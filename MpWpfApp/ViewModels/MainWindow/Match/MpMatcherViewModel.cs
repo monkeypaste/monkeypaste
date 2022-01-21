@@ -292,9 +292,9 @@ namespace MpWpfApp {
                 case MpMatchTriggerType.WatchFileChanged:
                 case MpMatchTriggerType.WatchFolderChange:
                     Task.Run(async () => {
-                        var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(TriggerActionObjId);
+                        var ci = await MpDb.GetItemAsync<MpCopyItem>(TriggerActionObjId);
                         if(ci != null) {
-                            if(ci.Source.App.UserDeviceId == MpPreferences.Instance.ThisUserDevice.Id) {
+                            if(ci.Source.App.UserDeviceId == MpPreferences.ThisUserDevice.Id) {
                                 //only add filesystem watchers for this device
                                 MatchData = ci.ItemData.ToString();
                                 MpFileSystemWatcher.Instance.RegisterMatcher(this);
@@ -346,13 +346,13 @@ namespace MpWpfApp {
                 switch (e.ChangeType) {
                     case WatcherChangeTypes.Changed:
                     case WatcherChangeTypes.Created:
-                        var app = MpPreferences.Instance.ThisAppSource.App;
+                        var app = MpPreferences.ThisAppSource.App;
                         var source = await MpSource.Create(app, null);
                         ci = await MpCopyItem.Create(source, e.FullPath, MpCopyItemType.FileList, true);
                         break;
                     case WatcherChangeTypes.Renamed:
                         RenamedEventArgs re = e as RenamedEventArgs;
-                        ci = await MpDataModelProvider.Instance.GetCopyItemByData(re.OldFullPath);
+                        ci = await MpDataModelProvider.GetCopyItemByData(re.OldFullPath);
                         ci.ItemData = re.FullPath;
                         await ci.WriteToDatabaseAsync();
                         break;

@@ -116,19 +116,19 @@ namespace MpWpfApp {
             MpConsole.WriteLine(ErrorMessage);
         }
         protected virtual int GetCurCallCount() {
-            return MpPreferences.Instance.RestfulLinkMinificationCount;
+            return MpPreferences.RestfulLinkMinificationCount;
         }
 
         protected virtual int GetMaxCallCount() {
-            return MpPreferences.Instance.RestfulLinkMinificationMaxCount;
+            return MpPreferences.RestfulLinkMinificationMaxCount;
         }
 
         protected virtual void IncrementCallCount() {
-            MpPreferences.Instance.RestfulLinkMinificationCount++;
+            MpPreferences.RestfulLinkMinificationCount++;
         }
 
         protected virtual void ClearCount() {
-            MpPreferences.Instance.RestfulLinkMinificationCount = 0;
+            MpPreferences.RestfulLinkMinificationCount = 0;
         }
     }
 }

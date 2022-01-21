@@ -27,7 +27,7 @@ namespace MpWpfApp {
         Link
     }
 
-    public class MpCursorViewModel : MpViewModelBase, MpISingleton<MpCursorViewModel> {
+    public class MpCursorViewModel : MpViewModelBase, MpISingletonViewModel<MpCursorViewModel> {
         #region Private Variables
 
         private Dictionary<MpCursorType, Cursor> _cursorLookup = 
@@ -73,7 +73,7 @@ namespace MpWpfApp {
             CurrentCursor = MpCursorType.Default;
         }
 
-        public MpCursorViewModel() : base() {
+        public MpCursorViewModel() : base(null) {
             PropertyChanged += MpMouseViewModel_PropertyChanged;
             OnBusyChanged += MpViewModelBase_OnBusyChanged;
         }

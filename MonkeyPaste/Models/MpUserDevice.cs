@@ -70,14 +70,14 @@ namespace MonkeyPaste {
                 if (UserDeviceGuid == null) {
                     return false;
                 }
-                return UserDeviceGuid.ToString() == MpPreferences.Instance.ThisDeviceGuid;
+                return UserDeviceGuid.ToString() == MpPreferences.ThisDeviceGuid;
             }
         }
 
         [Ignore]
         public bool IsThisPlatform {
             get {
-                return PlatformType == MpPreferences.Instance.ThisDeviceType;
+                return PlatformType == MpPreferences.ThisDeviceType;
             }
         }
 
@@ -91,7 +91,7 @@ namespace MonkeyPaste {
         }
 
         public async Task<object> CreateFromLogs(string udGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {            
-            var ud = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUserDevice", udGuid) as MpUserDevice;
+            var ud = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", udGuid) as MpUserDevice;
 
             foreach (var li in logs) {
                 switch (li.AffectedColumnName) {

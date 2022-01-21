@@ -35,15 +35,15 @@ namespace MpWpfApp {
             }
             base.OnLoad();
             
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                     MpSearchBoxViewModel.Instance,
                     ReceivedSearchBoxViewModelMessage);
 
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
 
-            if(!string.IsNullOrEmpty(MpDataModelProvider.Instance.QueryInfo.SearchText)) {
+            if(!string.IsNullOrEmpty(MpDataModelProvider.QueryInfo.SearchText)) {
                 while (AssociatedObject == null) {
                     await Task.Delay(10);
                 }
@@ -57,11 +57,11 @@ namespace MpWpfApp {
         protected override async void OnUnload() {
             base.OnUnload();
 
-            MpMessenger.Instance.Unregister<MpMessageType>(
+            MpMessenger.Unregister<MpMessageType>(
                     MpSearchBoxViewModel.Instance,
                     ReceivedSearchBoxViewModelMessage);
 
-            MpMessenger.Instance.Unregister<MpMessageType>(
+            MpMessenger.Unregister<MpMessageType>(
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
 
@@ -118,7 +118,7 @@ namespace MpWpfApp {
             var hll = await GetHighlighters();
 
             if (hll.Count == 0 ||
-                        string.IsNullOrEmpty(MpDataModelProvider.Instance.QueryInfo.SearchText)) {
+                        string.IsNullOrEmpty(MpDataModelProvider.QueryInfo.SearchText)) {
                 Reset(hll);
                 return;
             }

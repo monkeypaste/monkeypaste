@@ -15,7 +15,7 @@
              PreviewMouseWheel="SearchCriteriaListBox_PreviewMouseWheel"
              Height="{Binding SearchCriteriaListBoxHeight}"
              RequestBringIntoView="SearchCriteriaListBox_RequestBringIntoView"
-             Background="{local:MpThemeColorsBinding Key=Filter_Menu_Background_Color}"
+             Background="{Binding ., Converter={StaticResource StringToThemeBrushConverter}, ConverterParameter=Filter_Menu_Background_Color}"
              dd:DragDrop.IsDragSource="True"
              dd:DragDrop.IsDropTarget="True"
              BorderThickness="0"
@@ -29,11 +29,11 @@
              ScrollViewer.VerticalScrollBarVisibility="Hidden"
              ScrollViewer.HorizontalScrollBarVisibility="Hidden">
         <ListBox.ItemContainerStyle>
-            <Style TargetType="{x:Type ListBoxItem}" >
+            <Style TargetType="{x:Type ListBoxItem}">
                 <Setter Property="IsSelected"
                         Value="{Binding IsSelected}" />
                 <Setter Property="FocusVisualStyle"
-                                        Value="{x:Null}" />
+                        Value="{x:Null}" />
                 <Setter Property="HorizontalContentAlignment"
                         Value="Left" />
                 <Setter Property="VerticalAlignment"

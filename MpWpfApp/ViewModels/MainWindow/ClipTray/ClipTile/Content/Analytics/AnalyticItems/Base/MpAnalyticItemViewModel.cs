@@ -356,7 +356,7 @@ namespace MpWpfApp {
                 return;
             }
             IsBusy = true;
-            AnalyticItem = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(ai.Id);
+            AnalyticItem = await MpDb.GetItemAsync<MpAnalyticItem>(ai.Id);
 
             if(AnalyticItem.Icon == null) {
                 var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null);
@@ -465,7 +465,7 @@ namespace MpWpfApp {
             object request = trans.Request;
             object response = trans.Response;
 
-            var app = MpPreferences.Instance.ThisAppSource.App;
+            var app = MpPreferences.ThisAppSource.App;
             var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, request.ToString());
             var source = await MpSource.Create(app, url);
 
@@ -474,11 +474,11 @@ namespace MpWpfApp {
             if(suppressCreateItem == false) {
                 //create is suppressed when its part of a match expression
                 if (parentCopyItemId > 0) {
-                    var pci = await MpDb.Instance.GetItemAsync<MpCopyItem>(parentCopyItemId);
+                    var pci = await MpDb.GetItemAsync<MpCopyItem>(parentCopyItemId);
 
                     if (pci.CompositeParentCopyItemId > 0) {
                         //when this items parent is a composite child, adjust fk/sort so theres single parent
-                        var ppccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
+                        var ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
                         ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
                         for (int i = 0; i < ppccil.Count; i++) {
                             var cci = ppccil[i];

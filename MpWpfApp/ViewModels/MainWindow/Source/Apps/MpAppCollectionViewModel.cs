@@ -11,11 +11,14 @@ using MonkeyPaste;
 using System.IO;
 
 namespace MpWpfApp {
-    public class MpAppCollectionViewModel : MpViewModelBase, MpISingleton<MpAppCollectionViewModel> {
+    public class MpAppCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpAppCollectionViewModel> {
+        #region Private Variables
+
+        #endregion
         #region Properties
 
         #region View Models
-                
+
         public ObservableCollection<MpAppViewModel> AppViewModels { get; set; } = new ObservableCollection<MpAppViewModel>();
 
         public MpAppViewModel SelectedAppViewModel {
@@ -37,14 +40,14 @@ namespace MpWpfApp {
         public static MpAppCollectionViewModel Instance => _instance ?? (_instance = new MpAppCollectionViewModel());
 
 
-        public MpAppCollectionViewModel() : base() {
+        public MpAppCollectionViewModel() : base(null) {
             MpHelpers.RunOnMainThreadAsync(Init);
         }
 
         public async Task Init() {
             IsBusy = true;
 
-            var appl = await MpDb.Instance.GetItemsAsync<MpApp>();
+            var appl = await MpDb.GetItemsAsync<MpApp>();
             AppViewModels.Clear();
             foreach (var app in appl) {
                 var avm = await CreateAppViewModel(app);
@@ -52,10 +55,7 @@ namespace MpWpfApp {
             }
             OnPropertyChanged(nameof(AppViewModels));
 
-            Application.Current.Resources["AppCollectionViewModel"] = this;
-
             IsBusy = false;
-            IsLoaded = true;
         }
 
         #endregion
@@ -76,7 +76,7 @@ namespace MpWpfApp {
             if (avm != null) {
                 bool wasCanceled = false;
                 if (rejectApp) {
-                    var clipsFromApp = await MpDataModelProvider.Instance.GetCopyItemsByAppId(app.AppId);
+                    var clipsFromApp = await MpDataModelProvider.GetCopyItemsByAppId(app.AppId);
                     IsBusy = false;
                     
                     if (clipsFromApp != null && clipsFromApp.Count > 0) {
@@ -152,7 +152,7 @@ namespace MpWpfApp {
                     MpApp app = null;
                     var avm = AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
                     if (avm == null) {
-                        var iconBmpSrc = MpHelpers.GetIconImage(appPath);
+                        var iconBmpSrc = MpProcessHelper.MpProcessManager.ProcessIconBuilder.GetBase64BitmapFromPath(appPath).ToBitmapSource();
                         var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                         app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
                         avm = await CreateAppViewModel(app);

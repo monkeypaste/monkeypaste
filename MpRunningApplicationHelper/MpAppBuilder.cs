@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace MpProcessHelper {
-    public class MpAppBuilder : MonkeyPaste.MpIAppBuilder, MonkeyPaste.MpISingleton<MpAppBuilder> {
+    public class MpAppBuilder : MonkeyPaste.MpIAppBuilder, MonkeyPaste.MpISingletonViewModel<MpAppBuilder> {
         #region MpISingleton Definition
         private static MpAppBuilder _instance;
         public static MpAppBuilder Instance => _instance ?? (_instance = new MpAppBuilder());

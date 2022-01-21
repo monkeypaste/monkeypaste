@@ -99,7 +99,7 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpSliderParameterViewModel() : base() { }
+        public MpSliderParameterViewModel() : base(null) { }
 
         public MpSliderParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 

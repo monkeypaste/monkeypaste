@@ -12,7 +12,7 @@ namespace MpWpfApp {
         public MpMainWindow() {
             sw = new Stopwatch();
             sw.Start();
-            DataContext = MpMainWindowViewModel.Instance;
+            //DataContext = MpMainWindowViewModel.Instance;
             InitializeComponent();
             //temporary
             //MpBootstrapper.Init();

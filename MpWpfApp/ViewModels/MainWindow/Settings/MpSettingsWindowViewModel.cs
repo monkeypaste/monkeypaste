@@ -53,7 +53,7 @@ namespace MpWpfApp {
     //   - Send Feedback
     //   - About Monkey Paste
 
-    public class MpSettingsWindowViewModel : MpViewModelBase<object> {
+    public class MpSettingsWindowViewModel : MpViewModelBase {
         #region Private Variables
         //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>();
         //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToDelete = new ObservableCollection<MpShortcutViewModel>();

@@ -46,7 +46,7 @@ namespace MpWpfApp {
             set {
                 if(_selectedWindowState != value) {
                     _selectedWindowState = value;
-                    WindowState = (WinApi.ShowWindowCommands)_selectedWindowState;
+                    WindowState = (MpProcessHelper.WinApi.ShowWindowCommands)_selectedWindowState;
                     OnPropertyChanged(nameof(SelectedWindowState));
                 }
             }
@@ -143,12 +143,12 @@ namespace MpWpfApp {
             }
         }
 
-        public WinApi.ShowWindowCommands WindowState {
+        public MpProcessHelper.WinApi.ShowWindowCommands WindowState {
             get {
                 if(PasteToAppPath == null) {
-                    return WinApi.ShowWindowCommands.Normal;
+                    return MpProcessHelper.WinApi.ShowWindowCommands.Normal;
                 }
-                return (WinApi.ShowWindowCommands)PasteToAppPath.WindowState;
+                return (MpProcessHelper.WinApi.ShowWindowCommands)PasteToAppPath.WindowState;
             }
             set {
                 if (PasteToAppPath.WindowState != (int)value) {
@@ -165,7 +165,7 @@ namespace MpWpfApp {
                 }
                 var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == AvatarId);
                 if(ivm == null) {
-                    return MpHelpers.GetIconImage(AppPath);
+                    return MpProcessHelper.MpProcessManager.ProcessIconBuilder.GetBase64BitmapFromFilePath(AppPath).ToBitmapSource();
                 }
                 return ivm.IconBitmapSource;
             }
@@ -368,8 +368,8 @@ namespace MpWpfApp {
             if (string.IsNullOrEmpty(Args)) {
                 return string.Empty;
             }
-            if(Args.Length > Properties.Settings.Default.MaxCommandLineArgumentLength) {
-                return @"Max length of Commandline args is " + Properties.Settings.Default.MaxCommandLineArgumentLength + " this is " + Args.Length;
+            if(Args.Length > MpPreferences.MaxCommandLineArgumentLength) {
+                return @"Max length of Commandline args is " + MpPreferences.MaxCommandLineArgumentLength + " this is " + Args.Length;
             }
             return string.Empty;
         }
@@ -390,13 +390,13 @@ namespace MpWpfApp {
                     iconColorChooserMenuItem,
                     (s1, e1) => {
                         var brush = (Brush)((Border)s1).Tag;
-                        var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                        AppIcon = MpHelpers.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+                        var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+                        AppIcon = MpWpfImagingHelper.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
                     }
                 );
                 var iconImageChooserMenuItem = new MenuItem();
                 iconImageChooserMenuItem.Header = "Choose Image...";
-                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
+                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
                 iconImageChooserMenuItem.Click += (s, e) => {
                     var openFileDialog = new OpenFileDialog() {
                         Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",

@@ -15,7 +15,7 @@
         <local:MpClipTrayDropBehavior x:Name="ClipTrayDropBehavior" />
     </i:Interaction.Behaviors>
     <Grid x:Name="ClipTrayGrid"
-          Background="{local:MpThemeColorsBinding Key=Clip_Tray_Background_Color}">
+          Background="{Binding ., Converter={StaticResource StringToThemeBrushConverter}, ConverterParameter=Clip_Tray_Background_Color}">
         <Grid>
             <AdornerDecorator>
                 <ScrollViewer x:Name="PagingScrollViewer"

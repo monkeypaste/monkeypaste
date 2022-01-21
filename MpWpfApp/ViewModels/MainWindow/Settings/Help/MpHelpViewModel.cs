@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
 namespace MpWpfApp {
-    public class MpHelpViewModel : MpViewModelBase<object> {
+    public class MpHelpViewModel : MpViewModelBase {
         #region Private Variables
 
         #endregion

@@ -5,7 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -77,6 +80,57 @@ namespace MpWpfApp {
                     break;
             }
         }
+
+        #endregion
+
+        #region Commands
+
+        public ICommand ChangeIconCommand => new RelayCommand<object>(
+            (args) => {
+                //var iconColorChooserMenuItem = new MenuItem();
+                //var iconContextMenu = new ContextMenu();
+                //iconContextMenu.Items.Add(iconColorChooserMenuItem);
+                //MpHelpers.SetColorChooserMenuItem(
+                //    iconContextMenu,
+                //    iconColorChooserMenuItem,
+                //    (s1, e1) => {
+                //        MpHelpers.RunOnMainThread(async () => {
+                //            var brush = (Brush)((Border)s1).Tag;
+                //            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+                //            var presetIcon = MpWpfImagingHelper.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+                //            Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String(), false);
+                //            Preset.IconId = Preset.Icon.Id;
+                //            await Preset.WriteToDatabaseAsync();
+
+                //            OnPropertyChanged(nameof(IconId));
+                //        });
+                //    }
+                //);
+                //var iconImageChooserMenuItem = new MenuItem();
+                //iconImageChooserMenuItem.Header = "Choose Image...";
+                //iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
+                //iconImageChooserMenuItem.Click += async (s, e) => {
+                //    var openFileDialog = new OpenFileDialog() {
+                //        Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
+                //        Title = "Select Image for " + Label,
+                //        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                //    };
+                //    bool? openResult = openFileDialog.ShowDialog();
+                //    if (openResult != null && openResult.Value) {
+                //        string imagePath = openFileDialog.FileName;
+                //        var presetIcon = (BitmapSource)new BitmapImage(new Uri(imagePath));
+                //        Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String());
+                //        Preset.IconId = Preset.Icon.Id;
+                //        await Preset.WriteToDatabaseAsync();
+
+                //        OnPropertyChanged(nameof(IconId));
+                //    }
+                //};
+                //iconContextMenu.Items.Add(iconImageChooserMenuItem);
+                //((Button)args).ContextMenu = iconContextMenu;
+                //iconContextMenu.PlacementTarget = ((Button)args);
+                //iconContextMenu.IsOpen = true;
+            }, (args) => args is Button);
 
         #endregion
     }

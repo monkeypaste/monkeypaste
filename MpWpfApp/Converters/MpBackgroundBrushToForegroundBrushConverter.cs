@@ -8,8 +8,8 @@ namespace MpWpfApp {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value == null) {
                 return Brushes.Red;
-            }
-            return MpHelpers.IsBright((value as SolidColorBrush).Color) ? Brushes.Black : Brushes.White;
+            }//MpWpfColorHelpers.IsBright
+            return MpWpfColorHelpers.IsBright((value as SolidColorBrush).Color) ? Brushes.Black : Brushes.White;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

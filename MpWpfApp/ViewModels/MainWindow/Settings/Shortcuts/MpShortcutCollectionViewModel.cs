@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpShortcutCollectionViewModel : MpViewModelBase, MpISingleton<MpShortcutCollectionViewModel> {
+    public class MpShortcutCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpShortcutCollectionViewModel> {
         #region Private Variables
         #endregion
 
@@ -50,7 +50,7 @@ namespace MpWpfApp {
         public static MpShortcutCollectionViewModel Instance => _instance ?? (_instance = new MpShortcutCollectionViewModel());
 
 
-        public MpShortcutCollectionViewModel() : base() { }
+        public MpShortcutCollectionViewModel() : base(null) { }
 
         public async Task Init() {
             var sw = new Stopwatch();
@@ -242,7 +242,7 @@ namespace MpWpfApp {
         private async Task InitShortcuts() {
             await MpHelpers.RunOnMainThreadAsync(async () => {
                 //using mainwindow, map all saved shortcuts to their commands
-                var scl = await MpDb.Instance.GetItemsAsync<MpShortcut>();
+                var scl = await MpDb.GetItemsAsync<MpShortcut>();
                 foreach (var sc in scl) {
                     ICommand shortcutCommand = null;
                     object commandParameter = null;
@@ -412,8 +412,8 @@ namespace MpWpfApp {
 
         private void GlobalHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen && !MpMainWindowViewModel.Instance.IsMainWindowOpening) {
-                if (Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
+                if (MpPreferences.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    if (e.Y <= MpPreferences.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
                 }
@@ -422,9 +422,9 @@ namespace MpWpfApp {
 
         private void GlobalHook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
-                if (Properties.Settings.Default.DoShowMainWindowWithMouseEdge &&
-               !Properties.Settings.Default.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
+                if (MpPreferences.DoShowMainWindowWithMouseEdge &&
+               !MpPreferences.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    if (e.Y <= MpPreferences.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
                 }

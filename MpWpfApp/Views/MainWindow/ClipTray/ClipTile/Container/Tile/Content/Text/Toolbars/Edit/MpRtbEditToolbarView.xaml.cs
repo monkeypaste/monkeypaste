@@ -136,7 +136,7 @@ namespace MpWpfApp {
             //}
 
             //if(canAddTemplate) {
-            //    canAddTemplate = ts.Text.Length <= MonkeyPaste.MpPreferences.Instance.MaxTemplateTextLength;
+            //    canAddTemplate = ts.Text.Length <= MonkeyPaste.MpPreferences.MaxTemplateTextLength;
             //}
 
             return canAddTemplate;

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
 namespace MpWpfApp {
-    public class MpSoundPlayerViewModel : MpViewModelBase<object> {
+    public class MpSoundPlayerViewModel : MpViewModelBase {
         #region Private Variables
         private SoundPlayer _soundPlayer = null;
         #endregion

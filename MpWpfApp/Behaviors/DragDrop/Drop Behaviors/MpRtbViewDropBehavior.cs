@@ -30,7 +30,7 @@ namespace MpWpfApp {
 
             _dataContext = AssociatedObject.DataContext;
 
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                 AssociatedObject.DataContext,
                 ReceivedAssociateObjectViewModelMessage,
                 AssociatedObject.DataContext);
@@ -39,7 +39,7 @@ namespace MpWpfApp {
         public override void OnUnloaded() {
             base.OnUnloaded();
 
-            MpMessenger.Instance.Unregister<MpMessageType>(
+            MpMessenger.Unregister<MpMessageType>(
                 _dataContext,
                 ReceivedAssociateObjectViewModelMessage,
                 _dataContext);
@@ -134,7 +134,7 @@ namespace MpWpfApp {
                     if (dragModels[i].CompositeParentCopyItemId == 0 &&
                         !AssociatedObject.BindingContext.Parent.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
                         //if drag item is head of ANOTHER tile swap or remove from main query ref w/ first child
-                        await MpDataModelProvider.Instance.RemoveQueryItem(dragModels[i].Id);
+                        await MpDataModelProvider.RemoveQueryItem(dragModels[i].Id);
                     }
                     var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModels[i].Id);
                     if (dcivm != null) {
@@ -174,7 +174,7 @@ namespace MpWpfApp {
                 }
 
                 if (needsRequery) {
-                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                     //MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
                 }
             }
@@ -199,8 +199,8 @@ namespace MpWpfApp {
             }
 
             // merge templates
-            var citl = await MpDataModelProvider.Instance.GetTemplatesAsync(AssociatedObject.BindingContext.CopyItemId);
-            var mcitl = await MpDataModelProvider.Instance.GetTemplatesAsync(mci.Id);
+            var citl = await MpDataModelProvider.GetTemplatesAsync(AssociatedObject.BindingContext.CopyItemId);
+            var mcitl = await MpDataModelProvider.GetTemplatesAsync(mci.Id);
             foreach (MpCopyItemTemplate mcit in mcitl) {
                 if (citl.Any(x => x.TemplateName == mcit.TemplateName)) {
                     //if merged item has template w/ same name just ignore it since it will already be parsed
@@ -211,8 +211,8 @@ namespace MpWpfApp {
             }
 
             // merge tags
-            var tl = await MpDataModelProvider.Instance.GetCopyItemTagsForCopyItemAsync(AssociatedObject.BindingContext.CopyItemId);
-            var mtl = await MpDataModelProvider.Instance.GetCopyItemTagsForCopyItemAsync(mci.Id);
+            var tl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(AssociatedObject.BindingContext.CopyItemId);
+            var mtl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(mci.Id);
             foreach (MpCopyItemTag mt in mtl) {
                 if (tl.Any(x => x.TagId == mt.TagId)) {
                     //if merged item has tags w/ same name just ignore it 

@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Markup;
-using System.Globalization;
-using System.Windows.Controls;
-using System.Reflection;
-using MonkeyPaste;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Collections;
 using System.Runtime.CompilerServices;
-using SQLite;
+using MonkeyPaste;
 
 namespace MpWpfApp {    
     public abstract class MpViewModelBase : INotifyPropertyChanged {
+        public static event EventHandler<bool> OnBusyChanged;
 
         private static Dictionary<string, int> _instanceCountLookup;
 
@@ -29,11 +19,16 @@ namespace MpWpfApp {
             get => _isBusy;
             set {
                 SetProperty(ref _isBusy, value);
-                MpCursorViewModel.Instance.NotifyAppBusy(_isBusy);
+                OnBusyChanged?.Invoke(this, _isBusy);
+                //MpCursorViewModel.Instance.NotifyAppBusy(_isBusy);
+                //MpMessenger.Send(MpMessageType.Busy);
             }
         }
+        public bool IsNotBusy => !IsBusy;
+
 
         public bool SupressPropertyChangedNotification { get; set; } = false;
+
 
         public bool HasModelChanged { get; set; } = false;
 
@@ -43,10 +38,12 @@ namespace MpWpfApp {
 
         public event EventHandler ViewModelLoaded;
         protected virtual void OnViewModelLoaded() => ViewModelLoaded?.Invoke(this, EventArgs.Empty);
-        
+
         #endregion
 
         #region Constructors
+
+        protected MpViewModelBase() { }
 
         protected MpViewModelBase(object parent) {
             if (parent == null) {
@@ -63,12 +60,13 @@ namespace MpWpfApp {
 
             ParentObj = parent;
 
-            MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
-            MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
-            MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
-            MpDb.Instance.SyncAdd += Instance_SyncAdd;
-            MpDb.Instance.SyncUpdate += Instance_SyncUpdate;
-            MpDb.Instance.SyncDelete += Instance_SyncDelete;
+            MpDb.OnItemAdded += Instance_OnItemAdded;
+            MpDb.OnItemUpdated += Instance_OnItemUpdated;
+            MpDb.OnItemDeleted += Instance_OnItemDeleted;
+
+            //MpDb.SyncAdd += Instance_SyncAdd;
+            //MpDb.SyncUpdate += Instance_SyncUpdate;
+            //MpDb.SyncDelete += Instance_SyncDelete;
         }
 
         #endregion
@@ -94,12 +92,12 @@ namespace MpWpfApp {
                 // Release other objects
                 IsBusy = false;
 
-                MpDb.Instance.OnItemAdded -= Instance_OnItemAdded;
-                MpDb.Instance.OnItemUpdated -= Instance_OnItemUpdated;
-                MpDb.Instance.OnItemDeleted -= Instance_OnItemDeleted;
-                MpDb.Instance.SyncAdd -= Instance_SyncAdd;
-                MpDb.Instance.SyncUpdate -= Instance_SyncUpdate;
-                MpDb.Instance.SyncDelete -= Instance_SyncDelete;
+                MpDb.OnItemAdded -= Instance_OnItemAdded;
+                MpDb.OnItemUpdated -= Instance_OnItemUpdated;
+                MpDb.OnItemDeleted -= Instance_OnItemDeleted;
+                //MpDb.SyncAdd -= Instance_SyncAdd;
+                //MpDb.SyncUpdate -= Instance_SyncUpdate;
+                //MpDb.SyncDelete -= Instance_SyncDelete;
             }
         }
 
@@ -110,6 +108,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Methods
+
 
         #region Db Events
 
@@ -167,7 +166,7 @@ namespace MpWpfApp {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             //return;
 
-            //MpHelpers.Instance.RunOnMainThreadAsync(() => {
+            //MpHelpers.RunOnMainThreadAsync(() => {
             //    //check if property has affects child attribute
             //    var affectsAttributes = GetType().GetProperty(propertyName).GetCustomAttributes<MpAffectsBaseAttribute>();
             //    int affectCount = affectsAttributes.Sum(x => x.FindAndNotifyProperties(this, propertyName));

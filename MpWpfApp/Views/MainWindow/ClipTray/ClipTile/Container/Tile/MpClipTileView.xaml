@@ -97,7 +97,9 @@
         </local:MpClipBorder.BorderBrush>
         <Grid x:Name="ClipTileBorderGrid">
             <DockPanel x:Name="ClipTileDockPanel"
-                       Background="{local:MpThemeColorsBinding Key=Clip_Tile_Content_Item_Background_Color}">
+                       Background="{Binding .,
+                                            Converter={StaticResource StringToThemeBrushConverter},
+                                            ConverterParameter=Clip_Tile_Content_Item_Background_Color}">
                 <!--  Tile Title Canvas  -->
                 <local:MpClipTileTitleView x:Name="TileTitleView"
                                            DockPanel.Dock="Top"

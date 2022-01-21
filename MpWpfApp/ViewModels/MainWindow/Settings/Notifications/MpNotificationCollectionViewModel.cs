@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
 namespace MpWpfApp {
-    public class MpNotificationCollectionViewModel : MpViewModelBase<object> {
+    public class MpNotificationCollectionViewModel : MpViewModelBase {
         #region Singleton
         private static readonly Lazy<MpNotificationCollectionViewModel> _Lazy = new Lazy<MpNotificationCollectionViewModel>(() => new MpNotificationCollectionViewModel());
         public static MpNotificationCollectionViewModel Instance { get { return _Lazy.Value; } }
@@ -38,10 +38,10 @@ namespace MpWpfApp {
 
         #region Private Methods
         private MpNotificationCollectionViewModel() : base(null) {
-            NotificationViewModels.Add(new MpNotificationViewModel(MpNotificationType.NotificationDoCopySound, Properties.Settings.Default.NotificationDoCopySound));
+            NotificationViewModels.Add(new MpNotificationViewModel(MpNotificationType.NotificationDoCopySound, MpPreferences.NotificationDoCopySound));
             NotificationViewModels[0].PerformNotificationCommand.Execute(null);
 
-            Properties.Settings.Default.NotificationDoCopySound = false;
+            MpPreferences.NotificationDoCopySound = false;
 
             NotificationViewModels[0].PerformNotificationCommand.Execute(null);
         }

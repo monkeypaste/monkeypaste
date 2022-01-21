@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpMatcherCollectionViewModel : MpViewModelBase, MpISingleton<MpMatcherCollectionViewModel> {
+    public class MpMatcherCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpMatcherCollectionViewModel> {
         #region Private Variables
 
         #endregion
@@ -37,12 +37,12 @@ namespace MpWpfApp {
         public static MpMatcherCollectionViewModel Instance => _instance ?? (_instance = new MpMatcherCollectionViewModel());
 
 
-        public MpMatcherCollectionViewModel() : base() {
+        public MpMatcherCollectionViewModel() : base(null) {
             PropertyChanged += MpMatcherCollectionViewModel_PropertyChanged;
         }
 
         public async Task Init() {
-            var matchers = await MpDb.Instance.GetItemsAsync<MpMatcher>();
+            var matchers = await MpDb.GetItemsAsync<MpMatcher>();
 
             foreach (var m in matchers) {
                 var mvm = await CreateMatcherViewModel(m);
@@ -127,7 +127,7 @@ namespace MpWpfApp {
         #region Commands
 
         public ICommand AddMatcherCommand => new RelayCommand<object>(
-            async (args) => {
+             (args) => {
                 if(args is MpAnalyticItemPresetViewModel aipvm) {
 
                 }

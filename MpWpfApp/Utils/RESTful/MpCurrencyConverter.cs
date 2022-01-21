@@ -104,7 +104,7 @@ namespace MpWpfApp {
         private string ApiKey { get; }
 
         private MpCurrencyConverter() {
-            ApiKey = Properties.Settings.Default.CurrencyConverterFreeApiKey;
+            ApiKey = MpPreferences.CurrencyConverterFreeApiKey;
         }
 
         public void Init() {
@@ -193,21 +193,20 @@ namespace MpWpfApp {
         }
 
         protected override int GetMaxCallCount() {
-            return Properties.Settings.Default.RestfulCurrencyConversionMaxCount;
+            return MpPreferences.RestfulCurrencyConversionMaxCount;
         }
 
         protected override int GetCurCallCount() {
-            return Properties.Settings.Default.RestfulCurrencyConversionCount;
+            return MpPreferences.RestfulCurrencyConversionCount;
         }
 
         protected override void IncrementCallCount() {
-            Properties.Settings.Default.RestfulCurrencyConversionCount++;
-            Properties.Settings.Default.Save();
+            MpPreferences.RestfulCurrencyConversionCount++;
         }
 
         protected override void ClearCount() {
-            Properties.Settings.Default.RestfulCurrencyConversionCount = 0;
-            Properties.Settings.Default.Save();
+            MpPreferences.RestfulCurrencyConversionCount = 0;
+            
         }
     }
 }

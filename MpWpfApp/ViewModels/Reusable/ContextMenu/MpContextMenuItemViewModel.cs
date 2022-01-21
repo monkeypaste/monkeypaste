@@ -33,7 +33,7 @@ namespace MpWpfApp {
         MpContextMenuItemViewModel MenuItemViewModel { get; }
     }
 
-    public class MpContextMenuItemViewModel : MpViewModelBase<object> {
+    public class MpContextMenuItemViewModel : MpViewModelBase {
         #region Properties
         public MenuItem MenuItem {
             get {
@@ -157,21 +157,21 @@ namespace MpWpfApp {
                     break;
                 case nameof(IconBackgroundBrush):
                     if (IconBackgroundBrush != null) {
-                        var bgBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                        bgBmp = MpHelpers.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
-                        var borderBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/textureborder.png"));
-                        if (!MpHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                            borderBmp = MpHelpers.TintBitmapSource(borderBmp, Colors.White, false);
+                        var bgBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+                        bgBmp = MpWpfImagingHelper.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
+                        var borderBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/textureborder.png"));
+                        if (!MpWpfColorHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                            borderBmp = MpWpfImagingHelper.TintBitmapSource(borderBmp, Colors.White, false);
                         }
                         var icon = new Image();
-                        icon.Source = MpHelpers.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
+                        icon.Source = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
                         if (!IsChecked.HasValue || IsChecked.Value) {
                             string checkPath = !IsChecked.HasValue ? @"/Images/check_partial.png" : @"/Images/check.png";
-                            var checkBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + checkPath));
-                            if (!MpHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                                checkBmp = MpHelpers.TintBitmapSource(checkBmp, Colors.White, false);
+                            var checkBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + checkPath));
+                            if (!MpWpfColorHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                                checkBmp = MpWpfImagingHelper.TintBitmapSource(checkBmp, Colors.White, false);
                             }
-                            icon.Source = MpHelpers.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
+                            icon.Source = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
                         }
                         Icon = icon;
                     }

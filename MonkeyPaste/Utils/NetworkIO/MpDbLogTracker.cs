@@ -13,7 +13,7 @@ namespace MonkeyPaste {
                 return;
             }
             Guid objectGuid = Guid.Parse(dbModel.Guid);
-            Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.Instance.ThisDeviceGuid) : Guid.Parse(clientGuid);
+            Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.ThisDeviceGuid) : Guid.Parse(clientGuid);
             string tableName = dbModel.GetType().ToString();
             tableName = tableName.Substring(tableName.IndexOf(".") + 1);
             var actionDateTime = DateTime.UtcNow;
@@ -24,7 +24,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var oldItem = await MpDb.Instance.GetDbObjectByTableGuidAsync(tableName, objectGuid.ToString());
+            var oldItem = await MpDb.GetDbObjectByTableGuidAsync(tableName, objectGuid.ToString());
             var alteredColumnNameValuePairs = await (dbModel as MpISyncableDbObject).DbDiff(oldItem);
             if (alteredColumnNameValuePairs.Count == 0) {
                 return;
@@ -38,18 +38,18 @@ namespace MonkeyPaste {
 
         //public static void TrackDbWrite(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
         //    Guid objectGuid = Guid.Parse(dbModel.Guid);
-        //    Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.Instance.ThisDeviceGuid) : Guid.Parse(clientGuid);
+        //    Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.ThisDeviceGuid) : Guid.Parse(clientGuid);
         //    string tableName = dbModel.GetType().ToString();
         //    tableName = tableName.Substring(tableName.IndexOf(".") + 1);
         //    var actionDateTime = DateTime.UtcNow;
 
         //    if (actionType == MpDbLogActionType.Delete) {
         //        var dbi = new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid);
-        //        MpDb.Instance.AddItem(dbi, string.Empty, true, true);
+        //        MpDb.AddItem(dbi, string.Empty, true, true);
         //        return;
         //    }
 
-        //    var oldItem = MpDb.Instance.GetDbObjectByTableGuid(tableName, objectGuid.ToString());
+        //    var oldItem = MpDb.GetDbObjectByTableGuid(tableName, objectGuid.ToString());
         //    var alteredColumnNameValuePairs = (dbModel as MpISyncableDbObject).DbDiff(oldItem);
         //    if (alteredColumnNameValuePairs.Count == 0) {
         //        return;
@@ -57,7 +57,7 @@ namespace MonkeyPaste {
 
         //    foreach (var kvp in alteredColumnNameValuePairs) {
         //        var dbi = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);
-        //        MpDb.Instance.AddItem(dbi, string.Empty, true, true);
+        //        MpDb.AddItem(dbi, string.Empty, true, true);
         //    }
         //}
 
@@ -68,7 +68,7 @@ namespace MonkeyPaste {
         //    }
 
         //    Guid objectGuid = Guid.Parse(objGuid);
-        //    Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.Instance.ThisDeviceGuid) : Guid.Parse(clientGuid);
+        //    Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.ThisDeviceGuid) : Guid.Parse(clientGuid);
         //    string tableName = "UnknownTableName";
         //    var actionType = MonkeyPaste.MpDbLogActionType.None;
         //    var actionDateTime = DateTime.UtcNow;
@@ -96,7 +96,7 @@ namespace MonkeyPaste {
         //        if (obj == null) {
         //            throw new Exception(@"DbLog object cannot be null for non-delete transactions");
         //        }
-        //        var oldRow = MpDb.Instance.GetDbObjectByTableGuid(tableName, objGuid);
+        //        var oldRow = MpDb.GetDbObjectByTableGuid(tableName, objGuid);
         //        var alteredColumnNameValueLookUp = (obj as MonkeyPaste.MpISyncableDbObject).DbDiff(oldRow);
         //        if (alteredColumnNameValueLookUp.Count == 0) {
         //            //since no data is altered return false to not write to db or change log
@@ -104,18 +104,18 @@ namespace MonkeyPaste {
         //        }
         //        foreach (var kvp in alteredColumnNameValueLookUp) {
         //            var newLog = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);
-        //            MpDb.Instance.AddItem(newLog, string.Empty, true, true);
+        //            MpDb.AddItem(newLog, string.Empty, true, true);
         //        }
         //    } else {
         //        var newLog = new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid);
-        //        MpDb.Instance.AddItem(newLog, string.Empty, true, true);
+        //        MpDb.AddItem(newLog, string.Empty, true, true);
         //    }
         //    return actionType;
         //}
 
         public static void PrintDbLog() {
             Task.Run(async () => {
-                var dblil = await MpDb.Instance.GetItemsAsync<MpDbLog>();
+                var dblil = await MpDb.GetItemsAsync<MpDbLog>();
 
                 foreach(var dbli in dblil) {
                     Console.WriteLine(dbli.ToString());

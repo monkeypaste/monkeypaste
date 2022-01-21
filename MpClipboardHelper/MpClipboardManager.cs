@@ -123,7 +123,7 @@ namespace MpClipboardHelper {
                 //to prevent cb listener thread from thinking there's a new item
                 IgnoreClipboardChangeEvent = true;
                 try {
-                    if (MpPreferences.Instance.ResetClipboardAfterMonkeyPaste) {
+                    if (MpPreferences.ResetClipboardAfterMonkeyPaste) {
                         _TempDataObject = _LastDataObject;
                     }
 
@@ -134,7 +134,7 @@ namespace MpClipboardHelper {
                     await Task.Delay(300);
                     System.Windows.Forms.SendKeys.SendWait("^v");
 
-                    if (MpPreferences.Instance.ResetClipboardAfterMonkeyPaste) {
+                    if (MpPreferences.ResetClipboardAfterMonkeyPaste) {
                         //from https://stackoverflow.com/a/52438404/105028
                         var clipboardThread = new Thread(new ThreadStart(ResetClipboard));
                         clipboardThread.SetApartmentState(ApartmentState.STA);

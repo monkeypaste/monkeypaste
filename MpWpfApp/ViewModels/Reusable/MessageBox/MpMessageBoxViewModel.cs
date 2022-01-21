@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
 namespace MpWpfApp {
-    public class MpMessageBoxViewModel : MpViewModelBase<object> {
+    public class MpMessageBoxViewModel : MpViewModelBase {
         #region Propeties
 
         public string Title { get; set; } = "Title";

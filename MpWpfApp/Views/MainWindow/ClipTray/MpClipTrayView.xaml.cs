@@ -23,7 +23,7 @@ namespace MpWpfApp {
             //MpClipboardHelper.MpClipboardMonitor.Start();
 
             
-            if (MpPreferences.Instance.IsInitialLoad) {
+            if (MpPreferences.IsInitialLoad) {
                 BindingContext.InitIntroItems();
             }
 
@@ -33,7 +33,7 @@ namespace MpWpfApp {
             BindingContext.OnUiRefreshRequest += Ctrvm_OnUiRefreshRequest;
             BindingContext.OnScrollToXRequest += Ctrvm_OnScrollToXRequest;
 
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                 MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
             //MpHelpers.RunOnMainThread(async () => {

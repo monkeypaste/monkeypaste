@@ -21,13 +21,13 @@ namespace MonkeyPaste {
             if (_isLoaded) {
                 return;
             }
-            _lastTempListFilePath = Path.Combine(MpPreferences.Instance.AppStorageFilePath, _lastTempListFilePath);
+            _lastTempListFilePath = Path.Combine(MpPreferences.AppStorageFilePath, _lastTempListFilePath);
 
             try {
                 // since app shutdown cannot effectively be caught every time on start
                 // check if temp file list existed and log file and remove all temps
                 if (File.Exists(_lastTempListFilePath)) {
-                    string[] lastTempFileList = MpHelpers.ReadTextFromFile(_lastTempListFilePath).Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] lastTempFileList = MpFileIo.ReadTextFromFile(_lastTempListFilePath).Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var lastTempFileToDelete in lastTempFileList) {
                         if (File.Exists(lastTempFileToDelete)) {
                             File.Delete(lastTempFileToDelete);
@@ -47,7 +47,7 @@ namespace MonkeyPaste {
             if(_isLoaded) {
                 Init();
             }
-            MpHelpers.AppendTextToFile(TempFilePath, filePathToAppend);
+            MpFileIo.AppendTextToFile(TempFilePath, filePathToAppend);
         }
     }
 }

@@ -18,37 +18,19 @@ using Org.BouncyCastle.Utilities.Encoders;
 using System.Collections;
 
 namespace MonkeyPaste {
-    #region SyncException
-    public class MpSyncException : Exception {
-        public MpSyncMesageType ErrorType { get; set; }
-        public MpRemoteDevice RemoteDevice { get; set; }
-        public MpSyncException(MpSyncMesageType errorType, MpRemoteDevice rd, Exception bex = null) : base() {
-            ErrorType = errorType;
-            RemoteDevice = rd;
-            if(bex != null) {
-                MpConsole.WriteTraceLine(bex);
-            }
-        }
-    }
-    #endregion
 
-    public class MpSyncManager {
-        #region Singleton
-        private static readonly Lazy<MpSyncManager> _Lazy = new Lazy<MpSyncManager>(() => new MpSyncManager());
-        public static MpSyncManager Instance { get { return _Lazy.Value; } }
-        #endregion
+    public static class MpSyncManager {
 
         #region Private Variables
-        private MpISync _localSync;
 
-        private CancellationTokenSource _cts;
-        private CancellationToken _ct;
+        private static CancellationTokenSource _cts;
+        private static CancellationToken _ct;
         #endregion
 
-        public event EventHandler<string> OnError;
+        public static event EventHandler<string> OnError;
 
         #region Properties
-        public string[] DbTableSyncOrder { get; private set; } = new string[] {
+        public static string[] DbTableSyncOrder { get; private set; } = new string[] {
             nameof(MpDbImage),
             nameof(MpIcon),
             nameof(MpUserDevice),
@@ -61,11 +43,11 @@ namespace MonkeyPaste {
             nameof(MpCopyItemTag)
         };
 
-        public MpDeviceEndpoint ThisEndpoint { get; set; }
+        public static MpDeviceEndpoint ThisEndpoint { get; set; }
 
-        public ObservableCollection<MpRemoteDevice> ConnectedDevices { get; set; }
+        public static ObservableCollection<MpRemoteDevice> ConnectedDevices { get; set; }
 
-        public MpRemoteDevice SelectedRemoteDevice {
+        public static MpRemoteDevice SelectedRemoteDevice {
             get {
                 if (ConnectedDevices == null) {
                     return null;
@@ -79,27 +61,24 @@ namespace MonkeyPaste {
             }
         }
 
-        public MpSessionManager SessionManager { get; set; }
+        public static MpSessionManager SessionManager { get; set; }
 
-        public bool IsRunning { get; set; } = false;
+        public static bool IsRunning { get; set; } = false;
         #endregion
 
         #region Public Methods
-        public void Init(MpISync localSync) {
+        public static void Init() {
             _cts = new CancellationTokenSource();
             _ct = _cts.Token;
+            MpSyncHelper.OnSyncableChange += LocalSync_OnSyncableChange;
 
-            _localSync = localSync;
-
-            _localSync.OnSyncableChange += LocalSync_OnSyncableChange;
-
-            ConnectedDevices = _localSync.GetRemoteDevices();
+            ConnectedDevices = MpSyncHelper.GetRemoteDevices();
 
             SessionManager = new MpSessionManager();
 
             IsRunning = true;
 
-            ThisEndpoint = MpDeviceEndpointFactory.CreateEndpoint(localSync);
+            ThisEndpoint = MpDeviceEndpointFactory.CreateEndpoint();
 
             Task.Run(async () => {
                 Socket listener = null;
@@ -112,12 +91,12 @@ namespace MonkeyPaste {
                         await Task.Delay(500);
                     }
                     ConnectedDevices.Clear();
-                    while (!_localSync.IsConnectedToNetwork()) {
+                    while (!MpSyncHelper.IsConnectedToNetwork()) {
                         await Task.Delay(10000);
                     }
-                    ThisEndpoint = MpDeviceEndpointFactory.CreateEndpoint(localSync);
+                    ThisEndpoint = MpDeviceEndpointFactory.CreateEndpoint();
 
-                    if (_localSync.IsConnectedToInternet()) {
+                    if (MpSyncHelper.IsConnectedToInternet()) {
                         
                         //if(_localSync.IsWpf()) {
                         //    // for debugging disconnect all
@@ -168,7 +147,7 @@ namespace MonkeyPaste {
                             listener = await MpPrivateEndpointDiscoveryHelper.Discover(
                                                 ThisEndpoint.PrimaryPrivateIp4Address,
                                                 ThisEndpoint.PrivatePortNum,
-                                                localSync.IsWpf());
+                                                MpSyncHelper.IsWpf());
                         }
                     }
 
@@ -196,11 +175,11 @@ namespace MonkeyPaste {
                                 var handshakeResponse = await MpStreamMessage.CreateHandshakeResponse(ThisEndpoint, oep.DeviceGuid);
                                 var dbLogRequest = await SendReceiveSocket(client, handshakeResponse);
                                 var lastSyncForOther = DateTime.Parse(dbLogRequest.Content);
-                                var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(lastSyncForOther);
+                                var dbLogQueryResultStr = await MpSyncHelper.GetLocalLogFromSyncDate(lastSyncForOther);
                                 var dbLogResponse = await MpStreamMessage.CreateDbLogResponse(ThisEndpoint, oep.DeviceGuid, dbLogQueryResultStr);
 
                                 var flipRequest = await SendReceiveSocket(client, dbLogResponse);
-                                var thisLastSyncDt = await _localSync.GetLastSyncForRemoteDevice(oep.DeviceGuid);
+                                var thisLastSyncDt = await MpSyncHelper.GetLastSyncForRemoteDevice(oep.DeviceGuid);
                                 var thisDbLogRequest = await MpStreamMessage.CreateDbLogRequest(
                                     ThisEndpoint,
                                     oep.DeviceGuid,
@@ -214,8 +193,8 @@ namespace MonkeyPaste {
                                             if (postSyncDbLogResponse.Header.FromGuid == ThisEndpoint.DeviceGuid) {
                                                 continue;
                                             }
-                                            var remoteChangesLookup = await _localSync.PrepareRemoteLogForSyncing(postSyncDbLogResponse.Content);
-                                            await _localSync.PerformSync(remoteChangesLookup,oep.DeviceGuid);
+                                            var remoteChangesLookup = await MpSyncHelper.PrepareRemoteLogForSyncing(postSyncDbLogResponse.Content);
+                                            await MpSyncHelper.PerformSync(remoteChangesLookup,oep.DeviceGuid);
 
                                             var rep = ConnectedDevices.Where(x => x.RemoteEndpoint.DeviceGuid == oep.DeviceGuid).FirstOrDefault();
                                             if (rep == null) {
@@ -257,25 +236,25 @@ namespace MonkeyPaste {
                             var handshakeRequest = await MpStreamMessage.CreateHandshakeRequest(ThisEndpoint);
                             var handshakeResponse = await SendReceiveSocket(listener, handshakeRequest);
                             var lep = await MpDeviceEndpoint.Parse(handshakeResponse.Content);
-                            var lastSyncDt = await _localSync.GetLastSyncForRemoteDevice(lep.DeviceGuid);
+                            var lastSyncDt = await MpSyncHelper.GetLastSyncForRemoteDevice(lep.DeviceGuid);
 
                             var dbLogRequest = await MpStreamMessage.CreateDbLogRequest(
                                 ThisEndpoint,
                                 lep.DeviceGuid,
                                 lastSyncDt);
                             var dbLogResponse = await SendReceiveSocket(listener, dbLogRequest);
-                            var remoteChangesLookup = await _localSync.PrepareRemoteLogForSyncing(dbLogResponse.Content);
+                            var remoteChangesLookup = await MpSyncHelper.PrepareRemoteLogForSyncing(dbLogResponse.Content);
                             var flipRequest = await MpStreamMessage.CreateFlipRequest(
                                 ThisEndpoint,
                                 lep.DeviceGuid);
 
                             var odbLogRequest = await SendReceiveSocket(listener, flipRequest);
                             var lastSyncForOther = DateTime.Parse(odbLogRequest.Content);
-                            var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(lastSyncForOther);
+                            var dbLogQueryResultStr = await MpSyncHelper.GetLocalLogFromSyncDate(lastSyncForOther);
                             var thisdbLogResponse = await MpStreamMessage .CreateDbLogResponse(ThisEndpoint, lep.DeviceGuid, dbLogQueryResultStr);
                             await SendSocket(listener, thisdbLogResponse);
 
-                            await _localSync.PerformSync(
+                            await MpSyncHelper.PerformSync(
                                 remoteChangesLookup,
                                 lep.DeviceGuid);                            
 
@@ -290,8 +269,8 @@ namespace MonkeyPaste {
                                         if (dbLogResponse.Header.FromGuid == ThisEndpoint.DeviceGuid) {
                                             continue;
                                         }
-                                        remoteChangesLookup = await _localSync.PrepareRemoteLogForSyncing(dbLogResponse.Content);
-                                        await _localSync.PerformSync(
+                                        remoteChangesLookup = await MpSyncHelper.PrepareRemoteLogForSyncing(dbLogResponse.Content);
+                                        await MpSyncHelper.PerformSync(
                                                     remoteChangesLookup,
                                                     lep.DeviceGuid);
                                     }
@@ -319,7 +298,7 @@ namespace MonkeyPaste {
             });
         }
 
-        public async Task DisposeAsync() {
+        public static async Task DisposeAsync() {
             if(ThisEndpoint == null) {
                 return;
             }
@@ -328,7 +307,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private void LocalSync_OnSyncableChange(object sender, object e) {
+        private static void LocalSync_OnSyncableChange(object sender, object e) {
             if (sender == null) {
                 return;
             }
@@ -342,8 +321,8 @@ namespace MonkeyPaste {
                         //}
                         var disconnectedDevices = new List<MpRemoteDevice>();
                         foreach (var rep in ConnectedDevices) {
-                            var lastSyncDt = await _localSync.GetLastSyncForRemoteDevice(rep.RemoteEndpoint.DeviceGuid);
-                            var dbLogQueryResultStr = await _localSync.GetLocalLogFromSyncDate(lastSyncDt, rep.RemoteEndpoint.DeviceGuid);
+                            var lastSyncDt = await MpSyncHelper.GetLastSyncForRemoteDevice(rep.RemoteEndpoint.DeviceGuid);
+                            var dbLogQueryResultStr = await MpSyncHelper.GetLocalLogFromSyncDate(lastSyncDt, rep.RemoteEndpoint.DeviceGuid);
                             if (!string.IsNullOrEmpty(dbLogQueryResultStr)) {
                                 var thisdbLogResponse = await MpStreamMessage .CreateDbLogResponse(ThisEndpoint, rep.RemoteEndpoint.DeviceGuid, dbLogQueryResultStr);
                                 try {
@@ -367,7 +346,7 @@ namespace MonkeyPaste {
         #region Network I/O
 
         #region Generic socket i/o
-        private async Task Send(MpRemoteDevice rep, MpStreamMessage msg) {
+        private static async Task Send(MpRemoteDevice rep, MpStreamMessage msg) {
             if (rep.RemoteSocket == null) {
                 MpConsole.WriteTraceLine($"Error socket is null");
                 return;
@@ -379,7 +358,7 @@ namespace MonkeyPaste {
             }
         }
 
-        private async Task<MpStreamMessage> Receive(MpRemoteDevice rep) {
+        private static async Task<MpStreamMessage> Receive(MpRemoteDevice rep) {
             if (rep.RemoteSocket == null) {
                 throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rep);
             }
@@ -393,7 +372,7 @@ namespace MonkeyPaste {
             throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rep);
         }
 
-        private async Task<MpStreamMessage> SendReceive(MpRemoteDevice rep, MpStreamMessage msg) {
+        private static async Task<MpStreamMessage> SendReceive(MpRemoteDevice rep, MpStreamMessage msg) {
             if (rep.RemoteSocket == null) {
                 throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rep);
             }
@@ -410,14 +389,14 @@ namespace MonkeyPaste {
         #endregion
 
         #region TCP Sockets
-        private Socket CreateLocalListener(MpDeviceEndpoint tep) {
+        private static Socket CreateLocalListener(MpDeviceEndpoint tep) {
             var listener = new Socket(tep.PrivateIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listener.Bind(tep.PrivateIPEndPoint);
             listener.Listen(10);
             return listener;
         }
 
-        private Socket ConnectSocket(MpDeviceEndpoint otherEndpoint) {
+        private static Socket ConnectSocket(MpDeviceEndpoint otherEndpoint) {
             try {
                 Socket tempSocket = new Socket(otherEndpoint.PrivateIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 tempSocket.Connect(otherEndpoint.PrivateIPEndPoint);
@@ -433,7 +412,7 @@ namespace MonkeyPaste {
             return null;
         }
 
-        private async Task<MpStreamMessage> SendReceiveSocket(Socket s, MpStreamMessage smsg) {
+        private static async Task<MpStreamMessage> SendReceiveSocket(Socket s, MpStreamMessage smsg) {
             var result = await SendSocket(s, smsg);
             if (result != null) {
                 return result;
@@ -442,7 +421,7 @@ namespace MonkeyPaste {
             return responeStreamMsg;
         }
 
-        private async Task<MpStreamMessage> SendSocket(Socket s, MpStreamMessage smsg) {
+        private static async Task<MpStreamMessage> SendSocket(Socket s, MpStreamMessage smsg) {
             if (!IsConnected(s,true)) {
                 var rd = ConnectedDevices.Where(x => x.RemoteSocket == (object)s).FirstOrDefault();
                 throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, rd);
@@ -460,14 +439,14 @@ namespace MonkeyPaste {
             }
 
             if(smsg.Header.MessageType == MpSyncMesageType.DbLogResponse) {
-               await _localSync.UpdateSyncHistory(smsg.Header.ToGuid, DateTime.UtcNow);
+               await MpSyncHelper.UpdateSyncHistory(smsg.Header.ToGuid, DateTime.UtcNow);
             }
 
             MpConsole.WriteLine(@"{0} Sent: {1} bytes", DateTime.Now.ToString(), bytesSent.Length);
             return null;
         }
 
-        private async Task<MpStreamMessage> ReceiveSocket(Socket s) {
+        private static async Task<MpStreamMessage> ReceiveSocket(Socket s) {
             var response = await ReceiveAllSocket(s);
 
             if (!response.Contains(MpStreamMessage.EofToken)) {
@@ -481,7 +460,7 @@ namespace MonkeyPaste {
             return smsg;
         }
 
-        private async Task<string> ReceiveAllSocket(Socket socket) {
+        private static async Task<string> ReceiveAllSocket(Socket socket) {
             var buffer = new List<byte>();
             string response = string.Empty;
             bool isConnected = IsConnected(socket,false);
@@ -515,7 +494,7 @@ namespace MonkeyPaste {
             return response;
         }
 
-        private bool IsConnected(Socket s, bool isWrite) {
+        private static bool IsConnected(Socket s, bool isWrite) {
             return true;
             int pt = 500000; //500000 microseconds is .5 seconds
             if (s == null) {
@@ -544,7 +523,7 @@ namespace MonkeyPaste {
 
         #region Web Sockets
 
-        private List<MpDeviceEndpoint> ProcessWebConnectResponse(string response) {
+        private static List<MpDeviceEndpoint> ProcessWebConnectResponse(string response) {
             var repl = new List<MpDeviceEndpoint>();
             if (string.IsNullOrEmpty(response)) {
                 return repl;
@@ -570,7 +549,7 @@ namespace MonkeyPaste {
             return repl;
         }
 
-        private async Task<ClientWebSocket> ConnectWebSocket() {
+        private static async Task<ClientWebSocket> ConnectWebSocket() {
             var serverIp = MpHelpers.GetIpForDomain("www.monkeypaste.com");
             var socket = new ClientWebSocket();
             try {
@@ -588,7 +567,7 @@ namespace MonkeyPaste {
             return socket;
         }
 
-        private async Task SendWebSocketAsync(ClientWebSocket cws, MpStreamMessage smsg) {
+        private static async Task SendWebSocketAsync(ClientWebSocket cws, MpStreamMessage smsg) {
             string smsgStr = await smsg.SerializeDbObject();
             var bytes = Encoding.ASCII.GetBytes(smsgStr);
             var buffer = new ArraySegment<Byte>(bytes, 0, bytes.Length);
@@ -602,7 +581,7 @@ namespace MonkeyPaste {
                 WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-        private async Task<MpStreamMessage> ReceiveWebSocketAsync(ClientWebSocket cws) {
+        private static async Task<MpStreamMessage> ReceiveWebSocketAsync(ClientWebSocket cws) {
             var response = string.Empty;
             var buffer = new ArraySegment<byte>(new Byte[8192]);
             WebSocketReceiveResult result = null;
@@ -639,7 +618,7 @@ namespace MonkeyPaste {
             return respMsg;
         }
 
-        private async Task<MpStreamMessage> SendReceiveWebSocketAsync(ClientWebSocket cws, MpStreamMessage smsg) {
+        private static async Task<MpStreamMessage> SendReceiveWebSocketAsync(ClientWebSocket cws, MpStreamMessage smsg) {
             await SendWebSocketAsync(cws, smsg);
             var responseStreamMsg = await ReceiveWebSocketAsync(cws);
             if (responseStreamMsg == null) {
@@ -650,7 +629,7 @@ namespace MonkeyPaste {
             return responseStreamMsg;
         }
 
-        private bool IsConnected(ClientWebSocket cws) {
+        private static bool IsConnected(ClientWebSocket cws) {
             return cws != null && cws.State == WebSocketState.Open;
         }
         #endregion

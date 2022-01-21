@@ -122,7 +122,7 @@ namespace MpWpfApp {
         }
 
         private async Task<object> CreateSavedSearchPicker() {
-            var usl = await MpDb.Instance.GetItemsAsync<MpUserSearch>();
+            var usl = await MpDb.GetItemsAsync<MpUserSearch>();
 
             var comboBox = new ComboBox() {
                 Width = 200

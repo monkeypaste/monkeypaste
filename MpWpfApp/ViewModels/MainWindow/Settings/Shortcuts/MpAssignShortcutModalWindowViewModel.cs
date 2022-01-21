@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 namespace MpWpfApp {
 
-    public class MpAssignShortcutModalWindowViewModel : MpViewModelBase<object> {
+    public class MpAssignShortcutModalWindowViewModel : MpViewModelBase {
         #region Static Variables
         #endregion
 
@@ -126,10 +126,10 @@ namespace MpWpfApp {
         public BitmapSource WarningBmp {
             get {
                 if (_isReplacingShortcut) {
-                    return (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath+@"/Images/warning.png"));
+                    return (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath+@"/Images/warning.png"));
                 }
                 if (_wasPreviouslyASequence || KeyList.Count > 1) {
-                    return (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/info.png"));
+                    return (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/info.png"));
                 }
                 return new BitmapImage();
             }

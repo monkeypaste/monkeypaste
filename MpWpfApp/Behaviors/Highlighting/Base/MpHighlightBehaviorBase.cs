@@ -127,7 +127,7 @@ namespace MpWpfApp {
                 // NOTE currently occurs during active search and tag changes
                 return;
             }
-            string st = MpDataModelProvider.Instance.QueryInfo.SearchText;
+            string st = MpDataModelProvider.QueryInfo.SearchText;
 
             _matches = MpHelpers.FindStringRangesFromPosition(
                 ContentRange.Start,

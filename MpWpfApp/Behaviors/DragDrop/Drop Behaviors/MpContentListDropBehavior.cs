@@ -39,7 +39,7 @@ namespace MpWpfApp {
 
             _dataContext = AssociatedObject.DataContext;
 
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                 AssociatedObject.DataContext, 
                 ReceivedAssociateObjectViewModelMessage,
                 AssociatedObject.DataContext);
@@ -48,7 +48,7 @@ namespace MpWpfApp {
         public override void OnUnloaded() {
             base.OnUnloaded();
 
-            MpMessenger.Instance.Unregister<MpMessageType>(
+            MpMessenger.Unregister<MpMessageType>(
                 _dataContext,
                 ReceivedAssociateObjectViewModelMessage,
                 _dataContext);
@@ -281,8 +281,8 @@ namespace MpWpfApp {
                     AssociatedObject.BindingContext.QueryOffsetIdx);
             } else {
                 int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + tileIdx;
-                MpDataModelProvider.Instance.InsertQueryItem(dropModels[0].Id, queryDropIdx);
-                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+                MpDataModelProvider.InsertQueryItem(dropModels[0].Id, queryDropIdx);
+                MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
             }
 
         }

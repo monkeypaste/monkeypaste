@@ -28,7 +28,7 @@ namespace MonkeyPaste {
             //none
             string.Empty,
             //File or folder path
-            @"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+MpPreferences.Instance.KnownFileExtensionsPsv+@")|(\\|\w))$",
+            @"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+MpPreferences.KnownFileExtensionsPsv+@")|(\\|\w))$",
             //WebLink ( NOTE for '"https://url.com"' this includes the last '"' in the match )
             @"(?:https?://|www\.)\S+", 
             //@"[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)",

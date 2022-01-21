@@ -10,7 +10,7 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpClipTileSortViewModel : MpViewModelBase, MpISingleton<MpClipTileSortViewModel> {
+    public class MpClipTileSortViewModel : MpViewModelBase, MpISingletonViewModel<MpClipTileSortViewModel> {
         #region View Models
         private ObservableCollection<MpSortTypeComboBoxItemViewModel> _sortTypes = new ObservableCollection<MpSortTypeComboBoxItemViewModel>();
         public ObservableCollection<MpSortTypeComboBoxItemViewModel> SortTypes {
@@ -79,17 +79,14 @@ namespace MpWpfApp {
         public static MpClipTileSortViewModel Instance => _instance ?? (_instance = new MpClipTileSortViewModel());
 
 
-        public MpClipTileSortViewModel() : base() { }
+        public MpClipTileSortViewModel() : base(null) {
+            PropertyChanged += MpClipTileSortViewModel_PropertyChanged;
+        }
 
 
         public async Task Init() {
-            await MpHelpers.RunOnMainThreadAsync(() => {
-
-                //must be set before property changed registered for loading order
-                SelectedSortType = SortTypes[0];
-
-                PropertyChanged += MpClipTileSortViewModel_PropertyChanged;
-            });
+            await Task.Delay(1);
+            ResetToDefault(true);
         }
 
         #endregion
@@ -110,7 +107,7 @@ namespace MpWpfApp {
             IsReseting = false;
 
             if(!suppressNotifyQueryChanged) {
-                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                MpDataModelProvider.QueryInfo.NotifyQueryChanged();
             }
         }
         #endregion
@@ -124,13 +121,9 @@ namespace MpWpfApp {
                     }
                     if (SelectedSortType.SortType != MpContentSortType.Manual) {
                         var manualSort = SortTypes.Where(x => x.SortType == MpContentSortType.Manual).FirstOrDefault();
-                        if (MpTagTrayViewModel.Instance.SelectedTagTile.IsSudoTag) {
-                            manualSort.IsVisible = false;
-                        } else {
-                            manualSort.IsVisible = true;
-                        }
-                        if(!IsReseting) {
-                            MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                        manualSort.IsVisible = false;
+                        if (!IsReseting) {
+                            MpDataModelProvider.QueryInfo.NotifyQueryChanged();
                         }
                     }
                     OnPropertyChanged(nameof(SortImagePath));
@@ -138,7 +131,7 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsSortDescending):
                     if (!IsReseting) {
-                        MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                        MpDataModelProvider.QueryInfo.NotifyQueryChanged();
                     }
                     OnPropertyChanged(nameof(SortImagePath));
                     OnPropertyChanged(nameof(IsManualSort));

@@ -49,9 +49,9 @@ namespace MonkeyPaste {
         public MpTagTileCollectionViewModel() : base() {
             PropertyChanged += MpTagCollectionViewModel_PropertyChanged;
 
-            MpDb.Instance.OnItemAdded += Db_OnItemAdded;
-            MpDb.Instance.OnItemUpdated += Db_OnItemUpdated;
-            MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
+            MpDb.OnItemAdded += Db_OnItemAdded;
+            MpDb.OnItemUpdated += Db_OnItemUpdated;
+            MpDb.OnItemDeleted += Db_OnItemDeleted;
 
             Task.Run(Initialize);
         }       
@@ -79,7 +79,7 @@ namespace MonkeyPaste {
                 await UpdateSort();
             }
             IsBusy = true;
-            var tags = await MpDb.Instance.GetItemsAsync<MpTag>();
+            var tags = await MpDb.GetItemsAsync<MpTag>();
             var tvms = tags.Select(x => CreateTagViewModel(x)).OrderBy(x=>x.Tag.TagSortIdx);
             TagViewModels = new ObservableCollection<MpTagTileViewModel>(tvms);
             OnPropertyChanged(nameof(TagViewModels));
@@ -204,9 +204,9 @@ namespace MonkeyPaste {
                 TagSortIdx = TagViewModels.Count,
                 HexColor = MpHelpers.GetRandomColor().ToHex()
             };
-            //await MpDb.Instance.AddItem<MpColor>(newTag.Color);
+            //await MpDb.AddItem<MpColor>(newTag.Color);
             //newTag.ColorId = newTag.Color.Id;
-            //await MpDb.Instance.AddItemAsync<MpTag>(newTag);
+            //await MpDb.AddItemAsync<MpTag>(newTag);
 
             //trigger db_onItemAdded instead of actually adding item because renaming is called automatically
             Db_OnItemAdded(this, newTag);

@@ -20,6 +20,7 @@
         ResizeMode="CanResize"
         WindowState="Normal"
         MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
+        DataContext="{x:Static local:MpMainWindowViewModel.Instance}"
         Height="{local:MpMeasurementsBinding WorkAreaBottom}"
         Width="{Binding MainWindowWidth}"
         d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
@@ -48,12 +49,16 @@
             <!--  Title Menu  -->
             <local:MpTitleBarView x:Name="TitleBarView"
                                   Grid.Row="0"
-                                  Background="{local:MpThemeColorsBinding Key=Title_Menu_Background_Color}"
+                                  Background="{Binding .,
+                                                       Converter={StaticResource StringToThemeBrushConverter},
+                                                       ConverterParameter=Title_Menu_Background_Color}"
                                   DataContext="{Binding}" />
 
             <!--  FilterMenu  -->
             <Grid Grid.Row="1"
-                  Background="{local:MpThemeColorsBinding Key=Filter_Menu_Background_Color}">
+                  Background="{Binding .,
+                                       Converter={StaticResource StringToThemeBrushConverter},
+                                       ConverterParameter=Filter_Menu_Background_Color}">
                 <!--<Grid.Background>
                     <SolidColorBrush Color="DarkViolet" Opacity="0.4"/>
                 </Grid.Background>-->
@@ -150,7 +155,9 @@
                                          Height="{Binding ClipTrayViewModel.ClipTrayHeight}"
                                          HorizontalAlignment="Left"
                                          DataContext="{Binding}"
-                                         Background="{local:MpThemeColorsBinding Key=Tag_Tree_Background_Color}" />
+                                         Background="{Binding .,
+                                                              Converter={StaticResource StringToThemeBrushConverter},
+                                                              ConverterParameter=Tag_Tree_Background_Color}" />
                 <GridSplitter Background="Black"
                               Grid.Row="1"
                               Grid.Column="0"

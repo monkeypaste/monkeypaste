@@ -713,7 +713,7 @@ namespace MpWpfApp {
 
         public Brush CriteriaItemBackgroundBrush {
             get {
-                Brush b = MpThemeColors.Instance.CurrentTheme[MpThemeItemType.Filter_Menu_Background_Color];
+                Brush b = MpThemeColors.Instance.CurrentTheme.ToArray()[(int)MpThemeItemType.Filter_Menu_Background_Color].Value;
                 Brush e = Brushes.DarkMagenta;
                 Brush o = Brushes.LightBlue;
                 return SortOrderIdx % 2 == 0 ? e : o;
@@ -791,7 +791,7 @@ namespace MpWpfApp {
 
             SearchCriteriaItem = sci;
 
-            var dl = await MpDb.Instance.GetItemsAsync<MpUserDevice>();
+            var dl = await MpDb.GetItemsAsync<MpUserDevice>();
             _deviceNames = dl.Select(x => x.MachineName).ToList();
 
             RootOptionViewModel = GetRootOption();

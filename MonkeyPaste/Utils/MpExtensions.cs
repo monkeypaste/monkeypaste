@@ -122,6 +122,13 @@ namespace MonkeyPaste {
 
         #region Strings
 
+        public static bool IsStringResourcePath(this string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith("pack:");
+        }
+
         public static string ToLabel(this string titleCaseStr, string noneText = "") {
             // TODO when automating UI language need to parameterize low vs up case logic
             //Converts 'ThisIsALabel" to 'This Is A Label'
@@ -177,7 +184,7 @@ namespace MonkeyPaste {
         }
 
         public static string ToTitleCase(this string str) {
-            TextInfo textInfo = new CultureInfo(MpPreferences.Instance.UserCultureInfoName, false).TextInfo;
+            TextInfo textInfo = new CultureInfo(MpPreferences.UserCultureInfoName, false).TextInfo;
             return textInfo.ToTitleCase(str);
         }
 
@@ -190,10 +197,10 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
                 return false;
             }
-            if(MpPreferences.Instance.SearchByRegex) {
+            if(MpPreferences.SearchByRegex) {
                 return Regex.IsMatch(str, compareStr);
             }
-            return str.ContainsByCase(compareStr, MpPreferences.Instance.SearchByIsCaseSensitive);
+            return str.ContainsByCase(compareStr, MpPreferences.SearchByIsCaseSensitive);
         }
 
         public static bool ContainsByCase(this string str, string compareStr, bool isCaseSensitive) {

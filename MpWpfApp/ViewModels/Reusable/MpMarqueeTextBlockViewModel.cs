@@ -9,7 +9,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using MonkeyPaste;
 namespace MpWpfApp {
-    public class MpMarqueeTextBlockViewModel : MpViewModelBase<object> {
+    public class MpMarqueeTextBlockViewModel : MpViewModelBase {
 
         #region Properties
 
@@ -49,7 +49,7 @@ namespace MpWpfApp {
                                 FontSize,
                                 ForegroundBrush,
                                 new NumberSubstitution(),
-                                Properties.Settings.Default.ThisAppDip);
+                                MpPreferences.ThisAppDip);
 
                     CanMarquee = ft.Width > ContainerWidth;
                     break;

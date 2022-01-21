@@ -147,7 +147,7 @@ namespace MonkeyPaste {
         //        return;
         //    }
 
-        //    MpDb.Instance.ExecuteWrite(
+        //    MpDb.ExecuteWrite(
         //        "delete from MpPasteToAppPath where pk_MpPasteToAppPathId=@cid",
         //        new Dictionary<string, object> {
         //            { "@cid", PasteToAppPathId }
@@ -157,7 +157,7 @@ namespace MonkeyPaste {
         //public void WriteToDatabase() {
         //    //AvatarDbImage.WriteToDatabase
         //    if (PasteToAppPathId == 0) {
-        //        DataTable dt = MpDb.Instance.Execute(
+        //        DataTable dt = MpDb.Execute(
         //            "select * from MpPasteToAppPath where AppPath=@ap and IsAdmin=@ia and IsSilent=@is and Args=@a",
         //            new System.Collections.Generic.Dictionary<string, object> {
         //                { "@ap", AppPath },
@@ -168,7 +168,7 @@ namespace MonkeyPaste {
         //        if (dt != null && dt.Rows.Count > 0) {
         //            PasteToAppPathId = Convert.ToInt32(dt.Rows[0]["pk_MpPasteToAppPathId"].ToString());
         //        } else {
-        //            MpDb.Instance.ExecuteWrite(
+        //            MpDb.ExecuteWrite(
         //                "insert into MpPasteToAppPath(MpPasteToAppPathGuid,AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent,WindowState,PressEnter) values(@apg,@ap,@an,@ia,@l,@a,@ib,@is,@ws,@pe)",
         //                new System.Collections.Generic.Dictionary<string, object> {
         //                    { "@apg", PasteToAppPathGuid.ToString() },
@@ -182,10 +182,10 @@ namespace MonkeyPaste {
         //                { "@ws", (int)WindowState },
         //                {"@pe", PressEnter ? 1:0 }
         //            });
-        //            PasteToAppPathId = MpDb.Instance.GetLastRowId("MpPasteToAppPath", "pk_MpPasteToAppPathId");
+        //            PasteToAppPathId = MpDb.GetLastRowId("MpPasteToAppPath", "pk_MpPasteToAppPathId");
         //        }
         //    } else {
-        //        MpDb.Instance.ExecuteWrite(
+        //        MpDb.ExecuteWrite(
         //            "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, IconBlob=@ib, WindowState=@ws, PressEnter=@pe where pk_MpPasteToAppPathId=@cid",
         //            new System.Collections.Generic.Dictionary<string, object> {
         //                { "@ap", AppPath },

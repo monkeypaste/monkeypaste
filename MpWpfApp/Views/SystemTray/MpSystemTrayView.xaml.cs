@@ -34,5 +34,9 @@ namespace MpWpfApp {
         private void SystemTrayTaskbarIcon_TrayLeftMouseUp(object sender, RoutedEventArgs e) {
             MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
         }
+
+        private void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
+            //SystemTrayTaskbarIcon.IconSource = new ImageSource(new Uri(Application.Current.Resources["AppIcon"] as string));
+        }
     }
 }

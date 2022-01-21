@@ -33,7 +33,7 @@ namespace MpWpfApp {
 
             _copyItemIdsNeedingView.CollectionChanged += _copyItemIdsNeedingView_CollectionChanged;
 
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
         }
@@ -46,7 +46,7 @@ namespace MpWpfApp {
 
             _copyItemIdsNeedingView.CollectionChanged -= _copyItemIdsNeedingView_CollectionChanged;
 
-            MpMessenger.Instance.Unregister<MpMessageType>(
+            MpMessenger.Unregister<MpMessageType>(
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
         }

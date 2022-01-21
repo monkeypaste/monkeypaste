@@ -55,7 +55,7 @@ namespace MpWpfApp {
 
             MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
 
-            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ResizeCompleted);
+            MpMessenger.Send<MpMessageType>(MpMessageType.ResizeCompleted);
 
             double mwDeltaHeight = MpMainWindowViewModel.Instance.MainWindowHeight - _lastMainWindowHeight;
             if(mwDeltaHeight < 0) {
@@ -93,7 +93,7 @@ namespace MpWpfApp {
             while(MpClipTrayViewModel.Instance.HeadItem == null) {
                 await Task.Delay(10);
             }
-            double deltaHeight = MpPreferences.Instance.MainWindowInitialHeight - MpMainWindowViewModel.Instance.MainWindowHeight;
+            double deltaHeight = MpPreferences.MainWindowInitialHeight - MpMainWindowViewModel.Instance.MainWindowHeight;
             Resize(deltaHeight);
         }
 
@@ -149,9 +149,9 @@ namespace MpWpfApp {
 
             mwvm.IsResizing = false;
 
-            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Resizing);
+            MpMessenger.Send<MpMessageType>(MpMessageType.Resizing);
 
-            MpPreferences.Instance.MainWindowInitialHeight = mwvm.MainWindowHeight;
+            MpPreferences.MainWindowInitialHeight = mwvm.MainWindowHeight;
             //Application.Current.MainWindow.UpdateLayout();
             //Application.Current.MainWindow.GetVisualDescendents<MpUserControl>().ForEach(x => x.UpdateLayout());
         }

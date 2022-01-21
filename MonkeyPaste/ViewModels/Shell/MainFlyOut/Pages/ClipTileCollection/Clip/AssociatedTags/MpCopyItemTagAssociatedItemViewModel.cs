@@ -50,7 +50,7 @@ namespace MonkeyPaste {
         private async Task Initialize() {
             await UpdateAssocation();
 
-            Tag.CopyItems = await MpDataModelProvider.Instance.GetCopyItemsForTagAsync(Tag.Id);
+            Tag.CopyItems = await MpDataModelProvider.GetCopyItemsForTagAsync(Tag.Id);
         }
 
         private async Task UpdateAssocation() {
@@ -58,7 +58,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            IsAssociated = await MpDataModelProvider.Instance.IsTagLinkedWithCopyItem(Tag.Id, CopyItem.Id);
+            IsAssociated = await MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, CopyItem.Id);
         }
         #endregion
 
@@ -66,7 +66,7 @@ namespace MonkeyPaste {
         public ICommand ToggleAssociationCommand => new Command(
             async () => {
                 if(IsAssociated) {
-                    var cit = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(CopyItem.Id, Tag.Id);
+                    var cit = await MpDataModelProvider.GetCopyItemTagForTagAsync(CopyItem.Id, Tag.Id);
                     //triggers tagtileviewmodel to update other item's sort order
                     await cit.DeleteFromDatabaseAsync();
                 } else {

@@ -418,5 +418,8 @@
     <Setting Name="AppStorageFilePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="FallbackProcessPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\WINDOWS\Explorer.EXE</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

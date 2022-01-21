@@ -22,7 +22,7 @@ namespace MpWpfApp {
         AzureImageAnalysis
     }
 
-    public class MpAnalyticItemCollectionViewModel : MpViewModelBase, MpISingleton<MpAnalyticItemCollectionViewModel>, MpITreeItemViewModel  { //
+    public class MpAnalyticItemCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpAnalyticItemCollectionViewModel>, MpITreeItemViewModel  { //
         #region Properties
 
         #region View Models
@@ -127,7 +127,7 @@ namespace MpWpfApp {
         public static MpAnalyticItemCollectionViewModel Instance => _instance ?? (_instance = new MpAnalyticItemCollectionViewModel());
 
 
-        public MpAnalyticItemCollectionViewModel() : base() {
+        public MpAnalyticItemCollectionViewModel() : base(null) {
             PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
         }
 
@@ -141,7 +141,7 @@ namespace MpWpfApp {
 
             Items.Clear();
 
-            var ail = await MpDb.Instance.GetItemsAsync<MpAnalyticItem>();
+            var ail = await MpDb.GetItemsAsync<MpAnalyticItem>();
             ail.Reverse();
             foreach (var ai in ail) {
                 var aivm = await CreateAnalyticItemViewModel(ai);

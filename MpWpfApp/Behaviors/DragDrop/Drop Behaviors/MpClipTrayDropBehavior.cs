@@ -155,9 +155,9 @@ namespace MpWpfApp {
 
             int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + DropIdx;
 
-            MpDataModelProvider.Instance.InsertQueryItem(dragModels[0].Id, queryDropIdx);
+            MpDataModelProvider.InsertQueryItem(dragModels[0].Id, queryDropIdx);
 
-            MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+            MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
         }
     }
 

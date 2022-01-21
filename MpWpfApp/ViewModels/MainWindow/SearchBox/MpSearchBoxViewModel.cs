@@ -18,7 +18,7 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpSearchBoxViewModel : MpViewModelBase, MpISingleton<MpSearchBoxViewModel> {
+    public class MpSearchBoxViewModel : MpViewModelBase, MpISingletonViewModel<MpSearchBoxViewModel> {
         #region Private Variables
         #endregion
 
@@ -36,69 +36,69 @@ namespace MpWpfApp {
                         new MpSearchFilterViewModel(
                             this,
                             "Content",
-                            nameof(MpPreferences.Instance.SearchByContent),
+                            nameof(MpPreferences.SearchByContent),
                             MpContentFilterType.Content),
                         new MpSearchFilterViewModel(
                             this,
                             "Title",
-                            nameof(MpPreferences.Instance.SearchByTitle),
+                            nameof(MpPreferences.SearchByTitle),
                             MpContentFilterType.Title),
                         new MpSearchFilterViewModel(
                             this,
                             "Url",
-                            nameof(MpPreferences.Instance.SearchBySourceUrl),
+                            nameof(MpPreferences.SearchBySourceUrl),
                             MpContentFilterType.Url),
                         new MpSearchFilterViewModel(
                             this,
                             "Url Title",
-                            nameof(MpPreferences.Instance.SearchByUrlTitle),
+                            nameof(MpPreferences.SearchByUrlTitle),
                             MpContentFilterType.UrlTitle),
                         new MpSearchFilterViewModel(
                             this,
                             "Application Path",
-                            nameof(MpPreferences.Instance.SearchByProcessName),
+                            nameof(MpPreferences.SearchByProcessName),
                             MpContentFilterType.AppPath),
                         new MpSearchFilterViewModel(
                             this,
                             "Application Name",
-                            nameof(MpPreferences.Instance.SearchByApplicationName),
+                            nameof(MpPreferences.SearchByApplicationName),
                             MpContentFilterType.AppName),
                         //new MpSearchFilterViewModel(
                         //    this,
                         //    "Collections",
-                        //    nameof(MpPreferences.Instance.SearchByTag),
+                        //    nameof(MpPreferences.SearchByTag),
                         //    MpContentFilterType.Tag),
                         new MpSearchFilterViewModel(
                             this,
                             "Description",
-                            nameof(MpPreferences.Instance.SearchByDescription),
+                            nameof(MpPreferences.SearchByDescription),
                             MpContentFilterType.Meta),
                         new MpSearchFilterViewModel(this,true),
                         new MpSearchFilterViewModel(
                             this,
                             "Text Type",
-                            nameof(MpPreferences.Instance.SearchByTextType),
+                            nameof(MpPreferences.SearchByTextType),
                             MpContentFilterType.TextType),
                         new MpSearchFilterViewModel(
                             this,
                             "File Type",
-                            nameof(MpPreferences.Instance.SearchByFileType),
+                            nameof(MpPreferences.SearchByFileType),
                             MpContentFilterType.FileType),
                         new MpSearchFilterViewModel(
                             this,
                             "Image Type",
-                            nameof(MpPreferences.Instance.SearchByImageType),
+                            nameof(MpPreferences.SearchByImageType),
                             MpContentFilterType.ImageType),
                         new MpSearchFilterViewModel(this,true),
                         new MpSearchFilterViewModel(
                             this,
                             "Case Sensitive",
-                            nameof(MpPreferences.Instance.SearchByIsCaseSensitive),
+                            nameof(MpPreferences.SearchByIsCaseSensitive),
                             MpContentFilterType.CaseSensitive),
                         new MpSearchFilterViewModel(
                             this,
                             "Regular Expression",
-                            nameof(MpPreferences.Instance.SearchByRegex),
+                            nameof(MpPreferences.SearchByRegex),
                             MpContentFilterType.Regex)
                     };
                 }
@@ -138,7 +138,7 @@ namespace MpWpfApp {
 
         public string PlaceholderText {
             get {
-                return MpPreferences.Instance.SearchPlaceHolderText;
+                return MpPreferences.SearchPlaceHolderText;
             }
         }
 
@@ -324,7 +324,7 @@ namespace MpWpfApp {
         public static MpSearchBoxViewModel Instance => _instance ?? (_instance = new MpSearchBoxViewModel());
 
 
-        public MpSearchBoxViewModel() : base() {
+        public MpSearchBoxViewModel() : base(null) {
             PropertyChanged += MpSearchBoxViewModel_PropertyChanged;
         }
 
@@ -339,7 +339,7 @@ namespace MpWpfApp {
                 }
 
 
-                MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
+                MpMessenger.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceiveClipTrayViewModelMessage);
             });
         }
 
@@ -354,7 +354,7 @@ namespace MpWpfApp {
                 UserSearch = null;
             } else {
                 if (us.CriteriaItems == null || us.CriteriaItems.Count == 0) {
-                    us = await MpDb.Instance.GetItemAsync<MpUserSearch>(us.Id);
+                    us = await MpDb.GetItemAsync<MpUserSearch>(us.Id);
                 }
 
                 UserSearch = us;
@@ -381,8 +381,8 @@ namespace MpWpfApp {
         }
 
         private void ValidateFilters() {
-            var resfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByRegex));
-            var cssfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByIsCaseSensitive));
+            var resfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByRegex));
+            var cssfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByIsCaseSensitive));
             if (resfvm.IsChecked) {
                 cssfvm.IsChecked = false;
                 cssfvm.IsEnabled = false;
@@ -390,9 +390,9 @@ namespace MpWpfApp {
                 cssfvm.IsEnabled = true;
             }
 
-            var sbtfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByTextType));
-            var sbifvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByImageType));
-            var sbffvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.Instance.SearchByFileType));
+            var sbtfvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByTextType));
+            var sbifvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByImageType));
+            var sbffvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByFileType));
 
             if(!sbffvm.IsChecked && !sbifvm.IsChecked && !sbffvm.IsChecked) {
                 sbtfvm.IsChecked = sbifvm.IsChecked = sbffvm.IsChecked = true;
@@ -519,7 +519,7 @@ namespace MpWpfApp {
                 IsMultipleMatches = false;
                 SearchText = string.Empty;
                 if(!string.IsNullOrWhiteSpace(LastSearchText)) {
-                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged();
                 }
                 LastSearchText = string.Empty;
             },
@@ -538,17 +538,17 @@ namespace MpWpfApp {
                 }
                 IsMultipleMatches = false;
 
-                MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                MpDataModelProvider.QueryInfo.NotifyQueryChanged();
             },!MpMainWindowViewModel.Instance.IsMainWindowLoading);
 
         public ICommand NextMatchCommand => new RelayCommand(
             () => {
-                MpMessenger.Instance.Send(MpMessageType.SelectNextMatch);
+                MpMessenger.Send(MpMessageType.SelectNextMatch);
             });
 
         public ICommand PrevMatchCommand => new RelayCommand(
             () => {
-                MpMessenger.Instance.Send(MpMessageType.SelectPreviousMatch);
+                MpMessenger.Send(MpMessageType.SelectPreviousMatch);
             });
 
         public ICommand ClearSearchCriteriaItemsCommand => new RelayCommand(
@@ -556,7 +556,7 @@ namespace MpWpfApp {
                 CriteriaItems.Clear();
                 OnPropertyChanged(nameof(CriteriaItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
-                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
+                MpMessenger.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             });
 
         public ICommand AddSearchCriteriaItemCommand => new RelayCommand(
@@ -568,7 +568,7 @@ namespace MpWpfApp {
                 CriteriaItems.Add(nscivm);
                 OnPropertyChanged(nameof(CriteriaItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
-                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
+                MpMessenger.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             },CanAddCriteriaItem);
 
         public ICommand RemoveSearchCriteriaItemCommand => new RelayCommand<MpSearchCriteriaItemViewModel>(
@@ -579,7 +579,7 @@ namespace MpWpfApp {
                     await scivm.SearchCriteriaItem.DeleteFromDatabaseAsync();
                 }
                 await UpdateCriteriaSortOrder();
-                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
+                MpMessenger.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             });
 
         public ICommand SaveSearchCommand => new RelayCommand(

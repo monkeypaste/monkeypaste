@@ -8,7 +8,7 @@ using System.Windows.Threading;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpDragDropManager : MpISingleton<MpDragDropManager> {
+    public class MpDragDropManager : MpISingletonViewModel<MpDragDropManager> {
         #region private  Variables
 
         private const double MINIMUM_DRAG_DISTANCE = 10;
@@ -86,7 +86,7 @@ namespace MpWpfApp {
 
             MpMainWindowViewModel.Instance.OnMainWindowHide += Instance_OnMainWindowHide;
 
-            MpMessenger.Instance.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
+            MpMessenger.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
             await Task.Delay(1);
         }
 
@@ -144,7 +144,7 @@ namespace MpWpfApp {
             }
             if (IsDragAndDrop) {
                 await PerformDrop(MpClipTrayViewModel.Instance.PersistentSelectedModels);
-                MpMessenger.Instance.Send(MpMessageType.ItemDragEnd);
+                MpMessenger.Send(MpMessageType.ItemDragEnd);
             }
         }
 
@@ -161,7 +161,7 @@ namespace MpWpfApp {
                     _autoScrollTimer.Start();
                     Keyboard.AddKeyDownHandler(Application.Current.MainWindow, Application_KeyDown);
 
-                    MpMessenger.Instance.Send(MpMessageType.ItemDragBegin);
+                    MpMessenger.Send(MpMessageType.ItemDragBegin);
                 }
 
                 var dropTarget = SelectDropTarget(MpClipTrayViewModel.Instance.PersistentSelectedModels);

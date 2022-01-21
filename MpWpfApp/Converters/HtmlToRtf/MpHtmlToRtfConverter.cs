@@ -160,7 +160,7 @@ namespace MpWpfApp {
             var img = te.FindChildren<Image>().FirstOrDefault();
             //byte[] data = Convert.FromBase64String(imgStr);
             //string decodedString = Encoding.UTF8.GetString(data);
-            img.Source = MpHelpers.ConvertStringToBitmapSource(imgStr);
+            img.Source = imgStr.ToBitmapSource();
             img.Height = 100;
             img.Width = 100;
             return te;

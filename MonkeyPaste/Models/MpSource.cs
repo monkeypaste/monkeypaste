@@ -88,9 +88,9 @@ namespace MonkeyPaste {
                 throw new Exception("Source must have an app associated");
             }
             int urlId = url == null ? 0 : url.Id;
-            MpSource dupCheck = await MpDataModelProvider.Instance.GetSourceByMembers(app.Id, urlId);
+            MpSource dupCheck = await MpDataModelProvider.GetSourceByMembers(app.Id, urlId);
             if(dupCheck != null) {
-                dupCheck = await MpDb.Instance.GetItemAsync<MpSource>(dupCheck.Id);
+                dupCheck = await MpDb.GetItemAsync<MpSource>(dupCheck.Id);
                 return dupCheck;
             }
             var source = new MpSource() {

@@ -155,7 +155,7 @@ namespace MonkeyPaste {
                     iconStr = MpBase64Images.Instance.ChainIcon;
                     break;
             }
-            int iconId = MpPreferences.Instance.ThisAppSource.PrimarySource.SourceIcon.Id;
+            int iconId = MpPreferences.ThisAppSource.PrimarySource.SourceIcon.Id;
             if(!string.IsNullOrEmpty(iconStr)) {
                 var icon = await MpIcon.Create(iconStr, false);
                 iconId = icon.Id;

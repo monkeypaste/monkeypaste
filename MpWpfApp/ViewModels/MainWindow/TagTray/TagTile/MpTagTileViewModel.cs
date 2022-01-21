@@ -214,7 +214,7 @@ namespace MpWpfApp {
 
         public Brush TagCountTextColor {
             get {
-                return MpHelpers.IsBright(((SolidColorBrush)TagBrush).Color) ? Brushes.Black : Brushes.White; ;
+                return MpWpfColorHelpers.IsBright(((SolidColorBrush)TagBrush).Color) ? Brushes.Black : Brushes.White; ;
             }
         }
 
@@ -343,11 +343,11 @@ namespace MpWpfApp {
                 if(Tag == null) {
                     return Brushes.Red;
                 }
-                return new SolidColorBrush(MpHelpers.ConvertHexToColor(Tag.HexColor));
+                return new SolidColorBrush(MpWpfColorHelpers.ConvertHexToColor(Tag.HexColor));
             }
             set {
-                if (new SolidColorBrush(MpHelpers.ConvertHexToColor(Tag.HexColor)) != value) {
-                    Tag.HexColor = MpHelpers.ConvertColorToHex(((SolidColorBrush)value).Color);
+                if (new SolidColorBrush(MpWpfColorHelpers.ConvertHexToColor(Tag.HexColor)) != value) {
+                    Tag.HexColor = MpWpfColorHelpers.ConvertColorToHex(((SolidColorBrush)value).Color);
                     //Task.Run(async () => {
                     //    await Tag.WriteToDatabaseAsync();
                     //});
@@ -394,9 +394,9 @@ namespace MpWpfApp {
         public MpTagTileViewModel() : base(null) { }
 
         public MpTagTileViewModel(MpTagTrayViewModel parent) : base(parent) {
-            MonkeyPaste.MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
-            MonkeyPaste.MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
-            MonkeyPaste.MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
+            MonkeyPaste.MpDb.SyncAdd += MpDbObject_SyncAdd;
+            MonkeyPaste.MpDb.SyncUpdate += MpDbObject_SyncUpdate;
+            MonkeyPaste.MpDb.SyncDelete += MpDbObject_SyncDelete;
 
             PropertyChanged += MpTagTileViewModel_PropertyChanged;
         }
@@ -479,7 +479,7 @@ namespace MpWpfApp {
         }
 
         public async Task RemoveContentItem(int ciid) {
-            var cit = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(ciid, TagId);
+            var cit = await MpDataModelProvider.GetCopyItemTagForTagAsync(ciid, TagId);
             if(cit == null) {
                 MpConsole.WriteLine($"Tag {TagName} doesn't contain a link with CopyItem Id {ciid} so cannot remove");
                 return;
@@ -496,9 +496,9 @@ namespace MpWpfApp {
             if (IsAllTag) {
                 isLinked = true;
             } else if (IsRecentTag) {
-                isLinked = await MpDataModelProvider.Instance.IsCopyItemInRecentTag(ci.Id);
+                isLinked = await MpDataModelProvider.IsCopyItemInRecentTag(ci.Id);
             } else {
-                isLinked = await MpDataModelProvider.Instance.IsTagLinkedWithCopyItem(Tag.Id, ci.Id);
+                isLinked = await MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, ci.Id);
             }
 
             return isLinked;
@@ -521,9 +521,9 @@ namespace MpWpfApp {
 
         public override void Dispose() {
             base.Dispose();
-            MonkeyPaste.MpDb.Instance.SyncAdd -= MpDbObject_SyncAdd;
-            MonkeyPaste.MpDb.Instance.SyncUpdate -= MpDbObject_SyncUpdate;
-            MonkeyPaste.MpDb.Instance.SyncDelete -= MpDbObject_SyncDelete;
+            MonkeyPaste.MpDb.SyncAdd -= MpDbObject_SyncAdd;
+            MonkeyPaste.MpDb.SyncUpdate -= MpDbObject_SyncUpdate;
+            MonkeyPaste.MpDb.SyncDelete -= MpDbObject_SyncDelete;
 
             PropertyChanged -= MpTagTileViewModel_PropertyChanged;
         }
@@ -543,7 +543,7 @@ namespace MpWpfApp {
                 TagClipCount++;
 
                 Task.Run(async () => {
-                    var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(cit.CopyItemId);
+                    var ci = await MpDb.GetItemAsync<MpCopyItem>(cit.CopyItemId);
                 OnCopyItemLinked?.Invoke(this, ci);
                 });
             }
@@ -565,7 +565,7 @@ namespace MpWpfApp {
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 TagClipCount--;
                 Task.Run(async () => {
-                    var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(cit.CopyItemId);
+                    var ci = await MpDb.GetItemAsync<MpCopyItem>(cit.CopyItemId);
                     OnCopyItemUnlinked?.Invoke(this, ci);
                 });
                 
@@ -603,7 +603,7 @@ namespace MpWpfApp {
                 if (sender is MpCopyItemTag cit) {
                     if(TagId == cit.TagId) {
                         cit.StartSync(e.SourceGuid);
-                            var dupCheck = await MpDataModelProvider.Instance.GetCopyItemTagForTagAsync(cit.TagId, cit.CopyItemId);
+                            var dupCheck = await MpDataModelProvider.GetCopyItemTagForTagAsync(cit.TagId, cit.CopyItemId);
                         if (dupCheck != null) {
                             MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, copyItemTag was duplicate: " + cit.ToString());
                         }

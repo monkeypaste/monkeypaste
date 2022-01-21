@@ -20,7 +20,7 @@ namespace MpWpfApp {
             if(result == null || result.Value == false) {
                 return string.Empty;
             }
-            string bitlyToken = MpPreferences.Instance.BitlyApiToken;
+            string bitlyToken = MpPreferences.BitlyApiToken;
             using (HttpClient client = new HttpClient()) {
                 using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api-ssl.bitly.com/v4/shorten")) {
                     request.Content = new StringContent($"{{\"long_url\":\"{url}\"}}", Encoding.UTF8, "application/json");
@@ -54,19 +54,19 @@ namespace MpWpfApp {
         }
 
         protected override int GetCurCallCount() {
-            return MpPreferences.Instance.RestfulLinkMinificationCount;
+            return MpPreferences.RestfulLinkMinificationCount;
         }
 
         protected override int GetMaxCallCount() {
-            return MpPreferences.Instance.RestfulLinkMinificationMaxCount;
+            return MpPreferences.RestfulLinkMinificationMaxCount;
         }
 
         protected override void IncrementCallCount() {
-            MpPreferences.Instance.RestfulLinkMinificationCount++;
+            MpPreferences.RestfulLinkMinificationCount++;
         }
 
         protected override void ClearCount() {
-            MpPreferences.Instance.RestfulLinkMinificationCount = 0;
+            MpPreferences.RestfulLinkMinificationCount = 0;
         }
     }
 }

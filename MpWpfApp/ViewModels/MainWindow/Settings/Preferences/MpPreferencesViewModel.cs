@@ -56,7 +56,7 @@ namespace MpWpfApp {
             }
         }
 
-        private string _selectedVoiceName = Properties.Settings.Default.SpeechSynthVoiceName;
+        private string _selectedVoiceName = MpPreferences.SpeechSynthVoiceName;
         public string SelectedVoiceName {
             get {
                 return _selectedVoiceName;
@@ -64,14 +64,14 @@ namespace MpWpfApp {
             set {
                 if(_selectedVoiceName != value) {
                     _selectedVoiceName = value;
-                    Properties.Settings.Default.SpeechSynthVoiceName = _selectedVoiceName;
-                    Properties.Settings.Default.Save();
+                    MpPreferences.SpeechSynthVoiceName = _selectedVoiceName;
+                    
                     OnPropertyChanged(nameof(SelectedVoiceName));
                 }
             }
         }
 
-        private int _maxRtfCharCount = Properties.Settings.Default.MaxRtfCharCount;
+        private int _maxRtfCharCount = MpPreferences.MaxRtfCharCount;
         public int MaxRtfCharCount {
             get {
                 return _maxRtfCharCount;
@@ -79,8 +79,8 @@ namespace MpWpfApp {
             set {
                 if (_maxRtfCharCount != value && value > 0) {
                     _maxRtfCharCount = value;
-                    Properties.Settings.Default.MaxRtfCharCount = _maxRtfCharCount;
-                    Properties.Settings.Default.Save();
+                    MpPreferences.MaxRtfCharCount = _maxRtfCharCount;
+                    
                     OnPropertyChanged(nameof(MaxRtfCharCount));
                 }
             }
@@ -99,7 +99,7 @@ namespace MpWpfApp {
             }
         }
 
-        private string _selectedLanguage = Properties.Settings.Default.UserLanguage;
+        private string _selectedLanguage = MpPreferences.UserLanguage;
         public string SelectedLanguage {
             get {
                 return _selectedLanguage;
@@ -107,13 +107,13 @@ namespace MpWpfApp {
             set {
                 if (_selectedLanguage != value) {
                     _selectedLanguage = value;
-                    Properties.Settings.Default.UserLanguage = _selectedLanguage;
-                    Properties.Settings.Default.Save();
+                    MpPreferences.UserLanguage = _selectedLanguage;
+                    
                     OnPropertyChanged(nameof(SelectedLanguage));
                 }
             }
         }
-        private bool _ignoreWhiteSpaceCopyItems = Properties.Settings.Default.IgnoreWhiteSpaceCopyItems;
+        private bool _ignoreWhiteSpaceCopyItems = MpPreferences.IgnoreWhiteSpaceCopyItems;
         public bool IgnoreWhiteSpaceCopyItems {
             get {
                 return _ignoreWhiteSpaceCopyItems;
@@ -121,14 +121,13 @@ namespace MpWpfApp {
             set {
                 if (_ignoreWhiteSpaceCopyItems != value) {
                     _ignoreWhiteSpaceCopyItems = value;
-                    Properties.Settings.Default.IgnoreWhiteSpaceCopyItems = _ignoreWhiteSpaceCopyItems;
-                    Properties.Settings.Default.Save();
+                    MpPreferences.IgnoreWhiteSpaceCopyItems = _ignoreWhiteSpaceCopyItems;
                     OnPropertyChanged(nameof(IgnoreWhiteSpaceCopyItems));
                 }
             }
         }
 
-        private bool _resetClipboard = Properties.Settings.Default.ResetClipboardAfterMonkeyPaste;
+        private bool _resetClipboard = MpPreferences.ResetClipboardAfterMonkeyPaste;
         public bool ResetClipboard {
             get {
                 return _resetClipboard;
@@ -136,14 +135,14 @@ namespace MpWpfApp {
             set {
                 if (_resetClipboard != value) {
                     _resetClipboard = value;
-                    Properties.Settings.Default.ResetClipboardAfterMonkeyPaste = _resetClipboard;
-                    Properties.Settings.Default.Save();
+                    MpPreferences.ResetClipboardAfterMonkeyPaste = _resetClipboard;
+                    
                     OnPropertyChanged(nameof(ResetClipboard));
                 }
             }
         }
 
-        private bool _showItemPreview = Properties.Settings.Default.ShowItemPreview;
+        private bool _showItemPreview = MpPreferences.ShowItemPreview;
         public bool ShowItemPreview {
             get {
                 return _showItemPreview;
@@ -151,8 +150,8 @@ namespace MpWpfApp {
             set {
                 if (_showItemPreview != value) {
                     _showItemPreview = value;
-                    Properties.Settings.Default.ShowItemPreview = _showItemPreview;
-                    Properties.Settings.Default.Save();
+                    MpPreferences.ShowItemPreview = _showItemPreview;
+                    
                     if(!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                         foreach(var ctvm in MpClipTrayViewModel.Instance.Items) {
                             ctvm.OnPropertyChanged(nameof(ctvm.ToolTipVisibility));
@@ -166,7 +165,7 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _useSpellCheck = Properties.Settings.Default.UseSpellCheck;
+        private bool _useSpellCheck = MpPreferences.UseSpellCheck;
         public bool UseSpellCheck {
             get {
                 return _useSpellCheck;
@@ -174,14 +173,14 @@ namespace MpWpfApp {
             set {
                 if (_useSpellCheck != value) {
                     _useSpellCheck = value;
-                    Properties.Settings.Default.UseSpellCheck = _useSpellCheck;
-                    Properties.Settings.Default.Save();
+                    MpPreferences.UseSpellCheck = _useSpellCheck;
+                    
                     OnPropertyChanged(nameof(UseSpellCheck));
                 }
             }
         }
 
-        private bool _ignoreNewDuplicates = Properties.Settings.Default.IgnoreNewDuplicates;
+        private bool _ignoreNewDuplicates = MpPreferences.IgnoreNewDuplicates;
         public bool IgnoreNewDuplicates {
             get {
                 return _ignoreNewDuplicates;
@@ -189,8 +188,8 @@ namespace MpWpfApp {
             set {
                 if (_ignoreNewDuplicates != value) {
                     _ignoreNewDuplicates = value;
-                    Properties.Settings.Default.IgnoreNewDuplicates = _ignoreNewDuplicates;
-                    Properties.Settings.Default.Save();
+                    MpPreferences.IgnoreNewDuplicates = _ignoreNewDuplicates;
+                    
                     OnPropertyChanged(nameof(IgnoreNewDuplicates));
                 }
             }
@@ -227,9 +226,9 @@ namespace MpWpfApp {
                 }
             };
 
-            IsLoadOnLoginChecked = Properties.Settings.Default.LoadOnLogin;
-            UseSpellCheck = Properties.Settings.Default.UseSpellCheck;
-            if(string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName) && VoiceNames != null && VoiceNames.Count > 0) {
+            IsLoadOnLoginChecked = MpPreferences.LoadOnLogin;
+            UseSpellCheck = MpPreferences.UseSpellCheck;
+            if(string.IsNullOrEmpty(MpPreferences.SpeechSynthVoiceName) && VoiceNames != null && VoiceNames.Count > 0) {
                 SelectedVoiceName = VoiceNames[0];
             }
         }
@@ -245,7 +244,7 @@ namespace MpWpfApp {
                     }
                 }
             }
-            Properties.Settings.Default.Save();
+            
             Properties.UserUiStrings.Default.Save();
         }
 
@@ -262,8 +261,8 @@ namespace MpWpfApp {
             } else {
                 rk.DeleteValue(appName, false);
             }
-            Properties.Settings.Default.LoadOnLogin = loadOnLogin;
-            Properties.Settings.Default.Save();
+            MpPreferences.LoadOnLogin = loadOnLogin;
+            
             MonkeyPaste.MpConsole.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
         }
 

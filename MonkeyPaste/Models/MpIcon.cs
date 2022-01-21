@@ -74,9 +74,9 @@ namespace MonkeyPaste {
         #region Statics
 
         public static async Task<MpIcon> Create(string iconImgBase64, bool createBorder = true) {
-            var dupCheck = await MpDataModelProvider.Instance.GetIconByImageStr(iconImgBase64);
+            var dupCheck = await MpDataModelProvider.GetIconByImageStr(iconImgBase64);
             if(dupCheck != null) {
-                dupCheck = await MpDb.Instance.GetItemAsync<MpIcon>(dupCheck.Id);
+                dupCheck = await MpDb.GetItemAsync<MpIcon>(dupCheck.Id);
                 return dupCheck;
             }
 
@@ -88,7 +88,7 @@ namespace MonkeyPaste {
                 IconImage = iconImage
             };
 
-            var iconBuilder = createBorder ? MpNativeWrapper.Instance.GetIconBuilder() : null;
+            var iconBuilder = createBorder ? MpNativeWrapper.GetIconBuilder() : null;
             if (iconBuilder != null) {
                 var borderImage64Str = iconBuilder.CreateBorder(iconImgBase64, 1.25, @"#FFFFFFFF");
                 var iconBorderImage = await MpDbImage.Create(borderImage64Str);
@@ -125,7 +125,7 @@ namespace MonkeyPaste {
         #region Sync
 
         public async Task<object> CreateFromLogs(string iconGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
-            var icon = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpIcon>(iconGuid);
+            var icon = await MpDb.GetDbObjectByTableGuidAsync<MpIcon>(iconGuid);
 
             foreach (var li in logs) {
                 switch (li.AffectedColumnName) {
@@ -133,11 +133,11 @@ namespace MonkeyPaste {
                         icon.IconGuid = System.Guid.Parse(li.AffectedColumnValue);
                         break;
                     case "fk_IconDbImageId":
-                        icon.IconImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;
+                        icon.IconImage = await MpDb.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;
                         icon.IconImageId = icon.IconImage.Id;
                         break;
                     case "fk_IconBorderDbImageId":
-                        icon.IconBorderImage = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;
+                        icon.IconBorderImage = await MpDb.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;
                         icon.IconBorderImageId = icon.IconBorderImage.Id;
                         break;
                     case "HexColor1":
@@ -169,9 +169,9 @@ namespace MonkeyPaste {
             var icon = new MpIcon() {
                 IconGuid = System.Guid.Parse(objParts[0])
             };
-            icon.IconImage = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpDbImage>(objParts[1]);
+            icon.IconImage = await MpDb.GetDbObjectByTableGuidAsync<MpDbImage>(objParts[1]);
             icon.IconImageId = icon.IconImage.Id;
-            icon.IconBorderImage = await MpDb.Instance.GetDbObjectByTableGuidAsync<MpDbImage>(objParts[2]);
+            icon.IconBorderImage = await MpDb.GetDbObjectByTableGuidAsync<MpDbImage>(objParts[2]);
             icon.IconBorderImageId = icon.IconBorderImage.Id;
             icon.HexColor1 = objParts[5];
             icon.HexColor2 = objParts[6];

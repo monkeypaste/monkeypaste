@@ -99,7 +99,7 @@ namespace MpWpfApp {
 
         public Brush TemplateForegroundBrush {
             get {
-                if (MpHelpers.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
+                if (MpWpfColorHelpers.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
                     return Brushes.Black;
                 }
                 return Brushes.White;
@@ -113,10 +113,10 @@ namespace MpWpfApp {
                 }
                 if(HostClipTileViewModel.IsExpanded) {
                     if (IsHovering) {
-                        return MpHelpers.GetDarkerBrush(TemplateBrush);
+                        return MpWpfColorHelpers.GetDarkerBrush(TemplateBrush);
                     }
                     if (IsSelected) {
-                        return MpHelpers.GetLighterBrush(TemplateBrush);
+                        return MpWpfColorHelpers.GetLighterBrush(TemplateBrush);
                     }
                 }
                 return TemplateBrush;

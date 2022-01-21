@@ -8,11 +8,11 @@ using System.Collections.Generic;
 
 namespace MpProcessHelper {
     public class MpProcessIconBuilder : MpIProcessIconBuilder {
-        private static MpIconBuilder _iconBuilder;
+        private static MpIconBuilderBase _iconBuilder;
 
-        public MpIconBuilder IconBuilder { get => _iconBuilder; set => _iconBuilder = value; }
+        public MpIconBuilderBase IconBuilder { get => _iconBuilder; set => _iconBuilder = value; }
 
-        public MpProcessIconBuilder(MpIconBuilder ib) {
+        public MpProcessIconBuilder(MpIconBuilderBase ib) {
             _iconBuilder = ib;
         }
         public string GetBase64BitmapFromFolderPath(string filepath) {
@@ -21,6 +21,13 @@ namespace MpProcessHelper {
 
         public string GetBase64BitmapFromFilePath(string filepath) {
             return GetBitmapFromFilePath(filepath, IconSizeEnum.MediumIcon32);
+        }
+
+        public string GetBase64BitmapFromPath(string fileOrFolderpath) {
+            if(Directory.Exists(fileOrFolderpath)) {
+                return GetBase64BitmapFromFolderPath(fileOrFolderpath);
+            }
+            return GetBitmapFromFilePath(fileOrFolderpath, IconSizeEnum.MediumIcon32);
         }
 
 

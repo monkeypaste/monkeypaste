@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 namespace MonkeyPaste {    
     public abstract class MpViewModelBase : INotifyPropertyChanged {
         public static event EventHandler<bool> OnBusyChanged;
-        public static event EventHandler OnLoaded;
 
         private static Dictionary<string, int> _instanceCountLookup;
 
@@ -21,26 +20,11 @@ namespace MonkeyPaste {
                 SetProperty(ref _isBusy, value);
                 OnBusyChanged?.Invoke(this, _isBusy);
                 //MpCursorViewModel.Instance.NotifyAppBusy(_isBusy);
-                //MpMessenger.Instance.Send(MpMessageType.Busy);
+                //MpMessenger.Send(MpMessageType.Busy);
             }
         }
         public bool IsNotBusy => !IsBusy;
 
-        private bool _isLoaded = false;
-        public bool IsLoaded {
-            get {
-                return _isLoaded;
-            }
-            set {
-                if (_isLoaded != value) {
-                    IsLoaded = value;
-                    if (IsLoaded) {
-                        MpMessenger.Instance.Send(MpMessageType.Loaded, this);
-                        OnLoaded?.Invoke(this, null);
-                    }
-                }
-            }
-        }
 
         public bool SupressPropertyChangedNotification { get; set; } = false;
 
@@ -75,12 +59,12 @@ namespace MonkeyPaste {
 
             ParentObj = parent;
 
-            MpDb.Instance.OnItemAdded += Instance_OnItemAdded;
-            MpDb.Instance.OnItemUpdated += Instance_OnItemUpdated;
-            MpDb.Instance.OnItemDeleted += Instance_OnItemDeleted;
-            MpDb.Instance.SyncAdd += Instance_SyncAdd;
-            MpDb.Instance.SyncUpdate += Instance_SyncUpdate;
-            MpDb.Instance.SyncDelete += Instance_SyncDelete;
+            MpDb.OnItemAdded += Instance_OnItemAdded;
+            MpDb.OnItemUpdated += Instance_OnItemUpdated;
+            MpDb.OnItemDeleted += Instance_OnItemDeleted;
+            MpDb.SyncAdd += Instance_SyncAdd;
+            MpDb.SyncUpdate += Instance_SyncUpdate;
+            MpDb.SyncDelete += Instance_SyncDelete;
         }
 
         #endregion
@@ -106,12 +90,12 @@ namespace MonkeyPaste {
                 // Release other objects
                 IsBusy = false;
 
-                MpDb.Instance.OnItemAdded -= Instance_OnItemAdded;
-                MpDb.Instance.OnItemUpdated -= Instance_OnItemUpdated;
-                MpDb.Instance.OnItemDeleted -= Instance_OnItemDeleted;
-                MpDb.Instance.SyncAdd -= Instance_SyncAdd;
-                MpDb.Instance.SyncUpdate -= Instance_SyncUpdate;
-                MpDb.Instance.SyncDelete -= Instance_SyncDelete;
+                MpDb.OnItemAdded -= Instance_OnItemAdded;
+                MpDb.OnItemUpdated -= Instance_OnItemUpdated;
+                MpDb.OnItemDeleted -= Instance_OnItemDeleted;
+                MpDb.SyncAdd -= Instance_SyncAdd;
+                MpDb.SyncUpdate -= Instance_SyncUpdate;
+                MpDb.SyncDelete -= Instance_SyncDelete;
             }
         }
 

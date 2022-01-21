@@ -86,7 +86,7 @@ namespace MpWpfApp {
             
             UpdateUi();
 
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                     BindingContext,
                     ReceivedClipTileViewModelMessage,
                     BindingContext);

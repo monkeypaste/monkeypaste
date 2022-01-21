@@ -89,7 +89,7 @@ namespace MpWpfApp {
                 //not sure why this is getting called on non-images this shouldn't have to happen
                 return;
             }
-            var iiol = await MpDataModelProvider.Instance.GetDetectedImageObjects(ci.Id);
+            var iiol = await MpDataModelProvider.GetDetectedImageObjects(ci.Id);
             foreach (var dio in iiol) {
                 var diovm = await CreateDetectedImageObjectViewModel(dio);
                 Items.Add(diovm);

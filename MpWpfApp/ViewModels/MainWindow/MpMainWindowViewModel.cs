@@ -18,7 +18,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpMainWindowViewModel : MpViewModelBase,MpISingleton<MpMainWindowViewModel> {
+    public class MpMainWindowViewModel : MpViewModelBase,MpISingletonViewModel<MpMainWindowViewModel> {
 
         #region Statics
 
@@ -187,7 +187,7 @@ namespace MpWpfApp {
             MpConsole.WriteLine("MainWindow Init");
             PropertyChanged += MpMainWindowViewModel_PropertyChanged;
 
-            //MpDataModelProvider.Instance.Init(new MpWpfQueryInfo());
+            //MpDataModelProvider.Init(new MpWpfQueryInfo());
 
             //await MpSystemTrayViewModel.Instance.Init();
             //Application.Current.Resources["SystemTrayViewModel"] = MpSystemTrayViewModel.Instance;
@@ -241,7 +241,7 @@ namespace MpWpfApp {
 
             //Application.Current.Resources["MainWindowViewModel"] = this;
 
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                 MpSearchBoxViewModel.Instance,
                 ReceivedSearchBoxViewModelMessage);
             
@@ -286,9 +286,9 @@ namespace MpWpfApp {
                 case nameof(IsResizing):
                     if(!IsResizing) {
                         if(MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ExpandComplete);
+                            MpMessenger.Send<MpMessageType>(MpMessageType.ExpandComplete);
                         } else {
-                            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.UnexpandComplete);
+                            MpMessenger.Send<MpMessageType>(MpMessageType.UnexpandComplete);
                         }
                     }
                     break;
@@ -322,7 +322,7 @@ namespace MpWpfApp {
 
         #region Disposable
         public override void Dispose() {
-            // MonkeyPaste.MpSyncManager.Instance.Dispose();
+            // MonkeyPaste.MpSyncManager.Dispose();
             base.Dispose();
             foreach (string tfp in _tempFilePathList) {
                 if(File.Exists(tfp)) {
@@ -368,7 +368,7 @@ namespace MpWpfApp {
 
 
 
-                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.MainWindowOpening);
+                MpMessenger.Send<MpMessageType>(MpMessageType.MainWindowOpening);
 
                 var mw = (MpMainWindow)Application.Current.MainWindow;
                 mw.Show();
@@ -383,7 +383,7 @@ namespace MpWpfApp {
 
                 SetupMainWindowRect();
 
-                double tt = MpPreferences.Instance.ShowMainWindowAnimationMilliseconds;
+                double tt = MpPreferences.ShowMainWindowAnimationMilliseconds;
                 double fps = 30;
                 double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
 
@@ -410,7 +410,7 @@ namespace MpWpfApp {
             () => {
                 return (Application.Current.MainWindow == null ||
                    //Application.Current.MainWindow.Visibility != Visibility.Visible ||
-                   MpMainWindowViewModel.Instance.IsMainWindowLoading ||
+                   !MpMainWindowViewModel.Instance.IsMainWindowLoading ||
                    !MpMainWindowViewModel.Instance.IsShowingDialog) && !IsMainWindowOpen && !IsMainWindowOpening;
             });
 
@@ -447,7 +447,7 @@ namespace MpWpfApp {
                 if (IsMainWindowOpen) {
                     IsMainWindowClosing = true;
 
-                    double tt = MpPreferences.Instance.HideMainWindowAnimationMilliseconds;
+                    double tt = MpPreferences.HideMainWindowAnimationMilliseconds;
                     double fps = 30;
                     double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
 

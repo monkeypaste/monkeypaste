@@ -9,77 +9,64 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpPreferences : MpISingleton<MpPreferences> {
+    public static class MpPreferences {
         #region Constructors
 
-        private static MpPreferences _instance;
-        public static MpPreferences Instance => _instance ?? (_instance = new MpPreferences());
-
-        public MpPreferences() {
-            throw new Exception("Must be init'd with args");
-        }
-
-        public async Task Init() {
-            await Task.Delay(1);
-        }
-
-        public MpPreferences(MpIPreferenceIO prefIo) {
-            _prefIo = prefIo;
+        public static void Init(MpIPreferenceIO prefIo) {
+            Default = prefIo;
             if (string.IsNullOrEmpty(ThisDeviceGuid)) {
                 ThisDeviceGuid = System.Guid.NewGuid().ToString();
             }
             ResetClipboardAfterMonkeyPaste = false;
-
-            _instance = this;
         }
 
         #endregion
 
         #region Private Variables
 
-        private MpIPreferenceIO _prefIo;
+        public static MpIPreferenceIO Default { get; private set; }
         #endregion
 
         #region Properties
 
         #region Property Reflection Referencer
 
-        public object this[string propertyName] {
-            get {
-                // probably faster without reflection:
-                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
-                // instead of the following
-                Type myType = typeof(MpPreferences);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                if (myPropInfo == null) {
-                    throw new Exception("Unable to find property: " + propertyName);
-                }
-                return myPropInfo.GetValue(this, null);
-            }
-            set {
-                Type myType = typeof(MpPreferences);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                myPropInfo.SetValue(this, value, null);
-            }
-        }
+        //public static object this[string propertyName] {
+        //    get {
+        //        // probably faster without reflection:
+        //        // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+        //        // instead of the following
+        //        Type myType = typeof(MpPreferences);
+        //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+        //        if (myPropInfo == null) {
+        //            throw new Exception("Unable to find property: " + propertyName);
+        //        }
+        //        return myPropInfo.GetValue(this, null);
+        //    }
+        //    set {
+        //        Type myType = typeof(MpPreferences);
+        //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+        //        myPropInfo.SetValue(this, value, null);
+        //    }
+        //}
 
         #endregion
 
         #region Application Properties
 
         #region Encyption
-        public string SslAlgorithm { get; set; } = "SHA256WITHRSA";
-        public string SslCASubject { get; set; } = "CN{ get; set; } =MPCA";
-        public string SslCertSubject { get; set; } = "CN{ get; set; } =127.0.01";
+        public static string SslAlgorithm { get; set; } = "SHA256WITHRSA";
+        public static string SslCASubject { get; set; } = "CN{ get; set; } =MPCA";
+        public static string SslCertSubject { get; set; } = "CN{ get; set; } =127.0.01";
         #endregion
 
-        public MpUserDeviceType ThisDeviceType {
+        public static MpUserDeviceType ThisDeviceType {
             get {
-                return _prefIo.GetDeviceType();
+                return Default.GetDeviceType();
             }
         }
 
-        public string LocalStoragePath {
+        public static string LocalStoragePath {
             get {
                 return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             }
@@ -87,24 +74,27 @@ namespace MonkeyPaste {
 
         #region Db
 
-        public string DbName { get; set; } = "Mp.db";
+        public static string DbName { get; set; } = "Mp.db";
 
-        public string DbPath {
+        public static string DbPath {
             get {
-                return _prefIo.Get(nameof(DbPath), Path.Combine(LocalStoragePath, DbName));
-            }
-        }
-
-        public string DbMediaFolderPath {
-            get {
-                return _prefIo.Get(nameof(DbMediaFolderPath), Path.Combine(LocalStoragePath, "media"));
+                return Default.Get(nameof(DbPath), Path.Combine(LocalStoragePath, DbName));
             }
             set {
-                _prefIo.Set(nameof(DbMediaFolderPath), value);
+                Default.Set(nameof(DbPath), value);
             }
         }
 
-        public int MaxDbPasswordAttempts {
+        public static string DbMediaFolderPath {
+            get {
+                return Default.Get(nameof(DbMediaFolderPath), Path.Combine(LocalStoragePath, "media"));
+            }
+            set {
+                Default.Set(nameof(DbMediaFolderPath), value);
+            }
+        }
+
+        public static int MaxDbPasswordAttempts {
             get {
                 return 3;
             }
@@ -112,52 +102,52 @@ namespace MonkeyPaste {
         #endregion
 
         #region Sync
-        public string SyncCertFolderPath {
+        public static string SyncCertFolderPath {
             get {
                 return Path.Combine(LocalStoragePath, "SyncCerts");
             }
         }
 
-        public string SyncCaPath {
+        public static string SyncCaPath {
             get {
                 return Path.Combine(SyncCertFolderPath, @"MPCA.cert");
             }
         }
 
-        public string SyncCertPath {
+        public static string SyncCertPath {
             get {
                 return Path.Combine(SyncCertFolderPath, @"MPSC.cert");
             }
         }
 
-        public string SyncServerProtocol {
+        public static string SyncServerProtocol {
             get {
-                return _prefIo.Get(nameof(SyncServerProtocol), @"https://");
+                return Default.Get(nameof(SyncServerProtocol), @"https://");
             }
             set {
-                _prefIo.Set(nameof(SyncServerProtocol), value);
+                Default.Set(nameof(SyncServerProtocol), value);
             }
         }
 
-        public string SyncServerHostNameOrIp {
+        public static string SyncServerHostNameOrIp {
             get {
-                return _prefIo.Get(nameof(SyncServerHostNameOrIp), @"monkeypaste.com");
+                return Default.Get(nameof(SyncServerHostNameOrIp), @"monkeypaste.com");
             }
             set {
-                _prefIo.Set(nameof(SyncServerHostNameOrIp), value);
+                Default.Set(nameof(SyncServerHostNameOrIp), value);
             }
         }
 
-        public int SyncServerPort {
+        public static int SyncServerPort {
             get {
-                return _prefIo.Get(nameof(SyncServerPort), 44376);
+                return Default.Get(nameof(SyncServerPort), 44376);
             }
             set {
-                _prefIo.Set(nameof(SyncServerPort), value);
+                Default.Set(nameof(SyncServerPort), value);
             }
         }
 
-        public string SyncServerEndpoint {
+        public static string SyncServerEndpoint {
             get {
                 return $"{SyncServerProtocol}{SyncServerHostNameOrIp}:{SyncServerPort}";
             }
@@ -165,13 +155,13 @@ namespace MonkeyPaste {
         #endregion
 
         #region Appearance
-        public double LogWindowHeightRatio {
+        public static double LogWindowHeightRatio {
             get {
                 return 0.35;
             }
         }
 
-        public double MainWindowStartHeight {
+        public static double MainWindowStartHeight {
             get {
                 return 10000;
             }
@@ -180,13 +170,13 @@ namespace MonkeyPaste {
 
         #region Resources
 
-        public string AbsoluteResourcesPath {
+        public static string AbsoluteResourcesPath {
             get {
                 return @"pack://application:,,,/Resources";
             }
         }
 
-        public int MaxFilePathCharCount {
+        public static int MaxFilePathCharCount {
             get {
                 return 260;
             }
@@ -195,13 +185,13 @@ namespace MonkeyPaste {
         #endregion
 
         #region Drag & Drop
-        public string CompositeItemDragDropFormatName {
+        public static string CompositeItemDragDropFormatName {
             get {
                 return "CompositeItemDragDropFormat";
             }
         }
 
-        public string ClipTileDragDropFormatName {
+        public static string ClipTileDragDropFormatName {
             get {
                 return "MpClipDragDropFormat";
             }
@@ -209,49 +199,49 @@ namespace MonkeyPaste {
         #endregion
 
         #region Experience
-        public int ShowMainWindowAnimationMilliseconds {
+        public static int ShowMainWindowAnimationMilliseconds {
             get {
                 return 500;
             }
         }
 
-        public int HideMainWindowAnimationMilliseconds {
+        public static int HideMainWindowAnimationMilliseconds {
             get {
                 return 250;
             }
         }
 
-        public int SearchBoxTypingDelayInMilliseconds {
+        public static int SearchBoxTypingDelayInMilliseconds {
             get {
                 return 500;
             }
         }
 
-        public string NotificationCopySound1Path {
+        public static string NotificationCopySound1Path {
             get {
                 return @"Sounds/Ting.wav";
             }
         }
 
-        public int ShowMainWindowMouseHitZoneHeight {
+        public static int ShowMainWindowMouseHitZoneHeight {
             get {
                 return 5;
             }
         }
 
-        public string DefaultCultureInfoName {
+        public static string DefaultCultureInfoName {
             get {
                 return @"en-US";
             }
         }
 
-        public string SearchPlaceHolderText {
+        public static string SearchPlaceHolderText {
             get {
                 return @"Search...";
             }
         }
 
-        public string ApplicationName {
+        public static string ApplicationName {
             get {
                 return @"Monkey Paste";
             }
@@ -260,49 +250,49 @@ namespace MonkeyPaste {
 
         #region REST
 
-        public string CurrencyConverterFreeApiKey {
+        public static string CurrencyConverterFreeApiKey {
             get {
                 return @"897d0d9538155ebeaff7";
             }
         }
 
-        public string AzureCognitiveServicesKey {
+        public static string AzureCognitiveServicesKey {
             get {
                 return "b455280a2c66456e926b66a1e6656ce3";
             }
         }
 
-        public string AzureTextAnalyticsKey {
+        public static string AzureTextAnalyticsKey {
             get {
                 return "ec769ed641ac48ed86b38363e67e824b";
             }
         }
 
-        public string AzureTextAnalyticsEndpoint {
+        public static string AzureTextAnalyticsEndpoint {
             get {
                 return @"https://mp-azure-text-analytics-services-resource-instance.cognitiveservices.azure.com/";
             }
         }
 
-        public string AzureCognitiveServicesEndpoint {
+        public static string AzureCognitiveServicesEndpoint {
             get {
                 return @"https://mp-azure-cognitive-services-resource-instance.cognitiveservices.azure.com/";
             }
         }
 
-        public string BitlyApiToken {
+        public static string BitlyApiToken {
             get {
                 return @"f6035b9ed05ac82b42d4853c984e34a4f1ba05d8";
             }
         }
 
-        public string RestfulOpenAiApiKey {
+        public static string RestfulOpenAiApiKey {
             get {
                 return @"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";
             }
         }
 
-        public string DomainFavIconEndpoint {
+        public static string DomainFavIconEndpoint {
             get {
                 return @"https://www.google.com/s2/favicons?https://www.google.com/s2/favicons?sz=64&domain_url=";
             }
@@ -310,758 +300,780 @@ namespace MonkeyPaste {
         #endregion
 
         #region Settings 
-        public string AutoSelectionElementTag {
+        public static string AutoSelectionElementTag {
             get {
                 return "AutoSelectionElement";
             }
         }
-        public int MaxCommandLineArgumentLength {
+        public static int MaxCommandLineArgumentLength {
             get {
                 return 1024;
             }
         }
 
 
-        public int MaxQrCodeCharLength {
+        public static int MaxQrCodeCharLength {
             get {
                 return 4296;
             }
         }
 
-        public int MaxTemplateTextLength {
+        public static int MaxTemplateTextLength {
             get {
                 return 10;
             }
         }
+
+
         #endregion
 
         #endregion
 
         #region User Properties        
 
-        public MpSource ThisAppSource { get; set; }
+        public static MpSource ThisAppSource { get; set; }
 
-        public MpUserDevice ThisUserDevice { get; set; }
+        public static MpUserDevice ThisUserDevice { get; set; }
 
-        public string AppStorageFilePath {
+        public static string AppStorageFilePath {
             get {
-                return _prefIo.Get(nameof(AppStorageFilePath), Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+                return Default.Get(nameof(AppStorageFilePath), Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             }
             set {
-                _prefIo.Set(nameof(AppStorageFilePath), value);
+                Default.Set(nameof(AppStorageFilePath), value);
             }
         }
 
-        public double MainWindowInitialHeight {
+        public static double MainWindowInitialHeight {
             get {
-                return _prefIo.Get(nameof(MainWindowInitialHeight), default(double));
+                return Default.Get(nameof(MainWindowInitialHeight), default(double));
             }
             set {
-                _prefIo.Set(nameof(MainWindowInitialHeight), value);
+                Default.Set(nameof(MainWindowInitialHeight), value);
             }
         }
 
-        public DateTime StartupDateTime {
+        public static DateTime StartupDateTime {
             get {
-                return _prefIo.Get(nameof(StartupDateTime), DateTime.MinValue);
+                return Default.Get(nameof(StartupDateTime), DateTime.MinValue);
             }
             set {
-                _prefIo.Set(nameof(StartupDateTime), value);
+                Default.Set(nameof(StartupDateTime), value);
             }
         }
-        public string UserCultureInfoName {
+        public static string UserCultureInfoName {
             get {
-                return _prefIo.Get(nameof(UserCultureInfoName), DefaultCultureInfoName);
+                return Default.Get(nameof(UserCultureInfoName), DefaultCultureInfoName);
             }
             set {
-                _prefIo.Set(nameof(UserCultureInfoName), value);
-            }
-        }
-
-        public string ThisDeviceGuid {
-            get {
-                return _prefIo.Get(nameof(ThisDeviceGuid), string.Empty);
-            }
-            set {
-                _prefIo.Set(nameof(ThisDeviceGuid), value);
+                Default.Set(nameof(UserCultureInfoName), value);
             }
         }
 
-        public int ThisDeviceSourceId {
+        public static string ThisDeviceGuid {
             get {
-                return _prefIo.Get(nameof(ThisDeviceSourceId), 0);
+                return Default.Get(nameof(ThisDeviceGuid), string.Empty);
             }
             set {
-                _prefIo.Set(nameof(ThisDeviceSourceId), value);
+                Default.Set(nameof(ThisDeviceGuid), value);
+            }
+        }
+
+        public static int ThisDeviceSourceId {
+            get {
+                return Default.Get(nameof(ThisDeviceSourceId), 0);
+            }
+            set {
+                Default.Set(nameof(ThisDeviceSourceId), value);
             }
         }
 
         #region Encrytion
 
-        public string SslPrivateKey {
+        public static string SslPrivateKey {
             get {
-                return _prefIo.Get(nameof(SslPrivateKey), string.Empty);
+                return Default.Get(nameof(SslPrivateKey), string.Empty);
             }
             set {
-                _prefIo.Set(nameof(SslPrivateKey), value);
+                Default.Set(nameof(SslPrivateKey), value);
             }
         }
 
-        public string SslPublicKey {
+        public static string SslPublicKey {
             get {
-                return _prefIo.Get(nameof(SslPublicKey), string.Empty);
+                return Default.Get(nameof(SslPublicKey), string.Empty);
             }
             set {
-                _prefIo.Set(nameof(SslPublicKey), value);
+                Default.Set(nameof(SslPublicKey), value);
             }
         }
 
-        public DateTime SslCertExpirationDateTime {
+        public static DateTime SslCertExpirationDateTime {
             get {
-                return _prefIo.Get(nameof(SslCertExpirationDateTime), DateTime.UtcNow.AddDays(-1));
+                return Default.Get(nameof(SslCertExpirationDateTime), DateTime.UtcNow.AddDays(-1));
             }
             set {
-                _prefIo.Set(nameof(SslCertExpirationDateTime), value);
+                Default.Set(nameof(SslCertExpirationDateTime), value);
+            }
+        }
+
+        public static string FallbackProcessPath {
+            get {
+                return Default.Get(nameof(FallbackProcessPath), @"C:\WINDOWS\Explorer.EXE");
+            }
+            set {
+                Default.Set(nameof(FallbackProcessPath), value);
             }
         }
         #endregion
 
         #region Db
 
-        public bool EncryptDb {
+        public static bool EncryptDb {
             get {
-                return _prefIo.Get(nameof(EncryptDb), true);
+                return Default.Get(nameof(EncryptDb), true);
             }
             set {
-                _prefIo.Set(nameof(EncryptDb), value);
+                Default.Set(nameof(EncryptDb), value);
             }
         }
 
-        public string DbPassword {
+        public static string DbPassword {
             get {
-                return _prefIo.Get(
+                return Default.Get(
                     nameof(DbPassword),
                     MpPasswordGenerator.GetRandomPassword());
+            }
+            set {
+                Default.Set(nameof(DbPassword), value);
             }
         }
         #endregion
 
         #region Sync
-        public int SyncPort {
+        public static int SyncPort {
             get {
-                return _prefIo.Get(nameof(UserName), 11000);
+                return Default.Get(nameof(UserName), 11000);
             }
             set {
-                _prefIo.Set(nameof(UserName), value);
+                Default.Set(nameof(UserName), value);
             }
         }
         #endregion
 
         #region REST
 
-        public int RestfulLinkMinificationMaxCount {
+        public static int RestfulLinkMinificationMaxCount {
             get {
-                return _prefIo.Get(nameof(RestfulLinkMinificationMaxCount), 5);
+                return Default.Get(nameof(RestfulLinkMinificationMaxCount), 5);
             }
             set {
-                _prefIo.Set(nameof(RestfulLinkMinificationMaxCount), value);
+                Default.Set(nameof(RestfulLinkMinificationMaxCount), value);
             }
         }
 
-        public int RestfulDictionaryDefinitionMaxCount {
+        public static int RestfulDictionaryDefinitionMaxCount {
             get {
-                return _prefIo.Get(nameof(RestfulDictionaryDefinitionMaxCount), 5);
+                return Default.Get(nameof(RestfulDictionaryDefinitionMaxCount), 5);
             }
             set {
-                _prefIo.Set(nameof(RestfulDictionaryDefinitionMaxCount), value);
+                Default.Set(nameof(RestfulDictionaryDefinitionMaxCount), value);
             }
         }
 
-        public int RestfulTranslationMaxCount {
+        public static int RestfulTranslationMaxCount {
             get {
-                return _prefIo.Get(nameof(RestfulTranslationMaxCount), 5);
+                return Default.Get(nameof(RestfulTranslationMaxCount), 5);
             }
             set {
-                _prefIo.Set(nameof(RestfulTranslationMaxCount), value);
+                Default.Set(nameof(RestfulTranslationMaxCount), value);
             }
         }
-        public int RestfulCurrencyConversionMaxCount {
+        public static int RestfulCurrencyConversionMaxCount {
             get {
-                return _prefIo.Get(nameof(RestfulCurrencyConversionMaxCount), 5);
+                return Default.Get(nameof(RestfulCurrencyConversionMaxCount), 5);
             }
             set {
-                _prefIo.Set(nameof(RestfulCurrencyConversionMaxCount), value);
-            }
-        }
-
-        public int RestfulLinkMinificationCount {
-            get {
-                return _prefIo.Get(nameof(RestfulLinkMinificationCount), 0);
-            }
-            set {
-                _prefIo.Set(nameof(RestfulLinkMinificationCount), value);
+                Default.Set(nameof(RestfulCurrencyConversionMaxCount), value);
             }
         }
 
-        public int RestfulDictionaryDefinitionCount {
+        public static int RestfulLinkMinificationCount {
             get {
-                return _prefIo.Get(nameof(RestfulDictionaryDefinitionCount), 0);
+                return Default.Get(nameof(RestfulLinkMinificationCount), 0);
             }
             set {
-                _prefIo.Set(nameof(RestfulDictionaryDefinitionCount), value);
+                Default.Set(nameof(RestfulLinkMinificationCount), value);
             }
         }
 
-        public int RestfulCurrencyConversionCount {
+        public static int RestfulDictionaryDefinitionCount {
             get {
-                return _prefIo.Get(nameof(RestfulCurrencyConversionCount), 0);
+                return Default.Get(nameof(RestfulDictionaryDefinitionCount), 0);
             }
             set {
-                _prefIo.Set(nameof(RestfulCurrencyConversionCount), value);
+                Default.Set(nameof(RestfulDictionaryDefinitionCount), value);
             }
         }
 
-        public int RestfulTranslationCount {
+        public static int RestfulCurrencyConversionCount {
             get {
-                return _prefIo.Get(nameof(RestfulTranslationCount), 0);
+                return Default.Get(nameof(RestfulCurrencyConversionCount), 0);
             }
             set {
-                _prefIo.Set(nameof(RestfulTranslationCount), value);
+                Default.Set(nameof(RestfulCurrencyConversionCount), value);
             }
         }
 
-        public DateTime RestfulBillingDate {
+        public static int RestfulTranslationCount {
             get {
-                return _prefIo.Get(nameof(RestfulBillingDate), DateTime.UtcNow);
+                return Default.Get(nameof(RestfulTranslationCount), 0);
             }
             set {
-                _prefIo.Set(nameof(RestfulBillingDate), value);
+                Default.Set(nameof(RestfulTranslationCount), value);
             }
         }
 
-        public int RestfulOpenAiCount {
+        public static DateTime RestfulBillingDate {
             get {
-                return _prefIo.Get(nameof(RestfulOpenAiCount), 0);
+                return Default.Get(nameof(RestfulBillingDate), DateTime.UtcNow);
             }
             set {
-                _prefIo.Set(nameof(RestfulOpenAiCount), value);
+                Default.Set(nameof(RestfulBillingDate), value);
             }
         }
 
-        public int RestfulOpenAiMaxCount {
+        public static int RestfulOpenAiCount {
             get {
-                return _prefIo.Get(nameof(RestfulOpenAiMaxCount), 5);
+                return Default.Get(nameof(RestfulOpenAiCount), 0);
             }
             set {
-                _prefIo.Set(nameof(RestfulOpenAiMaxCount), value);
+                Default.Set(nameof(RestfulOpenAiCount), value);
+            }
+        }
+
+        public static int RestfulOpenAiMaxCount {
+            get {
+                return Default.Get(nameof(RestfulOpenAiMaxCount), 5);
+            }
+            set {
+                Default.Set(nameof(RestfulOpenAiMaxCount), value);
             }
         }
         #endregion
 
         #region Experience
-        public System.Int32[] UserCustomColorIdxArray {
+        public static System.Int32[] UserCustomColorIdxArray {
             get {
-                return _prefIo.Get(nameof(UserCustomColorIdxArray), new Int32[] { 0 });
+                return Default.Get(nameof(UserCustomColorIdxArray), new Int32[] { 0 });
             }
             set {
-                _prefIo.Set(nameof(UserCustomColorIdxArray), value);
+                Default.Set(nameof(UserCustomColorIdxArray), value);
             }
         }
 
 
 
-        public string ThemeClipTileBackgroundColor {
+        public static string ThemeClipTileBackgroundColor {
             get {
-                return _prefIo.Get(nameof(ThemeClipTileBackgroundColor), "#FFFFF");
+                return Default.Get(nameof(ThemeClipTileBackgroundColor), "#FFFFF");
             }
             set {
-                _prefIo.Set(nameof(ThemeClipTileBackgroundColor), value);
+                Default.Set(nameof(ThemeClipTileBackgroundColor), value);
             }
         }
 
-        public string HighlightFocusedHexColorString {
+        public static string HighlightFocusedHexColorString {
             get {
-                return _prefIo.Get(nameof(HighlightFocusedHexColorString), "#FFC0CB");
+                return Default.Get(nameof(HighlightFocusedHexColorString), "#FFC0CB");
             }
             set {
-                _prefIo.Set(nameof(HighlightFocusedHexColorString), value);
+                Default.Set(nameof(HighlightFocusedHexColorString), value);
             }
         }
 
-        public string HighlightColorHexString {
+        public static string HighlightColorHexString {
             get {
-                return _prefIo.Get(nameof(HighlightColorHexString), "#FFFF00");
+                return Default.Get(nameof(HighlightColorHexString), "#FFFF00");
             }
             set {
-                _prefIo.Set(nameof(HighlightColorHexString), value);
+                Default.Set(nameof(HighlightColorHexString), value);
             }
         }
 
-        public string ClipTileBackgroundColor {
+        public static string ClipTileBackgroundColor {
             get {
-                return _prefIo.Get(nameof(HighlightFocusedHexColorString), "#FFFFFF");
+                return Default.Get(nameof(HighlightFocusedHexColorString), "#FFFFFF");
             }
             set {
-                _prefIo.Set(nameof(HighlightFocusedHexColorString), value);
+                Default.Set(nameof(HighlightFocusedHexColorString), value);
             }
         }
 
-        public string DefaultFontFamily {
+        public static string DefaultFontFamily {
             get {
-                return _prefIo.Get(nameof(DefaultFontFamily), "Arial");
+                return Default.Get(nameof(DefaultFontFamily), "Arial");
             }
             set {
-                _prefIo.Set(nameof(DefaultFontFamily), value);
+                Default.Set(nameof(DefaultFontFamily), value);
             }
         }
 
-        public double DefaultFontSize {
+        public static double DefaultFontSize {
             get {
-                return _prefIo.Get(nameof(DefaultFontSize), 12);
+                return Default.Get(nameof(DefaultFontSize), 12);
             }
             set {
-                _prefIo.Set(nameof(DefaultFontSize), value);
+                Default.Set(nameof(DefaultFontSize), value);
             }
         }
 
-        public string SpeechSynthVoiceName {
+        public static string SpeechSynthVoiceName {
             get {
-                return _prefIo.Get(nameof(SpeechSynthVoiceName), "Zira");
+                return Default.Get(nameof(SpeechSynthVoiceName), "Zira");
             }
             set {
-                _prefIo.Set(nameof(SpeechSynthVoiceName), value);
+                Default.Set(nameof(SpeechSynthVoiceName), value);
             }
         }
 
-        public bool IgnoreNewDuplicates {
+        public static bool IgnoreNewDuplicates {
             get {
-                return _prefIo.Get(nameof(IgnoreNewDuplicates), true);
+                return Default.Get(nameof(IgnoreNewDuplicates), true);
             }
             set {
-                _prefIo.Set(nameof(IgnoreNewDuplicates), value);
+                Default.Set(nameof(IgnoreNewDuplicates), value);
             }
         }
 
-        public int MaxRecentClipItems {
+        public static int MaxRecentClipItems {
             get {
-                return _prefIo.Get(nameof(MaxRecentClipItems), 25);
+                return Default.Get(nameof(MaxRecentClipItems), 25);
             }
             set {
-                _prefIo.Set(nameof(MaxRecentClipItems), value);
+                Default.Set(nameof(MaxRecentClipItems), value);
             }
         }
 
-        public int NotificationBalloonVisibilityTimeMs {
+        public static int NotificationBalloonVisibilityTimeMs {
             get {
-                return _prefIo.Get(nameof(NotificationBalloonVisibilityTimeMs), 3000);
+                return Default.Get(nameof(NotificationBalloonVisibilityTimeMs), 3000);
             }
             set {
-                _prefIo.Set(nameof(NotificationBalloonVisibilityTimeMs), value);
+                Default.Set(nameof(NotificationBalloonVisibilityTimeMs), value);
             }
         }
 
-        public int NotificationSoundGroupIdx {
+        public static int NotificationSoundGroupIdx {
             get {
-                return _prefIo.Get(nameof(NotificationSoundGroupIdx), 1);
+                return Default.Get(nameof(NotificationSoundGroupIdx), 1);
             }
             set {
-                _prefIo.Set(nameof(NotificationSoundGroupIdx), value);
+                Default.Set(nameof(NotificationSoundGroupIdx), value);
             }
         }
 
 
-        public bool UseSpellCheck {
+        public static bool UseSpellCheck {
             get {
-                return _prefIo.Get(nameof(UseSpellCheck), false);
+                return Default.Get(nameof(UseSpellCheck), false);
             }
             set {
-                _prefIo.Set(nameof(UseSpellCheck), value);
+                Default.Set(nameof(UseSpellCheck), value);
             }
         }
 
-        public string UserLanguage {
+        public static string UserLanguage {
             get {
-                return _prefIo.Get(nameof(UserLanguage), "English");
+                return Default.Get(nameof(UserLanguage), "English");
             }
             set {
-                _prefIo.Set(nameof(UserLanguage), value);
+                Default.Set(nameof(UserLanguage), value);
             }
         }
 
-        public bool ShowItemPreview {
+        public static bool ShowItemPreview {
             get {
-                return _prefIo.Get(nameof(ShowItemPreview), false);
+                return Default.Get(nameof(ShowItemPreview), false);
             }
             set {
-                _prefIo.Set(nameof(ShowItemPreview), value);
+                Default.Set(nameof(ShowItemPreview), value);
             }
         }
 
-        public bool NotificationDoPasteSound {
+        public static bool NotificationDoPasteSound {
             get {
-                return _prefIo.Get(nameof(NotificationDoPasteSound), true);
+                return Default.Get(nameof(NotificationDoPasteSound), true);
             }
             set {
-                _prefIo.Set(nameof(NotificationDoPasteSound), value);
+                Default.Set(nameof(NotificationDoPasteSound), value);
             }
         }
 
-        public bool NotificationDoCopySound {
+        public static bool NotificationDoCopySound {
             get {
-                return _prefIo.Get(nameof(NotificationDoCopySound), true);
+                return Default.Get(nameof(NotificationDoCopySound), true);
             }
             set {
-                _prefIo.Set(nameof(NotificationDoCopySound), value);
+                Default.Set(nameof(NotificationDoCopySound), value);
             }
         }
 
-        public bool NotificationShowCopyToast {
+        public static bool NotificationShowCopyToast {
             get {
-                return _prefIo.Get(nameof(NotificationShowCopyToast), true);
+                return Default.Get(nameof(NotificationShowCopyToast), true);
             }
             set {
-                _prefIo.Set(nameof(NotificationShowCopyToast), value);
+                Default.Set(nameof(NotificationShowCopyToast), value);
             }
         }
-        public bool NotificationDoLoadedSound {
+        public static bool NotificationDoLoadedSound {
             get {
-                return _prefIo.Get(nameof(NotificationDoLoadedSound), true);
+                return Default.Get(nameof(NotificationDoLoadedSound), true);
             }
             set {
-                _prefIo.Set(nameof(NotificationDoLoadedSound), value);
-            }
-        }
-
-        public string NotificationLoadedPath {
-            get {
-                return _prefIo.Get(nameof(NotificationLoadedPath), @"Sounds/MonkeySound1.wav");
-            }
-            set {
-                _prefIo.Set(nameof(NotificationLoadedPath), value);
+                Default.Set(nameof(NotificationDoLoadedSound), value);
             }
         }
 
-        public string NotificationCopySoundCustomPath {
+        public static string NotificationLoadedPath {
             get {
-                return _prefIo.Get(nameof(NotificationCopySoundCustomPath), string.Empty);
+                return Default.Get(nameof(NotificationLoadedPath), @"Sounds/MonkeySound1.wav");
             }
             set {
-                _prefIo.Set(nameof(NotificationCopySoundCustomPath), value);
+                Default.Set(nameof(NotificationLoadedPath), value);
             }
         }
 
-        public string NotificationAppendModeOffSoundPath {
+        public static string NotificationCopySoundCustomPath {
             get {
-                return _prefIo.Get(nameof(NotificationAppendModeOffSoundPath), @"Sounds/blip2.wav");
+                return Default.Get(nameof(NotificationCopySoundCustomPath), string.Empty);
             }
             set {
-                _prefIo.Set(nameof(NotificationAppendModeOffSoundPath), value);
+                Default.Set(nameof(NotificationCopySoundCustomPath), value);
             }
         }
-        public bool NotificationDoModeChangeSound {
+        public static string NotificationAppendModeOnSoundPath {
             get {
-                return _prefIo.Get(nameof(NotificationDoModeChangeSound), true);
+                return Default.Get(nameof(NotificationAppendModeOnSoundPath), @"Sounds/blip2.wav");
             }
             set {
-                _prefIo.Set(nameof(NotificationDoModeChangeSound), value);
-            }
-        }
-
-        public bool NotificationShowModeChangeToast {
-            get {
-                return _prefIo.Get(nameof(NotificationShowModeChangeToast), true);
-            }
-            set {
-                _prefIo.Set(nameof(NotificationShowModeChangeToast), value);
+                Default.Set(nameof(NotificationAppendModeOnSoundPath), value);
             }
         }
 
-        public bool NotificationShowAppendBufferToast {
+        public static string NotificationAppendModeOffSoundPath {
             get {
-                return _prefIo.Get(nameof(NotificationShowAppendBufferToast), false);
+                return Default.Get(nameof(NotificationAppendModeOffSoundPath), @"Sounds/blip2.wav");
             }
             set {
-                _prefIo.Set(nameof(NotificationShowAppendBufferToast), value);
+                Default.Set(nameof(NotificationAppendModeOffSoundPath), value);
             }
         }
-        public bool NotificationShowCopyItemTooLargeToast {
+        public static bool NotificationDoModeChangeSound {
             get {
-                return _prefIo.Get(nameof(NotificationShowCopyItemTooLargeToast), false);
+                return Default.Get(nameof(NotificationDoModeChangeSound), true);
             }
             set {
-                _prefIo.Set(nameof(NotificationShowCopyItemTooLargeToast), value);
-            }
-        }
-
-        public bool DoShowMainWindowWithMouseEdgeAndScrollDelta {
-            get {
-                return _prefIo.Get(nameof(DoShowMainWindowWithMouseEdgeAndScrollDelta), false);
-            }
-            set {
-                _prefIo.Set(nameof(DoShowMainWindowWithMouseEdgeAndScrollDelta), value);
+                Default.Set(nameof(NotificationDoModeChangeSound), value);
             }
         }
 
-        public bool DoShowMainWindowWithMouseEdge {
+        public static bool NotificationShowModeChangeToast {
             get {
-                return _prefIo.Get(nameof(DoShowMainWindowWithMouseEdge), true);
+                return Default.Get(nameof(NotificationShowModeChangeToast), true);
             }
             set {
-                _prefIo.Set(nameof(DoShowMainWindowWithMouseEdge), value);
+                Default.Set(nameof(NotificationShowModeChangeToast), value);
+            }
+        }
+
+        public static bool NotificationShowAppendBufferToast {
+            get {
+                return Default.Get(nameof(NotificationShowAppendBufferToast), false);
+            }
+            set {
+                Default.Set(nameof(NotificationShowAppendBufferToast), value);
+            }
+        }
+        public static bool NotificationShowCopyItemTooLargeToast {
+            get {
+                return Default.Get(nameof(NotificationShowCopyItemTooLargeToast), false);
+            }
+            set {
+                Default.Set(nameof(NotificationShowCopyItemTooLargeToast), value);
+            }
+        }
+
+        public static bool DoShowMainWindowWithMouseEdgeAndScrollDelta {
+            get {
+                return Default.Get(nameof(DoShowMainWindowWithMouseEdgeAndScrollDelta), false);
+            }
+            set {
+                Default.Set(nameof(DoShowMainWindowWithMouseEdgeAndScrollDelta), value);
+            }
+        }
+
+        public static bool DoShowMainWindowWithMouseEdge {
+            get {
+                return Default.Get(nameof(DoShowMainWindowWithMouseEdge), true);
+            }
+            set {
+                Default.Set(nameof(DoShowMainWindowWithMouseEdge), value);
             }
         }
         #endregion
 
         #region Drag & Drop
-        public string[] PasteAsImageDefaultProcessNameCollection {
+        public static string[] PasteAsImageDefaultProcessNameCollection {
             get {
-                return _prefIo.Get(nameof(PasteAsImageDefaultProcessNameCollection), "paint\r\nphotoshop\r\n").Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                return Default.Get(nameof(PasteAsImageDefaultProcessNameCollection), "paint\r\nphotoshop\r\n").Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             }
             set {
-                _prefIo.Set(nameof(PasteAsImageDefaultProcessNameCollection), string.Join(Environment.NewLine, value));
+                Default.Set(nameof(PasteAsImageDefaultProcessNameCollection), string.Join(Environment.NewLine, value));
             }
         }
         #endregion
 
         #region Preferences
-        public string KnownFileExtensionsPsv {
+        public static string KnownFileExtensionsPsv {
             get {
-                return _prefIo.Get(nameof(KnownFileExtensionsPsv), @"rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx");
+                return Default.Get(nameof(KnownFileExtensionsPsv), @"rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx");
             }
             set {
-                _prefIo.Set(nameof(KnownFileExtensionsPsv), value);
+                Default.Set(nameof(KnownFileExtensionsPsv), value);
             }
         }
 
-        public int MaxRtfCharCount {
+        public static int MaxRtfCharCount {
             get {
-                return _prefIo.Get(nameof(MaxRtfCharCount), 250000);
+                return Default.Get(nameof(MaxRtfCharCount), 250000);
             }
             set {
-                _prefIo.Set(nameof(MaxRtfCharCount), value);
+                Default.Set(nameof(MaxRtfCharCount), value);
             }
         }
 
-        public bool LoadOnLogin {
+        public static bool LoadOnLogin {
             get {
-                return _prefIo.Get(nameof(LoadOnLogin), false);
+                return Default.Get(nameof(LoadOnLogin), false);
             }
             set {
-                _prefIo.Set(nameof(LoadOnLogin), value);
+                Default.Set(nameof(LoadOnLogin), value);
             }
         }
 
-        public bool IgnoreWhiteSpaceCopyItems {
+        public static bool IgnoreWhiteSpaceCopyItems {
             get {
-                return _prefIo.Get(nameof(IgnoreWhiteSpaceCopyItems), false);
+                return Default.Get(nameof(IgnoreWhiteSpaceCopyItems), false);
             }
             set {
-                _prefIo.Set(nameof(IgnoreWhiteSpaceCopyItems), value);
+                Default.Set(nameof(IgnoreWhiteSpaceCopyItems), value);
             }
         }
 
-        public bool ResetClipboardAfterMonkeyPaste {
+        public static bool ResetClipboardAfterMonkeyPaste {
             get {
-                return _prefIo.Get(nameof(ResetClipboardAfterMonkeyPaste), false);
+                return Default.Get(nameof(ResetClipboardAfterMonkeyPaste), false);
             }
             set {
-                _prefIo.Set(nameof(ResetClipboardAfterMonkeyPaste), value);
+                Default.Set(nameof(ResetClipboardAfterMonkeyPaste), value);
             }
         }
 
-        public double ThisAppDip {
+        public static double ThisAppDip {
             get {
-                return _prefIo.Get(nameof(ThisAppDip), (double)1);
+                return Default.Get(nameof(ThisAppDip), (double)1);
             }
             set {
-                _prefIo.Set(nameof(ThisAppDip), value);
+                Default.Set(nameof(ThisAppDip), value);
             }
         }
 
-        public string UserDefaultBrowserProcessPath {
+        public static string UserDefaultBrowserProcessPath {
             get {
-                return _prefIo.Get(nameof(UserDefaultBrowserProcessPath), string.Empty);
+                return Default.Get(nameof(UserDefaultBrowserProcessPath), string.Empty);
             }
             set {
-                _prefIo.Set(nameof(UserDefaultBrowserProcessPath), value);
+                Default.Set(nameof(UserDefaultBrowserProcessPath), value);
             }
         }
 
-        public bool DoFindBrowserUrlForCopy {
+        public static bool DoFindBrowserUrlForCopy {
             get {
-                return _prefIo.Get(nameof(DoFindBrowserUrlForCopy), true);
+                return Default.Get(nameof(DoFindBrowserUrlForCopy), true);
             }
             set {
-                _prefIo.Set(nameof(DoFindBrowserUrlForCopy), value);
+                Default.Set(nameof(DoFindBrowserUrlForCopy), value);
             }
         }
 
-        public int MainWindowMonitorIdx {
+        public static int MainWindowMonitorIdx {
             get {
-                return _prefIo.Get(nameof(MainWindowMonitorIdx), 0);
+                return Default.Get(nameof(MainWindowMonitorIdx), 0);
             }
             set {
-                _prefIo.Set(nameof(MainWindowMonitorIdx), value);
+                Default.Set(nameof(MainWindowMonitorIdx), value);
             }
         }
 
-        public int DoShowMainWIndowWithMouseEdgeIndex {
+        public static int DoShowMainWIndowWithMouseEdgeIndex {
             get {
-                return _prefIo.Get(nameof(DoShowMainWIndowWithMouseEdgeIndex), 1);
+                return Default.Get(nameof(DoShowMainWIndowWithMouseEdgeIndex), 1);
             }
             set {
-                _prefIo.Set(nameof(DoShowMainWIndowWithMouseEdgeIndex), value);
+                Default.Set(nameof(DoShowMainWIndowWithMouseEdgeIndex), value);
             }
         }
         #endregion
 
         #region Account
-        public string UserName {
+        public static string UserName {
             get {
-                return _prefIo.Get(nameof(UserName), "Not Set");
+                return Default.Get(nameof(UserName), "Not Set");
             }
             set {
-                _prefIo.Set(nameof(UserName), value);
+                Default.Set(nameof(UserName), value);
             }
         }
 
-        public string UserEmail {
+        public static string UserEmail {
             get {
-                return _prefIo.Get(nameof(UserEmail), "tkefauver@gmail.com");
+                return Default.Get(nameof(UserEmail), "tkefauver@gmail.com");
             }
             set {
-                _prefIo.Set(nameof(UserEmail), value);
+                Default.Set(nameof(UserEmail), value);
             }
         }
 
-        public bool IsTrialExpired {
+        public static bool IsTrialExpired {
             get {
-                return _prefIo.Get(nameof(IsTrialExpired), false);
+                return Default.Get(nameof(IsTrialExpired), false);
             }
             set {
-                _prefIo.Set(nameof(IsTrialExpired), value);
+                Default.Set(nameof(IsTrialExpired), value);
             }
         }
 
-        public bool IsInitialLoad {
+        public static bool IsInitialLoad {
             get {
-                return _prefIo.Get(nameof(IsInitialLoad), true);
+                return Default.Get(nameof(IsInitialLoad), true);
             }
             set {
-                _prefIo.Set(nameof(IsInitialLoad), value);
+                Default.Set(nameof(IsInitialLoad), value);
             }
         }
         #endregion
 
         #region Search Filters
 
-        public bool SearchByIsCaseSensitive {
+        public static bool SearchByIsCaseSensitive {
             get {
-                return _prefIo.Get(nameof(SearchByIsCaseSensitive), false);
+                return Default.Get(nameof(SearchByIsCaseSensitive), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByIsCaseSensitive), value);
+                Default.Set(nameof(SearchByIsCaseSensitive), value);
             }
         }
 
-        public bool SearchByContent {
+        public static bool SearchByContent {
             get {
-                return _prefIo.Get(nameof(SearchByContent), false);
+                return Default.Get(nameof(SearchByContent), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByContent), value);
+                Default.Set(nameof(SearchByContent), value);
             }
         }
 
-        public bool SearchByUrlTitle {
+        public static bool SearchByUrlTitle {
             get {
-                return _prefIo.Get(nameof(SearchByUrlTitle), false);
+                return Default.Get(nameof(SearchByUrlTitle), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByUrlTitle), value);
+                Default.Set(nameof(SearchByUrlTitle), value);
             }
         }
 
-        public bool SearchByApplicationName {
+        public static bool SearchByApplicationName {
             get {
-                return _prefIo.Get(nameof(SearchByApplicationName), false);
+                return Default.Get(nameof(SearchByApplicationName), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByApplicationName), value);
+                Default.Set(nameof(SearchByApplicationName), value);
             }
         }
-        public bool SearchByFileType {
+        public static bool SearchByFileType {
             get {
-                return _prefIo.Get(nameof(SearchByFileType), false);
+                return Default.Get(nameof(SearchByFileType), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByFileType), value);
+                Default.Set(nameof(SearchByFileType), value);
             }
         }
-        public bool SearchByImageType {
+        public static bool SearchByImageType {
             get {
-                return _prefIo.Get(nameof(SearchByImageType), false);
+                return Default.Get(nameof(SearchByImageType), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByImageType), value);
+                Default.Set(nameof(SearchByImageType), value);
             }
         }
-        public bool SearchByProcessName {
+        public static bool SearchByProcessName {
             get {
-                return _prefIo.Get(nameof(SearchByProcessName), false);
+                return Default.Get(nameof(SearchByProcessName), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByProcessName), value);
+                Default.Set(nameof(SearchByProcessName), value);
             }
         }
-        public bool SearchByTextType {
+        public static bool SearchByTextType {
             get {
-                return _prefIo.Get(nameof(SearchByTextType), false);
+                return Default.Get(nameof(SearchByTextType), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByTextType), value);
+                Default.Set(nameof(SearchByTextType), value);
             }
         }
-        public bool SearchBySourceUrl {
+        public static bool SearchBySourceUrl {
             get {
-                return _prefIo.Get(nameof(SearchBySourceUrl), false);
+                return Default.Get(nameof(SearchBySourceUrl), false);
             }
             set {
-                _prefIo.Set(nameof(SearchBySourceUrl), value);
+                Default.Set(nameof(SearchBySourceUrl), value);
             }
         }
-        public bool SearchByTag {
+        public static bool SearchByTag {
             get {
-                return _prefIo.Get(nameof(SearchByTag), false);
+                return Default.Get(nameof(SearchByTag), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByTag), value);
+                Default.Set(nameof(SearchByTag), value);
             }
         }
-        public bool SearchByTitle {
+        public static bool SearchByTitle {
             get {
-                return _prefIo.Get(nameof(SearchByTitle), false);
+                return Default.Get(nameof(SearchByTitle), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByTitle), value);
-            }
-        }
-
-        public bool SearchByDescription {
-            get {
-                return _prefIo.Get(nameof(SearchByDescription), false);
-            }
-            set {
-                _prefIo.Set(nameof(SearchByDescription), value);
+                Default.Set(nameof(SearchByTitle), value);
             }
         }
 
-        public bool SearchByRegex {
+        public static bool SearchByDescription {
             get {
-                return _prefIo.Get(nameof(SearchByRegex), false);
+                return Default.Get(nameof(SearchByDescription), false);
             }
             set {
-                _prefIo.Set(nameof(SearchByRegex), value);
+                Default.Set(nameof(SearchByDescription), value);
+            }
+        }
+
+        public static bool SearchByRegex {
+            get {
+                return Default.Get(nameof(SearchByRegex), false);
+            }
+            set {
+                Default.Set(nameof(SearchByRegex), value);
             }
         }
 
@@ -1073,12 +1085,12 @@ namespace MonkeyPaste {
         #endregion
 
         #region MpIPreferences Implementation
-        public object GetPreferenceValue(string preferenceName) {
-            return this.GetType().GetProperty(preferenceName).GetValue(this);
+        public static object GetPreferenceValue(string preferenceName) {
+            return typeof(MpIPreferenceIO).GetProperty(preferenceName).GetValue(Default);
         }
 
-        public void SetPreferenceValue(string preferenceName, object preferenceValue) {
-            this.GetType().GetProperty(preferenceName).SetValue(this, preferenceValue);
+        public static void SetPreferenceValue(string preferenceName, object preferenceValue) {
+            typeof(MpIPreferenceIO).GetProperty(preferenceName).SetValue(Default, preferenceValue);
         }
         #endregion
 

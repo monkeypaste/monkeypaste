@@ -15,53 +15,45 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpDb : MpISingleton<MpDb>, MpISync {
+    public static class MpDb {
         #region Private Variables
-        private MpIDbInfo _dbInfo;
-        private object _rdLock = new object();
-        private SQLiteAsyncConnection _connectionAsync;
+        private static MpIDbInfo _dbInfo;
+        private static object _rdLock = new object();
+        private static SQLiteAsyncConnection _connectionAsync;
         #endregion
 
         #region Properties
 
-        public bool UseWAL { get; set; } = false;
-        public string IdentityToken { get; set; }
-        public string AccessToken { get; set; }
-        public bool IsLoaded { get; set; } = false;
+        public static bool UseWAL { get; set; } = false;
+        public static string IdentityToken { get; set; }
+        public static string AccessToken { get; set; }
+        public static bool IsLoaded { get; set; } = false;
 
         #endregion
 
         #region Events
-        public event EventHandler OnInitDefaultNativeData;
+        public static event EventHandler OnInitDefaultNativeData;
 
-        public event EventHandler<MpDbModelBase> OnItemAdded;
-        public event EventHandler<MpDbModelBase> OnItemUpdated;
-        public event EventHandler<MpDbModelBase> OnItemDeleted;
-        public event EventHandler<object> OnSyncableChange;
+        public static event EventHandler<MpDbModelBase> OnItemAdded;
+        public static event EventHandler<MpDbModelBase> OnItemUpdated;
+        public static event EventHandler<MpDbModelBase> OnItemDeleted;
 
-        public event EventHandler<MpDbSyncEventArgs> SyncAdd;
-        public event EventHandler<MpDbSyncEventArgs> SyncUpdate;
-        public event EventHandler<MpDbSyncEventArgs> SyncDelete;
+        public static event EventHandler<MpDbSyncEventArgs> SyncAdd;
+        public static event EventHandler<MpDbSyncEventArgs> SyncUpdate;
+        public static event EventHandler<MpDbSyncEventArgs> SyncDelete;
         #endregion
 
         #region Constructors
 
-        private static MpDb _instance;
-        public static MpDb Instance => _instance ?? (_instance = new MpDb());
 
-        public MpDb() {
-            throw new Exception("Must be instantiated with args");
-        }
-
-        public MpDb(MpIDbInfo dbInfo) {
+        public static void Init(MpIDbInfo dbInfo) {
             _dbInfo = dbInfo;
-            _instance = this;
         }
 
-        public async Task Init() {
+        public static async Task Init() {
             var sw = new Stopwatch();
             sw.Start();
-            //MpPreferences.Instance.StartupDateTime = DateTime.Now;
+            //MpPreferences.StartupDateTime = DateTime.Now;
             await InitDb();
             IsLoaded = true;
             sw.Stop();
@@ -72,9 +64,13 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
+        public static string GetDbFileAsBase64() {
+            var bytes = File.ReadAllBytes(_dbInfo.GetDbFilePath());
+            return Convert.ToBase64String(bytes);
+        }
         #region Queries
 
-        public async Task<TableMapping> GetTableMappingAsync(string tableName) {
+        public static async Task<TableMapping> GetTableMappingAsync(string tableName) {
             await Task.Delay(1);
             if (_connectionAsync == null) {
                 CreateConnection();
@@ -84,7 +80,7 @@ namespace MonkeyPaste {
                     .Where(x => x.TableName.ToLower() == tableName.ToLower()).FirstOrDefault();
         }
 
-        public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
+        public static async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
@@ -92,7 +88,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public async Task<List<object>> QueryAsync(string tableName,string query, params object[] args) {
+        public static async Task<List<object>> QueryAsync(string tableName,string query, params object[] args) {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
@@ -110,7 +106,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public async Task<T> QueryScalarAsync<T>(string query, params object[] args) {
+        public static async Task<T> QueryScalarAsync<T>(string query, params object[] args) {
             if(_connectionAsync == null) {
                 CreateConnection();
             }
@@ -118,7 +114,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public async Task<List<T>> QueryScalarsAsync<T>(string query, params object[] args) {
+        public static async Task<List<T>> QueryScalarsAsync<T>(string query, params object[] args) {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
@@ -126,14 +122,14 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public async Task<List<T>> GetItemsAsync<T>() where T : new() {
+        public static async Task<List<T>> GetItemsAsync<T>() where T : new() {
             if (_connectionAsync == null) {
                 await InitDb ();
             }
             var dbol = await _connectionAsync.GetAllWithChildrenAsync<T>(recursive: true);
             return dbol;
         }
-        public async Task<T> GetItemAsync<T>(int id) where T : new() {
+        public static async Task<T> GetItemAsync<T>(int id) where T : new() {
             if (_connectionAsync == null) {
                 await InitDb();
             }
@@ -141,7 +137,7 @@ namespace MonkeyPaste {
             return dbo;
         }
 
-        public async Task<List<T>> GetAllWithChildrenAsync<T>(Expression<Func<T, bool>> exp, bool recursive = true) where T : new() {
+        public static async Task<List<T>> GetAllWithChildrenAsync<T>(Expression<Func<T, bool>> exp, bool recursive = true) where T : new() {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
@@ -149,7 +145,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        //public async Task RunInMutex(Func<Task> action) {
+        //public static async Task RunInMutex(Func<Task> action) {
         //    try {
         //        await mutex.WaitAsync();
         //        await action.Invoke();
@@ -159,7 +155,7 @@ namespace MonkeyPaste {
         //    }
         //}
 
-        //public async Task<T> RunInMutex<T>(Func<Task<T>> action) {
+        //public static async Task<T> RunInMutex<T>(Func<Task<T>> action) {
         //    try {
         //        await mutex.WaitAsync();
         //        return await action.Invoke();
@@ -169,7 +165,7 @@ namespace MonkeyPaste {
         //    }
         //}
 
-        private async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
+        private static async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
 
             if (_connectionAsync == null) {
@@ -195,7 +191,7 @@ namespace MonkeyPaste {
             NotifyWrite(MpDbLogActionType.Create, item as MpDbModelBase, ignoreSyncing);
         }
 
-        private async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        private static async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
             if (_connectionAsync == null) {
                 await InitDb();
@@ -215,7 +211,7 @@ namespace MonkeyPaste {
             NotifyWrite(MpDbLogActionType.Modify, item as MpDbModelBase, ignoreSyncing);
         }
 
-        public async Task AddOrUpdateAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        public static async Task AddOrUpdateAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             if ((item as MpDbModelBase).Id == 0) {
                 await AddItemAsync(item, sourceClientGuid, ignoreTracking, ignoreSyncing);
             } else {
@@ -223,7 +219,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        public static async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
             if (_connectionAsync == null) {
                 await InitDb();
@@ -242,7 +238,7 @@ namespace MonkeyPaste {
             NotifyWrite(MpDbLogActionType.Delete, item as MpDbModelBase, ignoreSyncing);
         }
                 
-        public async Task<object> GetDbObjectByTableGuidAsync(string tableName, string objGuid) {
+        public static async Task<object> GetDbObjectByTableGuidAsync(string tableName, string objGuid) {
             var dt = await QueryAsync(
                 tableName,
                 string.Format("select * from {0} where {1}=?", tableName, tableName + "Guid"),
@@ -257,7 +253,7 @@ namespace MonkeyPaste {
             return dbo;
         }
 
-        public async Task<T> GetDbObjectByTableGuidAsync<T>(string objGuid) where T : new() {
+        public static async Task<T> GetDbObjectByTableGuidAsync<T>(string objGuid) where T : new() {
             string tableName = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
             var dt = await QueryAsync(
                 tableName,
@@ -277,7 +273,7 @@ namespace MonkeyPaste {
         
         #endregion
 
-        public byte[] GetDbFileBytes() {
+        public static byte[] GetDbFileBytes() {
             var dbPath = _dbInfo.GetDbFilePath();
             return File.ReadAllBytes(dbPath);
         }
@@ -286,14 +282,14 @@ namespace MonkeyPaste {
 
         #region Private Methods  
 
-        private string GetSourceClientGuid(string providedSourceClientGuid) {
+        private static string GetSourceClientGuid(string providedSourceClientGuid) {
             if(!IsLoaded) {
                 return null;
             }
-            return string.IsNullOrEmpty(providedSourceClientGuid) ? MpPreferences.Instance.ThisDeviceGuid : providedSourceClientGuid;
+            return string.IsNullOrEmpty(providedSourceClientGuid) ? MpPreferences.ThisDeviceGuid : providedSourceClientGuid;
         }
 
-        private async Task LogWrite(MpDbLogActionType actionType, MpDbModelBase item, string sourceClientGuid, bool ignoreTracking) {
+        private static async Task LogWrite(MpDbLogActionType actionType, MpDbModelBase item, string sourceClientGuid, bool ignoreTracking) {
             if(!IsLoaded) {
                 return;
             }
@@ -311,25 +307,24 @@ namespace MonkeyPaste {
             }
         }
 
-        private void NotifyWrite(MpDbLogActionType actionType, MpDbModelBase item, bool ignoreSyncing) {
+        private static void NotifyWrite(MpDbLogActionType actionType, MpDbModelBase item, bool ignoreSyncing) {
             switch(actionType) {
                 case MpDbLogActionType.Create:
-                    OnItemAdded?.Invoke(this, item);
+                    OnItemAdded?.Invoke(nameof(MpDb), item);
                     break;
                 case MpDbLogActionType.Modify:
-                    OnItemUpdated?.Invoke(this, item);
+                    OnItemUpdated?.Invoke(nameof(MpDb), item);
                     break;
                 case MpDbLogActionType.Delete:
-                    OnItemDeleted?.Invoke(this, item);
+                    OnItemDeleted?.Invoke(nameof(MpDb), item);
                     break;
             }
 
             if (!ignoreSyncing && item is MpISyncableDbObject) {
-                OnSyncableChange?.Invoke(item, item.Guid);
             }
         }
 
-        private async Task InitDb() {
+        private static async Task InitDb() {
 
             //SQLitePCL.Batteries.Init();
 
@@ -359,23 +354,23 @@ namespace MonkeyPaste {
                 await CreateViews();
                 await InitDefaultPortableData();
 
-                OnInitDefaultNativeData?.Invoke(this, null);
+                OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-            MpPreferences.Instance.ThisUserDevice = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
+            MpPreferences.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpPreferences.ThisDeviceGuid);
 
-            MpPreferences.Instance.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.Instance.ThisDeviceSourceId);
+            MpPreferences.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.ThisDeviceSourceId);
 
             if(isNewDb) {
-                OnInitDefaultNativeData?.Invoke(this, null);
+                OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
             MpConsole.WriteLine(@"Db file located: " + dbPath);
-            MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.Instance.ThisDeviceGuid);
+            MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
 
-        private void CreateConnection() {
+        private static void CreateConnection() {
             if (_connectionAsync == null) {
                 SQLitePCL.Batteries.Init();
                 var _connStr = new SQLiteConnectionString(
@@ -393,7 +388,7 @@ namespace MonkeyPaste {
             }
         }
 
-        private void MatchRegex(sqlite3_context ctx, object user_data, sqlite3_value[] args) {
+        private static void MatchRegex(sqlite3_context ctx, object user_data, sqlite3_value[] args) {
             bool isMatched = System.Text.RegularExpressions.Regex.IsMatch(
                 SQLitePCL.raw.sqlite3_value_text(args[1]).utf8_to_string(),
                 SQLitePCL.raw.sqlite3_value_text(args[0]).utf8_to_string(),
@@ -405,7 +400,7 @@ namespace MonkeyPaste {
                 SQLitePCL.raw.sqlite3_result_int(ctx, 0);
         }
 
-        private async Task InitTables() {
+        private static async Task InitTables() {
             await _connectionAsync.CreateTableAsync<MpAnalyticItem>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPreset>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPresetParameterValue>();
@@ -433,7 +428,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpUserSearch>();
         }
 
-        private async Task CreateViews() {
+        private static async Task CreateViews() {
             await _connectionAsync.ExecuteAsync(@"CREATE VIEW MpSortableCopyItem_View as
                                                     SELECT 
 	                                                    case fk_ParentCopyItemId
@@ -472,14 +467,14 @@ namespace MonkeyPaste {
                                                     LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
         }
         
-        private async Task InitDefaultPortableData() {
+        private static async Task InitDefaultPortableData() {
             #region User Device
 
-            MpPreferences.Instance.ThisDeviceGuid = Guid.NewGuid().ToString();
+            MpPreferences.ThisDeviceGuid = Guid.NewGuid().ToString();
 
             var thisDevice = new MpUserDevice() {
-                UserDeviceGuid = Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
-                PlatformType = MpPreferences.Instance.ThisDeviceType
+                UserDeviceGuid = Guid.Parse(MpPreferences.ThisDeviceGuid),
+                PlatformType = MpPreferences.ThisDeviceType
             };
             await AddItemAsync<MpUserDevice>(thisDevice);
 
@@ -489,11 +484,11 @@ namespace MonkeyPaste {
 
             var process = Process.GetCurrentProcess();
             string appPath = process.MainModule.FileName;
-            string appName = MpPreferences.Instance.ApplicationName;
+            string appName = MpPreferences.ApplicationName;
             var icon = await MpIcon.Create(MpBase64Images.Instance.AppIcon);
             var app = await MpApp.Create(appPath, appName, icon);
             var source = await MpSource.Create(app, null);
-            MpPreferences.Instance.ThisDeviceSourceId = source.Id;
+            MpPreferences.ThisDeviceSourceId = source.Id;
 
             #endregion
 
@@ -815,25 +810,25 @@ namespace MonkeyPaste {
 
             var ai1 = await MpAnalyticItem.Create(
                         "https://api.cognitive.microsofttranslator.com/{0}",
-                        MpPreferences.Instance.AzureCognitiveServicesKey,
+                        MpPreferences.AzureCognitiveServicesKey,
                         MpCopyItemType.Text,
                         MpOutputFormatType.Text,
                         "Language Translator",
                         "Azure Cognitive-Services Language Translator",
-                        MpHelpers.ReadTextFromResource(
+                        MpFileIo.ReadTextFromResource(
                             "MonkeyPaste.Resources.Data.Analytics.Formats.Azure.azuretranslator.json", 
-                            GetType().Assembly));
+                            typeof(MpDb).Assembly));
 
             var ai2 = await MpAnalyticItem.Create(
                         "https://api.openai.com/v1/",
-                        MpPreferences.Instance.RestfulOpenAiApiKey,
+                        MpPreferences.RestfulOpenAiApiKey,
                         MpCopyItemType.Text,
                         MpOutputFormatType.Text,
                         "Open Ai",
                         "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.",
-                        MpHelpers.ReadTextFromResource(
+                        MpFileIo.ReadTextFromResource(
                             "MonkeyPaste.Resources.Data.Analytics.Formats.OpenAi.openai.json",
-                            GetType().Assembly));
+                            typeof(MpDb).Assembly));
 
             // TODO add other analyzers here or better load w/ json
 
@@ -866,7 +861,7 @@ namespace MonkeyPaste {
             MpConsole.WriteTraceLine(@"Created all default tables");
         }
 
-        private void NotifyRemoteUpdate(MpDbLogActionType actionType, object dbo, string sourceClientGuid) {
+        private static void NotifyRemoteUpdate(MpDbLogActionType actionType, object dbo, string sourceClientGuid) {
             var eventArgs = new MpDbSyncEventArgs() {
                 DbObject = dbo,
                 EventType = actionType,
@@ -885,7 +880,7 @@ namespace MonkeyPaste {
             }
         }
 
-        private string GetCreateString() {
+        private static string GetCreateString() {
             return @"                    
                     CREATE TABLE MpSyncHistory (
                       pk_MpSyncHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -1171,50 +1166,50 @@ namespace MonkeyPaste {
         #endregion
 
         #region Sync Data
-        public bool IsWpf() {
+        public static bool IsWpf() {
             return false;
         }
 
-        public bool IsConnectedToNetwork() {
+        public static bool IsConnectedToNetwork() {
             return MpHelpers.IsConnectedToNetwork();
         }
 
-        public bool IsConnectedToInternet() {
+        public static bool IsConnectedToInternet() {
             return MpHelpers.IsConnectedToInternet();
         }
-        public int GetSyncPort() {
+        public static int GetSyncPort() {
             return 44381;
         }
-        public string GetThisClientGuid() {
-            return MpPreferences.Instance.ThisDeviceGuid;
+        public static string GetThisClientGuid() {
+            return MpPreferences.ThisDeviceGuid;
         }
-        public string GetPrimaryLocalIp4Address() {
+        public static string GetPrimaryLocalIp4Address() {
             if (!IsConnectedToNetwork()) {
                 return "0.0.0.0";
             }
             return MpHelpers.GetLocalIp4Address();
         }
 
-        public string[] GetAllLocalIp4Addresses() {
+        public static string[] GetAllLocalIp4Addresses() {
             if (!IsConnectedToNetwork()) {
                 return new string[] { "0.0.0.0" };
             }
             return MpHelpers.GetAllLocalIPv4();
         }
 
-        public string GetExternalIp4Address() {
+        public static string GetExternalIp4Address() {
             if (!IsConnectedToInternet()) {
                 return "0.0.0.0";
             }
             return MpHelpers.GetExternalIp4Address();
         }
 
-        public async Task<List<MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {
-            var logs = await MpDataModelProvider.Instance.GetDbLogsByGuidAsync(dboGuid, fromDtUtc);
+        public static async Task<List<MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {
+            var logs = await MpDataModelProvider.GetDbLogsByGuidAsync(dboGuid, fromDtUtc);
             return logs;
         }
 
-        public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
+        public static async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
             var shl = await GetItemsAsync<MpSyncHistory>();
             if(shl.Count == 0) {
                 return DateTime.MinValue;
@@ -1229,7 +1224,7 @@ namespace MonkeyPaste {
             return DateTime.MinValue;
         }
 
-        public async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime, string ignoreGuid = "") {
+        public static async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime, string ignoreGuid = "") {
             var logItems = await GetItemsAsync<MpDbLog>();
             var matchLogItems = logItems.Where(x => x.LogActionDateTime > fromDateTime && x.SourceClientGuid.ToString() != ignoreGuid).ToList();
 
@@ -1244,7 +1239,7 @@ namespace MonkeyPaste {
             return dbMsgStr;
         }
 
-        public async Task<Dictionary<Guid, List<MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr) {
+        public static async Task<Dictionary<Guid, List<MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr) {
             var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
 
             var remoteDbLogs = new List<MpDbLog>();
@@ -1264,7 +1259,7 @@ namespace MonkeyPaste {
             return remoteItemChangeLookup;
         }
 
-        public async Task PerformSync(
+        public static async Task PerformSync(
             Dictionary<Guid, List<MpDbLog>> changeLookup,
             string remoteClientGuid) {            
             var lastSyncDt = await GetLastSyncForRemoteDevice(remoteClientGuid);
@@ -1350,7 +1345,7 @@ namespace MonkeyPaste {
                 var deleteByDboTypeMethod = deleteMethod.MakeGenericMethod(new[] { dbot });
                 var dbo = await GetDbObjectByTableGuidAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
-                var deleteTask = (Task)deleteByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
+                var deleteTask = (Task)deleteByDboTypeMethod.Invoke(nameof(MpDb), new object[] { dbo,remoteClientGuid,false,true });
                 await deleteTask;
             }
 
@@ -1365,7 +1360,7 @@ namespace MonkeyPaste {
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var addMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
-                var addTask = (Task)addByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
+                var addTask = (Task)addByDboTypeMethod.Invoke(nameof(MpDb), new object[] { dbo,remoteClientGuid,false,true });
                 await addTask;
             }
 
@@ -1380,15 +1375,15 @@ namespace MonkeyPaste {
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var updateMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var updateByDboTypeMethod = updateMethod.MakeGenericMethod(new[] { dbot });
-                var updateTask = (Task)updateByDboTypeMethod.Invoke(MpDb.Instance, new object[] { dbo,remoteClientGuid,false,true });
+                var updateTask = (Task)updateByDboTypeMethod.Invoke(nameof(MpDb), new object[] { dbo,remoteClientGuid,false,true });
                 await updateTask;
             }
 
             return;
         }
 
-        public async Task UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
-            MpSyncHistory sh = await MpDataModelProvider.Instance.GetSyncHistoryByDeviceGuid(otherDeviceGuid);
+        public static async Task UpdateSyncHistory(string otherDeviceGuid, DateTime utcDtSentLocalChanges) {
+            MpSyncHistory sh = await MpDataModelProvider.GetSyncHistoryByDeviceGuid(otherDeviceGuid);
 
             if (sh == null) {
                 sh = new MpSyncHistory() {
@@ -1402,7 +1397,7 @@ namespace MonkeyPaste {
             await AddOrUpdateAsync<MpSyncHistory>(sh);
         }
 
-        private Dictionary<Guid,List<MpDbLog>> OrderByPrecedence(Dictionary<Guid,List<MpDbLog>> dict) {
+        private static Dictionary<Guid,List<MpDbLog>> OrderByPrecedence(Dictionary<Guid,List<MpDbLog>> dict) {
             if(dict.Count == 0) {
                 return dict;
             }
@@ -1417,8 +1412,8 @@ namespace MonkeyPaste {
             return customSortedValues;
         }
 
-        private int GetDbTableOrder(MpDbLog log) {
-            var orderedLogs = MpSyncManager.Instance.DbTableSyncOrder.ToList();
+        private static int GetDbTableOrder(MpDbLog log) {
+            var orderedLogs = MpSyncManager.DbTableSyncOrder.ToList();
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if (idx < 0) {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
@@ -1426,105 +1421,27 @@ namespace MonkeyPaste {
             return idx;
         }
 
-        public object GetMainThreadObj() {
+        public static object GetMainThreadObj() {
             return Application.Current.MainPage;
         }
 
-        public MpIStringToSyncObjectTypeConverter GetTypeConverter() {
+        public static MpIStringToSyncObjectTypeConverter GetTypeConverter() {
             return new MpXamStringToSyncObjectTypeConverter();
         }
 
-        public string GetDbFileAsBase64() {
-            var bytes = File.ReadAllBytes(_dbInfo.GetDbFilePath());
-            return Convert.ToBase64String(bytes);
-        }
-
-        public ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
+        public static ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
             _rdLock = new object();
             var rdoc = new ObservableCollection<MpRemoteDevice>();
             Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
             return rdoc;
         }
 
-        private void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess) {
+        private static void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess) {
             // `lock` ensures that only one thread access the collection at a time
             lock (collection) {
                 accessMethod?.Invoke();
             }
         }
         #endregion
-    }
-
-    public class MpDbLogTableComparer : IComparer<MpDbLog> {
-        public int Compare(MpDbLog a, MpDbLog b) {
-            return GetVal(a).CompareTo(GetVal(b));
-        }
-        private int GetVal(MpDbLog log) {
-            var orderedLogs = new List<string>() {
-                          "MpColor",
-                          "MpDbImage",
-                          "MpIcon",
-                          "MpUrl",
-                          "MpUrlDomain",
-                          "MpApp",
-                          "MpSource",
-                          "MpCopyItem",
-                          "MpTag",
-                          "MpCompositeCopyItem",
-                          "MpCopyItemTag",
-                          "MpCopyItemTemplate",
-                          "MpUserDevice" };
-            var idx = orderedLogs.IndexOf(log.DbTableName);
-            if(idx < 0) {
-                throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
-            }
-            return idx;
-        }
-    }
-
-    public class DataTable {
-        public List<DataRow> Rows { get; set; } = new List<DataRow>();
-    }
-
-    public class DataRow{
-        private Dictionary<string, object> _columns = new Dictionary<string, object>();
-
-        #region Property Reflection Referencer
-        public object this[string colName] {
-            get {
-                if(!_columns.ContainsKey(colName)) {
-                    if (colName.StartsWith("pk_") || colName.StartsWith("fk_") || colName.Contains("Id")) {
-                        return 0;
-                    }
-                    return null;
-                    //throw new Exception("Unable to find property: " + colName);
-                }
-                return _columns[colName];
-            }
-            set {
-                if (!_columns.ContainsKey(colName)) {
-                    throw new Exception("Unable to find property: " + colName);
-                }
-                _columns[colName] = value;
-            }
-        }
-
-        public object this[int idx] {
-            get {
-                if (idx >= _columns.Count) {
-                    throw new Exception("Index out of bounds: "+idx);
-                }
-                return _columns.ToArray()[idx].Value;
-            }
-        }
-        #endregion        
-
-        public void AddColumn(string colName,object value = null) {
-            if (_columns.ContainsKey(colName)) {
-                _columns[colName] = value;
-            } else {
-                _columns.Add(colName, value);
-            }
-        }
     }
 }

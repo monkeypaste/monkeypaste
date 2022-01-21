@@ -5,16 +5,16 @@ using System.Text;
 
 namespace MonkeyPaste {
     public class MpDeviceEndpointFactory {
-        public static MpDeviceEndpoint CreateEndpoint(MpISync sync) {
+        public static MpDeviceEndpoint CreateEndpoint() {
             var newEndpoint = new MpDeviceEndpoint() {
-                PublicIp4Address = sync.GetExternalIp4Address(),
-                PrivateIp4Addresses = new ObservableCollection<string>(sync.GetAllLocalIp4Addresses()),
-                DeviceGuid = sync.GetThisClientGuid(),
-                PublicPortNum = sync.GetSyncPort(),
-                PrivatePortNum = sync.GetSyncPort(),
+                PublicIp4Address = MpSyncHelper.GetExternalIp4Address(),
+                PrivateIp4Addresses = new ObservableCollection<string>(MpSyncHelper.GetAllLocalIp4Addresses()),
+                DeviceGuid = MpSyncHelper.GetThisClientGuid(),
+                PublicPortNum = MpSyncHelper.GetSyncPort(),
+                PrivatePortNum = MpSyncHelper.GetSyncPort(),
                 AccessToken = MpHelpers.GetNewAccessToken()
             };
-            newEndpoint.PrimaryPrivateIp4AddressIdx = newEndpoint.PrivateIp4Addresses.IndexOf(sync.GetPrimaryLocalIp4Address());
+            newEndpoint.PrimaryPrivateIp4AddressIdx = newEndpoint.PrivateIp4Addresses.IndexOf(MpSyncHelper.GetPrimaryLocalIp4Address());
             return newEndpoint;
         }
     }

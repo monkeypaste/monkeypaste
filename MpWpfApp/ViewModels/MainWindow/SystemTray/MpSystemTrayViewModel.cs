@@ -8,7 +8,14 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSystemTrayViewModel : MpViewModelBase, MpISingleton<MpSystemTrayViewModel> {
+    public class MpSystemTrayViewModel : MpViewModelBase, MpISingletonViewModel<MpSystemTrayViewModel> {
+
+
+        #region Private Variables
+        //private TaskbarIcon _taskbarIcon = null;
+        #endregion
+
+        #region Properties
 
         #region View Models
         private MpSettingsWindowViewModel _settingsWindowViewModel = null;
@@ -17,7 +24,7 @@ namespace MpWpfApp {
                 return _settingsWindowViewModel;
             }
             set {
-                if(_settingsWindowViewModel != value) {
+                if (_settingsWindowViewModel != value) {
                     _settingsWindowViewModel = value;
                     OnPropertyChanged(nameof(SettingsWindowViewModel));
                 }
@@ -25,12 +32,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Private Variables
-        //private TaskbarIcon _taskbarIcon = null;
-        #endregion
-
-        #region Properties
-        private string _systemTrayIconToolTipText = Properties.Settings.Default.ApplicationName;
+        private string _systemTrayIconToolTipText = MpPreferences.ApplicationName;
         public string SystemTrayIconToolTipText {
             get {
                 return _systemTrayIconToolTipText;
@@ -62,7 +64,7 @@ namespace MpWpfApp {
 
         public string DbSizeInMbs {
             get {
-                return Math.Round(MpHelpers.FileListSize(new string[] { Properties.Settings.Default.DbPath }),2).ToString() + " megabytes";
+                return Math.Round(MpHelpers.FileListSize(new string[] { MpPreferences.DbPath }),2).ToString() + " megabytes";
             }
         }
 
@@ -100,7 +102,7 @@ namespace MpWpfApp {
             await Task.Delay(1);
         }
 
-        public MpSystemTrayViewModel() : base() {
+        public MpSystemTrayViewModel() : base(null) {
             Application.Current.Resources["SystemTrayViewModel"] = this;
         }
 
@@ -115,7 +117,7 @@ namespace MpWpfApp {
 
         public ICommand ShowLogDialogCommand => new RelayCommand(
             () => {
-                //var result = MessageBox.Show(MonkeyPaste.MpSyncManager.Instance.StatusLog, "Server Log", MessageBoxButton.OK, MessageBoxImage.Error);
+                //var result = MessageBox.Show(MonkeyPaste.MpSyncManager.StatusLog, "Server Log", MessageBoxButton.OK, MessageBoxImage.Error);
             });
 
         public ICommand ShowSettingsWindowCommand => new RelayCommand<object>(

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
+using MpProcessHelper;
 
 namespace MpWpfApp {
     public class MpCopyItemBuilder : MpICopyItemBuilder {
@@ -24,21 +25,20 @@ namespace MpWpfApp {
                     return null;
                 }
                 var iData = mpdo.DataFormatLookup as Dictionary<string,string>;
-                var processManager = MpProcessHelper.MpProcessManager.Instance;
 
                 string processPath, appName, processIconImg64;
 
-                var processHandle = processManager.LastHandle;
+                var processHandle = MpProcessManager.LastHandle;
                 if (processHandle == IntPtr.Zero) {
                     // since source is unknown set to this app
 
-                    processPath = MpPreferences.Instance.ThisAppSource.App.AppPath;
-                    appName = MpPreferences.Instance.ThisAppSource.App.AppName;
-                    processIconImg64 = MpPreferences.Instance.ThisAppSource.App.Icon.IconImage.ImageBase64;
+                    processPath = MpPreferences.ThisAppSource.App.AppPath;
+                    appName = MpPreferences.ThisAppSource.App.AppName;
+                    processIconImg64 = MpPreferences.ThisAppSource.App.Icon.IconImage.ImageBase64;
                 } else {
-                    processPath = MpHelpers.GetProcessPath(processHandle);
-                    appName = MpHelpers.GetProcessApplicationName(processHandle);
-                    processIconImg64 = MpHelpers.GetIconImage(processPath).ToBase64String();
+                    processPath = MpProcessManager.GetProcessPath(processHandle);
+                    appName = MpProcessManager.GetProcessApplicationName(processHandle);
+                    processIconImg64 = MpProcessManager.ProcessIconBuilder.GetBase64BitmapFromFilePath(processPath);
                 }
                 
                 string itemData = null;
@@ -68,7 +68,7 @@ namespace MpWpfApp {
                     return null;
                 }
 
-                if (MpPreferences.Instance.IgnoreWhiteSpaceCopyItems &&
+                if (MpPreferences.IgnoreWhiteSpaceCopyItems &&
                     itemType == MpCopyItemType.Text &&
                     string.IsNullOrWhiteSpace((itemData).ToPlainText().Replace(Environment.NewLine, ""))) {
                     return null;
@@ -78,25 +78,25 @@ namespace MpWpfApp {
                     htmlData = iData[DataFormats.Html];
                 }
 
-                var dupCheck = await MpDataModelProvider.Instance.GetCopyItemByData(itemData);
+                var dupCheck = await MpDataModelProvider.GetCopyItemByData(itemData);
                 if(dupCheck != null) {
                     MpConsole.WriteLine("Duplicate item detected, flipping id and returning");
-                    dupCheck = await MpDb.Instance.GetItemAsync<MpCopyItem>(dupCheck.Id);
+                    dupCheck = await MpDb.GetItemAsync<MpCopyItem>(dupCheck.Id);
                     dupCheck.Id *= -1;
                     return dupCheck;
                 }
 
-                MpApp app = await MpDataModelProvider.Instance.GetAppByPath(processPath);
+                MpApp app = await MpDataModelProvider.GetAppByPath(processPath);
                 if (app == null) {
-                    var icon = await MpDataModelProvider.Instance.GetIconByImageStr(processIconImg64);
+                    var icon = await MpDataModelProvider.GetIconByImageStr(processIconImg64);
                     if (icon == null) {
                         icon = await MpIcon.Create(processIconImg64);
                     } else {
-                        icon = await MpDb.Instance.GetItemAsync<MpIcon>(icon.Id);
+                        icon = await MpDb.GetItemAsync<MpIcon>(icon.Id);
                     }
                     app = await MpApp.Create(processPath, appName, icon);
                 } else {
-                    app = await MpDb.Instance.GetItemAsync<MpApp>(app.Id);
+                    app = await MpDb.GetItemAsync<MpApp>(app.Id);
                 }
 
                 MpUrl url = null;
@@ -120,15 +120,15 @@ namespace MpWpfApp {
                     }
                 }
 
-                if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.Instance.MaxRtfCharCount) {
+                if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
                     itemData = MpHelpers.ConvertRichTextToPlainText((string)itemData);
-                    if (((string)itemData).Length > MpPreferences.Instance.MaxRtfCharCount) {
+                    if (((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
-                        if (MpPreferences.Instance.NotificationShowCopyItemTooLargeToast) {
+                        if (MpPreferences.NotificationShowCopyItemTooLargeToast) {
                             MpStandardBalloonViewModel.ShowBalloon(
                             "Item TOO LARGE",
-                            $"Max Item Characters is {MpPreferences.Instance.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
-                            MpPreferences.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                            $"Max Item Characters is {MpPreferences.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
+                            MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                         }
                         return null;
                     }
@@ -138,7 +138,7 @@ namespace MpWpfApp {
                     throw new Exception("Error creating copy item no source discovered");
                 }
                 if(url != null) {
-                    await MpDb.Instance.AddOrUpdateAsync<MpUrl>(url);
+                    await MpDb.AddOrUpdateAsync<MpUrl>(url);
                 }
                 var source = await MpSource.Create(app, url);
                 var ci = await MpCopyItem.Create(source, itemData, itemType);

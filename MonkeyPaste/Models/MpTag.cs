@@ -86,7 +86,7 @@ namespace MonkeyPaste {
             //await Task.Delay(1);
             //return MpDbModelBase.CreateOrUpdateFromLogs(logs, fromClientGuid);
 
-            var cdr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpTag", tagGuid);
+            var cdr = await MpDb.GetDbObjectByTableGuidAsync("MpTag", tagGuid);
             MpTag newTag = null;
             if (cdr == null) {
                 newTag = new MpTag();
@@ -113,7 +113,7 @@ namespace MonkeyPaste {
                         break;
                 }
             }
-            //await MpDb.Instance.AddOrUpdate<MpTag>(newTag, fromClientGuid);
+            //await MpDb.AddOrUpdate<MpTag>(newTag, fromClientGuid);
             return newTag;
         }
 

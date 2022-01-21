@@ -79,7 +79,7 @@ namespace MonkeyPaste {
             var remoteLogsMinDt = rlogs.FirstOrDefault().LogActionDateTime;
             var rlogsToRemove = new List<MpDbLog>();
             //query local db and get logs for item since oldest remote transaction datetime
-            var llogs = await MpDataModelProvider.Instance.GetDbLogsByGuidAsync(dboGuid, remoteLogsMinDt);
+            var llogs = await MpDataModelProvider.GetDbLogsByGuidAsync(dboGuid, remoteLogsMinDt);
             foreach (var rlog in rlogs) {
                 if(rlog.LogActionDateTime < lastSyncDt) {
                     rlogsToRemove.Add(rlog);

@@ -12,11 +12,11 @@ namespace MpWpfApp {
         Left
     }
 
-    public class MpMeasurements : MpViewModelBase, MpISingleton<MpMeasurements> {    
+    public class MpMeasurements : MpViewModelBase, MpISingletonViewModel<MpMeasurements> {    
         private static MpMeasurements _instance;
         public static MpMeasurements Instance => _instance ?? (_instance = new MpMeasurements());
 
-        public MpMeasurements() : base() {
+        public MpMeasurements() : base(null) {
 
         }
         public async Task Init() {
@@ -85,7 +85,7 @@ namespace MpWpfApp {
 
         public double MainWindowDefaultHeight {
             get {
-                return SystemParameters.PrimaryScreenHeight * MainWindowToScreenHeightRatio;// * MpPreferences.Instance.ThisAppDip;// SystemParameters.PrimaryScreenHeight - (SystemParameters.PrimaryScreenHeight / PHI); 
+                return SystemParameters.PrimaryScreenHeight * MainWindowToScreenHeightRatio;// * MpPreferences.ThisAppDip;// SystemParameters.PrimaryScreenHeight - (SystemParameters.PrimaryScreenHeight / PHI); 
             }
         }
 
@@ -97,7 +97,7 @@ namespace MpWpfApp {
 
         public double MainWindowMaxHeight {
             get {
-                return SystemParameters.WorkArea.Height;// * MpPreferences.Instance.ThisAppDip;
+                return SystemParameters.WorkArea.Height;// * MpPreferences.ThisAppDip;
             }
         }
 

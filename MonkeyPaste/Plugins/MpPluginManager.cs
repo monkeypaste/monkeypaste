@@ -10,21 +10,15 @@ using System.Threading.Tasks;
 using System.Linq;
 
 namespace MonkeyPaste {
-    public class MpPluginManager : MpISingleton<MpPluginManager> {
-        private static MpPluginManager _instance;
-        public static MpPluginManager Instance => _instance ?? (_instance = new MpPluginManager());
-
-
-        public MpPluginManager() { }
+    public static class MpPluginManager {
 
         #region Properties
-        public ObservableCollection<MpPlugin> Plugins = new ObservableCollection<MpPlugin>();
+        public static ObservableCollection<MpPlugin> Plugins = new ObservableCollection<MpPlugin>();
         #endregion
 
         #region Public Methods
 
-        public async Task Init() {
-            await Task.Delay(1);
+        public static void Init() {
             //find plugin folder in main app folder
             var pluginRootFolderPath = Directory.GetCurrentDirectory();
 

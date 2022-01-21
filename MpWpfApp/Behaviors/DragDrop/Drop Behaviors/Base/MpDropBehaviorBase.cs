@@ -136,16 +136,16 @@ namespace MpWpfApp {
         protected virtual void ReceivedMainWindowViewModelMessage(MpMessageType msg) { }
 
         public virtual void OnLoaded() {
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                 MpClipTrayViewModel.Instance, 
                 ReceivedClipTrayViewModelMessage);
 
 
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                 MpMainWindowViewModel.Instance, 
                 ReceivedMainWindowViewModelMessage);
 
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                 (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior,
                 ReceivedMainWindowResizeBehviorMessage);
 
@@ -153,8 +153,8 @@ namespace MpWpfApp {
         }
 
         public virtual void OnUnloaded() {
-            MpMessenger.Instance.Unregister<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
-            MpMessenger.Instance.Unregister<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
+            MpMessenger.Unregister<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayViewModelMessage);
+            MpMessenger.Unregister<MpMessageType>(MpMainWindowViewModel.Instance, ReceivedMainWindowViewModelMessage);
 
         }
 
@@ -257,7 +257,7 @@ namespace MpWpfApp {
                     var oldTile = MpClipTrayViewModel.Instance.GetClipTileViewModelById(dragModels[i].Id);
                     int oldIdx = oldTile == null ? -1 : MpClipTrayViewModel.Instance.Items.IndexOf(oldTile);
 
-                    var newHead = await MpDataModelProvider.Instance.RemoveQueryItem(dragModels[i].Id);
+                    var newHead = await MpDataModelProvider.RemoveQueryItem(dragModels[i].Id);
                     bool wasRemoved = newHead == null;
                     if (!wasRemoved && dragModels.Any(x => x.Id == newHead.Id)) {
                         //if first child was substituted as parent and drag contains

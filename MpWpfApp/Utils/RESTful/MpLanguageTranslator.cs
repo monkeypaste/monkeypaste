@@ -18,7 +18,7 @@ namespace MpWpfApp {
         #region private static Variables
 
         private static bool _isLoaded = false;
-        private static string COGNITIVE_SERVICES_KEY = MpPreferences.Instance.AzureCognitiveServicesKey;
+        private static string COGNITIVE_SERVICES_KEY = MpPreferences.AzureCognitiveServicesKey;
         private static string TEXT_TRANSLATION_API_ENDPOINT = "https://api.cognitive.microsofttranslator.com/{0}?api-version=3.0";
 
         #endregion

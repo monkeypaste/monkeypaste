@@ -17,7 +17,7 @@ using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {
 
-    public class MpTagTrayViewModel : MpViewModelBase, MpISingleton<MpTagTrayViewModel>, MpITreeItemViewModel {
+    public class MpTagTrayViewModel : MpViewModelBase, MpISingletonViewModel<MpTagTrayViewModel>, MpITreeItemViewModel {
         #region Private Variables
         #endregion
 
@@ -125,7 +125,7 @@ namespace MpWpfApp {
         public static MpTagTrayViewModel Instance => _instance ?? (_instance = new MpTagTrayViewModel());
 
 
-        public MpTagTrayViewModel() : base() {
+        public MpTagTrayViewModel() : base(null) {
             PropertyChanged += MpTagTrayViewModel_PropertyChanged;
         }
 
@@ -134,11 +134,11 @@ namespace MpWpfApp {
             await MpHelpers.RunOnMainThreadAsync(async () => {
                 IsBusy = true;
 
-                MpDb.Instance.SyncAdd += MpDbObject_SyncAdd;
-                MpDb.Instance.SyncUpdate += MpDbObject_SyncUpdate;
-                MpDb.Instance.SyncDelete += MpDbObject_SyncDelete;
+                MpDb.SyncAdd += MpDbObject_SyncAdd;
+                MpDb.SyncUpdate += MpDbObject_SyncUpdate;
+                MpDb.SyncDelete += MpDbObject_SyncDelete;
 
-                List<MpTag> allTags = await MpDb.Instance.GetItemsAsync<MpTag>();
+                List<MpTag> allTags = await MpDb.GetItemsAsync<MpTag>();
 
                 var rttvm = await CreateTagTileViewModel(allTags.FirstOrDefault(x => x.Id == MpTag.AllTagId));
 
@@ -190,7 +190,7 @@ namespace MpWpfApp {
             MpTagTileViewModel ttvm = new MpTagTileViewModel(this);
             await ttvm.InitializeAsync(tag);
 
-            var ctl = await MpDataModelProvider.Instance.GetChildTagsAsync(ttvm.TagId);
+            var ctl = await MpDataModelProvider.GetChildTagsAsync(ttvm.TagId);
             foreach(var ct in ctl) {
                 var cttvm = await CreateTagTileViewModel(ct);
                 cttvm.ParentTreeItem = ttvm;
@@ -224,11 +224,11 @@ namespace MpWpfApp {
             var countTasks = new Dictionary<int, Task<int>>();
             foreach (var ttvm in TagTileViewModels) {
                 if (ttvm.IsAllTag) {
-                    countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetTotalCopyItemCountAsync());
+                    countTasks.Add(ttvm.TagId, MpDataModelProvider.GetTotalCopyItemCountAsync());
                 } else if (ttvm.IsRecentTag) {
-                    countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetRecentCopyItemCountAsync());
+                    countTasks.Add(ttvm.TagId, MpDataModelProvider.GetRecentCopyItemCountAsync());
                 } else {
-                    countTasks.Add(ttvm.TagId, MpDataModelProvider.Instance.GetCopyItemCountForTagAsync(ttvm.TagId));
+                    countTasks.Add(ttvm.TagId, MpDataModelProvider.GetCopyItemCountForTagAsync(ttvm.TagId));
                 }
             }
 
@@ -267,7 +267,7 @@ namespace MpWpfApp {
                 if (ttvm.IsSudoTag || ttvm.IsSelected) {
                     continue;
                 }
-                var ciidl = await MpDataModelProvider.Instance.GetCopyItemIdsForTagAsync(ttvm.TagId);
+                var ciidl = await MpDataModelProvider.GetCopyItemIdsForTagAsync(ttvm.TagId);
 
                 bool isTagLinkedToAnySelectedClips = false;
                 foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
@@ -384,7 +384,7 @@ namespace MpWpfApp {
                 var ttvm = TagTileViewModels.Where(x => x.TagId == (int)tagId).FirstOrDefault();
                 ttvm.ParentTreeItem.Children.Remove(ttvm);
 
-                var ctl = await MpDataModelProvider.Instance.GetChildTagsAsync((int)tagId);
+                var ctl = await MpDataModelProvider.GetChildTagsAsync((int)tagId);
                 ctl.ForEach(x => DeleteTagCommand.Execute(x.Id));
 
                 if (!ttvm.Tag.IsSyncing) {
@@ -412,7 +412,7 @@ namespace MpWpfApp {
                 //add tag to datastore so TagTile collection will automatically add the tile
                 MpTag newTag = new MpTag() {
                     TagName = "Untitled",
-                    HexColor = MpHelpers.GetRandomColor().ToString(),
+                    HexColor = MpWpfColorHelpers.GetRandomColor().ToString(),
                     TagSortIdx = TagTileViewModels.Count,
                     ParentTagId = SelectedTagTile.TagId
                 };
@@ -444,7 +444,7 @@ namespace MpWpfApp {
                     tagId = (int)args;
                 }
 
-                //if (MpDataModelProvider.Instance.QueryInfo.TagId == tagId) {
+                //if (MpDataModelProvider.QueryInfo.TagId == tagId) {
                 //    return;
                 //}
 
@@ -452,10 +452,10 @@ namespace MpWpfApp {
                     ttvm.IsSelected = ttvm.TagId == tagId;
                 }
 
-                if(MpClipTileSortViewModel.Instance.SelectedSortType.SortType == MpContentSortType.Manual) {
+                if(MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
                     MpClipTileSortViewModel.Instance.ResetToDefault();
-                } else if (MpDataModelProvider.Instance.QueryInfo.TagId != tagId) {
-                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged();
+                } else if (MpDataModelProvider.QueryInfo.TagId != tagId) {
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged();
                 }                
             },
             (args)=>args != null);

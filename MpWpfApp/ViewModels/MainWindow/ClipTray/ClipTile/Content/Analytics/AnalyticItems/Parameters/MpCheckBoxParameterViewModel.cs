@@ -25,7 +25,7 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpCheckBoxParameterViewModel() : base() { }
+        public MpCheckBoxParameterViewModel() : base(null) { }
 
         public MpCheckBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 

@@ -23,10 +23,10 @@ namespace MonkeyPaste {
         private X509Certificate2 _cert = null;
 
         public MpCertificateManager() {
-            if (DateTime.UtcNow > MpPreferences.Instance.SslCertExpirationDateTime) {
+            if (DateTime.UtcNow > MpPreferences.SslCertExpirationDateTime) {
                 CreateCertificate();
             }
-            _cert = LoadCertificate(MpPreferences.Instance.SyncCertPath);
+            _cert = LoadCertificate(MpPreferences.SyncCertPath);
 
             if (_cert == null) {
                 MpConsole.WriteTraceLine(@"Error could not load sync certificate");
@@ -34,13 +34,13 @@ namespace MonkeyPaste {
         }
 
         private void CreateCertificate() {
-            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpPreferences.Instance.SslCASubject);
+            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpPreferences.SslCASubject);
 
-            var cert = GenerateSelfSignedCertificate(MpPreferences.Instance.SslCertSubject, MpPreferences.Instance.SslCASubject, caPrivKey);
+            var cert = GenerateSelfSignedCertificate(MpPreferences.SslCertSubject, MpPreferences.SslCASubject, caPrivKey);
 
-            MpPreferences.Instance.SslPublicKey = cert.GetPublicKeyString();
+            MpPreferences.SslPublicKey = cert.GetPublicKeyString();
 
-            SaveCertificate(MpPreferences.Instance.SyncCertPath, cert);
+            SaveCertificate(MpPreferences.SyncCertPath, cert);
         }
 
         private AsymmetricKeyParameter GenerateCACertificate(string subjectName, int keyStrength = 2048) {
@@ -108,7 +108,7 @@ namespace MonkeyPaste {
             //var x509 = new X509Certificate2(certificate.GetEncoded(),string.Empty);
 
             // Add CA certificate to Root store
-            SaveCertificate(MpPreferences.Instance.SyncCaPath, certificate);
+            SaveCertificate(MpPreferences.SyncCaPath, certificate);
 
             return issuerKeyPair.Private;
         }
@@ -146,7 +146,7 @@ namespace MonkeyPaste {
             var notBefore = DateTime.UtcNow.Date;
             var notAfter = notBefore.AddYears(2);
 
-            MpPreferences.Instance.SslCertExpirationDateTime = notAfter;
+            MpPreferences.SslCertExpirationDateTime = notAfter;
 
             certificateGenerator.SetNotBefore(notBefore);
             certificateGenerator.SetNotAfter(notAfter);

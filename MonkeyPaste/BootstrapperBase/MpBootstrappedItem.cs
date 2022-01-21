@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpBootstrappedItem {
         public Type ItemType { get; set; }
-        public Dictionary<string, object> Parameters { get; set; }
 
         public MpBootstrappedItem() { }
 
@@ -16,28 +16,17 @@ namespace MonkeyPaste {
             ItemType = itemType;
         }
 
-        public MpBootstrappedItem(Type itemType, string paramName, object paramVal) : this(itemType) {
-            Parameters = new Dictionary<string, object>();
-            Parameters.Add(paramName, paramVal);
-        }
 
         public async Task Register() {
             var sw = Stopwatch.StartNew();
 
-            object itemObj = null;
-            if (Parameters == null) {
-                Activator.CreateInstance(ItemType);
-            } else {
-                List<object> args = new List<object>();
-                foreach(var kvp in Parameters) {
-                    args.Add(kvp.Key);
-                    args.Add(kvp.Value);
-                }
-                Activator.CreateInstance(ItemType, args.ToArray());
-            }
-                
-                
-            
+            // Get a PropertyInfo of specific property type(T).GetProperty(....)
+            PropertyInfo propertyInfo;
+            propertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
+
+            // Use the PropertyInfo to retrieve the value from the type by not passing in an instance
+            object itemObj = propertyInfo.GetValue(null, null);
+
             var initMethod = ItemType.GetMethod("Init");
             var initTask = (Task)initMethod.Invoke(itemObj, null);
             await initTask;

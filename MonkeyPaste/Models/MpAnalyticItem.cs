@@ -113,14 +113,14 @@ namespace MonkeyPaste {
             string description,
             string parameterFormatResourcePath,
             int sortOrderIdx = -1) {
-            var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemByEndpoint(endPoint);
+            var dupItem = await MpDataModelProvider.GetAnalyticItemByEndpoint(endPoint);
             if (dupItem != null) {
-                dupItem = await MpDb.Instance.GetItemAsync<MpAnalyticItem>(dupItem.Id);
+                dupItem = await MpDb.GetItemAsync<MpAnalyticItem>(dupItem.Id);
                 return dupItem;
             }
 
             if (sortOrderIdx < 0) {
-                sortOrderIdx = await MpDataModelProvider.Instance.GetAnalyticItemCount();
+                sortOrderIdx = await MpDataModelProvider.GetAnalyticItemCount();
             }
 
             var domainStr = MpHelpers.GetUrlDomain(endPoint);

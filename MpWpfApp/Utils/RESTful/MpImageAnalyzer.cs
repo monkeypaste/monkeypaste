@@ -16,9 +16,9 @@ namespace MpWpfApp {
         public static MpImageAnalyzer Instance { get { return _Lazy.Value; } }
 
         // Add your Computer Vision subscription key and endpoint to your environment variables.
-        private string _subscriptionKey = MpPreferences.Instance.AzureCognitiveServicesKey;
+        private string _subscriptionKey = MpPreferences.AzureCognitiveServicesKey;
 
-        private static string _endpoint = MpPreferences.Instance.AzureCognitiveServicesEndpoint;
+        private static string _endpoint = MpPreferences.AzureCognitiveServicesEndpoint;
 
         // the OCR method endpoint
         private string _uriBase = _endpoint + "vision/v3.1/analyze";

@@ -64,9 +64,9 @@ namespace MonkeyPaste {
         public MpCopyItemTileCollectionPageViewModel(int tagId) : base() {
             PropertyChanged += MpCopyItemCollectionViewModel_PropertyChanged;
 
-            MpDb.Instance.OnItemAdded += Db_OnItemAdded;
-            MpDb.Instance.OnItemUpdated += Db_OnItemUpdated;
-            MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
+            MpDb.OnItemAdded += Db_OnItemAdded;
+            MpDb.OnItemUpdated += Db_OnItemUpdated;
+            MpDb.OnItemDeleted += Db_OnItemDeleted;
 
             _ = Task.Run(() => Initialize(tagId));
         }
@@ -74,10 +74,10 @@ namespace MonkeyPaste {
         public async Task SetTag(int tagId) {
             TagId = tagId; 
             await Device.InvokeOnMainThreadAsync(async () => {                                
-                var clips = await MpDataModelProvider.Instance.GetPageAsync(TagId, 0, _pageSize, MpContentSortType.CopyDateTime, true);
+                var clips = await MpDataModelProvider.GetPageAsync(TagId, 0, _pageSize, MpContentSortType.CopyDateTime, true);
                 CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(clips.Select(x=>CreateCopyItemViewModel(x)));                
                 if(clips.Count == 0) {
-                    var tl = await MpDb.Instance.GetItemsAsync<MpTag>();
+                    var tl = await MpDb.GetItemsAsync<MpTag>();
                     var t = tl.Where(x => x.Id == TagId).FirstOrDefault();
                     if(t != null) {
                         EmptyCollectionLableText = string.Format(@"No Clips could be found in '{0}' Collection", t.TagName);
@@ -237,7 +237,7 @@ namespace MonkeyPaste {
                 }
                 CopyItemViewModels.Remove(civm);
             
-                await MpDb.Instance.DeleteItemAsync(civm.CopyItem);
+                await MpDb.DeleteItemAsync(civm.CopyItem);
             });
 
         public ICommand LoadMoreCopyItemsCommand => new Command(

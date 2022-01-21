@@ -32,7 +32,7 @@ namespace MpWpfApp {
 
         public MpRtbView() : base() {
             InitializeComponent();
-            Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.Instance.UseSpellCheck;
+            Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.UseSpellCheck;
         }
         
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
@@ -60,7 +60,7 @@ namespace MpWpfApp {
         //            if(BindingContext.IsPlaceholder) {
         //                break;
         //            }
-        //            if(string.IsNullOrEmpty(MpDataModelProvider.Instance.QueryInfo.SearchText)) {
+        //            if(string.IsNullOrEmpty(MpDataModelProvider.QueryInfo.SearchText)) {
         //                break;
         //            }
 
@@ -102,16 +102,16 @@ namespace MpWpfApp {
                     await CreateHyperlinksAsync(CTS.Token);
                 });
 
-                //MpMessenger.Instance.Register<MpMessageType>(
+                //MpMessenger.Register<MpMessageType>(
                 //    MpClipTrayViewModel.Instance,
                 //    ReceivedClipTrayViewModelMessage);
 
-                MpMessenger.Instance.Register<MpMessageType>(
+                MpMessenger.Register<MpMessageType>(
                     BindingContext.Parent,
                     ReceivedClipTileViewModelMessage,
                     BindingContext.Parent);
 
-                MpMessenger.Instance.Register<MpMessageType>(
+                MpMessenger.Register<MpMessageType>(
                     (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior,
                     ReceivedMainWindowResizeBehviorMessage);
 
@@ -487,7 +487,7 @@ namespace MpWpfApp {
                 return;
             }
             var rtbSelection = Rtb?.Selection;
-            var templateModels = await MpDataModelProvider.Instance.GetTemplatesAsync(rtbvm.CopyItemId);
+            var templateModels = await MpDataModelProvider.GetTemplatesAsync(rtbvm.CopyItemId);
             string templateRegEx = string.Join("|", templateModels.Select(x => x.TemplateToken));
             string pt = rtbvm.CopyItem.ItemData.ToPlainText(); //Rtb.Document.ToPlainText();
             for (int i = 1; i < MpRegEx.RegExList.Count; i++) {
@@ -727,7 +727,7 @@ namespace MpWpfApp {
                                                 hl.Inlines.Clear();
                                                 hl.Inlines.Add(run);
                                                 var bgBrush = result;
-                                                var fgBrush = MpHelpers.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
+                                                var fgBrush = MpWpfColorHelpers.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
                                                 var tr = new TextRange(run.ElementStart, run.ElementEnd);
                                                 tr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
                                                 tr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
@@ -768,7 +768,7 @@ namespace MpWpfApp {
                                         hl.ContextMenu.Items.Add(changeColorItem);
 
                                         hl.Background = (Brush)new BrushConverter().ConvertFromString(linkText);
-                                        hl.Foreground = MpHelpers.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
+                                        hl.Foreground = MpWpfColorHelpers.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
                                         break;
                                     default:
                                         MonkeyPaste.MpConsole.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);

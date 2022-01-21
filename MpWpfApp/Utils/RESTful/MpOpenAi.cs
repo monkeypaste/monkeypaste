@@ -22,7 +22,7 @@ namespace MpWpfApp {
 
         public async Task<string> Summarize(string text) {
             text = text.Replace(Environment.NewLine, " ");
-            string openAiToken = MpPreferences.Instance.RestfulOpenAiApiKey;
+            string openAiToken = MpPreferences.RestfulOpenAiApiKey;
             /*
              curl https://api.openai.com/v1/engines/davinci/completions \
                   -H "Content-Type: application/json" \
@@ -39,7 +39,7 @@ namespace MpWpfApp {
              */
             using (var httpClient = new HttpClient()) {
                 using (var request = new HttpRequestMessage(new HttpMethod("POST"),"https://api.openai.com/v1/engines/davinci/completions")) {
-                    request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {MpPreferences.Instance.RestfulOpenAiApiKey}");
+                    request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {MpPreferences.RestfulOpenAiApiKey}");
                     string reqStr = "{\n  \"prompt\": \"" + text + "\",\n  \"temperature\": 0.3,\n  \"max_tokens\": 64,\n  \"top_p\": 1,\n  \"frequency_penalty\": 0,\n  \"presence_penalty\": 0 \n}";//,\n  \"stop\": [\"\\n\"]\n}";
                     request.Content = new StringContent(reqStr);
                     request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
@@ -75,7 +75,7 @@ namespace MpWpfApp {
              */
             using (var httpClient = new HttpClient()) {
                 using (var request = new HttpRequestMessage(new HttpMethod("POST"), endpoint)) {
-                    request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {MpPreferences.Instance.RestfulOpenAiApiKey}");
+                    request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {MpPreferences.RestfulOpenAiApiKey}");
                     request.Content = new StringContent(reqStr);
                     request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
@@ -90,19 +90,19 @@ namespace MpWpfApp {
         }
 
         protected override int GetCurCallCount() {
-            return MpPreferences.Instance.RestfulOpenAiCount;
+            return MpPreferences.RestfulOpenAiCount;
         }
 
         protected override int GetMaxCallCount() {
-            return MpPreferences.Instance.RestfulOpenAiMaxCount;
+            return MpPreferences.RestfulOpenAiMaxCount;
         }
 
         protected override void IncrementCallCount() {
-            MpPreferences.Instance.RestfulOpenAiCount++;
+            MpPreferences.RestfulOpenAiCount++;
         }
 
         protected override void ClearCount() {
-            MpPreferences.Instance.RestfulOpenAiCount = 0;
+            MpPreferences.RestfulOpenAiCount = 0;
         }
     }
 }

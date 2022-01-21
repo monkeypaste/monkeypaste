@@ -17,8 +17,8 @@ namespace MpWpfApp {
         private bool _isOcrLocal = true;
 
         // Add your Computer Vision subscription key and endpoint to your environment variables.
-        private string _subscriptionKey = MpPreferences.Instance.AzureCognitiveServicesKey;
-        private static string _endpoint = MpPreferences.Instance.AzureCognitiveServicesEndpoint;
+        private string _subscriptionKey = MpPreferences.AzureCognitiveServicesKey;
+        private static string _endpoint = MpPreferences.AzureCognitiveServicesEndpoint;
 
         // the OCR method endpoint
         private string _uriBase = _endpoint + "vision/v2.1/ocr";
@@ -122,12 +122,12 @@ namespace MpWpfApp {
         private async Task<OcrResult> OcrEngineFromFileAsync(string imagePath, bool isTemporaryFile = true) {
             // see this about packaging https://docs.microsoft.com/en-us/answers/questions/4354/is-the-ocr-api-supported-from-win32-applications-w.html
 
-            var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language(Properties.Settings.Default.UserCultureInfoName));
+            var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language(MpPreferences.UserCultureInfoName));
             if(engine == null) {
-                engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language(Properties.Settings.Default.DefaultCultureInfoName));
+                engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language(MpPreferences.DefaultCultureInfoName));
             }
             if(engine == null) {
-                MonkeyPaste.MpConsole.WriteLine(@"MpImageOcr.OcrEngineFromFileAsync error unable to create engine for language named: " + Properties.Settings.Default.UserCultureInfoName);
+                MonkeyPaste.MpConsole.WriteLine(@"MpImageOcr.OcrEngineFromFileAsync error unable to create engine for language named: " + MpPreferences.UserCultureInfoName);
                 return null;
             }
             var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(imagePath);

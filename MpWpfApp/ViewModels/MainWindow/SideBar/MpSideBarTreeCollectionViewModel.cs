@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpSideBarTreeCollectionViewModel : MpViewModelBase, MpISingleton<MpSideBarTreeCollectionViewModel>, MpITreeItemViewModel {
+    public class MpSideBarTreeCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpSideBarTreeCollectionViewModel>, MpITreeItemViewModel {
         public bool IsSelected { get; set; }
         public bool IsHovering { get; set; }
         public bool IsExpanded { get; set; }
@@ -19,7 +19,7 @@ namespace MpWpfApp {
         public static MpSideBarTreeCollectionViewModel Instance => _instance ?? (_instance = new MpSideBarTreeCollectionViewModel());
 
 
-        public MpSideBarTreeCollectionViewModel() :base() { }
+        public MpSideBarTreeCollectionViewModel() : base(null) { }
 
         public async Task Init() {
             await Task.Delay(1);

@@ -18,7 +18,7 @@ namespace MpImageHelper {
         public byte Red;
         public byte Alpha;
     }
-    public class MpWpfImageHelper : MonkeyPaste.MpIconBuilder, MpISingleton<MpWpfImageHelper> {
+    public class MpWpfImageHelper : MonkeyPaste.MpIconBuilderBase, MpISingletonViewModel<MpWpfImageHelper> {
         private List<List<Brush>> _colors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),
@@ -119,26 +119,6 @@ namespace MpImageHelper {
                     new SolidColorBrush(Color.FromRgb(65, 65, 65))
                 }
             };
-
-        #region MpISingleton Definition
-        //private static readonly Lazy<MpImageHelper> _Lazy = new Lazy<MpImageHelper>(() => new MpImageHelper());
-        //public static MpImageHelper Instance { get { return _Lazy.Value; } }
-        private static MpWpfImageHelper _instance;
-        public static MpWpfImageHelper Instance => _instance ?? (_instance = new MpWpfImageHelper()); 
-        
-        public async Task Init() {
-            await Task.Delay(1);
-        }
-
-        #region Constructor
-
-        public MpWpfImageHelper() { }
-
-        #endregion
-
-        #endregion
-
-
 
         public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint, bool retainAlpha = false) {
             BitmapSource formattedBmpSrc = null;

@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public interface MpISingleton<T> where T:class {
+    public interface MpISingletonViewModel<T> where T:class {
         //static T Instance { get; }
         Task Init();
     }

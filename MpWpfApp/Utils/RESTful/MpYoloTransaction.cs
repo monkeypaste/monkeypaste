@@ -19,10 +19,10 @@ namespace MpWpfApp {
         public static async Task<MpYoloResponse> DetectObjectsAsync(byte[] image, double minConfidence = 0.0) {            
             var response = new MpYoloResponse();
             await Task.Run(() => {
-                if(!_isLoaded) {
+                if (!_isLoaded) {
                     Init();
                 }
-                using (var bmp = MpHelpers.ConvertBitmapSourceToBitmap(MpHelpers.ConvertByteArrayToBitmapSource(image))) {
+                using (var bmp = image.ToBitmapSource().ToBitmap()) { 
                     List<YoloPrediction> predictions = _yoloWrapper.Predict(bmp);
                     using (var graphics = System.Drawing.Graphics.FromImage(bmp)) {
                         foreach (var item in predictions) {

@@ -28,18 +28,11 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using QRCoder;
-//using static MpWpfApp.MpShellEx;
-//using Windows.Graphics.Imaging;
-//using Windows.Media.Ocr;
-//using CsvHelper;
 using System.Windows.Threading;
 using System.Security.Principal;
 using System.Speech.Synthesis;
 using WindowsInput;
-using Microsoft.Win32;
 using MonkeyPaste;
-using MpProcessHelper;
-using MpImageHelper;
 
 namespace MpWpfApp {
     public static class MpHelpers {
@@ -55,7 +48,7 @@ namespace MpWpfApp {
             _iconBuilder = processIconBuilder;
             // SharedRtb = new RichTextBox();
             //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
-            _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
+            _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
         }
 
         #region Documents    
@@ -1049,56 +1042,6 @@ namespace MpWpfApp {
             }
         }
 
-        public static IntPtr StartProcess(
-            string args, 
-            string processPath, 
-            bool asAdministrator, 
-            bool isSilent, 
-            WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal) {
-            try {
-                IntPtr outHandle = IntPtr.Zero;
-                if (isSilent) {
-                    windowState = WinApi.ShowWindowCommands.Hide;
-                }
-                ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo();
-                processInfo.FileName = processPath;//Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
-                if (!string.IsNullOrEmpty(args)) {
-                    processInfo.Arguments = args;
-                }
-                processInfo.WindowStyle = isSilent ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
-                processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
-
-                if (asAdministrator) {
-                    using (var process = Process.Start(processInfo)) {
-                        while (!process.WaitForInputIdle(100)) {
-                            Thread.Sleep(100);
-                            process.Refresh();
-                        }
-                        outHandle = process.Handle;
-                    }
-                } else {
-                    using (var process = UACHelper.UACHelper.StartLimited(processInfo)) {
-                        while (!process.WaitForInputIdle(100)) {
-                            Thread.Sleep(100);
-                            process.Refresh();
-                        }
-                        outHandle = process.Handle;
-                    }
-                }
-                if (outHandle == IntPtr.Zero) {
-                    MonkeyPaste.MpConsole.WriteLine("Error starting process: " + processPath);
-                    return outHandle;
-                }
-
-                WinApi.ShowWindowAsync(outHandle, GetShowWindowValue(windowState));
-                return outHandle;
-            }
-            catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("Start Process error (Admin to Normal mode): " + ex);
-                return IntPtr.Zero;
-            }
-            // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
-        }
 
         public static IntPtr RunAsDesktopUser(string fileName, string args = "") {            
             if (string.IsNullOrWhiteSpace(fileName)) {
@@ -1195,25 +1138,6 @@ namespace MpWpfApp {
             }            
         }
 
-        public static int GetShowWindowValue(WinApi.ShowWindowCommands cmd) {
-            int winType = 0;
-            switch (cmd) {
-                case WinApi.ShowWindowCommands.Normal:
-                    winType = WinApi.Windows.NORMAL;
-                    break;
-                case WinApi.ShowWindowCommands.Maximized:
-                    winType = WinApi.Windows.MAXIMIXED;
-                    break;
-                case WinApi.ShowWindowCommands.Minimized:
-                case WinApi.ShowWindowCommands.Hide:
-                    winType = WinApi.Windows.HIDE;
-                    break;
-                default:
-                    winType = WinApi.Windows.NORMAL;
-                    break;
-            }
-            return winType;
-        }
 
         public static IntPtr GetThisAppHandle() {
             return Process.GetCurrentProcess().Handle;
@@ -1224,40 +1148,6 @@ namespace MpWpfApp {
                       .IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static bool IsProcessAdmin(IntPtr handle) {
-            if(handle == null || handle == IntPtr.Zero) {
-                return false;
-            }
-            try {
-                WinApi.GetWindowThreadProcessId(handle, out uint pid);
-                using (Process proc = Process.GetProcessById((int)pid)) {
-                    IntPtr ph = IntPtr.Zero;
-                    WinApi.OpenProcessToken(proc.Handle,WinApi.TOKEN_ALL_ACCESS, out ph);
-                    WindowsIdentity iden = new WindowsIdentity(ph);
-                    bool result = false;
-
-                    foreach (IdentityReference role in iden.Groups) {
-                        if (role.IsValidTargetType(typeof(SecurityIdentifier))) {
-                            SecurityIdentifier sid = role as SecurityIdentifier;
-                            if (sid.IsWellKnown(WellKnownSidType.AccountAdministratorSid) || sid.IsWellKnown(WellKnownSidType.BuiltinAdministratorsSid)) {
-                                result = true;
-                                break;
-                            }
-                        }
-                    }
-                    WinApi.CloseHandle(ph);
-                    return result;
-                }                    
-            }
-            catch(Exception ex) {
-                //if app is started using "Run as" is if you get "Access Denied" error. 
-                //That means that running app has rights that your app does not have. 
-                //in this case ADMIN rights
-                MonkeyPaste.MpConsole.WriteLine("IsProcessAdmin error: " + ex.ToString());
-                return true;
-            }
-        }
-        
         public static string GetApplicationDirectory() {
             return AppDomain.CurrentDomain.BaseDirectory;
         }
@@ -1282,99 +1172,8 @@ namespace MpWpfApp {
             }
         }
 
-        public static string GetProcessApplicationName(IntPtr hWnd) {
-            string mwt = GetProcessMainWindowTitle(hWnd);
-            if (string.IsNullOrEmpty(mwt)) {
-                return mwt;
-            }
-            var mwta = mwt.Split(new string[] { "-" },StringSplitOptions.RemoveEmptyEntries);
-            if (mwta.Length == 1) {
-                if(string.IsNullOrEmpty(mwta[0])) {
-                    return "Explorer";
-                }
-                return mwta[0];
-            }
-            return mwta[mwta.Length - 1].Trim();
-        }
 
-        private static string GetExecutablePathAboveVista(IntPtr dwProcessId) {
-            StringBuilder buffer = new StringBuilder(1024);
-            IntPtr hprocess = WinApi.OpenProcess(WinApi.ProcessAccessFlags.QueryLimitedInformation, false, (int)dwProcessId);
-            if (hprocess != IntPtr.Zero) {
-                try {
-                    int size = buffer.Capacity;
-                    if (WinApi.QueryFullProcessImageName(hprocess, 0, buffer, ref size)) {
-                        return buffer.ToString(0, size);
-                    }
-                } finally {
-                    WinApi.CloseHandle(hprocess);
-                }
-            }
-            return string.Empty;
-        }
-
-        public static string GetProcessPath(IntPtr hwnd) { 
-            try {
-                if (hwnd == null || hwnd == IntPtr.Zero) {
-                    return GetApplicationProcessPath();
-                }
-
-                WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
-                using (Process proc = Process.GetProcessById((int)pid)) {
-                    if(proc.ProcessName == @"csrss") {
-                        //occurs with messageboxes and dialogs
-                        return GetApplicationProcessPath();
-                    }
-                    if(proc.MainWindowHandle == IntPtr.Zero) {
-                        return GetApplicationProcessPath();
-                    }
-                    return proc.MainModule.FileName.ToString();
-                }
-            }
-            catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine("GetProcessPath error (likely) cannot find process path (w/ Handle "+hwnd.ToString()+") : " + e.ToString());
-                //return GetExecutablePathAboveVista(hwnd);
-                return GetApplicationProcessPath();
-            }
-        }
-
-        public static string GetProcessMainWindowTitle(IntPtr hWnd) {
-            try {
-                if (hWnd == null || hWnd == IntPtr.Zero) {
-                    return "Unknown Application";
-                }
-                //uint processId;
-                //WinApi.GetWindowThreadProcessId(hWnd, out processId);
-                //using (Process proc = Process.GetProcessById((int)processId)) {
-                //    return proc.MainWindowTitle;
-                //}
-                int length = WinApi.GetWindowTextLength(hWnd);
-                if (length == 0) {
-                    return string.Empty;
-                }
-
-                StringBuilder builder = new StringBuilder(length);
-                WinApi.GetWindowText(hWnd, builder, length + 1);
-
-                return builder.ToString();
-            }
-            catch(Exception ex) {
-                return "MpHelpers.GetProcessMainWindowTitle Exception: "+ex.ToString();
-            }
-        }
-
-        public static string GetMainModuleFilepath(int processId) {
-            string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
-            using (var searcher = new ManagementObjectSearcher(wmiQueryString)) {
-                using (var results = searcher.Get()) {
-                    ManagementObject mo = results.Cast<ManagementObject>().FirstOrDefault();
-                    if (mo != null) {
-                        return (string)mo["ExecutablePath"];
-                    }
-                }
-            }
-            return null;
-        }
+        
 
         public static bool IsPathDirectory(string str) {
             // get the file attributes for file or directory
@@ -1386,29 +1185,6 @@ namespace MpWpfApp {
 
         #region Visual
 
-        public static void ResizeImages(string sourceDir,string targetDir, double newWidth,double newHeight) {
-            if(!Directory.Exists(sourceDir)) {
-                throw new DirectoryNotFoundException(sourceDir);
-            }
-            foreach(var f in Directory.GetFiles(sourceDir)) {
-                if(Directory.Exists(f)) {
-                    continue;
-                }
-                var bmpSrc = ReadImageFromFile(f);
-                var newSize = new Size(newWidth, newHeight);
-
-                if (bmpSrc.Width != bmpSrc.Height) {
-                    if(bmpSrc.Width > bmpSrc.Height) {
-                        newSize.Height *= bmpSrc.Height / bmpSrc.Width;
-                    } else {
-                        newSize.Width *= bmpSrc.Width / bmpSrc.Height;
-                    }
-                }
-                var rbmpSrc = ResizeBitmapSource(bmpSrc, newSize);
-                string targetPath = Path.Combine(targetDir, Path.GetFileName(f));
-                WriteBitmapSourceToFile(targetPath, rbmpSrc);
-            }
-        }
 
         public static void PrintVisualTree(int depth, object obj) {
             // Print the object with preceding spaces that represent its depth
@@ -1431,82 +1207,9 @@ namespace MpWpfApp {
                 PrintVisualTree(depth + 1, VisualTreeHelper.GetChild(obj as DependencyObject, i));
         }
 
-        public static List<string> CreatePrimaryColorList(BitmapSource bmpSource,int palleteSize = 5) {
-            //var sw = new Stopwatch();
-            //sw.Start();
-            var primaryIconColorList = new List<string>();
-            var hist = (_iconBuilder as MpImageHelper.MpWpfImageHelper).GetStatistics(bmpSource);
-            foreach (var kvp in hist) {
-                var c = Color.FromArgb(255, kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue);
 
-                //MonkeyPaste.MpConsole.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
-                if (primaryIconColorList.Count == palleteSize) {
-                    break;
-                }
-                //between 0-255 where 0 is black 255 is white
-                var rgDiff = Math.Abs((int)c.R - (int)c.G);
-                var rbDiff = Math.Abs((int)c.R - (int)c.B);
-                var gbDiff = Math.Abs((int)c.G - (int)c.B);
-                var totalDiff = rgDiff + rbDiff + gbDiff;
 
-                //0-255 0 is black
-                var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
-                var relativeDist = primaryIconColorList.Count == 0 ? 1 : ColorDistance(ConvertHexToColor(primaryIconColorList[primaryIconColorList.Count - 1]), c);
-                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
-                    primaryIconColorList.Add(ConvertColorToHex(c));
-                }
-            }
-
-            //if only 1 color found within threshold make random list
-            for (int i = primaryIconColorList.Count; i < palleteSize; i++) {
-                primaryIconColorList.Add(ConvertColorToHex(GetRandomColor()));
-            }
-            //sw.Stop();
-            //MonkeyPaste.MpConsole.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
-            return primaryIconColorList;
-        }
-
-        public static async Task<List<string>> CreatePrimaryColorListAsync(BitmapSource bmpSource, int palleteSize = 5, DispatcherPriority priority = DispatcherPriority.Normal) {
-            List<string> result = null;
             
-            await Task.Run(() => {
-                result = CreatePrimaryColorList(bmpSource, palleteSize);
-            });
-
-            return result;
-        }
-
-        public static BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
-            var borderBmpSrc = TintBitmapSource(img, bgColor, true);
-            //var borderSize = new Size(borderBmpSrc.Width * scale, bordherBmpSrc.Height * scale);
-            return ScaleBitmapSource(borderBmpSrc, new Size(scale,scale));
-        }
-
-        public static async Task<BitmapSource> CreateBorderAsync(BitmapSource img, double scale, Color bgColor) {
-            var borderBmpSrc = await TintBitmapSourceAsync(img, bgColor, true);
-            //var borderSize = new Size(borderBmpSrc.Width * scale, bordherBmpSrc.Height * scale);
-            return ScaleBitmapSource(borderBmpSrc, new Size(scale, scale));
-        }
-
-        public static BitmapSource CopyScreen() {
-            double left = 0;//System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.X);
-            double top = 0;// System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.Y);
-            double right = MpMeasurements.Instance.ScreenWidth * MpPreferences.Instance.ThisAppDip;//System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.X + screen.Bounds.Width);
-            double bottom = MpMeasurements.Instance.ScreenHeight * MpPreferences.Instance.ThisAppDip;//System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.Y + screen.Bounds.Height);
-            int width = (int)(right - left);
-            int height = (int)(bottom - top);
-
-            using (var screenBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb)) {
-                using (var bmpGraphics = System.Drawing.Graphics.FromImage(screenBmp)) {
-                    bmpGraphics.CopyFromScreen((int)left, (int)top, 0, 0, new System.Drawing.Size(width, height));
-                    return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                        screenBmp.GetHbitmap(),
-                        IntPtr.Zero,
-                        Int32Rect.Empty,
-                        BitmapSizeOptions.FromEmptyOptions());
-                }
-            }
-        }       
 
         public static IList<T> GetRandomizedList<T>(IList<T> orderedList) where T : class {
             var preRandomList = new List<T>();
@@ -1543,10 +1246,10 @@ namespace MpWpfApp {
                 for (int y = 0; y < _ContentColors[0].Count; y++) {
                     Border b = new Border();
                     if(x == _ContentColors.Count -1 && y == _ContentColors[0].Count - 1) {
-                        var addBmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/add2.png"));
+                        var addBmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/add2.png"));
                         b.Background = new ImageBrush(addBmpSrc);
                         MouseButtonEventHandler bMouseLeftButtonUp = (object o, MouseButtonEventArgs e3) => {
-                            var result = ShowColorDialog(GetRandomBrushColor());
+                            var result = ShowColorDialog(MpWpfColorHelpers.GetRandomBrushColor());
                             if (result != null) {
                                 b.Tag = result;
                             }
@@ -1763,469 +1466,32 @@ namespace MpWpfApp {
             System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
             cd.AllowFullOpen = true;
             cd.ShowHelp = true;
-            cd.Color = ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)currentBrush);
-            cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
+            cd.Color = currentBrush.ToWinFormsColor();
+            cd.CustomColors = MpPreferences.UserCustomColorIdxArray;
             cd.FullOpen = showFullOpen;
             var mw = (MpMainWindow)Application.Current.MainWindow;
             ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
             // Update the text box color if the user clicks OK 
             if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                return ConvertWinFormsColorToSolidColorBrush(cd.Color);
+                return cd.Color.ToSolidColorBrush();
             }
             return null;
         }
 
-        public static BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint, bool retainAlpha = false) {
-            BitmapSource formattedBmpSrc = null;
-            if(bmpSrc.Width != bmpSrc.PixelWidth || bmpSrc.Height != bmpSrc.PixelHeight) {
-                //means bmp dpi isn't 96
-                double dpi = 96;
-                int width = bmpSrc.PixelWidth;
-                int height = bmpSrc.PixelHeight;
+        
 
-                int stride = width * 4; // 4 bytes per pixel
-                byte[] pixelData = new byte[stride * height];
-                bmpSrc.CopyPixels(pixelData, stride, 0);
+        
 
-                formattedBmpSrc = BitmapSource.Create(width, height, dpi, dpi, PixelFormats.Bgra32, null, pixelData, stride);
-            } else {
-                formattedBmpSrc = bmpSrc;
-            }
-            var bmp = new WriteableBitmap(formattedBmpSrc);
-            var pixels = GetPixels(bmp);
-            var pixelColor = new PixelColor[1, 1];
-            pixelColor[0, 0] = new PixelColor { Alpha = tint.A, Red = tint.R, Green = tint.G, Blue = tint.B };
+        
 
-            for (int x = 0; x < bmp.Width; x++) {
-                for (int y = 0; y < bmp.Height; y++) {
-                    PixelColor c = pixels[x, y];
-                    if (c.Alpha > 0) {
-                        if(retainAlpha) {
-                            pixelColor[0, 0].Alpha = c.Alpha;
-                        }
-                        PutPixels(bmp, pixelColor, x, y);
-                    }
-                }
-            }
-            return bmp;
-        }
+        
 
-        public static async Task<BitmapSource> TintBitmapSourceAsync(BitmapSource bmpSrc, Color tint, bool retainAlpha = false, DispatcherPriority priority = DispatcherPriority.Background) {
-            BitmapSource bmpSource = null;
-            await Task.Run(() => {
-                bmpSource = TintBitmapSource(bmpSrc, tint, retainAlpha);
-            });
-            return bmpSource;
-        }
-
-        public static double ColorDistance(Color e1, Color e2) {
-            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
-            long rmean = ((long)e1.R + (long)e2.R) / 2;
-            long r = (long)e1.R - (long)e2.R;
-            long g = (long)e1.G - (long)e2.G;
-            long b = (long)e1.B - (long)e2.B;
-            double max = 764.83331517396653;
-            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
-            return d / max;
-        }
-
-        public static Color ConvertHexToColor(string hexString) {
-            if (hexString.IndexOf('#') != -1) {
-                hexString = hexString.Replace("#", string.Empty);
-            }
-            //
-            int x = hexString.Length == 8 ? 2 : 0;
-            byte r = byte.Parse(hexString.Substring(x, 2), NumberStyles.AllowHexSpecifier);
-            byte g = byte.Parse(hexString.Substring(x+2, 2), NumberStyles.AllowHexSpecifier);
-            byte b = byte.Parse(hexString.Substring(x+4, 2), NumberStyles.AllowHexSpecifier);
-            byte a = x > 0 ? byte.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier) : (byte)255;
-            return Color.FromArgb(a, r, g, b);
-        }
-
-        public static string ConvertColorToHex(Color c, byte forceAlpha = 255) {
-            if(c == null) {
-                return "#FF0000";
-            }
-            c.A = forceAlpha;
-            return c.ToString();
-        }
-
-        public static BitmapSource GetIconImage(string sourcePath) {
-            
-
-            BitmapSource iconBmp = new BitmapImage();
-            try {
-                if (!File.Exists(sourcePath)) {
-                    if (!Directory.Exists(sourcePath)) {
-                        //return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/monkey (2).png"));
-                        //return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
-                        iconBmp = ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Exclamation.ToBitmap());
-                    } else {
-                        iconBmp = _iconBuilder.GetBase64BitmapFromFolderPath(sourcePath).ToBitmapSource();
-                        //iconBmp = GetBitmapFromFolderPath(sourcePath, IconSizeEnum.MediumIcon32);
-                    }
-
-                } else {
-                    //iconBmp = GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32);
-                    iconBmp = _iconBuilder.GetBase64BitmapFromFilePath(sourcePath).ToBitmapSource();
-                }                
-            }
-            catch(Exception ex) {
-                MpConsole.WriteTraceLine(ex);
-                iconBmp = ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
-            }
-            return iconBmp;
-        }
-
-        public static BitmapSource ScaleBitmapSource(BitmapSource bmpSrc, Size newScale) {
-            try {
-                var sbmpSrc = new TransformedBitmap(bmpSrc, new ScaleTransform(newScale.Width, newScale.Height));
-                return sbmpSrc;
-            } catch(Exception ex) {
-                MpConsole.WriteTraceLine("Error scaling bmp", ex);
-                return bmpSrc;
-            }
-        }
-
-        public static BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newSize) {
-            try {
-                double sw = newSize.Width / bmpSrc.Width;
-                double sh = newSize.Height / bmpSrc.Height;
-                var rbmpSrc = new TransformedBitmap(bmpSrc, new ScaleTransform(sw,sh));
-                return rbmpSrc;
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine("Error scaling bmp", ex);
-                return bmpSrc;
-            }
-        }
-
-        public static bool ByteArrayCompare(byte[] b1, byte[] b2) {
-            // Validate buffers are the same length.
-            // This also ensures that the count does not exceed the length of either buffer.  
-            return b1.Length == b2.Length && WinApi.memcmp(b1, b2, b1.Length) == 0;
-        }
-
-        public static BitmapSource ReadImageFromFile(string filePath) {
-            return new BitmapImage(new Uri(filePath));
-        }
-
-        public static System.Drawing.Color GetDominantColor(System.Drawing.Bitmap bmp) {
-            //Used for tally
-            int r = 0;
-            int g = 0;
-            int b = 0;
-
-            int total = 0;
-
-            for (int x = 0; x < bmp.Width; x++) {
-                for (int y = 0; y < bmp.Height; y++) {
-                    System.Drawing.Color clr = bmp.GetPixel(x, y);
-
-                    r += clr.R;
-                    g += clr.G;
-                    b += clr.B;
-
-                    total++;
-                }
-            }
-
-            //Calculate average
-            r /= total;
-            g /= total;
-            b /= total;
-
-            return System.Drawing.Color.FromArgb((byte)r, (byte)g, (byte)b);
-        }
-
-        public static void ColorToHSV(System.Drawing.Color color, out double hue, out double saturation, out double value) {
-            int max = Math.Max(color.R, Math.Max(color.G, color.B));
-            int min = Math.Min(color.R, Math.Min(color.G, color.B));
-
-            hue = color.GetHue();
-            saturation = (max == 0) ? 0 : 1d - (1d * min / max);
-            value = max / 255d;
-        }
-
-        public static System.Drawing.Color ColorFromHSV(double hue, double saturation, double value) {
-            int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
-            double f = (hue / 60) - Math.Floor(hue / 60);
-
-            value *= 255;
-            int v = Convert.ToInt32(value);
-            int p = Convert.ToInt32(value * (1 - saturation));
-            int q = Convert.ToInt32(value * (1 - (f * saturation)));
-            int t = Convert.ToInt32(value * (1 - ((1 - f) * saturation)));
-
-            if (hi == 0) {
-                return System.Drawing.Color.FromArgb(255, (byte)v, (byte)t, (byte)p);
-            } else if (hi == 1) {
-                return System.Drawing.Color.FromArgb(255, (byte)q, (byte)v, (byte)p);
-            } else if (hi == 2) {
-                return System.Drawing.Color.FromArgb(255, (byte)p, (byte)v, (byte)t);
-            } else if (hi == 3) {
-                return System.Drawing.Color.FromArgb(255, (byte)p, (byte)q, (byte)v);
-            } else if (hi == 4) {
-                return System.Drawing.Color.FromArgb(255, (byte)t, (byte)p, (byte)v);
-            } else {
-                return System.Drawing.Color.FromArgb(255, (byte)v, (byte)p, (byte)q);
-            }
-        }
-
-        public static System.Drawing.Color GetInvertedColor(System.Drawing.Color c) {
-            ColorToHSV(c, out double h, out double s, out double v);
-            h = (h + 180) % 360;
-            return ColorFromHSV(h, s, v);
-        }
-
-        public static bool IsBright(Color c, int brightThreshold = 150) {
-            int grayVal = (int)Math.Sqrt(
-            c.R * c.R * .299 +
-            c.G * c.G * .587 +
-            c.B * c.B * .114);
-            return grayVal > brightThreshold;
-        }
-
-        public static SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {
-            var c = solidColorBrush.Color;
-            c.A = alpha;
-            solidColorBrush.Color = c;
-            return solidColorBrush;
-        }
-
-        public static SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, double correctionFactor) {
-            if (correctionFactor == 0.0f) {
-                return b.Clone();
-            }
-            double red = (double)b.Color.R;
-            double green = (double)b.Color.G;
-            double blue = (double)b.Color.B;
-
-            if (correctionFactor < 0) {
-                correctionFactor = 1 + correctionFactor;
-                red *= correctionFactor;
-                green *= correctionFactor;
-                blue *= correctionFactor;
-            } else {
-                red = (255 - red) * correctionFactor + red;
-                green = (255 - green) * correctionFactor + green;
-                blue = (255 - blue) * correctionFactor + blue;
-            }
-
-            return new SolidColorBrush(Color.FromArgb(b.Color.A, (byte)red, (byte)green, (byte)blue));
-        }
-
-        public static Brush GetDarkerBrush(Brush b, double factor = -0.5) {
-            return ChangeBrushBrightness((SolidColorBrush)b, factor);
-        }
-
-        public static Brush GetLighterBrush(Brush b, double factor = 0.5) {
-            return ChangeBrushBrightness((SolidColorBrush)b, factor);
-        }
-
-        public static Color GetRandomColor(byte alpha = 255) {
-            //if (alpha == 255) {
-            //    return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
-            //}
-            //return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
-
-            //int x = Rand.Next(0, _ContentColors.Count);
-            //int y = Rand.Next(0, _ContentColors[0].Count);
-            //return ((SolidColorBrush)_ContentColors[x][y]).Color;
-
-            return new MpContentColors().GetRandomColor();
-        }
-
-        public static Brush GetRandomBrushColor(byte alpha = 255) {
-            return (Brush)new SolidColorBrush() { Color = GetRandomColor(alpha) };
-        }
-
-        public static System.Drawing.Icon GetIconFromBitmap(System.Drawing.Bitmap bmp) {
-            IntPtr hIcon = bmp.GetHicon();
-            return System.Drawing.Icon.FromHandle(hIcon);
-        }
-
-        public static string GetColorString(Color c) {
-            return (int)c.A + "," + (int)c.R + "," + (int)c.G + "," + (int)c.B;
-        }
-
-        public static System.Drawing.Color GetColorFromString(string colorStr) {
-            if (string.IsNullOrEmpty(colorStr)) {
-                colorStr = GetColorString(GetRandomColor());
-            }
-
-            int[] c = new int[colorStr.Split(',').Length];
-            for (int i = 0; i < c.Length; i++) {
-                c[i] = Convert.ToInt32(colorStr.Split(',')[i]);
-            }
-
-            if (c.Length == 3) {
-                return System.Drawing.Color.FromArgb(255/*c[3]*/, c[0], c[1], c[2]);
-            }
-
-            return System.Drawing.Color.FromArgb(c[3], c[0], c[1], c[2]);
-        }
-
-        public static BitmapSource MergeImages2(IList<BitmapSource> bmpSrcList,bool scaleToSmallestSize = false, bool scaleToLargestDpi = true) {
-            // if not scaled to smallest, will be scaled to largest
-            int w = scaleToSmallestSize ? bmpSrcList.Min(x => x.PixelWidth) : bmpSrcList.Max(x => x.PixelWidth);
-            int h = scaleToSmallestSize ? bmpSrcList.Min(x => x.PixelHeight) : bmpSrcList.Max(x => x.PixelHeight);
-
-            double dpiX = scaleToLargestDpi ? bmpSrcList.Max(x => x.DpiX) : bmpSrcList.Min(x => x.DpiX);
-            double dpiY = scaleToLargestDpi ? bmpSrcList.Max(x => x.DpiY) : bmpSrcList.Max(x=>x.DpiY);
-
-            for (int i = 0;i < bmpSrcList.Count;i++) {
-                BitmapSource bmp = bmpSrcList[i];
-                if(bmp.PixelWidth != w || bmp.PixelHeight != h) {
-                    bmpSrcList[i] = ScaleBitmapSource(bmp, new Size(w / bmp.PixelWidth, h / bmp.PixelHeight));
-                }
-            }
-
-            var renderTargetBitmap = new RenderTargetBitmap(w, h, dpiX, dpiY, PixelFormats.Pbgra32);
-            var drawingVisual = new DrawingVisual();
-            using (var drawingContext = drawingVisual.RenderOpen()) {
-                foreach (var image in bmpSrcList) {
-                    drawingContext.DrawImage(image, new Rect(0, 0, w, h));
-                }
-            }
-            renderTargetBitmap.Render(drawingVisual);
-
-
-
-            return ConvertRenderTargetBitmapToBitmapSource(renderTargetBitmap);
-        }
-
-        public static BitmapSource MergeImages(IList<BitmapSource> bmpSrcList, Size size = default) {
-            // from https://stackoverflow.com/a/14661969/105028
-            size = size == default ? new Size(32, 32) : size;
-
-            // Gets the size of the images (I assume each image has the same size)
-
-            // Draws the images into a DrawingVisual component
-            DrawingVisual drawingVisual = new DrawingVisual();
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen()) {
-                foreach(BitmapSource bmpSrc in bmpSrcList) {
-                    Size scale = new Size(size.Width / (double)bmpSrc.PixelWidth, size.Height / (double)bmpSrc.PixelHeight);
-                    var rbmpSrc = ScaleBitmapSource(bmpSrc, scale);
-                    drawingContext.DrawImage(rbmpSrc,new Rect(0, 0, (int)size.Width, (int)size.Width));
-                }
-            }
-
-            // Converts the Visual (DrawingVisual) into a BitmapSource
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
-            bmp.Render(drawingVisual);
-
-            return ConvertRenderTargetBitmapToBitmapSource(bmp);
-        }
-
-
-
-
-        public static async Task<BitmapSource> MergeImagesAsync(IList<BitmapSource> bmpSrcList, DispatcherPriority priority = DispatcherPriority.Background) {
-            BitmapSource mergedImage = null;
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                mergedImage = MergeImages(bmpSrcList);
-            }, priority);
-            return mergedImage;
-        }
-
-        public static BitmapSource ConvertRenderTargetBitmapToBitmapSource(RenderTargetBitmap rtb) {
-            var bitmapImage = new BitmapImage();
-            var bitmapEncoder = new PngBitmapEncoder();
-            bitmapEncoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(rtb));
-            using (var stream = new MemoryStream()) {
-                bitmapEncoder.Save(stream);
-                stream.Seek(0, SeekOrigin.Begin);
-
-                bitmapImage.BeginInit();
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
-                bitmapImage.StreamSource = stream;
-                bitmapImage.EndInit();
-                return bitmapImage;
-            }
-        }
-
-        public static BitmapSource CombineBitmap(IList<BitmapSource> bmpSrcList, bool tileHorizontally = true) {
-            if(bmpSrcList.Count == 0) {
-                return new BitmapImage();
-            }
-            if (bmpSrcList.Count == 1) {
-                return bmpSrcList[0];
-            }
-            //read all images into memory
-            List<System.Drawing.Bitmap> images = new List<System.Drawing.Bitmap>();
-            System.Drawing.Bitmap finalImage = null;
-
-            try {
-                int width = 0;
-                int height = 0;
-
-                foreach (var bmpSrc in bmpSrcList) {
-                    //create a Bitmap from the file and add it to the list
-                    System.Drawing.Bitmap bitmap = ConvertBitmapSourceToBitmap(bmpSrc);
-
-                    //update the size of the final bitmap
-                    if (tileHorizontally) {
-                        width += bitmap.Width;
-                        height = Math.Max(bitmap.Height, height);
-                    } else {
-                        width = Math.Max(bitmap.Width, width);
-                        height += bitmap.Height;
-                    }
-                    images.Add(bitmap);
-                }
-
-                //create a bitmap to hold the combined image
-                finalImage = new System.Drawing.Bitmap(width, height);
-
-                //get a graphics object from the image so we can draw on it
-                using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(finalImage)) {
-                    //set background color
-                    g.Clear(System.Drawing.Color.Transparent);
-
-                    //go through each image and draw it on the final image
-                    int offset = 0;
-                    foreach (System.Drawing.Bitmap image in images) {
-                        g.DrawImage(image, new System.Drawing.Rectangle(offset, 0, image.Width, image.Height));
-                        offset += image.Width;
-                    }
-                    g.Dispose();
-                }
-                return ConvertBitmapToBitmapSource(finalImage);
-            }
-            catch (Exception ex) {
-                if (finalImage != null) {
-                    finalImage.Dispose();
-                }
-                throw ex;
-            } finally {
-                //clean up memory
-                foreach (System.Drawing.Bitmap image in images) {
-                    image.Dispose();
-                }
-            }
-        }
+        
 
         #endregion
 
         #region Converters
-        public static BitmapSource ConvertBitmapSourceToGrayScale(BitmapSource bmpSrc) {
-            var grayScaleSsBmp = new FormatConvertedBitmap();
-
-            // BitmapSource objects like FormatConvertedBitmap can only have their properties
-            // changed within a BeginInit/EndInit block.
-            grayScaleSsBmp.BeginInit();
-
-            // Use the BitmapSource object defined above as the source for this new
-            // BitmapSource (chain the BitmapSource objects together).
-            grayScaleSsBmp.Source = bmpSrc;
-
-            // Set the new format to Gray32Float (grayscale).
-            grayScaleSsBmp.DestinationFormat = PixelFormats.Gray32Float;
-            grayScaleSsBmp.EndInit();
-            return grayScaleSsBmp;
-        }
+        
         public static BitmapSource ConvertFlowDocumentToBitmap(FlowDocument document, Size size, Brush bgBrush = null) {
             if (size.Width <= 0) {
                 size.Width = 1;
@@ -2511,7 +1777,7 @@ namespace MpWpfApp {
         public static string ConvertPlainTextToRichText(string plainText) {
             using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                 rtb.Text = plainText;
-                rtb.Font = new System.Drawing.Font(Properties.Settings.Default.DefaultFontFamily, (float)Properties.Settings.Default.DefaultFontSize);
+                rtb.Font = new System.Drawing.Font(MpPreferences.DefaultFontFamily, (float)MpPreferences.DefaultFontSize);
                 return rtb.Rtf;
             }                
         }
@@ -2521,7 +1787,7 @@ namespace MpWpfApp {
             await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                         using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                             rtb.Text = plainText;
-                            rtb.Font = new System.Drawing.Font(Properties.Settings.Default.DefaultFontFamily, (float)Properties.Settings.Default.DefaultFontSize);
+                            rtb.Font = new System.Drawing.Font(MpPreferences.DefaultFontFamily, (float)MpPreferences.DefaultFontSize);
                             rtfString = rtb.Rtf;
                         }
                     }, priority);
@@ -2710,7 +1976,8 @@ namespace MpWpfApp {
 
         public static string ConvertBitmapSourceToPlainTextAsciiArt(BitmapSource bmpSource) {
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
-            using (System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ScaleBitmapSource(bmpSource, new Size(MpMeasurements.Instance.ClipTileBorderMinSize, MpMeasurements.Instance.ClipTileContentHeight)))) {
+            bmpSource.Scale(new Size(MpMeasurements.Instance.ClipTileBorderMinSize, MpMeasurements.Instance.ClipTileContentHeight));
+            using (System.Drawing.Bitmap image = bmpSource.ToBitmap()) {
                 string outStr = string.Empty;
                 for (int h = 0; h < image.Height; h++) {
                     for (int w = 0; w < image.Width; w++) {
@@ -2729,92 +1996,12 @@ namespace MpWpfApp {
             }
         }
 
-        public static byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {
-            if (bs == null) {
-                return null;
-            }
-            PngBitmapEncoder encoder = new PngBitmapEncoder();
-            using (MemoryStream stream = new MemoryStream()) {
-                try {
-                    var bf = System.Windows.Media.Imaging.BitmapFrame.Create(bs);                    
-                    encoder.Frames.Add(bf);
-                    encoder.Save(stream);
-                    byte[] bit = stream.ToArray();
-                    stream.Close();
-                    return bit;
-                }
-                catch (Exception ex) {
-                    MonkeyPaste.MpConsole.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
-                    return null;
-                }
-                
-            }
-            
-        }
 
-        public static async Task<byte[]> ConvertBitmapSourceToByteArrayAsync(BitmapSource bs, DispatcherPriority priority) {
-            PngBitmapEncoder encoder = new PngBitmapEncoder();
-            byte[] bit = null;
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                using (MemoryStream stream = new MemoryStream()) {
-                    encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bs));
-                    encoder.Save(stream);
-                    bit = stream.ToArray();
-                    stream.Close();
-                }
-            }, priority);            
-            return bit;
-        }
+        
 
-        public static BitmapSource ConvertByteArrayToBitmapSource(byte[] bytes) {
-            var bmpSrc = (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
-            bmpSrc.Freeze();
-            return bmpSrc;
-        }
+        
 
-        public static async Task<BitmapSource> ConvertByteArrayToBitmapSourceAsync(byte[] bytes, DispatcherPriority priority) {
-            BitmapSource bmpSource = null;
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                bmpSource = (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
-            }, priority);
-            return bmpSource;
-        }
-
-        public static BitmapSource ConvertBitmapToBitmapSource(System.Drawing.Bitmap bitmap) {
-            var bitmapData = bitmap.LockBits(
-                new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-
-            var bitmapSource = BitmapSource.Create(
-                bitmapData.Width,
-                bitmapData.Height,
-                bitmap.HorizontalResolution,
-                bitmap.VerticalResolution,
-                PixelFormats.Bgra32,
-                null,
-                bitmapData.Scan0,
-                bitmapData.Stride * bitmapData.Height,
-                bitmapData.Stride);
-            bitmap.UnlockBits(bitmapData);
-            //bitmap.Dispose();
-            return bitmapSource;
-        }
-
-        public static System.Drawing.Bitmap ConvertBitmapSourceToBitmap(BitmapSource bitmapsource) {
-            using (MemoryStream outStream = new MemoryStream()) {
-                System.Windows.Media.Imaging.BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bitmapsource));
-                enc.Save(outStream);
-                return new System.Drawing.Bitmap(outStream);
-            }
-        }
-
-        public static System.Drawing.Color ConvertSolidColorBrushToWinFormsColor(SolidColorBrush scb) {
-            return System.Drawing.Color.FromArgb(scb.Color.A, scb.Color.R, scb.Color.G, scb.Color.B);
-        }
-
-        public static SolidColorBrush ConvertWinFormsColorToSolidColorBrush(System.Drawing.Color c) {
-            return new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
-        }
+        
 
         #endregion
 
@@ -3151,55 +2338,17 @@ namespace MpWpfApp {
                     using (var qrCode = new QRCoder.PngByteQRCode(qrCodeData)) {
                         var qrCodeAsXaml = qrCode.GetGraphic(20);                        
                         //var bmpSrc= ConvertDrawingImageToBitmapSource(qrCodeAsXaml);
-                        return ScaleBitmapSource(qrCodeAsXaml.ToBitmapSource(), new Size(0.2, 0.2));
+                        return qrCodeAsXaml.ToBitmapSource().Scale(new Size(0.2, 0.2));
                     }
                 }
             }
         }
 
-        public static BitmapSource ConvertDrawingImageToBitmapSource(DrawingImage source) {
-            DrawingVisual drawingVisual = new DrawingVisual();
-            DrawingContext drawingContext = drawingVisual.RenderOpen(); 
-            drawingContext.DrawImage(source, new Rect(new Point(0, 0), new Size(source.Width, source.Height)));
-            drawingContext.Close();
+        
 
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)source.Width, (int)source.Height, 96, 96, PixelFormats.Pbgra32);
-            bmp.Render(drawingVisual); 
-            return bmp;
-        }
-
-        public static BitmapSource ConvertStringToBitmapSource(string base64Str) {
-            if(string.IsNullOrEmpty(base64Str) || !base64Str.IsBase64String()) {
-                return new BitmapImage();
-            }
-            var bytes = System.Convert.FromBase64String(base64Str);
-            return ConvertByteArrayToBitmapSource(bytes);
-        }
-
-        public static string ConvertBitmapSourceToBase64String(BitmapSource bmpSrc) {
-            var bytes = ConvertBitmapSourceToByteArray(bmpSrc);
-            return Convert.ToBase64String(bytes);
-        }
         #endregion
 
         #region private static Methods
-        public static PixelColor[,] GetPixels(BitmapSource source) {
-            if (source.Format != PixelFormats.Bgra32) {
-                source = new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
-            }
-            int width = source.PixelWidth;
-            int height = source.PixelHeight;
-            PixelColor[,] result = new PixelColor[width, height];
-
-            source.CopyPixels(result, width * 4, 0, false);
-            return result;
-        }
-
-        private static void PutPixels(WriteableBitmap bitmap, PixelColor[,] pixels, int x, int y) {
-            int width = pixels.GetLength(0);
-            int height = pixels.GetLength(1);
-            bitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * 4, x, y);
-        }
 
         private static long CalcDirSize(string sourceDir, bool recurse = true) {
             return CalcDirSizeHelper(new DirectoryInfo(sourceDir), recurse);
@@ -4168,13 +3317,5 @@ namespace MpWpfApp {
             ".zuerich",
             ".zw"
         };
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct PixelColor {
-        public byte Blue;
-        public byte Green;
-        public byte Red;
-        public byte Alpha;
     }
 }

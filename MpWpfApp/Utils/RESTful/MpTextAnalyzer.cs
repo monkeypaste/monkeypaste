@@ -18,9 +18,9 @@ namespace MpWpfApp {
         public static MpTextAnalyzer Instance { get { return _Lazy.Value; } }
 
         // Add your Computer Vision subscription key and endpoint to your environment variables.
-        private string _subscriptionKey = Properties.Settings.Default.AzureTextAnalyticsKey;
+        private string _subscriptionKey = MpPreferences.AzureTextAnalyticsKey;
 
-        private static string _endpoint = Properties.Settings.Default.AzureTextAnalyticsEndpoint;
+        private static string _endpoint = MpPreferences.AzureTextAnalyticsEndpoint;
 
         public async Task<string> AnalyzeTextAsync(string text) {
             try {

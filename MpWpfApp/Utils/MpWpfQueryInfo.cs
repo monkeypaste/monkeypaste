@@ -29,19 +29,19 @@ namespace MpWpfApp {
             SortType = MpClipTileSortViewModel.Instance.SelectedSortType.SortType;
             TagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
             SearchText = MpSearchBoxViewModel.Instance.SearchText;
-            TotalItemsInQuery = MpDataModelProvider.Instance.TotalTilesInQuery;
+            TotalItemsInQuery = MpDataModelProvider.TotalTilesInQuery;
 
-            var qi = MpDataModelProvider.Instance.QueryInfo;
-            MpDataModelProvider.Instance.QueryInfos.Clear();
+            var qi = MpDataModelProvider.QueryInfo;
+            MpDataModelProvider.QueryInfos.Clear();
 
             qi.FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
-            MpDataModelProvider.Instance.QueryInfos.Add(qi);
-           // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.Instance.QueryInfos.Add(x.ToQueryInfo()));
+            MpDataModelProvider.QueryInfos.Add(qi);
+           // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
 
             if (isFilterSortOrSearch) {
-                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.QueryChanged);
+                MpMessenger.Send<MpMessageType>(MpMessageType.QueryChanged);
             } else {
-                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.SubQueryChanged);
+                MpMessenger.Send<MpMessageType>(MpMessageType.SubQueryChanged);
             }
         }
 

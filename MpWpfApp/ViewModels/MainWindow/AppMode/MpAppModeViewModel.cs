@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpAppModeViewModel : MpViewModelBase, MpISingleton<MpAppModeViewModel> {
+    public class MpAppModeViewModel : MpViewModelBase, MpISingletonViewModel<MpAppModeViewModel> {
         #region Properties
 
         #region View Models
@@ -223,11 +223,11 @@ namespace MpWpfApp {
             await MpHelpers.RunOnMainThreadAsync(() => {
                 PropertyChanged += MpAppModeViewModel_PropertyChanged;
 
-                MpMessenger.Instance.Register<MpMessageType>(
+                MpMessenger.Register<MpMessageType>(
                     MpMainWindowViewModel.Instance, 
                     ReceivedMainWindowViewModelMessage);
 
-                MpMessenger.Instance.Register(
+                MpMessenger.Register(
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
 
@@ -235,7 +235,7 @@ namespace MpWpfApp {
             });
         }
 
-        public MpAppModeViewModel() : base() { }
+        public MpAppModeViewModel() : base(null) { }
 
         #endregion
 
@@ -298,10 +298,10 @@ namespace MpWpfApp {
         }
 
         private void ShowNotifcation(string modeType, string status, bool isOn) {
-            if (Properties.Settings.Default.NotificationShowModeChangeToast) {
+            if (MpPreferences.NotificationShowModeChangeToast) {
                 MpStandardBalloonViewModel.ShowBalloon("Monkey Paste", modeType + " is " + status);
             }
-            if (Properties.Settings.Default.NotificationDoModeChangeSound) {
+            if (MpPreferences.NotificationDoModeChangeSound) {
                 MpSoundPlayerGroupCollectionViewModel.Instance.PlayModeChangeCommand.Execute(isOn);
             }
         }

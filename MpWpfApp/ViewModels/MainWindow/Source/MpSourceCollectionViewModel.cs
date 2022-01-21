@@ -9,7 +9,7 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpSourceCollectionViewModel : MpViewModelBase, MpISingleton<MpSourceCollectionViewModel> {
+    public class MpSourceCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpSourceCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -37,7 +37,7 @@ namespace MpWpfApp {
         private static MpSourceCollectionViewModel _instance;
         public static MpSourceCollectionViewModel Instance => _instance ?? (_instance = new MpSourceCollectionViewModel());
 
-        public MpSourceCollectionViewModel() : base() {
+        public MpSourceCollectionViewModel() : base(null) {
 
         }
 
@@ -48,16 +48,14 @@ namespace MpWpfApp {
             //await MpAppCollectionViewModel.Instance.Init();
             //await MpUrlCollectionViewModel.Instance.Init();
 
-            var sl = await MpDb.Instance.GetItemsAsync<MpSource>();
+            var sl = await MpDb.GetItemsAsync<MpSource>();
             foreach(var s in sl) {
                 var svm = await CreateSourceViewModel(s);
                 Items.Add(svm);
             }
 
-            Application.Current.Resources["SourceCollectionViewModel"] = this;
 
             IsBusy = false;
-            IsLoaded = true;
         }
 
         #endregion

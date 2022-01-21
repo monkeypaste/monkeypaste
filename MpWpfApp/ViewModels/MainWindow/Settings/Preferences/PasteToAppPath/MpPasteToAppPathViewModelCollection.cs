@@ -17,59 +17,57 @@ using Xamarin.Forms.Internals;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using MpProcessHelper;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModelCollection : ObservableCollection<MpPasteToAppPathViewModel>, MpISingleton<MpPasteToAppPathViewModelCollection>,  INotifyPropertyChanged {
+    public class MpPasteToAppPathViewModelCollection : ObservableCollection<MpPasteToAppPathViewModel>, MpISingletonViewModel<MpPasteToAppPathViewModelCollection>,  INotifyPropertyChanged {
         
         #region Private Variables
 
         #endregion
 
         #region View Models
-        private ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>> _menuItemViewModels = null;
         public ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>> MenuItemViewModels {
             get {
-                if (_menuItemViewModels == null) {
-                    _menuItemViewModels = new ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>>();
-                    foreach (var kvp in MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary) {
-                        var appName = MpHelpers.GetProcessApplicationName(kvp.Value[0]);
-                        if (kvp.Value.Count == 0 || string.IsNullOrEmpty(appName)) {
+                var _menuItemViewModels = new ObservableCollection<ObservableCollection<MpPasteToAppPathViewModel>>();
+                foreach (var kvp in MpProcessManager.CurrentProcessWindowHandleStackDictionary) {
+                    var appName = MpProcessManager.GetProcessApplicationName(kvp.Value[0]);
+                    if (kvp.Value.Count == 0 || string.IsNullOrEmpty(appName)) {
+                        continue;
+                    }
+                    var processPath = kvp.Key;
+                    var processHandles = new ObservableCollection<MpPasteToAppPathViewModel>();
+                    foreach (var handle in kvp.Value) {
+                        processHandles.Add(
+                            new MpPasteToAppPathViewModel(
+                                this,
+                                new MpPasteToAppPath(
+                                    processPath,
+                                    MpProcessManager.GetProcessMainWindowTitle(handle),
+                                    MpProcessManager.ProcessIconBuilder.GetBase64BitmapFromFilePath(processPath),
+                                    MpProcessManager.IsProcessAdmin(handle)),
+                                handle));
+                    }
+                    //check already created menu items and add handles to AppName if it already exists
+                    int mivmIdx = -1;
+                    foreach (var mivm in _menuItemViewModels) {
+                        if (mivm.Count == 0) {
                             continue;
                         }
-                        var processPath = kvp.Key;
-                        var processHandles = new ObservableCollection<MpPasteToAppPathViewModel>();
-                        foreach (var handle in kvp.Value) {
-                            processHandles.Add(
-                                new MpPasteToAppPathViewModel(
-                                    this,
-                                    new MpPasteToAppPath(
-                                        processPath,
-                                        MpHelpers.GetProcessMainWindowTitle(handle),
-                                        MpHelpers.GetIconImage(processPath).ToBase64String(),
-                                        MpHelpers.IsProcessAdmin(handle)),
-                                    handle));
-                        }
-                        //check already created menu items and add handles to AppName if it already exists
-                        int mivmIdx = -1;
-                        foreach (var mivm in _menuItemViewModels) {
-                            if (mivm.Count == 0) {
-                                continue;
-                            }
-                            if (appName.ToLower() == MpHelpers.GetProcessApplicationName(mivm[0].Handle).ToLower()) {
-                                mivmIdx = _menuItemViewModels.IndexOf(mivm);
-                            }
-                        }
-                        if (mivmIdx >= 0) {
-                            foreach (var ph in processHandles) {
-                                _menuItemViewModels[mivmIdx].Add(ph);
-                            }
-                        } else {
-                            _menuItemViewModels.Add(processHandles);
+                        if (appName.ToLower() == MpProcessManager.GetProcessApplicationName(mivm[0].Handle).ToLower()) {
+                            mivmIdx = _menuItemViewModels.IndexOf(mivm);
                         }
                     }
-                    foreach (var ptapvm in this) {
-                        _menuItemViewModels.Add(new ObservableCollection<MpPasteToAppPathViewModel>() { ptapvm });
+                    if (mivmIdx >= 0) {
+                        foreach (var ph in processHandles) {
+                            _menuItemViewModels[mivmIdx].Add(ph);
+                        }
+                    } else {
+                        _menuItemViewModels.Add(processHandles);
                     }
+                }
+                foreach (var ptapvm in this) {
+                    _menuItemViewModels.Add(new ObservableCollection<MpPasteToAppPathViewModel>() { ptapvm });
                 }
                 return _menuItemViewModels;
             }
@@ -112,16 +110,16 @@ namespace MpWpfApp {
 
 
         public async Task Init() {
-            MpRunningApplicationManager.Instance.PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary):
-                        _menuItemViewModels = null;
-                        OnPropertyChanged(nameof(MenuItemViewModels));
-                        break;
-                }
-            };
+            //MpProcessManager.CurrentProcessWindowHandleStackDictionary += (s, e) => {
+            //    switch (e.PropertyName) {
+            //        case nameof(MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary):
+            //            _menuItemViewModels = null;
+            //            OnPropertyChanged(nameof(MenuItemViewModels));
+            //            break;
+            //    }
+            //};
 
-            var allPasteToAppPaths = await MpDb.Instance.GetItemsAsync<MpPasteToAppPath>();
+            var allPasteToAppPaths = await MpDb.GetItemsAsync<MpPasteToAppPath>();
             foreach (var ptap in allPasteToAppPaths) {
                 this.Add(new MpPasteToAppPathViewModel(this, ptap));
             }
@@ -175,7 +173,7 @@ namespace MpWpfApp {
                         continue;
                     }
                     var ptamip = new MenuItem();
-                    ptamip.Header = MpHelpers.GetProcessApplicationName(ptamivmc[0].Handle);
+                    ptamip.Header = MpProcessManager.GetProcessApplicationName(ptamivmc[0].Handle);
                     ptamip.Icon = new Image() { Source = ptamivmc[0].AppIcon };
                     foreach (var ptamivm in ptamivmc) {
                         if (ptamivm.IsHidden) {
@@ -183,10 +181,10 @@ namespace MpWpfApp {
                         }
                         var ptami = new MenuItem();
                         var l = new Label();
-                        l.Content = MpHelpers.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
+                        l.Content = MpProcessManager.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
 
-                        var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye.png")) };
-                        var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
+                        var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/eye.png")) };
+                        var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
                         var btn = new Button() { Cursor = Cursors.Hand, Content = eyeOpenImg, BorderThickness = new Thickness(0), Background = Brushes.Transparent, Width = 20, Height = 20, HorizontalAlignment = HorizontalAlignment.Right/*, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center*/ };
                         bool isOverButton = false;
                         MouseEventHandler mouseEnter = (object o, MouseEventArgs e) => {
@@ -263,7 +261,7 @@ namespace MpWpfApp {
             }
             var addNewMenuItem = new MenuItem();
             addNewMenuItem.Header = "Add Application...";
-            addNewMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png")) };
+            addNewMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png")) };
             RoutedEventHandler addNewMenuItemClick = (object o, RoutedEventArgs e) => {
                 MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand.Execute(1);
             };
@@ -347,8 +345,8 @@ namespace MpWpfApp {
                     this, 
                     new MpPasteToAppPath(
                         appPath, 
-                        string.Empty, 
-                        MpHelpers.GetIconImage(appPath).ToBase64String(), 
+                        string.Empty,
+                        MpProcessManager.ProcessIconBuilder.GetBase64BitmapFromFilePath(appPath), 
                         false));
 
                 await nptapvm.PasteToAppPath.WriteToDatabaseAsync();

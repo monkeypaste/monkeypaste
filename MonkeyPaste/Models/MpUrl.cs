@@ -111,9 +111,9 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpUrl> Create(string urlPath,string urlTitle, MpApp app) {
-            var dupCheck = await MpDataModelProvider.Instance.GetUrlByPath(urlPath);
+            var dupCheck = await MpDataModelProvider.GetUrlByPath(urlPath);
             if(dupCheck != null) {
-                dupCheck = await MpDb.Instance.GetItemAsync<MpUrl>(dupCheck.Id);
+                dupCheck = await MpDb.GetItemAsync<MpUrl>(dupCheck.Id);
                 return dupCheck;
             }
 
@@ -140,8 +140,8 @@ namespace MonkeyPaste {
                 }                
             } 
             if(newUrl.Icon == null) {
-                newUrl.Icon = MpPreferences.Instance.ThisAppSource.PrimarySource.SourceIcon;
-                newUrl.IconId = MpPreferences.Instance.ThisAppSource.PrimarySource.SourceIcon.Id;
+                newUrl.Icon = MpPreferences.ThisAppSource.PrimarySource.SourceIcon;
+                newUrl.IconId = MpPreferences.ThisAppSource.PrimarySource.SourceIcon.Id;
             }
 
             await newUrl.WriteToDatabaseAsync();
@@ -152,7 +152,7 @@ namespace MonkeyPaste {
 
 
         public async Task<object> CreateFromLogs(string urlGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
-            var urlDr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUrl", urlGuid);
+            var urlDr = await MpDb.GetDbObjectByTableGuidAsync("MpUrl", urlGuid);
             MpUrl url = null;
             if (urlDr == null) {
                 url = new MpUrl();
@@ -165,7 +165,7 @@ namespace MonkeyPaste {
                         url.UrlGuid = System.Guid.Parse(li.AffectedColumnValue);
                         break;
                     case "fk_MpIconinId":
-                        url.Icon = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
+                        url.Icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
                         url.IconId = url.Icon.Id;
                         break;
                     case "UrlPath":
@@ -189,7 +189,7 @@ namespace MonkeyPaste {
                 UrlGuid = System.Guid.Parse(objParts[0])
             };
 
-            url.Icon = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpIcon", objParts[1]) as MpIcon;
+            url.Icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", objParts[1]) as MpIcon;
             url.IconId = url.Icon.Id;
             url.UrlPath = objParts[2];
             url.UrlTitle = objParts[3];

@@ -102,20 +102,20 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpApp> Create(string appPath, string appName, MpIcon icon) {
-            var dupApp = await MpDataModelProvider.Instance.GetAppByPath(appPath);
+            var dupApp = await MpDataModelProvider.GetAppByPath(appPath);
             if (dupApp != null) {
-                dupApp = await MpDb.Instance.GetItemAsync<MpApp>(dupApp.Id);
+                dupApp = await MpDb.GetItemAsync<MpApp>(dupApp.Id);
                 return dupApp;
             }
             //if app doesn't exist create image,icon,app and source
 
-            var thisDevice = await MpDataModelProvider.Instance.GetUserDeviceByGuid(MpPreferences.Instance.ThisDeviceGuid);
+            var thisDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpPreferences.ThisDeviceGuid);
 
             if(thisDevice == null) {
                 //not sure why this happens but duplicating MpDb.InitDefaultData...
                 thisDevice = new MpUserDevice() {
-                    UserDeviceGuid = System.Guid.Parse(MpPreferences.Instance.ThisDeviceGuid),
-                    PlatformType = MpPreferences.Instance.ThisDeviceType
+                    UserDeviceGuid = System.Guid.Parse(MpPreferences.ThisDeviceGuid),
+                    PlatformType = MpPreferences.ThisDeviceType
                 };
                 await thisDevice.WriteToDatabaseAsync();
             }
@@ -139,7 +139,7 @@ namespace MonkeyPaste {
 
 
         public async Task<object> CreateFromLogs(string appGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
-            var adr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpApp", appGuid);
+            var adr = await MpDb.GetDbObjectByTableGuidAsync("MpApp", appGuid);
             MpApp appFromLog = null;
             if (adr == null) {
                 appFromLog = new MpApp();
@@ -152,11 +152,11 @@ namespace MonkeyPaste {
                         appFromLog.AppGuid = System.Guid.Parse(li.AffectedColumnValue);
                         break;
                     case "fk_MpUserDeviceId":
-                        appFromLog.UserDevice = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUserDevice", li.AffectedColumnValue) as MpUserDevice;
+                        appFromLog.UserDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", li.AffectedColumnValue) as MpUserDevice;
                         appFromLog.UserDeviceId = appFromLog.UserDevice.Id;
                         break;
                     case "fk_MpIconId":
-                        appFromLog.Icon = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
+                        appFromLog.Icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
                         appFromLog.IconId = appFromLog.Icon.Id;
                         break;
                     case "SourcePath":
@@ -182,9 +182,9 @@ namespace MonkeyPaste {
             var a = new MpApp() {
                 AppGuid = System.Guid.Parse(objParts[0])
             };
-            a.UserDevice = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpUserDevice", objParts[1]) as MpUserDevice;
+            a.UserDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", objParts[1]) as MpUserDevice;
             a.UserDeviceId = a.UserDevice.Id;
-            a.Icon = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpIcon", objParts[2]) as MpIcon;
+            a.Icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", objParts[2]) as MpIcon;
             a.IconId = a.Icon.Id;
 
             a.AppPath = objParts[3];

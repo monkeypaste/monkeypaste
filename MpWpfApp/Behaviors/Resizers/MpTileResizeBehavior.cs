@@ -41,7 +41,7 @@ namespace MpWpfApp {
             base.OnLoad();
 
             _dataContext = AssociatedObject.DataContext;
-            MpMessenger.Instance.Register<MpMessageType>(
+            MpMessenger.Register<MpMessageType>(
                 _dataContext, 
                 ReceiveClipTileMessage, 
                 _dataContext);
@@ -59,7 +59,7 @@ namespace MpWpfApp {
             AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
             AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
 
-            MpMessenger.Instance.Unregister<MpMessageType>(
+            MpMessenger.Unregister<MpMessageType>(
                 _dataContext, 
                 ReceiveClipTileMessage, 
                 _dataContext);
@@ -120,7 +120,7 @@ namespace MpWpfApp {
                 _lastMousePosition = new Point();
 
                 //send resize as mainwindow resize so all drop handlers update rects
-                MpMessenger.Instance.Send<MpMessageType>(
+                MpMessenger.Send<MpMessageType>(
                     MpMessageType.ResizeCompleted,
                     (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior);
             }
@@ -208,7 +208,7 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.AdjustScrollOffsetToResize(oldHeadTrayX, oldScrollOffset);
             //ctrvm.ScrollOffset = ctrvm.LastScrollOfset = newScrollOfset;
 
-            MpMessenger.Instance.Send<MpMessageType>(MpMessageType.Resizing);
+            MpMessenger.Send<MpMessageType>(MpMessageType.Resizing);
         }
     }
 }

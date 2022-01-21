@@ -62,9 +62,9 @@ namespace MonkeyPaste {
 
         public MpTagTileViewModel(MpTag tag) {
             PropertyChanged += MpTagViewModel_PropertyChanged;
-            MpDb.Instance.OnItemAdded += Db_OnItemAdded;
-            MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
-            MpDb.Instance.OnItemUpdated += Db_OnItemUpdated;
+            MpDb.OnItemAdded += Db_OnItemAdded;
+            MpDb.OnItemDeleted += Db_OnItemDeleted;
+            MpDb.OnItemUpdated += Db_OnItemUpdated;
             Tag = tag;
 
             //CopyItemCollectionViewModel = new MpCopyItemCollectionViewModel(Tag.Id);
@@ -102,7 +102,7 @@ namespace MonkeyPaste {
 
         private async Task UpdateSortOrder(bool fromModel = false) {
             if(fromModel) {
-                var citl = await MpDataModelProvider.Instance.GetCopyItemTagsForTagAsync(Tag.Id);
+                var citl = await MpDataModelProvider.GetCopyItemTagsForTagAsync(Tag.Id);
                 citl = citl.OrderBy(x => x.CopyItemSortIdx).ToList();
                 for (int i = 0; i < citl.Count; i++) {
                     citl[i].CopyItemSortIdx = i;
@@ -136,7 +136,7 @@ namespace MonkeyPaste {
                             ncit.CopyItemSortIdx = Tag.CopyItems.Count;
                             await ncit.WriteToDatabaseAsync();
                         } else {
-                            var nci = await MpDb.Instance.GetItemAsync<MpCopyItem>(ncit.CopyItemId);
+                            var nci = await MpDb.GetItemAsync<MpCopyItem>(ncit.CopyItemId);
                             if(!Tag.CopyItems.Contains(nci)) {
                                 Tag.CopyItems.Add(nci);
                             }
@@ -147,7 +147,7 @@ namespace MonkeyPaste {
                     }
                 } else if (e is MpCopyItem nci) {
                     //occurs for new/synced copy items
-                    bool isLinked = await MpDataModelProvider.Instance.IsTagLinkedWithCopyItem(Tag.Id, nci.Id);
+                    bool isLinked = await MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, nci.Id);
                     if (!isLinked) {
                         isLinked = Tag.Id == MpTag.RecentTagId || Tag.Id == MpTag.AllTagId;
                     } 

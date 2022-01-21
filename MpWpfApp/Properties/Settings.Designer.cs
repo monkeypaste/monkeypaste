@@ -1515,5 +1515,17 @@ namespace MpWpfApp.Properties {
                 this["AppStorageFilePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\WINDOWS\\Explorer.EXE")]
+        public string FallbackProcessPath {
+            get {
+                return ((string)(this["FallbackProcessPath"]));
+            }
+            set {
+                this["FallbackProcessPath"] = value;
+            }
+        }
     }
 }

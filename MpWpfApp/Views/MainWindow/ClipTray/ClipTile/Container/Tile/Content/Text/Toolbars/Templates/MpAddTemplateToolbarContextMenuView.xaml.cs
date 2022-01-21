@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,7 +52,7 @@ namespace MpWpfApp {
                 Header = "Add New..."
             };
             var icon = new Image();
-            icon.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png"));            
+            icon.Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png"));            
             ami.Icon = icon;
 
             mil.Add(ami);
@@ -122,10 +123,10 @@ namespace MpWpfApp {
 
         private void AddButton_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if(AddButton.IsEnabled) {
-                AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/MpRichTextBox/templateadd.png"));
+                AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/MpRichTextBox/templateadd.png"));
                 AddButton.ToolTip = "Add Template";
             } else {
-                AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/MpRichTextBox/templatedisabled.png"));
+                AddButtonImage.Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/MpRichTextBox/templatedisabled.png"));
                 var tb = new TextBlock() {
                     Foreground = Brushes.Red,
                     Background = Brushes.White,

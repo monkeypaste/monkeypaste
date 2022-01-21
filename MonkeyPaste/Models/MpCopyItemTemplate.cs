@@ -71,7 +71,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpCopyItemTemplate> Create(int copyItemId,string templateName, string templateColor = "") {
-            var dupCheck = await MpDataModelProvider.Instance.GetTemplateByNameAsync(copyItemId, templateName); //MpDb.Instance.GetItems<MpCopyItemTemplate>().Where(x =>x.CopyItemId == copyItemId && x.TemplateName.ToLower() == templateName.ToLower()).FirstOrDefault();
+            var dupCheck = await MpDataModelProvider.GetTemplateByNameAsync(copyItemId, templateName); //MpDb.GetItems<MpCopyItemTemplate>().Where(x =>x.CopyItemId == copyItemId && x.TemplateName.ToLower() == templateName.ToLower()).FirstOrDefault();
             if (dupCheck != null) {
                 return dupCheck;
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -216,7 +217,7 @@ namespace MpWpfApp {
                     (double)textRange.GetPropertyValue(TextElement.FontSizeProperty),
                 Brushes.Black,
                 new NumberSubstitution(),
-                Properties.Settings.Default.ThisAppDip).Width;
+                MpPreferences.ThisAppDip).Width;
         }
     }
 }

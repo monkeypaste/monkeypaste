@@ -50,7 +50,7 @@ namespace MpWpfApp {
             _filterType = filterType;
             Label = label;
             PreferenceName = prefName;
-            IsChecked = (bool)MpPreferences.Instance[PreferenceName];
+            IsChecked = (bool)MpPreferences.Default.Get(PreferenceName, false);//[PreferenceName];
         }
 
         #endregion
@@ -60,7 +60,7 @@ namespace MpWpfApp {
         private void MpSearchFilterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsChecked):
-                    MpPreferences.Instance[PreferenceName] = IsChecked;
+                    MpPreferences.Default.Set(PreferenceName,IsChecked);
                     break;
             }
         }

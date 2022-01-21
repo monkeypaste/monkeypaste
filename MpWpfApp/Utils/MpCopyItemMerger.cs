@@ -46,7 +46,7 @@ namespace MpWpfApp {
             foreach (var ci in cil) {
                 switch (ci.ItemType) {
                     case MpCopyItemType.Image:
-                        bmp = MpHelpers.CombineBitmap(
+                        bmp = MpWpfImagingHelper.CombineBitmap(
                             new List<BitmapSource> { bmp, ci.ItemData.ToBitmapSource() });
                         break;
                     default:
@@ -55,7 +55,7 @@ namespace MpWpfApp {
                             fd,
                             fd.GetDocumentSize(), Brushes.White);
 
-                        bmp = MpHelpers.CombineBitmap(
+                        bmp = MpWpfImagingHelper.CombineBitmap(
                             new List<BitmapSource> { bmp, rtfImg });
                         break;
                 }
@@ -102,7 +102,7 @@ namespace MpWpfApp {
                         } else {
                             fileList.Add(MpHelpers.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
                         }
-                        var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(CopyItem.Id);
+                        var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(CopyItem.Id);
                         foreach (var cci in ccil) {
                             if (forceType == MpCopyItemType.Image) {
                                 fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));

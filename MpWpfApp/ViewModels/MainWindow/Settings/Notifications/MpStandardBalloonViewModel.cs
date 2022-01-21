@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
 namespace MpWpfApp {
-    public class MpStandardBalloonViewModel : MpViewModelBase<object> {
+    public class MpStandardBalloonViewModel : MpViewModelBase {
         private static readonly Lazy<MpStandardBalloonViewModel> _Lazy = new Lazy<MpStandardBalloonViewModel>(() => new MpStandardBalloonViewModel());
         public static MpStandardBalloonViewModel Instance { get { return _Lazy.Value; } }
 
@@ -114,12 +114,12 @@ namespace MpWpfApp {
             tbi.ShowCustomBalloon(
                 abc, 
                 System.Windows.Controls.Primitives.PopupAnimation.Slide, 
-                Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);            
+                MpPreferences.NotificationBalloonVisibilityTimeMs);            
         }
 
         public static void ShowBalloon(string title, string content, string bitmapSourcePath = "") {
             if (string.IsNullOrEmpty(bitmapSourcePath)) {
-                bitmapSourcePath = Properties.Settings.Default.AbsoluteResourcesPath + "/Images/monkey (2).png";
+                bitmapSourcePath = MpPreferences.AbsoluteResourcesPath + "/Images/monkey (2).png";
             }
             TaskbarIcon tbi = new TaskbarIcon();
             var sbc = new MpStandardBalloonControl(title, content, bitmapSourcePath);
@@ -127,7 +127,7 @@ namespace MpWpfApp {
             tbi.ShowCustomBalloon(
                 sbc,
                 System.Windows.Controls.Primitives.PopupAnimation.Slide,
-                Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);
+                MpPreferences.NotificationBalloonVisibilityTimeMs);
         }
         #endregion
 

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpIconCollectionViewModel : MpViewModelBase, MpISingleton<MpIconCollectionViewModel> {
+    public class MpIconCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpIconCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -20,7 +20,7 @@ namespace MpWpfApp {
         public static MpIconCollectionViewModel Instance => _instance ?? (_instance = new MpIconCollectionViewModel());
 
 
-        public MpIconCollectionViewModel() : base() {
+        public MpIconCollectionViewModel() : base(null) {
             MpHelpers.RunOnMainThreadAsync(Init);
         }
 
@@ -28,7 +28,7 @@ namespace MpWpfApp {
             IsBusy = true;
 
             IconViewModels.Clear();
-            var il = await MpDb.Instance.GetItemsAsync<MpIcon>();
+            var il = await MpDb.GetItemsAsync<MpIcon>();
             foreach(var i in il) {
                 var ivm = await CreateIconViewModel(i);
                 IconViewModels.Add(ivm);
@@ -36,7 +36,6 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(IconViewModels));
 
             IsBusy = false;
-            IsLoaded = true;
         }
 
         #endregion

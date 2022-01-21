@@ -11,7 +11,7 @@ using MonkeyPaste;
 using System.IO;
 
 namespace MpWpfApp {
-    public class MpUrlCollectionViewModel : MpViewModelBase, MpISingleton<MpUrlCollectionViewModel> {
+    public class MpUrlCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpUrlCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -37,13 +37,13 @@ namespace MpWpfApp {
         public static MpUrlCollectionViewModel Instance => _instance ?? (_instance = new MpUrlCollectionViewModel());
 
 
-        public MpUrlCollectionViewModel() : base() {
+        public MpUrlCollectionViewModel() : base(null) {
         }
 
         public async Task Init() {
             IsBusy = true;
 
-            var urll = await MpDb.Instance.GetItemsAsync<MpUrl>();
+            var urll = await MpDb.GetItemsAsync<MpUrl>();
             UrlViewModels.Clear();
             foreach (var url in urll) {
                 var uvm = await CreateUrlViewModel(url);
@@ -53,7 +53,6 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(UrlViewModels));
 
             IsBusy = false;
-            IsLoaded = true;
         }
 
         #endregion
@@ -94,7 +93,7 @@ namespace MpWpfApp {
                     MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + url.UrlPath + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
                     if (confirmExclusionResult == MessageBoxResult.Yes) {
                         IsBusy = true;
-                        clipsFromUrl = await MpDataModelProvider.Instance.GetCopyItemsByUrlId(url.UrlId);
+                        clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlId(url.UrlId);
                     } else if(confirmExclusionResult == MessageBoxResult.Cancel) {
                         wasCanceled = true;
                     }
@@ -125,7 +124,7 @@ namespace MpWpfApp {
                     MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + url.UrlDomainPath + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
                     if (confirmExclusionResult == MessageBoxResult.Yes) {
                         IsBusy = true;
-                        clipsFromUrl = await MpDataModelProvider.Instance.GetCopyItemsByUrlDomain(url.UrlDomainPath);
+                        clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlDomain(url.UrlDomainPath);
                     } else if(confirmExclusionResult == MessageBoxResult.Cancel) {
                             wasCanceled = true;
                     } 
@@ -196,7 +195,7 @@ namespace MpWpfApp {
                     var iconBmpSrc = MpHelpers.GetUrlFavicon(UrlPath);
                     string title = await MpHelpers.GetUrlTitle(UrlPath);
                     var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                    url = await MpUrl.Create(UrlPath, title, MpPreferences.Instance.ThisAppSource.App);
+                    url = await MpUrl.Create(UrlPath, title, MpPreferences.ThisAppSource.App);
                     uvm = await CreateUrlViewModel(url);
                     await UpdateRejection(uvm);
                 }

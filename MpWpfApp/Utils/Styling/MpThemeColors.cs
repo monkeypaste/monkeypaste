@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using System.Windows.Data;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace MpWpfApp {
     public enum MpThemeItemType {
@@ -36,7 +37,7 @@ namespace MpWpfApp {
         Custom
     }
 
-    public class MpThemeColors : MpViewModelBase, MpISingleton<MpThemeColors> {
+    public class MpThemeColors : MpViewModelBase, MpISingletonViewModel<MpThemeColors> {
 
         #region Private Variables
 
@@ -59,7 +60,7 @@ namespace MpWpfApp {
 
         #region Properties
 
-        public Dictionary<MpThemeItemType, Brush> CurrentTheme { get; set; }
+        public Dictionary<string, Brush> CurrentTheme { get; set; }
 
         public List<List<Brush>> ContentColors {
             get {
@@ -160,7 +161,7 @@ namespace MpWpfApp {
                         new SolidColorBrush(Color.FromRgb(223, 223, 223)),
                         new SolidColorBrush(Color.FromRgb(187, 187, 187)),
                         new SolidColorBrush(Color.FromRgb(137, 137, 137)),
-                        new ImageBrush(new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/add2.png")))
+                        new ImageBrush(new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/add2.png")))
                     }
                 };
             }
@@ -180,7 +181,7 @@ namespace MpWpfApp {
             LoadTheme(MpThemeType.Light);
         }
 
-        public MpThemeColors() : base() {
+        public MpThemeColors() : base(null) {
         }
 
 
@@ -188,13 +189,19 @@ namespace MpWpfApp {
         }
 
         public void LoadTheme(MpThemeType themeType) {
-            CurrentTheme = _lightThemeColors;
+            var ct = new Dictionary<string, Brush>();
+            
+            //CurrentTheme = _lightThemeColors;
 
             switch (themeType) {
                 case MpThemeType.Light:
-                    CurrentTheme = _lightThemeColors;
+                   // CurrentTheme = _lightThemeColors;
+                   foreach(var kvp in _lightThemeColors) {
+                        ct.Add(Enum.GetName(typeof(MpThemeItemType), kvp.Key), kvp.Value);
+                    }
                     break;
             }
+            CurrentTheme = ct;
             CurrentThemeType = themeType;
         }
     }
@@ -220,28 +227,60 @@ namespace MpWpfApp {
     }
 
     //https://thomaslevesque.com/2008/11/18/wpf-binding-to-application-settings-using-a-markup-extension/
-    public class MpThemeColorsBindingExtension : MpBindingExtension {
-        public MpThemeColorsBindingExtension() {
-            Source = MpThemeColors.Instance;
-        }
+    //public class MpThemeColorsBindingExtension : MpBindingExtension {
+    //    public MpThemeColorsBindingExtension() {
+    //        Source = MpThemeColors.Instance;
+    //    }
 
-        public MpThemeColorsBindingExtension(string path) : this() {
-            Key = path;
-        }
+    //    public MpThemeColorsBindingExtension(string path) : this() {
+    //        Key = path;
+    //    }
 
-        public List<List<Brush>> ContentColors {
-            get {
-                return MpThemeColors.Instance.ContentColors;
+    //    public List<List<Brush>> ContentColors {
+    //        get {
+    //            return MpThemeColors.Instance.ContentColors;
+    //        }
+    //    }
+
+    //    public string Key { get; set; }
+
+    //    public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+    //        if (Enum.TryParse<MpThemeItemType>(Key, out MpThemeItemType itemType)) {
+    //            return MpThemeColors.Instance.CurrentTheme[itemType];
+    //        }
+    //        return Brushes.Red;
+    //    }
+    //}
+
+    public sealed class DictionaryAdapter<T, TU> : INotifyPropertyChanged {
+        private TU _value;
+        private readonly TU[] _values;
+
+        public T Key { get; }
+
+        public TU Value {
+            get => _value;
+            set {
+                _value = value;
+                OnPropertyChanged();
             }
         }
 
-        public string Key { get; set; }
 
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if (Enum.TryParse<MpThemeItemType>(Key, out MpThemeItemType itemType)) {
-                return MpThemeColors.Instance.CurrentTheme[itemType];
-            }
-            return Brushes.Red;
+        public DictionaryAdapter(T key, params TU[] values) {
+            Key = key;
+            _values = values;
+            Value = values[0];
         }
+
+
+        public override string ToString() {
+            return Value.ToString();
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -12,13 +12,15 @@ namespace MpWpfApp {
     public class MpBootstrapper : MpBootstrapperBase {
         private List<MpBootstrappedItem> _items;
 
+        
         public MpBootstrapper(MpINativeInterfaceWrapper niw) : base(niw) {
+            MpHelpers.Init(new MpProcessHelper.MpProcessIconBuilder(niw.GetIconBuilder()));
+
             _items = new List<MpBootstrappedItem>() {
+                new MpBootstrappedItem(typeof(MpThemeColors)),
+
                 new MpBootstrappedItem(typeof(MpMeasurements)),
                 new MpBootstrappedItem(typeof(MpFileSystemWatcher)),
-
-                new MpBootstrappedItem(typeof(MpThemeColors)),
-                new MpBootstrappedItem(typeof(MpProcessHelper.MpProcessManager),"ib",niw.GetIconBuilder()),
 
                 new MpBootstrappedItem(typeof(MpCursorViewModel)),
 
@@ -36,7 +38,6 @@ namespace MpWpfApp {
                 new MpBootstrappedItem(typeof(MpSearchBoxViewModel)),
 
                 new MpBootstrappedItem(typeof(MpAppModeViewModel)),
-                new MpBootstrappedItem(typeof(MpTagTrayViewModel)),
                 new MpBootstrappedItem(typeof(MpAnalyticItemCollectionViewModel)),
                 new MpBootstrappedItem(typeof(MpSideBarTreeCollectionViewModel)),
 
@@ -45,6 +46,7 @@ namespace MpWpfApp {
                 new MpBootstrappedItem(typeof(MpShortcutCollectionViewModel)),
 
 
+                new MpBootstrappedItem(typeof(MpTagTrayViewModel)),
                 new MpBootstrappedItem(typeof(MpMainWindowViewModel)),
 
                 new MpBootstrappedItem(typeof(MpDragDropManager)),
@@ -62,6 +64,13 @@ namespace MpWpfApp {
             for (int i = 0; i < _items.Count; i++) {
                 await _items[i].Register();
             }
+
+
+
+            MpProcessHelper.MpProcessManager.Start(
+                MpPreferences.FallbackProcessPath,
+                MpAppCollectionViewModel.Instance.AppViewModels.Select(x => x.AppPath).ToArray(),
+                new MpWpfIconBuilder());
         }
     }
 }

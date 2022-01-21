@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using MonkeyPaste;
 using Xamarin.Forms.PlatformConfiguration;
-using MpImageHelper;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
@@ -11,17 +10,15 @@ namespace MpWpfApp {
         public MpWpfDbInfo DbInfo { private get; set; }
         public MpWpfPreferences WpfPreferences { private get; set; }
         public MpWpfQueryInfo QueryInfo { private get; set; }
+        public MpWpfIconBuilder IconBuilder { private get; set; }
 
         public MpWpfWrapper() {
-            Task.Run(Init);
-        }
-
-        public async Task Init() {
-            await Task.Delay(1);
             DbInfo = new MpWpfDbInfo();
             WpfPreferences = new MpWpfPreferences();
             QueryInfo = new MpWpfQueryInfo();
+            IconBuilder = new MpWpfIconBuilder();
         }
+
 
         public MpIDbInfo GetDbInfo() {
             return DbInfo;
@@ -31,8 +28,8 @@ namespace MpWpfApp {
             throw new System.NotImplementedException();
         }
 
-        public MpIconBuilder GetIconBuilder() {
-            return MpImageHelper.MpWpfImageHelper.Instance;
+        public MpIconBuilderBase GetIconBuilder() {
+            return IconBuilder;
         }
 
         public MpIKeyboardInteractionService GetKeyboardInteractionService() {

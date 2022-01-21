@@ -116,22 +116,22 @@ namespace MpWpfApp {
         public Brush ItemBackgroundBrush {
             get {
                 if (MpDragDropManager.Instance.IsDragAndDrop) {
-                    return MpThemeColors.Instance.CurrentTheme[MpThemeItemType.Clip_Tile_Content_Item_Background_Color];
+                    return MpThemeColors.Instance.CurrentTheme.ToArray()[(int)MpThemeItemType.Clip_Tile_Content_Item_Background_Color].Value;
                 }
                 if (IsHovering &&
                     ((Parent.IsExpanded && !IsSelected) || !Parent.IsExpanded) &&
                     Parent.Count > 1) {
                     if(string.IsNullOrEmpty(CopyItem.ItemColor)) {
                         if(_itemBackgroundBrush == null) {
-                            _itemBackgroundBrush = MpHelpers.GetRandomBrushColor();
+                            _itemBackgroundBrush = MpWpfColorHelpers.GetRandomBrushColor();
                         }
                     } else if(_itemBackgroundBrush != CopyItemColorBrush) {
                         _itemBackgroundBrush = CopyItemColorBrush;
                     }
-                    return MpHelpers.GetLighterBrush(_itemBackgroundBrush, 0.75);
+                    return MpWpfColorHelpers.GetLighterBrush(_itemBackgroundBrush, 0.75);
                 }
 
-                return MpThemeColors.Instance.CurrentTheme[MpThemeItemType.Clip_Tile_Content_Item_Background_Color];
+                return MpThemeColors.Instance.CurrentTheme.ToArray()[(int)MpThemeItemType.Clip_Tile_Content_Item_Background_Color].Value;
 
             }
         }
@@ -613,10 +613,10 @@ namespace MpWpfApp {
         public async Task InitializeAsync(MpCopyItem ci) {
             IsBusy = true;
 
-            MpMessenger.Instance.Unregister<MpMessageType>(MpDragDropManager.Instance, ReceivedDragDropManagerMessage);
+            MpMessenger.Unregister<MpMessageType>(MpDragDropManager.Instance, ReceivedDragDropManagerMessage);
 
             if (ci != null && ci.Source == null) {
-                ci.Source = await MpDb.Instance.GetItemAsync<MpSource>(ci.SourceId);
+                ci.Source = await MpDb.GetItemAsync<MpSource>(ci.SourceId);
             }
             CopyItem = ci;
 
@@ -642,7 +642,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(ItemBorderBrush));
             OnPropertyChanged(nameof(ShortcutKeyString));
 
-            MpMessenger.Instance.Register<MpMessageType>(MpDragDropManager.Instance, ReceivedDragDropManagerMessage);
+            MpMessenger.Register<MpMessageType>(MpDragDropManager.Instance, ReceivedDragDropManagerMessage);
 
             IsBusy = false;
         }
@@ -762,7 +762,7 @@ namespace MpWpfApp {
                     }
                     break;
                 case MpCopyItemDetailType.AppInfo:
-                    if (CopyItem.Source.App.UserDevice.Guid == MpPreferences.Instance.ThisDeviceGuid) {
+                    if (CopyItem.Source.App.UserDevice.Guid == MpPreferences.ThisDeviceGuid) {
                         info = CopyItem.Source.App.AppPath;
                     } else {
                         info = CopyItem.Source.App.AppPath;
@@ -802,7 +802,7 @@ namespace MpWpfApp {
                     CopyItem.Source.PrimarySource.SourceIcon.HexColor5
                 };
 
-            var tagColors = await MpDataModelProvider.Instance.GetTagColorsForCopyItem(CopyItemId);
+            var tagColors = await MpDataModelProvider.GetTagColorsForCopyItem(CopyItemId);
 
             pallete.InsertRange(0, tagColors);
 
@@ -1082,7 +1082,7 @@ namespace MpWpfApp {
             MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItem.Title, CopyItem.ItemData.ToPlainText()));
             //MpClipTrayViewModel.Instance.ClearClipSelection();
             //IsSelected = true;
-            //MpHelpers.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+            //MpHelpers.CreateEmail(MpPreferences.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         }
 
         private RelayCommand _createQrCodeFromSubSelectedItemCommand;
@@ -1095,7 +1095,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanCreateQrCodeFromSubSelectedItem() {
-            return true;//CopyItem.ItemType == MpCopyItemType.RichText && CopyItem.ItemData.ToPlainText().Length <= Properties.Settings.Default.MaxQrCodeCharLength;
+            return true;//CopyItem.ItemType == MpCopyItemType.RichText && CopyItem.ItemData.ToPlainText().Length <= MpPreferences.MaxQrCodeCharLength;
         }
         private void CreateQrCodeFromSubSelectedItem() {
             var bmpSrc = MpHelpers.ConvertUrlToQrCode(CopyItem.ItemData.ToPlainText());

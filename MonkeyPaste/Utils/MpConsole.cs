@@ -53,7 +53,7 @@ namespace MonkeyPaste {
                 };
 
                 writeLogTimer.Elapsed += (s, e) => {
-                    MpHelpers.AppendTextToFile(LogFilePath, _sb.ToString());
+                    MpFileIo.AppendTextToFile(LogFilePath, _sb.ToString());
                     _sb.Clear();
                 };
 
@@ -72,7 +72,7 @@ namespace MonkeyPaste {
         public static void WriteLine(string line) {
             line = line == null ? string.Empty : line;
             string str = line.ToString(); 
-            if (MpPreferences.Instance.ThisDeviceType == MpUserDeviceType.Windows) {
+            if (MpPreferences.ThisDeviceType == MpUserDeviceType.Windows) {
                 Console.WriteLine(str);
                 return;
             }
@@ -91,7 +91,7 @@ namespace MonkeyPaste {
             if (args != null && args.Length > 0) {
                 str = string.Format(str, args);
             } 
-            if(MpPreferences.Instance.ThisDeviceType == MpUserDeviceType.Windows) {
+            if(MpPreferences.ThisDeviceType == MpUserDeviceType.Windows) {
                 Console.WriteLine(str);
                 return;
             }

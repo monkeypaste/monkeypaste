@@ -125,9 +125,9 @@ namespace MonkeyPaste {
             MpRoutingType routeType,
             MpShortcutType shortcutType,
             int commandId) {
-            var dupShortcut = await MpDataModelProvider.Instance.GetShortcut(shortcutType,commandId);
+            var dupShortcut = await MpDataModelProvider.GetShortcut(shortcutType,commandId);
             if (dupShortcut != null) {
-                dupShortcut = await MpDb.Instance.GetItemAsync<MpShortcut>(dupShortcut.Id);
+                dupShortcut = await MpDb.GetItemAsync<MpShortcut>(dupShortcut.Id);
                 return dupShortcut;
             }
             var newShortcut = new MpShortcut() {

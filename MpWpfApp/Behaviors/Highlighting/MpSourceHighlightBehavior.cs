@@ -36,7 +36,7 @@ namespace MpWpfApp {
             }
 
             var civm = AssociatedObject.BindingContext;
-            var qi = MpDataModelProvider.Instance.QueryInfo;
+            var qi = MpDataModelProvider.QueryInfo;
             string st = qi.SearchText;
             if(qi.FilterFlags.HasFlag(MpContentFilterType.Url) && 
                civm.CopyItem.Source.Url != null &&

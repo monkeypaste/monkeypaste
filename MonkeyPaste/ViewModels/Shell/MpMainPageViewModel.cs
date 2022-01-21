@@ -16,12 +16,12 @@ namespace MonkeyPaste {
         #region Public Methods
         public MpMainPageViewModel() {
             Task.Run(async() => {
-                //await MpDb.Instance.Init(MpMainPage.NativeWrapper.GetDbInfo());
+                //await MpDb.Init(MpMainPage.NativeWrapper.GetDbInfo());
 
                 MpTempFileManager.Init();
                 //MpSocketClient.StartClient("192.168.43.209");
 
-                //MpSyncManager.Instance.Init(MpDb.Instance);
+                //MpSyncManager.Init(MpDb.);
 
                 TagCollectionViewModel = new MpTagTileCollectionViewModel();
             });
@@ -39,7 +39,7 @@ namespace MonkeyPaste {
 
                 MpDbLogTracker.PrintDbLog();
                 //var ms = Application.Current.MainPage as MpMainShell;
-                //var curDbBytes = MpDb.Instance.GetDbFileBytes();
+                //var curDbBytes = MpDb.GetDbFileBytes();
                 //ms.StorageService.CreateFile(@"mp_clone", curDbBytes, @".db");
             });
 

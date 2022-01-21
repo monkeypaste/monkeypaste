@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Controls;
@@ -11,8 +12,8 @@ namespace MpWpfApp {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is Brush brush) {
                 var bmpSrc = (BitmapSource)new BitmapImage(
-                    new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-               return MpHelpers.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+                    new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+               return MpWpfImagingHelper.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
             }
             return new Image();
         }

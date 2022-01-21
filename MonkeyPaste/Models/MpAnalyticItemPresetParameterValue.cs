@@ -54,11 +54,11 @@ namespace MonkeyPaste {
             if (parentItem == null) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
-            var dupItem = await MpDataModelProvider.Instance.GetAnalyticItemPresetValue(parentItem.Id, paramEnumId);
+            var dupItem = await MpDataModelProvider.GetAnalyticItemPresetValue(parentItem.Id, paramEnumId);
             if (dupItem != null) {
                 MpConsole.WriteLine($"Updating preset {parentItem.Label} for {paramEnumId}");
 
-                dupItem = await MpDb.Instance.GetItemAsync<MpAnalyticItemPresetParameterValue>(dupItem.Id);
+                dupItem = await MpDb.GetItemAsync<MpAnalyticItemPresetParameterValue>(dupItem.Id);
                 dupItem.AnalyticItemPresetId = parentItem.Id;
                 dupItem.ParameterEnumId = paramEnumId;
                 dupItem.Value = value;

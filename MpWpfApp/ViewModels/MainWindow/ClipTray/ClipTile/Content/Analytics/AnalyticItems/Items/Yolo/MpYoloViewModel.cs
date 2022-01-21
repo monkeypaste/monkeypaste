@@ -75,7 +75,7 @@ namespace MpWpfApp {
             object reqStr = trans.Request;
             object resultData = trans.Response;
 
-            var app = MpPreferences.Instance.ThisAppSource.App;
+            var app = MpPreferences.ThisAppSource.App;
             var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, reqStr.ToString());
             var source = await MpSource.Create(app, url);
 
@@ -99,7 +99,7 @@ namespace MpWpfApp {
                 }
             }
 
-            var ci = await MpDb.Instance.GetItemAsync<MpCopyItem>(parentCopyItemId);
+            var ci = await MpDb.GetItemAsync<MpCopyItem>(parentCopyItemId);
             ci.ItemDescription = reqStr.ToString();
             if (!suppressWrite) {
                 await ci.WriteToDatabaseAsync();

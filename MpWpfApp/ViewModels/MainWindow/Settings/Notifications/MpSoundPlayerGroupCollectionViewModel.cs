@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpSoundPlayerGroupCollectionViewModel : MpViewModelBase, MpISingleton<MpSoundPlayerGroupCollectionViewModel> {
+    public class MpSoundPlayerGroupCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpSoundPlayerGroupCollectionViewModel> {
         #region Properties
 
         #region View Models
@@ -72,10 +72,10 @@ namespace MpWpfApp {
 
         public async Task Init() {
 
-            await SetSoundGroupIdx(MpPreferences.Instance.NotificationSoundGroupIdx);
+            await SetSoundGroupIdx(MpPreferences.NotificationSoundGroupIdx);
         }
 
-        public MpSoundPlayerGroupCollectionViewModel() : base() {
+        public MpSoundPlayerGroupCollectionViewModel() : base(null) {
             PropertyChanged += MpSoundPlayerGroupCollectionViewModel_PropertyChanged;
         }
         #endregion
@@ -91,13 +91,13 @@ namespace MpWpfApp {
                         //do nothing so collections empty and play commands don't execute
                         break;
                     case MpSoundGroup.Minimal:
-                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Copy, Properties.Settings.Default.NotificationCopySound1Path));
-                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOn, Properties.Settings.Default.NotificationAppendModeOnSoundPath));
-                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, Properties.Settings.Default.NotificationAppendModeOffSoundPath));
-                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Loaded, Properties.Settings.Default.NotificationLoadedPath));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Copy, MpPreferences.NotificationCopySound1Path));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOn, MpPreferences.NotificationAppendModeOnSoundPath));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, MpPreferences.NotificationAppendModeOffSoundPath));
+                        SoundPlayerViewModels.Add(new MpSoundPlayerViewModel(MpSoundType.Loaded, MpPreferences.NotificationLoadedPath));
                         break;
                 }
-                MpPreferences.Instance.NotificationSoundGroupIdx = (int)SelectedSoundGroupNameIdx;
+                MpPreferences.NotificationSoundGroupIdx = (int)SelectedSoundGroupNameIdx;
             });
         }
         #endregion
@@ -124,7 +124,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanPlayCopySound() {
-            return Properties.Settings.Default.NotificationDoCopySound && SoundPlayerViewModels.Count > 0;
+            return MpPreferences.NotificationDoCopySound && SoundPlayerViewModels.Count > 0;
         }
         private void PlayCopySound() {
             SoundPlayerViewModels.Where(x => x.SoundType == MpSoundType.Copy).ToList()[0].Play();
@@ -140,7 +140,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanPlayLoadedSound() {
-            return Properties.Settings.Default.NotificationDoLoadedSound && SoundPlayerViewModels.Count > 0;
+            return MpPreferences.NotificationDoLoadedSound && SoundPlayerViewModels.Count > 0;
         }
         private void PlayLoadedSound() {
             SoundPlayerViewModels.Where(x => x.SoundType == MpSoundType.Loaded).ToList()[0].Play();
@@ -156,7 +156,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanPlayModeChange(bool isOn) {
-            return Properties.Settings.Default.NotificationDoModeChangeSound && SoundPlayerViewModels.Count > 0;
+            return MpPreferences.NotificationDoModeChangeSound && SoundPlayerViewModels.Count > 0;
         }
         private void PlayModeChange(bool isOn) {
             SoundPlayerViewModels.Where(x => isOn ? x.SoundType == MpSoundType.AppendOn: x.SoundType == MpSoundType.AppendOff).ToList()[0].Play();

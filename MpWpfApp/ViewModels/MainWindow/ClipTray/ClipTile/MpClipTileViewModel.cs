@@ -55,7 +55,7 @@ using System.Speech.Synthesis;
         //public object this[string propertyName] {
         //    get {
         //        // probably faster without reflection:
-        //        // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+        //        // like:  return MpPreferences.PropertyValues[propertyName] 
         //        // instead of the following
         //        Type myType = typeof(MpClipTileViewModel);
         //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
@@ -372,7 +372,7 @@ using System.Speech.Synthesis;
 
         public Visibility ToolTipVisibility {
             get {
-                if (HeadItem == null || !Properties.Settings.Default.ShowItemPreview) {
+                if (HeadItem == null || !MpPreferences.ShowItemPreview) {
                     return Visibility.Collapsed;
                 }
                 return (Parent.IsScrolling || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
@@ -417,7 +417,7 @@ using System.Speech.Synthesis;
 
         public Visibility TrialOverlayVisibility {
             get {
-                return MpPreferences.Instance.IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
+                return MpPreferences.IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -794,7 +794,7 @@ using System.Speech.Synthesis;
             }
 
             if (headItem != null) {
-                var ccil = await MpDataModelProvider.Instance.GetCompositeChildrenAsync(headItem.Id);
+                var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(headItem.Id);
                 ccil.Insert(0, headItem);
 
                 for (int i = 0; i < ccil.OrderBy(x=>x.CompositeSortOrderIdx).Count(); i++) {
@@ -811,7 +811,7 @@ using System.Speech.Synthesis;
                 IsNew = false;
                 RequestUiUpdate();
 
-                MpMessenger.Instance.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
+                MpMessenger.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
             }
 
             ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
@@ -1145,7 +1145,7 @@ using System.Speech.Synthesis;
                 ItemViewModels.Remove(rcivm);
 
                 if(ItemViewModels.Count == 0) {
-                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                 } else {
                     RequestListRefresh();
                 }
@@ -1188,7 +1188,7 @@ using System.Speech.Synthesis;
                     OnPropertyChanged(nameof(TileBorderBrush));
                     break;
                 case nameof(IsExpanded):
-                    MpMessenger.Instance.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
+                    MpMessenger.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
 
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
                     MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
@@ -1218,7 +1218,7 @@ using System.Speech.Synthesis;
                     }
                     OnPropertyChanged(nameof(TrayX));
 
-                    MpMessenger.Instance.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
+                    MpMessenger.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
                     
                     OnPropertyChanged(nameof(CanVerticallyScroll));
@@ -1327,7 +1327,7 @@ using System.Speech.Synthesis;
         //    }
         //}
         //private bool CanCreateQrCodeFromClip() {
-        //    return CopyItemType == MpCopyItemType.RichText && CopyItemPlainText.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
+        //    return CopyItemType == MpCopyItemType.RichText && CopyItemPlainText.Length <= MpPreferences.MaxQrCodeCharLength;
         //}
         //private void CreateQrCodeFromClip() {
         //    var bmpSrc = MpHelpers.ConvertUrlToQrCode(CopyItemPlainText);
@@ -1350,7 +1350,7 @@ using System.Speech.Synthesis;
         //    MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemPlainText));
         //    //Parent.ClearClipSelection();
         //    //IsSelected = true;
-        //    //MpHelpers.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+        //    //MpHelpers.CreateEmail(MpPreferences.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         //}
 
 
@@ -1477,7 +1477,7 @@ using System.Speech.Synthesis;
                 !IsAnyEditingContent &&
                 !IsAnyEditingTitle &&
                 !IsAnyPastingTemplate &&
-                !MpPreferences.Instance.IsTrialExpired;
+                !MpPreferences.IsTrialExpired;
         }
         private void PasteSubSelectedClips(object ptapId) {
             if (ptapId != null && ptapId.GetType() == typeof(int) && (int)ptapId > 0) {
@@ -1671,8 +1671,8 @@ using System.Speech.Synthesis;
                     var speechSynthesizer = new SpeechSynthesizer();
                     speechSynthesizer.SetOutputToDefaultAudioDevice();
                     string voiceName = speechSynthesizer.GetInstalledVoices()[3].VoiceInfo.Name;
-                    if (!string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName)) {
-                        var voice = speechSynthesizer.GetInstalledVoices().Where(x => x.VoiceInfo.Name.ToLower().Contains(Properties.Settings.Default.SpeechSynthVoiceName.ToLower())).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(MpPreferences.SpeechSynthVoiceName)) {
+                        var voice = speechSynthesizer.GetInstalledVoices().Where(x => x.VoiceInfo.Name.ToLower().Contains(MpPreferences.SpeechSynthVoiceName.ToLower())).FirstOrDefault();
                         if (voice != null) {
                             voiceName = voice.VoiceInfo.Name;
                         }

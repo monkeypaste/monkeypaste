@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MonkeyPaste;
 namespace MpWpfApp {
-    public class MpNotificationViewModel : MpViewModelBase<object> {
+    public class MpNotificationViewModel : MpViewModelBase {
         #region Properties
         private MpNotificationType _notificationType = MpNotificationType.None;
         public MpNotificationType NotificationType {

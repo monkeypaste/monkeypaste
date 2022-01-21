@@ -245,10 +245,10 @@ namespace MpWpfApp {
             if(aip == null) {
                 Preset = await MpAnalyticItemPreset.Create(Parent.AnalyticItem, "Default", Parent.AnalyticItem.Icon, true, false, 0);
             } else {
-                Preset = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
+                Preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
             }
 
-            string formatJson = MonkeyPaste.MpHelpers.ReadTextFromResource(Parent.AnalyticItem.ParameterFormatResourcePath);
+            string formatJson = MpFileIo.ReadTextFromResource(Parent.AnalyticItem.ParameterFormatResourcePath);
 
             var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
                 formatJson, new MpJsonEnumConverter()).ParameterFormats;
@@ -444,8 +444,8 @@ namespace MpWpfApp {
                     (s1, e1) => {
                         MpHelpers.RunOnMainThread(async () => {
                             var brush = (Brush)((Border)s1).Tag;
-                            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
-                            var presetIcon = MpHelpers.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+                            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+                            var presetIcon = MpWpfImagingHelper.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
                             Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String(),false);
                             Preset.IconId = Preset.Icon.Id;
                             await Preset.WriteToDatabaseAsync();
@@ -456,7 +456,7 @@ namespace MpWpfApp {
                 );
                 var iconImageChooserMenuItem = new MenuItem();
                 iconImageChooserMenuItem.Header = "Choose Image...";
-                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
+                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
                 iconImageChooserMenuItem.Click += async (s, e) => {
                     var openFileDialog = new OpenFileDialog() {
                         Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
@@ -482,7 +482,7 @@ namespace MpWpfApp {
 
         public ICommand CancelChangesCommand => new RelayCommand(
             async () => {
-                var aip = await MpDb.Instance.GetItemAsync<MpAnalyticItemPreset>(AnalyticItemPresetId);
+                var aip = await MpDb.GetItemAsync<MpAnalyticItemPreset>(AnalyticItemPresetId);
                 Preset = aip;
 
                 ParameterViewModels.ForEach(x => x.CurrentValue = x.DefaultValue);

@@ -81,10 +81,10 @@ namespace MonkeyPaste {
                 if (CopyItem == null) {
                     return false;
                 }
-                var favTagList = MpDb.Instance.QueryAsync<MpTag>("select * from MpTag where TagName=?", "Favorites").Result;
+                var favTagList = MpDb.QueryAsync<MpTag>("select * from MpTag where TagName=?", "Favorites").Result;
 
                 if (favTagList != null && favTagList.Count > 0) {
-                    var result = MpDb.Instance.QueryAsync<MpCopyItemTag>("select * from MpCopyItemTag where CopyItemId=? and TagId=?", CopyItem.Id, favTagList[0].Id).Result;
+                    var result = MpDb.QueryAsync<MpCopyItemTag>("select * from MpCopyItemTag where CopyItemId=? and TagId=?", CopyItem.Id, favTagList[0].Id).Result;
                     return result != null && result.Count > 0;
                 }
                 return false;
@@ -121,7 +121,7 @@ namespace MonkeyPaste {
         public MpCopyItemViewModel(MpCopyItem item) : base() {
             PropertyChanged += MpCopyItemViewModel_PropertyChanged;
             OnEditorLoaded += MpCopyItemViewModel_OnEditorLoaded;
-            MpDb.Instance.OnItemUpdated += MpDb_OnItemUpdated;
+            MpDb.OnItemUpdated += MpDb_OnItemUpdated;
             CopyItem = item;
             //Routing.RegisterRoute("CopyItemdetails", typeof(MpCopyItemDetailPageView));
             Routing.RegisterRoute("CopyItemTagAssociations", typeof(MpCopyItemTagAssociationPageView));

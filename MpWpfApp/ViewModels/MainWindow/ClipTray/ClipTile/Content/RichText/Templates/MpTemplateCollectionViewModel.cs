@@ -235,7 +235,7 @@ namespace MpWpfApp {
             if (e is MpCopyItem ci) {
                 if(ci.Id == Parent.CopyItemId && Templates != null) {
                     foreach(var cit in Templates) {
-                        await MpDb.Instance.DeleteItemAsync<MpCopyItemTemplate>(cit.CopyItemTemplate);
+                        await MpDb.DeleteItemAsync<MpCopyItemTemplate>(cit.CopyItemTemplate);
                     }
                 }
             }

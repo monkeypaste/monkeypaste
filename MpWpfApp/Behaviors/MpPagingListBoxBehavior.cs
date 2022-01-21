@@ -99,12 +99,12 @@ namespace MpWpfApp {
 
                 hScrollBar.Track.Minimum = 0;
 
-                MpMessenger.Instance.Register<MpMessageType>(
+                MpMessenger.Register<MpMessageType>(
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
 
                 var mwrb = (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior;
-                MpMessenger.Instance.Register<MpMessageType>(
+                MpMessenger.Register<MpMessageType>(
                     mwrb,
                     ReceivedMainWindowResizeBehaviorMessage);
 
@@ -121,8 +121,8 @@ namespace MpWpfApp {
         #region Public Methods
 
         public int FindJumpTileIdx(double trackValue) {
-            int totalTileCount = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds.Count;
-            var headItemIds = MpDataModelProvider.Instance.AllFetchedAndSortedCopyItemIds;
+            int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
+            var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
             var uniqueWidthLookup = MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup;
 
             double offsetX = 0;
@@ -154,7 +154,7 @@ namespace MpWpfApp {
                 //case MpMessageType.Resizing:
                 case MpMessageType.ResizeCompleted:
                     //ApplyOffsetChange(true);
-                    MpDataModelProvider.Instance.QueryInfo.NotifyQueryChanged(false);
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                     break;
             }
         }

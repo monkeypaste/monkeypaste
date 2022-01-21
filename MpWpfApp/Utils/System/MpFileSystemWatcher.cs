@@ -11,7 +11,7 @@ namespace MpWpfApp {
         void OnFileSystemItemChanged(object sender, FileSystemEventArgs e);
     }
 
-    public class MpFileSystemWatcher : MpISingleton<MpFileSystemWatcher>, IDisposable, MpIMatchTrigger {
+    public class MpFileSystemWatcher : MpISingletonViewModel<MpFileSystemWatcher>, IDisposable, MpIMatchTrigger {
         #region Private Variables
 
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();

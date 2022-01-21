@@ -8,8 +8,7 @@
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              d1p1:Ignorable="d"
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
-             Exit="Application_Exit"
-             StartupUri="Views\MainWindow\MpMainWindow.xaml">
+             Exit="Application_Exit">
     <Application.Resources>
         <!--<Style TargetType="{x:Type ItemsControl}">
             <Setter Property="HorizontalAlignment"
@@ -49,6 +48,7 @@
         <!--  Cursor Source Paths END  -->
 
         <!--  Icon/Image Source Paths  -->
+        <s:String x:Key="AppIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/monkey(2).png</s:String>
         <s:String x:Key="NoEntryIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/noentry.png</s:String>
         <s:String x:Key="RobotClawIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/robotclaw.png</s:String>
         <s:String x:Key="BrainIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/brain.png</s:String>
@@ -181,6 +181,7 @@
         <local:MpSourceIdToImageSourceConverter x:Key="SourceIdToImageSourceConverter" />
         <local:MpSourceIdToImageSourceBorderConverter x:Key="SourceIdToImageSourceBorderConverter" />
         <local:MpIconIdToImageSourceConverter x:Key="IconIdToImageSourceConverter" />
+        <local:MpStringToThemeBrushConverter x:Key="StringToThemeBrushConverter" />
         <!--  Converter Declarations End  -->
 
 

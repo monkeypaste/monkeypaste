@@ -112,8 +112,8 @@ namespace MonkeyPaste {
         #region Static Methods
 
         public static async Task<ObservableCollection<MpCopyItem>> SearchAsync(int tagId, string searchString) {
-            var allCopyItems = await MpDb.Instance.GetItemsAsync<MpCopyItem>();
-            var allCopyItemTags = await MpDb.Instance.GetItemsAsync<MpCopyItemTag>();
+            var allCopyItems = await MpDb.GetItemsAsync<MpCopyItem>();
+            var allCopyItemTags = await MpDb.GetItemsAsync<MpCopyItemTag>();
 
             var searchResult = (from ci in allCopyItems
                                 join cit in allCopyItemTags on
@@ -129,14 +129,14 @@ namespace MonkeyPaste {
             string data, 
             MpCopyItemType itemType,
             bool suppressWrite = false) {
-            var dupCheck = await MpDataModelProvider.Instance.GetCopyItemByData(data);
-            if (MpPreferences.Instance.IgnoreNewDuplicates && dupCheck != null) {
+            var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
+            if (MpPreferences.IgnoreNewDuplicates && dupCheck != null) {
                 //flipping pk sign notifies AddItemThread item already exists and flips it back
                 dupCheck.Id *= -1;
                 return dupCheck;
             }
 
-            int count = await MpDataModelProvider.Instance.GetTotalCopyItemCountAsync();
+            int count = await MpDataModelProvider.GetTotalCopyItemCountAsync();
             
             if(itemType == MpCopyItemType.FileList) {
                 // NOTE when filedrop is added to clipboard the string collection is broken into file list composite item
@@ -205,7 +205,7 @@ namespace MonkeyPaste {
                 return;
             }
             if(Source == null) {
-                Source = await MpDb.Instance.GetItemAsync<MpSource>(SourceId);
+                Source = await MpDb.GetItemAsync<MpSource>(SourceId);
             }
             if(CompositeParentCopyItemId == Id && Id > 0) {
                 MpConsole.WriteLine("Warning! circular copy item ref detected, attempting to fix...");
@@ -221,7 +221,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var citl = await MpDataModelProvider.Instance.GetTemplatesAsync(Id);
+            var citl = await MpDataModelProvider.GetTemplatesAsync(Id);
             await Task.WhenAll(citl.Select(x => x.DeleteFromDatabaseAsync()));
             await base.DeleteFromDatabaseAsync();
         }
@@ -240,7 +240,7 @@ namespace MonkeyPaste {
                 ItemDescription = objParts[5],
                 ItemType = (MpCopyItemType)Convert.ToInt32(objParts[6])
             };
-            ci.Source = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
+            ci.Source = await MpDb.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
             //TODO deserialize this once img and files added
             //ci.ItemType = MpCopyItemType.RichText;
             return ci;
@@ -327,7 +327,7 @@ namespace MonkeyPaste {
         }
 
         public async Task<object> CreateFromLogs(string dboGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
-            var cidr = await MpDb.Instance.GetDbObjectByTableGuidAsync("MpCopyItem", CopyItemGuid.ToString());
+            var cidr = await MpDb.GetDbObjectByTableGuidAsync("MpCopyItem", CopyItemGuid.ToString());
             MpCopyItem newCopyItem = null;
             if (cidr == null) {
                 newCopyItem = new MpCopyItem();
@@ -355,9 +355,9 @@ namespace MonkeyPaste {
                         newCopyItem.ItemDescription = li.AffectedColumnValue;
                         break;
                     case "fk_MpSourceId":
-                        newCopyItem.Source = await MpDataModelProvider.Instance.GetSourceByGuid(li.AffectedColumnValue);
+                        newCopyItem.Source = await MpDataModelProvider.GetSourceByGuid(li.AffectedColumnValue);
                         if(newCopyItem.Source != null) {
-                            newCopyItem.Source = await MpDb.Instance.GetItemAsync<MpSource>(newCopyItem.Source.Id);
+                            newCopyItem.Source = await MpDb.GetItemAsync<MpSource>(newCopyItem.Source.Id);
                         }
                         newCopyItem.SourceId = Convert.ToInt32(newCopyItem.Source.Id);
                         break;
@@ -378,7 +378,7 @@ namespace MonkeyPaste {
             // NOTE isReplica is used when duplicating item which retains tag associations but not shortcuts
 
             if(Source == null) {
-                Source = await MpDb.Instance.GetItemAsync<MpSource>(SourceId);
+                Source = await MpDb.GetItemAsync<MpSource>(SourceId);
             }
 
             var newItem = new MpCopyItem() {
@@ -399,12 +399,12 @@ namespace MonkeyPaste {
             if(isReplica) {
                 await newItem.WriteToDatabaseAsync();
 
-                var tags = await MpDataModelProvider.Instance.GetCopyItemTagsForCopyItemAsync(this.Id);
+                var tags = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(this.Id);
                 foreach (var tag in tags) {
                     await MpCopyItemTag.Create(tag.Id, newItem.Id);
                 }
 
-                var templates = await MpDataModelProvider.Instance.GetTemplatesAsync(this.Id);
+                var templates = await MpDataModelProvider.GetTemplatesAsync(this.Id);
                 foreach (var template in templates) {
                     var templateClone = template.Clone(true) as MpCopyItemTemplate;
                     templateClone.CopyItemId = newItem.Id;
