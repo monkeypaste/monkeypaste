@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemPresetViewModel : MpViewModelBase<MpAnalyticItemViewModel>, MpIMatchTrigger, MpIShortcutCommand, MpITreeItemViewModel, ICloneable {
+    public class MpAnalyticItemPresetViewModel : MpViewModelBase<MpAnalyticItemViewModel>, MpIUserIconViewModel, MpIMatchTrigger, MpIShortcutCommand, MpITreeItemViewModel, ICloneable {
         #region Properties
 
         #region View Models
@@ -92,6 +92,8 @@ namespace MpWpfApp {
         public bool IsEditingMatchers { get; set; }
 
         public bool IsExpanded { get; set; }
+
+        public bool IsReadOnly => IsDefault;
 
         #endregion
 
@@ -336,6 +338,17 @@ namespace MpWpfApp {
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Title} matcher");
         }
 
+        public async Task<MpIcon> GetIcon() {
+            await Task.Delay(1);
+            return Preset.Icon;
+        }
+
+        public async Task SetIcon(MpIcon icon) {
+            Preset.Icon = icon;
+            Preset.IconId = icon.Id;
+            await Preset.WriteToDatabaseAsync();
+            OnPropertyChanged(nameof(IconId));
+        }
         #endregion
 
         #region Protected Methods
@@ -429,56 +442,11 @@ namespace MpWpfApp {
             }
         }
 
+        
+
         #endregion
 
         #region Commands
-
-        public ICommand ChangeIconCommand => new RelayCommand<object>(
-            (args) => {
-                var iconColorChooserMenuItem = new MenuItem();
-                var iconContextMenu = new ContextMenu();
-                iconContextMenu.Items.Add(iconColorChooserMenuItem);
-                MpHelpers.SetColorChooserMenuItem(
-                    iconContextMenu,
-                    iconColorChooserMenuItem,
-                    (s1, e1) => {
-                        MpHelpers.RunOnMainThread(async () => {
-                            var brush = (Brush)((Border)s1).Tag;
-                            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
-                            var presetIcon = MpWpfImagingHelper.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
-                            Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String(),false);
-                            Preset.IconId = Preset.Icon.Id;
-                            await Preset.WriteToDatabaseAsync();
-
-                            OnPropertyChanged(nameof(IconId));
-                        });
-                    }
-                );
-                var iconImageChooserMenuItem = new MenuItem();
-                iconImageChooserMenuItem.Header = "Choose Image...";
-                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
-                iconImageChooserMenuItem.Click += async (s, e) => {
-                    var openFileDialog = new OpenFileDialog() {
-                        Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
-                        Title = "Select Image for " + Label,
-                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                    };
-                    bool? openResult = openFileDialog.ShowDialog();
-                    if (openResult != null && openResult.Value) {
-                        string imagePath = openFileDialog.FileName;
-                        var presetIcon = (BitmapSource)new BitmapImage(new Uri(imagePath));
-                        Preset.Icon = await MpIcon.Create(presetIcon.ToBase64String());
-                        Preset.IconId = Preset.Icon.Id;
-                        await Preset.WriteToDatabaseAsync();
-
-                        OnPropertyChanged(nameof(IconId));
-                    }
-                };
-                iconContextMenu.Items.Add(iconImageChooserMenuItem);
-                ((Button)args).ContextMenu = iconContextMenu;
-                iconContextMenu.PlacementTarget = ((Button)args);
-                iconContextMenu.IsOpen = true;
-            }, (args) => !IsDefault && args is Button);
 
         public ICommand CancelChangesCommand => new RelayCommand(
             async () => {

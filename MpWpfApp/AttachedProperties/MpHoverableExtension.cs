@@ -8,6 +8,8 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpHoverableExtension : DependencyObject {
+        #region Brush Properties
+
         #region ForegroundBrush Properties
 
         #region HoverSelectedForegroundBrush DependencyProperty
@@ -236,6 +238,8 @@ namespace MpWpfApp {
 
         #endregion
 
+        #endregion
+
         #region IsHovering DependencyProperty
 
         public static bool GetIsHovering(DependencyObject obj) {
@@ -318,6 +322,19 @@ namespace MpWpfApp {
 
         #endregion
 
+        private static void Fe_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
+            var dpo = sender as DependencyObject;
+            SetIsHovering(dpo, true);
+            MpCursorType? hoverCursor = GetHoverCursor(dpo);
+            if (hoverCursor.HasValue) {
+                MpCursorViewModel.Instance.CurrentCursor = hoverCursor.Value;
+            }
+
+            if (dpo is FrameworkElement fe) {
+                UpdateBrushes(fe);
+            }
+        }
+
         private static void Fe_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
             var dpo = sender as DependencyObject;
             SetIsHovering(dpo, false);
@@ -330,21 +347,9 @@ namespace MpWpfApp {
             }
         }
 
-        private static void Fe_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
-            var dpo = sender as DependencyObject;
-            SetIsHovering(dpo, true);
-            MpCursorType? hoverCursor = GetHoverCursor(dpo);
-            if(hoverCursor.HasValue) {
-                MpCursorViewModel.Instance.CurrentCursor = hoverCursor.Value;
-            }
-
-            if (dpo is FrameworkElement fe) {
-                UpdateBrushes(fe);
-            } 
-        }
 
         private static void UpdateBrushes(FrameworkElement fe) {
-            if(fe == null) {
+            if(fe == null || !HasBrushes(fe)) {
                 return;
             }
             bool isHovering = GetIsHovering(fe);
@@ -363,11 +368,21 @@ namespace MpWpfApp {
             
         }
 
+        private static bool HasBrushes(FrameworkElement fe) {
+            return HasBrush(fe, "Foreground") || HasBrush(fe, "Background") || HasBrush(fe,"BorderBrush");
+        }
+
+        private static bool HasBrush(FrameworkElement fe, string prefix) {
+            return GetBrush(fe, false, false, prefix) != null ||
+                   GetBrush(fe, true, false, prefix) != null ||
+                   GetBrush(fe, false, true, prefix) != null ||
+                   GetBrush(fe, false, true, prefix) != null;
+        }
+
         private static Brush GetBrush(DependencyObject dpo, bool isHovering, bool isSelected, string prefix) {
             prefix += "Brush";
             Stack<string> propertyNameStack = new Stack<string>();
             propertyNameStack.Push(prefix);
-
 
             if (isHovering) {
                 prefix = "Hover" + prefix;

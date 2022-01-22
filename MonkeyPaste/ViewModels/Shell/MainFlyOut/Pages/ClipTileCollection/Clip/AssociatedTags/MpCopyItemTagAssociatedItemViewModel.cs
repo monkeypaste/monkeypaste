@@ -58,7 +58,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            IsAssociated = await MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, CopyItem.Id);
+            IsAssociated = await MpDataModelProvider.IsTagLinkedWithCopyItemAsync(Tag.Id, CopyItem.Id);
         }
         #endregion
 

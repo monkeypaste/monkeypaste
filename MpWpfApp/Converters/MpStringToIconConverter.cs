@@ -14,14 +14,9 @@ namespace MpWpfApp {
                 if(string.IsNullOrEmpty(valueStr)) {
                     return new Image();
                 }
-                if(valueStr.IsStringHexColor()) {
-                    if(parameter is string paramStr) {
-                        var paramParts = paramStr.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-
-                    }
-                }
                 var icon = new Image();
                 icon.Source = (BitmapSource)new BitmapImage(new Uri(value.ToString()));
+                icon.Source.Freeze();
                 return icon;
             }
             return new Image();

@@ -10,73 +10,42 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public enum MpContextMenuType {
-        None = 0,
-        ContentItem,
-        Tag,
-        TextEditor
-    }
 
-    public enum MpContextMenuItemsSourceType {
-        None = 0,
-        ContentItems,
-        Tags,
-        Analyzers,
-        Matchers
-    }
-
-    public interface MpIContextMenuViewModel {
-        Dictionary<MpContextMenuItemsSourceType,MpContextMenuItemViewModel> MenuItemViewModelLookup { get; }
-    }
-
-    public interface MpIMenuItemViewModel {
+    public interface MpIContextMenuItemViewModel {
         MpContextMenuItemViewModel MenuItemViewModel { get; }
     }
 
     public class MpContextMenuItemViewModel : MpViewModelBase {
         #region Properties
-        public MenuItem MenuItem {
-            get {
-                var mi = new MenuItem() {
-                    Header = this.Header,
-                    Icon = this.Icon,
-                    InputGestureText = this.InputGestureText,
-                    Command = this.Command,
-                    CommandParameter = this.CommandParameter
-                };
-                return mi;
-            }
-        }
+
+        public bool IsPasteToPathRuntimeItem { get; set; }
 
         public bool IsSeparator { get; set; }
 
         public bool IsColorPallete { get; set; }
 
-        public bool IsColorPalleteItem { get; set; }
+        public bool IsSelected { get; set; } = false;
 
-        private bool? _isChecked = null;
-        public bool? IsChecked {
+        public bool IsPartiallySelected { get; set; } = false; // for multi-select tag ischecked overlay
+
+        public bool IsHovering { get; set; }
+
+        public bool CanHide { get; set; } // for eye button on paste to path
+
+        public bool IsVisible { get; set; } = true;
+
+        public string BorderHexColor {
             get {
-                if(!IsCheckable) {
-                    return false;
+                Brush b = Brushes.DarkGray;
+                if(IsSelected) {
+                    b = Brushes.Red;
+                } else if(IsHovering) {
+                    b = Brushes.DimGray;
                 }
-                return _isChecked;
-            }
-            set {
-                if (_isChecked != value) {
-                    _isChecked = value;
-                    OnPropertyChanged(nameof(IsChecked));
-                }
+                return b.ToHex();
             }
         }
-
-        public bool IsCheckable {
-            get {
-                return _isChecked.HasValue;
-            }
-        }
-
-        public Visibility MenuItemVisibility { get; set; }
+        //public Visibility MenuItemVisibility { get; set; }
 
         public string Header { get; set; }
 
@@ -86,13 +55,17 @@ namespace MpWpfApp {
 
         public string InputGestureText { get; set; }
 
-        public string IconSource { get; set; }
+        //public string IconSource { get; set; }
 
-        public Brush IconBackgroundBrush { get; set; } = Brushes.Transparent;
+        //public Brush IconBackgroundBrush { get; set; } = Brushes.Transparent;
 
-        public Image Icon { get; set; }
+        //public Image Icon { get; set; }
 
-        public int IconId { get; set; }
+        public int IconId { get; set; } = 0;
+
+        public string IconResourceKey { get; set; } = string.Empty;
+
+        public string IconHexStr { get; set; } = string.Empty;
 
         public IList<MpContextMenuItemViewModel> SubItems { get; set; }
 
@@ -105,34 +78,34 @@ namespace MpWpfApp {
             //IsSeparator = true;
         }
         
-        public MpContextMenuItemViewModel(
-            string header, 
-            ICommand command,
-            object commandParameter,
-            bool? isChecked,
-            string iconSource = "",
-            ObservableCollection<MpContextMenuItemViewModel> subItems = null,
-            string inputGestureText = "",
-            Brush bgBrush = null,
-            BitmapSource bmpSrc = null) : this() {
-            IsSeparator = false;
+        //public MpContextMenuItemViewModel(
+        //    string header, 
+        //    ICommand command,
+        //    object commandParameter,
+        //    bool? isChecked,
+        //    string iconSource = "",
+        //    ObservableCollection<MpContextMenuItemViewModel> subItems = null,
+        //    string inputGestureText = "",
+        //    Brush bgBrush = null,
+        //    BitmapSource bmpSrc = null) : this() {
+        //    IsSeparator = false;
 
-            Header = header;
-            Command = command;
-            CommandParameter = commandParameter;
-            IsChecked = isChecked;
-            if(bmpSrc == null) {
-                IconSource = iconSource;
-            } else {
-                Icon = new Image();
-                Icon.Source = bmpSrc;
-                Icon.Stretch = Stretch.Fill;
-            }
+        //    Header = header;
+        //    Command = command;
+        //    CommandParameter = commandParameter;
+        //    IsChecked = isChecked;
+        //    if(bmpSrc == null) {
+        //        IconSource = iconSource;
+        //    } else {
+        //        Icon = new Image();
+        //        Icon.Source = bmpSrc;
+        //        Icon.Stretch = Stretch.Fill;
+        //    }
             
-            SubItems = subItems ?? new ObservableCollection<MpContextMenuItemViewModel>();
-            InputGestureText = inputGestureText;
-            IconBackgroundBrush = bgBrush == null ? Brushes.Transparent : bgBrush;
-        }
+        //    SubItems = subItems ?? new ObservableCollection<MpContextMenuItemViewModel>();
+        //    InputGestureText = inputGestureText;
+        //    IconBackgroundBrush = bgBrush == null ? Brushes.Transparent : bgBrush;
+        //}
 
         
         #endregion
@@ -141,49 +114,45 @@ namespace MpWpfApp {
 
         private void MpContextMenuItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IconSource):
-                    if (!string.IsNullOrEmpty(IconSource)) {
-                        var icon = new Image();
-                        if (!IconSource.IsBase64String()) {
-                            icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
+                //case nameof(IconSource):
+                //    if (!string.IsNullOrEmpty(IconSource)) {
+                //        var icon = new Image();
+                //        if (!IconSource.IsBase64String()) {
+                //            icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
 
-                        } else {
-                            icon.Source = IconSource.ToBitmapSource();
-                            //icon.Height = icon.Width = 20;
-                        }
-                        Icon = icon;
-                        Icon.Stretch = Stretch.Fill;
-                    }
-                    break;
-                case nameof(IconBackgroundBrush):
-                    if (IconBackgroundBrush != null) {
-                        var bgBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
-                        bgBmp = MpWpfImagingHelper.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
-                        var borderBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/textureborder.png"));
-                        if (!MpWpfColorHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                            borderBmp = MpWpfImagingHelper.TintBitmapSource(borderBmp, Colors.White, false);
-                        }
-                        var icon = new Image();
-                        icon.Source = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
-                        if (!IsChecked.HasValue || IsChecked.Value) {
-                            string checkPath = !IsChecked.HasValue ? @"/Images/check_partial.png" : @"/Images/check.png";
-                            var checkBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + checkPath));
-                            if (!MpWpfColorHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                                checkBmp = MpWpfImagingHelper.TintBitmapSource(checkBmp, Colors.White, false);
-                            }
-                            icon.Source = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
-                        }
-                        Icon = icon;
-                    }
-                    break;
+                //        } else {
+                //            icon.Source = IconSource.ToBitmapSource();
+                //            //icon.Height = icon.Width = 20;
+                //        }
+                //        Icon = icon;
+                //        Icon.Stretch = Stretch.Fill;
+                //    }
+                //    break;
+                //case nameof(IconBackgroundBrush):
+                //    if (IconBackgroundBrush != null) {
+                //        var bgBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+                //        bgBmp = MpWpfImagingHelper.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
+                //        var borderBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/textureborder.png"));
+                //        if (!MpWpfColorHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                //            borderBmp = MpWpfImagingHelper.TintBitmapSource(borderBmp, Colors.White, false);
+                //        }
+                //        var icon = new Image();
+                //        icon.Source = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
+                //        if (!IsChecked.HasValue || IsChecked.Value) {
+                //            string checkPath = !IsChecked.HasValue ? @"/Images/check_partial.png" : @"/Images/check.png";
+                //            var checkBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + checkPath));
+                //            if (!MpWpfColorHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                //                checkBmp = MpWpfImagingHelper.TintBitmapSource(checkBmp, Colors.White, false);
+                //            }
+                //            icon.Source = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
+                //        }
+                //        Icon = icon;
+                //    }
+                //    break;
             }
         }
 
 
         #endregion
-    }
-
-    public class MpContextMenuViewModel {
-
     }
 }

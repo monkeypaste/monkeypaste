@@ -39,10 +39,10 @@ namespace MpWpfApp {
         }
 
         private async Task PrepareContextMenu() {
-            MpClipTrayViewModel.Instance.TagMenuItems = await MpClipTrayViewModel.Instance.GetTagMenuItemsForSelectedItems();
+            //MpClipTrayViewModel.Instance.TagMenuItems = await MpClipTrayViewModel.Instance.GetTagMenuItemsForSelectedItemsAsync();
 
             Tag = DataContext;
-            MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(this);
+            //MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(this);
 
             string primarySourceName = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem.Source.PrimarySource.SourceName;
             string primarySourceIcon64 = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64;

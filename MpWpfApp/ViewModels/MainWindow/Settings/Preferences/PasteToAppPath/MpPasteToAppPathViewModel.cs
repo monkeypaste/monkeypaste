@@ -14,13 +14,29 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModel : MpViewModelBase<MpPasteToAppPathViewModelCollection> {
+    public class MpPasteToAppPathViewModel : MpViewModelBase<MpPasteToAppPathViewModelCollection>, MpIUserIconViewModel, MpIContextMenuItemViewModel {
         #region Private Variables
         #endregion
 
         #region Properties
 
-        #region View Properties
+        #region View Models
+        public MpContextMenuItemViewModel MenuItemViewModel {
+            get {
+                return new MpContextMenuItemViewModel() {
+                    Header = IsRuntime ? Label + (IsAdmin ? " (Admin)" : string.Empty) : Label,
+                    IconId = this.IconId,
+                    Command = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand,
+                    CommandParameter = Handle,
+                    IsPasteToPathRuntimeItem = IsRuntime,
+                    InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(MpClipTrayViewModel.Instance.PasteSelectedClipsCommand, PasteToAppPathId),
+                    IsVisible = !IsHidden
+                };
+            }
+        }
+        #endregion
+
+        #region Appearance
         public Brush PasteToAppPathDataRowBorderBrush {
             get {
                 if(IsValid) {
@@ -31,7 +47,8 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Business Logic
+        #region State
+
         private int _selectedWindowState = -1;
         public int SelectedWindowState {
             get {
@@ -86,47 +103,15 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isRuntime = false;
-        public bool IsRuntime {
-            get {
-                return _isRuntime;
-            }
-            set {
-                if (_isRuntime != value) {
-                    _isRuntime = value;
-                    OnPropertyChanged(nameof(IsRuntime));
-                }
-            }
-        }
+        public bool IsRuntime => Handle != IntPtr.Zero;
 
-        private bool _isHidden = false;
-        public bool IsHidden {
-            get {
-                return _isHidden;
-            }
-            set {
-                if (_isHidden != value) {
-                    _isHidden = value;
-                    OnPropertyChanged(nameof(IsHidden));
-                }
-            }
-        }
+        public bool IsHidden => IsRuntime && Parent.HiddenHandles.Contains(Handle);
 
-        private IntPtr _handle = IntPtr.Zero;
-        public IntPtr Handle {
-            get {
-                return _handle;
-            }
-            set {
-                if(_handle != value) {
-                    _handle = value;
-                    OnPropertyChanged(nameof(Handle));
-                }
-            }
-        }
+        public IntPtr Handle { get; set; }
         #endregion
 
         #region Model Properties
+
         public bool PressEnter {
             get {
                 if(PasteToAppPath == null) {
@@ -158,28 +143,17 @@ namespace MpWpfApp {
                 }
             }
         }
-        public BitmapSource AppIcon {
+        public int IconId {
             get {
                 if (PasteToAppPath == null) {
-                    return new BitmapImage();
+                    return 0;
                 }
-                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == AvatarId);
-                if(ivm == null) {
-                    return MpProcessHelper.MpProcessManager.ProcessIconBuilder.GetBase64BitmapFromFilePath(AppPath).ToBitmapSource();
-                }
-                return ivm.IconBitmapSource;
+                return PasteToAppPath.IconId;
             }
             set {
-                if(PasteToAppPath != null) {
-                    Task.Run(
-                        async () => {
-                            var dbi = await MpDbImage.Create(value.ToBase64String());
-                            PasteToAppPath.AvatarDbImage = dbi;
-                            PasteToAppPath.AvatarId = dbi.Id;
-                            await PasteToAppPath.AvatarDbImage.WriteToDatabaseAsync();
-                            await PasteToAppPath.WriteToDatabaseAsync();
-                        });
-                    OnPropertyChanged(nameof(AppIcon));
+                if(IconId != value) {
+                    PasteToAppPath.IconId = value;
+                    OnPropertyChanged(nameof(IconId));
                 }
             }
         }
@@ -291,21 +265,6 @@ namespace MpWpfApp {
             }
         }
 
-        public int AvatarId {
-            get {
-                if(PasteToAppPath == null) {
-                    return 0;
-                }
-                return PasteToAppPath.AvatarId;
-            }
-            set {
-                if(AvatarId != value) {
-                    PasteToAppPath.AvatarId = value;
-                    OnPropertyChanged(nameof(AvatarId));
-                }
-            }
-        }
-
         public int PasteToAppPathId {
             get {
                 if(PasteToAppPath == null) {
@@ -336,7 +295,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(WindowState));
                     OnPropertyChanged(nameof(IsSilent));
                     OnPropertyChanged(nameof(AppName));
-                    OnPropertyChanged(nameof(AppIcon));
+                    OnPropertyChanged(nameof(IconId));
                     OnPropertyChanged(nameof(Args));
                     OnPropertyChanged(nameof(Label));
                     OnPropertyChanged(nameof(PressEnter));
@@ -353,10 +312,7 @@ namespace MpWpfApp {
         public MpPasteToAppPathViewModel(MpPasteToAppPathViewModelCollection parent, MpPasteToAppPath pasteToAppPath, IntPtr handle) : base(parent) {
             //constructor used for running applications
             PasteToAppPath = pasteToAppPath;
-            if(handle != IntPtr.Zero) {
-                Handle = handle;
-                IsRuntime = true;
-            }            
+            Handle = handle;
         }
 
         public MpPasteToAppPathViewModel(MpPasteToAppPathViewModelCollection parent, MpPasteToAppPath pasteToAppPath) : base(parent) {
@@ -377,43 +333,24 @@ namespace MpWpfApp {
             base.Dispose();
             await PasteToAppPath.DeleteFromDatabaseAsync();
         }
+
+        public async Task SetIcon(MpIcon icon) {
+            IconId = icon.IconImageId;
+            PasteToAppPath.Icon = icon;
+            await PasteToAppPath.WriteToDatabaseAsync();
+            OnPropertyChanged(nameof(IconId));
+        }
+
+        public async Task<MpIcon> GetIcon() {
+            if(PasteToAppPath.Icon == null && IconId > 0) {
+                PasteToAppPath.Icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+            }
+            return PasteToAppPath.Icon;
+        }
         #endregion
 
         #region Commands
-        public ICommand ChangeIconCommand => new RelayCommand<object>(
-            (param) => {
-                var iconColorChooserMenuItem = new MenuItem();
-                var iconContextMenu = new ContextMenu();
-                iconContextMenu.Items.Add(iconColorChooserMenuItem);
-                MpHelpers.SetColorChooserMenuItem(
-                    iconContextMenu,
-                    iconColorChooserMenuItem,
-                    (s1, e1) => {
-                        var brush = (Brush)((Border)s1).Tag;
-                        var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
-                        AppIcon = MpWpfImagingHelper.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
-                    }
-                );
-                var iconImageChooserMenuItem = new MenuItem();
-                iconImageChooserMenuItem.Header = "Choose Image...";
-                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
-                iconImageChooserMenuItem.Click += (s, e) => {
-                    var openFileDialog = new OpenFileDialog() {
-                        Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
-                        Title = "Select Image for " + Label,
-                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                    };
-                    bool? openResult = openFileDialog.ShowDialog();
-                    if (openResult != null && openResult.Value) {
-                        string imagePath = openFileDialog.FileName;
-                        AppIcon = (BitmapSource)new BitmapImage(new Uri(imagePath));
-                    }
-                };
-                iconContextMenu.Items.Add(iconImageChooserMenuItem);
-                ((Button)param).ContextMenu = iconContextMenu;
-                iconContextMenu.PlacementTarget = ((Button)param);
-                iconContextMenu.IsOpen = true;
-            });
+        
         #endregion
     }
 }

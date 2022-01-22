@@ -13,11 +13,10 @@ namespace MpWpfApp {
                 }
                 if (parameter is string paramStr) {
                     if (paramStr == "SecondarySource") {
-
-                        return svm.SecondarySourceIconViewModel.IconBorderBitmapSource;
+                        return new MpIconIdToImageSourceConverter().Convert(svm.SecondarySourceIconViewModel.IconId,targetType,"border",culture);
                     }
                 }
-                return svm.PrimarySourceIconViewModel.IconBorderBitmapSource;
+                return new MpIconIdToImageSourceConverter().Convert(svm.PrimarySourceIconViewModel.IconId, targetType, "border", culture);
             }
             return null;
         }

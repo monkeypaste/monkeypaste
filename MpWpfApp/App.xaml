@@ -92,6 +92,8 @@
         <s:String x:Key="PasteToAppIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bullseye.png</s:String>
         <s:String x:Key="BullsEyeIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/bullseye.png</s:String>
         <s:String x:Key="PinToCollectionIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tag.png</s:String>
+        <s:String x:Key="OpenEyeIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/eye.png</s:String>
+        <s:String x:Key="ClosedEyeIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/eye_closed.png</s:String>
         <s:String x:Key="TranslateIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/translate.png</s:String>
         <s:String x:Key="UserIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/user.png</s:String>
         <s:String x:Key="SlidersIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/sliders.png</s:String>
@@ -118,6 +120,7 @@
         <s:String x:Key="ScalesIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/scales.png</s:String>
         <s:String x:Key="FolderEventIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/fileSystemEvent.png</s:String>
         <s:String x:Key="ChainIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/chain.png</s:String>
+        <s:String x:Key="CheckIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/check.png</s:String>
         <!--  Icon/Image Source Paths End  -->
 
         <!--  Font Awesome  -->
@@ -182,7 +185,195 @@
         <local:MpSourceIdToImageSourceBorderConverter x:Key="SourceIdToImageSourceBorderConverter" />
         <local:MpIconIdToImageSourceConverter x:Key="IconIdToImageSourceConverter" />
         <local:MpStringToThemeBrushConverter x:Key="StringToThemeBrushConverter" />
+        <local:MpIconIdToIconConverter x:Key="IconIdToIconConverter" />
+        <local:MpHexStringToIconConverter x:Key="HexStringToIconConverter" />
+        <local:MpDbImageIdToIconConverter x:Key="DbImageIdToIconConverter" />
+        <local:MpDbImageIdToBitmapSourceConverter x:Key="DbImageIdToBitmapSourceConverter" />
         <!--  Converter Declarations End  -->
+
+        <!--  Context Menu Resources  -->
+        <local:MpContextMenuItemContainerSelector x:Key="MenuItemContainerSelector" />
+        <!--  MenuItem  -->
+        <HierarchicalDataTemplate x:Key="MenuItem"
+                                  DataType="{x:Type local:MpContextMenuItemViewModel}"
+                                  ItemsSource="{Binding SubItems}">
+            <MenuItem Header="{Binding Header}"
+                      Command="{Binding Command}"
+                      CommandParameter="{Binding CommandParameter}"
+                      Icon="{Binding IconResourceKey,
+                                     Converter={StaticResource StringToIconConverter}}"
+                      ItemsSource="{Binding SubItems}"
+                      InputGestureText="{Binding InputGestureText}"
+                      UsesItemContainerTemplate="true"
+                      ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}" />
+        </HierarchicalDataTemplate>
+        <!--  User MenuItem  -->
+        <HierarchicalDataTemplate x:Key="UserMenuItem"
+                                  DataType="{x:Type local:MpContextMenuItemViewModel}"
+                                  ItemsSource="{Binding SubItems}">
+            <MenuItem Header="{Binding Header}"
+                      Command="{Binding Command}"
+                      CommandParameter="{Binding CommandParameter}"
+                      Icon="{Binding IconId,
+                                     Converter={StaticResource IconIdToIconConverter}}"
+                      InputGestureText="{Binding InputGestureText}"
+                      UsesItemContainerTemplate="true"
+                      ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}" />
+        </HierarchicalDataTemplate>
+        <!--  Checked Tag Menu Item  -->
+        <HierarchicalDataTemplate x:Key="CheckedTagMenuItem"
+                                  DataType="{x:Type local:MpContextMenuItemViewModel}"
+                                  ItemsSource="{Binding SubItems}">
+            <!--  Currently only for Tags  -->
+            <MenuItem Header="{Binding Header}"
+                      Command="{Binding Command}"
+                      CommandParameter="{Binding CommandParameter}"
+                      Icon="{Binding IconHexStr,
+                                     Converter={StaticResource HexStringToIconConverter},
+                                     ConverterParameter=checked}"
+                      InputGestureText="{Binding InputGestureText}"
+                      UsesItemContainerTemplate="true"
+                      ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}" />
+        </HierarchicalDataTemplate>
+        <!--  Unchecked Tag Menu Item  -->
+        <HierarchicalDataTemplate x:Key="UncheckedTagMenuItem"
+                                  DataType="{x:Type local:MpContextMenuItemViewModel}"
+                                  ItemsSource="{Binding SubItems}">
+            <!--  Currently only for Tags  -->
+            <MenuItem Header="{Binding Header}"
+                      Command="{Binding Command}"
+                      CommandParameter="{Binding CommandParameter}"
+                      Icon="{Binding IconHexStr,
+                                     Converter={StaticResource HexStringToIconConverter}}"
+                      InputGestureText="{Binding InputGestureText}"
+                      UsesItemContainerTemplate="true"
+                      ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}" />
+        </HierarchicalDataTemplate>
+        <!--  Paste To Path Runtime Item  -->
+        <DataTemplate x:Key="PasteToPathRuntimeMenuItem"
+                      DataType="{x:Type local:MpContextMenuItemViewModel}">
+            <MenuItem Visibility="{Binding IsVisible,
+                                           Converter={StaticResource BoolToVisibilityConverter}}"
+                      Command="{Binding Command}"
+                      CommandParameter="{Binding CommandParameter}">
+                <MenuItem.Icon>
+                    <Image Source="{Binding IconId, Converter={StaticResource IconIdToImageSourceConverter}}" />
+                </MenuItem.Icon>
+                <MenuItem.Header>
+                    <DockPanel LastChildFill="False">
+                        <Label DockPanel.Dock="Left"
+                               Content="{Binding Header}" />
+                        <Button DockPanel.Dock="Right"
+                                local:MpHoverableExtension.IsEnabled="True"
+                                local:MpHoverableExtension.IsHovering="{Binding CanHide,
+                                                                                Mode=TwoWay}"
+                                Cursor="Hand"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                Width="20"
+                                Height="20"
+                                HorizontalAlignment="Right"
+                                Command="{Binding HideHandleCommand,
+                                                  Source={x:Static local:MpPasteToAppPathViewModelCollection.Instance}}"
+                                CommandParameter="{Binding CommandParameter}">
+                            <StackPanel>
+                                <Image Visibility="{Binding CanHide,
+                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                       Source="{Binding .,
+                                                        Source={StaticResource OpenEyeIcon}}"
+                                       Width="20"
+                                       Height="20" />
+                                <Image Visibility="{Binding CanHide,
+                                                            Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Source="{Binding .,
+                                                        Source={StaticResource ClosedEyeIcon}}"
+                                       Width="20"
+                                       Height="20" />
+                            </StackPanel>
+                        </Button>
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </DataTemplate>
+
+        <!--  Seperator  -->
+        <DataTemplate x:Key="SeperatorMenuItem"
+                      DataType="{x:Type local:MpContextMenuItemViewModel}">
+            <Separator />
+        </DataTemplate>
+        <!--  Color Pallete ListBox Menu Item  -->
+        <DataTemplate x:Key="ColorPalleteMenuItem"
+                      DataType="{x:Type local:MpContextMenuItemViewModel}">
+            <MenuItem>
+                <MenuItem.Header>
+                    <ListBox ItemsSource="{Binding SubItems}"
+                             Margin="0,0,0,0"
+                             Focusable="True"
+                             BorderThickness="0"
+                             VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Top"
+                             HorizontalAlignment="Stretch"
+                             HorizontalContentAlignment="Left"
+                             SelectionMode="Single"
+                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                             ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True"
+                                           Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="IsSelected"
+                                        Value="{Binding IsSelected}" />
+                                <Setter Property="FocusVisualStyle"
+                                        Value="{x:Null}" />
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Left" />
+                                <Setter Property="VerticalContentAlignment"
+                                        Value="Top" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <!--  Color Pallete Item  -->
+                            <DataTemplate>
+                                <Button BorderThickness="1"
+                                        Width="15"
+                                        Height="15"
+                                        Command="{Binding Command}"
+                                        CommandParameter="{Binding CommandParameter}"
+                                        local:MpHoverableExtension.IsEnabled="True"
+                                        local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                                        Mode=TwoWay}"
+                                        BorderBrush="{Binding BorderHexColor,
+                                                              Converter={StaticResource StringToBrushConverter}}"
+                                        Background="{Binding Header,
+                                                             Converter={StaticResource StringToBrushConverter}}">
+                                    <Image Source="{Binding .,
+                                                            Source={StaticResource PlusIcon}}"
+                                           ToolTip="Custom Color..."
+                                           ToolTipService.InitialShowDelay="1"
+                                           Stretch="Fill"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           Visibility="{Binding IsVisible,
+                                                                Converter={StaticResource BoolToVisibilityConverter},
+                                                                ConverterParameter={StaticResource Hide}}" />
+                                </Button>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </MenuItem.Header>
+            </MenuItem>
+        </DataTemplate>
 
 
 
@@ -210,16 +401,6 @@
         </Style>
 
         <!--  Context Menu Item  -->
-        <DataTemplate x:Key="MenuItemContent">
-            <MenuItem ItemContainerStyle="{StaticResource DefaultItemStyle}" />
-        </DataTemplate>
-        <DataTemplate x:Key="SeparatorContent">
-            <Separator />
-        </DataTemplate>
-        <local:MpContextMenuItemSelector x:Key="MenuItemSelector"
-                                         SeparatorTempalte="{StaticResource SeparatorContent}"
-                                         MenuItemTemplate="{StaticResource MenuItemContent}" />
-
 
         <Style x:Key="DefaultItemStyle"
                TargetType="{x:Type MenuItem}">

@@ -157,6 +157,7 @@
     <Compile Include="Controls\MpResizeThumb.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpBindableListBox.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpMultiComboBox.cs" />
+    <Compile Include="Converters\From\Bool\MpBoolConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
@@ -174,8 +175,12 @@
     <Compile Include="Converters\MpBoolToScrollBarVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToColorConverter.cs" />
     <Compile Include="Converters\MpAbsoluteToRelativePathStringConverter.cs" />
+    <Compile Include="Converters\MpDbImageIdToBitmapSourceConverter.cs" />
+    <Compile Include="Converters\MpDbImageIdToIconConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
+    <Compile Include="Converters\MpHexStringToIconConverter.cs" />
+    <Compile Include="Converters\MpIconIdToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityConverter.cs" />
@@ -336,7 +341,7 @@
       <DependentUpon>MpAnalyticItemPresetDataGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\MpContentUserControl.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Context\Selector\MpContextMenuItemSelector.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Context\Selector\MpContextMenuItemContainerSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayContainerView.xaml.cs">
       <DependentUpon>MpClipTrayContainerView.xaml</DependentUpon>
     </Compile>
@@ -2532,6 +2537,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Converters\From\Double\" />
+    <Folder Include="Converters\From\Id\" />
+    <Folder Include="Converters\From\Int\" />
+    <Folder Include="Converters\From\String\" />
     <Folder Include="Resources\Data\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />

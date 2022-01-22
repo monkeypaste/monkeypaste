@@ -88,32 +88,11 @@ namespace MonkeyPaste {
                 IconImage = iconImage
             };
 
-            var iconBuilder = createBorder ? MpNativeWrapper.GetIconBuilder() : null;
-            if (iconBuilder != null) {
-                var borderImage64Str = iconBuilder.CreateBorder(iconImgBase64, 1.25, @"#FFFFFFFF");
-                var iconBorderImage = await MpDbImage.Create(borderImage64Str);
-
-                var colorList = iconBuilder.CreatePrimaryColorList(iconImgBase64);
-                newIcon.IconBorderImageId = iconBorderImage.Id;
-                newIcon.IconBorderImage = iconBorderImage;
-                newIcon.HexColor1 = colorList[0];
-                newIcon.HexColor2 = colorList[1];
-                newIcon.HexColor3 = colorList[2];
-                newIcon.HexColor4 = colorList[3];
-                newIcon.HexColor5 = colorList[4];
+            if(createBorder) {
+                await newIcon.CreateOrUpdateBorder();
             } else {
-                var iconBorderImage = await MpDbImage.Create(iconImgBase64);
-
-                newIcon.IconBorderImageId = iconBorderImage.Id;
-                newIcon.IconBorderImage = iconBorderImage;
-                newIcon.HexColor1 = MpHelpers.GetRandomColor().ToHex();
-                newIcon.HexColor2 = MpHelpers.GetRandomColor().ToHex();
-                newIcon.HexColor3 = MpHelpers.GetRandomColor().ToHex();
-                newIcon.HexColor4 = MpHelpers.GetRandomColor().ToHex();
-                newIcon.HexColor5 = MpHelpers.GetRandomColor().ToHex();
+                await newIcon.WriteToDatabaseAsync();
             }
-            
-            await newIcon.WriteToDatabaseAsync();
 
             return newIcon;
         }
@@ -122,6 +101,48 @@ namespace MonkeyPaste {
 
         public MpIcon() { }
 
+        public async Task CreateOrUpdateBorder(string forceHexColor = "") {
+            var iconBuilder = MpNativeWrapper.GetIconBuilder();
+            if(iconBuilder == null) {
+                //make border same as icon if no builder
+                var iconBorderImage = await MpDbImage.Create(IconImage.ImageBase64);
+
+                IconBorderImageId = iconBorderImage.Id;
+                IconBorderImage = iconBorderImage;
+                HexColor1 = MpHelpers.GetRandomColor().ToHex();
+                HexColor2 = MpHelpers.GetRandomColor().ToHex();
+                HexColor3 = MpHelpers.GetRandomColor().ToHex();
+                HexColor4 = MpHelpers.GetRandomColor().ToHex();
+                HexColor5 = MpHelpers.GetRandomColor().ToHex();
+            } else  {
+                var borderImage64Str = iconBuilder.CreateBorder(IconImage.ImageBase64, 1.25, @"#FFFFFFFF");
+                if(IconBorderImage == null) {
+                    if(IconBorderImageId > 0) {
+                        IconBorderImage = await MpDb.GetItemAsync<MpDbImage>(IconBorderImageId);
+                    } else {
+                        IconBorderImage = await MpDbImage.Create(borderImage64Str);
+                    }
+                } else if(IconBorderImageId == 0) {
+                    IconBorderImageId = IconBorderImage.Id;
+                }
+
+                var colorList = iconBuilder.CreatePrimaryColorList(IconImage.ImageBase64);
+                HexColor1 = colorList[0];
+                HexColor2 = colorList[1];
+                HexColor3 = colorList[2];
+                HexColor4 = colorList[3];
+                HexColor5 = colorList[4];
+            } 
+            if(!string.IsNullOrEmpty(forceHexColor)) {
+                HexColor1 = forceHexColor;
+                HexColor2 = forceHexColor;
+                HexColor3 = forceHexColor;
+                HexColor4 = forceHexColor;
+                HexColor5 = forceHexColor;
+            }
+
+            await WriteToDatabaseAsync();
+        }
         #region Sync
 
         public async Task<object> CreateFromLogs(string iconGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {

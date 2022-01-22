@@ -17,9 +17,6 @@ namespace MpWpfApp {
 
         #region Appearance
 
-        public BitmapSource IconBitmapSource { get; set; }
-
-        public BitmapSource IconBorderBitmapSource { get; set; }
 
         #endregion
 
@@ -74,8 +71,8 @@ namespace MpWpfApp {
         private void MpIconViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(Icon):
-                    IconBitmapSource = Icon.IconImage.ImageBase64.ToBitmapSource();
-                    IconBorderBitmapSource = Icon.IconBorderImage.ImageBase64.ToBitmapSource();
+                    //IconBitmapSource = Icon.IconImage.ImageBase64.ToBitmapSource();
+                    //IconBorderBitmapSource = Icon.IconBorderImage.ImageBase64.ToBitmapSource();
 
                     break;
             }

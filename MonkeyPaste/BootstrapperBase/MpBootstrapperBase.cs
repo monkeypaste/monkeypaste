@@ -11,6 +11,7 @@ namespace MonkeyPaste {
         public MpBootstrapperBase(MpINativeInterfaceWrapper niw) {
             MpNativeWrapper.Init(niw);
             MpPreferences.Init(niw.GetPreferenceIO());
+            MpRegEx.Init();
             MpDb.Init(niw.GetDbInfo());
             MpDataModelProvider.Init(niw.GetQueryInfo());
             //warning! plugin manager has issue trying to load netstandard2.1 and wpf can't load it

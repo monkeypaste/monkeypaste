@@ -294,6 +294,11 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public static MpDbImage GetDbImageById(int dbImgId) {
+            var result = MpAsyncHelpers.RunSync<MpDbImage>(() => MpDb.GetItemAsync<MpDbImage>(dbImgId));
+            return result;
+        }
+
         #endregion
 
         #region MpIcon
@@ -552,9 +557,15 @@ namespace MonkeyPaste {
             return result > 0;
         }
 
-        public static async Task<bool> IsTagLinkedWithCopyItem(int tagId, int copyItemId) {
+        public static async Task<bool> IsTagLinkedWithCopyItemAsync(int tagId, int copyItemId) {
             string query = $"select count(*) from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?";
             var result = await MpDb.QueryScalarAsync<int>(query, tagId, copyItemId);
+            return result > 0;
+        }
+
+        public static bool IsTagLinkedWithCopyItem(int tagId, int copyItemId) {
+            string query = $"select count(*) from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?";
+            var result = MpAsyncHelpers.RunSync<int>(() => MpDb.QueryScalarAsync<int>(query, tagId, copyItemId));
             return result > 0;
         }
 

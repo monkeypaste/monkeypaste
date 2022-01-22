@@ -1,60 +1,15 @@
-﻿<MenuItem x:Name="ContextMenuView"
-          x:Class="MpWpfApp.MpContextMenuView"
-          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          mc:Ignorable="d"
-          xmlns:local="clr-namespace:MpWpfApp"
-          Loaded="ClipTile_ContextMenu_Loaded"
-          ItemsSource="{Binding MenuItems}"
-          d:DataContext="{d:DesignInstance Type=local:MpContextMenuItemCollectionViewModel,
-                                           IsDesignTimeCreatable=False}">
-    <MenuItem.ItemContainerStyle>
-        <Style TargetType="MenuItem">
-            <Setter Property="Header"
-                    Value="{Binding Header}" />
-            <Setter Property="Command"
-                    Value="{Binding Command}" />
-            <Setter Property="CommandParameter"
-                    Value="{Binding CommandParameter}" />
-            <Setter Property="Icon"
-                    Value="{Binding Icon}" />
-            <Setter Property="InputGestureText"
-                    Value="{Binding InputGestureText}" />
-            <Setter Property="IsCheckable"
-                    Value="{Binding IsCheckable,
-                                    FallbackValue=False}" />
-            <Setter Property="IsChecked"
-                    Value="{Binding IsChecked,
-                                    FallbackValue=False}" />
-            <Setter Property="ItemsSource"
-                    Value="{Binding SubItems}" />
-        </Style>
-    </MenuItem.ItemContainerStyle>
-    <MenuItem.ItemTemplateSelector>
-        <local:MpContextMenuItemTemplateViewSelector>
-            <local:MpContextMenuItemTemplateViewSelector.MenuItemTemplate>
-                <DataTemplate>
-                    <MenuItem DataContext="{Binding}" />
-                </DataTemplate>
-            </local:MpContextMenuItemTemplateViewSelector.MenuItemTemplate>
-            <local:MpContextMenuItemTemplateViewSelector.SeparatorTemplate>
-                <DataTemplate>
-                    <Separator DataContext="{Binding}" />
-                </DataTemplate>
-            </local:MpContextMenuItemTemplateViewSelector.SeparatorTemplate>
-            <!--<local:MpContextMenuItemTemplateViewSelector.ColorPalleteTemplate>
-                <DataTemplate>
-                    <MenuItem DataContext="{Binding}">
-                        <MenuItem.Header>
-                            <Canvas>
-                                <ItemsControl ItemsSource="{local:MpThemeColorsBinding ContentColors=}"/>
-                            </Canvas>
-                        </MenuItem.Header>
-                    </MenuItem>
-                </DataTemplate>
-            </local:MpContextMenuItemTemplateViewSelector.ColorPalleteTemplate>-->
-        </local:MpContextMenuItemTemplateViewSelector>
-    </MenuItem.ItemTemplateSelector>
-</MenuItem>
+﻿<ContextMenu x:Name="ContextMenuView"
+             x:Class="MpWpfApp.MpContextMenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:local="clr-namespace:MpWpfApp"
+             Loaded="ClipTile_ContextMenu_Loaded"
+             ItemsSource="{Binding SubItems}"
+             UsesItemContainerTemplate="True"
+             ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"
+             d:DataContext="{d:DesignInstance Type=local:MpContextMenuItemViewModel,
+                                              IsDesignTimeCreatable=False}">
+</ContextMenu>

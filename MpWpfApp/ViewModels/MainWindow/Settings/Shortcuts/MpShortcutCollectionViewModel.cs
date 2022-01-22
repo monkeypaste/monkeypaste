@@ -134,6 +134,14 @@ namespace MpWpfApp {
             }
         }
 
+        public string GetShortcutKeyStringByCommand(ICommand command, int commandId = 0) {
+            var scvm = Shortcuts.FirstOrDefault(x => x.Command == command && x.CommandId == commandId);
+            if(scvm == null) {
+                return string.Empty;
+            }
+            return scvm.KeyString;
+        }
+
         public MpShortcutViewModel GetShortcutViewModelById(int shortcutId) {
             var scvml = Shortcuts.Where(x => x.ShortcutId == shortcutId).ToList();
             if (scvml.Count > 0) {
@@ -245,7 +253,6 @@ namespace MpWpfApp {
                 var scl = await MpDb.GetItemsAsync<MpShortcut>();
                 foreach (var sc in scl) {
                     ICommand shortcutCommand = null;
-                    object commandParameter = null;
                     switch (sc.ShortcutId) {
                         case 1:
                             shortcutCommand = MpMainWindowViewModel.Instance.ShowWindowCommand;
@@ -327,7 +334,7 @@ namespace MpWpfApp {
                             shortcutCommand = MpAppModeViewModel.Instance.ToggleIsAppPausedCommand;
                             break;
                         case 27:
-                            //shortcutCommand = MpClipTrayViewModel.Instance.CopyCommand;
+                            shortcutCommand = MpClipTrayViewModel.Instance.CopySelectedClipsCommand;
                             break;
                         case 28:
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollToHomeCommand;
@@ -344,13 +351,10 @@ namespace MpWpfApp {
                         default:
                             if (sc.ShortcutType == MpShortcutType.PasteCopyItem) {
                                 shortcutCommand = MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand;
-                                commandParameter = sc.CommandId;
                             } else if (sc.ShortcutType == MpShortcutType.SelectTag) {
                                 shortcutCommand = MpTagTrayViewModel.Instance.SelectTagCommand;
-                                commandParameter = sc.CommandId;
                             } else if (sc.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
                                 shortcutCommand = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand;
-                                commandParameter = sc.CommandId;
                             }
                             break;
                     }

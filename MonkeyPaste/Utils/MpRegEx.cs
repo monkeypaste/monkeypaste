@@ -47,7 +47,7 @@ namespace MonkeyPaste {
             string.Empty
         };
 
-        private static void Init() {
+        public static void Init() {
             RegExList = _regExStrings.Select(x =>
                 new Regex(x, RegexOptions.ExplicitCapture | RegexOptions.Multiline)).ToList();
             _isLoaded = true;

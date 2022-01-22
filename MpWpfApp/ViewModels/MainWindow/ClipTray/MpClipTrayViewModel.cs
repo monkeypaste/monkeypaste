@@ -25,7 +25,7 @@ using FFImageLoading.Helpers.Exif;
 using MpProcessHelper;
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpViewModelBase, MpISingletonViewModel<MpClipTrayViewModel>, MpIMatchTrigger, MpIContextMenuViewModel {
+    public class MpClipTrayViewModel : MpViewModelBase, MpISingletonViewModel<MpClipTrayViewModel>, MpIMatchTrigger, MpIContextMenuItemViewModel {
         #region Private Variables      
 
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -141,17 +141,70 @@ namespace MpWpfApp {
 
         #region MpIContextMenuItemViewModel Implementation
 
-        public Dictionary<MpContextMenuItemsSourceType, MpContextMenuItemViewModel> MenuItemViewModelLookup { 
+        public MpContextMenuItemViewModel MenuItemViewModel { 
             get {
-                //var cmivm = new MpContextMenuItemViewModel() {
-                //    SubItems = new List<MpContextMenuItemViewModel> () { 
-                //        new MpContextMenuItemViewModel() {
-                //            Header = @"_Copy",
-                //            Icon = Application.Current.Resources["CopyIcon"] as 
-                //        }
-                //    },
-                //}
-                return null;
+                var tmil = new ObservableCollection<MpContextMenuItemViewModel>();
+
+                foreach (var ttvm in MpTagTrayViewModel.Instance.TagTileViewModels) {
+                    if (ttvm.IsSudoTag) {
+                        continue;
+                    }
+                    int isCheckedCount = 0;
+                    foreach (var sm in SelectedModels) {
+                        bool isLinked = ttvm.IsLinked(sm);
+                        if (isLinked) {
+                            isCheckedCount++;
+                        }
+                    }
+                    bool isChecked = false;
+                    bool isPartialChecked = false;
+                    if (isCheckedCount == SelectedModels.Count) {
+                        isChecked = true;
+                    } else if (isCheckedCount > 0) {
+                        isPartialChecked = true;
+                    } else {
+                        isChecked = false;
+                    }
+                    tmil.Add(
+                        new MpContextMenuItemViewModel() {
+                            Header = ttvm.TagName,
+                            Command = LinkTagToCopyItemCommand,
+                            CommandParameter = ttvm,
+                            IsSelected = isChecked,
+                            IsPartiallySelected = isPartialChecked,
+                            IconHexStr = ttvm.TagBrush.ToHex(),
+                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
+                                                    MpTagTrayViewModel.Instance.SelectTagCommand,
+                                                    ttvm.TagId)
+                        });
+                }
+
+                var cmivm = new MpContextMenuItemViewModel() {
+
+                    SubItems = new List<MpContextMenuItemViewModel>() {
+                        new MpContextMenuItemViewModel() {
+                            Header = @"_Copy",
+                            IconResourceKey = Application.Current.Resources["CopyIcon"] as string,
+                            Command = CopySelectedClipsCommand,
+                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(CopySelectedClipsCommand)
+                        },
+                        new MpContextMenuItemViewModel() {
+                            Header = @"_Paste",
+                            IconResourceKey = Application.Current.Resources["PasteIcon"] as string,
+                            Command = PasteSelectedClipsCommand,
+                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(PasteSelectedClipsCommand)
+                        },
+                        new MpContextMenuItemViewModel() {
+                            IsSeparator = true
+                        },
+                        new MpContextMenuItemViewModel() {
+                            Header = @"Pin To _Collection",
+                            IconResourceKey = Application.Current.Resources["PinToCollectionIcon"] as string,
+                            SubItems = tmil
+                        }
+                    },
+                };
+                return cmivm;
             }
         }
 
@@ -465,43 +518,6 @@ namespace MpWpfApp {
         }
 
         #endregion
-
-        public async Task<ObservableCollection<MpContextMenuItemViewModel>> GetTagMenuItemsForSelectedItems() {
-            var tmil = new ObservableCollection<MpContextMenuItemViewModel>();
-
-            foreach (var tagTile in MpTagTrayViewModel.Instance.TagTileViewModels) {
-                if (tagTile.IsSudoTag) {
-                    continue;
-                }
-                int isCheckedCount = 0;
-                foreach (var sm in SelectedModels) {
-                    bool isLinked = await tagTile.IsLinked(sm);
-                    if (isLinked) {
-                        isCheckedCount++;
-                    }
-                }
-                bool? isChecked;
-                if (isCheckedCount == SelectedModels.Count) {
-                    isChecked = true;
-                } else if (isCheckedCount > 0) {
-                    isChecked = null;
-                } else {
-                    isChecked = false;
-                }
-                tmil.Add(
-                    new MpContextMenuItemViewModel(
-                        tagTile.TagName,
-                        LinkTagToCopyItemCommand,
-                        tagTile,
-                        isChecked,
-                        string.Empty,
-                        null,
-                        tagTile.ShortcutKeyString,
-                        tagTile.TagBrush));
-            }
-            return tmil;
-        }
-
 
         #region View Invokers
         public void RequestScrollToX(double xoffset) {
@@ -1108,7 +1124,7 @@ namespace MpWpfApp {
                 if(ttvm == null || !ttvm.IsSelected) {
                     return;
                 }
-                bool isAssociated = await ttvm.IsLinked(ctvm);
+                bool isAssociated = await ttvm.IsLinkedAsync(ctvm);
                 if(isAssociated) {
                     return;
                 }
@@ -2007,7 +2023,7 @@ namespace MpWpfApp {
             async (tagToLink) => {
                 var ctvm = PrimaryItem;
                 var civm = PrimaryItem.PrimaryItem;
-                bool isUnlink = await tagToLink.IsLinked(civm);
+                bool isUnlink = await tagToLink.IsLinkedAsync(civm);
 
                 if(isUnlink) {
                     // NOTE item is removed from ui from db ondelete event

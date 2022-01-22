@@ -59,6 +59,9 @@
                 </DrawingBrush.Drawing>
             </DrawingBrush>
         </Border.BorderBrush>
+        <Border.ContextMenu>
+            <local:MpContextMenuView DataContext="{Binding MenuItemViewModel, Source={x:Static local:MpClipTrayViewModel.Instance}}" />
+        </Border.ContextMenu>
         <Grid>
             <ContentControl x:Name="ContentView"
                             Content="{Binding .,

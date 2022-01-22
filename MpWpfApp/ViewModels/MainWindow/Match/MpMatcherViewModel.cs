@@ -62,14 +62,19 @@ namespace MpWpfApp {
             get {
                 var cmvml = FindChildren();
 
-                return new MpContextMenuItemViewModel(
-                        header: Title,
-                        command: null,
-                        commandParameter: null,
-                        isChecked: null,
-                        bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId).IconBitmapSource,
-                        subItems: cmvml.Count == 0 ? null : new ObservableCollection<MpContextMenuItemViewModel>(cmvml.Select(x=>x.MatcherContextMenuItemViewModel)),
-                        bgBrush: null);
+                return new MpContextMenuItemViewModel() {
+                    Header = Title,
+                    IconId = IconId,
+                    SubItems = FindChildren().Select(x => x.MatcherContextMenuItemViewModel).ToList()
+                };
+                        //header: Title,
+                        //command: null,
+                        //commandParameter: null,
+                        //isChecked: null,
+                        //bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId).IconBitmapSource,
+                        //subItems: cmvml.Count == 0 ? null : new ObservableCollection<MpContextMenuItemViewModel>(
+                        //                                    cmvml.Select(x=>x.MatcherContextMenuItemViewModel)),
+                        //bgBrush: null);
             }
         }
         #endregion

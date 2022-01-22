@@ -19,7 +19,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpContentContextMenuView.xaml
     /// </summary>
-    public partial class MpContextMenuView : MenuItem {
+    public partial class MpContextMenuView : ContextMenu {
         public MpContextMenuView() {
             InitializeComponent();
         }

@@ -14,22 +14,24 @@ namespace MpWpfApp {
                 if(svm == null) {
                     return null;
                 }
-                string paramStr = string.Empty;
-                MpIconViewModel ivm = null;
-                if(parameter is string) {
-                    paramStr = parameter as string;
-                    if(paramStr.ToLower() == "border") {
-                        ivm = svm.PrimarySourceIconViewModel;
-                    } else { 
-                        ivm = svm.SecondarySourceIconViewModel;
-                    }
-                } else {
-                    ivm = svm.PrimarySourceIconViewModel;
-                }
-                if(ivm == null) {
-                    return null;
-                }
-                return paramStr.ToLower() == "border" ? ivm.IconBorderBitmapSource : ivm.IconBitmapSource;
+                return new MpIconIdToImageSourceConverter().Convert(svm.PrimarySource.SourceIcon.Id, targetType, parameter, culture);
+
+                //string paramStr = string.Empty;
+                //MpIconViewModel ivm = null;
+                //if(parameter is string) {
+                //    paramStr = parameter as string;
+                //    if(paramStr.ToLower() == "border") {
+                //        ivm = svm.PrimarySourceIconViewModel;
+                //    } else { 
+                //        ivm = svm.SecondarySourceIconViewModel;
+                //    }
+                //} else {
+                //    ivm = svm.PrimarySourceIconViewModel;
+                //}
+                //if(ivm == null) {
+                //    return null;
+                //}
+                //return paramStr.ToLower() == "border" ? ivm.IconBorderBitmapSource : ivm.IconBitmapSource;
             }
             return null;
         }

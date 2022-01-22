@@ -19,17 +19,17 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentItemView.xaml
     /// </summary>
     public partial class MpContentItemView : MpUserControl<MpContentItemViewModel> {
-        private static MpContentContextMenuView _contentContextMenu;
+        //private static MpContentContextMenuView _contentContextMenu;
 
         public MpContentItemView() : base() {
             InitializeComponent();            
         }
 
         private void ContentListItemView_Loaded(object sender, RoutedEventArgs e) {
-            if (_contentContextMenu == null) {
-                _contentContextMenu = new MpContentContextMenuView();
-                //_contentContextMenu.Items.Refresh();
-            }
+            //if (_contentContextMenu == null) {
+            //    _contentContextMenu = new MpContentContextMenuView();
+            //    //_contentContextMenu.Items.Refresh();
+            //}
         }
 
         
@@ -103,10 +103,10 @@ namespace MpWpfApp {
             }
 
             e.Handled = true;
-
-            ContextMenu = _contentContextMenu;
-            ContextMenu.PlacementTarget = this;
-            ContextMenu.IsOpen = true;
+            var fe = sender as FrameworkElement;
+            fe.ContextMenu.DataContext = MpClipTrayViewModel.Instance.MenuItemViewModel;
+            fe.ContextMenu.PlacementTarget = this;
+            fe.ContextMenu.IsOpen = true;
         }
     }
 }

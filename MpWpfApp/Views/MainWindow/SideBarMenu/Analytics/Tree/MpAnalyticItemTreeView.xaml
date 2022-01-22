@@ -13,7 +13,8 @@
     <StackPanel Orientation="Horizontal">
         <local:MpClipBorder x:Name="TagTileBorder"
                             local:MpHoverableExtension.IsEnabled="True"
-                            local:MpHoverableExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                            local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                            Mode=TwoWay}"
                             CornerRadius="10"
                             Margin="5,3,0,0"
                             Padding="7,5,7,5"

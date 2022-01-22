@@ -487,7 +487,24 @@ namespace MpWpfApp {
             await cit.DeleteFromDatabaseAsync();
         }
 
-        public async Task<bool> IsLinked(MpCopyItem ci) {
+        public bool IsLinked(MpCopyItem ci) {
+            if (ci == null || ci.Id == 0 || Tag == null || Tag.Id == 0) {
+                return false;
+            }
+            bool isLinked;
+
+            if (IsAllTag) {
+                isLinked = true;
+            } else if (IsRecentTag) {
+                isLinked = false;
+            } else {
+                isLinked = MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, ci.Id);
+            }
+
+            return isLinked;
+        }
+
+        public async Task<bool> IsLinkedAsync(MpCopyItem ci) {
             if (ci == null || ci.Id == 0 || Tag == null ||  Tag.Id == 0) {
                 return false;
             }
@@ -498,15 +515,15 @@ namespace MpWpfApp {
             } else if (IsRecentTag) {
                 isLinked = await MpDataModelProvider.IsCopyItemInRecentTag(ci.Id);
             } else {
-                isLinked = await MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, ci.Id);
+                isLinked = await MpDataModelProvider.IsTagLinkedWithCopyItemAsync(Tag.Id, ci.Id);
             }
 
             return isLinked;
         }
 
-        public async Task<bool> IsLinked(MpClipTileViewModel ctvm) {
+        public async Task<bool> IsLinkedAsync(MpClipTileViewModel ctvm) {
             foreach(var civm in ctvm.ItemViewModels) {
-                bool isLinked = await IsLinked(civm);
+                bool isLinked = await IsLinkedAsync(civm);
                 if(isLinked) {
                     return true;
                 }
@@ -514,8 +531,8 @@ namespace MpWpfApp {
             return false;
         }
 
-        public async Task<bool> IsLinked(MpContentItemViewModel rtbvm) {
-            var result = await IsLinked(rtbvm.CopyItem);
+        public async Task<bool> IsLinkedAsync(MpContentItemViewModel rtbvm) {
+            var result = await IsLinkedAsync(rtbvm.CopyItem);
             return result;
         }
 
