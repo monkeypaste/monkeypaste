@@ -7,7 +7,7 @@ namespace MpWpfApp {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             string imgPath = new MpBoolToImageSourceConverter().Convert(value, targetType, parameter, culture).ToString();
 
-            return new MpStringToIconConverter().Convert(value, targetType, parameter, culture);
+            return new MpStringResourceToIconConverter().Convert(value, targetType, parameter, culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

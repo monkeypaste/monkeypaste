@@ -1,21 +1,15 @@
-﻿using MonkeyPaste;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Linq;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
 
-    public interface MpIContextMenuItemViewModel {
-        MpContextMenuItemViewModel MenuItemViewModel { get; }
+    public interface MpIMenuItemViewModel {
+        MpMenuItemViewModel MenuItemViewModel { get; }
     }
 
-    public class MpContextMenuItemViewModel : MpViewModelBase {
+    public class MpMenuItemViewModel : MpViewModelBase {
         #region Properties
 
         public bool IsPasteToPathRuntimeItem { get; set; }
@@ -36,13 +30,12 @@ namespace MpWpfApp {
 
         public string BorderHexColor {
             get {
-                Brush b = Brushes.DarkGray;
                 if(IsSelected) {
-                    b = Brushes.Red;
+                    return MpSystemColors.IsSelectedBorderColor;
                 } else if(IsHovering) {
-                    b = Brushes.DimGray;
+                    return MpSystemColors.IsHoveringBorderColor;
                 }
-                return b.ToHex();
+                return MpSystemColors.DarkGray;
             }
         }
         //public Visibility MenuItemVisibility { get; set; }
@@ -54,6 +47,8 @@ namespace MpWpfApp {
         public object CommandParameter { get; set; }
 
         public string InputGestureText { get; set; }
+
+        public int ShortcutId { get; set; }
 
         //public string IconSource { get; set; }
 
@@ -67,24 +62,51 @@ namespace MpWpfApp {
 
         public string IconHexStr { get; set; } = string.Empty;
 
-        public IList<MpContextMenuItemViewModel> SubItems { get; set; }
+        public IList<MpMenuItemViewModel> SubItems { get; set; }
 
         #endregion
 
         #region Public Methods
 
-        public MpContextMenuItemViewModel() : base(null)  {
+        public static MpMenuItemViewModel GetColorPalleteMenuItemViewModel(string selectedHexStr, ICommand changeColorCommand, ICommand selectCustomColorCommand) {
+            bool isAnySelected = false;
+            var colors = new List<MpMenuItemViewModel>();
+            for (int y = 0; y < MpSystemColors.ContentColors[0].Count; y++) {
+                for (int x = 0; x < MpSystemColors.ContentColors.Count; x++) {
+                    string cc = MpSystemColors.ContentColors[x][y].ToUpper();
+                    bool isCustom = y == MpSystemColors.ContentColors[0].Count - 1 && x == MpSystemColors.ContentColors.Count - 1;
+                    bool isSelected = isCustom && !isAnySelected ? true : selectedHexStr.ToUpper() == cc;
+                    if(isSelected) {
+                        isAnySelected = true;
+                    }
+                    colors.Add(new MpMenuItemViewModel() {
+                        IsSelected = isSelected,
+                        Header = isSelected && isCustom ? selectedHexStr : cc, // if selected color is custom make background of custom icon that color (default white)
+                        Command = isCustom ? selectCustomColorCommand : changeColorCommand,
+                        CommandParameter = isCustom ? new object[] { selectedHexStr, changeColorCommand } : cc,
+                        IsVisible = isCustom
+                    });
+                }
+            }
+            
+            return new MpMenuItemViewModel() {
+                IsColorPallete = true,
+                SubItems = colors
+            };
+        }
+
+        public MpMenuItemViewModel() : base(null)  {
             PropertyChanged += MpContextMenuItemViewModel_PropertyChanged;
             //IsSeparator = true;
         }
         
-        //public MpContextMenuItemViewModel(
+        //public MpMenuItemViewModel(
         //    string header, 
         //    ICommand command,
         //    object commandParameter,
         //    bool? isChecked,
         //    string iconSource = "",
-        //    ObservableCollection<MpContextMenuItemViewModel> subItems = null,
+        //    ObservableCollection<MpMenuItemViewModel> subItems = null,
         //    string inputGestureText = "",
         //    Brush bgBrush = null,
         //    BitmapSource bmpSrc = null) : this() {
@@ -102,7 +124,7 @@ namespace MpWpfApp {
         //        Icon.Stretch = Stretch.Fill;
         //    }
             
-        //    SubItems = subItems ?? new ObservableCollection<MpContextMenuItemViewModel>();
+        //    SubItems = subItems ?? new ObservableCollection<MpMenuItemViewModel>();
         //    InputGestureText = inputGestureText;
         //    IconBackgroundBrush = bgBrush == null ? Brushes.Transparent : bgBrush;
         //}

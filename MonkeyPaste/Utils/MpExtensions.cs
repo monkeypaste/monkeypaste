@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -215,84 +216,18 @@ namespace MonkeyPaste {
 
 
         public static async Task<string> CheckSum(this string str) {
-            string result = await MpHelpers.GetCheckSum(str);
+            string result = await Task<string>.Run(() => {
+                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
+                    string hash = BitConverter.ToString(
+                        md5.ComputeHash(
+                            Encoding.UTF8.GetBytes(str))).Replace("-", String.Empty);
+                    return hash;
+                }
+            });
             return result;
         }
 
-        public static bool IsStringHexColor(this string text) {
-            //if (!text.StartsWith("#")) {
-            // enforce that hex colors start with '#'
-            //    text = "#" + text;
-            //}
-            return MpRegEx.IsMatch(MpSubTextTokenType.HexColor, text);
-        }
-
-        public static bool IsBase64String(this string str) {
-            try {
-                // If no exception is caught, then it is possibly a base64 encoded string
-                byte[] data = Convert.FromBase64String(str);
-                // The part that checks if the string was properly padded to the
-                // correct length was borrowed from d@anish's solution
-                return (str.Replace(" ", "").Length % 4 == 0);
-            }
-            catch {
-                // If exception is caught, then it is not a base64 encoded string
-                return false;
-            }
-        }
-
-        public static bool IsStringQuillText(this string text) {
-            return MpHelpers.IsStringQuillText(text);
-        }
-
-        public static bool IsStringCsv(this string text) {
-            if (string.IsNullOrEmpty(text) || IsStringRichText(text)) {
-                return false;
-            }
-            return text.Contains(",");
-        }
-
-        public static bool IsStringRichText(this string text) {
-            if (string.IsNullOrEmpty(text)) {
-                return false;
-            }
-            return text.StartsWith(@"{\rtf");
-        }
-
-        public static bool IsStringXaml(this string text) {
-            if (string.IsNullOrEmpty(text)) {
-                return false;
-            }
-            return text.StartsWith(@"<Section xmlns=") || text.StartsWith(@"<Span xmlns=");
-        }
-
-        public static bool IsStringSpan(this string text) {
-            if (string.IsNullOrEmpty(text)) {
-                return false;
-            }
-            return text.StartsWith(@"<Span xmlns=");
-        }
-
-        public static bool IsStringSection(this string text) {
-            if (string.IsNullOrEmpty(text)) {
-                return false;
-            }
-            return text.StartsWith(@"<Section xmlns=");
-        }
-
-        public static bool IsStringPlainText(this string text) {
-            //returns true for csv
-            if (text == null) {
-                return false;
-            }
-            if (text == string.Empty) {
-                return true;
-            }
-            if (IsStringRichText(text) || IsStringSection(text) || IsStringSpan(text) || IsStringXaml(text)) {
-                return false;
-            }
-            return true;
-        }
+        
         #endregion
 
         #region Visual

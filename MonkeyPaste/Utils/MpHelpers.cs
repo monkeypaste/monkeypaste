@@ -65,19 +65,6 @@ namespace MonkeyPaste {
             return idxList;
         }
 
-        public static bool IsStringQuillText(string str) {
-            if (string.IsNullOrEmpty(str)) {
-                return false;
-            }
-            str = str.ToLower();
-            foreach (var quillTag in _quillTags) {
-                if (str.Contains($"</{quillTag}>")) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public static string Diff(string str1, string str2) {
             if (str1 == null) {
                 return str2;
@@ -118,107 +105,7 @@ namespace MonkeyPaste {
             return new MpImageConverter().Convert(buffer,typeof(SKBitmap)) as SKBitmap;
         }
 
-        public static async Task<string> GetCheckSum(string theString) {
-            string result = await Task<string>.Run(() => {
-                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
-                    string hash = BitConverter.ToString(
-                        md5.ComputeHash(
-                            Encoding.UTF8.GetBytes(theString))).Replace("-", String.Empty);
-                    return hash;
-                }
-            });
-            return result;
-        }
-
-        public const string AlphaNumericChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        public const string OtherChars = @"`~!@#$%^*()_-+[{]}\|;':,<./";
-        private static string _passwordChars = null;
-        public static string PasswordChars {
-            get {
-                if (_passwordChars == null) {
-                    var sb = new StringBuilder();
-                    for (int i = char.MinValue; i <= char.MaxValue; i++) {
-                        char c = Convert.ToChar(i);
-                        if (!char.IsControl(c)) {
-                            sb.Append(c);
-                        }
-                    }
-                    _passwordChars = sb.ToString();
-                }
-                return _passwordChars;
-            }
-        }
-
-        public static string GetRandomString(int length, string chars = AlphaNumericChars) {
-            return new string(Enumerable.Repeat(chars, length).Select(s => s[Rand.Next(s.Length)]).ToArray());
-        }
-
-        public static string GetNewAccessToken() {
-            return GetRandomString(Rand.Next(20, 50), AlphaNumericChars);
-        }
-
-        public static bool IsStringCsv(string text) {
-            if (string.IsNullOrEmpty(text) || IsStringRichText(text)) {
-                return false;
-            }
-            return text.Contains(",");
-        }
-
-        public static bool IsStringRichText(string text) {
-            if (string.IsNullOrEmpty(text)) {
-                return false;
-            }
-            return text.StartsWith(@"{\rtf");
-        }
-
-        public static bool IsStringXaml(string text) {
-            if (string.IsNullOrEmpty(text)) {
-                return false;
-            }
-            return text.StartsWith(@"<Section xmlns=") || text.StartsWith(@"<Span xmlns=");
-        }
-
-        public static bool IsStringSpan(string text) {
-            if (string.IsNullOrEmpty(text)) {
-                return false;
-            }
-            return text.StartsWith(@"<Span xmlns=");
-        }
-
-        public static bool IsStringSection(string text) {
-            if (string.IsNullOrEmpty(text)) {
-                return false;
-            }
-            return text.StartsWith(@"<Section xmlns=");
-        }
-
-        public static bool IsStringPlainText(string text) {
-            //returns true for csv
-            if (text == null) {
-                return false;
-            }
-            if (text == string.Empty) {
-                return true;
-            }
-            if (IsStringRichText(text) || IsStringSection(text) || IsStringSpan(text) || IsStringXaml(text)) {
-                return false;
-            }
-            return true;
-        }
-
-        private static string[] _quillTags = new string[] {
-            "p",
-            "ol",
-            "li",
-            "#text",
-            "img",
-            "em",
-            "span",
-            "strong",
-            "u",
-            "br",
-            "a"
-        };
+        
         #endregion
 
         #region System

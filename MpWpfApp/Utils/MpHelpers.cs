@@ -33,6 +33,7 @@ using System.Security.Principal;
 using System.Speech.Synthesis;
 using WindowsInput;
 using MonkeyPaste;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace MpWpfApp {
     public static class MpHelpers {
@@ -1232,6 +1233,7 @@ namespace MpWpfApp {
             return MpThemeColors.Instance.ContentColors[c][r];
         }
 
+        
         public static void SetColorChooserMenuItem(
             ContextMenu cm,
             MenuItem cmi,
@@ -1249,7 +1251,7 @@ namespace MpWpfApp {
                         var addBmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/add2.png"));
                         b.Background = new ImageBrush(addBmpSrc);
                         MouseButtonEventHandler bMouseLeftButtonUp = (object o, MouseButtonEventArgs e3) => {
-                            var result = ShowColorDialog(MpWpfColorHelpers.GetRandomBrushColor());
+                            var result = MpWpfColorHelpers.ShowColorDialog(MpWpfColorHelpers.GetRandomBrushColor().ToHex());
                             if (result != null) {
                                 b.Tag = result;
                             }
@@ -1461,32 +1463,6 @@ namespace MpWpfApp {
 
             return new Size(formattedText.Width, formattedText.Height);
         }
-
-        public static Brush ShowColorDialog(Brush currentBrush,bool showFullOpen = false) {
-            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
-            cd.AllowFullOpen = true;
-            cd.ShowHelp = true;
-            cd.Color = currentBrush.ToWinFormsColor();
-            cd.CustomColors = MpPreferences.UserCustomColorIdxArray;
-            cd.FullOpen = showFullOpen;
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
-            // Update the text box color if the user clicks OK 
-            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                return cd.Color.ToSolidColorBrush();
-            }
-            return null;
-        }
-
-        
-
-        
-
-        
-
-        
-
-        
 
         #endregion
 

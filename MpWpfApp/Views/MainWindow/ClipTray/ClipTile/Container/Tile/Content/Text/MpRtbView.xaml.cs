@@ -721,7 +721,7 @@ namespace MpWpfApp {
                                         hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
                                         hl.IsEnabled = true;
                                         Action showChangeColorDialog = () => {
-                                            var result = MpHelpers.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText), true);
+                                            var result = MpWpfColorHelpers.ShowColorDialog(linkText);
                                             if (result != null) {
                                                 var run = new Run(result.ToString());
                                                 hl.Inlines.Clear();

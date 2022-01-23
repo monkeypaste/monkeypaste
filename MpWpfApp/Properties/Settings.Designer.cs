@@ -175,9 +175,10 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public int[] UserCustomColorIdxArray {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public string UserCustomColorIdxArray {
             get {
-                return ((int[])(this["UserCustomColorIdxArray"]));
+                return ((string)(this["UserCustomColorIdxArray"]));
             }
             set {
                 this["UserCustomColorIdxArray"] = value;

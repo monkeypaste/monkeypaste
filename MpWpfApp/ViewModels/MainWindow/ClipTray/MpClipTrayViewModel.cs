@@ -25,7 +25,11 @@ using FFImageLoading.Helpers.Exif;
 using MpProcessHelper;
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpViewModelBase, MpISingletonViewModel<MpClipTrayViewModel>, MpIMatchTrigger, MpIContextMenuItemViewModel {
+    public class MpClipTrayViewModel : 
+        MpViewModelBase, 
+        MpISingletonViewModel<MpClipTrayViewModel>, 
+        MpIMatchTrigger, 
+        MpIMenuItemViewModel {
         #region Private Variables      
 
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -135,15 +139,15 @@ namespace MpWpfApp {
         #region Context Menu Item View Models
 
 
-        public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems { get; set; } = new ObservableCollection<MpContextMenuItemViewModel>();
+        public ObservableCollection<MpMenuItemViewModel> TagMenuItems { get; set; } = new ObservableCollection<MpMenuItemViewModel>();
 
         #endregion
 
         #region MpIContextMenuItemViewModel Implementation
 
-        public MpContextMenuItemViewModel MenuItemViewModel { 
+        public MpMenuItemViewModel MenuItemViewModel { 
             get {
-                var tmil = new ObservableCollection<MpContextMenuItemViewModel>();
+                var tmil = new ObservableCollection<MpMenuItemViewModel>();
 
                 foreach (var ttvm in MpTagTrayViewModel.Instance.TagTileViewModels) {
                     if (ttvm.IsSudoTag) {
@@ -166,7 +170,7 @@ namespace MpWpfApp {
                         isChecked = false;
                     }
                     tmil.Add(
-                        new MpContextMenuItemViewModel() {
+                        new MpMenuItemViewModel() {
                             Header = ttvm.TagName,
                             Command = LinkTagToCopyItemCommand,
                             CommandParameter = ttvm,
@@ -179,25 +183,182 @@ namespace MpWpfApp {
                         });
                 }
 
-                var cmivm = new MpContextMenuItemViewModel() {
+                var cmivm = new MpMenuItemViewModel() {
 
-                    SubItems = new List<MpContextMenuItemViewModel>() {
-                        new MpContextMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        new MpMenuItemViewModel() {
                             Header = @"_Copy",
                             IconResourceKey = Application.Current.Resources["CopyIcon"] as string,
                             Command = CopySelectedClipsCommand,
-                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(CopySelectedClipsCommand)
+                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
+                                CopySelectedClipsCommand)
                         },
-                        new MpContextMenuItemViewModel() {
+                        new MpMenuItemViewModel() {
                             Header = @"_Paste",
                             IconResourceKey = Application.Current.Resources["PasteIcon"] as string,
                             Command = PasteSelectedClipsCommand,
-                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(PasteSelectedClipsCommand)
+                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
+                                PasteSelectedClipsCommand)
                         },
-                        new MpContextMenuItemViewModel() {
+                        new MpMenuItemViewModel() {
                             IsSeparator = true
                         },
-                        new MpContextMenuItemViewModel() {
+
+                        new MpMenuItemViewModel() {
+                            Header = @"_Delete",
+                            IconResourceKey = Application.Current.Resources["DeleteIcon"] as string,
+                            Command = DeleteSelectedClipsCommand,
+                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
+                                DeleteSelectedClipsCommand)
+                        },
+                        new MpMenuItemViewModel() {
+                            IsSeparator = true
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = @"_Rename",
+                            IconResourceKey = Application.Current.Resources["RenameIcon"] as string,
+                            Command = EditSelectedTitleCommand,
+                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
+                                EditSelectedTitleCommand)
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = @"_Edit",
+                            IconResourceKey = Application.Current.Resources["EditContentIcon"] as string,
+                            Command = EditSelectedContentCommand,
+                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
+                                EditSelectedContentCommand)
+                        },
+                        new MpMenuItemViewModel() {
+                            IsSeparator = true
+                        },
+                        MpAnalyticItemCollectionViewModel.Instance.MenuItemViewModel,
+                        new MpMenuItemViewModel() {
+                            Header = @"_Transform",
+                            IconResourceKey = Application.Current.Resources["ToolsIcon"] as string,
+                            SubItems = new List<MpMenuItemViewModel>() {
+                                new MpMenuItemViewModel() {
+                                    Header = "_Duplicate",
+                                    IconResourceKey = Application.Current.Resources["DuplicateIcon"] as string,
+                                    Command = DuplicateSelectedClipsCommand
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = "_Merge",
+                                    IconResourceKey = Application.Current.Resources["MergeIcon"] as string,
+                                    Command = MergeSelectedClipsCommand
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = "To _Email",
+                                    IconResourceKey = Application.Current.Resources["EmailIcon"] as string,
+                                    Command = SendToEmailCommand
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = "To _Qr Code",
+                                    IconResourceKey = Application.Current.Resources["QrIcon"] as string,
+                                    Command = CreateQrCodeFromSelectedClipsCommand
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = "To _Audio",
+                                    IconResourceKey = Application.Current.Resources["SpeakIcon"] as string,
+                                    Command = SpeakSelectedClipsCommand
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = "To _Web Search",
+                                    IconResourceKey = Application.Current.Resources["SearchIcon"] as string,
+                                    SubItems = new List<MpMenuItemViewModel>() {
+                                        new MpMenuItemViewModel() {
+                                            Header = "_Google",
+                                            IconResourceKey = Application.Current.Resources["GoogleIcon"] as string,
+                                            Command = SearchWebCommand,
+                                            CommandParameter=@"https://www.google.com/search?q="
+                                        },
+                                        new MpMenuItemViewModel() {
+                                            Header = "_Bing",
+                                            IconResourceKey = Application.Current.Resources["BingIcon"] as string,
+                                            Command = SearchWebCommand,
+                                            CommandParameter=@"https://www.bing.com/search?q="
+                                        },
+                                        new MpMenuItemViewModel() {
+                                            Header = "_DuckDuckGo",
+                                            IconResourceKey = Application.Current.Resources["DuckGo"] as string,
+                                            Command = SearchWebCommand,
+                                            CommandParameter=@"https://duckduckgo.com/?q="
+                                        },
+                                        new MpMenuItemViewModel() {
+                                            Header = "_Yandex",
+                                            IconResourceKey = Application.Current.Resources["YandexIcon"] as string,
+                                            Command = SearchWebCommand,
+                                            CommandParameter=@"https://yandex.com/search/?text="
+                                        },
+                                        new MpMenuItemViewModel() { IsSeparator = true},
+                                        new MpMenuItemViewModel() {
+                                            Header = "_Manage...",
+                                            IconResourceKey = Application.Current.Resources["CogIcon"] as string
+                                        },
+                                    }
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = $"'{PrimaryItem.PrimaryItem.CopyItem.Source.App.AppName}' to _Excluded App",
+                                    IconId = PrimaryItem.PrimaryItem.CopyItem.Source.AppId,
+                                    Command = ExcludeSubSelectedItemApplicationCommand
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = PrimaryItem.PrimaryItem.CopyItem.Source.Url == null ? 
+                                                null :
+                                                $"'{PrimaryItem.PrimaryItem.CopyItem.Source.Url.UrlDomainPath}' to _Excluded Domain",
+                                    IconId = PrimaryItem.PrimaryItem.CopyItem.Source.Url == null ?
+                                                0 :
+                                                PrimaryItem.PrimaryItem.CopyItem.Source.Url.IconId,
+                                    IsVisible = PrimaryItem.PrimaryItem.CopyItem.Source.Url != null,
+                                    Command = ExcludeSubSelectedItemUrlDomainCommand
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = "Into _Macro",
+                                    IconResourceKey = Application.Current.Resources["RobotClawIcon"] as string,
+                                    Command = MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand,
+                                    CommandParameter = this
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = string.IsNullOrEmpty(PrimaryItem.PrimaryItem.ShortcutKeyString) ? 
+                                                "To _Shorcut" : $"Paste '{PrimaryItem.PrimaryItem.ShortcutKeyString}'",
+                                    IconResourceKey = Application.Current.Resources["HotkeyIcon"] as string,
+                                    Command = MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand,
+                                    CommandParameter = this
+                                },
+                            }
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = "_Select",
+                            IconResourceKey = Application.Current.Resources["SelectionIcon"] as string,
+                            SubItems = new List<MpMenuItemViewModel>() {
+                                new MpMenuItemViewModel() {
+                                    Header = "_Bring to Front",
+                                    IconResourceKey = Application.Current.Resources["BringToFrontIcon"] as string,
+                                    Command = BringSelectedClipTilesToFrontCommand,
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = "_Send to Back",
+                                    IconResourceKey = Application.Current.Resources["SendToBackIcon"] as string,
+                                    Command = SendSelectedClipTilesToBackCommand
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = "Select _All",
+                                    IconResourceKey = Application.Current.Resources["SelectAllIcon"] as string,
+                                    Command = SelectAllCommand
+                                },
+                                new MpMenuItemViewModel() {
+                                    Header = "_Invert Selection",
+                                    IconResourceKey = Application.Current.Resources["InvertSelectionIcon"] as string,
+                                    Command = InvertSelectionCommand
+                                },
+                            }
+                        },
+                        new MpMenuItemViewModel() {IsSeparator = true},
+                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(
+                            PrimaryItem.PrimaryItem.CopyItemColorBrush.ToHex(),
+                            ChangeSelectedClipsColorCommand,
+                            MpWpfColorHelpers.SelectCustomColorCommand),
+                        new MpMenuItemViewModel() {IsSeparator = true},
+                        new MpMenuItemViewModel() {
                             Header = @"Pin To _Collection",
                             IconResourceKey = Application.Current.Resources["PinToCollectionIcon"] as string,
                             SubItems = tmil
@@ -1731,13 +1892,23 @@ namespace MpWpfApp {
             });
 
 
-        public ICommand ExcludeSubSelectedItemApplicationCommand => new RelayCommand<object>(
-            async (args) => {
+        public ICommand ExcludeSubSelectedItemApplicationCommand => new RelayCommand(
+            async () => {
                 await MpAppCollectionViewModel.Instance.UpdateRejection(
                         MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(
                             PrimaryItem.PrimaryItem.CopyItem.Source.AppId), true);
             },
-            (args) => {
+            () => {
+                return SelectedItems.Count == 1;
+            });
+
+        public ICommand ExcludeSubSelectedItemUrlDomainCommand => new RelayCommand(
+            async () => {
+                await MpUrlCollectionViewModel.Instance.UpdateDomainRejection(
+                        MpUrlCollectionViewModel.Instance.GetUrlViewModelByUrlId(
+                            PrimaryItem.PrimaryItem.CopyItem.Source.UrlId), true);
+            },
+            () => {
                 return SelectedItems.Count == 1;
             });
 
@@ -1897,14 +2068,15 @@ namespace MpWpfApp {
         }
 
         public ICommand ChangeSelectedClipsColorCommand => new RelayCommand<object>(
-            (brush) => {
-                if (brush == null) {
+            async (brushStr) => {
+                if (brushStr == null) {
                     return;
                 }
-                var b = brush as Brush;
+                var b = ((string)brushStr).ToSolidColorBrush();
                 foreach (var scivm in SelectedContentItemViewModels) {
                     scivm.CopyItemColorBrush = b;
                     scivm.TitleSwirlViewModel.ForceBrush(b);
+                    await scivm.CopyItem.WriteToDatabaseAsync();
                 }
             });
 

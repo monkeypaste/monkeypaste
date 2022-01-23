@@ -250,6 +250,6 @@
 
   <ItemGroup>
     <Folder Include="Utils\DragDrop\" />
-    <Folder Include="ViewModels\Reusable\" />
+    <Folder Include="ViewModels\Reusable\Theme\" />
   </ItemGroup>
 </Project>

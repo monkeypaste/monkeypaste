@@ -14,16 +14,16 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModel : MpViewModelBase<MpPasteToAppPathViewModelCollection>, MpIUserIconViewModel, MpIContextMenuItemViewModel {
+    public class MpPasteToAppPathViewModel : MpViewModelBase<MpPasteToAppPathViewModelCollection>, MpIUserIconViewModel, MpIMenuItemViewModel {
         #region Private Variables
         #endregion
 
         #region Properties
 
         #region View Models
-        public MpContextMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
-                return new MpContextMenuItemViewModel() {
+                return new MpMenuItemViewModel() {
                     Header = IsRuntime ? Label + (IsAdmin ? " (Admin)" : string.Empty) : Label,
                     IconId = this.IconId,
                     Command = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand,

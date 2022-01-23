@@ -1,12 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public static class MpPreferences {
@@ -563,15 +557,14 @@ namespace MonkeyPaste {
         #endregion
 
         #region Experience
-        public static System.Int32[] UserCustomColorIdxArray {
+        public static string UserCustomColorIdxArray {
             get {
-                return Default.Get(nameof(UserCustomColorIdxArray), new Int32[] { 0 });
+                return Default.Get(nameof(UserCustomColorIdxArray), "0");
             }
             set {
                 Default.Set(nameof(UserCustomColorIdxArray), value);
             }
         }
-
 
 
         public static string ThemeClipTileBackgroundColor {

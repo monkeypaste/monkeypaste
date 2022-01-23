@@ -66,7 +66,8 @@ namespace MpWpfApp {
             }
 
 
-
+            MpPreferences.UseSpellCheck = false;
+            MpPreferences.IsTrialExpired = false;
             MpProcessHelper.MpProcessManager.Start(
                 MpPreferences.FallbackProcessPath,
                 MpAppCollectionViewModel.Instance.AppViewModels.Select(x => x.AppPath).ToArray(),

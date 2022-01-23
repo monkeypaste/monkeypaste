@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:MpWpfApp"
+             xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              d1p1:Ignorable="d"
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
@@ -149,9 +150,9 @@
         <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
         <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
         <local:MpIntToWindowCommandConverter x:Key="IntToWindowCommandConverter" />
-        <local:MpStringToImageSourceConverter x:Key="StringToImageSourceConverter" />
-        <local:MpStringToIconConverter x:Key="StringToIconConverter" />
-        <local:MpStringToBrushConverter x:Key="StringToBrushConverter" />
+        <local:MpStringResourceToImageSourceConverter x:Key="StringToImageSourceConverter" />
+        <local:MpStringResourceToIconConverter x:Key="StringToIconConverter" />
+        <local:MpStringHexToBrushConverter x:Key="StringToBrushConverter" />
         <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />
         <local:MpIntToStringConverter x:Key="IntToStringConverter" />
         <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -186,16 +187,17 @@
         <local:MpIconIdToImageSourceConverter x:Key="IconIdToImageSourceConverter" />
         <local:MpStringToThemeBrushConverter x:Key="StringToThemeBrushConverter" />
         <local:MpIconIdToIconConverter x:Key="IconIdToIconConverter" />
-        <local:MpHexStringToIconConverter x:Key="HexStringToIconConverter" />
+        <local:MpStringHexToIconConverter x:Key="HexStringToIconConverter" />
         <local:MpDbImageIdToIconConverter x:Key="DbImageIdToIconConverter" />
         <local:MpDbImageIdToBitmapSourceConverter x:Key="DbImageIdToBitmapSourceConverter" />
+        <local:MpShorcutIdToKeyStringConverter x:Key="ShorcutIdToKeyStringConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Context Menu Resources  -->
         <local:MpContextMenuItemContainerSelector x:Key="MenuItemContainerSelector" />
         <!--  MenuItem  -->
         <HierarchicalDataTemplate x:Key="MenuItem"
-                                  DataType="{x:Type local:MpContextMenuItemViewModel}"
+                                  DataType="{x:Type pcl:MpMenuItemViewModel}"
                                   ItemsSource="{Binding SubItems}">
             <MenuItem Header="{Binding Header}"
                       Command="{Binding Command}"
@@ -209,7 +211,7 @@
         </HierarchicalDataTemplate>
         <!--  User MenuItem  -->
         <HierarchicalDataTemplate x:Key="UserMenuItem"
-                                  DataType="{x:Type local:MpContextMenuItemViewModel}"
+                                  DataType="{x:Type pcl:MpMenuItemViewModel}"
                                   ItemsSource="{Binding SubItems}">
             <MenuItem Header="{Binding Header}"
                       Command="{Binding Command}"
@@ -222,7 +224,7 @@
         </HierarchicalDataTemplate>
         <!--  Checked Tag Menu Item  -->
         <HierarchicalDataTemplate x:Key="CheckedTagMenuItem"
-                                  DataType="{x:Type local:MpContextMenuItemViewModel}"
+                                  DataType="{x:Type pcl:MpMenuItemViewModel}"
                                   ItemsSource="{Binding SubItems}">
             <!--  Currently only for Tags  -->
             <MenuItem Header="{Binding Header}"
@@ -237,7 +239,7 @@
         </HierarchicalDataTemplate>
         <!--  Unchecked Tag Menu Item  -->
         <HierarchicalDataTemplate x:Key="UncheckedTagMenuItem"
-                                  DataType="{x:Type local:MpContextMenuItemViewModel}"
+                                  DataType="{x:Type pcl:MpMenuItemViewModel}"
                                   ItemsSource="{Binding SubItems}">
             <!--  Currently only for Tags  -->
             <MenuItem Header="{Binding Header}"
@@ -251,7 +253,7 @@
         </HierarchicalDataTemplate>
         <!--  Paste To Path Runtime Item  -->
         <DataTemplate x:Key="PasteToPathRuntimeMenuItem"
-                      DataType="{x:Type local:MpContextMenuItemViewModel}">
+                      DataType="{x:Type pcl:MpMenuItemViewModel}">
             <MenuItem Visibility="{Binding IsVisible,
                                            Converter={StaticResource BoolToVisibilityConverter}}"
                       Command="{Binding Command}"
@@ -295,32 +297,31 @@
                 </MenuItem.Header>
             </MenuItem>
         </DataTemplate>
-
         <!--  Seperator  -->
         <DataTemplate x:Key="SeperatorMenuItem"
-                      DataType="{x:Type local:MpContextMenuItemViewModel}">
+                      DataType="{x:Type pcl:MpMenuItemViewModel}">
             <Separator />
         </DataTemplate>
         <!--  Color Pallete ListBox Menu Item  -->
         <DataTemplate x:Key="ColorPalleteMenuItem"
-                      DataType="{x:Type local:MpContextMenuItemViewModel}">
+                      DataType="{x:Type pcl:MpMenuItemViewModel}">
             <MenuItem>
                 <MenuItem.Header>
                     <ListBox ItemsSource="{Binding SubItems}"
-                             Margin="0,0,0,0"
-                             Focusable="True"
+                             Margin="5"
                              BorderThickness="0"
+                             Background="Transparent"
                              VerticalAlignment="Stretch"
                              VerticalContentAlignment="Top"
-                             HorizontalAlignment="Stretch"
+                             HorizontalAlignment="Left"
                              HorizontalContentAlignment="Left"
                              SelectionMode="Single"
-                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                             ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel IsItemsHost="True"
-                                           Orientation="Horizontal" />
+                                <WrapPanel MaxWidth="240"
+                                           Orientation="Horizontal"
+                                           IsItemsHost="True" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemContainerStyle>
@@ -345,28 +346,33 @@
                         <ListBox.ItemTemplate>
                             <!--  Color Pallete Item  -->
                             <DataTemplate>
-                                <Button BorderThickness="1"
-                                        Width="15"
-                                        Height="15"
+                                <Button BorderThickness="0"
+                                        Background="Transparent"
                                         Command="{Binding Command}"
                                         CommandParameter="{Binding CommandParameter}"
                                         local:MpHoverableExtension.IsEnabled="True"
                                         local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                                                        Mode=TwoWay}"
-                                        BorderBrush="{Binding BorderHexColor,
-                                                              Converter={StaticResource StringToBrushConverter}}"
-                                        Background="{Binding Header,
-                                                             Converter={StaticResource StringToBrushConverter}}">
-                                    <Image Source="{Binding .,
-                                                            Source={StaticResource PlusIcon}}"
-                                           ToolTip="Custom Color..."
-                                           ToolTipService.InitialShowDelay="1"
-                                           Stretch="Fill"
-                                           HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Stretch"
-                                           Visibility="{Binding IsVisible,
-                                                                Converter={StaticResource BoolToVisibilityConverter},
-                                                                ConverterParameter={StaticResource Hide}}" />
+                                                                                        Mode=TwoWay}">
+                                    <Border BorderThickness="1"
+                                            CornerRadius="2"
+                                            Padding="2.5"
+                                            Width="15"
+                                            Height="15"
+                                            BorderBrush="{Binding BorderHexColor,
+                                                                  Converter={StaticResource StringToBrushConverter}}"
+                                            Background="{Binding Header,
+                                                                 Converter={StaticResource StringToBrushConverter}}">
+                                        <Image Source="{Binding .,
+                                                                Source={StaticResource PlusIcon}}"
+                                               ToolTip="Custom Color..."
+                                               ToolTipService.InitialShowDelay="1"
+                                               Stretch="Fill"
+                                               HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch"
+                                               Visibility="{Binding IsVisible,
+                                                                    Converter={StaticResource BoolToVisibilityConverter},
+                                                                    ConverterParameter={StaticResource Hide}}" />
+                                    </Border>
                                 </Button>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

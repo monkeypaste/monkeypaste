@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using System.Web;
 
 namespace MpWpfApp {
-    public abstract class MpAnalyticItemViewModel : MpViewModelBase<MpAnalyticItemCollectionViewModel>, MpITreeItemViewModel {
+    public abstract class MpAnalyticItemViewModel : MpViewModelBase<MpAnalyticItemCollectionViewModel>, MpITreeItemViewModel, MpIMenuItemViewModel {
         #region Private Variables
 
         #endregion
@@ -28,33 +28,24 @@ namespace MpWpfApp {
 
         public MpAnalyticItemPresetViewModel SelectedPresetViewModel => PresetViewModels.FirstOrDefault(x => x.IsSelected);     
 
-        public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems => new ObservableCollection<MpContextMenuItemViewModel>(PresetViewModels.Select(x => x.ContextMenuItemViewModel));
-
-        public ObservableCollection<MpContextMenuItemViewModel> QuickActionPresetMenuItems {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
-                var children = new List<MpContextMenuItemViewModel>();
-
-                foreach (var p in PresetViewModels.Where(x=>x.IsQuickAction)) {
-                    var pmi = new MpContextMenuItemViewModel() {
-                        Header = p.Label,
-                        Command = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
-                        IconId = IconId,
-                        InputGestureText = p.ShortcutKeyString
-                    };
-                        //header: p.Label,
-                        //command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
-                        //commandParameter: p.Preset.Id,
-                        //isChecked: null,
-                        //bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x=>x.IconId == IconId).IconBitmapSource,
-                        //subItems: null,
-                        //inputGestureText: p.ShortcutKeyString,
-                        //bgBrush: null);
-                    children.Add(pmi);
-                }
-
-                return new ObservableCollection<MpContextMenuItemViewModel>(children);
+                var subItems = PresetViewModels.Select(x => x.MenuItemViewModel).ToList();
+                subItems.Add(
+                    new MpMenuItemViewModel() {
+                        Header = $"Manage '{Title}'",
+                        Command = Parent.ManageItemCommand,
+                        CommandParameter = AnalyticItemId
+                    });
+                return new MpMenuItemViewModel() {
+                    Header = Title,
+                    IconId = IconId,
+                    SubItems = subItems
+                };
             }
         }
+
+        public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => PresetViewModels.Where(x => x.IsQuickAction).Select(x => x.MenuItemViewModel);
 
         public MpITreeItemViewModel ParentTreeItem => Parent;
 
@@ -451,7 +442,7 @@ namespace MpWpfApp {
                             PresetViewModels.RemoveAt(presetIdx);
                             OnPropertyChanged(nameof(PresetViewModels));
                             OnPropertyChanged(nameof(SelectedPresetViewModel));
-                            OnPropertyChanged(nameof(ContextMenuItems));
+                            //OnPropertyChanged(nameof(ContextMenuItems));
                             OnPropertyChanged(nameof(QuickActionPresetMenuItems));
                         }
                     }

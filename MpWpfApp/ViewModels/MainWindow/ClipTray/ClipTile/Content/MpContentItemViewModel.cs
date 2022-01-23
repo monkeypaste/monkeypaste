@@ -806,6 +806,9 @@ namespace MpWpfApp {
 
             pallete.InsertRange(0, tagColors);
 
+            if(!string.IsNullOrEmpty(CopyItem.ItemColor)) {
+                pallete.Insert(0,CopyItem.ItemColor);
+            }
             ColorPallete = pallete.Take(5).ToArray();
 
             await TitleSwirlViewModel.InitializeAsync();

@@ -61,6 +61,9 @@ namespace MonkeyPaste {
         }
 
         public static bool IsMatch(MpSubTextTokenType tokenType, string compareStr) {
+            if(compareStr == null) {
+                return false;
+            }
             return GetRegExForTokenType(tokenType).IsMatch(compareStr);
         }
     }

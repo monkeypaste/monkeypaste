@@ -21,7 +21,7 @@ using MpProcessHelper;
 using System.Web.UI;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModelCollection : ObservableCollection<MpPasteToAppPathViewModel>, MpIContextMenuItemViewModel, MpISingletonViewModel<MpPasteToAppPathViewModelCollection>,  INotifyPropertyChanged {
+    public class MpPasteToAppPathViewModelCollection : ObservableCollection<MpPasteToAppPathViewModel>, MpIMenuItemViewModel, MpISingletonViewModel<MpPasteToAppPathViewModelCollection>,  INotifyPropertyChanged {
 
         #region Private Variables
 
@@ -33,14 +33,14 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpContextMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
                 var itemsToRemove = this.Where(x => x.IsRuntime).ToList();
                 for (int i = 0; i < itemsToRemove.Count; i++) {
                     //clear running applications so they aren't duplicated but are current
                     this.Remove(itemsToRemove[i]);
                 }
-                var pmivml = new List<MpContextMenuItemViewModel>();
+                var pmivml = new List<MpMenuItemViewModel>();
                 foreach (var kvp in MpProcessManager.CurrentProcessWindowHandleStackDictionary) {
                     var appName = MpProcessManager.GetProcessApplicationName(kvp.Value[0]);
                     if (kvp.Value.Count == 0 || string.IsNullOrEmpty(appName)) {
@@ -49,10 +49,10 @@ namespace MpWpfApp {
                     var processPath = kvp.Key;
                     var processName = MpProcessManager.GetProcessApplicationName(kvp.Value[0]);
                     var avm = MpAppCollectionViewModel.Instance.AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower());
-                    var rpmivm = new MpContextMenuItemViewModel() {
+                    var rpmivm = new MpMenuItemViewModel() {
                         Header = processName,
                         IconId = avm == null ? 0 : avm.IconId,
-                        SubItems = new List<MpContextMenuItemViewModel>()
+                        SubItems = new List<MpMenuItemViewModel>()
                     };
                     foreach (var handle in kvp.Value) {
                         var ptapvm = new MpPasteToAppPathViewModel(
@@ -76,21 +76,21 @@ namespace MpWpfApp {
                     }
                 }
                 if (pmivml.Count > 0) {
-                    pmivml.Add(new MpContextMenuItemViewModel() { IsSeparator = true });
+                    pmivml.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
                 foreach (var ptapvm in this) {
                     pmivml.AddRange(this.Select(x => x.MenuItemViewModel));
                 }
 
-                pmivml.Add(new MpContextMenuItemViewModel() { IsSeparator = true });
+                pmivml.Add(new MpMenuItemViewModel() { IsSeparator = true });
 
-                pmivml.Add(new MpContextMenuItemViewModel() {
+                pmivml.Add(new MpMenuItemViewModel() {
                     Header = "Add Application",
                     IconResourceKey = Application.Current.Resources["AddIcon"] as string,
                     Command = MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand,
                     CommandParameter = 1
                 });
-                var rmivm = new MpContextMenuItemViewModel() {
+                var rmivm = new MpMenuItemViewModel() {
                     Header = "Paste To Path",
                     IconResourceKey = Application.Current.Resources["PasteIcon"] as string,
                     SubItems = pmivml

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Office.Interop.Outlook;
+using MonkeyPaste;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -66,19 +67,19 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region ForegroundBrush DependencyProperty
+        #region InactiveForegroundBrush DependencyProperty
 
-        public static Brush GetForegroundBrush(DependencyObject obj) {
-            return (Brush)obj.GetValue(ForegroundBrushProperty);
+        public static Brush GetInactiveForegroundBrush(DependencyObject obj) {
+            return (Brush)obj.GetValue(InactiveForegroundBrushProperty);
         }
 
-        public static void SetForegroundBrush(DependencyObject obj, Brush value) {
-            obj.SetValue(ForegroundBrushProperty, value);
+        public static void SetInactiveForegroundBrush(DependencyObject obj, Brush value) {
+            obj.SetValue(InactiveForegroundBrushProperty, value);
         }
 
-        public static readonly DependencyProperty ForegroundBrushProperty =
+        public static readonly DependencyProperty InactiveForegroundBrushProperty =
             DependencyProperty.Register(
-                "ForegroundBrush", typeof(Brush),
+                "InactiveForegroundBrush", typeof(Brush),
                 typeof(MpHoverableExtension),
                 new FrameworkPropertyMetadata(null));
 
@@ -142,19 +143,19 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region BackgroundBrush DependencyProperty
+        #region InactiveBackgroundBrush DependencyProperty
 
-        public static Brush GetBackgroundBrush(DependencyObject obj) {
-            return (Brush)obj.GetValue(BackgroundBrushProperty);
+        public static Brush GetInactiveBackgroundBrush(DependencyObject obj) {
+            return (Brush)obj.GetValue(InactiveBackgroundBrushProperty);
         }
 
-        public static void SetBackgroundBrush(DependencyObject obj, Brush value) {
-            obj.SetValue(BackgroundBrushProperty, value);
+        public static void SetInactiveBackgroundBrush(DependencyObject obj, Brush value) {
+            obj.SetValue(InactiveBackgroundBrushProperty, value);
         }
 
-        public static readonly DependencyProperty BackgroundBrushProperty =
+        public static readonly DependencyProperty InactiveBackgroundBrushProperty =
             DependencyProperty.Register(
-                "BackgroundBrush", typeof(Brush),
+                "InactiveBackgroundBrush", typeof(Brush),
                 typeof(MpHoverableExtension),
                 new FrameworkPropertyMetadata(null));
 
@@ -218,19 +219,19 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region BorderBrush DependencyProperty
+        #region InactiveBorderBrush DependencyProperty
 
-        public static Brush GetBorderBrush(DependencyObject obj) {
-            return (Brush)obj.GetValue(BorderBrushProperty);
+        public static Brush GetInactiveBorderBrush(DependencyObject obj) {
+            return (Brush)obj.GetValue(InactiveBorderBrushProperty);
         }
 
-        public static void SetBorderBrush(DependencyObject obj, Brush value) {
-            obj.SetValue(BorderBrushProperty, value);
+        public static void SetInactiveBorderBrush(DependencyObject obj, Brush value) {
+            obj.SetValue(InactiveBorderBrushProperty, value);
         }
 
-        public static readonly DependencyProperty BorderBrushProperty =
+        public static readonly DependencyProperty InactiveBorderBrushProperty =
             DependencyProperty.Register(
-                "BorderBrush", typeof(Brush),
+                "InactiveBorderBrush", typeof(Brush),
                 typeof(MpHoverableExtension),
                 new FrameworkPropertyMetadata(null));
 
@@ -325,6 +326,7 @@ namespace MpWpfApp {
         private static void Fe_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
             var dpo = sender as DependencyObject;
             SetIsHovering(dpo, true);
+
             MpCursorType? hoverCursor = GetHoverCursor(dpo);
             if (hoverCursor.HasValue) {
                 MpCursorViewModel.Instance.CurrentCursor = hoverCursor.Value;
@@ -357,11 +359,11 @@ namespace MpWpfApp {
 
             if(fe is Border b) {
                 b.Background = GetBrush(fe, isHovering, isSelected, "Background");
-                b.BorderBrush = GetBrush(fe, isHovering, isSelected, "BorderBrush");
+                b.BorderBrush = GetBrush(fe, isHovering, isSelected, "Border");
             }else if(fe is Control c) {
                 c.Foreground = GetBrush(fe, isHovering, isSelected, "Foreground");
                 c.Background = GetBrush(fe, isHovering, isSelected, "Background");
-                c.BorderBrush = GetBrush(fe, isHovering, isSelected, "BorderBrush");
+                c.BorderBrush = GetBrush(fe, isHovering, isSelected, "Border");
             } else {
                 Debugger.Break();
             }
@@ -369,29 +371,38 @@ namespace MpWpfApp {
         }
 
         private static bool HasBrushes(FrameworkElement fe) {
-            return HasBrush(fe, "Foreground") || HasBrush(fe, "Background") || HasBrush(fe,"BorderBrush");
+            return HasBrush(fe, "Foreground") || HasBrush(fe, "Background") || HasBrush(fe,"Border");
         }
 
         private static bool HasBrush(FrameworkElement fe, string prefix) {
-            return GetBrush(fe, false, false, prefix) != null ||
-                   GetBrush(fe, true, false, prefix) != null ||
-                   GetBrush(fe, false, true, prefix) != null ||
-                   GetBrush(fe, false, true, prefix) != null;
+            var b0 = GetBrush(fe, false, false, prefix);
+            var b1 = GetBrush(fe, false, true, prefix);
+            var b2 = GetBrush(fe, true, false, prefix);
+            var b3 = GetBrush(fe, true, true, prefix);
+            return b0 != null ||
+                   b1 != null ||
+                   b2 != null ||
+                   b3 != null;
         }
-
         private static Brush GetBrush(DependencyObject dpo, bool isHovering, bool isSelected, string prefix) {
             prefix += "Brush";
             Stack<string> propertyNameStack = new Stack<string>();
             propertyNameStack.Push(prefix);
 
-            if (isHovering) {
-                prefix = "Hover" + prefix;
+            if(!isHovering && !isSelected) {
+                prefix = "Inactive" + prefix;
                 propertyNameStack.Push(prefix);
+            } else {
+                if (isHovering) {
+                    prefix = "Hover" + prefix;
+                    propertyNameStack.Push(prefix);
+                }
+                if (isSelected) {
+                    prefix = "Selected" + prefix;
+                    propertyNameStack.Push(prefix);
+                }
             }
-            if (isSelected) {
-                prefix = "Selected" + prefix;
-                propertyNameStack.Push(prefix);
-            }
+
             DependencyPropertyDescriptor descriptor = null;
             while (descriptor == null) { 
                 if(propertyNameStack.Count == 0) {
@@ -407,7 +418,8 @@ namespace MpWpfApp {
                 return Brushes.Transparent;
             }
 
-            return descriptor.GetValue(dpo) as Brush;
+            var result = descriptor.GetValue(dpo) as Brush;
+            return result;
         }
 
     }

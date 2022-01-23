@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public static class MpColorExtensions {
         public static Brush ToSolidColorBrush(this string hex, double opacity = 1.0) {
-            if (string.IsNullOrEmpty(hex)) {
+            if (!hex.IsStringHexColor()) {
                 return Brushes.Red;
             }
             var br = (Brush)new SolidColorBrush(hex.ToWinMediaColor());
@@ -17,10 +18,18 @@ namespace MpWpfApp {
         }
 
         public static Color ToWinMediaColor(this string hex) {
-            if (string.IsNullOrEmpty(hex)) {
+            if (!hex.IsStringHexColor()) {
                 return Colors.Red;
             }
             return (Color)ColorConverter.ConvertFromString(hex);
+        }
+
+        public static System.Drawing.Color ToWinFormsColor(this string hex) {
+            if (!hex.IsStringHexColor()) {
+                return System.Drawing.Color.Red;
+            }
+            var scb = hex.ToSolidColorBrush();
+            return scb.ToWinFormsColor();
         }
 
         public static System.Drawing.Color ToWinFormsColor(this Brush b) {
@@ -29,6 +38,9 @@ namespace MpWpfApp {
             }
             var scb = (SolidColorBrush)b;
             return System.Drawing.Color.FromArgb(scb.Color.A, scb.Color.R, scb.Color.G, scb.Color.B);
+        }
+        public static string ToHex(this System.Drawing.Color c) {
+            return c.ToSolidColorBrush().ToHex();
         }
 
         public static SolidColorBrush ToSolidColorBrush(this System.Drawing.Color c) {
@@ -39,7 +51,7 @@ namespace MpWpfApp {
             if (b is SolidColorBrush scb) {
                 return scb.Color.ToHex();
             }
-            throw new Exception("Brush must be solid color brush but is " + b.GetType().ToString());
+            return MpSystemColors.Transparent;
         }
         public static string ToHex(this Color c, byte forceAlpha = 255) {
             if (c == null) {

@@ -16,6 +16,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MpWpfApp {
+    public interface MpIShortcutCommandViewModel<T> where T:struct,Enum {
+        int CommandId { get; }
+        ICommand Command { get; }
+        object CommandParameter { get; }
+    }
+
     public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, MpIMatchTrigger {
         #region Properties        
 
@@ -541,7 +547,10 @@ namespace MpWpfApp {
             return KeyString.Contains(",");
         }
         public bool IsCustom() {
-            return (int)Shortcut.ShortcutType > (int)MpShortcutType.CustomMinimum;
+            if(Shortcut == null) {
+                return false;
+            }
+            return Shortcut.CommandId > 0;
         }
 
         public void ClearShortcutKeyString() {
@@ -603,7 +612,7 @@ namespace MpWpfApp {
                             OnShortcutExecuted?.Invoke(this, aipvm.Parent.LastResultContentItem);
                         });
                     }
-                } else if (ShortcutType == MpShortcutType.PasteCopyItem || ShortcutType == MpShortcutType.PasteSelectedClip) {
+                } else if (ShortcutType == MpShortcutType.PasteCopyItem || ShortcutType == MpShortcutType.PasteSelectedItems) {
                     OnShortcutExecuted?.Invoke(this, MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem);
                 }
             },

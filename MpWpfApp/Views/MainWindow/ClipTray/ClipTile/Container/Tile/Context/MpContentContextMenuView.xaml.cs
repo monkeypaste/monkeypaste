@@ -59,7 +59,7 @@ namespace MpWpfApp {
             MpShortcutCollectionViewModel.Instance.UpdateInputGestures(this);
             var aicvm = Application.Current.Resources["AnalyticItemCollectionViewModel"] as MpAnalyticItemCollectionViewModel;
             
-            aicvm.OnPropertyChanged(nameof(aicvm.ContextMenuItems));
+            //aicvm.OnPropertyChanged(nameof(aicvm.ContextMenuItems));
         }
 
         private void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {

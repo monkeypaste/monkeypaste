@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media.Imaging;
+using System.Linq;
+using System.Windows.Input;
 
 namespace MpWpfApp {
-
-    public class MpDbImageIdToIconConverter : IValueConverter {
+    public class MpCommandToShortcutKeyStringConverter : IValueConverter {
         //returns primary source by default but secondary w/ parameter of 'SecondarySource' 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return new Image() {
-                Source = new MpDbImageIdToBitmapSourceConverter().Convert(value,targetType,parameter,culture) as BitmapSource
-            };
+            if (value is ICommand icommand) {
+                var svm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.Command == icommand);
+                return svm == null ? null : svm.KeyString;
+            }
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

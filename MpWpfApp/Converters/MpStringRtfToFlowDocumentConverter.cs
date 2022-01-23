@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpStringToBrushConverter : IValueConverter {
+    public class MpStringRtfToFlowDocumentConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (Brush)new BrushConverter().ConvertFrom(value.ToString());
+            return value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return value.ToString();
+            return System.Convert.ToInt32(value.ToString());
         }
     }
 }

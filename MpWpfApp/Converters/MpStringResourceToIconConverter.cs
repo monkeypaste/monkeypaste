@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpStringToIconConverter : IValueConverter {
+    public class MpStringResourceToIconConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string valueStr) {
                 if(string.IsNullOrEmpty(valueStr)) {

@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpHexStringToIconConverter : IValueConverter {
+    public class MpStringHexToIconConverter : IValueConverter {
         //returns primary source by default but secondary w/ parameter of 'SecondarySource' 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string hexStr) {

@@ -70,12 +70,12 @@ namespace MpWpfApp {
             MpMainWindowViewModel.Instance.IsShowingDialog = true;
             string shortcutKeyString = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command);
 
-            MpShortcutViewModel scvm = null;
-            if ((int)shortcutType < (int)MpShortcutType.CustomMinimum) {
-                scvm = Shortcuts.FirstOrDefault(x => x.Command == command && (int)x.CommandId == commandId);
-            } else {
-                scvm = Shortcuts.FirstOrDefault(x => x.CommandId == (int)commandId && x.ShortcutType == shortcutType);
-            }
+            MpShortcutViewModel scvm = Shortcuts.FirstOrDefault(x => x.CommandId == (int)commandId && x.ShortcutType == shortcutType && x.Command == command);
+            //if ((int)shortcutType < (int)MpShortcutType.CustomMinimum) {
+            //    scvm = Shortcuts.FirstOrDefault(x => x.Command == command && (int)x.CommandId == commandId);
+            //} else {
+            //    scvm = Shortcuts.FirstOrDefault(x => x.CommandId == (int)commandId && x.ShortcutType == shortcutType && );
+            //}
 
             if (shortcutKeyString == null) {
                 //if assignment was canceled ignore but reset skl
@@ -118,8 +118,8 @@ namespace MpWpfApp {
                             if (smi == null || smi is Separator) {
                                 continue;
                             }
-                            string header = (smi as MpContextMenuItemViewModel).Header.ToString();
-                            (smi as MpContextMenuItemViewModel).InputGestureText = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.TagName == header).FirstOrDefault().ShortcutKeyString;
+                            string header = (smi as MpMenuItemViewModel).Header.ToString();
+                            (smi as MpMenuItemViewModel).InputGestureText = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.TagName == header).FirstOrDefault().ShortcutKeyString;
                         }
                     } else {
                         var scvm = Shortcuts.Where(x => x.ShortcutId == tagNum).FirstOrDefault();
@@ -253,99 +253,99 @@ namespace MpWpfApp {
                 var scl = await MpDb.GetItemsAsync<MpShortcut>();
                 foreach (var sc in scl) {
                     ICommand shortcutCommand = null;
-                    switch (sc.ShortcutId) {
-                        case 1:
+                    switch ((MpShortcutType)sc.ShortcutId) {
+                        case MpShortcutType.ShowMainWindow:
                             shortcutCommand = MpMainWindowViewModel.Instance.ShowWindowCommand;
                             break;
-                        case 2:
+                        case MpShortcutType.HideMainWindow:
                             shortcutCommand = MpMainWindowViewModel.Instance.HideWindowCommand;
                             break;
-                        case 3:
+                        case MpShortcutType.ToggleAppendMode:
                             shortcutCommand = MpAppModeViewModel.Instance.ToggleAppendModeCommand;
                             break;
-                        case 4:
+                        case MpShortcutType.ToggleAutoCopyMode:
                             shortcutCommand = MpAppModeViewModel.Instance.ToggleAutoCopyModeCommand;
                             break;
-                        case 5:
+                        case MpShortcutType.ToggleRightClickPasteMode:
                             //right click paste mode
                             shortcutCommand = MpAppModeViewModel.Instance.ToggleRightClickPasteCommand;
                             break;
-                        case 6:
+                        case MpShortcutType.PasteSelectedItems:
                             shortcutCommand = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
                             break;
-                        case 7:
+                        case MpShortcutType.DeleteSelectedItems:
                             shortcutCommand = MpClipTrayViewModel.Instance.DeleteSelectedClipsCommand;
                             break;
-                        case 8:
+                        case MpShortcutType.SelectNextItem:
                             shortcutCommand = MpClipTrayViewModel.Instance.SelectNextItemCommand;
                             break;
-                        case 9:
+                        case MpShortcutType.SelectPreviousItem:
                             shortcutCommand = MpClipTrayViewModel.Instance.SelectPreviousItemCommand;
                             break;
-                        case 10:
+                        case MpShortcutType.SelectAll:
                             shortcutCommand = MpClipTrayViewModel.Instance.SelectAllCommand;
                             break;
-                        case 11:
+                        case MpShortcutType.InvertSelection:
                             shortcutCommand = MpClipTrayViewModel.Instance.InvertSelectionCommand;
                             break;
-                        case 12:
+                        case MpShortcutType.BringSelectedToFront:
                             shortcutCommand = MpClipTrayViewModel.Instance.BringSelectedClipTilesToFrontCommand;
                             break;
-                        case 13:
+                        case MpShortcutType.SendSelectedToBack:
                             shortcutCommand = MpClipTrayViewModel.Instance.SendSelectedClipTilesToBackCommand;
                             break;
-                        case 14:
+                        case MpShortcutType.AssignShortcut:
                             shortcutCommand = MpClipTrayViewModel.Instance.AssignHotkeyCommand;
                             break;
-                        case 15:
+                        case MpShortcutType.ChangeColor:
                             shortcutCommand = MpClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand;
                             break;
-                        case 16:
+                        case MpShortcutType.SpeakSelectedItem:
                             shortcutCommand = MpClipTrayViewModel.Instance.SpeakSelectedClipsCommand;
                             break;
-                        case 17:
+                        case MpShortcutType.MergeSelectedItems:
                             shortcutCommand = MpClipTrayViewModel.Instance.MergeSelectedClipsCommand;
                             break;
-                        case 18:
+                        case MpShortcutType.Undo:
                             shortcutCommand = MpMainWindowViewModel.Instance.UndoCommand;
                             break;
-                        case 19:
+                        case MpShortcutType.Redo:
                             shortcutCommand = MpMainWindowViewModel.Instance.RedoCommand;
                             break;
-                        case 20:
+                        case MpShortcutType.EditContent:
                             shortcutCommand = MpClipTrayViewModel.Instance.EditSelectedContentCommand;
                             break;
-                        case 21:
+                        case MpShortcutType.EditTitle:
                             shortcutCommand = MpClipTrayViewModel.Instance.EditSelectedTitleCommand;
                             break;
-                        case 22:
+                        case MpShortcutType.Duplicate:
                             shortcutCommand = MpClipTrayViewModel.Instance.DuplicateSelectedClipsCommand;
                             break;
-                        case 23:
+                        case MpShortcutType.SendToEmail:
                             shortcutCommand = MpClipTrayViewModel.Instance.SendToEmailCommand;
                             break;
-                        case 24:
+                        case MpShortcutType.CreateQrCode:
                             shortcutCommand = MpClipTrayViewModel.Instance.CreateQrCodeFromSelectedClipsCommand;
                             break;
-                        case 25:
+                        case MpShortcutType.ToggleAppendLineMode:
                             shortcutCommand = MpAppModeViewModel.Instance.ToggleAppendLineModeCommand;
                             break;
-                        case 26:
+                        case MpShortcutType.ToggleListenToClipboard:
                             shortcutCommand = MpAppModeViewModel.Instance.ToggleIsAppPausedCommand;
                             break;
-                        case 27:
+                        case MpShortcutType.CopySelectedItems:
                             shortcutCommand = MpClipTrayViewModel.Instance.CopySelectedClipsCommand;
                             break;
-                        case 28:
+                        case MpShortcutType.ScrollToHome:
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollToHomeCommand;
                             break;
-                        case 29:
+                        case MpShortcutType.ScrollToEnd:
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollToEndCommand;
                             break;
-                        case 30:
+                        case MpShortcutType.ScrollUp:
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollUpCommand;
                             break;
-                        case 31:
+                        case MpShortcutType.ScrollDown:
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollDownCommand;
                             break;
                         default:

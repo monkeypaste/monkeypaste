@@ -175,11 +175,13 @@
     <Compile Include="Converters\MpBoolToScrollBarVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToColorConverter.cs" />
     <Compile Include="Converters\MpAbsoluteToRelativePathStringConverter.cs" />
+    <Compile Include="Converters\MpCommandToShortcutKeyStringConverter.cs" />
     <Compile Include="Converters\MpDbImageIdToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpDbImageIdToIconConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
-    <Compile Include="Converters\MpHexStringToIconConverter.cs" />
+    <Compile Include="Converters\MpShorcutIdToKeyStringConverter.cs" />
+    <Compile Include="Converters\MpStringHexToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
@@ -201,8 +203,8 @@
     <Compile Include="Converters\MpStringToThemeBrushConverter.cs" />
     <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
-    <Compile Include="Converters\MpStringToIconConverter.cs" />
-    <Compile Include="Converters\MpStringToBrushConverter.cs" />
+    <Compile Include="Converters\MpStringResourceToIconConverter.cs" />
+    <Compile Include="Converters\MpStringHexToBrushConverter.cs" />
     <Compile Include="Properties\DefaultUiStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -268,7 +270,6 @@
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\Styling\MpMeasurements.cs" />
     <Compile Include="Utils\BindingExtensions\MpMeasurementsBindingExtension.cs" />
-    <Compile Include="Utils\Styling\MpThemeColors.cs" />
     <Compile Include="Utils\System\Clipboard\MpPasteHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
@@ -285,7 +286,7 @@
     <Compile Include="Utils\System\WinApi.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
-    <Compile Include="Converters\MpStringToFlowDocumentConverter.cs" />
+    <Compile Include="Converters\MpStringRtfToFlowDocumentConverter.cs" />
     <Compile Include="Converters\MpVisibilityToBoolConverter.cs" />
     <Compile Include="Converters\MpImageSourceToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpIntToStringConverter.cs" />
@@ -313,11 +314,11 @@
     <Compile Include="ViewModels\MainWindow\Source\MpSourceViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Geometry\MpPointViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Geometry\MpRectViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Geometry\MpSizeViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\MpSystemColors.cs" />
+    <Compile Include="ViewModels\Reusable\MpThemeColors.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
     <Compile Include="ViewModels\Reusable\MpToggleButtonBaseViewModel.cs" />
     <Compile Include="Views\Base\MpIRectViewModel.cs" />
@@ -363,7 +364,7 @@
     <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarMenuView.xaml.cs">
       <DependentUpon>MpSidebarMenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\ContextMenu\Selector\MpContextMenuItemTemplateViewSelector.cs" />
+    <Compile Include="Views\Reusable\ContextMenu\Selector\MpMenuItemTemplateViewSelector.cs" />
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Selector\MpTagTileTemplateSelector.cs" />
     <Compile Include="ViewModels\Reusable\MessageBox\MpMessageBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />

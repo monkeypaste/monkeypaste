@@ -22,7 +22,11 @@ namespace MpWpfApp {
         AzureImageAnalysis
     }
 
-    public class MpAnalyticItemCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpAnalyticItemCollectionViewModel>, MpITreeItemViewModel  { //
+    public class MpAnalyticItemCollectionViewModel : 
+        MpViewModelBase, 
+        MpIMenuItemViewModel,
+        MpISingletonViewModel<MpAnalyticItemCollectionViewModel>, 
+        MpITreeItemViewModel  { //
         #region Properties
 
         #region View Models
@@ -41,45 +45,19 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<MpContextMenuItemViewModel> ContextMenuItems {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
-                if(MpIconCollectionViewModel.Instance == null) {
-                    return new ObservableCollection<MpContextMenuItemViewModel>();
+                List<MpMenuItemViewModel> subItems = Items.SelectMany(x => x.QuickActionPresetMenuItems).ToList();
+                if(subItems.Count > 0) {
+                    subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
-                var pmic = new List<MpContextMenuItemViewModel>();
-                foreach (var item in Items) {
-                    var imivm = new MpContextMenuItemViewModel() {
-                        Header = item.Title,
-                        IconId = item.IconId,
-                        SubItems = item.ContextMenuItems
-                    };
+                subItems.AddRange(Items.Select(x => x.MenuItemViewModel));
 
-                    imivm.SubItems.Add(
-                        new MpContextMenuItemViewModel() {
-                            Header = "Manage",
-                            Command = ManageItemCommand,
-                            CommandParameter = item.AnalyticItemId
-                        });
-
-                    pmic.Add(imivm);
-                }
-                //if(QuickActionContextMenuItems.Count > 0) {                    
-                //    pmic.InsertRange(0, QuickActionContextMenuItems);
-                //    pmic.Insert(QuickActionContextMenuItems.Count, new MpContextMenuItemViewModel());
-                //}
-                return new ObservableCollection<MpContextMenuItemViewModel>(pmic);
-            }
-        }
-
-        public ObservableCollection<MpContextMenuItemViewModel> QuickActionContextMenuItems {
-            get {
-                var qamivml = new List<MpContextMenuItemViewModel>();
-                foreach (var item in Items) {
-                    if (item.PresetViewModels.Any(x => x.IsQuickAction)) {
-                        qamivml.AddRange(item.PresetViewModels.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel));
-                    }
-                }
-                return new ObservableCollection<MpContextMenuItemViewModel>(qamivml);
+                return new MpMenuItemViewModel() {
+                    Header = @"_Analyze",
+                    IconResourceKey = Application.Current.Resources["BrainIcon"] as string,
+                    SubItems = subItems
+                };
             }
         }
 

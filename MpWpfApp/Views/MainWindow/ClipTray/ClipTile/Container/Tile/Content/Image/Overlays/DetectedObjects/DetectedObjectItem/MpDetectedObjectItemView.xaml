@@ -115,7 +115,7 @@
                          HorizontalContentAlignment="Center"
                          VerticalContentAlignment="Center"
                          Padding="5,0"
-                         local:MpHoverableExtension.ForegroundBrush="White"
+                         local:MpHoverableExtension.InactiveForegroundBrush="White"
                          local:MpHoverableExtension.HoverForegroundBrush="Red"
                          local:MpHoverableExtension.IsEnabled="True"
                          local:MpHoverableExtension.IsHovering="{Binding IsHovering,

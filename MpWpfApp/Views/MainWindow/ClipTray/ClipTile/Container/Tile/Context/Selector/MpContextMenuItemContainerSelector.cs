@@ -10,7 +10,7 @@ using MonkeyPaste;
 namespace MpWpfApp {
     public class MpContextMenuItemContainerSelector : ItemContainerTemplateSelector {
         public override DataTemplate SelectTemplate(object item, ItemsControl parentItemsControl) {
-            var cmivm = item as MpContextMenuItemViewModel;
+            var cmivm = item as MpMenuItemViewModel;
             if(cmivm == null) {
                 return null;
             }

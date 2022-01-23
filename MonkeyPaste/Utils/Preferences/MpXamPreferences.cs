@@ -6,6 +6,9 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpXamPreferences : MpIPreferenceIO {
+        public MpXamPreferences() {
+
+        }
         public bool Get(string key, bool defValue) {            
             return Preferences.Get(key, (bool)defValue);
         }

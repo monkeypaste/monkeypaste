@@ -8,228 +8,43 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
-
-    public class MpShortcut : MpDbModelBase {
-        #region Columns
-        [PrimaryKey, AutoIncrement]
-        [Column("pk_MpShortcutId")]
-        public override int Id { get; set; } = 0;
-
-        [Column("MpShortcutGuid")]
-        public new string Guid { get => base.Guid; set => base.Guid = value; }
-
-        //[Column("fk_MpCopyItemId")]
-        //[ForeignKey(typeof(MpCopyItem))]
-        //public int CopyItemId { get; set; } = 0;
-
-        //[Column("fk_MpAnalyticItemPresetId")]
-        //[ForeignKey(typeof(MpAnalyticItemPreset))]
-        //public int AnalyticItemPresetId { get; set; } = 0;
-
-        //[Column("fk_MpTagId")]
-        //[ForeignKey(typeof(MpTag))]
-        //public int TagId { get; set; } = 0;
-
-        [Column("fk_MpCommandId")]
-        public int CommandId { get; set; } = 0;
-
-        public string ShortcutName { get; set; } = string.Empty;
-        public string KeyString { get; set; } = string.Empty;
-        public string DefaultKeyString { get; set; } = string.Empty;
-
-        [Column("RoutingType")]
-        public int RouteType { get; set; } = 0;
-
-        [Column("e_ShortcutTypeId")]
-        public int ShortcutTypeId { get; set; } = 0;
-
-        #endregion
-
-        #region Fk Models
-
-        #endregion
-
-
-        #region Properties
-
-        [Ignore]
-        public Guid ShortcutGuid {
-            get {
-                if (string.IsNullOrEmpty(Guid)) {
-                    return System.Guid.Empty;
-                }
-                return System.Guid.Parse(Guid);
-            }
-            set {
-                Guid = value.ToString();
-            }
-        }
-
-        [Ignore]
-        public int ShortcutId {
-            get {
-                return Id;
-            }
-            set {
-                Id = value;
-            }
-        }
-
-        [Ignore]
-        public MpShortcutType ShortcutType {
-            get {
-                return (MpShortcutType)ShortcutTypeId;
-            }
-            set {
-                ShortcutTypeId = (int)value;
-            }
-        }
-
-        [Ignore]
-        public MpRoutingType RoutingType {
-            get {
-                return (MpRoutingType)RouteType;
-            }
-            set {
-                RouteType = (int)value;
-            }
-        }
-
-        [Ignore]
-        public List<List<MpWindowsKey>> KeyList {
-            get {
-                var keyList = new List<List<MpWindowsKey>>();
-                var combos = KeyString.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();
-                foreach (var c in combos) {
-                    var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
-                    keyList.Add(new List<MpWindowsKey>());
-                    foreach (var k in keys) {
-                        keyList[keyList.Count - 1].Add(ConvertStringToKey(k));
-                    }
-                }
-                return keyList;
-            }
-        }
-
-        #endregion
-
-        #region Private Variables
-        #endregion
-
-        #region Static Methods
-
-        public static async Task<MpShortcut> Create(
-            string name,
-            string keyString,
-            string defKeyString,
-            MpRoutingType routeType,
-            MpShortcutType shortcutType,
-            int commandId) {
-            var dupShortcut = await MpDataModelProvider.GetShortcut(shortcutType,commandId);
-            if (dupShortcut != null) {
-                dupShortcut = await MpDb.GetItemAsync<MpShortcut>(dupShortcut.Id);
-                return dupShortcut;
-            }
-            var newShortcut = new MpShortcut() {
-                ShortcutGuid = System.Guid.NewGuid(),
-                ShortcutName = name,
-                KeyString = keyString,
-                DefaultKeyString = defKeyString,
-                RoutingType = routeType,
-                ShortcutType = shortcutType,
-                CommandId = commandId
-            };
-
-            await newShortcut.WriteToDatabaseAsync();
-
-            return newShortcut;
-        }
-        #endregion
-
-        #region Public Methods
-        public MpShortcut() { }
-
-        //public MpShortcut(int comman, int tagId, string keyString, string shortcutName) : this() {
-        //    ShortcutName = shortcutName;
-        //    CopyItemId = copyItemId;
-        //    TagId = tagId;
-        //    KeyString = keyString;
-        //    RoutingType = TagId > 0 ? MpRoutingType.Internal : MpRoutingType.Direct;
-        //}
-
-        public void Reset() {
-            KeyString = DefaultKeyString;
-        }
-
-        public override string ToString() {
-            string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;
-            outStr += " " + KeyString;
-            return outStr;
-        }
-        #endregion
-
-        private string ConvertKeyToString(MpWindowsKey key) {
-            if (key == MpWindowsKey.LeftCtrl || key == MpWindowsKey.RightCtrl) {
-                return "Control";
-            }
-            if (key == MpWindowsKey.LeftAlt || key == MpWindowsKey.RightAlt) {
-                return "Alt";
-            }
-            if (key == MpWindowsKey.LeftShift || key == MpWindowsKey.RightShift) {
-                return "Shift";
-            }
-            return key.ToString();
-        }
-
-        private MpWindowsKey ConvertStringToKey(string keyStr) {
-            string lks = keyStr.ToLower();
-            if (lks == "control") {
-                return MpWindowsKey.LeftCtrl;
-            }
-            if (lks == "alt") {
-                return MpWindowsKey.LeftAlt;
-            }
-            if (lks == "shift") {
-                return MpWindowsKey.LeftShift;
-            }
-            if (lks == ";") {
-                return MpWindowsKey.Oem1;
-            }
-            if (lks == "`") {
-                return MpWindowsKey.Oem3;
-            }
-            if (lks == "'") {
-                return MpWindowsKey.OemQuotes;
-            }
-            if (lks == "-") {
-                return MpWindowsKey.OemMinus;
-            }
-            if (lks == "=") {
-                return MpWindowsKey.OemPlus;
-            }
-            if (lks == ",") {
-                return MpWindowsKey.OemComma;
-            }
-            if (lks == @"/") {
-                return MpWindowsKey.OemQuestion;
-            }
-            if (lks == ".") {
-                return MpWindowsKey.OemPeriod;
-            }
-            if (lks == "[") {
-                return MpWindowsKey.OemOpenBrackets;
-            }
-            if (lks == "]") {
-                return MpWindowsKey.Oem6;
-            }
-            if (lks == "|") {
-                return MpWindowsKey.Oem5;
-            }
-            if (lks == "PageDown") {
-                return MpWindowsKey.Next;
-            }
-            return (MpWindowsKey)Enum.Parse(typeof(MpWindowsKey), keyStr, true);
-        }
+    public enum MpShortcutType {
+        None = 0,
+        ShowMainWindow,
+        HideMainWindow,
+        ToggleAppendMode,
+        ToggleAutoCopyMode,
+        ToggleRightClickPasteMode,
+        PasteSelectedItems,
+        DeleteSelectedItems,
+        SelectNextItem,
+        SelectPreviousItem,
+        SelectAll,
+        InvertSelection,
+        BringSelectedToFront,
+        SendSelectedToBack,
+        AssignShortcut,
+        ChangeColor,
+        SpeakSelectedItem,
+        MergeSelectedItems,
+        Undo,
+        Redo,
+        EditContent,
+        EditTitle,
+        Duplicate,
+        SendToEmail,
+        CreateQrCode,
+        ToggleAppendLineMode,
+        ToggleListenToClipboard,
+        CopySelectedItems,
+        ScrollToHome,
+        ScrollToEnd,
+        ScrollUp,
+        ScrollDown, //remaining are data (not context) driven using commandId
+        PasteCopyItem,
+        SelectTag,
+        AnalyzeCopyItemWithPreset,
+        TriggerAction
     }
     public enum MpRoutingType {
         None = 0,
@@ -238,26 +53,6 @@ namespace MonkeyPaste {
         Bubble, //3 sendkey before
         Tunnel  //4 sendkey after
     }
-
-    public enum MpShortcutType {
-        None = 0,
-        ShowWindow,
-        HideWindow,
-        AppendMode,
-        AutoCopyMode,
-        RightClickPasteMode, 
-        PasteSelectedClip,
-        DeleteSelectedClip,
-        Search,
-        CustomMinimum, //used to differentiate type
-        PasteCopyItem, //10
-        SelectTag,
-        AnalyzeCopyItemWithPreset,
-        CutCopyItem,
-        CopyCopyItem,
-        DuplicateCopyItem
-    }
-
 
     public enum MpWindowsKey {
         //
@@ -1069,4 +864,227 @@ namespace MonkeyPaste {
         //     The key is used with another key to create a single combined character.
         DeadCharProcessed = 172
     }
+    public class MpShortcut : MpDbModelBase {
+        #region Columns
+        [PrimaryKey, AutoIncrement]
+        [Column("pk_MpShortcutId")]
+        public override int Id { get; set; } = 0;
+
+        [Column("MpShortcutGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        //[Column("fk_MpCopyItemId")]
+        //[ForeignKey(typeof(MpCopyItem))]
+        //public int CopyItemId { get; set; } = 0;
+
+        //[Column("fk_MpAnalyticItemPresetId")]
+        //[ForeignKey(typeof(MpAnalyticItemPreset))]
+        //public int AnalyticItemPresetId { get; set; } = 0;
+
+        //[Column("fk_MpTagId")]
+        //[ForeignKey(typeof(MpTag))]
+        //public int TagId { get; set; } = 0;
+
+        [Column("fk_MpCommandId")]
+        public int CommandId { get; set; } = 0;
+
+        public string ShortcutName { get; set; } = string.Empty;
+        public string KeyString { get; set; } = string.Empty;
+        public string DefaultKeyString { get; set; } = string.Empty;
+
+        [Column("RoutingType")]
+        public int RouteType { get; set; } = 0;
+
+        [Column("e_ShortcutTypeId")]
+        public int ShortcutTypeId { get; set; } = 0;
+
+        #endregion
+
+        #region Fk Models
+
+        #endregion
+
+
+        #region Properties
+
+        [Ignore]
+        public Guid ShortcutGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
+        [Ignore]
+        public int ShortcutId {
+            get {
+                return Id;
+            }
+            set {
+                Id = value;
+            }
+        }
+
+        [Ignore]
+        public MpShortcutType ShortcutType {
+            get {
+                return (MpShortcutType)ShortcutTypeId;
+            }
+            set {
+                ShortcutTypeId = (int)value;
+            }
+        }
+
+        [Ignore]
+        public MpRoutingType RoutingType {
+            get {
+                return (MpRoutingType)RouteType;
+            }
+            set {
+                RouteType = (int)value;
+            }
+        }
+
+        [Ignore]
+        public List<List<MpWindowsKey>> KeyList {
+            get {
+                var keyList = new List<List<MpWindowsKey>>();
+                var combos = KeyString.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();
+                foreach (var c in combos) {
+                    var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
+                    keyList.Add(new List<MpWindowsKey>());
+                    foreach (var k in keys) {
+                        keyList[keyList.Count - 1].Add(ConvertStringToKey(k));
+                    }
+                }
+                return keyList;
+            }
+        }
+
+        #endregion
+
+        #region Private Variables
+        #endregion
+
+        #region Static Methods
+
+        public static async Task<MpShortcut> Create(
+            string name,
+            string keyString,
+            string defKeyString,
+            MpRoutingType routeType,
+            MpShortcutType shortcutType,
+            int commandId) {
+            var dupShortcut = await MpDataModelProvider.GetShortcut(shortcutType,commandId);
+            if (dupShortcut != null) {
+                dupShortcut = await MpDb.GetItemAsync<MpShortcut>(dupShortcut.Id);
+                return dupShortcut;
+            }
+            var newShortcut = new MpShortcut() {
+                ShortcutGuid = System.Guid.NewGuid(),
+                ShortcutName = name,
+                KeyString = keyString,
+                DefaultKeyString = defKeyString,
+                RoutingType = routeType,
+                ShortcutType = shortcutType,
+                CommandId = commandId
+            };
+
+            await newShortcut.WriteToDatabaseAsync();
+
+            return newShortcut;
+        }
+        #endregion
+
+        #region Public Methods
+        public MpShortcut() { }
+
+        //public MpShortcut(int comman, int tagId, string keyString, string shortcutName) : this() {
+        //    ShortcutName = shortcutName;
+        //    CopyItemId = copyItemId;
+        //    TagId = tagId;
+        //    KeyString = keyString;
+        //    RoutingType = TagId > 0 ? MpRoutingType.Internal : MpRoutingType.Direct;
+        //}
+
+        public void Reset() {
+            KeyString = DefaultKeyString;
+        }
+
+        public override string ToString() {
+            string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;
+            outStr += " " + KeyString;
+            return outStr;
+        }
+        #endregion
+
+        private string ConvertKeyToString(MpWindowsKey key) {
+            if (key == MpWindowsKey.LeftCtrl || key == MpWindowsKey.RightCtrl) {
+                return "Control";
+            }
+            if (key == MpWindowsKey.LeftAlt || key == MpWindowsKey.RightAlt) {
+                return "Alt";
+            }
+            if (key == MpWindowsKey.LeftShift || key == MpWindowsKey.RightShift) {
+                return "Shift";
+            }
+            return key.ToString();
+        }
+
+        private MpWindowsKey ConvertStringToKey(string keyStr) {
+            string lks = keyStr.ToLower();
+            if (lks == "control") {
+                return MpWindowsKey.LeftCtrl;
+            }
+            if (lks == "alt") {
+                return MpWindowsKey.LeftAlt;
+            }
+            if (lks == "shift") {
+                return MpWindowsKey.LeftShift;
+            }
+            if (lks == ";") {
+                return MpWindowsKey.Oem1;
+            }
+            if (lks == "`") {
+                return MpWindowsKey.Oem3;
+            }
+            if (lks == "'") {
+                return MpWindowsKey.OemQuotes;
+            }
+            if (lks == "-") {
+                return MpWindowsKey.OemMinus;
+            }
+            if (lks == "=") {
+                return MpWindowsKey.OemPlus;
+            }
+            if (lks == ",") {
+                return MpWindowsKey.OemComma;
+            }
+            if (lks == @"/") {
+                return MpWindowsKey.OemQuestion;
+            }
+            if (lks == ".") {
+                return MpWindowsKey.OemPeriod;
+            }
+            if (lks == "[") {
+                return MpWindowsKey.OemOpenBrackets;
+            }
+            if (lks == "]") {
+                return MpWindowsKey.Oem6;
+            }
+            if (lks == "|") {
+                return MpWindowsKey.Oem5;
+            }
+            if (lks == "PageDown") {
+                return MpWindowsKey.Next;
+            }
+            return (MpWindowsKey)Enum.Parse(typeof(MpWindowsKey), keyStr, true);
+        }
+    }
+    
 }

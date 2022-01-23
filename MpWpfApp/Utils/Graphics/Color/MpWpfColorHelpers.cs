@@ -1,13 +1,48 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
-
+using System.Linq;
 namespace MpWpfApp {
     public static class MpWpfColorHelpers {
+        public static ICommand SelectCustomColorCommand => new RelayCommand<object>(
+            (args) => {
+                var argParts = args as object[];
+                string selectedColor = argParts[0] as string;
+                ICommand confirmSelectedColorCommand = argParts[1] as ICommand;
+                ShowColorDialog(selectedColor,confirmSelectedColorCommand);
+            });
+
+        public static Brush ShowColorDialog(string selectedColorHexStr, ICommand confirmCommand = null) {
+            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+            cd.AllowFullOpen = true;
+            cd.ShowHelp = true;
+            cd.Color = selectedColorHexStr.ToWinFormsColor();
+            //MpPreferences.UserCustomColorIdxArray = new int[0];
+
+            cd.CustomColors = MpPreferences.UserCustomColorIdxArray.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Select(x=>Convert.ToInt32(x)).ToArray();
+            cd.FullOpen = cd.CustomColors.Length > 0;
+            var mw = (MpMainWindow)Application.Current.MainWindow;
+            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
+            // Update the text box color if the user clicks OK 
+            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                MpPreferences.UserCustomColorIdxArray = string.Join(",", cd.CustomColors);
+                if (confirmCommand == null) {
+                    return cd.Color.ToSolidColorBrush();
+                } else {
+                    confirmCommand.Execute(cd.Color.ToHex());
+                }
+            }
+            return null;
+        }
+
         public static double ColorDistance(Color e1, Color e2) {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)
             long rmean = ((long)e1.R + (long)e2.R) / 2;

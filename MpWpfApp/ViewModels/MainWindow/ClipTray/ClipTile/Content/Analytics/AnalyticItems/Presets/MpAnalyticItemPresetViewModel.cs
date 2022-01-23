@@ -16,7 +16,13 @@ using Newtonsoft.Json;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemPresetViewModel : MpViewModelBase<MpAnalyticItemViewModel>, MpIUserIconViewModel, MpIMatchTrigger, MpIShortcutCommand, MpITreeItemViewModel, ICloneable {
+    public class MpAnalyticItemPresetViewModel : 
+        MpViewModelBase<MpAnalyticItemViewModel>, 
+        MpIMenuItemViewModel,
+        MpIUserIconViewModel, 
+        MpIMatchTrigger, 
+        MpIShortcutCommand, 
+        MpITreeItemViewModel, ICloneable {
         #region Properties
 
         #region View Models
@@ -35,23 +41,15 @@ namespace MpWpfApp {
 
         public MpAnalyticItemParameterViewModel SelectedParameter => ParameterViewModels.FirstOrDefault(x => x.IsSelected);
 
-        public MpContextMenuItemViewModel ContextMenuItemViewModel {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
-                return new MpContextMenuItemViewModel() {
+                return new MpMenuItemViewModel() {
                     Header = Label,
                     Command = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
                     CommandParameter = AnalyticItemPresetId,
                     IconId = IconId,
                     InputGestureText = ShortcutKeyString
                 };
-                        //header: Label,
-                        //command: MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
-                        //commandParameter: Preset.Id,
-                        //isChecked: null,
-                        //bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId).IconBitmapSource,
-                        //subItems: null,
-                        //inputGestureText: ShortcutKeyString,
-                        //bgBrush: null);
             }
         }
 

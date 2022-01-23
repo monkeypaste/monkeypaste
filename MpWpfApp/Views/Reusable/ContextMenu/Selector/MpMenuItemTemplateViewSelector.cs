@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpContextMenuItemTemplateViewSelector : DataTemplateSelector {
+    public class MpMenuItemTemplateViewSelector : DataTemplateSelector {
         public DataTemplate MenuItemTemplate { get; set; }
         public DataTemplate SeparatorTemplate { get; set; }
         public DataTemplate ColorPalleteTemplate { get; set; }
@@ -14,7 +14,7 @@ namespace MpWpfApp {
                 return null;
             }
 
-            var cmivm = item as MpContextMenuItemViewModel;
+            var cmivm = item as MpMenuItemViewModel;
             if(cmivm.IsSeparator) {
                 return SeparatorTemplate;
             }
