@@ -1251,7 +1251,7 @@ namespace MpWpfApp {
                         var addBmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/add2.png"));
                         b.Background = new ImageBrush(addBmpSrc);
                         MouseButtonEventHandler bMouseLeftButtonUp = (object o, MouseButtonEventArgs e3) => {
-                            var result = MpWpfColorHelpers.ShowColorDialog(MpWpfColorHelpers.GetRandomBrushColor().ToHex());
+                            var result = new MpWpfCustomColorChooserMenu().ShowCustomColorMenu(MpWpfColorHelpers.GetRandomBrushColor().ToHex(),null);
                             if (result != null) {
                                 b.Tag = result;
                             }

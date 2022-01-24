@@ -9,8 +9,8 @@
                      mc:Ignorable="d"
                      d:DesignHeight="50"
                      d:DesignWidth="800"
-                    local:MpHoverableExtension.IsEnabled="True"
-                    local:MpHoverableExtension.IsHovering="{Binding IsHovering}"
+                     local:MpHoverableExtension.IsEnabled="True"
+                     local:MpHoverableExtension.IsHovering="{Binding IsHovering}"
                      d:DataContext="{d:DesignInstance Type=local:MpSearchCriteriaItemViewModel,
                                                       IsDesignTimeCreatable=False}">
     <DockPanel LastChildFill="False">
@@ -38,7 +38,8 @@
                     Width="25"
                     BorderThickness="2"
                     local:MpHoverableExtension.IsEnabled="True"
-                    local:MpHoverableExtension.IsHovering="{Binding IsOverAddCriteriaButton, Mode=TwoWay}"
+                    local:MpHoverableExtension.IsHovering="{Binding IsOverAddCriteriaButton,
+                                                                    Mode=TwoWay}"
                     Style="{StaticResource SemiTransparentButton}"
                     Command="{Binding Parent.AddSearchCriteriaItemCommand}">
                 <Border CornerRadius="2"
@@ -48,7 +49,7 @@
                     <Image Stretch="Fill"
                            Source="{Binding .,
                                             Source={StaticResource PlusIcon},
-                                            Converter={StaticResource StringToImageSourceConverter}}" />
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}" />
                 </Border>
             </Button>
             <Button x:Name="RemoveCriteriaItemButton"
@@ -58,7 +59,8 @@
                     Width="25"
                     BorderThickness="2"
                     local:MpHoverableExtension.IsEnabled="True"
-                    local:MpHoverableExtension.IsHovering="{Binding IsOverRemoveCriteriaButton, Mode=TwoWay}"
+                    local:MpHoverableExtension.IsHovering="{Binding IsOverRemoveCriteriaButton,
+                                                                    Mode=TwoWay}"
                     Style="{StaticResource SemiTransparentButton}"
                     Command="{Binding Parent.RemoveSearchCriteriaItemCommand}"
                     CommandParameter="{Binding}">
@@ -69,7 +71,7 @@
                     <Image Stretch="Fill"
                            Source="{Binding .,
                                             Source={StaticResource MinusIcon},
-                                            Converter={StaticResource StringToImageSourceConverter}}" />
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}" />
                 </Border>
             </Button>
         </StackPanel>

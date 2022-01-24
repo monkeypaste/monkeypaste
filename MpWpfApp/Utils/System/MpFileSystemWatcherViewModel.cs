@@ -1,9 +1,12 @@
 ﻿using MonkeyPaste;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
@@ -11,7 +14,7 @@ namespace MpWpfApp {
         void OnFileSystemItemChanged(object sender, FileSystemEventArgs e);
     }
 
-    public class MpFileSystemWatcher : MpISingletonViewModel<MpFileSystemWatcher>, IDisposable, MpIMatchTrigger {
+    public class MpFileSystemWatcherViewModel : MpISingletonViewModel<MpFileSystemWatcherViewModel>, IDisposable, MpIMatcherTriggerViewModel {
         #region Private Variables
 
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
@@ -19,13 +22,51 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Properties
+
+        #region MpIMatcherTriggerViewModel Implementation
+
+        #region MpIUserIcon Implementation
+
+        public bool IsReadOnly => true;
+        public async Task<MpIcon> Get() {
+            await Task.Delay(1);
+            throw new NotImplementedException();
+        }
+
+        public async Task Set(MpIcon icon) {
+            await Task.Delay(1);
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        public void RegisterMatcher(MpMatcherViewModel mvm) {
+            AddWatcher(mvm.MatchData, mvm);
+            MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Title} matcher");
+        }
+
+        public void UnregisterMatcher(MpMatcherViewModel mvm) {
+            RemoveWatcher(mvm.MatchData);
+            MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Title} matcher");
+        }
+
+        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => new ObservableCollection<MpMatcherViewModel>(
+                    MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
+                        x.Matcher.MatcherTriggerType == MpMatcherTriggerType.WatchFileChanged ||
+                         x.Matcher.MatcherTriggerType == MpMatcherTriggerType.WatchFolderChange).ToList());
+
+        #endregion
+
+        #endregion
+
         #region Constructors
 
-        private static MpFileSystemWatcher _instance;
-        public static MpFileSystemWatcher Instance => _instance ?? (_instance = new MpFileSystemWatcher());
+        private static MpFileSystemWatcherViewModel _instance;
+        public static MpFileSystemWatcherViewModel Instance => _instance ?? (_instance = new MpFileSystemWatcherViewModel());
 
 
-        public MpFileSystemWatcher() {
+        public MpFileSystemWatcherViewModel() {
             
         }
 
@@ -39,15 +80,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public void RegisterMatcher(MpMatcherViewModel mvm) {
-            AddWatcher(mvm.MatchData, mvm);
-            MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Title} matcher");
-        }
-
-        public void UnregisterMatcher(MpMatcherViewModel mvm) {
-            RemoveWatcher(mvm.MatchData);
-            MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Title} matcher");
-        }
+        
 
         public void AddWatcher(string path, MpIFileSystemEventHandler handler = null) {
             if(!File.Exists(path) && !Directory.Exists(path)) {
@@ -166,7 +199,7 @@ namespace MpWpfApp {
             }
         }
 
-        ~MpFileSystemWatcher() {
+        ~MpFileSystemWatcherViewModel() {
             Dispose(false);
         }
 

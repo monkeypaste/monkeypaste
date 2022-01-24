@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpMatcherCollectionView.xaml
     /// </summary>
-    public partial class MpMatcherCollectionView : MpUserControl<MpAnalyticItemPresetViewModel> {
+    public partial class MpMatcherCollectionView : MpUserControl<MpIMatcherTriggerViewModel> {
         public MpMatcherCollectionView() {
             InitializeComponent();
         }

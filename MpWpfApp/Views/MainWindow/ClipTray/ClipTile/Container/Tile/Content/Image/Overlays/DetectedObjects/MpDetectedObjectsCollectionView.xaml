@@ -11,7 +11,7 @@
                                                       IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
-    <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol" 
+    <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   Visibility="{Binding Parent.Parent.IsSelected,
@@ -59,22 +59,24 @@
                                  IsReadOnly="{Binding IsNameReadOnly}" />
                     </Button>
                 </ContentControl>-->
-                
-                <!--<local:MpDetectedObjectItemView Width="100"
+
+            <!--<local:MpDetectedObjectItemView Width="100"
                         Height="100"  DataContext="{Binding}" />
                 <Ellipse Fill="Red" Width="50" Height="50"/>
             </DataTemplate>-->
         </ItemsControl.Resources>
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <Canvas x:Name="ClipTileImageDetectedObjectsCanvas" 
+                <Canvas x:Name="ClipTileImageDetectedObjectsCanvas"
                         IsItemsHost="True" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemContainerStyle>
             <Style TargetType="ContentPresenter">
-                <Setter Property="Canvas.Left" Value="{Binding X}" />
-                <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                <Setter Property="Canvas.Left"
+                        Value="{Binding X}" />
+                <Setter Property="Canvas.Top"
+                        Value="{Binding Y}" />
             </Style>
         </ItemsControl.ItemContainerStyle>
         <ItemsControl.ItemTemplate>

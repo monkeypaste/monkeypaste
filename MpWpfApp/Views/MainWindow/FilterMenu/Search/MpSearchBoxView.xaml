@@ -158,7 +158,7 @@
                             Visibility="{Binding ClearTextButtonVisibility}"
                             Click="ClearTextBoxButton_Click">
                         <Button.Background>
-                            <ImageBrush ImageSource="{Binding ClearButtonImagePath, Converter={StaticResource StringToImageSourceConverter}}" />
+                            <ImageBrush ImageSource="{Binding ClearButtonImagePath, Converter={StaticResource StringResourceToImageSourceConverter}}" />
                         </Button.Background>
                     </Button>
                     <!--  Search Navigation Border  -->

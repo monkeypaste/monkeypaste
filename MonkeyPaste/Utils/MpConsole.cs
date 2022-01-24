@@ -88,6 +88,7 @@ namespace MonkeyPaste {
         public static void WriteLine(object line, params object[] args) {
             line = line == null ? string.Empty : line;
             string str = line.ToString();
+            str = $"[{DateTime.Now.ToString()}] {str}";
             if (args != null && args.Length > 0) {
                 str = string.Format(str, args);
             } 
@@ -112,6 +113,8 @@ namespace MonkeyPaste {
             if(args != null) {
                 line += args.ToString();
             }
+
+            line = $"[{DateTime.Now.ToString()}] {line}";
             //args = args == null ? string.Empty : args;
             string outStr = string.Empty;
             Console.WriteLine("");

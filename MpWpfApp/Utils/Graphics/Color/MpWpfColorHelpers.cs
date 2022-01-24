@@ -12,36 +12,18 @@ using System.Windows.Media;
 using System.Linq;
 namespace MpWpfApp {
     public static class MpWpfColorHelpers {
-        public static ICommand SelectCustomColorCommand => new RelayCommand<object>(
-            (args) => {
-                var argParts = args as object[];
-                string selectedColor = argParts[0] as string;
-                ICommand confirmSelectedColorCommand = argParts[1] as ICommand;
-                ShowColorDialog(selectedColor,confirmSelectedColorCommand);
-            });
+        //private static MpWpfCustomColorChooserMenu _CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
 
-        public static Brush ShowColorDialog(string selectedColorHexStr, ICommand confirmCommand = null) {
-            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
-            cd.AllowFullOpen = true;
-            cd.ShowHelp = true;
-            cd.Color = selectedColorHexStr.ToWinFormsColor();
-            //MpPreferences.UserCustomColorIdxArray = new int[0];
+        //public static ICommand SelectCustomColorCommand => new RelayCommand<object>(
+        //    (args) => {
+        //        _CustomColorChooserMenu.SelectCustomColorCommand.Execute(args);
+        //    });
 
-            cd.CustomColors = MpPreferences.UserCustomColorIdxArray.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Select(x=>Convert.ToInt32(x)).ToArray();
-            cd.FullOpen = cd.CustomColors.Length > 0;
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
-            // Update the text box color if the user clicks OK 
-            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                MpPreferences.UserCustomColorIdxArray = string.Join(",", cd.CustomColors);
-                if (confirmCommand == null) {
-                    return cd.Color.ToSolidColorBrush();
-                } else {
-                    confirmCommand.Execute(cd.Color.ToHex());
-                }
-            }
-            return null;
-        }
+        //public static Brush ShowColorDialog(string selectedColorHexStr, ICommand confirmCommand = null) {
+        //    string hexStr = _CustomColorChooserMenu.ShowCustomColorMenu(selectedColorHexStr, confirmCommand);
+
+        //    return string.IsNullOrEmpty(hexStr) ? null : hexStr.ToSolidColorBrush();
+        //}
 
         public static double ColorDistance(Color e1, Color e2) {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)

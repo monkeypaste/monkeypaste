@@ -10,7 +10,7 @@ namespace MpWpfApp {
     public static class MpColorExtensions {
         public static Brush ToSolidColorBrush(this string hex, double opacity = 1.0) {
             if (!hex.IsStringHexColor()) {
-                return Brushes.Red;
+                return Brushes.Transparent;
             }
             var br = (Brush)new SolidColorBrush(hex.ToWinMediaColor());
             br.Opacity = opacity;
@@ -19,14 +19,14 @@ namespace MpWpfApp {
 
         public static Color ToWinMediaColor(this string hex) {
             if (!hex.IsStringHexColor()) {
-                return Colors.Red;
+                return Colors.Transparent;
             }
             return (Color)ColorConverter.ConvertFromString(hex);
         }
 
         public static System.Drawing.Color ToWinFormsColor(this string hex) {
             if (!hex.IsStringHexColor()) {
-                return System.Drawing.Color.Red;
+                return System.Drawing.Color.Transparent;
             }
             var scb = hex.ToSolidColorBrush();
             return scb.ToWinFormsColor();

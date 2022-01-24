@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpMatcherCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpMatcherCollectionViewModel> {
+    public class MpMatcherCollectionViewModel : 
+        MpViewModelBase, 
+        MpISingletonViewModel<MpMatcherCollectionViewModel> {
         #region Private Variables
 
         #endregion
@@ -44,7 +46,7 @@ namespace MpWpfApp {
         public async Task Init() {
             var matchers = await MpDb.GetItemsAsync<MpMatcher>();
 
-            foreach (var m in matchers) {
+            foreach (var m in matchers.Where(x=>x.ParentMatcherId == 0).OrderBy(x=>x.SortOrderIdx)) {
                 var mvm = await CreateMatcherViewModel(m);
                 Matchers.Add(mvm);
             }
@@ -63,16 +65,16 @@ namespace MpWpfApp {
         }
 
         public void LinkAllTriggers() {
-            Matchers.ForEach(x => x.LinkTriggers());
+            Matchers.ForEach(x => x.Enable());
         }
 
         public void UnlinkAllTriggers() {
-            Matchers.ForEach(x => x.UnlinkTriggers());
+            Matchers.ForEach(x => x.Disable());
         }
 
-        public string GetUniqueMatcherName() {
+        public string GetUniqueMatcherName(string prefix = "Matcher") {
             int uniqueIdx = 1;
-            string uniqueName = $"Matcher";
+            string uniqueName = string.IsNullOrEmpty(prefix) ? $"Matcher": prefix;
             string testName = string.Format(
                                         @"{0}{1}",
                                         uniqueName.ToLower(),
@@ -116,7 +118,7 @@ namespace MpWpfApp {
 
         private void PerformCommand(MpMatchCommand mc, MpMatcher m, object arg) {
             switch(mc.MatcherCommandType) {
-                case MpMatchActionType.Analyze:
+                case MpMatcherActionType.Analyze:
 
                     break;
             }
@@ -127,17 +129,53 @@ namespace MpWpfApp {
         #region Commands
 
         public ICommand AddMatcherCommand => new RelayCommand<object>(
-             (args) => {
-                if(args is MpAnalyticItemPresetViewModel aipvm) {
+             async (args) => {
+                 if (args is MpAnalyticItemPresetViewModel aipvm) {
+                     var nm = await MpMatcher.Create(
+                         MpMatcherType.None,
+                         GetUniqueMatcherName(),
+                         string.Empty,
+                         string.Empty,
+                         MpMatcherTriggerType.None,
+                         MpMatcherActionType.Analyze,
+                         aipvm.AnalyticItemPresetId,
+                         MpMatcherActionType.None,
+                         0);
 
-                }
-            }, (args) => args != null);
+                     var nmvm = await CreateMatcherViewModel(nm);
+
+                     Matchers.Add(nmvm);
+                     aipvm.OnPropertyChanged(nameof(aipvm.MatcherViewModels));
+                } else if (args is MpMatcherViewModel mvm) {
+                     var nm = await MpMatcher.Create(
+                         MpMatcherType.None,
+                         GetUniqueMatcherName(),
+                         string.Empty,
+                         string.Empty,
+                         MpMatcherTriggerType.ParentMatchOutput,
+                         MpMatcherActionType.None,
+                         mvm.MatcherId,
+                         MpMatcherActionType.None,
+                         0,
+                         mvm.MatcherId,
+                         mvm.MatcherViewModels.Count);
+
+                     await mvm.InitializeAsync(mvm.Matcher);
+                     mvm.OnPropertyChanged(nameof(mvm.MatcherViewModels));
+                 }
+             }, (args) => args != null);
 
         public ICommand DeleteMatcherCommand => new RelayCommand<object>(
             async (args) => {
                 if(args is MpMatcherViewModel mvm) {
                     Matchers.Remove(mvm);
                     await mvm.Matcher.DeleteFromDatabaseAsync();
+                    if(mvm.IsEnabled) {
+                        mvm.Disable();
+                    }
+                    if(mvm.ParentMatcherViewModel != null) {
+                        await mvm.ParentMatcherViewModel.InitializeAsync(mvm.ParentMatcherViewModel.Matcher);
+                    }
                 }
             }, (args) => args != null);
         #endregion

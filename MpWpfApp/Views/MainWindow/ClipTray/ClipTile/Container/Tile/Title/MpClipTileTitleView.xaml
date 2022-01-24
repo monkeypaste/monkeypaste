@@ -178,7 +178,7 @@
                                Height="15"
                                Stretch="Uniform"
                                Source="{Binding Parent.PinIconSourcePath,
-                                                Converter={StaticResource StringToImageSourceConverter}}" />
+                                                Converter={StaticResource StringResourceToImageSourceConverter}}" />
                     </Button>
                     <Ellipse x:Name="SourceMatchEllipse"
                              Visibility="Hidden"

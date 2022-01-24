@@ -28,7 +28,7 @@ namespace MpWpfApp {
     public class MpClipTrayViewModel : 
         MpViewModelBase, 
         MpISingletonViewModel<MpClipTrayViewModel>, 
-        MpIMatchTrigger, 
+        MpIMatcherTriggerViewModel, 
         MpIMenuItemViewModel {
         #region Private Variables      
 
@@ -130,9 +130,9 @@ namespace MpWpfApp {
 
         public MpClipTileViewModel ExpandedTile => Items.FirstOrDefault(x => x.IsExpanded);
 
-        public ObservableCollection<MpMatcherViewModel> Matchers => new ObservableCollection<MpMatcherViewModel>(
+        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => new ObservableCollection<MpMatcherViewModel>(
                     MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
-                        x.TriggerType == MpMatchTriggerType.ContentItemAdded).ToList());
+                        x.TriggerType == MpMatcherTriggerType.ContentItemAdded).ToList());
 
         
 
@@ -353,10 +353,7 @@ namespace MpWpfApp {
                             }
                         },
                         new MpMenuItemViewModel() {IsSeparator = true},
-                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(
-                            PrimaryItem.PrimaryItem.CopyItemColorBrush.ToHex(),
-                            ChangeSelectedClipsColorCommand,
-                            MpWpfColorHelpers.SelectCustomColorCommand),
+                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(PrimaryItem.PrimaryItem),
                         new MpMenuItemViewModel() {IsSeparator = true},
                         new MpMenuItemViewModel() {
                             Header = @"Pin To _Collection",
@@ -2068,16 +2065,8 @@ namespace MpWpfApp {
         }
 
         public ICommand ChangeSelectedClipsColorCommand => new RelayCommand<object>(
-            async (brushStr) => {
-                if (brushStr == null) {
-                    return;
-                }
-                var b = ((string)brushStr).ToSolidColorBrush();
-                foreach (var scivm in SelectedContentItemViewModels) {
-                    scivm.CopyItemColorBrush = b;
-                    scivm.TitleSwirlViewModel.ForceBrush(b);
-                    await scivm.CopyItem.WriteToDatabaseAsync();
-                }
+            async (hexStr) => {
+                PrimaryItem.PrimaryItem.SetColorCommand.Execute(hexStr.ToString());
             });
 
         public ICommand CopySelectedClipsCommand => new RelayCommand(
@@ -2261,6 +2250,7 @@ namespace MpWpfApp {
 
         public ICommand SendToEmailCommand => new RelayCommand(
             () => {
+                // for gmail see https://stackoverflow.com/a/60741242/105028
                 string pt = string.Join(Environment.NewLine, PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
                 MpHelpers.OpenUrl(
                     string.Format("mailto:{0}?subject={1}&body={2}",

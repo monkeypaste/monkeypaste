@@ -9,12 +9,12 @@
              WidthRequest="{Binding PageWidth}">
     <ContentPage.Content>
         <CollectionView HorizontalOptions="Center"
-                        VerticalOptions="Fill"                        
+                        VerticalOptions="Fill"
                         ItemsSource="{Binding CopyItemTagAssociatedItemViewModels}"
                         Margin="10,50,10,50"
                         SelectionMode="Single">
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" 
+                <LinearItemsLayout Orientation="Vertical"
                                    SnapPointsAlignment="Start"
                                    SnapPointsType="Mandatory" />
             </CollectionView.ItemsLayout>

@@ -14,8 +14,17 @@ namespace MpWpfApp {
                 if(string.IsNullOrEmpty(valueStr)) {
                     return new Image();
                 }
+                var bmpSrc = (BitmapSource)new BitmapImage(new Uri(value.ToString()));
+                
+                if(parameter is string paramStr) {
+                    if(string.IsNullOrEmpty(paramStr)) {
+                        //do nothing
+                    } else if(!paramStr.IsStringHexColor()) {
+                        bmpSrc = MpWpfImagingHelper.TintBitmapSource(bmpSrc, paramStr.ToWinMediaColor(), true);
+                    }
+                }
                 var icon = new Image();
-                icon.Source = (BitmapSource)new BitmapImage(new Uri(value.ToString()));
+                icon.Source = bmpSrc;
                 icon.Source.Freeze();
                 return icon;
             }

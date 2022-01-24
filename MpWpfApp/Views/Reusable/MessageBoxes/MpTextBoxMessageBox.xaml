@@ -54,7 +54,8 @@
                         Margin="0,0,30.429,27.714"
                         MinWidth="60"
                         Height="30"
-                        Click="btn2_Click" Width="95" />
+                        Click="btn2_Click"
+                        Width="95" />
                 <TextBlock x:Name="tbMessageBoxCaption"
                            FontWeight="SemiBold"
                            Margin="30,23,10,0"
@@ -85,8 +86,9 @@
                        VerticalAlignment="Top"
                        Stretch="Fill"
                        Width="100"
-                       Source="{Binding ., Source={StaticResource SaveIcon},
-                                        Converter={StaticResource StringToImageSourceConverter}}" />
+                       Source="{Binding .,
+                                        Source={StaticResource SaveIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}" />
                 <Button x:Name="btnMessageBoxClose"
                         FontWeight="SemiBold"
                         Content="Fermer"

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,11 +15,8 @@ using Microsoft.Win32;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public interface MpIUserIconViewModel {
-        bool IsReadOnly { get; }
-        Task<MpIcon> GetIcon();
-        Task SetIcon(MpIcon icon);
-    }
+
+
     public class MpIconCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpIconCollectionViewModel> {
         #region Properties
 
@@ -96,48 +96,61 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ChangeIconCommand => new RelayCommand<object>(
+        public ICommand SelectImagePathCommand => new RelayCommand<object>(
             async (args) => {
-                FrameworkElement fe = args as FrameworkElement;
-                var uivm = fe.DataContext as MpIUserIconViewModel;
-                MpIcon icon = await uivm.GetIcon();
-                var iconColorChooserMenuItem = new MenuItem();
-                var iconContextMenu = new ContextMenu();
-                iconContextMenu.Items.Add(iconColorChooserMenuItem);
-                MpHelpers.SetColorChooserMenuItem(
-                    iconContextMenu,
-                    iconColorChooserMenuItem,
-                    async (s1, e1) => {
-                        var brush = (Brush)((Border)s1).Tag;
-                        var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
-                        bmpSrc = MpWpfImagingHelper.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
-                        icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
-                        await icon.CreateOrUpdateBorder(brush.ToHex());
-                        await uivm.SetIcon(icon);
-                    }
-                );
-                var iconImageChooserMenuItem = new MenuItem();
-                iconImageChooserMenuItem.Header = "Choose Image...";
-                iconImageChooserMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/image_icon.png")) };
-                iconImageChooserMenuItem.Click += async(s, e) => {
-                    var openFileDialog = new OpenFileDialog() {
-                        Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
-                        Title = "Select Image for Icon",
-                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                    };
-                    bool? openResult = openFileDialog.ShowDialog();
-                    if (openResult != null && openResult.Value) {
-                        string imagePath = openFileDialog.FileName;
-                        var bmpSrc = (BitmapSource)new BitmapImage(new Uri(imagePath));
-                        icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
-                        await icon.CreateOrUpdateBorder();
-                        await uivm.SetIcon(icon);
-                    }
+                var uivm = args as MpIUserIconViewModel;
+
+                var openFileDialog = new OpenFileDialog() {
+                    Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
+                    Title = "Select Image for Icon",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
                 };
-                iconContextMenu.Items.Add(iconImageChooserMenuItem);
-                fe.ContextMenu = iconContextMenu;
-                iconContextMenu.PlacementTarget = fe;
-                iconContextMenu.IsOpen = true;
+                bool? openResult = openFileDialog.ShowDialog();
+                if (openResult != null && openResult.Value) {
+                    string imagePath = openFileDialog.FileName;
+                    var bmpSrc = (BitmapSource)new BitmapImage(new Uri(imagePath));
+
+                    var icon = await uivm.GetIcon();
+                    icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
+                    await icon.CreateOrUpdateBorder();
+                    uivm.SetIconCommand.Execute(icon);
+                }
+            });
+
+        public ICommand ChangeIconCommand => new RelayCommand<object>(
+             (args) => {
+                FrameworkElement fe = args as FrameworkElement;
+                MpMenuItemViewModel mivm = new MpMenuItemViewModel();
+
+                if (fe.DataContext is MpIUserColorViewModel ucvm) {
+                    string hexColor = ucvm.GetColor();
+                    mivm.SubItems.Add(MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(ucvm));
+                }
+
+                if (fe.DataContext is MpIUserIconViewModel uivm) {
+                    mivm.SubItems.Add(
+                        new MpMenuItemViewModel() {
+                            Header = "Choose Image...",
+                            IconResourceKey = Application.Current.Resources["ImageIcon"] as string,
+                            Command = SelectImagePathCommand,
+                            CommandParameter = uivm
+                        });
+                }
+
+                fe.ContextMenu = new MpContextMenuView();
+                fe.ContextMenu.DataContext = mivm;
+                fe.ContextMenu.PlacementTarget = fe;
+                fe.ContextMenu.IsOpen = true;
+            },(args)=> {
+                if(args !=  null) {
+                    if(args is MpIUserIconViewModel uivm) {
+                        return !uivm.IsReadOnly;
+                    }
+                    if (args is MpIUserColorViewModel ucvm) {
+                        return !ucvm.IsReadOnly;
+                    }
+                }
+                return false;
             });
 
         #endregion

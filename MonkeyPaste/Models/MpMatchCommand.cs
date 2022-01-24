@@ -50,14 +50,14 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpMatchActionType MatcherCommandType {
-            get => (MpMatchActionType)MatcherCommandTypeId;
+        public MpMatcherActionType MatcherCommandType {
+            get => (MpMatcherActionType)MatcherCommandTypeId;
             set => MatcherCommandTypeId = (int)value;
         }
 
         #endregion
 
-        public static async Task<MpMatchCommand> Create(MpMatchActionType matchType, int mrId, int coid) {            
+        public static async Task<MpMatchCommand> Create(MpMatcherActionType matchType, int mrId, int coid) {            
             var mr = new MpMatchCommand() {
                 MatcherCommandGuid = System.Guid.NewGuid(),
                 MatcherCommandType = matchType,

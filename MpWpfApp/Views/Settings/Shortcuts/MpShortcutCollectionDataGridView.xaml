@@ -50,7 +50,7 @@
                                    Height="15"
                                    Source="{Binding .,
                                                     Source={StaticResource HotkeyActiveIcon},
-                                                    Converter={StaticResource StringToImageSourceConverter}}" />
+                                                    Converter={StaticResource StringResourceToImageSourceConverter}}" />
                         </Button>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>

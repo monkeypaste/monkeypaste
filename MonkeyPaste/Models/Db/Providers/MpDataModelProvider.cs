@@ -761,6 +761,15 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region MpMatchers
+
+        public static async Task<List<MpMatcher>> GetChildMatchers(int matcherId) {
+            string query = $"select * from MpMatcher where fk_ParentMatcherId=?";
+            var result = await MpDb.QueryAsync<MpMatcher>(query,matcherId);
+            return result;
+        }
+        #endregion
+
         #endregion
 
         #endregion

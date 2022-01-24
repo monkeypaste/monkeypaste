@@ -19,7 +19,10 @@ using MonkeyPaste;
 using PropertyChanged;
 
 namespace MpWpfApp {
-    public class MpContentItemViewModel : MpViewModelBase<MpClipTileViewModel>, MpIShortcutCommand {
+    public class MpContentItemViewModel : 
+        MpViewModelBase<MpClipTileViewModel>, 
+        MpIShortcutCommand,
+        MpIUserColorViewModel {
         #region Private Variables
         private DispatcherTimer _timer;
 
@@ -572,6 +575,21 @@ namespace MpWpfApp {
                     CopyItem.ItemData = value;
                     OnPropertyChanged(nameof(CopyItemData));
                     OnPropertyChanged(nameof(CurrentSize));
+                }
+            }
+        }
+
+        public string CopyItemColor {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.ItemColor;
+            }
+            set {
+                if (CopyItemColor != value) {
+                    CopyItem.ItemColor = value;
+                    OnPropertyChanged(nameof(CopyItemColor));
                 }
             }
         }
@@ -1148,6 +1166,21 @@ namespace MpWpfApp {
             IsEditingTitle = !IsEditingTitle;
         }
 
+        public string GetColor() {
+            return CopyItem.ItemColor;
+        }
+
+        public ICommand SetColorCommand => new RelayCommand<string>(
+            async (args) => {
+                CopyItemColor = args as string;
+                await CopyItem.WriteToDatabaseAsync();
+
+                CopyItemColorBrush = CopyItemColor.ToSolidColorBrush();
+                TitleSwirlViewModel.ForceBrush(CopyItemColorBrush);
+
+                MpContextMenuView.CloseMenu();
+            });
+
         public ICommand ChangeColorCommand => new RelayCommand<Brush>(
             async (b) => {
                 CopyItem.ItemColor = b.ToHex();
@@ -1176,6 +1209,8 @@ namespace MpWpfApp {
                     });
             }
         }
+
+        public bool IsReadOnly { get; }
 
         #endregion
 

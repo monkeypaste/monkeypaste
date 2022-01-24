@@ -18,7 +18,7 @@ namespace MpWpfApp {
         MpITreeItemViewModel, 
         MpIShortcutCommand, 
         MpIHasNotification, 
-        MpIMatchTrigger {
+        MpIMatcherTriggerViewModel {
 
         #region Private Variables
         private int _tagClipCount = 0;
@@ -34,9 +34,9 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = new ObservableCollection<MpITreeItemViewModel>();
 
-        public ObservableCollection<MpMatcherViewModel> Matchers => new ObservableCollection<MpMatcherViewModel>(
+        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => new ObservableCollection<MpMatcherViewModel>(
                     MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
-                        x.TriggerActionType == MpMatchActionType.Classify && x.Matcher.TriggerActionObjId == TagId).ToList());
+                        x.TriggerActionType == MpMatcherActionType.Classify && x.Matcher.TriggerActionObjId == TagId).ToList());
 
         public void UnregisterMatcher(MpMatcherViewModel mvm) {
             OnCopyItemLinked -= mvm.OnMatcherTrigggered;

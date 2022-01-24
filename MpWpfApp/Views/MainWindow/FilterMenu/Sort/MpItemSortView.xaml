@@ -50,7 +50,7 @@
                                     Converter={StaticResource BoolFlipConverter}}"
                 Command="{Binding ToggleSortOrderCommand}">
             <Image Source="{Binding SortImagePath,
-                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
                    Stretch="Fill" />
         </Button>
     </StackPanel>

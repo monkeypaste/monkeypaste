@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         Lexical = 512 // like azure cognitive search?
     }
 
-    public enum MpMatchTriggerType {
+    public enum MpMatcherTriggerType {
         None = 0,
         ContentItemAdded, 
         WatchFileChanged,
@@ -29,7 +29,7 @@ namespace MonkeyPaste {
         ParentMatchOutput
     }
 
-    public enum MpMatchActionType {
+    public enum MpMatcherActionType {
         None = 0,
         Classify, //tagid
         Analyze, //analyticItemPresetId
@@ -71,12 +71,13 @@ namespace MonkeyPaste {
 
         public int MatchCount { get; set; } = 0;
 
-        public string Title { get; set; } = string.Empty;
+        public string Label { get; set; } = string.Empty;
 
         public string MatchData { get; set; } = string.Empty;
 
         public string IsMatchPropertyPath { get; set; } = string.Empty;
 
+        public int ReadOnly { get; set; } = 0;
         #endregion
 
         #region Properties
@@ -95,20 +96,26 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
+        public bool IsReadOnly {
+            get => ReadOnly == 1;
+            set => ReadOnly = value ? 1 : 0;
+        }
+
+        [Ignore]
         public MpMatcherType MatcherType {
             get => (MpMatcherType)MatcherTypeId;
             set => MatcherTypeId = (int)value;
         }
 
         [Ignore]
-        public MpMatchTriggerType TriggerType {
-            get => (MpMatchTriggerType)MatchTriggerTypeId;
+        public MpMatcherTriggerType MatcherTriggerType {
+            get => (MpMatcherTriggerType)MatchTriggerTypeId;
             set => MatchTriggerTypeId = (int)value;
         }
 
         [Ignore]
-        public MpMatchActionType TriggerActionType {
-            get => (MpMatchActionType)TriggerActionTypeId;
+        public MpMatcherActionType MatcherActionType {
+            get => (MpMatcherActionType)TriggerActionTypeId;
             set => TriggerActionTypeId = (int)value;
         }
 
@@ -126,32 +133,32 @@ namespace MonkeyPaste {
             string matchPropertyPath,
             string matchData,
 
-            MpMatchTriggerType trigger,            
+            MpMatcherTriggerType trigger,            
 
-            MpMatchActionType onTriggerAction,
+            MpMatcherActionType onTriggerAction,
             int onTriggerActionObjId,
 
-            MpMatchActionType isMatchAction,
+            MpMatcherActionType isMatchAction,
             int isMatchTargetObjId,
             int parentMatcherId = 0,
             int sortOrderIdx = 0) {
 
             string iconStr = null;
             switch(trigger) {
-                case MpMatchTriggerType.ContentItemAdded:
+                case MpMatcherTriggerType.ContentItemAdded:
                     iconStr = MpBase64Images.Instance.ClipboardIcon;
                     break;
-                case MpMatchTriggerType.ContentItemAddedToTag:
+                case MpMatcherTriggerType.ContentItemAddedToTag:
                     iconStr = MpBase64Images.Instance.TagIcon;
                     break;
-                case MpMatchTriggerType.WatchFolderChange:
-                case MpMatchTriggerType.WatchFileChanged:
+                case MpMatcherTriggerType.WatchFolderChange:
+                case MpMatcherTriggerType.WatchFileChanged:
                     iconStr = MpBase64Images.Instance.FolderChangedIcon;
                     break;
-                case MpMatchTriggerType.Shortcut:
+                case MpMatcherTriggerType.Shortcut:
                     iconStr = MpBase64Images.Instance.JoystickUnset;
                     break;
-                case MpMatchTriggerType.ParentMatchOutput:
+                case MpMatcherTriggerType.ParentMatchOutput:
                     iconStr = MpBase64Images.Instance.ChainIcon;
                     break;
             }
@@ -164,12 +171,12 @@ namespace MonkeyPaste {
                 MatcherGuid = System.Guid.NewGuid(),
 
                 MatcherType = matchType,
-                Title = title,
+                Label = title,
                 IsMatchPropertyPath = matchPropertyPath,
                 MatchData = matchData,
 
-                TriggerType = trigger,
-                TriggerActionType = onTriggerAction,
+                MatcherTriggerType = trigger,
+                MatcherActionType = onTriggerAction,
                 TriggerActionObjId = onTriggerActionObjId,
 
                 //IsMatchActionType = isMatchAction,

@@ -102,13 +102,15 @@
                                                 Cursor="Hand"
                                                 Background="Transparent"
                                                 Template="{StaticResource SearchButtonControlTemplate}"
-                                                Command="{Binding ChangeIconCommand, Source={x:Static local:MpIconCollectionViewModel.Instance}}"
+                                                Command="{Binding ChangeIconCommand,
+                                                                  Source={x:Static local:MpIconCollectionViewModel.Instance}}"
                                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                             <Image Width="20"
                                                    Height="20"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"
-                                                   Source="{Binding AvatarId, Converter={StaticResource DbImageIdToBitmapSourceConverter}}" />
+                                                   Source="{Binding AvatarId,
+                                                                    Converter={StaticResource DbImageIdToBitmapSourceConverter}}" />
                                         </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

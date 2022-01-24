@@ -51,14 +51,14 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpMatchTriggerType MatchableEventType {
-            get => (MpMatchTriggerType)MatchableEventTypeId;
+        public MpMatcherTriggerType MatchableEventType {
+            get => (MpMatcherTriggerType)MatchableEventTypeId;
             set => MatchableEventTypeId = (int)value;
         }
 
         #endregion
 
-        public static async Task<MpMatchableEvent> Create(MpMatchTriggerType matchType, int mrId) {
+        public static async Task<MpMatchableEvent> Create(MpMatcherTriggerType matchType, int mrId) {
             var mr = new MpMatchableEvent() {
                 MatchableEventGuid = System.Guid.NewGuid(),
                 MatchableEventType = matchType,

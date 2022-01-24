@@ -416,7 +416,7 @@ namespace MpWpfApp {
 
         public ICommand HideWindowCommand => new RelayCommand<object>(
             async (args) => {
-                if (IsMainWindowLocked || IsResizing || IsMainWindowClosing) {
+                if (IsMainWindowLocked || IsResizing || IsMainWindowClosing || IsShowingDialog) {
                     return;
                 }
 

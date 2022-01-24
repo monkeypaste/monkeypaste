@@ -1,4 +1,5 @@
 ﻿using Azure;
+using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 using System;
 using System.Collections.Generic;
@@ -8,16 +9,23 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MpWpfApp {
 
-    public interface MpIMatchTrigger {
+    public interface MpIMatcherTriggerViewModel {
         void RegisterMatcher(MpMatcherViewModel mvm);
         void UnregisterMatcher(MpMatcherViewModel mvm);
-        //ObservableCollection<MpMatcherViewModel> Matchers { get; }
+
+        ObservableCollection<MpMatcherViewModel> MatcherViewModels { get; }
     }
 
-    public class MpMatcherViewModel : MpViewModelBase<MpMatcherCollectionViewModel>, MpIFileSystemEventHandler, MpITreeItemViewModel, MpIMatchTrigger {
+    public class MpMatcherViewModel : 
+        MpViewModelBase<MpMatcherCollectionViewModel>, 
+        MpIFileSystemEventHandler, 
+        MpITreeItemViewModel,
+        MpIMenuItemViewModel,
+        MpIMatcherTriggerViewModel {
         #region Private Variables
 
         private Regex _regEx = null;
@@ -28,7 +36,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public ObservableCollection<string> TriggerTypes { get; set; } = new ObservableCollection<string>(typeof(MpMatchTriggerType).EnumToLabels("Select Trigger"));
+        public ObservableCollection<string> TriggerTypes { get; set; } = new ObservableCollection<string>(typeof(MpMatcherTriggerType).EnumToLabels("Select Trigger"));
 
         public int SelectedTriggerTypeIdx {
             get {
@@ -36,13 +44,13 @@ namespace MpWpfApp {
             }
             set {
                 if((int)TriggerType != value) {
-                    TriggerType = (MpMatchTriggerType)value;
+                    TriggerType = (MpMatcherTriggerType)value;
                     OnPropertyChanged(nameof(SelectedTriggerTypeIdx));
                 }
             }
         }
 
-        public ObservableCollection<string> TriggerActionTypes { get; set; } = new ObservableCollection<string>(typeof(MpMatchActionType).EnumToLabels("Select Trigger Action"));
+        public ObservableCollection<string> TriggerActionTypes { get; set; } = new ObservableCollection<string>(typeof(MpMatcherActionType).EnumToLabels("Select Trigger Action"));
         
         public int SelectedTriggerActionTypeIdx {
             get {
@@ -50,7 +58,7 @@ namespace MpWpfApp {
             }
             set {
                 if ((int)TriggerActionType != value) {
-                    TriggerActionType = (MpMatchActionType)value;
+                    TriggerActionType = (MpMatcherActionType)value;
                     OnPropertyChanged(nameof(SelectedTriggerActionTypeIdx));
                 }
             }
@@ -58,25 +66,42 @@ namespace MpWpfApp {
 
         public MpMatcherViewModel ParentMatcherViewModel { get; set; } = null;
 
-        public MpMenuItemViewModel MatcherContextMenuItemViewModel {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
                 var cmvml = FindChildren();
 
                 return new MpMenuItemViewModel() {
                     Header = Title,
                     IconId = IconId,
-                    SubItems = FindChildren().Select(x => x.MatcherContextMenuItemViewModel).ToList()
+                    SubItems = FindChildren().Select(x => x.MenuItemViewModel).ToList()
                 };
-                        //header: Title,
-                        //command: null,
-                        //commandParameter: null,
-                        //isChecked: null,
-                        //bmpSrc: MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId).IconBitmapSource,
-                        //subItems: cmvml.Count == 0 ? null : new ObservableCollection<MpMenuItemViewModel>(
-                        //                                    cmvml.Select(x=>x.MatcherContextMenuItemViewModel)),
-                        //bgBrush: null);
             }
         }
+        
+        private ObservableCollection<MpMatcherViewModel> _matcherViewModels;
+        public ObservableCollection<MpMatcherViewModel> MatcherViewModels {
+            get {
+                if(_matcherViewModels == null) {
+                    _matcherViewModels = new ObservableCollection<MpMatcherViewModel>();
+                }
+                if(Parent == null) {
+                    return _matcherViewModels;
+                }
+                //to maintain any collection changed handlers only add/remove matchers if they do/don't exist
+                var cmvml = Parent.Matchers.Where(x => x.ParentMatcherId == MatcherId).ToList();
+                foreach(var cmvm in cmvml) {
+                    if(!_matcherViewModels.Contains(cmvm)) {
+                        _matcherViewModels.Add(cmvm);
+                    }
+                }
+                var matchersToRemove = _matcherViewModels.Where(x => !cmvml.Any(y => y.MatcherId == x.MatcherId)).ToList();
+                for (int i = 0; i < matchersToRemove.Count; i++) {
+                    _matcherViewModels.Remove(matchersToRemove[i]);
+                }
+                return _matcherViewModels;
+            }
+        }
+
         #endregion
 
         #region MpITreeItemViewModel Implementation
@@ -87,11 +112,50 @@ namespace MpWpfApp {
 
         public MpITreeItemViewModel ParentTreeItem => ParentMatcherViewModel;
 
-        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>();
+        public ObservableCollection<MpITreeItemViewModel> Children => 
+                        new ObservableCollection<MpITreeItemViewModel>(MatcherViewModels.Cast<MpITreeItemViewModel>());
+
+        #endregion
+
+        #region MpIUserIcon Implementation
+
+        public async Task<MpIcon> Get() {
+            var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+            return icon;
+        }
+
+        public async Task Set(MpIcon icon) {
+            Matcher.IconId = icon.Id;
+            await Matcher.WriteToDatabaseAsync();
+            OnPropertyChanged(nameof(IconId));
+        }
+
+        #endregion
+
+        #region State
+
+        public bool IsRootMatcher => ParentMatcherId == 0;
+
+        public bool IsEnabled { get; set; } = false;
 
         #endregion
 
         #region Model
+
+        public bool IsReadOnly {
+            get {
+                if (Matcher == null) {
+                    return false;
+                }
+                return Matcher.IsReadOnly;
+            }
+            set {
+                if (IsReadOnly != value) {
+                    Matcher.IsReadOnly = value;
+                    OnPropertyChanged(nameof(IsReadOnly));
+                }
+            }
+        }
 
         public int TriggerActionObjId {
             get {
@@ -123,31 +187,31 @@ namespace MpWpfApp {
             }
         }
 
-        public MpMatchTriggerType TriggerType {
+        public MpMatcherTriggerType TriggerType {
             get {
                 if(Matcher == null) {
-                    return MpMatchTriggerType.None;
+                    return MpMatcherTriggerType.None;
                 }
-                return Matcher.TriggerType;
+                return Matcher.MatcherTriggerType;
             }
             set {
                 if(TriggerType != value) {
-                    Matcher.TriggerType = value;
+                    Matcher.MatcherTriggerType = value;
                     OnPropertyChanged(nameof(TriggerType));
                 }
             }
         }
 
-        public MpMatchActionType TriggerActionType {
+        public MpMatcherActionType TriggerActionType {
             get {
                 if (Matcher == null) {
-                    return MpMatchActionType.None;
+                    return MpMatcherActionType.None;
                 }
-                return Matcher.TriggerActionType;
+                return Matcher.MatcherActionType;
             }
             set {
                 if (TriggerActionType != value) {
-                    Matcher.TriggerActionType = value;
+                    Matcher.MatcherActionType = value;
                     OnPropertyChanged(nameof(TriggerActionType));
                 }
             }
@@ -158,11 +222,11 @@ namespace MpWpfApp {
                 if (Matcher == null) {
                     return null;
                 }
-                return Matcher.Title;
+                return Matcher.Label;
             }
             set {
                 if (MatchData != value) {
-                    Matcher.Title = value;
+                    Matcher.Label = value;
                     OnPropertyChanged(nameof(Title));
                 }
             }
@@ -272,42 +336,55 @@ namespace MpWpfApp {
             IsBusy = true;
 
             Matcher = m;
-            await Task.Delay(1);
+
+            var cml = await MpDataModelProvider.GetChildMatchers(MatcherId);
+
+            foreach(var cm in cml.OrderBy(x=>x.SortOrderIdx)) {
+                var dupCheck = Parent.Matchers.FirstOrDefault(x => x.MatcherId == cm.Id);
+                if (dupCheck != null) {
+                    Parent.Matchers.Remove(dupCheck);
+                }
+                var cmvm = await Parent.CreateMatcherViewModel(cm);
+                cmvm.ParentMatcherViewModel = this;
+                Parent.Matchers.Add(cmvm);
+            }
+
+            OnPropertyChanged(nameof(MatcherViewModels));
 
             IsBusy = false;
         }
 
-        public void LinkTriggers() {
-            switch (Matcher.TriggerType) {
-                case MpMatchTriggerType.ContentItemAdded:
+        public void Enable() {
+            switch (Matcher.MatcherTriggerType) {
+                case MpMatcherTriggerType.ContentItemAdded:
                     MpClipTrayViewModel.Instance.RegisterMatcher(this);
                     break;
-                case MpMatchTriggerType.ContentItemAddedToTag:
+                case MpMatcherTriggerType.ContentItemAddedToTag:
                     var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagId == TriggerActionObjId);
                     if(ttvm != null) {
                         ttvm.RegisterMatcher(this);
                     }
                     break;
-                case MpMatchTriggerType.Shortcut:
+                case MpMatcherTriggerType.Shortcut:
                     var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == TriggerActionObjId);
                     if(scvm != null) {
                         scvm.RegisterMatcher(this);
                     }
                     break;
-                case MpMatchTriggerType.WatchFileChanged:
-                case MpMatchTriggerType.WatchFolderChange:
+                case MpMatcherTriggerType.WatchFileChanged:
+                case MpMatcherTriggerType.WatchFolderChange:
                     Task.Run(async () => {
                         var ci = await MpDb.GetItemAsync<MpCopyItem>(TriggerActionObjId);
                         if(ci != null) {
                             if(ci.Source.App.UserDeviceId == MpPreferences.ThisUserDevice.Id) {
                                 //only add filesystem watchers for this device
                                 MatchData = ci.ItemData.ToString();
-                                MpFileSystemWatcher.Instance.RegisterMatcher(this);
+                                MpFileSystemWatcherViewModel.Instance.RegisterMatcher(this);
                             }                            
                         }
                     });
                     break;
-                case MpMatchTriggerType.ParentMatchOutput:
+                case MpMatcherTriggerType.ParentMatchOutput:
                     var pmvm = Parent.Matchers.FirstOrDefault(x => x.MatcherId == ParentMatcherId);
                     if (pmvm != null) {
                         ParentMatcherViewModel = pmvm;
@@ -321,12 +398,18 @@ namespace MpWpfApp {
                     MatchData, 
                     RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
             }
+
+            MatcherViewModels.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Enable());
+
+            IsEnabled = true;
         }
 
-        public void UnlinkTriggers() {
-
+        public void Disable() {
+            // TODO reverse enable
+            MatcherViewModels.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Disable());
+            IsEnabled = false;
         }
-
+        
         #endregion
 
         #region MpIMatchTrigger Implementation
@@ -380,6 +463,19 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Protected Methods
+
+        #region Db Event Handlers
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if(e is MpMatcher m && MatcherViewModels.Any(x=>x.MatcherId == m.Id)) {
+               
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region Private Methods
 
         public void OnMatcherTrigggered(object sender, MpCopyItem e) {
@@ -392,7 +488,7 @@ namespace MpWpfApp {
             }
             Task.Run(async () => {
                 switch (TriggerActionType) {
-                    case MpMatchActionType.Analyze:
+                    case MpMatcherActionType.Analyze:
                         var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Matcher.TriggerActionObjId);
                         object[] args = new object[] { aipvm, arg as MpCopyItem };
                         aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
@@ -403,12 +499,12 @@ namespace MpWpfApp {
 
                         OnMatch?.Invoke(this, aipvm.Parent.LastResultContentItem);
                         break;
-                    case MpMatchActionType.Classify:
+                    case MpMatcherActionType.Classify:
                         var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x=>x.TagId == Matcher.TriggerActionObjId);
                         await ttvm.AddContentItem((arg as MpCopyItem).Id);
                         OnMatch?.Invoke(this, arg);
                         break;
-                    case MpMatchActionType.Compare:
+                    case MpMatcherActionType.Compare:
                         // NOTE always case insensitive
 
                         object matchVal = arg.GetPropertyValue(IsMatchPropertyPath);
@@ -457,5 +553,21 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Commands
+
+        public ICommand ToggleIsEnabledCommand => new RelayCommand(
+             () => {
+                if(IsEnabled) {
+                     Disable();
+                } else {
+                     Enable();
+                 }
+            });
+
+        public ICommand AddChildMatcherCommand => new RelayCommand(
+              () => {
+                  Parent.AddMatcherCommand.Execute(this);
+             },Parent != null);
+        #endregion
     }
 }

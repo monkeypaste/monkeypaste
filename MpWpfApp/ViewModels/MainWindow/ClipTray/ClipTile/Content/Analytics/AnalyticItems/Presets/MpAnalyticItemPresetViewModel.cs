@@ -19,8 +19,8 @@ namespace MpWpfApp {
     public class MpAnalyticItemPresetViewModel : 
         MpViewModelBase<MpAnalyticItemViewModel>, 
         MpIMenuItemViewModel,
-        MpIUserIconViewModel, 
-        MpIMatchTrigger, 
+        MpIMatcherTriggerViewModel, 
+        MpIUserIconViewModel,
         MpIShortcutCommand, 
         MpITreeItemViewModel, ICloneable {
         #region Properties
@@ -57,9 +57,9 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = null;
 
-        public ObservableCollection<MpMatcherViewModel> PresetMatchers => new ObservableCollection<MpMatcherViewModel>(
+        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => new ObservableCollection<MpMatcherViewModel>(
                     MpMatcherCollectionViewModel.Instance.Matchers.Where(x=>
-                        x.Matcher.TriggerActionType == MpMatchActionType.Analyze && x.Matcher.TriggerActionObjId == AnalyticItemPresetId).ToList());
+                        x.Matcher.MatcherActionType == MpMatcherActionType.Analyze && x.Matcher.TriggerActionObjId == AnalyticItemPresetId).ToList());
 
         #endregion
 
@@ -183,6 +183,12 @@ namespace MpWpfApp {
                 }
                 return Preset.IconId;
             }
+            set {
+                if(IconId != value) {
+                    Preset.IconId = value;
+                    OnPropertyChanged(nameof(IconId));
+                }
+            }
         }
 
         public int AnalyticItemPresetId {
@@ -262,7 +268,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(ShortcutViewModel));
             OnPropertyChanged(nameof(ParameterViewModels));
             OnPropertyChanged(nameof(HasAnyParamValueChanged));
-            OnPropertyChanged(nameof(PresetMatchers));
+            OnPropertyChanged(nameof(MatcherViewModels));
             ParameterViewModels.ForEach(x => x.Validate());
             HasModelChanged = false;
 
@@ -340,13 +346,13 @@ namespace MpWpfApp {
             await Task.Delay(1);
             return Preset.Icon;
         }
+        public ICommand SetIconCommand => new RelayCommand<object>(
+            async (args) => {
+                Preset.Icon = args as MpIcon;
+                IconId = Preset.Icon.Id;
+                await Preset.WriteToDatabaseAsync();
+            });
 
-        public async Task SetIcon(MpIcon icon) {
-            Preset.Icon = icon;
-            Preset.IconId = icon.Id;
-            await Preset.WriteToDatabaseAsync();
-            OnPropertyChanged(nameof(IconId));
-        }
         #endregion
 
         #region Protected Methods
@@ -414,7 +420,7 @@ namespace MpWpfApp {
                         Parent.PresetViewModels.Where(x => x != this).ForEach(x => x.IsEditingMatchers = false);
                         ManageMatchersCommand.Execute(null);
                     }
-                    OnPropertyChanged(nameof(PresetMatchers));
+                    OnPropertyChanged(nameof(MatcherViewModels));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingMatchers));
                     break;
                 case nameof(HasModelChanged):

@@ -20,7 +20,7 @@ namespace MpWpfApp {
                 new MpBootstrappedItem(typeof(MpThemeColors)),
 
                 new MpBootstrappedItem(typeof(MpMeasurements)),
-                new MpBootstrappedItem(typeof(MpFileSystemWatcher)),
+                new MpBootstrappedItem(typeof(MpFileSystemWatcherViewModel)),
 
                 new MpBootstrappedItem(typeof(MpCursorViewModel)),
 
@@ -65,9 +65,6 @@ namespace MpWpfApp {
                 await _items[i].Register();
             }
 
-
-            MpPreferences.UseSpellCheck = false;
-            MpPreferences.IsTrialExpired = false;
             MpProcessHelper.MpProcessManager.Start(
                 MpPreferences.FallbackProcessPath,
                 MpAppCollectionViewModel.Instance.AppViewModels.Select(x => x.AppPath).ToArray(),

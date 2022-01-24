@@ -16,26 +16,22 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
-    /// <summary>
-    /// Interaction logic for MpContentContextMenuView.xaml
-    /// </summary>
+    
     public partial class MpContextMenuView : ContextMenu {
+        private static MpContextMenuView _CurrentContextMenu;
+
+        public static void CloseMenu() {
+            if(_CurrentContextMenu == null) {
+                return;
+            }
+            _CurrentContextMenu.IsOpen = false;
+        }
         public MpContextMenuView() {
             InitializeComponent();
         }
 
-        private void ClipTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
-        }
-
-        private async void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
-            await PrepareContextMenu();
-        }
-
-        private async Task PrepareContextMenu() {
-            await Task.Delay(1);
-        }
-
-        private void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
+        private void ContextMenuView_Loaded(object sender, RoutedEventArgs e) {
+            _CurrentContextMenu = sender as MpContextMenuView;
         }
     }
 }

@@ -7,6 +7,9 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpStringHexToBrushConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            if(value.GetType() != typeof(string) || !value.ToString().IsStringHexColor()) {
+                return Brushes.Transparent;
+            }
             var b = (Brush)new BrushConverter().ConvertFrom(value.ToString());
             if(parameter is string paramStr) {
                 double opacity = 1.0;

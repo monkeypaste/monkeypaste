@@ -22,7 +22,7 @@ namespace MpWpfApp {
         object CommandParameter { get; }
     }
 
-    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, MpIMatchTrigger {
+    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, MpIMatcherTriggerViewModel {
         #region Properties        
 
         #region View Models
@@ -53,9 +53,9 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<MpMatcherViewModel> Matchers => new ObservableCollection<MpMatcherViewModel>(
+        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => new ObservableCollection<MpMatcherViewModel>(
                     MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
-                        x.TriggerType == MpMatchTriggerType.ContentItemAdded).ToList());
+                        x.TriggerType == MpMatcherTriggerType.ContentItemAdded).ToList());
 
         
 

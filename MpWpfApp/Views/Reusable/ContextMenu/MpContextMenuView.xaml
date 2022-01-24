@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              xmlns:local="clr-namespace:MpWpfApp"
-             Loaded="ClipTile_ContextMenu_Loaded"
+             Loaded="ContextMenuView_Loaded"
              ItemsSource="{Binding SubItems}"
              UsesItemContainerTemplate="True"
              ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"

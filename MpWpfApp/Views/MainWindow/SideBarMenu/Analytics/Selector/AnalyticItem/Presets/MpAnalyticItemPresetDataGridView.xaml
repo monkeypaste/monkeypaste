@@ -127,7 +127,7 @@
                                     <Image Width="20"
                                            Height="20"
                                            Source="{Binding .,
-                                                            Converter={StaticResource StringToImageSourceConverter},
+                                                            Converter={StaticResource StringResourceToImageSourceConverter},
                                                             Source={StaticResource SlidersIcon}}" />
                                 </ToggleButton>
                             </DataTemplate>
@@ -151,7 +151,7 @@
                                     <Image Width="20"
                                            Height="20"
                                            Source="{Binding .,
-                                                            Converter={StaticResource StringToImageSourceConverter},
+                                                            Converter={StaticResource StringResourceToImageSourceConverter},
                                                             Source={StaticResource BoltIcon}}" />
                                 </ToggleButton>
                             </DataTemplate>
@@ -168,7 +168,7 @@
                                     <Image Width="20"
                                            Height="20"
                                            Source="{Binding .,
-                                                            Converter={StaticResource StringToImageSourceConverter},
+                                                            Converter={StaticResource StringResourceToImageSourceConverter},
                                                             Source={StaticResource ExecuteIcon}}" />
                                 </Button>
                             </DataTemplate>
@@ -187,7 +187,7 @@
                                     <Image Width="20"
                                            Height="20"
                                            Source="{Binding .,
-                                                            Converter={StaticResource StringToImageSourceConverter},
+                                                            Converter={StaticResource StringResourceToImageSourceConverter},
                                                             Source={StaticResource TrashCanIcon}}" />
                                 </Button>
                             </DataTemplate>
@@ -204,7 +204,7 @@
                     Command="{Binding CreateNewPresetCommand}">
                 <DockPanel>
                     <Image Source="{Binding .,
-                                            Converter={StaticResource StringToImageSourceConverter},
+                                            Converter={StaticResource StringResourceToImageSourceConverter},
                                             Source={StaticResource AddIcon}}"
                            DockPanel.Dock="Left"
                            Width="15"

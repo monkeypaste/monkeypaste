@@ -100,7 +100,7 @@
                         <DockPanel>
                             <Image Source="{Binding .,
                                                     Source={StaticResource AddIcon},
-                                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
                                    DockPanel.Dock="Left"
                                    Width="20"
                                    Height="20" />
@@ -232,7 +232,7 @@
                         <DockPanel>
                             <Image Source="{Binding .,
                                                     Source={StaticResource AddIcon},
-                                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
                                    DockPanel.Dock="Left"
                                    Width="20"
                                    Height="20" />

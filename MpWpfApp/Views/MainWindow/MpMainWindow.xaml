@@ -82,7 +82,7 @@
                             Template="{StaticResource SearchButtonControlTemplate}">
                         <Image Source="{Binding .,
                                                 Source={StaticResource CogIcon},
-                                                Converter={StaticResource StringToImageSourceConverter}}"
+                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     </Button>
@@ -98,7 +98,7 @@
                                   CommandParameter="{StaticResource True}"
                                   Template="{StaticResource LockToggleButtonControlTemplate}">
                         <Image Source="{Binding Source={StaticResource LockIcon},
-                                                Converter={StaticResource StringToImageSourceConverter}}"
+                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     </ToggleButton>

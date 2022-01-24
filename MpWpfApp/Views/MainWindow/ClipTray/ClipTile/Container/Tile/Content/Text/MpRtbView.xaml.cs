@@ -721,12 +721,12 @@ namespace MpWpfApp {
                                         hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
                                         hl.IsEnabled = true;
                                         Action showChangeColorDialog = () => {
-                                            var result = MpWpfColorHelpers.ShowColorDialog(linkText);
+                                            var result = new MpWpfCustomColorChooserMenu().ShowCustomColorMenu(linkText,null);
                                             if (result != null) {
                                                 var run = new Run(result.ToString());
                                                 hl.Inlines.Clear();
                                                 hl.Inlines.Add(run);
-                                                var bgBrush = result;
+                                                var bgBrush = result.ToSolidColorBrush();
                                                 var fgBrush = MpWpfColorHelpers.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
                                                 var tr = new TextRange(run.ElementStart, run.ElementEnd);
                                                 tr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);

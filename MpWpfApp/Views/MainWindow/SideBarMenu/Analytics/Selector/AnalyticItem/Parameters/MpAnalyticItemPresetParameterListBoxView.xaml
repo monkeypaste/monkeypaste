@@ -39,7 +39,7 @@
                                VerticalAlignment="Top"
                                Source="{Binding .,
                                                 Source={StaticResource DeleteIcon},
-                                                Converter={StaticResource StringToImageSourceConverter}}" />
+                                                Converter={StaticResource StringResourceToImageSourceConverter}}" />
                         <TextBlock VerticalAlignment="Top"
                                    Visibility="Visible"
                                    Text="Cancel" />
@@ -56,7 +56,7 @@
                                VerticalAlignment="Top"
                                Source="{Binding .,
                                                 Source={StaticResource SaveIcon},
-                                                Converter={StaticResource StringToImageSourceConverter}}" />
+                                                Converter={StaticResource StringResourceToImageSourceConverter}}" />
                         <TextBlock VerticalAlignment="Top"
                                    HorizontalAlignment="Center"
                                    Visibility="Visible"

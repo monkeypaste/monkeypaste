@@ -48,7 +48,7 @@
                       Click="TagTreeToggleButton_Click"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource PinToCollectionIcon},
-                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
@@ -63,7 +63,7 @@
                       Click="AnalyzerToggleButton_Click"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BrainIcon},
-                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
@@ -78,7 +78,7 @@
                       Click="MatcherToggleButton_Click"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BoltIcon},
-                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
@@ -123,7 +123,7 @@
                                                                       Source={x:Static local:MpAppModeViewModel.Instance}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource AppendRunIcon},
-                                                                Converter={StaticResource StringToImageSourceConverter}}"
+                                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
@@ -141,14 +141,14 @@
                                                                       Source={x:Static local:MpAppModeViewModel.Instance}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource AppendLineIcon},
-                                                                Converter={StaticResource StringToImageSourceConverter}}"
+                                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
                                 </StackPanel>
                             </Popup>
                             <Image Source="{Binding Source={StaticResource AppendIcon},
-                                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
                         </Grid>
@@ -180,7 +180,7 @@
                                                                       Source={x:Static local:MpAppModeViewModel.Instance}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource LeftClickIcon},
-                                                                Converter={StaticResource StringToImageSourceConverter}}"
+                                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
@@ -198,14 +198,14 @@
                                                                       Source={x:Static local:MpAppModeViewModel.Instance}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource RightClickIcon},
-                                                                Converter={StaticResource StringToImageSourceConverter}}"
+                                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
                                 </StackPanel>
                             </Popup>
                             <Image Source="{Binding MouseModeImageSourcePath,
-                                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
                         </Grid>
@@ -223,7 +223,7 @@
                 </ContextMenu>
             </ToggleButton.ContextMenu>
             <Image Source="{Binding Source={StaticResource BullsEyeIcon},
-                                    Converter={StaticResource StringToImageSourceConverter}}"
+                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>

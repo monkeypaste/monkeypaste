@@ -86,7 +86,7 @@
                        VerticalAlignment="Top"
                        Width="100"
                        Source="{Binding IconPath,
-                                        Converter={StaticResource StringToImageSourceConverter}}" />
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}" />
                 <Button x:Name="btnMessageBoxClose"
                         FontWeight="SemiBold"
                         Content="Fermer"

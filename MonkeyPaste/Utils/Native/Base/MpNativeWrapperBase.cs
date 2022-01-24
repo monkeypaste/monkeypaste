@@ -12,10 +12,11 @@ namespace MonkeyPaste {
         MpIconBuilderBase GetIconBuilder();
         MpIPreferenceIO GetPreferenceIO();
         MpIQueryInfo GetQueryInfo();
+        MpICustomColorChooserMenu GetCustomColorChooserMenu();
     }
 
 
-    public static  class MpNativeWrapper {
+    public static class MpNativeWrapper {
         public static void Init(MpINativeInterfaceWrapper niw) {
             _niw = niw;
         }
@@ -53,6 +54,10 @@ namespace MonkeyPaste {
 
         public static MpIQueryInfo GetQueryInfo() {
             return _niw?.GetQueryInfo();
+        }
+
+        public static MpICustomColorChooserMenu GetCustomColorChooserMenu() {
+            return _niw?.GetCustomColorChooserMenu();
         }
         #endregion
     }

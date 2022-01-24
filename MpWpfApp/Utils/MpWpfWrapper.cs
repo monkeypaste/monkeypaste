@@ -11,12 +11,14 @@ namespace MpWpfApp {
         public MpWpfPreferences WpfPreferences { private get; set; }
         public MpWpfQueryInfo QueryInfo { private get; set; }
         public MpWpfIconBuilder IconBuilder { private get; set; }
+        public MpWpfCustomColorChooserMenu CustomColorChooserMenu { private get; set; }
 
         public MpWpfWrapper() {
             DbInfo = new MpWpfDbInfo();
             WpfPreferences = new MpWpfPreferences();
             QueryInfo = new MpWpfQueryInfo();
             IconBuilder = new MpWpfIconBuilder();
+            CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
         }
 
 
@@ -46,6 +48,10 @@ namespace MpWpfApp {
 
         public MpIQueryInfo GetQueryInfo() {
             return QueryInfo;
+        }
+
+        public MpICustomColorChooserMenu GetCustomColorChooserMenu() {
+            return CustomColorChooserMenu;
         }
     }
 }

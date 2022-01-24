@@ -12,9 +12,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
+using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModel : MpViewModelBase<MpPasteToAppPathViewModelCollection>, MpIUserIconViewModel, MpIMenuItemViewModel {
+    public class MpPasteToAppPathViewModel : 
+        MpViewModelBase<MpPasteToAppPathViewModelCollection>,
+        MpIUserIconViewModel, 
+        MpIMenuItemViewModel {
         #region Private Variables
         #endregion
 
@@ -34,6 +38,41 @@ namespace MpWpfApp {
                 };
             }
         }
+        #endregion
+
+        #region MpIMatcherTriggerViewModel Implementation
+
+        #region MpIUserIcon Implementation
+
+        public async Task<MpIcon> GetIcon() {
+            var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+            return icon;
+        }
+
+        public ICommand SetIconCommand => new RelayCommand<object>(
+            async (args) => {
+                PasteToAppPath.Icon = args as MpIcon;
+                IconId = PasteToAppPath.Icon.Id;
+                await PasteToAppPath.WriteToDatabaseAsync();
+
+            });
+        #endregion
+
+        public void RegisterMatcher(MpMatcherViewModel mvm) {
+            //AddWatcher(mvm.MatchData, mvm);
+            MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Title} matcher");
+        }
+
+        public void UnregisterMatcher(MpMatcherViewModel mvm) {
+            //RemoveWatcher(mvm.MatchData);
+            MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Title} matcher");
+        }
+
+        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => null;// new ObservableCollection<MpMatcherViewModel>(
+                    //MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
+                    //    x.Matcher.MatcherTriggerType == MpMatcherTriggerType.WatchFileChanged ||
+                    //     x.Matcher.MatcherTriggerType == MpMatcherTriggerType.WatchFolderChange).ToList());
+
         #endregion
 
         #region Appearance
@@ -334,19 +373,6 @@ namespace MpWpfApp {
             await PasteToAppPath.DeleteFromDatabaseAsync();
         }
 
-        public async Task SetIcon(MpIcon icon) {
-            IconId = icon.IconImageId;
-            PasteToAppPath.Icon = icon;
-            await PasteToAppPath.WriteToDatabaseAsync();
-            OnPropertyChanged(nameof(IconId));
-        }
-
-        public async Task<MpIcon> GetIcon() {
-            if(PasteToAppPath.Icon == null && IconId > 0) {
-                PasteToAppPath.Icon = await MpDb.GetItemAsync<MpIcon>(IconId);
-            }
-            return PasteToAppPath.Icon;
-        }
         #endregion
 
         #region Commands
