@@ -22,7 +22,7 @@ namespace MonkeyPaste {
         public int MatcherCommandTypeId { get; set; }
 
         [Column("fk_MpMatcherId")]
-        [ForeignKey(typeof(MpMatcher))]
+        [ForeignKey(typeof(MpAction))]
         public int MatcherId { get; set; }
 
         [Column("afk_CommandObjId")]
@@ -50,14 +50,14 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpMatcherActionType MatcherCommandType {
-            get => (MpMatcherActionType)MatcherCommandTypeId;
+        public MpActionType MatcherCommandType {
+            get => (MpActionType)MatcherCommandTypeId;
             set => MatcherCommandTypeId = (int)value;
         }
 
         #endregion
 
-        public static async Task<MpMatchCommand> Create(MpMatcherActionType matchType, int mrId, int coid) {            
+        public static async Task<MpMatchCommand> Create(MpActionType matchType, int mrId, int coid) {            
             var mr = new MpMatchCommand() {
                 MatcherCommandGuid = System.Guid.NewGuid(),
                 MatcherCommandType = matchType,

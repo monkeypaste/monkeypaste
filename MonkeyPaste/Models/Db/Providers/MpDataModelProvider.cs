@@ -763,10 +763,19 @@ namespace MonkeyPaste {
 
         #region MpMatchers
 
-        public static async Task<List<MpMatcher>> GetChildMatchers(int matcherId) {
-            string query = $"select * from MpMatcher where fk_ParentMatcherId=?";
-            var result = await MpDb.QueryAsync<MpMatcher>(query,matcherId);
+        public static async Task<List<MpAction>> GetChildActions(int matcherId) {
+            string query = $"select * from MpAction where fk_ParentActionId=?";
+            var result = await MpDb.QueryAsync<MpAction>(query,matcherId);
             return result;
+        }
+
+        public static async Task<MpAction> GetActionByLabel(string label) {
+            string query = string.Format(@"select * from MpAction where Label=?");
+            var result = await MpDb.QueryAsync<MpAction>(query, label);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
         }
         #endregion
 

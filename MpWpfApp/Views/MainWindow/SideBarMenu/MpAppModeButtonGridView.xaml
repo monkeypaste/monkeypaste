@@ -12,7 +12,6 @@
                      d:DataContext="{d:DesignInstance Type=local:MpAppModeViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Grid Loaded="Grid_Loaded"
-          Width="{Binding AppModeButtonGridMinWidth}"
           Background="{Binding .,
                                Converter={StaticResource StringToThemeBrushConverter},
                                ConverterParameter=App_Mode_Grid_Background_Color}">
@@ -44,8 +43,7 @@
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Collection Tree"
-                      IsEnabled="True"
-                      Click="TagTreeToggleButton_Click"
+                      IsChecked="{Binding IsVisible, Source={x:Static local:MpTagTrayViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource PinToCollectionIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -60,7 +58,7 @@
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Analyze"
                       IsEnabled="True"
-                      Click="AnalyzerToggleButton_Click"
+                      IsChecked="{Binding IsVisible, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BrainIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -75,7 +73,7 @@
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Analyze"
                       IsEnabled="True"
-                      Click="MatcherToggleButton_Click"
+                      IsChecked="{Binding IsVisible, Source={x:Static local:MpActionCollectionViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BoltIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"

@@ -22,7 +22,7 @@ namespace MpWpfApp {
         object CommandParameter { get; }
     }
 
-    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, MpIMatcherTriggerViewModel {
+    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, MpITriggerActionViewModel {
         #region Properties        
 
         #region View Models
@@ -53,11 +53,6 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => new ObservableCollection<MpMatcherViewModel>(
-                    MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
-                        x.TriggerType == MpMatcherTriggerType.ContentItemAdded).ToList());
-
-        
 
         #endregion
 
@@ -470,16 +465,16 @@ namespace MpWpfApp {
             }
         }
 
-        public void RegisterMatcher(MpMatcherViewModel mvm) {
+        public void RegisterTrigger(MpActionViewModelBase mvm) {
             //by design this only can occur for shortcuts with a selected item as its context
 
-            OnShortcutExecuted += mvm.OnMatcherTrigggered;
-            MpConsole.WriteLine($"ClipTray Registered {mvm.Title} matcher");
+            OnShortcutExecuted += mvm.OnTrigger;
+            MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterMatcher(MpMatcherViewModel mvm) {
-            OnShortcutExecuted -= mvm.OnMatcherTrigggered;
-            MpConsole.WriteLine($"Matcher {mvm.Title} Unregistered from OnShortcutExecuted");
+        public void UnregisterTrigger(MpActionViewModelBase mvm) {
+            OnShortcutExecuted -= mvm.OnTrigger;
+            MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
         }
 
         private void MpShortcutViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

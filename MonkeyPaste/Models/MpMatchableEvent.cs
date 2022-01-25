@@ -28,7 +28,7 @@ namespace MonkeyPaste {
         #region Fk Objects
 
         [ManyToOne]
-        public MpMatcher Matcher { get; set; }
+        public MpAction Matcher { get; set; }
 
         [ManyToMany(typeof(MpMatchCommand))]
         public List<MpMatchCommand> MatchCommands { get; set; } = new List<MpMatchCommand>();
@@ -51,14 +51,14 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpMatcherTriggerType MatchableEventType {
-            get => (MpMatcherTriggerType)MatchableEventTypeId;
+        public MpTriggerType MatchableEventType {
+            get => (MpTriggerType)MatchableEventTypeId;
             set => MatchableEventTypeId = (int)value;
         }
 
         #endregion
 
-        public static async Task<MpMatchableEvent> Create(MpMatcherTriggerType matchType, int mrId) {
+        public static async Task<MpMatchableEvent> Create(MpTriggerType matchType, int mrId) {
             var mr = new MpMatchableEvent() {
                 MatchableEventGuid = System.Guid.NewGuid(),
                 MatchableEventType = matchType,

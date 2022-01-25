@@ -293,7 +293,7 @@ namespace MpWpfApp {
                     
                     if(IsVisible) {
                         MpAnalyticItemCollectionViewModel.Instance.IsVisible = false;
-                        MpMatcherCollectionViewModel.Instance.IsVisible = false;
+                        MpActionCollectionViewModel.Instance.IsVisible = false;
                     }
                     break;
                 case nameof(TagTileViewModels):

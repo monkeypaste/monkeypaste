@@ -54,7 +54,8 @@
                                         Cursor="Hand"
                                         Background="Transparent"
                                         Template="{StaticResource SearchButtonControlTemplate}"
-                                        Command="{Binding ChangeIconCommand, Source={x:Static local:MpIconCollectionViewModel.Instance}}"
+                                        Command="{Binding ChangeIconCommand,
+                                                          Source={x:Static local:MpIconCollectionViewModel.Instance}}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                     <Image Width="20"
                                            Height="20"
@@ -129,30 +130,6 @@
                                            Source="{Binding .,
                                                             Converter={StaticResource StringResourceToImageSourceConverter},
                                                             Source={StaticResource SlidersIcon}}" />
-                                </ToggleButton>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="40">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ToggleButton Background="Transparent"
-                                              BorderThickness="0"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Stretch"
-                                              ToolTip="Configure"
-                                              Margin="0"
-                                              Template="{StaticResource LockToggleButtonControlTemplate}"
-                                              IsChecked="{Binding IsEditingMatchers,
-                                                                  Mode=TwoWay,
-                                                                  NotifyOnTargetUpdated=True,
-                                                                  NotifyOnSourceUpdated=True,
-                                                                  UpdateSourceTrigger=PropertyChanged}">
-                                    <Image Width="20"
-                                           Height="20"
-                                           Source="{Binding .,
-                                                            Converter={StaticResource StringResourceToImageSourceConverter},
-                                                            Source={StaticResource BoltIcon}}" />
                                 </ToggleButton>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

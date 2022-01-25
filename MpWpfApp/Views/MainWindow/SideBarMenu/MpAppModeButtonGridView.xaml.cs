@@ -101,7 +101,7 @@ namespace MpWpfApp {
         }
 
         private void MatcherToggleButton_Click(object sender, RoutedEventArgs e) {
-            MpMatcherCollectionViewModel.Instance.IsVisible = !MpMatcherCollectionViewModel.Instance.IsVisible;
+            MpActionCollectionViewModel.Instance.IsVisible = !MpActionCollectionViewModel.Instance.IsVisible;
 
         }
 

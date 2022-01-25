@@ -58,17 +58,17 @@ namespace MpWpfApp {
             });
         #endregion
 
-        public void RegisterMatcher(MpMatcherViewModel mvm) {
+        public void RegisterMatcher(MpActionViewModelBase mvm) {
             //AddWatcher(mvm.MatchData, mvm);
-            MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Title} matcher");
+            MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterMatcher(MpMatcherViewModel mvm) {
+        public void UnregisterMatcher(MpActionViewModelBase mvm) {
             //RemoveWatcher(mvm.MatchData);
-            MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Title} matcher");
+            MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Label} matcher");
         }
 
-        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => null;// new ObservableCollection<MpMatcherViewModel>(
+        public ObservableCollection<MpActionViewModelBase> MatcherViewModels => null;// new ObservableCollection<MpMatcherViewModel>(
                     //MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
                     //    x.Matcher.MatcherTriggerType == MpMatcherTriggerType.WatchFileChanged ||
                     //     x.Matcher.MatcherTriggerType == MpMatcherTriggerType.WatchFolderChange).ToList());

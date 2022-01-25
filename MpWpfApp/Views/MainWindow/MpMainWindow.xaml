@@ -106,28 +106,27 @@
                 <!--  Sort Combobox  -->
                 <local:MpItemSortView x:Name="ItemSortView"
                                       Grid.Column="1"
-                                      Visibility="{Binding ClipTrayViewModel.IsAnyTileExpanded,
-                                                           Source={x:Static local:MpMainWindowViewModel.Instance},
+                                      Visibility="{Binding IsAnyTileExpanded,
+                                                           Source={x:Static local:MpClipTrayViewModel.Instance},
                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                      DataContext="{Binding ClipTileSortViewModel}" />
+                                      DataContext="{x:Static local:MpClipTileSortViewModel.Instance}" />
                 <!--  Tag Tray  -->
                 <local:MpTagTrayView x:Name="TagTrayView"
                                      Grid.Column="2"
                                      Visibility="{Binding IsAnyTileExpanded,
                                                           Converter={StaticResource BoolToVisibilityFlipConverter},
                                                           Source={x:Static local:MpClipTrayViewModel.Instance}}"
-                                     DataContext="{Binding TagTrayViewModel,
-                                                           IsAsync=True}" />
+                                     DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
                 <!--  Search  -->
                 <local:MpSearchBoxView x:Name="SearchView"
                                        Grid.Column="3"
-                                       DataContext="{Binding SearchBoxViewModel}" />
+                                       DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />
             </Grid>
 
             <!--  3rd row row for tray  -->
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="{Binding SearchBoxViewModel.SearchCriteriaListBoxHeight}" />
+                    <RowDefinition Height="{Binding Path=SearchCriteriaListBoxHeight, Source={x:Static local:MpSearchBoxViewModel.Instance}}" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -140,7 +139,7 @@
                                                    Grid.ColumnSpan="2"
                                                    VerticalAlignment="Stretch"
                                                    VerticalContentAlignment="Stretch"
-                                                   DataContext="{Binding SearchBoxViewModel}" />
+                                                   DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />
                 <!--  Side bar AppState Buttons  -->
                 <!--<local:MpAppModeButtonGridView Grid.Row="1"
                                                Grid.Column="0"
@@ -152,9 +151,9 @@
                                          Grid.Row="1"
                                          Grid.Column="0"
                                          VerticalAlignment="Stretch"
-                                         Height="{Binding ClipTrayViewModel.ClipTrayHeight}"
+                                         Height="{Binding ClipTrayHeight}"
                                          HorizontalAlignment="Left"
-                                         DataContext="{Binding}"
+                                         DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
                                          Background="{Binding .,
                                                               Converter={StaticResource StringToThemeBrushConverter},
                                                               ConverterParameter=Tag_Tree_Background_Color}" />
@@ -170,7 +169,7 @@
                 <local:MpClipTrayContainerView x:Name="ClipTrayView"
                                                Grid.Row="1"
                                                Grid.Column="1"
-                                               DataContext="{Binding ClipTrayViewModel}" />
+                                         DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
                 <Grid Background="DarkGray"
                       Opacity="0.3"
                       HorizontalAlignment="Stretch"

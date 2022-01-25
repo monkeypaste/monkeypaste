@@ -14,7 +14,10 @@ namespace MpWpfApp {
         void OnFileSystemItemChanged(object sender, FileSystemEventArgs e);
     }
 
-    public class MpFileSystemWatcherViewModel : MpISingletonViewModel<MpFileSystemWatcherViewModel>, IDisposable, MpIMatcherTriggerViewModel {
+    public class MpFileSystemWatcherViewModel : 
+        MpISingletonViewModel<MpFileSystemWatcherViewModel>, 
+        IDisposable, 
+        MpITriggerActionViewModel {
         #region Private Variables
 
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
@@ -41,20 +44,22 @@ namespace MpWpfApp {
 
         #endregion
 
-        public void RegisterMatcher(MpMatcherViewModel mvm) {
-            AddWatcher(mvm.MatchData, mvm);
-            MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Title} matcher");
+        public void RegisterTrigger(MpActionViewModelBase mvm) {
+            var fstvm = mvm as MpFileSystemTriggerViewModel;
+            AddWatcher(fstvm.FileSystemPath, fstvm);
+            MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterMatcher(MpMatcherViewModel mvm) {
-            RemoveWatcher(mvm.MatchData);
-            MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Title} matcher");
+        public void UnregisterTrigger(MpActionViewModelBase mvm) {
+            var fstvm = mvm as MpFileSystemTriggerViewModel;
+            RemoveWatcher(fstvm.FileSystemPath);
+            MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Label} matcher");
         }
 
-        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => new ObservableCollection<MpMatcherViewModel>(
-                    MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
-                        x.Matcher.MatcherTriggerType == MpMatcherTriggerType.WatchFileChanged ||
-                         x.Matcher.MatcherTriggerType == MpMatcherTriggerType.WatchFolderChange).ToList());
+        //public ObservableCollection<MpActionViewModelBase> MatcherViewModels => new ObservableCollection<MpActionViewModelBase>(
+        //            MpActionCollectionViewModel.Instance.Matchers.Where(x =>
+        //                x.Action.TriggerType == MpTriggerType.FileSystemChange ||
+        //                 x.Action.TriggerType == MpTriggerType.FileSystemChange).ToList());
 
         #endregion
 
@@ -79,9 +84,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-
-        
-
         public void AddWatcher(string path, MpIFileSystemEventHandler handler = null) {
             if(!File.Exists(path) && !Directory.Exists(path)) {
                 throw new FileNotFoundException(path);

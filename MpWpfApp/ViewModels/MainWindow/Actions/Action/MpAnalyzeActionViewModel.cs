@@ -1,0 +1,57 @@
+﻿using MonkeyPaste;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MpWpfApp {
+    public class MpAnalyzeActionViewModel : MpActionViewModelBase {
+        #region Properties
+
+        #region Model
+
+        public int AnalyticItemPresetId {
+            get {
+                if (Action == null) {
+                    return 0;
+                }
+                return ActionObjId;
+            }
+            set {
+                if (AnalyticItemPresetId != value) {
+                    ActionObjId = value;
+                    OnPropertyChanged(nameof(AnalyticItemPresetId));
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Constructors
+
+        public MpAnalyzeActionViewModel(MpActionCollectionViewModel parent) : base(parent) {
+
+        }
+
+        #endregion
+
+
+        #region Protected Overrides
+
+        protected override async Task PerformAction(MpCopyItem arg) {
+            var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
+            object[] args = new object[] { aipvm, arg as MpCopyItem };
+            aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
+
+            while (aipvm.Parent.IsBusy) {
+                await Task.Delay(100);
+            }
+
+            await base.PerformAction(aipvm.Parent.LastResultContentItem);
+        }
+        #endregion
+    }
+}

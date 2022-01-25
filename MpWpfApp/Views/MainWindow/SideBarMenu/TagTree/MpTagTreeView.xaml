@@ -32,7 +32,8 @@
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Style.Resources>
-                        <SolidColorBrush Color="Transparent" x:Key="{x:Static SystemColors.HighlightBrushKey}"/>
+                        <SolidColorBrush Color="Transparent"
+                                         x:Key="{x:Static SystemColors.HighlightBrushKey}" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
                                          Color="Transparent" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"

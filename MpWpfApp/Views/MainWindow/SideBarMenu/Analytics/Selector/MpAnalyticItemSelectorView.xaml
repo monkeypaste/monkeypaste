@@ -53,7 +53,7 @@
               Visibility="{Binding SelectedItem.IsAnyEditingMatchers,
                                    Converter={StaticResource BoolToVisibilityConverter},
                                    FallbackValue='Collapsed'}">
-            <local:MpMatcherCollectionView DataContext="{Binding SelectedItem.SelectedPresetViewModel}" />
+            <local:MpRootActionTreeView DataContext="{Binding SelectedItem.SelectedPresetViewModel}" />
         </Grid>
     </StackPanel>
 </local:MpUserControl>

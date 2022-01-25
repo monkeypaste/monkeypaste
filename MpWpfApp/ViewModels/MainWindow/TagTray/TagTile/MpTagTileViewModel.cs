@@ -18,7 +18,7 @@ namespace MpWpfApp {
         MpITreeItemViewModel, 
         MpIShortcutCommand, 
         MpIHasNotification, 
-        MpIMatcherTriggerViewModel {
+        MpITriggerActionViewModel {
 
         #region Private Variables
         private int _tagClipCount = 0;
@@ -29,19 +29,28 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        
+        #endregion
+
+        #region MpITreeItemViewModel Implementation
+
         public MpITreeItemViewModel ParentTreeItem { get; set; }
 
         public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = new ObservableCollection<MpITreeItemViewModel>();
 
-        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => new ObservableCollection<MpMatcherViewModel>(
-                    MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
-                        x.TriggerActionType == MpMatcherActionType.Classify && x.Matcher.TriggerActionObjId == TagId).ToList());
+        #endregion
 
-        public void UnregisterMatcher(MpMatcherViewModel mvm) {
-            OnCopyItemLinked -= mvm.OnMatcherTrigggered;
-            MpConsole.WriteLine($"Matcher {mvm.Title} Unregistered from {TagName} TagAdd");
+        #region MpITriggerActionViewModel Implementation
+
+        public void RegisterTrigger(MpActionViewModelBase mvm) {
+            OnCopyItemLinked += mvm.OnTrigger;
+            MpConsole.WriteLine($"TagTile {TagName} Registered {mvm.Label} matcher");
         }
+
+        public void UnregisterTrigger(MpActionViewModelBase mvm) {
+            OnCopyItemLinked -= mvm.OnTrigger;
+            MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from {TagName} TagAdd");
+        }
+
         #endregion
 
         #region MpIShortcutCommand Implementation
@@ -468,10 +477,6 @@ namespace MpWpfApp {
             return cl;
         }
 
-        public void RegisterMatcher(MpMatcherViewModel mvm) {
-            OnCopyItemLinked += mvm.OnMatcherTrigggered;
-            MpConsole.WriteLine($"TagTile {TagName} Registered {mvm.Title} matcher");
-        }
 
         public async Task AddContentItem(int ciid) {
             var ncit = await MpCopyItemTag.Create(TagId, ciid);

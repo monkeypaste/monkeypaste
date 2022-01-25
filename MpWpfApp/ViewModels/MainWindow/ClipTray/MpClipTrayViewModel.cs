@@ -28,7 +28,7 @@ namespace MpWpfApp {
     public class MpClipTrayViewModel : 
         MpViewModelBase, 
         MpISingletonViewModel<MpClipTrayViewModel>, 
-        MpIMatcherTriggerViewModel, 
+        MpITriggerActionViewModel, 
         MpIMenuItemViewModel {
         #region Private Variables      
 
@@ -130,9 +130,6 @@ namespace MpWpfApp {
 
         public MpClipTileViewModel ExpandedTile => Items.FirstOrDefault(x => x.IsExpanded);
 
-        public ObservableCollection<MpMatcherViewModel> MatcherViewModels => new ObservableCollection<MpMatcherViewModel>(
-                    MpMatcherCollectionViewModel.Instance.Matchers.Where(x =>
-                        x.TriggerType == MpMatcherTriggerType.ContentItemAdded).ToList());
 
         
 
@@ -665,14 +662,14 @@ namespace MpWpfApp {
 
         #region MpIMatchTrigger Implementation
 
-        public void RegisterMatcher(MpMatcherViewModel mvm) {
-            OnCopyItemItemAdd += mvm.OnMatcherTrigggered;
-            MpConsole.WriteLine($"ClipTray Registered {mvm.Title} matcher");
+        public void RegisterTrigger(MpActionViewModelBase mvm) {
+            OnCopyItemItemAdd += mvm.OnTrigger;
+            MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterMatcher(MpMatcherViewModel mvm) {
-            OnCopyItemItemAdd -= mvm.OnMatcherTrigggered;
-            MpConsole.WriteLine($"Matcher {mvm.Title} Unregistered from OnCopyItemAdded");
+        public void UnregisterTrigger(MpActionViewModelBase mvm) {
+            OnCopyItemItemAdd -= mvm.OnTrigger;
+            MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
         }
 
         #endregion

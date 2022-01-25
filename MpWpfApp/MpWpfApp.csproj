@@ -233,29 +233,36 @@
     <Compile Include="Utils\MpCsvReader.cs" />
     <Compile Include="Utils\Graphics\Geometry\MpLine.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcherViewModel.cs" />
-    <Compile Include="ViewModels\Base\Interfaces\MpITreeItemViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Match\MpMatcherCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\MpAnalyzeActionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\MpClassifyActionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\MpCompareActionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\Base\MpTriggerActionViewModelBase.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentAddTriggerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentTaggedTriggerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpFileSystemTriggerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpParentOutputTriggerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpShortcutTriggerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\MpActionCollectionViewModel.cs" />
     <Compile Include="Utils\MpWpfWrapper.cs" />
     <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
     <Compile Include="Utils\RESTful\MpCountry.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
     <Compile Include="Utils\RESTful\MpYoloTransaction.cs" />
-    <Compile Include="ViewModels\Base\Interfaces\MpIHoverableViewModel.cs" />
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Azure\ImageAnalysis\MpAzureImageAnalysisViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Yolo\MpYoloViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpMultiSelectComboBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetParameterValueViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Items\Azure\Translator\MpTranslatorViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\MpAnalyticItemCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\Values\MpAnalyticItemParameterValueViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Azure\ImageAnalysis\MpAzureImageAnalysisViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Yolo\MpYoloViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpMultiSelectComboBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetParameterValueViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Azure\Translator\MpTranslatorViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\MpAnalyticItemCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Values\MpAnalyticItemParameterValueViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />
@@ -298,14 +305,14 @@
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpContactTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Match\MpMatcherViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\Base\MpActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SideBar\MpSideBarTreeCollectionViewModel.cs" />
@@ -321,7 +328,6 @@
     <Compile Include="ViewModels\Reusable\MpSystemColors.cs" />
     <Compile Include="ViewModels\Reusable\MpThemeColors.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
-    <Compile Include="ViewModels\Reusable\MpToggleButtonBaseViewModel.cs" />
     <Compile Include="Views\Base\MpIRectViewModel.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\DetectedObjectItem\MpDetectedObjectItemView.xaml.cs">
       <DependentUpon>MpDetectedObjectItemView.xaml</DependentUpon>
@@ -333,6 +339,15 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpRootActionSelectorView.xaml.cs">
+      <DependentUpon>MpRootActionSelectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\ActionItem\MpActionItemView.xaml.cs">
+      <DependentUpon>MpActionItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\MpRootActionView.xaml.cs">
+      <DependentUpon>MpRootActionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
       <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
     </Compile>
@@ -343,7 +358,7 @@
       <DependentUpon>MpAnalyticItemPresetDataGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\MpContentUserControl.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Context\Selector\MpContextMenuItemContainerSelector.cs" />
+    <Compile Include="Views\Reusable\ContextMenu\Selector\MpContextMenuItemContainerSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayContainerView.xaml.cs">
       <DependentUpon>MpClipTrayContainerView.xaml</DependentUpon>
     </Compile>
@@ -359,14 +374,13 @@
     <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyzerTreeView.xaml.cs">
       <DependentUpon>MpAnalyzerTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Matcher\MpMatcherCollectionView.xaml.cs">
-      <DependentUpon>MpMatcherCollectionView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\MpRootActionTreeView.xaml.cs">
+      <DependentUpon>MpRootActionTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Matcher\Selector\MpMatchActionCellTemplateSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\ActionItem\Selector\MpActionItemTemplateSelector.cs" />
     <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarMenuView.xaml.cs">
       <DependentUpon>MpSidebarMenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\ContextMenu\Selector\MpMenuItemTemplateViewSelector.cs" />
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Selector\MpTagTileTemplateSelector.cs" />
     <Compile Include="ViewModels\Reusable\MessageBox\MpMessageBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
@@ -514,12 +528,6 @@
     <Compile Include="Views\Reusable\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\ToggleButton\MpToggleButtonView.xaml.cs">
-      <DependentUpon>MpToggleButtonView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Reusable\TreeItemCollection\MpTreeItemCollectionView.xaml.cs">
-      <DependentUpon>MpTreeItemCollectionView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Settings\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -595,6 +603,18 @@
     <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpRootActionSelectorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\ActionItem\MpActionItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\MpRootActionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml">
       <SubType>Designer</SubType>
@@ -744,7 +764,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Matcher\MpMatcherCollectionView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\MpRootActionTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -777,14 +797,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Reusable\MessageBoxes\MpMessageBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Reusable\ToggleButton\MpToggleButtonView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Reusable\TreeItemCollection\MpTreeItemCollectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2547,6 +2559,7 @@
     <Folder Include="Resources\Data\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
+    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Context\Selector\" />
     <Folder Include="Views\MainWindow\FilterMenu\AppMode\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>

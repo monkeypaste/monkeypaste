@@ -54,21 +54,21 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpSystemTrayViewModel SystemTrayViewModel => MpSystemTrayViewModel.Instance;
+        //public MpSystemTrayViewModel SystemTrayViewModel => MpSystemTrayViewModel.Instance;
 
-        public MpClipTrayViewModel ClipTrayViewModel => MpClipTrayViewModel.Instance;
+        //public MpClipTrayViewModel ClipTrayViewModel => MpClipTrayViewModel.Instance;
 
-        public MpTagTrayViewModel TagTrayViewModel => MpTagTrayViewModel.Instance;
+        //public MpTagTrayViewModel TagTrayViewModel => MpTagTrayViewModel.Instance;
 
-        public MpClipTileSortViewModel ClipTileSortViewModel => MpClipTileSortViewModel.Instance;
+        //public MpClipTileSortViewModel ClipTileSortViewModel => MpClipTileSortViewModel.Instance;
 
-        public MpSearchBoxViewModel SearchBoxViewModel => MpSearchBoxViewModel.Instance;
+        //public MpSearchBoxViewModel SearchBoxViewModel => MpSearchBoxViewModel.Instance;
 
-        public MpAppModeViewModel AppModeViewModel => MpAppModeViewModel.Instance;
+        //public MpAppModeViewModel AppModeViewModel => MpAppModeViewModel.Instance;
 
-        public MpAnalyticItemCollectionViewModel AnalyticItemCollectionViewModel => MpAnalyticItemCollectionViewModel.Instance;
+        //public MpAnalyticItemCollectionViewModel AnalyticItemCollectionViewModel => MpAnalyticItemCollectionViewModel.Instance;
 
-        public MpMatcherCollectionViewModel MatcherCollectionViewModel => MpMatcherCollectionViewModel.Instance;
+        //public MpActionCollectionViewModel MatcherCollectionViewModel => MpActionCollectionViewModel.Instance;
 
         #endregion
 
