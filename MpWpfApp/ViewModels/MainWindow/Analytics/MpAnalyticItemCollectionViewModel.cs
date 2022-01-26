@@ -51,6 +51,11 @@ namespace MpWpfApp {
 
         public MpITreeItemViewModel ParentTreeItem => MpSideBarTreeCollectionViewModel.Instance;
 
+        public List<MpAnalyticItemPresetViewModel> AllPresets {
+            get {
+                return Items.OrderBy(x => x.Title).SelectMany(x => x.PresetViewModels).ToList();
+            }
+        }
         #endregion
 
         #region Layout

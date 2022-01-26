@@ -414,8 +414,6 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpDetectedImageObject>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
             await _connectionAsync.CreateTableAsync<MpAction>();
-            await _connectionAsync.CreateTableAsync<MpMatchCommand>();
-            await _connectionAsync.CreateTableAsync<MpMatchableEvent>();
             await _connectionAsync.CreateTableAsync<MpPasteHistory>();
             await _connectionAsync.CreateTableAsync<MpPasteToAppPath>();
             await _connectionAsync.CreateTableAsync<MpSearchCriteriaItem>();
@@ -477,18 +475,6 @@ namespace MonkeyPaste {
                 PlatformType = MpPreferences.ThisDeviceType
             };
             await AddItemAsync<MpUserDevice>(thisDevice);
-
-            #endregion
-
-            #region Source
-
-            var process = Process.GetCurrentProcess();
-            string appPath = process.MainModule.FileName;
-            string appName = MpPreferences.ApplicationName;
-            var icon = await MpIcon.Create(MpBase64Images.Instance.AppIcon);
-            var app = await MpApp.Create(appPath, appName, icon);
-            var source = await MpSource.Create(app, null);
-            MpPreferences.ThisDeviceSourceId = source.Id;
 
             #endregion
 
@@ -855,6 +841,32 @@ namespace MonkeyPaste {
             //    MpMatchActionType.Classify,
             //    32
             //    );
+
+            #endregion
+
+            #region Icon
+
+
+            var sourceIcon = await MpIcon.Create(MpBase64Images.AppIcon);
+            /*
+            
+129a1643-3bf5-4292-aedb-a6c8f1112088
+470752e3-1a6d-4785-b215-a881c9a96385
+091894d7-6c88-4815-936d-682b0906c409
+3b3e27e8-8f6d-4b10-a83a-1668eb798891
+            */
+            //var i1 = await MpIcon.Create(MpBase64Images.ClipboardIcon,false, "954fc715-35f3-4171-b23f-b8379a40db96")
+            #endregion
+
+
+            #region Source
+
+            var process = Process.GetCurrentProcess();
+            string appPath = process.MainModule.FileName;
+            string appName = MpPreferences.ApplicationName;
+            var app = await MpApp.Create(appPath, appName, sourceIcon);
+            var source = await MpSource.Create(app, null);
+            MpPreferences.ThisDeviceSourceId = source.Id;
 
             #endregion
 

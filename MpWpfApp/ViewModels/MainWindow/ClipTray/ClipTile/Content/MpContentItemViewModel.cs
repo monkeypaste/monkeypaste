@@ -22,7 +22,8 @@ namespace MpWpfApp {
     public class MpContentItemViewModel : 
         MpViewModelBase<MpClipTileViewModel>, 
         MpIShortcutCommand,
-        MpIUserColorViewModel {
+        MpIUserColorViewModel,
+        MpISelectableViewModel {
         #region Private Variables
         private DispatcherTimer _timer;
 
@@ -404,9 +405,9 @@ namespace MpWpfApp {
         public string HotkeyIconSource {
             get {
                 if (string.IsNullOrEmpty(ShortcutKeyString)) {
-                    return MpBase64Images.Instance.JoystickUnset;
+                    return MpBase64Images.JoystickUnset;
                 }
-                return MpBase64Images.Instance.JoystickActive;
+                return MpBase64Images.JoystickActive;
             }
         }
 

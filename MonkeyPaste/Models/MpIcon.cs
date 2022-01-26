@@ -73,7 +73,7 @@ namespace MonkeyPaste {
 
         #region Statics
 
-        public static async Task<MpIcon> Create(string iconImgBase64, bool createBorder = true) {
+        public static async Task<MpIcon> Create(string iconImgBase64, bool createBorder = true, string guid = "") {
             var dupCheck = await MpDataModelProvider.GetIconByImageStr(iconImgBase64);
             if(dupCheck != null) {
                 dupCheck = await MpDb.GetItemAsync<MpIcon>(dupCheck.Id);
@@ -83,7 +83,7 @@ namespace MonkeyPaste {
             var iconImage = await MpDbImage.Create(iconImgBase64);
 
             var newIcon = new MpIcon() {
-                IconGuid = System.Guid.NewGuid(),
+                IconGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid():System.Guid.Parse(guid),
                 IconImageId = iconImage.Id,
                 IconImage = iconImage
             };

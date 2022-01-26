@@ -22,8 +22,8 @@
                                        Converter={StaticResource BoolFlipConverter}}"
             PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
             PreviewMouseRightButtonDown="Border_PreviewMouseRightButtonDown"
-            MouseEnter="ContentListItemView_MouseEnter"
-            MouseLeave="ContentListItemView_MouseLeave"
+            local:MpHoverableExtension.IsEnabled="True"
+            local:MpHoverableExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Border.Resources>

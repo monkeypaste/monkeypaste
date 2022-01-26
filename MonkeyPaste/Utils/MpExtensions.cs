@@ -97,12 +97,12 @@ namespace MonkeyPaste {
 
         #region Enums
 
-        public static string[] EnumToLabels(this Type e, string noneText = "") {
+        public static string[] EnumToLabels(this Type e,  string noneText = "", bool hideFirst = false) {
             if(!e.IsEnum) {
                 throw new Exception($"{e.ToString()} is not enum type");
             }
             var names = Enum.GetNames(e);
-            for (int i = 0; i < names.Length; i++) {
+            for (int i = hideFirst ? 1:0; i < names.Length; i++) {
                 names[i] = names[i].ToLabel(noneText);
             }
             return names;

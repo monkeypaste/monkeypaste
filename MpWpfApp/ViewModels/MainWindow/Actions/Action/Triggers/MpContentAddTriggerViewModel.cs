@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpContentAddTriggerViewModel : MpTriggerActionViewModelBase {
+    public class MpContentAddTriggerViewModel : 
+        MpTriggerActionViewModelBase {
         #region Constructors
 
         public MpContentAddTriggerViewModel(MpActionCollectionViewModel parent) : base(parent) {

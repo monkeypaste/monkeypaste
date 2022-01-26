@@ -69,6 +69,8 @@ namespace MpWpfApp {
                 MpPreferences.FallbackProcessPath,
                 MpAppCollectionViewModel.Instance.AppViewModels.Select(x => x.AppPath).ToArray(),
                 new MpWpfIconBuilder());
+
+            MpClipboardHelper.MpClipboardManager.Start();
         }
     }
 }

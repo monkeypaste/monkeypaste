@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,12 @@ using System.Threading.Tasks;
 namespace MpWpfApp {
     public class MpAnalyzeActionViewModel : MpActionViewModelBase {
         #region Properties
+
+        #region View Models
+
+        //public MpAnalyticItemPresetViewModel SelectedPreset { get; set; }
+
+        #endregion
 
         #region Model
 

@@ -1,4 +1,4 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpRootActionSelectorView"
+﻿<local:MpUserControl x:Class="MpWpfApp.MpTriggerActionSelectorView"
                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -44,20 +44,17 @@
                         </ComboBox.ItemContainerStyle>
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <local:MpRootActionView Visibility="{Binding IsRootAction,
-                                                                             Converter={StaticResource BoolToVisibilityConverter}}"
-                                                        DataContext="{Binding}" />
+                                <local:MpActionComboBoxItem Visibility="{Binding IsRootAction,
+                                                                                 Converter={StaticResource BoolToVisibilityConverter}}"
+                                                            DataContext="{Binding}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Button BorderThickness="0"
                             Margin="5"
                             Background="Beige"
-                            Style="{StaticResource SemiTransparentButton}"
                             HorizontalAlignment="Right"
-                            Command="{Binding AddActionCommand}"
-                            CommandParameter="{Binding}">
-
+                            PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown">
                         <Image Source="{Binding .,
                                                 Converter={StaticResource StringResourceToImageSourceConverter},
                                                 Source={StaticResource AddIcon}}"
@@ -66,7 +63,9 @@
                                Height="15" />
                     </Button>
                 </StackPanel>
-                <local:MpRootActionTreeView DataContext="{Binding SelectedItem}" />
+                <local:MpTriggerActionTreeView Visibility="{Binding IsAnySelected,
+                                                                    Converter={StaticResource BoolToVisibilityConverter}}"
+                                               DataContext="{Binding}" />
             </StackPanel>
         </Border>
         <Grid x:Name="DetailGrid"

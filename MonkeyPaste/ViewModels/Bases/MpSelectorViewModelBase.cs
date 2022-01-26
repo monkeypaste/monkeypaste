@@ -28,5 +28,7 @@ namespace MonkeyPaste {
                 }
             }
         }
+
+        //public List<C> SelectedItems => Items.Where(x => x.IsSelected).ToList();
     }
 }

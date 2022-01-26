@@ -40,7 +40,7 @@
                                               DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
                                               Visibility="{Binding IsVisible,
                                                                    Converter={StaticResource BoolToVisibilityConverter}}" />
-            <local:MpRootActionSelectorView x:Name="ActionCollectionView"
+            <local:MpTriggerActionSelectorView x:Name="ActionCollectionView"
                                  MinWidth="100"
                                  DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
                                  Visibility="{Binding IsVisible,

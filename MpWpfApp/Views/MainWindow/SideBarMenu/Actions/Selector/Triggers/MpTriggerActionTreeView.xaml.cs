@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +16,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpRootActionView.xaml
+    /// Interaction logic for MpMatcherCollectionView.xaml
     /// </summary>
-    public partial class MpRootActionView : MpUserControl<MpActionViewModelBase> {
-        public MpRootActionView() {
+    public partial class MpTriggerActionTreeView : MpUserControl<MpActionCollectionViewModel> {
+        public MpTriggerActionTreeView() {
             InitializeComponent();
         }
     }

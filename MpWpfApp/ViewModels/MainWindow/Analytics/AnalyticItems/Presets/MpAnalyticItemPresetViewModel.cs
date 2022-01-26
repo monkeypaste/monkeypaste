@@ -187,6 +187,15 @@ namespace MpWpfApp {
             }
         }
 
+        public int ParentAnalyticItemId {
+            get {
+                if (Preset == null) {
+                    return 0;
+                }
+                return Preset.AnalyticItemId;
+            }
+        }
+
         public int AnalyticItemPresetId {
             get {
                 if(Preset == null) {

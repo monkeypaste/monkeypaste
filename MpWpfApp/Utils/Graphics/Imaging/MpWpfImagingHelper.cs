@@ -21,7 +21,7 @@ namespace MpWpfApp {
     }
 
     public static class MpWpfImagingHelper {
-
+        private static Random _Rand;
         private static List<List<Brush>> _colors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),
@@ -435,9 +435,11 @@ namespace MpWpfApp {
         }
 
         public static Color GetRandomColor() {
-            var rand = new Random((int)DateTime.Now.Ticks);
-            int x = rand.Next(0, _colors.Count);
-            int y = rand.Next(0, _colors[0].Count);
+            if(_Rand == null) {
+                _Rand = new Random((int)DateTime.Now.Ticks);
+            }
+            int x = _Rand.Next(0, _colors.Count);
+            int y = _Rand.Next(0, _colors[0].Count);
 
             return ((SolidColorBrush)_colors[x][y]).Color;
         }

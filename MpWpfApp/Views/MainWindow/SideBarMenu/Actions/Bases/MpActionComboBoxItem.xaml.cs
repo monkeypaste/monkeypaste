@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +15,11 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpMatcherCollectionView.xaml
+    /// Interaction logic for MpActionComboBoxItem.xaml
     /// </summary>
-    public partial class MpRootActionTreeView : MpUserControl<MpActionViewModelBase> {
-        public MpRootActionTreeView() {
+    public partial class MpActionComboBoxItem : MpUserControl<MpActionViewModelBase> {
+        public MpActionComboBoxItem() {
             InitializeComponent();
-        }
-
-        private void Border_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
         }
     }
 }

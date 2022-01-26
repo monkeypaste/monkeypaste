@@ -129,7 +129,7 @@ namespace MonkeyPaste {
                 return null;
             } else {
                 var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
-                if(favIconImg64 == MpBase64Images.Instance.UnknownFavIcon && app != null) {
+                if(favIconImg64 == MpBase64Images.UnknownFavIcon && app != null) {
                     //url has no favicon so use application's icon
                     MpConsole.WriteLine($"Url: {urlPath} has no favicon, using app: {app.AppPath}");
                     newUrl.Icon = app.Icon;

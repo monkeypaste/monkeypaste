@@ -29,7 +29,7 @@
     using MonkeyPaste;
 using System.Speech.Synthesis;
 
-    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel> {
+    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpISelectableViewModel {
         #region Private Variables
 
         private double _unexpandedHeight = 0;

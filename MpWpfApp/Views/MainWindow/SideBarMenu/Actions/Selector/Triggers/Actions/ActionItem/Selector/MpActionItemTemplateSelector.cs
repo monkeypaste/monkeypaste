@@ -14,7 +14,8 @@ namespace MpWpfApp {
                 return null;
             }
             string templateKeyName = mvm.ActionType.ToString() + "Template";
-            return (container as FrameworkElement).GetVisualAncestor<UserControl>().Resources[templateKeyName] as DataTemplate;
+            var dt = (container as FrameworkElement).GetVisualAncestor<UserControl>().Resources[templateKeyName] as DataTemplate;
+            return dt;
         }
     }
 }

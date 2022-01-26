@@ -29,74 +29,17 @@ namespace MpWpfApp {
 
         #region Properties
 
-        #region View Models
+        #region View Models               
 
-        //public ObservableCollection<string> TriggerTypes { get; set; } = new ObservableCollection<string>(typeof(MpTriggerType).EnumToLabels("Select Trigger"));
-
-        //public int SelectedTriggerTypeIdx {
-        //    get {
-        //        return (int)TriggerType;
-        //    }
-        //    set {
-        //        if((int)TriggerType != value) {
-        //            TriggerType = (MpTriggerType)value;
-        //            OnPropertyChanged(nameof(SelectedTriggerTypeIdx));
-        //        }
-        //    }
-        //}
-
-        //public ObservableCollection<string> TriggerActionTypes { get; set; } = new ObservableCollection<string>(typeof(MpActionType).EnumToLabels("Select Trigger Action"));
-        
-        //public int SelectedTriggerActionTypeIdx {
-        //    get {
-        //        return (int)ActionType;
-        //    }
-        //    set {
-        //        if ((int)ActionType != value) {
-        //            ActionType = (MpActionType)value;
-        //            OnPropertyChanged(nameof(SelectedTriggerActionTypeIdx));
-        //        }
-        //    }
-        //}
-
-        public MpActionViewModelBase ParentActionViewModel { get; set; } = null;
-
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpActionViewModelBase ParentActionViewModel {
             get {
-                var cmvml = FindChildren();
-
-                return new MpMenuItemViewModel() {
-                    Header = Label,
-                    IconId = IconId,
-                    SubItems = FindChildren().Select(x => x.MenuItemViewModel).ToList()
-                };
-            }
-        }
-        
-        private ObservableCollection<MpActionViewModelBase> _matcherViewModels;
-        public ObservableCollection<MpActionViewModelBase> MatcherViewModels {
-            get {
-                if(_matcherViewModels == null) {
-                    _matcherViewModels = new ObservableCollection<MpActionViewModelBase>();
-                }
                 if(Parent == null) {
-                    return _matcherViewModels;
+                    return null;
                 }
-                //to maintain any collection changed handlers only add/remove matchers if they do/don't exist
-                var cmvml = Parent.Items.Where(x => x.ParentActionId == ActionId).ToList();
-                foreach(var cmvm in cmvml) {
-                    if(!_matcherViewModels.Contains(cmvm)) {
-                        _matcherViewModels.Add(cmvm);
-                    }
-                }
-                var matchersToRemove = _matcherViewModels.Where(x => !cmvml.Any(y => y.ActionId == x.ActionId)).ToList();
-                for (int i = 0; i < matchersToRemove.Count; i++) {
-                    _matcherViewModels.Remove(matchersToRemove[i]);
-                }
-                return _matcherViewModels;
+                return Parent.Items.FirstOrDefault(x => x.ActionId == ParentActionId);
             }
         }
-
+                
         #endregion
 
         #region MpITreeItemViewModel Implementation
@@ -133,6 +76,29 @@ namespace MpWpfApp {
         #region MpISelectableViewModel Implementation
 
         public bool IsSelected { get; set; }
+
+        #endregion
+
+
+        #region MpIMenuItemViewModel Implementation
+
+        public virtual MpMenuItemViewModel MenuItemViewModel {
+            get {
+                var cmvml = FindChildren();
+
+                return new MpMenuItemViewModel() {
+                    Header = Label,
+                    IconId = IconId,
+                    SubItems = cmvml.Select(x => x.MenuItemViewModel).ToList()
+                };
+            }
+        }
+
+        #endregion
+
+        #region Appearance
+
+        public string ActionTypeLabel => ActionType.EnumToLabel();
 
         #endregion
 
@@ -279,8 +245,11 @@ namespace MpWpfApp {
 
         public MpActionViewModelBase() : base(null) { }
 
-        public MpActionViewModelBase(MpActionCollectionViewModel parent) : base(parent) { 
+        public MpActionViewModelBase(MpActionCollectionViewModel parent) : base(parent) {
+            PropertyChanged += MpActionViewModelBase_PropertyChanged;
         }
+
+        
 
         #endregion
 
@@ -291,19 +260,7 @@ namespace MpWpfApp {
 
             Action = m;
 
-            var cml = await MpDataModelProvider.GetChildActions(ActionId);
-
-            foreach(var cm in cml.OrderBy(x=>x.SortOrderIdx)) {
-                var dupCheck = Parent.Items.FirstOrDefault(x => x.ActionId == cm.Id);
-                if (dupCheck != null) {
-                    Parent.Items.Remove(dupCheck);
-                }
-                var cmvm = await Parent.CreateActionViewModel(cm);
-                cmvm.ParentActionViewModel = this;
-                Parent.Items.Add(cmvm);
-            }
-
-            OnPropertyChanged(nameof(MatcherViewModels));
+            await Task.Delay(1);
 
             IsBusy = false;
         }
@@ -314,20 +271,18 @@ namespace MpWpfApp {
                 return new List<MpActionViewModelBase>();
             }
             var cl = Parent.FindChildren(this);
-            cl.Insert(0, this);
             return cl;
         }
 
         public virtual void Enable() {
-
-            MatcherViewModels.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Enable());
+            Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Enable());
 
             IsEnabled = true;
         }
 
         public virtual void Disable() {
             // TODO reverse enable
-            MatcherViewModels.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Disable());
+            Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Disable());
             IsEnabled = false;
         }
 
@@ -355,11 +310,6 @@ namespace MpWpfApp {
 
         #region Db Event Handlers
 
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpAction m && MatcherViewModels.Any(x=>x.ActionId == m.Id)) {
-               
-            }
-        }
         #endregion
 
         #endregion
@@ -382,7 +332,18 @@ namespace MpWpfApp {
         //    MpHelpers.RunOnMainThreadAsync(()=>PerformAction(e));
         //}
 
-
+        private void MpActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsSelected):
+                    //if(Parent == null) {
+                    //    return;
+                    //}
+                    //if(IsSelected) {
+                    //    Parent.SelectedItem = this;
+                    //}
+                    break;
+            }
+        }
         #endregion
 
         #region Commands
@@ -396,10 +357,6 @@ namespace MpWpfApp {
                  }
             });
 
-        public ICommand AddChildActionCommand => new RelayCommand(
-              () => {
-                  Parent.AddActionCommand.Execute(this);
-             },Parent != null);
         #endregion
     }
 }

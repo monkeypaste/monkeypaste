@@ -110,6 +110,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
+    <Compile Include="AttachedProperties\MpPopupMenuExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpHoverableExtension.cs" />
     <Compile Include="Attributes\Affects\Base\MpAffectsBaseAttribute.cs" />
@@ -162,9 +163,11 @@
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\MpAnalyticItemIdToTitleConverter.cs" />
     <Compile Include="Converters\MpBackgroundBrushToForegroundBrushConverter.cs" />
     <Compile Include="Converters\MpBase64StringToIconConverter.cs" />
     <Compile Include="Converters\MpBase64ToImageBrushConverter.cs" />
+    <Compile Include="Converters\MpEnumToIntConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
     <Compile Include="Converters\MpBoolToBrushConverter.cs" />
     <Compile Include="Converters\MpBoolToCursorConverter.cs" />
@@ -237,6 +240,7 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpClassifyActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpCompareActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\Base\MpTriggerActionViewModelBase.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpEmptyTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentAddTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentTaggedTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpFileSystemTriggerViewModel.cs" />
@@ -339,14 +343,14 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpRootActionSelectorView.xaml.cs">
-      <DependentUpon>MpRootActionSelectorView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionSelectorView.xaml.cs">
+      <DependentUpon>MpTriggerActionSelectorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\ActionItem\MpActionItemView.xaml.cs">
-      <DependentUpon>MpActionItemView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemView.xaml.cs">
+      <DependentUpon>MpActionTreeItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\MpRootActionView.xaml.cs">
-      <DependentUpon>MpRootActionView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Bases\MpActionComboBoxItem.xaml.cs">
+      <DependentUpon>MpActionComboBoxItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
       <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
@@ -374,10 +378,10 @@
     <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyzerTreeView.xaml.cs">
       <DependentUpon>MpAnalyzerTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\MpRootActionTreeView.xaml.cs">
-      <DependentUpon>MpRootActionTreeView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\MpTriggerActionTreeView.xaml.cs">
+      <DependentUpon>MpTriggerActionTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\ActionItem\Selector\MpActionItemTemplateSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\Selector\MpActionItemTemplateSelector.cs" />
     <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarMenuView.xaml.cs">
       <DependentUpon>MpSidebarMenuView.xaml</DependentUpon>
     </Compile>
@@ -604,15 +608,15 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpRootActionSelectorView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionSelectorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\ActionItem\MpActionItemView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\MpRootActionView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Bases\MpActionComboBoxItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -764,7 +768,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\RootAction\ActionItems\MpRootActionTreeView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\MpTriggerActionTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2535,6 +2539,13 @@
     <Resource Include="Resources\Images\monkey%282%29.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\clipboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\alarmClock.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\add1.png" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -3,17 +3,20 @@ using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpActionCollectionViewModel : 
         MpSelectorViewModelBase<object,MpActionViewModelBase>, 
-        MpISingletonViewModel<MpActionCollectionViewModel>,
-        MpISelectorViewModel<MpActionViewModelBase> {
+        MpIMenuItemViewModel,
+        MpISingletonViewModel<MpActionCollectionViewModel> {
         #region Private Variables
 
         #endregion
@@ -22,7 +25,44 @@ namespace MpWpfApp {
 
         #region View Models
 
-        
+        public MpMenuItemViewModel MenuItemViewModel {
+            get {
+                var tmivml = new List<MpMenuItemViewModel>();
+                var triggerLabels = typeof(MpTriggerType).EnumToLabels();
+                for (int i = 0; i < triggerLabels.Length; i++) {
+                    string resourceKey = string.Empty;
+                    switch((MpTriggerType)i) {
+                        case MpTriggerType.ContentItemAdded:
+                            resourceKey = "ClipboardIcon";
+                            break;
+                        case MpTriggerType.ContentItemAddedToTag:
+                            resourceKey = "PinToCollectionIcon";
+                            break;
+                        case MpTriggerType.FileSystemChange:
+                            resourceKey = "FolderEventIcon";
+                            break;
+                        case MpTriggerType.Shortcut:
+                            resourceKey = "HotkeyIcon";
+                            break;
+                        case MpTriggerType.ParentOutput:
+                            resourceKey = "ChainIcon";
+                            break;
+                    }
+                    var tt = (MpTriggerType)i;
+                    tmivml.Add(new MpMenuItemViewModel() {
+                        IconResourceKey = Application.Current.Resources[resourceKey] as string,
+                        Header = triggerLabels[i],
+                        Command = AddActionCommand,
+                        CommandParameter = tt,
+                        IsVisible = tt != MpTriggerType.None && (tt != MpTriggerType.ParentOutput || (SelectedItem != null && !SelectedItem.IsRootAction))
+                    });
+                }
+                return new MpMenuItemViewModel() {
+                    SubItems = tmivml
+                };
+            }
+        }
+
         #endregion
 
         #region State
@@ -30,6 +70,8 @@ namespace MpWpfApp {
         public bool IsVisible { get; set; } = false;
 
         public bool HasItems => Items.Count > 0;
+
+        public bool IsAnySelected => SelectedItem != null;// SelectedItems.Count > 0;
         #endregion
 
         #endregion
@@ -52,7 +94,7 @@ namespace MpWpfApp {
                 Items.Add(mvm);
             }
 
-            LinkAllTriggers();
+            EnabledAll();
         }
 
         public IList<MpActionViewModelBase> FindChildren(MpActionViewModelBase avm) {
@@ -101,11 +143,13 @@ namespace MpWpfApp {
             return mvm;
         }
 
-        public void LinkAllTriggers() {
+        public void EnabledAll() {
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
             Items.ForEach(x => x.Enable());
         }
 
-        public void UnlinkAllTriggers() {
+        public void DisableAll() {
             Items.ForEach(x => x.Disable());
         }
 
@@ -142,9 +186,29 @@ namespace MpWpfApp {
 
                     }
                     break;
+                case nameof(SelectedItem):
+                    //SelectedItems.Clear();
+                    //if(SelectedItem != null) {
+                    //    if(SelectedItem.IsRootAction) {
+                    //        SelectedItems.Add(SelectedItem);
+                    //    } else {
+                    //        var rsavm = SelectedItem.ParentActionViewModel;
+                    //        while (rsavm.ParentActionViewModel != null) {
+                    //            rsavm = rsavm.ParentActionViewModel;
+                    //        }
+                    //        if(rsavm == null) {
+                    //            throw new Exception("Error unlinked sub item");
+                    //        }
+                    //        SelectedItems.Add(rsavm);
+                    //    }
+                        
+                        
+                    //}
+                    //OnPropertyChanged(nameof(SelectedItems));
+                    OnPropertyChanged(nameof(IsAnySelected));
+                    break;
             }
         }
-
 
         #endregion
 
@@ -153,33 +217,47 @@ namespace MpWpfApp {
         public ICommand AddActionCommand => new RelayCommand<object>(
              async (args) => {
                  MpAction na = null;
-                 if (args is MpAnalyticItemPresetViewModel aipvm) {
+                 if(args is MpTriggerType tt) {
                      na = await MpAction.Create(
-                         GetUniqueMatcherName($"{aipvm.Label} Action"),
-                         MpActionType.Analyze,
-                         aipvm.AnalyticItemPresetId);
-                     
-                } else if (args is MpActionViewModelBase mvm) {
+                         label: GetUniqueMatcherName(),
+                         actionType: MpActionType.Trigger,
+                         actionObjId: (int)tt);
+
+
+                 } else if (args is MpActionType at) {
+                     if(SelectedItem == null) {
+                         throw new Exception("Action must have context");
+                     }
                      na = await MpAction.Create(
-                         GetUniqueMatcherName($"{mvm.Label} Action"),
-                         MpActionType.Trigger,
-                         (int)MpTriggerType.ParentOutput);
-                 } else {
-                     na = await MpAction.Create(
-                         GetUniqueMatcherName(),
-                         MpActionType.Trigger,
-                         (int)MpTriggerType.ContentItemAdded);
+                         label: GetUniqueMatcherName(),
+                         actionType: at,
+                         0,
+                         SelectedItem.ActionId);
                  }
+
                  var navm = await CreateActionViewModel(na);
 
                  Items.Add(navm);
 
-                 SelectedItem = navm;
+                 if(navm.IsRootAction) {
+                     //SelectedItems.Clear();
+                     SelectedItem = navm;
+                 }
+                 
+                 if(navm.ParentActionViewModel != null) {
+                     navm.ParentActionViewModel.OnPropertyChanged(nameof(navm.ParentActionViewModel.Children));
+                 }
+
+                 //OnPropertyChanged(nameof(Items));
              });
 
         public ICommand DeleteActionCommand => new RelayCommand<object>(
             async (args) => {
                 if(args is MpActionViewModelBase mvm) {
+                    mvm = Items.FirstOrDefault(x => x.ActionId == mvm.ActionId);
+                    if(mvm == null) {
+                        Debugger.Break();
+                    }
                     Items.Remove(mvm);
                     await mvm.Action.DeleteFromDatabaseAsync();
                     if(mvm.IsEnabled) {
@@ -187,9 +265,13 @@ namespace MpWpfApp {
                     }
                     if(mvm.ParentActionViewModel != null) {
                         await mvm.ParentActionViewModel.InitializeAsync(mvm.ParentActionViewModel.Action);
+                    } else {
+                        mvm.OnPropertyChanged(nameof(mvm.Children));
                     }
+                    OnPropertyChanged(nameof(Items));
+                    OnPropertyChanged(nameof(SelectedItem));
                 }
-            }, (args) => args != null);
+            });
         #endregion
     }
 }

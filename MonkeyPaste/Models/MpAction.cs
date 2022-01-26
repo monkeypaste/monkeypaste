@@ -34,17 +34,19 @@ namespace MonkeyPaste {
         Classify,  //tagid
         Analyze,   //analyticItemPresetId
         Compare,   //MatcherTypeEnumId
-        Trigger    //TriggerTypeEnumId 
+        Trigger,    //TriggerTypeEnumId 
+        Macro,
+        Timer
     }
 
     public class MpAction : MpDbModelBase {
         #region Columns
 
         [PrimaryKey, AutoIncrement]
-        [Column("pk_MpMatcherId")]
+        [Column("pk_MpActionId")]
         public override int Id { get; set; }
 
-        [Column("MpMatcherGuid")]
+        [Column("MpActionGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [ForeignKey(typeof(MpAction))]
@@ -79,7 +81,7 @@ namespace MonkeyPaste {
         #region Properties
 
         [Ignore]
-        public Guid MatcherGuid {
+        public Guid ActionGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
@@ -111,37 +113,40 @@ namespace MonkeyPaste {
             string label,
             MpActionType actionType,
             int actionObjId,
+            int parentId = 0,
+            int sortOrderIdx = 0,
             string arg1 = "",
             string arg2 = "",
             string arg3 = "",
-            int parentMatcherId = 0,
-            int sortOrderIdx = 0,
             int iconId = 0,
             string description = "",
             bool isReadOnly = false) {
 
-            var dupCheck = await MpDataModelProvider.GetActionByLabel(label);
-            if(dupCheck != null) {
-                MpConsole.WriteTraceLine("Action must have unique name");
-                return null;
+            //var dupCheck = await MpDataModelProvider.GetActionByLabel(label);
+            //if(dupCheck != null) {
+            //    MpConsole.WriteTraceLine("Action must have unique name");
+            //    return null;
+            //}
+            if(sortOrderIdx == 0 && parentId > 0) {
+                sortOrderIdx = await MpDataModelProvider.GetChildActionCount(parentId);
             }
             if(actionType == MpActionType.Trigger && iconId == 0) {
                 string iconStr = null;
                 switch ((MpTriggerType)actionObjId) {
                     case MpTriggerType.ContentItemAdded:
-                        iconStr = MpBase64Images.Instance.ClipboardIcon;
+                        iconStr = MpBase64Images.ClipboardIcon;
                         break;
                     case MpTriggerType.ContentItemAddedToTag:
-                        iconStr = MpBase64Images.Instance.TagIcon;
+                        iconStr = MpBase64Images.TagIcon;
                         break;
                     case MpTriggerType.FileSystemChange:
-                        iconStr = MpBase64Images.Instance.FolderChangedIcon;
+                        iconStr = MpBase64Images.FolderChangedIcon;
                         break;
                     case MpTriggerType.Shortcut:
-                        iconStr = MpBase64Images.Instance.JoystickUnset;
+                        iconStr = MpBase64Images.JoystickUnset;
                         break;
                     case MpTriggerType.ParentOutput:
-                        iconStr = MpBase64Images.Instance.ChainIcon;
+                        iconStr = MpBase64Images.ChainIcon;
                         break;
                 }
                 if (string.IsNullOrEmpty(iconStr)) {
@@ -153,14 +158,14 @@ namespace MonkeyPaste {
             }
 
             var mr = new MpAction() {
-                MatcherGuid = System.Guid.NewGuid(),
+                ActionGuid = System.Guid.NewGuid(),
                 Label = label,
                 ActionType = actionType,
                 ActionObjId = actionObjId,
                 Arg1 = arg1,
                 Arg2 = arg2,
                 Arg3 = arg3,
-                ParentActionId = parentMatcherId,
+                ParentActionId = parentId,
                 SortOrderIdx = sortOrderIdx,
                 IconId = iconId,
                 Description = description,
