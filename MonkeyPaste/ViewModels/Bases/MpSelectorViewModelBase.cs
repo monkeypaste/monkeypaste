@@ -6,7 +6,7 @@ using System.Text;
 using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste {
-    public class MpSelectorViewModelBase<P,C> : 
+    public abstract class MpSelectorViewModelBase<P,C> : 
         MpViewModelBase<P>, 
         MpISelectorViewModel<C> where P:class 
         where C: MpViewModelBase,MpISelectableViewModel {
@@ -15,7 +15,7 @@ namespace MonkeyPaste {
 
         public MpSelectorViewModelBase(P p):base(p) { }
 
-        public ObservableCollection<C> Items { get; set; } = new ObservableCollection<C>();
+        public virtual ObservableCollection<C> Items { get; set; } = new ObservableCollection<C>();
 
         public C SelectedItem {
             get => Items.FirstOrDefault(x => x.IsSelected);
@@ -28,7 +28,9 @@ namespace MonkeyPaste {
                 }
             }
         }
+        public bool HasItems => Items.Count > 0;
 
+        public bool IsAnySelected => SelectedItem != null;
         //public List<C> SelectedItems => Items.Where(x => x.IsSelected).ToList();
     }
 }

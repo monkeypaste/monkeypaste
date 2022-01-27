@@ -70,6 +70,7 @@
         <s:String x:Key="PasteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/paste.png</s:String>
         <s:String x:Key="DeleteIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/Delete.png</s:String>
         <s:String x:Key="EditIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/edit.png</s:String>
+        <s:String x:Key="CaretIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/caret.png</s:String>
         <s:String x:Key="EditContentIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/caret.png</s:String>
         <s:String x:Key="ToolsIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/tools.png</s:String>
         <s:String x:Key="RenameIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/rename.png</s:String>
@@ -126,6 +127,8 @@
         <s:String x:Key="ImageIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/image_icon.png</s:String>
         <s:String x:Key="ClipboardIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/clipboard.png</s:String>
         <s:String x:Key="AlarmClockIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/alarmClock.png</s:String>
+        <s:String x:Key="BeakerIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/beaker.png</s:String>
+        <s:String x:Key="AsteriskIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/asterisk.png</s:String>
         <!--  Icon/Image Source Paths End  -->
 
         <!--  Font Awesome  -->
@@ -156,7 +159,7 @@
         <local:MpIntToWindowCommandConverter x:Key="IntToWindowCommandConverter" />
         <local:MpStringResourceToImageSourceConverter x:Key="StringResourceToImageSourceConverter" />
         <local:MpStringResourceToIconConverter x:Key="StringToIconConverter" />
-        <local:MpStringHexToBrushConverter x:Key="StringToBrushConverter" />
+        <local:MpStringHexToBrushConverter x:Key="StringHexToBrushConverter" />
         <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />
         <local:MpIntToStringConverter x:Key="IntToStringConverter" />
         <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -191,12 +194,18 @@
         <local:MpIconIdToImageSourceConverter x:Key="IconIdToImageSourceConverter" />
         <local:MpStringToThemeBrushConverter x:Key="StringToThemeBrushConverter" />
         <local:MpIconIdToIconConverter x:Key="IconIdToIconConverter" />
-        <local:MpStringHexToIconConverter x:Key="HexStringToIconConverter" />
+        <local:MpStringHexToIconConverter x:Key="StringHexToIconConverter" />
         <local:MpDbImageIdToIconConverter x:Key="DbImageIdToIconConverter" />
         <local:MpDbImageIdToBitmapSourceConverter x:Key="DbImageIdToBitmapSourceConverter" />
         <local:MpShorcutIdToKeyStringConverter x:Key="ShorcutIdToKeyStringConverter" />
         <local:MpEnumToIntConverter x:Key="EnumToIntConverter" />
         <local:MpAnalyticItemIdToTitleConverter x:Key="AnalyticItemIdToTitleConverter" />
+        <local:MpItemToItemsSourceConverter x:Key="ItemToItemsSourceConverter" />
+        <local:MpCollectionToGroupedCollectionConverter x:Key="CollectionToGroupedCollectionConverter" />
+        <local:MpAnalyticItemIdToIconSourceConverter x:Key="AnalyticItemIdToIconSourceConverter" />
+        <local:MpTagIdToBrushConverter x:Key="TagIdToBrushConverter" />
+        <local:MpTagIdToTagNameConverter x:Key="TagIdToTagNameConverter" />
+        <local:MpTagIdToThicknessNameConverter x:Key="TagIdToThicknessNameConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Context Menu Resources  -->
@@ -243,7 +252,7 @@
                       Command="{Binding Command}"
                       CommandParameter="{Binding CommandParameter}"
                       Icon="{Binding IconHexStr,
-                                     Converter={StaticResource HexStringToIconConverter},
+                                     Converter={StaticResource StringHexToIconConverter},
                                      ConverterParameter=checked}"
                       InputGestureText="{Binding InputGestureText}"
                       UsesItemContainerTemplate="true"
@@ -260,7 +269,7 @@
                       Command="{Binding Command}"
                       CommandParameter="{Binding CommandParameter}"
                       Icon="{Binding IconHexStr,
-                                     Converter={StaticResource HexStringToIconConverter}}"
+                                     Converter={StaticResource StringHexToIconConverter}}"
                       InputGestureText="{Binding InputGestureText}"
                       UsesItemContainerTemplate="true"
                       ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}" />
@@ -373,9 +382,9 @@
                                             Width="15"
                                             Height="15"
                                             BorderBrush="{Binding BorderHexColor,
-                                                                  Converter={StaticResource StringToBrushConverter}}"
+                                                                  Converter={StaticResource StringHexToBrushConverter}}"
                                             Background="{Binding Header,
-                                                                 Converter={StaticResource StringToBrushConverter}}">
+                                                                 Converter={StaticResource StringHexToBrushConverter}}">
                                         <Image Source="{Binding .,
                                                                 Source={StaticResource PlusIcon}}"
                                                ToolTip="Custom Color..."

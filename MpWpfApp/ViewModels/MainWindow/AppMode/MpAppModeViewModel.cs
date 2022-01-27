@@ -81,7 +81,8 @@ namespace MpWpfApp {
                     return false;
                 }
                 return MpTagTrayViewModel.Instance.IsVisible ||
-                       MpAnalyticItemCollectionViewModel.Instance.IsVisible;
+                       MpAnalyticItemCollectionViewModel.Instance.IsVisible ||
+                       MpActionCollectionViewModel.Instance.IsVisible;
             }
         }
 
@@ -183,6 +184,10 @@ namespace MpWpfApp {
                 return Application.Current.Resources["NoneClickIcon"] as string;
             }
         }
+
+        public double TotalSidebarWidth => SidebarWidth + AppModeButtonGridMinWidth;
+
+        public double SidebarWidth { get; set; }
 
         #endregion
 

@@ -2,17 +2,16 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Linq;
 
 namespace MpWpfApp {
-    public class MpBoolToVisibilityConverter : IValueConverter {
+    public class MpTagIdToBrushConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value == null || value.GetType() != typeof(bool)) {
-                return Visibility.Collapsed;
+            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == (int)value);
+            if (ttvm == null) {
+                return null;
             }
-            if (parameter != null) {
-                return (bool)value ? Visibility.Visible : Visibility.Hidden;
-            }
-            return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+            return new MpStringHexToBrushConverter().Convert(ttvm.TagHexColor, targetType, parameter, culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

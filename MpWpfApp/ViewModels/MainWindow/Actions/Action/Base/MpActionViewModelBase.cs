@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MpWpfApp {
@@ -18,52 +19,47 @@ namespace MpWpfApp {
         void UnregisterTrigger(MpActionViewModelBase mvm);
     }
 
-    public abstract class MpActionViewModelBase : 
-        MpViewModelBase<MpActionCollectionViewModel>,
+    public abstract class MpActionViewModelBase :
+        MpSelectorViewModelBase<MpActionCollectionViewModel, MpActionViewModelBase>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
+        MpIUserIconViewModel,
         MpITreeItemViewModel<MpActionViewModelBase>,
         MpIMenuItemViewModel,
         MpITriggerActionViewModel {
         
-
         #region Properties
 
         #region View Models               
 
-        public MpActionViewModelBase ParentActionViewModel {
-            get {
-                if(Parent == null) {
-                    return null;
-                }
-                return Parent.Items.FirstOrDefault(x => x.ActionId == ParentActionId);
-            }
-        }
-                
+        public MpActionViewModelBase ParentActionViewModel { get; set; }
+
         #endregion
 
         #region MpITreeItemViewModel Implementation
 
-        public bool IsExpanded { get; set; }
+        public bool IsExpanded { get; set; } = true;
 
         public MpActionViewModelBase ParentTreeItem => ParentActionViewModel;
 
-        public IList<MpActionViewModelBase> Children => FindChildren();
+        public IList<MpActionViewModelBase> Children => Items;
 
         #endregion
 
         #region MpIUserIcon Implementation
 
-        public async Task<MpIcon> Get() {
+        public async Task<MpIcon> GetIcon() {
             var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
             return icon;
         }
 
-        public async Task Set(MpIcon icon) {
-            Action.IconId = icon.Id;
-            await Action.WriteToDatabaseAsync();
-            OnPropertyChanged(nameof(IconId));
-        }
+        public ICommand SetIconCommand => new RelayCommand<object>(
+            async (args) => {
+                var icon = args as MpIcon;
+                Action.IconId = icon.Id;
+                await Action.WriteToDatabaseAsync();
+                OnPropertyChanged(nameof(IconId));
+            });
 
         #endregion
 
@@ -79,17 +75,41 @@ namespace MpWpfApp {
 
         #endregion
 
-
         #region MpIMenuItemViewModel Implementation
 
         public virtual MpMenuItemViewModel MenuItemViewModel {
             get {
-                var cmvml = FindChildren();
-
+                var amivml = new List<MpMenuItemViewModel>();
+                var triggerLabels = typeof(MpActionType).EnumToLabels();
+                for (int i = 0; i < triggerLabels.Length; i++) {
+                    string resourceKey = string.Empty;
+                    switch ((MpActionType)i) {
+                        case MpActionType.Analyze:
+                            resourceKey = "BrainIcon";
+                            break;
+                        case MpActionType.Classify:
+                            resourceKey = "PinToCollectionIcon";
+                            break;
+                        case MpActionType.Compare:
+                            resourceKey = "ScalesIcon";
+                            break;
+                        case MpActionType.Macro:
+                            resourceKey = "HotkeyIcon";
+                            break;
+                        case MpActionType.Timer:
+                            resourceKey = "AlarmClockIcon";
+                            break;
+                    }
+                    amivml.Add(new MpMenuItemViewModel() {
+                        IconResourceKey = Application.Current.Resources[resourceKey] as string,
+                        Header = triggerLabels[i],
+                        Command = AddChildActionCommand,
+                        CommandParameter = (MpActionType)i,
+                        IsVisible = (MpActionType)i != MpActionType.None && (MpActionType)i != MpActionType.Trigger
+                    });
+                }
                 return new MpMenuItemViewModel() {
-                    Header = Label,
-                    IconId = IconId,
-                    SubItems = cmvml.Select(x => x.MenuItemViewModel).ToList()
+                    SubItems = amivml
                 };
             }
         }
@@ -97,8 +117,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance
-
-        public string ActionTypeLabel => ActionType.EnumToLabel();
 
         #endregion
 
@@ -113,6 +131,21 @@ namespace MpWpfApp {
         public bool IsCompareAction => ActionType == MpActionType.Compare;
 
         public bool IsAnalyzeAction => ActionType == MpActionType.Analyze;
+
+        public bool IsLabelFocused { get; set; } = false;
+
+        public bool IsActionTextBoxFocused { get; set; } = false;
+
+        public bool IsAnyLabelFocused => IsLabelFocused || this.FindAllChildren().Any(x => x.IsLabelFocused);
+
+        public bool IsAnyActionTextBoxFocused => IsActionTextBoxFocused || this.FindAllChildren().Any(x => x.IsActionTextBoxFocused);
+
+        public bool IsAnyTextBoxFocused => IsAnyLabelFocused || IsAnyActionTextBoxFocused;
+
+        public bool IsValid => string.IsNullOrEmpty(ValidationText);
+
+        public string ValidationText { get; set; }
+
         #endregion
 
         #region Model
@@ -147,8 +180,6 @@ namespace MpWpfApp {
             }
         }
 
-
-
         public MpActionType ActionType {
             get {
                 if (Action == null) {
@@ -164,10 +195,13 @@ namespace MpWpfApp {
             }
         }
 
-        public string Label {
+        public virtual string Label {
             get {
                 if (Action == null) {
                     return null;
+                }
+                if(string.IsNullOrEmpty(Action.Label)) {
+                    return ActionType.EnumToLabel();
                 }
                 return Action.Label;
             }
@@ -249,29 +283,55 @@ namespace MpWpfApp {
             PropertyChanged += MpActionViewModelBase_PropertyChanged;
         }
 
-        
-
         #endregion
 
         #region Public Methods
 
-        public virtual async Task InitializeAsync(MpAction m) {
+        public virtual async Task InitializeAsync(MpAction a) {
             IsBusy = true;
 
-            Action = m;
+            Action = a;
 
-            await Task.Delay(1);
+            var cal = await MpDataModelProvider.GetChildActions(ActionId);
+
+            foreach(var ca in cal.OrderBy(x=>x.SortOrderIdx)) {
+                var cavm = await CreateActionViewModel(ca);
+                Items.Add(cavm);
+            }
 
             IsBusy = false;
         }
 
-
-        public IList<MpActionViewModelBase> FindChildren() {
-            if(Parent == null) {
-                return new List<MpActionViewModelBase>();
+        public async Task<MpActionViewModelBase> CreateActionViewModel(MpAction a) {
+            MpActionViewModelBase avm = null;
+            switch (a.ActionType) {
+                case MpActionType.Trigger:
+                    if((MpTriggerType)a.ActionObjId != MpTriggerType.ParentOutput) {
+                        throw new Exception("Only parent output triggers can be children of a trigger or action");
+                    }
+                    avm = new MpParentOutputTriggerViewModel(Parent);
+                    break;
+                case MpActionType.Analyze:
+                    avm = new MpAnalyzeActionViewModel(Parent);
+                    break;
+                case MpActionType.Classify:
+                    avm = new MpClassifyActionViewModel(Parent);
+                    break;
+                case MpActionType.Compare:
+                    avm = new MpCompareActionViewModel(Parent);
+                    break;
+                case MpActionType.Macro:
+                    avm = new MpMacroActionViewModel(Parent);
+                    break;
+                case MpActionType.Timer:
+                    avm = new MpTimerActionViewModel(Parent);
+                    break;
             }
-            var cl = Parent.FindChildren(this);
-            return cl;
+
+            await avm.InitializeAsync(a);
+            avm.ParentActionViewModel = this;
+
+            return avm;
         }
 
         public virtual void Enable() {
@@ -290,6 +350,8 @@ namespace MpWpfApp {
             OnAction?.Invoke(this, ci);
         }
         
+        public virtual void Validate() { }
+
         #endregion
 
         #region MpIMatchTrigger Implementation
@@ -328,9 +390,10 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        //private void OnTrigger(object sender, MpCopyItem e) {
-        //    MpHelpers.RunOnMainThreadAsync(()=>PerformAction(e));
-        //}
+        private async Task UpdateSortOrder() {
+            Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
+            await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
+        }
 
         private void MpActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
@@ -357,6 +420,61 @@ namespace MpWpfApp {
                  }
             });
 
+        public ICommand ShowActionSelectorMenuCommand => new RelayCommand<object>(
+             (args) => {
+                 var fe = args as FrameworkElement;
+                 var cm = new MpContextMenuView();
+                 cm.DataContext = MenuItemViewModel;
+                 fe.ContextMenu = cm;
+                 fe.ContextMenu.PlacementTarget = fe;
+                 fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
+                 fe.ContextMenu.IsOpen = true;
+             });
+
+        public ICommand AddChildActionCommand => new RelayCommand<object>(
+             async (args) => {
+                 MpActionType at = (MpActionType)args;
+                 MpAction na = await MpAction.Create(
+                                         actionType: at,
+                                         parentId: ActionId,
+                                         sortOrderIdx: Items.Count);
+
+                 var navm = await CreateActionViewModel(na);
+
+                 Items.Add(navm);
+
+                 SelectedItem = navm;
+
+                 OnPropertyChanged(nameof(Items));
+             });
+
+        public ICommand DeleteChildActionCommand => new RelayCommand<object>(
+            async (args) => {
+                var avm = args as MpActionViewModelBase;
+                avm.Disable();
+                var deleteTasks = avm.FindAllChildren().Select(x => x.Action.DeleteFromDatabaseAsync()).ToList();
+                deleteTasks.Add(avm.Action.DeleteFromDatabaseAsync());
+                await Task.WhenAll(deleteTasks);
+
+                Items.Remove(avm);
+
+                await UpdateSortOrder();
+                OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(SelectedItem));
+            });
+
+        public ICommand DeleteThisActionCommand => new RelayCommand(
+            () => {
+                if(IsRootAction) {
+                    Parent.DeleteTriggerCommand.Execute(this);
+                    return;
+                }
+
+                if (ParentActionViewModel == null) {
+                    throw new Exception("This shouldn't be null, cannot delete");
+                }
+                ParentActionViewModel.DeleteChildActionCommand.Execute(this);
+            });
         #endregion
     }
 }

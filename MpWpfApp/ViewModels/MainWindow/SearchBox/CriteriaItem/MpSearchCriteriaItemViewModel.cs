@@ -435,7 +435,7 @@ namespace MpWpfApp {
             ovm.UnitType = MpSearchCriteriaUnitType.Enumerable;
             ovm.Items = GetTextOptionViewModel(ovm);
             iovml.Add(ovm);
-            foreach (var ttvm in MpTagTrayViewModel.Instance.TagTileViewModels.OrderBy(x => x.TagName)) {
+            foreach (var ttvm in MpTagTrayViewModel.Instance.Items.OrderBy(x => x.TagName)) {
                 var tovm = new MpSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = ttvm.TagName;
                 tovm.UnitType = MpSearchCriteriaUnitType.EnumerableValue;

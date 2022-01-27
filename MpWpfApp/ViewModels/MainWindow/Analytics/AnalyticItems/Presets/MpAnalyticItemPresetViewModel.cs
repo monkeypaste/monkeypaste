@@ -83,8 +83,6 @@ namespace MpWpfApp {
 
         public bool IsEditingParameters { get; set; }
 
-        public bool IsEditingMatchers { get; set; }
-
         public bool IsExpanded { get; set; }
 
         public bool IsReadOnly => IsDefault;
@@ -410,7 +408,6 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsEditingParameters):
                     if(IsEditingParameters) {
-                        Parent.PresetViewModels.ForEach(x => x.IsEditingMatchers = false);
                         Parent.PresetViewModels.Where(x => x != this).ForEach(x => x.IsEditingParameters = false);
                         ManagePresetCommand.Execute(null);
                     }
@@ -501,12 +498,6 @@ namespace MpWpfApp {
                 Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
             }, !IsEditingParameters && !Parent.IsAnyEditingParameters);
 
-        public ICommand ManageMatchersCommand => new RelayCommand(
-            () => {
-                Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
-                Parent.PresetViewModels.ForEach(x => x.IsEditingMatchers = x == this);
-                Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
-            }, !IsEditingMatchers && !Parent.IsAnyEditingMatchers);
 
         //public ICommand ExecutePresetCommand => new RelayCommand(
         //    () => {

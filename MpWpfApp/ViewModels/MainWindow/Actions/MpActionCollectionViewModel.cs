@@ -52,7 +52,7 @@ namespace MpWpfApp {
                     tmivml.Add(new MpMenuItemViewModel() {
                         IconResourceKey = Application.Current.Resources[resourceKey] as string,
                         Header = triggerLabels[i],
-                        Command = AddActionCommand,
+                        Command = AddTriggerCommand,
                         CommandParameter = tt,
                         IsVisible = tt != MpTriggerType.None && (tt != MpTriggerType.ParentOutput || (SelectedItem != null && !SelectedItem.IsRootAction))
                     });
@@ -69,9 +69,8 @@ namespace MpWpfApp {
 
         public bool IsVisible { get; set; } = false;
 
-        public bool HasItems => Items.Count > 0;
+        public bool IsAnyTextBoxFocused => SelectedItem != null && SelectedItem.IsAnyTextBoxFocused;
 
-        public bool IsAnySelected => SelectedItem != null;// SelectedItems.Count > 0;
         #endregion
 
         #endregion
@@ -87,60 +86,48 @@ namespace MpWpfApp {
         }
 
         public async Task Init() {
-            var al = await MpDb.GetItemsAsync<MpAction>();
+            var tal = await MpDataModelProvider.GetAllTriggerActions();
 
-            foreach (var m in al) {
-                var mvm = await CreateActionViewModel(m);
-                Items.Add(mvm);
+            foreach (var ta in tal) {
+                var tavm = await CreateTriggerViewModel(ta);
+                Items.Add(tavm);
             }
 
             EnabledAll();
-        }
-
-        public IList<MpActionViewModelBase> FindChildren(MpActionViewModelBase avm) {
-            return Items.Where(x => x.ParentActionId == avm.ActionId).ToList();
         }
 
         #endregion
 
         #region Public Methods
 
-        public async Task<MpActionViewModelBase> CreateActionViewModel(MpAction a) {
-            MpActionViewModelBase mvm = null;
-            switch(a.ActionType) {
-                case MpActionType.Trigger:
-                    switch ((MpTriggerType)a.ActionObjId) {
-                        case MpTriggerType.ContentItemAdded:
-                            mvm = new MpContentAddTriggerViewModel(this);
-                            break;
-                        case MpTriggerType.ContentItemAddedToTag:
-                            mvm = new MpContentTaggedTriggerViewModel(this);
-                            break;
-                        case MpTriggerType.FileSystemChange:
-                            mvm = new MpFileSystemTriggerViewModel(this);
-                            break;
-                        case MpTriggerType.Shortcut:
-                            mvm = new MpShortcutTriggerViewModel(this);
-                            break;
-                        case MpTriggerType.ParentOutput:
-                            mvm = new MpParentOutputTriggerViewModel(this);
-                            break;
-
-                    }
+        public async Task<MpActionViewModelBase> CreateTriggerViewModel(MpAction a) {
+            
+            if(a.ActionType != MpActionType.Trigger || 
+               (MpTriggerType) a.ActionObjId == MpTriggerType.None || 
+               (MpTriggerType)a.ActionObjId == MpTriggerType.ParentOutput) {
+                throw new Exception("This is only supposed to load root level triggers");
+            }
+            MpTriggerActionViewModelBase tavm = null;
+            switch ((MpTriggerType)a.ActionObjId) {
+                case MpTriggerType.ContentItemAdded:
+                    tavm = new MpContentAddTriggerViewModel(this);
                     break;
-                case MpActionType.Analyze:
-                    mvm = new MpAnalyzeActionViewModel(this);
+                case MpTriggerType.ContentItemAddedToTag:
+                    tavm = new MpContentTaggedTriggerViewModel(this);
                     break;
-                case MpActionType.Classify:
-                    mvm = new MpClassifyActionViewModel(this);
+                case MpTriggerType.FileSystemChange:
+                    tavm = new MpFileSystemTriggerViewModel(this);
                     break;
-                case MpActionType.Compare:
-                    mvm = new MpCompareActionViewModel(this);
+                case MpTriggerType.Shortcut:
+                    tavm = new MpShortcutTriggerViewModel(this);
                     break;
+                //case MpTriggerType.ParentOutput:
+                //    tavm = new MpParentOutputTriggerViewModel(this);
+                //    break;
             }
 
-            await mvm.InitializeAsync(a);            
-            return mvm;
+            await tavm.InitializeAsync(a);            
+            return tavm;
         }
 
         public void EnabledAll() {
@@ -153,7 +140,7 @@ namespace MpWpfApp {
             Items.ForEach(x => x.Disable());
         }
 
-        public string GetUniqueMatcherName(string prefix = "Action") {
+        public string GetUniqueTriggerName(string prefix) {
             int uniqueIdx = 1;
             string testName = string.Format(
                                         @"{0}{1}",
@@ -173,6 +160,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+
+        private async Task UpdateSortOrder() {
+            Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
+            await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
+        }
 
         private void MpMatcherCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -214,63 +206,49 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand AddActionCommand => new RelayCommand<object>(
+        public ICommand ShowActionSelectorMenuCommand => new RelayCommand<object>(
+             (args) => {
+                 var fe = args as FrameworkElement;
+                 var cm = new MpContextMenuView();
+                 cm.DataContext = MenuItemViewModel;
+                 fe.ContextMenu = cm;
+                 fe.ContextMenu.PlacementTarget = fe;
+                 fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Relative;
+                 fe.ContextMenu.IsOpen = true;
+             });
+
+        public ICommand AddTriggerCommand => new RelayCommand<object>(
              async (args) => {
-                 MpAction na = null;
-                 if(args is MpTriggerType tt) {
-                     na = await MpAction.Create(
-                         label: GetUniqueMatcherName(),
+                 MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
+                 
+                 MpAction na = await MpAction.Create(
+                         label: GetUniqueTriggerName("Trigger"),
                          actionType: MpActionType.Trigger,
-                         actionObjId: (int)tt);
+                         actionObjId: (int)tt,
+                         sortOrderIdx: Items.Count);
 
-
-                 } else if (args is MpActionType at) {
-                     if(SelectedItem == null) {
-                         throw new Exception("Action must have context");
-                     }
-                     na = await MpAction.Create(
-                         label: GetUniqueMatcherName(),
-                         actionType: at,
-                         0,
-                         SelectedItem.ActionId);
-                 }
-
-                 var navm = await CreateActionViewModel(na);
+                 var navm = await CreateTriggerViewModel(na);
 
                  Items.Add(navm);
 
-                 if(navm.IsRootAction) {
-                     //SelectedItems.Clear();
-                     SelectedItem = navm;
-                 }
-                 
-                 if(navm.ParentActionViewModel != null) {
-                     navm.ParentActionViewModel.OnPropertyChanged(nameof(navm.ParentActionViewModel.Children));
-                 }
+                 SelectedItem = navm;
 
-                 //OnPropertyChanged(nameof(Items));
+                 OnPropertyChanged(nameof(Items));
              });
 
-        public ICommand DeleteActionCommand => new RelayCommand<object>(
+        public ICommand DeleteTriggerCommand => new RelayCommand<object>(
             async (args) => {
-                if(args is MpActionViewModelBase mvm) {
-                    mvm = Items.FirstOrDefault(x => x.ActionId == mvm.ActionId);
-                    if(mvm == null) {
-                        Debugger.Break();
-                    }
-                    Items.Remove(mvm);
-                    await mvm.Action.DeleteFromDatabaseAsync();
-                    if(mvm.IsEnabled) {
-                        mvm.Disable();
-                    }
-                    if(mvm.ParentActionViewModel != null) {
-                        await mvm.ParentActionViewModel.InitializeAsync(mvm.ParentActionViewModel.Action);
-                    } else {
-                        mvm.OnPropertyChanged(nameof(mvm.Children));
-                    }
-                    OnPropertyChanged(nameof(Items));
-                    OnPropertyChanged(nameof(SelectedItem));
-                }
+                var tavm = args as MpTriggerActionViewModelBase;
+                tavm.Disable();
+                var deleteTasks = tavm.FindAllChildren().Select(x => x.Action.DeleteFromDatabaseAsync()).ToList();
+                deleteTasks.Add(tavm.Action.DeleteFromDatabaseAsync());
+                await Task.WhenAll(deleteTasks);
+
+                Items.Remove(tavm);
+
+                await UpdateSortOrder();
+                OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(SelectedItem));
             });
         #endregion
     }

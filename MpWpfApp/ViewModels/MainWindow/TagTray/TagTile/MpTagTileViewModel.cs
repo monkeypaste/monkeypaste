@@ -14,8 +14,10 @@ using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : 
-        MpViewModelBase<MpTagTrayViewModel>, 
-        MpITreeItemViewModel, 
+        MpSelectorViewModelBase<MpTagTrayViewModel, MpTagTileViewModel>, 
+        MpIHoverableViewModel,
+        MpISelectableViewModel,
+        MpITreeItemViewModel<MpTagTileViewModel>, 
         MpIShortcutCommand, 
         MpIHasNotification, 
         MpITriggerActionViewModel {
@@ -33,9 +35,23 @@ namespace MpWpfApp {
 
         #region MpITreeItemViewModel Implementation
 
-        public MpITreeItemViewModel ParentTreeItem { get; set; }
+        public bool IsExpanded { get; set; }
 
-        public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = new ObservableCollection<MpITreeItemViewModel>();
+        public MpTagTileViewModel ParentTreeItem { get; set; }
+
+        public IList<MpTagTileViewModel> Children => Items;
+
+        #endregion
+
+        #region MpIHoverableViewModel Implementation
+
+        public bool IsHovering { get; set; }
+
+        #endregion
+
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; }
 
         #endregion
 
@@ -127,10 +143,6 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsSelected { get; set; }
-
-        public bool IsExpanded { get; set; }
-
         private bool _isEditing = false;
         public bool IsEditing {
             get {
@@ -141,21 +153,6 @@ namespace MpWpfApp {
                     _isEditing = value;
 
                     OnPropertyChanged(nameof(IsEditing));
-                }
-            }
-        }
-
-        private bool _isHovering = false;
-        public bool IsHovering {
-            get {
-                return _isHovering;
-            }
-            set {
-                if (_isHovering != value) {
-                    _isHovering = value;
-                    OnPropertyChanged(nameof(IsHovering));
-                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
-                    OnPropertyChanged(nameof(TagTextColor));
                 }
             }
         }
@@ -347,6 +344,21 @@ namespace MpWpfApp {
             }
         }
 
+        public string TagHexColor {
+            get {
+                if (Tag == null) {
+                    return string.Empty;
+                }
+                return Tag.HexColor;
+            }
+            set {
+                if (TagHexColor != value) {
+                    Tag.HexColor = value;
+                    OnPropertyChanged(nameof(TagHexColor));
+                }
+            }
+        }
+
         public Brush TagBrush {
             get {
                 if(Tag == null) {
@@ -418,10 +430,22 @@ namespace MpWpfApp {
 
             Tag = tag;
 
-            await Task.Delay(1);
+            var ctl = await MpDataModelProvider.GetChildTagsAsync(TagId);
+
+            foreach(var ct in ctl.OrderBy(x=>x.TagSortIdx)) {
+                var ttvm = await CreateChildTagTileViewModel(ct);
+                Items.Add(ttvm);
+            }
+
             IsBusy = false;
         }
-                
+
+        public async Task<MpTagTileViewModel> CreateChildTagTileViewModel(MpTag tag) {
+            MpTagTileViewModel ttvm = new MpTagTileViewModel(Parent);
+            await ttvm.InitializeAsync(tag);
+            ttvm.ParentTreeItem = this;
+            return ttvm;
+        }
 
         protected virtual void MpTagTileViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -599,6 +623,11 @@ namespace MpWpfApp {
 
         #region Private Methods
 
+        private async Task UpdateSortOrder() {
+            Items.ForEach(x => x.TagSortIdx = Items.IndexOf(x));
+            await Task.WhenAll(Items.Select(x => x.Tag.WriteToDatabaseAsync()));
+        }
+
         #region Sync Event Handlers
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
             //throw new NotImplementedException();
@@ -689,6 +718,41 @@ namespace MpWpfApp {
             () => {
                 return !IsTagReadOnly;
             });
+
+        public ICommand AddChildTagCommand => new RelayCommand(
+             async () => {
+                 //only called in All Tag
+                 MpTag t = await MpTag.Create(
+                     parentTagId: Parent.SelectedTagTile.TagId,
+                     sortIdx: Parent.SelectedTagTile.Items.Count);
+
+                 var ttvm = await Parent.SelectedTagTile.CreateChildTagTileViewModel(t);
+
+                 Parent.SelectedTagTile.Items.Add(ttvm);
+
+                 Parent.SelectedTagTile.SelectedItem = ttvm;
+
+                 OnPropertyChanged(nameof(Parent.SelectedTagTile.Items));
+             });
+
+        public ICommand DeleteChildTagCommand => new RelayCommand<object>(
+            async (args) => {
+                var ttvm = args as MpTagTileViewModel;
+                var deleteTasks = ttvm.FindAllChildren().Select(x => x.Tag.DeleteFromDatabaseAsync()).ToList();
+                deleteTasks.Add(ttvm.Tag.DeleteFromDatabaseAsync());
+                await Task.WhenAll(deleteTasks);
+
+                Items.Remove(ttvm);
+
+                await UpdateSortOrder();
+                OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(SelectedItem));
+            });
+
+        public ICommand DeleteThisTagCommand => new RelayCommand(
+            () => {
+                ParentTreeItem.DeleteChildTagCommand.Execute(this);
+            }, !IsTagReadOnly);
 
         #endregion
     }

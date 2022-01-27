@@ -49,13 +49,23 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
 
-        public MpITreeItemViewModel ParentTreeItem => MpSideBarTreeCollectionViewModel.Instance;
+        public MpITreeItemViewModel ParentTreeItem => null;
 
         public List<MpAnalyticItemPresetViewModel> AllPresets {
             get {
                 return Items.OrderBy(x => x.Title).SelectMany(x => x.PresetViewModels).ToList();
             }
         }
+
+        public MpAnalyticItemPresetViewModel SelectedPresetViewModel {
+            get {
+                if(SelectedItem == null) {
+                    return null;
+                }
+                return SelectedItem.SelectedPresetViewModel;
+            }
+        }
+
         #endregion
 
         #region Layout
@@ -71,8 +81,6 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; }
 
-        public bool IsAnySelected => SelectedItem != null;
-
         public bool IsHovering { get; set; }
 
         public bool IsLoaded => Items.Count > 0;
@@ -80,6 +88,9 @@ namespace MpWpfApp {
         public bool IsExpanded { get; set; }
 
         public bool IsVisible { get; set; } = false;
+
+        public bool IsAnyEditingParameters => Items.Any(x => x.IsAnyEditingParameters);
+
         #endregion
 
         #region Model
@@ -201,6 +212,16 @@ namespace MpWpfApp {
                 Items.ForEach(x => x.IsSelected = x.AnalyticItemId == (int)itemId);
                 SelectedItem.ManageAnalyticItemCommand.Execute(null);
             }, (itemId) => itemId != null);
+
+        public ICommand ManagePresetCommand => new RelayCommand<object>(
+            (presetId) => {
+                var aipvm = AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == (int)presetId);
+                if(aipvm == null) {
+                    return;
+                }
+
+                aipvm.ManagePresetCommand.Execute(null);
+            }, (presetId) => presetId != null);
 
         public ICommand RegisterContentCommand => new RelayCommand<object>(
             (args) => {

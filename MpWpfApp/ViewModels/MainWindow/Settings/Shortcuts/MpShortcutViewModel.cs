@@ -493,7 +493,7 @@ namespace MpWpfApp {
                     //        var ctvm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
                     //        ctvm.ShortcutKeyString = Shortcut.KeyString;
                     //    } else {
-                    //        var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.Tag.Id == Shortcut.TagId).Single();
+                    //        var ttvm = MpTagTrayViewModel.Instance.Items.Where(x => x.Tag.Id == Shortcut.TagId).Single();
                     //        ttvm.ShortcutKeyString = Shortcut.KeyString;
                     //    }
                     //}
@@ -616,14 +616,19 @@ namespace MpWpfApp {
                 var ctrvm = MpClipTrayViewModel.Instance;
                 var ttrvm = MpTagTrayViewModel.Instance;
                 var sbvm = MpSearchBoxViewModel.Instance;
+                var acvm = MpActionCollectionViewModel.Instance;
                 //never perform shortcuts in the following states
                 if (mwvm.IsShowingDialog ||
                    ctrvm.IsAnyPastingTemplate ||
                    ctrvm.IsAnyEditingClipTile ||
                    ctrvm.IsAnyEditingClipTitle ||
-                   ttrvm.IsEditingTagName ||
-                   (sbvm.IsTextBoxFocused && mwvm.IsMainWindowOpen)) {
+                   ttrvm.IsEditingTagName) {
                     return false;
+                }
+                if(mwvm.IsMainWindowOpen) {
+                    if(sbvm.IsTextBoxFocused || acvm.IsAnyTextBoxFocused) {
+                        return false;
+                    }
                 }
                 //otherwise check basic type routing for validity
                 if (RoutingType == MpRoutingType.Internal) {

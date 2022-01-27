@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace MpWpfApp {
+
     public abstract class MpUserControl : UserControl {
         //private ObservableCollection<Behavior> _behaviors = new ObservableCollection<Behavior>();
 

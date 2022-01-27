@@ -22,5 +22,11 @@ namespace MpWpfApp {
         public MpTriggerActionTreeView() {
             InitializeComponent();
         }
+
+        private void GridSplitter_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
+            var fe = sender as FrameworkElement;
+            var g = fe.GetVisualAncestor<TreeViewItem>();
+            g.Height += e.VerticalChange;
+        }
     }
 }

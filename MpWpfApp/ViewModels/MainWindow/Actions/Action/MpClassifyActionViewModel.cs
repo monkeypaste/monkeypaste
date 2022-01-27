@@ -48,7 +48,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagId == TagId);
+            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             await ttvm.AddContentItem((arg as MpCopyItem).Id);
 
             await base.PerformAction(arg);

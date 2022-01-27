@@ -108,12 +108,12 @@ namespace MonkeyPaste {
             return names;
         }
 
-        public static string EnumToLabel<TValue>(this TValue value)
+        public static string EnumToLabel<TValue>(this TValue value, string noneText = "")
             where TValue : Enum {
-            string valStr = nameof(value);
+            string valStr = value.ToString();
             var valParts = valStr.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
 
-            return valParts[valParts.Length - 1].ToLabel();
+            return valParts[valParts.Length - 1].ToLabel(noneText);
         }
 
         public static int EnumToInt<TValue>(this TValue value) 

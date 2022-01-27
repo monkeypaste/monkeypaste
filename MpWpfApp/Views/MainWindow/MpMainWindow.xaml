@@ -152,7 +152,7 @@
                                          Grid.Column="0"
                                          VerticalAlignment="Stretch"
                                          Height="{Binding ClipTrayHeight}"
-                                         HorizontalAlignment="Left"
+                                         HorizontalAlignment="Stretch"
                                          DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
                                          Background="{Binding .,
                                                               Converter={StaticResource StringToThemeBrushConverter},
@@ -163,7 +163,7 @@
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch"
                               Width="3"
-                              IsEnabled="False"
+                              IsEnabled="{Binding IsGridSplitterEnabled, Source={x:Static local:MpAppModeViewModel.Instance}}"
                               MouseEnter="GridSplitter_MouseEnter"
                               MouseLeave="GridSplitter_MouseLeave" />
                 <local:MpClipTrayContainerView x:Name="ClipTrayView"

@@ -1,20 +1,76 @@
-﻿using MonkeyPaste;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpCompareActionViewModel : MpActionViewModelBase {
         #region Private Variables
-
-        private Regex _regEx = null;
-
         #endregion
 
         #region Properties
+
+        #region View Models
+
+        public MpMenuItemViewModel CompareTypesMenuItemViewModel {
+            get {
+                var amivml = new List<MpMenuItemViewModel>();
+                var triggerLabels = typeof(MpCompareType).EnumToLabels();
+                for (int i = 0; i < triggerLabels.Length; i++) {
+                    string resourceKey = string.Empty;
+                    MpCompareType ct = (MpCompareType)i;
+                    switch (ct) {
+                        case MpCompareType.BeginsWith:
+                        case MpCompareType.EndsWith:
+                        case MpCompareType.Contains:
+                            resourceKey = "CaretIcon";
+                            break;
+                        case MpCompareType.Exact:
+                            resourceKey = "BullsEyeIcon";
+                            break;
+                        case MpCompareType.Regex:
+                            resourceKey = "BeakerIcon";
+                            break;
+                        case MpCompareType.Automatic:
+                            resourceKey = "AppendLineIcon";
+                            break;
+                        case MpCompareType.Wildcard:
+                            resourceKey = "AsteriskIcon";
+                            break;
+                    }
+                    amivml.Add(new MpMenuItemViewModel() {
+                        IconResourceKey = Application.Current.Resources[resourceKey] as string,
+                        Header = triggerLabels[i],
+                        Command = ChangeCompareTypeCommand,
+                        CommandParameter = ct,
+                        IsVisible = ct != MpCompareType.None || ct != MpCompareType.Lexical
+                    });
+                }
+                return new MpMenuItemViewModel() {
+                    SubItems = amivml
+                };
+            }
+        }
+        #endregion
+
+        #region Appearance
+
+        public string CompareTypeLabel {
+            get {
+                if(Action == null) {
+                    return string.Empty;
+                }
+                return CompareType.EnumToLabel("None");
+            } 
+        }
+
+        #endregion
 
         #region Model
 
@@ -53,6 +109,9 @@ namespace MpWpfApp {
                 if (Action == null) {
                     return MpCompareType.None;
                 }
+                if((MpCompareType)ActionObjId == MpCompareType.None) {
+                    ActionObjId = (int)MpCompareType.Contains;
+                }
                 return (MpCompareType)Action.ActionObjId;
             }
             set {
@@ -72,17 +131,6 @@ namespace MpWpfApp {
 
         public MpCompareActionViewModel(MpActionCollectionViewModel parent) : base(parent) {
 
-        }
-
-
-        public override async Task InitializeAsync(MpAction m) {
-            await base.InitializeAsync(m);
-
-            if (CompareType == MpCompareType.Regex) {
-                _regEx = new Regex(
-                    CompareData,
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
-            }
         }
 
         #endregion
@@ -128,13 +176,36 @@ namespace MpWpfApp {
                     }
                     break;
                 case MpCompareType.Regex:
-                    if (_regEx != null && _regEx.IsMatch(compareStr)) {
+                    var regEx = new Regex(CompareData,
+                                            RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
+                    if (regEx.IsMatch(compareStr)) {
                         return true;
                     }
                     break;
             }
             return false;
         }
+
+        #endregion
+
+        #region Commands
+
+        public ICommand ShowCompareTypeChooserMenuCommand => new RelayCommand<object>(
+             (args) => {
+                 var fe = args as FrameworkElement;
+                 var cm = new MpContextMenuView();
+                 cm.DataContext = CompareTypesMenuItemViewModel;
+                 fe.ContextMenu = cm;
+                 fe.ContextMenu.PlacementTarget = fe;
+                 fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
+                 fe.ContextMenu.IsOpen = true;
+             });
+
+        public ICommand ChangeCompareTypeCommand => new RelayCommand<object>(
+             async(args) => {
+                 CompareType = (MpCompareType)args;
+                 await Action.WriteToDatabaseAsync();
+             });
 
         #endregion
     }

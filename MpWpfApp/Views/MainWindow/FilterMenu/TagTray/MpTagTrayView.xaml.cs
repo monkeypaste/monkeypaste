@@ -47,7 +47,7 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
 
-                //BindingContext.TagTileViewModels.CollectionChanged += TagTileViewModels_CollectionChanged;
+                //BindingContext.Items.CollectionChanged += TagTileViewModels_CollectionChanged;
                 RefreshTray();
             });
         }

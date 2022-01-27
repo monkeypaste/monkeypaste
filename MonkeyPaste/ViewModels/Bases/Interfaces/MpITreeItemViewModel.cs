@@ -20,7 +20,16 @@ namespace MonkeyPaste {
         T ParentTreeItem { get; }
 
         IList<T> Children { get; }
+    }
 
-        IList<T> FindChildren();
+    public static class MpITreeItemViewModelExtensions {
+        public static IEnumerable<T> FindAllChildren<T>(this MpITreeItemViewModel<T> tivm) where T:MpViewModelBase {
+            var activml = new List<T>();
+            foreach(MpITreeItemViewModel<T> c in tivm.Children) {
+                activml.Add(c as T);
+                activml.AddRange(c.FindAllChildren());
+            }
+            return activml;
+        }
     }
 }

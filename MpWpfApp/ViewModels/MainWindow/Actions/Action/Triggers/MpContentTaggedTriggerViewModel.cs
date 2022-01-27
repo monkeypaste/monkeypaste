@@ -35,7 +35,7 @@ namespace MpWpfApp {
         #region Public Methods
 
         public override void Enable() {
-            var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagId == TagId);
+            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm != null) {
                 ttvm.RegisterTrigger(this);
             }

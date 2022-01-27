@@ -39,7 +39,6 @@ namespace MpWpfApp {
 
                 new MpBootstrappedItem(typeof(MpAppModeViewModel)),
                 new MpBootstrappedItem(typeof(MpAnalyticItemCollectionViewModel)),
-                new MpBootstrappedItem(typeof(MpSideBarTreeCollectionViewModel)),
 
                 new MpBootstrappedItem(typeof(MpClipTrayViewModel)),
 
@@ -51,7 +50,7 @@ namespace MpWpfApp {
 
                 new MpBootstrappedItem(typeof(MpDragDropManager)),
 
-
+                new MpBootstrappedItem(typeof(MpActionCollectionViewModel))
             };
         }
 

@@ -146,7 +146,7 @@ namespace MpWpfApp {
             get {
                 var tmil = new ObservableCollection<MpMenuItemViewModel>();
 
-                foreach (var ttvm in MpTagTrayViewModel.Instance.TagTileViewModels) {
+                foreach (var ttvm in MpTagTrayViewModel.Instance.Items) {
                     if (ttvm.IsSudoTag) {
                         continue;
                     }
@@ -173,7 +173,7 @@ namespace MpWpfApp {
                             CommandParameter = ttvm,
                             IsSelected = isChecked,
                             IsPartiallySelected = isPartialChecked,
-                            IconHexStr = ttvm.TagBrush.ToHex(),
+                            IconHexStr = ttvm.TagHexColor,
                             InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
                                                     MpTagTrayViewModel.Instance.SelectTagCommand,
                                                     ttvm.TagId)
@@ -414,15 +414,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance
-
-        public Brush ClipTrayBackgroundBrush {
-            get {
-                if (MpTagTrayViewModel.Instance.SelectedTagTile == null) {
-                    return Brushes.Transparent;
-                }
-                return MpTagTrayViewModel.Instance.SelectedTagTile.TagBrush;
-            }
-        }
 
         public int TotalVisibleClipTiles {
             get {
@@ -1275,7 +1266,7 @@ namespace MpWpfApp {
                 if(ctvm == null) {
                     return;
                 }
-                var ttvm = MpTagTrayViewModel.Instance.TagTileViewModels.FirstOrDefault(x => x.TagId == cit.TagId);
+                var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == cit.TagId);
                 if(ttvm == null || !ttvm.IsSelected) {
                     return;
                 }

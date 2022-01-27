@@ -110,6 +110,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
+    <Compile Include="AttachedProperties\MpIsFocusedExtension.cs" />
     <Compile Include="AttachedProperties\MpPopupMenuExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpHoverableExtension.cs" />
@@ -163,10 +164,12 @@
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\MpAnalyticItemIdToIconSourceConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemIdToTitleConverter.cs" />
     <Compile Include="Converters\MpBackgroundBrushToForegroundBrushConverter.cs" />
     <Compile Include="Converters\MpBase64StringToIconConverter.cs" />
     <Compile Include="Converters\MpBase64ToImageBrushConverter.cs" />
+    <Compile Include="Converters\MpCollectionToGroupedCollectionConverter.cs" />
     <Compile Include="Converters\MpEnumToIntConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
     <Compile Include="Converters\MpBoolToBrushConverter.cs" />
@@ -183,6 +186,7 @@
     <Compile Include="Converters\MpDbImageIdToIconConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
+    <Compile Include="Converters\MpItemToItemsSourceConverter.cs" />
     <Compile Include="Converters\MpShorcutIdToKeyStringConverter.cs" />
     <Compile Include="Converters\MpStringHexToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToIconConverter.cs" />
@@ -204,6 +208,9 @@
     <Compile Include="Converters\MpSourceIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringToDateTimeConverter.cs" />
     <Compile Include="Converters\MpStringToThemeBrushConverter.cs" />
+    <Compile Include="Converters\MpTagIdToBrushConverter.cs" />
+    <Compile Include="Converters\MpTagIdToTagNameConverter.cs" />
+    <Compile Include="Converters\MpTagIdToThicknessNameConverter.cs" />
     <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringResourceToIconConverter.cs" />
@@ -236,6 +243,8 @@
     <Compile Include="Utils\MpCsvReader.cs" />
     <Compile Include="Utils\Graphics\Geometry\MpLine.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcherViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\MpMacroActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpAnalyzeActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpClassifyActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpCompareActionViewModel.cs" />
@@ -319,7 +328,6 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\Base\MpActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\SideBar\MpSideBarTreeCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Icon\MpIconCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Icon\MpIconViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\MpSourceCollectionViewModel.cs" />
@@ -331,6 +339,7 @@
     <Compile Include="ViewModels\Reusable\Geometry\MpSizeViewModel.cs" />
     <Compile Include="ViewModels\Reusable\MpSystemColors.cs" />
     <Compile Include="ViewModels\Reusable\MpThemeColors.cs" />
+    <Compile Include="Views\Base\MpContextMenu.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
     <Compile Include="Views\Base\MpIRectViewModel.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\DetectedObjectItem\MpDetectedObjectItemView.xaml.cs">
@@ -343,11 +352,11 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionSelectorView.xaml.cs">
-      <DependentUpon>MpTriggerActionSelectorView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionChooserView.xaml.cs">
+      <DependentUpon>MpTriggerActionChooserView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemView.xaml.cs">
-      <DependentUpon>MpActionTreeItemView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemOptionsView.xaml.cs">
+      <DependentUpon>MpActionTreeItemOptionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Actions\Bases\MpActionComboBoxItem.xaml.cs">
       <DependentUpon>MpActionComboBoxItem.xaml</DependentUpon>
@@ -608,11 +617,11 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionSelectorView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionChooserView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemOptionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2546,6 +2555,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\add1.png" />
+    <Resource Include="Resources\Images\beaker.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\asterisk.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

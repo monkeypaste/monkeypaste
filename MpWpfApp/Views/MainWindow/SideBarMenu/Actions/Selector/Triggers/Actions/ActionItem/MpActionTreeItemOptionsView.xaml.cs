@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpActionTreeItemView.xaml
+    /// Interaction logic for MpActionTreeItemOptionsView.xaml
     /// </summary>
-    public partial class MpActionTreeItemView : MpUserControl<MpActionViewModelBase> {
-        public MpActionTreeItemView() {
+    public partial class MpActionTreeItemOptionsView : MpUserControl<MpActionViewModelBase> {
+        public MpActionTreeItemOptionsView() {
             InitializeComponent();
         }
 

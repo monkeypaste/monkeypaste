@@ -119,7 +119,7 @@ namespace MpWpfApp {
                                 continue;
                             }
                             string header = (smi as MpMenuItemViewModel).Header.ToString();
-                            (smi as MpMenuItemViewModel).InputGestureText = MpTagTrayViewModel.Instance.TagTileViewModels.Where(x => x.TagName == header).FirstOrDefault().ShortcutKeyString;
+                            (smi as MpMenuItemViewModel).InputGestureText = MpTagTrayViewModel.Instance.Items.Where(x => x.TagName == header).FirstOrDefault().ShortcutKeyString;
                         }
                     } else {
                         var scvm = Shortcuts.Where(x => x.ShortcutId == tagNum).FirstOrDefault();

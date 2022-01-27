@@ -57,11 +57,12 @@
                                             Margin="3,0,0,0"
                                             Padding="5,5,5,5"
                                             BorderThickness="0"
-                                            Background="{Binding TagBrush,
+                                            Background="{Binding TagHexColor,
                                                                  Mode=TwoWay,
                                                                  UpdateSourceTrigger=PropertyChanged,
                                                                  NotifyOnTargetUpdated=True,
-                                                                 NotifyOnSourceUpdated=True}">
+                                                                 NotifyOnSourceUpdated=True,
+                                                                 Converter={StaticResource StringHexToBrushConverter}}">
                             <TextBlock Background="Transparent"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center"
@@ -125,7 +126,7 @@
                         ToolTip="Add Collection"
                         ToolTipService.InitialShowDelay="100"
                         Style="{StaticResource RoundedButton}"
-                        Command="{Binding Parent.CreateTagCommand}">
+                        Command="{Binding AddChildTagCommand}">
                     <Image Stretch="Fill"
                            Source="/MpWpfApp;component/Resources/Images/add4.png" />
                 </Button>

@@ -76,6 +76,23 @@ namespace MonkeyPaste {
         #endregion
 
         #region Statics
+
+        public static async Task<MpTag> Create(
+            string tagName = "Untitled", 
+            int sortIdx = 0,
+            int parentTagId = 0, 
+            string hexColor = "") {
+            hexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor;
+            MpTag newTag = new MpTag() {
+                TagName = tagName,
+                HexColor = hexColor,
+                TagSortIdx = sortIdx,
+                ParentTagId = parentTagId
+            };
+            await newTag.WriteToDatabaseAsync();
+            return newTag;
+        }
+
         #endregion
 
         public MpTag() {            

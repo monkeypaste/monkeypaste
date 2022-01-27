@@ -763,6 +763,12 @@ namespace MonkeyPaste {
 
         #region MpAction
 
+        public static async Task<List<MpAction>> GetAllTriggerActions() {
+            string query = $"select * from MpAction where e_MpActionTypeId=? and fk_ActionObjId != ? and fk_ActionObjId != 0";
+            var result = await MpDb.QueryAsync<MpAction>(query, (int)MpActionType.Trigger,(int)MpTriggerType.ParentOutput);
+            return result;
+        }
+
         public static async Task<int> GetChildActionCount(int actionId) {
             string query = $"select count(pk_MpActionId) from MpAction where fk_ParentActionId=?";
             var result = await MpDb.QueryScalarAsync<int>(query, actionId);

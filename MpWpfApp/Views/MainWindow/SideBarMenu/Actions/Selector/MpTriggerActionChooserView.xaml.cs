@@ -17,8 +17,8 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAnalyticItemSelectorView.xaml
     /// </summary>
-    public partial class MpTriggerActionSelectorView : MpUserControl<MpActionCollectionViewModel> {
-        public MpTriggerActionSelectorView() {
+    public partial class MpTriggerActionChooserView : MpUserControl<MpActionCollectionViewModel> {
+        public MpTriggerActionChooserView() {
             InitializeComponent();
         }
 

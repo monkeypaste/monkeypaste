@@ -93,8 +93,6 @@ namespace MpWpfApp {
 
         public bool IsAnyEditingParameters => PresetViewModels.Any(x => x.IsEditingParameters);
 
-        public bool IsAnyEditingMatchers => PresetViewModels.Any(x => x.IsEditingMatchers);
-
         public bool IsHovering { get; set; } = false;
 
         public bool IsSelected { get; set; } = false;

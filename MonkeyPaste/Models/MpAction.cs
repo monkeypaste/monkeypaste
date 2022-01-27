@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public enum MpCompareType {
-        None = 1,
-        Contains = 2,
-        Exact = 4,
-        BeginsWith = 8,
-        EndsWith = 16,
-        Regex = 32,
-        Source = 64,
-        Automatic = 128,
-        Wildcard = 256,
-        Lexical = 512 // like azure cognitive search?
+        None = 0,
+        Contains,
+        Exact,
+        BeginsWith,
+        EndsWith,
+        Regex,
+        Source,
+        Automatic,
+        Wildcard,
+        Lexical // like azure cognitive search?
     }
 
     public enum MpTriggerType {
@@ -110,9 +110,9 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAction> Create(
-            string label,
             MpActionType actionType,
-            int actionObjId,
+            int actionObjId = 0,
+            string label = "",
             int parentId = 0,
             int sortOrderIdx = 0,
             string arg1 = "",

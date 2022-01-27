@@ -2,17 +2,16 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Linq;
 
 namespace MpWpfApp {
-    public class MpBoolToVisibilityConverter : IValueConverter {
+    public class MpAnalyticItemIdToIconSourceConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value == null || value.GetType() != typeof(bool)) {
-                return Visibility.Collapsed;
+            var aivm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == (int)value);
+            if (aivm == null) {
+                return null;
             }
-            if (parameter != null) {
-                return (bool)value ? Visibility.Visible : Visibility.Hidden;
-            }
-            return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+            return new MpIconIdToImageSourceConverter().Convert(aivm.IconId,targetType,parameter,culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
