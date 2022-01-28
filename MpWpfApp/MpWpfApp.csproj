@@ -110,6 +110,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
+    <Compile Include="AttachedProperties\MpResizerExtension.cs" />
     <Compile Include="AttachedProperties\MpIsFocusedExtension.cs" />
     <Compile Include="AttachedProperties\MpPopupMenuExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
@@ -153,6 +154,8 @@
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
+    <Compile Include="Controls\Adorners\Resizer\MpResizeChildHelper.cs" />
+    <Compile Include="Controls\Adorners\Resizer\MpResizeAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMoveThumb.cs" />
@@ -264,6 +267,7 @@
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Azure\ImageAnalysis\MpAzureImageAnalysisViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Plugin\MpPluginAnalyzerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Yolo\MpYoloViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpMultiSelectComboBoxParameterViewModel.cs" />
@@ -589,6 +593,10 @@
     <Compile Include="Views\SystemTray\MpSystemTrayView.xaml.cs">
       <DependentUpon>MpSystemTrayView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\Adorners\Resizer\MpResizeAdornerTriangle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\MultiSelectComboBox\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -2590,6 +2598,10 @@
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj">
+      <Project>{faf48e9e-e646-44d0-be02-ad1a9e9dfcd8}</Project>
+      <Name>MonkeyPaste.Plugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
       <Project>{effa9e68-c567-4f5a-ae60-0ba2937cf5fa}</Project>
       <Name>MonkeyPaste</Name>

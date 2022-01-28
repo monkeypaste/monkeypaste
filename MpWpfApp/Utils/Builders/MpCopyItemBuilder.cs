@@ -38,7 +38,7 @@ namespace MpWpfApp {
                 } else {
                     processPath = MpProcessManager.GetProcessPath(processHandle);
                     appName = MpProcessManager.GetProcessApplicationName(processHandle);
-                    processIconImg64 = MpProcessManager.ProcessIconBuilder.GetBase64BitmapFromFilePath(processPath);
+                    processIconImg64 = MpProcessIconBuilder.GetBase64BitmapFromPath(processPath);
                 }
                 
                 string itemData = null;

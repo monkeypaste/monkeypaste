@@ -241,7 +241,6 @@ namespace MpClipboardHelper {
                                     data = dobj.GetText(TextDataFormat.Html);
                                     break;
                                 case nameof(DataFormats.Bitmap):
-                                    BinaryFormatter binFormatter = new BinaryFormatter();
                                     using (Image img = Clipboard.GetImage()) {
                                         using (MemoryStream memoryStream = new MemoryStream()) {
                                             img.Save(memoryStream, ImageFormat.Bmp);

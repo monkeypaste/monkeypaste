@@ -9,18 +9,6 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public abstract class MpJsonMessage {
-        //public sealed string GetMessage(string[] args) {
-        //    var jsonProps = this.GetType()
-        //            .GetProperties()
-        //            .Where(x => 
-        //                x.GetCustomAttribute<JsonPropertyAttribute>() != null)
-        //                 .OrderBy(x=>x.GetCustomAttribute<JsonPropertyAttribute>().Order);
-
-        //    foreach(var jsonProp in jsonProps) {
-
-        //    }
-        //}
-
         public string Serialize() {
             return JsonConvert.SerializeObject(this);
         }

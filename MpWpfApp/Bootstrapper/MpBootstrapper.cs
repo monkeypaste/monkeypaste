@@ -14,8 +14,6 @@ namespace MpWpfApp {
 
         
         public MpBootstrapper(MpINativeInterfaceWrapper niw) : base(niw) {
-            MpHelpers.Init(new MpProcessHelper.MpProcessIconBuilder(niw.GetIconBuilder()));
-
             _items = new List<MpBootstrappedItem>() {
                 new MpBootstrappedItem(typeof(MpThemeColors)),
 
@@ -51,6 +49,8 @@ namespace MpWpfApp {
                 new MpBootstrappedItem(typeof(MpDragDropManager)),
 
                 new MpBootstrappedItem(typeof(MpActionCollectionViewModel))
+
+
             };
         }
 

@@ -49,7 +49,7 @@ namespace MpWpfApp {
                         Header = triggerLabels[i],
                         Command = ChangeCompareTypeCommand,
                         CommandParameter = ct,
-                        IsVisible = ct != MpCompareType.None || ct != MpCompareType.Lexical
+                        IsVisible = !(ct == MpCompareType.None || ct == MpCompareType.Lexical)
                     });
                 }
                 return new MpMenuItemViewModel() {

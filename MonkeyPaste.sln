@@ -33,13 +33,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MpWpfApp", "MpWpfApp\MpWpfA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MpClipboardHelper", "MpClipboardHelper\MpClipboardHelper.csproj", "{E3C8E3F7-3A44-4678-A742-5A6DD971A38C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Plugin.Wpf_Template", "MonkeyPaste.Plugin.Wpf\MonkeyPaste.Plugin.Wpf_Template.csproj", "{11D306DF-E74D-486A-A7F9-EDE9D016340B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Plugin.BasicTest", "MonkeyPaste.Plugin.Wpf\MonkeyPaste.Plugin.BasicTest.csproj", "{11D306DF-E74D-486A-A7F9-EDE9D016340B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.Plugin", "MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj", "{FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MpProcessHelper", "MpRunningApplicationHelper\MpProcessHelper.csproj", "{56E5FAAD-0C31-400F-B95F-D83517C07ED3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MpSystemTray", "MpSystemTray\MpSystemTray.csproj", "{9B379F4A-C8C3-47D1-9EB3-03C2DE91899C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{D87F8DC2-8DB2-444D-BF8A-2D592009864A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yolo", "Plugins\System\Yolo\Yolo\Yolo.csproj", "{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8} = {FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -477,9 +484,42 @@ Global
 		{9B379F4A-C8C3-47D1-9EB3-03C2DE91899C}.Release|x64.Build.0 = Release|Any CPU
 		{9B379F4A-C8C3-47D1-9EB3-03C2DE91899C}.Release|x86.ActiveCfg = Release|Any CPU
 		{9B379F4A-C8C3-47D1-9EB3-03C2DE91899C}.Release|x86.Build.0 = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|ARM.Build.0 = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|x64.Build.0 = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Debug|x86.Build.0 = Debug|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|ARM.Build.0 = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|ARM64.Build.0 = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|iPhone.Build.0 = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|x64.ActiveCfg = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|x64.Build.0 = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|x86.ActiveCfg = Release|Any CPU
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11D306DF-E74D-486A-A7F9-EDE9D016340B} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
+		{FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
+		{BCF6583A-A976-4D7D-AE0F-CECCD33F2860} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}

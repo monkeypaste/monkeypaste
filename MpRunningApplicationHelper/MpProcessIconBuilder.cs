@@ -5,73 +5,26 @@ using System.Runtime.InteropServices;
 using static MpProcessHelper.WinApi;
 using MonkeyPaste;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace MpProcessHelper {
-    public class MpProcessIconBuilder : MpIProcessIconBuilder {
-        private static MpIconBuilderBase _iconBuilder;
-
-        public MpIconBuilderBase IconBuilder { get => _iconBuilder; set => _iconBuilder = value; }
-
-        public MpProcessIconBuilder(MpIconBuilderBase ib) {
-            _iconBuilder = ib;
-        }
-        public string GetBase64BitmapFromFolderPath(string filepath) {
-            return GetBitmapFromFolderPath(filepath, IconSizeEnum.MediumIcon32);
-        }
-
-        public string GetBase64BitmapFromFilePath(string filepath) {
-            return GetBitmapFromFilePath(filepath, IconSizeEnum.MediumIcon32);
-        }
-
-        public string GetBase64BitmapFromPath(string fileOrFolderpath) {
-            if(Directory.Exists(fileOrFolderpath)) {
-                return GetBase64BitmapFromFolderPath(fileOrFolderpath);
-            }
-            return GetBitmapFromFilePath(fileOrFolderpath, IconSizeEnum.MediumIcon32);
-        }
+    public static class MpProcessIconBuilder {
 
 
-        private static string GetBitmapFromFolderPath(string filepath, IconSizeEnum iconsize) {
-            IntPtr hIcon = GetIconHandleFromFolderPath(filepath, iconsize);
-            return GetIconBase64FromHandle(hIcon);
-        }
-
-        private static string GetBitmapFromFilePath(string filepath, IconSizeEnum iconsize) {
-            IntPtr hIcon = GetIconHandleFromFilePath(filepath, iconsize);
-            return GetIconBase64FromHandle(hIcon);
-        }
-
-        private static string GetBitmapFromPath(string filepath, IconSizeEnum iconsize) {
+        public static string GetBase64BitmapFromPath(string fileOrFolderpath, IconSizeEnum iconSize = IconSizeEnum.MediumIcon32) {
             IntPtr hIcon = IntPtr.Zero;
-            if (Directory.Exists(filepath)) {
-                hIcon = GetIconHandleFromFolderPath(filepath, iconsize);
-            } else {
-                if (File.Exists(filepath)) {
-                    hIcon = GetIconHandleFromFilePath(filepath, iconsize);
-                }
+            if (Directory.Exists(fileOrFolderpath)) {
+                hIcon = GetIconHandleFromFolderPath(fileOrFolderpath, iconSize);
+            } 
+            if(File.Exists(fileOrFolderpath)) {
+                hIcon = GetIconHandleFromFilePath(fileOrFolderpath, iconSize);
+            }
+            if(hIcon == IntPtr.Zero) {
+                return MpBase64Images.Warning;
             }
             return GetIconBase64FromHandle(hIcon);
         }
-
-        private static string GetIconBase64FromHandle(IntPtr hIcon) {
-            if (hIcon == IntPtr.Zero) {
-                throw new System.IO.FileNotFoundException();
-            }
-            using (var myIcon = System.Drawing.Icon.FromHandle(hIcon)) {
-                using (var img = myIcon.ToBitmap()) {
-                    myIcon.Dispose();
-                    DestroyIcon(hIcon);
-                    SendMessage(hIcon, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-
-                    using (MemoryStream memoryStream = new MemoryStream()) {
-                        img.Save(memoryStream, ImageFormat.Bmp);
-                        byte[] imageBytes = memoryStream.ToArray();
-                        return Convert.ToBase64String(imageBytes);
-                    }
-                }                    
-            }
-        }
-
+        
         private static IntPtr GetIconHandleFromFilePath(string filepath, IconSizeEnum iconsize) {
             var shinfo = new WinApi.SHFILEINFO();
             const uint SHGFI_SYSICONINDEX = 0x4000;
@@ -88,6 +41,44 @@ namespace MpProcessHelper {
             const int FILE_ATTRIBUTE_DIRECTORY = 0x00000010;
             uint flags = SHGFI_ICON | SHGFI_USEFILEATTRIBUTES;
             return GetIconHandleFromFilePathWithFlags(folderpath, iconsize, ref shinfo, FILE_ATTRIBUTE_DIRECTORY, flags);
+        }
+
+        private static string GetIconBase64FromHandle(IntPtr hIcon) {
+            if (hIcon == IntPtr.Zero) {
+                throw new System.IO.FileNotFoundException();
+            }
+            using (var myIcon = System.Drawing.Icon.FromHandle(hIcon)) {
+                using (Bitmap b = new Bitmap(myIcon.Width, myIcon.Height)) {
+                    using (Graphics g = Graphics.FromImage(b)) {
+                        g.DrawIcon(SystemIcons.Information, 0, 0);
+
+                    }
+                    myIcon.Dispose();
+                    DestroyIcon(hIcon);
+                    SendMessage(hIcon, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+
+                    using (MemoryStream memoryStream = new MemoryStream()) {
+                        b.Save(memoryStream, ImageFormat.Bmp);
+                        byte[] imageBytes = memoryStream.ToArray();
+                        return Convert.ToBase64String(imageBytes);
+                    }
+                }
+                //using (var img = myIcon.ToBitmap()) {
+                //    myIcon.Dispose();
+                //    DestroyIcon(hIcon);
+                //    SendMessage(hIcon, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+
+                    
+
+                //    // note this converts image format to Format32bppArgb
+                //    img.MakeTransparent(System.Drawing.Color.Black);
+                //    using (MemoryStream memoryStream = new MemoryStream()) {
+                //        img.Save(memoryStream, ImageFormat.Bmp);
+                //        byte[] imageBytes = memoryStream.ToArray();
+                //        return Convert.ToBase64String(imageBytes);
+                //    }
+                //}
+            }
         }
 
         private static IntPtr GetIconHandleFromFilePathWithFlags(

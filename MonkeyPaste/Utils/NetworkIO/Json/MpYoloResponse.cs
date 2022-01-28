@@ -9,10 +9,10 @@ using MonkeyPaste;
 namespace MonkeyPaste {
     public class MpYoloResponse : MpJsonMessage {
         [JsonProperty("detectedObjects")]
-        public List<MpYoloDetectedObject> DetectedObjects { get; set; } = new List<MpYoloDetectedObject>();
+        public List<MpDetectedImageItem> DetectedObjects { get; set; } = new List<MpDetectedImageItem>();
     }
 
-    public class MpYoloDetectedObject : MpJsonMessage {
+    public class MpDetectedImageItem : MpJsonMessage {
         [JsonProperty("score")]
         public double Score { get; set; } = 0;
 

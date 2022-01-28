@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MpAppBuilder.cs" />
+    <Compile Include="MpProcessAutomation.cs" />
     <Compile Include="MpProcessIconBuilder.cs" />
     <Compile Include="MpProcessManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

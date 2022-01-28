@@ -37,20 +37,11 @@ using GalaSoft.MvvmLight.CommandWpf;
 
 namespace MpWpfApp {
     public static class MpHelpers {
-        //public static RichTextBox SharedRtb { get; set; }
         private static InputSimulator sim = new InputSimulator();
         private static BitmapSource _defaultFavIcon = null;
-        private static MpIProcessIconBuilder _iconBuilder = null;
-        //private static MpImageHelper.MpImageHelper _imageHelper = null;
 
+        public static Random Rand { get; set; } = new Random((int)DateTime.Now.Ticks);
 
-        public static void Init(MpIProcessIconBuilder processIconBuilder) {
-            Rand = new Random((int)DateTime.Now.Ticks);
-            _iconBuilder = processIconBuilder;
-            // SharedRtb = new RichTextBox();
-            //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
-            _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
-        }
 
         #region Documents    
 
@@ -773,7 +764,6 @@ namespace MpWpfApp {
             BindingOperations.SetBinding(target, targetProperty, b);
         }
 
-        public static Random Rand { get; set; } = null;
 
         public static bool IsInDesignMode {
             get {
@@ -2298,6 +2288,10 @@ namespace MpWpfApp {
                         urlDomain)
                     , UriKind.Absolute);
                 var img = new BitmapImage(favicon);
+
+                if(_defaultFavIcon == null) {
+                    _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
+                }
                 if((img as BitmapSource).IsEqual(_defaultFavIcon)) {
                     return null;
                 }

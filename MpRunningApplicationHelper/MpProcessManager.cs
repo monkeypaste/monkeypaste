@@ -4,12 +4,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Management;
 using System.Security.Principal;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -39,23 +37,12 @@ namespace MpProcessHelper {
 
         public static string LastProcessPath => GetProcessPath(LastHandle);
 
-        public static MpProcessIconBuilder ProcessIconBuilder { get; private set; }
         #endregion
 
-        #region Events
-
-
-        #endregion
-
-        #region Constructor
-
-        #endregion
+        #region Public Methods
 
         public static void Start(string fallbackProcessPath, string[] knownAppPaths, MpIconBuilderBase iconBuilder) {
             Task.Run(async () => {
-                //fallback is used when cannot find path from handle
-                ProcessIconBuilder = new MpProcessIconBuilder(iconBuilder);
-
                 fallback = fallbackProcessPath;
                 _knownAppPaths = new ObservableCollection<string>(knownAppPaths);
 
@@ -73,7 +60,7 @@ namespace MpProcessHelper {
                         _knownAppPaths.Add(kvp.Key);
 
                         // this will notify main application of new app found
-                        await new MpAppBuilder().Build(kvp.Value[0], ProcessIconBuilder);
+                        await MpAppBuilder.Build(kvp.Value[0]);
                     }
                 }
 
@@ -91,23 +78,111 @@ namespace MpProcessHelper {
             _timer?.Stop();
         }
 
-
-        private static string GetExecutablePathAboveVista(IntPtr dwProcessId) {
-            StringBuilder buffer = new StringBuilder(1024);
-            IntPtr hprocess = WinApi.OpenProcess(WinApi.ProcessAccessFlags.QueryLimitedInformation, false, (int)dwProcessId);
-            if (hprocess != IntPtr.Zero) {
-                try {
-                    int size = buffer.Capacity;
-                    if (WinApi.QueryFullProcessImageName(hprocess, 0, buffer, ref size)) {
-                        return buffer.ToString(0, size);
-                    }
+        public static string GetProcessMainWindowTitle(IntPtr hWnd) {
+            try {
+                if (hWnd == null || hWnd == IntPtr.Zero) {
+                    return "Unknown Application";
                 }
-                finally {
-                    WinApi.CloseHandle(hprocess);
+                //uint processId;
+                //WinApi.GetWindowThreadProcessId(hWnd, out processId);
+                //using (Process proc = Process.GetProcessById((int)processId)) {
+                //    return proc.MainWindowTitle;
+                //}
+                int length = WinApi.GetWindowTextLength(hWnd);
+                if (length == 0) {
+                    return string.Empty;
+                }
+
+                StringBuilder builder = new StringBuilder(length);
+                WinApi.GetWindowText(hWnd, builder, length + 1);
+                return builder.ToString();
+            }
+            catch (Exception ex) {
+                return "MpHelpers.GetProcessMainWindowTitle Exception: " + ex.ToString();
+            }
+        }
+
+        public static bool IsProcessAdmin(IntPtr handle) {
+            if (handle == null || handle == IntPtr.Zero) {
+                return false;
+            }
+            try {
+                WinApi.GetWindowThreadProcessId(handle, out uint pid);
+                using (Process proc = Process.GetProcessById((int)pid)) {
+                    IntPtr ph = IntPtr.Zero;
+                    WinApi.OpenProcessToken(proc.Handle, WinApi.TOKEN_ALL_ACCESS, out ph);
+                    WindowsIdentity iden = new WindowsIdentity(ph);
+                    bool result = false;
+
+                    foreach (IdentityReference role in iden.Groups) {
+                        if (role.IsValidTargetType(typeof(SecurityIdentifier))) {
+                            SecurityIdentifier sid = role as SecurityIdentifier;
+                            if (sid.IsWellKnown(WellKnownSidType.AccountAdministratorSid) || sid.IsWellKnown(WellKnownSidType.BuiltinAdministratorsSid)) {
+                                result = true;
+                                break;
+                            }
+                        }
+                    }
+                    WinApi.CloseHandle(ph);
+                    return result;
                 }
             }
-            return string.Empty;
+            catch (Exception ex) {
+                //if app is started using "Run as" is if you get "Access Denied" error. 
+                //That means that running app has rights that your app does not have. 
+                //in this case ADMIN rights
+                MonkeyPaste.MpConsole.WriteLine("IsProcessAdmin error: " + ex.ToString());
+                return true;
+            }
         }
+
+        public static int GetShowWindowValue(WinApi.ShowWindowCommands cmd) {
+            int winType = 0;
+            switch (cmd) {
+                case WinApi.ShowWindowCommands.Normal:
+                    winType = WinApi.Windows.NORMAL;
+                    break;
+                case WinApi.ShowWindowCommands.Maximized:
+                    winType = WinApi.Windows.MAXIMIXED;
+                    break;
+                case WinApi.ShowWindowCommands.Minimized:
+                case WinApi.ShowWindowCommands.Hide:
+                    winType = WinApi.Windows.HIDE;
+                    break;
+                default:
+                    winType = WinApi.Windows.NORMAL;
+                    break;
+            }
+            return winType;
+        }
+
+        public static string GetProcessPath(IntPtr hwnd, string fallback = @"C:\WINDOWS\Explorer.EXE") {
+            try {
+                if (hwnd == null || hwnd == IntPtr.Zero) {
+                    return fallback; //fallback;
+                }
+
+                WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
+                using (Process proc = Process.GetProcessById((int)pid)) {
+                    // TODO when user clicks eye (to hide it) icon on running apps it should add to a string[] pref
+                    // and if it contains proc.ProcessName return fallback (so choice persists
+                    if (proc.ProcessName == @"csrss") {
+                        //occurs with messageboxes and dialogs
+                        return fallback; //fallback;
+                    }
+                    if (proc.MainWindowHandle == IntPtr.Zero) {
+                        return fallback; //fallback;
+                    }
+                    return proc.MainModule.FileName.ToString();
+                }
+            }
+            catch (Exception e) {
+                MonkeyPaste.MpConsole.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
+                //return GetExecutablePathAboveVista(hwnd);
+                return fallback; //fallback;
+            }
+        }
+
         public static string GetProcessPath(IntPtr hwnd) {
             try {
                 if (hwnd == null || hwnd == IntPtr.Zero) {
@@ -132,7 +207,6 @@ namespace MpProcessHelper {
                 return fallback;
             }
         }
-
 
         public static string GetMainModuleFilepath(int processId) {
             string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
@@ -163,6 +237,27 @@ namespace MpProcessHelper {
             return mwta[mwta.Length - 1].Trim();
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private static string GetExecutablePathAboveVista(IntPtr dwProcessId) {
+            StringBuilder buffer = new StringBuilder(1024);
+            IntPtr hprocess = WinApi.OpenProcess(WinApi.ProcessAccessFlags.QueryLimitedInformation, false, (int)dwProcessId);
+            if (hprocess != IntPtr.Zero) {
+                try {
+                    int size = buffer.Capacity;
+                    if (WinApi.QueryFullProcessImageName(hprocess, 0, buffer, ref size)) {
+                        return buffer.ToString(0, size);
+                    }
+                }
+                finally {
+                    WinApi.CloseHandle(hprocess);
+                }
+            }
+            return string.Empty;
+        }
+
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e) {
             IntPtr currentHandle = WinApi.GetForegroundWindow();
 
@@ -184,14 +279,15 @@ namespace MpProcessHelper {
                 //var app = await MpApp.Create(processName, MpHelpers.GetProcessApplicationName(LastHandle), icon);
                 _knownAppPaths.Add(processName);
                 // this will notify main application of new app found
-                Task.Run((Func<Task>)(async () => { await new MpAppBuilder().Build(LastHandle, (MpIProcessIconBuilder)MpProcessManager.ProcessIconBuilder); }));
+                Task.Run(async () => {
+                    await MpAppBuilder.Build(LastHandle);
+                });
             }
 
             if (hasChanged) {
                 MonkeyPaste.MpConsole.WriteLine(string.Format(@"Last Window: {0} ({1})", GetProcessMainWindowTitle(LastHandle), LastHandle));
             }
         }
-
 
         private static void RefreshHandleStack() {
             lock (CurrentProcessWindowHandleStackDictionary) {
@@ -317,219 +413,6 @@ namespace MpProcessHelper {
             return null;
         }
 
-        public static string GetProcessMainWindowTitle(IntPtr hWnd) {
-            try {
-                if (hWnd == null || hWnd == IntPtr.Zero) {
-                    return "Unknown Application";
-                }
-                //uint processId;
-                //WinApi.GetWindowThreadProcessId(hWnd, out processId);
-                //using (Process proc = Process.GetProcessById((int)processId)) {
-                //    return proc.MainWindowTitle;
-                //}
-                int length = WinApi.GetWindowTextLength(hWnd);
-                if (length == 0) {
-                    return string.Empty;
-                }
-
-                StringBuilder builder = new StringBuilder(length);
-                WinApi.GetWindowText(hWnd, builder, length + 1);
-                return builder.ToString();
-            }
-            catch (Exception ex) {
-                return "MpHelpers.GetProcessMainWindowTitle Exception: " + ex.ToString();
-            }
-        }
-
-        public static bool IsProcessAdmin(IntPtr handle) {
-            if (handle == null || handle == IntPtr.Zero) {
-                return false;
-            }
-            try {
-                WinApi.GetWindowThreadProcessId(handle, out uint pid);
-                using (Process proc = Process.GetProcessById((int)pid)) {
-                    IntPtr ph = IntPtr.Zero;
-                    WinApi.OpenProcessToken(proc.Handle, WinApi.TOKEN_ALL_ACCESS, out ph);
-                    WindowsIdentity iden = new WindowsIdentity(ph);
-                    bool result = false;
-
-                    foreach (IdentityReference role in iden.Groups) {
-                        if (role.IsValidTargetType(typeof(SecurityIdentifier))) {
-                            SecurityIdentifier sid = role as SecurityIdentifier;
-                            if (sid.IsWellKnown(WellKnownSidType.AccountAdministratorSid) || sid.IsWellKnown(WellKnownSidType.BuiltinAdministratorsSid)) {
-                                result = true;
-                                break;
-                            }
-                        }
-                    }
-                    WinApi.CloseHandle(ph);
-                    return result;
-                }
-            }
-            catch (Exception ex) {
-                //if app is started using "Run as" is if you get "Access Denied" error. 
-                //That means that running app has rights that your app does not have. 
-                //in this case ADMIN rights
-                MonkeyPaste.MpConsole.WriteLine("IsProcessAdmin error: " + ex.ToString());
-                return true;
-            }
-        }
-
-        public static int GetShowWindowValue(WinApi.ShowWindowCommands cmd) {
-            int winType = 0;
-            switch (cmd) {
-                case WinApi.ShowWindowCommands.Normal:
-                    winType = WinApi.Windows.NORMAL;
-                    break;
-                case WinApi.ShowWindowCommands.Maximized:
-                    winType = WinApi.Windows.MAXIMIXED;
-                    break;
-                case WinApi.ShowWindowCommands.Minimized:
-                case WinApi.ShowWindowCommands.Hide:
-                    winType = WinApi.Windows.HIDE;
-                    break;
-                default:
-                    winType = WinApi.Windows.NORMAL;
-                    break;
-            }
-            return winType;
-        }
-
-        public static string GetProcessPath(IntPtr hwnd, string fallback = @"C:\WINDOWS\Explorer.EXE") {
-            try {
-                if (hwnd == null || hwnd == IntPtr.Zero) {
-                    return fallback; //fallback;
-                }
-
-                WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
-                using (Process proc = Process.GetProcessById((int)pid)) {
-                    // TODO when user clicks eye (to hide it) icon on running apps it should add to a string[] pref
-                    // and if it contains proc.ProcessName return fallback (so choice persists
-                    if (proc.ProcessName == @"csrss") {
-                        //occurs with messageboxes and dialogs
-                        return fallback; //fallback;
-                    }
-                    if (proc.MainWindowHandle == IntPtr.Zero) {
-                        return fallback; //fallback;
-                    }
-                    return proc.MainModule.FileName.ToString();
-                }
-            }
-            catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
-                //return GetExecutablePathAboveVista(hwnd);
-                return fallback; //fallback;
-            }
-        }
-
-        public static IntPtr StartProcess(
-            string args,
-            string processPath,
-            bool asAdministrator,
-            bool isSilent,
-            WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal) {
-            try {
-                IntPtr outHandle = IntPtr.Zero;
-                if (isSilent) {
-                    windowState = WinApi.ShowWindowCommands.Hide;
-                }
-                ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo();
-                processInfo.FileName = processPath;//Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
-                if (!string.IsNullOrEmpty(args)) {
-                    processInfo.Arguments = args;
-                }
-                processInfo.WindowStyle = isSilent ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
-                processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
-
-                if (asAdministrator) {
-                    using (var process = Process.Start(processInfo)) {
-                        while (!process.WaitForInputIdle(100)) {
-                            Thread.Sleep(100);
-                            process.Refresh();
-                        }
-                        outHandle = process.Handle;
-                    }
-                } else {
-                    using (var process = UACHelper.UACHelper.StartLimited(processInfo)) {
-                    //using (var process = Process.Start(processInfo)) {
-                        while (!process.WaitForInputIdle(100)) {
-                            Thread.Sleep(100);
-                            process.Refresh();
-                        }
-                        outHandle = process.Handle;
-                    }
-                }
-                if (outHandle == IntPtr.Zero) {
-                    MonkeyPaste.MpConsole.WriteLine("Error starting process: " + processPath);
-                    return outHandle;
-                }
-
-                WinApi.ShowWindowAsync(outHandle, GetShowWindowValue(windowState));
-                return outHandle;
-            }
-            catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("Start Process error (Admin to Normal mode): " + ex);
-                return IntPtr.Zero;
-            }
-            // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
-        }
-        public static IntPtr SetActiveProcess(
-            string processPath,
-            bool isAdmin,
-            bool isSilent = false,
-            string args = "",
-            object forceHandle = null,
-            WinApi.ShowWindowCommands forceWindowState = WinApi.ShowWindowCommands.Maximized) {
-            try {
-                if (string.IsNullOrEmpty(processPath)) {
-                    return IntPtr.Zero;
-                }
-                if (processPath[0] == '%') {
-                    //only occurs for hardcoded %windir%\cmd.exe
-                    processPath = string.Format(
-                        @"{0}\System32\cmd.exe",
-                        Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.System)).FullName);
-                }
-                processPath = processPath.Replace(@"\\", @"\").ToLower();
-                //MonkeyPaste.MpConsole.WriteLine(processPath);
-
-                //forceHandle is only passed when its a running application
-                IntPtr handle = forceHandle == null ? IntPtr.Zero : (IntPtr)forceHandle;
-                if (handle != IntPtr.Zero || !CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath)) {
-                    //if process is not running anymore or needs to be started (custom pastetoapppath)
-                    handle = StartProcess(args, processPath, isAdmin, isSilent, forceWindowState);
-                } else {
-                    //ensure the process has a handle matching isAdmin, if not it needs to be created
-                    var handleList = CurrentProcessWindowHandleStackDictionary[processPath];
-                    foreach (var h in handleList) {
-                        if (isAdmin == IsProcessAdmin(h)) {
-                            handle = h;
-                            if (LastWindowStateHandleDictionary.ContainsKey(handle)) {
-                                forceWindowState = LastWindowStateHandleDictionary[handle];
-                            }
-                            break;
-                        }
-                    }
-                    if (handle == IntPtr.Zero) {
-                        //no handle found matching admin rights
-                        handle = StartProcess(args, processPath, isAdmin, isSilent, forceWindowState);
-                    } else {
-                        //show running window with last known window state
-                        WinApi.ShowWindowAsync(handle, GetShowWindowValue(forceWindowState));
-                    }
-                }
-
-                return handle;
-            }
-            catch (Exception) {
-                //MonkeyPaste.MpConsole.WriteLine("MpRunningApplicationManager.SetActiveApplication error: " + ex.ToString());
-                return IntPtr.Zero;
-            }
-        }
+        #endregion
     }
-
-    public static class MpProcessExtensions {
-
-    }
-
 }

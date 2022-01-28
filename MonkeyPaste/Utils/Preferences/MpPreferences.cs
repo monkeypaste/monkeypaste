@@ -614,7 +614,7 @@ namespace MonkeyPaste {
 
         public static double DefaultFontSize {
             get {
-                return Default.Get(nameof(DefaultFontSize), 12);
+                return Default.Get(nameof(DefaultFontSize), 12.0d);
             }
             set {
                 Default.Set(nameof(DefaultFontSize), value);

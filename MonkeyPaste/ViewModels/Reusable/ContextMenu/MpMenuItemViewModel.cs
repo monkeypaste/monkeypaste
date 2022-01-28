@@ -72,37 +72,35 @@ namespace MonkeyPaste {
             bool isAnySelected = false;
             var colors = new List<MpMenuItemViewModel>();
             string selectedHexStr = ucvm.GetColor();
-            for (int y = 0; y < MpSystemColors.ContentColors[0].Count; y++) {
-                for (int x = 0; x < MpSystemColors.ContentColors.Count; x++) {
-                    string cc = MpSystemColors.ContentColors[x][y].ToUpper();
-                    bool isCustom = y == MpSystemColors.ContentColors[0].Count - 1 && x == MpSystemColors.ContentColors.Count - 1;
-                    bool isSelected = selectedHexStr.ToUpper() == cc;
-                    if(isSelected) {
-                        isAnySelected = true;
-                    }
-                    ICommand command = null;
-                    object commandArg = null;
-                    string header = cc;
-                    if(isCustom) {
-                        if(!isAnySelected) {
-                            isSelected = true;
-                            // if selected color is custom make background of custom icon that color (default white)
-                            header = selectedHexStr;
-                        }
-                        command = MpNativeWrapper.GetCustomColorChooserMenu().SelectCustomColorCommand;
-                        commandArg = ucvm;
-                    } else {
-                        command = ucvm.SetColorCommand;
-                        commandArg = cc;
-                    }
-                    colors.Add(new MpMenuItemViewModel() {
-                        IsSelected = isSelected,
-                        Header = header, 
-                        Command = command,
-                        CommandParameter = commandArg,
-                        IsVisible = isCustom
-                    });
+            for (int i = 0; i < MpSystemColors.ContentColors.Count; i++) {
+                string cc = MpSystemColors.ContentColors[i].ToUpper();
+                bool isCustom = i == MpSystemColors.ContentColors.Count - 1;
+                bool isSelected = selectedHexStr.ToUpper() == cc;
+                if (isSelected) {
+                    isAnySelected = true;
                 }
+                ICommand command = null;
+                object commandArg = null;
+                string header = cc;
+                if (isCustom) {
+                    if (!isAnySelected) {
+                        isSelected = true;
+                        // if selected color is custom make background of custom icon that color (default white)
+                        header = selectedHexStr;
+                    }
+                    command = MpNativeWrapper.GetCustomColorChooserMenu().SelectCustomColorCommand;
+                    commandArg = ucvm;
+                } else {
+                    command = ucvm.SetColorCommand;
+                    commandArg = cc;
+                }
+                colors.Add(new MpMenuItemViewModel() {
+                    IsSelected = isSelected,
+                    Header = header,
+                    Command = command,
+                    CommandParameter = commandArg,
+                    IsVisible = isCustom
+                });
             }
             
             return new MpMenuItemViewModel() {

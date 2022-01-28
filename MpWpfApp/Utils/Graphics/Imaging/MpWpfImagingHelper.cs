@@ -122,6 +122,15 @@ namespace MpWpfApp {
                     new SolidColorBrush(Color.FromRgb(65, 65, 65))
                 }
             };
+
+        public static void DumpColors() {
+            for (int y = 0; y < _colors[0].Count; y++) {
+                for (int x = 0; x < _colors.Count; x++) {
+                    Console.WriteLine(string.Format(@"'{0}',", _colors[x][y].ToHex()));
+                }
+            }
+        }
+
         public static BitmapSource MergeImages2(IList<BitmapSource> bmpSrcList, bool scaleToSmallestSize = false, bool scaleToLargestDpi = true) {
             // if not scaled to smallest, will be scaled to largest
             int w = scaleToSmallestSize ? bmpSrcList.Min(x => x.PixelWidth) : bmpSrcList.Max(x => x.PixelWidth);
@@ -388,7 +397,7 @@ namespace MpWpfApp {
             return countDictionary.OrderByDescending(o => o.Value).ToList();
         }
 
-        public static  List<string> CreatePrimaryColorList(BitmapSource bmpSource, int palleteSize = 5) {
+        public static List<string> CreatePrimaryColorList(BitmapSource bmpSource, int palleteSize = 5) {
             //var sw = new Stopwatch();
             //sw.Start();
             var primaryIconColorList = new List<string>();
@@ -408,61 +417,22 @@ namespace MpWpfApp {
 
                 //0-255 0 is black
                 var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
-                var relativeDist = primaryIconColorList.Count == 0 ? 1 : ColorDistance(ConvertHexToColor(primaryIconColorList[primaryIconColorList.Count - 1]), c);
+                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpWpfColorHelpers.ColorDistance(MpWpfColorHelpers.ConvertHexToColor(primaryIconColorList[primaryIconColorList.Count - 1]), c);
                 if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
-                    primaryIconColorList.Add(ConvertColorToHex(c));
+                    primaryIconColorList.Add(MpWpfColorHelpers.ConvertColorToHex(c));
                 }
             }
 
             //if only 1 color found within threshold make random list
             for (int i = primaryIconColorList.Count; i < palleteSize; i++) {
-                primaryIconColorList.Add(ConvertColorToHex(GetRandomColor()));
+                primaryIconColorList.Add(MpWpfColorHelpers.ConvertColorToHex(MpWpfColorHelpers.GetRandomColor()));
             }
             //sw.Stop();
             //MonkeyPaste.MpConsole.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return primaryIconColorList;
         }
 
-        public static double ColorDistance(Color e1, Color e2) {
-            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
-            long rmean = ((long)e1.R + (long)e2.R) / 2;
-            long r = (long)e1.R - (long)e2.R;
-            long g = (long)e1.G - (long)e2.G;
-            long b = (long)e1.B - (long)e2.B;
-            double max = 764.83331517396653;
-            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
-            return d / max;
-        }
-
-        public static Color GetRandomColor() {
-            if(_Rand == null) {
-                _Rand = new Random((int)DateTime.Now.Ticks);
-            }
-            int x = _Rand.Next(0, _colors.Count);
-            int y = _Rand.Next(0, _colors[0].Count);
-
-            return ((SolidColorBrush)_colors[x][y]).Color;
-        }
-        public static Color ConvertHexToColor(string hexString) {
-            if (hexString.IndexOf('#') != -1) {
-                hexString = hexString.Replace("#", string.Empty);
-            }
-            //
-            int x = hexString.Length == 8 ? 2 : 0;
-            byte r = byte.Parse(hexString.Substring(x, 2), NumberStyles.AllowHexSpecifier);
-            byte g = byte.Parse(hexString.Substring(x + 2, 2), NumberStyles.AllowHexSpecifier);
-            byte b = byte.Parse(hexString.Substring(x + 4, 2), NumberStyles.AllowHexSpecifier);
-            byte a = x > 0 ? byte.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier) : (byte)255;
-            return Color.FromArgb(a, r, g, b);
-        }
-
-        public static string ConvertColorToHex(Color c, byte forceAlpha = 255) {
-            if (c == null) {
-                return "#FF0000";
-            }
-            c.A = forceAlpha;
-            return c.ToString();
-        }
+        
 
     }
 }

@@ -233,7 +233,6 @@ namespace MpWpfApp {
 
         #region MpAnalyticItem
 
-
         public MpCopyItemType InputContentType { 
             get {
                 if(AnalyticItem == null) {

@@ -112,7 +112,9 @@ namespace MonkeyPaste {
             string title,
             string description,
             string parameterFormatResourcePath,
-            int sortOrderIdx = -1) {
+            int sortOrderIdx = -1,
+            int iconId = 0,
+            string guid = "") {
             var dupItem = await MpDataModelProvider.GetAnalyticItemByEndpoint(endPoint);
             if (dupItem != null) {
                 dupItem = await MpDb.GetItemAsync<MpAnalyticItem>(dupItem.Id);
@@ -123,13 +125,20 @@ namespace MonkeyPaste {
                 sortOrderIdx = await MpDataModelProvider.GetAnalyticItemCount();
             }
 
-            var domainStr = MpHelpers.GetUrlDomain(endPoint);
-            var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
+            
 
-            var icon = await MpIcon.Create(favIconImg64);
+            MpIcon icon = null;
+            if (iconId > 0) {
+                icon = await MpDb.GetItemAsync<MpIcon>(iconId);
+            } else {
+                var domainStr = MpHelpers.GetUrlDomain(endPoint);
+                var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
+                await MpIcon.Create(favIconImg64);
+            }
+            
 
             var newAnalyticItem = new MpAnalyticItem() {
-                AnalyticItemGuid = System.Guid.NewGuid(),
+                AnalyticItemGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 EndPoint = endPoint,
                 ApiKey = apiKey,
                 IconId = icon.Id,

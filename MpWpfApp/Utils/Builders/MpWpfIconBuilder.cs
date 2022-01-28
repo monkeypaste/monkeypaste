@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using static MpWpfApp.MpWpfImagingHelper;
+using static MpWpfApp.MpWpfColorHelpers;
 
 namespace MpWpfApp {
     public class MpWpfIconBuilder : MpIconBuilderBase {

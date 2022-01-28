@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using MonkeyPaste;
 using System.IO;
+using MpProcessHelper;
 
 namespace MpWpfApp {
     public class MpAppCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpAppCollectionViewModel> {
@@ -152,7 +153,7 @@ namespace MpWpfApp {
                     MpApp app = null;
                     var avm = AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
                     if (avm == null) {
-                        var iconBmpSrc = MpProcessHelper.MpProcessManager.ProcessIconBuilder.GetBase64BitmapFromPath(appPath).ToBitmapSource();
+                        var iconBmpSrc = MpProcessIconBuilder.GetBase64BitmapFromPath(appPath).ToBitmapSource();
                         var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                         app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
                         avm = await CreateAppViewModel(app);

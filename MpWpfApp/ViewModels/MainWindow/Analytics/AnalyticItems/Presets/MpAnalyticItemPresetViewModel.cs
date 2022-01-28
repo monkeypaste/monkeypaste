@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -252,12 +253,17 @@ namespace MpWpfApp {
             ParameterViewModels.Clear();
 
             if(aip == null) {
-                Preset = await MpAnalyticItemPreset.Create(Parent.AnalyticItem, "Default", Parent.AnalyticItem.Icon, true, false, 0);
+                Preset = await MpAnalyticItemPreset.Create(
+                    Parent.AnalyticItem, "Default", Parent.AnalyticItem.Icon, true, false, 0);
             } else {
                 Preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
             }
 
-            string formatJson = MpFileIo.ReadTextFromResource(Parent.AnalyticItem.ParameterFormatResourcePath);
+            Assembly assembly = null;
+            if(Parent is MpPluginAnalyzerViewModel pavm) {
+                assembly = pavm.AnalyzerPluginComponent.GetType().Assembly;
+            }
+            string formatJson = MpFileIo.ReadTextFromResource(Parent.AnalyticItem.ParameterFormatResourcePath,assembly);
 
             var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
                 formatJson, new MpJsonEnumConverter()).ParameterFormats;

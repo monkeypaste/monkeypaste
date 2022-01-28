@@ -12,6 +12,8 @@ using System.Windows.Media;
 using FFImageLoading.Helpers.Exif;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
+using Xamarin.Forms.Internals;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public enum MpAnalyzerType {
@@ -128,6 +130,11 @@ namespace MpWpfApp {
                 Items.Add(aivm);
             }
 
+            var pail = MpPluginManager.Plugins.Where(x => x.Components.Any(y => y is MpIAnalyzerPluginComponent));
+            foreach(var pai in pail) {
+                var paivml = await CreateAnalyticItemViewModel(pai);
+                paivml.ForEach(x => Items.Add(x));
+            }
             OnPropertyChanged(nameof(Items));
             
             if (Items.Count > 0) {
@@ -156,7 +163,7 @@ namespace MpWpfApp {
         #region Private Methods
 
         private async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpAnalyticItem ai) {
-            MpAnalyticItemViewModel aivm = null;
+            MpAnalyticItemViewModel aivm = null; 
             switch(ai.Title) {
                 case "Open Ai":
                     aivm = new MpOpenAiViewModel(this);
@@ -173,6 +180,20 @@ namespace MpWpfApp {
             }
             await aivm.InitializeAsync(ai);
             return aivm;
+        }
+
+        private async Task<List<MpAnalyticItemViewModel>> CreateAnalyticItemViewModel(MpPlugin plugin) {
+            var apl = new List<MpAnalyticItemViewModel>();
+
+            for (int i = 0; i < plugin.types.Count; i++) {
+                for (int j = 0; j < plugin.types[i].analyzer.Count; j++) {
+                    MpPluginAnalyzerViewModel aivm = new MpPluginAnalyzerViewModel(this);
+
+                    await aivm.InitializeAsync(plugin, i,j);
+                    apl.Add(aivm);
+                }
+            }
+            return apl;
         }
 
         private void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

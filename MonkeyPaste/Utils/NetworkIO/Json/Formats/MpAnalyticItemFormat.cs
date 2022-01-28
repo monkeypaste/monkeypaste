@@ -23,6 +23,7 @@ namespace MonkeyPaste {
         RichText,
         Html,
         Image,
+        Base64Text,
         Custom
     }
     //adult,brands,categories,description,faces,objects,tags

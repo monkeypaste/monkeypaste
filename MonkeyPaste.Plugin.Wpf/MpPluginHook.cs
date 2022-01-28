@@ -12,23 +12,32 @@ namespace MonkeyPaste.Plugin.Wpf_Template {
 
         public MpPluginHook() { }
 
+        #region MpIPlugin Implementation
+
+        public string GetManifest() {
+            return "Yo Test Plugin Here";
+        }
+
+        #endregion
+
+        #region MpIPluginComponent Implementation
+
         public void Create(object dobj) {
             //dobj will contain an array of data matching supplied formats
-            if(dobj == null) {
+            if (dobj == null) {
                 return;
             }
-            if(dobj is object[] dobjParts) {
-                if(dobjParts.Length > 0) {
+            if (dobj is object[] dobjParts) {
+                if (dobjParts.Length > 0) {
                     _dobj = (dobjParts[0] as string) + "test";
                 }
             }
 
         }
 
-        public MpIPluginComponent[] GetComponents() {
-            return new MpIPluginComponent[] { this };
-        }
+        #endregion
 
+        #region MpIClipboardItemPluginComponent Implementation
         public object GetDataObject() {
             return _dobj;
         }
@@ -38,9 +47,6 @@ namespace MonkeyPaste.Plugin.Wpf_Template {
                 "Text"
             };
         }
-
-        public string GetName() {
-            return "Yo Test Plugin Here";
-        }
+        #endregion
     }
 }

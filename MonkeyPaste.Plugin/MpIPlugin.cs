@@ -1,33 +1,25 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace MonkeyPaste.Plugin {
-    public interface MpIPlugin {
-        string GetName();
+    public interface MpIPlugin { }
 
-        MpIPluginComponent[] GetComponents();
-    }
-
-    public interface MpIPluginComponent {
-        void Create(object obj);
-    }
-
-    public interface MpIClipboardItemPluginComponent : MpIPluginComponent {
+    public interface MpIClipboardItemPluginComponent : MpIPlugin {
         object GetDataObject();
         string[] GetHandledDataFormats();
     }
 
-    public interface MpIAnalyzerPluginComponent : MpIPluginComponent {
-        string AnalyzeText(string text);
-        string AnalyzeImage(string imgBase64);
-        string AnalyzeFile(string path);
+    public interface MpIAnalyzerPluginComponent : MpIPlugin {
+        Task<object> Analyze(object args);
     }
 
-    public interface MpITransformerPluginComponent : MpIPluginComponent {
+    public interface MpITransformerPluginComponent : MpIPlugin {
         string TransformText(string text);
         string TransformImage(string imgBase64);
         string TransformFile(string path);
     }
 
-    public interface MpIComparerPluginComponent : MpIPluginComponent {
+    public interface MpIComparerPluginComponent : MpIPlugin {
         bool CompareText(bool text);
         bool CompareImage(string imgBase64);
         bool CompareFile(string path);

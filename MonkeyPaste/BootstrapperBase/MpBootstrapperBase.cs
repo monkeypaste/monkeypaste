@@ -15,7 +15,7 @@ namespace MonkeyPaste {
             MpDb.Init(niw.GetDbInfo());
             MpDataModelProvider.Init(niw.GetQueryInfo());
             //warning! plugin manager has issue trying to load netstandard2.1 and wpf can't load it
-            //MpPluginManager.Init();
+            MpPluginManager.Init();
         }
 
         public virtual async Task Initialize() {

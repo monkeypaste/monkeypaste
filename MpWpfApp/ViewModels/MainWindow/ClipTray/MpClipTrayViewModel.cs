@@ -1004,7 +1004,7 @@ namespace MpWpfApp {
 
                 IntPtr pasteToWindowHandle = IntPtr.Zero;
                 if (_selectedPasteToAppPathViewModel != null) {
-                    pasteToWindowHandle = MpProcessManager.SetActiveProcess(
+                    pasteToWindowHandle = MpProcessAutomation.SetActiveProcess(
                         _selectedPasteToAppPathViewModel.AppPath,
                         _selectedPasteToAppPathViewModel.IsAdmin,
                         _selectedPasteToAppPathViewModel.IsSilent,

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste.Plugin {
-    public enum MpPluginType {
+    public enum Type {
         None = 0,
         Clipboard,
         Input,
@@ -24,14 +24,12 @@ namespace MonkeyPaste.Plugin {
 
         public string PluginId { get; set; }
 
-        public List<MpPluginType> PluginTypes { get; set; } = new List<MpPluginType>();
+        public List<Type> PluginTypes { get; set; } = new List<Type>();
 
         #endregion
 
         #region Public Methods
         
-        #endregion
-
-        
+        #endregion        
     }
 }

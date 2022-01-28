@@ -81,18 +81,38 @@ namespace MonkeyPaste {
             }
         }
 
-        public static void AddRange<TSource>(this IList<TSource> collection, int idx, IList<TSource> itemsToAdd) where TSource : class {
-            if (idx >= collection.Count()) {
-                throw new IndexOutOfRangeException($"Idx: {idx} out of range {collection.Count()}");
-            }
-            if(idx < 0) {
-                idx = Math.Max(0,collection.Count - 1);
-            }
-            itemsToAdd.Reverse();
-            foreach(var item in itemsToAdd) {
-                collection.Insert(idx, item);
-            }
-        }
+        //public static IList<TSource> AddRange<TSource>(this IList<TSource> collection, IList<TSource> itemsToAdd) where TSource : class {
+        //    foreach (var item in itemsToAdd) {
+        //        collection.Add(item);
+        //    }
+        //    return collection;
+        //}
+
+        //public static IList<TSource> Add<TSource>(this IList<TSource> collection, TSource itemToAdd) where TSource : class {
+        //    collection.Add(itemToAdd);
+        //    return collection;
+        //}
+
+        //public static IList<TSource> InsertRange<TSource>(this IList<TSource> collection, int idx, IList<TSource> itemsToInsert) where TSource : class {
+        //    itemsToInsert.Reverse();
+        //    foreach (var item in itemsToInsert) {
+        //        collection.Insert(idx, item);
+        //    }
+        //    return collection;
+        //}
+
+        //public static IList<TSource> Insert<TSource>(this IList<TSource> collection, int idx, TSource itemToInsert) where TSource : class {
+        //    collection.Insert(idx, itemToInsert);
+        //    return collection;
+        //}
+
+        //public static List<T> ToList<T>(this T obj) where T : class {
+        //    return new List<T>() { obj };
+        //}
+
+        //public static ObservableCollection<T> ToObservableCollection<T>(this T obj) where T : class {
+        //    return new ObservableCollection<T>() { obj };
+        //}
         #endregion
 
         #region Enums
