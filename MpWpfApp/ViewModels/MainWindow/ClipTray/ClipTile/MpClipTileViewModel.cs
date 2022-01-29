@@ -1036,9 +1036,9 @@ using System.Speech.Synthesis;
                 foreach (var rtbvm in SelectedItems) {
                     if (rtbvm.HasTemplates) {
                         string rtbvmrtf = rtbvm.TemplateRichText;
-                        rtf = MpHelpers.CombineRichText(rtbvmrtf, rtf, true);
+                        rtf = rtf.ToFlowDocument().Combine(rtbvmrtf.ToFlowDocument(), true).ToRichText();
                     } else {
-                        rtf = MpHelpers.CombineRichText(rtbvm.CopyItem.ItemData.ToRichText(), rtf, true);
+                        rtf = rtf.ToFlowDocument().Combine(rtbvm.CopyItem.ItemData.ToFlowDocument(), true).ToRichText();
                     }
                 }
                 sw.Stop();

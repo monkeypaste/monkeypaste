@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public static class MpImageExtensions {
+    public static class MpWpfImageExtensions {
         //faster version but needs unsafe thing
         //public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset) {
         //    fixed (PixelColor* buffer = &pixels[0, 0])
@@ -122,7 +122,7 @@ namespace MpWpfApp {
         }
 
         public static BitmapSource ToBitmapSource(this string base64Str) {
-            if (string.IsNullOrEmpty(base64Str) || !base64Str.IsBase64String()) {
+            if (string.IsNullOrEmpty(base64Str) || !base64Str.IsStringBase64()) {
                 return new BitmapImage();
             }
             var bytes = System.Convert.FromBase64String(base64Str);
@@ -147,22 +147,6 @@ namespace MpWpfApp {
             }
         }
 
-        public static bool IsBase64String(this string str) {
-            if (str.IsStringResourcePath()) {
-                return false;
-            }
-            try {
-                // If no exception is caught, then it is possibly a base64 encoded string
-                byte[] data = Convert.FromBase64String(str);
-                // The part that checks if the string was properly padded to the
-                // correct length was borrowed from d@anish's solution
-                return (str.Replace(" ", "").Length % 4 == 0);
-            }
-            catch {
-                // If exception is caught, then it is not a base64 encoded string
-                return false;
-            }
-        }
         public static System.Drawing.Icon ToIcon(this System.Drawing.Bitmap bmp) {
             IntPtr hIcon = bmp.GetHicon();
             return System.Drawing.Icon.FromHandle(hIcon);
@@ -184,5 +168,7 @@ namespace MpWpfApp {
             grayScaleSsBmp.EndInit();
             return grayScaleSsBmp;
         }
+
+        
     }
 }

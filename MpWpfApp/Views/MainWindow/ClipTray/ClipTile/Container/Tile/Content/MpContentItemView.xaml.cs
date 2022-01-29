@@ -49,14 +49,14 @@ namespace MpWpfApp {
             BindingContext.IsHovering = true;
             if (!MpDragDropManager.Instance.IsDragAndDrop &&
                 (!BindingContext.Parent.IsExpanded || !BindingContext.IsSelected)) {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
+                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
             }
         }
 
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
             BindingContext.IsHovering = false;
             if (!MpDragDropManager.Instance.IsDragAndDrop) {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
         }
 

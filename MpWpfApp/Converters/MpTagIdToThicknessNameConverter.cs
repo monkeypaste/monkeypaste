@@ -3,11 +3,16 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace MpWpfApp {
-    public class MpTagIdToThicknessNameConverter : IValueConverter {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == (int)value);
+    public class MpTagIdToThicknessNameConverter : IMultiValueConverter {
+        
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
+            if(values == null || values.Length < 2 || (bool)values[1] == false) {
+                return new Thickness();
+            }
+            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == (int)values[0]);
             if (ttvm == null) {
                 return null;
             }
@@ -17,12 +22,11 @@ namespace MpWpfApp {
                 indentCount++;
                 temp = temp.ParentTreeItem;
             }
-            int indentSize = 30;
-            return new Thickness((double)(indentCount*indentSize),0,0,0);
+            double indentSize = (double)values[2] * indentCount;
+            return new Thickness(indentSize, 0, 0, 0);
         }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return null;
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
+            throw new NotImplementedException();
         }
     }
 }

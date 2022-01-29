@@ -84,6 +84,7 @@ namespace MpWpfApp {
             set {
                 if (SourcePropertyPath != value) {
                     Action.Arg1 = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(SourcePropertyPath));
                 }
             }
@@ -99,6 +100,7 @@ namespace MpWpfApp {
             set {
                 if (CompareData != value) {
                     Action.Arg2 = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CompareData));
                 }
             }
@@ -117,6 +119,7 @@ namespace MpWpfApp {
             set {
                 if (CompareType != value) {
                     Action.ActionObjId = (int)value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CompareType));
                 }
             }

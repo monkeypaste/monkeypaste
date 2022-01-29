@@ -66,12 +66,8 @@
                             <TextBlock Background="Transparent"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center"
-                                       Text="{Binding TagClipCount,
-                                                      Converter={StaticResource IntToStringConverter},
-                                                      Mode=TwoWay,
-                                                      UpdateSourceTrigger=PropertyChanged,
-                                                      NotifyOnTargetUpdated=True,
-                                                      NotifyOnSourceUpdated=True}"
+                                       Text="{Binding TotalClipCount,
+                                                      Converter={StaticResource IntToStringConverter}}"
                                        Foreground="{Binding TagCountTextColor}" />
                         </local:MpClipBorder>
                         <TextBlock x:Name="TagTextBlock"

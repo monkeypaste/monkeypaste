@@ -49,22 +49,6 @@ namespace MonkeyPaste {
 
         #region Documents
 
-        public static List<int> IndexListOfAll(string text, string matchStr) {
-            var idxList = new List<int>();
-            int curIdx = text.IndexOf(matchStr);
-            int offset = 0;
-            while (curIdx >= 0 && curIdx < text.Length) {
-                idxList.Add(curIdx + offset);
-                if (curIdx + matchStr.Length + 1 >= text.Length) {
-                    break;
-                }
-                text = text.Substring(curIdx + matchStr.Length);
-                offset = curIdx + 1;
-                curIdx = text.IndexOf(matchStr);
-            }
-            return idxList;
-        }
-
         public static string Diff(string str1, string str2) {
             if (str1 == null) {
                 return str2;

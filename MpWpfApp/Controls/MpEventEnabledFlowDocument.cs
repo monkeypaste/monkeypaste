@@ -26,7 +26,7 @@ namespace MpWpfApp {
                 }
                 return a;
             }
-            return (FlowDocument)MpHelpers.CombineFlowDocuments(a, b, true);
+            return MpWpfRichDocumentExtensions.CombineFlowDocuments(a, b, true);
         }
     }
 }

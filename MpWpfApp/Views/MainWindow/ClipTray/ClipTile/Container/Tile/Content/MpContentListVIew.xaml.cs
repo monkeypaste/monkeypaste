@@ -233,7 +233,7 @@ namespace MpWpfApp {
             int maxCols = int.MinValue;
             var rtbl = this.GetVisualDescendents<RichTextBox>().ToList();
             for (int i = 0; i < rtbl.Count; i++) {
-                maxCols = Math.Max(maxCols, MpHelpers.GetColCount(rtbl[i].Document.ToPlainText()));
+                maxCols = Math.Max(maxCols, MpWpfStringExtensions.GetColCount(rtbl[i].Document.ToPlainText()));
             }
 
             string separatorLine = string.Empty;
@@ -245,12 +245,12 @@ namespace MpWpfApp {
             for (int i = 0; i < rtbl.Count; i++) {
                 var rtb = rtbl[i];
                 if (i != 0) {
-                    await MpHelpers.CombineFlowDocumentsAsync(
+                    await MpWpfRichDocumentExtensions.CombineFlowDocumentsAsync(
                     separatorDocument,
                     fullDocument,
                     false);
                 }
-                await MpHelpers.CombineFlowDocumentsAsync(
+                await MpWpfRichDocumentExtensions.CombineFlowDocumentsAsync(
                     (MpEventEnabledFlowDocument)rtb.Document,
                     fullDocument,
                     false);

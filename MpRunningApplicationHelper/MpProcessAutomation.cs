@@ -3,9 +3,17 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using static MpProcessHelper.MpProcessManager;
+using MonkeyPaste;
 
 namespace MpProcessHelper {
     public static class MpProcessAutomation {
+        public static void PasteData(string targetProcessPath) {
+
+        }
+        public static void PasteData(IntPtr targetWindowHandle) {
+
+        }
+
         public static IntPtr StartProcess(
             string args,
             string processPath,

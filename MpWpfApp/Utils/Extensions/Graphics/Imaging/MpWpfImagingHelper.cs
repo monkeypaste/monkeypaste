@@ -130,7 +130,28 @@ namespace MpWpfApp {
                 }
             }
         }
-
+        public static string ConvertBitmapSourceToPlainTextAsciiArt(BitmapSource bmpSource) {
+            string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
+            bmpSource.Scale(new Size(MpMeasurements.Instance.ClipTileBorderMinSize, MpMeasurements.Instance.ClipTileContentHeight));
+            using (System.Drawing.Bitmap image = bmpSource.ToBitmap()) {
+                string outStr = string.Empty;
+                for (int h = 0; h < image.Height; h++) {
+                    for (int w = 0; w < image.Width; w++) {
+                        System.Drawing.Color pixelColor = image.GetPixel(w, h);
+                        //Average out the RGB components to find the Gray Color
+                        int red = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        int green = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        int blue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        System.Drawing.Color grayColor = System.Drawing.Color.FromArgb(red, green, blue);
+                        int index = (grayColor.R * 10) / 255;
+                        outStr += asciiChars[index];
+                    }
+                    outStr += Environment.NewLine;
+                }
+                return outStr;
+            }
+        }
+        
         public static BitmapSource MergeImages2(IList<BitmapSource> bmpSrcList, bool scaleToSmallestSize = false, bool scaleToLargestDpi = true) {
             // if not scaled to smallest, will be scaled to largest
             int w = scaleToSmallestSize ? bmpSrcList.Min(x => x.PixelWidth) : bmpSrcList.Max(x => x.PixelWidth);
@@ -160,7 +181,7 @@ namespace MpWpfApp {
             return ConvertRenderTargetBitmapToBitmapSource(renderTargetBitmap);
         }
 
-        public static BitmapSource MergeImages(IList<BitmapSource> bmpSrcList, Size size = default) {
+        public static BitmapSource MergeImages(IList<BitmapSource> bmpSrcList, Size size = default, double xstep = 0, double ystep = 0) {
             // from https://stackoverflow.com/a/14661969/105028
             size = size == default ? new Size(32, 32) : size;
 
@@ -169,10 +190,13 @@ namespace MpWpfApp {
             // Draws the images into a DrawingVisual component
             DrawingVisual drawingVisual = new DrawingVisual();
             using (DrawingContext drawingContext = drawingVisual.RenderOpen()) {
+                double x = 0, y = 0;
                 foreach (BitmapSource bmpSrc in bmpSrcList) {
                     Size scale = new Size(size.Width / (double)bmpSrc.PixelWidth, size.Height / (double)bmpSrc.PixelHeight);
                     var rbmpSrc = bmpSrc.Scale(scale);
-                    drawingContext.DrawImage(rbmpSrc, new Rect(0, 0, (int)size.Width, (int)size.Width));
+                    drawingContext.DrawImage(rbmpSrc, new Rect(x, y, (int)size.Width, (int)size.Width));
+                    x += xstep;
+                    y += ystep;
                 }
             }
 

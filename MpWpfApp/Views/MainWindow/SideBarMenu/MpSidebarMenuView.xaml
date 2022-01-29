@@ -29,8 +29,8 @@
                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                        DataContext="{x:Static local:MpAppModeViewModel.Instance}" />
 
-        <StackPanel Grid.Column="1"
-                    HorizontalAlignment="Stretch">
+        <Grid Grid.Column="1"
+              HorizontalAlignment="Stretch">
             <local:MpTagTreeView x:Name="TagTreeView"
                                  MinWidth="100"
                                  Visibility="{Binding IsVisible,
@@ -43,10 +43,11 @@
                                                                    Converter={StaticResource BoolToVisibilityConverter}}" />
             <local:MpTriggerActionChooserView x:Name="ActionCollectionView"
                                               MinWidth="100"
+                                              VerticalAlignment="Stretch"
                                               DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
                                               Visibility="{Binding IsVisible,
                                                                    Converter={StaticResource BoolToVisibilityConverter}}" />
-        </StackPanel>
+        </Grid>
     </Grid>
 
 </local:MpUserControl>

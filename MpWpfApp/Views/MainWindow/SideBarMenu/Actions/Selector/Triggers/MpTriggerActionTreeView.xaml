@@ -5,6 +5,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpActionCollectionViewModel"
                      mc:Ignorable="d"
@@ -12,126 +13,365 @@
                                                       IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
-    <StackPanel Orientation="Horizontal">
-        <Grid Height="{Binding ClipTrayHeight, Source={x:Static local:MpClipTrayViewModel.Instance}}">
-            <Grid.Resources>
-                <!--  Analyze  -->
-                <HierarchicalDataTemplate x:Key="AnalyzeTemplate"
-                                          DataType="{x:Type local:MpAnalyzeActionViewModel}"
-                                          ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox x:Name="AnalyzerPresetComboBox"
-                                  DockPanel.Dock="Left"
-                                  MinWidth="150"
-                                  IsSynchronizedWithCurrentItem="True"
-                                  SelectedItem="{Binding .,
-                                                         Mode=TwoWay}"
-                                  SelectedValuePath="AnalyticItemPresetId"
-                                  ItemsSource="{Binding AllPresets,
-                                                        Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance},
-                                                        Converter={StaticResource CollectionToGroupedCollectionConverter},
-                                                        ConverterParameter=ParentAnalyticItemId}">
-                            <ComboBox.GroupStyle>
-                                <GroupStyle>
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-                                            <Border Background="LightGray">
-                                                <DockPanel Margin="10,5">
-                                                    <Image DockPanel.Dock="Left"
-                                                           Source="{Binding Name,
-                                                                            Converter={StaticResource AnalyticItemIdToIconSourceConverter}}"
-                                                           Width="15"
-                                                           Height="15"
-                                                           Stretch="Fill" />
-                                                    <TextBlock DockPanel.Dock="Right"
-                                                               Foreground="DimGray"
-                                                               FontStyle="Italic"
-                                                               FontWeight="SemiBold"
-                                                               FontSize="16"
-                                                               Text="{Binding Name,
-                                                                              Converter={StaticResource AnalyticItemIdToTitleConverter}}" />
-                                                </DockPanel>
-                                            </Border>
-                                        </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
-                                </GroupStyle>
-                            </ComboBox.GroupStyle>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Margin="10,3,0,0"
-                                                Orientation="Horizontal">
-                                        <Image Source="{Binding IconId,
-                                                                Converter={StaticResource IconIdToImageSourceConverter}}"
-                                               Width="15"
-                                               Height="15"
-                                               VerticalAlignment="Center"
-                                               Stretch="Fill" />
-                                        <TextBlock Foreground="DimGray"
-                                                   Margin="5,0,0,0"
-                                                   Text="{Binding Label}"
-                                                   FontSize="14" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <Button ToolTip="Settings"
-                                Background="Transparent"
-                                Margin="5,0,0,0"
-                                BorderThickness="0"
-                                Command="{Binding ManagePresetCommand,
-                                                  Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
-                                CommandParameter="{Binding ActionObjId}"
-                                Style="{StaticResource SemiTransparentButton}">
-                            <Border CornerRadius="2"
-                                    BorderThickness="2"
-                                    Background="LightGray">
-                                <Image Source="{Binding .,
-                                                        Converter={StaticResource StringResourceToImageSourceConverter},
-                                                        Source={StaticResource SlidersIcon}}"
-                                       Stretch="Fill"
-                                       Margin="5"
-                                       Width="15"
-                                       Height="15" />
-                            </Border>
-                        </Button>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0" />
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <!--  Trigger  -->
+            <HierarchicalDataTemplate x:Key="TriggerTemplate"
+                                      DataType="{x:Type local:MpTriggerActionViewModelBase}"
+                                      ItemsSource="{Binding Items}">
+                <!--<StackPanel Width="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}}">
+                    <Border HorizontalAlignment="Stretch" Padding="0,0,20,0">
 
-                        <local:MpActionTreeItemOptionsView DataContext="{Binding}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-                <!--  Classify  -->
-                <HierarchicalDataTemplate x:Key="ClassifyTemplate"
-                                          DataType="{x:Type local:MpClassifyActionViewModel}"
-                                          ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox x:Name="TagChooserComboBox"
-                                  DockPanel.Dock="Left"
-                                  MinWidth="150"
-                                  IsSynchronizedWithCurrentItem="True"
-                                  SelectedItem="{Binding .,
-                                                         Mode=TwoWay}"
-                                  SelectedValuePath="TagId"
-                                  ItemsSource="{Binding Items,
-                                                        Source={x:Static local:MpTagTrayViewModel.Instance}}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Margin="3"
-                                                Orientation="Horizontal">
-                                        <Border BorderThickness="0.7"
-                                                Margin="{Binding TagId,
-                                                                 Converter={StaticResource TagIdToThicknessNameConverter}}"
-                                                BorderBrush="Black"
-                                                Background="{Binding TagHexColor,
-                                                                     Converter={StaticResource StringHexToBrushConverter}}"
-                                                Width="15"
-                                                Height="15" />
-                                        <TextBlock Margin="10,0,0,0"
-                                                   FontSize="16"
-                                                   Text="{Binding TagName}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <!--<Button ToolTip="Add"
+                    </Border>
+                </StackPanel>-->
+                <Grid Background="Orange">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.2*" />
+                        <ColumnDefinition Width="0.2*" />
+                        <ColumnDefinition Width="100*" />
+                        <ColumnDefinition Width="0.4*" />
+                    </Grid.ColumnDefinitions>
+                    <ToggleButton x:Name="ToggleEnableButton"
+                                  Grid.Column="0"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                  IsChecked="{Binding IsEnabled,
+                                                      Mode=TwoWay}">
+                        <StackPanel>
+                            <Ellipse Width="20"
+                                     Height="20"
+                                     ToolTip="Click To Enable"
+                                     Visibility="{Binding IsEnabled,
+                                                          Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Fill="Red" />
+                            <Ellipse Width="20"
+                                     Height="20"
+                                     ToolTip="Click To Disable"
+                                     Visibility="{Binding IsEnabled,
+                                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Fill="Green" />
+                        </StackPanel>
+                    </ToggleButton>
+                    <Image Grid.Column="1"
+                           Source="{Binding IconId,
+                                            Converter={StaticResource IconIdToImageSourceConverter}}"
+                           Width="15"
+                           Height="15"
+                           Margin="5"
+                           Stretch="Fill" />
+                    <TextBox Grid.Column="2"
+                             Foreground="Black"
+                             Margin="5"
+                             Padding="3,0,0,0"
+                             VerticalContentAlignment="Center"
+                             FontSize="12"
+                             local:MpIsFocusedExtension.IsEnabled="True"
+                             local:MpIsFocusedExtension.IsFocused="{Binding IsLabelFocused,
+                                                                            Mode=TwoWay}"
+                             Text="{Binding Label,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            NotifyOnTargetUpdated=True,
+                                            NotifyOnSourceUpdated=True}" />
+                    <local:MpActionTreeItemOptionsView Grid.Column="3"
+                                                       DataContext="{Binding}" />
+                </Grid>
+            </HierarchicalDataTemplate>
+
+            <!--  Compare  -->
+            <HierarchicalDataTemplate x:Key="CompareTemplate"
+                                      DataType="{x:Type local:MpCompareActionViewModel}"
+                                      ItemsSource="{Binding Items}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.5*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="0.1*" />
+                        </Grid.ColumnDefinitions>
+                        <!--  Compare Property Path  -->
+                        <StackPanel Grid.Row="0" 
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="Field"
+                                       Margin="0,0,10,0" />
+                            <ComboBox MinWidth="100">
+                                <Separator>
+                                    <Separator.Template>
+                                        <ControlTemplate>
+                                            <Border CornerRadius="2"
+                                                    Padding="5"
+                                                    Background="PaleGoldenrod"
+                                                    BorderBrush="Black"
+                                                    BorderThickness="1">
+                                                <TextBlock FontWeight="Bold">
+                                                    What
+                                                </TextBlock>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Separator.Template>
+                                </Separator>
+                                <ComboBoxItem Tag="ItemData">Content</ComboBoxItem>
+                                <ComboBoxItem Tag="ItemType">ContentType</ComboBoxItem>
+                                <ComboBoxItem Tag="ItemDescription">Description</ComboBoxItem>
+                                <ComboBoxItem Tag="Title">Title</ComboBoxItem>
+                                <Separator>
+                                    <Separator.Template>
+                                        <ControlTemplate>
+                                            <Border CornerRadius="2"
+                                                    Padding="5"
+                                                    Background="PaleGoldenrod"
+                                                    BorderBrush="Black"
+                                                    BorderThickness="1">
+                                                <TextBlock FontWeight="Bold">
+                                                    Where
+                                                </TextBlock>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Separator.Template>
+                                </Separator>
+                                <ComboBoxItem Tag="Source.App.AppPath">App Path</ComboBoxItem>
+                                <ComboBoxItem Tag="Source.App.AppName">App Name</ComboBoxItem>
+                                <Separator />
+                                <ComboBoxItem Tag="Source.Url.UrlPath">Url Path</ComboBoxItem>
+                                <ComboBoxItem Tag="Source.Url.UrlDomain">Url Path</ComboBoxItem>
+                                <ComboBoxItem Tag="Source.Url.UrlTitle">Url Title</ComboBoxItem>
+                                <Separator>
+                                    <Separator.Template>
+                                        <ControlTemplate>
+                                            <Border CornerRadius="2"
+                                                    Padding="5"
+                                                    Background="PaleGoldenrod"
+                                                    BorderBrush="Black"
+                                                    BorderThickness="1">
+                                                <TextBlock FontWeight="Bold">
+                                                    When
+                                                </TextBlock>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Separator.Template>
+                                </Separator>
+                                <ComboBoxItem Tag="CopyDateTime">Copy Date/Time</ComboBoxItem>
+                                <ComboBoxItem Tag="LastPasteDateTime">Last Paste Date/Time</ComboBoxItem>
+                                <Separator>
+                                    <Separator.Template>
+                                        <ControlTemplate>
+                                            <Border CornerRadius="2"
+                                                    Padding="5"
+                                                    Background="PaleGoldenrod"
+                                                    BorderBrush="Black"
+                                                    BorderThickness="1">
+                                                <TextBlock FontWeight="Bold">
+                                                    Other
+                                                </TextBlock>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Separator.Template>
+                                </Separator>
+                                <ComboBoxItem Tag="CopyCount">Copy Count</ComboBoxItem>
+                                <ComboBoxItem Tag="CompositeSortOrderIdx">Sort Order Index</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <!--  Compare Type  -->
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="0"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="0,10,0,10">
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="Type"
+                                       Margin="0,0,10,0" />
+                            <ComboBox MinWidth="100"
+                                      SelectedIndex="{Binding CompareType,
+                                                              Mode=TwoWay,
+                                                              UpdateSourceTrigger=PropertyChanged,
+                                                              NotifyOnSourceUpdated=True,
+                                                              NotifyOnTargetUpdated=True,
+                                                              Converter={StaticResource EnumToIntConverter}}"
+                                      ItemsSource="{Binding CompareTypesMenuItemViewModel.SubItems}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Visibility="{Binding IsVisible,
+                                                                        Converter={StaticResource BoolToVisibilityConverter}}"
+                                                   Text="{Binding Header}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        <local:MpActionTreeItemOptionsView Grid.Row="0" Grid.Column="1" DataContext="{Binding}" />
+                    </Grid>
+                    <!--
+                             local:MpResizerExtension.IsEnabled="True"
+                             local:MpResizerExtension.MaxWidth="1000"
+                             local:MpResizerExtension.MaxHeight="1000"
+                             local:MpIsFocusedExtension.IsEnabled="True"
+                             local:MpIsFocusedExtension.IsFocused="{Binding IsActionTextBoxFocused,
+                                                                            Mode=TwoWay}"
+                             local:MpIsFocusedExtension.IsSaveOnLostFocus="True"
+                             local:MpIsFocusedExtension.SaveModel="{Binding Action}"-->
+                    <TextBox Grid.Row="1"
+                             Grid.Column="0"
+                             Grid.ColumnSpan="2"
+                             MinHeight="30"
+                             MinWidth="130"
+                             Margin="5"
+                             Name="CompareDataTextBox"
+                             TextWrapping="Wrap"
+                             Text="{Binding CompareData,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            NotifyOnSourceUpdated=True,
+                                            NotifyOnTargetUpdated=True}" />
+                </Grid>
+            </HierarchicalDataTemplate>
+            <!--  Analyze  -->
+            <HierarchicalDataTemplate x:Key="AnalyzeTemplate"
+                                      DataType="{x:Type local:MpAnalyzeActionViewModel}"
+                                      ItemsSource="{Binding Items}">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="AnalyzerPresetComboBox"
+                              DockPanel.Dock="Left"
+                              MinWidth="150"
+                              IsSynchronizedWithCurrentItem="True"
+                              SelectedItem="{Binding .,
+                                                     Mode=TwoWay}"
+                              SelectedValuePath="AnalyticItemPresetId"
+                              ItemsSource="{Binding AllPresets,
+                                                    Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance},
+                                                    Converter={StaticResource CollectionToGroupedCollectionConverter},
+                                                    ConverterParameter=ParentAnalyticItemId}">
+                        <ComboBox.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Border Background="LightGray">
+                                            <DockPanel Margin="10,5">
+                                                <Image DockPanel.Dock="Left"
+                                                       Source="{Binding Name,
+                                                                        Converter={StaticResource AnalyticItemIdToIconSourceConverter}}"
+                                                       Width="15"
+                                                       Height="15"
+                                                       Stretch="Fill" />
+                                                <TextBlock DockPanel.Dock="Right"
+                                                           Foreground="DimGray"
+                                                           FontStyle="Italic"
+                                                           FontWeight="SemiBold"
+                                                           FontSize="16"
+                                                           Text="{Binding Name,
+                                                                          Converter={StaticResource AnalyticItemIdToTitleConverter}}" />
+                                            </DockPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ComboBox.GroupStyle>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="10,3,0,0"
+                                            Orientation="Horizontal">
+                                    <Image Source="{Binding IconId,
+                                                            Converter={StaticResource IconIdToImageSourceConverter}}"
+                                           Width="15"
+                                           Height="15"
+                                           VerticalAlignment="Center"
+                                           Stretch="Fill" />
+                                    <TextBlock Foreground="DimGray"
+                                               Margin="5,0,0,0"
+                                               Text="{Binding Label}"
+                                               FontSize="14" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button ToolTip="Settings"
+                            Background="Transparent"
+                            Margin="5,0,0,0"
+                            BorderThickness="0"
+                            Command="{Binding ManagePresetCommand,
+                                              Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
+                            CommandParameter="{Binding ActionObjId}"
+                            Style="{StaticResource SemiTransparentButton}">
+                        <Border CornerRadius="2"
+                                BorderThickness="2"
+                                Background="LightGray">
+                            <Image Source="{Binding .,
+                                                    Converter={StaticResource StringResourceToImageSourceConverter},
+                                                    Source={StaticResource SlidersIcon}}"
+                                   Stretch="Fill"
+                                   Margin="5"
+                                   Width="15"
+                                   Height="15" />
+                        </Border>
+                    </Button>
+
+                    <local:MpActionTreeItemOptionsView DataContext="{Binding}" />
+                </StackPanel>
+            </HierarchicalDataTemplate>
+            <!--  Classify  -->
+            <HierarchicalDataTemplate x:Key="ClassifyTemplate"
+                                      DataType="{x:Type local:MpClassifyActionViewModel}"
+                                      ItemsSource="{Binding Items}">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="TagChooserComboBox"
+                              DockPanel.Dock="Left"
+                              MinWidth="150"
+                              IsSynchronizedWithCurrentItem="True"
+                              SelectedItem="{Binding .,
+                                                     Mode=TwoWay}"
+                              SelectedValuePath="TagId"
+                              ItemsSource="{Binding Items,
+                                                    Source={x:Static local:MpTagTrayViewModel.Instance}}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="3"
+                                            Orientation="Horizontal">
+                                    <Frame BorderThickness="0.7"
+                                           BorderBrush="LightGray"
+                                           Background="{Binding TagHexColor,
+                                                                Converter={StaticResource StringHexToBrushConverter}}"
+                                           Width="15"
+                                           Height="15">
+                                        <Frame.Margin>
+                                            <MultiBinding Converter="{StaticResource TagIdToThicknessNameConverter}">
+                                                <Binding Path="DataContext.TagId"
+                                                         RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                                         AncestorType=Border}" />
+                                                <Binding Path="IsDropDownOpen"
+                                                         ElementName="TagChooserComboBox" />
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <sys:Double>5.0</sys:Double>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </Frame.Margin>
+                                    </Frame>
+                                    <TextBlock Margin="10,0,0,0"
+                                               FontSize="16"
+                                               Text="{Binding TagName}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <!--<Button ToolTip="Add"
                                 Background="Transparent"
                                 Margin="5,0,0,0"
                                 BorderThickness="0"
@@ -152,150 +392,50 @@
                             </Border>
                         </Button>-->
 
-                        <local:MpActionTreeItemOptionsView DataContext="{Binding}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-                <!--  Transform  -->
-                <HierarchicalDataTemplate x:Key="TransformTemplate"
-                                          DataType="{x:Type local:MpAnalyzeActionViewModel}"
-                                          ItemsSource="{Binding Items}">
-                    <TextBox Text="Transform" />
-                </HierarchicalDataTemplate>
-                <!--  Macro  -->
-                <HierarchicalDataTemplate x:Key="MacroTemplate"
-                                          DataType="{x:Type local:MpMacroActionViewModel}"
-                                          ItemsSource="{Binding Items}">
-                    <TextBox Text="Classify" />
-                </HierarchicalDataTemplate>
-                <!--  Timer  -->
-                <HierarchicalDataTemplate x:Key="TimerTemplate"
-                                          DataType="{x:Type local:MpTimerActionViewModel}"
-                                          ItemsSource="{Binding Items}">
-                    <TextBox Text="Classify" />
-                </HierarchicalDataTemplate>
-                <!--  Compare  -->
-                <HierarchicalDataTemplate x:Key="CompareTemplate"
-                                          DataType="{x:Type local:MpCompareActionViewModel}"
-                                          ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid x:Name="CompareGrid"
-                              MinWidth="150">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="35" />
-                            </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0"
-                                     MinHeight="30"
-                                     MinWidth="120"
-                                     Margin="5"
-                                     Name="CompareDataTextBox"
-                                     VerticalScrollBarVisibility="Auto"
-                                     TextWrapping="Wrap"
-                                     local:MpResizerExtension.IsEnabled="True"
-                                     local:MpResizerExtension.MaxWidth="1000"
-                                     local:MpResizerExtension.MaxHeight="1000"
-                                     local:MpIsFocusedExtension.IsEnabled="True"
-                                     local:MpIsFocusedExtension.IsFocused="{Binding IsActionTextBoxFocused,
-                                                                                    Mode=TwoWay}"
-                                     local:MpIsFocusedExtension.IsSaveOnLostFocus="True"
-                                     local:MpIsFocusedExtension.SaveModel="{Binding Action}"
-                                     Text="{Binding CompareData,
-                                                    Mode=TwoWay,
-                                                    UpdateSourceTrigger=PropertyChanged,
-                                                    NotifyOnSourceUpdated=True,
-                                                    NotifyOnTargetUpdated=True}" />
-                            <StackPanel Orientation="Vertical"
-                                        Grid.Column="1">
-                                <Button x:Name="SelectCompareTypeButton"
-                                        Width="35"
-                                        VerticalAlignment="Top"
-                                        HorizontalAlignment="Right"
-                                        HorizontalContentAlignment="Stretch"
-                                        ToolTip="Select Compare Type"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Command="{Binding ShowCompareTypeChooserMenuCommand}"
-                                        CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                        Style="{StaticResource SemiTransparentButton}">
-                                    <Border CornerRadius="2"
-                                            BorderThickness="2"
-                                            HorizontalAlignment="Stretch"
-                                            Background="LightGray">
-                                        <Image Source="{Binding .,
-                                                                Converter={StaticResource StringResourceToImageSourceConverter},
-                                                                Source={StaticResource ScalesIcon}}"
-                                               Stretch="UniformToFill"
-                                               Margin="5"
-                                               Width="15"
-                                               Height="15" />
-                                    </Border>
-                                </Button>
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding CompareTypeLabel}" />
-                            </StackPanel>
-                        </Grid>
-                        <local:MpActionTreeItemOptionsView DataContext="{Binding}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-                <!--  Trigger  -->
-                <HierarchicalDataTemplate x:Key="TriggerTemplate"
-                                          DataType="{x:Type local:MpTriggerActionViewModelBase}"
-                                          ItemsSource="{Binding Items}">
-
-                    <Grid>
-                        <Border Background="Pink">
-                            <DockPanel LastChildFill="True">
-                                <Image DockPanel.Dock="Left"
-                                       Source="{Binding IconId,
-                                                        Converter={StaticResource IconIdToImageSourceConverter}}"
-                                       Width="15"
-                                       Height="15"
-                                       Margin="5"
-                                       Stretch="Fill" />
-                                <local:MpActionTreeItemOptionsView DockPanel.Dock="Right"
-                                                                   DataContext="{Binding}" />
-                                <TextBox Foreground="Black"
-                                         Margin="3"
-                                         Padding="3,0,0,0"
-                                         Width="100"
-                                         FontSize="14"
-                                         local:MpIsFocusedExtension.IsEnabled="True"
-                                         local:MpIsFocusedExtension.IsFocused="{Binding IsLabelFocused,
-                                                                                        Mode=TwoWay}"
-                                         Text="{Binding Label,
-                                                        Mode=TwoWay,
-                                                        UpdateSourceTrigger=PropertyChanged,
-                                                        NotifyOnTargetUpdated=True,
-                                                        NotifyOnSourceUpdated=True}" />
-
-                            </DockPanel>
-                        </Border>
-                    </Grid>
-                </HierarchicalDataTemplate>
-                <local:MpActionItemTemplateSelector x:Key="ActionTemplateSelector"
-                                                    AnalyzeTemplate="{StaticResource AnalyzeTemplate}"
-                                                    ClassifyTemplate="{StaticResource ClassifyTemplate}"
-                                                    TransformTemplate="{StaticResource TransformTemplate}"
-                                                    MacroTemplate="{StaticResource MacroTemplate}"
-                                                    TimerTemplate="{StaticResource TimerTemplate}"
-                                                    CompareTemplate="{StaticResource CompareTemplate}"
-                                                    TriggerTemplate="{StaticResource TriggerTemplate}" />
-            </Grid.Resources>
-            <TreeView dd:DragDrop.IsDragSource="True"
-                      dd:DragDrop.IsDropTarget="True"
-                      BorderThickness="0"
-                      Background="Orange"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Top"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      ItemTemplateSelector="{StaticResource ActionTemplateSelector}"
-                      ItemsSource="{Binding SelectedItem,
-                                            Converter={StaticResource ItemToItemsSourceConverter}}">
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Style.Resources>
-                            <!--<SolidColorBrush Color="Transparent"
+                    <local:MpActionTreeItemOptionsView DataContext="{Binding}" />
+                </StackPanel>
+            </HierarchicalDataTemplate>
+            <!--  Transform  -->
+            <HierarchicalDataTemplate x:Key="TransformTemplate"
+                                      DataType="{x:Type local:MpAnalyzeActionViewModel}"
+                                      ItemsSource="{Binding Items}">
+                <TextBox Text="Transform" />
+            </HierarchicalDataTemplate>
+            <!--  Macro  -->
+            <HierarchicalDataTemplate x:Key="MacroTemplate"
+                                      DataType="{x:Type local:MpMacroActionViewModel}"
+                                      ItemsSource="{Binding Items}">
+                <TextBox Text="Classify" />
+            </HierarchicalDataTemplate>
+            <!--  Timer  -->
+            <HierarchicalDataTemplate x:Key="TimerTemplate"
+                                      DataType="{x:Type local:MpTimerActionViewModel}"
+                                      ItemsSource="{Binding Items}">
+                <TextBox Text="Classify" />
+            </HierarchicalDataTemplate>
+            <local:MpActionItemTemplateSelector x:Key="ActionTemplateSelector"
+                                                AnalyzeTemplate="{StaticResource AnalyzeTemplate}"
+                                                ClassifyTemplate="{StaticResource ClassifyTemplate}"
+                                                TransformTemplate="{StaticResource TransformTemplate}"
+                                                MacroTemplate="{StaticResource MacroTemplate}"
+                                                TimerTemplate="{StaticResource TimerTemplate}"
+                                                CompareTemplate="{StaticResource CompareTemplate}"
+                                                TriggerTemplate="{StaticResource TriggerTemplate}" />
+        </Grid.Resources>
+        <TreeView Grid.Column="0"
+                  dd:DragDrop.IsDragSource="True"
+                  dd:DragDrop.IsDropTarget="True"
+                  VerticalAlignment="Top"
+                  BorderThickness="0"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ItemTemplateSelector="{StaticResource ActionTemplateSelector}"
+                  ItemsSource="{Binding SelectedItem,
+                                        Converter={StaticResource ItemToItemsSourceConverter}}">
+            <TreeView.ItemContainerStyle>
+                <!--<Style TargetType="{x:Type TreeViewItem}">
+                    <Style.Resources>
+                -->
+                <!--<SolidColorBrush Color="Transparent"
                                          x:Key="{x:Static SystemColors.HighlightBrushKey}" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
                                          Color="Transparent" />
@@ -303,29 +443,208 @@
                                          Color="Transparent" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
                                          Color="Transparent" />-->
-                        </Style.Resources>
-                        <Setter Property="IsSelected"
-                                Value="{Binding IsSelected}" />
-                        <Setter Property="IsExpanded"
-                                Value="{Binding IsExpanded}" />
-                        <Setter Property="Background"
-                                Value="Transparent" />
-                        <Setter Property="Padding"
-                                Value="5" />
-                        <Setter Property="HorizontalAlignment"
-                                Value="Stretch" />
-                        <Setter Property="HorizontalContentAlignment"
-                                Value="Stretch" />
-                    </Style>
-                </TreeView.ItemContainerStyle>
-            </TreeView>
-        </Grid>
+                <!--
+                    </Style.Resources>
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected}" />
+                    <Setter Property="IsExpanded"
+                            Value="{Binding IsExpanded}" />
+                    <Setter Property="Background"
+                            Value="Pink" />
+                    <Setter Property="Padding"
+                            Value="5" />
+                    <Setter Property="BorderThickness"
+                            Value="1" />
+                    <Setter Property="BorderBrush"
+                            Value="Black" />
+                </Style>-->
+                <Style TargetType="TreeViewItem"
+                       BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Style.Resources>
+                        <SolidColorBrush Color="Transparent"
+                                         x:Key="{x:Static SystemColors.HighlightBrushKey}" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                         Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                         Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                                         Color="Transparent" />
+                    </Style.Resources>
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Stretch" />
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected}" />
+                    <Setter Property="IsExpanded"
+                            Value="{Binding IsExpanded}" />
+                    <Setter Property="Background"
+                            Value="Pink" />
+                    <Setter Property="Padding"
+                            Value="5" />
+                    <Setter Property="BorderThickness"
+                            Value="1" />
+                    <Setter Property="BorderBrush"
+                            Value="Black" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TreeViewItem">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"
+                                                              MinWidth="19" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <!--
+                             Note that the following do not work, but I believe the top 2 should?!
+                             <ToggleButton IsChecked="{TemplateBinding IsExpanded}" ClickMode="Press" Name="Expander">
+                             <ToggleButton IsChecked="{TemplateBinding Property=IsExpanded}" ClickMode="Press" Name="Expander">
+                             <ToggleButton IsChecked="{TemplateBinding Path=IsExpanded}" ClickMode="Press" Name="Expander">
+                                        -->
+                                        <ToggleButton IsChecked="{Binding Path=IsExpanded,
+                                                                          RelativeSource={RelativeSource TemplatedParent}}"
+                                                      ClickMode="Press"
+                                                      Name="Expander">
+                                            <ToggleButton.Style>
+                                                <Style TargetType="ToggleButton">
+                                                    <Setter Property="UIElement.Focusable"
+                                                            Value="false" />
+                                                    <Setter Property="FrameworkElement.Width"
+                                                            Value="16" />
+                                                    <Setter Property="FrameworkElement.Height"
+                                                            Value="16" />
+                                                    <Setter Property="Control.Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ToggleButton">
+                                                                <Border Padding="5,5,5,5"
+                                                                        Background="#00FFFFFF"
+                                                                        Width="16"
+                                                                        Height="16">
+                                                                    <Path Fill="#00FFFFFF"
+                                                                          Stroke="#FF989898"
+                                                                          Name="ExpandPath">
+                                                                        <Path.Data>
+                                                                            <PathGeometry Figures="M0,0L0,6L6,0z" />
+                                                                        </Path.Data>
+                                                                        <Path.RenderTransform>
+                                                                            <RotateTransform Angle="135"
+                                                                                             CenterX="3"
+                                                                                             CenterY="3" />
+                                                                        </Path.RenderTransform>
+                                                                    </Path>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="UIElement.IsMouseOver"
+                                                                             Value="True">
+                                                                        <Setter TargetName="ExpandPath"
+                                                                                Property="Shape.Stroke"
+                                                                                Value="#FF1BBBFA" />
+                                                                        <Setter TargetName="ExpandPath"
+                                                                                Property="Shape.Fill"
+                                                                                Value="#00FFFFFF" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="ToggleButton.IsChecked"
+                                                                             Value="True">
+                                                                        <Setter TargetName="ExpandPath"
+                                                                                Property="UIElement.RenderTransform">
+                                                                            <Setter.Value>
+                                                                                <RotateTransform Angle="180"
+                                                                                                 CenterX="3"
+                                                                                                 CenterY="3" />
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                        <Setter TargetName="ExpandPath"
+                                                                                Property="Shape.Fill"
+                                                                                Value="#FF595959" />
+                                                                        <Setter TargetName="ExpandPath"
+                                                                                Property="Shape.Stroke"
+                                                                                Value="#FF262626" />
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ToggleButton.Style>
+                                        </ToggleButton>
+                                        <Border x:Name="Bd"
+                                                HorizontalAlignment="Stretch"
+                                                BorderThickness="{TemplateBinding Border.BorderThickness}"
+                                                BorderBrush="{TemplateBinding Border.BorderBrush}"
+                                                Padding="{TemplateBinding Control.Padding}"
+                                                Background="{TemplateBinding Panel.Background}"
+                                                SnapsToDevicePixels="True"
+                                                Grid.Column="1">
+                                            <ContentPresenter x:Name="PART_Header"
+                                                              Content="{TemplateBinding HeaderedContentControl.Header}"
+                                                              ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"
+                                                              ContentStringFormat="{TemplateBinding HeaderedItemsControl.HeaderStringFormat}"
+                                                              ContentTemplateSelector="{TemplateBinding HeaderedItemsControl.HeaderTemplateSelector}"
+                                                              ContentSource="Header"
+                                                              HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                        </Border>
+                                        <ItemsPresenter x:Name="ItemsHost"
+                                                        Grid.Column="1"
+                                                        Grid.Row="1" />
+                                    </Grid>
+                                </StackPanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="TreeViewItem.IsExpanded"
+                                             Value="False">
+                                        <Setter TargetName="ItemsHost"
+                                                Property="UIElement.Visibility"
+                                                Value="Collapsed" />
+                                    </Trigger>
+                                    <Trigger Property="ItemsControl.HasItems"
+                                             Value="False">
+                                        <Setter TargetName="Expander"
+                                                Property="UIElement.Visibility"
+                                                Value="Hidden" />
+                                    </Trigger>
+                                    <Trigger Property="TreeViewItem.IsSelected"
+                                             Value="True">
+                                        <Setter TargetName="Bd"
+                                                Property="Panel.Background"
+                                                Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                        <Setter Property="TextElement.Foreground"
+                                                Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="TreeViewItem.IsSelected"
+                                                       Value="True" />
+                                            <Condition Property="Selector.IsSelectionActive"
+                                                       Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter TargetName="Bd"
+                                                Property="Panel.Background"
+                                                Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                                        <Setter Property="TextElement.Foreground"
+                                                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                                    </MultiTrigger>
+                                    <Trigger Property="UIElement.IsEnabled"
+                                             Value="False">
+                                        <Setter Property="TextElement.Foreground"
+                                                Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
         <Grid x:Name="PresetParametersGrid"
+              Grid.Column="1"
               Visibility="{Binding IsAnyEditingParameters,
                                    Converter={StaticResource BoolToVisibilityConverter},
                                    Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance},
                                    FallbackValue='Collapsed'}">
             <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedPresetViewModel, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}" />
         </Grid>
-    </StackPanel>
+    </Grid>
 </local:MpUserControl>

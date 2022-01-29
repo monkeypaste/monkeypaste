@@ -175,6 +175,7 @@ namespace MpWpfApp {
             set {
                 if (ActionObjId != value) {
                     Action.ActionObjId = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(ActionObjId));
                 }
             }
@@ -190,6 +191,7 @@ namespace MpWpfApp {
             set {
                 if (ActionType != value) {
                     Action.ActionType = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(ActionType));
                 }
             }
@@ -208,6 +210,7 @@ namespace MpWpfApp {
             set {
                 if (Label != value) {
                     Action.Label = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(Label));
                 }
             }
@@ -225,6 +228,7 @@ namespace MpWpfApp {
             set {
                 if (SortOrderIdx != value) {
                     Action.SortOrderIdx = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(SortOrderIdx));
                 }
             }
@@ -249,6 +253,7 @@ namespace MpWpfApp {
             set {
                 if(ParentActionId != value) {
                     Action.ParentActionId = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(ParentActionId));
                 }
             }
@@ -337,20 +342,25 @@ namespace MpWpfApp {
         public virtual void Enable() {
             Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Enable());
 
-            IsEnabled = true;
+            //IsEnabled = true;
         }
 
         public virtual void Disable() {
             // TODO reverse enable
             Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Disable());
-            IsEnabled = false;
+            //IsEnabled = false;
         }
 
         public void OnTrigger(object sender, MpCopyItem ci) {
             OnAction?.Invoke(this, ci);
         }
         
-        public virtual void Validate() { }
+        public virtual void Validate() {
+            this.FindAllChildren().ForEach(x => x.Validate());
+            if(ActionType == MpActionType.None) {
+                ValidationText = "Select Action Type";
+            }
+        }
 
         #endregion
 
@@ -405,6 +415,19 @@ namespace MpWpfApp {
                     //    Parent.SelectedItem = this;
                     //}
                     break;
+                case nameof(IsEnabled):
+                    if (IsEnabled) {
+                        Enable();
+                    } else {
+                        Disable();
+                    }
+                    break;
+                case nameof(HasModelChanged):
+                    if(HasModelChanged) {
+                        HasModelChanged = false;
+                        Task.Run(async () => { await Action.WriteToDatabaseAsync(); });
+                    }
+                    break;
             }
         }
         #endregion
@@ -413,11 +436,7 @@ namespace MpWpfApp {
 
         public ICommand ToggleIsEnabledCommand => new RelayCommand(
              () => {
-                if(IsEnabled) {
-                     Disable();
-                } else {
-                     Enable();
-                 }
+                 IsEnabled = !IsEnabled;
             });
 
         public ICommand ShowActionSelectorMenuCommand => new RelayCommand<object>(

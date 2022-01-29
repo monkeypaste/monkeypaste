@@ -197,11 +197,11 @@ namespace MpWpfApp {
         //        MpEventEnabledFlowDocument fd = string.Empty.ToRichText().ToFlowDocument();
         //        foreach (var sctvm in SelectedItems) {
         //            if (sctvm.CopyItemType == MpCopyItemType.RichText) {
-        //                fd = MpHelpers.CombineFlowDocuments(
+        //                fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(
         //                    sctvm.RtbItemCollectionViewModel.SubSelectedClipTilesMergedRtf.ToFlowDocument(),
         //                    fd);
         //            } else {
-        //                fd = MpHelpers.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
+        //                fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
         //            }
         //        }
         //        return fd.ToRichText();
@@ -314,9 +314,9 @@ namespace MpWpfApp {
         //        MpEventEnabledFlowDocument fd = string.Empty.ToRichText().ToFlowDocument();
         //        foreach (var sctvm in SubSelectedContentItems.OrderBy(x => x.LastSubSelectedDateTime)) {
         //            if (sctvm.HasTokens) {
-        //                fd = MpHelpers.CombineFlowDocuments(sctvm.TemplateRichText.ToFlowDocument(), fd);
+        //                fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(sctvm.TemplateRichText.ToFlowDocument(), fd);
         //            } else {
-        //                fd = MpHelpers.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
+        //                fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
         //            }
         //        }
         //        if (wasEmptySelection) {

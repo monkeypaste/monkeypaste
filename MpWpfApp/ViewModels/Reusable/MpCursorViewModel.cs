@@ -110,6 +110,10 @@ namespace MpWpfApp {
         }
 
         public Cursor GetCurrentCursor() {
+            if(CurrentCursor == MpCursorType.OverDragItem ||
+               CurrentCursor == MpCursorType.Invalid) {
+                //Debugger.Break();
+            }
             return _cursorLookup[CurrentCursor];
         }
 
@@ -128,6 +132,7 @@ namespace MpWpfApp {
             //this keeps track of notifiers busy status in a list
             //so is busy is not negated when something else is still busy
             _isBusyCount += isAppBusy ? 1 : -1;
+            MpConsole.WriteLine($"IsBusy: {_isBusyCount}");
             OnPropertyChanged(nameof(IsAppBusy));
         }
         #endregion

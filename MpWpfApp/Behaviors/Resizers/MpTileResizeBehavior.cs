@@ -36,6 +36,7 @@ namespace MpWpfApp {
 
         private double _maxResizeDist = MpMeasurements.Instance.ClipTileBorderThickness * 2;
         private Point _lastMousePosition;
+        private bool _isMouseDown = false;
 
         protected override void OnLoad() {
             base.OnLoad();
@@ -46,18 +47,22 @@ namespace MpWpfApp {
                 ReceiveClipTileMessage, 
                 _dataContext);
 
-            //AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
-            //AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
+            AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
+            AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_PreviewMouseLeftButtonUp;
             AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
             AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
             AssociatedObject.MouseDoubleClick += AssociatedObject_MouseDoubleClick;
         }
+
 
         protected override void OnUnload() {
             base.OnUnload();
 
             AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
             AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
+
+            AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_PreviewMouseLeftButtonDown;
+            AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_PreviewMouseLeftButtonUp;
 
             MpMessenger.Unregister<MpMessageType>(
                 _dataContext, 
@@ -84,6 +89,19 @@ namespace MpWpfApp {
 
         #region Manual Resize Event Handlers
 
+        private void AssociatedObject_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            e.Handled = false;
+            _isMouseDown = false;
+            _isResizing = false;
+            _lastMousePosition = new Point();
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        }
+
+        private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            _isMouseDown = true;
+            e.Handled = false;
+        }
+
         private void AssociatedObject_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             double deltaWidth = AssociatedObject.BindingContext.TileBorderWidth - MpClipTileViewModel.DefaultBorderWidth;
             Resize(-deltaWidth);
@@ -106,8 +124,7 @@ namespace MpWpfApp {
             if(MpDragDropManager.Instance.IsDragAndDrop) {
                 return;
             }
-            if(_isResizing && 
-                Mouse.LeftButton == MouseButtonState.Released) {
+            if(_isResizing && !_isMouseDown) {
                 //resize complete so reset
 
                 if (AssociatedObject.IsMouseCaptured) {
@@ -138,11 +155,11 @@ namespace MpWpfApp {
             if(_canResize) {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeWE;
 
-                if(Mouse.LeftButton == MouseButtonState.Pressed && !_isResizing) {
-                    if(!AssociatedObject.IsMouseCaptured) {
-                        AssociatedObject.CaptureMouse();
-                    }
+                if(_isMouseDown && !_isResizing) {
                     _isResizing = true;
+                    if (!AssociatedObject.IsMouseCaptured) {
+                        _isResizing = AssociatedObject.CaptureMouse();
+                    }
                     _lastMousePosition = e.GetPosition(AssociatedObject);
                 }
                 if (_isResizing) {

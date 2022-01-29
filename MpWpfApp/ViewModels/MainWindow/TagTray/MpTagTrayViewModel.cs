@@ -177,10 +177,10 @@ namespace MpWpfApp {
         public async Task RefreshAllCounts() {
             var countTasks = new Dictionary<int, Task<int>>();
             foreach (var ttvm in Items) {
-                if (ttvm.IsAllTag) {
+                if (ttvm.IsAllTag && !MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                     countTasks.Add(ttvm.TagId, MpDataModelProvider.GetTotalCopyItemCountAsync());
                 } else if (ttvm.IsRecentTag) {
-                    countTasks.Add(ttvm.TagId, MpDataModelProvider.GetRecentCopyItemCountAsync());
+                    //countTasks.Add(ttvm.TagId, MpDataModelProvider.GetRecentCopyItemCountAsync());
                 } else {
                     countTasks.Add(ttvm.TagId, MpDataModelProvider.GetCopyItemCountForTagAsync(ttvm.TagId));
                 }

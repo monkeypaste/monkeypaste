@@ -25,6 +25,7 @@ namespace MpWpfApp {
             set {
                 if(TagId != value) {
                     ActionObjId = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(TagId));
                 }
             }

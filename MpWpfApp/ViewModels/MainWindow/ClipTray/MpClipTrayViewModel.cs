@@ -883,7 +883,7 @@ namespace MpWpfApp {
                     } else if (sctvm.ItemType == MpCopyItemType.Image) {
                         continue;
                     }
-                    rtf = MpHelpers.CombineRichText(itemData, rtf);
+                    rtf = MpWpfStringExtensions.CombineRichText(itemData, rtf);
                 }
                 pt = rtf.ToPlainText();
             }
@@ -946,8 +946,6 @@ namespace MpWpfApp {
                     d.DataFormatLookup.AddOrReplace(DataFormats.CommaSeparatedValue, sctcsv);
                 }
 
-                //update metrics
-                selectedModels.ForEach(x => x.PasteCount++);
             }
 
             //set resorting
@@ -1027,25 +1025,21 @@ namespace MpWpfApp {
 
                 if (!fromHotKey) {
                     //resort list so pasted items are in front and paste is tracked
-                    var phl = new List<MpPasteHistory>();
                     for (int i = SelectedItems.Count - 1; i >= 0; i--) {
                         var sctvm = SelectedItems[i];
 
                         var a = await MpDataModelProvider.GetAppByPath(MpProcessManager.GetProcessPath(MpProcessManager.LastHandle));
                         var aid = a == null ? 0 : a.Id;
                         foreach (var ivm in sctvm.ItemViewModels) {
-                            //var ud = await MpDataModelProvider.GetUserDeviceByGuid(MpPreferences.ThisDeviceGuid);
-                            phl.Add(new MpPasteHistory() {
-                                AppId = aid,
-                                PasteHistoryGuid = Guid.NewGuid(),
-                                CopyItemId = ivm.CopyItem.Id,
-                                UserDeviceId = MpPreferences.ThisUserDevice.Id,
-                                PasteDateTime = DateTime.Now
-                            });
+                            ivm.CopyItem.PasteCount++;
+                            await ivm.CopyItem.WriteToDatabaseAsync();
+                            await MpPasteHistory.Create(
+                                copyItemId: ivm.CopyItemId,
+                                appId: aid);
                             
                         }
                     }
-                    await Task.WhenAll(phl.Select(x=>x.WriteToDatabaseAsync()).ToArray());
+                    
                 }
             } else if (pasteDataObject == null) {
                 MpConsole.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");
@@ -1353,7 +1347,7 @@ namespace MpWpfApp {
             }
         }
 
-        private void ReceivedQueryInfoMessage(MpMessageType msg) {
+        private async void ReceivedQueryInfoMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.QueryChanged:
                     IsRequery = true;
@@ -1366,19 +1360,21 @@ namespace MpWpfApp {
             }
 
             if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                while (IsBusy) { await Task.Delay(100); }
 
-                MpHelpers.RunOnMainThread(async () => {
-                    while(IsBusy) { await Task.Delay(100); }
+                int totalItems = await MpDataModelProvider.GetTotalCopyItemCountAsync();
+                MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount = totalItems;
 
-                    int totalItems = await MpDataModelProvider.GetTotalCopyItemCountAsync();
-                    MpStandardBalloonViewModel.ShowBalloon(
-                            "Monkey Paste",
-                            "Successfully loaded w/ " + totalItems + " items",
-                            MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                MpStandardBalloonViewModel.ShowBalloon(
+                        "Monkey Paste",
+                        "Successfully loaded w/ " + totalItems + " items",
+                        MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
-                    MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
-                    MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
-                });
+                MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
+                MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
+                //MpHelpers.RunOnMainThread(async () => {
+                    
+                //});
             }
         }
 
@@ -1876,7 +1872,6 @@ namespace MpWpfApp {
                 ctvm.IsBusy = false;
             });
 
-
         public ICommand ExcludeSubSelectedItemApplicationCommand => new RelayCommand(
             async () => {
                 await MpAppCollectionViewModel.Instance.UpdateRejection(
@@ -2036,21 +2031,13 @@ namespace MpWpfApp {
             },
             ()=>!IsBusy);
 
-        private RelayCommand _selectAllCommand;
-        public ICommand SelectAllCommand {
-            get {
-                if (_selectAllCommand == null) {
-                    _selectAllCommand = new RelayCommand(SelectAll);
+        public ICommand SelectAllCommand => new RelayCommand(
+            () => {
+                ClearClipSelection();
+                foreach (var ctvm in Items) {
+                    ctvm.IsSelected = true;
                 }
-                return _selectAllCommand;
-            }
-        }
-        private void SelectAll() {
-            ClearClipSelection();
-            foreach (var ctvm in Items) {
-                ctvm.IsSelected = true;
-            }
-        }
+            });
 
         public ICommand ChangeSelectedClipsColorCommand => new RelayCommand<object>(
             async (hexStr) => {

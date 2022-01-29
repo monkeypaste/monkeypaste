@@ -47,8 +47,26 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpApp))]
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
+
         #endregion
 
+        public static async Task<MpPasteHistory> Create(
+            int copyItemId,
+            int appId = 0,
+            int urlId = 0,
+            int userDeviceId = 0,
+            DateTime pasteDateTime = default) {
+            var ph = new MpPasteHistory() {
+                PasteHistoryGuid = System.Guid.NewGuid(),
+                CopyItemId = copyItemId,
+                AppId = appId,
+                UrlId = urlId,
+                UserDeviceId = userDeviceId == 0 ? MpPreferences.ThisUserDevice.Id : userDeviceId,
+                PasteDateTime = pasteDateTime == default ? DateTime.Now : pasteDateTime
+            };
+            await ph.WriteToDatabaseAsync();
+            return ph;
+        }
         public MpPasteHistory() { }
     }
 }

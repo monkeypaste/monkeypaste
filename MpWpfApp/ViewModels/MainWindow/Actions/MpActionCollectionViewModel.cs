@@ -65,6 +65,11 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Appearance
+
+        //public double ActionTreeHeight 
+        #endregion
+
         #region State
 
         public bool IsVisible { get; set; } = false;
@@ -86,6 +91,8 @@ namespace MpWpfApp {
         }
 
         public async Task Init() {
+            IsBusy = true;
+
             var tal = await MpDataModelProvider.GetAllTriggerActions();
 
             foreach (var ta in tal) {
@@ -94,6 +101,8 @@ namespace MpWpfApp {
             }
 
             EnabledAll();
+
+            IsBusy = false;
         }
 
         #endregion
@@ -219,6 +228,8 @@ namespace MpWpfApp {
 
         public ICommand AddTriggerCommand => new RelayCommand<object>(
              async (args) => {
+                 IsBusy = true;
+
                  MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
                  
                  MpAction na = await MpAction.Create(
@@ -234,6 +245,8 @@ namespace MpWpfApp {
                  SelectedItem = navm;
 
                  OnPropertyChanged(nameof(Items));
+
+                 IsBusy = false;
              });
 
         public ICommand DeleteTriggerCommand => new RelayCommand<object>(

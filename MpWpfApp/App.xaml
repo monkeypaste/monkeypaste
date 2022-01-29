@@ -206,6 +206,8 @@
         <local:MpTagIdToBrushConverter x:Key="TagIdToBrushConverter" />
         <local:MpTagIdToTagNameConverter x:Key="TagIdToTagNameConverter" />
         <local:MpTagIdToThicknessNameConverter x:Key="TagIdToThicknessNameConverter" />
+        <local:MpDoubleWithDeltaConverter x:Key="DoubleWithDeltaConverter" />
+        <local:MpDoubleWithDeltaMultiConverter x:Key="DoubleWithDeltaMultiConverter" />
         <!--  Converter Declarations End  -->
 
         <!--  Context Menu Resources  -->
@@ -406,7 +408,7 @@
 
 
 
-        <Style TargetType="{x:Type ItemsControl}">
+        <!--<Style TargetType="{x:Type ItemsControl}">
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
             <Setter Property="VerticalAlignment"
@@ -427,7 +429,7 @@
                     Value="Left" />
             <Setter Property="VerticalContentAlignment"
                     Value="Top" />
-        </Style>
+        </Style>-->
 
         <!--  Context Menu Item  -->
 

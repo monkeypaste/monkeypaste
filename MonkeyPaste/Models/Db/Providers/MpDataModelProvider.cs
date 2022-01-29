@@ -511,9 +511,8 @@ namespace MonkeyPaste {
         }
 
         public static async Task<int> GetCopyItemCountForTagAsync(int tagId) {
-            string query = string.Format(@"select count(pk_MpCopyItemId) from MpCopyItem where pk_MpCopyItemId in 
-                                           (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0})", tagId);
-            var result = await MpDb.QueryScalarAsync<int>(query);
+            string query = @"select count(pk_MpCopyItemTagId) from MpCopyItemTag where fk_MpTagId=?";
+            var result = await MpDb.QueryScalarAsync<int>(query,tagId);
             return result;
         }
 

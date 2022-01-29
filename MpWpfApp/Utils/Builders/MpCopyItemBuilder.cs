@@ -61,7 +61,7 @@ namespace MpWpfApp {
                     itemData = iData[DataFormats.Bitmap];
                 } else if(iData.ContainsKey(DataFormats.Text)) {                    
                     itemType = MpCopyItemType.Text;
-                    itemData = MpHelpers.ConvertPlainTextToRichText(iData[DataFormats.UnicodeText]);
+                    itemData = iData[DataFormats.UnicodeText].ToRichText();
                     //itemData = itemData.ToQuillText();
                 } else {
                     MonkeyPaste.MpConsole.WriteTraceLine("clipboard data is not known format");
@@ -121,7 +121,7 @@ namespace MpWpfApp {
                 }
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
-                    itemData = MpHelpers.ConvertRichTextToPlainText((string)itemData);
+                    itemData = itemData.ToPlainText();
                     if (((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
                         if (MpPreferences.NotificationShowCopyItemTooLargeToast) {

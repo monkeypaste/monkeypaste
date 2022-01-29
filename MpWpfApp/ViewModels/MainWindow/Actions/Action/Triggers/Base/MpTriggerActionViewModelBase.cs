@@ -36,6 +36,7 @@ namespace MpWpfApp {
             set {
                 if (TriggerType != value) {
                     Action.ActionObjId = (int)value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(TriggerType));
                 }
             }

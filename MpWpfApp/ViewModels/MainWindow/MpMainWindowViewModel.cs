@@ -360,7 +360,7 @@ namespace MpWpfApp {
         }
 
         public ICommand ShowWindowCommand => new RelayCommand(
-            () => {
+            async () => {
                 IsMainWindowOpening = true;
 
                 //Ss = MpHelpers.CopyScreen();
@@ -371,6 +371,10 @@ namespace MpWpfApp {
                 MpMessenger.Send<MpMessageType>(MpMessageType.MainWindowOpening);
 
                 var mw = (MpMainWindow)Application.Current.MainWindow;
+                while(mw == null) {
+                    await Task.Delay(100);
+                    mw = (MpMainWindow)Application.Current.MainWindow;
+                }
                 mw.Show();
                 mw.Activate();
                 mw.Visibility = Visibility.Visible;

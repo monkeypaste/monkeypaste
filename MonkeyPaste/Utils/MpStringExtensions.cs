@@ -1,11 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste {
-    public static class MpStringHelpers {
+    public static class MpStringExtensions {
         private static Random _Rand;
+
+        public static bool IsFile(this string str) {
+            return File.Exists(str);
+        }
+
+        public static bool IsDirectory(this string str) {
+            return Directory.Exists(str);
+        }
+
+        public static bool IsFileOrDirectory(this string str) {
+            return str.IsFile() || str.IsDirectory();
+        }
+
+        public static List<int> IndexListOfAll(this string text, string matchStr) {
+            var idxList = new List<int>();
+            int curIdx = text.IndexOf(matchStr);
+            int offset = 0;
+            while (curIdx >= 0 && curIdx < text.Length) {
+                idxList.Add(curIdx + offset);
+                if (curIdx + matchStr.Length + 1 >= text.Length) {
+                    break;
+                }
+                text = text.Substring(curIdx + matchStr.Length + 1);
+                offset = curIdx + 1;
+                curIdx = text.IndexOf(matchStr);
+            }
+            return idxList;
+        }
+
+        public static string ToMultiLineString(this StringCollection sc) {
+            var sb = new StringBuilder();
+            foreach (var s in sc) {
+                sb.AppendLine(s);
+            }
+            return sb.ToString();
+        }
+
+        public static byte[] ToByteArray(this string str) {
+            if(!str.IsStringBase64()) {
+                return new byte[] { };
+            }
+
+            var bytes = Convert.FromBase64String(str);
+            return bytes;
+        }
+        public static string[] ToArray(this StringCollection sc) {
+            if (sc == null || sc.Count == 0) {
+                return new string[0];
+            }
+            string[] strArray = new string[sc.Count];
+            try {
+                sc.CopyTo(strArray, 0);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+                return new string[0];
+            }
+            return strArray;
+        }
+
+
+        public static StringCollection ToStringCollection(this IEnumerable<string> strings) {
+            var stringCollection = new StringCollection();
+            foreach (string s in strings) {
+                stringCollection.Add(s);
+            }
+            return stringCollection;
+        }
 
         public static bool IsStringHexColor(this string str) {
             if(string.IsNullOrWhiteSpace(str)) {

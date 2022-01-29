@@ -416,6 +416,12 @@ namespace MonkeyPaste {
         }
     }
 
+    public static class MpCopyItemExtensions {
+        public static string ToRichText(this MpCopyItem ci) {
+            return null;
+        }
+    }
+
     public enum MpCopyItemDetailType {
         None = 0,
         DateTimeCreated,

@@ -1,15 +1,12 @@
-﻿
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
 namespace MpWpfApp {
-    public class MpDoubleToThicknessConverter : IValueConverter {
+    public class MpDoubleWithDeltaConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             double v = (double)value;
-            return new Thickness(v, v, v, v);
+            return v + System.Convert.ToDouble(parameter.ToString());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

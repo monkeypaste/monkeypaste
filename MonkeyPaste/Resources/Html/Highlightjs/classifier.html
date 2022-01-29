@@ -1,0 +1,40 @@
+<div class="container">
+<pre><code>
+#include <stdio.h>
+int main() {
+    int dividend, divisor, quotient, remainder;
+    printf("Enter dividend: ");
+    scanf("%d", &dividend);
+    printf("Enter divisor: ");
+    scanf("%d", &divisor);
+
+    // Computes quotient
+    quotient = dividend / divisor;
+
+    // Computes remainder
+    remainder = dividend % divisor;
+
+    printf("Quotient = %d\n", quotient);
+    printf("Remainder = %d", remainder);
+    return 0;
+}
+
+</code></pre>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>
+function findAllHLJSLanguages() {
+  var tempClasses = $('.hljs'), foundClasses = [];
+  for (var iter = 0; iter < tempClasses.length; iter++) {
+    var tempClassesSplit = $(tempClasses[iter]).attr('class').split(' ');
+    foundClasses.push(tempClassesSplit[tempClassesSplit.length - 1]);
+  }
+  return foundClasses;
+}
+
+function findLanguageOfHLJSWithID(id) {
+  var foundClasses = $('#' + id + '.hljs').attr('class').split(' ');
+  return foundClasses[foundClasses.length - 1];
+}
+</script>

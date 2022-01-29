@@ -209,11 +209,6 @@ namespace MonkeyPaste {
             return textInfo.ToTitleCase(str);
         }
 
-        public static List<int> IndexListOfAll(this string str, string compareStr) {
-            return MpHelpers.IndexListOfAll(str, compareStr);
-        }
-
-
         public static bool ContainsByCaseOrRegexSetting(this string str, string compareStr) {
             if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
                 return false;

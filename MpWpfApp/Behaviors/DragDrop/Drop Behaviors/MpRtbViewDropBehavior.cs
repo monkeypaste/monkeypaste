@@ -193,9 +193,9 @@ namespace MpWpfApp {
 
             // merge content
             if (isHomeMerge) {
-                AssociatedObject.BindingContext.CopyItem.ItemData = MpHelpers.CombineRichText(AssociatedObject.Rtb.Document.ToRichText(), mci.ItemData);
+                AssociatedObject.BindingContext.CopyItem.ItemData = MpWpfStringExtensions.CombineRichText(AssociatedObject.Rtb.Document.ToRichText(), mci.ItemData);
             } else {
-                AssociatedObject.BindingContext.CopyItem.ItemData = MpHelpers.CombineRichText(mci.ItemData, AssociatedObject.Rtb.Document.ToRichText());
+                AssociatedObject.BindingContext.CopyItem.ItemData = MpWpfStringExtensions.CombineRichText(mci.ItemData, AssociatedObject.Rtb.Document.ToRichText());
             }
 
             // merge templates

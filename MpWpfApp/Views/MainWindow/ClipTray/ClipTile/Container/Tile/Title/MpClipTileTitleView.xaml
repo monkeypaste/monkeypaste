@@ -18,21 +18,16 @@
     </i:Interaction.Behaviors>
     <Grid>
         <Viewbox VerticalAlignment="Top"
-                 HorizontalAlignment="Stretch"
-                 Width="{local:MpMeasurementsBinding ClipTileMinSize,
-                                                     Mode=OneWay}"
-                 Height="{local:MpMeasurementsBinding ClipTileTitleHeight,
-                                                      Mode=OneWay}"
+                 HorizontalAlignment="Left"
+                 Stretch="UniformToFill"
+                 Width="{Binding ClipTileMinSize,Source={x:Static local:MpMeasurements.Instance}}"
+                 Height="{Binding ClipTileTitleHeight, Source={x:Static local:MpMeasurements.Instance}}"
                  Loaded="ClipTileAppIconBorderImage_Loaded"
                  Unloaded="Grid_Unloaded"
                  Grid.ColumnSpan="2">
             <Canvas x:Name="TitleSwirlCanvas"
-                    Width="{local:MpMeasurementsBinding ClipTileDefaultMinSize,
-                                                        Mode=OneWay}"
-                    Height="{local:MpMeasurementsBinding ClipTileTitleHeight,
-                                                         Mode=OneWay}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
+                    Width="{Binding ClipTileDefaultMinSize, Source={x:Static local:MpMeasurements.Instance}}"
+                    Height="{Binding ClipTileTitleHeight, Source={x:Static local:MpMeasurements.Instance}}"
                     DataContext="{Binding TitleSwirlViewModel}">
                 <Path x:Name="Layer0"
                       StrokeThickness="0"

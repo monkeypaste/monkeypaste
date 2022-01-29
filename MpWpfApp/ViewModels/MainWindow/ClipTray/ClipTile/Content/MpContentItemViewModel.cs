@@ -458,14 +458,6 @@ namespace MpWpfApp {
             }
         }
 
-        public int RelevanceScore {
-            get {
-                if (CopyItem == null) {
-                    return 0;
-                }
-                return CopyItem.CopyCount + CopyItem.PasteCount;
-            }
-        }
         public int CompositeSortOrderIdx {
             get {
                 if (CopyItem == null) {
@@ -909,7 +901,7 @@ namespace MpWpfApp {
                         ds = MpHelpers.FileListSize(fl.ToArray());
                         break;
                     case MonkeyPaste.MpCopyItemType.Text:
-                        lc = MpHelpers.GetRowCount(CopyItem.ItemData.ToPlainText());
+                        lc = MpWpfStringExtensions.GetRowCount(CopyItem.ItemData.ToPlainText());
                         cc = CopyItem.ItemData.ToPlainText().Length;
                         itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
                         break;

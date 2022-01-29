@@ -28,6 +28,7 @@ namespace MpWpfApp {
             set {
                 if (AnalyticItemPresetId != value) {
                     ActionObjId = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(AnalyticItemPresetId));
                 }
             }

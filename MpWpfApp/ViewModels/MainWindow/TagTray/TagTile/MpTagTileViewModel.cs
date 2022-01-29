@@ -232,9 +232,14 @@ namespace MpWpfApp {
                 if (_tagClipCount != value) {
                     _tagClipCount = value;
                     OnPropertyChanged(nameof(TagClipCount));
+                    if(ParentTreeItem != null) {
+                        ParentTreeItem.OnPropertyChanged(nameof(ParentTreeItem.TotalClipCount));
+                    }
                 }
             }
         }
+
+        public int TotalClipCount => TagClipCount + this.FindAllChildren().Sum(x => x.TagClipCount);
 
         public double TagHeight {
             get {

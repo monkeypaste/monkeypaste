@@ -17,6 +17,7 @@ namespace MpWpfApp {
             set {
                 if (FileSystemPath != value) {
                     Action.Arg1 = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(FileSystemPath));
                 }
             }

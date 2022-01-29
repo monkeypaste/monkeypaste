@@ -173,6 +173,8 @@
     <Compile Include="Converters\MpBase64StringToIconConverter.cs" />
     <Compile Include="Converters\MpBase64ToImageBrushConverter.cs" />
     <Compile Include="Converters\MpCollectionToGroupedCollectionConverter.cs" />
+    <Compile Include="Converters\MpDoubleWithDeltaConverter.cs" />
+    <Compile Include="Converters\MpDoubleWithDeltaMultiConverter.cs" />
     <Compile Include="Converters\MpEnumToIntConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
     <Compile Include="Converters\MpBoolToBrushConverter.cs" />
@@ -229,22 +231,25 @@
       <DependentUpon>UserUiStrings.settings</DependentUpon>
     </Compile>
     <Compile Include="Utils\Builders\MpWpfIconBuilder.cs" />
+    <Compile Include="Utils\Builders\MpWpfPasteObjectBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
     <Compile Include="Utils\Documents\MpHyperlinkHelper.cs" />
-    <Compile Include="Utils\Graphics\Color\MpColorExtensions.cs" />
-    <Compile Include="Utils\Graphics\Color\MpWpfColorHelpers.cs" />
-    <Compile Include="Utils\Graphics\Color\MpWpfCustomColorChooserMenu.cs" />
-    <Compile Include="Utils\Graphics\Geometry\MpPoint.cs" />
-    <Compile Include="Utils\Graphics\Geometry\MpRect.cs" />
-    <Compile Include="Utils\Graphics\Geometry\MpSize.cs" />
-    <Compile Include="Utils\Graphics\Imaging\MpImageExtensions.cs" />
-    <Compile Include="Utils\Graphics\Imaging\MpWpfImagingHelper.cs" />
+    <Compile Include="Utils\Extensions\Graphics\Color\MpColorExtensions.cs" />
+    <Compile Include="Utils\Extensions\Graphics\Color\MpWpfColorHelpers.cs" />
+    <Compile Include="Utils\Extensions\Graphics\Color\MpWpfCustomColorChooserMenu.cs" />
+    <Compile Include="Utils\Extensions\Graphics\Geometry\MpPoint.cs" />
+    <Compile Include="Utils\Extensions\Graphics\Geometry\MpRect.cs" />
+    <Compile Include="Utils\Extensions\Graphics\Geometry\MpSize.cs" />
+    <Compile Include="Utils\Extensions\Graphics\Imaging\MpWpfImageExtensions.cs" />
+    <Compile Include="Utils\Extensions\Graphics\Imaging\MpWpfImagingHelper.cs" />
+    <Compile Include="Utils\Extensions\MpWpfRichDocumentExtensions.cs" />
     <Compile Include="Utils\MpContentColors.cs" />
     <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpCsvReader.cs" />
-    <Compile Include="Utils\Graphics\Geometry\MpLine.cs" />
+    <Compile Include="Utils\Extensions\Graphics\Geometry\MpLine.cs" />
+    <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcherViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpMacroActionViewModel.cs" />

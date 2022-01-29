@@ -23,12 +23,12 @@ namespace MpWpfApp {
             foreach(var ci in cil) {
                 switch(ci.ItemType) {
                     case MpCopyItemType.Image:
-                        fd = MpHelpers.CombineFlowDocuments(
+                        fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(
                                 ci.ItemDescription.ToFlowDocument(),
                                 fd, true);
                         break;
                     default:
-                        fd = MpHelpers.CombineFlowDocuments(
+                        fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(
                                 ci.ItemData.ToFlowDocument(),
                                 fd, true);
                         break;

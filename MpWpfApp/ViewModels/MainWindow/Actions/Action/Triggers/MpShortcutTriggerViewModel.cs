@@ -16,6 +16,7 @@ namespace MpWpfApp {
             set {
                 if (ShortcutId != value) {
                     ActionObjId = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(ShortcutId));
                 }
             }
