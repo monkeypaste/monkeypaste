@@ -148,8 +148,7 @@
     <Compile Include="Behaviors\MpImageObjectRecognitionBehavior.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
     <Compile Include="Behaviors\MpTagTileNotificationBehavior.cs" />
-    <Compile Include="Behaviors\Resizers\MpMainWindowResizeBehavior.cs" />
-    <Compile Include="Behaviors\Resizers\MpTileResizeBehavior.cs" />
+    <Compile Include="Behaviors\Resizers\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpBootstrapper.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
@@ -173,6 +172,7 @@
     <Compile Include="Converters\MpBase64StringToIconConverter.cs" />
     <Compile Include="Converters\MpBase64ToImageBrushConverter.cs" />
     <Compile Include="Converters\MpCollectionToGroupedCollectionConverter.cs" />
+    <Compile Include="Converters\MpDoubleToThicknessIndentLevelConverter.cs" />
     <Compile Include="Converters\MpDoubleWithDeltaConverter.cs" />
     <Compile Include="Converters\MpDoubleWithDeltaMultiConverter.cs" />
     <Compile Include="Converters\MpEnumToIntConverter.cs" />
@@ -198,7 +198,6 @@
     <Compile Include="Converters\MpIconIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpMultiBoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\MpDoubleToThicknessConverter.cs" />
     <Compile Include="Converters\MpBoolToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToImageConverter.cs" />
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
@@ -538,6 +537,7 @@
     <Compile Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reusable\ContextMenu\Selector\MpSelectorItemDataTemplateSelector.cs" />
     <Compile Include="Views\Reusable\DesignerItem\MpDesignerItemView.xaml.cs">
       <DependentUpon>MpDesignerItemView.xaml</DependentUpon>
     </Compile>
@@ -606,15 +606,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\MpAnimatedListBoxResourceDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\MpListBoxScrollBarResourceDictionary.xaml">
+    <Page Include="Resources\Styles\Buttons\MpButtonResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\MpPagingListBoxResourceDictionary.xaml">
+    <Page Include="Resources\Styles\Constants\Icons\MpIconsResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Constants\MpConstantsResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Converters\MpConvertersResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Menus\MpSelectorItemResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\ListBoxes\MpAnimatedListBoxResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\Scrollbars\MpListBoxScrollBarResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Menus\MpContextMenuItemResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\ListBoxes\MpPagingListBoxResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

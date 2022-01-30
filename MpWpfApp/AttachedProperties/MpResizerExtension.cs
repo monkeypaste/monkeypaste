@@ -137,8 +137,10 @@ namespace MpWpfApp {
         private static void Fe_Loaded(object sender, RoutedEventArgs e) {
             var fe = sender as FrameworkElement;
             fe.Loaded -= Fe_Loaded;
-            var ra = new MpResizeAdorner(fe, GetMinWidth(fe), GetMinHeight(fe), GetMaxWidth(fe), GetMaxHeight(fe));
-            SetResizeAdorner(fe, ra);            
+            if (GetResizeAdorner(fe) == null) {
+                var ra = new MpResizeAdorner(fe, GetMinWidth(fe), GetMinHeight(fe), GetMaxWidth(fe), GetMaxHeight(fe));
+                SetResizeAdorner(fe, ra);
+            }           
         }
 
         #endregion

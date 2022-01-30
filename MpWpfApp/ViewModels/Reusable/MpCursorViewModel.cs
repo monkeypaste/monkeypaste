@@ -24,6 +24,8 @@ namespace MpWpfApp {
         IBeam,
         ResizeNS,
         ResizeWE,
+        ResizeNWSE,
+        ResizeNESW,
         Link
     }
 
@@ -44,6 +46,8 @@ namespace MpWpfApp {
                 {MpCursorType.IBeam, Cursors.IBeam },
                 {MpCursorType.ResizeNS, Cursors.SizeNS },
                 {MpCursorType.ResizeWE, Cursors.SizeWE },
+                {MpCursorType.ResizeNWSE, Cursors.SizeNWSE },
+                {MpCursorType.ResizeNESW, Cursors.SizeNESW },
                 {MpCursorType.Link, Cursors.Hand },
             };
 
@@ -132,7 +136,7 @@ namespace MpWpfApp {
             //this keeps track of notifiers busy status in a list
             //so is busy is not negated when something else is still busy
             _isBusyCount += isAppBusy ? 1 : -1;
-            MpConsole.WriteLine($"IsBusy: {_isBusyCount}");
+            //MpConsole.WriteLine($"IsBusy: {_isBusyCount}");
             OnPropertyChanged(nameof(IsAppBusy));
         }
         #endregion

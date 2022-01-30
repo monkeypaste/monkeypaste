@@ -6,8 +6,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace MpWpfApp {
-    public class MpTagIdToThicknessNameConverter : IMultiValueConverter {
-        
+    public class MpTagIdToThicknessNameConverter : IMultiValueConverter {        
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
             if(values == null || values.Length < 2 || (bool)values[1] == false) {
                 return new Thickness();

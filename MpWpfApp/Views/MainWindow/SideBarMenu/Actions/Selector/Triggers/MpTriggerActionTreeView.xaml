@@ -23,11 +23,6 @@
             <HierarchicalDataTemplate x:Key="TriggerTemplate"
                                       DataType="{x:Type local:MpTriggerActionViewModelBase}"
                                       ItemsSource="{Binding Items}">
-                <!--<StackPanel Width="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}}">
-                    <Border HorizontalAlignment="Stretch" Padding="0,0,20,0">
-
-                    </Border>
-                </StackPanel>-->
                 <Grid Background="Orange">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.2*" />
@@ -113,81 +108,15 @@
                             <TextBlock VerticalAlignment="Center"
                                        Text="Field"
                                        Margin="0,0,10,0" />
-                            <ComboBox MinWidth="100">
-                                <Separator>
-                                    <Separator.Template>
-                                        <ControlTemplate>
-                                            <Border CornerRadius="2"
-                                                    Padding="5"
-                                                    Background="PaleGoldenrod"
-                                                    BorderBrush="Black"
-                                                    BorderThickness="1">
-                                                <TextBlock FontWeight="Bold">
-                                                    What
-                                                </TextBlock>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Separator.Template>
-                                </Separator>
-                                <ComboBoxItem Tag="ItemData">Content</ComboBoxItem>
-                                <ComboBoxItem Tag="ItemType">ContentType</ComboBoxItem>
-                                <ComboBoxItem Tag="ItemDescription">Description</ComboBoxItem>
-                                <ComboBoxItem Tag="Title">Title</ComboBoxItem>
-                                <Separator>
-                                    <Separator.Template>
-                                        <ControlTemplate>
-                                            <Border CornerRadius="2"
-                                                    Padding="5"
-                                                    Background="PaleGoldenrod"
-                                                    BorderBrush="Black"
-                                                    BorderThickness="1">
-                                                <TextBlock FontWeight="Bold">
-                                                    Where
-                                                </TextBlock>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Separator.Template>
-                                </Separator>
-                                <ComboBoxItem Tag="Source.App.AppPath">App Path</ComboBoxItem>
-                                <ComboBoxItem Tag="Source.App.AppName">App Name</ComboBoxItem>
-                                <Separator />
-                                <ComboBoxItem Tag="Source.Url.UrlPath">Url Path</ComboBoxItem>
-                                <ComboBoxItem Tag="Source.Url.UrlDomain">Url Path</ComboBoxItem>
-                                <ComboBoxItem Tag="Source.Url.UrlTitle">Url Title</ComboBoxItem>
-                                <Separator>
-                                    <Separator.Template>
-                                        <ControlTemplate>
-                                            <Border CornerRadius="2"
-                                                    Padding="5"
-                                                    Background="PaleGoldenrod"
-                                                    BorderBrush="Black"
-                                                    BorderThickness="1">
-                                                <TextBlock FontWeight="Bold">
-                                                    When
-                                                </TextBlock>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Separator.Template>
-                                </Separator>
-                                <ComboBoxItem Tag="CopyDateTime">Copy Date/Time</ComboBoxItem>
-                                <ComboBoxItem Tag="LastPasteDateTime">Last Paste Date/Time</ComboBoxItem>
-                                <Separator>
-                                    <Separator.Template>
-                                        <ControlTemplate>
-                                            <Border CornerRadius="2"
-                                                    Padding="5"
-                                                    Background="PaleGoldenrod"
-                                                    BorderBrush="Black"
-                                                    BorderThickness="1">
-                                                <TextBlock FontWeight="Bold">
-                                                    Other
-                                                </TextBlock>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Separator.Template>
-                                </Separator>
-                                <ComboBoxItem Tag="CopyCount">Copy Count</ComboBoxItem>
-                                <ComboBoxItem Tag="CompositeSortOrderIdx">Sort Order Index</ComboBoxItem>
+                            <ComboBox MinWidth="100"
+                                      ItemsSource="{Binding ComparePropertyPathsMenuItemViewModel}"
+                                      ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style TargetType="ComboBoxItem" >
+                                        <Setter Property="IsSelected"
+                                                Value="{Binding IsSelected, Mode=TwoWay}"/>
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
                             </ComboBox>
                         </StackPanel>
                         <!--  Compare Type  -->

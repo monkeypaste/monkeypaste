@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib"
+                    xmlns:local="clr-namespace:MpWpfApp">
+
+
+    <!--  Settings Tab Indexes  -->
+    <s:Int32 x:Key="SettingsTabAccount">0</s:Int32>
+    <s:Int32 x:Key="SettingsTabPreferences">1</s:Int32>
+    <s:Int32 x:Key="SettingsTabSecurity">2</s:Int32>
+    <s:Int32 x:Key="SettingsTabShortcuts">3</s:Int32>
+    <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
+    <!--  Settings Tab Indexes End  -->
+
+    <!--  Command Parameter Primitives  -->
+    <s:Int32 x:Key="Files">1</s:Int32>
+    <s:Int32 x:Key="Csv">2</s:Int32>
+    <s:Int32 x:Key="Zip">3</s:Int32>
+    <s:Int32 x:Key="Up">-1</s:Int32>
+    <s:Int32 x:Key="Down">1</s:Int32>
+
+    <s:Boolean x:Key="True">True</s:Boolean>
+    <s:Boolean x:Key="False">False</s:Boolean>
+
+    <s:String x:Key="SecondarySource">SecondarySource</s:String>
+    <s:String x:Key="Hide">Hide</s:String>
+    <s:String x:Key="Collapse">Collapse</s:String>
+    <s:String x:Key="TemplateHyperlinkTag">TemplateHyperlink</s:String>
+    <!--  Command Parameter Primitives End  -->
+
+    <!--  Cursor Source Paths  -->
+    <s:String x:Key="CopyCursor">Resources\Cursors\copy.cur</s:String>
+    <s:String x:Key="HandOpenCursor">Resources\Cursors\hand_open.cur</s:String>
+    <s:String x:Key="HandClosedCursor">Resources\Cursors\hand_closed.cur</s:String>
+    <!--  Cursor Source Paths END  -->
+</ResourceDictionary>

@@ -38,7 +38,7 @@ namespace MonkeyPaste {
         TagTileNotificationRemoved,
         Loaded, //has context (object)
         Busy,
-        NotBusy
+        NotBusy,
     }
 
     public static partial class MpMessenger {

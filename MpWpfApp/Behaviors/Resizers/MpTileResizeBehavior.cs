@@ -90,7 +90,7 @@ namespace MpWpfApp {
         #region Manual Resize Event Handlers
 
         private void AssociatedObject_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            e.Handled = false;
+            e.Handled = _isResizing;
             _isMouseDown = false;
             _isResizing = false;
             _lastMousePosition = new Point();
@@ -98,6 +98,9 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if (MpDragDropManager.Instance.IsDragAndDrop) {
+                return;
+            }
             _isMouseDown = true;
             e.Handled = false;
         }
@@ -118,12 +121,11 @@ namespace MpWpfApp {
                 AssociatedObject.BindingContext.CanResize = false;
                 AssociatedObject.BindingContext.OnPropertyChanged(nameof(AssociatedObject.BindingContext.TileBorderBrush));
             }
+            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            if(MpDragDropManager.Instance.IsDragAndDrop) {
-                return;
-            }
+            
             if(_isResizing && !_isMouseDown) {
                 //resize complete so reset
 
@@ -139,7 +141,7 @@ namespace MpWpfApp {
                 //send resize as mainwindow resize so all drop handlers update rects
                 MpMessenger.Send<MpMessageType>(
                     MpMessageType.ResizeCompleted,
-                    (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior);
+                    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior);
             }
             var mp = e.GetPosition(AssociatedObject);
             

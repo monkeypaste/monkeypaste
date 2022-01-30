@@ -1200,7 +1200,7 @@ using System.Speech.Synthesis;
                     Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
                     MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
 
-                    var mwrb = (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior;
+                    var mwrb = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior;
                     if (IsExpanded) {
                         Parent.ScrollOffset = Parent.LastScrollOfset = 0;
 
@@ -1209,12 +1209,12 @@ using System.Speech.Synthesis;
                         }
 
                         _unexpandedHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
-                        mwrb.Resize(Math.Max(TileBorderHeight, ExpandedContentSize.Height - TileBorderHeight));
+                        mwrb.Resize(0,Math.Max(TileBorderHeight, ExpandedContentSize.Height - TileBorderHeight));
 
                         Keyboard.AddKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
                     } else {
                         Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
-                        mwrb.Resize(_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
+                        mwrb.Resize(0,_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
                     }
                     OnPropertyChanged(nameof(TrayX));
 
@@ -1235,6 +1235,9 @@ using System.Speech.Synthesis;
                     break;
                 case nameof(IsAnyEditingTemplate):
                     //OnPropertyChanged(nameof(De))
+                    break;
+                case nameof(CanResize):
+                    OnPropertyChanged(nameof(TileBorderBrush));
                     break;
                 case nameof(TileBorderWidth):
                     if (HeadItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(HeadItem.CopyItemId, out double uniqueWidth)) {

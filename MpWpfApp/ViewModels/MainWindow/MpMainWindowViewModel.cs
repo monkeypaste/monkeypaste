@@ -54,22 +54,6 @@ namespace MpWpfApp {
 
         #region View Models
 
-        //public MpSystemTrayViewModel SystemTrayViewModel => MpSystemTrayViewModel.Instance;
-
-        //public MpClipTrayViewModel ClipTrayViewModel => MpClipTrayViewModel.Instance;
-
-        //public MpTagTrayViewModel TagTrayViewModel => MpTagTrayViewModel.Instance;
-
-        //public MpClipTileSortViewModel ClipTileSortViewModel => MpClipTileSortViewModel.Instance;
-
-        //public MpSearchBoxViewModel SearchBoxViewModel => MpSearchBoxViewModel.Instance;
-
-        //public MpAppModeViewModel AppModeViewModel => MpAppModeViewModel.Instance;
-
-        //public MpAnalyticItemCollectionViewModel AnalyticItemCollectionViewModel => MpAnalyticItemCollectionViewModel.Instance;
-
-        //public MpActionCollectionViewModel MatcherCollectionViewModel => MpActionCollectionViewModel.Instance;
-
         #endregion
 
         #region State
@@ -136,8 +120,8 @@ namespace MpWpfApp {
         public double MainWindowWidth { get; set; } = MpMeasurements.Instance.ScreenWidth;
 
         public double MainWindowHeight { get; set; } = MpMeasurements.Instance.MainWindowDefaultHeight;
-                        
-        public double MainWindowTop { get; set; } = SystemParameters.WorkArea.Bottom;
+
+        public double MainWindowTop { get; set; } = MpMeasurements.Instance.WorkAreaBottom;
 
         #endregion
 
@@ -187,58 +171,7 @@ namespace MpWpfApp {
             MpConsole.WriteLine("MainWindow Init");
             PropertyChanged += MpMainWindowViewModel_PropertyChanged;
 
-            //MpDataModelProvider.Init(new MpWpfQueryInfo());
-
-            //await MpSystemTrayViewModel.Instance.Init();
-            //Application.Current.Resources["SystemTrayViewModel"] = MpSystemTrayViewModel.Instance;
-
-            //MonkeyPaste.MpNativeWrapper.Instance.Init(new MpWpfWrapper() {
-            //    IconBuilder = new MpIconBuilder()
-            //});
-
-            //await MpHelpers.Init();
-
-            //MpPluginManager.Instance.Init();
-
-            //await MpCursorViewModel.Instance.Init();
-
-            //await MpSourceCollectionViewModel.Instance.Init();
-
-            //await MpSearchBoxViewModel.Instance.Init();
-            //Application.Current.Resources["SearchBoxViewModel"] = MpSearchBoxViewModel.Instance;
-
-            //await MpAnalyticItemCollectionViewModel.Instance.Init();
-            //Application.Current.Resources["AnalyticItemCollectionViewModel"] = MpAnalyticItemCollectionViewModel.Instance;
-
-            //await MpClipTrayViewModel.Instance.Init();
-            //Application.Current.Resources["ClipTrayViewModel"] = MpClipTrayViewModel.Instance;
-
-            //await MpClipTileSortViewModel.Instance.Init();
-            //Application.Current.Resources["ClipTileSortViewModel"] = MpClipTileSortViewModel.Instance;
-
-            //await MpTagTrayViewModel.Instance.Init();
-            //Application.Current.Resources["TagTrayViewModel"] = MpTagTrayViewModel.Instance;
-
-            //await MpShortcutCollectionViewModel.Instance.Init();
-            //Application.Current.Resources["ShortcutCollectionViewModel"] = MpShortcutCollectionViewModel.Instance;
-
-            //await MpAppModeViewModel.Instance.Init();
-            //Application.Current.Resources["AppModeViewModel"] = MpAppModeViewModel.Instance;
-
-            //await MpSoundPlayerGroupCollectionViewModel.Instance.Init();
-            //Application.Current.Resources["SoundPlayerGroupCollectionViewModel"] = MpSoundPlayerGroupCollectionViewModel.Instance;
-
-            //await MpMatcherCollectionViewModel.Instance.Init();
-            //Application.Current.Resources["MatcherCollectionViewModel"] = MpMatcherCollectionViewModel.Instance;
-
-            //await MpSideBarTreeCollectionViewModel.Instance.Init();
-            //Application.Current.Resources["SideBarTreeCollectionViewModel"] = MpSideBarTreeCollectionViewModel.Instance;
-
-            MpMainWindowViewModel.Instance.SetupMainWindowRect();
-
-            while(MpClipTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
-
-
+            SetupMainWindowRect();
             //Application.Current.Resources["MainWindowViewModel"] = this;
 
             MpMessenger.Register<MpMessageType>(
@@ -318,6 +251,23 @@ namespace MpWpfApp {
                     break;
             }
         }
+
+
+        public void ReceivedResizerBehaviorMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.Resizing:
+                    //IsResizing = true;
+
+                    MainWindowTop = MpMeasurements.Instance.WorkAreaBottom - MainWindowHeight;
+                    
+                    break;
+                case MpMessageType.ResizeCompleted:
+                    //IsResizing = false;
+                    MpPreferences.MainWindowInitialHeight = MainWindowHeight;
+                    break;
+            }
+        }
+
         #endregion
 
         #region Disposable

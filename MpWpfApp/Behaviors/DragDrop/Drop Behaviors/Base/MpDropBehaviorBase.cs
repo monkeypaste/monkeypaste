@@ -146,7 +146,7 @@ namespace MpWpfApp {
                 ReceivedMainWindowViewModelMessage);
 
             MpMessenger.Register<MpMessageType>(
-                (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior,
+                (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
                 ReceivedMainWindowResizeBehviorMessage);
 
             InitAdorner();

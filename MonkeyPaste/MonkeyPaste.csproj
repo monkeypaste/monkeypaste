@@ -80,6 +80,7 @@
 
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />
+    <EmbeddedResource Remove="Resources\Styles\MpPagingListBoxResourceDictionary.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\MpMainView.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\Pages\MpCopyItemDetailPageView.xaml" />
@@ -136,6 +137,10 @@
   <ItemGroup>
     <EmbeddedResource Update="Controls\MpPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Styles\MpWpfConverters.xaml">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MpWpfConverters.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpColorChooserContextMenuItemView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -207,6 +212,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Styles\MpWpfConverters.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MpWpfConverters.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
@@ -251,5 +261,9 @@
   <ItemGroup>
     <Folder Include="Utils\DragDrop\" />
     <Folder Include="ViewModels\Reusable\Theme\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Resources\Styles\MpPagingListBoxResourceDictionary.xaml" />
   </ItemGroup>
 </Project>

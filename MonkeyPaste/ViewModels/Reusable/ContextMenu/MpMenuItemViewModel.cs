@@ -16,6 +16,10 @@ namespace MonkeyPaste {
 
         public bool IsSeparator { get; set; }
 
+        public bool IsHeaderedSeparator { get; set; }
+
+        public int HeaderIndentLevel { get; set; }
+
         public bool IsColorPallete { get; set; }
 
         public bool IsSelected { get; set; } = false;

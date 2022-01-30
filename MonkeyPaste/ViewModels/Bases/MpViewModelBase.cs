@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace MonkeyPaste {    
     public abstract class MpViewModelBase : INotifyPropertyChanged {
+        
         public static event EventHandler<bool> OnBusyChanged;
 
         private static Dictionary<string, int> _instanceCountLookup;

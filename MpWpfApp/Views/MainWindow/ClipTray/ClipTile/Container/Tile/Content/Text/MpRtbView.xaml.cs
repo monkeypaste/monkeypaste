@@ -112,7 +112,7 @@ namespace MpWpfApp {
                     BindingContext.Parent);
 
                 MpMessenger.Register<MpMessageType>(
-                    (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior,
+                    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
                     ReceivedMainWindowResizeBehviorMessage);
 
 

@@ -103,7 +103,7 @@ namespace MpWpfApp {
                     MpClipTrayViewModel.Instance,
                     ReceivedClipTrayViewModelMessage);
 
-                var mwrb = (Application.Current.MainWindow as MpMainWindow).TitleBarView.MainWindowResizeBehvior;
+                var mwrb = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior;
                 MpMessenger.Register<MpMessageType>(
                     mwrb,
                     ReceivedMainWindowResizeBehaviorMessage);
@@ -285,7 +285,7 @@ namespace MpWpfApp {
                 //scrolling down towards end of list
 
                 //get item under point in middle of right edge of listbox
-                int r_target_idx = lb.GetItemIndexAtPoint(new Point(svr.Right, svr.Height / 2),AssociatedObject);
+                int r_target_idx = lb.GetItemIndexAtPoint(new Point(svr.Right, svr.Height / 2), AssociatedObject);
                 if (r_target_idx < 0) {
                     return;
                 }

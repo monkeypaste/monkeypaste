@@ -33,10 +33,35 @@
             <local:MpExternalDropBehavior x:Name="ExternalDropBehavior" />
         </i:Interaction.Behaviors>
         <Grid x:Name="MainWindowGrid"
-              Height="{Binding MainWindowHeight}"
+              Height="{Binding MainWindowHeight,
+                               Mode=TwoWay,
+                               UpdateSourceTrigger=PropertyChanged,
+                               NotifyOnSourceUpdated=True,
+                               NotifyOnTargetUpdated=True}"
               Width="{Binding MainWindowWidth}"
               Canvas.Top="{Binding MainWindowTop}"
               Canvas.Left="0">
+            <i:Interaction.Behaviors>
+                <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
+                                        IsResizing="{Binding IsResizing,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged,
+                                                             NotifyOnSourceUpdated=True,
+                                                             NotifyOnTargetUpdated=True}"
+                                        ResizableEdges="Top"
+                                        BoundHeight="{Binding MainWindowHeight,
+                                                              Mode=TwoWay,
+                                                              UpdateSourceTrigger=PropertyChanged,
+                                                              NotifyOnSourceUpdated=True,
+                                                              NotifyOnTargetUpdated=True}"
+                                        DefaultHeight="{Binding MainWindowDefaultHeight,
+                                                                Source={x:Static local:MpMeasurements.Instance}}"
+                                        MinHeight="{Binding MainWindowMinHeight,
+                                                            Source={x:Static local:MpMeasurements.Instance}}"
+                                        MaxHeight="{Binding MainWindowMaxHeight,
+                                                            Source={x:Static local:MpMeasurements.Instance}}" />
+
+            </i:Interaction.Behaviors>
             <Grid.RowDefinitions>
                 <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />
                 <RowDefinition Height="{local:MpMeasurementsBinding FilterMenuHeight}" />
@@ -163,13 +188,14 @@
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch"
                               Width="3"
-                              IsEnabled="{Binding IsGridSplitterEnabled, Source={x:Static local:MpAppModeViewModel.Instance}}"
+                              IsEnabled="{Binding IsGridSplitterEnabled,
+                                                  Source={x:Static local:MpAppModeViewModel.Instance}}"
                               MouseEnter="GridSplitter_MouseEnter"
                               MouseLeave="GridSplitter_MouseLeave" />
                 <local:MpClipTrayContainerView x:Name="ClipTrayView"
                                                Grid.Row="1"
                                                Grid.Column="1"
-                                         DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
+                                               DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
                 <Grid Background="DarkGray"
                       Opacity="0.3"
                       HorizontalAlignment="Stretch"

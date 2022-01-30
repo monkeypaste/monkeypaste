@@ -16,7 +16,9 @@ namespace MpWpfApp {
             }
             string keyStr = string.Empty;
 
-            if (cmivm.IsSeparator) {
+            if (cmivm.IsHeaderedSeparator) {
+                keyStr = "HeaderedSeperatorMenuItem";
+            } else if (cmivm.IsSeparator) {
                 keyStr = "SeperatorMenuItem";
             } else if (cmivm.IsPasteToPathRuntimeItem) {
                 keyStr = "PasteToPathRuntimeMenuItem";

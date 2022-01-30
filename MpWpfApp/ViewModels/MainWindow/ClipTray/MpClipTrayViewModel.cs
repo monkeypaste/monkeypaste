@@ -535,6 +535,9 @@ namespace MpWpfApp {
 
         public bool IsAnyTileFlipped => Items.Any(x => x.IsFlipped || x.IsFlipping);
 
+        public bool IsAnyResizing => Items.Any(x => x.IsResizing);
+
+        public bool CanAnyResize => Items.Any(x => x.CanResize);
         [MpAffectsChild]
         public bool IsAnyTileExpanded => Items.Any(x => x.IsExpanded);
 
@@ -619,11 +622,12 @@ namespace MpWpfApp {
 
                 _pageSize = 1;
                 RemainingItemsCountThreshold = 1;
-
+                _oldMainWindowHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
                 //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
 
                 MpMessenger.Register<MpMessageType>(
                     MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
+
 
                 MpClipboardHelper.MpClipboardManager.OnClipboardChange += ClipboardChanged;
 
@@ -1220,9 +1224,6 @@ namespace MpWpfApp {
             double newScrollOfset = FindTileOffsetX(HeadQueryIdx) + newScrollOfsetDiffWithHead;
 
             ScrollOffset = newScrollOfset;
-
-
-            
         }
 
         #endregion
@@ -1347,7 +1348,71 @@ namespace MpWpfApp {
             }
         }
 
-        private async void ReceivedQueryInfoMessage(MpMessageType msg) {
+        private double _oldMainWindowHeight = 0;
+
+        public void ReceivedResizerBehaviorMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.Resizing:
+                    double oldHeadTrayX = HeadItem.TrayX;
+                    double oldScrollOffset = ScrollOffset;
+
+                    if(MpMainWindowViewModel.Instance.IsResizing) {
+                        //main window resize
+
+                        double deltaHeight = MpMainWindowViewModel.Instance.MainWindowHeight - _oldMainWindowHeight;
+                        _oldMainWindowHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
+
+                        MpMeasurements.Instance.ClipTileMinSize += deltaHeight;
+                        MpMeasurements.Instance.OnPropertyChanged(nameof(MpMeasurements.Instance.ClipTileTitleHeight));
+
+                        MpClipTileViewModel.DefaultBorderWidth += deltaHeight;
+                        MpClipTileViewModel.DefaultBorderHeight += deltaHeight;
+
+                        Items.ForEach(x => x.TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize);
+                        Items.ForEach(x => x.TileBorderWidth += deltaHeight);
+                        OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
+                        OnPropertyChanged(nameof(ClipTrayScreenWidth));
+                        OnPropertyChanged(nameof(ClipTrayTotalWidth));
+                        OnPropertyChanged(nameof(MaximumScrollOfset));
+                        Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+                    } else {
+                        //tile resize
+                        PersistentUniqueWidthTileLookup
+                            .AddOrReplace(PrimaryItem.HeadItem.CopyItemId, PrimaryItem.TileBorderWidth);
+                        if (PrimaryItem.CanResize) {
+                            Items.
+                                Where(x => x.QueryOffsetIdx >= PrimaryItem.QueryOffsetIdx).
+                                ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+                        }
+                    }
+
+                    AdjustScrollOffsetToResize(oldHeadTrayX, oldScrollOffset);
+
+                    break;
+                case MpMessageType.ResizeCompleted:
+                    _oldMainWindowHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
+                    break;
+            }
+        }
+
+        private async Task OnPostMainWindowLoaded() {
+            while (IsBusy) { await Task.Delay(100); }
+
+
+            int totalItems = await MpDataModelProvider.GetTotalCopyItemCountAsync();
+            MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount = totalItems;
+
+            MpStandardBalloonViewModel.ShowBalloon(
+                    "Monkey Paste",
+                    "Successfully loaded w/ " + totalItems + " items",
+                    MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+
+            MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
+            MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
+        }
+
+
+        private void ReceivedQueryInfoMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.QueryChanged:
                     IsRequery = true;
@@ -1360,21 +1425,8 @@ namespace MpWpfApp {
             }
 
             if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                while (IsBusy) { await Task.Delay(100); }
-
-                int totalItems = await MpDataModelProvider.GetTotalCopyItemCountAsync();
-                MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount = totalItems;
-
-                MpStandardBalloonViewModel.ShowBalloon(
-                        "Monkey Paste",
-                        "Successfully loaded w/ " + totalItems + " items",
-                        MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-
-                MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
-                MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
-                //MpHelpers.RunOnMainThread(async () => {
-                    
-                //});
+                
+                MpHelpers.RunOnMainThreadAsync(OnPostMainWindowLoaded);
             }
         }
 

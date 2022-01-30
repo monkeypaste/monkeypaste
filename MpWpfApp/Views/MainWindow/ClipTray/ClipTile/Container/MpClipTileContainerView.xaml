@@ -9,16 +9,35 @@
                      mc:Ignorable="d"
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <i:Interaction.Behaviors>
-        <local:MpTileResizeBehavior x:Name="TileResizeBehavior" />
-    </i:Interaction.Behaviors>
+
+
     <Grid>
-        <!--<local:MpAnalyticItemCollectionView x:Name="ContentItemAnalyticsView"
-                                            DataContext="{Binding PrimaryItem}"
-                                            Visibility="{Binding Parent.BackVisibility}" />-->
+        <i:Interaction.Behaviors>
+            <local:MpResizeBehavior x:Name="TileResizeBehvior"
+                                    IsResizing="{Binding IsResizing,
+                                                         Mode=TwoWay,
+                                                         UpdateSourceTrigger=PropertyChanged,
+                                                         NotifyOnSourceUpdated=True,
+                                                         NotifyOnTargetUpdated=True}"
+                                    CanResize="{Binding CanResize,
+                                                        Mode=TwoWay,
+                                                        UpdateSourceTrigger=PropertyChanged,
+                                                        NotifyOnSourceUpdated=True,
+                                                        NotifyOnTargetUpdated=True}"
+                                    ResizableEdges="Right"
+                                    BoundWidth="{Binding TileBorderWidth,
+                                                         Mode=TwoWay,
+                                                         UpdateSourceTrigger=PropertyChanged,
+                                                         NotifyOnSourceUpdated=True,
+                                                         NotifyOnTargetUpdated=True}"
+                                    DefaultWidth="{Binding ClipTileDefaultMinSize,
+                                                           Source={x:Static local:MpMeasurements.Instance}}"
+                                    MinWidth="{Binding ClipTileBorderMinWidth,
+                                                       Source={x:Static local:MpMeasurements.Instance}}" />
+
+        </i:Interaction.Behaviors>
         <local:MpClipTileView x:Name="ClipTileView"
                               Visibility="{Binding FrontVisibility}" />
-
 
         <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
                                   OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"

@@ -23,5 +23,6 @@ namespace MpWpfApp {
         public MpClipTileContainerView() {
             InitializeComponent();
         }
+
     }
 }

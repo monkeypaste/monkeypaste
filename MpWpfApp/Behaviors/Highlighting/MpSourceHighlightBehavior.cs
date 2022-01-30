@@ -72,6 +72,9 @@ namespace MpWpfApp {
         }
 
         private void HideSourceHighlight() {
+            if(AssociatedObject == null) {
+                return;
+            }
             AssociatedObject.SourceMatchEllipse.Visibility = Visibility.Collapsed;
         }
     }

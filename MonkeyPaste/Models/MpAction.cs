@@ -6,6 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
+    public enum MpComparePropertyPathType {
+        None = 0,
+        ItemData,
+        ItemType,
+        ItemDescription,
+        Title, //seperator
+        AppPath,
+        AppName,
+        UrlPath,
+        UrlTitle,
+        UrlDomain,
+        CopyDateTime,
+        LastPasteDateTime,
+        CopyCount,
+        PasteCount
+    }
     public enum MpCompareType {
         None = 0,
         Contains,

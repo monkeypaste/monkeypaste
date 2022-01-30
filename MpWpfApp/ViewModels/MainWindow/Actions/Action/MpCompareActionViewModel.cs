@@ -57,35 +57,116 @@ namespace MpWpfApp {
                 };
             }
         }
+
+        public MpMenuItemViewModel ComparePropertyPathsMenuItemViewModel {
+            get {
+                var amivml = new List<MpMenuItemViewModel>();
+                amivml.Add(new MpMenuItemViewModel() {
+                    IsHeaderedSeparator = true,
+                    Header = "What",
+                    HeaderIndentLevel = 0
+                });
+
+                var triggerLabels = typeof(MpComparePropertyPathType).EnumToLabels();
+                for (int i = 0; i < triggerLabels.Length; i++) {
+                    MpComparePropertyPathType ct = (MpComparePropertyPathType)i;
+                    if(ct == MpComparePropertyPathType.AppPath) {
+                        amivml.Add(new MpMenuItemViewModel() {
+                            IsHeaderedSeparator = true,
+                            Header = "Where",
+                            HeaderIndentLevel = 0
+                        });
+                        amivml.Add(new MpMenuItemViewModel() {
+                            IsHeaderedSeparator = true,
+                            Header = "Local",
+                            HeaderIndentLevel = 1
+                        });
+                    }
+                    if (ct == MpComparePropertyPathType.UrlPath) {
+                        amivml.Add(new MpMenuItemViewModel() {
+                            IsHeaderedSeparator = true,
+                            Header = "Remote",
+                            HeaderIndentLevel = 1
+                        });
+                    }
+                    if (ct == MpComparePropertyPathType.CopyDateTime) {
+                        amivml.Add(new MpMenuItemViewModel() {
+                            IsHeaderedSeparator = true,
+                            Header = "When",
+                            HeaderIndentLevel = 0
+                        });
+                    }
+                    if (ct == MpComparePropertyPathType.CopyCount) {
+                        amivml.Add(new MpMenuItemViewModel() {
+                            IsHeaderedSeparator = true,
+                            Header = "How (Many)",
+                            HeaderIndentLevel = 0
+                        });
+                    }
+
+                    amivml.Add(new MpMenuItemViewModel() {
+                        Header = triggerLabels[i],
+                        Command = ChangeComparePropertyPathCommand,
+                        CommandParameter = ct,
+                        IsSelected = ComparePropertyPathType == ct,
+                        IsVisible = !(ct == MpComparePropertyPathType.None)
+                    });
+                }
+                return new MpMenuItemViewModel() {
+                    SubItems = amivml
+                };
+            }
+        }
         #endregion
 
         #region Appearance
 
-        public string CompareTypeLabel {
+        #endregion
+
+        #region Business Logic
+
+        public string PhysicalPropertyPath {
             get {
-                if(Action == null) {
-                    return string.Empty;
+                switch (ComparePropertyPathType) {
+                    case MpComparePropertyPathType.ItemData:
+                    case MpComparePropertyPathType.ItemType:
+                    case MpComparePropertyPathType.ItemDescription:
+                    case MpComparePropertyPathType.Title:
+                    case MpComparePropertyPathType.CopyDateTime:
+                    case MpComparePropertyPathType.CopyCount:
+                    case MpComparePropertyPathType.PasteCount:
+                        return ComparePropertyPathType.ToString();
+                    case MpComparePropertyPathType.AppName:
+                    case MpComparePropertyPathType.AppPath:
+                        return string.Format(@"Source.App.{0}", ComparePropertyPathType.ToString());
+                    case MpComparePropertyPathType.UrlPath:
+                    case MpComparePropertyPathType.UrlTitle:
+                    case MpComparePropertyPathType.UrlDomain:
+                        return string.Format(@"Source.App.{0}", ComparePropertyPathType.ToString());
                 }
-                return CompareType.EnumToLabel("None");
-            } 
+                return string.Empty;
+            }
         }
 
         #endregion
 
         #region Model
 
-        public string SourcePropertyPath {
+        public MpComparePropertyPathType ComparePropertyPathType {
             get {
                 if (Action == null) {
-                    return null;
+                    return MpComparePropertyPathType.None;
                 }
-                return Action.Arg1;
+                if(string.IsNullOrWhiteSpace(Action.Arg1)) {
+                    return MpComparePropertyPathType.None;
+                }
+                return (MpComparePropertyPathType)Convert.ToInt32(Action.Arg1);
             }
             set {
-                if (SourcePropertyPath != value) {
-                    Action.Arg1 = value;
+                if (ComparePropertyPathType != value) {
+                    Action.Arg1 = ((int)value).ToString();
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(SourcePropertyPath));
+                    OnPropertyChanged(nameof(ComparePropertyPathType));
                 }
             }
         }
@@ -141,7 +222,7 @@ namespace MpWpfApp {
         #region Protected Overrides
 
         protected override async Task PerformAction(MpCopyItem arg) {
-            object matchVal = arg.GetPropertyValue(SourcePropertyPath);
+            object matchVal = arg.GetPropertyValue(PhysicalPropertyPath);
             string compareStr = string.Empty;
             if (matchVal != null) {
                 compareStr = matchVal.ToString();
@@ -207,7 +288,11 @@ namespace MpWpfApp {
         public ICommand ChangeCompareTypeCommand => new RelayCommand<object>(
              async(args) => {
                  CompareType = (MpCompareType)args;
-                 await Action.WriteToDatabaseAsync();
+             });
+
+        public ICommand ChangeComparePropertyPathCommand => new RelayCommand<object>(
+             async (args) => {
+                 ComparePropertyPathType = (MpComparePropertyPathType)args;
              });
 
         #endregion
