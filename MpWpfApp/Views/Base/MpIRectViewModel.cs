@@ -11,8 +11,4 @@ namespace MpWpfApp {
         double Width { get; set; }
         double Height { get;set; }
     }
-
-    public interface MpIDesignerItemViewModel : MpIRectViewModel {
-        object DesignerItemContext { get; }
-    }
 }

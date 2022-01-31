@@ -5,6 +5,9 @@ using System.Windows.Input;
 using System.Linq;
 using System.Collections.Generic;
 using Windows.UI.Core;
+using System.Windows.Controls;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     [Flags]
@@ -16,14 +19,12 @@ namespace MpWpfApp {
         Bottom = 0b_1000
     }
 
-    public class MpResizeBehavior : MpBehavior<FrameworkElement> {
+    public class MpResizeBehavior : MpDropBehaviorBase<FrameworkElement> {
         #region Private Variables
+        private static List<MpIResizableViewModel> _allResizers = new List<MpIResizableViewModel>();
 
-        private static bool _isAnyResizing = false;
-
-        private DateTime _lastUpTime = DateTime.MinValue;
-
-        private Size _startSize;
+        public static bool IsAnyResizing => _allResizers.Any(x => x.IsResizing);
+        public static bool CanAnyResize => _allResizers.Any(x => x.CanResize);
 
         private Point _lastMousePosition;
 
@@ -75,6 +76,21 @@ namespace MpWpfApp {
                 "MaxDistance", typeof(double),
                 typeof(MpResizeBehavior),
                 new FrameworkPropertyMetadata(10.0d));
+
+        #endregion
+
+        #region DoubleClickControl DependencyProperty
+
+        public Control DoubleClickControl {
+            get { return (Control)GetValue(DoubleClickControlProperty); }
+            set { SetValue(DoubleClickControlProperty, value); }
+        }
+
+        public static readonly DependencyProperty DoubleClickControlProperty =
+            DependencyProperty.Register(
+                "DoubleClickControl", typeof(Control),
+                typeof(MpResizeBehavior),
+                new FrameworkPropertyMetadata(null));
 
         #endregion
 
@@ -206,6 +222,56 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region DropBehaviorBase Implementation
+
+        public override bool IsEnabled { get; set; }
+        public override MpDropType DropType => MpDropType.Resize;
+        public override UIElement RelativeToElement => AssociatedObject;
+        public override FrameworkElement AdornedElement => AssociatedObject;
+        public override Orientation AdornerOrientation => Orientation.Horizontal;
+        public override MpCursorType MoveCursor { get; }
+        public override MpCursorType CopyCursor { get; }
+
+        public override List<Rect> GetDropTargetRects() {
+            var r = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
+            var edgeRects = new List<Rect>();
+
+            if (ResizableEdges.HasFlag(MpRectEdgeType.Left)) {
+                Rect lr = new Rect(r.Left, r.Top, r.Left, r.Bottom);
+                lr.Inflate(new Size(MaxDistance, MaxDistance));
+                edgeRects.Add(lr);
+            }
+            if (ResizableEdges.HasFlag(MpRectEdgeType.Right)) {
+                Rect rr = new Rect(r.Right, r.Top, r.Right, r.Bottom);
+                rr.Inflate(new Size(MaxDistance, MaxDistance));
+                edgeRects.Add(rr);
+            }
+            if (ResizableEdges.HasFlag(MpRectEdgeType.Top)) {
+                Rect tr = new Rect(r.Left, r.Top, r.Right, r.Top);
+                tr.Inflate(new Size(MaxDistance, MaxDistance));
+                edgeRects.Add(tr);
+            }
+            if (ResizableEdges.HasFlag(MpRectEdgeType.Bottom)) {
+                Rect br = new Rect(r.Left, r.Bottom, r.Right, r.Bottom);
+                br.Inflate(new Size(MaxDistance, MaxDistance));
+                edgeRects.Add(br);
+            }
+            return edgeRects;
+        }
+
+        public override async Task StartDrop() {
+            await Task.Delay(1);
+        }
+
+        public override bool IsDragDataValid(bool isCopy, object dragData) {
+            return base.IsDragDataValid(isCopy, dragData);
+        }
+
+        public override void AutoScrollByMouse() {
+            
+        }
+        #endregion
+
         protected override void OnLoad() {
             base.OnLoad();
 
@@ -217,8 +283,42 @@ namespace MpWpfApp {
             AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
             AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
 
+            if(DoubleClickControl != null) {
+                DoubleClickControl.MouseDoubleClick += DoubleClickButton_MouseDoubleClick;
+            }
+
             MpMessenger.Register(this, MpClipTrayViewModel.Instance.ReceivedResizerBehaviorMessage);
             MpMessenger.Register(this, MpMainWindowViewModel.Instance.ReceivedResizerBehaviorMessage);
+
+            if(AssociatedObject.DataContext is MpIResizableViewModel rvm) {
+                if(_allResizers.Contains(rvm)) {
+                    MpConsole.WriteLine("Duplicate resizer detected while loading, swapping for new...");
+                    _allResizers.Remove(rvm);
+                }
+                _allResizers.Add(rvm);
+            }
+        }
+
+        protected override void OnUnload() {
+            base.OnUnload();
+
+            AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
+            AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
+            AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
+            AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
+
+            if (DoubleClickControl != null) {
+                DoubleClickControl.MouseDoubleClick -= DoubleClickButton_MouseDoubleClick;
+            }
+
+            MpMessenger.Unregister<MpMessageType>(this, MpClipTrayViewModel.Instance.ReceivedResizerBehaviorMessage);
+            MpMessenger.Unregister<MpMessageType>(this, MpMainWindowViewModel.Instance.ReceivedResizerBehaviorMessage);
+
+            if (AssociatedObject.DataContext is MpIResizableViewModel rvm) {
+                if (_allResizers.Contains(rvm)) {
+                    _allResizers.Remove(rvm);
+                }
+            }
         }
 
         #region Public Methods
@@ -253,6 +353,11 @@ namespace MpWpfApp {
 
         #region Manual Resize Event Handlers
 
+
+        private void DoubleClickButton_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            ResetToDefault();
+        }
+
         private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {
             if(!IsResizing) {
                 MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
@@ -261,7 +366,7 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            if (MpDragDropManager.Instance.IsDragAndDrop || (!IsResizing && _isAnyResizing)) {
+            if (MpDragDropManager.IsDragAndDrop || (!IsResizing && IsAnyResizing)) {
                 return;
             }
 
@@ -272,7 +377,7 @@ namespace MpWpfApp {
 
             if (IsResizing) {
                 Resize(delta.X, delta.Y);
-            } else if(!_isAnyResizing) {
+            } else if(!IsAnyResizing) {
                 var rect = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
                 MpRectEdgeType edgeFlags = GetClosestEdgeOrCorner(rect, e.GetPosition(AssociatedObject));
                 _curCursor = GetCursorByRectFlags(edgeFlags);
@@ -280,9 +385,10 @@ namespace MpWpfApp {
                     MpCursorViewModel.Instance.CurrentCursor = _curCursor;
                     CanResize = true;
                 } else {
-
-                    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
                     CanResize = false;
+                    if(!CanAnyResize) {
+                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                    }                    
                 }
             }
         }
@@ -292,21 +398,12 @@ namespace MpWpfApp {
                 IsResizing = AssociatedObject.CaptureMouse();
 
                 if (IsResizing) {
-                    _isAnyResizing = true;
-                    _startSize = AssociatedObject.RenderSize;
                     e.Handled = true;
                 }
             }
         }
 
         private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            //check for double click
-            if (CanResize) {
-                var lastClickDiff = DateTime.Now - _lastUpTime;
-                if (lastClickDiff < TimeSpan.FromMilliseconds(1000) && lastClickDiff > TimeSpan.FromMilliseconds(1)) {
-                    ResetToDefault();
-                }
-            }
             AssociatedObject.ReleaseMouseCapture();
 
             if (IsResizeCursor(MpCursorViewModel.Instance.CurrentCursor)) {
@@ -314,13 +411,10 @@ namespace MpWpfApp {
             }
 
             if (IsResizing) {
-                _isAnyResizing = false;
                 _curCursor = MpCursorType.None;
                 IsResizing = false;
                 MpMessenger.Send(MpMessageType.ResizeCompleted);
             }
-
-            _lastUpTime = DateTime.Now;
         }
 
         #endregion

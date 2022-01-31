@@ -16,9 +16,9 @@ namespace MonkeyPaste {
         AppName,
         UrlPath,
         UrlTitle,
-        UrlDomain,
+        UrlDomain, //seperator
         CopyDateTime,
-        LastPasteDateTime,
+        LastPasteDateTime, //seperator
         CopyCount,
         PasteCount
     }

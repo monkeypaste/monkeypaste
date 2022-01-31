@@ -22,6 +22,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsDesignerVisible { get; set; } = false;
+
         #endregion
 
         #region Model

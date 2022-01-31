@@ -73,7 +73,7 @@ namespace MpWpfApp {
 
         #region Selection
         private async void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            MpAppModeViewModel.Instance.RefreshState();
+            MpSidebarViewModel.Instance.RefreshState();
 
             BindingContext.RefreshAllCommands();
 

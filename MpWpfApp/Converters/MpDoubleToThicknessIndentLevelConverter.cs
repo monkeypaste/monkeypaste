@@ -2,39 +2,41 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpDoubleToThicknessIndentLevelConverter : IMultiValueConverter {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
-            if (values == null || values.Length < 2) {
+            if (values == null || values.Length < 2 || values[0].IsUnsetValue() || values[1].IsUnsetValue()) {
                 return new Thickness();
             }
-            int indentLevel = System.Convert.ToInt32(parameter.ToString());
+            
+            int indentLevel = System.Convert.ToInt32(values[0].ToString());
+            double amt = System.Convert.ToDouble(values[1].ToString()) * indentLevel;
+
             Thickness thickness = new Thickness();
-            for (int i = 0; i < values.Length; i++) {
+            if(values.Length < 3) {
+                thickness.Left = amt;
+                return thickness;
+            }
+            for (int i = 2; i < values.Length; i++) {
                 string val = values[i].ToString();
                 if(val.ToLower() == "all") {
-                    double amt = System.Convert.ToDouble(values[i + 1].ToString()) * indentLevel;
                     return new Thickness(amt, amt, amt, amt);
                 }
                 if (val.ToLower() == "left") {
-                    double amt = System.Convert.ToDouble(values[i + 1].ToString()) * indentLevel;
                     thickness.Left = amt;
                     i++;
                 } else if (val.ToLower() == "top") {
-                    double amt = System.Convert.ToDouble(values[i + 1].ToString()) * indentLevel;
                     thickness.Top = amt;
                     i++;
                 } else if (val.ToLower() == "right") {
-                    double amt = System.Convert.ToDouble(values[i + 1].ToString()) * indentLevel;
                     thickness.Right = amt;
                     i++;
                 } else if (val.ToLower() == "bottom") {
-                    double amt = System.Convert.ToDouble(values[i + 1].ToString()) * indentLevel;
                     thickness.Bottom = amt;
                     i++;
                 }
-
             }
             return thickness;
         }

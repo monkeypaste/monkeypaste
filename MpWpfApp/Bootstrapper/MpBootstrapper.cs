@@ -35,7 +35,7 @@ namespace MpWpfApp {
                 new MpBootstrappedItem(typeof(MpClipTileSortViewModel)),
                 new MpBootstrappedItem(typeof(MpSearchBoxViewModel)),
 
-                new MpBootstrappedItem(typeof(MpAppModeViewModel)),
+                new MpBootstrappedItem(typeof(MpSidebarViewModel)),
                 new MpBootstrappedItem(typeof(MpAnalyticItemCollectionViewModel)),
 
                 new MpBootstrappedItem(typeof(MpClipTrayViewModel)),
@@ -46,10 +46,7 @@ namespace MpWpfApp {
                 new MpBootstrappedItem(typeof(MpTagTrayViewModel)),
                 new MpBootstrappedItem(typeof(MpMainWindowViewModel)),
 
-                new MpBootstrappedItem(typeof(MpDragDropManager)),
-
                 new MpBootstrappedItem(typeof(MpActionCollectionViewModel))
-
 
             };
         }
@@ -64,12 +61,16 @@ namespace MpWpfApp {
                 await _items[i].Register();
             }
 
+            MpDragDropManager.Init();
+
             MpProcessHelper.MpProcessManager.Start(
                 MpPreferences.FallbackProcessPath,
                 MpAppCollectionViewModel.Instance.AppViewModels.Select(x => x.AppPath).ToArray(),
                 new MpWpfIconBuilder());
 
             MpClipboardHelper.MpClipboardManager.Start();
+
+            MpMouseHook.Initialize();
         }
     }
 }

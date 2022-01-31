@@ -8,12 +8,7 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpDetectedImageObjectViewModel : 
-        MpViewModelBase<MpDetectedImageObjectCollectionViewModel>, MpIDesignerItemViewModel {
-        public object DesignerItemContext {
-            get {
-                return this;
-            }
-        }
+        MpViewModelBase<MpDetectedImageObjectCollectionViewModel> {
 
         #region Private Variables       
 

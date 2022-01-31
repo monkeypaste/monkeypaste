@@ -11,95 +11,9 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpDetectedImageObjectViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <local:MpUserControl.Resources>
-        <!--  MoveThumb Template  -->
-        <ControlTemplate x:Key="MoveThumbTemplate"
-                         TargetType="{x:Type local:MpMoveThumb}">
-            <Rectangle Fill="Transparent" />
-        </ControlTemplate>
-        <!--  ResizeDecorator Template  -->
-        <ControlTemplate x:Key="ResizeDecoratorTemplate"
-                         TargetType="{x:Type Control}">
-            <Grid>
-                <local:MpResizeThumb Height="3"
-                                     Cursor="SizeNS"
-                                     Margin="0,-4,0,0"
-                                     VerticalAlignment="Top"
-                                     HorizontalAlignment="Stretch" />
-                <local:MpResizeThumb Width="3"
-                                     Cursor="SizeWE"
-                                     Margin="-4,0,0,0"
-                                     VerticalAlignment="Stretch"
-                                     HorizontalAlignment="Left" />
-                <local:MpResizeThumb Width="3"
-                                     Cursor="SizeWE"
-                                     Margin="0,0,-4,0"
-                                     VerticalAlignment="Stretch"
-                                     HorizontalAlignment="Right" />
-                <local:MpResizeThumb Height="3"
-                                     Cursor="SizeNS"
-                                     Margin="0,0,0,-4"
-                                     VerticalAlignment="Bottom"
-                                     HorizontalAlignment="Stretch" />
-                <local:MpResizeThumb Width="7"
-                                     Height="7"
-                                     Cursor="SizeNWSE"
-                                     Margin="-6,-6,0,0"
-                                     VerticalAlignment="Top"
-                                     HorizontalAlignment="Left" />
-                <local:MpResizeThumb Width="7"
-                                     Height="7"
-                                     Cursor="SizeNESW"
-                                     Margin="0,-6,-6,0"
-                                     VerticalAlignment="Top"
-                                     HorizontalAlignment="Right" />
-                <local:MpResizeThumb Width="7"
-                                     Height="7"
-                                     Cursor="SizeNESW"
-                                     Margin="-6,0,0,-6"
-                                     VerticalAlignment="Bottom"
-                                     HorizontalAlignment="Left" />
-                <local:MpResizeThumb Width="7"
-                                     Height="7"
-                                     Cursor="SizeNWSE"
-                                     Margin="0,0,-6,-6"
-                                     VerticalAlignment="Bottom"
-                                     HorizontalAlignment="Right" />
-            </Grid>
-        </ControlTemplate>
-        <!--  Designer Item Template  -->
-
-        <Style x:Key="DetectedObjectContentControlStyle"
-               TargetType="{x:Type ContentControl}">
-            <Setter Property="MinHeight"
-                    Value="20" />
-            <Setter Property="MinWidth"
-                    Value="20" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ContentControl">
-                        <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                            <local:MpMoveThumb Template="{StaticResource MoveThumbTemplate}"
-                                               Cursor="SizeAll" />
-                            <Control Template="{StaticResource ResizeDecoratorTemplate}" />
-                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=DetectedImageObjectButton,
-                                               Path=IsMouseOver}"
-                             Value="True">
-                    <Setter Property="Background"
-                            Value="Transparent" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </local:MpUserControl.Resources>
     <ContentControl Width="{Binding Width}"
                     Height="{Binding Height}"
-                    Style="{StaticResource DetectedObjectContentControlStyle}">
+                    Style="{StaticResource ResizableDesignerControlStyle}">
         <Button x:Name="DetectedImageObjectButton"
                 DataContext="{Binding}"
                 Background="Transparent"

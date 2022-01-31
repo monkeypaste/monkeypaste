@@ -18,8 +18,10 @@ using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpMainWindowViewModel : MpViewModelBase,MpISingletonViewModel<MpMainWindowViewModel> {
-
+    public class MpMainWindowViewModel : 
+        MpViewModelBase,
+        MpISingletonViewModel<MpMainWindowViewModel>,
+        MpIResizableViewModel {
         #region Statics
 
 
@@ -99,6 +101,8 @@ namespace MpWpfApp {
 
         public bool IsResizing { get; set; } = false;
 
+        public bool CanResize { get; set; } = false;
+
         #endregion
 
         #region Layout
@@ -109,8 +113,8 @@ namespace MpWpfApp {
                 if(IsMainWindowLocked) {
                     return 20000;
                 }
-                if(MpDragDropManager.Instance.IsDragAndDrop &&
-                   MpDragDropManager.Instance.DropType == MpDropType.External) {
+                if(MpDragDropManager.IsDragAndDrop &&
+                   MpDragDropManager.DropType == MpDropType.External) {
                     return (double)int.MaxValue;
                 }
                 return 0;

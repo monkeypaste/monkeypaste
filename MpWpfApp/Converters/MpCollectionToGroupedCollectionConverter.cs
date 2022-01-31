@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Globalization;
 using System.Windows.Data;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpCollectionToGroupedCollectionConverter : IValueConverter {

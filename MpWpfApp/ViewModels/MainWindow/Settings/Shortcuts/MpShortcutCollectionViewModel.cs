@@ -261,14 +261,14 @@ namespace MpWpfApp {
                             shortcutCommand = MpMainWindowViewModel.Instance.HideWindowCommand;
                             break;
                         case MpShortcutType.ToggleAppendMode:
-                            shortcutCommand = MpAppModeViewModel.Instance.ToggleAppendModeCommand;
+                            shortcutCommand = MpSidebarViewModel.Instance.ToggleAppendModeCommand;
                             break;
                         case MpShortcutType.ToggleAutoCopyMode:
-                            shortcutCommand = MpAppModeViewModel.Instance.ToggleAutoCopyModeCommand;
+                            shortcutCommand = MpSidebarViewModel.Instance.ToggleAutoCopyModeCommand;
                             break;
                         case MpShortcutType.ToggleRightClickPasteMode:
                             //right click paste mode
-                            shortcutCommand = MpAppModeViewModel.Instance.ToggleRightClickPasteCommand;
+                            shortcutCommand = MpSidebarViewModel.Instance.ToggleRightClickPasteCommand;
                             break;
                         case MpShortcutType.PasteSelectedItems:
                             shortcutCommand = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
@@ -328,10 +328,10 @@ namespace MpWpfApp {
                             shortcutCommand = MpClipTrayViewModel.Instance.CreateQrCodeFromSelectedClipsCommand;
                             break;
                         case MpShortcutType.ToggleAppendLineMode:
-                            shortcutCommand = MpAppModeViewModel.Instance.ToggleAppendLineModeCommand;
+                            shortcutCommand = MpSidebarViewModel.Instance.ToggleAppendLineModeCommand;
                             break;
                         case MpShortcutType.ToggleListenToClipboard:
-                            shortcutCommand = MpAppModeViewModel.Instance.ToggleIsAppPausedCommand;
+                            shortcutCommand = MpSidebarViewModel.Instance.ToggleIsAppPausedCommand;
                             break;
                         case MpShortcutType.CopySelectedItems:
                             shortcutCommand = MpClipTrayViewModel.Instance.CopySelectedClipsCommand;
@@ -437,12 +437,12 @@ namespace MpWpfApp {
 
         private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
-                if (MpAppModeViewModel.Instance.IsAutoCopyMode) {
+                if (MpSidebarViewModel.Instance.IsAutoCopyMode) {
                     if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.ApplicationIsActivated()) {
                         System.Windows.Forms.SendKeys.SendWait(" ^ c");
                     }
                 }
-                if (MpAppModeViewModel.Instance.IsRightClickPasteMode) {
+                if (MpSidebarViewModel.Instance.IsRightClickPasteMode) {
                     if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.ApplicationIsActivated()) {
                         System.Windows.Forms.SendKeys.SendWait("^v");
                     }

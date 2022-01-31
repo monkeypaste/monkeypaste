@@ -14,13 +14,14 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Resources/Styles/Buttons/MpButtonResourceDictionary.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Resources/Styles/Constants/MpConstantsResourceDictionary.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Resources/Styles/Constants/Icons/MpIconsResourceDictionary.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Resources/Styles/Converters/MpConvertersResourceDictionary.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Resources/Styles/Menus/MpContextMenuItemResourceDictionary.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Resources/Styles/Menus/MpSelectorItemResourceDictionary.xaml" />
-            </ResourceDictionary.MergedDictionaries>            
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Buttons/MpButtonResourceDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Constants/MpConstantsResourceDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Constants/Icons/MpIconsResourceDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Converters/MpConvertersResourceDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Menus/MpContextMenuItemResourceDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Menus/MpSelectorItemResourceDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Designer/MpDesignerResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
 
             <!--  Color Palletes  -->

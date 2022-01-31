@@ -28,7 +28,8 @@ namespace MpWpfApp {
         MpSelectorViewModelBase<object,MpAnalyticItemViewModel>,
         MpIMenuItemViewModel,
         MpISingletonViewModel<MpAnalyticItemCollectionViewModel>, 
-        MpITreeItemViewModel  { //
+        MpITreeItemViewModel,
+        MpISidebarItemViewModel { //
         #region Properties
 
         #region View Models
@@ -70,6 +71,15 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpISidebarItemViewModel Implementation
+        public double DefaultSidebarWidth { get; } = 200;
+        public bool IsSidebarVisible { get; set; } = false;
+
+        public MpISidebarItemViewModel NextSidebarItem { get; set; }
+        public MpISidebarItemViewModel PreviousSidebarItem { get; set; }
+
+        #endregion
+
         #region Layout
 
         #endregion
@@ -89,7 +99,6 @@ namespace MpWpfApp {
 
         public bool IsExpanded { get; set; }
 
-        public bool IsVisible { get; set; } = false;
 
         public bool IsAnyEditingParameters => Items.Any(x => x.IsAnyEditingParameters);
 
@@ -201,13 +210,13 @@ namespace MpWpfApp {
                 case nameof(IsHovering):
                 case nameof(IsAnySelected):
                     break;
-                case nameof(IsVisible):
-                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.IsGridSplitterEnabled));
-                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
+                case nameof(IsSidebarVisible):
+                    MpSidebarViewModel.Instance.OnPropertyChanged(nameof(MpSidebarViewModel.Instance.IsAnySidebarOpen));
+                    
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
-                    if (IsVisible) {
-                        MpTagTrayViewModel.Instance.IsVisible = false;
-                        MpActionCollectionViewModel.Instance.IsVisible = false;
+                    if (IsSidebarVisible) {
+                        MpTagTrayViewModel.Instance.IsSidebarVisible = false;
+                        MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
                     if(SelectedItem == null) {
                         Items[0].IsSelected = true;

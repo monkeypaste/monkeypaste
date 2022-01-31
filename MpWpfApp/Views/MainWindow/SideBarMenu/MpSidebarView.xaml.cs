@@ -16,12 +16,12 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpAppModeButtonGridView.xaml
+    /// Interaction logic for MpSidebarView.xaml
     /// </summary>
-    public partial class MpAppModeButtonGridView : MpUserControl<MpAppModeViewModel> {
+    public partial class MpSidebarView : MpUserControl<MpSidebarViewModel> {
         public ToggleButton AppendModeToggleButton, MouseModeToggleButton;
 
-        public MpAppModeButtonGridView() {
+        public MpSidebarView() {
             InitializeComponent();
         }
 
@@ -89,19 +89,19 @@ namespace MpWpfApp {
         }
 
         private void AnalyzerToggleButton_Click(object sender, RoutedEventArgs e) {
-            MpAnalyticItemCollectionViewModel.Instance.IsVisible = !MpAnalyticItemCollectionViewModel.Instance.IsVisible;
-            AnalyzerToggleButton.IsChecked = MpAnalyticItemCollectionViewModel.Instance.IsVisible;
-            TagTreeToggleButton.IsChecked = MpTagTrayViewModel.Instance.IsVisible;
+            MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = !MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible;
+            AnalyzerToggleButton.IsChecked = MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible;
+            TagTreeToggleButton.IsChecked = MpTagTrayViewModel.Instance.IsSidebarVisible;
         }
 
         private void TagTreeToggleButton_Click(object sender, RoutedEventArgs e) {
-            MpTagTrayViewModel.Instance.IsVisible = !MpTagTrayViewModel.Instance.IsVisible;
-            TagTreeToggleButton.IsChecked = MpTagTrayViewModel.Instance.IsVisible;
-            AnalyzerToggleButton.IsChecked = MpAnalyticItemCollectionViewModel.Instance.IsVisible;
+            MpTagTrayViewModel.Instance.IsSidebarVisible = !MpTagTrayViewModel.Instance.IsSidebarVisible;
+            TagTreeToggleButton.IsChecked = MpTagTrayViewModel.Instance.IsSidebarVisible;
+            AnalyzerToggleButton.IsChecked = MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible;
         }
 
         private void MatcherToggleButton_Click(object sender, RoutedEventArgs e) {
-            MpActionCollectionViewModel.Instance.IsVisible = !MpActionCollectionViewModel.Instance.IsVisible;
+            MpActionCollectionViewModel.Instance.IsSidebarVisible = !MpActionCollectionViewModel.Instance.IsSidebarVisible;
 
         }
 

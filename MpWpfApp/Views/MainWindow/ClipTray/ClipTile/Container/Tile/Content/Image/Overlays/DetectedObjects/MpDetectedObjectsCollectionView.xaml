@@ -32,7 +32,7 @@
                                 Background="Transparent"
                                 Visibility="{Binding Parent.Parent.Parent.IsSelected,
                                                      Converter={StaticResource BoolToVisibilityConverter}}"
-                                Style="{StaticResource DetectedObjectContentControlStyle}">
+                                Style="{StaticResource ResizableDesignerControlStyle}">
                     <ContentControl.RenderTransform>
                         <TranslateTransform X="{Binding X}"
                                             Y="{Binding Y}" />

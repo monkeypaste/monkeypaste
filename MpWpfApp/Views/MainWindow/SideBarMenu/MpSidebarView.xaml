@@ -1,15 +1,15 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpAppModeButtonGridView"
+﻿<local:MpUserControl x:Class="MpWpfApp.MpSidebarView"
                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpAppModeViewModel"
+                     x:TypeArguments="local:MpSidebarViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpAppModeViewModel,
+                     d:DataContext="{d:DesignInstance Type=local:MpSidebarViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Grid Loaded="Grid_Loaded"
           Background="{Binding .,
@@ -43,7 +43,7 @@
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Collection Tree"
-                      IsChecked="{Binding IsVisible, Source={x:Static local:MpTagTrayViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpTagTrayViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource PinToCollectionIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -58,14 +58,14 @@
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Analyze"
                       IsEnabled="True"
-                      IsChecked="{Binding IsVisible, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BrainIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
-        <ToggleButton x:Name="MatcherToggleButton"
+        <ToggleButton x:Name="ActionsToggleButton"
                       Grid.Row="3"
                       ToolTipService.InitialShowDelay="0"
                       VerticalAlignment="Center"
@@ -73,7 +73,7 @@
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Analyze"
                       IsEnabled="True"
-                      IsChecked="{Binding IsVisible, Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpActionCollectionViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BoltIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -114,11 +114,11 @@
                                                   HorizontalAlignment="Center"
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
                                                   ToolTip="{Binding IsAppendModeTooltip,
-                                                                    Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                    Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   IsEnabled="{Binding CanAppendMode,
-                                                                      Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                      Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   IsChecked="{Binding IsAppendMode,
-                                                                      Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                      Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource AppendRunIcon},
                                                                 Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -132,11 +132,11 @@
                                                   HorizontalAlignment="Center"
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
                                                   ToolTip="{Binding IsAppendLineModeTooltip,
-                                                                    Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                    Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   IsEnabled="{Binding CanAppendMode,
-                                                                      Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                      Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   IsChecked="{Binding IsAppendLineMode,
-                                                                      Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                      Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource AppendLineIcon},
                                                                 Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -171,11 +171,11 @@
                                                   HorizontalAlignment="Center"
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
                                                   ToolTip="{Binding IsAutoCopyModeTooltip,
-                                                                    Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                    Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   IsEnabled="{Binding CanAutoCopyMode,
-                                                                      Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                      Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   IsChecked="{Binding IsAutoCopyMode,
-                                                                      Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                      Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource LeftClickIcon},
                                                                 Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -189,11 +189,11 @@
                                                   HorizontalAlignment="Center"
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
                                                   ToolTip="{Binding IsRighClickPasteModeTooltip,
-                                                                    Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                    Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   IsEnabled="{Binding CanRighClickPasteMode,
-                                                                      Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                      Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   IsChecked="{Binding IsRightClickPasteMode,
-                                                                      Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                                                      Source={x:Static local:MpSidebarViewModel.Instance}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource RightClickIcon},
                                                                 Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -215,7 +215,7 @@
                     <ContextMenu.Template>
                         <ControlTemplate>
                             <ContentControl Content="{StaticResource AppModeToggleButtonStackPanel}"
-                                            DataContext="{x:Static local:MpAppModeViewModel.Instance}" />
+                                            DataContext="{x:Static local:MpSidebarViewModel.Instance}" />
                         </ControlTemplate>
                     </ContextMenu.Template>
                 </ContextMenu>

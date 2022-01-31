@@ -47,7 +47,7 @@ namespace MpWpfApp {
 
         private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
             BindingContext.IsHovering = true;
-            if (!MpDragDropManager.Instance.IsDragAndDrop &&
+            if (!MpDragDropManager.IsDragAndDrop &&
                 (!BindingContext.Parent.IsExpanded || !BindingContext.IsSelected)) {
                 //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
             }
@@ -55,7 +55,7 @@ namespace MpWpfApp {
 
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
             BindingContext.IsHovering = false;
-            if (!MpDragDropManager.Instance.IsDragAndDrop) {
+            if (!MpDragDropManager.IsDragAndDrop) {
                 //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
         }
@@ -81,16 +81,16 @@ namespace MpWpfApp {
 
         private void Border_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (BindingContext.IsEditingTitle ||
-                (BindingContext.IsSelected &&
-                 BindingContext.Parent.IsExpanded) ||
+                (BindingContext.IsSelected && BindingContext.Parent.IsExpanded) ||
                  BindingContext.Parent.Parent.IsAnyResizing ||
-                 BindingContext.Parent.Parent.CanAnyResize) {
+                 BindingContext.Parent.Parent.CanAnyResize ||
+                 MpResizeBehavior.IsAnyResizing) {
                 e.Handled = false;
                 return;
             }
             BindingContext.IsSelected = true;
 
-            MpDragDropManager.Instance.StartDragCheck(
+            MpDragDropManager.StartDragCheck(
                 e.GetPosition(Application.Current.MainWindow));
 
             e.Handled = true;

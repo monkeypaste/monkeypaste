@@ -20,6 +20,10 @@ namespace MonkeyPaste {
 
         public int HeaderIndentLevel { get; set; }
 
+        public double HeaderIndentSize { get; set; } = 20;
+
+        public string HeaderedSeparatorLabel { get; set; }
+
         public bool IsColorPallete { get; set; }
 
         public bool IsSelected { get; set; } = false;

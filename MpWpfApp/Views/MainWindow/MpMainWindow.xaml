@@ -32,6 +32,7 @@
         <i:Interaction.Behaviors>
             <local:MpExternalDropBehavior x:Name="ExternalDropBehavior" />
         </i:Interaction.Behaviors>
+        <!--<AdornerDecorator>-->
         <Grid x:Name="MainWindowGrid"
               Height="{Binding MainWindowHeight,
                                Mode=TwoWay,
@@ -43,11 +44,17 @@
               Canvas.Left="0">
             <i:Interaction.Behaviors>
                 <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
+                                        DoubleClickControl="{Binding ElementName=FrameGripButton}"
                                         IsResizing="{Binding IsResizing,
                                                              Mode=TwoWay,
                                                              UpdateSourceTrigger=PropertyChanged,
                                                              NotifyOnSourceUpdated=True,
                                                              NotifyOnTargetUpdated=True}"
+                                        CanResize="{Binding CanResize,
+                                                            Mode=TwoWay,
+                                                            UpdateSourceTrigger=PropertyChanged,
+                                                            NotifyOnSourceUpdated=True,
+                                                            NotifyOnTargetUpdated=True}"
                                         ResizableEdges="Top"
                                         BoundHeight="{Binding MainWindowHeight,
                                                               Mode=TwoWay,
@@ -72,12 +79,36 @@
             <local:MpSystemTrayView DataContext="{x:Static local:MpSystemTrayViewModel.Instance}" />
 
             <!--  Title Menu  -->
-            <local:MpTitleBarView x:Name="TitleBarView"
-                                  Grid.Row="0"
-                                  Background="{Binding .,
-                                                       Converter={StaticResource StringToThemeBrushConverter},
-                                                       ConverterParameter=Title_Menu_Background_Color}"
-                                  DataContext="{Binding}" />
+            <DockPanel x:Name="TitleBarDockPanel"
+                       Grid.Row="0"
+                       Background="{Binding .,
+                                            Converter={StaticResource StringToThemeBrushConverter},
+                                            ConverterParameter=Title_Menu_Background_Color}"
+                       LastChildFill="True">
+                <TextBlock DockPanel.Dock="Left"
+                           Text="{Binding LogText}" />
+                <Button x:Name="FrameGripButton"
+                        Style="{StaticResource FrameGripButton}">
+                    <!--<Grid HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch" Background="Pink">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.25*" />
+                                        <RowDefinition Height="0.5*" />
+                                        <RowDefinition Height="0.25*" />
+                                    </Grid.RowDefinitions>
+                                    <Border x:Name="FrameGripTop" Background="Orange"
+                                            Grid.Row="0" />
+                                    <Border x:Name="FrameGripMiddle"
+                                            Grid.Row="1">
+                                        <Border.Background>
+
+                                        </Border.Background>
+                                    </Border>
+                                    <Border x:Name="FrameGripBottom"
+                                            Grid.Row="2" />
+                                </Grid>-->
+                </Button>
+            </DockPanel>
 
             <!--  FilterMenu  -->
             <Grid Grid.Row="1"
@@ -155,7 +186,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="{Binding TotalSidebarWidth, Source={x:Static local:MpSidebarViewModel.Instance}}" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
@@ -166,32 +197,58 @@
                                                    VerticalContentAlignment="Stretch"
                                                    DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />
                 <!--  Side bar AppState Buttons  -->
-                <!--<local:MpAppModeButtonGridView Grid.Row="1"
+                <!--<local:MpSidebarView Grid.Row="1"
                                                Grid.Column="0"
                                                Visibility="{Binding IsAnyTileExpanded,
                                                                     Source={x:Static local:MpClipTrayViewModel.Instance},
                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                DataContext="{Binding AppModeViewModel}" />-->
-                <local:MpSidebarMenuView x:Name="SidebarMenuView"
-                                         Grid.Row="1"
-                                         Grid.Column="0"
-                                         VerticalAlignment="Stretch"
-                                         Height="{Binding ClipTrayHeight}"
-                                         HorizontalAlignment="Stretch"
-                                         DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
-                                         Background="{Binding .,
-                                                              Converter={StaticResource StringToThemeBrushConverter},
-                                                              ConverterParameter=Tag_Tree_Background_Color}" />
-                <GridSplitter Background="Black"
+                <local:MpSidebarContainerView x:Name="SidebarMenuView"
+                                              Grid.Row="1"
+                                              Grid.Column="0"
+                                              VerticalAlignment="Stretch"
+                                              Height="{Binding ClipTrayHeight,
+                                                               Source={x:Static local:MpClipTrayViewModel.Instance}}"
+                                              DataContext="{x:Static local:MpSidebarViewModel.Instance}"
+                                              HorizontalAlignment="Stretch"
+                                              Background="{Binding .,
+                                                                   Converter={StaticResource StringToThemeBrushConverter},
+                                                                   ConverterParameter=Tag_Tree_Background_Color}" />
+                <GridSplitter x:Name="SidebarGridSplitter"
+                              DataContext="{x:Static local:MpSidebarViewModel.Instance}"
+                              Background="Black"
                               Grid.Row="1"
                               Grid.Column="0"
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch"
                               Width="3"
-                              IsEnabled="{Binding IsGridSplitterEnabled,
-                                                  Source={x:Static local:MpAppModeViewModel.Instance}}"
-                              MouseEnter="GridSplitter_MouseEnter"
-                              MouseLeave="GridSplitter_MouseLeave" />
+                              IsEnabled="{Binding IsAnySidebarOpen}"
+                              DragStarted="SidebarGridSplitter_DragStarted">
+                    <i:Interaction.Behaviors>
+                        <local:MpResizeBehavior x:Name="SidebarResizeBehvior"
+                                                DoubleClickControl="{Binding ElementName=SidebarGridSplitter}"
+                                                IsResizing="{Binding IsResizing,
+                                                                     Mode=TwoWay,
+                                                                     UpdateSourceTrigger=PropertyChanged,
+                                                                     NotifyOnSourceUpdated=True,
+                                                                     NotifyOnTargetUpdated=True}"
+                                                CanResize="{Binding CanResize,
+                                                                    Mode=TwoWay,
+                                                                    UpdateSourceTrigger=PropertyChanged,
+                                                                    NotifyOnSourceUpdated=True,
+                                                                    NotifyOnTargetUpdated=True}"
+                                                ResizableEdges="Right"
+                                                BoundWidth="{Binding SidebarWidth,
+                                                                     Mode=TwoWay,
+                                                                     UpdateSourceTrigger=PropertyChanged,
+                                                                     NotifyOnSourceUpdated=True,
+                                                                     NotifyOnTargetUpdated=True}"
+                                                DefaultWidth="{Binding VisibleSidebar.DefaultWidth}"
+                                                MinWidth="{Binding DefaultSidebarPanelWidth,
+                                                                   Source={x:Static local:MpMeasurements.Instance}}" />
+
+                    </i:Interaction.Behaviors>
+                </GridSplitter>
                 <local:MpClipTrayContainerView x:Name="ClipTrayView"
                                                Grid.Row="1"
                                                Grid.Column="1"
@@ -221,5 +278,6 @@
                 </Grid>
             </Grid>
         </Grid>
+        <!--</AdornerDecorator>-->
     </Canvas>
 </Window>

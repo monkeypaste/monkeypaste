@@ -19,7 +19,8 @@ namespace MpWpfApp {
         Content,
         Tile,
         Tray,
-        External
+        External,
+        Resize
     }
 
     public abstract class MpDropBehaviorBase<T> : MpBehavior<T>, MpIContentDropTarget where T : FrameworkElement {
@@ -136,6 +137,8 @@ namespace MpWpfApp {
         protected virtual void ReceivedMainWindowViewModelMessage(MpMessageType msg) { }
 
         public virtual void OnLoaded() {
+            _dataContext = AssociatedObject.DataContext;
+
             MpMessenger.Register<MpMessageType>(
                 MpClipTrayViewModel.Instance, 
                 ReceivedClipTrayViewModelMessage);
@@ -222,13 +225,18 @@ namespace MpWpfApp {
         }
 
         public void InitAdorner() {
-            DropLineAdorner = new MpDropLineAdorner(AdornedElement,this);
-            adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
-            adornerLayer.Add(DropLineAdorner);
+            if(AdornedElement != null) {
+                adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
+                if(adornerLayer != null) {
+                    DropLineAdorner = new MpDropLineAdorner(AdornedElement, this);
+                    adornerLayer.Add(DropLineAdorner);
+                    RefreshDropRects();
+                }
+            }
+            
 
             IsDebugEnabled = false;
 
-            RefreshDropRects();
         }
 
         public void UpdateAdorner() {

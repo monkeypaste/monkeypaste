@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 
@@ -66,7 +67,7 @@ namespace MpWpfApp {
 
         private void PerformMainWindowHide() {
             var mwvm = DataContext as MpMainWindowViewModel;
-            if (mwvm.IsResizing || MpDragDropManager.Instance.IsDragAndDrop) {
+            if (mwvm.IsResizing || MpDragDropManager.IsDragAndDrop) {
                 return;
             }
             mwvm.HideWindowCommand.Execute(null);
@@ -83,12 +84,24 @@ namespace MpWpfApp {
             //mwvm.HideWindowCommand.Execute(null);
         }
 
-        private void GridSplitter_MouseEnter(object sender, MouseEventArgs e) {
-            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeWE;
+        private void SidebarGridSplitter_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
+            (sender as GridSplitter).CancelDrag();
         }
 
-        private void GridSplitter_MouseLeave(object sender, MouseEventArgs e) {
-            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
-        }
+        //private void GridSplitter_MouseEnter(object sender, MouseEventArgs e) {
+        //    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeWE;
+        //}
+
+        //private void GridSplitter_MouseLeave(object sender, MouseEventArgs e) {
+        //    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        //}
+
+        //private void GridSplitter_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
+        //    MpResizeBehavior.IsAnyResizing = true;
+        //}
+
+        //private void GridSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
+        //    MpResizeBehavior.IsAnyResizing = false;
+        //}
     }
 }

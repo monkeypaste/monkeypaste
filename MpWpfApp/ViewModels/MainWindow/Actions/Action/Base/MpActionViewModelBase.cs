@@ -26,7 +26,9 @@ namespace MpWpfApp {
         MpIUserIconViewModel,
         MpITreeItemViewModel<MpActionViewModelBase>,
         MpIMenuItemViewModel,
-        MpITriggerActionViewModel {
+        MpITriggerActionViewModel,
+        MpIActionDesignerItemViewModel,
+        MpIMovableViewModel {
         
         #region Properties
 
@@ -36,9 +38,27 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpIMovableViewModel Implementation
+
+        public bool IsMoving { get; set; }
+
+        public bool CanMove { get; set; }
+
+        #endregion
+
+        #region MpIActionDesignerItemViewModel Implementation
+
+        public double Width { get; set; } = 50;
+        public double Height { get; set; } = 50;
+
+        public double X { get; set; }
+        public double Y { get; set; }
+
+        #endregion
+
         #region MpITreeItemViewModel Implementation
 
-        public bool IsExpanded { get; set; } = true;
+        public bool IsExpanded { get; set; } = false;
 
         public MpActionViewModelBase ParentTreeItem => ParentActionViewModel;
 
@@ -465,6 +485,8 @@ namespace MpWpfApp {
                  SelectedItem = navm;
 
                  OnPropertyChanged(nameof(Items));
+                 Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                 IsExpanded = true;
              });
 
         public ICommand DeleteChildActionCommand => new RelayCommand<object>(
@@ -480,6 +502,7 @@ namespace MpWpfApp {
                 await UpdateSortOrder();
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(SelectedItem));
+                Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
             });
 
         public ICommand DeleteThisActionCommand => new RelayCommand(
@@ -494,6 +517,7 @@ namespace MpWpfApp {
                 }
                 ParentActionViewModel.DeleteChildActionCommand.Execute(this);
             });
+
         #endregion
     }
 }

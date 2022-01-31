@@ -23,7 +23,7 @@
             <HierarchicalDataTemplate x:Key="TriggerTemplate"
                                       DataType="{x:Type local:MpTriggerActionViewModelBase}"
                                       ItemsSource="{Binding Items}">
-                <Grid Background="Orange">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.2*" />
                         <ColumnDefinition Width="0.2*" />
@@ -69,7 +69,6 @@
                              Padding="3,0,0,0"
                              VerticalContentAlignment="Center"
                              FontSize="12"
-                             local:MpIsFocusedExtension.IsEnabled="True"
                              local:MpIsFocusedExtension.IsFocused="{Binding IsLabelFocused,
                                                                             Mode=TwoWay}"
                              Text="{Binding Label,
@@ -88,87 +87,96 @@
                                       ItemsSource="{Binding Items}">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.5*" />
+                        <RowDefinition Height="0.3*" />
+                        <RowDefinition Height="0.3*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="0.1*" />
-                        </Grid.ColumnDefinitions>
-                        <!--  Compare Property Path  -->
-                        <StackPanel Grid.Row="0" 
-                                    Grid.Column="0"
-                                    HorizontalAlignment="Right"
-                                    Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center"
-                                       Text="Field"
-                                       Margin="0,0,10,0" />
-                            <ComboBox MinWidth="100"
-                                      ItemsSource="{Binding ComparePropertyPathsMenuItemViewModel}"
-                                      ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}">
-                                <ComboBox.ItemContainerStyle>
-                                    <Style TargetType="ComboBoxItem" >
-                                        <Setter Property="IsSelected"
-                                                Value="{Binding IsSelected, Mode=TwoWay}"/>
-                                    </Style>
-                                </ComboBox.ItemContainerStyle>
-                            </ComboBox>
-                        </StackPanel>
-                        <!--  Compare Type  -->
-                        <StackPanel Grid.Row="1"
-                                    Grid.Column="0"
-                                    Orientation="Horizontal"
-                                    HorizontalAlignment="Right"
-                                    Margin="0,10,0,10">
-                            <TextBlock VerticalAlignment="Center"
-                                       Text="Type"
-                                       Margin="0,0,10,0" />
-                            <ComboBox MinWidth="100"
-                                      SelectedIndex="{Binding CompareType,
-                                                              Mode=TwoWay,
-                                                              UpdateSourceTrigger=PropertyChanged,
-                                                              NotifyOnSourceUpdated=True,
-                                                              NotifyOnTargetUpdated=True,
-                                                              Converter={StaticResource EnumToIntConverter}}"
-                                      ItemsSource="{Binding CompareTypesMenuItemViewModel.SubItems}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Visibility="{Binding IsVisible,
-                                                                        Converter={StaticResource BoolToVisibilityConverter}}"
-                                                   Text="{Binding Header}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </StackPanel>
-                        <local:MpActionTreeItemOptionsView Grid.Row="0" Grid.Column="1" DataContext="{Binding}" />
-                    </Grid>
-                    <!--
-                             local:MpResizerExtension.IsEnabled="True"
-                             local:MpResizerExtension.MaxWidth="1000"
-                             local:MpResizerExtension.MaxHeight="1000"
-                             local:MpIsFocusedExtension.IsEnabled="True"
-                             local:MpIsFocusedExtension.IsFocused="{Binding IsActionTextBoxFocused,
-                                                                            Mode=TwoWay}"
-                             local:MpIsFocusedExtension.IsSaveOnLostFocus="True"
-                             local:MpIsFocusedExtension.SaveModel="{Binding Action}"-->
-                    <TextBox Grid.Row="1"
-                             Grid.Column="0"
-                             Grid.ColumnSpan="2"
-                             MinHeight="30"
-                             MinWidth="130"
-                             Margin="5"
-                             Name="CompareDataTextBox"
-                             TextWrapping="Wrap"
-                             Text="{Binding CompareData,
-                                            Mode=TwoWay,
-                                            UpdateSourceTrigger=PropertyChanged,
-                                            NotifyOnSourceUpdated=True,
-                                            NotifyOnTargetUpdated=True}" />
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.3*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="0.3*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Compare Property Path  -->
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Foreground="Black"
+                               Text="Field"
+                               Margin="0,0,10,0" />
+
+                    <ComboBox Grid.Row="0"
+                              Grid.Column="1"
+                              MinWidth="100"
+                              Margin="0,0,10,0"
+                              ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
+                              ItemsSource="{Binding ComparePropertyPathsMenuItemViewModel.SubItems}">
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="IsSelected"
+                                        Value="{Binding IsSelected,
+                                                        Mode=TwoWay}" />
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
+
+                    <!--  Compare Type  -->
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Foreground="Black"
+                               Text="Type"
+                               Margin="0,0,10,0" />
+                    <ComboBox Grid.Row="1"
+                              Grid.Column="1"
+                              MinWidth="100"
+                              IsSynchronizedWithCurrentItem="True"
+                              SelectedIndex="{Binding CompareType,
+                                                      Converter={StaticResource EnumToIntConverter}}"
+                              ItemsSource="{Binding CompareTypesMenuItemViewModel.SubItems}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="DimGray"
+                                           Margin="5,0,0,0"
+                                           Text="{Binding Header}"
+                                           FontSize="14" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <local:MpActionTreeItemOptionsView Grid.Row="0"
+                                                       Grid.Column="2"
+                                                       HorizontalAlignment="Right"
+                                                       DataContext="{Binding}" />
+                    <AdornerDecorator>
+                        <TextBox x:Name="CompareDataTextBox"
+                                 Grid.Row="2"
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="3"
+                                 MinHeight="30"
+                                 MinWidth="130"
+                                 Margin="5"
+                                 TextWrapping="Wrap"
+                                 local:MpIsFocusedExtension.IsFocused="{Binding IsCompareDataTextBoxFocused,
+                                                                                Mode=TwoWay}"
+                                 Text="{Binding CompareData,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}">
+                            <i:Interaction.Behaviors>
+                                <local:MpResizeBehavior x:Name="CompareDataTextBoxResizeBehvior"
+                                                        DoubleClickControl="{Binding ElementName=CompareDataTextBox}"
+                                                        ResizableEdges="Bottom"
+                                                        BoundHeight="{Binding Height,
+                                                                              ElementName=CompareDataTextBox}"
+                                                        MinHeight="30"
+                                                        MinWidth="130" />
+
+                            </i:Interaction.Behaviors>
+                        </TextBox>
+                    </AdornerDecorator>
                 </Grid>
             </HierarchicalDataTemplate>
             <!--  Analyze  -->
@@ -361,32 +369,6 @@
                   ItemsSource="{Binding SelectedItem,
                                         Converter={StaticResource ItemToItemsSourceConverter}}">
             <TreeView.ItemContainerStyle>
-                <!--<Style TargetType="{x:Type TreeViewItem}">
-                    <Style.Resources>
-                -->
-                <!--<SolidColorBrush Color="Transparent"
-                                         x:Key="{x:Static SystemColors.HighlightBrushKey}" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
-                                         Color="Transparent" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                         Color="Transparent" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
-                                         Color="Transparent" />-->
-                <!--
-                    </Style.Resources>
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected}" />
-                    <Setter Property="IsExpanded"
-                            Value="{Binding IsExpanded}" />
-                    <Setter Property="Background"
-                            Value="Pink" />
-                    <Setter Property="Padding"
-                            Value="5" />
-                    <Setter Property="BorderThickness"
-                            Value="1" />
-                    <Setter Property="BorderBrush"
-                            Value="Black" />
-                </Style>-->
                 <Style TargetType="TreeViewItem"
                        BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Style.Resources>

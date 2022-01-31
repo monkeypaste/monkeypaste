@@ -42,44 +42,65 @@ namespace MonkeyPaste {
     }
 
     public static partial class MpMessenger {
-
+        //private static readonly List<object> _globalRecipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
         private static readonly ConcurrentDictionary<MessengerKey, List<object>> _recipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
 
-        public static void Register(object sender, Action<MpMessageType> callback, object context = null) {
-            Register<MpMessageType>(sender, callback, context);
+        public static void Register(object sender, Action<MpMessageType> receiverAction, object context = null) {
+            Register<MpMessageType>(sender, receiverAction, context);
         }
 
-        public static void Register<T>(object sender, Action<T> callback) {
-            Register(sender, callback, null);
+        public static void Register<T>(object sender, Action<T> receiverAction) {
+            Register(sender, receiverAction, null);
         }
 
-        public static void Register<T>(object sender, Action<T> action, object context) {
+        public static void Register<T>(object sender, Action<T> receiverAction, object context) {
             var key = new MessengerKey(sender, typeof(T), context);
             if(_recipientDictionary.ContainsKey(key)) {
-                _recipientDictionary[key].Add(action);
+                _recipientDictionary[key].Add(receiverAction);
             } else {
-                _recipientDictionary.TryAdd(key, new List<object> { action });
+                _recipientDictionary.TryAdd(key, new List<object> { receiverAction });
             }            
         }
 
-        public static void Unegister(object sender, Action<MpMessageType> callback, object context = null) {
-            Unregister<MpMessageType>(sender, callback, context);
+        //public static void RegisterGlobal(object sender, Action<MpMessageType> receiverAction) {
+        //    RegisterGlobal<MpMessageType>(sender, receiverAction);
+        //}
+
+        //public static void RegisterGlobal<T>(object sender, Action<T> receiverAction) {
+        //    var key = new MessengerKey(sender, typeof(T), null);
+        //    if (_globalRecipientDictionary.ContainsKey(key)) {
+        //        _globalRecipientDictionary[key].Add(receiverAction);
+        //    } else {
+        //        _globalRecipientDictionary.TryAdd(key, new List<object> { receiverAction });
+        //    }
+        //}
+
+        public static void Unregister<T>(object sender, Action<T> receiverAction) {
+            Unregister(sender, receiverAction, null);
         }
 
-        public static void Unregister<T>(object sender, Action<T> callback) {
-            Unregister(sender, callback, null);
-        }
-
-        public static void Unregister<T>(object recipient, Action<T> action, object context) {
-            var key = new MessengerKey(recipient, typeof(T), context);
+        public static void Unregister<T>(object sender, Action<T> receiverAction, object context) {
+            var key = new MessengerKey(sender, typeof(T), context);
             //RecipientDictionary.TryRemove(key, out removeAction);
             if (_recipientDictionary.ContainsKey(key)) {
-                _recipientDictionary[key].Remove(action);
+                _recipientDictionary[key].Remove(receiverAction);
             }
         }
 
+        //public static void UnregisterGlobal(object sender, Action<MpMessageType> receiverAction) {
+        //    UnregisterGlobal<MpMessageType>(sender, receiverAction);
+        //}
+
+        //public static void UnregisterGlobal<T>(object sender, Action<T> receiverAction) {
+        //    var key = new MessengerKey(sender, typeof(T), null);
+        //    if (_globalRecipientDictionary.ContainsKey(key)) {
+        //        _globalRecipientDictionary[key].Remove(receiverAction);
+        //    }
+        //}
+
         public static void UnregisterAll() {
             _recipientDictionary.Clear();
+           // _globalRecipientDictionary.Clear();
         }
 
         public static void Send(MpMessageType message, object context = null) {
@@ -95,28 +116,40 @@ namespace MonkeyPaste {
 
             if (context == null) {
                 // Get all recipients where the context is null.
-                results = from r in _recipientDictionary where r.Key.Context == null select r;
+                results = _recipientDictionary.Where(x => x.Key.Context == null).Select(x => x);
+                //results = from r in _recipientDictionary where r.Key.Context == null select r;
             } else {
                 // Get all recipients where the context is matching.
-                results = from r in _recipientDictionary where r.Key.Context != null && r.Key.Context.Equals(context) select r;
+                results = _recipientDictionary.Where(x => x.Key.Context != null && x.Key.Context.Equals(context)).Select(x => x);
+                //results = from r in _recipientDictionary where r.Key.Context != null && r.Key.Context.Equals(context) select r;
             }
 
             foreach(var result in results) {
-                foreach(var action in result.Value.ToList()) {
+                foreach(var receiverAction in result.Value.ToList()) {
                     // NOTE enumerating over .ToList() to avoid colleciton changed exception
-                    (action as Action<T>).Invoke(message);
+                    (receiverAction as Action<T>)?.Invoke(message);
                 }
             }
         }
 
+        //public static void SendGlobal(MpMessageType message) {
+        //    SendGlobal<MpMessageType>(message);
+        //}
+
+        //public static void SendGlobal<T>(T message) {
+        //    foreach(var kvp in _globalRecipientDictionary) {
+        //        kvp.Value.ToList().ForEach(x => (x as Action<T>)?.Invoke(message));
+        //    }
+        //}
+
         #region (Internal class) Message Key
 
         internal class MessengerKey {
-            public  object Recipient { get; private  set; }
-            public  Type MessageType { get; private  set; }
-            public  object Context { get; private  set; }
+            public object Recipient { get; private  set; }
+            public Type MessageType { get; private  set; }
+            public object Context { get; private  set; }
 
-            public  MessengerKey(object recipient, Type messageType, object context) {
+            public MessengerKey(object recipient, Type messageType, object context) {
                 Recipient = recipient;
                 MessageType = messageType;
                 Context = context;
@@ -128,7 +161,7 @@ namespace MonkeyPaste {
                     && Equals(Context, other.Context);
             }
 
-            public  override bool Equals(object obj) {
+            public override bool Equals(object obj) {
                 if (ReferenceEquals(null, obj)) return false;
                 if (ReferenceEquals(this, obj)) return true;
                 if (obj.GetType() != GetType()) return false;
@@ -136,7 +169,7 @@ namespace MonkeyPaste {
                 return Equals((MessengerKey)obj);
             }
 
-            public  override int GetHashCode() {
+            public override int GetHashCode() {
                 unchecked {
                     return ((Recipient != null ? Recipient.GetHashCode() : 0) * 397)
                         ^ ((MessageType != null ? MessageType.GetHashCode() : 0) * 397)

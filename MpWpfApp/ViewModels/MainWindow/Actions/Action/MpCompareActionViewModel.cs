@@ -61,56 +61,27 @@ namespace MpWpfApp {
         public MpMenuItemViewModel ComparePropertyPathsMenuItemViewModel {
             get {
                 var amivml = new List<MpMenuItemViewModel>();
-                amivml.Add(new MpMenuItemViewModel() {
-                    IsHeaderedSeparator = true,
-                    Header = "What",
-                    HeaderIndentLevel = 0
-                });
 
                 var triggerLabels = typeof(MpComparePropertyPathType).EnumToLabels();
                 for (int i = 0; i < triggerLabels.Length; i++) {
                     MpComparePropertyPathType ct = (MpComparePropertyPathType)i;
-                    if(ct == MpComparePropertyPathType.AppPath) {
-                        amivml.Add(new MpMenuItemViewModel() {
-                            IsHeaderedSeparator = true,
-                            Header = "Where",
-                            HeaderIndentLevel = 0
-                        });
-                        amivml.Add(new MpMenuItemViewModel() {
-                            IsHeaderedSeparator = true,
-                            Header = "Local",
-                            HeaderIndentLevel = 1
-                        });
+                    var amivm = new MpMenuItemViewModel() {
+                                        Header = triggerLabels[i],
+                                        Command = ChangeComparePropertyPathCommand,
+                                        CommandParameter = ct,
+                                        IsSelected = ComparePropertyPathType == ct,
+                                        IsVisible = !(ct == MpComparePropertyPathType.None)
+                                    };
+                    if(i < (int)MpComparePropertyPathType.AppPath) {
+                        amivm.HeaderedSeparatorLabel = "What";
+                    } else if (i < (int)MpComparePropertyPathType.CopyDateTime) {
+                        amivm.HeaderedSeparatorLabel = "Where";
+                    } else if (i < (int)MpComparePropertyPathType.CopyCount) {
+                        amivm.HeaderedSeparatorLabel = "When";
+                    } else {
+                        amivm.HeaderedSeparatorLabel = "How (many)";
                     }
-                    if (ct == MpComparePropertyPathType.UrlPath) {
-                        amivml.Add(new MpMenuItemViewModel() {
-                            IsHeaderedSeparator = true,
-                            Header = "Remote",
-                            HeaderIndentLevel = 1
-                        });
-                    }
-                    if (ct == MpComparePropertyPathType.CopyDateTime) {
-                        amivml.Add(new MpMenuItemViewModel() {
-                            IsHeaderedSeparator = true,
-                            Header = "When",
-                            HeaderIndentLevel = 0
-                        });
-                    }
-                    if (ct == MpComparePropertyPathType.CopyCount) {
-                        amivml.Add(new MpMenuItemViewModel() {
-                            IsHeaderedSeparator = true,
-                            Header = "How (Many)",
-                            HeaderIndentLevel = 0
-                        });
-                    }
-
-                    amivml.Add(new MpMenuItemViewModel() {
-                        Header = triggerLabels[i],
-                        Command = ChangeComparePropertyPathCommand,
-                        CommandParameter = ct,
-                        IsSelected = ComparePropertyPathType == ct,
-                        IsVisible = !(ct == MpComparePropertyPathType.None)
-                    });
+                    amivml.Add(amivm);
                 }
                 return new MpMenuItemViewModel() {
                     SubItems = amivml
@@ -120,6 +91,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance
+
+        #endregion
+
+        #region State
+
+        public bool IsCompareDataTextBoxFocused { get; set; }
 
         #endregion
 

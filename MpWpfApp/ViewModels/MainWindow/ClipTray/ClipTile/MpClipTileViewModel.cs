@@ -29,7 +29,10 @@
     using MonkeyPaste;
 using System.Speech.Synthesis;
 
-    public class MpClipTileViewModel : MpViewModelBase<MpClipTrayViewModel>, MpISelectableViewModel {
+    public class MpClipTileViewModel : 
+        MpViewModelBase<MpClipTrayViewModel>, 
+        MpISelectableViewModel,
+        MpIResizableViewModel {
         #region Private Variables
 
         private double _unexpandedHeight = 0;
@@ -1198,7 +1201,7 @@ using System.Speech.Synthesis;
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
                     Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
-                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
+                    
 
                     var mwrb = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior;
                     if (IsExpanded) {
@@ -1254,7 +1257,7 @@ using System.Speech.Synthesis;
         }
 
         private void ExpandedKeyDown_Handler(object sender, KeyEventArgs e) {
-            if(MpDragDropManager.Instance.IsDragAndDrop) {
+            if(MpDragDropManager.IsDragAndDrop) {
                 return;
             }
             if(e.Key == Key.Escape) {

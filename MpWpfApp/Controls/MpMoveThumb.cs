@@ -8,7 +8,7 @@ using System.Windows.Controls.Primitives;
 namespace MpWpfApp {
     public class MpMoveThumb : Thumb {
         public MpMoveThumb() {
-            DragDelta += new DragDeltaEventHandler(this.MoveThumb_DragDelta);
+            DragDelta += new DragDeltaEventHandler(this.MoveThumb_DragDelta);            
         }
 
         private void MoveThumb_DragDelta(object sender, DragDeltaEventArgs e) {

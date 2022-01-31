@@ -34,9 +34,9 @@
                           Icon="{Binding IsAppPaused,
                                          Converter={StaticResource BoolToIconSourceConverter},
                                          ConverterParameter='PlayIcon|PauseIcon',
-                                         Source={x:Static local:MpAppModeViewModel.Instance}}"
+                                         Source={x:Static local:MpSidebarViewModel.Instance}}"
                           Command="{Binding ToggleIsAppPausedCommand,
-                                            Source={x:Static local:MpAppModeViewModel.Instance}}" />
+                                            Source={x:Static local:MpSidebarViewModel.Instance}}" />
                 <MenuItem Header="Help"
                           Icon="{Binding Source={StaticResource HelpIcon},
                                          Converter={StaticResource StringToIconConverter},

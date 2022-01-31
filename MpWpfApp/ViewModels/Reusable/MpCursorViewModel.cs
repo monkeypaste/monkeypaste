@@ -26,6 +26,7 @@ namespace MpWpfApp {
         ResizeWE,
         ResizeNWSE,
         ResizeNESW,
+        ResizeAll,
         Link
     }
 
@@ -48,6 +49,7 @@ namespace MpWpfApp {
                 {MpCursorType.ResizeWE, Cursors.SizeWE },
                 {MpCursorType.ResizeNWSE, Cursors.SizeNWSE },
                 {MpCursorType.ResizeNESW, Cursors.SizeNESW },
+                {MpCursorType.ResizeAll, Cursors.SizeAll },
                 {MpCursorType.Link, Cursors.Hand },
             };
 

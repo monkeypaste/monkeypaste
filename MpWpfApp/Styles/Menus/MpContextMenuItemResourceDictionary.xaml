@@ -132,19 +132,18 @@
                             BorderBrush="Black"
                             BorderThickness="1">
                         <Border.Padding>
-                            <MultiBinding Converter="{StaticResource DoubleToThicknessIndentLevelConverter}"
-                                          ConverterParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                                      AncestorType=Separator},
-                                                                       Path=DataContext.HeaderIndentLevel}">
-                                <Binding>
-                                    <Binding.Source>
-                                        <sys:String>left</sys:String>
-                                    </Binding.Source>
-                                </Binding>
+                            <MultiBinding Converter="{StaticResource DoubleToThicknessIndentLevelConverter}">
                                 <Binding Path="DataContext.HeaderIndentLevel"
                                          RelativeSource="{RelativeSource Mode=FindAncestor,
                                                                          AncestorType=Separator}" />
-
+                                <Binding Path="DataContext.HeaderIndentSize"
+                                         RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                         AncestorType=Separator}" />
+                                <!--<Binding>
+                                    <Binding.Source>
+                                        <sys:String>left</sys:String>
+                                    </Binding.Source>
+                                </Binding>-->
                             </MultiBinding>
                         </Border.Padding>
                         <TextBlock FontWeight="Bold"

@@ -654,8 +654,8 @@ namespace MpWpfApp {
                  if (SelectedPresetViewModel == null && PresetViewModels.Count > 0) {
                      PresetViewModels.ForEach(x => x.IsSelected = x == PresetViewModels[0]);
                  }
-                 if(!Parent.IsVisible) {
-                     Parent.IsVisible = true;
+                 if(!Parent.IsSidebarVisible) {
+                     Parent.IsSidebarVisible = true;
                  }
                  OnPropertyChanged(nameof(SelectedPresetViewModel));
              });

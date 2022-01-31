@@ -19,9 +19,17 @@ namespace MpWpfApp {
     /// Interaction logic for MpMatcherCollectionView.xaml
     /// </summary>
     public partial class MpTriggerActionTreeView : MpUserControl<MpActionCollectionViewModel> {
+        private static bool test = false;
         public MpTriggerActionTreeView() {
             InitializeComponent();
         }
 
+        private void CompareDataTextBox_Loaded(object sender, RoutedEventArgs e) {
+            if(test) {
+                return;
+            }
+            test = true;
+            new ResizeAdorner(sender as TextBox, 3000, 3000);
+        }
     }
 }

@@ -15,15 +15,11 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpSidebarMenuView.xaml
+    /// Interaction logic for MpActionDesignerItemView.xaml
     /// </summary>
-    public partial class MpSidebarMenuView : MpUserControl<MpMainWindowViewModel> {
-        public MpSidebarMenuView() {
+    public partial class MpActionDesignerItemView : MpUserControl<MpActionViewModelBase> {
+        public MpActionDesignerItemView() {
             InitializeComponent();
-        }
-
-        private void ManageAnalyticItemsContainerView_Loaded(object sender, RoutedEventArgs e) {
-            (sender as FrameworkElement).DataContext = MpAnalyticItemCollectionViewModel.Instance;
         }
     }
 }

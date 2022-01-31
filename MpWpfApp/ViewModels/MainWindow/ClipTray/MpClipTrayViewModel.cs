@@ -1396,11 +1396,15 @@ namespace MpWpfApp {
         }
 
         private async Task OnPostMainWindowLoaded() {
-            while (IsBusy) { await Task.Delay(100); }
+            while (IsBusy || MpTagTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
 
 
-            int totalItems = await MpDataModelProvider.GetTotalCopyItemCountAsync();
-            MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount = totalItems;
+            if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                // this ensures this only gets called once
+                return;
+            }
+
+            int totalItems =  MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
 
             MpStandardBalloonViewModel.ShowBalloon(
                     "Monkey Paste",
@@ -1471,7 +1475,7 @@ namespace MpWpfApp {
             bool isDup = newCopyItem.Id < 0;
             newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
 
-            if (MpAppModeViewModel.Instance.IsAppendMode) {
+            if (MpSidebarViewModel.Instance.IsAppendMode) {
                 if(isDup) {
                     //when duplicate copied in append mode treat item as new and don't unlink original 
                     isDup = false;
@@ -1532,7 +1536,7 @@ namespace MpWpfApp {
 
                 MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
 
-                if (MpAppModeViewModel.Instance.IsAppendMode) {
+                if (MpSidebarViewModel.Instance.IsAppendMode) {
                     AppendNewItemsCommand.Execute(null);
                 } else {
                     AddNewItemsCommand.Execute(null);

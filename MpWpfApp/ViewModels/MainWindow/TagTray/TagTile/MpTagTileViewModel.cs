@@ -239,7 +239,7 @@ namespace MpWpfApp {
             }
         }
 
-        public int TotalClipCount => TagClipCount + this.FindAllChildren().Sum(x => x.TagClipCount);
+        public int TotalClipCount => IsAllTag ? TagClipCount : TagClipCount + this.FindAllChildren().Sum(x => x.TagClipCount);
 
         public double TagHeight {
             get {
@@ -597,6 +597,8 @@ namespace MpWpfApp {
                     var ci = await MpDb.GetItemAsync<MpCopyItem>(cit.CopyItemId);
                 OnCopyItemLinked?.Invoke(this, ci);
                 });
+            } else if(e is MpCopyItem ci && IsAllTag) {
+                TagClipCount++;
             }
         }
 
@@ -618,9 +620,10 @@ namespace MpWpfApp {
                 Task.Run(async () => {
                     var ci = await MpDb.GetItemAsync<MpCopyItem>(cit.CopyItemId);
                     OnCopyItemUnlinked?.Invoke(this, ci);
-                });
-                
-            } 
+                });                
+            } else if (e is MpCopyItem ci && IsAllTag) {
+                TagClipCount--;
+            }
         }
         #endregion
 

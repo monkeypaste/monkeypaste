@@ -16,7 +16,9 @@ namespace MpWpfApp {
     public class MpActionCollectionViewModel : 
         MpSelectorViewModelBase<object,MpActionViewModelBase>, 
         MpIMenuItemViewModel,
-        MpISingletonViewModel<MpActionCollectionViewModel> {
+        MpISingletonViewModel<MpActionCollectionViewModel>,
+        MpIResizableViewModel,
+        MpISidebarItemViewModel {
         #region Private Variables
 
         #endregion
@@ -65,6 +67,23 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpIResizableViewModel Implementation
+
+        public bool IsResizing { get; set; }
+        public bool CanResize { get; set; }
+
+        #endregion
+
+        #region MpISidebarItemViewModel Implementation
+
+        public double DefaultSidebarWidth { get; } = 150;
+        public bool IsSidebarVisible { get; set; } = false;
+
+        public MpISidebarItemViewModel NextSidebarItem { get; set; }
+        public MpISidebarItemViewModel PreviousSidebarItem { get; set; }
+
+        #endregion
+
         #region Appearance
 
         //public double ActionTreeHeight 
@@ -72,7 +91,6 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool IsVisible { get; set; } = false;
 
         public bool IsAnyTextBoxFocused => SelectedItem != null && SelectedItem.IsAnyTextBoxFocused;
 
@@ -177,13 +195,13 @@ namespace MpWpfApp {
 
         private void MpMatcherCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsVisible):
-                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.IsGridSplitterEnabled));
-                    MpAppModeViewModel.Instance.OnPropertyChanged(nameof(MpAppModeViewModel.Instance.AppModeButtonGridMinWidth));
+                case nameof(IsSidebarVisible):
+                    MpSidebarViewModel.Instance.OnPropertyChanged(nameof(MpSidebarViewModel.Instance.IsAnySidebarOpen));
+                    
 
-                    if (IsVisible) {
-                        MpAnalyticItemCollectionViewModel.Instance.IsVisible = false;
-                        MpTagTrayViewModel.Instance.IsVisible = false;
+                    if (IsSidebarVisible) {
+                        MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
+                        MpTagTrayViewModel.Instance.IsSidebarVisible = false;
 
                     }
                     break;
@@ -263,6 +281,7 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(SelectedItem));
             });
+
         #endregion
     }
 }

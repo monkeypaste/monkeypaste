@@ -109,34 +109,35 @@
     <!--  Headered Seperator  -->
     <DataTemplate x:Key="HeaderedSeperatorSelectorItem"
                   DataType="{x:Type pcl:MpMenuItemViewModel}">
-        <Separator>
+        <Separator IsHitTestVisible="False">
             <Separator.Template>
                 <ControlTemplate>
-                    <Border CornerRadius="2"
-                            Background="PaleGoldenrod"
-                            BorderBrush="Black"
-                            BorderThickness="1">
-                        <Border.Padding>
-                            <MultiBinding Converter="{StaticResource DoubleToThicknessIndentLevelConverter}"
-                                          ConverterParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                                      AncestorType=Separator},
-                                                                       Path=DataContext.HeaderIndentLevel}">
-                                <Binding>
+                        <Border CornerRadius="2"
+                                Width="1000"
+                                Background="PaleGoldenrod"
+                                BorderBrush="Black"
+                                BorderThickness="1">
+                            <Border.Padding>
+                                <MultiBinding Converter="{StaticResource DoubleToThicknessIndentLevelConverter}">
+                                    <Binding Path="DataContext.HeaderIndentLevel"
+                                             RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                             AncestorType=Separator}" />
+                                    <Binding Path="DataContext.HeaderIndentSize"
+                                             RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                             AncestorType=Separator}" />
+                                    <!--<Binding>
                                     <Binding.Source>
                                         <sys:String>left</sys:String>
                                     </Binding.Source>
-                                </Binding>
-                                <Binding Path="DataContext.HeaderIndentLevel"
-                                         RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                         AncestorType=Separator}" />
+                                </Binding>-->
 
-                            </MultiBinding>
-                        </Border.Padding>
-                        <TextBlock FontWeight="Bold"
-                                   Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                 AncestorType=Separator},
-                                                  Path=DataContext.Header}" />
-                    </Border>
+                                </MultiBinding>
+                            </Border.Padding>
+                            <TextBlock FontWeight="Bold"
+                                       Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType=Separator},
+                                                      Path=DataContext.Header}" />
+                        </Border>
                 </ControlTemplate>
             </Separator.Template>
         </Separator>

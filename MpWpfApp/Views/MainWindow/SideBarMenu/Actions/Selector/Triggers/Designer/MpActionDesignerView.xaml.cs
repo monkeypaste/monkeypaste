@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpTitleBarView.xaml
+    /// Interaction logic for MpActionDesignerView.xaml
     /// </summary>
-    public partial class MpTitleBarView : MpUserControl<MpMainWindowViewModel> {
-        public MpTitleBarView() {
+    public partial class MpActionDesignerView : MpUserControl<MpTriggerActionViewModelBase> {
+        public MpActionDesignerView() {
             InitializeComponent();
         }
     }

@@ -136,6 +136,7 @@
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\Base\MpDropBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDropTarget.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpRtbViewDropBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\MpMouseHook.cs" />
     <Compile Include="Behaviors\Highlighting\MpClipTileTitleHighlightBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\MpSourceHighlightBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Selector\MpHighlightSelectorBehavior.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Behaviors\MpImageObjectRecognitionBehavior.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
     <Compile Include="Behaviors\MpTagTileNotificationBehavior.cs" />
+    <Compile Include="Behaviors\Resizers\MpMoveBehavior.cs" />
     <Compile Include="Behaviors\Resizers\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpBootstrapper.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
@@ -325,7 +327,7 @@
     <Compile Include="Utils\MpExtensions.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
-    <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Sidebar\MpSidebarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
@@ -369,6 +371,13 @@
     <Compile Include="Views\MainWindow\SideBarMenu\Actions\Bases\MpActionComboBoxItem.xaml.cs">
       <DependentUpon>MpActionComboBoxItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\DesignerItem\MpActionDesignerItemView.xaml.cs">
+      <DependentUpon>MpActionDesignerItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\DesignerItem\Selector\MpActionDesignerItemTemplateSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\MpActionDesignerView.xaml.cs">
+      <DependentUpon>MpActionDesignerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
       <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
     </Compile>
@@ -399,8 +408,8 @@
       <DependentUpon>MpTriggerActionTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\Selector\MpActionItemTemplateSelector.cs" />
-    <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarMenuView.xaml.cs">
-      <DependentUpon>MpSidebarMenuView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarContainerView.xaml.cs">
+      <DependentUpon>MpSidebarContainerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Selector\MpTagTileTemplateSelector.cs" />
     <Compile Include="ViewModels\Reusable\MessageBox\MpMessageBoxViewModel.cs" />
@@ -528,19 +537,13 @@
     <Compile Include="Views\MainWindow\SideBarMenu\TagTree\MpTagTreeView.xaml.cs">
       <DependentUpon>MpTagTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml.cs">
-      <DependentUpon>MpAppModeButtonGridView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\TitleBar\MpTitleBarView.xaml.cs">
-      <DependentUpon>MpTitleBarView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarView.xaml.cs">
+      <DependentUpon>MpSidebarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\ContextMenu\Selector\MpSelectorItemDataTemplateSelector.cs" />
-    <Compile Include="Views\Reusable\DesignerItem\MpDesignerItemView.xaml.cs">
-      <DependentUpon>MpDesignerItemView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml.cs">
       <DependentUpon>MpTextBoxMessageBox.xaml</DependentUpon>
     </Compile>
@@ -606,39 +609,43 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Styles\Buttons\MpButtonResourceDictionary.xaml">
+    <Page Include="Styles\Buttons\MpButtonResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Styles\Constants\Icons\MpIconsResourceDictionary.xaml">
+    <Page Include="Styles\Constants\Icons\MpIconsResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Styles\Constants\MpConstantsResourceDictionary.xaml">
+    <Page Include="Styles\Constants\MpConstantsResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Styles\Converters\MpConvertersResourceDictionary.xaml">
+    <Page Include="Styles\Converters\MpConvertersResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Styles\Menus\MpSelectorItemResourceDictionary.xaml">
+    <Page Include="Styles\Designer\MpDesignerResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Styles\ListBoxes\MpAnimatedListBoxResourceDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Styles\Scrollbars\MpListBoxScrollBarResourceDictionary.xaml">
+    <Page Include="Styles\Menus\MpSelectorItemResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Styles\Menus\MpContextMenuItemResourceDictionary.xaml">
+    <Page Include="Styles\ListBoxes\MpAnimatedListBoxResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Scrollbars\MpListBoxScrollBarResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Styles\ListBoxes\MpPagingListBoxResourceDictionary.xaml">
+    <Page Include="Styles\Menus\MpContextMenuItemResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ListBoxes\MpPagingListBoxResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -663,6 +670,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\Actions\Bases\MpActionComboBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\DesignerItem\MpActionDesignerItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\MpActionDesignerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -822,25 +837,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\MpAppModeButtonGridView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\MpSidebarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\MpSidebarMenuView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\TitleBar\MpTitleBarView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\MpSidebarContainerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Reusable\DesignerItem\MpDesignerItemView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml">
       <Generator>MSBuild:Compile</Generator>

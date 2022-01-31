@@ -269,7 +269,7 @@ namespace MpWpfApp {
             }
             BindingContext.ItemViewModels[BindingContext.ItemViewModels.Count - 1].IsSelected = true;
 
-            MpDragDropManager.Instance.StartDragCheck(
+            MpDragDropManager.StartDragCheck(
                 e.GetPosition(Application.Current.MainWindow));
 
             e.Handled = true;

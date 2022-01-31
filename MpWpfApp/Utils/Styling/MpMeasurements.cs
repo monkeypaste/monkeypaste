@@ -136,7 +136,11 @@ namespace MpWpfApp {
             }
         }
 
-        #endregion        
+        #endregion
+
+        #region Sidebar
+
+        public double DefaultSidebarPanelWidth => 100;
 
         #region App Mode Menu
 
@@ -145,6 +149,8 @@ namespace MpWpfApp {
                 return MainWindowDefaultHeight / 7;
             }
         }
+
+        #endregion
 
         #endregion
 

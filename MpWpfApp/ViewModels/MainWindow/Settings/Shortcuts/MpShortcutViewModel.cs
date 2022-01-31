@@ -612,6 +612,9 @@ namespace MpWpfApp {
                 }
             },
             () => {
+                if(MpIsFocusedExtension.IsAnyTextBoxFocused) {
+                    return false;
+                }
                 var mwvm = MpMainWindowViewModel.Instance;
                 var ctrvm = MpClipTrayViewModel.Instance;
                 var ttrvm = MpTagTrayViewModel.Instance;

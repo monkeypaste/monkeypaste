@@ -11,37 +11,39 @@
                                                       IsDesignTimeCreatable=False}">
 
 
-    <Grid>
-        <i:Interaction.Behaviors>
-            <local:MpResizeBehavior x:Name="TileResizeBehvior"
-                                    IsResizing="{Binding IsResizing,
-                                                         Mode=TwoWay,
-                                                         UpdateSourceTrigger=PropertyChanged,
-                                                         NotifyOnSourceUpdated=True,
-                                                         NotifyOnTargetUpdated=True}"
-                                    CanResize="{Binding CanResize,
-                                                        Mode=TwoWay,
-                                                        UpdateSourceTrigger=PropertyChanged,
-                                                        NotifyOnSourceUpdated=True,
-                                                        NotifyOnTargetUpdated=True}"
-                                    ResizableEdges="Right"
-                                    BoundWidth="{Binding TileBorderWidth,
-                                                         Mode=TwoWay,
-                                                         UpdateSourceTrigger=PropertyChanged,
-                                                         NotifyOnSourceUpdated=True,
-                                                         NotifyOnTargetUpdated=True}"
-                                    DefaultWidth="{Binding ClipTileDefaultMinSize,
-                                                           Source={x:Static local:MpMeasurements.Instance}}"
-                                    MinWidth="{Binding ClipTileBorderMinWidth,
-                                                       Source={x:Static local:MpMeasurements.Instance}}" />
+    <!--<AdornerDecorator>-->
+        <Grid>
+            <i:Interaction.Behaviors>
+                <local:MpResizeBehavior x:Name="TileResizeBehvior"
+                                        IsResizing="{Binding IsResizing,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged,
+                                                             NotifyOnSourceUpdated=True,
+                                                             NotifyOnTargetUpdated=True}"
+                                        CanResize="{Binding CanResize,
+                                                            Mode=TwoWay,
+                                                            UpdateSourceTrigger=PropertyChanged,
+                                                            NotifyOnSourceUpdated=True,
+                                                            NotifyOnTargetUpdated=True}"
+                                        ResizableEdges="Right"
+                                        BoundWidth="{Binding TileBorderWidth,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged,
+                                                             NotifyOnSourceUpdated=True,
+                                                             NotifyOnTargetUpdated=True}"
+                                        DefaultWidth="{Binding ClipTileDefaultMinSize,
+                                                               Source={x:Static local:MpMeasurements.Instance}}"
+                                        MinWidth="{Binding ClipTileBorderMinWidth,
+                                                           Source={x:Static local:MpMeasurements.Instance}}" />
 
-        </i:Interaction.Behaviors>
-        <local:MpClipTileView x:Name="ClipTileView"
-                              Visibility="{Binding FrontVisibility}" />
+            </i:Interaction.Behaviors>
+            <local:MpClipTileView x:Name="ClipTileView"
+                                  Visibility="{Binding FrontVisibility}" />
 
-        <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
+            <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
                                   OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"
                                   Visibility="{Binding IsFlipping,
                                                        Converter={StaticResource BoolToVisibilityConverter}}" />-->
-    </Grid>
+        </Grid>
+    <!--</AdornerDecorator>-->
 </local:MpUserControl>

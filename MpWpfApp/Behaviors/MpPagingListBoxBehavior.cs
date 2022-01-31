@@ -193,7 +193,7 @@ namespace MpWpfApp {
 
         private async void Track_MouseMove(object sender, MouseEventArgs e) {
             //only used when dragging data onto trackbar
-            if(!MpDragDropManager.Instance.IsDragAndDrop || 
+            if(!MpDragDropManager.IsDragAndDrop || 
                 MpClipTrayViewModel.Instance.IsScrollJumping ||
                 MpClipTrayViewModel.Instance.IsThumbDragging) {
                 return;

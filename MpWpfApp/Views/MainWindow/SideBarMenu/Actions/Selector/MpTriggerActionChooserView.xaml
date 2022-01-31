@@ -12,25 +12,49 @@
                      d:DataContext="{d:DesignInstance Type=local:MpActionCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
 
-    <Grid>
-        <Border CornerRadius="3"
+    <StackPanel Orientation="Horizontal">
+        <Border Grid.Column="0"
+                CornerRadius="3"
                 HorizontalAlignment="Stretch"
                 BorderThickness="1"
                 BorderBrush="Black"
                 Margin="10">
+            <i:Interaction.Behaviors>
+                <local:MpResizeBehavior x:Name="ActionTreeResizeBehvior"
+                                        IsResizing="{Binding IsResizing,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged,
+                                                             NotifyOnSourceUpdated=True,
+                                                             NotifyOnTargetUpdated=True}"
+                                        CanResize="{Binding CanResize,
+                                                            Mode=TwoWay,
+                                                            UpdateSourceTrigger=PropertyChanged,
+                                                            NotifyOnSourceUpdated=True,
+                                                            NotifyOnTargetUpdated=True}"
+                                        ResizableEdges="Right"
+                                        BoundWidth="{Binding SidebarWidth,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged,
+                                                             NotifyOnSourceUpdated=True,
+                                                             NotifyOnTargetUpdated=True,
+                                                             Source={x:Static local:MpSidebarViewModel.Instance}}"
+                                        DefaultWidth="{Binding DefaultSidebarWidth}"
+                                        MinWidth="{Binding DefaultSidebarWidth}" />
+
+            </i:Interaction.Behaviors>
             <Grid Margin="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.15*"/>
-                    <RowDefinition Height="0.2*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.15*" />
+                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" 
+                <TextBlock Grid.Row="0"
                            FontSize="18"
                            FontWeight="SemiBold"
                            Margin="0,0,0,5"
                            Foreground="White"
                            Text="Actions" />
-                <DockPanel Grid.Row="1" 
+                <DockPanel Grid.Row="1"
                            LastChildFill="True">
                     <Button BorderThickness="0"
                             DockPanel.Dock="Right"
@@ -73,7 +97,7 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </DockPanel>
-                <local:MpTriggerActionTreeView Grid.Row="2" 
+                <local:MpTriggerActionTreeView Grid.Row="2"
                                                Margin="0,10,0,0"
                                                Visibility="{Binding IsAnySelected,
                                                                     Converter={StaticResource BoolToVisibilityConverter}}"
@@ -81,14 +105,36 @@
             </Grid>
         </Border>
         <Grid x:Name="DetailGrid"
-              DataContext="{Binding SelectedItem}"
-              Visibility="{Binding IsEditingDetails,
+              Grid.Column="1"
+              MinWidth="500"
+              Visibility="{Binding IsAnySelected,
                                    Converter={StaticResource BoolToVisibilityConverter},
                                    FallbackValue=Collapsed}">
-                <!--<local:MpAnalyticItemPresetParameterListBoxView Visibility="{Binding IsAnalyzeAction,
-                                                                                 Converter={StaticResource BoolToVisibilityConverter}}"
-                                                            DataContext="{Binding SelectedItem.SelectedPresetViewModel}" />-->
-                <TextBlock Visibility="{Binding IsCompareAction, Converter={StaticResource BoolToVisibilityConverter}}">Fancy Compare setup here</TextBlock>
-            </Grid>
+            <i:Interaction.Behaviors>
+                <local:MpResizeBehavior x:Name="SidebarResizeBehvior"
+                                        DoubleClickControl="{Binding ElementName=SidebarGridSplitter}"
+                                        IsResizing="{Binding IsResizing,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged,
+                                                             NotifyOnSourceUpdated=True,
+                                                             NotifyOnTargetUpdated=True}"
+                                        CanResize="{Binding CanResize,
+                                                            Mode=TwoWay,
+                                                            UpdateSourceTrigger=PropertyChanged,
+                                                            NotifyOnSourceUpdated=True,
+                                                            NotifyOnTargetUpdated=True}"
+                                        ResizableEdges="Right"
+                                        BoundWidth="{Binding SidebarWidth,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged,
+                                                             NotifyOnSourceUpdated=True,
+                                                             NotifyOnTargetUpdated=True}"
+                                        DefaultWidth="{Binding VisibleSidebar.DefaultWidth}"
+                                        MinWidth="{Binding DefaultSidebarPanelWidth,
+                                                           Source={x:Static local:MpMeasurements.Instance}}" />
+
+            </i:Interaction.Behaviors>
+            <local:MpActionDesignerView DataContext="{Binding SelectedItem}" />
         </Grid>
+    </StackPanel>
 </local:MpUserControl>

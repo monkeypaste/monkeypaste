@@ -119,7 +119,7 @@ namespace MpWpfApp {
         private Brush _itemBackgroundBrush;
         public Brush ItemBackgroundBrush {
             get {
-                if (MpDragDropManager.Instance.IsDragAndDrop) {
+                if (MpDragDropManager.IsDragAndDrop) {
                     return MpThemeColors.Instance.CurrentTheme.ToArray()[(int)MpThemeItemType.Clip_Tile_Content_Item_Background_Color].Value;
                 }
                 if (IsHovering &&
@@ -624,7 +624,7 @@ namespace MpWpfApp {
         public async Task InitializeAsync(MpCopyItem ci) {
             IsBusy = true;
 
-            MpMessenger.Unregister<MpMessageType>(MpDragDropManager.Instance, ReceivedDragDropManagerMessage);
+            MpMessenger.Unregister<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
             if (ci != null && ci.Source == null) {
                 ci.Source = await MpDb.GetItemAsync<MpSource>(ci.SourceId);
@@ -653,7 +653,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(ItemBorderBrush));
             OnPropertyChanged(nameof(ShortcutKeyString));
 
-            MpMessenger.Register<MpMessageType>(MpDragDropManager.Instance, ReceivedDragDropManagerMessage);
+            MpMessenger.Register(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
             IsBusy = false;
         }

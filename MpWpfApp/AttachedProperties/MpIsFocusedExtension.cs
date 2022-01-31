@@ -12,6 +12,8 @@ using MonkeyPaste;
 namespace MpWpfApp {
 
     public class MpIsFocusedExtension : DependencyObject {
+        public static bool IsAnyTextBoxFocused = false;
+
         #region IsFocused
 
         public static bool GetIsFocused(DependencyObject obj) {
@@ -25,7 +27,31 @@ namespace MpWpfApp {
             "IsFocused",
             typeof(bool),
             typeof(MpIsFocusedExtension),
-            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (obj, e) => {
+                    var fe = obj as FrameworkElement;
+                    fe.Loaded += Fe_Loaded;
+                    fe.Unloaded += Fe_Unloaded;
+                    if (fe.IsLoaded) {
+                        fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
+                    } else {
+                        fe.Loaded += Fe_Loaded;
+                    }
+                }
+            });
+
+        private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
+            var fe = sender as FrameworkElement;
+            fe.IsKeyboardFocusedChanged -= MpIsFocusedExtension_IsKeyboardFocusedChanged;
+            fe.Loaded -= Fe_Loaded;
+            fe.Unloaded -= Fe_Unloaded;
+        }
+
+        private static void Fe_Loaded(object sender, RoutedEventArgs e) {
+            var fe = sender as FrameworkElement;
+            fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
+        }
 
         #endregion
 
@@ -63,38 +89,10 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region IsEnabled
-
-        public static bool GetIsEnabled(DependencyObject obj) {
-            return (bool)obj.GetValue(IsEnabledProperty);
-        }
-        public static void SetIsEnabled(DependencyObject obj, bool value) {
-            obj.SetValue(IsEnabledProperty, value);
-        }
-        public static readonly DependencyProperty IsEnabledProperty =
-          DependencyProperty.RegisterAttached(
-            "IsEnabled",
-            typeof(bool),
-            typeof(MpIsFocusedExtension),
-            new FrameworkPropertyMetadata {
-                PropertyChangedCallback = (obj, e) => {
-                    if (e.NewValue == null) {
-                        return;
-                    }
-                    bool isEnabled = (bool)e.NewValue;
-                    if (isEnabled) {
-                        (obj as FrameworkElement).IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
-                    } else {
-                        (obj as FrameworkElement).IsKeyboardFocusedChanged -= MpIsFocusedExtension_IsKeyboardFocusedChanged;
-                    }
-                }
-            });
-
-        #endregion
-
         private static void MpIsFocusedExtension_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e) {
             var dpo = (DependencyObject)sender;
             bool isFocused = (bool)e.NewValue;
+            IsAnyTextBoxFocused = isFocused;
 
             SetIsFocused(dpo, isFocused);
 

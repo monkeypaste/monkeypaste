@@ -3,18 +3,47 @@ using Gma.System.MouseKeyHook;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using MonkeyPaste;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Linq;
 
 namespace MpWpfApp {
-    public class MpAppModeViewModel : MpViewModelBase, MpISingletonViewModel<MpAppModeViewModel> {
+    public class MpSidebarViewModel : 
+        MpViewModelBase, 
+        MpISingletonViewModel<MpSidebarViewModel>,
+        MpIResizableViewModel {
         #region Properties
 
         #region View Models
+
+        public List<MpISidebarItemViewModel> SidebarItemViewModels {
+            get {
+                if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    return new List<MpISidebarItemViewModel>();
+                }
+                return new List<MpISidebarItemViewModel> {
+                    MpTagTrayViewModel.Instance,
+                    MpAnalyticItemCollectionViewModel.Instance,
+                    MpActionCollectionViewModel.Instance
+                };
+            }
+        }
+
+        public MpISidebarItemViewModel VisibleSidebar => SidebarItemViewModels.FirstOrDefault(x => x.IsSidebarVisible);
+
+        #endregion
+
+        #region MpIResizableViewModel Implementation
+
+        public bool IsResizing { get; set; } = false;
+
+        public bool CanResize { get; set; } = false;
+
         #endregion
 
         public Visibility AppModeColumnVisibility {
@@ -75,14 +104,14 @@ namespace MpWpfApp {
 
         public bool IsAnyAppendMode => IsAppendMode || IsAppendLineMode;
 
-        public bool IsGridSplitterEnabled {
+        public bool IsAnySidebarOpen {
             get {
                 if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                     return false;
                 }
-                return MpTagTrayViewModel.Instance.IsVisible ||
-                       MpAnalyticItemCollectionViewModel.Instance.IsVisible ||
-                       MpActionCollectionViewModel.Instance.IsVisible;
+                return MpTagTrayViewModel.Instance.IsSidebarVisible ||
+                       MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible ||
+                       MpActionCollectionViewModel.Instance.IsSidebarVisible;
             }
         }
 
@@ -101,6 +130,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
 
         #endregion
 
@@ -185,7 +215,7 @@ namespace MpWpfApp {
             }
         }
 
-        public double TotalSidebarWidth => SidebarWidth + AppModeButtonGridMinWidth;
+        public double TotalSidebarWidth => SidebarWidth + MpMeasurements.Instance.AppStateButtonPanelWidth;
 
         public double SidebarWidth { get; set; }
 
@@ -193,36 +223,14 @@ namespace MpWpfApp {
 
         #region Layout
 
-        public double DefaultTagTreeWidth => 100;
-
-        public double DefaultAnalyticTreeWidth => 100;
-
-        public double AppModeButtonGridMinWidth {
-            get {
-                if (MpMainWindowViewModel.Instance.IsMainWindowLoading ||
-                   MpClipTrayViewModel.Instance == null ||
-                   !MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                    double ambgw = MpMeasurements.Instance.AppStateButtonPanelWidth;
-                    if(MpTagTrayViewModel.Instance.IsVisible) {
-                        ambgw += DefaultTagTreeWidth;
-                    }
-                    if (MpAnalyticItemCollectionViewModel.Instance.IsVisible) {
-                        ambgw += DefaultAnalyticTreeWidth;
-                    }
-                    return ambgw;
-                }
-                return 0;
-            }
-        }
-
         #endregion
 
         #endregion
 
         #region Constructors
 
-        private static MpAppModeViewModel _instance;
-        public static MpAppModeViewModel Instance => _instance ?? (_instance = new MpAppModeViewModel());
+        private static MpSidebarViewModel _instance;
+        public static MpSidebarViewModel Instance => _instance ?? (_instance = new MpSidebarViewModel());
 
         public async Task Init() {
             await MpHelpers.RunOnMainThreadAsync(() => {
@@ -240,7 +248,7 @@ namespace MpWpfApp {
             });
         }
 
-        public MpAppModeViewModel() : base(null) { }
+        public MpSidebarViewModel() : base(null) { }
 
         #endregion
 
@@ -252,6 +260,14 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(CanAppendMode));
 
             UpdateAppendMode();
+        }
+
+        public void ToggleVisibility(MpISidebarItemViewModel sivm) {
+            if(sivm.IsSidebarVisible) {
+                sivm.IsSidebarVisible = false;
+            } else {
+                SidebarItemViewModels.ForEach(x => x.IsSidebarVisible = false);
+            }
         }
         #endregion
 
@@ -269,7 +285,6 @@ namespace MpWpfApp {
             switch(msg) {
                 case MpMessageType.UnexpandComplete:
                 case MpMessageType.ExpandComplete:
-                    OnPropertyChanged(nameof(AppModeButtonGridMinWidth));
                     break;
             }
         }
@@ -296,8 +311,10 @@ namespace MpWpfApp {
                 case nameof(IsAutoCopyMode):
                     ShowNotifcation("Auto-Copy Mode", IsAutoCopyMode ? "ON" : "OFF", IsAutoCopyMode);
                     break;
-                case nameof(AppModeButtonGridMinWidth):
-                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayScreenWidth));
+                case nameof(IsAnySidebarOpen):
+                    SidebarWidth = VisibleSidebar == null ? 0 : VisibleSidebar.DefaultSidebarWidth;
+                    OnPropertyChanged(nameof(TotalSidebarWidth));
+
                     break;
             }
         }
