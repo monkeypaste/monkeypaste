@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MonkeyPaste;
-namespace MpWpfApp {
+namespace MonkeyPaste {
     public class MpSizeViewModel : MpViewModelBase {
         #region Properties
 

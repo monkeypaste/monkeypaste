@@ -1,4 +1,4 @@
-﻿namespace MpWpfApp {
+﻿namespace MonkeyPaste {
     public class MpRect {
         public MpPoint Location { get; set; } = new MpPoint();
 

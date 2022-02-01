@@ -12,7 +12,24 @@
 
 
     <!--<AdornerDecorator>-->
-        <Grid>
+    <Grid>
+
+        <local:MpClipTileView x:Name="ClipTileView"
+                              Visibility="{Binding FrontVisibility}" />
+
+        <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
+                                  OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"
+                                  Visibility="{Binding IsFlipping,
+                                                       Converter={StaticResource BoolToVisibilityConverter}}" />-->
+
+        <Rectangle VerticalAlignment="Stretch"
+                   local:MpHoverableExtension.IsEnabled="True"
+                   local:MpHoverableExtension.HoverCursor="ResizeWE"
+                   Margin="0,0,5,0"
+                   Width="5"
+                   Fill="Transparent"
+                   StrokeThickness="0"
+                   HorizontalAlignment="Right">
             <i:Interaction.Behaviors>
                 <local:MpResizeBehavior x:Name="TileResizeBehvior"
                                         IsResizing="{Binding IsResizing,
@@ -37,13 +54,7 @@
                                                            Source={x:Static local:MpMeasurements.Instance}}" />
 
             </i:Interaction.Behaviors>
-            <local:MpClipTileView x:Name="ClipTileView"
-                                  Visibility="{Binding FrontVisibility}" />
-
-            <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
-                                  OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"
-                                  Visibility="{Binding IsFlipping,
-                                                       Converter={StaticResource BoolToVisibilityConverter}}" />-->
-        </Grid>
+        </Rectangle>
+    </Grid>
     <!--</AdornerDecorator>-->
 </local:MpUserControl>

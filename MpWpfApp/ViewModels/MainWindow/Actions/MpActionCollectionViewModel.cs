@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpActionCollectionViewModel : 
-        MpSelectorViewModelBase<object,MpActionViewModelBase>, 
+        MpSelectorViewModelBase<object,MpTriggerActionViewModelBase>, 
         MpIMenuItemViewModel,
         MpISingletonViewModel<MpActionCollectionViewModel>,
         MpIResizableViewModel,
@@ -65,6 +65,8 @@ namespace MpWpfApp {
             }
         }
 
+        public ObservableCollection<MpActionViewModelBase> AllSelectedActions { get; set; } = new ObservableCollection<MpActionViewModelBase>();
+
         #endregion
 
         #region MpIResizableViewModel Implementation
@@ -74,13 +76,15 @@ namespace MpWpfApp {
 
         #endregion
 
+
         #region MpISidebarItemViewModel Implementation
 
-        public double DefaultSidebarWidth { get; } = 150;
+        public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultActionPanelWidth;
+        public double SidebarWidth { get; set; } = MpMeasurements.Instance.DefaultActionPanelWidth;
         public bool IsSidebarVisible { get; set; } = false;
 
-        public MpISidebarItemViewModel NextSidebarItem { get; set; }
-        public MpISidebarItemViewModel PreviousSidebarItem { get; set; }
+        public MpISidebarItemViewModel NextSidebarItem => SelectedItem == null ? null : SelectedItem;
+        public MpISidebarItemViewModel PreviousSidebarItem => null;
 
         #endregion
 
@@ -127,7 +131,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task<MpActionViewModelBase> CreateTriggerViewModel(MpAction a) {
+        public async Task<MpTriggerActionViewModelBase> CreateTriggerViewModel(MpAction a) {
             
             if(a.ActionType != MpActionType.Trigger || 
                (MpTriggerType) a.ActionObjId == MpTriggerType.None || 
@@ -206,24 +210,6 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(SelectedItem):
-                    //SelectedItems.Clear();
-                    //if(SelectedItem != null) {
-                    //    if(SelectedItem.IsRootAction) {
-                    //        SelectedItems.Add(SelectedItem);
-                    //    } else {
-                    //        var rsavm = SelectedItem.ParentActionViewModel;
-                    //        while (rsavm.ParentActionViewModel != null) {
-                    //            rsavm = rsavm.ParentActionViewModel;
-                    //        }
-                    //        if(rsavm == null) {
-                    //            throw new Exception("Error unlinked sub item");
-                    //        }
-                    //        SelectedItems.Add(rsavm);
-                    //    }
-                        
-                        
-                    //}
-                    //OnPropertyChanged(nameof(SelectedItems));
                     OnPropertyChanged(nameof(IsAnySelected));
                     break;
             }
@@ -262,6 +248,10 @@ namespace MpWpfApp {
 
                  SelectedItem = navm;
 
+                 AllSelectedActions.Clear();
+                 AllSelectedActions.Add(SelectedItem);
+                 OnPropertyChanged(nameof(AllSelectedActions));
+
                  OnPropertyChanged(nameof(Items));
 
                  IsBusy = false;
@@ -276,6 +266,8 @@ namespace MpWpfApp {
                 await Task.WhenAll(deleteTasks);
 
                 Items.Remove(tavm);
+                AllSelectedActions.Remove(tavm);
+                OnPropertyChanged(nameof(AllSelectedActions));
 
                 await UpdateSortOrder();
                 OnPropertyChanged(nameof(Items));

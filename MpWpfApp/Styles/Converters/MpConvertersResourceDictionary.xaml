@@ -60,5 +60,7 @@
     <local:MpDoubleWithDeltaConverter x:Key="DoubleWithDeltaConverter" />
     <local:MpDoubleWithDeltaMultiConverter x:Key="DoubleWithDeltaMultiConverter" />
     <local:MpDoubleToThicknessIndentLevelConverter x:Key="DoubleToThicknessIndentLevelConverter" />
+    <local:MpActionTypeToBrushConverter x:Key="ActionTypeToBrushConverter" />
+    <local:MpMultiSelectHoverableToBrushConverter x:Key="MultiSelectHoverableToBrushConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

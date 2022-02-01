@@ -13,7 +13,6 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-
     public interface MpITriggerActionViewModel {
         void RegisterTrigger(MpActionViewModelBase mvm);
         void UnregisterTrigger(MpActionViewModelBase mvm);
@@ -26,9 +25,9 @@ namespace MpWpfApp {
         MpIUserIconViewModel,
         MpITreeItemViewModel<MpActionViewModelBase>,
         MpIMenuItemViewModel,
-        MpITriggerActionViewModel,
-        MpIActionDesignerItemViewModel,
-        MpIMovableViewModel {
+        MpIBoxViewModel,
+        MpIMovableViewModel,
+        MpITriggerActionViewModel {
         
         #region Properties
 
@@ -43,16 +42,6 @@ namespace MpWpfApp {
         public bool IsMoving { get; set; }
 
         public bool CanMove { get; set; }
-
-        #endregion
-
-        #region MpIActionDesignerItemViewModel Implementation
-
-        public double Width { get; set; } = 50;
-        public double Height { get; set; } = 50;
-
-        public double X { get; set; }
-        public double Y { get; set; }
 
         #endregion
 
@@ -138,6 +127,17 @@ namespace MpWpfApp {
 
         #region Appearance
 
+        public string BorderBrushHexColor {
+            get {
+                if(IsSelected) {
+                    return MpSystemColors.IsSelectedBorderColor;
+                }
+                if(IsHovering) {
+                    return MpSystemColors.IsHoveringBorderColor;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
         #endregion
 
         #region State
@@ -169,6 +169,83 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
+        #region MpIBoxViewModel Implementation
+
+        public double X {
+            get {
+                if (Box == null) {
+                    return 0;
+                }
+                return Box.X;
+            }
+            set {
+                if (X != value) {
+                    Box.X = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(X));
+                }
+            }
+        }
+
+        public double Y {
+            get {
+                if (Box == null) {
+                    return 0;
+                }
+                return Box.Y;
+            }
+            set {
+                if (Y != value) {
+                    Box.Y = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(Y));
+                }
+            }
+        }
+
+        public double Width {
+            get {
+                if (Box == null) {
+                    return 0;
+                }
+                return Box.Width;
+            }
+            set {
+                if (Width != value) {
+                    Box.Width = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(Width));
+                }
+            }
+        }
+
+        public double Height {
+            get {
+                if (Box == null) {
+                    return 0;
+                }
+                return Box.Height;
+            }
+            set {
+                if (Height != value) {
+                    Box.Width = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(Height));
+                }
+            }
+        }
+
+        public MpBox Box {
+            get {
+                if (Action == null) {
+                    return null;
+                }
+                return Action.Box;
+            }
+        }
+
+        #endregion
 
         public bool IsReadOnly {
             get {
@@ -236,8 +313,6 @@ namespace MpWpfApp {
             }
         }
 
-
-
         public int SortOrderIdx {
             get {
                 if (Action == null) {
@@ -260,6 +335,15 @@ namespace MpWpfApp {
                     return 0;
                 }
                 return Action.IconId;
+            }
+        }
+
+        public int BoxId {
+            get {
+                if (Action == null) {
+                    return 0;
+                }
+                return Action.BoxId;
             }
         }
 
@@ -315,7 +399,27 @@ namespace MpWpfApp {
         public virtual async Task InitializeAsync(MpAction a) {
             IsBusy = true;
 
+            if (a.Box == null) {
+                if (a.BoxId > 0) {
+                    a.Box = await MpDb.GetItemAsync<MpBox>(a.BoxId);
+                } else {
+                    a.Box = await MpBox.Create(
+                        boxType: MpBoxType.DesignerItem,
+                        boxObjId: a.Id,
+                        x: MpMeasurements.Instance.DefaultDesignerItemWidth / 2,
+                        y: MpMeasurements.Instance.DefaultDesignerItemHeight / 2,
+                        w: MpMeasurements.Instance.DefaultDesignerItemWidth,
+                        h: MpMeasurements.Instance.DefaultDesignerItemHeight);
+                }
+            }
             Action = a;
+
+            OnPropertyChanged(nameof(Box));
+            OnPropertyChanged(nameof(Action));
+            OnPropertyChanged(nameof(Height));
+            OnPropertyChanged(nameof(Width));
+            OnPropertyChanged(nameof(Y));
+            OnPropertyChanged(nameof(X));
 
             var cal = await MpDataModelProvider.GetChildActions(ActionId);
 
@@ -445,7 +549,10 @@ namespace MpWpfApp {
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         HasModelChanged = false;
-                        Task.Run(async () => { await Action.WriteToDatabaseAsync(); });
+                        Task.Run(async () => {
+                            await Box.WriteToDatabaseAsync();
+                            await Action.WriteToDatabaseAsync();                            
+                        });
                     }
                     break;
             }
@@ -485,7 +592,10 @@ namespace MpWpfApp {
                  SelectedItem = navm;
 
                  OnPropertyChanged(nameof(Items));
-                 Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+
+                 Parent.AllSelectedActions.Add(navm);
+                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedActions));
+
                  IsExpanded = true;
              });
 
@@ -494,7 +604,10 @@ namespace MpWpfApp {
                 var avm = args as MpActionViewModelBase;
                 avm.Disable();
                 var deleteTasks = avm.FindAllChildren().Select(x => x.Action.DeleteFromDatabaseAsync()).ToList();
+                deleteTasks.AddRange(avm.FindAllChildren().Select(x => x.Action.Box?.DeleteFromDatabaseAsync()).ToList());
+
                 deleteTasks.Add(avm.Action.DeleteFromDatabaseAsync());
+                deleteTasks.Add(avm.Action.Box?.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks);
 
                 Items.Remove(avm);
@@ -502,7 +615,8 @@ namespace MpWpfApp {
                 await UpdateSortOrder();
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(SelectedItem));
-                Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                Parent.AllSelectedActions.Remove(avm);
+                Parent.OnPropertyChanged(nameof(Parent.AllSelectedActions));
             });
 
         public ICommand DeleteThisActionCommand => new RelayCommand(
@@ -517,6 +631,7 @@ namespace MpWpfApp {
                 }
                 ParentActionViewModel.DeleteChildActionCommand.Execute(this);
             });
+
 
         #endregion
     }

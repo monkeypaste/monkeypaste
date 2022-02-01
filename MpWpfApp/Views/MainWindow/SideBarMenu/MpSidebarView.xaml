@@ -43,7 +43,8 @@
                       HorizontalAlignment="Center"
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Collection Tree"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpTagTrayViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible,
+                                          Source={x:Static local:MpTagTrayViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource PinToCollectionIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -58,7 +59,8 @@
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Analyze"
                       IsEnabled="True"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible,
+                                          Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BrainIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"
@@ -73,7 +75,8 @@
                       Template="{StaticResource AppModeToggleButtonControlTemplate}"
                       ToolTip="Analyze"
                       IsEnabled="True"
-                      IsChecked="{Binding IsSidebarVisible, Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                      IsChecked="{Binding IsSidebarVisible,
+                                          Source={x:Static local:MpActionCollectionViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource BoltIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"

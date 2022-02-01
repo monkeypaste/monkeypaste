@@ -144,6 +144,9 @@ namespace MpWpfApp {
 
         public MpMenuItemViewModel MenuItemViewModel { 
             get {
+                if(PrimaryItem == null || PrimaryItem.PrimaryItem == null) {
+                    return new MpMenuItemViewModel();
+                }
                 var tmil = new ObservableCollection<MpMenuItemViewModel>();
 
                 foreach (var ttvm in MpTagTrayViewModel.Instance.Items) {

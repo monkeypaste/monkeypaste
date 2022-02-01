@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace MpWpfApp {
     public class MpHoverableExtension : DependencyObject {
@@ -312,14 +313,36 @@ namespace MpWpfApp {
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (obj, e) => {
                     if(e.NewValue is bool isEnabled) {
-                        if(isEnabled) {
-                            var fe = obj as FrameworkElement;
+                        var fe = obj as FrameworkElement;
+                        if (isEnabled) {
                             fe.MouseEnter += Fe_MouseEnter;
                             fe.MouseLeave += Fe_MouseLeave;
+
+                            if(fe.IsLoaded) {
+                                UpdateBrushes(fe);
+                            } else {
+                                fe.Loaded += Fe_Loaded;
+                            }
+                            fe.Unloaded += Fe_Unloaded;
+                        } else {
+                            Fe_Unloaded(fe, null);
                         }
                     }
                 }
             });
+
+        private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
+            var fe = sender as FrameworkElement;
+
+            fe.MouseEnter -= Fe_MouseEnter;
+            fe.MouseLeave -= Fe_MouseLeave;
+            fe.Loaded -= Fe_Loaded;
+            fe.Unloaded -= Fe_Unloaded;
+        }
+
+        private static void Fe_Loaded(object sender, RoutedEventArgs e) {
+            UpdateBrushes(sender as FrameworkElement);
+        }
 
         #endregion
 
@@ -357,13 +380,15 @@ namespace MpWpfApp {
             bool isHovering = GetIsHovering(fe);
             bool isSelected = GetIsSelected(fe);
 
-            if(fe is Border b) {
+            if (fe is Border b) {
                 b.Background = GetBrush(fe, isHovering, isSelected, "Background");
                 b.BorderBrush = GetBrush(fe, isHovering, isSelected, "Border");
-            }else if(fe is Control c) {
+            } else if (fe is Control c) {
                 c.Foreground = GetBrush(fe, isHovering, isSelected, "Foreground");
                 c.Background = GetBrush(fe, isHovering, isSelected, "Background");
                 c.BorderBrush = GetBrush(fe, isHovering, isSelected, "Border");
+            } else if (fe is Shape s) {
+                s.Stroke = GetBrush(s, isHovering, isSelected, "Border");
             } else {
                 Debugger.Break();
             }
@@ -387,39 +412,38 @@ namespace MpWpfApp {
         private static Brush GetBrush(DependencyObject dpo, bool isHovering, bool isSelected, string prefix) {
             prefix += "Brush";
             Stack<string> propertyNameStack = new Stack<string>();
-            propertyNameStack.Push(prefix);
 
             if(!isHovering && !isSelected) {
                 prefix = "Inactive" + prefix;
                 propertyNameStack.Push(prefix);
             } else {
                 if (isHovering) {
-                    prefix = "Hover" + prefix;
-                    propertyNameStack.Push(prefix);
+                    propertyNameStack.Push("Hover" + prefix);
                 }
                 if (isSelected) {
-                    prefix = "Selected" + prefix;
-                    propertyNameStack.Push(prefix);
+                    propertyNameStack.Push("Selected" + prefix);
+                }
+                if (isHovering && isSelected) {
+                    propertyNameStack.Push("HoverSelected" + prefix);
                 }
             }
 
-            DependencyPropertyDescriptor descriptor = null;
-            while (descriptor == null) { 
-                if(propertyNameStack.Count == 0) {
-                    break;
-                }
+            while (propertyNameStack.Count > 0) { 
                 string propertyName = propertyNameStack.Pop();
-                descriptor = DependencyPropertyDescriptor.FromName(
-                                propertyName,
+                var descriptor = DependencyPropertyDescriptor.FromName(propertyName,
                                 typeof(MpHoverableExtension),
                                 typeof(Brush));
-            }
-            if(descriptor == null) {
-                return Brushes.Transparent;
+                if (descriptor == null) {
+                    continue;
+                }
+
+                var result = descriptor.GetValue(dpo) as Brush;
+                if(result != null) {
+                    return result;
+                }
             }
 
-            var result = descriptor.GetValue(dpo) as Brush;
-            return result;
+            return null;
         }
 
     }

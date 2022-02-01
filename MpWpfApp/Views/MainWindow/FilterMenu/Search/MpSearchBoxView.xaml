@@ -42,7 +42,8 @@
                 BorderThickness="0"
                 Command="{Binding SaveSearchCommand}"
                 local:MpHoverableExtension.IsEnabled="True"
-                local:MpHoverableExtension.IsHovering="{Binding IsOverSaveSearchButton, Mode=TwoWay}"
+                local:MpHoverableExtension.IsHovering="{Binding IsOverSaveSearchButton,
+                                                                Mode=TwoWay}"
                 Visibility="{Binding HasCriteriaItems,
                                      Converter={StaticResource BoolToVisibilityConverter},
                                      ConverterParameter={StaticResource Hide}}"
@@ -200,7 +201,8 @@
                 Visibility="{Binding HasCriteriaItems,
                                      Converter={StaticResource BoolToVisibilityFlipConverter}}"
                 Template="{StaticResource SearchButtonControlTemplate}">
-            <Image Source="{Binding ., Source={StaticResource PlusIcon}}"
+            <Image Source="{Binding .,
+                                    Source={StaticResource PlusIcon}}"
                    Height="20"
                    Width="20"
                    Stretch="Uniform" />
@@ -212,7 +214,8 @@
                 Visibility="{Binding HasCriteriaItems,
                                      Converter={StaticResource BoolToVisibilityConverter}}"
                 Template="{StaticResource SearchButtonControlTemplate}">
-            <Image Source="{Binding ., Source={StaticResource MinusIcon}}"
+            <Image Source="{Binding .,
+                                    Source={StaticResource MinusIcon}}"
                    Height="20"
                    Width="20"
                    Stretch="Uniform" />

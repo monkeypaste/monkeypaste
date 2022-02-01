@@ -6,6 +6,7 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
                      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpActionViewModelBase"
                      mc:Ignorable="d"
@@ -17,17 +18,34 @@
             <Ellipse Width="{Binding Width}"
                      Height="{Binding Height}"
                      StrokeThickness="3"
-                     Stroke="Yellow"
-                     Fill="Yellow" />
+                     local:MpHoverableExtension.IsEnabled="True"
+                     local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                     Mode=TwoWay,
+                                                                     UpdateSourceTrigger=PropertyChanged,
+                                                                     NotifyOnSourceUpdated=True,
+                                                                     NotifyOnTargetUpdated=True}"
+                     local:MpHoverableExtension.HoverCursor="ResizeAll"
+                     Stroke="{Binding BorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                     Fill="{Binding ActionType,
+                                    Converter={StaticResource ActionTypeToBrushConverter}}">
+            </Ellipse>
         </DataTemplate>
         <DataTemplate x:Key="CompareDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
-            <Polygon Points="50,0 100,50 50,100 0,50 50,0"
-                     Width="{Binding Width}"
+            <Polygon Width="{Binding Width}"
                      Height="{Binding Height}"
-                     Stroke="Red"
+                     Points="0,25 25,0 50,25 25,50"
                      StrokeThickness="3"
-                     Fill="Red" />
+                     local:MpHoverableExtension.IsEnabled="True"
+                     local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                     Mode=TwoWay,
+                                                                     UpdateSourceTrigger=PropertyChanged,
+                                                                     NotifyOnSourceUpdated=True,
+                                                                     NotifyOnTargetUpdated=True}"
+                     local:MpHoverableExtension.HoverCursor="ResizeAll"
+                     Stroke="{Binding BorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                     Fill="{Binding ActionType,
+                                    Converter={StaticResource ActionTypeToBrushConverter}}" />
         </DataTemplate>
         <DataTemplate x:Key="AnalyzeDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
@@ -50,48 +68,45 @@
         </DataTemplate>
         <local:MpActionDesignerItemTemplateSelector x:Key="ActionDesignerItemTemplateSelector" />
     </local:MpUserControl.Resources>
-    <ContentControl Width="{Binding Width}"
-                    Height="{Binding Height,
-                                     Converter={StaticResource DoubleWithDeltaConverter},
-                                     ConverterParameter=20,
-                                     Mode=OneWay}"
-                    Style="{StaticResource MovableDesignerControlStyle}">
-        <Button x:Name="ActionDesignerItemButton"
-                DataContext="{Binding}"
-                Background="Transparent"
-                Style="{StaticResource Transparent_Button}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Stretch"
-                BorderBrush="Black"
-                BorderThickness="0"
-                Command="{Binding}">
-            <DockPanel Width="{Binding Width}"
-                       Height="200"
-                       Background="Purple"
-                       LastChildFill="False">
-                <ContentControl DockPanel.Dock="Top"
-                                Width="{Binding Width}"
-                                Height="{Binding Height}"
-                                Content="{Binding}"
-                                VerticalAlignment="Top"
-                                ContentTemplateSelector="{StaticResource ActionDesignerItemTemplateSelector}" />
-                <TextBox DockPanel.Dock="Bottom"
-                         Height="30"
-                         Margin="0,0,0,0"
-                         Foreground="Black"
-                         Background="Transparent"
-                         local:MpIsFocusedExtension.IsFocused="{Binding IsLabelFocused,
-                                                                        Mode=TwoWay,
-                                                                        NotifyOnTargetUpdated=True,
-                                                                        NotifyOnSourceUpdated=True,
-                                                                        UpdateSourceTrigger=PropertyChanged}"
-                         Text="{Binding Label,
-                                        Mode=TwoWay,
-                                        NotifyOnTargetUpdated=True,
-                                        NotifyOnSourceUpdated=True,
-                                        UpdateSourceTrigger=PropertyChanged}"
-                         FontSize="14" />
-            </DockPanel>
-        </Button>
-    </ContentControl>
+    <Grid>
+        <ContentControl Width="{Binding Width}"
+                        Height="{Binding Height}"
+                        Content="{Binding}"
+                        VerticalAlignment="Top"
+                        ContentTemplateSelector="{StaticResource ActionDesignerItemTemplateSelector}">
+            <i:Interaction.Behaviors>
+                <local:MpMoveBehavior IsMoving="{Binding IsMoving,
+                                                         Mode=TwoWay,
+                                                         UpdateSourceTrigger=PropertyChanged,
+                                                         NotifyOnSourceUpdated=True,
+                                                         NotifyOnTargetUpdated=True}"
+                                      CanMove="{Binding CanMove,
+                                                        Mode=TwoWay,
+                                                        UpdateSourceTrigger=PropertyChanged,
+                                                        NotifyOnSourceUpdated=True,
+                                                        NotifyOnTargetUpdated=True}" />
+            </i:Interaction.Behaviors>
+        </ContentControl>
+        <Label Height="30"
+               BorderThickness="0"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch"
+               HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Center"
+               Margin="0,0,0,0"
+               Foreground="Black"
+               Background="Transparent"
+               IsHitTestVisible="False"
+               local:MpIsFocusedExtension.IsFocused="{Binding IsLabelFocused,
+                                                              Mode=TwoWay,
+                                                              NotifyOnTargetUpdated=True,
+                                                              NotifyOnSourceUpdated=True,
+                                                              UpdateSourceTrigger=PropertyChanged}"
+               Content="{Binding Label,
+                                 Mode=TwoWay,
+                                 NotifyOnTargetUpdated=True,
+                                 NotifyOnSourceUpdated=True,
+                                 UpdateSourceTrigger=PropertyChanged}"
+               FontSize="10" />
+    </Grid>
 </local:MpUserControl>

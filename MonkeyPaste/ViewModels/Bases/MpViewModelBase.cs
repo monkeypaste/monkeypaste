@@ -28,7 +28,7 @@ namespace MonkeyPaste {
 
 
         public bool SupressPropertyChangedNotification { get; set; } = false;
-
+        public bool SuprressWriteModelChangedToDatabase { get; set; } = false;
 
         public bool HasModelChanged { get; set; } = false;
 

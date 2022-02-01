@@ -6,13 +6,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 
 namespace MpWpfApp {
     public abstract class MpTriggerActionViewModelBase : 
-        MpActionViewModelBase {
+        MpActionViewModelBase,
+        MpIResizableViewModel,
+        MpISidebarItemViewModel,
+        MpIActionDesignerCollectionViewModel {
         #region Properties
 
         #region View Models
+
+        public ObservableCollection<MpActionViewModelBase> AllChildren => new ObservableCollection<MpActionViewModelBase>(this.FindAllChildren());
+
+        #endregion
+
+        #region MpISidebarItemViewModel Implementation
+
+        public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultDesignerWidth;
+        public double SidebarWidth { get; set; } = MpMeasurements.Instance.DefaultDesignerWidth;
+
+        public bool IsSidebarVisible { get; set; }
+        public MpISidebarItemViewModel NextSidebarItem => null;
+        public MpISidebarItemViewModel PreviousSidebarItem => Parent;
+
+        #endregion
+
+
+        #region MpIResizableViewModel Implementation
+
+        public bool IsResizing { get; set; }
+        public bool CanResize { get; set; }
+
+        #endregion
+
+        #region MpIActionDesignerCollectionViewModel Implementation
+
+        public double CameraZoomFactor { get; set; } = 1.0;
+
+        public double DesignerWidth { get; set; } = 300;
+        public double DesignerHeight { get; set; } = 250;
+
+        public double CameraX { get; set; } = 150;
+        public double CameraY { get; set; } = 150;
 
         #endregion
 

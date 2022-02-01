@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
-namespace MpWpfApp {
-    public class MpRectViewModel : MpViewModelBase {
+namespace MonkeyPaste {
+    public class MpBoxViewModel : 
+        MpViewModelBase,
+        MpIMovableViewModel {
         #region Properties
 
         #region State
@@ -17,18 +19,27 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpIMovableViewModel Implementation
+
+        public bool IsMoving { get; set; }
+
+        public bool CanMove { get; set; }
+
+        #endregion
+
         #region Model
 
         public double X {
             get {
-                if (Location == null) {
+                if (Box == null) {
                     return 0;
                 }
-                return Location.X;
+                return Box.X;
             }
             set {
                 if (X != value) {
-                    Location.X = value;
+                    Box.X = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(X));
                 }
             }
@@ -36,14 +47,15 @@ namespace MpWpfApp {
 
         public double Y {
             get {
-                if (Location == null) {
+                if (Box == null) {
                     return 0;
                 }
-                return Location.Y;
+                return Box.Y;
             }
             set {
                 if (Y != value) {
-                    Location.Y = value;
+                    Box.Y = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(Y));
                 }
             }
@@ -51,14 +63,15 @@ namespace MpWpfApp {
 
         public double Width {
             get {
-                if (Size == null) {
+                if (Box == null) {
                     return 0;
                 }
-                return Size.Width;
+                return Box.Width;
             }
             set {
                 if (Width != value) {
-                    Size.Width = value;
+                    Box.Width = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(Width));
                 }
             }
@@ -66,50 +79,21 @@ namespace MpWpfApp {
 
         public double Height {
             get {
-                if (Size == null) {
+                if (Box == null) {
                     return 0;
                 }
-                return Size.Height;
+                return Box.Height;
             }
             set {
                 if (Height != value) {
-                    Size.Width = value;
+                    Box.Width = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(Height));
                 }
             }
         }
 
-        MpPoint Location {
-            get {
-                if(Rect == null) {
-                    return null;
-                }
-                return Rect.Location;
-            }
-            set {
-                if(Location != value) {
-                    Rect.Location = value;
-                    OnPropertyChanged(nameof(Location));
-                }
-            }
-        }
-
-        MpSize Size {
-            get {
-                if (Rect == null) {
-                    return null;
-                }
-                return Rect.Size;
-            }
-            set {
-                if (Size != value) {
-                    Rect.Size = value;
-                    OnPropertyChanged(nameof(Size));
-                }
-            }
-        }
-
-        public MpRect Rect { get; set; }
+        public MpBox Box { get; set; }
 
         #endregion
 
@@ -117,18 +101,25 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpRectViewModel() :base(null) {
-
+        public MpBoxViewModel() :base(null) {
+            PropertyChanged += MpBoxViewModel_PropertyChanged;
         }
 
-        public MpRectViewModel(MpRect rect) : this() {
-            Rect = rect;
+
+        private void MpBoxViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(HasModelChanged):
+                    if(HasModelChanged) {
+                        HasModelChanged = false;
+                        Task.Run(async () => { await Box.WriteToDatabaseAsync(); });
+                    }
+                    break;
+            }
         }
 
-        
-        public async Task InitializeAsync(MpRect rect) {
+        public async Task InitializeAsync(MpBox box) {
             IsBusy = true;
-            Rect = rect;
+            Box = box;
             await Task.Delay(1);
             IsBusy = false;
         }
@@ -136,11 +127,11 @@ namespace MpWpfApp {
         #endregion
     }
 
-    //public class MpRectViewModel<T,P> : MpRectViewModel 
-    //    where P:MpViewModelBase 
-    //    where T:MpViewModelBase<P> {
+    //public class MpRectViewModel<T, P> : MpRectViewModel
+    //    where P : MpViewModelBase
+    //    where T : MpViewModelBase<P> {
 
-    //    public MpRectViewModel(P p,MpIRectViewModel irect) {
+    //    public MpRectViewModel(P p, MpIRectViewModel irect) {
 
     //        Rect = new MpRect() {
     //            Location = new MpPoint(irect.X, irect.Y),

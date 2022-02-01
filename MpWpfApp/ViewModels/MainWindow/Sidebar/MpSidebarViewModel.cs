@@ -312,7 +312,16 @@ namespace MpWpfApp {
                     ShowNotifcation("Auto-Copy Mode", IsAutoCopyMode ? "ON" : "OFF", IsAutoCopyMode);
                     break;
                 case nameof(IsAnySidebarOpen):
-                    SidebarWidth = VisibleSidebar == null ? 0 : VisibleSidebar.DefaultSidebarWidth;
+                    if(VisibleSidebar == null) {
+                        SidebarWidth = 0;
+                    } else {
+                        SidebarWidth = VisibleSidebar.SidebarWidth;
+                        var temp = VisibleSidebar.NextSidebarItem;
+                        while(temp != null) {
+                            SidebarWidth += temp.SidebarWidth;
+                            temp = temp.NextSidebarItem;
+                        }
+                    }
                     OnPropertyChanged(nameof(TotalSidebarWidth));
 
                     break;

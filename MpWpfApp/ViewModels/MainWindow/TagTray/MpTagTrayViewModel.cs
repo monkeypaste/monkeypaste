@@ -56,11 +56,13 @@ namespace MpWpfApp {
         #endregion
 
         #region MpISidebarItemViewModel Implementation
-        public double DefaultSidebarWidth { get; } = 100;
+        public double SidebarWidth { get; set; } = MpMeasurements.Instance.DefaultTagTreePanelWidth;
+
+        public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultTagTreePanelWidth;
         public bool IsSidebarVisible { get; set; }
 
-        public MpISidebarItemViewModel NextSidebarItem { get; set; }
-        public MpISidebarItemViewModel PreviousSidebarItem { get; set; }
+        public MpISidebarItemViewModel NextSidebarItem { get; }
+        public MpISidebarItemViewModel PreviousSidebarItem { get; }
 
         #endregion
 

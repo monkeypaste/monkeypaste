@@ -14,52 +14,47 @@
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           Background="Pink">
-        <ItemsControl x:Name="ActionDesignerItemscontrol"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"
-                      ItemsSource="{Binding SelectedItem,
-                                            Converter={StaticResource ItemToItemsSourceConverter},
-                                            Source={x:Static local:MpActionCollectionViewModel.Instance}}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas x:Name="ActionDesignerCanvas"
-                            IsItemsHost="True" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemContainerStyle>
-                <Style TargetType="ContentPresenter">
-                    <Setter Property="Canvas.Left"
-                            Value="{Binding X,
-                                            Mode=TwoWay,
-                                            UpdateSourceTrigger=PropertyChanged,
-                                            NotifyOnSourceUpdated=True,
-                                            NotifyOnTargetUpdated=True}" />
-                    <Setter Property="Canvas.Top"
-                            Value="{Binding Y,
-                                            Mode=TwoWay,
-                                            UpdateSourceTrigger=PropertyChanged,
-                                            NotifyOnSourceUpdated=True,
-                                            NotifyOnTargetUpdated=True}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <local:MpActionDesignerItemView DataContext="{Binding}">
-                        <i:Interaction.Behaviors>
-                            <local:MpMoveBehavior IsMoving="{Binding IsMoving,
-                                                                     Mode=TwoWay,
-                                                                     UpdateSourceTrigger=PropertyChanged,
-                                                                     NotifyOnSourceUpdated=True,
-                                                                     NotifyOnTargetUpdated=True}"
-                                                  CanMove="{Binding CanMove,
-                                                                    Mode=TwoWay,
-                                                                    UpdateSourceTrigger=PropertyChanged,
-                                                                    NotifyOnSourceUpdated=True,
-                                                                    NotifyOnTargetUpdated=True}" />
-                        </i:Interaction.Behaviors>
-                    </local:MpActionDesignerItemView>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <AdornerDecorator>
+            <ListBox x:Name="ActionDesignerListBox"
+                     Background="Salmon"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     ItemsSource="{Binding AllSelectedActions,
+                                           Source={x:Static local:MpActionCollectionViewModel.Instance}}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <local:MpDesignerCanvas x:Name="ActionDesignerCanvas"
+                                                IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}" />
+                        <Setter Property="Canvas.Left"
+                                Value="{Binding X,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}" />
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding Y,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpActionDesignerItemView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </AdornerDecorator>
     </Grid>
 </local:MpUserControl>

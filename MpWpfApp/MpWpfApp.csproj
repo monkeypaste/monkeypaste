@@ -152,6 +152,7 @@
     <Compile Include="Behaviors\Resizers\MpMoveBehavior.cs" />
     <Compile Include="Behaviors\Resizers\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpBootstrapper.cs" />
+    <Compile Include="Controls\MpDesignerCanvas.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\MpActionTypeToBrushConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemIdToIconSourceConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemIdToTitleConverter.cs" />
     <Compile Include="Converters\MpBackgroundBrushToForegroundBrushConverter.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
     <Compile Include="Converters\MpItemToItemsSourceConverter.cs" />
+    <Compile Include="Converters\MpMultiSelectHoverableToBrushConverter.cs" />
     <Compile Include="Converters\MpShorcutIdToKeyStringConverter.cs" />
     <Compile Include="Converters\MpStringHexToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToIconConverter.cs" />
@@ -238,9 +241,6 @@
     <Compile Include="Utils\Extensions\Graphics\Color\MpColorExtensions.cs" />
     <Compile Include="Utils\Extensions\Graphics\Color\MpWpfColorHelpers.cs" />
     <Compile Include="Utils\Extensions\Graphics\Color\MpWpfCustomColorChooserMenu.cs" />
-    <Compile Include="Utils\Extensions\Graphics\Geometry\MpPoint.cs" />
-    <Compile Include="Utils\Extensions\Graphics\Geometry\MpRect.cs" />
-    <Compile Include="Utils\Extensions\Graphics\Geometry\MpSize.cs" />
     <Compile Include="Utils\Extensions\Graphics\Imaging\MpWpfImageExtensions.cs" />
     <Compile Include="Utils\Extensions\Graphics\Imaging\MpWpfImagingHelper.cs" />
     <Compile Include="Utils\Extensions\MpWpfRichDocumentExtensions.cs" />
@@ -249,7 +249,6 @@
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpCsvReader.cs" />
-    <Compile Include="Utils\Extensions\Graphics\Geometry\MpLine.cs" />
     <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcherViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
@@ -344,9 +343,6 @@
     <Compile Include="ViewModels\MainWindow\Source\MpSourceViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Geometry\MpPointViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Geometry\MpRectViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Geometry\MpSizeViewModel.cs" />
     <Compile Include="ViewModels\Reusable\MpSystemColors.cs" />
     <Compile Include="ViewModels\Reusable\MpThemeColors.cs" />
     <Compile Include="Views\Base\MpContextMenu.cs" />

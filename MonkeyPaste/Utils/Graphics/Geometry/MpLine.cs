@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
     public class MpLine {
         public MpPoint P1 { get; set; } = new MpPoint();
         public MpPoint P2 { get; set; } = new MpPoint();

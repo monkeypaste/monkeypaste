@@ -140,7 +140,7 @@ namespace MpWpfApp {
 
         #region Sidebar
 
-        public double DefaultSidebarPanelWidth => 100;
+        public double MinSidebarWidth => 50;
 
         #region App Mode Menu
 
@@ -149,6 +149,36 @@ namespace MpWpfApp {
                 return MainWindowDefaultHeight / 7;
             }
         }
+
+        #endregion
+
+        #region Tag Tree
+
+        public double DefaultTagTreePanelWidth => 150;
+
+        #endregion
+
+        #region Analyzers
+
+        public double DefaultAnalyzerPanelWidth => 500;
+
+        #endregion
+
+        #region Actions
+
+        public double DefaultActionPanelWidth => 325;
+
+        #region Action Designer
+
+        public double DefaultDesignerWidth => 300;
+
+        public double DefaultDesignerHeight => 200;
+
+        public double DefaultDesignerItemWidth => 50;
+
+        public double DefaultDesignerItemHeight => 50;
+
+        #endregion
 
         #endregion
 

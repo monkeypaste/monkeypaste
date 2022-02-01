@@ -39,7 +39,8 @@
                                                              NotifyOnTargetUpdated=True,
                                                              Source={x:Static local:MpSidebarViewModel.Instance}}"
                                         DefaultWidth="{Binding DefaultSidebarWidth}"
-                                        MinWidth="{Binding DefaultSidebarWidth}" />
+                                        MinWidth="{Binding MinSidebarWidth,
+                                                           Source={x:Static local:MpMeasurements.Instance}}"  />
 
             </i:Interaction.Behaviors>
             <Grid Margin="10">
@@ -107,12 +108,13 @@
         <Grid x:Name="DetailGrid"
               Grid.Column="1"
               MinWidth="500"
+              DataContext="{Binding SelectedItem}"
               Visibility="{Binding IsAnySelected,
                                    Converter={StaticResource BoolToVisibilityConverter},
+                                   Source={x:Static local:MpActionCollectionViewModel.Instance},
                                    FallbackValue=Collapsed}">
             <i:Interaction.Behaviors>
                 <local:MpResizeBehavior x:Name="SidebarResizeBehvior"
-                                        DoubleClickControl="{Binding ElementName=SidebarGridSplitter}"
                                         IsResizing="{Binding IsResizing,
                                                              Mode=TwoWay,
                                                              UpdateSourceTrigger=PropertyChanged,
@@ -129,12 +131,12 @@
                                                              UpdateSourceTrigger=PropertyChanged,
                                                              NotifyOnSourceUpdated=True,
                                                              NotifyOnTargetUpdated=True}"
-                                        DefaultWidth="{Binding VisibleSidebar.DefaultWidth}"
-                                        MinWidth="{Binding DefaultSidebarPanelWidth,
+                                        DefaultWidth="{Binding DefaultSidebarWidth}"
+                                        MinWidth="{Binding MinSidebarWidth,
                                                            Source={x:Static local:MpMeasurements.Instance}}" />
 
             </i:Interaction.Behaviors>
-            <local:MpActionDesignerView DataContext="{Binding SelectedItem}" />
+            <local:MpActionDesignerView DataContext="{Binding}" />
         </Grid>
     </StackPanel>
 </local:MpUserControl>

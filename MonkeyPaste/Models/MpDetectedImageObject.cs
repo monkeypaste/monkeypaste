@@ -54,6 +54,7 @@ namespace MonkeyPaste {
 
         public static async Task<MpDetectedImageObject> Create(int cid, double c, double x, double y, double w, double h, string tcsv) {
             var ndio = new MpDetectedImageObject() {
+                DetectedImageObjectGuid = System.Guid.NewGuid(),
                 CopyItemId = cid,
                 Confidence = c,
                 X = x,

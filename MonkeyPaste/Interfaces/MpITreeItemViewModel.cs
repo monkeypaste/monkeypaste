@@ -31,5 +31,23 @@ namespace MonkeyPaste {
             }
             return activml;
         }
+
+        public static T FindRootParent<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase {
+            MpITreeItemViewModel<T> rootParent = tivm.ParentTreeItem as MpITreeItemViewModel<T>;
+            while (rootParent.ParentTreeItem != null) {
+                rootParent = rootParent.ParentTreeItem as MpITreeItemViewModel<T>;
+            }
+            return rootParent as T;
+        }
+
+        public static int FindTreeLevel<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase {
+            int level = 0;
+            MpITreeItemViewModel<T> rootParent = tivm.ParentTreeItem as MpITreeItemViewModel<T>;
+            while (rootParent.ParentTreeItem != null) {
+                rootParent = rootParent.ParentTreeItem as MpITreeItemViewModel<T>;
+                level++;
+            }
+            return level;
+        }
     }
 }

@@ -127,13 +127,15 @@
                             </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Border BorderThickness="1" Background="Transparent" BorderBrush="{Binding BorderBrush}">
+                                    <Border BorderThickness="1"
+                                            Background="Transparent"
+                                            BorderBrush="{Binding BorderBrush}">
                                         <TextBlock Background="{Binding BackgroundBrush}"
-                                               Foreground="OldLace"        
-                                               local:MpHoverableExtension.IsEnabled="True"
-                                               local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                                                               Mode=TwoWay}"
-                                               Text="{Binding Label}" />
+                                                   Foreground="OldLace"
+                                                   local:MpHoverableExtension.IsEnabled="True"
+                                                   local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                                                   Mode=TwoWay}"
+                                                   Text="{Binding Label}" />
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>

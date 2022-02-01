@@ -790,6 +790,19 @@ namespace MonkeyPaste {
         }
         #endregion
 
+        #region MpBox
+
+        public static async Task<MpBox> GetBoxByTypeAndObjId(MpBoxType boxType, int objId) {
+            string query = string.Format(@"select * from MpBox where e_MpBoxTypeId=? and fk_BoxObjectId=?");
+            var result = await MpDb.QueryAsync<MpBox>(query, (int)boxType,objId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        #endregion
+
         #endregion
 
         #endregion

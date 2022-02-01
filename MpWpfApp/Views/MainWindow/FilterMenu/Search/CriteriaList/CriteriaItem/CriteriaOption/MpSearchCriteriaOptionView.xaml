@@ -23,7 +23,7 @@
                                                      UpdateSourceTrigger=PropertyChanged}">
                         <ComboBox.ItemTemplate>
                             <ItemContainerTemplate>
-                                <TextBlock FontSize="16" 
+                                <TextBlock FontSize="16"
                                            HorizontalAlignment="Center"
                                            Padding="3"
                                            Text="{Binding Label}" />
@@ -58,17 +58,17 @@
                                         CornerRadius="10"
                                         Background="WHite"
                                         BorderBrush="White">
-                    <TextBox MinWidth="900"
-                             Margin="3,0,0,0"
-                             Height="23"
-                             VerticalContentAlignment="Center"
-                             BorderThickness="0"
-                             BorderBrush="Black"
-                             Text="{Binding Value,
-                                            Mode=TwoWay,
-                                            NotifyOnSourceUpdated=True,
-                                            NotifyOnTargetUpdated=True,
-                                            UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox MinWidth="900"
+                                 Margin="3,0,0,0"
+                                 Height="23"
+                                 VerticalContentAlignment="Center"
+                                 BorderThickness="0"
+                                 BorderBrush="Black"
+                                 Text="{Binding Value,
+                                                Mode=TwoWay,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True,
+                                                UpdateSourceTrigger=PropertyChanged}" />
                     </local:MpClipBorder>
                 </StackPanel>
             </DataTemplate>
@@ -135,13 +135,13 @@
                             SelectedDateFormat="Long" />
             </DataTemplate>
             <DataTemplate x:Key="EmptyOption"
-                          DataType="local:MpSearchCriteriaOptionViewModel"/>
+                          DataType="local:MpSearchCriteriaOptionViewModel" />
             <local:MpSearchCriteriaOptionViewSelector x:Key="OptionViewSelector"
                                                       EnumerableTemplate="{StaticResource EnumerableOption}"
                                                       TextTemplate="{StaticResource TextOption}"
                                                       DateTemplate="{StaticResource DateOption}"
-                                                      RGBATemplate="{StaticResource RGBAOption}" 
-                                                      EmptyTemplate="{StaticResource EmptyOption}"/>
+                                                      RGBATemplate="{StaticResource RGBAOption}"
+                                                      EmptyTemplate="{StaticResource EmptyOption}" />
         </Grid.Resources>
         <local:MpClipBorder BorderThickness="0"
                             Background="Transparent"

@@ -42,8 +42,26 @@
               Width="{Binding MainWindowWidth}"
               Canvas.Top="{Binding MainWindowTop}"
               Canvas.Left="0">
-            <i:Interaction.Behaviors>
-                <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />
+                <RowDefinition Height="{local:MpMeasurementsBinding FilterMenuHeight}" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  System Tray  -->
+            <local:MpSystemTrayView DataContext="{x:Static local:MpSystemTrayViewModel.Instance}" />
+
+            <!--  Title Menu  -->
+            <Grid x:Name="TitleBarDockPanel"
+                       Grid.Row="0"
+                  local:MpHoverableExtension.IsEnabled="True"
+                  local:MpHoverableExtension.HoverCursor="ResizeNS"
+                       Background="{Binding .,
+                                            Converter={StaticResource StringToThemeBrushConverter},
+                                            ConverterParameter=Title_Menu_Background_Color}">
+
+                <i:Interaction.Behaviors>
+                    <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
                                         DoubleClickControl="{Binding ElementName=FrameGripButton}"
                                         IsResizing="{Binding IsResizing,
                                                              Mode=TwoWay,
@@ -68,23 +86,7 @@
                                         MaxHeight="{Binding MainWindowMaxHeight,
                                                             Source={x:Static local:MpMeasurements.Instance}}" />
 
-            </i:Interaction.Behaviors>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />
-                <RowDefinition Height="{local:MpMeasurementsBinding FilterMenuHeight}" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <!--  System Tray  -->
-            <local:MpSystemTrayView DataContext="{x:Static local:MpSystemTrayViewModel.Instance}" />
-
-            <!--  Title Menu  -->
-            <DockPanel x:Name="TitleBarDockPanel"
-                       Grid.Row="0"
-                       Background="{Binding .,
-                                            Converter={StaticResource StringToThemeBrushConverter},
-                                            ConverterParameter=Title_Menu_Background_Color}"
-                       LastChildFill="True">
+                </i:Interaction.Behaviors>
                 <TextBlock DockPanel.Dock="Left"
                            Text="{Binding LogText}" />
                 <Button x:Name="FrameGripButton"
@@ -108,7 +110,7 @@
                                             Grid.Row="2" />
                                 </Grid>-->
                 </Button>
-            </DockPanel>
+            </Grid>
 
             <!--  FilterMenu  -->
             <Grid Grid.Row="1"
@@ -222,6 +224,9 @@
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch"
                               Width="3"
+                              local:MpHoverableExtension.IsEnabled="True"
+                              local:MpHoverableExtension.HoverCursor="ResizeWE"
+                              
                               IsEnabled="{Binding IsAnySidebarOpen}"
                               DragStarted="SidebarGridSplitter_DragStarted">
                     <i:Interaction.Behaviors>
@@ -244,7 +249,7 @@
                                                                      NotifyOnSourceUpdated=True,
                                                                      NotifyOnTargetUpdated=True}"
                                                 DefaultWidth="{Binding VisibleSidebar.DefaultWidth}"
-                                                MinWidth="{Binding DefaultSidebarPanelWidth,
+                                                MinWidth="{Binding MinSidebarWidth,
                                                                    Source={x:Static local:MpMeasurements.Instance}}" />
 
                     </i:Interaction.Behaviors>

@@ -394,7 +394,8 @@
                     <Setter Property="BorderThickness"
                             Value="1" />
                     <Setter Property="BorderBrush"
-                            Value="Black" />
+                            Value="{Binding BorderBrushHexColor,
+                                            Converter={StaticResource StringHexToBrushConverter}}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TreeViewItem">

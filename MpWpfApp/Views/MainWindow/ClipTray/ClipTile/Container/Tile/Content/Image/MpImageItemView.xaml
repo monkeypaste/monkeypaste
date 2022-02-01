@@ -15,16 +15,16 @@
              Height="{Binding EditorHeight}"
              DataContext="{Binding}"
              Stretch="Uniform">-->
-        <Grid Width="{Binding Parent.TileContentWidth}" 
-             Height="{Binding EditorHeight}">
-            <Image x:Name="ClipTileAppIconImage"
+    <Grid Width="{Binding Parent.TileContentWidth}"
+          Height="{Binding EditorHeight}">
+        <Image x:Name="ClipTileAppIconImage"
                Source="{Binding CopyItemData,
                                 Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                Stretch="Uniform"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                Visibility="Visible" />
-            <local:MpDetectedObjectsCollectionView DataContext="{Binding DetectedImageObjectCollectionViewModel}"/>
-        </Grid>
+        <local:MpDetectedObjectsCollectionView DataContext="{Binding DetectedImageObjectCollectionViewModel}" />
+    </Grid>
     <!--</Viewbox>-->
 </local:MpUserControl>

@@ -13,11 +13,7 @@ namespace MpWpfApp {
         public MpMainWindow() {
             sw = new Stopwatch();
             sw.Start();
-            //DataContext = MpMainWindowViewModel.Instance;
             InitializeComponent();
-            //temporary
-            //MpBootstrapper.Init();
-            //DataContext = MpResolver.Resolve<MpMainWindowViewModel>();
         }
 
         private  void MainWindow_Loaded(object sender, RoutedEventArgs e) {
@@ -37,8 +33,6 @@ namespace MpWpfApp {
             
             mwvm.OnMainWindowShow += Mwvm_OnMainWindowShow;
             mwvm.OnMainWindowHide += Mwvm_OnMainWindowHide;
-
-            // MpPasteToAppPathViewModelCollection.Instance.Init();
 
             sw.Stop();
 

@@ -100,7 +100,7 @@ namespace MpWpfApp {
             if (Math.Abs(dx + dy) < 0.1) {
                 return;
             }
-            var adivm = AssociatedObject.DataContext as MpIActionDesignerItemViewModel;
+            var adivm = AssociatedObject.DataContext as MpIBoxViewModel;
             adivm.X += dx;
             adivm.Y += dy;
             MpConsole.WriteLine("Moved: " + dx + " " + dy);
@@ -115,14 +115,14 @@ namespace MpWpfApp {
 
         private void AssociatedObject_MouseEnter(object sender, MouseEventArgs e) {
             if(!IsAnyMoving) {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeAll;
+                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeAll;
                 CanMove = true;
             }
         }
 
         private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {
             if(!IsMoving) {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
                 CanMove = false;
             }
         }

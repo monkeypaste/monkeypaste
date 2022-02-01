@@ -218,6 +218,7 @@ namespace MpWpfApp {
 
         #endregion
 
+
         public virtual MpRectEdgeType ResizableEdges { get; set; } = MpRectEdgeType.Left | MpRectEdgeType.Right | MpRectEdgeType.Top | MpRectEdgeType.Bottom;
 
         #endregion
@@ -274,9 +275,6 @@ namespace MpWpfApp {
 
         protected override void OnLoad() {
             base.OnLoad();
-
-            //DefaultWidth = AssociatedObject.RenderSize.Width;
-            //DefaultHeight = AssociatedObject.RenderSize.Height;
 
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
             AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
@@ -360,7 +358,7 @@ namespace MpWpfApp {
 
         private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {
             if(!IsResizing) {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
                 CanResize = false;
             }
         }
@@ -379,15 +377,16 @@ namespace MpWpfApp {
                 Resize(delta.X, delta.Y);
             } else if(!IsAnyResizing) {
                 var rect = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
-                MpRectEdgeType edgeFlags = GetClosestEdgeOrCorner(rect, e.GetPosition(AssociatedObject));
+                var lmp = e.GetPosition(AssociatedObject);
+                MpRectEdgeType edgeFlags = GetClosestEdgeOrCorner(rect, lmp);
                 _curCursor = GetCursorByRectFlags(edgeFlags);
                 if (_curCursor != MpCursorType.Default) {
-                    MpCursorViewModel.Instance.CurrentCursor = _curCursor;
+                    //MpCursorViewModel.Instance.CurrentCursor = _curCursor;
                     CanResize = true;
                 } else {
                     CanResize = false;
                     if(!CanAnyResize) {
-                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                        //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
                     }                    
                 }
             }
@@ -407,7 +406,7 @@ namespace MpWpfApp {
             AssociatedObject.ReleaseMouseCapture();
 
             if (IsResizeCursor(MpCursorViewModel.Instance.CurrentCursor)) {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
             }
 
             if (IsResizing) {

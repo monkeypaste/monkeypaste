@@ -17,7 +17,6 @@
             BorderBrush="Black"
             CornerRadius="3"
             Background="Transparent"
-            
             local:MpHoverableExtension.IsEnabled="True"
             local:MpHoverableExtension.IsHovering="{Binding IsHovering,
                                                             Mode=TwoWay}">
