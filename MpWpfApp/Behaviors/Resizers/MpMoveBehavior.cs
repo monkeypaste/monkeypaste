@@ -22,9 +22,42 @@ namespace MpWpfApp {
 
         private Point _lastMousePosition;
 
+        private Point _mouseDownPosition;
+
         #endregion
 
         #region Properties
+
+        #region Command DependencyProperty
+
+        public ICommand Command {
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.Register(
+                "Command", typeof(ICommand),
+                typeof(MpMoveBehavior),
+                new FrameworkPropertyMetadata(null));
+
+        #endregion
+
+        #region CommandParameter DependencyProperty
+
+        public object CommandParameter {
+            get { return (object)GetValue(CommandParameterProperty); }
+            set { SetValue(CommandParameterProperty, value); }
+        }
+
+        public static readonly DependencyProperty CommandParameterProperty =
+            DependencyProperty.Register(
+                "CommandParameter", typeof(object),
+                typeof(MpMoveBehavior),
+                new FrameworkPropertyMetadata(null));
+
+        #endregion
+
 
         #region IsMoving DependencyProperty
 
@@ -61,6 +94,10 @@ namespace MpWpfApp {
         protected override void OnLoad() {
             base.OnLoad();
 
+            if (AssociatedObject == null) {
+                return;
+            }
+
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
             AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
             AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
@@ -69,7 +106,7 @@ namespace MpWpfApp {
 
             if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
                 if (_allMovables.Contains(rvm)) {
-                    MpConsole.WriteLine("Duplicate resizer detected while loading, swapping for new...");
+                    MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
                     _allMovables.Remove(rvm);
                 }
                 _allMovables.Add(rvm);
@@ -87,7 +124,7 @@ namespace MpWpfApp {
 
             if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
                 if (_allMovables.Contains(rvm)) {
-                    MpConsole.WriteLine("Duplicate resizer detected while loading, swapping for new...");
+                    MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
                     _allMovables.Remove(rvm);
                 }
             }
@@ -103,7 +140,6 @@ namespace MpWpfApp {
             var adivm = AssociatedObject.DataContext as MpIBoxViewModel;
             adivm.X += dx;
             adivm.Y += dy;
-            MpConsole.WriteLine("Moved: " + dx + " " + dy);
         }
 
         #endregion
@@ -145,7 +181,12 @@ namespace MpWpfApp {
                 IsMoving = AssociatedObject.CaptureMouse();
 
                 if (IsMoving) {
-                    _lastMousePosition = e.GetPosition(Application.Current.MainWindow);
+
+
+                    if (AssociatedObject.DataContext is MpISelectableViewModel svm) {
+                        svm.IsSelected = true;
+                    }
+                    _mouseDownPosition = _lastMousePosition = e.GetPosition(Application.Current.MainWindow);
                     e.Handled = true;
                 }
             }
@@ -157,6 +198,10 @@ namespace MpWpfApp {
             if (IsMoving) {
                 IsMoving = false;
             }
+            if((e.GetPosition(Application.Current.MainWindow) - _mouseDownPosition).Length < 5) {
+                Command?.Execute(CommandParameter);
+            }
+
         }
 
         #endregion

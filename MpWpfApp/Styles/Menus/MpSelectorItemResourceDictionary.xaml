@@ -13,7 +13,7 @@
                                      Converter={StaticResource BoolToVisibilityConverter}}"
                 Command="{Binding Command}"
                 CommandParameter="{Binding CommandParameter}">
-            <Border Margin="5"
+            <Border Margin="0"
                     HorizontalAlignment="Stretch"
                     BorderThickness="0"
                     BorderBrush="Black"
@@ -39,7 +39,7 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
                                Text="{Binding Header}"
-                               FontSize="16"
+                               FontSize="12"
                                Foreground="Black"
                                Background="Transparent">
                         <TextBlock.ToolTip>
@@ -87,7 +87,7 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
                                Text="{Binding Header}"
-                               FontSize="16"
+                               FontSize="12"
                                Foreground="Black"
                                Background="Transparent">
                         <TextBlock.ToolTip>

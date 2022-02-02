@@ -16,10 +16,7 @@
             BorderThickness="0"
             BorderBrush="Black"
             CornerRadius="3"
-            Background="Transparent"
-            local:MpHoverableExtension.IsEnabled="True"
-            local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                            Mode=TwoWay}">
+            Background="Transparent">
         <DockPanel LastChildFill="False">
             <Image DockPanel.Dock="Left"
                    Source="{Binding IconId,

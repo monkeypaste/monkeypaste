@@ -32,5 +32,9 @@ namespace MpWpfApp {
             fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
             fe.ContextMenu.IsOpen = true;
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            (sender as ComboBox).IsDropDownOpen = false;
+        }
     }
 }

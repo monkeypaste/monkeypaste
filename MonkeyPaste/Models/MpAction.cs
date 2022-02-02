@@ -37,9 +37,9 @@ namespace MonkeyPaste {
 
     public enum MpTriggerType {
         None = 0,
-        ContentItemAdded, 
+        ContentAdded, 
         FileSystemChange,
-        ContentItemAddedToTag,
+        ContentTagged,
         Shortcut,
         ParentOutput
     }
@@ -161,10 +161,10 @@ namespace MonkeyPaste {
             if(actionType == MpActionType.Trigger && iconId == 0) {
                 string iconStr = null;
                 switch ((MpTriggerType)actionObjId) {
-                    case MpTriggerType.ContentItemAdded:
+                    case MpTriggerType.ContentAdded:
                         iconStr = MpBase64Images.ClipboardIcon;
                         break;
-                    case MpTriggerType.ContentItemAddedToTag:
+                    case MpTriggerType.ContentTagged:
                         iconStr = MpBase64Images.TagIcon;
                         break;
                     case MpTriggerType.FileSystemChange:

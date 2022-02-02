@@ -80,7 +80,24 @@ namespace MpWpfApp {
 
         #region MpISelectableViewModel Implementation
 
-        public bool IsSelected { get; set; }
+        private bool _isSelected;
+        public bool IsSelected { 
+            get {
+                return _isSelected || IsAnyChildSelected;
+            }
+            set {
+                if(IsSelected != value) {
+                    _isSelected = value;
+                    if (!_isSelected) {
+                        this.FindAllChildren().ForEach(x => x.IsSelected = false);
+                    }
+                    OnPropertyChanged(nameof(IsSelected));
+                    if(ParentActionViewModel != null) {
+                        ParentActionViewModel.OnPropertyChanged(nameof(ParentActionViewModel.IsSelected));
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -142,6 +159,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsDropDownOpen { get; set; } = false;
+
         public bool IsRootAction => ParentActionId == 0;
 
         public bool IsEnabled { get; set; } = false;
@@ -165,6 +184,8 @@ namespace MpWpfApp {
         public bool IsValid => string.IsNullOrEmpty(ValidationText);
 
         public string ValidationText { get; set; }
+
+        public bool IsAnyChildSelected => this.FindAllChildren().Any(x => x.IsSelected);
 
         #endregion
 
@@ -406,8 +427,8 @@ namespace MpWpfApp {
                     a.Box = await MpBox.Create(
                         boxType: MpBoxType.DesignerItem,
                         boxObjId: a.Id,
-                        x: MpMeasurements.Instance.DefaultDesignerItemWidth / 2,
-                        y: MpMeasurements.Instance.DefaultDesignerItemHeight / 2,
+                        x: -1,
+                        y: -1,
                         w: MpMeasurements.Instance.DefaultDesignerItemWidth,
                         h: MpMeasurements.Instance.DefaultDesignerItemHeight);
                 }
@@ -459,7 +480,11 @@ namespace MpWpfApp {
 
             await avm.InitializeAsync(a);
             avm.ParentActionViewModel = this;
-
+            if(avm.X < 0 && avm.Y < 0) {
+                //new action set position relative to this action
+                avm.X = X + Width * 2;
+                avm.Y = Y;
+            }
             return avm;
         }
 
@@ -535,9 +560,11 @@ namespace MpWpfApp {
                     //if(Parent == null) {
                     //    return;
                     //}
-                    //if(IsSelected) {
-                    //    Parent.SelectedItem = this;
-                    //}
+                    if (IsSelected) {
+                        if(ParentTreeItem != null) {
+                            ParentTreeItem.SelectedItem = this;
+                        }                        
+                    }
                     break;
                 case nameof(IsEnabled):
                     if (IsEnabled) {
@@ -579,6 +606,8 @@ namespace MpWpfApp {
 
         public ICommand AddChildActionCommand => new RelayCommand<object>(
              async (args) => {
+                 IsDropDownOpen = false;
+
                  MpActionType at = (MpActionType)args;
                  MpAction na = await MpAction.Create(
                                          actionType: at,

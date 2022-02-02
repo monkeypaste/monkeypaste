@@ -2626,7 +2626,6 @@
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Context\Selector\" />
-    <Folder Include="Views\MainWindow\FilterMenu\AppMode\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>
   <ItemGroup>

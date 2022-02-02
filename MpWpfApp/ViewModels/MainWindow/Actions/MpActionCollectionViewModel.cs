@@ -34,10 +34,10 @@ namespace MpWpfApp {
                 for (int i = 0; i < triggerLabels.Length; i++) {
                     string resourceKey = string.Empty;
                     switch((MpTriggerType)i) {
-                        case MpTriggerType.ContentItemAdded:
+                        case MpTriggerType.ContentAdded:
                             resourceKey = "ClipboardIcon";
                             break;
-                        case MpTriggerType.ContentItemAddedToTag:
+                        case MpTriggerType.ContentTagged:
                             resourceKey = "PinToCollectionIcon";
                             break;
                         case MpTriggerType.FileSystemChange:
@@ -65,7 +65,32 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<MpActionViewModelBase> AllSelectedActions { get; set; } = new ObservableCollection<MpActionViewModelBase>();
+        public IList<MpActionViewModelBase> AllSelectedActions {
+            get {
+                if(SelectedItem == null) {
+                    return new List<MpActionViewModelBase>();
+                }
+                var avml = SelectedItem.FindAllChildren().ToList();
+                avml.Insert(0, SelectedItem);
+                return avml;
+            }
+        }
+
+        private ObservableCollection<MpActionViewModelBase> _allActions;
+        public ObservableCollection<MpActionViewModelBase> AllActions {
+            get {
+                if(_allActions == null) {
+                    _allActions = new ObservableCollection<MpActionViewModelBase>();
+                }
+                _allActions.Clear();
+                foreach(var tavm in Items) {
+                    foreach(var cavm in tavm.FindAllChildren()) {
+                        _allActions.Add(cavm);
+                    }
+                }
+                return _allActions;
+            }
+        }
 
         #endregion
 
@@ -75,7 +100,6 @@ namespace MpWpfApp {
         public bool CanResize { get; set; }
 
         #endregion
-
 
         #region MpISidebarItemViewModel Implementation
 
@@ -94,7 +118,6 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-
 
         public bool IsAnyTextBoxFocused => SelectedItem != null && SelectedItem.IsAnyTextBoxFocused;
 
@@ -134,16 +157,19 @@ namespace MpWpfApp {
         public async Task<MpTriggerActionViewModelBase> CreateTriggerViewModel(MpAction a) {
             
             if(a.ActionType != MpActionType.Trigger || 
-               (MpTriggerType) a.ActionObjId == MpTriggerType.None || 
+               //(MpTriggerType) a.ActionObjId == MpTriggerType.None || 
                (MpTriggerType)a.ActionObjId == MpTriggerType.ParentOutput) {
                 throw new Exception("This is only supposed to load root level triggers");
             }
             MpTriggerActionViewModelBase tavm = null;
             switch ((MpTriggerType)a.ActionObjId) {
-                case MpTriggerType.ContentItemAdded:
+                case MpTriggerType.None:
+                    tavm = new MpTriggerActionViewModelBase(this);
+                    break;
+                case MpTriggerType.ContentAdded:
                     tavm = new MpContentAddTriggerViewModel(this);
                     break;
-                case MpTriggerType.ContentItemAddedToTag:
+                case MpTriggerType.ContentTagged:
                     tavm = new MpContentTaggedTriggerViewModel(this);
                     break;
                 case MpTriggerType.FileSystemChange:
@@ -211,6 +237,7 @@ namespace MpWpfApp {
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(IsAnySelected));
+                    OnPropertyChanged(nameof(AllSelectedActions));
                     break;
             }
         }
@@ -226,14 +253,14 @@ namespace MpWpfApp {
                  cm.DataContext = MenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
-                 fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Relative;
+                 fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
                  fe.ContextMenu.IsOpen = true;
              });
 
         public ICommand AddTriggerCommand => new RelayCommand<object>(
              async (args) => {
                  IsBusy = true;
-
+                                  
                  MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
                  
                  MpAction na = await MpAction.Create(
@@ -248,8 +275,6 @@ namespace MpWpfApp {
 
                  SelectedItem = navm;
 
-                 AllSelectedActions.Clear();
-                 AllSelectedActions.Add(SelectedItem);
                  OnPropertyChanged(nameof(AllSelectedActions));
 
                  OnPropertyChanged(nameof(Items));
@@ -266,7 +291,7 @@ namespace MpWpfApp {
                 await Task.WhenAll(deleteTasks);
 
                 Items.Remove(tavm);
-                AllSelectedActions.Remove(tavm);
+
                 OnPropertyChanged(nameof(AllSelectedActions));
 
                 await UpdateSortOrder();

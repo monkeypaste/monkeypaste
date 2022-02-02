@@ -35,16 +35,17 @@ namespace MpWpfApp {
                 return;
             }
 
-            var tavm = DataContext as MpActionViewModelBase;
+            var tavm = DataContext as MpTriggerActionViewModelBase;
 
             if(tavm == null) {
                 return;
             }
-            var avmc = tavm.Parent.AllSelectedActions;
+            var avmc = tavm.FindAllChildren().ToList();
+
             if(avmc == null) {
                 return;
             }
-
+            avmc.Insert(0, tavm);
             foreach (var avm in avmc) {
                 var pavm = avm.ParentActionViewModel;
                 if (pavm == null) {

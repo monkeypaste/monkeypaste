@@ -1,4 +1,5 @@
-﻿using MonkeyPaste;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace MpWpfApp {
-    public abstract class MpTriggerActionViewModelBase : 
+    public class MpTriggerActionViewModelBase : 
         MpActionViewModelBase,
         MpIResizableViewModel,
         MpISidebarItemViewModel,
+        MpIMenuItemViewModel,
         MpIActionDesignerCollectionViewModel {
         #region Properties
 
@@ -33,7 +36,6 @@ namespace MpWpfApp {
 
         #endregion
 
-
         #region MpIResizableViewModel Implementation
 
         public bool IsResizing { get; set; }
@@ -50,6 +52,48 @@ namespace MpWpfApp {
 
         public double CameraX { get; set; } = 150;
         public double CameraY { get; set; } = 150;
+
+        #endregion
+
+        #region MpIMenuItemViewModel Implementation
+
+        public MpMenuItemViewModel TriggerTypeMenuItemViewModel {
+            get {
+                var tmivml = new List<MpMenuItemViewModel>();
+                var triggerLabels = typeof(MpTriggerType).EnumToLabels();
+                for (int i = 0; i < triggerLabels.Length; i++) {
+                    string resourceKey = string.Empty;
+                    switch ((MpTriggerType)i) {
+                        case MpTriggerType.ContentAdded:
+                            resourceKey = "ClipboardIcon";
+                            break;
+                        case MpTriggerType.ContentTagged:
+                            resourceKey = "PinToCollectionIcon";
+                            break;
+                        case MpTriggerType.FileSystemChange:
+                            resourceKey = "FolderEventIcon";
+                            break;
+                        case MpTriggerType.Shortcut:
+                            resourceKey = "HotkeyIcon";
+                            break;
+                        case MpTriggerType.ParentOutput:
+                            resourceKey = "ChainIcon";
+                            break;
+                    }
+                    var tt = (MpTriggerType)i;
+                    tmivml.Add(new MpMenuItemViewModel() {
+                        IconResourceKey = Application.Current.Resources[resourceKey] as string,
+                        Header = triggerLabels[i],
+                        Command = SelectTriggerTypeCommand,
+                        CommandParameter = tt,
+                        IsVisible = tt != MpTriggerType.None && (tt != MpTriggerType.ParentOutput || (SelectedItem != null && !SelectedItem.IsRootAction))
+                    });
+                }
+                return new MpMenuItemViewModel() {
+                    SubItems = tmivml
+                };
+            }
+        }
 
         #endregion
 
@@ -81,6 +125,22 @@ namespace MpWpfApp {
             }
         }
 
+        public string Description {
+            get {
+                if(Action == null) {
+                    return string.Empty;
+                }
+                return Action.Description;
+            }
+            set {
+                if(Description != value) {
+                    Description = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(Description));
+                }
+            }
+        }
+
         #endregion
 
         #endregion
@@ -88,8 +148,9 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpTriggerActionViewModelBase(MpActionCollectionViewModel parent) : base(parent) {
-
+            PropertyChanged += MpTriggerActionViewModelBase_PropertyChanged;
         }
+
         #endregion
 
         #region Public Mehthods
@@ -99,6 +160,37 @@ namespace MpWpfApp {
                 ValidationText = "Trigger Action Must Have Name";
             }
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpTriggerActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region Commands
+
+
+        public ICommand SelectTriggerTypeCommand => new RelayCommand<object>(
+            async (args) => {
+                IsDropDownOpen = false;
+
+                TriggerType = (MpTriggerType)args;
+
+                var thisTrigger = Parent.Items.FirstOrDefault(x => x.ActionId == ActionId);
+                if (thisTrigger != null) {
+                    MpHelpers.RunOnMainThread(async () => {
+                        thisTrigger = await Parent.CreateTriggerViewModel(Action);
+                    });
+                }
+            });
         #endregion
     }
 }

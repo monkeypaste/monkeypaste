@@ -23,7 +23,6 @@ namespace MpWpfApp {
         MpITriggerActionViewModel {
 
         #region Private Variables
-        private int _tagClipCount = 0;
         private string _originalTagName = string.Empty;
         private bool _wasEditingName = false;
         #endregion
@@ -143,19 +142,7 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isEditing = false;
-        public bool IsEditing {
-            get {
-                return _isEditing;
-            }
-            set {
-                if (_isEditing != value) {
-                    _isEditing = value;
-
-                    OnPropertyChanged(nameof(IsEditing));
-                }
-            }
-        }
+        public bool IsEditing { get; set; }
 
         private bool _isAssociated = false;
         public bool IsAssociated {
@@ -224,22 +211,7 @@ namespace MpWpfApp {
             }
         }
 
-        public int TagClipCount {
-            get {
-                return _tagClipCount;
-            }
-            set {
-                if (_tagClipCount != value) {
-                    _tagClipCount = value;
-                    OnPropertyChanged(nameof(TagClipCount));
-                    if(ParentTreeItem != null) {
-                        ParentTreeItem.OnPropertyChanged(nameof(ParentTreeItem.TotalClipCount));
-                    }
-                }
-            }
-        }
-
-        public int TotalClipCount => IsAllTag ? TagClipCount : TagClipCount + this.FindAllChildren().Sum(x => x.TagClipCount);
+        public int TagClipCount { get; set; }
 
         public double TagHeight {
             get {

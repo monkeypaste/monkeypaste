@@ -275,7 +275,9 @@ namespace MpWpfApp {
 
         protected override void OnLoad() {
             base.OnLoad();
-
+            if(AssociatedObject == null) {
+                return;
+            }
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
             AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
             AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;

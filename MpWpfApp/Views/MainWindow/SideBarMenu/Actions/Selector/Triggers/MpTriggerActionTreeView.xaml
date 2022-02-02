@@ -550,13 +550,5 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
-        <Grid x:Name="PresetParametersGrid"
-              Grid.Column="1"
-              Visibility="{Binding IsAnyEditingParameters,
-                                   Converter={StaticResource BoolToVisibilityConverter},
-                                   Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance},
-                                   FallbackValue='Collapsed'}">
-            <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedPresetViewModel, Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}" />
-        </Grid>
     </Grid>
 </local:MpUserControl>

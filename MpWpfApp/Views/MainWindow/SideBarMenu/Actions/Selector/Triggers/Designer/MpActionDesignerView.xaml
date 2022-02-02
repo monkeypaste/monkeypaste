@@ -12,11 +12,10 @@
                      d:DataContext="{d:DesignInstance Type=local:MpTriggerActionViewModelBase,
                                                       IsDesignTimeCreatable=False}">
     <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch"
-          Background="Pink">
+          VerticalAlignment="Stretch">
         <AdornerDecorator>
             <ListBox x:Name="ActionDesignerListBox"
-                     Background="Salmon"
+                     Background="LightGray"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      ItemsSource="{Binding AllSelectedActions,
@@ -56,5 +55,37 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </AdornerDecorator>
+        <Button x:Name="AddNewActionButton"
+                Visibility="{Binding IsAnySelected,
+                                     Converter={StaticResource BoolToVisibilityFlipConverter},
+                                     Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                Style="{StaticResource SemiTransparentButton}"
+                Command="{Binding AddTriggerCommand,
+                                  Source={x:Static local:MpActionCollectionViewModel.Instance}}">
+            <StackPanel Orientation="Vertical">
+                <Grid>
+                    <Ellipse Stroke="DimGray"
+                             Fill="Transparent"
+                             StrokeThickness="3"
+                             Width="50"
+                             Height="50" />
+                    <Rectangle HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Fill="DimGray"
+                               Height="30"
+                               Width="3" />
+                    <Rectangle HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Fill="DimGray"
+                               Height="3"
+                               Width="30" />
+                </Grid>
+                <Label HorizontalAlignment="Center">Add New</Label>
+            </StackPanel>
+        </Button>
     </Grid>
 </local:MpUserControl>

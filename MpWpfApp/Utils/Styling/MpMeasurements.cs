@@ -154,13 +154,13 @@ namespace MpWpfApp {
 
         #region Tag Tree
 
-        public double DefaultTagTreePanelWidth => 150;
+        public double DefaultTagTreePanelWidth => 200;
 
         #endregion
 
         #region Analyzers
 
-        public double DefaultAnalyzerPanelWidth => 500;
+        public double DefaultAnalyzerPanelWidth => 600;
 
         #endregion
 

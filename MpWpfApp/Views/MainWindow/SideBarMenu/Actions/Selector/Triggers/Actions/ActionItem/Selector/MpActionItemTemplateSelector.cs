@@ -9,13 +9,13 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpActionItemTemplateSelector : DataTemplateSelector {
-        public HierarchicalDataTemplate AnalyzeTemplate { get; set; }
-        public HierarchicalDataTemplate ClassifyTemplate { get; set; }
-        public HierarchicalDataTemplate TransformTemplate { get; set; } //unimplemented...
-        public HierarchicalDataTemplate MacroTemplate { get; set; }
-        public HierarchicalDataTemplate TimerTemplate { get; set; }
-        public HierarchicalDataTemplate CompareTemplate { get; set; }
-        public HierarchicalDataTemplate TriggerTemplate { get; set; }
+        public DataTemplate AnalyzeTemplate { get; set; }
+        public DataTemplate ClassifyTemplate { get; set; }
+        public DataTemplate TransformTemplate { get; set; } //unimplemented...
+        public DataTemplate MacroTemplate { get; set; }
+        public DataTemplate TimerTemplate { get; set; }
+        public DataTemplate CompareTemplate { get; set; }
+        public DataTemplate TriggerTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
             var mvm = item as MpActionViewModelBase;
