@@ -36,5 +36,10 @@ namespace MpWpfApp {
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             (sender as ComboBox).IsDropDownOpen = false;
         }
+
+        private void DetailGrid_SizeChanged(object sender, SizeChangedEventArgs e) {
+            BindingContext.DesignerWidth = e.NewSize.Width;
+            BindingContext.DesignerHeight = e.NewSize.Height;
+        }
     }
 }

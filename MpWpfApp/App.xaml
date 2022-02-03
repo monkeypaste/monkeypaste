@@ -23,6 +23,47 @@
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Designer/MpDesignerResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <Style TargetType="ComboBoxItem">
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Top" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Center" />
+            </Style>
+
+            <Style TargetType="{x:Type ItemsControl}">
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Top" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
+            </Style>
+            <Style TargetType="{x:Type ListBoxItem}">
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Top" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
+            </Style>
+            <Style TargetType="{x:Type TreeViewItem}">
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Top" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
+            </Style>
 
             <!--  Color Palletes  -->
             <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>

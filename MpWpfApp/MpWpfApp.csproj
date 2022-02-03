@@ -115,6 +115,7 @@
     <Compile Include="AttachedProperties\MpPopupMenuExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpHoverableExtension.cs" />
+    <Compile Include="AttachedProperties\MpScrollViewerExtension.cs" />
     <Compile Include="Attributes\Affects\Base\MpAffectsBaseAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsThisAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsSiblingAttribute.cs" />
@@ -147,10 +148,11 @@
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Base\MpHighlightBehaviorBase.cs" />
     <Compile Include="Behaviors\MpImageObjectRecognitionBehavior.cs" />
+    <Compile Include="Behaviors\MpViewportCameraBehavior.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
     <Compile Include="Behaviors\MpTagTileNotificationBehavior.cs" />
-    <Compile Include="Behaviors\Resizers\MpMoveBehavior.cs" />
-    <Compile Include="Behaviors\Resizers\MpResizeBehavior.cs" />
+    <Compile Include="Behaviors\MpMoveBehavior.cs" />
+    <Compile Include="Behaviors\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpBootstrapper.cs" />
     <Compile Include="Controls\MpDesignerCanvas.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="Controls\Adorners\Resizer\MpResizeChildHelper.cs" />
     <Compile Include="Controls\Adorners\Resizer\MpResizeAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
+    <Compile Include="Controls\MpDesignerViewbox.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMoveThumb.cs" />
     <Compile Include="Controls\MpResizeThumb.cs" />

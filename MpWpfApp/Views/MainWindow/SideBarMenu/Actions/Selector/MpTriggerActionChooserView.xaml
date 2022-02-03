@@ -240,8 +240,7 @@
                                         Margin="5,10"                                        
                                         HorizontalAlignment="Stretch"
                                         Background="Crimson"
-                                        Foreground="Cornsilk"
-                                        
+                                        Foreground="Cornsilk"                                        
                                         Style="{StaticResource RoundedButton}"
                                         Command="{Binding DeleteThisActionCommand}"
                                         CommandParameter="{Binding}"
@@ -534,7 +533,8 @@
         <Grid x:Name="DetailGrid"
               Grid.Column="1"
               HorizontalAlignment="Stretch"
-              DataContext="{Binding SelectedItem}">
+              SizeChanged="DetailGrid_SizeChanged"
+              DataContext="{Binding}">
             <i:Interaction.Behaviors>
                 <local:MpResizeBehavior x:Name="DesignerResizeBehvior"
                                         IsResizing="{Binding IsResizing,
@@ -558,7 +558,7 @@
                                                            Source={x:Static local:MpMeasurements.Instance}}" />
 
             </i:Interaction.Behaviors>
-            <local:MpActionDesignerView DataContext="{Binding}" />
+            <local:MpActionDesignerView DataContext="{Binding SelectedItem}" />
         </Grid>
     </DockPanel>
 </local:MpUserControl>

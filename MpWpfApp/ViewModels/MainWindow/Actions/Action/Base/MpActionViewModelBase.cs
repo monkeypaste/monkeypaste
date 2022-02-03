@@ -155,6 +155,7 @@ namespace MpWpfApp {
                 return MpSystemColors.Transparent;
             }
         }
+
         #endregion
 
         #region State
@@ -424,11 +425,13 @@ namespace MpWpfApp {
                 if (a.BoxId > 0) {
                     a.Box = await MpDb.GetItemAsync<MpBox>(a.BoxId);
                 } else {
+                    MpPoint openSpot = Parent.FindOpenDesignerLocation();
+
                     a.Box = await MpBox.Create(
                         boxType: MpBoxType.DesignerItem,
                         boxObjId: a.Id,
-                        x: -1,
-                        y: -1,
+                        x: openSpot.X,
+                        y: openSpot.Y,
                         w: MpMeasurements.Instance.DefaultDesignerItemWidth,
                         h: MpMeasurements.Instance.DefaultDesignerItemHeight);
                 }
@@ -480,11 +483,7 @@ namespace MpWpfApp {
 
             await avm.InitializeAsync(a);
             avm.ParentActionViewModel = this;
-            if(avm.X < 0 && avm.Y < 0) {
-                //new action set position relative to this action
-                avm.X = X + Width * 2;
-                avm.Y = Y;
-            }
+
             return avm;
         }
 
@@ -581,6 +580,9 @@ namespace MpWpfApp {
                             await Action.WriteToDatabaseAsync();                            
                         });
                     }
+                    break;
+                case nameof(IsMoving):
+                    Parent.OnPropertyChanged(nameof(Parent.CanPan));
                     break;
             }
         }

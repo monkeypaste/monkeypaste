@@ -22,6 +22,7 @@ namespace MpWpfApp {
         protected virtual void OnLoad() {
             MpMainWindowViewModel.Instance.OnMainWindowShow += OnMainWindowShow; 
             MpMainWindowViewModel.Instance.OnMainWindowHide += OnMainWindowHide;
+            _dataContext = AssociatedObject.DataContext;
 
             _isLoaded = true;
         }

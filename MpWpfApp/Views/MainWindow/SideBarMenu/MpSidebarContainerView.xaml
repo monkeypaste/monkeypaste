@@ -34,17 +34,17 @@
               Visibility="{Binding IsAnySidebarOpen,
                                    Converter={StaticResource BoolToVisibilityConverter}}">
             <local:MpTagTreeView x:Name="TagTreeView"
-                                 MinWidth="{Binding DefaultSidebarWidth}"
+                                 MinWidth="{Binding DefaultTagTreePanelWidth, Source={x:Static local:MpMeasurements.Instance}}"
                                  Visibility="{Binding IsSidebarVisible,
                                                       Converter={StaticResource BoolToVisibilityConverter}}"
                                  DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
             <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
-                                              MinWidth="{Binding DefaultSidebarWidth}"
+                                              MinWidth="{Binding DefaultAnalyzerPanelWidth, Source={x:Static local:MpMeasurements.Instance}}"
                                               DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
                                               Visibility="{Binding IsSidebarVisible,
                                                                    Converter={StaticResource BoolToVisibilityConverter}}" />
             <local:MpTriggerActionChooserView x:Name="ActionCollectionView"
-                                              MinWidth="{Binding DefaultSidebarWidth}"
+                                              MinWidth="{Binding DefaultActionPanelWidth, Source={x:Static local:MpMeasurements.Instance}}"
                                               VerticalAlignment="Stretch"
                                               DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
                                               Visibility="{Binding IsSidebarVisible,

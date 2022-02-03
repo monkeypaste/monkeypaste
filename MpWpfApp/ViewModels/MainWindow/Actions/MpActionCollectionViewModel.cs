@@ -17,8 +17,10 @@ namespace MpWpfApp {
         MpSelectorViewModelBase<object,MpTriggerActionViewModelBase>, 
         MpIMenuItemViewModel,
         MpISingletonViewModel<MpActionCollectionViewModel>,
+        MpIHoverableViewModel,
         MpIResizableViewModel,
-        MpISidebarItemViewModel {
+        MpISidebarItemViewModel,
+        MpIViewportCameraViewModel {
         #region Private Variables
 
         #endregion
@@ -30,7 +32,7 @@ namespace MpWpfApp {
         public MpMenuItemViewModel MenuItemViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
-                var triggerLabels = typeof(MpTriggerType).EnumToLabels();
+                var triggerLabels = typeof(MpTriggerType).EnumToLabels("Select Trigger");
                 for (int i = 0; i < triggerLabels.Length; i++) {
                     string resourceKey = string.Empty;
                     switch((MpTriggerType)i) {
@@ -101,6 +103,12 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpIHoverableViewModel Implementation
+
+        public bool IsHovering { get; set; }
+
+        #endregion
+
         #region MpISidebarItemViewModel Implementation
 
         public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultActionPanelWidth;
@@ -112,9 +120,61 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpIViewportCameraViewModel Implementation
+
+        public bool IsPanning { get; set; } = false;
+        public bool IsZooming { get; set; } = false;
+        public bool CanZoom => SelectedItem != null;
+        public bool CanPan => SelectedItem != null && AllSelectedActions.All(x => !x.IsMoving && !x.CanMove);
+
+        public double MaxCameraZoomFactor => 10.0;
+        public double MinCameraZoomFactor => 0.1;
+        public double CameraZoomFactor { get; set; } = 1.0;
+
+        public double CameraX { get; set; } = 0;
+        public double CameraY { get; set; } = 0;
+
+        public double DesignerWidth { get; set; } = MpMeasurements.Instance.DefaultDesignerWidth;
+        public double DesignerHeight { get; set; }
+
+        public double ViewportWidth {
+            get {
+                return DesignerWidth * CameraZoomFactor;
+            }
+            set {
+                if(ViewportWidth != value) {
+                    DesignerWidth = value / CameraZoomFactor;
+                    OnPropertyChanged(nameof(ViewportWidth));
+                    MpConsole.WriteLine("Viewport width: " + ViewportWidth);
+                }
+            }
+        }
+        public double ViewportHeight {
+            get {
+                return DesignerHeight * CameraZoomFactor;
+            }
+            set {
+                if (ViewportHeight != value) {
+                    DesignerHeight = value / CameraZoomFactor;
+                    OnPropertyChanged(nameof(ViewportHeight));
+                    MpConsole.WriteLine("Viewport heighy: " + ViewportHeight);
+                }
+            }
+        }
+
+        #endregion
+
         #region Appearance
 
-        //public double ActionTreeHeight 
+        public string AddNewButtonBorderBrushHexColor {
+            get {
+                if (IsHovering) {
+                    return MpSystemColors.LightGray;
+                }
+                return MpSystemColors.DarkGray;
+            }
+        }
+
         #endregion
 
         #region State
@@ -184,6 +244,7 @@ namespace MpWpfApp {
             }
 
             await tavm.InitializeAsync(a);            
+
             return tavm;
         }
 
@@ -195,6 +256,44 @@ namespace MpWpfApp {
 
         public void DisableAll() {
             Items.ForEach(x => x.Disable());
+        }
+
+        public MpPoint FindOpenDesignerLocation() {
+            MpPoint p = new MpPoint();
+            if(SelectedItem == null) {
+                return p;
+            }
+            int attempts = 0;
+            int maxAttempts = 100;
+            int hw = (int)(DesignerWidth / 2);
+            int hh = (int)(DesignerHeight / 2);
+            while(OverlapsItem(p)) {
+                p.X = MpHelpers.Rand.Next(-hw, hw);
+                p.Y = MpHelpers.Rand.Next(-hh, hh);
+                attempts++;
+                if(attempts > maxAttempts) {
+                    DesignerWidth += MpMeasurements.Instance.DefaultDesignerItemWidth * 2;
+                    DesignerHeight += MpMeasurements.Instance.DefaultDesignerItemHeight * 2;
+                    hw = (int)(DesignerWidth / 2);
+                    hh = (int)(DesignerHeight / 2);
+                    attempts = 0;
+                }
+            }
+            return p;
+        }
+
+        public bool OverlapsItem(MpPoint targetTopLeft) {
+            double w = MpMeasurements.Instance.DefaultDesignerItemWidth;
+            double h = MpMeasurements.Instance.DefaultDesignerItemHeight;
+            MpPoint targetMid = new MpPoint(targetTopLeft.X + (w / 2), targetTopLeft.Y + (h / 2));
+            foreach(var avm in AllSelectedActions) {
+                MpPoint sourceMid = new MpPoint(avm.X + (w / 2), avm.Y + (h / 2));
+                double dist = targetMid.Distance(sourceMid);
+                if(dist < w || dist < h) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public string GetUniqueTriggerName(string prefix) {
@@ -236,8 +335,15 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(SelectedItem):
+                    CameraZoomFactor = 1.0;
                     OnPropertyChanged(nameof(IsAnySelected));
                     OnPropertyChanged(nameof(AllSelectedActions));
+                    break;
+                case nameof(DesignerWidth):
+                case nameof(DesignerHeight):
+                case nameof(CameraZoomFactor):
+                    OnPropertyChanged(nameof(ViewportWidth));
+                    OnPropertyChanged(nameof(ViewportHeight));
                     break;
             }
         }

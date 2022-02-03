@@ -15,8 +15,7 @@ namespace MpWpfApp {
         MpActionViewModelBase,
         MpIResizableViewModel,
         MpISidebarItemViewModel,
-        MpIMenuItemViewModel,
-        MpIActionDesignerCollectionViewModel {
+        MpIMenuItemViewModel {
         #region Properties
 
         #region View Models
@@ -40,18 +39,6 @@ namespace MpWpfApp {
 
         public bool IsResizing { get; set; }
         public bool CanResize { get; set; }
-
-        #endregion
-
-        #region MpIActionDesignerCollectionViewModel Implementation
-
-        public double CameraZoomFactor { get; set; } = 1.0;
-
-        public double DesignerWidth { get; set; } = 300;
-        public double DesignerHeight { get; set; } = 250;
-
-        public double CameraX { get; set; } = 150;
-        public double CameraY { get; set; } = 150;
 
         #endregion
 

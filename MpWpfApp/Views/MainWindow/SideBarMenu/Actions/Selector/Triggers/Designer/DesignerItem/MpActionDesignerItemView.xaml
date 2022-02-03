@@ -70,13 +70,29 @@
         <local:MpActionDesignerItemTemplateSelector x:Key="ActionDesignerItemTemplateSelector" />
     </local:MpUserControl.Resources>
     <Button Background="Transparent"
-            BorderThickness="0">
+            Style="{StaticResource SemiTransparentButton}"
+            BorderThickness="0"
+            BorderBrush="White">
         <Grid>
             <ContentControl Width="{Binding Width}"
                             Height="{Binding Height}"
+                            Background="Transparent"
                             Content="{Binding}"
                             VerticalAlignment="Top"
                             ContentTemplateSelector="{StaticResource ActionDesignerItemTemplateSelector}">
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ContentControl">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ContentControl.Style>
                 <i:Interaction.Behaviors>
                     <local:MpMoveBehavior IsMoving="{Binding IsMoving,
                                                              Mode=TwoWay,
@@ -89,7 +105,8 @@
                                                             NotifyOnSourceUpdated=True,
                                                             NotifyOnTargetUpdated=True}"
                                           Command="{Binding ShowActionSelectorMenuCommand}"
-                                          CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" />
+                                          CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                                    AncestorType=Button}}" />
                 </i:Interaction.Behaviors>
             </ContentControl>
             <Label Height="30"

@@ -166,11 +166,11 @@ namespace MpWpfApp {
 
         #region Actions
 
-        public double DefaultActionPanelWidth => 325;
+        public double DefaultActionPanelWidth => 600;
 
         #region Action Designer
 
-        public double DefaultDesignerWidth => 300;
+        public double DefaultDesignerWidth => 600;
 
         public double DefaultDesignerHeight => 200;
 

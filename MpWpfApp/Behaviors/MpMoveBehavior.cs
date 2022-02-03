@@ -120,6 +120,7 @@ namespace MpWpfApp {
             AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
             AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
             AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
+            AssociatedObject.MouseEnter -= AssociatedObject_MouseEnter;
             AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
 
             if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
