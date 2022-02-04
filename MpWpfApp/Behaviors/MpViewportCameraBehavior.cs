@@ -10,14 +10,16 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using MonkeyPaste;
 using System.Windows.Media;
-
+using ZoomAndPan;
 namespace MpWpfApp {
 
-    public class MpViewportCameraBehavior : MpBehavior<FrameworkElement> {
+    public class MpViewportCameraBehavior : MpBehavior<ZoomAndPanControl> {
         #region Private Variables
 
         private Point _lastMousePosition;
-        private Point _mouseDownPosition;
+
+        private Point _designerMouseDownPosition; //control
+        private Point _viewportMouseDownPosition; //content
 
         private double _originalZoomFactor;
         private MpSize _originalSize;
@@ -43,6 +45,7 @@ namespace MpWpfApp {
 
         #endregion
 
+        public double ZoomFactor { get; set; } =  1.0;
 
         #endregion
 
@@ -80,28 +83,30 @@ namespace MpWpfApp {
         #region Event Handlers
 
         private void AssociatedObject_MouseWheel(object sender, MouseWheelEventArgs e) {
-            double oldZoom = ViewportCameraViewModel.CameraZoomFactor;
-            double newZoom = oldZoom + -e.Delta * _mouseWheelDampening;
+            //double oldZoom = ViewportCameraViewModel.CameraZoomFactor;
+            //double newZoom = oldZoom + -e.Delta * _mouseWheelDampening;
 
-            ViewportCameraViewModel.CameraZoomFactor = Math.Min(
-                                                            Math.Max(
-                                                                newZoom,
-                                                                ViewportCameraViewModel.MinCameraZoomFactor), 
-                                                            ViewportCameraViewModel.MaxCameraZoomFactor);
+            ////ViewportCameraViewModel.CameraZoomFactor = Math.Min(
+            ////                                                Math.Max(
+            ////                                                    newZoom,
+            ////                                                    ViewportCameraViewModel.MinCameraZoomFactor), 
+            ////                                                ViewportCameraViewModel.MaxCameraZoomFactor);
+            //var position = e.GetPosition(AssociatedObject);
+            //var transform = (MatrixTransform)AssociatedObject.RenderTransform;
+            //var matrix = transform.Matrix;
+            //var scale = e.Delta >= 0 ? 1.1 : (1.0 / 1.1); // choose appropriate scaling factor
 
-            var st = AssociatedObject.RenderTransform as ScaleTransform;
-            var tavm = AssociatedObject.DataContext as MpTriggerActionViewModelBase;
-            double deltaX = ViewportCameraViewModel.ViewportWidth /  ViewportCameraViewModel.DesignerWidth;
-            double deltaY = ViewportCameraViewModel.ViewportHeight / ViewportCameraViewModel.DesignerHeight;
-            tavm.Parent.AllSelectedActions.ForEach(x => x.X *= deltaX);
-            tavm.Parent.AllSelectedActions.ForEach(x => x.Y *= deltaY);
+            //matrix.ScaleAtPrepend(scale, scale, position.X, position.Y);
+            //transform.Matrix = matrix;
 
-            var mp = e.GetPosition(AssociatedObject);
-            var cp = new Point(AssociatedObject.RenderSize.Width / 2, AssociatedObject.RenderSize.Height / 2);
-            var delta = cp - mp;
-            //delta *= ViewportCameraViewModel.CameraZoomFactor;
-            //ViewportCameraViewModel.CameraX += delta.X;
-            //ViewportCameraViewModel.CameraY += delta.Y;
+            double deltaZoom = 0;
+            if (e.Delta > 0) {
+                deltaZoom = ZoomFactor;
+            } else if (e.Delta < 0) {
+                deltaZoom = -ZoomFactor;
+            }
+            var lb = AssociatedObject.GetVisualDescendent<ListBox>();
+            AssociatedObject.AnimatedZoomAboutPoint(AssociatedObject.ContentScale + deltaZoom, e.GetPosition(lb));
             e.Handled = true;
         }
 
@@ -110,28 +115,25 @@ namespace MpWpfApp {
                 return;
             }
 
-            var mp = e.GetPosition(AssociatedObject);
+            var lb = AssociatedObject.GetVisualDescendent<ListBox>();
+            var vmp = e.GetPosition(lb);
 
-            Vector delta = mp - _lastMousePosition;
-            _lastMousePosition = mp;
+            Vector delta = vmp - _viewportMouseDownPosition;
+            _lastMousePosition = vmp;
 
-            ViewportCameraViewModel.CameraX += delta.X;
-            ViewportCameraViewModel.CameraY += delta.Y;
-
-            //MpConsole.WriteLine($"Camera X:{ViewportCameraViewModel.CameraX} Y:{ViewportCameraViewModel.CameraY}");
+            AssociatedObject.ContentOffsetX -= delta.X;
+            AssociatedObject.ContentOffsetY -= delta.Y;
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            var lb = AssociatedObject.GetVisualDescendent<ListBox>();
+            _designerMouseDownPosition = e.GetPosition(AssociatedObject);
+            _viewportMouseDownPosition = e.GetPosition(lb);
+
             if (ViewportCameraViewModel.CanPan) {
                 ViewportCameraViewModel.IsPanning = AssociatedObject.CaptureMouse();
 
                 if (ViewportCameraViewModel.IsPanning) {
-                    Viewbox vb = AssociatedObject.GetVisualAncestor<Viewbox>();
-                    Grid g = AssociatedObject.GetVisualAncestor<Grid>();
-
-                    var mp = e.GetPosition(AssociatedObject);
-
-                    _mouseDownPosition = _lastMousePosition = mp;
                     e.Handled = true;
                 }
             }

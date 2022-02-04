@@ -6,6 +6,7 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
                      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                     xmlns:zoompan="clr-namespace:ZoomAndPan;assembly=ZoomAndPan"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpTriggerActionViewModelBase"
                      mc:Ignorable="d"
@@ -13,58 +14,51 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
-        <local:MpDesignerViewbox Stretch="Fill"
+
+        <Grid.Background>
+            <SolidColorBrush Color="Gray"
+                             Opacity="0.7" />
+        </Grid.Background>
+        <!--<local:MpDesignerViewbox Stretch="UniformToFill"
                                  OriginThickness="1.5"
                                  GridLineSpacing="50"
+                                 OriginBrush="Transparent"
+                                 GridLineBrush="Transparent"
                                  Width="{Binding DesignerWidth,
                                                  Source={x:Static local:MpActionCollectionViewModel.Instance},
                                                  Mode=TwoWay}"
                                  Height="{Binding DesignerHeight,
-                                                  Source={x:Static local:MpActionCollectionViewModel.Instance},
-                                                  Mode=TwoWay}">
-            <AdornerDecorator>
+                                                  Source={x:Static local:MpActionCollectionViewModel.Instance}}">-->
+            <zoompan:ZoomAndPanControl Width="{Binding DesignerWidth,
+                                                 Source={x:Static local:MpActionCollectionViewModel.Instance},
+                                                 Mode=TwoWay}"
+                                 Height="{Binding DesignerHeight,
+                                                  Source={x:Static local:MpActionCollectionViewModel.Instance}}">
+                <i:Interaction.Behaviors>
+                    <local:MpViewportCameraBehavior x:Name="ActionDesignerViewportBehavior"
+                                                    ZoomFactor="0.5"
+                                                    ViewportCameraViewModel="{x:Static local:MpActionCollectionViewModel.Instance}" />
+                </i:Interaction.Behaviors>
                 <ListBox x:Name="ActionDesignerListBox"
-                         Background="Transparent"
-                         HorizontalAlignment="Stretch"
-                         VerticalAlignment="Stretch"
-                         RenderTransformOrigin="0.5,0.5"
-                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                         Background="Orange"
+                         Height="Auto"
+                         BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                          ScrollViewer.CanContentScroll="False"
                          ScrollViewer.IsDeferredScrollingEnabled="True"
-                         ItemsSource="{Binding AllSelectedActions,
+                         ItemsSource="{Binding AllSelectedTriggerActions,
                                                Source={x:Static local:MpActionCollectionViewModel.Instance}}">
-                    <i:Interaction.Behaviors>
-                        <local:MpViewportCameraBehavior x:Name="ActionDesignerViewportBehavior"
-                                                        ViewportCameraViewModel="{x:Static local:MpActionCollectionViewModel.Instance}" />
-                    </i:Interaction.Behaviors>
-                    <ListBox.RenderTransform>
-                        <ScaleTransform />
-                    </ListBox.RenderTransform>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <local:MpDesignerCanvas x:Name="ActionDesignerCanvas"
-                                                    ClipToBounds="False"
-                                                    TipLength="20"
                                                     TipWidth="10"
-                                                    Background="Transparent"
-                                                    RenderTransformOrigin="0.5,0.5"
-                                                    TransitionLineBrush="HotPink"
-                                                    TransitionLineThickness="2"
-                                                    Width="{Binding ViewportWidth,
-                                                                    Source={x:Static local:MpActionCollectionViewModel.Instance},
-                                                                    Mode=TwoWay}"
-                                                    Height="{Binding ViewportHeight,
-                                                                     Source={x:Static local:MpActionCollectionViewModel.Instance},
-                                                                     Mode=TwoWay}"
-                                                    IsItemsHost="True">
-                                <Canvas.RenderTransform>
-                                    <TranslateTransform X="{Binding CameraX,
-                                                                    Source={x:Static local:MpActionCollectionViewModel.Instance}}"
-                                                        Y="{Binding CameraY,
-                                                                    Source={x:Static local:MpActionCollectionViewModel.Instance}}" />
-                                </Canvas.RenderTransform>
-                            </local:MpDesignerCanvas>
+                                                    TailWidth="3"
+                                                    TransitionLineBorderBrush="White"
+                                                    TransitionLineThickness="1" 
+                                                    Width="2000"
+                                                    Height="2000"
+                                                    IsItemsHost="True" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemContainerStyle>
@@ -106,14 +100,17 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <ContentPresenter />
+                                        <StackPanel Orientation="Vertical">
+                                            <ContentPresenter />
+                                            <TextBlock HorizontalAlignment="Center" Text="{Binding Label}"/>
+                                        </StackPanel>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsSelected"
-                                                         Value="True">
+                                                     Value="True">
                                                 <Setter Property="BorderBrush"
-                                                            Value="Transparent" />
+                                                        Value="Transparent" />
                                                 <Setter Property="Background"
-                                                            Value="Transparent" />
+                                                        Value="Transparent" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -127,8 +124,8 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </AdornerDecorator>
-        </local:MpDesignerViewbox>
+            </zoompan:ZoomAndPanControl>
+        <!--</local:MpDesignerViewbox>-->
         <Button x:Name="AddNewActionButton"
                 Visibility="{Binding IsAnySelected,
                                      Converter={StaticResource BoolToVisibilityFlipConverter},

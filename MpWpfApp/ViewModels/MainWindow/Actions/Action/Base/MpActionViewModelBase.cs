@@ -4,7 +4,6 @@ using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -19,7 +18,7 @@ namespace MpWpfApp {
     }
 
     public abstract class MpActionViewModelBase :
-        MpSelectorViewModelBase<MpActionCollectionViewModel, MpActionViewModelBase>,
+        MpViewModelBase<MpActionCollectionViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpIUserIconViewModel,
@@ -51,8 +50,9 @@ namespace MpWpfApp {
 
         public MpActionViewModelBase ParentTreeItem => ParentActionViewModel;
 
-        public IList<MpActionViewModelBase> Children => Items;
+        public ObservableCollection<MpActionViewModelBase> Items { get; set; } = new ObservableCollection<MpActionViewModelBase>();
 
+        public IList<MpActionViewModelBase> Children => Items;
         #endregion
 
         #region MpIUserIcon Implementation
@@ -80,24 +80,27 @@ namespace MpWpfApp {
 
         #region MpISelectableViewModel Implementation
 
-        private bool _isSelected;
-        public bool IsSelected { 
-            get {
-                return _isSelected || IsAnyChildSelected;
-            }
-            set {
-                if(IsSelected != value) {
-                    _isSelected = value;
-                    if (!_isSelected) {
-                        this.FindAllChildren().ForEach(x => x.IsSelected = false);
-                    }
-                    OnPropertyChanged(nameof(IsSelected));
-                    if(ParentActionViewModel != null) {
-                        ParentActionViewModel.OnPropertyChanged(nameof(ParentActionViewModel.IsSelected));
-                    }
-                }
-            }
-        }
+        //private bool _isSelected;
+        //public bool IsSelected {
+        //    get {
+        //        return _isSelected || IsAnyChildSelected;
+        //    }
+        //    set {
+        //        if (IsSelected != value) {
+        //            _isSelected = value;
+        //            if (!_isSelected) {
+        //                this.FindAllChildren().ForEach(x => x.IsSelected = false);
+        //            }
+        //            OnPropertyChanged(nameof(IsSelected));
+        //            if (ParentActionViewModel != null) {
+        //                ParentActionViewModel.OnPropertyChanged(nameof(ParentActionViewModel.IsSelected));
+        //            }
+        //        }
+        //    }
+        //}
+        public DateTime LastSelectedDateTime { get; set; }
+
+        public bool IsSelected { get; set; } = false;
 
         #endregion
 
@@ -129,7 +132,7 @@ namespace MpWpfApp {
                     amivml.Add(new MpMenuItemViewModel() {
                         IconResourceKey = Application.Current.Resources[resourceKey] as string,
                         Header = triggerLabels[i],
-                        Command = AddChildActionCommand,
+                        Command = IsPlaceholder ? ParentActionViewModel.AddChildActionCommand : AddChildActionCommand,
                         CommandParameter = (MpActionType)i,
                         IsVisible = (MpActionType)i != MpActionType.None && (MpActionType)i != MpActionType.Trigger
                     });
@@ -146,7 +149,7 @@ namespace MpWpfApp {
 
         public string BorderBrushHexColor {
             get {
-                if(IsSelected) {
+                if(Parent != null && Parent.PrimaryAction != null && Parent.PrimaryAction.ActionId == ActionId) {
                     return MpSystemColors.IsSelectedBorderColor;
                 }
                 if(IsHovering) {
@@ -159,6 +162,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsPlaceholder => ActionType == MpActionType.None;
 
         public bool IsDropDownOpen { get; set; } = false;
 
@@ -193,6 +198,8 @@ namespace MpWpfApp {
         #region Model
 
         #region MpIBoxViewModel Implementation
+
+        public Point Location => new Point(X, Y);
 
         public double X {
             get {
@@ -425,15 +432,21 @@ namespace MpWpfApp {
                 if (a.BoxId > 0) {
                     a.Box = await MpDb.GetItemAsync<MpBox>(a.BoxId);
                 } else {
-                    MpPoint openSpot = Parent.FindOpenDesignerLocation();
+                    Point? parentLoc = null;
+                    if (ParentActionViewModel != null) {
+                        parentLoc = new Point(ParentActionViewModel.X, ParentActionViewModel.Y);
+                    } 
+
+                    Point openSpot = Parent.FindOpenDesignerLocation(parentLoc);
 
                     a.Box = await MpBox.Create(
                         boxType: MpBoxType.DesignerItem,
                         boxObjId: a.Id,
                         x: openSpot.X,
                         y: openSpot.Y,
-                        w: MpMeasurements.Instance.DefaultDesignerItemWidth,
-                        h: MpMeasurements.Instance.DefaultDesignerItemHeight);
+                        w: MpMeasurements.Instance.DesignerItemSize,
+                        h: MpMeasurements.Instance.DesignerItemSize,
+                        suppressWrite: IsPlaceholder);
                 }
             }
             Action = a;
@@ -445,17 +458,20 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(Y));
             OnPropertyChanged(nameof(X));
 
-            var cal = await MpDataModelProvider.GetChildActions(ActionId);
+            if(!IsPlaceholder) {
+                var cal = await MpDataModelProvider.GetChildActions(ActionId);
 
-            foreach(var ca in cal.OrderBy(x=>x.SortOrderIdx)) {
-                var cavm = await CreateActionViewModel(ca);
-                Items.Add(cavm);
+                foreach (var ca in cal.OrderBy(x => x.SortOrderIdx)) {
+                    var cavm = await CreateActionViewModel(ca);
+                    Items.Add(cavm);
+                }
             }
 
             IsBusy = false;
         }
 
         public async Task<MpActionViewModelBase> CreateActionViewModel(MpAction a) {
+            a = a == null ? new MpAction() : a;
             MpActionViewModelBase avm = null;
             switch (a.ActionType) {
                 case MpActionType.Trigger:
@@ -481,9 +497,19 @@ namespace MpWpfApp {
                     break;
             }
 
-            await avm.InitializeAsync(a);
             avm.ParentActionViewModel = this;
+            await avm.InitializeAsync(a);
 
+            var eavm = await avm.CreateEmptyActionViewModel();
+            avm.Items.Add(eavm);
+
+            return avm;
+        }
+
+        public async Task<MpEmptyActionViewModel> CreateEmptyActionViewModel() {
+            MpEmptyActionViewModel avm = new MpEmptyActionViewModel(Parent);
+            avm.ParentActionViewModel = this;
+            await avm.InitializeAsync(new MpAction());
             return avm;
         }
 
@@ -560,10 +586,16 @@ namespace MpWpfApp {
                     //    return;
                     //}
                     if (IsSelected) {
-                        if(ParentTreeItem != null) {
-                            ParentTreeItem.SelectedItem = this;
-                        }                        
+                        LastSelectedDateTime = DateTime.Now;
+                        if(Children.Any(x=>x is MpEmptyActionViewModel)) {
+                            Children.Where(x => x is MpEmptyActionViewModel).ForEach(x => (x as MpEmptyActionViewModel).OnPropertyChanged("IsVisible"));
+                        }
                     }
+                    if(this is MpTriggerActionViewModelBase) {
+                        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.PrimaryAction));
+                    OnPropertyChanged(nameof(BorderBrushHexColor));
                     break;
                 case nameof(IsEnabled):
                     if (IsEnabled) {
@@ -575,9 +607,10 @@ namespace MpWpfApp {
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         HasModelChanged = false;
+
                         Task.Run(async () => {
                             await Box.WriteToDatabaseAsync();
-                            await Action.WriteToDatabaseAsync();                            
+                            await Action.WriteToDatabaseAsync();
                         });
                     }
                     break;
@@ -599,12 +632,15 @@ namespace MpWpfApp {
              (args) => {
                  var fe = args as FrameworkElement;
                  var cm = new MpContextMenuView();
+                 //LastSelectedDateTime = DateTime.Now;
+                 IsSelected = true;
+
                  cm.DataContext = MenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
                  fe.ContextMenu.IsOpen = true;
-             });
+             },(args)=>ActionType == MpActionType.None);
 
         public ICommand AddChildActionCommand => new RelayCommand<object>(
              async (args) => {
@@ -617,37 +653,38 @@ namespace MpWpfApp {
                                          sortOrderIdx: Items.Count);
 
                  var navm = await CreateActionViewModel(na);
-
                  Items.Add(navm);
+                 navm.IsSelected = true;
 
-                 SelectedItem = navm;
+                 Parent.ClearAllOverlaps();
 
                  OnPropertyChanged(nameof(Items));
 
-                 Parent.AllSelectedActions.Add(navm);
-                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedActions));
+                 //Parent.AllSelectedTriggerActions.Add(navm);
+                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
 
                  IsExpanded = true;
-             });
+             }, (args) => ActionType != MpActionType.None);
 
         public ICommand DeleteChildActionCommand => new RelayCommand<object>(
             async (args) => {
                 var avm = args as MpActionViewModelBase;
                 avm.Disable();
-                var deleteTasks = avm.FindAllChildren().Select(x => x.Action.DeleteFromDatabaseAsync()).ToList();
-                deleteTasks.AddRange(avm.FindAllChildren().Select(x => x.Action.Box?.DeleteFromDatabaseAsync()).ToList());
 
-                deleteTasks.Add(avm.Action.DeleteFromDatabaseAsync());
-                deleteTasks.Add(avm.Action.Box?.DeleteFromDatabaseAsync());
-                await Task.WhenAll(deleteTasks);
+                var grandChildren = Parent.AllSelectedTriggerActions.Where(x => x.ParentActionId == avm.ActionId);
+                grandChildren.ForEach(x => x.ParentActionId = ActionId);
+                grandChildren.ForEach(x => x.ParentActionViewModel = this);
+                await Task.WhenAll(grandChildren.Select(x => x.Action.WriteToDatabaseAsync()));
+                await avm.Action.DeleteFromDatabaseAsync();
+                await avm.Box.DeleteFromDatabaseAsync();
 
                 Items.Remove(avm);
 
                 await UpdateSortOrder();
                 OnPropertyChanged(nameof(Items));
-                OnPropertyChanged(nameof(SelectedItem));
-                Parent.AllSelectedActions.Remove(avm);
-                Parent.OnPropertyChanged(nameof(Parent.AllSelectedActions));
+                OnPropertyChanged(nameof(Children));
+                Parent.AllSelectedTriggerActions.Remove(avm);
+                Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
             });
 
         public ICommand DeleteThisActionCommand => new RelayCommand(

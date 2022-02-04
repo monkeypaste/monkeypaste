@@ -139,8 +139,12 @@ namespace MpWpfApp {
                 return;
             }
             var adivm = AssociatedObject.DataContext as MpIBoxViewModel;
-            adivm.X += dx;
-            adivm.Y += dy;
+            var newLoc = new Point(adivm.X + dx, adivm.Y + dy);
+            MpActionCollectionViewModel.Instance.ClearAreaAtPoint(newLoc, adivm);
+            adivm.X = newLoc.X;
+            adivm.Y = newLoc.Y;
+
+            MpConsole.WriteLine($"New Location: {adivm.X} {adivm.Y}");
         }
 
         #endregion

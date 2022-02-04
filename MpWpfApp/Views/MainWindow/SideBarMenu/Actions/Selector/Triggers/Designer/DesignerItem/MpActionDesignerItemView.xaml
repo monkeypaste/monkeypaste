@@ -15,27 +15,33 @@
     <local:MpUserControl.Resources>
         <DataTemplate x:Key="TriggerDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
-            <Ellipse Width="{Binding Width}"
-                     Height="{Binding Height}"
-                     StrokeThickness="1"
-                     local:MpHoverableExtension.IsEnabled="True"
-                     local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                                     Mode=TwoWay,
-                                                                     UpdateSourceTrigger=PropertyChanged,
-                                                                     NotifyOnSourceUpdated=True,
-                                                                     NotifyOnTargetUpdated=True}"
-                     local:MpHoverableExtension.HoverCursor="ResizeAll"
-                     Stroke="{Binding BorderBrushHexColor,
-                                      Converter={StaticResource StringHexToBrushConverter}}"
-                     Fill="{Binding ActionType,
-                                    Converter={StaticResource ActionTypeToBrushConverter}}" />
+            <Grid>
+                <Ellipse Width="{Binding Width}"
+                         Height="{Binding Height}"
+                         StrokeThickness="2.5"
+                         local:MpHoverableExtension.IsEnabled="True"
+                         local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                         Mode=TwoWay,
+                                                                         UpdateSourceTrigger=PropertyChanged,
+                                                                         NotifyOnSourceUpdated=True,
+                                                                         NotifyOnTargetUpdated=True}"
+                         local:MpHoverableExtension.HoverCursor="ResizeAll"
+                         Stroke="{Binding BorderBrushHexColor,
+                                          Converter={StaticResource StringHexToBrushConverter}}"
+                         Fill="{Binding ActionType,
+                                        Converter={StaticResource ActionTypeToBrushConverter}}" />
+                <Image Width="{Binding Width}"
+                       Height="{Binding Height}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </Grid>
         </DataTemplate>
         <DataTemplate x:Key="CompareDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
             <Polygon Width="{Binding Width}"
                      Height="{Binding Height}"
                      Points="0,25 25,0 50,25 25,50"
-                     StrokeThickness="1"
+                     StrokeThickness="2.5"
                      local:MpHoverableExtension.IsEnabled="True"
                      local:MpHoverableExtension.IsHovering="{Binding IsHovering,
                                                                      Mode=TwoWay,
@@ -55,7 +61,7 @@
                        RadiusX="10"
                        RadiusY="10"
                        Stroke="Green"
-                       StrokeThickness="5"
+                       StrokeThickness="2.5"
                        Fill="Lime" />
         </DataTemplate>
         <DataTemplate x:Key="ClassifyDesignerTemplate"
@@ -64,72 +70,81 @@
                      Width="{Binding Width}"
                      Height="{Binding Height}"
                      Stroke="Blue"
-                     StrokeThickness="1"
+                     StrokeThickness="2.5"
                      Fill="LightBlue" />
+        </DataTemplate>
+        <DataTemplate x:Key="NoneDesignerTemplate"
+                      DataType="local:MpEmptyActionViewModel">
+            <Button Style="{StaticResource SemiTransparentButton}"
+                    local:MpHoverableExtension.IsEnabled="True"
+                    local:MpHoverableExtension.HoverCursor="ResizeAll"
+                    Command="{Binding AddChildActionCommand}">
+                <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor,
+                                                  Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                                 Fill="Transparent"
+                                 StrokeThickness="3"
+                                 Width="50"
+                                 Height="50" />
+                        <Rectangle HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Fill="DimGray"
+                                   Height="30"
+                                   Width="3" />
+                        <Rectangle HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Fill="DimGray"
+                                   Height="3"
+                                   Width="30" />
+                    </Grid>
+                    <Label HorizontalAlignment="Center">Add New</Label>
+                </StackPanel>
+                </Button>
         </DataTemplate>
         <local:MpActionDesignerItemTemplateSelector x:Key="ActionDesignerItemTemplateSelector" />
     </local:MpUserControl.Resources>
-    <Button Background="Transparent"
-            Style="{StaticResource SemiTransparentButton}"
-            BorderThickness="0"
-            BorderBrush="White">
-        <Grid>
-            <ContentControl Width="{Binding Width}"
-                            Height="{Binding Height}"
-                            Background="Transparent"
-                            Content="{Binding}"
-                            VerticalAlignment="Top"
-                            ContentTemplateSelector="{StaticResource ActionDesignerItemTemplateSelector}">
-                <ContentControl.Style>
-                    <Style TargetType="ContentControl">
-                        <Setter Property="Background"
-                                Value="Transparent" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ContentControl">
-                                    <ContentPresenter />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ContentControl.Style>
-                <i:Interaction.Behaviors>
-                    <local:MpMoveBehavior IsMoving="{Binding IsMoving,
-                                                             Mode=TwoWay,
-                                                             UpdateSourceTrigger=PropertyChanged,
-                                                             NotifyOnSourceUpdated=True,
-                                                             NotifyOnTargetUpdated=True}"
-                                          CanMove="{Binding CanMove,
-                                                            Mode=TwoWay,
-                                                            UpdateSourceTrigger=PropertyChanged,
-                                                            NotifyOnSourceUpdated=True,
-                                                            NotifyOnTargetUpdated=True}"
-                                          Command="{Binding ShowActionSelectorMenuCommand}"
-                                          CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                                    AncestorType=Button}}" />
-                </i:Interaction.Behaviors>
-            </ContentControl>
-            <Label Height="30"
-                   BorderThickness="0"
-                   HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch"
-                   HorizontalContentAlignment="Center"
-                   VerticalContentAlignment="Center"
-                   Margin="0,0,0,0"
-                   Foreground="Black"
-                   Background="Transparent"
-                   IsHitTestVisible="False"
-                   local:MpIsFocusedExtension.IsFocused="{Binding IsLabelFocused,
-                                                                  Mode=TwoWay,
-                                                                  NotifyOnTargetUpdated=True,
-                                                                  NotifyOnSourceUpdated=True,
-                                                                  UpdateSourceTrigger=PropertyChanged}"
-                   Content="{Binding Label,
-                                     Mode=TwoWay,
-                                     NotifyOnTargetUpdated=True,
-                                     NotifyOnSourceUpdated=True,
-                                     UpdateSourceTrigger=PropertyChanged}"
-                   FontSize="10" />
-        </Grid>
-    </Button>
+    <ContentControl Width="{Binding Width}"
+                    Height="{Binding Height}"
+                    Background="Transparent"
+                    Content="{Binding}"
+                    VerticalAlignment="Top"
+                    ContentTemplateSelector="{StaticResource ActionDesignerItemTemplateSelector}">
+
+        <ContentControl.Effect>
+            <DropShadowEffect RenderingBias="Quality"
+                              Color="Black"
+                              Direction="315"
+                              Opacity="0.3"
+                              BlurRadius="5" />
+        </ContentControl.Effect>
+        <ContentControl.Style>
+            <Style TargetType="ContentControl">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ContentControl">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ContentControl.Style>
+        <i:Interaction.Behaviors>
+            <local:MpMoveBehavior IsMoving="{Binding IsMoving,
+                                                     Mode=TwoWay,
+                                                     UpdateSourceTrigger=PropertyChanged,
+                                                     NotifyOnSourceUpdated=True,
+                                                     NotifyOnTargetUpdated=True}"
+                                  CanMove="{Binding CanMove,
+                                                    Mode=TwoWay,
+                                                    UpdateSourceTrigger=PropertyChanged,
+                                                    NotifyOnSourceUpdated=True,
+                                                    NotifyOnTargetUpdated=True}"
+                                  Command="{Binding ShowActionSelectorMenuCommand}"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                            AncestorType=ContentControl}}" />
+        </i:Interaction.Behaviors>
+    </ContentControl>
 </local:MpUserControl>

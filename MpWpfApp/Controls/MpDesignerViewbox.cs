@@ -41,13 +41,20 @@ namespace MpWpfApp {
         }
 
         private void DrawGrid(DrawingContext dc) {
+            var zc = this.GetVisualDescendent<ZoomAndPan.ZoomAndPanControl>();
+            Point offset = new Point(zc.ContentOffsetX, zc.ContentOffsetY);
+            offset.X = WrapValue(offset.X, -GridLineSpacing, GridLineSpacing);
+            offset.Y = WrapValue(offset.Y, -GridLineSpacing, GridLineSpacing);
+
             int HorizontalGridLineCount = (int)(RenderSize.Width / GridLineSpacing);
 
             double xStep = RenderSize.Width / HorizontalGridLineCount;
             double curX = 0;
             for (int x = 0; x < HorizontalGridLineCount; x++) {
                 Point p1 = new Point(curX, 0);
+                p1 = (Point)(p1 - offset);
                 Point p2 = new Point(curX, RenderSize.Height);
+                p2 = (Point)(p2 - offset);
 
                 bool isOrigin = x == (int)(HorizontalGridLineCount / 2);
                 if (isOrigin) {
@@ -64,7 +71,9 @@ namespace MpWpfApp {
             double curY = 0;
             for (int y = 0; y < VerticalGridLineCount; y++) {
                 Point p1 = new Point(0, curY);
+                p1 = (Point)(p1 - offset);
                 Point p2 = new Point(RenderSize.Width, curY);
+                p2 = (Point)(p2 - offset);
 
                 bool isOrigin = y == (int)(VerticalGridLineCount / 2);
                 if (isOrigin) {
@@ -79,6 +88,10 @@ namespace MpWpfApp {
 
         private void _timer_Tick(object sender, EventArgs e) {
             InvalidateVisual();
+        }
+
+        private double WrapValue(double x, double x_min,double x_max) {
+            return ((x - x_min) % (x_max - x_min)) + x_min;
         }
     }
 }

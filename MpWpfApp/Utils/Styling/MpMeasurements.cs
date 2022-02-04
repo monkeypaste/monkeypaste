@@ -172,11 +172,7 @@ namespace MpWpfApp {
 
         public double DefaultDesignerWidth => 600;
 
-        public double DefaultDesignerHeight => 200;
-
-        public double DefaultDesignerItemWidth => 50;
-
-        public double DefaultDesignerItemHeight => 50;
+        public double DesignerItemSize => 50;
 
         #endregion
 

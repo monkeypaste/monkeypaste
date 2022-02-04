@@ -158,7 +158,7 @@ namespace MonkeyPaste {
         //    }
         //}
 
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null, [CallerFilePath] string path = null, [CallerMemberName] string memName = null,[CallerLineNumber] int line = 0) {
             if(SupressPropertyChangedNotification) {
                 return;
             }

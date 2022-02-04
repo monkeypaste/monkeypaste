@@ -350,14 +350,7 @@
                                       ItemsSource="{Binding Items}">
                 <TextBox Text="Classify" />
             </HierarchicalDataTemplate>
-            <local:MpActionItemTemplateSelector x:Key="ActionTemplateSelector"
-                                                AnalyzeTemplate="{StaticResource AnalyzeTemplate}"
-                                                ClassifyTemplate="{StaticResource ClassifyTemplate}"
-                                                TransformTemplate="{StaticResource TransformTemplate}"
-                                                MacroTemplate="{StaticResource MacroTemplate}"
-                                                TimerTemplate="{StaticResource TimerTemplate}"
-                                                CompareTemplate="{StaticResource CompareTemplate}"
-                                                TriggerTemplate="{StaticResource TriggerTemplate}" />
+            <local:MpActionItemPropertiesTemplateSelector x:Key="ActionTemplateSelector"/>
         </Grid.Resources>
         <TreeView Grid.Column="0"
                   dd:DragDrop.IsDragSource="True"

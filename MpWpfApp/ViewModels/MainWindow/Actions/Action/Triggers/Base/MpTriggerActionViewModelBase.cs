@@ -73,7 +73,7 @@ namespace MpWpfApp {
                         Header = triggerLabels[i],
                         Command = SelectTriggerTypeCommand,
                         CommandParameter = tt,
-                        IsVisible = tt != MpTriggerType.None && (tt != MpTriggerType.ParentOutput || (SelectedItem != null && !SelectedItem.IsRootAction))
+                        IsVisible = tt != MpTriggerType.None && (tt != MpTriggerType.ParentOutput)// || (SelectedItem != null && !SelectedItem.IsRootAction))
                     });
                 }
                 return new MpMenuItemViewModel() {
