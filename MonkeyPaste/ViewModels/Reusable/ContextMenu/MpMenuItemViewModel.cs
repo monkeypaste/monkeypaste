@@ -36,6 +36,8 @@ namespace MonkeyPaste {
 
         public bool IsVisible { get; set; } = true;
 
+        public bool IsIconHidden => IconId == 0 && string.IsNullOrEmpty(IconResourceKey);
+
         public string BorderHexColor {
             get {
                 if(IsSelected) {

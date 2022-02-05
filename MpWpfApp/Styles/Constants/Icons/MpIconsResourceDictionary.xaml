@@ -85,5 +85,7 @@
     <s:String x:Key="AlarmClockIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/alarmClock.png</s:String>
     <s:String x:Key="BeakerIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/beaker.png</s:String>
     <s:String x:Key="AsteriskIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/asterisk.png</s:String>
+    <s:String x:Key="QuestionMarkIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/question.png</s:String>
+    <s:String x:Key="EmptyIcon">pack://application:,,,/MpWpfApp;component/Resources/Images/transparent.png</s:String>
     <!--  Icon/Image Source Paths End  -->
 </ResourceDictionary>

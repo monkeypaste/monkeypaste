@@ -69,6 +69,7 @@ namespace MpWpfApp {
                     }
                     var tt = (MpTriggerType)i;
                     tmivml.Add(new MpMenuItemViewModel() {
+                        IsSelected = tt == TriggerType,
                         IconResourceKey = Application.Current.Resources[resourceKey] as string,
                         Header = triggerLabels[i],
                         Command = SelectTriggerTypeCommand,
@@ -121,7 +122,7 @@ namespace MpWpfApp {
             }
             set {
                 if(Description != value) {
-                    Description = value;
+                    Action.Description = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Description));
                 }
@@ -167,7 +168,7 @@ namespace MpWpfApp {
 
         public ICommand SelectTriggerTypeCommand => new RelayCommand<object>(
             async (args) => {
-                IsDropDownOpen = false;
+                ///IsDropDownOpen = false;
 
                 TriggerType = (MpTriggerType)args;
 

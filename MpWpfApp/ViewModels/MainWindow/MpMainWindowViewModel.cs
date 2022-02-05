@@ -394,6 +394,8 @@ namespace MpWpfApp {
                         IsMainWindowLocked = true;
                     }
                     if(pasteDataObject == null) {
+                        
+                        
                         pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false, true);
                     }
                     //test = pasteDataObject.GetData(DataFormats.Text).ToString();

@@ -43,6 +43,7 @@
                          Background="Orange"
                          Height="Auto"
                          BorderThickness="0"
+                         IsSynchronizedWithCurrentItem="False"
                          ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                          ScrollViewer.CanContentScroll="False"

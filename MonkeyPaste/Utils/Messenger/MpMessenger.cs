@@ -39,6 +39,7 @@ namespace MonkeyPaste {
         Loaded, //has context (object)
         Busy,
         NotBusy,
+        ActionViewportChanged
     }
 
     public static partial class MpMessenger {

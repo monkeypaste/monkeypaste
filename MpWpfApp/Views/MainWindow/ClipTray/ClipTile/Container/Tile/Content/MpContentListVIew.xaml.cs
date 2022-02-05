@@ -263,11 +263,22 @@ namespace MpWpfApp {
         }
 
         private void ContentListBox_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (BindingContext.IsAnyEditingTitle || BindingContext.ItemViewModels.Count == 0) {
+            if (BindingContext.IsAnyEditingTitle || 
+                BindingContext.ItemViewModels.Count == 0) {
                 e.Handled = false;
                 return;
             }
-            BindingContext.ItemViewModels[BindingContext.ItemViewModels.Count - 1].IsSelected = true;
+            var tailItem  = BindingContext.ItemViewModels[BindingContext.ItemViewModels.Count - 1];
+
+            if (tailItem.IsEditingTitle ||
+                (tailItem.IsSelected && tailItem.Parent.IsExpanded) ||
+                 tailItem.Parent.Parent.IsAnyResizing ||
+                 tailItem.Parent.Parent.CanAnyResize ||
+                 MpResizeBehavior.IsAnyResizing) {
+                e.Handled = false;
+                return;
+            }
+            tailItem.IsSelected = true;
 
             MpDragDropManager.StartDragCheck(
                 e.GetPosition(Application.Current.MainWindow));

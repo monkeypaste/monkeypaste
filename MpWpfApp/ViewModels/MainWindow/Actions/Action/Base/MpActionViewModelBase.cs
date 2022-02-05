@@ -159,13 +159,59 @@ namespace MpWpfApp {
             }
         }
 
+        public string IconResourceKeyStr {
+            get {
+                string resourceKey = string.Empty;
+                switch (ActionType) {
+                    case MpActionType.Trigger:
+                        switch ((MpTriggerType)ActionObjId) {
+                            case MpTriggerType.ContentAdded:
+                                resourceKey = "ClipboardIcon";
+                                break;
+                            case MpTriggerType.ContentTagged:
+                                resourceKey = "PinToCollectionIcon";
+                                break;
+                            case MpTriggerType.FileSystemChange:
+                                resourceKey = "FolderEventIcon";
+                                break;
+                            case MpTriggerType.Shortcut:
+                                resourceKey = "HotkeyIcon";
+                                break;
+                            case MpTriggerType.ParentOutput:
+                                resourceKey = "ChainIcon";
+                                break;
+                        }
+                        break;
+                    case MpActionType.Analyze:
+                        resourceKey = "BrainIcon";
+                        break;
+                    case MpActionType.Classify:
+                        resourceKey = "PinToCollectionIcon";
+                        break;
+                    case MpActionType.Compare:
+                        resourceKey = "ScalesIcon";
+                        break;
+                    case MpActionType.Macro:
+                        resourceKey = "HotkeyIcon";
+                        break;
+                    case MpActionType.Timer:
+                        resourceKey = "AlarmClockIcon";
+                        break;
+                    case MpActionType.None:
+                        resourceKey = "QuestionMarkIcon";
+                        break;
+                }
+                return Application.Current.Resources[resourceKey] as string;
+            }
+        }
+
         #endregion
 
         #region State
 
         public bool IsPlaceholder => ActionType == MpActionType.None;
 
-        public bool IsDropDownOpen { get; set; } = false;
+        //public bool IsDropDownOpen { get; set; } = false;
 
         public bool IsRootAction => ParentActionId == 0;
 
@@ -173,19 +219,15 @@ namespace MpWpfApp {
 
         public bool IsEditingDetails { get; set; }
 
+        public bool IsEmptyAction => this is MpEmptyActionViewModel;
+
         public bool IsCompareAction => ActionType == MpActionType.Compare;
 
         public bool IsAnalyzeAction => ActionType == MpActionType.Analyze;
 
-        public bool IsLabelFocused { get; set; } = false;
-
         public bool IsActionTextBoxFocused { get; set; } = false;
 
-        public bool IsAnyLabelFocused => IsLabelFocused || this.FindAllChildren().Any(x => x.IsLabelFocused);
-
         public bool IsAnyActionTextBoxFocused => IsActionTextBoxFocused || this.FindAllChildren().Any(x => x.IsActionTextBoxFocused);
-
-        public bool IsAnyTextBoxFocused => IsAnyLabelFocused || IsAnyActionTextBoxFocused;
 
         public bool IsValid => string.IsNullOrEmpty(ValidationText);
 
@@ -591,10 +633,11 @@ namespace MpWpfApp {
                             Children.Where(x => x is MpEmptyActionViewModel).ForEach(x => (x as MpEmptyActionViewModel).OnPropertyChanged("IsVisible"));
                         }
                     }
-                    if(this is MpTriggerActionViewModelBase) {
+                    if(this is MpTriggerActionViewModelBase && Parent.SelectedItem != this) {
                         Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryAction));
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedActions));
                     OnPropertyChanged(nameof(BorderBrushHexColor));
                     break;
                 case nameof(IsEnabled):
@@ -616,6 +659,11 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsMoving):
                     Parent.OnPropertyChanged(nameof(Parent.CanPan));
+                    break;
+                case nameof(Items):
+                //case nameof(X):
+                //case nameof(Y):
+                    Parent.NotifyViewportChanged();
                     break;
             }
         }
@@ -640,11 +688,18 @@ namespace MpWpfApp {
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
                  fe.ContextMenu.IsOpen = true;
+                 fe.ContextMenu.Closed += ContextMenu_Closed;
              },(args)=>ActionType == MpActionType.None);
+
+        private void ContextMenu_Closed(object sender, RoutedEventArgs e) {
+            return;
+        }
 
         public ICommand AddChildActionCommand => new RelayCommand<object>(
              async (args) => {
-                 IsDropDownOpen = false;
+                 IsBusy = true;
+
+                 //IsDropDownOpen = false;
 
                  MpActionType at = (MpActionType)args;
                  MpAction na = await MpAction.Create(
@@ -661,13 +716,19 @@ namespace MpWpfApp {
                  OnPropertyChanged(nameof(Items));
 
                  //Parent.AllSelectedTriggerActions.Add(navm);
-                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
+                 //Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
 
                  IsExpanded = true;
+
+                 Parent.NotifyViewportChanged();
+
+                 IsBusy = false;
              }, (args) => ActionType != MpActionType.None);
 
         public ICommand DeleteChildActionCommand => new RelayCommand<object>(
             async (args) => {
+                IsBusy = true;
+
                 var avm = args as MpActionViewModelBase;
                 avm.Disable();
 
@@ -685,6 +746,10 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(Children));
                 Parent.AllSelectedTriggerActions.Remove(avm);
                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
+
+                Parent.NotifyViewportChanged();
+
+                IsBusy = false;
             });
 
         public ICommand DeleteThisActionCommand => new RelayCommand(

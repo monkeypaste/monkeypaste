@@ -69,8 +69,7 @@
                              Padding="3,0,0,0"
                              VerticalContentAlignment="Center"
                              FontSize="12"
-                             local:MpIsFocusedExtension.IsFocused="{Binding IsLabelFocused,
-                                                                            Mode=TwoWay}"
+                             local:MpIsFocusedExtension.IsEnabled="True"
                              Text="{Binding Label,
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=PropertyChanged,
@@ -158,8 +157,7 @@
                                  MinWidth="130"
                                  Margin="5"
                                  TextWrapping="Wrap"
-                                 local:MpIsFocusedExtension.IsFocused="{Binding IsCompareDataTextBoxFocused,
-                                                                                Mode=TwoWay}"
+                                 local:MpIsFocusedExtension.IsEnabled="True"
                                  Text="{Binding CompareData,
                                                 Mode=TwoWay,
                                                 UpdateSourceTrigger=PropertyChanged,
@@ -168,7 +166,7 @@
                             <i:Interaction.Behaviors>
                                 <local:MpResizeBehavior x:Name="CompareDataTextBoxResizeBehvior"
                                                         DoubleClickControl="{Binding ElementName=CompareDataTextBox}"
-                                                        ResizableEdges="Bottom"
+                                                        ResizableEdge1="Bottom"
                                                         BoundHeight="{Binding Height,
                                                                               ElementName=CompareDataTextBox}"
                                                         MinHeight="30"

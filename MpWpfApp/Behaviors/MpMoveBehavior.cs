@@ -117,16 +117,18 @@ namespace MpWpfApp {
         protected override void OnUnload() {
             base.OnUnload();
 
-            AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
-            AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
-            AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
-            AssociatedObject.MouseEnter -= AssociatedObject_MouseEnter;
-            AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
+            if(AssociatedObject != null) {
+                AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
+                AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
+                AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
+                AssociatedObject.MouseEnter -= AssociatedObject_MouseEnter;
+                AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
 
-            if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
-                if (_allMovables.Contains(rvm)) {
-                    MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
-                    _allMovables.Remove(rvm);
+                if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
+                    if (_allMovables.Contains(rvm)) {
+                        MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
+                        _allMovables.Remove(rvm);
+                    }
                 }
             }
         }
@@ -169,6 +171,9 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
+            if (Mouse.LeftButton == MouseButtonState.Released) {
+                IsMoving = false;
+            }
             if (!IsMoving) {
                 return;
             }
@@ -182,6 +187,7 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+
             if (!IsAnyMoving) {
                 IsMoving = AssociatedObject.CaptureMouse();
 
@@ -195,6 +201,7 @@ namespace MpWpfApp {
                     e.Handled = true;
                 }
             }
+
         }
 
         private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -203,10 +210,9 @@ namespace MpWpfApp {
             if (IsMoving) {
                 IsMoving = false;
             }
-            if((e.GetPosition(Application.Current.MainWindow) - _mouseDownPosition).Length < 5) {
+            if ((e.GetPosition(Application.Current.MainWindow) - _mouseDownPosition).Length < 5) {
                 Command?.Execute(CommandParameter);
             }
-
         }
 
         #endregion

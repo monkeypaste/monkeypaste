@@ -219,7 +219,11 @@ namespace MpWpfApp {
         #endregion
 
 
-        public virtual MpRectEdgeType ResizableEdges { get; set; } = MpRectEdgeType.Left | MpRectEdgeType.Right | MpRectEdgeType.Top | MpRectEdgeType.Bottom;
+        public virtual MpRectEdgeType ResizableEdge1 { get; set; }
+
+        public virtual MpRectEdgeType ResizableEdge2 { get; set; }
+
+        public virtual MpRectEdgeType ResizableEdges => ResizableEdge1 | ResizableEdge2;
 
         #endregion
 
@@ -292,7 +296,8 @@ namespace MpWpfApp {
 
             if(AssociatedObject.DataContext is MpIResizableViewModel rvm) {
                 if(_allResizers.Contains(rvm)) {
-                    MpConsole.WriteLine("Duplicate resizer detected while loading, swapping for new...");
+                    var old = _allResizers.FirstOrDefault(x => x == rvm);
+                    MpConsole.WriteLine($"Duplicate resizer detected while loading, swapping for new... (old: '{old.GetType()}' new:'{rvm.GetType()}'");
                     _allResizers.Remove(rvm);
                 }
                 _allResizers.Add(rvm);
@@ -302,10 +307,20 @@ namespace MpWpfApp {
         protected override void OnUnload() {
             base.OnUnload();
 
-            AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
-            AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
-            AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
-            AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
+            if(AssociatedObject != null) {
+                AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
+                AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
+                AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
+                AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
+
+
+                if (AssociatedObject.DataContext is MpIResizableViewModel rvm) {
+                    if (_allResizers.Contains(rvm)) {
+                        _allResizers.Remove(rvm);
+                    }
+                }
+            }
+            
 
             if (DoubleClickControl != null) {
                 DoubleClickControl.MouseDoubleClick -= DoubleClickButton_MouseDoubleClick;
@@ -314,11 +329,6 @@ namespace MpWpfApp {
             MpMessenger.Unregister<MpMessageType>(this, MpClipTrayViewModel.Instance.ReceivedResizerBehaviorMessage);
             MpMessenger.Unregister<MpMessageType>(this, MpMainWindowViewModel.Instance.ReceivedResizerBehaviorMessage);
 
-            if (AssociatedObject.DataContext is MpIResizableViewModel rvm) {
-                if (_allResizers.Contains(rvm)) {
-                    _allResizers.Remove(rvm);
-                }
-            }
         }
 
         #region Public Methods
@@ -369,7 +379,11 @@ namespace MpWpfApp {
             if (MpDragDropManager.IsDragAndDrop || (!IsResizing && IsAnyResizing)) {
                 return;
             }
-
+            if(Mouse.LeftButton == MouseButtonState.Released) {
+                IsResizing = false;
+                AssociatedObject.ReleaseMouseCapture();
+                return;
+            }
             var mwmp = e.GetPosition(Application.Current.MainWindow);
 
             Vector delta = _lastMousePosition - mwmp;

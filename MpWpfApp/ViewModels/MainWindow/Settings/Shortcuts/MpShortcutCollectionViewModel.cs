@@ -227,7 +227,6 @@ namespace MpWpfApp {
 
                     #endregion
 
-                    #endregion
                 }
                 catch (Exception ex) {
                     MpConsole.WriteLine("Error creating mainwindow hotkeys: " + ex.ToString());
@@ -471,6 +470,8 @@ namespace MpWpfApp {
         private void ApplicationHook_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {
             //AutoSearchOnKeyPress(e.KeyChar);
         }
+
+        #endregion
 
         #endregion
 

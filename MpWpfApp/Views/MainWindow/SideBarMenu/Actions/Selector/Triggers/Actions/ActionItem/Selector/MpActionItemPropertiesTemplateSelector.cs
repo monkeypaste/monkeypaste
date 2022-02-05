@@ -8,24 +8,42 @@ using System.Windows.Controls;
 using MonkeyPaste;
 
 namespace MpWpfApp {
+
     public class MpActionItemPropertiesTemplateSelector : DataTemplateSelector {
+        public DataTemplate EmptyPropertiesTemplate { get; set; }
+        public DataTemplate TriggerPropertiesTemplate { get; set; }
+        public DataTemplate ComparePropertiesTemplate { get; set; }
+        public DataTemplate AnalyzePropertiesTemplate { get; set; }
+        public DataTemplate ClassifyPropertiesTemplate { get; set; }
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
-            if (item == null) {
+            var fe = container as FrameworkElement;
+            if (item == null || fe == null) {
                 return null;
             }
-            var fe = container as FrameworkElement;
 
             var aivm = item as MpActionViewModelBase;
             if (aivm == null) {
                 return null;
             }
-            string keyStr = string.Format(@"{0}PropertiesTemplate", aivm.ActionType.ToString());
 
-            if (fe.Name == "ActionPropertiesContainer" && keyStr == "None") {
-                return null;
+            if (fe.Name == "RootActionPropertyContentControl" && aivm.ActionType != MpActionType.Trigger) {
+                return EmptyPropertiesTemplate;
             }
-            var result = (container as FrameworkElement).GetVisualAncestor<Border>().Resources[keyStr] as DataTemplate;
-            return result;
+
+            switch (aivm.ActionType) {
+                case MpActionType.Trigger:
+                    return TriggerPropertiesTemplate;
+                case MpActionType.Compare:
+                    return ComparePropertiesTemplate;
+                case MpActionType.Analyze:
+                    return AnalyzePropertiesTemplate;
+                case MpActionType.Classify:
+                    return ClassifyPropertiesTemplate;
+                //case MpActionType.None:
+                //    return EmptyPropertiesTemplate;
+            }
+            return null;
         }
     }
 }

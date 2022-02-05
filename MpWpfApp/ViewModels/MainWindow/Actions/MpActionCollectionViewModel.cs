@@ -78,6 +78,18 @@ namespace MpWpfApp {
                 }
                 return PrimaryAction.FindRootParent() as MpTriggerActionViewModelBase;
             }
+            set {
+                if(SelectedItem != value) {
+                    AllSelectedTriggerActions.ForEach(x => x.IsSelected = false);
+                    if(value != null) {
+                        value.IsSelected = true;
+                    }
+                    OnPropertyChanged(nameof(SelectedItem));
+                    OnPropertyChanged(nameof(AllSelectedTriggerActions));
+                    OnPropertyChanged(nameof(SelectedActions));
+                    OnPropertyChanged(nameof(PrimaryAction));
+                }
+            }
         }
 
         public IList<MpActionViewModelBase> AllActions {
@@ -105,7 +117,8 @@ namespace MpWpfApp {
             }
         }
 
-        public IList<MpActionViewModelBase> SelectedActions => AllActions.Where(x => x.IsSelected).OrderByDescending(x => x.LastSelectedDateTime).ToList();
+        public IList<MpActionViewModelBase> SelectedActions => 
+            AllActions.Where(x => x.IsSelected).OrderByDescending(x => x.LastSelectedDateTime).ToList();
 
         public MpActionViewModelBase PrimaryAction => SelectedActions.Count == 0 ? null : SelectedActions[0];
 
@@ -174,8 +187,9 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool IsAnyTextBoxFocused => SelectedItem != null && SelectedItem.IsAnyTextBoxFocused;
+        public bool IsChooserDropDownOpen { get; set; } = false;
 
+        public bool IsUnselectedChooserItemHidden => IsChooserDropDownOpen || Items.Count == 0;
 
         #endregion
 
@@ -315,11 +329,12 @@ namespace MpWpfApp {
 
                     var dir = overlapLoc - tempLoc;
                     dir.Normalize();
+                    dir = new Vector(-dir.Y, dir.X);
                     overlapLoc += dir * distToMove;
                     overlapItem.X = overlapLoc.X;
                     overlapItem.Y = overlapLoc.Y;
 
-                    overlapItem = MpActionCollectionViewModel.Instance.GetItemNearPoint(overlapLoc, overlapItem);
+                    overlapItem = GetItemNearPoint(overlapLoc, overlapItem);
                     tempLoc = overlapLoc;
                 } while (overlapItem != null && overlapItem != ignoreItem);
             }
@@ -348,6 +363,11 @@ namespace MpWpfApp {
             return prefix + uniqueIdx;
         }
 
+        public void NotifyViewportChanged() {
+            MpMessenger.Send(MpMessageType.ActionViewportChanged);
+            //OnPropertyChanged(nameof(SelectedActions));
+        }
+
         #endregion
 
         #region Private Methods
@@ -372,6 +392,7 @@ namespace MpWpfApp {
                 case nameof(SelectedItem):
                     CameraZoomFactor = 1.0;
                     OnPropertyChanged(nameof(IsAnySelected));
+                    NotifyViewportChanged();
                     //OnPropertyChanged(nameof(AllSelectedTriggerActions));
                     break;
                 case nameof(DesignerWidth):
@@ -379,6 +400,12 @@ namespace MpWpfApp {
                 case nameof(CameraZoomFactor):
                     OnPropertyChanged(nameof(ViewportWidth));
                     OnPropertyChanged(nameof(ViewportHeight));
+                    break;
+                case nameof(PrimaryAction):
+                    AllSelectedTriggerActions
+                        .Where(x => x is MpEmptyActionViewModel)
+                        .Cast<MpEmptyActionViewModel>()
+                        .ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
                     break;
             }
         }
@@ -418,11 +445,15 @@ namespace MpWpfApp {
 
                  OnPropertyChanged(nameof(Items));
 
+                 NotifyViewportChanged();
+
                  IsBusy = false;
              });
 
         public ICommand DeleteTriggerCommand => new RelayCommand<object>(
             async (args) => {
+                IsBusy = true;
+
                 var tavm = args as MpTriggerActionViewModelBase;
                 tavm.Disable();
                 var deleteTasks = tavm.FindAllChildren().Select(x => x.Action.DeleteFromDatabaseAsync()).ToList();
@@ -436,6 +467,10 @@ namespace MpWpfApp {
                 await UpdateSortOrder();
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(SelectedItem));
+
+                NotifyViewportChanged();
+
+                IsBusy = false;
             });
 
         #endregion

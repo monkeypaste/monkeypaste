@@ -42,7 +42,7 @@
                                                             UpdateSourceTrigger=PropertyChanged,
                                                             NotifyOnSourceUpdated=True,
                                                             NotifyOnTargetUpdated=True}"
-                                        ResizableEdges="Right"
+                                        ResizableEdge1="Right"
                                         BoundWidth="{Binding TileBorderWidth,
                                                              Mode=TwoWay,
                                                              UpdateSourceTrigger=PropertyChanged,

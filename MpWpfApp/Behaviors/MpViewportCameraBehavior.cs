@@ -16,9 +16,7 @@ namespace MpWpfApp {
     public class MpViewportCameraBehavior : MpBehavior<ZoomAndPanControl> {
         #region Private Variables
 
-        private Point _lastMousePosition;
-
-        private Point _designerMouseDownPosition; //control
+        private Point _contentMouseDownPosition; //control
         private Point _viewportMouseDownPosition; //content
 
         private double _originalZoomFactor;
@@ -63,15 +61,27 @@ namespace MpWpfApp {
 
             _originalZoomFactor = ViewportCameraViewModel.CameraZoomFactor;
             _originalSize = new MpSize(ViewportCameraViewModel.DesignerWidth, ViewportCameraViewModel.DesignerHeight);
+
+            MpMessenger.Register(
+                MpActionCollectionViewModel.Instance, 
+                ReceivedActionCollectionViewModelMessage);
         }
+
 
         protected override void OnUnload() {
             base.OnUnload();
 
-            AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
-            AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
-            AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
-            AssociatedObject.PreviewMouseWheel -= AssociatedObject_MouseWheel;
+            if(AssociatedObject != null) {
+                AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
+                AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
+                AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
+                AssociatedObject.PreviewMouseWheel -= AssociatedObject_MouseWheel;
+            }
+
+
+            MpMessenger.Unregister<MpMessageType>(
+                MpActionCollectionViewModel.Instance,
+                ReceivedActionCollectionViewModelMessage);
         }
 
         #region Public Methods
@@ -80,54 +90,58 @@ namespace MpWpfApp {
 
         #region Private Methods
 
+        private void ScaleToContent() {
+            var astavml = MpActionCollectionViewModel.Instance.AllSelectedTriggerActions;
+            var contentRect = new Rect();
+            foreach (var avm in astavml) {
+                contentRect.Union(new Rect(avm.Location, new Size(avm.Width, avm.Height)));
+            }
+            contentRect.Width += 100;
+            contentRect.Height += 100;
+            AssociatedObject.ZoomTo(contentRect);
+        }
+
+        private void ReceivedActionCollectionViewModelMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.ActionViewportChanged:
+                    ScaleToContent();
+                    break;
+            }
+        }
+
         #region Event Handlers
 
         private void AssociatedObject_MouseWheel(object sender, MouseWheelEventArgs e) {
-            //double oldZoom = ViewportCameraViewModel.CameraZoomFactor;
-            //double newZoom = oldZoom + -e.Delta * _mouseWheelDampening;
-
-            ////ViewportCameraViewModel.CameraZoomFactor = Math.Min(
-            ////                                                Math.Max(
-            ////                                                    newZoom,
-            ////                                                    ViewportCameraViewModel.MinCameraZoomFactor), 
-            ////                                                ViewportCameraViewModel.MaxCameraZoomFactor);
-            //var position = e.GetPosition(AssociatedObject);
-            //var transform = (MatrixTransform)AssociatedObject.RenderTransform;
-            //var matrix = transform.Matrix;
-            //var scale = e.Delta >= 0 ? 1.1 : (1.0 / 1.1); // choose appropriate scaling factor
-
-            //matrix.ScaleAtPrepend(scale, scale, position.X, position.Y);
-            //transform.Matrix = matrix;
-
             double deltaZoom = 0;
             if (e.Delta > 0) {
                 deltaZoom = ZoomFactor;
             } else if (e.Delta < 0) {
                 deltaZoom = -ZoomFactor;
             }
-            var lb = AssociatedObject.GetVisualDescendent<ListBox>();
-            AssociatedObject.AnimatedZoomAboutPoint(AssociatedObject.ContentScale + deltaZoom, e.GetPosition(lb));
+            var contentMousePosition = e.GetPosition(AssociatedObject);
+            AssociatedObject.ZoomAboutPoint(AssociatedObject.ContentScale + deltaZoom, contentMousePosition);
             e.Handled = true;
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
+            if(Mouse.LeftButton == MouseButtonState.Released) {
+                ViewportCameraViewModel.IsPanning = false;
+            }
             if (!ViewportCameraViewModel.IsPanning) {
                 return;
             }
 
-            var lb = AssociatedObject.GetVisualDescendent<ListBox>();
-            var vmp = e.GetPosition(lb);
+            var contentMousePosition = e.GetPosition(AssociatedObject);
 
-            Vector delta = vmp - _viewportMouseDownPosition;
-            _lastMousePosition = vmp;
+            Vector offset = _contentMouseDownPosition - contentMousePosition;
 
-            AssociatedObject.ContentOffsetX -= delta.X;
-            AssociatedObject.ContentOffsetY -= delta.Y;
+            AssociatedObject.ContentOffsetX = offset.X;
+            AssociatedObject.ContentOffsetY = offset.Y;
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             var lb = AssociatedObject.GetVisualDescendent<ListBox>();
-            _designerMouseDownPosition = e.GetPosition(AssociatedObject);
+            _contentMouseDownPosition = e.GetPosition(AssociatedObject);
             _viewportMouseDownPosition = e.GetPosition(lb);
 
             if (ViewportCameraViewModel.CanPan) {

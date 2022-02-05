@@ -29,31 +29,47 @@ namespace MpWpfApp {
             typeof(MpIsFocusedExtension),
             new FrameworkPropertyMetadata {
                 BindsTwoWayByDefault = true,
+                DefaultValue = false
+            });
+
+        #endregion
+
+        #region IsEnabled
+
+        public static bool GetIsEnabled(DependencyObject obj) {
+            return (bool)obj.GetValue(IsEnabledProperty);
+        }
+        public static void SetIsEnabled(DependencyObject obj, bool value) {
+            obj.SetValue(IsEnabledProperty, value);
+        }
+        public static readonly DependencyProperty IsEnabledProperty =
+          DependencyProperty.RegisterAttached(
+            "IsEnabled",
+            typeof(bool),
+            typeof(MpIsFocusedExtension),
+            new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (obj, e) => {
                     var fe = obj as FrameworkElement;
-                    fe.Loaded += Fe_Loaded;
-                    fe.Unloaded += Fe_Unloaded;
-                    if (fe.IsLoaded) {
-                        fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
-                    } else {
+                    if(fe == null) {
+                        return;
+                    }
+
+                    if ((bool)e.NewValue == true) {
                         fe.Loaded += Fe_Loaded;
+                        fe.Unloaded += Fe_Unloaded;
+                        if (fe.IsLoaded) {
+                            fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
+                        } else {
+                            fe.Loaded += Fe_Loaded;
+                        }
+                    } else {
+                        Fe_Unloaded(fe, null);
                     }
                 }
             });
 
-        private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
-            var fe = sender as FrameworkElement;
-            fe.IsKeyboardFocusedChanged -= MpIsFocusedExtension_IsKeyboardFocusedChanged;
-            fe.Loaded -= Fe_Loaded;
-            fe.Unloaded -= Fe_Unloaded;
-        }
-
-        private static void Fe_Loaded(object sender, RoutedEventArgs e) {
-            var fe = sender as FrameworkElement;
-            fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
-        }
-
         #endregion
+
 
         #region IsSaveOnLostFocus
 
@@ -89,23 +105,69 @@ namespace MpWpfApp {
 
         #endregion
 
+
+        private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
+            var fe = sender as FrameworkElement;
+            fe.IsKeyboardFocusedChanged -= MpIsFocusedExtension_IsKeyboardFocusedChanged;
+            fe.Loaded -= Fe_Loaded;
+            fe.Unloaded -= Fe_Unloaded;
+        }
+
+        private static void Fe_Loaded(object sender, RoutedEventArgs e) {
+            var fe = sender as FrameworkElement;
+            fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
+            fe.GotFocus += Fe_GotFocus;
+            fe.LostFocus += Fe_LostFocus;
+        }
+
+
+
+        private static void GotFocus(DependencyObject dpo) {
+            IsAnyTextBoxFocused = true;
+            SetIsFocused(dpo, true);
+        }
+
+        private static void LostFocus(DependencyObject dpo) {
+            IsAnyTextBoxFocused = false;
+            SetIsFocused(dpo, false);
+
+            if (GetIsSaveOnLostFocus(dpo)) {
+                var dbo = GetSaveModel(dpo);
+                if (dbo == null) {
+                    return;
+                }
+                Task.Run(async () => {
+                    await dbo.WriteToDatabaseAsync();
+                });
+            }
+        }
+
+        private static void Fe_LostFocus(object sender, RoutedEventArgs e) {
+            var dpo = (DependencyObject)sender;
+            if (dpo == null) {
+                return;
+            }
+            LostFocus(dpo);
+        }
+
+        private static void Fe_GotFocus(object sender, RoutedEventArgs e) {
+            var dpo = (DependencyObject)sender;
+            if (dpo == null) {
+                return;
+            }
+            GotFocus(dpo);
+        }
+
         private static void MpIsFocusedExtension_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e) {
             var dpo = (DependencyObject)sender;
+            if(dpo == null) {
+                return;
+            }
             bool isFocused = (bool)e.NewValue;
-            IsAnyTextBoxFocused = isFocused;
-
-            SetIsFocused(dpo, isFocused);
-
-            if(!isFocused) {
-                if(GetIsSaveOnLostFocus(dpo)) {
-                    var dbo = GetSaveModel(dpo);
-                    if(dbo == null) {
-                        return;
-                    }
-                    Task.Run(async () => {
-                        await dbo.WriteToDatabaseAsync();
-                    });
-                }
+            if(isFocused) {
+                GotFocus(dpo);
+            } else {
+                LostFocus(dpo);
             }
         }
     }

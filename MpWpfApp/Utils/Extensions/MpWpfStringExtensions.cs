@@ -17,10 +17,12 @@ using static MpWpfApp.MpWpfRichDocumentExtensions;
 namespace MpWpfApp {
     public static class MpWpfStringExtensions {
         public static string ToImageRtf(this string base64Str) {
-            BitmapSource bmpSrc = null;
-            if (base64Str.IsStringBase64()) {
-                bmpSrc = base64Str.ToBitmapSource();
+            if (!base64Str.IsStringBase64()) {
+                return base64Str;
             }
+
+            BitmapSource bmpSrc = base64Str.ToBitmapSource();
+            
 
             var img = new Image() {
                 Source = bmpSrc,

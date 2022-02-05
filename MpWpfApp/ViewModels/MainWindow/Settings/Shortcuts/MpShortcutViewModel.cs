@@ -271,10 +271,11 @@ namespace MpWpfApp {
                 if(Shortcut == null) {
                     return 0;
                 }
-                if(IsCustom()) {
-                    return Shortcut.CommandId;
-                }
-                return ShortcutId;
+                //if(IsCustom()) {
+                //    return Shortcut.CommandId;
+                //}
+                //return ShortcutId;
+                return Shortcut.CommandId;
             }
             set {
                 if(CommandId != value) {
@@ -595,7 +596,11 @@ namespace MpWpfApp {
         #region Commands
         public ICommand PerformShortcutCommand => new RelayCommand(
             () => {
-                Command?.Execute(CommandId);
+                if (IsCustom()) {
+                    Command?.Execute(CommandId);
+                } else {
+                    Command?.Execute(null);
+                }
 
                 if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
                     var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(CommandId);
@@ -629,7 +634,7 @@ namespace MpWpfApp {
                     return false;
                 }
                 if(mwvm.IsMainWindowOpen) {
-                    if(sbvm.IsTextBoxFocused || acvm.IsAnyTextBoxFocused) {
+                    if(sbvm.IsTextBoxFocused) {
                         return false;
                     }
                 }

@@ -3,6 +3,7 @@ using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,6 +18,28 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+
+        public MpMenuItemViewModel ContentTypeCompareDataMenuItemViewModel {
+            get {
+                var amivml = new List<MpMenuItemViewModel>();
+                var contentTypeLabels = typeof(MpCopyItemType).EnumToLabels();
+                for (int i = 0; i < contentTypeLabels.Length; i++) {
+                    MpCopyItemType ct = (MpCopyItemType)i;
+
+                    amivml.Add(
+                        new MpMenuItemViewModel() {
+                            IsSelected = i == ContentItemTypeIndex,
+                            Header = Enum.GetName(typeof(MpCopyItemType),ct),
+                            Command = SetCompareDataContentTypeCommand,
+                            CommandParameter = ct,
+                            IsVisible = ct != MpCopyItemType.None
+                        });
+                }
+                return new MpMenuItemViewModel() {
+                    SubItems = amivml
+                };
+            }
+        }
 
         public MpMenuItemViewModel CompareTypesMenuItemViewModel {
             get {
@@ -45,6 +68,7 @@ namespace MpWpfApp {
                             break;
                     }
                     amivml.Add(new MpMenuItemViewModel() {
+                        IsSelected = ct == CompareType,
                         IconResourceKey = Application.Current.Resources[resourceKey] as string,
                         Header = triggerLabels[i],
                         Command = ChangeCompareTypeCommand,
@@ -66,21 +90,21 @@ namespace MpWpfApp {
                 for (int i = 0; i < triggerLabels.Length; i++) {
                     MpComparePropertyPathType ct = (MpComparePropertyPathType)i;
                     var amivm = new MpMenuItemViewModel() {
-                                        Header = triggerLabels[i],
-                                        Command = ChangeComparePropertyPathCommand,
-                                        CommandParameter = ct,
-                                        IsSelected = ComparePropertyPathType == ct,
-                                        IsVisible = !(ct == MpComparePropertyPathType.None)
-                                    };
-                    if(i < (int)MpComparePropertyPathType.AppPath) {
-                        amivm.HeaderedSeparatorLabel = "What";
-                    } else if (i < (int)MpComparePropertyPathType.CopyDateTime) {
-                        amivm.HeaderedSeparatorLabel = "Where";
-                    } else if (i < (int)MpComparePropertyPathType.CopyCount) {
-                        amivm.HeaderedSeparatorLabel = "When";
-                    } else {
-                        amivm.HeaderedSeparatorLabel = "How (many)";
-                    }
+                        Header = triggerLabels[i],
+                        Command = ChangeComparePropertyPathCommand,
+                        CommandParameter = ct,
+                        IsSelected = ComparePropertyPathType == ct,
+                        IsVisible = !(ct == MpComparePropertyPathType.None)
+                    };
+                    //if (i < (int)MpComparePropertyPathType.AppPath) {
+                    //    amivm.HeaderedSeparatorLabel = "What";
+                    //} else if (i < (int)MpComparePropertyPathType.CopyDateTime) {
+                    //    amivm.HeaderedSeparatorLabel = "Where";
+                    //} else if (i < (int)MpComparePropertyPathType.CopyCount) {
+                    //    amivm.HeaderedSeparatorLabel = "When";
+                    //} else {
+                    //    amivm.HeaderedSeparatorLabel = "How (many)";
+                    //}
                     amivml.Add(amivm);
                 }
                 return new MpMenuItemViewModel() {
@@ -92,11 +116,12 @@ namespace MpWpfApp {
 
         #region Appearance
 
+        public double CompareDataTextBoxWidth { get; set; } = 130;
+
+        public double CompareDataTextBoxHeight { get; set; } = 30;
         #endregion
 
         #region State
-
-        public bool IsCompareDataTextBoxFocused { get; set; }
 
         #endregion
 
@@ -127,6 +152,12 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region State
+
+        public bool IsItemTypeCompare => ComparePropertyPathType == MpComparePropertyPathType.ItemType;
+
+        #endregion
+
         #region Model
 
         public MpComparePropertyPathType ComparePropertyPathType {
@@ -134,7 +165,7 @@ namespace MpWpfApp {
                 if (Action == null) {
                     return MpComparePropertyPathType.None;
                 }
-                if(string.IsNullOrWhiteSpace(Action.Arg1)) {
+                if (string.IsNullOrWhiteSpace(Action.Arg1)) {
                     return MpComparePropertyPathType.None;
                 }
                 return (MpComparePropertyPathType)Convert.ToInt32(Action.Arg1);
@@ -144,6 +175,30 @@ namespace MpWpfApp {
                     Action.Arg1 = ((int)value).ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ComparePropertyPathType));
+                }
+            }
+        }
+
+        public int ContentItemTypeIndex {
+            get {
+                if(Action == null) {
+                    return 0;
+                }
+                if(ComparePropertyPathType != MpComparePropertyPathType.ItemType) {
+                    return 0;
+                }
+                for (int i = 0; i < Enum.GetNames(typeof(MpCopyItemType)).Length; i++) {
+                    var contentTypeName = Enum.GetNames(typeof(MpCopyItemType))[i];
+                    if(CompareData == contentTypeName) {
+                        return i;
+                    }
+                }
+                return 0;
+            }
+            set {
+                if(ContentItemTypeIndex != value) {
+                    Action.Arg2 = Enum.GetName(typeof(MpCopyItemType), value);
+                    OnPropertyChanged(nameof(ContentItemTypeIndex));
                 }
             }
         }
@@ -160,6 +215,7 @@ namespace MpWpfApp {
                     Action.Arg2 = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CompareData));
+                    //OnPropertyChanged(nameof(ContentItemTypeIndex));
                 }
             }
         }
@@ -170,7 +226,7 @@ namespace MpWpfApp {
                     return MpCompareType.None;
                 }
                 if((MpCompareType)ActionObjId == MpCompareType.None) {
-                    ActionObjId = (int)MpCompareType.Contains;
+                    Action.ActionObjId = (int)MpCompareType.Contains;
                 }
                 return (MpCompareType)Action.ActionObjId;
             }
@@ -191,7 +247,15 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpCompareActionViewModel(MpActionCollectionViewModel parent) : base(parent) {
+            PropertyChanged += MpCompareActionViewModel_PropertyChanged;
+        }
 
+        private void MpCompareActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(ComparePropertyPathType):
+                    OnPropertyChanged(nameof(IsItemTypeCompare));
+                    break;
+            }
         }
 
         #endregion
@@ -260,17 +324,27 @@ namespace MpWpfApp {
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
                  fe.ContextMenu.IsOpen = true;
+                 fe.ContextMenu.Closed += ContextMenu_Closed;
+             });
+
+        private void ContextMenu_Closed(object sender, RoutedEventArgs e) {
+            return;
+        }
+
+        public ICommand SetCompareDataContentTypeCommand => new RelayCommand<object>(
+             (args) => {
+                 CompareData = Enum.GetName(typeof(MpCopyItemType), args);
              });
 
         public ICommand ChangeCompareTypeCommand => new RelayCommand<object>(
-             async(args) => {
+             (args) => {
                  CompareType = (MpCompareType)args;
              });
 
         public ICommand ChangeComparePropertyPathCommand => new RelayCommand<object>(
-             async (args) => {
+              (args) => {
                  ComparePropertyPathType = (MpComparePropertyPathType)args;
-             });
+              });
 
         #endregion
     }

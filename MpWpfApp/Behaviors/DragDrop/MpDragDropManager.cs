@@ -148,6 +148,12 @@ namespace MpWpfApp {
                 Reset();
                 return;
             }
+            if(Mouse.LeftButton == MouseButtonState.Released) {
+                // this is a sanity check since global event handlers are needed and 
+                // probably something isn't releasing mouse capture
+                Reset();
+                return;
+            }
             Vector diff = Mouse.GetPosition(Application.Current.MainWindow) - _mouseStartPosition;
 
             if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragAndDrop) {

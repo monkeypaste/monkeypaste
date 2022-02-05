@@ -9,6 +9,7 @@
                   DataType="{x:Type pcl:MpMenuItemViewModel}">
         <Button Background="Transparent"
                 BorderThickness="0"
+                
                 Visibility="{Binding IsVisible,
                                      Converter={StaticResource BoolToVisibilityConverter}}"
                 Command="{Binding Command}"
@@ -22,6 +23,7 @@
                     local:MpHoverableExtension.IsEnabled="True">
                 <DockPanel LastChildFill="False">
                     <Image DockPanel.Dock="Left"
+                           Visibility="{Binding IsIconHidden, Converter={StaticResource BoolToVisibilityFlipConverter}}"
                            Source="{Binding IconResourceKey,
                                             Converter={StaticResource StringResourceToImageSourceConverter}}"
                            Margin="5,0,5,0"
@@ -70,6 +72,7 @@
                     local:MpHoverableExtension.IsEnabled="True">
                 <DockPanel LastChildFill="False">
                     <Image DockPanel.Dock="Left"
+                           Visibility="{Binding IsIconVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                            Source="{Binding IconId,
                                             Converter={StaticResource IconIdToImageSourceConverter}}"
                            Margin="5,0,5,0"

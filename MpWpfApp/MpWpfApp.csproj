@@ -364,11 +364,18 @@
     <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionChooserView.xaml.cs">
       <DependentUpon>MpTriggerActionChooserView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionPropertyListBoxItemView.xaml.cs">
+      <DependentUpon>MpActionPropertyListBoxItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemOptionsView.xaml.cs">
       <DependentUpon>MpActionTreeItemOptionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Actions\Bases\MpActionComboBoxItem.xaml.cs">
       <DependentUpon>MpActionComboBoxItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\Selector\MpCompareActionItemCompareDataTemplateSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\MpActionPropertyListBoxView.xaml.cs">
+      <DependentUpon>MpActionPropertyListBoxView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\DesignerItem\MpActionDesignerItemView.xaml.cs">
       <DependentUpon>MpActionDesignerItemView.xaml</DependentUpon>
@@ -664,11 +671,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionPropertyListBoxItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemOptionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\Actions\Bases\MpActionComboBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\MpActionPropertyListBoxView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2602,6 +2617,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\asterisk.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\question.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Resources\Sounds\alert.wav">

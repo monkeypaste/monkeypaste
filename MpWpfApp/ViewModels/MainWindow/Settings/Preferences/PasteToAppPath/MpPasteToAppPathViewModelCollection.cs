@@ -316,6 +316,7 @@ namespace MpWpfApp {
         }
 
         public MpPasteToAppPathViewModel FindById(int ptapid) {
+            
             return this.Where(x => x.PasteToAppPathId == ptapid).First();
         }
         #endregion

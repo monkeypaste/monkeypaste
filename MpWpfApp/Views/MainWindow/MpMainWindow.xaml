@@ -73,7 +73,7 @@
                                                             UpdateSourceTrigger=PropertyChanged,
                                                             NotifyOnSourceUpdated=True,
                                                             NotifyOnTargetUpdated=True}"
-                                        ResizableEdges="Top"
+                                        ResizableEdge1="Top"
                                         BoundHeight="{Binding MainWindowHeight,
                                                               Mode=TwoWay,
                                                               UpdateSourceTrigger=PropertyChanged,
@@ -242,7 +242,7 @@
                                                                     UpdateSourceTrigger=PropertyChanged,
                                                                     NotifyOnSourceUpdated=True,
                                                                     NotifyOnTargetUpdated=True}"
-                                                ResizableEdges="Right"
+                                                ResizableEdge1="Right"
                                                 BoundWidth="{Binding SidebarWidth,
                                                                      Mode=TwoWay,
                                                                      UpdateSourceTrigger=PropertyChanged,

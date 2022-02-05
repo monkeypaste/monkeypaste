@@ -76,13 +76,19 @@
         <DataTemplate x:Key="NoneDesignerTemplate"
                       DataType="local:MpEmptyActionViewModel">
             <Button Style="{StaticResource SemiTransparentButton}"
+                    Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                     local:MpHoverableExtension.IsEnabled="True"
+                     local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                     Mode=TwoWay,
+                                                                     UpdateSourceTrigger=PropertyChanged,
+                                                                     NotifyOnSourceUpdated=True,
+                                                                     NotifyOnTargetUpdated=True}"
                     local:MpHoverableExtension.HoverCursor="ResizeAll"
-                    Command="{Binding AddChildActionCommand}">
+                    Command="{Binding ShowActionSelectorMenuCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                 <StackPanel Orientation="Vertical">
                     <Grid>
-                        <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor,
-                                                  Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                        <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                                  Fill="Transparent"
                                  StrokeThickness="3"
                                  Width="50"
