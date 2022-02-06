@@ -60,53 +60,73 @@
                        Height="{Binding Height}"
                        RadiusX="10"
                        RadiusY="10"
-                       Stroke="Green"
                        StrokeThickness="2.5"
-                       Fill="Lime" />
+                       local:MpHoverableExtension.IsEnabled="True"
+                       local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                       Mode=TwoWay,
+                                                                       UpdateSourceTrigger=PropertyChanged,
+                                                                       NotifyOnSourceUpdated=True,
+                                                                       NotifyOnTargetUpdated=True}"
+                       local:MpHoverableExtension.HoverCursor="ResizeAll"
+                       Stroke="{Binding BorderBrushHexColor,
+                                        Converter={StaticResource StringHexToBrushConverter}}"
+                       Fill="{Binding ActionType,
+                                      Converter={StaticResource ActionTypeToBrushConverter}}" />
         </DataTemplate>
         <DataTemplate x:Key="ClassifyDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
-            <Polygon Points="50,0 75,50 0,50"
+            <Polygon Points="25,0 50,48 0,48"
                      Width="{Binding Width}"
                      Height="{Binding Height}"
-                     Stroke="Blue"
                      StrokeThickness="2.5"
-                     Fill="LightBlue" />
-        </DataTemplate>
-        <DataTemplate x:Key="NoneDesignerTemplate"
-                      DataType="local:MpEmptyActionViewModel">
-            <Button Style="{StaticResource SemiTransparentButton}"
-                    Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                    local:MpHoverableExtension.IsEnabled="True"
+                     local:MpHoverableExtension.IsEnabled="True"
                      local:MpHoverableExtension.IsHovering="{Binding IsHovering,
                                                                      Mode=TwoWay,
                                                                      UpdateSourceTrigger=PropertyChanged,
                                                                      NotifyOnSourceUpdated=True,
                                                                      NotifyOnTargetUpdated=True}"
+                     local:MpHoverableExtension.HoverCursor="ResizeAll"
+                     Stroke="{Binding BorderBrushHexColor,
+                                      Converter={StaticResource StringHexToBrushConverter}}"
+                     Fill="{Binding ActionType,
+                                    Converter={StaticResource ActionTypeToBrushConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="NoneDesignerTemplate"
+                      DataType="local:MpEmptyActionViewModel">
+            <Button Style="{StaticResource SemiTransparentButton}"
+                    Visibility="{Binding IsVisible,
+                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                    local:MpHoverableExtension.IsEnabled="True"
+                    local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                    Mode=TwoWay,
+                                                                    UpdateSourceTrigger=PropertyChanged,
+                                                                    NotifyOnSourceUpdated=True,
+                                                                    NotifyOnTargetUpdated=True}"
                     local:MpHoverableExtension.HoverCursor="ResizeAll"
                     Command="{Binding ShowActionSelectorMenuCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                 <StackPanel Orientation="Vertical">
                     <Grid>
-                        <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                        <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor,
+                                                  Converter={StaticResource StringHexToBrushConverter}}"
                                  Fill="Transparent"
-                                 StrokeThickness="3"
-                                 Width="50"
-                                 Height="50" />
+                                 StrokeThickness="1"
+                                 Width="25"
+                                 Height="25" />
                         <Rectangle HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Fill="DimGray"
-                                   Height="30"
-                                   Width="3" />
+                                   Height="15"
+                                   Width="2" />
                         <Rectangle HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Fill="DimGray"
-                                   Height="3"
-                                   Width="30" />
+                                   Height="2"
+                                   Width="15" />
                     </Grid>
-                    <Label HorizontalAlignment="Center">Add New</Label>
+                    <TextBlock HorizontalAlignment="Center">Add New</TextBlock>
                 </StackPanel>
-                </Button>
+            </Button>
         </DataTemplate>
         <local:MpActionDesignerItemTemplateSelector x:Key="ActionDesignerItemTemplateSelector" />
     </local:MpUserControl.Resources>
@@ -116,7 +136,6 @@
                     Content="{Binding}"
                     VerticalAlignment="Top"
                     ContentTemplateSelector="{StaticResource ActionDesignerItemTemplateSelector}">
-
         <ContentControl.Effect>
             <DropShadowEffect RenderingBias="Quality"
                               Color="Black"
@@ -138,6 +157,7 @@
             </Style>
         </ContentControl.Style>
         <i:Interaction.Behaviors>
+            <local:MpActionDesignerItemDropBehavior x:Name="ActionDesignerItemDropBehavior" />
             <local:MpMoveBehavior IsMoving="{Binding IsMoving,
                                                      Mode=TwoWay,
                                                      UpdateSourceTrigger=PropertyChanged,

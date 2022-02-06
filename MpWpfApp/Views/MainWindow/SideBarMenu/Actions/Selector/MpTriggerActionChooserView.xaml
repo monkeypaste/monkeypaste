@@ -18,6 +18,7 @@
                 DockPanel.Dock="Left"
                 CornerRadius="3"
                 HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
                 BorderThickness="1"
                 BorderBrush="Black"
                 Margin="10">
@@ -47,8 +48,8 @@
             </i:Interaction.Behaviors>
             <Grid Margin="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.15*" />
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="40" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
@@ -58,12 +59,13 @@
                            Foreground="White"
                            Text="Actions" />
                 <DockPanel Grid.Row="1"
-                           LastChildFill="True">
+                           LastChildFill="True" VerticalAlignment="Top">
                     <Button BorderThickness="0"
                             DockPanel.Dock="Right"
+                            MaxHeight="30"
                             Margin="5"
-                            Background="Beige"
                             HorizontalAlignment="Right"
+                            Style="{StaticResource RoundedButton}"
                             Visibility="{Binding IsAnySelected,
                                                  Converter={StaticResource BoolToVisibilityConverter}}"
                             Command="{Binding AddTriggerCommand}">
@@ -76,38 +78,21 @@
                     </Button>
                     <ComboBox x:Name="RootActionChooserComboBox"
                               DockPanel.Dock="Left"
+                              VerticalAlignment="Top"
                               IsDropDownOpen="{Binding IsChooserDropDownOpen,
                                                        Mode=TwoWay,
                                                        UpdateSourceTrigger=PropertyChanged,
                                                        NotifyOnSourceUpdated=True,
                                                        NotifyOnTargetUpdated=True}"
                               MinWidth="200"
+                              MaxHeight="40"
+                              ItemsSource="{Binding Items, IsAsync=True}"
                               SelectedItem="{Binding SelectedItem,
                                                      Mode=TwoWay,
                                                      UpdateSourceTrigger=PropertyChanged,
                                                      NotifyOnSourceUpdated=True,
                                                      NotifyOnTargetUpdated=True}"
                               IsSynchronizedWithCurrentItem="True">
-                        <ComboBox.ItemsSource>
-                            <CompositeCollection>
-                                <ComboBoxItem IsEnabled="False"
-                                              HorizontalAlignment="Stretch"
-                                              Visibility="{Binding IsUnselectedChooserItemHidden,
-                                                                   Converter={StaticResource BoolToVisibilityConverter}}"
-                                              Foreground="Black">
-                                    <TextBlock Text="Please Select"
-                                               FontSize="14"
-                                               Padding="3" />
-                                </ComboBoxItem>
-                                <CollectionContainer Collection="{Binding Items, Source={x:Static local:MpActionCollectionViewModel.Instance}}" />
-                            </CompositeCollection>
-                        </ComboBox.ItemsSource>
-                        <!--<ComboBox.ItemContainerStyle>
-                            <Style TargetType="ComboBoxItem">
-                                <Setter Property="IsSelected"
-                                        Value="{Binding IsSelected}" />
-                            </Style>
-                        </ComboBox.ItemContainerStyle>-->
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <local:MpActionComboBoxItem Visibility="{Binding IsRootAction,
@@ -117,6 +102,18 @@
                                                             DataContext="{Binding}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="HorizontalAlignment"
+                                                Value="Stretch"/>
+                                <Setter Property="VerticalAlignment"
+                                                Value="Center"/>
+                                <Setter Property="VerticalContentAlignment"
+                                                Value="Center"/>
+                                <Setter Property="Padding"
+                                                Value="3"/>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
                     </ComboBox>
                 </DockPanel>
                 <local:MpActionPropertyListBoxView Grid.Row="2"

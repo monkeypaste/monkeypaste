@@ -23,7 +23,6 @@ namespace MpWpfApp {
         MpISelectableViewModel,
         MpIUserIconViewModel,
         MpITreeItemViewModel<MpActionViewModelBase>,
-        MpIMenuItemViewModel,
         MpIBoxViewModel,
         MpIMovableViewModel,
         MpITriggerActionViewModel {
@@ -80,24 +79,6 @@ namespace MpWpfApp {
 
         #region MpISelectableViewModel Implementation
 
-        //private bool _isSelected;
-        //public bool IsSelected {
-        //    get {
-        //        return _isSelected || IsAnyChildSelected;
-        //    }
-        //    set {
-        //        if (IsSelected != value) {
-        //            _isSelected = value;
-        //            if (!_isSelected) {
-        //                this.FindAllChildren().ForEach(x => x.IsSelected = false);
-        //            }
-        //            OnPropertyChanged(nameof(IsSelected));
-        //            if (ParentActionViewModel != null) {
-        //                ParentActionViewModel.OnPropertyChanged(nameof(ParentActionViewModel.IsSelected));
-        //            }
-        //        }
-        //    }
-        //}
         public DateTime LastSelectedDateTime { get; set; }
 
         public bool IsSelected { get; set; } = false;
@@ -106,7 +87,7 @@ namespace MpWpfApp {
 
         #region MpIMenuItemViewModel Implementation
 
-        public virtual MpMenuItemViewModel MenuItemViewModel {
+        public virtual MpMenuItemViewModel CreateActionMenuItemViewModel {
             get {
                 var amivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpActionType).EnumToLabels();
@@ -241,80 +222,57 @@ namespace MpWpfApp {
 
         #region MpIBoxViewModel Implementation
 
-        public Point Location => new Point(X, Y);
+        public Point Location {
+            get {
+                return new Point(X, Y);
+            }
+            set {
+                if(Location != value) {
+                    X = value.X;
+                    Y = value.Y;
+                    OnPropertyChanged(nameof(Location));
+                }
+            }
+        }
 
         public double X {
             get {
-                if (Box == null) {
+                if (Action == null) {
                     return 0;
                 }
-                return Box.X;
+                return Action.X;
             }
             set {
                 if (X != value) {
-                    Box.X = value;
-                    HasModelChanged = true;
+                    Action.X = value;
+                    HasModelChanged = !IsMoving;
                     OnPropertyChanged(nameof(X));
+                    OnPropertyChanged(nameof(Location));
                 }
             }
         }
 
         public double Y {
             get {
-                if (Box == null) {
+                if (Action == null) {
                     return 0;
                 }
-                return Box.Y;
+                return Action.Y;
             }
             set {
                 if (Y != value) {
-                    Box.Y = value;
-                    HasModelChanged = true;
+                    Action.Y = value;
+                    HasModelChanged = !IsMoving;
                     OnPropertyChanged(nameof(Y));
+                    OnPropertyChanged(nameof(Location));
                 }
             }
         }
 
-        public double Width {
-            get {
-                if (Box == null) {
-                    return 0;
-                }
-                return Box.Width;
-            }
-            set {
-                if (Width != value) {
-                    Box.Width = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(Width));
-                }
-            }
-        }
+        public double Width => MpMeasurements.Instance.DesignerItemSize;
 
-        public double Height {
-            get {
-                if (Box == null) {
-                    return 0;
-                }
-                return Box.Height;
-            }
-            set {
-                if (Height != value) {
-                    Box.Width = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(Height));
-                }
-            }
-        }
+        public double Height => MpMeasurements.Instance.DesignerItemSize;
 
-        public MpBox Box {
-            get {
-                if (Action == null) {
-                    return null;
-                }
-                return Action.Box;
-            }
-        }
 
         #endregion
 
@@ -409,14 +367,6 @@ namespace MpWpfApp {
             }
         }
 
-        public int BoxId {
-            get {
-                if (Action == null) {
-                    return 0;
-                }
-                return Action.BoxId;
-            }
-        }
 
         public int ParentActionId {
             get {
@@ -470,35 +420,7 @@ namespace MpWpfApp {
         public virtual async Task InitializeAsync(MpAction a) {
             IsBusy = true;
 
-            if (a.Box == null) {
-                if (a.BoxId > 0) {
-                    a.Box = await MpDb.GetItemAsync<MpBox>(a.BoxId);
-                } else {
-                    Point? parentLoc = null;
-                    if (ParentActionViewModel != null) {
-                        parentLoc = new Point(ParentActionViewModel.X, ParentActionViewModel.Y);
-                    } 
-
-                    Point openSpot = Parent.FindOpenDesignerLocation(parentLoc);
-
-                    a.Box = await MpBox.Create(
-                        boxType: MpBoxType.DesignerItem,
-                        boxObjId: a.Id,
-                        x: openSpot.X,
-                        y: openSpot.Y,
-                        w: MpMeasurements.Instance.DesignerItemSize,
-                        h: MpMeasurements.Instance.DesignerItemSize,
-                        suppressWrite: IsPlaceholder);
-                }
-            }
             Action = a;
-
-            OnPropertyChanged(nameof(Box));
-            OnPropertyChanged(nameof(Action));
-            OnPropertyChanged(nameof(Height));
-            OnPropertyChanged(nameof(Width));
-            OnPropertyChanged(nameof(Y));
-            OnPropertyChanged(nameof(X));
 
             if(!IsPlaceholder) {
                 var cal = await MpDataModelProvider.GetChildActions(ActionId);
@@ -542,7 +464,7 @@ namespace MpWpfApp {
             avm.ParentActionViewModel = this;
             await avm.InitializeAsync(a);
 
-            var eavm = await avm.CreateEmptyActionViewModel();
+            var eavm = await avm.CreateEmptyActionViewModel();            
             avm.Items.Add(eavm);
 
             return avm;
@@ -552,19 +474,23 @@ namespace MpWpfApp {
             MpEmptyActionViewModel avm = new MpEmptyActionViewModel(Parent);
             avm.ParentActionViewModel = this;
             await avm.InitializeAsync(new MpAction());
+
+            avm.X = X;
+            avm.Y = Y - (Height * 1.75);
+
             return avm;
         }
 
         public virtual void Enable() {
             Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Enable());
 
-            //IsEnabled = true;
+            IsEnabled = true;
         }
 
         public virtual void Disable() {
             // TODO reverse enable
             Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Disable());
-            //IsEnabled = false;
+            IsEnabled = false;
         }
 
         public void OnTrigger(object sender, MpCopyItem ci) {
@@ -576,6 +502,15 @@ namespace MpWpfApp {
             if(ActionType == MpActionType.None) {
                 ValidationText = "Select Action Type";
             }
+        }
+
+
+        public virtual async Task PerformAction(MpCopyItem arg) {
+            if (arg == null) {
+                return;
+            }
+            await Task.Delay(1);
+            OnAction?.Invoke(this, arg);
         }
 
         #endregion
@@ -605,13 +540,6 @@ namespace MpWpfApp {
         #region Protected Methods
 
 
-        protected virtual async Task PerformAction(MpCopyItem arg) {
-            if (arg == null) {
-                return;
-            }
-            await Task.Delay(1);
-            OnAction?.Invoke(this, arg);
-        }
         #endregion
 
         #region Private Methods
@@ -651,8 +579,11 @@ namespace MpWpfApp {
                     if(HasModelChanged) {
                         HasModelChanged = false;
 
+                        if(this is MpEmptyActionViewModel) {
+                            return;
+                        }
+
                         Task.Run(async () => {
-                            await Box.WriteToDatabaseAsync();
                             await Action.WriteToDatabaseAsync();
                         });
                     }
@@ -664,6 +595,11 @@ namespace MpWpfApp {
                 //case nameof(X):
                 //case nameof(Y):
                     Parent.NotifyViewportChanged();
+                    break;
+                case nameof(IsExpanded):
+                    if(IsExpanded) {
+                        IsSelected = true;
+                    }
                     break;
             }
         }
@@ -683,7 +619,7 @@ namespace MpWpfApp {
                  //LastSelectedDateTime = DateTime.Now;
                  IsSelected = true;
 
-                 cm.DataContext = MenuItemViewModel;
+                 cm.DataContext = CreateActionMenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
@@ -708,6 +644,17 @@ namespace MpWpfApp {
                                          sortOrderIdx: Items.Count);
 
                  var navm = await CreateActionViewModel(na);
+                 var neavm = navm.Items.FirstOrDefault(x => x is MpEmptyActionViewModel);
+                 
+                 var eavm = this.Items.FirstOrDefault(x => x is MpEmptyActionViewModel);
+                 navm.Location = eavm.Location;
+                 neavm.X = navm.X;
+                 neavm.Y = navm.Y - (navm.Height * 2);
+
+                 eavm.X = X;
+                 eavm.Y = Y + (Height * 2);
+
+                 eavm.IsSelected = false;
                  Items.Add(navm);
                  navm.IsSelected = true;
 
@@ -715,8 +662,7 @@ namespace MpWpfApp {
 
                  OnPropertyChanged(nameof(Items));
 
-                 //Parent.AllSelectedTriggerActions.Add(navm);
-                 //Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
+                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
 
                  IsExpanded = true;
 
@@ -737,14 +683,13 @@ namespace MpWpfApp {
                 grandChildren.ForEach(x => x.ParentActionViewModel = this);
                 await Task.WhenAll(grandChildren.Select(x => x.Action.WriteToDatabaseAsync()));
                 await avm.Action.DeleteFromDatabaseAsync();
-                await avm.Box.DeleteFromDatabaseAsync();
 
                 Items.Remove(avm);
 
                 await UpdateSortOrder();
                 OnPropertyChanged(nameof(Items));
-                OnPropertyChanged(nameof(Children));
-                Parent.AllSelectedTriggerActions.Remove(avm);
+                //OnPropertyChanged(nameof(Children));
+                //Parent.AllSelectedTriggerActions.Remove(avm);
                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
 
                 Parent.NotifyViewportChanged();

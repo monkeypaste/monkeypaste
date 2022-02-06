@@ -98,7 +98,7 @@ namespace MpWpfApp {
             }
             contentRect.Width += 100;
             contentRect.Height += 100;
-            AssociatedObject.ZoomTo(contentRect);
+            //AssociatedObject.ZoomTo(contentRect);
         }
 
         private void ReceivedActionCollectionViewModelMessage(MpMessageType msg) {

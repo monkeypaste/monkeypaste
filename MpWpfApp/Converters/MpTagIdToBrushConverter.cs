@@ -15,7 +15,7 @@ namespace MpWpfApp {
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (Visibility)value == Visibility.Visible ? true : false;
+            return 0;
         }
     }
 }

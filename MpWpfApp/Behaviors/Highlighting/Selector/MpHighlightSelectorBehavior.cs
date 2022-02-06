@@ -169,6 +169,18 @@ namespace MpWpfApp {
                 hll[_selectedHighlighterIdx].SelectedIdx = hll[_selectedHighlighterIdx].MatchCount - 1;
             } else {
                 hll[_selectedHighlighterIdx].SelectedIdx--;
+                
+                //NOTE this added for untested stack overflow of decrementing SelectedIdx
+                //from here
+                if(hll[_selectedHighlighterIdx].SelectedIdx < 0) {
+                    if (_selectedHighlighterIdx == 0) {
+                        _selectedHighlighterIdx = hll.Count - 1;
+                    } else {
+                        _selectedHighlighterIdx--;
+                    }
+                    hll[_selectedHighlighterIdx].SelectedIdx = hll[_selectedHighlighterIdx].MatchCount - 1;
+                }
+                //to here
             }
             //if (_selectedHighlighterIdx >= _highlighters.Count - 1) {
             //    _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;

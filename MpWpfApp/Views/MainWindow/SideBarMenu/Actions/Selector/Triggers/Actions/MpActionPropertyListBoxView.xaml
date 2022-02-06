@@ -15,15 +15,14 @@
     <Grid>
         <ListBox x:Name="ActionPropertyListBox"
                  SnapsToDevicePixels="True"
-                 ItemsSource="{Binding SelectedActions}"
+                 ItemsSource="{Binding AllSelectedTriggerActions}"
+                 SelectionChanged="ActionPropertyListBox_SelectionChanged"
                  Background="Transparent"
                  Margin="0"
                  Focusable="True"
                  BorderThickness="0"
                  VerticalAlignment="Stretch"
-                 VerticalContentAlignment="Stretch"
                  HorizontalAlignment="Stretch"
-                 HorizontalContentAlignment="Stretch"
                  SelectionMode="Single"
                  ScrollViewer.CanContentScroll="False"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -34,10 +33,6 @@
                             Value="{Binding IsSelected}" />
                     <Setter Property="FocusVisualStyle"
                             Value="{x:Null}" />
-                    <Setter Property="HorizontalContentAlignment"
-                            Value="Left" />
-                    <Setter Property="VerticalContentAlignment"
-                            Value="Top" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -58,7 +53,9 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpActionPropertyListBoxItemView Visibility="{Binding IsEmptyAction,
+                    <local:MpActionPropertyListBoxItemView BorderThickness="5" 
+                                                           BorderBrush="{Binding BorderBrushHexColor,Converter={StaticResource StringHexToBrushConverter}}"
+                                                           Visibility="{Binding IsEmptyAction,
                                                                                 Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                            DataContext="{Binding}" />
                 </DataTemplate>

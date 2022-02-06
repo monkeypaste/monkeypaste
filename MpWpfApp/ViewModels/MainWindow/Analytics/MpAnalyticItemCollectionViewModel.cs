@@ -34,13 +34,13 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel CreateActionMenuItemViewModel {
             get {
                 List<MpMenuItemViewModel> subItems = Items.SelectMany(x => x.QuickActionPresetMenuItems).ToList();
                 if(subItems.Count > 0) {
                     subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
-                subItems.AddRange(Items.Select(x => x.MenuItemViewModel));
+                subItems.AddRange(Items.Select(x => x.CreateActionMenuItemViewModel));
 
                 return new MpMenuItemViewModel() {
                     Header = @"_Analyze",
@@ -76,8 +76,15 @@ namespace MpWpfApp {
         public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultAnalyzerPanelWidth;
         public bool IsSidebarVisible { get; set; } = false;
 
-        public MpISidebarItemViewModel NextSidebarItem { get; }
-        public MpISidebarItemViewModel PreviousSidebarItem { get; }
+        public MpISidebarItemViewModel NextSidebarItem {
+            get {
+                if(SelectedPresetViewModel == null) {
+                    return null;
+                }
+                return SelectedPresetViewModel;
+            }
+        }
+        public MpISidebarItemViewModel PreviousSidebarItem => null;
 
         #endregion
 

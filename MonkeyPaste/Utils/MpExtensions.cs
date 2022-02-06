@@ -14,6 +14,10 @@ using static Xamarin.Forms.Internals.Profile;
 
 namespace MonkeyPaste {
     public static class MpExtensions {
+        #region Private Variables
+
+        private static List<string> _resourceNames;
+        #endregion
         #region Collections
 
         public static bool AddOrReplace<TKey, TValue>(this Dictionary<TKey,TValue> d,TKey key, TValue value) {
@@ -147,7 +151,17 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(text)) {
                 return false;
             }
-            return text.StartsWith("pack:");
+            if(text.StartsWith("pack:")) {
+                return true;
+            }
+            if (_resourceNames == null) {
+                //add executing resource names
+                _resourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames().Select(x=>x.ToLower()).ToList();
+                //add shared resource names
+                _resourceNames.AddRange(Assembly.GetCallingAssembly().GetManifestResourceNames().Select(x => x.ToLower()));
+            }
+
+            return _resourceNames.Contains(text.ToLower());
         }
 
         public static string ToLabel(this string titleCaseStr, string noneText = "") {

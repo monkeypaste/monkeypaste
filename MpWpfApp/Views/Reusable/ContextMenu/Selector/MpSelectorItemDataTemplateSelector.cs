@@ -15,10 +15,6 @@ namespace MpWpfApp {
                 keyStr = "HeaderedSeperatorSelectorItem";
             } else if (cmivm.IsSeparator) {
                 keyStr = "SeperatorSelectorItem";
-            } else if (!string.IsNullOrEmpty(cmivm.IconResourceKey)) {
-                keyStr = "SelectorItem";
-            }  else if (cmivm.IconId > 0) {
-                keyStr = "UserSelectorItem";
             } else {
                 keyStr = "SelectorItem";
             }

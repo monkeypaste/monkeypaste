@@ -29,7 +29,6 @@ namespace MonkeyPaste {
         BeginsWith,
         EndsWith,
         Regex,
-        Source,
         Automatic,
         Wildcard,
         Lexical // like azure cognitive search?
@@ -69,10 +68,6 @@ namespace MonkeyPaste {
         [Column("fk_ParentActionId")]
         public int ParentActionId { get; set; } = 0;
 
-        [ForeignKey(typeof(MpBox))]
-        [Column("fk_MpBoxId")]
-        public int BoxId { get; set; }
-
         [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; } = 0;
@@ -91,6 +86,10 @@ namespace MonkeyPaste {
 
         public string Arg3 { get; set; } = string.Empty;
 
+        public double X { get; set; }
+
+        public double Y { get; set; }
+
         public string Label { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
@@ -101,8 +100,6 @@ namespace MonkeyPaste {
 
         #region Fk Objects
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpBox Box { get; set; }
 
         #endregion
 

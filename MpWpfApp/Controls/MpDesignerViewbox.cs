@@ -41,7 +41,7 @@ namespace MpWpfApp {
         }
 
         private void DrawGrid(DrawingContext dc) {
-            var zc = this.GetVisualDescendent<ZoomAndPan.ZoomAndPanControl>();
+            var zc = this.GetVisualAncestor<ZoomAndPan.ZoomAndPanControl>();
             Point offset = new Point(zc.ContentOffsetX, zc.ContentOffsetY);
             offset.X = WrapValue(offset.X, -GridLineSpacing, GridLineSpacing);
             offset.Y = WrapValue(offset.Y, -GridLineSpacing, GridLineSpacing);

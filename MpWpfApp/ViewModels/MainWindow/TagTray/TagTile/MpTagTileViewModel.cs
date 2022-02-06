@@ -32,6 +32,29 @@ namespace MpWpfApp {
         #region View Models
         #endregion
 
+        #region MpIMenuItemViewModel Implementation
+
+        //content menu item
+        public MpMenuItemViewModel ContentMenuItemViewModel {
+            get {
+                int totalCount = MpClipTrayViewModel.Instance.SelectedModels.Count;
+                int linkCount = MpClipTrayViewModel.Instance.SelectedModels.Where(x => IsLinked(x)).Count();
+                return new MpMenuItemViewModel() {
+                    Header = TagName,
+                    Command = MpClipTrayViewModel.Instance.LinkTagToCopyItemCommand,
+                    CommandParameter = this,
+                    IsSelected = totalCount == linkCount && totalCount > 0,
+                    IsPartiallySelected = linkCount != totalCount && totalCount > 0,
+                    IconHexStr = TagHexColor,
+                    ShortcutObjId = TagId,
+                    ShortcutType = MpShortcutType.SelectTag,
+                    SubItems = Items.Select(x => x.ContentMenuItemViewModel).ToList()
+                };
+            }
+        }
+
+        #endregion
+
         #region MpITreeItemViewModel Implementation
 
         public bool IsExpanded { get; set; }
@@ -468,16 +491,6 @@ namespace MpWpfApp {
                     break;
             }
         }
-
-        public List<MpTagTileViewModel> FindChildren() {
-            var cl = new List<MpTagTileViewModel>();
-            foreach(var cttvm in Children.Cast<MpTagTileViewModel>()) {
-                cl.Add(cttvm);
-                cl.AddRange(cttvm.Children.Cast<MpTagTileViewModel>());
-            }
-            return cl;
-        }
-
 
         public async Task AddContentItem(int ciid) {
             var ncit = await MpCopyItemTag.Create(TagId, ciid);

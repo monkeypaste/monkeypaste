@@ -116,7 +116,7 @@ namespace MpWpfApp {
 
         #region Appearance
 
-        public double CompareDataTextBoxWidth { get; set; } = 130;
+        public double CompareDataTextBoxWidth { get; set; } = 200;
 
         public double CompareDataTextBoxHeight { get; set; } = 30;
         #endregion
@@ -262,7 +262,7 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        protected override async Task PerformAction(MpCopyItem arg) {
+        public virtual async Task PerformAction(MpCopyItem arg) {
             object matchVal = arg.GetPropertyValue(PhysicalPropertyPath);
             string compareStr = string.Empty;
             if (matchVal != null) {

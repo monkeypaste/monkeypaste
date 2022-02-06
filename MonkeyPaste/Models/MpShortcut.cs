@@ -40,11 +40,12 @@ namespace MonkeyPaste {
         ScrollToHome,
         ScrollToEnd,
         ScrollUp,
-        ScrollDown, //remaining are data (not context) driven using commandId
-        PasteCopyItem,
-        SelectTag,
-        AnalyzeCopyItemWithPreset,
-        TriggerAction
+        ScrollDown, 
+        //remaining are data (not context) driven using commandId
+        PasteCopyItem = 101,
+        SelectTag = 102,
+        AnalyzeCopyItemWithPreset = 103,
+        TriggerAction = 104
     }
     public enum MpRoutingType {
         None = 0,
@@ -980,7 +981,7 @@ namespace MonkeyPaste {
             MpRoutingType routeType,
             MpShortcutType shortcutType,
             int commandId) {
-            var dupShortcut = await MpDataModelProvider.GetShortcut(shortcutType,commandId);
+            var dupShortcut = await MpDataModelProvider.GetShortcutAsync(shortcutType,commandId);
             if (dupShortcut != null) {
                 dupShortcut = await MpDb.GetItemAsync<MpShortcut>(dupShortcut.Id);
                 return dupShortcut;

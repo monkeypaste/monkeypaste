@@ -132,6 +132,7 @@
     <Compile Include="Behaviors\DragDrop\Drag Behaviors\Base\MpDragBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpClipTrayDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpExternalDropBehavior.cs" />
+    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpActionDesignerItemDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpDragDropManager.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpContentListDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\Base\MpDropBehaviorBase.cs" />
@@ -198,8 +199,10 @@
     <Compile Include="Converters\MpDbImageIdToIconConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
+    <Compile Include="Converters\MpObjectToImageSourceOrIconConverter.cs" />
     <Compile Include="Converters\MpItemToItemsSourceConverter.cs" />
     <Compile Include="Converters\MpMultiSelectHoverableToBrushConverter.cs" />
+    <Compile Include="Converters\MpObjectToTooltipConverter.cs" />
     <Compile Include="Converters\MpShorcutIdToKeyStringConverter.cs" />
     <Compile Include="Converters\MpStringHexToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToIconConverter.cs" />
@@ -218,6 +221,7 @@
     <Compile Include="Converters\MpFilePathStringToIconConverter.cs" />
     <Compile Include="Converters\MpSourceIdToImageSourceBorderConverter.cs" />
     <Compile Include="Converters\MpSourceIdToImageSourceConverter.cs" />
+    <Compile Include="Converters\MpStringHexToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringToDateTimeConverter.cs" />
     <Compile Include="Converters\MpStringToThemeBrushConverter.cs" />
     <Compile Include="Converters\MpTagIdToBrushConverter.cs" />

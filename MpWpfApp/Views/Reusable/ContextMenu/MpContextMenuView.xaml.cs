@@ -32,6 +32,7 @@ namespace MpWpfApp {
 
         private void ContextMenuView_Loaded(object sender, RoutedEventArgs e) {
             _CurrentContextMenu = sender as MpContextMenuView;
+            
         }
     }
 }

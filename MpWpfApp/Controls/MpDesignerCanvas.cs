@@ -20,6 +20,10 @@ namespace MpWpfApp {
         private DispatcherTimer _timer;
         #region Properties
 
+        public Brush EmptyLineBrush { get; set; } = Brushes.DimGray;
+        public double EmptyLineThickness { get; set; } = 2;
+        public DashStyle EmptyLineDaskStyle { get; set; } = DashStyles.Dash;
+
         public Brush TransitionLineBorderBrush { get; set; } = Brushes.White;
         public Brush TransitionLineFillBrush { get; set; } = Brushes.Red;
         public double TransitionLineThickness { get; set; } = 1;
@@ -73,12 +77,30 @@ namespace MpWpfApp {
                     head = new Point(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
                 }
 
-                DrawArrow(dc, head, tail,avm.Width / 2);
+                if(avm is MpEmptyActionViewModel) {
+                    DrawEmptyLine(dc, head, tail, avm.Width / 2);
+                } else {
+                    DrawArrow(dc, head, tail, avm.Width / 2);
+                }
             }
         }
 
         private void _timer_Tick(object sender, EventArgs e) {
             InvalidateVisual();
+        }
+
+        private void DrawEmptyLine(DrawingContext dc, Point startPoint, Point endPoint, double dw) {
+            Vector direction = endPoint - startPoint;
+
+            Vector normalizedDirection = direction;
+            normalizedDirection.Normalize();
+
+            startPoint += normalizedDirection * dw;
+            endPoint -= normalizedDirection * (dw / 2);
+
+            var emptyPen = new Pen(EmptyLineBrush, EmptyLineThickness) { DashStyle = EmptyLineDaskStyle };
+
+            dc.DrawLine(emptyPen, startPoint, endPoint);
         }
 
         private void DrawArrow(DrawingContext dc, Point startPoint, Point endPoint, double dw) {

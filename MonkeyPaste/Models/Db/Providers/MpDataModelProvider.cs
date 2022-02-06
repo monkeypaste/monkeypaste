@@ -591,13 +591,19 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        public static async Task<MpShortcut> GetShortcut(MpShortcutType shortcutType, int commandId) {
+        public static async Task<MpShortcut> GetShortcutAsync(MpShortcutType shortcutType, int commandId) {
             string query = string.Format(@"select * from MpShortcut where e_ShortcutTypeId=? and fk_MpCommandId=?");
             var result = await MpDb.QueryAsync<MpShortcut>(query, (int)shortcutType, commandId);
             if (result == null || result.Count == 0) {
                 return null;
             }
             return result[0];
+        }
+
+        public static async Task<string> GetShortcutKeystring(MpShortcutType shortcutType, int commandId = 0) {
+            string query = string.Format(@"select KeyString from MpShortcut where e_ShortcutTypeId=? and fk_MpCommandId=?");
+            var result = await MpDb.QueryScalarAsync<string>(query, (int)shortcutType, commandId);
+            return result;
         }
 
         public static async Task<List<MpShortcut>> GetAllShortcuts() {

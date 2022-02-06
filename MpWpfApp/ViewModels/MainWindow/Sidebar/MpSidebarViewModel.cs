@@ -321,9 +321,14 @@ namespace MpWpfApp {
                             SidebarWidth += temp.SidebarWidth;
                             temp = temp.NextSidebarItem;
                         }
+                        
                     }
                     OnPropertyChanged(nameof(TotalSidebarWidth));
-
+                    //if (VisibleSidebar is MpActionCollectionViewModel) {
+                    //    CanResize = false;
+                    //} else {
+                    //    CanResize = true;
+                    //}
                     break;
             }
         }

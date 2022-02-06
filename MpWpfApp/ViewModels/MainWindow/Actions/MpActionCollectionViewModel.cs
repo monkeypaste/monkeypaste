@@ -30,7 +30,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel CreateActionMenuItemViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpTriggerType).EnumToLabels("Select Trigger");
@@ -229,7 +229,6 @@ namespace MpWpfApp {
         public async Task<MpTriggerActionViewModelBase> CreateTriggerViewModel(MpAction a) {
             
             if(a.ActionType != MpActionType.Trigger || 
-               //(MpTriggerType) a.ActionObjId == MpTriggerType.None || 
                (MpTriggerType)a.ActionObjId == MpTriggerType.ParentOutput) {
                 throw new Exception("This is only supposed to load root level triggers");
             }
@@ -262,6 +261,8 @@ namespace MpWpfApp {
 
             return tavm;
         }
+
+
 
         public void EnabledAll() {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
@@ -418,7 +419,7 @@ namespace MpWpfApp {
              (args) => {
                  var fe = args as FrameworkElement;
                  var cm = new MpContextMenuView();
-                 cm.DataContext = MenuItemViewModel;
+                 cm.DataContext = CreateActionMenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
@@ -437,7 +438,10 @@ namespace MpWpfApp {
                          actionObjId: (int)tt,
                          sortOrderIdx: Items.Count);
 
+                 na.X = (DesignerWidth / 2) - MpMeasurements.Instance.DesignerItemSize;
+                 na.Y = DesignerHeight / 2;
                  var navm = await CreateTriggerViewModel(na);
+
                  Items.Add(navm);
                  SelectedItem = navm;
 

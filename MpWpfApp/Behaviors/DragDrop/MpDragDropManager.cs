@@ -29,6 +29,9 @@ namespace MpWpfApp {
 
                 dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().ClipTrayDropBehavior);
 
+                var adivl = Application.Current.MainWindow.GetVisualDescendents<MpActionDesignerItemView>();
+                dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsEnabled).ToList());
+
                 dtl.Add((Application.Current.MainWindow as MpMainWindow).ExternalDropBehavior);
 
                 return dtl;

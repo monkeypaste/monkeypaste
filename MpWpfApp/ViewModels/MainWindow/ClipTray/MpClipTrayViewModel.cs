@@ -142,63 +142,25 @@ namespace MpWpfApp {
 
         #region MpIContextMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel MenuItemViewModel { 
+        public MpMenuItemViewModel CreateActionMenuItemViewModel { 
             get {
                 if(PrimaryItem == null || PrimaryItem.PrimaryItem == null) {
                     return new MpMenuItemViewModel();
                 }
-                var tmil = new ObservableCollection<MpMenuItemViewModel>();
-
-                foreach (var ttvm in MpTagTrayViewModel.Instance.Items) {
-                    if (ttvm.IsSudoTag) {
-                        continue;
-                    }
-                    int isCheckedCount = 0;
-                    foreach (var sm in SelectedModels) {
-                        bool isLinked = ttvm.IsLinked(sm);
-                        if (isLinked) {
-                            isCheckedCount++;
-                        }
-                    }
-                    bool isChecked = false;
-                    bool isPartialChecked = false;
-                    if (isCheckedCount == SelectedModels.Count) {
-                        isChecked = true;
-                    } else if (isCheckedCount > 0) {
-                        isPartialChecked = true;
-                    } else {
-                        isChecked = false;
-                    }
-                    tmil.Add(
-                        new MpMenuItemViewModel() {
-                            Header = ttvm.TagName,
-                            Command = LinkTagToCopyItemCommand,
-                            CommandParameter = ttvm,
-                            IsSelected = isChecked,
-                            IsPartiallySelected = isPartialChecked,
-                            IconHexStr = ttvm.TagHexColor,
-                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
-                                                    MpTagTrayViewModel.Instance.SelectTagCommand,
-                                                    ttvm.TagId)
-                        });
-                }
-
-                var cmivm = new MpMenuItemViewModel() {
-
+                var tagItems = MpTagTrayViewModel.Instance.AllTagViewModel.ContentMenuItemViewModel.SubItems;
+                return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
                             Header = @"_Copy",
                             IconResourceKey = Application.Current.Resources["CopyIcon"] as string,
                             Command = CopySelectedClipsCommand,
-                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
-                                CopySelectedClipsCommand)
+                            ShortcutType = MpShortcutType.CopySelectedItems
                         },
                         new MpMenuItemViewModel() {
                             Header = @"_Paste",
                             IconResourceKey = Application.Current.Resources["PasteIcon"] as string,
                             Command = PasteSelectedClipsCommand,
-                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
-                                PasteSelectedClipsCommand)
+                            ShortcutType = MpShortcutType.PasteSelectedItems
                         },
                         new MpMenuItemViewModel() {
                             IsSeparator = true
@@ -208,8 +170,7 @@ namespace MpWpfApp {
                             Header = @"_Delete",
                             IconResourceKey = Application.Current.Resources["DeleteIcon"] as string,
                             Command = DeleteSelectedClipsCommand,
-                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
-                                DeleteSelectedClipsCommand)
+                            ShortcutType = MpShortcutType.DeleteSelectedItems
                         },
                         new MpMenuItemViewModel() {
                             IsSeparator = true
@@ -218,20 +179,18 @@ namespace MpWpfApp {
                             Header = @"_Rename",
                             IconResourceKey = Application.Current.Resources["RenameIcon"] as string,
                             Command = EditSelectedTitleCommand,
-                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
-                                EditSelectedTitleCommand)
+                            ShortcutType = MpShortcutType.EditTitle
                         },
                         new MpMenuItemViewModel() {
                             Header = @"_Edit",
                             IconResourceKey = Application.Current.Resources["EditContentIcon"] as string,
                             Command = EditSelectedContentCommand,
-                            InputGestureText = MpShortcutCollectionViewModel.Instance.GetShortcutKeyStringByCommand(
-                                EditSelectedContentCommand)
+                            ShortcutType = MpShortcutType.EditContent
                         },
                         new MpMenuItemViewModel() {
                             IsSeparator = true
                         },
-                        MpAnalyticItemCollectionViewModel.Instance.MenuItemViewModel,
+                        MpAnalyticItemCollectionViewModel.Instance.CreateActionMenuItemViewModel,
                         new MpMenuItemViewModel() {
                             Header = @"_Transform",
                             IconResourceKey = Application.Current.Resources["ToolsIcon"] as string,
@@ -239,27 +198,32 @@ namespace MpWpfApp {
                                 new MpMenuItemViewModel() {
                                     Header = "_Duplicate",
                                     IconResourceKey = Application.Current.Resources["DuplicateIcon"] as string,
-                                    Command = DuplicateSelectedClipsCommand
+                                    Command = DuplicateSelectedClipsCommand,
+                                    ShortcutType = MpShortcutType.Duplicate
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "_Merge",
                                     IconResourceKey = Application.Current.Resources["MergeIcon"] as string,
-                                    Command = MergeSelectedClipsCommand
+                                    Command = MergeSelectedClipsCommand,
+                                    ShortcutType = MpShortcutType.MergeSelectedItems
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "To _Email",
                                     IconResourceKey = Application.Current.Resources["EmailIcon"] as string,
-                                    Command = SendToEmailCommand
+                                    Command = SendToEmailCommand,
+                                    ShortcutType = MpShortcutType.SendToEmail
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "To _Qr Code",
                                     IconResourceKey = Application.Current.Resources["QrIcon"] as string,
-                                    Command = CreateQrCodeFromSelectedClipsCommand
+                                    Command = CreateQrCodeFromSelectedClipsCommand,
+                                    ShortcutType = MpShortcutType.CreateQrCode
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "To _Audio",
                                     IconResourceKey = Application.Current.Resources["SpeakIcon"] as string,
-                                    Command = SpeakSelectedClipsCommand
+                                    Command = SpeakSelectedClipsCommand,
+                                    ShortcutType = MpShortcutType.SpeakSelectedItem
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "To _Web Search",
@@ -334,21 +298,25 @@ namespace MpWpfApp {
                                     Header = "_Bring to Front",
                                     IconResourceKey = Application.Current.Resources["BringToFrontIcon"] as string,
                                     Command = BringSelectedClipTilesToFrontCommand,
+                                    ShortcutType = MpShortcutType.BringSelectedToFront
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "_Send to Back",
                                     IconResourceKey = Application.Current.Resources["SendToBackIcon"] as string,
-                                    Command = SendSelectedClipTilesToBackCommand
+                                    Command = SendSelectedClipTilesToBackCommand,
+                                    ShortcutType = MpShortcutType.SendSelectedToBack
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "Select _All",
                                     IconResourceKey = Application.Current.Resources["SelectAllIcon"] as string,
-                                    Command = SelectAllCommand
+                                    Command = SelectAllCommand,
+                                    ShortcutType = MpShortcutType.SelectAll
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "_Invert Selection",
                                     IconResourceKey = Application.Current.Resources["InvertSelectionIcon"] as string,
-                                    Command = InvertSelectionCommand
+                                    Command = InvertSelectionCommand,
+                                    ShortcutType = MpShortcutType.InvertSelection
                                 },
                             }
                         },
@@ -358,11 +326,10 @@ namespace MpWpfApp {
                         new MpMenuItemViewModel() {
                             Header = @"Pin To _Collection",
                             IconResourceKey = Application.Current.Resources["PinToCollectionIcon"] as string,
-                            SubItems = tmil
+                            SubItems = tagItems
                         }
                     },
                 };
-                return cmivm;
             }
         }
 

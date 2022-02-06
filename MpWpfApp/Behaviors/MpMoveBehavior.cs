@@ -146,7 +146,7 @@ namespace MpWpfApp {
             adivm.X = newLoc.X;
             adivm.Y = newLoc.Y;
 
-            MpConsole.WriteLine($"New Location: {adivm.X} {adivm.Y}");
+            //MpConsole.WriteLine($"New Location: {adivm.X} {adivm.Y}");
         }
 
         #endregion
@@ -173,35 +173,32 @@ namespace MpWpfApp {
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
             if (Mouse.LeftButton == MouseButtonState.Released) {
                 IsMoving = false;
-            }
-            if (!IsMoving) {
                 return;
-            }
+            }            
 
             var mwmp = e.GetPosition(Application.Current.MainWindow);
 
             Vector delta = mwmp - _lastMousePosition;
             _lastMousePosition = mwmp;
 
+            if (!IsMoving) {
+                if(mwmp.Distance(_mouseDownPosition) > 5) {
+                    IsMoving = AssociatedObject.CaptureMouse();                    
+                }
+                if(!IsMoving) {
+                    return;
+                }
+            }
+
             Move(delta.X, delta.Y);
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-
-            if (!IsAnyMoving) {
-                IsMoving = AssociatedObject.CaptureMouse();
-
-                if (IsMoving) {
-
-
-                    if (AssociatedObject.DataContext is MpISelectableViewModel svm) {
-                        svm.IsSelected = true;
-                    }
-                    _mouseDownPosition = _lastMousePosition = e.GetPosition(Application.Current.MainWindow);
-                    e.Handled = true;
-                }
+            _mouseDownPosition = _lastMousePosition = e.GetPosition(Application.Current.MainWindow);
+            if (AssociatedObject.DataContext is MpISelectableViewModel svm) {
+                svm.IsSelected = true;
             }
-
+            e.Handled = true;
         }
 
         private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -209,6 +206,7 @@ namespace MpWpfApp {
 
             if (IsMoving) {
                 IsMoving = false;
+                (AssociatedObject.DataContext as MpActionViewModelBase).HasModelChanged = true;
             }
             if ((e.GetPosition(Application.Current.MainWindow) - _mouseDownPosition).Length < 5) {
                 Command?.Execute(CommandParameter);

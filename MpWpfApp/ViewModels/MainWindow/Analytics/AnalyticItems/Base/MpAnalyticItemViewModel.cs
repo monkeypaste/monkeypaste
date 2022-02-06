@@ -33,9 +33,9 @@ namespace MpWpfApp {
 
         public MpAnalyticItemPresetViewModel SelectedPresetViewModel => PresetViewModels.FirstOrDefault(x => x.IsSelected);     
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel CreateActionMenuItemViewModel {
             get {
-                var subItems = PresetViewModels.Select(x => x.MenuItemViewModel).ToList();
+                var subItems = PresetViewModels.Select(x => x.CreateActionMenuItemViewModel).ToList();
                 subItems.Add(
                     new MpMenuItemViewModel() {
                         Header = $"Manage '{Title}'",
@@ -50,7 +50,7 @@ namespace MpWpfApp {
             }
         }
 
-        public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => PresetViewModels.Where(x => x.IsQuickAction).Select(x => x.MenuItemViewModel);
+        public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => PresetViewModels.Where(x => x.IsQuickAction).Select(x => x.CreateActionMenuItemViewModel);
 
         public MpITreeItemViewModel ParentTreeItem => Parent;
 
@@ -534,6 +534,9 @@ namespace MpWpfApp {
                     //if(SelectedPresetViewModel != null) {
                     //    SelectedPresetViewModel.OnPropertyChanged(nameof(SelectedPresetViewModel.IsEditing));
                     //}
+                    break;
+                case nameof(IsAnyEditingParameters):
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
                     break;
             }
         }

@@ -6,11 +6,19 @@ using System.Linq;
 namespace MonkeyPaste {
 
     public interface MpIMenuItemViewModel {
-        MpMenuItemViewModel MenuItemViewModel { get; }
+        MpMenuItemViewModel CreateActionMenuItemViewModel { get; }
     }
 
     public class MpMenuItemViewModel : MpViewModelBase {
         #region Properties
+
+        #region View Models
+
+        public IList<MpMenuItemViewModel> SubItems { get; set; }
+
+        #endregion
+
+        #region Data Template Helpers
 
         public bool IsPasteToPathRuntimeItem { get; set; }
 
@@ -18,13 +26,23 @@ namespace MonkeyPaste {
 
         public bool IsHeaderedSeparator { get; set; }
 
+        public bool IsColorPallete { get; set; }
+
+        #endregion
+
+        #region Header
+
         public int HeaderIndentLevel { get; set; }
 
         public double HeaderIndentSize { get; set; } = 20;
 
         public string HeaderedSeparatorLabel { get; set; }
 
-        public bool IsColorPallete { get; set; }
+        public string Header { get; set; }
+
+        #endregion
+
+        #region State
 
         public bool IsSelected { get; set; } = false;
 
@@ -32,39 +50,62 @@ namespace MonkeyPaste {
 
         public bool IsHovering { get; set; }
 
+        #endregion
+
+        #region Appearance
+
         public bool CanHide { get; set; } // for eye button on paste to path
 
         public bool IsVisible { get; set; } = true;
 
-        public bool IsIconHidden => IconId == 0 && string.IsNullOrEmpty(IconResourceKey);
+        #endregion
 
-        public string BorderHexColor {
-            get {
-                if(IsSelected) {
-                    return MpSystemColors.IsSelectedBorderColor;
-                } else if(IsHovering) {
-                    return MpSystemColors.IsHoveringBorderColor;
-                }
-                return MpSystemColors.DarkGray;
-            }
-        }
-        //public Visibility MenuItemVisibility { get; set; }
-
-        public string Header { get; set; }
+        #region Commands
 
         public ICommand Command { get; set; }
 
         public object CommandParameter { get; set; }
 
-        public string InputGestureText { get; set; }
+        #endregion
 
-        public int ShortcutId { get; set; }
+        #region InputGesture
 
-        //public string IconSource { get; set; }
+        private string _inputGestureText = string.Empty;
+        public string InputGestureText {
+            get {
+                if (ShortcutObjId > 0 || ShortcutType != MpShortcutType.None) {
+                    return MpAsyncHelpers.RunSync<string>(() => MpDataModelProvider.GetShortcutKeystring(ShortcutType, ShortcutObjId));
+                }
+                return _inputGestureText;
+            }
+            set {
+                if(InputGestureText != value) {
+                    _inputGestureText = value;
+                    OnPropertyChanged(nameof(InputGestureText));
+                }
+            }
+        }
 
-        //public Brush IconBackgroundBrush { get; set; } = Brushes.Transparent;
+        public int ShortcutObjId { get; set; } = 0;
 
-        //public Image Icon { get; set; }
+        public MpShortcutType ShortcutType { get; set; } = MpShortcutType.None;
+
+        #endregion
+
+        #region Icon
+
+        public string BorderHexColor {
+            get {
+                if (IsSelected) {
+                    return MpSystemColors.IsSelectedBorderColor;
+                } else if (IsHovering) {
+                    return MpSystemColors.IsHoveringBorderColor;
+                }
+                return MpSystemColors.DarkGray;
+            }
+        }
+
+        public bool IsIconHidden => IconSourceObj == null;
 
         public int IconId { get; set; } = 0;
 
@@ -72,7 +113,32 @@ namespace MonkeyPaste {
 
         public string IconHexStr { get; set; } = string.Empty;
 
-        public IList<MpMenuItemViewModel> SubItems { get; set; }
+        public object IconSourceObj {
+            get {
+                if(IconId > 0) {
+                    return IconId;
+                }
+                if(IconHexStr.IsStringHexColor()) {
+                    return IconHexStr;
+                }
+                if(IconResourceKey.IsStringResourcePath()) {
+                    return IconResourceKey;
+                }
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region Tooltip
+
+        public object Tooltip { get; set; }
+
+        public bool HasTooltip => Tooltip != null;
+
+        #endregion
+
+        
 
         #endregion
 

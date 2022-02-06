@@ -12,7 +12,20 @@ namespace MpWpfApp {
 
         #region View Models
 
-        //public MpAnalyticItemPresetViewModel SelectedPreset { get; set; }
+        public MpAnalyticItemPresetViewModel SelectedPreset {
+            get {
+                if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    return null;
+                }
+                return MpAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == AnalyticItemPresetId);
+            }
+            set {
+                if(SelectedPreset != value) {
+                    AnalyticItemPresetId = value.AnalyticItemPresetId;
+                    OnPropertyChanged(nameof(SelectedPreset));
+                }
+            }
+        }
 
         #endregion
 
@@ -30,6 +43,7 @@ namespace MpWpfApp {
                     ActionObjId = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(AnalyticItemPresetId));
+                    OnPropertyChanged(nameof(SelectedPreset));
                 }
             }
         }
@@ -49,7 +63,7 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        protected override async Task PerformAction(MpCopyItem arg) {
+        public virtual async Task PerformAction(MpCopyItem arg) {
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
             object[] args = new object[] { aipvm, arg as MpCopyItem };
             aipvm.Parent.ExecuteAnalysisCommand.Execute(args);

@@ -21,6 +21,7 @@ namespace MpWpfApp {
         MpViewModelBase<MpAnalyticItemViewModel>, 
         MpIMenuItemViewModel,
         MpITriggerActionViewModel, 
+        MpISidebarItemViewModel,
         MpIUserIconViewModel,
         MpIShortcutCommand, 
         MpITreeItemViewModel, ICloneable {
@@ -42,14 +43,15 @@ namespace MpWpfApp {
 
         public MpAnalyticItemParameterViewModel SelectedParameter => ParameterViewModels.FirstOrDefault(x => x.IsSelected);
 
-        public MpMenuItemViewModel MenuItemViewModel {
+        public MpMenuItemViewModel CreateActionMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     Header = Label,
                     Command = MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
                     CommandParameter = AnalyticItemPresetId,
                     IconId = IconId,
-                    InputGestureText = ShortcutKeyString
+                    ShortcutType = MpShortcutType.AnalyzeCopyItemWithPreset,
+                    ShortcutObjId = AnalyticItemPresetId
                 };
             }
         }
@@ -57,6 +59,16 @@ namespace MpWpfApp {
         public MpITreeItemViewModel ParentTreeItem => Parent;
 
         public ObservableCollection<MpITreeItemViewModel> Children { get; set; } = null;
+
+        #endregion
+
+        #region MpISidebarItemViewModel Implementation
+        public double SidebarWidth { get; set; } = MpMeasurements.Instance.DefaultAnalyzerPanelWidth;
+        public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultAnalyzerPanelWidth;
+        public bool IsSidebarVisible { get; set; } = false;
+
+        public MpISidebarItemViewModel NextSidebarItem { get; }
+        public MpISidebarItemViewModel PreviousSidebarItem { get; }
 
         #endregion
 
@@ -411,6 +423,7 @@ namespace MpWpfApp {
                 case nameof(IsSelected):
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
+                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
                     break;
                 case nameof(IsEditingParameters):
                     if(IsEditingParameters) {
@@ -418,6 +431,7 @@ namespace MpWpfApp {
                         ManagePresetCommand.Execute(null);
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
+                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
                     OnPropertyChanged(nameof(HasAnyParamValueChanged));
                     OnPropertyChanged(nameof(HasModelChanged));
                     OnPropertyChanged(nameof(CanSave));

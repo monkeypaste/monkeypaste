@@ -21,5 +21,10 @@ namespace MpWpfApp {
         public MpActionPropertyListBoxView() {
             InitializeComponent();
         }
+
+        private void ActionPropertyListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var lb = sender as ListBox;
+            lb.ScrollIntoView(MpActionCollectionViewModel.Instance.PrimaryAction);
+        }
     }
 }

@@ -42,33 +42,68 @@
                               DataType="{x:Type pcl:MpMenuItemViewModel}"
                               ItemsSource="{Binding SubItems}">
         <!--  Currently only for Tags  -->
-        <MenuItem Header="{Binding Header}"
-                  Visibility="{Binding IsVisible,
+        <MenuItem Visibility="{Binding IsVisible,
                                        Converter={StaticResource BoolToVisibilityConverter}}"
-                  Command="{Binding Command}"
-                  CommandParameter="{Binding CommandParameter}"
-                  Icon="{Binding IconHexStr,
-                                 Converter={StaticResource StringHexToIconConverter},
-                                 ConverterParameter=checked}"
+                  ItemsSource="{Binding SubItems}"
                   InputGestureText="{Binding InputGestureText}"
                   UsesItemContainerTemplate="true"
-                  ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}" />
+                  ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"
+                  Header="{Binding Header}">
+            <MenuItem.Icon>
+                <Button Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding Command}"
+                        CommandParameter="{Binding CommandParameter}">
+                    <Image Source="{Binding IconHexStr,
+                                            Converter={StaticResource StringHexToImageSourceConverter},
+                                            ConverterParameter=checked}"
+                           Stretch="Fill" />
+                </Button>
+            </MenuItem.Icon>
+        </MenuItem>
     </HierarchicalDataTemplate>
     <!--  Unchecked Tag Menu Item  -->
     <HierarchicalDataTemplate x:Key="UncheckedTagMenuItem"
                               DataType="{x:Type pcl:MpMenuItemViewModel}"
                               ItemsSource="{Binding SubItems}">
         <!--  Currently only for Tags  -->
-        <MenuItem Header="{Binding Header}"
-                  Visibility="{Binding IsVisible,
+        <MenuItem Visibility="{Binding IsVisible,
                                        Converter={StaticResource BoolToVisibilityConverter}}"
-                  Command="{Binding Command}"
-                  CommandParameter="{Binding CommandParameter}"
-                  Icon="{Binding IconHexStr,
-                                 Converter={StaticResource StringHexToIconConverter}}"
-                  InputGestureText="{Binding InputGestureText}"
+                  ItemsSource="{Binding SubItems}"
                   UsesItemContainerTemplate="true"
-                  ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}" />
+                  ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"
+                  Header="{Binding Header}">
+            <MenuItem.Icon>
+                <Button Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding Command}"
+                        CommandParameter="{Binding CommandParameter}">
+                    <Image Source="{Binding IconHexStr,
+                                            Converter={StaticResource StringHexToImageSourceConverter},
+                                            ConverterParameter=checked}"
+                           Stretch="Fill" />
+                </Button>
+            </MenuItem.Icon>
+            <!--<MenuItem.Header>
+                <Button Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding Command}"
+                        CommandParameter="{Binding CommandParameter}">
+                    <DockPanel LastChildFill="True">
+                        <Image DockPanel.Dock="Left"
+                               Width="15"
+                               Height="15"
+                               Source="{Binding IconHexStr,
+                                                Converter={StaticResource StringHexToImageSourceConverter}}" />
+                        <Label Content="{Binding InputGestureText}"
+                               Foreground="DimGray"
+                               DockPanel.Dock="Right" />
+                        <Label Content="{Binding Header}" />
+                    </DockPanel>
+                </Button>
+            </MenuItem.Header>-->
+        </MenuItem>
+
     </HierarchicalDataTemplate>
     <!--  Paste To Path Runtime Item  -->
     <DataTemplate x:Key="PasteToPathRuntimeMenuItem"
