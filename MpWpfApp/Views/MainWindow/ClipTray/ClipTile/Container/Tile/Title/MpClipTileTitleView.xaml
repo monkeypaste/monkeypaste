@@ -140,6 +140,7 @@
                      IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
                      LostFocus="ClipTileTitleTextBox_LostFocus"
                      PreviewKeyDown="ClipTileTitleTextBox_PreviewKeyDown"
+                     local:MpIsFocusedExtension.IsEnabled="True"
                      Background="{StaticResource ClipTileTitleTextBoxBackgroundBrush}"
                      Foreground="Black"
                      FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,

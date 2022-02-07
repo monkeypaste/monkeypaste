@@ -201,6 +201,7 @@ namespace MonkeyPaste {
             if (qi.FilterFlags.HasFlag(MpContentFilterType.ImageType)) {
                 types.Add(string.Format(@"fk_MpCopyItemTypeId={0}", (int)MpCopyItemType.Image));
             }
+            
             switch (qi.SortType) {
                 case MpContentSortType.CopyDateTime:
                     sortClause = string.Format(@"order by {0}", "CopyDateTime");
@@ -224,11 +225,9 @@ namespace MonkeyPaste {
 
                     break;
             }
-            if (qi.IsDescending) {
-                if(!sortClause.EndsWith(" ")) {
-                    sortClause += " ";
-                }
-                sortClause += "DESC";
+
+            if(!string.IsNullOrEmpty(sortClause)) {
+                sortClause += qi.IsDescending ? " DESC" : sortClause;
             }
 
             if (!string.IsNullOrEmpty(tagClause)) {
@@ -255,6 +254,7 @@ namespace MonkeyPaste {
                 query += " where ";
                 query += string.Join(" or ", types);
             }
+
             
             query += " " + sortClause;
             return query;

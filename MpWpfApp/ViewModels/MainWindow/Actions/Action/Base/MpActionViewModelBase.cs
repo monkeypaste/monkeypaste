@@ -87,7 +87,7 @@ namespace MpWpfApp {
 
         #region MpIMenuItemViewModel Implementation
 
-        public virtual MpMenuItemViewModel CreateActionMenuItemViewModel {
+        public virtual MpMenuItemViewModel MenuItemViewModel {
             get {
                 var amivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpActionType).EnumToLabels();
@@ -401,7 +401,7 @@ namespace MpWpfApp {
 
         #region Events
 
-        public event EventHandler<MpCopyItem> OnAction;
+        public event EventHandler<MpCopyItem> OnActionComplete;
 
         #endregion
 
@@ -483,18 +483,37 @@ namespace MpWpfApp {
 
         public virtual void Enable() {
             Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Enable());
+            if (IsEnabled) {
+                return;
+            }
+            if (ParentActionViewModel != null) {
+                if (ParentActionViewModel.OnActionComplete != null) {
+                    ParentActionViewModel.OnActionComplete -= OnActionTriggered;
+                }
+                ParentActionViewModel.OnActionComplete += OnActionTriggered;
+            }
 
             IsEnabled = true;
         }
 
         public virtual void Disable() {
-            // TODO reverse enable
+            if(!IsEnabled) {
+                return;
+            }
+            if (ParentActionViewModel != null) {
+                ParentActionViewModel.OnActionComplete -= OnActionTriggered;
+            }
             Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Disable());
             IsEnabled = false;
         }
 
-        public void OnTrigger(object sender, MpCopyItem ci) {
-            OnAction?.Invoke(this, ci);
+        public void OnActionTriggered(object sender, MpCopyItem ci) {
+            if(!IsEnabled) {
+                OnActionComplete?.Invoke(this, ci);
+                return;
+            }
+            //OnAction?.Invoke(this, ci);
+            Task.Run(()=>PerformAction(ci));
         }
         
         public virtual void Validate() {
@@ -510,7 +529,7 @@ namespace MpWpfApp {
                 return;
             }
             await Task.Delay(1);
-            OnAction?.Invoke(this, arg);
+            OnActionComplete?.Invoke(this, arg);
         }
 
         #endregion
@@ -518,12 +537,12 @@ namespace MpWpfApp {
         #region MpIMatchTrigger Implementation
 
         public void RegisterTrigger(MpActionViewModelBase mvm) {
-            OnAction += mvm.OnAction;
+            OnActionComplete += mvm.OnActionComplete;
             MpConsole.WriteLine($"Parent Matcher {Label} Registered {mvm.Label} matcher");
         }
 
         public void UnregisterTrigger(MpActionViewModelBase mvm) {
-            OnAction -= mvm.OnAction;
+            OnActionComplete -= mvm.OnActionComplete;
             MpConsole.WriteLine($"Parent Matcher {Label} Unregistered {mvm.Label} from OnCopyItemAdded");
         }
 
@@ -546,7 +565,7 @@ namespace MpWpfApp {
 
         private async Task UpdateSortOrder() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
-            await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
+            await Task.WhenAll(Items.Where(x=>x.GetType() != typeof(MpEmptyActionViewModel)).Select(x => x.Action.WriteToDatabaseAsync()));
         }
 
         private void MpActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -591,15 +610,24 @@ namespace MpWpfApp {
                 case nameof(IsMoving):
                     Parent.OnPropertyChanged(nameof(Parent.CanPan));
                     break;
-                case nameof(Items):
-                //case nameof(X):
-                //case nameof(Y):
+                case nameof(Items):                
                     Parent.NotifyViewportChanged();
                     break;
                 case nameof(IsExpanded):
                     if(IsExpanded) {
                         IsSelected = true;
                     }
+                    break;
+                case nameof(X):
+                case nameof(Y):
+                    var eavm = Items.FirstOrDefault(x => x is MpEmptyActionViewModel);
+                    if(eavm != null) {
+                        eavm.X = X;
+                        eavm.Y = Y - (Height * 1.75);
+                    }
+                    //if(IsMoving) {
+                    //    Parent.NotifyViewportChanged();
+                    //}
                     break;
             }
         }
@@ -619,7 +647,7 @@ namespace MpWpfApp {
                  //LastSelectedDateTime = DateTime.Now;
                  IsSelected = true;
 
-                 cm.DataContext = CreateActionMenuItemViewModel;
+                 cm.DataContext = MenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;

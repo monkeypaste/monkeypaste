@@ -64,7 +64,7 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        public virtual async Task PerformAction(MpCopyItem arg) {
+        public override async Task PerformAction(MpCopyItem arg) {
             if(!IsEnabled) {
                 return;
             }

@@ -26,7 +26,7 @@ namespace MpWpfApp {
             e.Handled = true;
             var fe = sender as FrameworkElement;
             var cm = new MpContextMenuView();
-            cm.DataContext = BindingContext.CreateActionMenuItemViewModel;
+            cm.DataContext = BindingContext.MenuItemViewModel;
             fe.ContextMenu = cm;
             fe.ContextMenu.PlacementTarget = this;
             fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;

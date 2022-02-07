@@ -162,7 +162,6 @@
     <Compile Include="Controls\Adorners\Resizer\MpResizeChildHelper.cs" />
     <Compile Include="Controls\Adorners\Resizer\MpResizeAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
-    <Compile Include="Controls\MpDesignerViewbox.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMoveThumb.cs" />
     <Compile Include="Controls\MpResizeThumb.cs" />
@@ -535,9 +534,6 @@
     <Compile Include="Views\MainWindow\FilterMenu\Sort\MpItemSortView.xaml.cs">
       <DependentUpon>MpItemSortView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Context\MpTagTileContextMenuView.xaml.cs">
-      <DependentUpon>MpTagTileContextMenuView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileView.xaml.cs">
       <DependentUpon>MpTagTileView.xaml</DependentUpon>
     </Compile>
@@ -826,10 +822,6 @@
     <Page Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Context\MpTagTileContextMenuView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileView.xaml">
       <SubType>Designer</SubType>

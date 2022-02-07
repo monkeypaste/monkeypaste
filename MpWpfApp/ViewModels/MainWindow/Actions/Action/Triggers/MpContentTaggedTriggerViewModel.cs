@@ -36,11 +36,25 @@ namespace MpWpfApp {
         #region Public Methods
 
         public override void Enable() {
-            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            if (ttvm != null) {
-                ttvm.RegisterTrigger(this);
+            if(!IsEnabled) {
+                var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+                if (ttvm != null) {
+                    ttvm.RegisterTrigger(this);
+                }
             }
+            
             base.Enable();
+        }
+
+        public override void Disable() {
+            if (IsEnabled) {
+                var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+                if (ttvm != null) {
+                    ttvm.UnregisterTrigger(this);
+                }
+            }
+
+            base.Disable();
         }
 
         #endregion

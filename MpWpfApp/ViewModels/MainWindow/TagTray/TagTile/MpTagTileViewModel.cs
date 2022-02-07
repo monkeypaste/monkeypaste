@@ -9,7 +9,6 @@ using System.Windows.Media;
 using MonkeyPaste;
 using System.Threading.Tasks;
 using System.IO;
-using System.Windows.Forms;
 using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
@@ -19,8 +18,10 @@ namespace MpWpfApp {
         MpISelectableViewModel,
         MpITreeItemViewModel<MpTagTileViewModel>, 
         MpIShortcutCommand, 
-        MpIHasNotification, 
-        MpITriggerActionViewModel {
+        MpIHasNotification,
+        MpIUserColorViewModel,
+        MpITriggerActionViewModel,
+        MpIMenuItemViewModel{
 
         #region Private Variables
         private string _originalTagName = string.Empty;
@@ -30,6 +31,19 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+        #endregion
+
+
+
+        #region MpIUserColorViewModel Implementation
+
+
+        public string GetColor() {
+            return TagHexColor;
+        }
+
+        public ICommand SetColorCommand => ChangeColorCommand;
+
         #endregion
 
         #region MpIMenuItemViewModel Implementation
@@ -49,6 +63,42 @@ namespace MpWpfApp {
                     ShortcutObjId = TagId,
                     ShortcutType = MpShortcutType.SelectTag,
                     SubItems = Items.Select(x => x.ContentMenuItemViewModel).ToList()
+                };
+            }
+        }
+
+        public MpMenuItemViewModel MenuItemViewModel {
+            get {
+                return new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        new MpMenuItemViewModel() {
+                            Header = "_Rename",
+                            IconResourceKey = Application.Current.Resources["RenameIcon"] as string,
+                            Command = RenameTagCommand
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = "_Assign Hotkey",
+                            IconResourceKey = Application.Current.Resources["HotkeyIcon"] as string,
+                            Command = AssignHotkeyCommand,
+                            ShortcutObjId = TagId,
+                            ShortcutType = MpShortcutType.SelectTag
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = IsPinned ? "_Unpin" : "_Pin",
+                            IconResourceKey = Application.Current.Resources["PinIcon"] as string,
+                            Command = Parent.ToggleTileIsPinnedCommand,
+                            CommandParameter = this
+                        },
+                        new MpMenuItemViewModel() {IsSeparator = true},
+                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
+                        new MpMenuItemViewModel() {IsSeparator = true},
+                        new MpMenuItemViewModel() {
+                            Header = "_Delete",
+                            IconResourceKey = Application.Current.Resources["DeleteIcon"] as string,
+                            Command = Parent.DeleteTagCommand,
+                            CommandParameter = TagId
+                        }
+                    }
                 };
             }
         }
@@ -80,12 +130,12 @@ namespace MpWpfApp {
         #region MpITriggerActionViewModel Implementation
 
         public void RegisterTrigger(MpActionViewModelBase mvm) {
-            OnCopyItemLinked += mvm.OnTrigger;
+            OnCopyItemLinked += mvm.OnActionTriggered;
             MpConsole.WriteLine($"TagTile {TagName} Registered {mvm.Label} matcher");
         }
 
         public void UnregisterTrigger(MpActionViewModelBase mvm) {
-            OnCopyItemLinked -= mvm.OnTrigger;
+            OnCopyItemLinked -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from {TagName} TagAdd");
         }
 
@@ -210,7 +260,7 @@ namespace MpWpfApp {
                     return Brushes.Red;
                 }
                 if (IsAssociated) {
-                    return TagBrush;
+                    return TagHexColor.ToSolidColorBrush();
                 }
                 return Brushes.Transparent;
             }
@@ -230,7 +280,7 @@ namespace MpWpfApp {
 
         public Brush TagCountTextColor {
             get {
-                return MpWpfColorHelpers.IsBright(((SolidColorBrush)TagBrush).Color) ? Brushes.Black : Brushes.White; ;
+                return MpWpfColorHelpers.IsBright((TagHexColor.ToSolidColorBrush() as SolidColorBrush).Color) ? Brushes.Black : Brushes.White; ;
             }
         }
 
@@ -251,9 +301,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
-
-        //public bool IsPinned => Parent != null &&
-        //                        Parent.PinnedItems.Any(x => x.TagId == TagId);
 
         public bool IsPinned {
             get {
@@ -282,9 +329,7 @@ namespace MpWpfApp {
             set {
                 if (ParentTagId != value) {
                     Tag.ParentTagId = value;
-                    Task.Run(async () => {
-                        await Tag.WriteToDatabaseAsync();
-                    });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(ParentTagId));
                 }
             }
@@ -300,9 +345,6 @@ namespace MpWpfApp {
             set {
                 if (Tag.Id != value) {
                     Tag.Id = value;
-                    Task.Run(async () => {
-                        await Tag.WriteToDatabaseAsync();
-                    });
                     OnPropertyChanged(nameof(TagId));
                 }
             }
@@ -318,9 +360,7 @@ namespace MpWpfApp {
             set {
                 if (Tag.TagSortIdx != value) {
                     Tag.TagSortIdx = value;
-                    Task.Run(async () => {
-                        await Tag.WriteToDatabaseAsync();
-                    });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(TagSortIdx));
                 }
             }
@@ -338,7 +378,8 @@ namespace MpWpfApp {
                     if (Tag.TagName.Trim() == string.Empty) {
                         Tag.TagName = "Untitled";
                         IsEditing = true;
-                    }                    
+                    }
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(TagName));
                 }
             }
@@ -354,47 +395,13 @@ namespace MpWpfApp {
             set {
                 if (TagHexColor != value) {
                     Tag.HexColor = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(TagHexColor));
                 }
             }
         }
 
-        public Brush TagBrush {
-            get {
-                if(Tag == null) {
-                    return Brushes.Red;
-                }
-                return new SolidColorBrush(MpWpfColorHelpers.ConvertHexToColor(Tag.HexColor));
-            }
-            set {
-                if (new SolidColorBrush(MpWpfColorHelpers.ConvertHexToColor(Tag.HexColor)) != value) {
-                    Tag.HexColor = MpWpfColorHelpers.ConvertColorToHex(((SolidColorBrush)value).Color);
-                    //Task.Run(async () => {
-                    //    await Tag.WriteToDatabaseAsync();
-                    //});
-                    OnPropertyChanged(nameof(TagBrush));
-                    OnPropertyChanged(nameof(TagCountTextColor));
-                }
-            }
-        }
-
-        //public Color TagColor => ((SolidColorBrush)TagBrush).Color;
-
-        private MpTag _tag;
-        public MpTag Tag {
-            get {
-                return _tag;
-            }
-            set {
-                if (_tag != value) {
-                    _tag = value;
-                    OnPropertyChanged(nameof(TagBrush));
-                    OnPropertyChanged(nameof(TagName));
-                    OnPropertyChanged(nameof(TagId));
-                    OnPropertyChanged(nameof(Tag));
-                }
-            }
-        }
+        public MpTag Tag { get; set; }
 
 
         #endregion
@@ -493,8 +500,11 @@ namespace MpWpfApp {
         }
 
         public async Task AddContentItem(int ciid) {
-            var ncit = await MpCopyItemTag.Create(TagId, ciid);
-            await ncit.WriteToDatabaseAsync();
+            if(!MpDataModelProvider.IsTagLinkedWithCopyItem(TagId,ciid)) {
+                var ncit = await MpCopyItemTag.Create(TagId, ciid);
+                await ncit.WriteToDatabaseAsync();
+            }
+            
         }
 
         public async Task RemoveContentItem(int ciid) {
@@ -679,15 +689,8 @@ namespace MpWpfApp {
 
         public ICommand ChangeColorCommand => new RelayCommand<object>(
             async (args) => {
-                var newBrush = args as Brush;
-                if (newBrush != null) {
-                    TagBrush = newBrush;
-                    await Tag.WriteToDatabaseAsync();
-
-                    await Task.Delay(50);
-
-                    await Task.WhenAll(MpClipTrayViewModel.Instance.Items.SelectMany(x => x.ItemViewModels).Select(x => x.UpdateColorPallete()));
-                }
+                TagHexColor = args.ToString();
+                await Task.WhenAll(MpClipTrayViewModel.Instance.Items.SelectMany(x => x.ItemViewModels).Select(x => x.UpdateColorPallete()));
             });
 
         public ICommand CancelRenameTagCommand => new RelayCommand(
@@ -746,6 +749,9 @@ namespace MpWpfApp {
             () => {
                 ParentTreeItem.DeleteChildTagCommand.Execute(this);
             }, !IsTagReadOnly);
+
+        public bool IsReadOnly { get; }
+
 
         #endregion
     }

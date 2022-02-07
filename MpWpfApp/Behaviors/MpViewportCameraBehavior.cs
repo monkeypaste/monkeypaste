@@ -47,34 +47,45 @@ namespace MpWpfApp {
 
         #endregion
 
-        protected override void OnLoad() {
+        protected override async void OnLoad() {
             base.OnLoad();
 
             if (AssociatedObject == null || this.ViewportCameraViewModel == null) {
                 return;
             }
-
-            AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
-            AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
-            AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
-            AssociatedObject.PreviewMouseWheel += AssociatedObject_MouseWheel;
-
             _originalZoomFactor = ViewportCameraViewModel.CameraZoomFactor;
             _originalSize = new MpSize(ViewportCameraViewModel.DesignerWidth, ViewportCameraViewModel.DesignerHeight);
 
+
+            var designerView = AssociatedObject.GetVisualAncestor<UserControl>();
+
+            while(designerView == null) {
+                await Task.Delay(100);
+                designerView = AssociatedObject.GetVisualAncestor<UserControl>();
+            }
+            designerView.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
+            designerView.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
+            designerView.PreviewMouseMove += AssociatedObject_MouseMove;
+            designerView.PreviewMouseWheel += AssociatedObject_MouseWheel;
+            AssociatedObject.MouseDoubleClick += DesignerView_MouseDoubleClick;
+
+
             MpMessenger.Register(
-                MpActionCollectionViewModel.Instance, 
+                MpActionCollectionViewModel.Instance,
                 ReceivedActionCollectionViewModelMessage);
         }
 
+        
 
         protected override void OnUnload() {
             base.OnUnload();
 
             if(AssociatedObject != null) {
-                AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
-                AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
-                AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
+                var designerView = AssociatedObject.GetVisualAncestor<UserControl>();
+
+                designerView.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
+                designerView.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
+                designerView.PreviewMouseMove -= AssociatedObject_MouseMove;
                 AssociatedObject.PreviewMouseWheel -= AssociatedObject_MouseWheel;
             }
 
@@ -89,16 +100,35 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        private void DesignerView_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            ScaleToContent();
+        }
 
-        private void ScaleToContent() {
+        public void ScaleToContent() {
             var astavml = MpActionCollectionViewModel.Instance.AllSelectedTriggerActions;
+           
             var contentRect = new Rect();
+            
             foreach (var avm in astavml) {
                 contentRect.Union(new Rect(avm.Location, new Size(avm.Width, avm.Height)));
             }
+
+            Point offset = new Point();
+            if (contentRect.Location.X < 0) {
+                offset.X = Math.Abs(contentRect.Location.X) + 10;
+            }
+            if (contentRect.Location.Y < 0) {
+                offset.Y = Math.Abs(contentRect.Location.Y) + 10;
+            }
+
+            astavml.ForEach(x => x.X += offset.X);
+            astavml.ForEach(x => x.Y += offset.Y);
             contentRect.Width += 100;
             contentRect.Height += 100;
-            //AssociatedObject.ZoomTo(contentRect);
+
+            AssociatedObject.ZoomTo(contentRect);
+
+            AssociatedObject.ScaleToFit();
         }
 
         private void ReceivedActionCollectionViewModelMessage(MpMessageType msg) {

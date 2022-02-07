@@ -152,7 +152,7 @@ namespace MpWpfApp {
         private void ReceivedMainWindowResizeBehaviorMessage(MpMessageType msg) {
             switch (msg) {
                 //case MpMessageType.Resizing:
-                case MpMessageType.ResizeCompleted:
+                case MpMessageType.ResizeContentCompleted:
                     //ApplyOffsetChange(true);
                     MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                     break;

@@ -29,8 +29,8 @@ namespace MonkeyPaste {
         TraySelectionChanged,
         ContentListScrollChanged, //has context (tile)
         ContentListItemsChanged, //has context (tile)
-        Resizing,
-        ResizeCompleted,
+        ResizingContent,
+        ResizeContentCompleted,
         SelectNextMatch,
         SelectPreviousMatch,
         SearchCriteriaItemsChanged,

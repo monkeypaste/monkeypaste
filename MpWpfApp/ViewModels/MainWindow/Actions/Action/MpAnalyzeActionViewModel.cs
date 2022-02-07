@@ -60,10 +60,9 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Public Overrides
 
-        #region Protected Overrides
-
-        public virtual async Task PerformAction(MpCopyItem arg) {
+        public override async Task PerformAction(MpCopyItem arg) {
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
             object[] args = new object[] { aipvm, arg as MpCopyItem };
             aipvm.Parent.ExecuteAnalysisCommand.Execute(args);

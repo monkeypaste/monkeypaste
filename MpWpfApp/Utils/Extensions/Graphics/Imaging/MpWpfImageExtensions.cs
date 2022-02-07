@@ -19,6 +19,13 @@ namespace MpWpfApp {
         //          pixels.GetLength(0) * pixels.GetLength(1) * sizeof(PixelColor),
         //          stride);
         //}
+        public static MpPoint ToMpPoint(this Point p) {
+            return new MpPoint(p.X, p.Y);
+        }
+        public static Point ToPoint(this MpPoint p) {
+            return new Point(p.X, p.Y);
+        }
+
         public static BitmapSource ReadImageFromFile(string filePath) {
             return new BitmapImage(new Uri(filePath));
         }

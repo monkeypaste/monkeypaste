@@ -5,7 +5,7 @@ using System.Text;
 namespace MonkeyPaste {
     public interface MpIPasteObjectBuilder {
         string GetFormat(
-            string format, 
+            MpClipboardFormat format, 
             string data, 
             string fileNameWithoutExtension = "", 
             string directory = "", 
@@ -14,7 +14,7 @@ namespace MonkeyPaste {
             bool isTemporary = false);
 
         string GetFormat(
-            string format,
+            MpClipboardFormat format,
             string[] data,
             string[] fileNameWithoutExtension = null,
             string directory = "",

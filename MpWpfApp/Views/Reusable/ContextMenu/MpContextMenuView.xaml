@@ -6,10 +6,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              xmlns:local="clr-namespace:MpWpfApp"
+             xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
              Loaded="ContextMenuView_Loaded"
              ItemsSource="{Binding SubItems}"
+             DataContext="{Binding}"
              UsesItemContainerTemplate="True"
              ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"
-             d:DataContext="{d:DesignInstance Type=local:MpMenuItemViewModel,
+             d:DataContext="{d:DesignInstance Type=pcl:MpMenuItemViewModel,
                                               IsDesignTimeCreatable=False}">
 </ContextMenu>

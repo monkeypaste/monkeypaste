@@ -106,6 +106,18 @@
                     Command="{Binding ShowActionSelectorMenuCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                 <StackPanel Orientation="Vertical">
+                    <Border BorderThickness="0"
+                            Padding="1"
+                            CornerRadius="3">
+                        <Border.Background>
+                            <SolidColorBrush Color="Wheat"
+                                             Opacity="0.3" />
+                        </Border.Background>
+
+                        <TextBlock Foreground="Black"
+                                   Text="Add New"
+                                   HorizontalAlignment="Center" />
+                    </Border>
                     <Grid>
                         <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor,
                                                   Converter={StaticResource StringHexToBrushConverter}}"
@@ -124,7 +136,6 @@
                                    Height="2"
                                    Width="15" />
                     </Grid>
-                    <TextBlock HorizontalAlignment="Center">Add New</TextBlock>
                 </StackPanel>
             </Button>
         </DataTemplate>
@@ -132,6 +143,7 @@
     </local:MpUserControl.Resources>
     <ContentControl Width="{Binding Width}"
                     Height="{Binding Height}"
+                    ClipToBounds="False"
                     Background="Transparent"
                     Content="{Binding}"
                     VerticalAlignment="Top"

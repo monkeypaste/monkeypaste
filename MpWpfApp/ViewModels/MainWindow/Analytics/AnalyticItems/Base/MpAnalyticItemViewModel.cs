@@ -33,9 +33,9 @@ namespace MpWpfApp {
 
         public MpAnalyticItemPresetViewModel SelectedPresetViewModel => PresetViewModels.FirstOrDefault(x => x.IsSelected);     
 
-        public MpMenuItemViewModel CreateActionMenuItemViewModel {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
-                var subItems = PresetViewModels.Select(x => x.CreateActionMenuItemViewModel).ToList();
+                var subItems = PresetViewModels.Select(x => x.MenuItemViewModel).ToList();
                 subItems.Add(
                     new MpMenuItemViewModel() {
                         Header = $"Manage '{Title}'",
@@ -50,7 +50,7 @@ namespace MpWpfApp {
             }
         }
 
-        public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => PresetViewModels.Where(x => x.IsQuickAction).Select(x => x.CreateActionMenuItemViewModel);
+        public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => PresetViewModels.Where(x => x.IsQuickAction).Select(x => x.MenuItemViewModel);
 
         public MpITreeItemViewModel ParentTreeItem => Parent;
 
@@ -468,20 +468,28 @@ namespace MpWpfApp {
                 if (parentCopyItemId > 0) {
                     var pci = await MpDb.GetItemAsync<MpCopyItem>(parentCopyItemId);
 
+                    int parentSortOrderIdx = pci.CompositeSortOrderIdx;
+                    List<MpCopyItem> ppccil = null;
+
                     if (pci.CompositeParentCopyItemId > 0) {
                         //when this items parent is a composite child, adjust fk/sort so theres single parent
-                        var ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
-                        ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
-                        for (int i = 0; i < ppccil.Count; i++) {
-                            var cci = ppccil[i];
-                            if (i == parentCopyItemId) {
-                                ci.CompositeParentCopyItemId = parentCopyItemId;
-                                ci.CompositeSortOrderIdx = i + 1;
-                                await ci.WriteToDatabaseAsync();
-                            } else if (i > parentCopyItemId) {
-                                ppccil[i].CompositeSortOrderIdx += 1;
-                                await ppccil[i].WriteToDatabaseAsync();
-                            }
+                        var ppci = await MpDb.GetItemAsync<MpCopyItem>(pci.CompositeParentCopyItemId);
+                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
+                        ppccil.Insert(0, ppci);
+                    } else {
+                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.Id);
+                        ppccil.Insert(0, pci);
+                    }
+                    ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
+                    for (int i = 0; i < ppccil.Count; i++) {
+                        var cci = ppccil[i];
+                        if (cci.Id == parentCopyItemId) {
+                            ci.CompositeParentCopyItemId = parentCopyItemId;
+                            ci.CompositeSortOrderIdx = i + 1;
+                            await ci.WriteToDatabaseAsync();
+                        } else if (i > parentSortOrderIdx) {
+                            ppccil[i].CompositeSortOrderIdx += 1;
+                            await ppccil[i].WriteToDatabaseAsync();
                         }
                     }
                 }
@@ -490,6 +498,8 @@ namespace MpWpfApp {
                 if (scivm == null) {
                     //analysis content is  linked with visible item in tray
                     await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
+
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                 }
             }
             
@@ -571,6 +581,7 @@ namespace MpWpfApp {
                 MpAnalyticItemPresetViewModel targetAnalyzer = null;
 
                 if (args != null && args is object[] argParts) {
+                    // when analyzer trigger from action not user selection
                     suppressCreateItem = true;
                     targetAnalyzer = argParts[0] as MpAnalyticItemPresetViewModel;
                     sourceCopyItem = argParts[1] as MpCopyItem;

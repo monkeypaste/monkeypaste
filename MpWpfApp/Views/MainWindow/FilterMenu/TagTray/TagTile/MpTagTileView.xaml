@@ -16,7 +16,11 @@
         <local:MpTagTileNotificationBehavior x:Name="TagTileNotificationBehavior" />
     </i:Interaction.Behaviors>
     <AdornerDecorator>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal"
+                    PreviewMouseRightButtonDown="StackPanel_PreviewMouseRightButtonDown">
+            <StackPanel.ContextMenu>
+                <local:MpContextMenuView DataContext="{Binding MenuItemViewModel}" />
+            </StackPanel.ContextMenu>
             <local:MpClipBorder x:Name="TagTileBorder"
                                 Loaded="TagTileBorder_Loaded"
                                 Unloaded="TagTileBorder_Unloaded"
@@ -25,7 +29,6 @@
                                                                                 Mode=TwoWay}"
                                 LostFocus="TagTileBorder_LostFocus"
                                 PreviewMouseLeftButtonDown="TagTileBorder_PreviewMouseLeftButtonDown"
-                                PreviewMouseRightButtonDown="TagTileBorder_PreviewMouseRightButtonDown"
                                 CornerRadius="10"
                                 Margin="5,3,0,0"
                                 Padding="7,5,7,5"
@@ -92,6 +95,7 @@
                                  LostFocus="TagTextBox_LostFocus"
                                  PreviewKeyDown="TagTextBox_PreviewKeyDown"
                                  TextChanged="TagTextBox_TextChanged"
+                                 local:MpIsFocusedExtension.IsEnabled="True"
                                  Grid.Row="0"
                                  Grid.Column="1"
                                  Margin="5,0,0,0"

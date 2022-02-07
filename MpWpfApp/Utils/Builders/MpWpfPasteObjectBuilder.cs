@@ -16,7 +16,7 @@ using System.Windows;
 namespace MpWpfApp {
     public class MpWpfPasteObjectBuilder : MpIPasteObjectBuilder {
         public string GetFormat(
-            string format, 
+            MpClipboardFormat format, 
             string data, 
             string fileNameWithoutExtension = "", 
             string directory = "", 
@@ -26,21 +26,21 @@ namespace MpWpfApp {
             // NOTE directory only used for non- file content to give a reference for interop
                         
             switch (format) {
-                case "Text":
-                case "UnicodeText":
+                case MpClipboardFormat.Text:
+                case MpClipboardFormat.UnicodeText:
                     return data.ToPlainText();
-                case "Rtf":
+                case MpClipboardFormat.Rtf:
                     return data.ToRichText();
-                case "CommaSeparatedValue":
+                case MpClipboardFormat.Csv:
                     return data.ToCsv();
-                case "Html":
+                case MpClipboardFormat.Html:
                     return data.ToQuillText();
-                case "Bitmap":
+                case MpClipboardFormat.Bitmap:
                     if(data.IsStringBase64()) {
                         return data;
                     }
                     return data.ToFlowDocument().ToBitmapSource().ToBase64String();
-                case "FileDrop":
+                case MpClipboardFormat.FileDrop:
                     // TODO this will be where syncing file items will occur so when file/folder does not exist
                     // this should request, receive and return the path
 
@@ -88,7 +88,7 @@ namespace MpWpfApp {
         }
 
         public string GetFormat(
-            string format,
+            MpClipboardFormat format,
             string[] datas,
             string[] fileNameWithoutExtension = null,
             string directory = "",
@@ -103,20 +103,20 @@ namespace MpWpfApp {
                 string fileName = fileNameWithoutExtension == null || i >= fileNameWithoutExtension.Length ?
                                         "" : fileNameWithoutExtension[i];
                 switch (format) {
-                    case "Text":
-                    case "UnicodeText":
+                    case MpClipboardFormat.Text:
+                    case MpClipboardFormat.UnicodeText:
                         outputData += data.ToPlainText();
                         break;
-                    case "Rtf":
+                    case MpClipboardFormat.Rtf:
                         outputData = outputData.ToFlowDocument().Combine(data.ToRichText()).ToRichText();
                         break;
-                    case "CommaSeparatedValue":
+                    case MpClipboardFormat.Csv:
                         outputData += data.ToCsv();
                         break;
-                    case "Html":
+                    case MpClipboardFormat.Html:
                         outputData = outputData.ToFlowDocument().Combine(data.ToRichText()).ToRichText().ToQuillText();
                         break;
-                    case "Bitmap":
+                    case MpClipboardFormat.Bitmap:
                         BitmapSource curBmpSrc = null;
                         if (data.IsStringBase64()) {
                             curBmpSrc = data.ToBitmapSource();
@@ -127,7 +127,7 @@ namespace MpWpfApp {
                         Size size = new Size(Math.Max(outputBmpSrc.Width, curBmpSrc.Width), Math.Max(outputBmpSrc.Height, curBmpSrc.Height));
                         outputData = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { outputBmpSrc, curBmpSrc }, size).ToBase64String();
                         break;
-                    case "FileDrop":
+                    case MpClipboardFormat.FileDrop:
                         // TODO this will be where syncing file items will occur so when file/folder does not exist
                         // this should request, receive and return the path
                         string curOutputPath = string.Empty;

@@ -27,5 +27,9 @@ namespace MpWpfApp {
             var lb = sender as ListBox;
             lb.ScrollIntoView(MpActionCollectionViewModel.Instance.PrimaryAction);
         }
+
+        private void ZoomAndPanControl_Loaded(object sender, RoutedEventArgs e) {
+            ZoomAndPanControl.ScaleToFit();
+        }
     }
 }

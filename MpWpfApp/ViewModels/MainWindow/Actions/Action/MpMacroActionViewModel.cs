@@ -33,7 +33,7 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        public virtual async Task PerformAction(MpCopyItem arg) {
+        public override async Task PerformAction(MpCopyItem arg) {
             await Task.Delay(1);
         }
         #endregion

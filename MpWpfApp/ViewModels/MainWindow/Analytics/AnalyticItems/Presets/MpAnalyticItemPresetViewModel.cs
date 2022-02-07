@@ -43,7 +43,7 @@ namespace MpWpfApp {
 
         public MpAnalyticItemParameterViewModel SelectedParameter => ParameterViewModels.FirstOrDefault(x => x.IsSelected);
 
-        public MpMenuItemViewModel CreateActionMenuItemViewModel {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
                     Header = Label,
@@ -353,13 +353,13 @@ namespace MpWpfApp {
         }
 
         public void RegisterTrigger(MpActionViewModelBase mvm) {
-            Parent.OnAnalysisCompleted += mvm.OnTrigger;
+            Parent.OnAnalysisCompleted += mvm.OnActionTriggered;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} Registered {mvm.Label} matcher");
         }
 
 
         public void UnregisterTrigger(MpActionViewModelBase mvm) {
-            Parent.OnAnalysisCompleted -= mvm.OnTrigger;
+            Parent.OnAnalysisCompleted -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
         }
 

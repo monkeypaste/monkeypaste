@@ -38,12 +38,16 @@ namespace MpWpfApp {
         #region Public Methods
 
         public override void Enable() {
-            MpFileSystemWatcherViewModel.Instance.RegisterTrigger(this);
+            if(!IsEnabled) {
+                MpFileSystemWatcherViewModel.Instance.RegisterTrigger(this);
+            }
             base.Enable();
         }
 
         public override void Disable() {
-            MpFileSystemWatcherViewModel.Instance.UnregisterTrigger(this);
+            if(IsEnabled) {
+                MpFileSystemWatcherViewModel.Instance.UnregisterTrigger(this);
+            }
             base.Disable();
         }
 

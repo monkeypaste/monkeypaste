@@ -30,7 +30,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpMenuItemViewModel CreateActionMenuItemViewModel {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpTriggerType).EnumToLabels("Select Trigger");
@@ -166,8 +166,8 @@ namespace MpWpfApp {
         public double DesignerWidth { get; set; } = MpMeasurements.Instance.DefaultDesignerWidth;
         public double DesignerHeight { get; set; } = MpClipTrayViewModel.Instance.ClipTrayHeight;
 
-        public double ViewportWidth { get; set; } = MpMeasurements.Instance.DefaultDesignerWidth;
-        public double ViewportHeight { get; set; } = MpClipTrayViewModel.Instance.ClipTrayHeight;
+        public double ViewportWidth { get; set; } = 2000;
+        public double ViewportHeight { get; set; } = 2000;
 
 
         #endregion
@@ -262,8 +262,6 @@ namespace MpWpfApp {
             return tavm;
         }
 
-
-
         public void EnabledAll() {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
@@ -272,36 +270,6 @@ namespace MpWpfApp {
 
         public void DisableAll() {
             Items.ForEach(x => x.Disable());
-        }
-
-        public Point FindOpenDesignerLocation(Point? p = null) {
-            double s = MpMeasurements.Instance.DesignerItemSize;
-            Point center = new Point(DesignerWidth / 2 - (s / 2), ViewportHeight / 2 - (s / 2));
-            if(SelectedItem == null && p == null) {
-                return center;
-            }
-            var origin = p.HasValue ? p.Value : center;
-            int attempts = 0;
-            int maxAttempts = 100;
-            int count = 12;
-            double dtheta = (2 * Math.PI) / count;
-            double r = MpMeasurements.Instance.DesignerItemSize;
-            while(attempts <= maxAttempts) {
-                double theta = 0;
-                for (int i = 0; i < count; i++) {
-                    var tp = new Point();
-                    tp.X = (double)(origin.X + r * Math.Cos(theta));
-                    tp.Y = (double)(origin.Y + r * Math.Sin(theta));
-                    if (!OverlapsItem(tp)) {
-                        return tp;
-                    }
-                    theta += dtheta;
-                }
-                r += MpMeasurements.Instance.DesignerItemSize;
-                attempts++;
-            }
-
-            throw new Exception("Could not find a spot for em");
         }
 
         public bool OverlapsItem(Point targetTopLeft) {
@@ -321,7 +289,7 @@ namespace MpWpfApp {
         }
 
         public void ClearAreaAtPoint(Point p, object ignoreItem = null) {
-            var overlapItem = MpActionCollectionViewModel.Instance.GetItemNearPoint(p, ignoreItem);
+            var overlapItem = GetItemNearPoint(p, ignoreItem);
             if (overlapItem != null) {
                 Point tempLoc = p;
                 do {
@@ -366,7 +334,6 @@ namespace MpWpfApp {
 
         public void NotifyViewportChanged() {
             MpMessenger.Send(MpMessageType.ActionViewportChanged);
-            //OnPropertyChanged(nameof(SelectedActions));
         }
 
         #endregion
@@ -419,7 +386,7 @@ namespace MpWpfApp {
              (args) => {
                  var fe = args as FrameworkElement;
                  var cm = new MpContextMenuView();
-                 cm.DataContext = CreateActionMenuItemViewModel;
+                 cm.DataContext = MenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
@@ -438,8 +405,8 @@ namespace MpWpfApp {
                          actionObjId: (int)tt,
                          sortOrderIdx: Items.Count);
 
-                 na.X = (DesignerWidth / 2) - MpMeasurements.Instance.DesignerItemSize;
-                 na.Y = DesignerHeight / 2;
+                 na.X = (ViewportWidth / 2) - MpMeasurements.Instance.DesignerItemSize;
+                 na.Y = ViewportHeight / 2;
                  var navm = await CreateTriggerViewModel(na);
 
                  Items.Add(navm);

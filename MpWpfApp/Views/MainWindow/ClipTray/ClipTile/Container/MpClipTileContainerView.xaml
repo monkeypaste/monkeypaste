@@ -32,6 +32,7 @@
                    HorizontalAlignment="Right">
             <i:Interaction.Behaviors>
                 <local:MpResizeBehavior x:Name="TileResizeBehvior"
+                                        AffectsContent="True"
                                         IsResizing="{Binding IsResizing,
                                                              Mode=TwoWay,
                                                              UpdateSourceTrigger=PropertyChanged,

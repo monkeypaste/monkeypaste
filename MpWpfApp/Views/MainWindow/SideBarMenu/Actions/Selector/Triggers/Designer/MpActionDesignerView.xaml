@@ -13,119 +13,129 @@
                      d:DataContext="{d:DesignInstance Type=local:MpTriggerActionViewModelBase,
                                                       IsDesignTimeCreatable=False}">
     <Grid>
-
         <Grid.Background>
             <SolidColorBrush Color="Gray"
                              Opacity="0.7" />
         </Grid.Background>
-        <zoompan:ZoomAndPanControl Width="{Binding DesignerWidth,
+        <zoompan:ZoomAndPanControl x:Name="ZoomAndPanControl"
+                                   Width="{Binding DesignerWidth,
                                                    Source={x:Static local:MpActionCollectionViewModel.Instance},
                                                    Mode=TwoWay}"
                                    Height="{Binding DesignerHeight,
                                                     Source={x:Static local:MpActionCollectionViewModel.Instance}}">
             <i:Interaction.Behaviors>
                 <local:MpViewportCameraBehavior x:Name="ActionDesignerViewportBehavior"
-                                                ZoomFactor="0.5"
+                                                ZoomFactor="0.25"
                                                 ViewportCameraViewModel="{x:Static local:MpActionCollectionViewModel.Instance}" />
             </i:Interaction.Behaviors>
-            <local:MpDesignerViewbox Stretch="UniformToFill"
-                                     OriginThickness="1.5"
-                                     GridLineSpacing="50"
-                                     OriginBrush="Transparent"
-                                     GridLineBrush="Transparent">
-                <ListBox x:Name="ActionDesignerListBox"
-                         Background="Orange"
-                         Height="Auto"
-                         BorderThickness="0"
-                         SelectionChanged="ActionDesignerListBox_SelectionChanged"
-                         IsSynchronizedWithCurrentItem="False"
-                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                         ScrollViewer.CanContentScroll="False"
-                         ScrollViewer.IsDeferredScrollingEnabled="True"
-                         ItemsSource="{Binding AllSelectedTriggerActions,
-                                               Source={x:Static local:MpActionCollectionViewModel.Instance}}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <local:MpDesignerCanvas x:Name="ActionDesignerCanvas"
-                                                    TipWidth="10"
-                                                    TailWidth="3"
-                                                    TransitionLineBorderBrush="White"
-                                                    TransitionLineThickness="1"
-                                                    Width="2000"
-                                                    Height="2000"
-                                                    IsItemsHost="True" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Style.Resources>
-                                <SolidColorBrush Color="Transparent"
-                                                 x:Key="{x:Static SystemColors.HighlightBrushKey}" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
-                                                 Color="Transparent" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                 Color="Transparent" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
-                                                 Color="Transparent" />
-                            </Style.Resources>
-                            <Setter Property="FocusVisualStyle"
-                                    Value="{x:Null}" />
-                            <Setter Property="BorderThickness"
-                                    Value="0" />
-                            <Setter Property="Background"
-                                    Value="Transparent" />
-                            <Setter Property="HorizontalContentAlignment"
-                                    Value="Left" />
-                            <Setter Property="VerticalContentAlignment"
-                                    Value="Center" />
-                            <Setter Property="IsSelected"
-                                    Value="{Binding IsSelected,
-                                                    Mode=TwoWay,
-                                                    UpdateSourceTrigger=PropertyChanged,
-                                                    NotifyOnSourceUpdated=True,
-                                                    NotifyOnTargetUpdated=True}" />
-                            <Setter Property="Canvas.Left"
-                                    Value="{Binding X,
-                                                    Mode=TwoWay,
-                                                    UpdateSourceTrigger=PropertyChanged,
-                                                    NotifyOnSourceUpdated=True,
-                                                    NotifyOnTargetUpdated=True}" />
-                            <Setter Property="Canvas.Top"
-                                    Value="{Binding Y,
-                                                    Mode=TwoWay,
-                                                    UpdateSourceTrigger=PropertyChanged,
-                                                    NotifyOnSourceUpdated=True,
-                                                    NotifyOnTargetUpdated=True}" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <StackPanel Orientation="Vertical">
-                                            <ContentPresenter />
-                                            <TextBlock HorizontalAlignment="Center"
-                                                       Text="{Binding Label}" />
-                                        </StackPanel>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected"
-                                                     Value="True">
-                                                <Setter Property="BorderBrush"
-                                                        Value="Transparent" />
-                                                <Setter Property="Background"
-                                                        Value="Transparent" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <local:MpActionDesignerItemView DataContext="{Binding}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </local:MpDesignerViewbox>
+            <!--<Viewbox Stretch="UniformToFill">-->
+            <ListBox x:Name="ActionDesignerListBox"
+                     Background="Transparent"
+                     Height="Auto"
+                     BorderThickness="0"
+                     SelectionChanged="ActionDesignerListBox_SelectionChanged"
+                     IsSynchronizedWithCurrentItem="False"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     ScrollViewer.CanContentScroll="False"
+                     ScrollViewer.IsDeferredScrollingEnabled="True"
+                     ItemsSource="{Binding AllSelectedTriggerActions,
+                                           Source={x:Static local:MpActionCollectionViewModel.Instance}}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <local:MpDesignerCanvas x:Name="ActionDesignerCanvas"
+                                                
+                                   Loaded="ZoomAndPanControl_Loaded"
+                                                ShowVoronoi="False"
+                                                ShowGrid="False"
+                                                MinDist="100.1"
+                                                TipWidth="10"
+                                                TailWidth="3"
+                                                TransitionLineBorderBrush="White"
+                                                TransitionLineThickness="1"
+                                                EmptyLineBrush="Orange"
+                                                OriginThickness="1"
+                                                GridLineThickness="1"
+                                                GridLineSpacing="30"
+                                                OriginBrush="Chartreuse"
+                                                GridLineBrush="Chartreuse"
+                                                Width="{Binding ViewportWidth,
+                                                                Source={x:Static local:MpActionCollectionViewModel.Instance},
+                                                                Mode=TwoWay}"
+                                                Height="{Binding ViewportHeight,
+                                                                 Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                                                IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Style.Resources>
+                            <SolidColorBrush Color="Transparent"
+                                             x:Key="{x:Static SystemColors.HighlightBrushKey}" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                             Color="Transparent" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                             Color="Transparent" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                                             Color="Transparent" />
+                        </Style.Resources>
+                        <Setter Property="FocusVisualStyle"
+                                Value="{x:Null}" />
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Left" />
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center" />
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}" />
+                        <Setter Property="Canvas.Left"
+                                Value="{Binding X,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}" />
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding Y,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <StackPanel Orientation="Vertical">
+                                        <ContentPresenter />
+                                        <TextBlock HorizontalAlignment="Center"
+                                                   Text="{Binding Label}" />
+                                    </StackPanel>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="BorderBrush"
+                                                    Value="Transparent" />
+                                            <Setter Property="Background"
+                                                    Value="Transparent" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpActionDesignerItemView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <!--</Viewbox>-->
         </zoompan:ZoomAndPanControl>
         <!--</local:MpDesignerViewbox>-->
         <Button x:Name="AddNewActionButton"

@@ -142,7 +142,7 @@ namespace MpWpfApp {
 
         #region MpIContextMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel CreateActionMenuItemViewModel { 
+        public MpMenuItemViewModel MenuItemViewModel { 
             get {
                 if(PrimaryItem == null || PrimaryItem.PrimaryItem == null) {
                     return new MpMenuItemViewModel();
@@ -190,7 +190,6 @@ namespace MpWpfApp {
                         new MpMenuItemViewModel() {
                             IsSeparator = true
                         },
-                        MpAnalyticItemCollectionViewModel.Instance.CreateActionMenuItemViewModel,
                         new MpMenuItemViewModel() {
                             Header = @"_Transform",
                             IconResourceKey = Application.Current.Resources["ToolsIcon"] as string,
@@ -628,12 +627,12 @@ namespace MpWpfApp {
         #region MpIMatchTrigger Implementation
 
         public void RegisterTrigger(MpActionViewModelBase mvm) {
-            OnCopyItemItemAdd += mvm.OnTrigger;
+            OnCopyItemItemAdd += mvm.OnActionTriggered;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
         public void UnregisterTrigger(MpActionViewModelBase mvm) {
-            OnCopyItemItemAdd -= mvm.OnTrigger;
+            OnCopyItemItemAdd -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
         }
 
@@ -897,27 +896,27 @@ namespace MpWpfApp {
                     }
                 }
 
-                d.DataFormatLookup.AddOrReplace(DataFormats.FileDrop,string.Join(Environment.NewLine,sctfl));
-                // d.SetData(DataFormats.FileDrop, sctfl.ToStringCollection());
+                d.DataFormatLookup.AddOrReplace(MpClipboardFormat.FileDrop,string.Join(Environment.NewLine,sctfl));
+                // d.SetData(MpClipboardFormat.FileDrop, sctfl.ToStringCollection());
             }
 
             if (isToExternalApp) {
                 //set rtf and text
                 if (!string.IsNullOrEmpty(rtf)) {
-                    d.DataFormatLookup.AddOrReplace(DataFormats.Rtf, rtf);
+                    d.DataFormatLookup.AddOrReplace(MpClipboardFormat.Rtf, rtf);
                 }
                 if (!string.IsNullOrEmpty(pt)) {
-                    d.DataFormatLookup.AddOrReplace(DataFormats.Text, rtf.ToPlainText());
+                    d.DataFormatLookup.AddOrReplace(MpClipboardFormat.Text, rtf.ToPlainText());
                 }
                 //set image
                 if (selectedModels.Count == 1 && selectedModels[0].ItemType == MpCopyItemType.Image) {
-                    d.DataFormatLookup.AddOrReplace(DataFormats.Bitmap, selectedModels[0].ItemData);
+                    d.DataFormatLookup.AddOrReplace(MpClipboardFormat.Bitmap, selectedModels[0].ItemData);
                 }
 
                 //set csv
                 string sctcsv = string.Join(Environment.NewLine, selectedModels.Select(x => x.ItemData.ToCsv()));
                 if (!string.IsNullOrWhiteSpace(sctcsv)) {
-                    d.DataFormatLookup.AddOrReplace(DataFormats.CommaSeparatedValue, sctcsv);
+                    d.DataFormatLookup.AddOrReplace(MpClipboardFormat.Csv, sctcsv);
                 }
 
             }
@@ -1322,8 +1321,8 @@ namespace MpWpfApp {
 
         public void ReceivedResizerBehaviorMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.Resizing:
-                    double oldHeadTrayX = HeadItem.TrayX;
+                case MpMessageType.ResizingContent:
+                    double oldHeadTrayX = HeadItem == null ? 0 : HeadItem.TrayX;
                     double oldScrollOffset = ScrollOffset;
 
                     if(MpMainWindowViewModel.Instance.IsResizing) {
@@ -1345,7 +1344,7 @@ namespace MpWpfApp {
                         OnPropertyChanged(nameof(ClipTrayTotalWidth));
                         OnPropertyChanged(nameof(MaximumScrollOfset));
                         Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
-                    } else {
+                    } else if(PrimaryItem != null && PrimaryItem.HeadItem != null) {
                         //tile resize
                         PersistentUniqueWidthTileLookup
                             .AddOrReplace(PrimaryItem.HeadItem.CopyItemId, PrimaryItem.TileBorderWidth);
@@ -1359,7 +1358,7 @@ namespace MpWpfApp {
                     AdjustScrollOffsetToResize(oldHeadTrayX, oldScrollOffset);
 
                     break;
-                case MpMessageType.ResizeCompleted:
+                case MpMessageType.ResizeContentCompleted:
                     _oldMainWindowHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
                     break;
             }
@@ -1621,8 +1620,10 @@ namespace MpWpfApp {
                 
 
                 foreach (var nci in _newModels) {
-                    MpClipTileViewModel nctvm = await CreateClipTileViewModel(nci, HeadQueryIdx);
-                    MpDataModelProvider.InsertQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx);
+                    int idx = HeadQueryIdx < 0 ? 0 : HeadQueryIdx; // check is for empty tag
+
+                    MpClipTileViewModel nctvm = await CreateClipTileViewModel(nci, idx);
+                    MpDataModelProvider.InsertQueryItem(nctvm.HeadItem.CopyItemId, idx);
                     OnPropertyChanged(nameof(TotalTilesInQuery));
 
                     Items.ForEach(x => x.QueryOffsetIdx++);
@@ -2295,9 +2296,9 @@ namespace MpWpfApp {
                     bmpSrc = MpHelpers.ConvertUrlToQrCode(pt);
                     MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(
                         new MpDataObject() {
-                            DataFormatLookup = new Dictionary<string, string>() { 
+                            DataFormatLookup = new Dictionary<MpClipboardFormat, string>() { 
                                 { 
-                                    DataFormats.Bitmap, 
+                                    MpClipboardFormat.Bitmap, 
                                     bmpSrc.ToBase64String() 
                                 } 
                             }

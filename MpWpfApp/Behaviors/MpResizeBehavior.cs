@@ -220,6 +220,7 @@ namespace MpWpfApp {
 
         #endregion
 
+        public bool AffectsContent { get; set; } = false;
 
         public virtual MpRectEdgeType ResizableEdge1 { get; set; }
 
@@ -355,7 +356,9 @@ namespace MpWpfApp {
                 BoundHeight = Math.Min(Math.Max(nh, MinHeight), MaxHeight);
             }
 
-            MpMessenger.Send(MpMessageType.Resizing);
+            if(AffectsContent) {
+                MpMessenger.Send(MpMessageType.ResizingContent);
+            }
         }
 
         #endregion
@@ -441,7 +444,9 @@ namespace MpWpfApp {
             if (IsResizing) {
                 _curCursor = MpCursorType.None;
                 IsResizing = false;
-                MpMessenger.Send(MpMessageType.ResizeCompleted);
+                if(AffectsContent) {
+                    MpMessenger.Send(MpMessageType.ResizeContentCompleted);
+                }
             }
         }
 

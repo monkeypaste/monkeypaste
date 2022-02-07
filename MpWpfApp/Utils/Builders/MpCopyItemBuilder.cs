@@ -24,7 +24,7 @@ namespace MpWpfApp {
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
                 }
-                var iData = mpdo.DataFormatLookup as Dictionary<string,string>;
+                var iData = mpdo.DataFormatLookup as Dictionary<MpClipboardFormat,string>;
 
                 string processPath, appName, processIconImg64;
 
@@ -45,23 +45,23 @@ namespace MpWpfApp {
                 string htmlData = string.Empty;
                 MpCopyItemType itemType = MpCopyItemType.None;
 
-                if (iData.ContainsKey(DataFormats.FileDrop)) {
+                if (iData.ContainsKey(MpClipboardFormat.FileDrop)) {
                     itemType = MpCopyItemType.FileList;
-                    itemData = iData[DataFormats.FileDrop];
-                } else if (iData.ContainsKey(DataFormats.CommaSeparatedValue)) {
+                    itemData = iData[MpClipboardFormat.FileDrop];
+                } else if (iData.ContainsKey(MpClipboardFormat.Csv)) {
                     itemType = MpCopyItemType.Text;
-                    string csvStr = iData[DataFormats.CommaSeparatedValue];
+                    string csvStr = iData[MpClipboardFormat.Csv];
                     itemData = csvStr.ToRichTextTable();
-                } else if (iData.ContainsKey(DataFormats.Rtf)) {
+                } else if (iData.ContainsKey(MpClipboardFormat.Rtf)) {
                     itemType = MpCopyItemType.Text;
-                    itemData = iData[DataFormats.Rtf].EscapeExtraOfficeRtfFormatting();
+                    itemData = iData[MpClipboardFormat.Rtf].EscapeExtraOfficeRtfFormatting();
                     //itemData = itemData.ToQuillText();
-                } else if (iData.ContainsKey(DataFormats.Bitmap)) {
+                } else if (iData.ContainsKey(MpClipboardFormat.Bitmap)) {
                     itemType = MpCopyItemType.Image;
-                    itemData = iData[DataFormats.Bitmap];
-                } else if(iData.ContainsKey(DataFormats.Text)) {                    
+                    itemData = iData[MpClipboardFormat.Bitmap];
+                } else if(iData.ContainsKey(MpClipboardFormat.Text)) {                    
                     itemType = MpCopyItemType.Text;
-                    itemData = iData[DataFormats.UnicodeText].ToRichText();
+                    itemData = iData[MpClipboardFormat.Text].ToRichText();
                     //itemData = itemData.ToQuillText();
                 } else {
                     MonkeyPaste.MpConsole.WriteTraceLine("clipboard data is not known format");
@@ -74,8 +74,8 @@ namespace MpWpfApp {
                     return null;
                 }
 
-                if (iData.ContainsKey(DataFormats.Html)) {
-                    htmlData = iData[DataFormats.Html];
+                if (iData.ContainsKey(MpClipboardFormat.Html)) {
+                    htmlData = iData[MpClipboardFormat.Html];
                 }
 
                 var dupCheck = await MpDataModelProvider.GetCopyItemByData(itemData);

@@ -53,38 +53,39 @@
 
             <!--  Title Menu  -->
             <Grid x:Name="TitleBarDockPanel"
-                       Grid.Row="0"
+                  Grid.Row="0"
                   local:MpHoverableExtension.IsEnabled="True"
                   local:MpHoverableExtension.HoverCursor="ResizeNS"
-                       Background="{Binding .,
-                                            Converter={StaticResource StringToThemeBrushConverter},
-                                            ConverterParameter=Title_Menu_Background_Color}">
+                  Background="{Binding .,
+                                       Converter={StaticResource StringToThemeBrushConverter},
+                                       ConverterParameter=Title_Menu_Background_Color}">
 
                 <i:Interaction.Behaviors>
                     <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
-                                        DoubleClickControl="{Binding ElementName=FrameGripButton}"
-                                        IsResizing="{Binding IsResizing,
-                                                             Mode=TwoWay,
-                                                             UpdateSourceTrigger=PropertyChanged,
-                                                             NotifyOnSourceUpdated=True,
-                                                             NotifyOnTargetUpdated=True}"
-                                        CanResize="{Binding CanResize,
-                                                            Mode=TwoWay,
-                                                            UpdateSourceTrigger=PropertyChanged,
-                                                            NotifyOnSourceUpdated=True,
-                                                            NotifyOnTargetUpdated=True}"
-                                        ResizableEdge1="Top"
-                                        BoundHeight="{Binding MainWindowHeight,
-                                                              Mode=TwoWay,
-                                                              UpdateSourceTrigger=PropertyChanged,
-                                                              NotifyOnSourceUpdated=True,
-                                                              NotifyOnTargetUpdated=True}"
-                                        DefaultHeight="{Binding MainWindowDefaultHeight,
+                                            AffectsContent="True"
+                                            DoubleClickControl="{Binding ElementName=FrameGripButton}"
+                                            IsResizing="{Binding IsResizing,
+                                                                 Mode=TwoWay,
+                                                                 UpdateSourceTrigger=PropertyChanged,
+                                                                 NotifyOnSourceUpdated=True,
+                                                                 NotifyOnTargetUpdated=True}"
+                                            CanResize="{Binding CanResize,
+                                                                Mode=TwoWay,
+                                                                UpdateSourceTrigger=PropertyChanged,
+                                                                NotifyOnSourceUpdated=True,
+                                                                NotifyOnTargetUpdated=True}"
+                                            ResizableEdge1="Top"
+                                            BoundHeight="{Binding MainWindowHeight,
+                                                                  Mode=TwoWay,
+                                                                  UpdateSourceTrigger=PropertyChanged,
+                                                                  NotifyOnSourceUpdated=True,
+                                                                  NotifyOnTargetUpdated=True}"
+                                            DefaultHeight="{Binding MainWindowDefaultHeight,
+                                                                    Source={x:Static local:MpMeasurements.Instance}}"
+                                            MinHeight="{Binding MainWindowMinHeight,
                                                                 Source={x:Static local:MpMeasurements.Instance}}"
-                                        MinHeight="{Binding MainWindowMinHeight,
-                                                            Source={x:Static local:MpMeasurements.Instance}}"
-                                        MaxHeight="{Binding MainWindowMaxHeight,
-                                                            Source={x:Static local:MpMeasurements.Instance}}" />
+                                            MaxHeight="{Binding MainWindowMaxHeight,
+                                                                Source={x:Static local:MpMeasurements.Instance}}" />
 
                 </i:Interaction.Behaviors>
                 <TextBlock DockPanel.Dock="Left"
@@ -226,7 +227,6 @@
                               Width="3"
                               local:MpHoverableExtension.IsEnabled="True"
                               local:MpHoverableExtension.HoverCursor="ResizeWE"
-                              
                               IsEnabled="{Binding IsAnySidebarOpen}"
                               DragStarted="SidebarGridSplitter_DragStarted">
                     <i:Interaction.Behaviors>

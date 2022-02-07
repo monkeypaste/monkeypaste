@@ -27,7 +27,18 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpEmptyActionViewModel(MpActionCollectionViewModel parent) : base(parent) {
+            PropertyChanged += MpEmptyActionViewModel_PropertyChanged;
+        }
 
+        private void MpEmptyActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsVisible):
+                    if(IsVisible && ParentActionViewModel != null) {
+                        X = ParentActionViewModel.X;
+                        Y = ParentActionViewModel.Y - (Height * 1.75);
+                    }
+                    break;
+            }
         }
         #endregion
 

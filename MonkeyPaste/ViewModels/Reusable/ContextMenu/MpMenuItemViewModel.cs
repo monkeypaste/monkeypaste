@@ -6,7 +6,7 @@ using System.Linq;
 namespace MonkeyPaste {
 
     public interface MpIMenuItemViewModel {
-        MpMenuItemViewModel CreateActionMenuItemViewModel { get; }
+        MpMenuItemViewModel MenuItemViewModel { get; }
     }
 
     public class MpMenuItemViewModel : MpViewModelBase {

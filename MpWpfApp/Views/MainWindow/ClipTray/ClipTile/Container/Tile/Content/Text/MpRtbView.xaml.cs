@@ -72,8 +72,8 @@ namespace MpWpfApp {
 
         private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.Resizing:
-                case MpMessageType.ResizeCompleted:
+                case MpMessageType.ResizingContent:
+                case MpMessageType.ResizeContentCompleted:
                     Rtb.FitDocToRtb();
                     break;
             }
@@ -591,9 +591,9 @@ namespace MpWpfApp {
                                     var bmpSrc = MpHelpers.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
                                     MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(
                                         new MpDataObject() {
-                                            DataFormatLookup = new Dictionary<string, string>() {
+                                            DataFormatLookup = new Dictionary<MpClipboardFormat, string>() {
                                                 {
-                                                    DataFormats.Bitmap,
+                                                    MpClipboardFormat.Bitmap,
                                                     bmpSrc.ToBase64String()
                                                 }
                                             }

@@ -54,6 +54,8 @@
                                  Fill="Lime" />
                     </Grid>
                 </ToggleButton>
+                <Image Margin="5,0,0,0" Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Width="20"/>
                 <TextBox Grid.Row="1"
                          Grid.Column="1"
                          Grid.ColumnSpan="2"
@@ -206,13 +208,11 @@
                             <ComboBox Grid.Row="0"
                                       Grid.Column="1"
                                       MinWidth="100"
+                                      MinHeight="28"
                                       Margin="10"
                                       IsSynchronizedWithCurrentItem="False"
                                       SelectionChanged="ComboBox_SelectionChanged"
-                                      SelectedIndex="{Binding ComparePropertyPathType,
-                                                              Converter={StaticResource EnumToIntConverter},
-                                                              ConverterParameter=MonkeyPaste.MpComparePropertyPathType,
-                                                              Mode=TwoWay}"
+                                      SelectedItem="{Binding SelectedComparePropertyPathMenuItemViewModel, Mode=TwoWay}"
                                       ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
                                       ItemsSource="{Binding ComparePropertyPathsMenuItemViewModel.SubItems}">
                                 <ComboBox.ItemContainerStyle>
@@ -245,7 +245,7 @@
                                       Margin="10,5"
                                       IsSynchronizedWithCurrentItem="False"
                                       SelectionChanged="ComboBox_SelectionChanged"
-                                      SelectedIndex="{Binding ContentItemTypeIndex,
+                                      SelectedItem="{Binding SelectedContentTypeMenuItemViewModel,
                                                               Mode=OneWay}"
                                       ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
                                       ItemsSource="{Binding ContentTypeCompareDataMenuItemViewModel.SubItems}">
@@ -276,9 +276,7 @@
                                       Margin="10"
                                       IsSynchronizedWithCurrentItem="False"
                                       SelectionChanged="ComboBox_SelectionChanged"
-                                      SelectedIndex="{Binding CompareType,
-                                                              Converter={StaticResource EnumToIntConverter},
-                                                              Mode=OneWay}"
+                                      SelectedItem="{Binding SelectedCompareTypeMenuItemViewModel, Mode=TwoWay}"
                                       ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
                                       ItemsSource="{Binding CompareTypesMenuItemViewModel.SubItems}">
                                 <ComboBox.ItemContainerStyle>

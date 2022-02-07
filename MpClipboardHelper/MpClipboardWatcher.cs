@@ -176,22 +176,28 @@ namespace MpClipboardHelper {
                     }
                     foreach (var af in _managedDataFormats) {
                         object data = null;
+                        MpClipboardFormat cf = MpClipboardFormat.None;
                         if (dobj.GetDataPresent(af)) {
                             switch (af) {
                                 case nameof(DataFormats.Text):
                                     data = dobj.GetText(TextDataFormat.Text);
+                                    cf = MpClipboardFormat.Text;
                                     break;
                                 case nameof(DataFormats.UnicodeText):
                                     data = dobj.GetText(TextDataFormat.UnicodeText);
+                                    cf = MpClipboardFormat.UnicodeText;
                                     break;
                                 case nameof(DataFormats.Rtf):
                                     data = dobj.GetText(TextDataFormat.Rtf);
+                                    cf = MpClipboardFormat.Rtf;
                                     break;
                                 case nameof(DataFormats.CommaSeparatedValue):
                                     data = dobj.GetText(TextDataFormat.CommaSeparatedValue);
+                                    cf = MpClipboardFormat.Csv;
                                     break;
                                 case nameof(DataFormats.Html):
                                     data = dobj.GetText(TextDataFormat.Html);
+                                    cf = MpClipboardFormat.Html;
                                     break;
                                 case nameof(DataFormats.Bitmap):
                                     BinaryFormatter binFormatter = new BinaryFormatter();
@@ -202,6 +208,7 @@ namespace MpClipboardHelper {
                                             data = Convert.ToBase64String(imageBytes);
                                         }
                                     }
+                                    cf = MpClipboardFormat.Bitmap;
                                     break;
                                 case nameof(DataFormats.FileDrop):
                                     StringCollection sc = dobj.GetFileDropList();
@@ -209,6 +216,7 @@ namespace MpClipboardHelper {
                                     try {
                                         sc.CopyTo(sa, 0);
                                         data = string.Join(Environment.NewLine, sa);
+                                        cf = MpClipboardFormat.FileDrop;
                                     }
                                     catch { }
 
@@ -219,7 +227,7 @@ namespace MpClipboardHelper {
                                 data = dobj.GetData(af, true);
                             }
                             if (data != null) {
-                                cbDict.DataFormatLookup.Add(af, data.ToString());
+                                cbDict.DataFormatLookup.Add(cf, data.ToString());
                             }
                         }
                     }
@@ -241,25 +249,25 @@ namespace MpClipboardHelper {
                 return dobj;
             }
 
-            private static void SetDataWrapper(ref DataObject dobj, string format, string dataStr) {
+            private static void SetDataWrapper(ref DataObject dobj, MpClipboardFormat format, string dataStr) {
                 switch (format) {
-                    case nameof(DataFormats.Bitmap):
+                    case MpClipboardFormat.Bitmap:
                         byte[] bytes = Convert.FromBase64String(dataStr);
                         Image image;
                         using (MemoryStream ms = new MemoryStream(bytes)) {
                             image = Image.FromStream(ms);
-                            dobj.SetData(format, image);
+                            dobj.SetData(DataFormats.Bitmap, image);
                         }
 
                         break;
-                    case nameof(DataFormats.FileDrop):
+                    case MpClipboardFormat.FileDrop:
                         var fl = dataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                         var sc = new StringCollection();
                         sc.AddRange(fl);
                         dobj.SetFileDropList(sc);
                         break;
                     default:
-                        dobj.SetData(format, dataStr);
+                        dobj.SetData(DataFormats.FileDrop, dataStr);
                         break;
                 }
             }

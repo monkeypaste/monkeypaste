@@ -127,7 +127,7 @@ namespace MpWpfApp {
         
         protected virtual void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.ResizeCompleted:
+                case MpMessageType.ResizeContentCompleted:
                     //comes from BOTH mainwindow resize and tile resize
                     RefreshDropRects();
                     break;

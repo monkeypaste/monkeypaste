@@ -33,7 +33,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpMenuItemViewModel CreateActionMenuItemViewModel {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
                 var itemsToRemove = this.Where(x => x.IsRuntime).ToList();
                 for (int i = 0; i < itemsToRemove.Count; i++) {
@@ -67,7 +67,7 @@ namespace MpWpfApp {
                                 handle);
 
                         if(!ptapvm.IsHidden) {
-                            rpmivm.SubItems.Add(ptapvm.CreateActionMenuItemViewModel);
+                            rpmivm.SubItems.Add(ptapvm.MenuItemViewModel);
                         }
 
                     }
@@ -79,7 +79,7 @@ namespace MpWpfApp {
                     pmivml.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
                 foreach (var ptapvm in this) {
-                    pmivml.AddRange(this.Select(x => x.CreateActionMenuItemViewModel));
+                    pmivml.AddRange(this.Select(x => x.MenuItemViewModel));
                 }
 
                 pmivml.Add(new MpMenuItemViewModel() { IsSeparator = true });
@@ -401,7 +401,7 @@ namespace MpWpfApp {
                     HiddenHandles.Add(intPtr);
                 }
                 this.ForEach(x => x.OnPropertyChanged(nameof(x.IsHidden)));
-                OnPropertyChanged(nameof(CreateActionMenuItemViewModel));
+                OnPropertyChanged(nameof(MenuItemViewModel));
             },(intPtr)=> { return intPtr != null && intPtr != IntPtr.Zero; });
 
         public ICommand ShowHandleCommand => new RelayCommand<IntPtr>(
@@ -409,7 +409,7 @@ namespace MpWpfApp {
                 if (HiddenHandles.Contains(intPtr)) {
                     HiddenHandles.Remove(intPtr); 
                     this.ForEach(x => x.OnPropertyChanged(nameof(x.IsHidden)));
-                    OnPropertyChanged(nameof(CreateActionMenuItemViewModel));
+                    OnPropertyChanged(nameof(MenuItemViewModel));
                 }
             });
 
@@ -417,7 +417,7 @@ namespace MpWpfApp {
             () => {
                 HiddenHandles.Clear();
                 this.ForEach(x => x.OnPropertyChanged(nameof(x.IsHidden)));
-                OnPropertyChanged(nameof(CreateActionMenuItemViewModel));
+                OnPropertyChanged(nameof(MenuItemViewModel));
             });
         #endregion
 

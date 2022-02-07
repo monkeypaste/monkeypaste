@@ -21,8 +21,6 @@ namespace MpWpfApp {
     /// Interaction logic for MpTagTileView.xaml
     /// </summary>
     public partial class MpTagTileView : MpUserControl<MpTagTileViewModel> {
-        private static MpTagTileContextMenuView _contextMenu;
-
         public bool IsTagTreeTile { get; set; } = false;
 
         public MpTagTileView() {
@@ -35,9 +33,7 @@ namespace MpWpfApp {
             if (ttvm.IsNew) {
                 ttvm.RenameTagCommand.Execute(null);
             }
-            if(_contextMenu == null) {
-                _contextMenu = new MpTagTileContextMenuView();
-            }
+
             if(!IsTagTreeTile) {
                 AddTagButtonPanel.Visibility = Visibility.Collapsed;
             }
@@ -96,18 +92,20 @@ namespace MpWpfApp {
             }
         }
 
-        private void TagTileBorder_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            var ttb = sender as FrameworkElement;
-            var ttvm = DataContext as MpTagTileViewModel;
-            _contextMenu.DataContext = ttvm;
-            ttb.ContextMenu = _contextMenu;
-            ttb.ContextMenu.IsOpen = true;
-            e.Handled = true;
-        }
-
         private void TagTextBox_TextChanged(object sender, TextChangedEventArgs e) {
             this.GetVisualAncestor<MpTagTrayView>()?.RefreshTray();
         }
 
+        private void StackPanel_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+            //if (!BindingContext.IsSelected) {
+            //    BindingContext.IsSelected = true;
+            //}
+
+            e.Handled = true;
+            var fe = sender as FrameworkElement;
+            fe.ContextMenu.DataContext = BindingContext.MenuItemViewModel;
+            fe.ContextMenu.PlacementTarget = this;
+            fe.ContextMenu.IsOpen = true;
+        }
     }
 }

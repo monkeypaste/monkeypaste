@@ -75,7 +75,7 @@ namespace MpWpfApp {
 
         private void UpdateNotifier() {
             var idsSeen = new List<int>();
-            foreach (int ciid in _copyItemIdsNeedingView) {
+            foreach (int ciid in _copyItemIdsNeedingView.ToList()) {
                 var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ciid);
                 if (civm != null && civm.IsVisible && AssociatedObject.BindingContext.IsSelected) {
                     idsSeen.Add(ciid);

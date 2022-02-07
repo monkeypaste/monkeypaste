@@ -19,19 +19,23 @@
         #region Public Methods
 
         public override void Enable() {
-            if(ParentActionViewModel == null) {
-                throw new System.Exception("Parent should be found in init");
+            if(!IsEnabled) {
+                if (ParentActionViewModel == null) {
+                    throw new System.Exception("Parent should be found in init");
+                }
+                ParentActionViewModel.RegisterTrigger(this);
             }
-            ParentActionViewModel.RegisterTrigger(this);
 
             base.Enable(); 
         }
 
         public override void Disable() {
-            if (ParentActionViewModel == null) {
-                throw new System.Exception("Parent should be found in init");
+            if(IsEnabled) {
+                if (ParentActionViewModel == null) {
+                    throw new System.Exception("Parent should be found in init");
+                }
+                ParentActionViewModel.UnregisterTrigger(this);
             }
-            ParentActionViewModel.UnregisterTrigger(this);
 
             base.Disable();
         }

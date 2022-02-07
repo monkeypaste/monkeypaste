@@ -34,13 +34,13 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpMenuItemViewModel CreateActionMenuItemViewModel {
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
                 List<MpMenuItemViewModel> subItems = Items.SelectMany(x => x.QuickActionPresetMenuItems).ToList();
                 if(subItems.Count > 0) {
                     subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
-                subItems.AddRange(Items.Select(x => x.CreateActionMenuItemViewModel));
+                subItems.AddRange(Items.Select(x => x.MenuItemViewModel));
 
                 return new MpMenuItemViewModel() {
                     Header = @"_Analyze",

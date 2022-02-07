@@ -37,11 +37,23 @@ namespace MpWpfApp {
         #region Public Methods
 
         public override void Enable() {
-            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
-            if (scvm != null) {
-                scvm.RegisterTrigger(this);
+            if(!IsEnabled) {
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+                if (scvm != null) {
+                    scvm.RegisterTrigger(this);
+                }
             }
             base.Enable();
+        }
+
+        public override void Disable() {
+            if (IsEnabled) {
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+                if (scvm != null) {
+                    scvm.UnregisterTrigger(this);
+                }
+            }
+            base.Disable();
         }
 
         #endregion

@@ -14,7 +14,9 @@ namespace MpWpfApp {
         #region Public Methods
 
         public override void Enable() {
-            MpClipTrayViewModel.Instance.RegisterTrigger(this);
+            if(!IsEnabled) {
+                MpClipTrayViewModel.Instance.RegisterTrigger(this);
+            }
             base.Enable();
         }
         #endregion

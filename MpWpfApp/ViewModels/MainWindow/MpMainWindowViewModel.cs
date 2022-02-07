@@ -259,13 +259,13 @@ namespace MpWpfApp {
 
         public void ReceivedResizerBehaviorMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.Resizing:
+                case MpMessageType.ResizingContent:
                     //IsResizing = true;
 
                     MainWindowTop = MpMeasurements.Instance.WorkAreaBottom - MainWindowHeight;
                     
                     break;
-                case MpMessageType.ResizeCompleted:
+                case MpMessageType.ResizeContentCompleted:
                     //IsResizing = false;
                     MpPreferences.MainWindowInitialHeight = MainWindowHeight;
                     break;

@@ -101,25 +101,25 @@ namespace MpClipboardHelper {
                 return dobj;
             }
 
-            private static void SetDataWrapper(ref DataObject dobj, string format, string dataStr) {
+            private static void SetDataWrapper(ref DataObject dobj, MpClipboardFormat format, string dataStr) {
                 switch (format) {
-                    case nameof(DataFormats.Bitmap):
+                    case MpClipboardFormat.Bitmap:
                         byte[] bytes = Convert.FromBase64String(dataStr);
                         Image image;
                         using (MemoryStream ms = new MemoryStream(bytes)) {
                             image = Image.FromStream(ms);
-                            dobj.SetData(format, image);
+                            dobj.SetData(DataFormats.Bitmap, image);
                         }
 
                         break;
-                    case nameof(DataFormats.FileDrop):
+                    case MpClipboardFormat.FileDrop:
                         var fl = dataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                         var sc = new StringCollection();
                         sc.AddRange(fl);
                         dobj.SetFileDropList(sc);
                         break;
                     default:
-                        dobj.SetData(format, dataStr);
+                        dobj.SetData(DataFormats.FileDrop, dataStr);
                         break;
                 }
             }
@@ -160,53 +160,54 @@ namespace MpClipboardHelper {
                         ido = Clipboard.GetDataObject();
                     }
                     bool autoConvert = false;
-                    if(MpDataObject.SupportedFormats.Contains("Text") && ido.GetDataPresent(DataFormats.Text,autoConvert)) {
+                    if(MpDataObject.SupportedFormats.Contains(MpClipboardFormat.Text) && 
+                        ido.GetDataPresent(DataFormats.Text,autoConvert)) {
                         string data = ido.GetData(DataFormats.Text, autoConvert) as string;
                         if(!string.IsNullOrEmpty(data)) {
-                            ndo.DataFormatLookup.Add("Text", data);
+                            ndo.DataFormatLookup.Add(MpClipboardFormat.Text, data);
                         }
                     } 
-                    if (MpDataObject.SupportedFormats.Contains("Html") && ido.GetDataPresent(DataFormats.Html, autoConvert)) {
+                    if (MpDataObject.SupportedFormats.Contains(MpClipboardFormat.Html) && 
+                        ido.GetDataPresent(DataFormats.Html, autoConvert)) {
                         string data = ido.GetData(DataFormats.Html, autoConvert) as string;
                         if (!string.IsNullOrEmpty(data)) {
-                            ndo.DataFormatLookup.Add("Html", data);
+                            ndo.DataFormatLookup.Add(MpClipboardFormat.Html, data);
                         }
                     } 
-                    if (MpDataObject.SupportedFormats.Contains("Rtf") && ido.GetDataPresent(DataFormats.Rtf, autoConvert)) {
-                        string data = ido.GetData(DataFormats.Rtf, autoConvert) as string;
+                    if (MpDataObject.SupportedFormats.Contains(MpClipboardFormat.Rtf) && 
+                        ido.GetDataPresent(DataFormats.Rtf, autoConvert)) {                        string data = ido.GetData(DataFormats.Rtf, autoConvert) as string;
                         if (!string.IsNullOrEmpty(data)) {
-                            ndo.DataFormatLookup.Add("Rtf", data);
+                            ndo.DataFormatLookup.Add(MpClipboardFormat.Rtf, data);
                         }
                     } 
-                    if (MpDataObject.SupportedFormats.Contains("Bitmap") && ido.GetDataPresent(DataFormats.Bitmap, autoConvert)) {
+                    if (MpDataObject.SupportedFormats.Contains(MpClipboardFormat.Bitmap) && 
+                        ido.GetDataPresent(DataFormats.Bitmap, autoConvert)) {
                         using (Image img = Clipboard.GetImage()) {
                             using (MemoryStream memoryStream = new MemoryStream()) {
                                 img.Save(memoryStream, ImageFormat.Bmp);
                                 byte[] imageBytes = memoryStream.ToArray();
                                 string data = Convert.ToBase64String(imageBytes);
                                 if (!string.IsNullOrEmpty(data)) {
-                                    ndo.DataFormatLookup.Add("Bitmap", data);
+                                    ndo.DataFormatLookup.Add(MpClipboardFormat.Bitmap, data);
                                 }
                             }
                         }                        
                     } 
-                    if (MpDataObject.SupportedFormats.Contains("FileDrop") && ido.GetDataPresent(DataFormats.FileDrop, autoConvert)) {
-                        StringCollection sc = ido.GetData(DataFormats.FileDrop,autoConvert) as StringCollection;
-                        string[] sa = new string[sc.Count];
-                        try {
-                            sc.CopyTo(sa, 0);
+                    if (MpDataObject.SupportedFormats.Contains(MpClipboardFormat.FileDrop) && 
+                        ido.GetDataPresent(DataFormats.FileDrop, autoConvert)) {
+                        string[] sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
+                        if(sa.Length > 0) {
                             string data = string.Join(Environment.NewLine, sa);
                             if (!string.IsNullOrEmpty(data)) {
-                                ndo.DataFormatLookup.Add("FileDrop", data);
+                                ndo.DataFormatLookup.Add(MpClipboardFormat.FileDrop, data);
                             }
                         }
-                        catch { }
-                        
                     } 
-                    if (MpDataObject.SupportedFormats.Contains("Csv") && ido.GetDataPresent(DataFormats.CommaSeparatedValue, autoConvert)) {
+                    if (MpDataObject.SupportedFormats.Contains(MpClipboardFormat.Csv) && 
+                        ido.GetDataPresent(DataFormats.CommaSeparatedValue, autoConvert)) {
                         string data = ido.GetData(DataFormats.CommaSeparatedValue, autoConvert) as string;
                         if (!string.IsNullOrEmpty(data)) {
-                            ndo.DataFormatLookup.Add("Csv", data);
+                            ndo.DataFormatLookup.Add(MpClipboardFormat.Csv, data);
                         }
                     }
                     return ndo;

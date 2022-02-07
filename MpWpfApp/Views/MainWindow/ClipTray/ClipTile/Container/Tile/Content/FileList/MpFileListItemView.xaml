@@ -24,7 +24,9 @@
                 Background="{Binding ItemBackgroundBrush}">
         <Image Source="{Binding CopyItemData,
                                 Converter={StaticResource FilePathStringToIconConverter},
-                                ConverterParameter=22}"
+                                ConverterParameter=15}"
+               Width="15"
+               Height="15"
                Stretch="Fill" />
         <TextBlock x:Name="FileListItemTextBlock"
                    Margin="8,0,0,0"
