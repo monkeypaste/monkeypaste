@@ -46,16 +46,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        public Visibility AppModeColumnVisibility {
-            get {
-                if(MpMainWindowViewModel.Instance == null || MpClipTrayViewModel.Instance == null) {
-                    return Visibility.Visible;
-                }
-
-                return MpClipTrayViewModel.Instance.IsAnyTileExpanded ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
         #region State
 
         public bool CanRighClickPasteMode => !IsAppPaused;
@@ -283,9 +273,9 @@ namespace MpWpfApp {
         
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.UnexpandComplete:
-                case MpMessageType.ExpandComplete:
-                    break;
+                //case MpMessageType.UnexpandComplete:
+                //case MpMessageType.ResizingMainWindowComplete:
+                //    break;
             }
         }
 

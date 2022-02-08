@@ -24,9 +24,6 @@
                              VerticalAlignment="Stretch"
                              VerticalContentAlignment="Stretch"
                              Margin="0,3"
-                             Visibility="{Binding IsAnyTileExpanded,
-                                                  Source={x:Static local:MpClipTrayViewModel.Instance},
-                                                  Converter={StaticResource BoolToVisibilityFlipConverter}}"
                              DataContext="{Binding}" />
 
         <Grid Grid.Column="1"

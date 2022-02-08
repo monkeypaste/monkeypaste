@@ -56,16 +56,7 @@ namespace MpWpfApp {
 
         protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ExpandComplete:
-                    if (AssociatedObject.BindingContext.Parent.IsExpanded) {
-                        IsEnabled = true;
-                        RefreshDropRects();
-                    } else {
-                        IsEnabled = false;
-                    }
-                    UpdateAdorner();
-                    break;
-                case MpMessageType.UnexpandComplete:
+                case MpMessageType.ResizingMainWindowComplete:
                     if (IsEnabled) {
                         RefreshDropRects();
                     }
@@ -156,7 +147,7 @@ namespace MpWpfApp {
             //clean up all tiles with content dragged
             //if tile has no items recycle it
             //if it still has items sync sort order from its visuals
-            if (!AssociatedObject.BindingContext.Parent.IsExpanded && !isCopy) {
+            if (AssociatedObject.BindingContext.IsReadOnly && !isCopy) {
                 bool needsRequery = false;
                 foreach (var dctvm in dragTiles) {
                     if (dctvm.HeadItem == null ||
@@ -201,7 +192,7 @@ namespace MpWpfApp {
             // merge templates
             var citl = await MpDataModelProvider.GetTemplatesAsync(AssociatedObject.BindingContext.CopyItemId);
             var mcitl = await MpDataModelProvider.GetTemplatesAsync(mci.Id);
-            foreach (MpCopyItemTemplate mcit in mcitl) {
+            foreach (MpTextToken mcit in mcitl) {
                 if (citl.Any(x => x.TemplateName == mcit.TemplateName)) {
                     //if merged item has template w/ same name just ignore it since it will already be parsed
                     continue;

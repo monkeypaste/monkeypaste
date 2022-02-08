@@ -83,7 +83,7 @@ namespace MpWpfApp {
                     thl = await MpTemplateHyperlink.Create(Rtb.Selection, null);
                 } else if (mi.DataContext is MpTemplateViewModel thlvm) {
                     //when clicking a pre-existing template
-                    thl = await MpTemplateHyperlink.Create(Rtb.Selection, thlvm.CopyItemTemplate);
+                    thl = await MpTemplateHyperlink.Create(Rtb.Selection, thlvm.TextToken);
                 }
 
                 //add trailing run of one space to allow clicking after template

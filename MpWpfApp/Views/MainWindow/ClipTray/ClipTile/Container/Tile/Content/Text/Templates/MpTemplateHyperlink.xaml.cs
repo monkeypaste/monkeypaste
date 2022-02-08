@@ -20,7 +20,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpTemplateHyperlink.xaml
     /// </summary>
     public partial class MpTemplateHyperlink : Hyperlink {
-        public static async Task<MpTemplateHyperlink> Create(TextRange tr, MpCopyItemTemplate cit) {
+        public static async Task<MpTemplateHyperlink> Create(TextRange tr, MpTextToken cit) {
             //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
             //needs to be broken into their text before the template hyperlink can be created
             var trSHl = tr.Start.Parent.FindParentOfType<Hyperlink>();
@@ -53,7 +53,7 @@ namespace MpWpfApp {
                 if (string.IsNullOrWhiteSpace(templateName)) {
                     templateName = thcvm.GetUniqueTemplateName();
                 } 
-                cit = await MpCopyItemTemplate.Create(
+                cit = await MpTextToken.Create(
                             thcvm.Parent.CopyItemId,
                             templateName);
                 await cit.WriteToDatabaseAsync();
@@ -109,7 +109,7 @@ namespace MpWpfApp {
             //            }
             //        }
             //    }
-            //    thlvm.Parent.RemoveItem(thlvm.CopyItemTemplate, false);
+            //    thlvm.Parent.RemoveItem(thlvm.TextToken, false);
             //} else {
             //    MpConsole.WriteLine($"UNLOAD-CLEARING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
             //}
@@ -133,7 +133,7 @@ namespace MpWpfApp {
                 //without doing this
                 thlvm.Parent.Parent.IsSelected = true;
             }
-            if (thlvm.HostClipTileViewModel.IsExpanded) {
+            if (!thlvm.HostClipTileViewModel.IsReadOnly) {
                 if(thlvm.Parent.Parent.IsPastingTemplate) {
                     thlvm.IsSelected = true;
                 } else {
@@ -159,7 +159,7 @@ namespace MpWpfApp {
             //MpConsole.WriteLine($"CLEARING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
             //flag Tag so unloaded doesn't delete
             Tag = null;
-            string text = thlvm.Parent.Parent.IsPastingTemplate ? thlvm.CopyItemTemplate.TemplateToken:thlvm.TemplateDisplayValue;
+            string text = thlvm.Parent.Parent.IsPastingTemplate ? thlvm.TextToken.TemplateToken:thlvm.TemplateDisplayValue;
             Inlines.Clear();
             new Span(new Run(text), ElementStart);
         }
@@ -175,7 +175,7 @@ namespace MpWpfApp {
             //var rtb = ElementStart.Parent.FindParentOfType<RichTextBox>();
             //var rtbv = rtb.FindParentOfType<MpRtbView>();
             //rtbv.TemplateViews.Remove(this);
-            //thlvm.Parent.RemoveItem(thlvm.CopyItemTemplate, false);
+            //thlvm.Parent.RemoveItem(thlvm.TextToken, false);
         }
 
         private void DeleteAll_Click(object sender, RoutedEventArgs e) {

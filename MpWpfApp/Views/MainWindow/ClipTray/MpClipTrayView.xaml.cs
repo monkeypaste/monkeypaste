@@ -58,9 +58,6 @@ namespace MpWpfApp {
                     PagingScrollViewer.ScrollToHorizontalOffset(0);
                     PagingScrollViewer.ScrollToLeftEnd();
                     break;
-                case MpMessageType.Expand:
-
-                    break;
             }
         }
 

@@ -46,13 +46,8 @@ namespace MpWpfApp {
 
         protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ExpandComplete:
-                    IsEnabled = false;
-                    UpdateAdorner();
-                    break;
-                case MpMessageType.UnexpandComplete:
-                    IsEnabled = true;
-                    UpdateAdorner();
+                case MpMessageType.ResizingMainWindowComplete:
+                    RefreshDropRects();
                     break;
             }
         }

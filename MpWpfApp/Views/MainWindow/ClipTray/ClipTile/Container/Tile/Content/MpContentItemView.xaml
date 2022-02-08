@@ -60,7 +60,7 @@
             </DrawingBrush>
         </Border.BorderBrush>
         <Border.ContextMenu>
-            <local:MpContextMenuView DataContext="{Binding MenuItemViewModel, Source={x:Static local:MpClipTrayViewModel.Instance}}" />
+            <local:MpContextMenuView />
         </Border.ContextMenu>
         <Grid>
             <ContentControl x:Name="ContentView"

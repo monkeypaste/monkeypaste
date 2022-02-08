@@ -249,7 +249,7 @@ namespace MpWpfApp {
 
         private void Sv_MouseWheel(object sender, MouseWheelEventArgs e) {
             if (//MpClipTrayViewModel.Instance.IsAnyTileFlipped ||
-                MpClipTrayViewModel.Instance.IsAnyTileExpanded ||
+                //MpClipTrayViewModel.Instance.IsAnyTileExpanded ||
                 MpMainWindowViewModel.Instance.IsMainWindowOpening) {
                 return;
             }

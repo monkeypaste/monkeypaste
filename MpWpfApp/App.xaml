@@ -92,6 +92,7 @@
                                                Converter={StaticResource BoolToVisibilityConverter}}"
                           Command="{Binding Command}"
                           CommandParameter="{Binding CommandParameter}"
+                          ItemsSource="{Binding SubItems}"
                           Icon="{Binding IconId,
                                          Converter={StaticResource IconIdToIconConverter}}"
                           InputGestureText="{Binding InputGestureText}"
@@ -118,8 +119,10 @@
                                        Width="15"
                                        Height="15"
                                        Source="{Binding IconHexStr,
-                                                        Converter={StaticResource StringHexToImageSourceConverter}, ConverterParameter=checked}" />
-                                <Label DockPanel.Dock="Right" Content="{Binding Header}" />
+                                                        Converter={StaticResource StringHexToImageSourceConverter},
+                                                        ConverterParameter=checked}" />
+                                <Label DockPanel.Dock="Right"
+                                       Content="{Binding Header}" />
                             </DockPanel>
                         </Button>
                     </MenuItem.Header>

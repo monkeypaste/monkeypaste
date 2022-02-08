@@ -82,7 +82,7 @@
 
             <!--  Compare  -->
             <HierarchicalDataTemplate x:Key="CompareTemplate"
-                                      DataType="{x:Type local:MpCompareActionViewModel}"
+                                      DataType="{x:Type local:MpCompareActionViewModelBase}"
                                       ItemsSource="{Binding Items}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -348,7 +348,7 @@
                                       ItemsSource="{Binding Items}">
                 <TextBox Text="Classify" />
             </HierarchicalDataTemplate>
-            <local:MpActionItemPropertiesTemplateSelector x:Key="ActionTemplateSelector"/>
+            <local:MpActionItemPropertiesTemplateSelector x:Key="ActionTemplateSelector" />
         </Grid.Resources>
         <TreeView Grid.Column="0"
                   dd:DragDrop.IsDragSource="True"

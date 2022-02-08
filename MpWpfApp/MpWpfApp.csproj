@@ -261,7 +261,7 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpMacroActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpAnalyzeActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpClassifyActionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Actions\Action\MpCompareActionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\MpCompareActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\Base\MpTriggerActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpEmptyActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentAddTriggerViewModel.cs" />
@@ -2640,6 +2640,7 @@
     <Folder Include="Converters\From\Int\" />
     <Folder Include="Converters\From\String\" />
     <Folder Include="Resources\Data\" />
+    <Folder Include="ViewModels\MainWindow\Actions\Action\Macro\Base\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Context\Selector\" />

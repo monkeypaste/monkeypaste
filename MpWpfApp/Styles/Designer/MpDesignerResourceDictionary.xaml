@@ -101,7 +101,6 @@
                 <ControlTemplate TargetType="ContentControl">
                     <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                         <local:MpMoveThumb Template="{StaticResource MoveThumbTemplate}"
-                                           
                                            Cursor="SizeAll" />
                         <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
                     </Grid>

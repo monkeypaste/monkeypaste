@@ -21,12 +21,13 @@
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemViewModel}"
                                           ItemsSource="{Binding PresetViewModels}">
-                    <local:MpAnalyticItemView DataContext="{Binding}"/>
+                    <local:MpAnalyticItemView DataContext="{Binding}" />
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type local:MpAnalyticItemPresetViewModel}">
-                    <local:MpAnalyticItemView DataContext="{Binding}"/>
+                    <local:MpAnalyticItemView DataContext="{Binding}" />
                 </DataTemplate>
-                <SolidColorBrush Color="Transparent" x:Key="{x:Static SystemColors.HighlightBrushKey}"/> 
+                <SolidColorBrush Color="Transparent"
+                                 x:Key="{x:Static SystemColors.HighlightBrushKey}" />
             </TreeView.Resources>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">

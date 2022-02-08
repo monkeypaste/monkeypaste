@@ -366,7 +366,7 @@ namespace MpWpfApp {
         private void AutoSearchOnKeyPress(char keyChar) {
             var sbvm = MpSearchBoxViewModel.Instance;
 
-            if (MpClipTrayViewModel.Instance != null && MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+            if (MpIsFocusedExtension.IsAnyTextBoxFocused) {
                 return;
             }
             if (sbvm != null && sbvm.IsTextBoxFocused) {

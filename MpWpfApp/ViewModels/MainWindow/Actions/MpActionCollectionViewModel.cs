@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
@@ -27,6 +28,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        public static CancellationTokenSource CTS = new CancellationTokenSource();
 
         #region View Models
 

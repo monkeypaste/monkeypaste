@@ -54,8 +54,10 @@
                                  Fill="Lime" />
                     </Grid>
                 </ToggleButton>
-                <Image Margin="5,0,0,0" Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
-                       Width="20"/>
+                <Image Margin="5,0,0,0"
+                       Source="{Binding IconResourceKeyStr,
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Width="20" />
                 <TextBox Grid.Row="1"
                          Grid.Column="1"
                          Grid.ColumnSpan="2"
@@ -112,7 +114,7 @@
                                        FontWeight="SemiBold"
                                        Text="Trigger"
                                        Margin="10" />
-                            
+
                             <ComboBox Grid.Row="0"
                                       Grid.Column="1"
                                       VerticalContentAlignment="Center"
@@ -182,9 +184,10 @@
                     </DataTemplate>
                     <!--  Compare  -->
                     <DataTemplate x:Key="ComparePropertiesTemplate"
-                                  DataType="{x:Type local:MpCompareActionViewModel}">
+                                  DataType="{x:Type local:MpCompareActionViewModelBase}">
                         <Grid Margin="10">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="0.3*" />
                                 <RowDefinition Height="0.3*" />
                                 <RowDefinition Height="0.3*" />
                                 <RowDefinition Height="0.3*" />
@@ -204,7 +207,6 @@
                                        FontWeight="SemiBold"
                                        Text="Field"
                                        Margin="10" />
-
                             <ComboBox Grid.Row="0"
                                       Grid.Column="1"
                                       MinWidth="100"
@@ -212,7 +214,8 @@
                                       Margin="10"
                                       IsSynchronizedWithCurrentItem="False"
                                       SelectionChanged="ComboBox_SelectionChanged"
-                                      SelectedItem="{Binding SelectedComparePropertyPathMenuItemViewModel, Mode=TwoWay}"
+                                      SelectedItem="{Binding SelectedComparePropertyPathMenuItemViewModel,
+                                                             Mode=TwoWay}"
                                       ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
                                       ItemsSource="{Binding ComparePropertyPathsMenuItemViewModel.SubItems}">
                                 <ComboBox.ItemContainerStyle>
@@ -224,6 +227,7 @@
                                 </ComboBox.ItemContainerStyle>
                             </ComboBox>
 
+                            <!--  START Item Type / Compare Type Row  -->
                             <!--  Item Type Chooser  -->
                             <TextBlock Grid.Row="1"
                                        Grid.Column="0"
@@ -235,7 +239,6 @@
                                        FontWeight="SemiBold"
                                        Text="Type"
                                        Margin="10" />
-
                             <ComboBox Grid.Row="1"
                                       Grid.Column="1"
                                       Grid.RowSpan="3"
@@ -246,7 +249,7 @@
                                       IsSynchronizedWithCurrentItem="False"
                                       SelectionChanged="ComboBox_SelectionChanged"
                                       SelectedItem="{Binding SelectedContentTypeMenuItemViewModel,
-                                                              Mode=OneWay}"
+                                                             Mode=OneWay}"
                                       ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
                                       ItemsSource="{Binding ContentTypeCompareDataMenuItemViewModel.SubItems}">
                                 <ComboBox.ItemContainerStyle>
@@ -276,7 +279,8 @@
                                       Margin="10"
                                       IsSynchronizedWithCurrentItem="False"
                                       SelectionChanged="ComboBox_SelectionChanged"
-                                      SelectedItem="{Binding SelectedCompareTypeMenuItemViewModel, Mode=TwoWay}"
+                                      SelectedItem="{Binding SelectedCompareTypeMenuItemViewModel,
+                                                             Mode=TwoWay}"
                                       ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
                                       ItemsSource="{Binding CompareTypesMenuItemViewModel.SubItems}">
                                 <ComboBox.ItemContainerStyle>
@@ -288,8 +292,33 @@
                                 </ComboBox.ItemContainerStyle>
                             </ComboBox>
 
-                            <!--  Compare Data  -->
+                            <!--  END Item Type / Compare Type Row  -->
+
+                            <!--  Is Case Sensitive (only non regex, non item type property path)  -->
+
                             <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Foreground="Black"
+                                       FontWeight="SemiBold"
+                                       Text="Case Sensitive"
+                                       Margin="10" />
+                            <CheckBox Grid.Row="2"
+                                      Grid.Column="1"
+                                      IsEnabled="{Binding IsCompareTypeRegex,
+                                                          Converter={StaticResource BoolFlipConverter}}"
+                                      MinWidth="100"
+                                      Margin="10"
+                                      IsChecked="{Binding IsCaseSensitive,
+                                                          Mode=TwoWay,
+                                                          UpdateSourceTrigger=PropertyChanged,
+                                                          NotifyOnSourceUpdated=True,
+                                                          NotifyOnTargetUpdated=True}" />
+
+
+
+                            <!--  Compare Data  -->
+                            <TextBlock Grid.Row="3"
                                        Grid.Column="0"
                                        Visibility="{Binding IsItemTypeCompare,
                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
@@ -300,15 +329,16 @@
                                        Margin="10,0,10,5" />
 
                             <TextBox x:Name="CompareDataTextBox"
-                                     Grid.Row="3"
+                                     Grid.Row="4"
                                      Grid.Column="0"
                                      Grid.ColumnSpan="3"
                                      Visibility="{Binding IsItemTypeCompare,
                                                           Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                      MinHeight="30"
                                      MinWidth="130"
-                                     
-                                     Width="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                                     Width="{Binding ActualWidth,
+                                                     RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                    AncestorType=Grid}}"
                                      Height="{Binding CompareDataTextBoxHeight,
                                                       Mode=TwoWay,
                                                       UpdateSourceTrigger=PropertyChanged,
@@ -341,7 +371,7 @@
 
                                 </i:Interaction.Behaviors>
                             </TextBox>
-                            <Rectangle Grid.Row="3"
+                            <Rectangle Grid.Row="4"
                                        Grid.Column="0"
                                        Grid.ColumnSpan="3"
                                        Visibility="{Binding IsItemTypeCompare,
@@ -352,7 +382,7 @@
                                        Fill="Transparent"
                                        local:MpHoverableExtension.IsEnabled="True"
                                        local:MpHoverableExtension.HoverCursor="ResizeNS" />
-                            <Rectangle Grid.Row="3"
+                            <Rectangle Grid.Row="4"
                                        Grid.Column="0"
                                        Grid.ColumnSpan="3"
                                        Visibility="{Binding IsItemTypeCompare,
@@ -363,7 +393,7 @@
                                        Fill="Transparent"
                                        local:MpHoverableExtension.IsEnabled="True"
                                        local:MpHoverableExtension.HoverCursor="ResizeWE" />
-                            <Rectangle Grid.Row="3"
+                            <Rectangle Grid.Row="4"
                                        Grid.Column="0"
                                        Grid.ColumnSpan="3"
                                        Visibility="{Binding IsItemTypeCompare,
@@ -456,13 +486,13 @@
                                 <ComboBox.ItemContainerStyle>
                                     <Style TargetType="ComboBoxItem">
                                         <Setter Property="HorizontalAlignment"
-                                                Value="Stretch"/>
+                                                Value="Stretch" />
                                         <Setter Property="VerticalAlignment"
-                                                Value="Center"/>
+                                                Value="Center" />
                                         <Setter Property="VerticalContentAlignment"
-                                                Value="Center"/>
+                                                Value="Center" />
                                         <Setter Property="Padding"
-                                                Value="3"/>
+                                                Value="3" />
                                     </Style>
                                 </ComboBox.ItemContainerStyle>
                             </ComboBox>
@@ -531,7 +561,8 @@
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Margin="3"
-                                                    Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                                    Orientation="Horizontal"
+                                                    HorizontalAlignment="Stretch">
                                             <Frame BorderThickness="0.7"
                                                    BorderBrush="LightGray"
                                                    Background="{Binding TagHexColor,
@@ -562,7 +593,7 @@
                                 <ComboBox.ItemContainerStyle>
                                     <Style TargetType="ComboBoxItem">
                                         <Setter Property="HorizontalAlignment"
-                                                Value="Stretch"/>
+                                                Value="Stretch" />
                                     </Style>
                                 </ComboBox.ItemContainerStyle>
                             </ComboBox>

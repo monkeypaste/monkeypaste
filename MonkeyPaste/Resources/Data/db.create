@@ -194,13 +194,13 @@ CREATE TABLE MpDetectedImageObject (
 , CONSTRAINT FK_MpDetectedImageObject_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
 );
                     
-CREATE TABLE MpCopyItemTemplate (
-    pk_MpCopyItemTemplateId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-, MpCopyItemTemplateGuid text
+CREATE TABLE MpTextToken (
+    pk_MpTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+, MpTextTokenGuid text
 , fk_MpCopyItemId integer NOT NULL
 , HexColor text default '#0000FF'
 , TemplateName text NOT NULL 
-, CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
+, CONSTRAINT FK_MpTextToken_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
 );       
                     
 CREATE TABLE MpPasteHistory (

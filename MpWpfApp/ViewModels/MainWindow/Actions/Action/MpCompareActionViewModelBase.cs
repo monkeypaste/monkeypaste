@@ -11,7 +11,12 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpCompareActionViewModel : MpActionViewModelBase {
+    public class MpCompareOutput : MpActionOutput {
+        public string MatchValue { get; set; }
+        public bool IsCaseSensitive { get; set; }
+    }
+
+    public class MpCompareActionViewModelBase : MpActionViewModelBase {
         #region Private Variables
         #endregion
 
@@ -115,9 +120,26 @@ namespace MpWpfApp {
 
         public bool IsItemTypeCompare => ComparePropertyPathType == MpComparePropertyPathType.ItemType;
 
+        public bool IsCompareTypeRegex => CompareType == MpCompareType.Regex;
+
         #endregion
 
         #region Model
+
+        public bool IsCaseSensitive {
+            get {
+                if(Action == null) {
+                    return false;
+                }
+                return Action.Arg3 == "1";
+            }
+            set {
+                if(IsCaseSensitive != value) {
+                    Action.Arg3 = value ? "1" : "0";
+                    OnPropertyChanged(nameof(IsCaseSensitive));
+                }
+            }
+        }
 
         public MpComparePropertyPathType ComparePropertyPathType {
             get {
@@ -202,10 +224,9 @@ namespace MpWpfApp {
 
         #endregion
 
-
         #region Constructors
 
-        public MpCompareActionViewModel(MpActionCollectionViewModel parent) : base(parent) {
+        public MpCompareActionViewModelBase(MpActionCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpCompareActionViewModel_PropertyChanged;
         }
 
@@ -236,28 +257,28 @@ namespace MpWpfApp {
             for (int i = 0; i < triggerLabels.Length; i++) {
                 string resourceKey = string.Empty;
                 MpCompareType ct = (MpCompareType)i;
-                switch (ct) {
-                    case MpCompareType.BeginsWith:
-                    case MpCompareType.EndsWith:
-                    case MpCompareType.Contains:
-                        resourceKey = "CaretIcon";
-                        break;
-                    case MpCompareType.Exact:
-                        resourceKey = "BullsEyeIcon";
-                        break;
-                    case MpCompareType.Regex:
-                        resourceKey = "BeakerIcon";
-                        break;
-                    case MpCompareType.Automatic:
-                        resourceKey = "AppendLineIcon";
-                        break;
-                    case MpCompareType.Wildcard:
-                        resourceKey = "AsteriskIcon";
-                        break;
-                }
+                //switch (ct) {
+                //    case MpCompareType.BeginsWith:
+                //    case MpCompareType.EndsWith:
+                //    case MpCompareType.Contains:
+                //        resourceKey = "CaretIcon";
+                //        break;
+                //    case MpCompareType.Exact:
+                //        resourceKey = "BullsEyeIcon";
+                //        break;
+                //    case MpCompareType.Regex:
+                //        resourceKey = "BeakerIcon";
+                //        break;
+                //    case MpCompareType.Automatic:
+                //        resourceKey = "AppendLineIcon";
+                //        break;
+                //    case MpCompareType.Wildcard:
+                //        resourceKey = "AsteriskIcon";
+                //        break;
+                //}
                 amivml2.Add(new MpMenuItemViewModel() {
                     IsSelected = ct == CompareType,
-                    IconResourceKey = Application.Current.Resources[resourceKey] as string,
+                    //IconResourceKey = Application.Current.Resources[resourceKey] as string,
                     Header = triggerLabels[i],
                     Command = ChangeCompareTypeCommand,
                     CommandParameter = ct,
@@ -295,26 +316,83 @@ namespace MpWpfApp {
                 SubItems = amivml3
             };
         }
-        #endregion
 
-        #region Protected Overrides
+        public override async Task PerformAction(object arg) {
+            MpCopyItem ci = null;
+            if (arg is MpCopyItem) {
+                ci = arg as MpCopyItem;
+            } else if (arg is MpCompareOutput co) {
+                ci = co.CopyItem;
+            } else if (arg is MpAnalyzeOutput ao) {
+                ci = ao.CopyItem;
+            } else if (arg is MpClassifyOutput clo) {
+                ci = clo.CopyItem;
+            }
 
-        public override async Task PerformAction(MpCopyItem arg) {
-            object matchVal = arg.GetPropertyValue(PhysicalPropertyPath);
+            object matchVal = ci.GetPropertyValue(PhysicalPropertyPath);
             string compareStr = string.Empty;
             if (matchVal != null) {
                 compareStr = matchVal.ToString();
             }
 
-            if (IsMatch(compareStr)) {
-                await base.PerformAction(arg);
+            string matchStr = PerformMatch(compareStr);
+            if (matchStr != null) {
+                await base.PerformAction(new MpCompareOutput() {
+                    Previous = arg as MpActionOutput,
+                    CopyItem = ci,
+                    MatchValue = matchStr,
+                    IsCaseSensitive = this.IsCaseSensitive
+                });
             }
         }
 
         #endregion
 
-        #region Private Methods
+        #region Protected Overrides
 
+        protected virtual string PerformMatch(string compareStr) {
+            bool isCaseSensitive = IsCaseSensitive;
+
+            string compareData = isCaseSensitive ? CompareData : CompareData.ToLower();
+            string unmodifiedCompareStr = compareStr;
+            compareStr = isCaseSensitive ? compareStr : compareStr.ToLower();
+            switch (CompareType) {
+                case MpCompareType.Contains:
+                    if (compareStr.Contains(compareData)) {
+                        return unmodifiedCompareStr;
+                    }
+                    break;
+                case MpCompareType.Exact:
+                    if (compareStr.Equals(compareData)) {
+                        return unmodifiedCompareStr;
+                    }
+                    break;
+                case MpCompareType.BeginsWith:
+                    if (compareStr.StartsWith(compareData)) {
+                        return unmodifiedCompareStr;
+                    }
+                    break;
+                case MpCompareType.EndsWith:
+                    if (compareStr.EndsWith(compareData)) {
+                        return unmodifiedCompareStr;
+                    }
+                    break;
+                case MpCompareType.Regex:
+                    var regEx = new Regex(compareData, 
+                                            RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
+                    var m = regEx.Match(compareStr);
+                    if(m.Success) {
+                        return m.Value;
+                    }
+                    break;
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private void MpCompareActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -322,6 +400,8 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(SelectedContentTypeMenuItemViewModel));
                     OnPropertyChanged(nameof(SelectedComparePropertyPathMenuItemViewModel));
                     OnPropertyChanged(nameof(SelectedCompareTypeMenuItemViewModel));
+                    OnPropertyChanged(nameof(IsCompareTypeRegex));
+                    OnPropertyChanged(nameof(IsCaseSensitive));
                     break;
                 case nameof(ComparePropertyPathType):
                     OnPropertyChanged(nameof(IsItemTypeCompare));
@@ -329,40 +409,6 @@ namespace MpWpfApp {
             }
         }
         
-
-    private bool IsMatch(string compareStr) {
-            switch (CompareType) {
-                case MpCompareType.Contains:
-                    if (compareStr.ToLower().Contains(CompareData.ToLower())) {
-                        return true;
-                    }
-                    break;
-                case MpCompareType.Exact:
-                    if (compareStr.ToLower().Equals(CompareData.ToLower())) {
-                        return true;
-                    }
-                    break;
-                case MpCompareType.BeginsWith:
-                    if (compareStr.ToLower().StartsWith(CompareData.ToLower())) {
-                        return true;
-                    }
-                    break;
-                case MpCompareType.EndsWith:
-                    if (compareStr.ToLower().EndsWith(CompareData.ToLower())) {
-                        return true;
-                    }
-                    break;
-                case MpCompareType.Regex:
-                    var regEx = new Regex(CompareData,
-                                            RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
-                    if (regEx.IsMatch(compareStr)) {
-                        return true;
-                    }
-                    break;
-            }
-            return false;
-        }
-
         #endregion
 
         #region Commands

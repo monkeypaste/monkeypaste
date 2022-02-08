@@ -30,6 +30,7 @@
             </i:Interaction.Behaviors>
             <!--<Viewbox Stretch="UniformToFill">-->
             <ListBox x:Name="ActionDesignerListBox"
+                     Loaded="ActionDesignerListBox_Loaded"
                      Background="Transparent"
                      Height="Auto"
                      BorderThickness="0"
@@ -46,8 +47,8 @@
                         <local:MpDesignerCanvas x:Name="ActionDesignerCanvas"
                                                 
                                    Loaded="ZoomAndPanControl_Loaded"
-                                                ShowVoronoi="False"
-                                                ShowGrid="False"
+                                                ShowVoronoi="True"
+                                                ShowGrid="True"
                                                 MinDist="100.1"
                                                 TipWidth="10"
                                                 TailWidth="3"

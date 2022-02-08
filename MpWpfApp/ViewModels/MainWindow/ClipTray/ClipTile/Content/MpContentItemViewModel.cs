@@ -123,7 +123,7 @@ namespace MpWpfApp {
                     return MpThemeColors.Instance.CurrentTheme.ToArray()[(int)MpThemeItemType.Clip_Tile_Content_Item_Background_Color].Value;
                 }
                 if (IsHovering &&
-                    ((Parent.IsExpanded && !IsSelected) || !Parent.IsExpanded) &&
+                    ((!IsReadOnly && !IsSelected) || IsReadOnly) &&
                     Parent.Count > 1) {
                     if(string.IsNullOrEmpty(CopyItem.ItemColor)) {
                         if(_itemBackgroundBrush == null) {
@@ -197,17 +197,17 @@ namespace MpWpfApp {
                 if(Parent == null || CopyItem == null) {
                     return 0;
                 }
-                if(Parent.IsExpanded) {
+                if(!IsReadOnly) {
                     if(Parent.Count > 1) {
                         return Double.NaN;
                     }
                     return Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
                 }
-                return UnexpandedSize.Height;
+                return ReadOnlyContentSize.Height;
             }
         }
 
-        public Size ExpandedSize {
+        public Size EditableContentSize {
             get {
                 if (Parent == null || CopyItem == null) {
                     return new Size();
@@ -225,7 +225,7 @@ namespace MpWpfApp {
             }
         }
 
-        public Size UnexpandedSize {
+        public Size ReadOnlyContentSize {
             get {
                 if (Parent == null || CopyItem == null) {
                     return new Size();
@@ -233,7 +233,7 @@ namespace MpWpfApp {
                 //item height is divided evenly by items but if there are many (more than 5) 
                 //their will only be 5 visible
 
-                double h = 0;
+                double h;
                 if(Parent.Count == 1) {
                     h = Parent.TileContentHeight; //MpMeasurements.Instance.ClipTileContentHeight;
                 } else {
@@ -252,10 +252,10 @@ namespace MpWpfApp {
                 if (Parent == null) {
                     return new Size();
                 }
-                if (Parent.IsExpanded) {
-                    return ExpandedSize;
+                if (!IsReadOnly) {
+                    return EditableContentSize;
                 }
-                return UnexpandedSize;
+                return ReadOnlyContentSize;
             }
         }
 
@@ -264,6 +264,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsReadOnly => Parent == null ? false : Parent.IsReadOnly;
 
         public bool HasDetectedObjects => DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.Items.Count > 0;
 
@@ -327,14 +329,13 @@ namespace MpWpfApp {
         [MpAffectsParent]
         public bool IsContextMenuOpen { get; set; } = false;
 
-        public bool IsEditingContent { 
-            get {
-                if(Parent == null || !Parent.IsExpanded) {
-                    return false;
-                }
-                return IsSelected && !IsPastingTemplate;
-            }
-        }
+        public bool IsContentFocused { get; set; } = false;
+
+        public bool IsTitleFocused { get; set; } = false;
+
+        public bool IsEditingContent => IsContentFocused && !IsReadOnly;
+
+        public bool IsEditingTitle { get; set; } // affects TileTitleTextGridBackgroundBrush
 
         public bool IsEditingTemplate {
             get {
@@ -348,19 +349,6 @@ namespace MpWpfApp {
 
         public bool IsPastingTemplate { get; set; } = false;
 
-        private bool _isEditingTitle = false;
-        public bool IsEditingTitle {
-            get {
-                return _isEditingTitle;
-            }
-            set {
-                if (_isEditingTitle != value) {
-                    _isEditingTitle = value;
-                    OnPropertyChanged(nameof(IsEditingTitle));
-                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
-                }
-            }
-        }
 
         public bool HasTemplates {
             get {
@@ -996,6 +984,9 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(HotkeyIconSource));
                     OnPropertyChanged(nameof(HotkeyIconTooltip));
                     break;
+                case nameof(IsReadOnly):
+                    OnPropertyChanged(nameof(EditorHeight));
+                    break;
             }
         }
 
@@ -1202,8 +1193,6 @@ namespace MpWpfApp {
                     });
             }
         }
-
-        public bool IsReadOnly { get; }
 
         #endregion
 

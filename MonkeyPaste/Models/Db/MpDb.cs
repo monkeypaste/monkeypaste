@@ -408,7 +408,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpBillableItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
-            await _connectionAsync.CreateTableAsync<MpCopyItemTemplate>();
+            await _connectionAsync.CreateTableAsync<MpTextToken>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
             await _connectionAsync.CreateTableAsync<MpDetectedImageObject>();
@@ -421,6 +421,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpSource>();
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
             await _connectionAsync.CreateTableAsync<MpTag>();
+            await _connectionAsync.CreateTableAsync<MpToken>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
             await _connectionAsync.CreateTableAsync<MpUserSearch>();
@@ -1075,9 +1076,9 @@ namespace MonkeyPaste {
                     , ObjectTypeName text
                     );
                     
-                    CREATE TABLE MpCopyItemTemplate (
-                      pk_MpCopyItemTemplateId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpCopyItemTemplateGuid text not null
+                    CREATE TABLE MpTextToken (
+                      pk_MpTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpTextTokenGuid text not null
                     , fk_MpCopyItemId integer NOT NULL
                     , HexColor text default '#0000FF'
                     , TemplateName text NOT NULL 

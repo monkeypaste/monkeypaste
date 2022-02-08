@@ -42,7 +42,7 @@ namespace MonkeyPaste {
             @"#([0-9]|[a-fA-F]){8}|#([0-9]|[a-fA-F]){6}",
             //StreetAddress
             @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
-            //Text Template (dynamically matching from CopyItemTemplate.TemplateName)
+            //Text Template (dynamically matching from TextToken.TemplateName)
             //CopyItem.TemplateRegExMatchString,
             string.Empty
         };

@@ -39,7 +39,7 @@ namespace MonkeyPaste {
             nameof(MpSource),
             nameof(MpCopyItem),
             nameof(MpTag),
-            nameof(MpCopyItemTemplate),
+            nameof(MpTextToken),
             nameof(MpCopyItemTag)
         };
 

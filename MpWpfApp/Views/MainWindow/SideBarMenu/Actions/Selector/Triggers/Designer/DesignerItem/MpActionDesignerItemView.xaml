@@ -91,6 +91,25 @@
                      Fill="{Binding ActionType,
                                     Converter={StaticResource ActionTypeToBrushConverter}}" />
         </DataTemplate>
+        <DataTemplate x:Key="MacroDesignerTemplate"
+                      DataType="local:MpActionViewModelBase">
+            <Rectangle Width="{Binding Width}"
+                       Height="{Binding Height}"
+                       RadiusX="10"
+                       RadiusY="10"
+                       StrokeThickness="2.5"
+                       local:MpHoverableExtension.IsEnabled="True"
+                       local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                       Mode=TwoWay,
+                                                                       UpdateSourceTrigger=PropertyChanged,
+                                                                       NotifyOnSourceUpdated=True,
+                                                                       NotifyOnTargetUpdated=True}"
+                       local:MpHoverableExtension.HoverCursor="ResizeAll"
+                       Stroke="{Binding BorderBrushHexColor,
+                                        Converter={StaticResource StringHexToBrushConverter}}"
+                       Fill="{Binding ActionType,
+                                      Converter={StaticResource ActionTypeToBrushConverter}}" />
+        </DataTemplate>
         <DataTemplate x:Key="NoneDesignerTemplate"
                       DataType="local:MpEmptyActionViewModel">
             <Button Style="{StaticResource SemiTransparentButton}"

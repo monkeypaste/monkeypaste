@@ -37,10 +37,10 @@ namespace MpWpfApp {
         
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.Expand:
+                case MpMessageType.IsEditable:
                     Rtb.FitDocToRtb();
                     break;
-                case MpMessageType.Unexpand:
+                case MpMessageType.IsReadOnly:
                     Rtb.FitDocToRtb();
                     MpHelpers.RunOnMainThread(async()=> {
                         await SyncModelsAsync();
@@ -159,7 +159,7 @@ namespace MpWpfApp {
         }
 
         private void Rtb_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if(!BindingContext.Parent.IsExpanded) {
+            if(BindingContext.IsReadOnly) {
                 e.Handled = true;
                 return;
             }
@@ -215,7 +215,7 @@ namespace MpWpfApp {
         }
 
         private void Rtb_SizeChanged(object sender, SizeChangedEventArgs e) {
-            if (BindingContext != null && BindingContext.Parent.IsExpanded) {
+            if (BindingContext != null) {
                 if (e.HeightChanged && 
                     !Rtb.IsReadOnly) {
                     //MpMainWindowResizeBehavior.Instance.Resize(e.NewSize.Height - e.PreviousSize.Height);
@@ -232,7 +232,7 @@ namespace MpWpfApp {
         }
 
         private void Rtb_MouseEnter(object sender, MouseEventArgs e) {
-            if (BindingContext.Parent.IsExpanded) {
+            if (!BindingContext.Parent.IsReadOnly) {
                 if (BindingContext.IsSelected) {
                     MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
                     return;
@@ -244,7 +244,7 @@ namespace MpWpfApp {
 
         private void Rtb_MouseMove(object sender, MouseEventArgs e) {
             e.Handled = false;
-            if (BindingContext.Parent.IsExpanded) {
+            if (!BindingContext.Parent.IsReadOnly) {
                 if (BindingContext.IsSelected) {
                     MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
                     return;
@@ -287,7 +287,7 @@ namespace MpWpfApp {
 
         private void Rtb_GotFocus(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpContentItemViewModel;
-            if(rtbvm.Parent.IsExpanded) {
+            if(!rtbvm.Parent.IsReadOnly) {
                 //rtbvm.IsEditingContent = true;
                 var plv = this.GetVisualAncestor<MpContentListView>();
                 if (plv != null) {
@@ -303,18 +303,13 @@ namespace MpWpfApp {
                     if (pttb != null) {
                         pttb.SetActiveRtb(Rtb);
                     }
-                }
-                
+                }                
             }
         }
 
         private void Rtb_PreviewKeyUp(object sender, KeyEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            if (e.Key == Key.Space && civm.IsEditingContent) {
-               // MpHelpers.RunOnMainThread(async () => {
-                    // TODO Update regex hyperlink matches (but ignore current ones??)
-                    //await SyncModelsAsync();
-                //});
+            if (e.Key == Key.Escape && BindingContext.IsEditingContent) {
+                BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
             } 
         }
 
@@ -454,7 +449,7 @@ namespace MpWpfApp {
                 foreach(var tvm2r in tvm_ToRemove) {
                     rtbvm.TemplateCollection.Templates.Remove(tvm2r);
                 }
-                await Task.WhenAll(tvm_ToRemove.Select(x => x.CopyItemTemplate.DeleteFromDatabaseAsync()));
+                await Task.WhenAll(tvm_ToRemove.Select(x => x.TextToken.DeleteFromDatabaseAsync()));
             }
             foreach (var hl in TemplateViews) {
                 hl.Clear();
@@ -517,7 +512,7 @@ namespace MpWpfApp {
                             }
                             lastRangeEnd = matchRange.End;
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
-                                var copyItemTemplate = templateModels.Where(x => x.TemplateToken == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().CopyItemTemplate;
+                                var copyItemTemplate = templateModels.Where(x => x.TemplateToken == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().TextToken;
                                 var thl = await MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
                             } else {
                                 var matchRun = new Run(matchRange.Text);

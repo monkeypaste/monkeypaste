@@ -14,6 +14,7 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid>
         <ListBox x:Name="ActionPropertyListBox"
+                 Loaded="ActionPropertyListBox_Loaded"
                  SnapsToDevicePixels="True"
                  ItemsSource="{Binding AllSelectedTriggerActions}"
                  SelectionChanged="ActionPropertyListBox_SelectionChanged"
@@ -53,8 +54,9 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpActionPropertyListBoxItemView BorderThickness="5" 
-                                                           BorderBrush="{Binding BorderBrushHexColor,Converter={StaticResource StringHexToBrushConverter}}"
+                    <local:MpActionPropertyListBoxItemView BorderThickness="5"
+                                                           BorderBrush="{Binding BorderBrushHexColor,
+                                                                                 Converter={StaticResource StringHexToBrushConverter}}"
                                                            Visibility="{Binding IsEmptyAction,
                                                                                 Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                                            DataContext="{Binding}" />

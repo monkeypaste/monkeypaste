@@ -11,6 +11,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Newtonsoft.Json;
 using System.Web;
+using System.Windows;
 
 namespace MpWpfApp {
     public abstract class MpAnalyticItemViewModel : 
@@ -38,6 +39,7 @@ namespace MpWpfApp {
                 var subItems = PresetViewModels.Select(x => x.MenuItemViewModel).ToList();
                 subItems.Add(
                     new MpMenuItemViewModel() {
+                        IconResourceKey = Application.Current.Resources["CogIcon"] as string,
                         Header = $"Manage '{Title}'",
                         Command = Parent.ManageItemCommand,
                         CommandParameter = AnalyticItemId

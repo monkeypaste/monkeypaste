@@ -165,16 +165,10 @@
                 <!--  Sort Combobox  -->
                 <local:MpItemSortView x:Name="ItemSortView"
                                       Grid.Column="1"
-                                      Visibility="{Binding IsAnyTileExpanded,
-                                                           Source={x:Static local:MpClipTrayViewModel.Instance},
-                                                           Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                       DataContext="{x:Static local:MpClipTileSortViewModel.Instance}" />
                 <!--  Tag Tray  -->
                 <local:MpTagTrayView x:Name="TagTrayView"
                                      Grid.Column="2"
-                                     Visibility="{Binding IsAnyTileExpanded,
-                                                          Converter={StaticResource BoolToVisibilityFlipConverter},
-                                                          Source={x:Static local:MpClipTrayViewModel.Instance}}"
                                      DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
                 <!--  Search  -->
                 <local:MpSearchBoxView x:Name="SearchView"
@@ -200,12 +194,7 @@
                                                    VerticalContentAlignment="Stretch"
                                                    DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />
                 <!--  Side bar AppState Buttons  -->
-                <!--<local:MpSidebarView Grid.Row="1"
-                                               Grid.Column="0"
-                                               Visibility="{Binding IsAnyTileExpanded,
-                                                                    Source={x:Static local:MpClipTrayViewModel.Instance},
-                                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                               DataContext="{Binding AppModeViewModel}" />-->
+
                 <local:MpSidebarContainerView x:Name="SidebarMenuView"
                                               Grid.Row="1"
                                               Grid.Column="0"

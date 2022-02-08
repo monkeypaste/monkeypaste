@@ -94,7 +94,7 @@ namespace MpWpfApp {
         }
 
         private void ContentListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if(!BindingContext.IsExpanded) {
+            if(BindingContext.IsReadOnly) {
                 e.Handled = true;
                 return;
             }
@@ -126,11 +126,11 @@ namespace MpWpfApp {
 
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.Expand:
+                case MpMessageType.IsEditable:
                     ContentListBox.GetVisualDescendent<ScrollViewer>().HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
                     ContentListBox.GetVisualDescendent<ScrollViewer>().VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
                     break;
-                case MpMessageType.Unexpand:
+                case MpMessageType.IsReadOnly:
                     ContentListBox.GetVisualDescendent<ScrollViewer>().HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                     ContentListBox.GetVisualDescendent<ScrollViewer>().VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                     break;
@@ -201,8 +201,7 @@ namespace MpWpfApp {
         #endregion
 
         public void Civm_OnScrollWheelRequest(object sender, int e) {
-            var ctvm = DataContext as MpClipTileViewModel;
-            if (ctvm.IsExpanded) {
+            if (!BindingContext.IsReadOnly && BindingContext.IsSelected) {
                 var sv = ContentListBox.GetVisualDescendent<ScrollViewer>();
                 double yOffset = sv.VerticalOffset + e;
                 sv.ScrollToVerticalOffset(yOffset);
@@ -271,7 +270,7 @@ namespace MpWpfApp {
             var tailItem  = BindingContext.ItemViewModels[BindingContext.ItemViewModels.Count - 1];
 
             if (tailItem.IsEditingTitle ||
-                (tailItem.IsSelected && tailItem.Parent.IsExpanded) ||
+                //(tailItem.IsSelected && tailItem.Parent.IsExpanded) ||
                  tailItem.Parent.Parent.IsAnyResizing ||
                  tailItem.Parent.Parent.CanAnyResize ||
                  MpResizeBehavior.IsAnyResizing) {

@@ -126,19 +126,7 @@ namespace MpWpfApp {
                 }
                 return cil;
             }
-        }
-
-        public MpClipTileViewModel ExpandedTile => Items.FirstOrDefault(x => x.IsExpanded);
-
-
-        
-
-        #region Context Menu Item View Models
-
-
-        public ObservableCollection<MpMenuItemViewModel> TagMenuItems { get; set; } = new ObservableCollection<MpMenuItemViewModel>();
-
-        #endregion
+        }        
 
         #region MpIContextMenuItemViewModel Implementation
 
@@ -289,6 +277,7 @@ namespace MpWpfApp {
                                 },
                             }
                         },
+                        MpAnalyticItemCollectionViewModel.Instance.MenuItemViewModel,
                         new MpMenuItemViewModel() {
                             Header = "_Select",
                             IconResourceKey = Application.Current.Resources["SelectionIcon"] as string,
@@ -345,15 +334,7 @@ namespace MpWpfApp {
         public double PinTrayTotalWidth { get; set; } = 0;
         //public double ClipTrayScreenHeight => ClipTrayHeight;
 
-        public double ClipTrayScreenWidth {
-            get {
-                if (IsAnyTileExpanded) {
-                    return MpMainWindowViewModel.Instance.MainWindowWidth;
-                }
-                return MpMeasurements.Instance.ClipTrayDefaultWidth - PinTrayTotalWidth;
-            }
-        }
-
+        public double ClipTrayScreenWidth => MpMeasurements.Instance.ClipTrayDefaultWidth - PinTrayTotalWidth;
 
         public double ClipTrayTotalTileWidth {
             get {
@@ -443,14 +424,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsHorizontalScrollBarVisible {
-            get {
-                if (IsAnyTileExpanded) {
-                    return false;
-                }
-                return TotalTilesInQuery > MpMeasurements.Instance.DefaultTotalVisibleClipTiles;
-            }
-        }
+        public bool IsHorizontalScrollBarVisible => TotalTilesInQuery > MpMeasurements.Instance.DefaultTotalVisibleClipTiles;
 
         public int HeadQueryIdx {
             get {
@@ -507,8 +481,6 @@ namespace MpWpfApp {
         public bool IsAnyResizing => Items.Any(x => x.IsResizing);
 
         public bool CanAnyResize => Items.Any(x => x.CanResize);
-        [MpAffectsChild]
-        public bool IsAnyTileExpanded => Items.Any(x => x.IsExpanded);
 
         public bool IsAnyEditing => Items.Any(x => x.IsAnyEditingContent);
 
@@ -1307,9 +1279,9 @@ namespace MpWpfApp {
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(IsTrayEmpty));
             //return;
-            if (IsAnyTileExpanded) {
-                return;
-            }
+            //if (IsAnyTileExpanded) {
+            //    return;
+            //}
             if (e.OldItems != null) { //if (e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
                 foreach (MpClipTileViewModel octvm in e.OldItems) {
                     octvm.Dispose();
@@ -1822,7 +1794,7 @@ namespace MpWpfApp {
                        !IsBusy &&
                        !IsLoadingMore &&
                        !IsScrollJumping &&
-                       !IsAnyTileExpanded &&
+                       //!IsAnyTileExpanded &&
                        !MpMainWindowViewModel.Instance.IsMainWindowLoading;
             });
 
@@ -2100,7 +2072,7 @@ namespace MpWpfApp {
             },
             (args) => {
                 return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
-                    !IsAnyTileExpanded &&
+                    //!IsAnyTileExpanded &&
                     !IsAnyEditingClipTile &&
                     !IsAnyEditingClipTitle &&
                     !IsAnyPastingTemplate &&
@@ -2241,7 +2213,7 @@ namespace MpWpfApp {
 
         public ICommand EditSelectedContentCommand => new RelayCommand(
             () => {
-                SelectedItems[0].IsExpanded = true;
+                SelectedItems[0].IsReadOnly = false;
             },
             () => {
                 if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {

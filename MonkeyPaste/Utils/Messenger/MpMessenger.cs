@@ -14,10 +14,10 @@ namespace MonkeyPaste {
         SubQueryChanged, //sent when composite parent is moved or tile deleted
         JumpToIdxCompleted,
         TotalQueryCountChanged,
-        Expand, //has context (tile)
-        Unexpand,   //has context (tile)
-        ExpandComplete,
-        UnexpandComplete,
+        IsReadOnly, //has context (tile)
+        IsEditable,   //has context (tile)
+        ResizingMainWindowComplete,
+        //UnexpandComplete,
         MainWindowOpening,
         MainWindowOpened,
         MainWindowHiding,

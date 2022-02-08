@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
+    public class MpClassifyOutput : MpActionOutput {
+        public int TagId { get; set; }
+    }
+
     public class MpClassifyActionViewModel : MpActionViewModelBase {
         #region Private Variables
 
@@ -64,15 +68,30 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        public override async Task PerformAction(MpCopyItem arg) {
-            if(!IsEnabled) {
+        public override async Task PerformAction(object arg) {
+            MpCopyItem ci = null;
+            if (arg is MpCopyItem) {
+                ci = arg as MpCopyItem;
+            } else if (arg is MpCompareOutput co) {
+                ci = co.CopyItem;
+            } else if (arg is MpAnalyzeOutput ao) {
+                ci = ao.CopyItem;
+            } else if (arg is MpClassifyOutput clo) {
+                ci = clo.CopyItem;
+            }
+
+            if (!IsEnabled) {
                 return;
             }
 
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            await ttvm.AddContentItem((arg as MpCopyItem).Id);
+            await ttvm.AddContentItem(ci.Id);
 
-            await base.PerformAction(arg);
+            await base.PerformAction(new MpClassifyOutput() {
+                Previous = arg as MpActionOutput,
+                CopyItem = ci,
+                TagId = TagId
+            });
         }
         #endregion
     }

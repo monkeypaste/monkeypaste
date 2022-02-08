@@ -220,9 +220,6 @@ using System.Speech.Synthesis;
 
         public double TrayX {
             get {
-                if(IsExpanded) {
-                    return MpMeasurements.Instance.ClipTileExpandedMargin;
-                }
                 if(HeadItem == null || IsPinned || Parent == null) {
                     return 0;
                 }
@@ -264,7 +261,7 @@ using System.Speech.Synthesis;
                 if (Count == 1) {
                     cs.Height = ch;
                 } else {
-                    double h = IsExpanded ? ExpandedContentSize.Height : UnexpandedSize.Height;
+                    double h = IsReadOnly ? ReadOnlyContentSize.Height : EditableContentSize.Height;
                     cs.Height = Math.Max(MpMeasurements.Instance.ClipTileScrollViewerWidth, Math.Max(ch, h));
                 }
                 return cs;
@@ -303,13 +300,13 @@ using System.Speech.Synthesis;
             }
         }
 
-        public Size ExpandedContentSize {
+        public Size EditableContentSize {
             get {
                 var ts = new Size(
                 MpMeasurements.Instance.ClipTileEditModeMinWidth,
                 0);
                 foreach (var ivm in ItemViewModels) {
-                    var ivs = ivm.ExpandedSize;
+                    var ivs = ivm.EditableContentSize;
                     ts.Width = Math.Max(ts.Width, ivs.Width);
                     ts.Height += ivs.Height;
                 }
@@ -318,7 +315,7 @@ using System.Speech.Synthesis;
             }
         }
 
-        public Size UnexpandedSize {
+        public Size ReadOnlyContentSize {
             get {
                 return new Size(
                     MpMeasurements.Instance.ClipTileContentMinWidth,
@@ -341,8 +338,8 @@ using System.Speech.Synthesis;
                 if (Parent == null) {
                     return ScrollBarVisibility.Hidden;
                 }
-                if (IsExpanded) {
-                    if (ExpandedContentSize.Width > ContentWidth) {
+                if (!IsReadOnly) {
+                    if (EditableContentSize.Width > ContentWidth) {
                         return ScrollBarVisibility.Visible;
                     }
                 }
@@ -355,8 +352,8 @@ using System.Speech.Synthesis;
                 if (Parent == null) {
                     return ScrollBarVisibility.Hidden;
                 }
-                if (IsExpanded) {
-                    if (ExpandedContentSize.Height > ContainerSize.Height) {
+                if (!IsReadOnly) {
+                    if (EditableContentSize.Height > ContainerSize.Height) {
                         return ScrollBarVisibility.Visible;
                     }
                 }
@@ -366,9 +363,6 @@ using System.Speech.Synthesis;
 
         public Visibility PinButtonVisibility {
             get {
-                if(IsExpanded) {
-                    return Visibility.Hidden;
-                }
                 return IsSelected || IsHovering ? Visibility.Visible : Visibility.Hidden;
             }
         }
@@ -379,20 +373,6 @@ using System.Speech.Synthesis;
                     return Visibility.Collapsed;
                 }
                 return (Parent.IsScrolling || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
-        public Visibility ToggleEditModeButtonVisibility {
-            get {
-                return ((IsHovering || IsExpanded) &&
-                        Parent.SelectedItems.Count == 1) ?
-                        Visibility.Visible : Visibility.Hidden;
-            }
-        }
-
-        public Visibility ClipTileTitleAppIconButtonVisibility {
-            get {
-                return IsExpanded ? Visibility.Hidden : Visibility.Visible;
             }
         }
 
@@ -421,14 +401,6 @@ using System.Speech.Synthesis;
         public Visibility TrialOverlayVisibility {
             get {
                 return MpPreferences.IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        public Visibility SelectionOverlayGridVisibility {
-            get {
-                return (IsSelected &&
-                       (Parent.SelectedItems.Count == 1 ||
-                        Parent.IsAnyTileExpanded)) ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
@@ -516,8 +488,8 @@ using System.Speech.Synthesis;
                                 HeadItem != null && 
                                 Parent.PinnedItems.Any(x => x.HeadItem.CopyItemId == HeadItem.CopyItemId);
 
-        public bool CanVerticallyScroll => IsExpanded ?
-                                                ExpandedContentSize.Height > TileContentHeight :
+        public bool CanVerticallyScroll => !IsReadOnly ?
+                                                EditableContentSize.Height > TileContentHeight :
                                                 ItemViewModels.Sum(x => x.UnformattedContentSize.Height) > TileContentHeight;
 
         public bool CanResize { get; set; } = false;
@@ -573,7 +545,7 @@ using System.Speech.Synthesis;
                     return false;
                 }
 
-                if (IsExpanded) {
+                if (!IsReadOnly) {
                     if (IsAnyEditingTemplate ||
                         IsAnyPastingTemplate) {
                         return false;
@@ -620,6 +592,8 @@ using System.Speech.Synthesis;
 
         public int Count => ItemViewModels.Count;
 
+        public bool IsReadOnly { get; set; } = true;
+
         public bool IsAnyEditingContent => ItemViewModels.Any(x => x.IsEditingContent);
 
         public bool IsAnyEditingTitle => ItemViewModels.Any(x => x.IsEditingTitle);
@@ -627,9 +601,6 @@ using System.Speech.Synthesis;
         public bool IsAnyEditingTemplate => ItemViewModels.Any(x => x.IsEditingTemplate);
 
         public bool IsAnyPastingTemplate => ItemViewModels.Any(x => x.IsPastingTemplate);
-
-        [MpAffectsSibling]
-        public bool IsExpanded { get; set; } = false;
 
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -689,8 +660,6 @@ using System.Speech.Synthesis;
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(HoverItem));
                     OnPropertyChanged(nameof(PrimaryItem));
-                    OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
-                    OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
                     OnPropertyChanged(nameof(IsDetailGridVisibile));
                 }
@@ -699,9 +668,7 @@ using System.Speech.Synthesis;
 
         public bool IsNew { get; set; } = false;
 
-        [MpDependsOnParent("IsAnyTileExpanded")]
         [MpDependsOnChild("IsPlaceholder")]
-        [MpDependsOnSibling("IsExpanded")]
         public bool IsPlaceholder {
             get {
                 if(IsNew) {
@@ -713,7 +680,7 @@ using System.Speech.Synthesis;
                 if(IsPinned) {
                     return true;
                 }
-                return Parent.IsAnyTileExpanded && !IsExpanded;
+                return false;// ItemViewModels.Count > 0;
             }
         }
 
@@ -1010,8 +977,8 @@ using System.Speech.Synthesis;
         }
 
         public void ClearEditing() {
-            if(IsExpanded) {
-                IsExpanded = false;
+            if(!IsReadOnly) {
+                IsReadOnly = true;
             }
             foreach(var ivm in ItemViewModels) {
                 ivm.ClearEditing();
@@ -1047,8 +1014,8 @@ using System.Speech.Synthesis;
                 sw.Stop();
                 MonkeyPaste.MpConsole.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
 
-                if(IsExpanded) {
-                    IsExpanded = false;
+                if (!IsReadOnly) {
+                    IsReadOnly = true;
                 }
                 return rtf;
             }
@@ -1065,7 +1032,7 @@ using System.Speech.Synthesis;
                     rtbvm.IsPastingTemplate = true;
                     if (!hasExpanded) {
                         //tile will be shrunk in on completed of hide window
-                        IsExpanded = true;
+                        IsReadOnly = false;
                         rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
                         rtbvm.TemplateCollection.UpdateCommandsCanExecute();
                         rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.Templates));
@@ -1190,38 +1157,38 @@ using System.Speech.Synthesis;
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     break;
-                case nameof(IsExpanded):
-                    MpMessenger.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
+                case nameof(IsAnyEditingContent):
+                    MpMessenger.Send<MpMessageType>(IsReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
 
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
-                    MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
-                    OnPropertyChanged(nameof(TileBorderWidth));
-                    OnPropertyChanged(nameof(PinButtonVisibility));
+                    //MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
+                    //OnPropertyChanged(nameof(TileBorderWidth));
+                    //OnPropertyChanged(nameof(PinButtonVisibility));
 
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
+                    //Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
-                    Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
+                    //Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
                     
 
-                    var mwrb = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior;
-                    if (IsExpanded) {
-                        Parent.ScrollOffset = Parent.LastScrollOfset = 0;
+                    //var mwrb = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior;
+                    //if (IsExpanded) {
+                    //    Parent.ScrollOffset = Parent.LastScrollOfset = 0;
 
-                        if (SelectedItems.Count == 0) {
-                            PrimaryItem.IsSelected = true;
-                        }
+                    //    if (SelectedItems.Count == 0) {
+                    //        PrimaryItem.IsSelected = true;
+                    //    }
 
-                        _unexpandedHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
-                        mwrb.Resize(0,Math.Max(TileBorderHeight, ExpandedContentSize.Height - TileBorderHeight));
+                    //    _unexpandedHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
+                    //    mwrb.Resize(0,Math.Max(TileBorderHeight, EditableContentSize.Height - TileBorderHeight));
 
-                        Keyboard.AddKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
-                    } else {
-                        Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
-                        mwrb.Resize(0,_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
-                    }
-                    OnPropertyChanged(nameof(TrayX));
+                    //    Keyboard.AddKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
+                    //} else {
+                    //    Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
+                    //    mwrb.Resize(0,_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
+                    //}
+                    //OnPropertyChanged(nameof(TrayX));
 
-                    MpMessenger.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
+                    //MpMessenger.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
                     
                     OnPropertyChanged(nameof(CanVerticallyScroll));
@@ -1253,6 +1220,9 @@ using System.Speech.Synthesis;
                     OnPropertyChanged(nameof(PinIconSourcePath));
                     OnPropertyChanged(nameof(IsPlaceholder));
                     break;
+                case nameof(IsReadOnly):
+                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsReadOnly)));
+                    break;
             }
         }
 
@@ -1261,7 +1231,7 @@ using System.Speech.Synthesis;
                 return;
             }
             if(e.Key == Key.Escape) {
-                ToggleExpandedCommand.Execute(null);
+                ToggleReadOnlyCommand.Execute(null);
             }
         }
         #endregion
@@ -1315,100 +1285,13 @@ using System.Speech.Synthesis;
                 }
             }, () => IsSelected);
 
-        public ICommand ToggleExpandedCommand => new RelayCommand(
+        public ICommand ToggleReadOnlyCommand => new RelayCommand(
             () => {
-                if(!IsSelected && !IsExpanded) {
+                if(!IsSelected && IsReadOnly) {
                     ResetSubSelection(false);
                 }
-                IsExpanded = !IsExpanded;
+                IsReadOnly = !IsReadOnly;
             });
-
-        //private RelayCommand _createQrCodeFromClipCommand;
-        //public ICommand CreateQrCodeFromClipCommand {
-        //    get {
-        //        if (_createQrCodeFromClipCommand == null) {
-        //            _createQrCodeFromClipCommand = new RelayCommand(CreateQrCodeFromClip, CanCreateQrCodeFromClip);
-        //        }
-        //        return _createQrCodeFromClipCommand;
-        //    }
-        //}
-        //private bool CanCreateQrCodeFromClip() {
-        //    return CopyItemType == MpCopyItemType.RichText && CopyItemPlainText.Length <= MpPreferences.MaxQrCodeCharLength;
-        //}
-        //private void CreateQrCodeFromClip() {
-        //    var bmpSrc = MpHelpers.ConvertUrlToQrCode(CopyItemPlainText);
-        //    System.Windows.MpClipboardManager.Instance.SetImageWrapper(bmpSrc);
-        //}
-
-        //private RelayCommand _sendClipToEmailCommand;
-        //public ICommand SendClipToEmailCommand {
-        //    get {
-        //        if (_sendClipToEmailCommand == null) {
-        //            _sendClipToEmailCommand = new RelayCommand(SendClipToEmail, CanSendClipToEmail);
-        //        }
-        //        return _sendClipToEmailCommand;
-        //    }
-        //}
-        //private bool CanSendClipToEmail() {
-        //    return !IsEditingContent;
-        //}
-        //private void SendClipToEmail() {
-        //    MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemPlainText));
-        //    //Parent.ClearClipSelection();
-        //    //IsSelected = true;
-        //    //MpHelpers.CreateEmail(MpPreferences.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
-        //}
-
-
-
-
-        //private RelayCommand _excludeApplicationCommand;
-        //public ICommand ExcludeApplicationCommand {
-        //    get {
-        //        if (_excludeApplicationCommand == null) {
-        //            _excludeApplicationCommand = new RelayCommand(ExcludeApplication, CanExcludeApplication);
-        //        }
-        //        return _excludeApplicationCommand;
-        //    }
-        //}
-        //private bool CanExcludeApplication() {
-        //    return Parent.SelectedItems.Count == 1;
-        //}
-        //private void ExcludeApplication() {
-        //    MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
-        //}
-
-        //private RelayCommand<object> _pasteClipCommand;
-        //public ICommand PasteClipCommand {
-        //    get {
-        //        if (_pasteClipCommand == null) {
-        //            _pasteClipCommand = new RelayCommand<object>(PasteClip);
-        //        }
-        //        return _pasteClipCommand;
-        //    }
-        //}
-        //private void PasteClip(object args) {
-        //    Parent.ClearClipSelection();
-        //    IsSelected = true;
-        //    Parent.PasteSelectedClipsCommand.Execute(args);
-        //}
-
-        //private RelayCommand _assignHotkeyCommand;
-        //public ICommand AssignHotkeyCommand {
-        //    get {
-        //        if (_assignHotkeyCommand == null) {
-        //            _assignHotkeyCommand = new RelayCommand(AssignHotkey);
-        //        }
-        //        return _assignHotkeyCommand;
-        //    }
-        //}
-        //private void AssignHotkey() {
-        //    ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
-        //        this,
-        //        "Paste " + CopyItemTitle,
-        //        ShortcutKeyString,
-        //        Parent.HotkeyPasteCommand, CopyItemId);
-        //}
 
         private RelayCommand _editTitleCommand;
         public ICommand EditTitleCommand {

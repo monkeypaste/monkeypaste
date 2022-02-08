@@ -6,6 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
+    public enum MpMacroActionType {
+        None = 0,
+        Tokenize,
+        Command
+    }
+
     public enum MpComparePropertyPathType {
         None = 0,
         ItemData,
@@ -86,6 +92,8 @@ namespace MonkeyPaste {
 
         public string Arg3 { get; set; } = string.Empty;
 
+        public string Arg4 { get; set; } = string.Empty;
+
         public double X { get; set; }
 
         public double Y { get; set; }
@@ -143,6 +151,7 @@ namespace MonkeyPaste {
             string arg1 = "",
             string arg2 = "",
             string arg3 = "",
+            string arg4 = "",
             int iconId = 0,
             string description = "",
             bool isReadOnly = false) {
@@ -190,6 +199,7 @@ namespace MonkeyPaste {
                 Arg1 = arg1,
                 Arg2 = arg2,
                 Arg3 = arg3,
+                Arg4 = arg4,
                 ParentActionId = parentId,
                 SortOrderIdx = sortOrderIdx,
                 IconId = iconId,

@@ -5,9 +5,10 @@
            xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
            xmlns:local="clr-namespace:MpWpfApp"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-           d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel, IsDesignTimeCreatable=False}"
+           d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
+                                            IsDesignTimeCreatable=False}"
            Background="Transparent"
-           IsEnabled="{Binding Parent.Parent.Parent.IsExpanded}"
+           IsEnabled="{Binding IsReadOnly, Converter={StaticResource BoolFlipConverter}}"
            MouseEnter="Hyperlink_MouseEnter"
            MouseLeave="Hyperlink_MouseLeave"
            PreviewMouseLeftButtonDown="Hyperlink_PreviewMouseLeftButtonDown"

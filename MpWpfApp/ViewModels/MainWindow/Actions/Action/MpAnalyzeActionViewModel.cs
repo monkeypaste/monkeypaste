@@ -7,6 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
+    public class MpAnalyzeOutput : MpActionOutput {
+        public MpCopyItem AnalysisItem { get; set; }
+    }
+
     public class MpAnalyzeActionViewModel : MpActionViewModelBase {
         #region Properties
 
@@ -62,16 +66,31 @@ namespace MpWpfApp {
 
         #region Public Overrides
 
-        public override async Task PerformAction(MpCopyItem arg) {
+        public override async Task PerformAction(object arg) {
+            MpCopyItem ci = null;
+            if(arg is MpCopyItem) {
+                ci = arg as MpCopyItem;
+            } else if(arg is MpCompareOutput co) {
+                ci = co.CopyItem;
+            } else if (arg is MpAnalyzeOutput ao) {
+                ci = ao.CopyItem;
+            } else if (arg is MpClassifyOutput clo) {
+                ci = clo.CopyItem;
+            }
+
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
-            object[] args = new object[] { aipvm, arg as MpCopyItem };
+            object[] args = new object[] { aipvm, ci };
             aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
 
             while (aipvm.Parent.IsBusy) {
                 await Task.Delay(100);
             }
 
-            await base.PerformAction(aipvm.Parent.LastResultContentItem);
+            await base.PerformAction(new MpAnalyzeOutput() {
+                Previous = arg as MpActionOutput,
+                CopyItem = ci,
+                AnalysisItem = aipvm.Parent.LastResultContentItem
+            });
         }
         #endregion
     }

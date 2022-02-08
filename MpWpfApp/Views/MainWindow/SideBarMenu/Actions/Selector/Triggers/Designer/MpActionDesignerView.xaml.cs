@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,20 @@ namespace MpWpfApp {
 
         private void ZoomAndPanControl_Loaded(object sender, RoutedEventArgs e) {
             ZoomAndPanControl.ScaleToFit();
+        }
+
+        private void ActionDesignerListBox_Loaded(object sender, RoutedEventArgs e) {
+            MpMessenger.Register(
+                MpActionCollectionViewModel.Instance,
+                ReceivedActionCollectionViewModelMessage);
+        }
+
+        private void ReceivedActionCollectionViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ActionViewportChanged:
+                    ActionDesignerListBox.Items.Refresh();
+                    break;
+            }
         }
     }
 }

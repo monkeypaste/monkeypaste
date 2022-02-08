@@ -20,7 +20,8 @@
                   BorderThickness="0"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
-                  ItemsSource="{Binding AllTagViewModel, Converter={StaticResource ItemToItemsSourceConverter}}">
+                  ItemsSource="{Binding AllTagViewModel,
+                                        Converter={StaticResource ItemToItemsSourceConverter}}">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:MpTagTileViewModel}"
                                           ItemsSource="{Binding Children}">

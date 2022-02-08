@@ -65,16 +65,7 @@ namespace MpWpfApp {
 
         protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ExpandComplete:
-                    if (AssociatedObject.BindingContext.IsExpanded) {
-                        IsEnabled = true;
-                        RefreshDropRects();
-                    } else {
-                        IsEnabled = false;
-                    }
-                    UpdateAdorner();
-                    break;
-                case MpMessageType.UnexpandComplete:
+                case MpMessageType.ResizingMainWindowComplete:
                     if (IsEnabled) {
                         RefreshDropRects();
                     }
@@ -275,15 +266,18 @@ namespace MpWpfApp {
 
             dropModels = await Detach(dropModels, true);
 
-            if (AssociatedObject.BindingContext.IsExpanded) {
-                await AssociatedObject.BindingContext.InitializeAsync(
-                    dropModels[0],
-                    AssociatedObject.BindingContext.QueryOffsetIdx);
-            } else {
-                int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + tileIdx;
-                MpDataModelProvider.InsertQueryItem(dropModels[0].Id, queryDropIdx);
-                MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-            }
+            //if (AssociatedObject.BindingContext.IsExpanded) {
+            //    await AssociatedObject.BindingContext.InitializeAsync(
+            //        dropModels[0],
+            //        AssociatedObject.BindingContext.QueryOffsetIdx);
+            //} else {
+            //    int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + tileIdx;
+            //    MpDataModelProvider.InsertQueryItem(dropModels[0].Id, queryDropIdx);
+            //    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+            //}
+            int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + tileIdx;
+            MpDataModelProvider.InsertQueryItem(dropModels[0].Id, queryDropIdx);
+            MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
 
         }
 

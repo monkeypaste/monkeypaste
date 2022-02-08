@@ -47,10 +47,10 @@ namespace MpWpfApp {
 
         private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
             BindingContext.IsHovering = true;
-            if (!MpDragDropManager.IsDragAndDrop &&
-                (!BindingContext.Parent.IsExpanded || !BindingContext.IsSelected)) {
-                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
-            }
+            //if (!MpDragDropManager.IsDragAndDrop &&
+            //    (!BindingContext.Parent.IsExpanded || !BindingContext.IsSelected)) {
+            //    //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
+            //}
         }
 
         private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
@@ -81,7 +81,7 @@ namespace MpWpfApp {
 
         private void Border_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (BindingContext.IsEditingTitle ||
-                (BindingContext.IsSelected && BindingContext.Parent.IsExpanded) ||
+                !BindingContext.IsReadOnly ||
                  BindingContext.Parent.Parent.IsAnyResizing ||
                  BindingContext.Parent.Parent.CanAnyResize ||
                  MpResizeBehavior.IsAnyResizing) {
@@ -97,9 +97,9 @@ namespace MpWpfApp {
         }
 
         private void Border_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                return;
-            }
+            //if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+            //    return;
+            //}
 
             if (!BindingContext.IsSelected) {
                 BindingContext.IsSelected = true;
@@ -107,7 +107,11 @@ namespace MpWpfApp {
 
             e.Handled = true;
             var fe = sender as FrameworkElement;
-            fe.ContextMenu.DataContext = MpClipTrayViewModel.Instance.MenuItemViewModel;
+            if(MpContextMenuView.CurrentContextMenu == null) {
+                MpContextMenuView.CurrentContextMenu = new MpContextMenuView();
+            }
+            MpContextMenuView.CurrentContextMenu.DataContext = MpClipTrayViewModel.Instance.MenuItemViewModel;
+            fe.ContextMenu = MpContextMenuView.CurrentContextMenu;
             fe.ContextMenu.PlacementTarget = this;
             fe.ContextMenu.IsOpen = true;
         }

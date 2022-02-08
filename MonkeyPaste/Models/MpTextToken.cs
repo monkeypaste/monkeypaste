@@ -11,8 +11,8 @@ using SQLiteNetExtensions.Extensions.TextBlob;
 using System.Text;
 
 namespace MonkeyPaste {
-    [Table("MpCopyItemTemplate")]
-    public class MpCopyItemTemplate : MpDbModelBase, MpIQuilEmbedable, ICloneable {
+    [Table("MpTextToken")]
+    public class MpTextToken : MpDbModelBase, MpIQuilEmbedable, ICloneable {
         #region Constants
         public const string TEMPLATE_PREFIX = "<";
         public const string TEMPLATE_SUFFIX = ">";
@@ -20,14 +20,14 @@ namespace MonkeyPaste {
 
         #region Columns
         [PrimaryKey, AutoIncrement]
-        [Column("pk_MpCopyItemTemplateId")]
+        [Column("pk_MpTextTokenId")]
         public override int Id { get; set; }
 
-        [Column("MpCopyItemTemplateGuid")]
+        [Column("MpTextTokenGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Ignore]
-        public Guid CopyItemTemplateGuid {
+        public Guid TextTokenGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
@@ -70,24 +70,24 @@ namespace MonkeyPaste {
         //public MpCopyItem CopyItem { get; set; }
         #endregion
 
-        public static async Task<MpCopyItemTemplate> Create(int copyItemId,string templateName, string templateColor = "") {
-            var dupCheck = await MpDataModelProvider.GetTemplateByNameAsync(copyItemId, templateName); //MpDb.GetItems<MpCopyItemTemplate>().Where(x =>x.CopyItemId == copyItemId && x.TemplateName.ToLower() == templateName.ToLower()).FirstOrDefault();
+        public static async Task<MpTextToken> Create(int copyItemId,string templateName, string templateColor = "") {
+            var dupCheck = await MpDataModelProvider.GetTemplateByNameAsync(copyItemId, templateName); //MpDb.GetItems<MpTextToken>().Where(x =>x.CopyItemId == copyItemId && x.TemplateName.ToLower() == templateName.ToLower()).FirstOrDefault();
             if (dupCheck != null) {
                 return dupCheck;
             }
-            var newCopyItemTemplate = new MpCopyItemTemplate() {
-                CopyItemTemplateGuid = System.Guid.NewGuid(),
+            var newTextToken = new MpTextToken() {
+                TextTokenGuid = System.Guid.NewGuid(),
                 CopyItemId = copyItemId,
                 TemplateName = templateName,
                 HexColor = string.IsNullOrEmpty(templateColor) ? MpHelpers.GetRandomColor().ToHex() : templateColor
             };
 
-            await newCopyItemTemplate.WriteToDatabaseAsync();
+            await newTextToken.WriteToDatabaseAsync();
 
-            return newCopyItemTemplate;
+            return newTextToken;
         }
 
-        public MpCopyItemTemplate() : base() { }
+        public MpTextToken() : base() { }
 
         public string ToHtml() {
             var c = string.IsNullOrEmpty(HexColor) ? Color.Red : Color.FromHex(HexColor);
@@ -109,7 +109,7 @@ namespace MonkeyPaste {
         }
 
         public string GetTokenName() {
-            return "MpCopyItemTemplate";
+            return "MpTextToken";
         }
 
         public int GetTokenId() {
@@ -140,13 +140,13 @@ namespace MonkeyPaste {
         }
 
         public object Clone(bool isReplica) {
-            var ccit = new MpCopyItemTemplate() {                
+            var ccit = new MpTextToken() {                
                 CopyItemId = this.CopyItemId,
                 TemplateName = this.TemplateName,
                 HexColor = this.HexColor,
                 TemplateText = this.TemplateText,
                 Id = isReplica ? 0 : this.Id,
-                CopyItemTemplateGuid = isReplica ? System.Guid.NewGuid() : this.CopyItemTemplateGuid,
+                TextTokenGuid = isReplica ? System.Guid.NewGuid() : this.TextTokenGuid,
             };
             return ccit;
         }

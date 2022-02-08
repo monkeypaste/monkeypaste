@@ -1,12 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Markup;
-using System.Windows.Media;
+using System.Windows.Controls.Primitives;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -62,6 +61,17 @@ namespace MpWpfApp {
                         } else {
                             fe.Loaded += Fe_Loaded;
                         }
+                        if(fe.GetType().IsSubclassOf(typeof(TextBoxBase))) {
+                            var tbb = fe as TextBoxBase;
+
+                            var descriptor = DependencyPropertyDescriptor.FromProperty(TextBoxBase.IsReadOnlyProperty,fe.GetType());
+                            
+                            if (descriptor == null) {
+                                return;
+                            }
+
+                            descriptor.AddValueChanged(tbb,Tbb_OnReadOnlyChanged);
+                        }
                     } else {
                         Fe_Unloaded(fe, null);
                     }
@@ -111,6 +121,18 @@ namespace MpWpfApp {
             fe.IsKeyboardFocusedChanged -= MpIsFocusedExtension_IsKeyboardFocusedChanged;
             fe.Loaded -= Fe_Loaded;
             fe.Unloaded -= Fe_Unloaded;
+
+            if (fe.GetType().IsSubclassOf(typeof(TextBoxBase))) {
+                var tbb = fe as TextBoxBase;
+
+                var descriptor = DependencyPropertyDescriptor.FromProperty(TextBoxBase.IsReadOnlyProperty, fe.GetType());
+
+                if (descriptor == null) {
+                    return;
+                }
+
+                descriptor.RemoveValueChanged(tbb, Tbb_OnReadOnlyChanged);
+            }
         }
 
         private static void Fe_Loaded(object sender, RoutedEventArgs e) {
@@ -119,8 +141,6 @@ namespace MpWpfApp {
             fe.GotFocus += Fe_GotFocus;
             fe.LostFocus += Fe_LostFocus;
         }
-
-
 
         private static void GotFocus(DependencyObject dpo) {
             IsAnyTextBoxFocused = true;
@@ -168,6 +188,14 @@ namespace MpWpfApp {
                 GotFocus(dpo);
             } else {
                 LostFocus(dpo);
+            }
+        }
+
+        private static void Tbb_OnReadOnlyChanged(object sender, EventArgs e) {
+            var tbb = sender as TextBoxBase;
+            if(GetIsFocused(tbb) && tbb.IsReadOnly) {
+                // when focused textbox becomes readonly need to make sure static IsAnyTextBoxFocused is toggled
+                LostFocus(tbb);
             }
         }
     }

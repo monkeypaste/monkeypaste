@@ -222,11 +222,7 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsResizing):
                     if(!IsResizing) {
-                        if(MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                            MpMessenger.Send<MpMessageType>(MpMessageType.ExpandComplete);
-                        } else {
-                            MpMessenger.Send<MpMessageType>(MpMessageType.UnexpandComplete);
-                        }
+                        MpMessenger.Send<MpMessageType>(MpMessageType.ResizingMainWindowComplete);
                     }
                     break;
             }
@@ -426,9 +422,9 @@ namespace MpWpfApp {
                             mw.Visibility = Visibility.Collapsed;
                             if (pasteDataObject != null) {
                                 await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject);
-                            } else if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                                MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsExpanded).IsExpanded = false;
-                            }
+                            }// else if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
+                            //    MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsExpanded).IsExpanded = false;
+                            //}
 
                             IsMainWindowLocked = false;
                             if (wasMainWindowLocked) {

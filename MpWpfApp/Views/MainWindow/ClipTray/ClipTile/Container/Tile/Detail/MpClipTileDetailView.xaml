@@ -50,7 +50,7 @@
                     Width="16"
                     Height="16"
                     HorizontalAlignment="Right"
-                    Command="{Binding Parent.ToggleExpandedCommand}"
+                    Command="{Binding Parent.ToggleReadOnlyCommand}"
                     MouseEnter="ClipTileToggleEditButton_MouseEnter"
                     MouseLeave="ClipTileToggleEditButton_MouseLeave"
                     Visibility="{Binding Parent.IsTextItem,

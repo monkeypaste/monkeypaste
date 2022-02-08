@@ -25,7 +25,7 @@ namespace MpWpfApp {
     }    
     public class MpTemplateViewModel : MpViewModelBase<MpTemplateCollectionViewModel>, ICloneable {
         #region Private Variables
-        private MpCopyItemTemplate _originalModel;
+        private MpTextToken _originalModel;
         #endregion
 
         #region Properties
@@ -84,7 +84,7 @@ namespace MpWpfApp {
 
         public Brush TemplateBorderBrush {
             get {
-                if(HostClipTileViewModel == null || !HostClipTileViewModel.IsExpanded) {
+                if(HostClipTileViewModel == null || HostClipTileViewModel.IsReadOnly) {
                     return Brushes.Transparent;
                 }
                 if(IsSelected) {
@@ -111,7 +111,7 @@ namespace MpWpfApp {
                 if(HostClipTileViewModel == null) {
                     return TemplateBrush;
                 }
-                if(HostClipTileViewModel.IsExpanded) {
+                if(!HostClipTileViewModel.IsReadOnly) {
                     if (IsHovering) {
                         return MpWpfColorHelpers.GetDarkerBrush(TemplateBrush);
                     }
@@ -218,7 +218,7 @@ namespace MpWpfApp {
                     HasText) {
                     return TemplateText;
                 }
-                return CopyItemTemplate.TemplateToken;
+                return TextToken.TemplateToken;
             }
         }
 
@@ -241,86 +241,86 @@ namespace MpWpfApp {
         #region Model Properties
         public bool IsNew {
             get {
-                if(CopyItemTemplate == null) {
+                if(TextToken == null) {
                     return false;
                 }
-                return CopyItemTemplate.Id == 0;
+                return TextToken.Id == 0;
             }
         }
 
         public bool WasNewOnEdit { get; set; } = false;
 
-        public int CopyItemTemplateId {
+        public int TextTokenId {
             get {
-                if (CopyItemTemplate == null) {
+                if (TextToken == null) {
                     return 0;
                 }
-                return CopyItemTemplate.Id;
+                return TextToken.Id;
             }
         }
 
         public int CopyItemId {
             get {
-                if(CopyItemTemplate == null) {
+                if(TextToken == null) {
                     return 0;
                 }
-                return CopyItemTemplate.CopyItemId;
+                return TextToken.CopyItemId;
             }
         }
 
         public string TemplateName {
             get {
-                if (CopyItemTemplate == null) {
+                if (TextToken == null) {
                     return "TEMPLATE UNKNOWN";
                 }
                 
-                return CopyItemTemplate.TemplateName;
+                return TextToken.TemplateName;
             }
             set {
-                if (CopyItemTemplate == null) {
+                if (TextToken == null) {
                     return;
                 }
-                if (CopyItemTemplate.TemplateName != value) {
-                    CopyItemTemplate.TemplateName = value;
+                if (TextToken.TemplateName != value) {
+                    TextToken.TemplateName = value;
                 }
 
                 OnPropertyChanged(nameof(TemplateName));
                 OnPropertyChanged(nameof(TemplateDisplayValue));
-                OnPropertyChanged(nameof(CopyItemTemplate));
+                OnPropertyChanged(nameof(TextToken));
             }
         }
 
         public Brush TemplateBrush {
             get {
-                if (CopyItemTemplate == null || string.IsNullOrEmpty(CopyItemTemplate.HexColor)) {
+                if (TextToken == null || string.IsNullOrEmpty(TextToken.HexColor)) {
                     return Brushes.Pink;
                 }
-                return new SolidColorBrush(CopyItemTemplate.HexColor.ToWinMediaColor());
+                return new SolidColorBrush(TextToken.HexColor.ToWinMediaColor());
             }
             set {
-                if (CopyItemTemplate != null) {
-                    CopyItemTemplate.HexColor = (value as SolidColorBrush).Color.ToHex();
+                if (TextToken != null) {
+                    TextToken.HexColor = (value as SolidColorBrush).Color.ToHex();
                     OnPropertyChanged(nameof(TemplateBrush));
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
                     OnPropertyChanged(nameof(TemplateBackgroundBrush));
-                    OnPropertyChanged(nameof(CopyItemTemplate));
+                    OnPropertyChanged(nameof(TextToken));
                 }
             }
         }
 
-        private MpCopyItemTemplate _copyItemTemplate = null;
-        public MpCopyItemTemplate CopyItemTemplate {
+        private MpTextToken _copyItemTemplate = null;
+        public MpTextToken TextToken {
             get {
                 return _copyItemTemplate;
             }
             set {
                 if (_copyItemTemplate != value) {
                     _copyItemTemplate = value;
-                    OnPropertyChanged(nameof(CopyItemTemplate));
+                    OnPropertyChanged(nameof(TextToken));
                     OnPropertyChanged(nameof(TemplateBrush));
                     OnPropertyChanged(nameof(TemplateName)); 
                     OnPropertyChanged(nameof(TemplateDisplayValue));
-                    OnPropertyChanged(nameof(CopyItemTemplateId));
+                    OnPropertyChanged(nameof(TextTokenId));
                     OnPropertyChanged(nameof(CopyItemId));
                 }
             }
@@ -339,9 +339,9 @@ namespace MpWpfApp {
 
         public MpTemplateViewModel() : base(null) { }
 
-        public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm, MpCopyItemTemplate cit) : base(thlcvm) {
+        public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm, MpTextToken cit) : base(thlcvm) {
              PropertyChanged += MpTemplateViewModel_PropertyChanged;
-            CopyItemTemplate = cit;
+            TextToken = cit;
         }
 
         #endregion
@@ -414,31 +414,26 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand EditTemplateCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        _originalModel = CopyItemTemplate.Clone() as MpCopyItemTemplate;
+        public ICommand EditTemplateCommand => new RelayCommand(
+            () => {
+                _originalModel = TextToken.Clone() as MpTextToken;
+                //Parent.ClearAllEditing();
+                //Parent.ClearSelection();
 
-                        //Parent.ClearAllEditing();
-                        //Parent.ClearSelection();
-
-                        IsSelected = true;
-                        IsEditingTemplate = true;
-                        Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
-                    },
-                    () => {
-                        if (HostClipTileViewModel == null) {
-                            return false;
-                        }
-                        return HostClipTileViewModel.IsExpanded;
-                    });
-            }
-        }
+                IsSelected = true;
+                IsEditingTemplate = true;
+                Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
+            },
+            () => {
+                if (HostClipTileViewModel == null) {
+                    return false;
+                }
+                return !HostClipTileViewModel.IsReadOnly;
+            });
 
         public ICommand DeleteTemplateCommand => new RelayCommand(
             async() => {
-                await CopyItemTemplate.DeleteFromDatabaseAsync();
+                await TextToken.DeleteFromDatabaseAsync();
             });
 
         public ICommand ClearTemplateCommand {
@@ -457,16 +452,16 @@ namespace MpWpfApp {
             async() => {
                 IsSelected = false;
                 if (WasNewOnEdit) {
-                    await Parent.RemoveItem(CopyItemTemplate, false);
+                    await Parent.RemoveItem(TextToken, false);
                 }
-                CopyItemTemplate = _originalModel;
+                TextToken = _originalModel;
                 IsEditingTemplate = false;
 
             });
 
         public ICommand OkCommand => new RelayCommand(
             async () => {
-                await CopyItemTemplate.WriteToDatabaseAsync();
+                await TextToken.WriteToDatabaseAsync();
                 //Parent.Parent.RequestSyncModels();
                 WasNewOnEdit = false;
                 IsEditingTemplate = false;
@@ -503,7 +498,7 @@ namespace MpWpfApp {
         }
 
         public object Clone() {
-            var nthlvm = new MpTemplateViewModel(Parent, CopyItemTemplate);
+            var nthlvm = new MpTemplateViewModel(Parent, TextToken);
             nthlvm.TemplateText = TemplateText;
             return nthlvm;
         }

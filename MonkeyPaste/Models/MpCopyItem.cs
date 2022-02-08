@@ -75,7 +75,7 @@ namespace MonkeyPaste {
         //public MpCopyItem Parent { get; set; }
 
         //[OneToMany]
-        //public List<MpCopyItemTemplate> Templates { get; set; }
+        //public List<MpTextToken> Templates { get; set; }
 
         //[OneToMany]
         //public List<MpShortcut> Shortcuts { get; set; }
@@ -406,7 +406,7 @@ namespace MonkeyPaste {
 
                 var templates = await MpDataModelProvider.GetTemplatesAsync(this.Id);
                 foreach (var template in templates) {
-                    var templateClone = template.Clone(true) as MpCopyItemTemplate;
+                    var templateClone = template.Clone(true) as MpTextToken;
                     templateClone.CopyItemId = newItem.Id;
                     await templateClone.WriteToDatabaseAsync();
                 }

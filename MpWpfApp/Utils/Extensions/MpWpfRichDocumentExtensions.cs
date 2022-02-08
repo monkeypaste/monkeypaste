@@ -23,11 +23,11 @@ namespace MpWpfApp {
         }
 
         public static void FitDocToRtb(this RichTextBox rtb) {
-            bool isExpanded = false;
+            bool isReadOnly = false;
             if (rtb.DataContext is MpContentItemViewModel civm) {
-                isExpanded = civm.Parent.IsExpanded;
+                isReadOnly = civm.IsReadOnly;
             }
-            if (isExpanded) {
+            if (!isReadOnly) {
                 var clv = rtb.GetVisualAncestor<MpContentListView>();
                 double w = clv == null ? rtb.ActualWidth : clv.ActualWidth;
                 double h = clv == null ? rtb.ActualHeight : clv.ActualHeight;

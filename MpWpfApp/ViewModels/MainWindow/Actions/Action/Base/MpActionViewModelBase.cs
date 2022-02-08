@@ -17,6 +17,11 @@ namespace MpWpfApp {
         void UnregisterTrigger(MpActionViewModelBase mvm);
     }
 
+    public class MpActionOutput {
+        public MpCopyItem CopyItem { get; set; }
+        public MpActionOutput Previous { get; set; }
+    }
+
     public abstract class MpActionViewModelBase :
         MpViewModelBase<MpActionCollectionViewModel>,
         MpIHoverableViewModel,
@@ -93,7 +98,8 @@ namespace MpWpfApp {
                 var triggerLabels = typeof(MpActionType).EnumToLabels();
                 for (int i = 0; i < triggerLabels.Length; i++) {
                     string resourceKey = string.Empty;
-                    switch ((MpActionType)i) {
+                    MpActionType at = (MpActionType)i;
+                    switch (at) {
                         case MpActionType.Analyze:
                             resourceKey = "BrainIcon";
                             break;
@@ -110,12 +116,21 @@ namespace MpWpfApp {
                             resourceKey = "AlarmClockIcon";
                             break;
                     }
+                    bool isVisible = true;
+                    if(at == MpActionType.None || at == MpActionType.Trigger) {
+                        isVisible = false;
+                    }
+                    if(GetType().IsSubclassOf(typeof(MpTriggerActionViewModelBase)) && 
+                       GetType() != typeof(MpCompareActionViewModelBase) && 
+                       at == MpActionType.Macro) {
+                        isVisible = false;
+                    }
                     amivml.Add(new MpMenuItemViewModel() {
                         IconResourceKey = Application.Current.Resources[resourceKey] as string,
                         Header = triggerLabels[i],
                         Command = IsPlaceholder ? ParentActionViewModel.AddChildActionCommand : AddChildActionCommand,
                         CommandParameter = (MpActionType)i,
-                        IsVisible = (MpActionType)i != MpActionType.None && (MpActionType)i != MpActionType.Trigger
+                        IsVisible = isVisible
                     });
                 }
                 return new MpMenuItemViewModel() {
@@ -401,7 +416,7 @@ namespace MpWpfApp {
 
         #region Events
 
-        public event EventHandler<MpCopyItem> OnActionComplete;
+        public event EventHandler<object> OnActionComplete;
 
         #endregion
 
@@ -451,7 +466,7 @@ namespace MpWpfApp {
                     avm = new MpClassifyActionViewModel(Parent);
                     break;
                 case MpActionType.Compare:
-                    avm = new MpCompareActionViewModel(Parent);
+                    avm = new MpCompareActionViewModelBase(Parent);
                     break;
                 case MpActionType.Macro:
                     avm = new MpMacroActionViewModel(Parent);
@@ -507,24 +522,27 @@ namespace MpWpfApp {
             IsEnabled = false;
         }
 
-        public void OnActionTriggered(object sender, MpCopyItem ci) {
+        public void OnActionTriggered(object sender, object args) {
             if(!IsEnabled) {
-                OnActionComplete?.Invoke(this, ci);
+                OnActionComplete?.Invoke(this, args);
                 return;
             }
             //OnAction?.Invoke(this, ci);
-            Task.Run(()=>PerformAction(ci));
+            Task.Run(()=>PerformAction(args));
         }
         
         public virtual void Validate() {
             this.FindAllChildren().ForEach(x => x.Validate());
             if(ActionType == MpActionType.None) {
                 ValidationText = "Select Action Type";
+            } else if(ParentActionViewModel != null && 
+                ParentActionViewModel.ActionType != MpActionType.Compare && this is MpCompareActionViewModelBase) {
+                ValidationText = "Macro's must be root level action's or a compare output";
             }
         }
 
 
-        public virtual async Task PerformAction(MpCopyItem arg) {
+        public virtual async Task PerformAction(object arg) {
             if (arg == null) {
                 return;
             }

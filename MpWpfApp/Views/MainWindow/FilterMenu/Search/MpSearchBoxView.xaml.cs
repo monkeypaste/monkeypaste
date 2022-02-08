@@ -85,9 +85,6 @@ namespace MpWpfApp {
                 foreach (var sfvm in BindingContext.Filters) {
                     _searchByContextMenu.Items.Add(CreateSearchByMenuItem(sfvm));
                 }
-                _searchByContextMenu.Items.Add(new Separator());
-                var picker = await CreateSavedSearchPicker();
-                _searchByContextMenu.Items.Add(picker);
             });
         }
 

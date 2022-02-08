@@ -10,7 +10,7 @@ namespace MpWpfApp {
                 return null;
             }
 
-            var cavm = item as MpCompareActionViewModel;
+            var cavm = item as MpCompareActionViewModelBase;
             if (cavm == null) {
                 return null;
             }

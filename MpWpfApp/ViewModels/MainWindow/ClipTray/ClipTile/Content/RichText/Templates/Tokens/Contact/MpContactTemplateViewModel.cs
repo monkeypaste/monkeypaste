@@ -12,7 +12,7 @@ namespace MpWpfApp {
         #region Model
         public MpContact Contact { get; set; }
 
-        public MpCopyItemTemplate CopyItemTemplate { get; set; }
+        public MpTextToken TextToken { get; set; }
         #endregion
 
         #endregion

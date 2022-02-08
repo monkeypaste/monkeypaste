@@ -23,8 +23,8 @@
                VerticalAlignment="Stretch">
         <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                     DockPanel.Dock="Top"
-                                    Visibility="{Binding Parent.IsExpanded,
-                                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                                    Visibility="{Binding IsReadOnly,
+                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                     DataContext="{Binding PrimaryItem}" />
         <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                          DockPanel.Dock="Bottom"

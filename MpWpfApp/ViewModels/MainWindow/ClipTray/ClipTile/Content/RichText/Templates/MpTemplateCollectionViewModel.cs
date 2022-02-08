@@ -115,7 +115,7 @@ namespace MpWpfApp {
             ClearSelection();
         }
 
-        public MpTemplateViewModel CreateTemplateViewModel(MpCopyItemTemplate ncit) {
+        public MpTemplateViewModel CreateTemplateViewModel(MpTextToken ncit) {
             MpTemplateViewModel ntvm = null;
 
             //check if template exists (it should)
@@ -169,13 +169,13 @@ namespace MpWpfApp {
             UpdateCommandsCanExecute();
         }
 
-        public async Task<bool> RemoveItem(MpCopyItemTemplate cit, bool removeAll) {
+        public async Task<bool> RemoveItem(MpTextToken cit, bool removeAll) {
             MpConsole.WriteLine("Removing template: " + cit.TemplateName);
             //returns true if this was the last instance of the template
-            var thlvmToRemove = Templates.Where(x => x.CopyItemTemplateId == cit.Id).FirstOrDefault();
+            var thlvmToRemove = Templates.Where(x => x.TextTokenId == cit.Id).FirstOrDefault();
             if(thlvmToRemove != null) {
                 if(removeAll || thlvmToRemove.InstanceCount == 1) {
-                    await thlvmToRemove.CopyItemTemplate.DeleteFromDatabaseAsync();
+                    await thlvmToRemove.TextToken.DeleteFromDatabaseAsync();
                     Templates.Remove(thlvmToRemove);
                 } else {
                     thlvmToRemove.InstanceCount--;
@@ -190,19 +190,19 @@ namespace MpWpfApp {
             string uniqueName = $"Template";
             string testName = string.Format(
                                         @"{0}{1}{2}{3}",
-                                        MpCopyItemTemplate.TEMPLATE_PREFIX,
+                                        MpTextToken.TEMPLATE_PREFIX,
                                         uniqueName.ToLower(),
                                         uniqueIdx,
-                                        MpCopyItemTemplate.TEMPLATE_SUFFIX);
+                                        MpTextToken.TEMPLATE_SUFFIX);
             string pt = Parent.CopyItem.ItemData.ToPlainText().ToLower();
             while (pt.Contains(testName) || Templates.Any(x => x.TemplateDisplayValue.ToLower() == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
                                         @"{0}{1}{2}{3}",
-                                        MpCopyItemTemplate.TEMPLATE_PREFIX,
+                                        MpTextToken.TEMPLATE_PREFIX,
                                         uniqueName.ToLower(),
                                         uniqueIdx,
-                                        MpCopyItemTemplate.TEMPLATE_SUFFIX);
+                                        MpTextToken.TEMPLATE_SUFFIX);
             }
             return uniqueName + uniqueIdx;
         }
@@ -235,7 +235,7 @@ namespace MpWpfApp {
             if (e is MpCopyItem ci) {
                 if(ci.Id == Parent.CopyItemId && Templates != null) {
                     foreach(var cit in Templates) {
-                        await MpDb.DeleteItemAsync<MpCopyItemTemplate>(cit.CopyItemTemplate);
+                        await MpDb.DeleteItemAsync<MpTextToken>(cit.TextToken);
                     }
                 }
             }
@@ -308,7 +308,7 @@ namespace MpWpfApp {
                 MpConsole.WriteLine("Unmodified item rtf: ");
                 MpConsole.WriteLine(rtf);
                 foreach (var thlvm in Templates) {
-                    rtf = rtf.Replace(thlvm.CopyItemTemplate.TemplateToken, thlvm.TemplateText);
+                    rtf = rtf.Replace(thlvm.TextToken.TemplateToken, thlvm.TemplateText);
                 }
                 Parent.TemplateRichText = rtf;
                 MpConsole.WriteLine("Pastable rtf: ");
