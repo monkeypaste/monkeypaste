@@ -22,12 +22,11 @@ namespace MpWpfApp {
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            var bs = MpBootstrapper.Init();
-            await bs.Initialize();
-
-            MpDb.OnInitDefaultNativeData += MpDb_OnInitDefaultNativeData;
 
             base.OnStartup(e);
+            await MpBootstrapper.Init();
+
+            MpDb.OnInitDefaultNativeData += MpDb_OnInitDefaultNativeData;
             base.MainWindow = new MpMainWindow();
         }
 
@@ -68,14 +67,14 @@ namespace MpWpfApp {
             var mivm = (sender as FrameworkElement).DataContext as MpMenuItemViewModel;
             mivm.Command.Execute(mivm.CommandParameter);
             if(sender is MenuItem mi) {
-                MpContextMenuView.CloseMenu();
+                MpContextMenuView.Instance.CloseMenu();
             }
         }
 
         private void Button_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             var mivm = (sender as FrameworkElement).DataContext as MpMenuItemViewModel;
             mivm.Command.Execute(mivm.CommandParameter);
-            MpContextMenuView.CloseMenu();
+            MpContextMenuView.Instance.CloseMenu();
         }
     }
 }

@@ -57,7 +57,7 @@ namespace MpWpfApp {
 
         public override int GetDropTargetRectIdx() {
             Point mp = Mouse.GetPosition(Application.Current.MainWindow);
-            MpConsole.WriteLine("Mouse Relative to Main Window: " + mp.ToString());
+            //MpConsole.WriteLine("Mouse Relative to Main Window: " + mp.ToString());
             if(GetDropTargetRects()[0].Contains(mp)) {
                 //Application.Current.MainWindow.Top = 20000;
                 IntPtr lastHandle = MpProcessHelper.MpProcessManager.LastHandle;

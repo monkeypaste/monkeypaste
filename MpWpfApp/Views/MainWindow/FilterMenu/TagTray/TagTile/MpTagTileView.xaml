@@ -18,9 +18,6 @@
     <AdornerDecorator>
         <StackPanel Orientation="Horizontal"
                     PreviewMouseRightButtonDown="StackPanel_PreviewMouseRightButtonDown">
-            <StackPanel.ContextMenu>
-                <local:MpContextMenuView DataContext="{Binding MenuItemViewModel}" />
-            </StackPanel.ContextMenu>
             <local:MpClipBorder x:Name="TagTileBorder"
                                 Loaded="TagTileBorder_Loaded"
                                 Unloaded="TagTileBorder_Unloaded"

@@ -143,8 +143,10 @@ namespace MpWpfApp {
             var ail = await MpDb.GetItemsAsync<MpAnalyticItem>();
             ail.Reverse();
             foreach (var ai in ail) {
-                var aivm = await CreateAnalyticItemViewModel(ai);
-                Items.Add(aivm);
+                if(Uri.IsWellFormedUriString(ai.EndPoint,UriKind.Absolute)) {
+                    var aivm = await CreateAnalyticItemViewModel(ai);
+                    Items.Add(aivm);
+                }                
             }
 
             var pail = MpPluginManager.Plugins.Where(x => x.Components.Any(y => y is MpIAnalyzerPluginComponent));
@@ -203,7 +205,7 @@ namespace MpWpfApp {
             var apl = new List<MpAnalyticItemViewModel>();
 
             for (int i = 0; i < plugin.types.Count; i++) {
-                for (int j = 0; j < plugin.types[i].analyzer.Count; j++) {
+                for (int j = 0; j < plugin.types[i].analyzers.Count; j++) {
                     MpPluginAnalyzerViewModel aivm = new MpPluginAnalyzerViewModel(this);
 
                     await aivm.InitializeAsync(plugin, i,j);

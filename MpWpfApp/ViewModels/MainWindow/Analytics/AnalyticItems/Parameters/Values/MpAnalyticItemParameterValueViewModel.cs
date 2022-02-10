@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Media;

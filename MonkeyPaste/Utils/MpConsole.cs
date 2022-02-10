@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace MonkeyPaste {
@@ -71,8 +72,9 @@ namespace MonkeyPaste {
 
         public static void WriteLine(string line) {
             line = line == null ? string.Empty : line;
-            string str = line.ToString(); 
-            if (MpPreferences.ThisDeviceType == MpUserDeviceType.Windows) {
+            string str = line.ToString();
+            string test = RuntimeInformation.FrameworkDescription;
+            if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework")) {
                 Console.WriteLine(str);
                 return;
             }
@@ -91,8 +93,8 @@ namespace MonkeyPaste {
             str = $"[{DateTime.Now.ToString()}] {str}";
             if (args != null && args.Length > 0) {
                 str = string.Format(str, args);
-            } 
-            if(MpPreferences.ThisDeviceType == MpUserDeviceType.Windows) {
+            }
+            if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework")) {
                 Console.WriteLine(str);
                 return;
             }

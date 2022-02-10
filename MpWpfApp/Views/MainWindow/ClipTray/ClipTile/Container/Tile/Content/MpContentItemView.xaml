@@ -59,9 +59,6 @@
                 </DrawingBrush.Drawing>
             </DrawingBrush>
         </Border.BorderBrush>
-        <Border.ContextMenu>
-            <local:MpContextMenuView />
-        </Border.ContextMenu>
         <Grid>
             <ContentControl x:Name="ContentView"
                             Content="{Binding .,

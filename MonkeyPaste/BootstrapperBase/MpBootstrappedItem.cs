@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpBootstrappedItem {
+        public object ItemArg { get; set; }
         public Type ItemType { get; set; }
+
+        public string Label => ItemType.ToString().Replace("Mp", string.Empty).ToLabel();
 
         public MpBootstrappedItem() { }
 
@@ -16,23 +19,44 @@ namespace MonkeyPaste {
             ItemType = itemType;
         }
 
+        public MpBootstrappedItem(Type itemType, object arg) : this(itemType) {
+            ItemArg = arg;
+        }
 
         public async Task Register() {
             var sw = Stopwatch.StartNew();
+            object itemObj = null;
+            object[] args = ItemArg == null ? null : new[] { ItemArg };
+            MethodInfo initMethodInfo = null;
+            PropertyInfo propertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
 
-            // Get a PropertyInfo of specific property type(T).GetProperty(....)
-            PropertyInfo propertyInfo;
-            propertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
+            if(propertyInfo == null) {
+                initMethodInfo = ItemType.GetMethod("Init", BindingFlags.Static | BindingFlags.Public);
+                if (initMethodInfo == null) {
+                    return;
+                }
+            } else {
+                itemObj = propertyInfo.GetValue(null, null);
 
-            // Use the PropertyInfo to retrieve the value from the type by not passing in an instance
-            object itemObj = propertyInfo.GetValue(null, null);
+                initMethodInfo = ItemType.GetMethod("Init");
+                if(itemObj == null || initMethodInfo == null) {
+                    return;
+                }
+            }
 
-            var initMethod = ItemType.GetMethod("Init");
-            var initTask = (Task)initMethod.Invoke(itemObj, null);
-            await initTask;
+            if(initMethodInfo.ReturnType == typeof(Task)) {
+                var initTask = (Task)initMethodInfo.Invoke(itemObj, args);
+                await initTask;
+            } else {
+                initMethodInfo.Invoke(itemObj, args);
+            }
+
+            
 
             sw.Stop();
-            MpConsole.WriteLine($"{itemObj.GetType()} loaded in {sw.ElapsedMilliseconds} ms");
+            MpConsole.WriteLine($"{ItemType} loaded in {sw.ElapsedMilliseconds} ms");
+
+            await Task.Delay(300);
         }
     }
 }

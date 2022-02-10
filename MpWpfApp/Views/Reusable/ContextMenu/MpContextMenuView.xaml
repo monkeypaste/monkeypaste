@@ -7,8 +7,6 @@
              mc:Ignorable="d"
              xmlns:local="clr-namespace:MpWpfApp"
              xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-             Loaded="ContextMenuView_Loaded"
-             Opened="ContextMenuView_Opened"
              UsesItemContainerTemplate="True"
              ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"
              d:DataContext="{d:DesignInstance Type=pcl:MpMenuItemViewModel,

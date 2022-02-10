@@ -129,6 +129,7 @@ namespace MpWpfApp {
                 System.Windows.Controls.Primitives.PopupAnimation.Slide,
                 MpPreferences.NotificationBalloonVisibilityTimeMs);
         }
+
         #endregion
 
         #region Public Methods

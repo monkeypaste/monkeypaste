@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using SQLite;
 using Windows.Foundation.Collections;
 
@@ -193,7 +194,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyticItemParameter Parameter { get; protected set; }
+        public MpAnalyticItemParameterFormat Parameter { get; protected set; }
 
         #endregion
 
@@ -217,7 +218,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public abstract Task InitializeAsync(MpAnalyticItemParameter aip);
+        public abstract Task InitializeAsync(MpAnalyticItemParameterFormat aip);
         
         public async Task<MpAnalyticItemParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, MpAnalyticItemParameterValue valueSeed) {
             var naipvvm = new MpAnalyticItemParameterValueViewModel(this);

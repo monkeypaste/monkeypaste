@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Newtonsoft.Json;
 using System.Web;
 using System.Windows;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public abstract class MpAnalyticItemViewModel : 
@@ -408,7 +409,7 @@ namespace MpWpfApp {
             return uniqueName + uniqueIdx;
         }
 
-        public virtual async Task<MpAnalyticItemParameter> DeferredCreateParameterModel(MpAnalyticItemParameter aip) {
+        public virtual async Task<MpAnalyticItemParameterFormat> DeferredCreateParameterModel(MpAnalyticItemParameterFormat aip) {
             //used to load remote content and called from CreateParameterViewModel in preset
             await Task.Delay(1);
             return aip;

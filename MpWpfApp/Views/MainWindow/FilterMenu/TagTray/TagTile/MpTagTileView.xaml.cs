@@ -103,7 +103,9 @@ namespace MpWpfApp {
 
             e.Handled = true;
             var fe = sender as FrameworkElement;
-            fe.ContextMenu.DataContext = BindingContext.MenuItemViewModel;
+
+            MpContextMenuView.Instance.DataContext = BindingContext.MenuItemViewModel;
+            fe.ContextMenu = MpContextMenuView.Instance;
             fe.ContextMenu.PlacementTarget = this;
             fe.ContextMenu.IsOpen = true;
         }

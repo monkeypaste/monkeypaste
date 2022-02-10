@@ -267,4 +267,8 @@
   <ItemGroup>
     <Page Include="Resources\Styles\MpPagingListBoxResourceDictionary.xaml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj" />
+  </ItemGroup>
 </Project>

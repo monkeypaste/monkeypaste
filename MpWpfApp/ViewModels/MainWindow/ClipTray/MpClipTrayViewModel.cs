@@ -1347,13 +1347,15 @@ namespace MpWpfApp {
 
             int totalItems =  MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
 
-            MpStandardBalloonViewModel.ShowBalloon(
-                    "Monkey Paste",
-                    "Successfully loaded w/ " + totalItems + " items",
-                    MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+            MpLoaderBalloonView.Instance.BindingContext.PostLoadedMessage =
+                $"Successfully loaded w/ {totalItems} items";
 
             MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
             MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
+
+            await Task.Delay(3000);
+
+            MpLoaderBalloonView.Instance.CloseBalloon();
         }
 
 
@@ -1521,8 +1523,13 @@ namespace MpWpfApp {
 
                 pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+
                 
+                if(!IsAnyTilePinned) {
+                    PinTrayTotalWidth = PinTrayScreenWidth = 0;
+                }
                 OnPropertyChanged(nameof(IsAnyTilePinned));
+                OnPropertyChanged(nameof(ClipTrayScreenWidth));                
             },
             (args) => args != null && 
                       (args is MpClipTileViewModel || 

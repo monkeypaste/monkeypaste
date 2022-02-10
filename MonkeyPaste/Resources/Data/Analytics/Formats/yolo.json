@@ -22,6 +22,26 @@
           "isDefault": true
         }
       ]
+    },
+    {
+      "label": "Image File Path",
+      "parameterType": "Text",
+      "valueType": "PlainText",
+      "enumId": 2,
+      "sortOrderIdx": 1,
+      "isReadOnly": true,
+      "isRequired": false,
+      "isVisible": false
+    },
+    {
+      "label": "Image Base 64",
+      "parameterType": "Text",
+      "valueType": "PlainText",
+      "enumId": 3,
+      "sortOrderIdx": 2,
+      "isReadOnly": true,
+      "isRequired": false,
+      "isVisible": false
     }
   ]
 }

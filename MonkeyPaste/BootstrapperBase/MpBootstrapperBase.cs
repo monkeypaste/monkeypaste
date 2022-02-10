@@ -6,25 +6,32 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public abstract class MpBootstrapperBase {
-        private List<MpBootstrappedItem> _items = new List<MpBootstrappedItem>();
+        protected static MpLoaderBalloonViewModel _loader;
+        
+        protected static List<MpBootstrappedItem> _items = new List<MpBootstrappedItem>();
 
-        public MpBootstrapperBase(MpINativeInterfaceWrapper niw) {
-            MpNativeWrapper.Init(niw);
-            MpPreferences.Init(niw.GetPreferenceIO());
-            MpRegEx.Init();
-            MpDb.Init(niw.GetDbInfo());
-            MpDataModelProvider.Init(niw.GetQueryInfo());
-            //warning! plugin manager has issue trying to load netstandard2.1 and wpf can't load it
-            MpPluginManager.Init();
+        public MpBootstrapperBase(MpINativeInterfaceWrapper niw, MpLoaderBalloonViewModel loader) {
+            _loader = loader;
+
+            _items.AddRange(
+                new List<MpBootstrappedItem>() {
+                    new MpBootstrappedItem(typeof(MpConsole)),
+                    new MpBootstrappedItem(typeof(MpNativeWrapper),niw),
+                    new MpBootstrappedItem(typeof(MpPreferences),niw.GetPreferenceIO()),                    
+                    new MpBootstrappedItem(typeof(MpRegEx)),
+                    new MpBootstrappedItem(typeof(MpDb),niw.GetDbInfo()),
+                    new MpBootstrappedItem(typeof(MpDataModelProvider),niw.GetQueryInfo()),
+                    new MpBootstrappedItem(typeof(MpPluginManager))
+                }
+                );
         }
 
-        public virtual async Task Initialize() {
-            for (int i = 0; i < _items.Count; i++) {
-                if(_items[i].ItemType == typeof(MpDb)) {
-                    Debugger.Break();
-                }
-                await _items[i].Register();
-            }            
+        public abstract Task Initialize();
+
+        protected void ReportItemLoading(MpBootstrappedItem item, int index) {
+            MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
+            _loader.Info = $"Loading {item.Label}";
+            _loader.PercentLoaded = (double)((double)(index + 1) / (double)_items.Count);
         }
     }
 }

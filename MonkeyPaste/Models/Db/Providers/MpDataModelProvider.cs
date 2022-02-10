@@ -649,6 +649,15 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public static async Task<MpAnalyticItem> GetAnalyticItemByGuid(string guid) {
+            string query = $"select * from MpAnalyticItem where MpAnalyticItemGuid=?";
+            var result = await MpDb.QueryAsync<MpAnalyticItem>(query, guid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
         public static async Task<List<MpAnalyticItemPreset>> GetAllQuickActionAnalyzers() {
             string query = $"select * from MpAnalyticItemPreset where IsQuickAction=1";
             var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query);
@@ -712,20 +721,6 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        public static async Task<MpAnalyticItemParameter> GetAnalyticItemParameterByKey(int analyticItemId, string key) {
-            string query = $"select * from MpAnalyticItemParameter where Key=? and fk_MpAnalyticItemId=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItemParameter>(query, key,analyticItemId);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
-
-        public static async Task<List<MpAnalyticItemParameterValue>> GetAnalyticItemParameterValuesByParamId(int paramId) {
-            string query = $"select * from MpAnalyticItemParameterValue where fk_MpAnalyticItemParameterId=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItemParameterValue>(query, paramId);
-            return result;
-        }
 
         #endregion MpAnalyticItem
 

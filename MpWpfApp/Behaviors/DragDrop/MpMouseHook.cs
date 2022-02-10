@@ -19,7 +19,7 @@ namespace MpWpfApp {
         public static long LeftMouseClicks { get; private set; }
         public static long RightMouseClicks { get; private set; }
 
-        public static void Initialize() {
+        public static void Init() {
             _hookID = SetHook(_proc);
         }
 

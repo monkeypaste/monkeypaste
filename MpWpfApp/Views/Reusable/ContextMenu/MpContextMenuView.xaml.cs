@@ -17,26 +17,21 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     
-    public partial class MpContextMenuView : ContextMenu {
-        public static MpContextMenuView CurrentContextMenu;
+    public partial class MpContextMenuView : ContextMenu, MpISingleton<MpContextMenu> {
+        private static MpContextMenuView _instance;
+        public static MpContextMenuView Instance => _instance ?? (_instance = new MpContextMenuView());
 
-        public static void CloseMenu() {
-            if(CurrentContextMenu == null) {
-                return;
+        public async Task Init() {
+            await Task.Delay(1);
+        }
+
+        public void CloseMenu() {
+            if(IsLoaded) {
+                IsOpen = false;
             }
-            CurrentContextMenu.IsOpen = false;
         }
         public MpContextMenuView() {
             InitializeComponent();
-        }
-
-        private void ContextMenuView_Loaded(object sender, RoutedEventArgs e) {
-            CurrentContextMenu = sender as MpContextMenuView;
-            
-        }
-
-        private void ContextMenuView_Opened(object sender, RoutedEventArgs e) {
-            ItemsSource = (DataContext as MpMenuItemViewModel).SubItems;
         }
     }
 }

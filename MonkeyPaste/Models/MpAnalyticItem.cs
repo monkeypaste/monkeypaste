@@ -1,7 +1,9 @@
-﻿using SQLite;
+﻿using Newtonsoft.Json;
+using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,21 +107,33 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAnalyticItem> Create(
-            string endPoint,
-            string apiKey,
-            MpCopyItemType inputFormat,
-            MpOutputFormatType outputFormat,
-            string title,
-            string description,
-            string parameterFormatResourcePath,
+            string endPoint = "",
+            string apiKey = "",
+            MpCopyItemType inputFormat = MpCopyItemType.None,
+            MpOutputFormatType outputFormat = MpOutputFormatType.None,
+            string title = "",
+            string description = "",
+            string parameterFormatResourcePath = "",
             int sortOrderIdx = -1,
             int iconId = 0,
             string guid = "") {
-            var dupItem = await MpDataModelProvider.GetAnalyticItemByEndpoint(endPoint);
+            MpAnalyticItem dupItem = null;
+
+            if (!string.IsNullOrEmpty(guid)) {
+                dupItem = await MpDataModelProvider.GetAnalyticItemByGuid(guid);
+                if (dupItem != null) {
+                    dupItem = await MpDb.GetItemAsync<MpAnalyticItem>(dupItem.Id);
+                    return dupItem;
+                }
+            }
+
+            dupItem = await MpDataModelProvider.GetAnalyticItemByEndpoint(endPoint);
             if (dupItem != null) {
                 dupItem = await MpDb.GetItemAsync<MpAnalyticItem>(dupItem.Id);
                 return dupItem;
             }
+
+            
 
             if (sortOrderIdx < 0) {
                 sortOrderIdx = await MpDataModelProvider.GetAnalyticItemCount();
@@ -153,17 +167,37 @@ namespace MonkeyPaste {
 
             await newAnalyticItem.WriteToDatabaseAsync();
 
-            //create default preset
-            var defPreset = await MpAnalyticItemPreset.Create(
-                analyticItem: newAnalyticItem,
-                label: "Default",
-                icon: newAnalyticItem.Icon,
-                isDefault: true,
-                isQuickAction: false,
-                sortOrderIdx: 0,
-                description: $"This is the default preset for '{newAnalyticItem.Title}' and cannot be removed");
 
-            await defPreset.WriteToDatabaseAsync();
+            //if(File.Exists(parameterFormatResourcePath)) {
+            //    string formatJson = MpFileIo.ReadTextFromFileOrResource(parameterFormatResourcePath);
+            //    var analyzerFormat = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(formatJson);
+            //    var presets = new List<MpAnalyticItemPreset>();
+            //    foreach (var presetFormat in analyzerFormat.ParameterFormats) {
+            //        int idx = analyzerFormat.ParameterFormats.IndexOf(presetFormat);
+
+            //        var aip = await MpAnalyticItemPreset.Create(
+            //            analyticItem: newAnalyticItem,
+            //            isDefault: idx == 0,
+            //            label: presetFormat.Label,
+            //            icon: newAnalyticItem.Icon,
+            //            sortOrderIdx: idx,
+            //            description: presetFormat.Description);
+
+            //        var aipvl = new List<MpAnalyticItemPresetParameterValue>();
+            //        foreach (var paramVal in presetFormat.Values) {
+            //            var aippv = await MpAnalyticItemPresetParameterValue.Create(
+            //                parentItem: aip,
+            //                paramEnumId: presetFormat.EnumId,
+            //                value: paramVal.Value);
+                               
+            //            aipvl.Add(aippv);
+            //        }
+
+            //        presets.Add(aip);
+            //    }
+
+            //    newAnalyticItem.Presets = presets;
+            //}
 
             return newAnalyticItem;
         }

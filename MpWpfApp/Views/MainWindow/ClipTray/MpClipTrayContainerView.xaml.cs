@@ -22,14 +22,6 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private void GridSplitter_MouseEnter(object sender, MouseEventArgs e) {
-            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeWE;
-        }
-
-        private void GridSplitter_MouseLeave(object sender, MouseEventArgs e) {
-            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
-        }
-
         private void ClipTraySplitter_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             if(ClipTraySplitter.IsEnabled) {
                 //pin tray has items

@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Plugin {
     public enum MpAnalyticItemParameterType {
         None = 0,
         Button,
@@ -11,6 +12,7 @@ namespace MonkeyPaste {
         ComboBox,
         CheckBox,
         Slider,
+        Content
         //RuntimeMinOffset,//below are only runtime types        
     }
 
@@ -44,7 +46,7 @@ namespace MonkeyPaste {
         public bool IsMaximum { get; set; } = false;
     }
 
-    public class MpAnalyticItemParameter {
+    public class MpAnalyticItemParameterFormat {
         [JsonProperty("label")]
         public string Label { get; set; }
 
@@ -87,6 +89,64 @@ namespace MonkeyPaste {
 
     public class MpAnalyticItemFormat {
         [JsonProperty("parameters")]
-        public List<MpAnalyticItemParameter> ParameterFormats { get; set; }
+        public List<MpAnalyticItemParameterFormat> ParameterFormats { get; set; }
+    }
+
+    public class MpAnalyzerPluginFormat {
+        public string guid { get; set; }
+        public MpAnalyzerPluginInputFormat inputType { get; set; }
+        public MpAnalyzerPluginOutputFormat outputType { get; set; }
+
+        public string endpoint { get; set; }
+
+        public List<MpAnalyticItemParameterFormat> parameters { get; set; }
+        public List<MpAnalyzerPresetFormat> presets { get; set; }
+    }    
+
+    public class MpAnalyzerPluginBoxResponseValueFormat {
+        public double x { get; set; }
+        public double y { get; set; }
+        public double width { get; set; }
+        public double height { get; set; }
+    }
+
+    public class MpAnalyzerPluginInputFormat {
+        public bool plaintext { get; set; }
+        public bool richtext { get; set; }
+        public bool html { get; set; }
+        public bool image { get; set; }
+        public bool file { get; set; }
+    }
+
+    public class MpAnalyzerPluginOutputFormat {
+        public bool text { get; set; }
+        public bool image { get; set; }
+        public bool box { get; set; }
+        public bool file { get; set; }
+    }
+
+    public class MpAnalyzerPresetFormat {
+        public string label { get; set; }
+        public string description { get; set; }
+        public List<MpAnalyzerPresetValueFormat> values { get; set; }
+    }
+
+    public class MpAnalyzerPresetValueFormat {
+        public int enumId { get; set; }
+        public string label { get; set; }
+        public string value { get; set; }
+    }
+
+    public class MpAnalyzerPluginRequestValueFormat {
+        public int enumId { get; set; }
+        public string value { get; set; }
+    }
+
+    public class MpAnalyzerPluginResponseValueFormat {
+        public string text { get; set; }
+        public string imageBase64 { get; set; }
+        public MpAnalyzerPluginBoxResponseValueFormat box { get; set; }
+        public double decimalVal { get; set; }
+        public int intVal { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Azure;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using Newtonsoft.Json;
 using Windows.Globalization;
 using Xamarin.Forms.Internals;
@@ -38,7 +39,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task<MpAnalyticItemParameter> DeferredCreateParameterModel(MpAnalyticItemParameter aip) {
+        public override async Task<MpAnalyticItemParameterFormat> DeferredCreateParameterModel(MpAnalyticItemParameterFormat aip) {
             IsBusy = true;
 
             if (!MpLanguageTranslator.IsLoaded) {

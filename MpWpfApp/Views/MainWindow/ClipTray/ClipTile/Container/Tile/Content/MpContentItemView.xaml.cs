@@ -107,11 +107,9 @@ namespace MpWpfApp {
 
             e.Handled = true;
             var fe = sender as FrameworkElement;
-            if(MpContextMenuView.CurrentContextMenu == null) {
-                MpContextMenuView.CurrentContextMenu = new MpContextMenuView();
-            }
-            MpContextMenuView.CurrentContextMenu.DataContext = MpClipTrayViewModel.Instance.MenuItemViewModel;
-            fe.ContextMenu = MpContextMenuView.CurrentContextMenu;
+
+            MpContextMenuView.Instance.DataContext = MpClipTrayViewModel.Instance.MenuItemViewModel;
+            fe.ContextMenu = MpContextMenuView.Instance;
             fe.ContextMenu.PlacementTarget = this;
             fe.ContextMenu.IsOpen = true;
         }

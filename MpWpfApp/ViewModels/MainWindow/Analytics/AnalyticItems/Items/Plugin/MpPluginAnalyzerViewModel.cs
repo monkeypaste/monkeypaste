@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using MonkeyPaste.Plugin;
-using static SQLite.SQLite3;
+using  MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpPluginAnalyzerViewModel : MpAnalyticItemViewModel {
@@ -19,7 +18,7 @@ namespace MpWpfApp {
 
         public MpAnalyzerPluginFormat AnalyzerPluginFormat { get; set; }
 
-        public MpIAnalyzerPluginComponent AnalyzerPluginComponent { get; set; }
+        public MonkeyPaste.Plugin.MpIAnalyzerPluginComponent AnalyzerPluginComponent { get; set; }
         #endregion
 
         #endregion
@@ -40,7 +39,7 @@ namespace MpWpfApp {
             }
             IsBusy = true;
 
-            AnalyzerPluginFormat = plugin.types[typeIdx].analyzer[analyzerIdx];
+            AnalyzerPluginFormat = plugin.types[typeIdx].analyzers[analyzerIdx];
             var compObj = plugin.Components.FirstOrDefault(x => x is MpIAnalyzerPluginComponent);
             if(compObj == null) {
                 throw new Exception("Cannot find component");
@@ -56,70 +55,71 @@ namespace MpWpfApp {
             icon = icon == null ? MpPreferences.ThisAppSource.App.Icon : icon;
 
             MpCopyItemType inputFormat = MpCopyItemType.None;
-            if(AnalyzerPluginFormat.inputTypes[0].image) {
+            if(AnalyzerPluginFormat.inputType.image) {
                 inputFormat = MpCopyItemType.Image;
+            } // TODO add other formats as plugins are implemented
+
+
+            string resourcePath = null;
+            if(AnalyzerPluginComponent is MpCommandLinePlugin clp) {
+                resourcePath = clp.Endpoint;
+            } else {
+                // TODO will need to add MpHttpPlugin and check if the component is local/remote
+                // when its remote set endpoint, etc. (def need to stay flexible w/ api token stuff)
             }
 
-            MpOutputFormatType outputFormat = MpOutputFormatType.None;
-            if (AnalyzerPluginFormat.outputTypes[0].text) {
-                outputFormat |= MpOutputFormatType.Text;
-            }
-            if (AnalyzerPluginFormat.outputTypes[0].boundingbox) {
-                outputFormat |= MpOutputFormatType.BoundingBox;
-            }
+
             AnalyticItem = await MpAnalyticItem.Create(
                 guid: AnalyzerPluginFormat.guid,
                 title: plugin.title,
                 description: plugin.description,
                 endPoint: AnalyzerPluginComponent.GetType().AssemblyQualifiedName,
                 inputFormat: inputFormat,
-                outputFormat: outputFormat,
                 iconId: icon.Id,
-                parameterFormatResourcePath: AnalyzerPluginFormat.parametersResourcePath,
+                parameterFormatResourcePath: resourcePath,
                 apiKey: string.Empty);
 
 
-            var presets = new List<MpAnalyticItemPreset>();
-            foreach (var presetFormat in AnalyzerPluginFormat.presets) {
-                int idx = AnalyzerPluginFormat.presets.IndexOf(presetFormat);
-                int presetId = MpHelpers.Rand.Next(1000, int.MaxValue);
-                var aipvl = new List<MpAnalyticItemPresetParameterValue>();
-                foreach(var paramVal in presetFormat.values) {
-                    var aippv = new MpAnalyticItemPresetParameterValue() {
-                        AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
-                        AnalyticItemPresetId = presetId,
-                        ParameterEnumId = paramVal.enumId,
-                        Value = paramVal.value
-                    };
-                    aipvl.Add(aippv);
-                }
-                var aip = new MpAnalyticItemPreset() {
-                    Id = presetId,
-                    AnalyticItem = AnalyticItem,
-                    AnalyticItemId = AnalyticItem.Id,
-                    IsDefault = idx == 0,
-                    Label = presetFormat.label,
-                    SortOrderIdx = AnalyzerPluginFormat.presets.IndexOf(presetFormat),
-                    PresetParameterValues = aipvl
-                };
-                presets.Add(aip);
-            }
+            
 
             // Init Presets
             //ParameterFormatJsonStr = JsonConvert.SerializeObject(AnalyzerPluginFormat.parametersResourcePath);
 
             PresetViewModels.Clear();
 
-            if (AnalyticItem.Presets.Count == 0) {
-                var naipvm = await CreatePresetViewModel(null);
-                PresetViewModels.Add(naipvm);
-            } else {
-                foreach (var preset in AnalyticItem.Presets.OrderBy(x => x.SortOrderIdx)) {
-                    var naipvm = await CreatePresetViewModel(preset);
-                    PresetViewModels.Add(naipvm);
-                }
-            }
+            if(AnalyticItem.Presets == null || AnalyticItem.Presets.Count == 0) {
+                //for new plugins create default presets
+                for (int i = 0; i < AnalyzerPluginFormat.presets.Count; i++) {
+                    var preset = AnalyzerPluginFormat.presets[i];
 
+                    var aip = await MpAnalyticItemPreset.Create(
+                        analyticItem: AnalyticItem,
+                        isDefault: i == 0,
+                        label: preset.label,
+                        icon: AnalyticItem.Icon,
+                        sortOrderIdx: i,
+                        description: preset.description);
+
+                    foreach(var paramVal in preset.values) {
+                        var aipv = await MpAnalyticItemPresetParameterValue.Create(
+                            parentItem: aip,
+                            paramEnumId: paramVal.enumId,
+                            value: paramVal.value);
+
+                        aip.PresetParameterValues.Add(aipv);
+                    }
+
+                    AnalyticItem.Presets.Add(aip);
+                }
+            } 
+            if (AnalyticItem.Presets == null || AnalyticItem.Presets.Count == 0) {
+                AnalyticItem.Presets = new List<MpAnalyticItemPreset>() { null };
+            } 
+
+            foreach (var preset in AnalyticItem.Presets) {
+                var naipvm = await CreatePresetViewModel(preset);
+                PresetViewModels.Add(naipvm);
+            }
             PresetViewModels.OrderBy(x => x.SortOrderIdx);
 
             var defPreset = PresetViewModels.FirstOrDefault(x => x.IsDefault);
@@ -137,45 +137,60 @@ namespace MpWpfApp {
             }
 
             IsBusy = true;
-            MonkeyPaste.MpAnalyzerPluginRequestFormat requestFormat = new MonkeyPaste.MpAnalyzerPluginRequestFormat();
 
-            var request = new List<MonkeyPaste.MpAnalyzerPluginTransactionValueFormat>();
+            var requestItems = new List<MpAnalyzerPluginRequestValueFormat>();
 
             var paramLookup = SelectedPresetViewModel.ParamLookup;
-            foreach(var reqVal in requestFormat.values) {
+            foreach(var kvp in paramLookup) {
+                MpAnalyzerPluginRequestValueFormat request = new MpAnalyzerPluginRequestValueFormat();
 
-                string curVal;
-                if(reqVal.enumId == 0) {
-                    //for content parameter
-                    curVal = obj.ToString();
-                } else {
-                    curVal = paramLookup[reqVal.enumId].CurrentValue;
+                var paramFormat = AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.EnumId == kvp.Key);
+                if(paramFormat == null) {
+                    continue;
                 }
-                request.Add(new MonkeyPaste.MpAnalyzerPluginTransactionValueFormat() {
-                    enumId = reqVal.enumId,
-                    valueType = reqVal.valueType,
-                    name = reqVal.name,
-                    value = curVal
-                });
+                if(paramFormat.ParameterType == MpAnalyticItemParameterType.Content) {
+                    // TODO (maybe)need to implement a request format so other properties can be passed
+                    request = new MpAnalyzerPluginRequestValueFormat() {
+                        enumId = kvp.Key,
+                        value = obj.ToString()
+                    };
+                } else {
+                    request = new MpAnalyzerPluginRequestValueFormat() {
+                        enumId = kvp.Key,
+                        value = kvp.Value.CurrentValue
+                    };
+                }
+                requestItems.Add(request);
             }
 
-            var resultObj = await AnalyzerPluginComponent.Analyze(request);
+            var resultObj = await AnalyzerPluginComponent.AnalyzeAsync(JsonConvert.SerializeObject(requestItems));
 
-            var results = new List<MonkeyPaste.MpAnalyzerPluginTransactionValueFormat>();
-            var temp = JsonConvert.DeserializeObject<MonkeyPaste.MpAnalyzerPluginTransactionValueFormat>(resultObj.ToString());
+            var results = new List<MpAnalyzerPluginResponseValueFormat>();
+            var temp = JsonConvert.DeserializeObject<MpAnalyzerPluginResponseValueFormat>(resultObj.ToString());
 
             if (temp == null) {
-                results = JsonConvert.DeserializeObject<List<MonkeyPaste.MpAnalyzerPluginTransactionValueFormat>>(resultObj.ToString());
+                results = JsonConvert.DeserializeObject<List<MpAnalyzerPluginResponseValueFormat>>(resultObj.ToString());
             } else {
                 results.Add(temp);
             }
 
-            if (AnalyzerPluginFormat.outputTypes[0].boundingbox) {
-                var bbl = new List<MpDetectedImageItem>();
+            
+            if (AnalyzerPluginFormat.outputType.box) {
+                var bbl = new List<MpDetectedImageObject>();
 
-                foreach(var result in results) {
-                        
+                foreach (var item in results) {
+                    var dio = new MpDetectedImageObject() {
+                        X = item.box.x,
+                        Y = item.box.y,
+                        Width = item.box.width,
+                        Height = item.box.height,
+                        ObjectTypeName = item.text,
+                        Confidence = item.decimalVal
+                    };
+                    bbl.Add(dio);
                 }
+                await Task.WhenAll(bbl.Select(x => x.WriteToDatabaseAsync()));
+
             }
             IsBusy = false;
 

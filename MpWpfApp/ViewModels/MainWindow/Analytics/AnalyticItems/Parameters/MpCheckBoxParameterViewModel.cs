@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace MpWpfApp {
 
         public MpCheckBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 
-        public override async Task InitializeAsync(MpAnalyticItemParameter aip) {
+        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip) {
             IsBusy = true;
 
             Parameter = aip;

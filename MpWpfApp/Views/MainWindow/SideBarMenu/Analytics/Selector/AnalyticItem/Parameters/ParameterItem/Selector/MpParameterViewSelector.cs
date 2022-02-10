@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpSliderValueViewSelector : DataTemplateSelector {

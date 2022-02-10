@@ -23,11 +23,19 @@ namespace MonkeyPaste {
 
         [Ignore]
         public string Guid { get; set; }
+
+        [Ignore]
+        public bool IsReadOnly { get; set; } = false;
+
         #endregion
 
         #region Public Methods
 
         public MpDbModelBase() { }
+
+        public static int GetUniqueId() {
+            return MpHelpers.Rand.Next(int.MaxValue - 10000, int.MaxValue);
+        }
 
         public void StartSync(string sourceGuid) {
             SyncingWithDeviceGuid = sourceGuid;
@@ -38,6 +46,10 @@ namespace MonkeyPaste {
         }
 
         public virtual async Task WriteToDatabaseAsync(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if(IsReadOnly) {
+                MpConsole.WriteTraceLine($"Warning, trying to write read-only data object: '{GetType()}' ignoring");
+                return;
+            }
             if (string.IsNullOrEmpty(sourceClientGuid)) {
                 sourceClientGuid = MpPreferences.ThisDeviceGuid;
             }
@@ -60,6 +72,10 @@ namespace MonkeyPaste {
         }
 
         public virtual async Task DeleteFromDatabaseAsync(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (IsReadOnly) {
+                MpConsole.WriteTraceLine($"Warning, trying to delete read-only data object: '{GetType()}' ignoring");
+                return;
+            }
             if (Id <= 0) {
                 return;
             }

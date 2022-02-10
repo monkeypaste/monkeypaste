@@ -116,6 +116,7 @@
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpHoverableExtension.cs" />
     <Compile Include="AttachedProperties\MpScrollViewerExtension.cs" />
+    <Compile Include="AttachedProperties\MpSizeObserverExtension.cs" />
     <Compile Include="Attributes\Affects\Base\MpAffectsBaseAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsThisAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsSiblingAttribute.cs" />
@@ -282,6 +283,7 @@
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Yolo\MpYoloViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpMultiSelectComboBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpContentParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
@@ -550,6 +552,9 @@
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\ContextMenu\Selector\MpSelectorItemDataTemplateSelector.cs" />
+    <Compile Include="Views\Reusable\Loader\MpLoaderBalloonView.xaml.cs">
+      <DependentUpon>MpLoaderBalloonView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml.cs">
       <DependentUpon>MpTextBoxMessageBox.xaml</DependentUpon>
     </Compile>
@@ -856,6 +861,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Reusable\Loader\MpLoaderBalloonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

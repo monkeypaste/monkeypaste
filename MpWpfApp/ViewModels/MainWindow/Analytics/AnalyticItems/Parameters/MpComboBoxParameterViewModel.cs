@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpComboBoxParameterViewModel : MpAnalyticItemParameterViewModel {
@@ -72,7 +73,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemParameter aip) {
+        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip) {
             IsBusy = true;
             
             Parameter = aip;

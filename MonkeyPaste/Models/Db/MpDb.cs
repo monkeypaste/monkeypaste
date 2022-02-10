@@ -46,11 +46,8 @@ namespace MonkeyPaste {
         #region Constructors
 
 
-        public static void Init(MpIDbInfo dbInfo) {
+        public static async Task Init(MpIDbInfo dbInfo) {
             _dbInfo = dbInfo;
-        }
-
-        public static async Task Init() {
             var sw = new Stopwatch();
             sw.Start();
             //MpPreferences.StartupDateTime = DateTime.Now;
@@ -59,6 +56,7 @@ namespace MonkeyPaste {
             sw.Stop();
             MpConsole.WriteLine($"Db loading: {sw.ElapsedMilliseconds} ms");
         }
+
 
         #endregion
 

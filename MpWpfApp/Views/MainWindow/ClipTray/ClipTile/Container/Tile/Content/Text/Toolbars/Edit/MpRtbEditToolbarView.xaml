@@ -22,7 +22,7 @@
         <Border.Resources>
             <RichTextBox x:Key="CurrentRtbTarget" />
         </Border.Resources>
-        <StackPanel Orientation="Horizontal">
+        <WrapPanel>
             <Button x:Name="PrintButton"
                     Margin="10,1,0,1"
                     Click="PrintButton_Click"
@@ -263,6 +263,6 @@
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </Button>-->
-        </StackPanel>
+        </WrapPanel>
     </Border>
 </local:MpUserControl>

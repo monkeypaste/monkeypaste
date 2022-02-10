@@ -3,6 +3,7 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -109,9 +110,13 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAnalyticItemPreset> Create(
-            MpAnalyticItem analyticItem, 
-            string label,
-            MpIcon icon = null, bool isDefault = false, bool isQuickAction = false, int sortOrderIdx = -1, string description = "") {
+            MpAnalyticItem analyticItem = null, 
+            string label = "",
+            MpIcon icon = null, 
+            bool isDefault = false, 
+            bool isQuickAction = false, 
+            int sortOrderIdx = -1, 
+            string description = "") {
             if (analyticItem == null || analyticItem.Icon == null) {
                 throw new Exception("Preset must be associated with an item");
             }
@@ -134,10 +139,14 @@ namespace MonkeyPaste {
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 
-            string formatJson = MpFileIo.ReadTextFromResource(analyticItem.ParameterFormatResourcePath);
+            string formatJson = null;
 
-            var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
-                formatJson, new MpJsonEnumConverter()).ParameterFormats;
+            //for local plugins resource file is in same folder as its console application and named "parameters.json"
+            formatJson = MpFileIo.ReadTextFromFileOrResource(analyticItem.ParameterFormatResourcePath);
+
+
+            var paramlist = JsonConvert.DeserializeObject<MonkeyPaste.Plugin.MpAnalyzerPluginFormat>(
+                formatJson, new MpJsonEnumConverter()).parameters;
 
             foreach(var param in paramlist.OrderBy(x=>x.SortOrderIdx)) {
                 string defValue = string.Empty;

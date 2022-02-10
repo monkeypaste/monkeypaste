@@ -9,6 +9,12 @@ namespace MonkeyPaste {
     public static class MpStringExtensions {
         private static Random _Rand;
 
+        public static string Escape(this string badString) {
+            return badString.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace(">", "&gt;").Replace("<", "&lt;");
+
+        }
+
+
         public static bool IsFile(this string str) {
             return File.Exists(str);
         }

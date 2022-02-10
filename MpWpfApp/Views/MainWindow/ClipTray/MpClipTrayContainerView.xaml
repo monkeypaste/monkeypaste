@@ -18,8 +18,6 @@
         </Grid.ColumnDefinitions>
         <local:MpPinTrayView x:Name="PinTrayView"
                              Grid.Column="0"
-                             Width="{Binding PinTrayScreenWidth,
-                                             Mode=OneWayToSource}"
                              DataContext="{Binding}"
                              Visibility="{Binding IsAnyTilePinned,
                                                   Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -30,8 +28,8 @@
                       IsEnabled="{Binding IsAnyTilePinned}"
                       Visibility="{Binding IsAnyTilePinned,
                                            Converter={StaticResource BoolToVisibilityConverter}}"
-                      MouseEnter="GridSplitter_MouseEnter"
-                      MouseLeave="GridSplitter_MouseLeave"
+                      local:MpHoverableExtension.IsEnabled="True"
+                      local:MpHoverableExtension.HoverCursor="ResizeWE"
                       MouseDoubleClick="ClipTraySplitter_MouseDoubleClick"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Stretch"

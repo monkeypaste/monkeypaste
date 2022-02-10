@@ -48,9 +48,9 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAnalyticItemPresetParameterValue> Create(
-            MpAnalyticItemPreset parentItem, 
-            int paramEnumId, 
-            string value) {
+            MpAnalyticItemPreset parentItem = null, 
+            int paramEnumId = 0, 
+            string value = "") {
             if (parentItem == null) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }

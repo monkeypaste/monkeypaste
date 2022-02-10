@@ -24,7 +24,7 @@ namespace MpClipboardHelper {
 
         #region Public Methods
 
-        public static void Start() {
+        public static void Init() {
             //MpClipboardWatcher.Start();
             //MpClipboardWatcher.OnClipboardChange += MpClipboardWatcher_OnClipboardChange;
 

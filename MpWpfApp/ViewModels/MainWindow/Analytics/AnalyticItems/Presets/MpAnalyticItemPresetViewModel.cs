@@ -13,6 +13,7 @@ using FFImageLoading.Helpers.Exif;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using Newtonsoft.Json;
 using Windows.UI.Xaml.Controls.Maps;
 
@@ -271,14 +272,20 @@ namespace MpWpfApp {
                 Preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
             }
 
-            Assembly assembly = null;
-            if(Parent is MpPluginAnalyzerViewModel pavm) {
-                assembly = pavm.AnalyzerPluginComponent.GetType().Assembly;
-            }
-            string formatJson = MpFileIo.ReadTextFromResource(Parent.AnalyticItem.ParameterFormatResourcePath,assembly);
+            List<MpAnalyticItemParameterFormat> paramlist = null;
+            
+            if (Parent is MpPluginAnalyzerViewModel pavm) {
+                paramlist = pavm.AnalyzerPluginFormat.parameters;
+            } else {
+                var assembly = typeof(MpDb).Assembly;
 
-            var paramlist = JsonConvert.DeserializeObject<MpAnalyticItemFormat>(
-                formatJson, new MpJsonEnumConverter()).ParameterFormats;
+                string formatJson = MpFileIo.ReadTextFromFileOrResource(Parent.AnalyticItem.ParameterFormatResourcePath, assembly);
+
+                paramlist = JsonConvert.DeserializeObject<MpAnalyzerPluginFormat>(
+                    formatJson, new MpJsonEnumConverter()).parameters;
+            }
+
+            
 
             foreach (var param in paramlist.OrderBy(x => x.SortOrderIdx)) {
                 var presetVal = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == param.EnumId);
@@ -295,7 +302,7 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameter aip, MpAnalyticItemPresetParameterValue aippv) {
+        public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameterFormat aip, MpAnalyticItemPresetParameterValue aippv) {
             MpAnalyticItemParameterViewModel naipvm = null;
 
             switch (aip.ParameterType) {
@@ -314,6 +321,9 @@ namespace MpWpfApp {
                     break;
                 case MpAnalyticItemParameterType.Slider:
                     naipvm = new MpSliderParameterViewModel(this);
+                    break;
+                case MpAnalyticItemParameterType.Content:
+                    naipvm = new MpContentParameterViewModel(this);
                     break;
                 default:
                     throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterType), aip.ParameterType));
@@ -337,7 +347,7 @@ namespace MpWpfApp {
                     var mvl = aippv.Value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                     aip.Values.ForEach(x => x.IsDefault = mvl.Any(y => y.ToLower() == x.Value.ToLower()));
                 } else {
-                    aip.Values.FirstOrDefault(x => x.IsDefault).Value = aippv.Value;
+                    //aip.Values.FirstOrDefault(x => x.IsDefault).Value = aippv.Value;
                 }
             }
 

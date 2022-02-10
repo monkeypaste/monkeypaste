@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpMultiSelectComboBoxParameterViewModel : MpComboBoxParameterViewModel {
@@ -66,7 +67,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemParameter aip) {
+        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip) {
             await base.InitializeAsync(aip);
             foreach (var spv in ValueViewModels.Where(x => x.IsDefault)) {
                 SelectedViewModels.Add(spv);

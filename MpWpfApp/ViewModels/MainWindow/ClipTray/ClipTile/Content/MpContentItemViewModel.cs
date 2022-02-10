@@ -1162,7 +1162,7 @@ namespace MpWpfApp {
                 CopyItemColorBrush = CopyItemColor.ToSolidColorBrush();
                 TitleSwirlViewModel.ForceBrush(CopyItemColorBrush);
 
-                MpContextMenuView.CloseMenu();
+                MpContextMenuView.Instance.CloseMenu();
             });
 
         public ICommand ChangeColorCommand => new RelayCommand<Brush>(

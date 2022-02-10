@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
-    public class MpTextBoxParameterViewModel : MpAnalyticItemParameterViewModel  {
+    public class MpContentParameterViewModel : MpAnalyticItemParameterViewModel  {
         #region Private Variables
         
         private string _defaultValue;
@@ -32,9 +32,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpTextBoxParameterViewModel() : base(null) { }
+        public MpContentParameterViewModel() : base(null) { }
 
-        public MpTextBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
+        public MpContentParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 
         #endregion
 
@@ -46,7 +46,12 @@ namespace MpWpfApp {
             Parameter = aip;
 
             if(Parameter.Values.Count > 0) {
-                _defaultValue = aip.Values.FirstOrDefault(x => x.IsDefault).Value;
+                var defParamVal = aip.Values.FirstOrDefault(x => x.IsDefault);
+                if(defParamVal == null) {
+                    _defaultValue = aip.Values[0].Value;
+                } else {
+                    _defaultValue = defParamVal.Value;
+                }                
             } else {
                 _defaultValue = string.Empty;
             }
@@ -68,13 +73,13 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(DefaultValue));
             OnPropertyChanged(nameof(CurrentValue));
 
-            OnValidate += MpTextBoxParameterViewModel_OnValidate;
+            OnValidate += MpContentParameterViewModel_OnValidate;
             await Task.Delay(1);
 
             IsBusy = false;
         }
 
-        private void MpTextBoxParameterViewModel_OnValidate(object sender, EventArgs e) {
+        private void MpContentParameterViewModel_OnValidate(object sender, EventArgs e) {
             //if (!IsRequired) {
             //    return true;
             //}

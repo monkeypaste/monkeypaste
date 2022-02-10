@@ -51,6 +51,13 @@ namespace MonkeyPaste {
             }
         }
 
+        public static string ReadTextFromFileOrResource(string fileOrResourcePath, Assembly assembly = null) {
+            if(File.Exists(fileOrResourcePath)) {
+                return ReadTextFromFile(fileOrResourcePath);
+            }
+            return ReadTextFromResource(fileOrResourcePath, assembly);
+        }
+
         public static string ReadTextFromFile(string filePath) {
             try {
                 using (StreamReader f = new StreamReader(filePath)) {

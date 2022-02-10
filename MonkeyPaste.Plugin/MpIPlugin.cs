@@ -2,7 +2,8 @@
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Plugin {
-    public interface MpIPlugin { }
+    public interface MpIPlugin { 
+    }
 
     public interface MpIClipboardItemPluginComponent : MpIPlugin {
         object GetDataObject();
@@ -10,7 +11,7 @@ namespace MonkeyPaste.Plugin {
     }
 
     public interface MpIAnalyzerPluginComponent : MpIPlugin {
-        Task<object> Analyze(object args);
+        Task<object> AnalyzeAsync(object args);
     }
 
     public interface MpITransformerPluginComponent : MpIPlugin {
