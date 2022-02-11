@@ -125,9 +125,9 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpCopyItem> Create(
-            MpSource source, 
-            string data, 
-            MpCopyItemType itemType,
+            MpSource source = null, 
+            string data = "", 
+            MpCopyItemType itemType = MpCopyItemType.None,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
             if (MpPreferences.IgnoreNewDuplicates && dupCheck != null) {
@@ -435,8 +435,6 @@ namespace MonkeyPaste {
         None = 0,
         Text,
         Image,
-        FileList,
-       // Csv, //this is only used during runtime
-        Html
+        FileList
     }
 }

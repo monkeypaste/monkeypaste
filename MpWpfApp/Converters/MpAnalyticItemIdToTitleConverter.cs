@@ -7,7 +7,7 @@ using System.Linq;
 namespace MpWpfApp {
     public class MpAnalyticItemIdToTitleConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            var aivm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == (int)value);
+            var aivm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyzerPluginSudoId == (int)value);
             if(aivm == null) {
                 return null;
             }

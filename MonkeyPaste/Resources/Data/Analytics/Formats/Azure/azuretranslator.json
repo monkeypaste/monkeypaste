@@ -2,8 +2,8 @@
   "parameters": [
     {
       "label": "From Language",
-      "parameterType": "ComboBox",
-      "valueType": "PlainText",
+      "parameterControlType": "ComboBox",
+      "parameterValueType": "PlainText",
       "enumId": 1,
       "sortOrderIdx": 0,
       "isReadOnly": false,
@@ -19,8 +19,8 @@
     },
     {
       "label": "To Language",
-      "parameterType": "ComboBox",
-      "valueType": "PlainText",
+      "parameterControlType": "ComboBox",
+      "parameterValueType": "PlainText",
       "enumId": 2,
       "sortOrderIdx": 1,
       "isReadOnly": false,

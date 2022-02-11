@@ -48,10 +48,10 @@ namespace MpWpfApp {
 
             foreach(var lcat in MpLanguageTranslator.LanguageCodesAndTitles) {
                 var laipv = new MpAnalyticItemParameterValue() {
-                    Label = string.Format(@"{0} - {1}",lcat.Value.LanguageName, lcat.Value.NativeName),
-                    Value = lcat.Key.ToString()
+                    label = string.Format(@"{0} - {1}",lcat.Value.LanguageName, lcat.Value.NativeName),
+                    value = lcat.Key.ToString()
                 };
-                aip.Values.Add(laipv);
+                aip.values.Add(laipv);
             }
 
             IsBusy = false;
@@ -82,7 +82,7 @@ namespace MpWpfApp {
         #region Protected Methods
 
 
-        protected override async Task<MpRestTransaction> ExecuteAnalysis(object obj) {
+        protected override async Task<MpAnalyzerTransaction> ExecuteAnalysis(object obj) {
             IsBusy = true;
             var paramLookup = SelectedPresetViewModel.ParamLookup;
 
@@ -96,7 +96,7 @@ namespace MpWpfApp {
 
             IsBusy = false;
 
-            return new MpRestTransaction() {
+            return new MpAnalyzerTransaction() {
                 Request = new MpAzureTranslateRequestFormat() {
                     FromCode = fromCode,
                     ToCode = toCode

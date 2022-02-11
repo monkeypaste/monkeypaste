@@ -53,7 +53,7 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task<MpRestTransaction> ExecuteAnalysis(object obj) {
+        protected override async Task<MpAnalyzerTransaction> ExecuteAnalysis(object obj) {
             IsBusy = true;
 
             var paramLookup = SelectedPresetViewModel.ParamLookup;
@@ -65,19 +65,20 @@ namespace MpWpfApp {
             IsBusy = false;
 
             //return new Tuple<object, object>(response,minConfidence);
-            return new MpRestTransaction() {
+            return new MpAnalyzerTransaction() {
                 Request = minConfidence,
                 Response = response
             };
         }
 
-        protected override async Task<MpCopyItem> ConvertToCopyItem(int parentCopyItemId, MpRestTransaction trans, bool suppressWrite = false) {
+        protected override async Task<MpCopyItem> ApplyAnalysisToContent(
+            MpCopyItem ci, MpAnalyzerTransaction trans, bool suppressWrite = false) {
             object reqStr = trans.Request;
             object resultData = trans.Response;
 
             var app = MpPreferences.ThisAppSource.App;
-            var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, reqStr.ToString());
-            var source = await MpSource.Create(app, url);
+            var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, reqStr.ToString());
+            var source = await MpSource.Create(MpPreferences.ThisAppSource.App, url);
 
             var yoloResponse = JsonConvert.DeserializeObject<MpYoloResponse>(resultData.ToString());
             if(yoloResponse == null) {
@@ -89,23 +90,23 @@ namespace MpWpfApp {
                     Y = yoloBox.Y,
                     Width = yoloBox.Width,
                     Height = yoloBox.Height,
-                    Confidence = yoloBox.Score,
-                    ObjectTypeName = yoloBox.Label,
+                    Score = yoloBox.Score,
+                    Label = yoloBox.Label,
                     DetectedImageObjectGuid = System.Guid.NewGuid(),
-                    CopyItemId = parentCopyItemId
+                    CopyItemId = ci.Id
                 };
                 if(!suppressWrite) {
                     await dio.WriteToDatabaseAsync();
                 }
             }
 
-            var ci = await MpDb.GetItemAsync<MpCopyItem>(parentCopyItemId);
+            ci = await MpDb.GetItemAsync<MpCopyItem>(ci.Id);
             ci.ItemDescription = reqStr.ToString();
             if (!suppressWrite) {
                 await ci.WriteToDatabaseAsync();
             }
 
-            var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(parentCopyItemId);
+            var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id);
             if (scivm == null) {
                 return ci;
             }

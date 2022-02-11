@@ -2344,8 +2344,8 @@ namespace MpWpfApp {
 
         public ICommand AnalyzeSelectedItemCommand => new RelayCommand<int>(
             async (presetId) => {
-                var preset = await MpDataModelProvider.GetAnalyzerPresetById(presetId);
-                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == preset.AnalyticItemId);
+                var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>((int)presetId);
+                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyzerPluginSudoId == preset.AnalyzerPluginSudoId);
                 var presetVm = analyticItemVm.PresetViewModels.FirstOrDefault(x => x.Preset.Id == preset.Id);                
 
                 var prevSelectedPresetVm = analyticItemVm.SelectedPresetViewModel;

@@ -2,8 +2,8 @@
   "parameters": [
     {
       "label": "Confidence",
-      "parameterType": "Slider",
-      "valueType": "Decimal",
+      "parameterControlType": "Slider",
+      "parameterValueType": "Decimal",
       "enumId": 1,
       "sortOrderIdx": 0,
       "isReadOnly": false,
@@ -25,8 +25,8 @@
     },
     {
       "label": "Image File Path",
-      "parameterType": "Text",
-      "valueType": "PlainText",
+      "parameterControlType": "Text",
+      "parameterValueType": "PlainText",
       "enumId": 2,
       "sortOrderIdx": 1,
       "isReadOnly": true,
@@ -35,8 +35,8 @@
     },
     {
       "label": "Image Base 64",
-      "parameterType": "Text",
-      "valueType": "PlainText",
+      "parameterControlType": "Text",
+      "parameterValueType": "PlainText",
       "enumId": 3,
       "sortOrderIdx": 2,
       "isReadOnly": true,

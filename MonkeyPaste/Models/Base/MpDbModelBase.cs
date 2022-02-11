@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,10 +58,17 @@ namespace MonkeyPaste {
                 Guid = System.Guid.NewGuid().ToString();
             }
 
-            var dbot = GetType();
-            var addOrUpdateAsyncMethod = typeof(MpDb).GetMethod(nameof(MpDb.AddOrUpdateAsync));
-            var addOrUpdateByDboTypeAsyncMethod = addOrUpdateAsyncMethod.MakeGenericMethod(new[] { dbot });
-            await addOrUpdateByDboTypeAsyncMethod.InvokeAsync(null, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
+            try {
+                var dbot = GetType();
+                var addOrUpdateAsyncMethod = typeof(MpDb).GetMethod(nameof(MpDb.AddOrUpdateAsync));
+                var addOrUpdateByDboTypeAsyncMethod = addOrUpdateAsyncMethod.MakeGenericMethod(new[] { dbot });
+                await addOrUpdateByDboTypeAsyncMethod.InvokeAsync(null, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+                Debugger.Break();
+            }
+
+            
         }
 
         public virtual async Task WriteToDatabaseAsync() {

@@ -277,10 +277,6 @@
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
     <Compile Include="Utils\RESTful\MpYoloTransaction.cs" />
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Azure\ImageAnalysis\MpAzureImageAnalysisViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\OpenAi\MpOpenAiViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Plugin\MpPluginAnalyzerViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Yolo\MpYoloViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpMultiSelectComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpContentParameterViewModel.cs" />
@@ -289,7 +285,6 @@
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Items\Azure\Translator\MpTranslatorViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\MpAnalyticItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Values\MpAnalyticItemParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModel.cs" />
@@ -362,6 +357,7 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\MpDetectedObjectsCollectionView.xaml.cs">
       <DependentUpon>MpDetectedObjectsCollectionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Selector\MpTextViewTempalteSelector.cs" />
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml.cs">
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>

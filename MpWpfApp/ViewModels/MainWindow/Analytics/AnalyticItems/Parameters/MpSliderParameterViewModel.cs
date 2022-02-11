@@ -28,7 +28,7 @@ namespace MpWpfApp {
                     return 0;
                 }
                 
-                switch(Parameter.ValueType) {
+                switch(Parameter.parameterValueType) {
                     case MpAnalyticItemParameterValueUnitType.Integer:
                         return IntValue;
                     case MpAnalyticItemParameterValueUnitType.Decimal:
@@ -50,13 +50,13 @@ namespace MpWpfApp {
                 if(Parameter == null) {
                     return double.MinValue;
                 }
-                var minCond = Parameter.Values.FirstOrDefault(x => x.IsMinimum);
+                var minCond = Parameter.values.FirstOrDefault(x => x.isMinimum);
                 if (minCond != null) {
                     try {
-                        return Convert.ToDouble(minCond.Value);
+                        return Convert.ToDouble(minCond.value);
                     }
                     catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Minimum val: {minCond.Value} could not conver to int, exception: {ex}");                        
+                        MpConsole.WriteTraceLine($"Minimum val: {minCond.value} could not conver to int, exception: {ex}");                        
                     }
                 }
                 return double.MinValue;
@@ -68,13 +68,13 @@ namespace MpWpfApp {
                 if (Parameter == null) {
                     return double.MaxValue;
                 }
-                var maxCond = Parameter.Values.FirstOrDefault(x => x.IsMaximum);
+                var maxCond = Parameter.values.FirstOrDefault(x => x.isMaximum);
                 if (maxCond != null) {
                     try {
-                        return Convert.ToDouble(maxCond.Value);
+                        return Convert.ToDouble(maxCond.value);
                     }
                     catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Minimum val: {maxCond.Value} could not conver to int, exception: {ex}");
+                        MpConsole.WriteTraceLine($"Minimum val: {maxCond.value} could not conver to int, exception: {ex}");
                     }
                 }
                 return 0;
@@ -86,10 +86,10 @@ namespace MpWpfApp {
                 if(Parameter == null) {
                     return 0.1;
                 }
-                if(string.IsNullOrEmpty(Parameter.FormatInfo)) {
+                if(string.IsNullOrEmpty(Parameter.formatInfo)) {
                     return (Max - Min) / 10;
                 }
-                return Convert.ToDouble(Parameter.FormatInfo);
+                return Convert.ToDouble(Parameter.formatInfo);
             }
         }
 

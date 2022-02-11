@@ -1,0 +1,83 @@
+{
+  "title": "Yolo Local Dll Plugin Example",
+  "description": "local image analysis",
+  "version": "1.0",
+  "credits": "Somebody",
+  "guid": "f0988931-c39a-4ea4-b39a-32346c23094b",
+  "iconUrl": "https://upload.wikimedia.org/wikipedia/en/c/c1/Keshia_Knight_Pulliam_as_Rudy_Huxtable.jpg",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "image": true
+    },
+    "outputType": {
+      "box": true
+    },
+    "parameters": [
+      {
+        "label": "Confidence",
+        "description": "A value between 0 and 1 of the estimated accuracy of the analysis",
+        "parameterControlType": "Slider",
+        "parameterValueType": "Decimal",
+        "enumId": 1,
+        "sortOrderIdx": 0,
+        "isReadOnly": false,
+        "isRequired": true,
+        "values": [
+          {
+            "value": "0",
+            "isMinimum": true
+          },
+          {
+            "value": "1",
+            "isMaximum": true
+          },
+          {
+            "value": "0.3",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The base64-encoded image to analyze",
+        "parameterControlType": "Hidden",
+        "parameterValueType": "Base64Text",
+        "enumId": 2,
+        "sortOrderIdx": 1,
+        "isRequired": true,
+        "isVisible": false,
+        "values": [
+          {
+            "value": "ItemData"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "isDefault": true,
+        "label": "Default",
+        "description": "A reliable but loosely accurate analysis of detected image objects",
+        "values": [
+          {
+            "enumId": 1,
+            "value": "0.3"
+          }
+        ]
+      },
+      {
+        "label": "EXTREME !!",
+        "description": "Only very confident detections to avoid false positives",
+        "values": [
+          {
+            "enumId": 1,
+            "value": "0.9"
+          }
+        ]
+      }
+    ]
+  }
+}

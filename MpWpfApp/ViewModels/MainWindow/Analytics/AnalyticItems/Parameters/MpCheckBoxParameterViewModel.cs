@@ -35,12 +35,12 @@ namespace MpWpfApp {
 
             Parameter = aip;
 
-            if (Parameter == null || Parameter.Values == null) {
+            if (Parameter == null || Parameter.values == null) {
                 ResetToDefault();
             } else {
-                MpAnalyticItemParameterValue defVal = Parameter.Values.FirstOrDefault(x => x.IsDefault);
+                MpAnalyticItemParameterValue defVal = Parameter.values.FirstOrDefault(x => x.isDefault);
                 if (defVal != null) {
-                    _defaultValue = defVal.Value;
+                    _defaultValue = defVal.value;
                 } else {
                     _defaultValue = "0";
                 }

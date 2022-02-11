@@ -227,7 +227,7 @@ namespace MonkeyPaste {
             }
 
             if(!string.IsNullOrEmpty(sortClause)) {
-                sortClause += qi.IsDescending ? " DESC" : sortClause;
+                sortClause = qi.IsDescending ? sortClause + " DESC" : sortClause;
             }
 
             if (!string.IsNullOrEmpty(tagClause)) {
@@ -670,45 +670,19 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<MpAnalyticItemPreset> GetAnalyzerPresetById(int aipid) {
-            string query = $"select * from MpAnalyticItemPreset where pk_MpAnalyticItemPresetId=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query,aipid);
+
+        public static async Task<MpAnalyticItemPreset> GetAnalyticItemDefaultPreset(string aguid) {
+            string query = $"select * from MpAnalyticItemPreset where AnalyzerPluginGuid=? and b_IsDefault=1";
+            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query, aguid);
             if (result == null || result.Count == 0) {
                 return null;
             }
             return result[0];
         }
 
-        public static async Task<MpAnalyticItem> GetAnalyticItemByTitle(string title) {
-            string query = $"select * from MpAnalyticItem where Title=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItem>(query, title);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
-
-        public static async Task<MpAnalyticItemPreset> GetAnalyticItemPresetByLabel(int aiid, string label) {
-            string query = $"select * from MpAnalyticItemPreset where fk_MpAnalyticItemId=? and Label=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query, aiid,label);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
-
-        public static async Task<MpAnalyticItemPreset> GetAnalyticItemDefaultPreset(int aiid) {
-            string query = $"select * from MpAnalyticItemPreset where fk_MpAnalyticItemId=? and b_IsDefault=1";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query, aiid);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
-
-        public static async Task<List<MpAnalyticItemPreset>> GetAnalyticItemPresetsById(int aiid) {
-            string query = $"select * from MpAnalyticItemPreset where fk_MpAnalyticItemId=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query, aiid);
+        public static async Task<List<MpAnalyticItemPreset>> GetAnalyticItemPresetsByAnalyzerGuid(string aguid) {
+            string query = $"select * from MpAnalyticItemPreset where AnalyzerPluginGuid=?";
+            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query, aguid);
             return result;
         }
 

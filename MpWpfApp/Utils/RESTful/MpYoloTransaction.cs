@@ -29,7 +29,7 @@ namespace MpWpfApp {
                             double score = Math.Round(item.Score, 2);
                             
                             if (score >= minConfidence) {
-                                var dio = new MpDetectedImageItem() {
+                                var dio = new MpYoloBox() {
                                     Score = (double)item.Score,
                                     X = (double)item.Rectangle.X,
                                     Y = (double)item.Rectangle.Y,

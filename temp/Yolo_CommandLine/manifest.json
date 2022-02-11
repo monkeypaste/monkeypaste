@@ -1,0 +1,88 @@
+{
+  "title": "YoloPlugin",
+  "description": "local image analysis",
+  "version": "1.0",
+  "credits": "Somebody",
+  "iconUrl": "https://upload.wikimedia.org/wikipedia/en/c/c1/Keshia_Knight_Pulliam_as_Rudy_Huxtable.jpg",
+  "types": [
+    {
+      "analyzers": [
+        {
+          "guid": "f0988931-c39a-4ea4-b39a-32346c23094b",
+          "inputType": {
+            "image": true
+          },
+          "outputType": {
+            "box": true
+          },
+          "pluginType": {
+            "isCommandLine": true
+          },
+          "endpoint": "yolo.exe",
+          "parameters": [
+            {
+              "label": "Confidence",
+              "parameterControlType": "Slider",
+              "parameterValueType": "Decimal",
+              "enumId": 1,
+              "sortOrderIdx": 0,
+              "isReadOnly": false,
+              "isRequired": true,
+              "values": [
+                {
+                  "value": "0",
+                  "isMinimum": true
+                },
+                {
+                  "value": "1",
+                  "isMaximum": true
+                },
+                {
+                  "value": "0.3",
+                  "isDefault": true
+                }
+              ]
+            },
+            {
+              "label": "Image Base 64",
+              "parameterControlType": "Content",
+              "parameterValueType": "PlainText",
+              "enumId": 2,
+              "sortOrderIdx": 1,
+              "isReadOnly": true,
+              "isRequired": false,
+              "isVisible": false,
+              "values": [
+                {
+                  "value": "ItemData"
+                }
+              ]
+            }
+          ],
+          "presets": [
+            {
+              "label": "Default",
+              "description": "default description",
+              "values": [
+                {
+                  "enumId": 1,
+                  "value": "0.3"
+                }
+              ]
+            },
+            {
+              "label": "EXTREME !!",
+              "description": "EXTREME DESCRIPTION WHOAAA!",
+              "values": [
+                {
+                  "enumId": 1,
+                  "value": "0.7"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

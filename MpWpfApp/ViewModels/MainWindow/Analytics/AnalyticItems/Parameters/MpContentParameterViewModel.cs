@@ -45,12 +45,12 @@ namespace MpWpfApp {
 
             Parameter = aip;
 
-            if(Parameter.Values.Count > 0) {
-                var defParamVal = aip.Values.FirstOrDefault(x => x.IsDefault);
+            if(Parameter.values.Count > 0) {
+                var defParamVal = aip.values.FirstOrDefault(x => x.isDefault);
                 if(defParamVal == null) {
-                    _defaultValue = aip.Values[0].Value;
+                    _defaultValue = aip.values[0].value;
                 } else {
-                    _defaultValue = defParamVal.Value;
+                    _defaultValue = defParamVal.value;
                 }                
             } else {
                 _defaultValue = string.Empty;
@@ -87,14 +87,14 @@ namespace MpWpfApp {
             //    return false;
             //}
 
-            var minCond = Parameter.Values.FirstOrDefault(x => x.IsMinimum);
+            var minCond = Parameter.values.FirstOrDefault(x => x.isMinimum);
             if (minCond != null) {
                 int minLength = 0;
                 try {
-                    minLength = Convert.ToInt32(minCond.Value);
+                    minLength = Convert.ToInt32(minCond.value);
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Minimum val: {minCond.Value} could not conver to int, exception: {ex}");
+                    MpConsole.WriteTraceLine($"Minimum val: {minCond.value} could not conver to int, exception: {ex}");
                 }
                 if (CurrentValue.Length < minLength) {
                     ValidationMessage = $"{Label} must be at least {minLength} characters";
@@ -103,15 +103,15 @@ namespace MpWpfApp {
                 }
             }
             if(IsValid) {
-                var maxCond = Parameter.Values.FirstOrDefault(x => x.IsMaximum);
+                var maxCond = Parameter.values.FirstOrDefault(x => x.isMaximum);
                 if (maxCond != null) {
                     // TODO should cap all input string but especially here
                     int maxLength = int.MaxValue;
                     try {
-                        maxLength = Convert.ToInt32(maxCond.Value);
+                        maxLength = Convert.ToInt32(maxCond.value);
                     }
                     catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Maximum val: {minCond.Value} could not conver to int, exception: {ex}");
+                        MpConsole.WriteTraceLine($"Maximum val: {minCond.value} could not conver to int, exception: {ex}");
                     }
                     if (CurrentValue.Length > maxLength) {
                         ValidationMessage = $"{Label} can be no more than {maxLength} characters";

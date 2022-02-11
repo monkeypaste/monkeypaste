@@ -2,8 +2,8 @@
   "parameters": [
     {
       "label": "Language",
-      "parameterType": "ComboBox",
-      "valueType": "PlainText",
+      "parameterControlType": "ComboBox",
+      "parameterValueType": "PlainText",
       "enumId": 1,
       "sortOrderIdx": 0,
       "isReadOnly": false,
@@ -40,8 +40,8 @@
     },
     {
       "label": "Visual Features",
-      "parameterType": "ComboBox",
-      "valueType": "PlainText",
+      "parameterControlType": "ComboBox",
+      "parameterValueType": "PlainText",
       "enumId": 2,
       "sortOrderIdx": 1,
       "isReadOnly": false,
@@ -93,8 +93,8 @@
     },
     {
       "label": "Details",
-      "parameterType": "ComboBox",
-      "valueType": "PlainText",
+      "parameterControlType": "ComboBox",
+      "parameterValueType": "PlainText",
       "enumId": 3,
       "sortOrderIdx": 2,
       "isReadOnly": false,

@@ -103,7 +103,7 @@ namespace MpWpfApp {
 
                 if(!string.IsNullOrEmpty(htmlData)) {
                     try {
-                        url = await MpUrlBuilder.CreateFromHtmlData(htmlData, app);
+                        url = await MpUrlBuilder.CreateFromHtmlData(htmlData);
                         if(url != null) {                            
                             if (MpUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
                                 MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlDomainPath);

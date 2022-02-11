@@ -5,15 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
-    public class MpDetectedImageObject : MpDbModelBase {
+    public class MpDetectedImageObject : MpDbModelBase, MpIImageDescriptorBox {
         #region Columns
 
         [Column("pk_MpDetectedImageObjectId")]
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; } = 0;
-
 
         [Column("MpDetectedImageObjectGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
@@ -22,7 +22,7 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; }
 
-        public double Confidence { get; set; } = 0;
+        public double Score { get; set; } = 0;
 
         public double X { get; set; } = 0;
         public double Y { get; set; } = 0;
@@ -30,7 +30,8 @@ namespace MonkeyPaste {
         public double Width { get; set; } = 0;
         public double Height { get; set; } = 0;
 
-        public string ObjectTypeName { get; set; } = String.Empty;
+        public string Label { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         #endregion
 
@@ -52,16 +53,25 @@ namespace MonkeyPaste {
         #endregion
 
 
-        public static async Task<MpDetectedImageObject> Create(int cid, double c, double x, double y, double w, double h, string tcsv) {
+        public static async Task<MpDetectedImageObject> Create(
+            int cid = 0, 
+            double c = 0, 
+            double x = 0, 
+            double y = 0, 
+            double w = 0, 
+            double h = 0, 
+            string label = "",
+            string description = "") {
             var ndio = new MpDetectedImageObject() {
                 DetectedImageObjectGuid = System.Guid.NewGuid(),
                 CopyItemId = cid,
-                Confidence = c,
+                Score = c,
                 X = x,
                 Y = y,
                 Width = w,
                 Height = h,
-                ObjectTypeName = tcsv
+                Label = label,
+                Description = description
             };
 
             await ndio.WriteToDatabaseAsync();
@@ -69,19 +79,5 @@ namespace MonkeyPaste {
         }
 
         public MpDetectedImageObject() { }
-
-        public MpDetectedImageObject(double c, double x, double y, double w, double h, string tcsv) {
-            Confidence = c;
-            X = x;
-            Y = y;
-            Width = w;
-            Height = h;
-            ObjectTypeName = tcsv;
-        }
-        public override string ToString() {
-            return string.Format(
-                "Type: {0} Bounding Box: ({1},{2},{3},{4}) Confidence: {5} CopyItemId: {6}",
-                ObjectTypeName, X, Y, Width, Height, Confidence, CopyItemId);
-        }
     }
 }

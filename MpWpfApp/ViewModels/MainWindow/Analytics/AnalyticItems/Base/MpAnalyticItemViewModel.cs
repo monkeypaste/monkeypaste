@@ -13,9 +13,10 @@ using Newtonsoft.Json;
 using System.Web;
 using System.Windows;
 using MonkeyPaste.Plugin;
+using System.Diagnostics;
 
 namespace MpWpfApp {
-    public abstract class MpAnalyticItemViewModel : 
+    public class MpAnalyticItemViewModel : 
         MpViewModelBase<MpAnalyticItemCollectionViewModel>, 
         MpISelectableViewModel,
         MpIHoverableViewModel,
@@ -43,7 +44,7 @@ namespace MpWpfApp {
                         IconResourceKey = Application.Current.Resources["CogIcon"] as string,
                         Header = $"Manage '{Title}'",
                         Command = Parent.ManageItemCommand,
-                        CommandParameter = AnalyticItemId
+                        CommandParameter = AnalyzerPluginSudoId
                     });
                 return new MpMenuItemViewModel() {
                     Header = Title,
@@ -102,7 +103,7 @@ namespace MpWpfApp {
 
         public bool IsExpanded { get; set; } = false;
 
-        public MpRestTransaction LastTransaction { get; private set; } = null;
+        public MpAnalyzerTransaction LastTransaction { get; private set; } = null;
 
         public MpCopyItem LastResultContentItem { get; set; } = null;
         #endregion
@@ -236,21 +237,46 @@ namespace MpWpfApp {
 
         #region MpAnalyticItem
 
-        public MpCopyItemType InputContentType { 
+        public MpAnalyzerInputFormatFlags InputFormatFlags { 
             get {
-                if(AnalyticItem == null) {
-                    return MpCopyItemType.None;
+                MpAnalyzerInputFormatFlags flags = MpAnalyzerInputFormatFlags.None;
+                if(AnalyzerPluginFormat == null || AnalyzerPluginFormat.inputType == null) {
+                    return flags;
                 }
-                return AnalyticItem.InputFormatType;
+                if(AnalyzerPluginFormat.inputType.text) {
+                    flags |= MpAnalyzerInputFormatFlags.Text;
+                }
+                if(AnalyzerPluginFormat.inputType.image) {
+                    flags |= MpAnalyzerInputFormatFlags.Image;
+                }
+                if(AnalyzerPluginFormat.inputType.file) {
+                    flags |= MpAnalyzerInputFormatFlags.File;
+                }
+
+                return flags;
             }
         }
 
-        public MpOutputFormatType OutputFormatType {
+        public MpAnalyzerOutputFormatFlags OutputFormatFlags {
             get {
-                if (AnalyticItem == null) {
-                    return MpOutputFormatType.None;
+                MpAnalyzerOutputFormatFlags flags = MpAnalyzerOutputFormatFlags.None;
+                if (AnalyzerPluginFormat == null || AnalyzerPluginFormat.outputType == null) {
+                    return flags;
                 }
-                return AnalyticItem.OutputFormatType;
+                if (AnalyzerPluginFormat.outputType.text) {
+                    flags |= MpAnalyzerOutputFormatFlags.Text;
+                }
+                if (AnalyzerPluginFormat.outputType.image) {
+                    flags |= MpAnalyzerOutputFormatFlags.Image;
+                }
+                if (AnalyzerPluginFormat.outputType.file) {
+                    flags |= MpAnalyzerOutputFormatFlags.File;
+                }
+                if (AnalyzerPluginFormat.outputType.box) {
+                    flags |= MpAnalyzerOutputFormatFlags.BoundingBox;
+                }
+
+                return flags;
             }
         }
 
@@ -296,14 +322,7 @@ namespace MpWpfApp {
             }
         }
 
-        public int AnalyticItemId {
-            get {
-                if (AnalyticItem == null) {
-                    return 0;
-                }
-                return AnalyticItem.Id;
-            }
-        }
+        public int AnalyzerPluginSudoId => AnalyticItem == null ? 0 : AnalyticItem.Id;
 
         public MpBillableItem BillableItem {
             get {
@@ -314,7 +333,17 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyticItem AnalyticItem { get; set; }
+        public MpAnalyticItem AnalyticItem { get; private set; }
+
+        #region Plugin
+
+        public MpPluginFormat PluginFormat { get; set; }
+
+        public MpAnalyzerPluginFormat AnalyzerPluginFormat => PluginFormat == null ? null : PluginFormat.analyzer;
+
+        public MpIAnalyzerPluginComponent AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.LoadedComponent as MpIAnalyzerPluginComponent;
+        
+        #endregion
 
         #endregion
 
@@ -346,33 +375,66 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpAnalyticItem ai) {
+        public async Task InitializeAsync(MpPluginFormat analyzerPlugin) {
             if (IsLoaded) {
                 return;
             }
             IsBusy = true;
-            AnalyticItem = await MpDb.GetItemAsync<MpAnalyticItem>(ai.Id);
 
-            if(AnalyticItem.Icon == null) {
-                var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null);
-                AnalyticItem.Icon = url.Icon;
-                AnalyticItem.IconId = url.IconId;
-                await AnalyticItem.WriteToDatabaseAsync();
-                OnPropertyChanged(nameof(IconId));
+            PluginFormat = analyzerPlugin;
+            if (AnalyzerPluginComponent == null) {
+                throw new Exception("Cannot find component");
             }
-            // Init Presets
+
+            MpIcon icon = null;
+
+            if (!string.IsNullOrEmpty(analyzerPlugin.iconUrl)) {
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(analyzerPlugin.iconUrl);
+                icon = await MpIcon.Create(bytes.ToBitmapSource().ToBase64String(), false);
+            }
+            icon = icon == null ? MpPreferences.ThisAppSource.App.Icon : icon;
+
+            AnalyticItem = new MpAnalyticItem() {
+                Guid = PluginFormat.guid,
+                Title = PluginFormat.title,
+                Description = PluginFormat.description,
+                EndPoint = AnalyzerPluginFormat.endpoint,
+                ApiKey = AnalyzerPluginFormat.apiKey,
+                Icon = icon,
+                IconId = icon.Id
+            };
+
+            AnalyticItem.Presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
+            bool isNew = AnalyticItem.Presets == null || AnalyticItem.Presets.Count == 0;
+            AnalyticItem.Id = isNew ? MpDbModelBase.GetUniqueId() : AnalyticItem.Presets[0].AnalyzerPluginSudoId;
+                       
+
             PresetViewModels.Clear();
 
-            if(AnalyticItem.Presets.Count == 0) {
-                var naipvm = await CreatePresetViewModel(null);
-                PresetViewModels.Add(naipvm);
-            } else {
-                foreach (var preset in AnalyticItem.Presets.OrderBy(x => x.SortOrderIdx)) {
-                    var naipvm = await CreatePresetViewModel(preset);
-                    PresetViewModels.Add(naipvm);
-                }
-            }            
+            if (isNew) {
+                //for new plugins create default presets
+                foreach(var preset in AnalyzerPluginFormat.presets) {
+                    var aip = await MpAnalyticItemPreset.Create(
+                        analyzerSudoId: AnalyticItem.Id,
+                        isDefault: preset.isDefault,
+                        label: preset.label,
+                        icon: AnalyticItem.Icon,
+                        sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(preset),
+                        description: preset.description,
+                        parameters: AnalyzerPluginFormat.parameters);
 
+                    AnalyticItem.Presets.Add(aip);
+                }
+            } 
+            if (AnalyticItem.Presets.All(x => x.IsDefault == false)) {
+                //this ensures at least one preset exists and not all can be deleted
+                AnalyticItem.Presets[0].IsDefault = true;
+            }
+
+            foreach (var preset in AnalyticItem.Presets) {
+                var naipvm = await CreatePresetViewModel(preset);
+                PresetViewModels.Add(naipvm);
+            }
             PresetViewModels.OrderBy(x => x.SortOrderIdx);
 
             var defPreset = PresetViewModels.FirstOrDefault(x => x.IsDefault);
@@ -385,11 +447,56 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
+        //public async Task InitializeAsync(MpAnalyticItem ai) {
+        //    if (IsLoaded) {
+        //        return;
+        //    }
+        //    IsBusy = true;
+        //    AnalyticItem = await MpDb.GetItemAsync<MpAnalyticItem>(ai.Id);
+
+        //    if(AnalyticItem.Icon == null) {
+        //        var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null);
+        //        AnalyticItem.Icon = url.Icon;
+        //        AnalyticItem.IconId = url.IconId;
+        //        await AnalyticItem.WriteToDatabaseAsync();
+        //        OnPropertyChanged(nameof(IconId));
+        //    }
+        //    // Init Presets
+        //    PresetViewModels.Clear();
+
+        //    if(AnalyticItem.Presets.Count == 0) {
+        //        var naipvm = await CreatePresetViewModel(null);
+        //        PresetViewModels.Add(naipvm);
+        //    } else {
+        //        foreach (var preset in AnalyticItem.Presets.OrderBy(x => x.SortOrderIdx)) {
+        //            var naipvm = await CreatePresetViewModel(preset);
+        //            PresetViewModels.Add(naipvm);
+        //        }
+        //    }            
+
+        //    PresetViewModels.OrderBy(x => x.SortOrderIdx);
+
+        //    var defPreset = PresetViewModels.FirstOrDefault(x => x.IsDefault);
+        //    MpAssert.Assert(defPreset, $"Error no default preset for anayltic item {AnalyticItem.Title}");
+
+
+        //    OnPropertyChanged(nameof(IconId));
+        //    OnPropertyChanged(nameof(PresetViewModels));
+
+        //    IsBusy = false;
+        //}
+
         public async Task<MpAnalyticItemPresetViewModel> CreatePresetViewModel(MpAnalyticItemPreset aip) {
             MpAnalyticItemPresetViewModel naipvm = new MpAnalyticItemPresetViewModel(this);
             await naipvm.InitializeAsync(aip);
             return naipvm;
         }
+
+        //public async Task<MpAnalyticItemPresetViewModel> CreatePresetViewModel(MpAnalyzerPresetFormat aip) {
+        //    MpAnalyticItemPresetViewModel naipvm = new MpAnalyticItemPresetViewModel(this);
+        //    await naipvm.InitializeAsync(aip);
+        //    return naipvm;
+        //}
 
         public string GetUniquePresetName() {
             int uniqueIdx = 1;
@@ -430,15 +537,13 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpAnalyticItemPreset aip) {
-                if (aip.AnalyticItemId == AnalyticItemId) {
-                    
-                }
+                
             }
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if(e is MpAnalyticItemPreset aip) {
-                if(aip.AnalyticItemId == AnalyticItemId) {
+                if(aip.AnalyzerPluginSudoId == AnalyzerPluginSudoId) {
                     var presetVm = PresetViewModels.FirstOrDefault(x => x.Preset.Id == aip.Id);
                     if(presetVm != null) {
                         int presetIdx = PresetViewModels.IndexOf(presetVm);
@@ -456,20 +561,48 @@ namespace MpWpfApp {
 
         #endregion
 
-        protected virtual async Task<MpCopyItem> ConvertToCopyItem(int parentCopyItemId, MpRestTransaction trans, bool suppressCreateItem) {
+        protected virtual async Task<MpCopyItem> ApplyAnalysisToContent(
+            MpCopyItem sourceCopyItem, 
+            MpAnalyzerTransaction trans, 
+            bool suppressWrite) {
             object request = trans.Request;
             object response = trans.Response;
+            MpCopyItem targetCopyItem = null;
 
-            var app = MpPreferences.ThisAppSource.App;
-            var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, null, request.ToString());
-            var source = await MpSource.Create(app, url);
+            if (response is List<MpIImageDescriptorBox> idbl) {
+                var diol = idbl.Cast<MpDetectedImageObject>().ToList();
+                diol.ForEach(x => x.CopyItemId = sourceCopyItem.Id);
+                if(!suppressWrite) {
+                    await Task.WhenAll(diol.Select(x => x.WriteToDatabaseAsync()));
+                    targetCopyItem = sourceCopyItem;
+                }
+                
+            }
+            
+            List<MpITextDescriptorRange> tdrl = new List<MpITextDescriptorRange>();
+            if(response is MpITextDescriptorRange tdr) {
+                tdrl.Add(tdr);
+            } else if(response is List<MpITextDescriptorRange> temp) {
+                tdrl = temp;
+            }
+            if(tdrl.Count > 0) {
+                var app = MpPreferences.ThisAppSource.App;
+                var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, request.ToString());
+                var source = await MpSource.Create(app, url);
 
-            var ci = await MpCopyItem.Create(source, response.ToString(), MpCopyItemType.Text,suppressCreateItem);
+                targetCopyItem = await MpCopyItem.Create(
+                    source: source,
+                    data: response.ToString(),
+                    itemType: MpCopyItemType.Text,
+                    suppressWrite: suppressWrite);
 
-            if(suppressCreateItem == false) {
+                
+            }
+
+            if (suppressWrite == false && targetCopyItem != null) {
                 //create is suppressed when its part of a match expression
-                if (parentCopyItemId > 0) {
-                    var pci = await MpDb.GetItemAsync<MpCopyItem>(parentCopyItemId);
+                if(sourceCopyItem.Id != targetCopyItem.Id) {
+                    var pci = await MpDb.GetItemAsync<MpCopyItem>(sourceCopyItem.Id);
 
                     int parentSortOrderIdx = pci.CompositeSortOrderIdx;
                     List<MpCopyItem> ppccil = null;
@@ -486,10 +619,10 @@ namespace MpWpfApp {
                     ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
                     for (int i = 0; i < ppccil.Count; i++) {
                         var cci = ppccil[i];
-                        if (cci.Id == parentCopyItemId) {
-                            ci.CompositeParentCopyItemId = parentCopyItemId;
-                            ci.CompositeSortOrderIdx = i + 1;
-                            await ci.WriteToDatabaseAsync();
+                        if (cci.Id == sourceCopyItem.Id) {
+                            targetCopyItem.CompositeParentCopyItemId = sourceCopyItem.Id;
+                            targetCopyItem.CompositeSortOrderIdx = i + 1;
+                            await targetCopyItem.WriteToDatabaseAsync();
                         } else if (i > parentSortOrderIdx) {
                             ppccil[i].CompositeSortOrderIdx += 1;
                             await ppccil[i].WriteToDatabaseAsync();
@@ -497,7 +630,7 @@ namespace MpWpfApp {
                     }
                 }
 
-                var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(parentCopyItemId);
+                var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sourceCopyItem.Id);
                 if (scivm == null) {
                     //analysis content is  linked with visible item in tray
                     await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
@@ -505,9 +638,17 @@ namespace MpWpfApp {
                     MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                 }
             }
-            
 
-            return ci;
+
+            return targetCopyItem;
+        }
+
+        protected virtual async Task TransformContent() {
+
+        }
+
+        protected virtual async Task AppendContent() {
+
         }
 
         #endregion
@@ -570,6 +711,52 @@ namespace MpWpfApp {
             }
         }
 
+        private string CreateRequest(MpCopyItem ci) {
+            var requestItems = new List<MpAnalyzerPluginRequestItemFormat>();
+
+            foreach (var kvp in SelectedPresetViewModel.ParamLookup) {
+                MpAnalyzerPluginRequestItemFormat requestItem = new MpAnalyzerPluginRequestItemFormat();
+
+                var paramFormat = AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.enumId == kvp.Key);
+                if (paramFormat == null) {
+                    continue;
+                }
+                if (paramFormat.parameterControlType == MpAnalyticItemParameterControlType.Hidden) {
+                    // TODO (maybe)need to implement a request format so other properties can be passed
+                    
+                    requestItem = new MpAnalyzerPluginRequestItemFormat() {
+                        enumId = kvp.Key,
+                        value = ci.ToString()
+                    };
+                } else {
+                    requestItem = new MpAnalyzerPluginRequestItemFormat() {
+                        enumId = kvp.Key,
+                        value = kvp.Value.CurrentValue
+                    };
+                }
+                requestItems.Add(requestItem);
+            }
+
+            return JsonConvert.SerializeObject(requestItems);
+        }
+
+        private async Task<object> GetResponse(string requestStr) {
+            var resultObj = await AnalyzerPluginComponent.AnalyzeAsync(requestStr);
+
+            if (resultObj == null) {
+                Debugger.Break();
+                return null;
+            }
+
+
+            if (AnalyzerPluginFormat.outputType.box) {
+                var boxes = JsonConvert.DeserializeObject<List<MpAnalyzerPluginBoxResponseValueFormat>>
+                                (resultObj.ToString()).Cast<MpIImageDescriptorBox>().ToList();
+                return boxes;
+            }
+            return null;
+        }
+
         #endregion
 
         #region Commands
@@ -600,18 +787,23 @@ namespace MpWpfApp {
                 PresetViewModels.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedPresetViewModel));
 
-                string analysisStr = sourceCopyItem.ItemData.ToPlainText();
-                
-                LastTransaction = await ExecuteAnalysis(analysisStr);
+                MpAnalyzerTransaction transaction = new MpAnalyzerTransaction();
+                string requestStr = CreateRequest(sourceCopyItem);
+                object responseData = await GetResponse(requestStr);
 
-                LastResultContentItem = await ConvertToCopyItem(sourceCopyItem.Id, LastTransaction, suppressCreateItem);
+                LastTransaction = new MpAnalyzerTransaction() {
+                    Request = requestStr,
+                    Response = responseData
+                };
+
+                LastResultContentItem = await ApplyAnalysisToContent(sourceCopyItem, LastTransaction, suppressCreateItem);
 
                 OnAnalysisCompleted?.Invoke(SelectedPresetViewModel, LastResultContentItem);
 
                 IsBusy = false;
             },(args)=>CanExecuteAnalysis(args));
 
-        protected abstract Task<MpRestTransaction> ExecuteAnalysis(object obj);
+        protected virtual Task<MpAnalyzerTransaction> ExecuteAnalysis(object obj) { return null; }
 
         public virtual bool CanExecuteAnalysis(object args) {
             MpAnalyticItemPresetViewModel spvm = null;
@@ -634,17 +826,30 @@ namespace MpWpfApp {
                 sci = argParts[1] as MpCopyItem;
             }
 
+            bool isOkType = false;
+            switch(sci.ItemType) {
+                case MpCopyItemType.Text:
+                    isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.Text);
+                    break;
+                case MpCopyItemType.Image:
+                    isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.Image);
+                    break;
+                case MpCopyItemType.FileList:
+                    isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.File);
+                    break;
+            }
+
             return spvm != null &&
                    spvm.IsAllValid && 
                    sci != null &&
-                   sci.ItemType == InputContentType;
+                   isOkType;
         }
 
         public ICommand CreateNewPresetCommand => new RelayCommand(
             async () => {
                 MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
-                        AnalyticItem,
-                        GetUniquePresetName());
+                        analyzerSudoId: AnalyzerPluginSudoId,
+                        label: GetUniquePresetName());
 
 
                 var npvm = await CreatePresetViewModel(newPreset);
@@ -666,7 +871,7 @@ namespace MpWpfApp {
         public ICommand ManageAnalyticItemCommand => new RelayCommand(
              () => {
                  if (!IsSelected) {
-                     Parent.Items.ForEach(x => x.IsSelected = x.AnalyticItemId == AnalyticItemId);
+                     Parent.Items.ForEach(x => x.IsSelected = x.AnalyzerPluginSudoId == AnalyzerPluginSudoId);
                  }
                  if (SelectedPresetViewModel == null && PresetViewModels.Count > 0) {
                      PresetViewModels.ForEach(x => x.IsSelected = x == PresetViewModels[0]);

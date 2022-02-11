@@ -9,13 +9,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
+    [Flags]
+    public enum MpAnalyzerInputFormatFlags {
+        None = 0,
+        Text = 1,
+        Image = 2,
+        File = 4
+    }
 
-    public enum MpOutputFormatType {
+    [Flags]
+    public enum MpAnalyzerOutputFormatFlags {
         None = 0,
         Text = 1,
         Image = 2,
         BoundingBox = 4,
-        CustomFile = 8
+        File = 8
     }
 
     public class MpAnalyticItem : MpDbModelBase {
@@ -32,10 +40,10 @@ namespace MonkeyPaste {
         public int IconId { get; set; }
 
         [Column("e_MpCopyItemType")]
-        public int InputFormatTypeId { get; set; } = 0;
+        public int InputFormatFlagsVal { get; set; } = 0;
 
         [Column("e_MpOutputFormatType")]
-        public int OutputFormatTypeId { get; set; } = 0;
+        public int OutputFormatFlagsVal { get; set; } = 0;
 
         [Column("Title")]
         public string Title { get; set; } = string.Empty;
@@ -72,22 +80,22 @@ namespace MonkeyPaste {
         #region Properties
 
         [Ignore]
-        public MpCopyItemType InputFormatType {
+        public MpAnalyzerInputFormatFlags InputFormatFlags {
             get {
-                return (MpCopyItemType)InputFormatTypeId;
+                return (MpAnalyzerInputFormatFlags)InputFormatFlagsVal;
             }
             set {
-                InputFormatTypeId = (int)value;
+                InputFormatFlagsVal = (int)value;
             }
         }
 
         [Ignore]
-        public MpOutputFormatType OutputFormatType {
+        public MpAnalyzerOutputFormatFlags OutputFormatFlags {
             get {
-                return (MpOutputFormatType)OutputFormatTypeId;
+                return (MpAnalyzerOutputFormatFlags)OutputFormatFlagsVal;
             }
             set {
-                OutputFormatTypeId = (int)value;
+                OutputFormatFlagsVal = (int)value;
             }
         }
 
@@ -109,8 +117,8 @@ namespace MonkeyPaste {
         public static async Task<MpAnalyticItem> Create(
             string endPoint = "",
             string apiKey = "",
-            MpCopyItemType inputFormat = MpCopyItemType.None,
-            MpOutputFormatType outputFormat = MpOutputFormatType.None,
+            MpAnalyzerInputFormatFlags inputFormat = MpAnalyzerInputFormatFlags.None,
+            MpAnalyzerOutputFormatFlags outputFormat = MpAnalyzerOutputFormatFlags.None,
             string title = "",
             string description = "",
             string parameterFormatResourcePath = "",
@@ -157,8 +165,8 @@ namespace MonkeyPaste {
                 ApiKey = apiKey,
                 IconId = icon.Id,
                 Icon = icon,
-                InputFormatType = inputFormat,
-                OutputFormatType = outputFormat,
+                InputFormatFlags = inputFormat,
+                OutputFormatFlags = outputFormat,
                 Title = title,
                 Description = description,
                 ParameterFormatResourcePath = parameterFormatResourcePath,

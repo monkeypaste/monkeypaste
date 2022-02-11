@@ -8,49 +8,37 @@ using System.Windows.Controls;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-
     public class MpContentViewSelector : DataTemplateSelector {
-        private DataTemplate _textContentTemplate;
-        public DataTemplate TextContentTemplate {
-            get { return _textContentTemplate; }
-            set { _textContentTemplate = value; }
-        }
-
-        private DataTemplate _imageContentTemplate;
-        public DataTemplate ImageContentTemplate {
-            get { return _imageContentTemplate; }
-            set { _imageContentTemplate = value; }
-        }
-
-        private DataTemplate _fileContentTemplate;
-        public DataTemplate FileContentTemplate {
-            get { return _fileContentTemplate; }
-            set { _fileContentTemplate = value; }
-        }
-
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
             if(item == null || container == null) {
                 return null;
             }
 
-            var ci = (item as MpContentItemViewModel).CopyItem;
-            if(ci == null) {
-                // TODO need to trigger template selection after initial load since all models are null,
-                // especially for other content types
-                return TextContentTemplate;
+            if (item == null) {
+                return null;
             }
 
-            switch (ci.ItemType) {
+            var civm = item as MpContentItemViewModel;
+            if (civm == null) {
+                return null;
+            }
+
+            string keyStr = "ContentTemplate";
+            switch(civm.CopyItemType) {
                 case MpCopyItemType.Text:
-                    return TextContentTemplate;
-                case MpCopyItemType.Image:
-                    return ImageContentTemplate;
-                case MpCopyItemType.FileList:
-                    return FileContentTemplate;
+                    if (civm.TemplateCollection == null || civm.TemplateCollection.Templates.Count == 0) {
+                        keyStr = "Rtb" + keyStr;
+                    } else {
+                        keyStr = "FlowDocumentScrollViewer" + keyStr;
+                    }
+                    break;
+                default:
+                    keyStr = civm.CopyItemType.EnumToName() + keyStr;
+                    break;
             }
-
-            throw new Exception("Uknown Item Type");
+            var result = (container as FrameworkElement).GetVisualAncestor<Border>().Resources[keyStr] as DataTemplate;
+            return result;
         }
     }
 }

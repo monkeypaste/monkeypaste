@@ -679,7 +679,7 @@ namespace MpWpfApp {
         public ICommand AssignHotkeyCommand => new RelayCommand<object>(
             async (args) => {
                 await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                            "Select " + TagName,
+                            $"Select '{TagName}' Collection",
                             Parent.SelectTagCommand, 
                             ShortcutType,
                             TagId,

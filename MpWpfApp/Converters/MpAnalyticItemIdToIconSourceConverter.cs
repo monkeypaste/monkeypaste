@@ -7,7 +7,7 @@ using System.Linq;
 namespace MpWpfApp {
     public class MpAnalyticItemIdToIconSourceConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            var aivm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyticItemId == (int)value);
+            var aivm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyzerPluginSudoId == (int)value);
             if (aivm == null) {
                 return null;
             }
@@ -15,7 +15,7 @@ namespace MpWpfApp {
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (Visibility)value == Visibility.Visible ? true : false;
+            return null;
         }
     }
 }

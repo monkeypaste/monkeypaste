@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using  MonkeyPaste.Plugin;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public class MpPluginAnalyzerViewModel : MpAnalyticItemViewModel {
@@ -14,11 +15,11 @@ namespace MpWpfApp {
 
         #region Model
 
-        //public string ParameterFormatJsonStr { get; set; }
+        public MpPluginFormat PluginFormat { get; set; }
 
-        public MpAnalyzerPluginFormat AnalyzerPluginFormat { get; set; }
+        public MpAnalyzerPluginFormat AnalyzerPluginFormat => PluginFormat == null ? null : PluginFormat.analyzer;
 
-        public MonkeyPaste.Plugin.MpIAnalyzerPluginComponent AnalyzerPluginComponent { get; set; }
+        public MpIAnalyzerPluginComponent AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.LoadedComponent as MpIAnalyzerPluginComponent;
         #endregion
 
         #endregion
@@ -33,51 +34,49 @@ namespace MpWpfApp {
 
         #endregion
 
-        public async Task InitializeAsync(MpPlugin plugin, int typeIdx,int analyzerIdx) {
+        public async Task InitializeAsync(MpPluginFormat analyzerPlugin) {
             if (IsLoaded) {
                 return;
             }
             IsBusy = true;
 
-            AnalyzerPluginFormat = plugin.types[typeIdx].analyzers[analyzerIdx];
-            var compObj = plugin.Components.FirstOrDefault(x => x is MpIAnalyzerPluginComponent);
-            if(compObj == null) {
+            PluginFormat = analyzerPlugin;
+            if(AnalyzerPluginComponent == null) {
                 throw new Exception("Cannot find component");
             }
-            AnalyzerPluginComponent = compObj as MpIAnalyzerPluginComponent;
 
             MpIcon icon = null;
 
-            if(!string.IsNullOrEmpty(plugin.iconUrl)) {
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(plugin.iconUrl);
+            if(!string.IsNullOrEmpty(analyzerPlugin.iconUrl)) {
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(analyzerPlugin.iconUrl);
                 icon = await MpIcon.Create(bytes.ToBitmapSource().ToBase64String(), false);
             }
             icon = icon == null ? MpPreferences.ThisAppSource.App.Icon : icon;
 
-            MpCopyItemType inputFormat = MpCopyItemType.None;
+            MpAnalyzerInputFormatFlags inputFlags = MpAnalyzerInputFormatFlags.None;
             if(AnalyzerPluginFormat.inputType.image) {
-                inputFormat = MpCopyItemType.Image;
+                inputFlags |= MpAnalyzerInputFormatFlags.Image;
             } // TODO add other formats as plugins are implemented
 
 
-            string resourcePath = null;
-            if(AnalyzerPluginComponent is MpCommandLinePlugin clp) {
-                resourcePath = clp.Endpoint;
-            } else {
-                // TODO will need to add MpHttpPlugin and check if the component is local/remote
-                // when its remote set endpoint, etc. (def need to stay flexible w/ api token stuff)
-            }
+            //string resourcePath = null;
+            //if(this.AnalyzerPluginComponent is MpCommandLinePlugin clp) {
+            //    resourcePath = clp.Endpoint;
+            //} else {
+            //    // TODO will need to add MpHttpPlugin and check if the component is local/remote
+            //    // when its remote set endpoint, etc. (def need to stay flexible w/ api token stuff)
+            //}
 
 
-            AnalyticItem = await MpAnalyticItem.Create(
-                guid: AnalyzerPluginFormat.guid,
-                title: plugin.title,
-                description: plugin.description,
-                endPoint: AnalyzerPluginComponent.GetType().AssemblyQualifiedName,
-                inputFormat: inputFormat,
-                iconId: icon.Id,
-                parameterFormatResourcePath: resourcePath,
-                apiKey: string.Empty);
+            //AnalyticItem = await MpAnalyticItem.Create(
+            //    guid: analyzerPlugin.guid,
+            //    title: analyzerPlugin.title,
+            //    description: analyzerPlugin.description,
+            //    endPoint: this.AnalyzerPluginComponent.GetType().AssemblyQualifiedName,
+            //    inputFormat: inputFlags,
+            //    iconId: icon.Id,
+            //    parameterFormatResourcePath: resourcePath,
+            //    apiKey: string.Empty);
 
 
             
@@ -116,7 +115,7 @@ namespace MpWpfApp {
                 AnalyticItem.Presets = new List<MpAnalyticItemPreset>() { null };
             } 
 
-            foreach (var preset in AnalyticItem.Presets) {
+            foreach (var preset in AnalyzerPluginFormat.presets) {
                 var naipvm = await CreatePresetViewModel(preset);
                 PresetViewModels.Add(naipvm);
             }
@@ -131,70 +130,70 @@ namespace MpWpfApp {
 
             IsBusy = false;
         }
-        protected override async Task<MpRestTransaction> ExecuteAnalysis(object obj) {
+        protected override async Task<MpAnalyzerTransaction> ExecuteAnalysis(object obj) {
             if(AnalyzerPluginFormat == null) {
                 return null;
             }
 
             IsBusy = true;
 
-            var requestItems = new List<MpAnalyzerPluginRequestValueFormat>();
+            var requestItems = new List<MpAnalyzerPluginRequestItemFormat>();
 
-            var paramLookup = SelectedPresetViewModel.ParamLookup;
-            foreach(var kvp in paramLookup) {
-                MpAnalyzerPluginRequestValueFormat request = new MpAnalyzerPluginRequestValueFormat();
+            foreach(var kvp in SelectedPresetViewModel.ParamLookup) {
+                MpAnalyzerPluginRequestItemFormat requestItem = new MpAnalyzerPluginRequestItemFormat();
 
-                var paramFormat = AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.EnumId == kvp.Key);
+                var paramFormat = AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.enumId == kvp.Key);
                 if(paramFormat == null) {
                     continue;
                 }
-                if(paramFormat.ParameterType == MpAnalyticItemParameterType.Content) {
+                if(paramFormat.parameterControlType == MpAnalyticItemParameterControlType.Hidden) {
                     // TODO (maybe)need to implement a request format so other properties can be passed
-                    request = new MpAnalyzerPluginRequestValueFormat() {
+                    requestItem = new MpAnalyzerPluginRequestItemFormat() {
                         enumId = kvp.Key,
                         value = obj.ToString()
                     };
                 } else {
-                    request = new MpAnalyzerPluginRequestValueFormat() {
+                    requestItem = new MpAnalyzerPluginRequestItemFormat() {
                         enumId = kvp.Key,
                         value = kvp.Value.CurrentValue
                     };
                 }
-                requestItems.Add(request);
+                requestItems.Add(requestItem);
             }
 
-            var resultObj = await AnalyzerPluginComponent.AnalyzeAsync(JsonConvert.SerializeObject(requestItems));
+            var request = JsonConvert.SerializeObject(requestItems);
+            var resultObj = await AnalyzerPluginComponent.AnalyzeAsync(request);
 
-            var results = new List<MpAnalyzerPluginResponseValueFormat>();
-            var temp = JsonConvert.DeserializeObject<MpAnalyzerPluginResponseValueFormat>(resultObj.ToString());
-
-            if (temp == null) {
-                results = JsonConvert.DeserializeObject<List<MpAnalyzerPluginResponseValueFormat>>(resultObj.ToString());
-            } else {
-                results.Add(temp);
+            if(resultObj == null) {
+                Debugger.Break();
+                return null;
             }
 
-            
-            if (AnalyzerPluginFormat.outputType.box) {
-                var bbl = new List<MpDetectedImageObject>();
+            var transaction = new MpAnalyzerTransaction() {
+                Request = request
+            };
 
-                foreach (var item in results) {
+            if(AnalyzerPluginFormat.outputType.box) {
+                var boxes = JsonConvert.DeserializeObject<List<MpAnalyzerPluginBoxResponseValueFormat>>(resultObj.ToString());
+                var diol = new List<MpDetectedImageObject>();
+                foreach (var item in boxes) { 
                     var dio = new MpDetectedImageObject() {
-                        X = item.box.x,
-                        Y = item.box.y,
-                        Width = item.box.width,
-                        Height = item.box.height,
-                        ObjectTypeName = item.text,
-                        Confidence = item.decimalVal
+                        X = item.X,
+                        Y = item.Y,
+                        Width = item.Width,
+                        Height = item.Height,
+                        Label = item.Label,
+                        Description = item.Description,
+                        Score = item.Score                        
                     };
-                    bbl.Add(dio);
+                    diol.Add(dio);
                 }
-                await Task.WhenAll(bbl.Select(x => x.WriteToDatabaseAsync()));
-
+                transaction.Response = diol;
             }
+
             IsBusy = false;
 
-            return null;
+            return transaction;
         }
     }
 }

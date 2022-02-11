@@ -132,12 +132,18 @@ namespace MonkeyPaste {
             return names;
         }
 
-        public static string EnumToLabel<TValue>(this TValue value, string noneText = "")
+        public static string EnumToName<TValue>(this TValue value, string noneText = "None")
             where TValue : Enum {
             string valStr = value.ToString();
             var valParts = valStr.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
 
-            return valParts[valParts.Length - 1].ToLabel(noneText);
+            return valParts[valParts.Length - 1];
+        }
+
+        public static string EnumToLabel<TValue>(this TValue value, string noneText = "")
+            where TValue : Enum {
+
+            return value.EnumToName(noneText).ToLabel(noneText);
         }
 
         public static int EnumToInt<TValue>(this TValue value) 

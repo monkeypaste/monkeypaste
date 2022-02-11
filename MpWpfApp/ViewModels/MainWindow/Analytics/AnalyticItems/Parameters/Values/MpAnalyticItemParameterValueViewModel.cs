@@ -53,7 +53,7 @@ namespace MpWpfApp {
                 if(AnalyticItemParameterValue == null) {
                     return false;
                 }
-                return AnalyticItemParameterValue.IsDefault;
+                return AnalyticItemParameterValue.isDefault;
             }
         }
 
@@ -62,7 +62,7 @@ namespace MpWpfApp {
                 if (AnalyticItemParameterValue == null) {
                     return false;
                 }
-                return AnalyticItemParameterValue.IsMaximum;
+                return AnalyticItemParameterValue.isMaximum;
             }
         }
 
@@ -71,7 +71,7 @@ namespace MpWpfApp {
                 if (AnalyticItemParameterValue == null) {
                     return false;
                 }
-                return AnalyticItemParameterValue.IsMinimum;
+                return AnalyticItemParameterValue.isMinimum;
             }
         }
 
@@ -80,7 +80,7 @@ namespace MpWpfApp {
                 if (AnalyticItemParameterValue == null) {
                     return string.Empty;
                 }
-                return AnalyticItemParameterValue.Label;
+                return AnalyticItemParameterValue.label;
             }
         }
 
@@ -89,12 +89,12 @@ namespace MpWpfApp {
                 if (AnalyticItemParameterValue == null) {
                     return null;
                 }
-                return AnalyticItemParameterValue.Value;
+                return AnalyticItemParameterValue.value;
             }
             set {
                 if (Value != value) {
-                    HasChanged = AnalyticItemParameterValue.Value != value;
-                    AnalyticItemParameterValue.Value = value;
+                    HasChanged = AnalyticItemParameterValue.value != value;
+                    AnalyticItemParameterValue.value = value;
                     OnPropertyChanged(nameof(Value));
                 }
             }

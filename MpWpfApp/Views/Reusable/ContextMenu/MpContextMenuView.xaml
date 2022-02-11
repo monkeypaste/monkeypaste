@@ -10,5 +10,4 @@
              UsesItemContainerTemplate="True"
              ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"
              d:DataContext="{d:DesignInstance Type=pcl:MpMenuItemViewModel,
-                                              IsDesignTimeCreatable=False}">
-</ContextMenu>
+                                              IsDesignTimeCreatable=False}" />

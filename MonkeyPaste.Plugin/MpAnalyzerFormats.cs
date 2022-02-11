@@ -5,15 +5,33 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste.Plugin {
-    public enum MpAnalyticItemParameterType {
+    public interface MpIDescriptor {
+        string Label { get; set; }
+        string Description { get; set; }
+
+        double Score { get; set; }
+    }
+
+    public interface MpIImageDescriptorBox : MpIDescriptor {
+        double X { get; set; }
+        double Y { get; set; }
+        double Width { get; set; }
+        double Height { get; set; }
+    }
+
+    public interface MpITextDescriptorRange : MpIDescriptor {
+        int RangeStart { get; set; }
+        int RangeEnd { get; set; }
+    }
+
+    public enum MpAnalyticItemParameterControlType {
         None = 0,
         Button,
         Text,
         ComboBox,
         CheckBox,
         Slider,
-        Content
-        //RuntimeMinOffset,//below are only runtime types        
+        Hidden
     }
 
     public enum MpAnalyticItemParameterValueUnitType {
@@ -25,128 +43,111 @@ namespace MonkeyPaste.Plugin {
         RichText,
         Html,
         Image,
-        Base64Text,
-        Custom
-    }
-    //adult,brands,categories,description,faces,objects,tags
-    public class MpAnalyticItemParameterValue {
-        [JsonProperty("value")]
-        public string Value { get; set; } = string.Empty;
-
-        [JsonProperty("label")]
-        public string Label { get; set; } = string.Empty;
-
-        [JsonProperty("isDefault")]
-        public bool IsDefault { get; set; } = false;
-
-        [JsonProperty("isMinimum")]
-        public bool IsMinimum { get; set; } = false;
-
-        [JsonProperty("isMaximum")]
-        public bool IsMaximum { get; set; } = false;
+        Base64Text
     }
 
-    public class MpAnalyticItemParameterFormat {
-        [JsonProperty("label")]
-        public string Label { get; set; }
-
-        [JsonProperty("description")]
-        public string Description { get; set; }
-
-        [JsonProperty("parameterType")]
-        public MpAnalyticItemParameterType ParameterType { get; set; } = MpAnalyticItemParameterType.None;
-
-        [JsonProperty("valueType")]
-        public MpAnalyticItemParameterValueUnitType ValueType { get; set; } = MpAnalyticItemParameterValueUnitType.None;
-
-        [JsonProperty("enumId")]
-        public int EnumId { get; set; }
-
-        [JsonProperty("sortOrderIdx")]
-        public int SortOrderIdx { get; set; } = 0;
-
-        [JsonProperty("isReadOnly")]
-        public bool IsReadOnly { get; set; } = false;
-
-        [JsonProperty("isRequired")]
-        public bool IsRequired { get; set; } = false;
-
-        [JsonProperty("isMultiValue")]
-        public bool IsMultiValue { get; set; } = false;
-
-        [JsonProperty("formatInfo")]
-        public string FormatInfo { get; set; } = string.Empty;
-
-        [JsonProperty("isValueDeferred")]
-        public bool IsValueDeferred { get; set; } = false;
-
-        [JsonProperty("isVisible")]
-        public bool IsVisible { get; set; } = true;
-
-        [JsonProperty("values")]
-        public List<MpAnalyticItemParameterValue> Values { get; set; } = new List<MpAnalyticItemParameterValue>();
-    }
-
-    public class MpAnalyticItemFormat {
-        [JsonProperty("parameters")]
-        public List<MpAnalyticItemParameterFormat> ParameterFormats { get; set; }
+    public class MpAnalyzerPluginRequestItemFormat {
+        public int enumId { get; set; } = 0;
+        public string value { get; set; } = string.Empty;
     }
 
     public class MpAnalyzerPluginFormat {
-        public string guid { get; set; }
-        public MpAnalyzerPluginInputFormat inputType { get; set; }
-        public MpAnalyzerPluginOutputFormat outputType { get; set; }
+        public string endpoint { get; set; } = string.Empty;
+        public string apiKey { get; set; } = string.Empty;
 
-        public string endpoint { get; set; }
+        public MpAnalyzerPluginInputFormat inputType { get; set; } = null;
+        public MpAnalyzerPluginOutputFormat outputType { get; set; } = null;
 
-        public List<MpAnalyticItemParameterFormat> parameters { get; set; }
-        public List<MpAnalyzerPresetFormat> presets { get; set; }
-    }    
-
-    public class MpAnalyzerPluginBoxResponseValueFormat {
-        public double x { get; set; }
-        public double y { get; set; }
-        public double width { get; set; }
-        public double height { get; set; }
+        public List<MpAnalyticItemParameterFormat> parameters { get; set; } = null;
+        public List<MpAnalyzerPresetFormat> presets { get; set; } = null;
     }
 
     public class MpAnalyzerPluginInputFormat {
-        public bool plaintext { get; set; }
-        public bool richtext { get; set; }
-        public bool html { get; set; }
-        public bool image { get; set; }
-        public bool file { get; set; }
+        public bool text { get; set; } = false;
+        public bool image { get; set; } = false;
+        public bool file { get; set; } = false;
     }
 
     public class MpAnalyzerPluginOutputFormat {
-        public bool text { get; set; }
-        public bool image { get; set; }
-        public bool box { get; set; }
-        public bool file { get; set; }
+        public bool text { get; set; } = false;
+        public bool image { get; set; } = false;
+        public bool box { get; set; } = false;
+        public bool token { get; set; } = false;
+        public bool file { get; set; } = false;
+    }
+
+    public class MpAnalyticItemParameterFormat {
+        public string label { get; set; } = string.Empty;
+        public string description { get; set; } = string.Empty;
+
+        public MpAnalyticItemParameterControlType parameterControlType { get; set; } = MpAnalyticItemParameterControlType.None;
+
+        public MpAnalyticItemParameterValueUnitType parameterValueType { get; set; } = MpAnalyticItemParameterValueUnitType.None;
+
+        public int enumId { get; set; } = 0;
+        public int sortOrderIdx { get; set; } = 0;
+        public bool isReadOnly { get; set; } = false;
+        public bool isRequired { get; set; } = false;
+        public bool isMultiValue { get; set; } = false;
+        public string formatInfo { get; set; } = string.Empty; // may be used for additional validation
+        public bool isValueDeferred { get; set; } = false; // TODO isValueDeferred is a placeholder and should be a seperate nullable json object for pulling values from http
+        public bool isVisible { get; set; } = true;
+
+        public List<MpAnalyticItemParameterValue> values { get; set; } = new List<MpAnalyticItemParameterValue>();
+    }
+
+    public class MpAnalyticItemParameterValue {
+        public string value { get; set; } = string.Empty;
+        public string label { get; set; } = string.Empty;
+        public bool isDefault { get; set; } = false;
+        public bool isMinimum { get; set; } = false;
+        public bool isMaximum { get; set; } = false;
+    }
+
+    public abstract class MpAnalyzerResponseValueFormatBase : MpIDescriptor {
+        [JsonProperty("label")]
+        public string Label { get; set; } = string.Empty;
+        [JsonProperty("description")]
+        public string Description { get; set; } = string.Empty;
+        [JsonProperty("score")]
+        public double Score { get; set; } = 0;
+    }
+
+    public class MpAnalyzerPluginBoxResponseValueFormat : 
+        MpAnalyzerResponseValueFormatBase, 
+        MpIImageDescriptorBox {
+        [JsonProperty("x")]
+        public double X { get; set; } = 0;
+        [JsonProperty("y")]
+        public double Y { get; set; } = 0;
+        [JsonProperty("width")]
+        public double Width { get; set; } = 0;
+        [JsonProperty("height")]
+        public double Height { get; set; } = 0;
+    }
+
+    public class MpAnalyzerPluginTextResponseValueFormat :
+        MpAnalyzerResponseValueFormatBase, 
+        MpITextDescriptorRange {
+        [JsonProperty("start")]
+        public int RangeStart { get; set; }
+        [JsonProperty("end")]
+        public int RangeEnd { get; set; }
     }
 
     public class MpAnalyzerPresetFormat {
-        public string label { get; set; }
-        public string description { get; set; }
-        public List<MpAnalyzerPresetValueFormat> values { get; set; }
+        public bool isDefault { get; set; } = false;
+
+        public string label { get; set; } = string.Empty;
+        public string description { get; set; } = string.Empty;
+
+        public List<MpAnalyzerPresetValueFormat> values { get; set; } = new List<MpAnalyzerPresetValueFormat>();
     }
 
     public class MpAnalyzerPresetValueFormat {
-        public int enumId { get; set; }
-        public string label { get; set; }
-        public string value { get; set; }
-    }
+        public int enumId { get; set; } = 0;
 
-    public class MpAnalyzerPluginRequestValueFormat {
-        public int enumId { get; set; }
-        public string value { get; set; }
-    }
-
-    public class MpAnalyzerPluginResponseValueFormat {
-        public string text { get; set; }
-        public string imageBase64 { get; set; }
-        public MpAnalyzerPluginBoxResponseValueFormat box { get; set; }
-        public double decimalVal { get; set; }
-        public int intVal { get; set; }
+        public string label { get; set; } = string.Empty;
+        public string value { get; set; } = string.Empty;
     }
 }

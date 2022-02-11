@@ -140,19 +140,19 @@ namespace MpWpfApp {
 
             Items.Clear();
 
-            var ail = await MpDb.GetItemsAsync<MpAnalyticItem>();
-            ail.Reverse();
-            foreach (var ai in ail) {
-                if(Uri.IsWellFormedUriString(ai.EndPoint,UriKind.Absolute)) {
-                    var aivm = await CreateAnalyticItemViewModel(ai);
-                    Items.Add(aivm);
-                }                
-            }
+            //var ail = await MpDb.GetItemsAsync<MpAnalyticItem>();
+            //ail.Reverse();
+            //foreach (var ai in ail) {
+            //    if(Uri.IsWellFormedUriString(ai.EndPoint,UriKind.Absolute)) {
+            //        var aivm = await CreateAnalyticItemViewModel(ai);
+            //        Items.Add(aivm);
+            //    }                
+            //}
 
-            var pail = MpPluginManager.Plugins.Where(x => x.Components.Any(y => y is MpIAnalyzerPluginComponent));
+            var pail = MpPluginManager.Plugins.Where(x => x.LoadedComponent is MpIAnalyzerPluginComponent);
             foreach(var pai in pail) {
-                var paivml = await CreateAnalyticItemViewModel(pai);
-                paivml.ForEach(x => Items.Add(x));
+                var paivm = await CreateAnalyticItemViewModel(pai);
+                Items.Add(paivm);
             }
             OnPropertyChanged(nameof(Items));
             
@@ -181,38 +181,31 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpAnalyticItem ai) {
-            MpAnalyticItemViewModel aivm = null; 
-            switch(ai.Title) {
-                case "Open Ai":
-                    aivm = new MpOpenAiViewModel(this);
-                    break;
-                case "Language Translator":
-                    aivm = new MpTranslatorViewModel(this);
-                    break;
-                case "Yolo":
-                    aivm = new MpYoloViewModel(this);
-                    break;
-                case "Azure Image Analysis":
-                    aivm = new MpAzureImageAnalysisViewModel(this);
-                    break;
-            }
-            await aivm.InitializeAsync(ai);
+        //private async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpAnalyticItem ai) {
+        //    MpAnalyticItemViewModel aivm = null; 
+        //    switch(ai.Title) {
+        //        case "Open Ai":
+        //            aivm = new MpOpenAiViewModel(this);
+        //            break;
+        //        case "Language Translator":
+        //            aivm = new MpTranslatorViewModel(this);
+        //            break;
+        //        case "Yolo":
+        //            aivm = new MpYoloViewModel(this);
+        //            break;
+        //        case "Azure Image Analysis":
+        //            aivm = new MpAzureImageAnalysisViewModel(this);
+        //            break;
+        //    }
+        //    await aivm.InitializeAsync(ai);
+        //    return aivm;
+        //}
+
+        private async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpPluginFormat plugin) {
+            MpAnalyticItemViewModel aivm = new MpAnalyticItemViewModel(this);
+
+            await aivm.InitializeAsync(plugin);
             return aivm;
-        }
-
-        private async Task<List<MpAnalyticItemViewModel>> CreateAnalyticItemViewModel(MpPlugin plugin) {
-            var apl = new List<MpAnalyticItemViewModel>();
-
-            for (int i = 0; i < plugin.types.Count; i++) {
-                for (int j = 0; j < plugin.types[i].analyzers.Count; j++) {
-                    MpPluginAnalyzerViewModel aivm = new MpPluginAnalyzerViewModel(this);
-
-                    await aivm.InitializeAsync(plugin, i,j);
-                    apl.Add(aivm);
-                }
-            }
-            return apl;
         }
 
         private void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -228,13 +221,15 @@ namespace MpWpfApp {
                         MpTagTrayViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
-                    if(SelectedItem == null) {
-                        Items[0].IsSelected = true;
-                        SelectedItem.PresetViewModels.ForEach(x => x.IsEditingParameters = false);
-                    }
-                    if(!SelectedItem.IsAnyEditingParameters) {
-                        SelectedItem.PresetViewModels.ForEach(x => x.IsSelected = x == SelectedItem.PresetViewModels[0]);
-                        //SelectedItem.PresetViewModels.ForEach(x => x.IsEditing = x == SelectedItem.PresetViewModels[0]);
+                    if(Items.Count > 0) {
+                        if (SelectedItem == null) {
+                            Items[0].IsSelected = true;
+                            SelectedItem.PresetViewModels.ForEach(x => x.IsEditingParameters = false);
+                        }
+                        if (!SelectedItem.IsAnyEditingParameters) {
+                            SelectedItem.PresetViewModels.ForEach(x => x.IsSelected = x == SelectedItem.PresetViewModels[0]);
+                            //SelectedItem.PresetViewModels.ForEach(x => x.IsEditing = x == SelectedItem.PresetViewModels[0]);
+                        }
                     }
                     OnPropertyChanged(nameof(SelectedItem));
                     break;
@@ -249,7 +244,7 @@ namespace MpWpfApp {
 
         public ICommand ManageItemCommand => new RelayCommand<object>(
             (itemId) => {
-                Items.ForEach(x => x.IsSelected = x.AnalyticItemId == (int)itemId);
+                Items.ForEach(x => x.IsSelected = x.AnalyzerPluginSudoId == (int)itemId);
                 SelectedItem.ManageAnalyticItemCommand.Execute(null);
             }, (itemId) => itemId != null);
 

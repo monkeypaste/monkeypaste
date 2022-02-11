@@ -43,8 +43,8 @@ namespace MpWpfApp {
                 if (!IsValid) {
                     return ValidationMessage;
                 }
-                if (Parameter != null && !string.IsNullOrEmpty(Parameter.Description)) {
-                    return Parameter.Description;
+                if (Parameter != null && !string.IsNullOrEmpty(Parameter.description)) {
+                    return Parameter.description;
                 }
                 return null;
             }
@@ -76,10 +76,10 @@ namespace MpWpfApp {
 
         public virtual string DefaultValue { 
             get {
-                if (Parameter == null || Parameter.Values.All(x=>x.IsDefault == false)) {
+                if (Parameter == null || Parameter.values.All(x=>x.isDefault == false)) {
                     return string.Empty;
                 }
-                return Parameter.Values.FirstOrDefault(x => x.IsDefault).Value;
+                return Parameter.values.FirstOrDefault(x => x.isDefault).value;
             }
         }
 
@@ -132,7 +132,7 @@ namespace MpWpfApp {
                 if(Parameter == null) {
                     return false;
                 }
-                return Parameter.IsVisible;
+                return Parameter.isVisible;
             }
         }
 
@@ -160,7 +160,7 @@ namespace MpWpfApp {
                 if (Parameter == null) {
                     return 0;
                 }
-                return Parameter.EnumId;
+                return Parameter.enumId;
             }
         }
 
@@ -169,7 +169,7 @@ namespace MpWpfApp {
                 if (Parameter == null) {
                     return false;
                 }
-                return Parameter.IsRequired;
+                return Parameter.isRequired;
            }
         }
 
@@ -178,10 +178,10 @@ namespace MpWpfApp {
                 if (Parameter == null) {
                     return string.Empty;
                 }
-                if(string.IsNullOrEmpty(Parameter.Label)) {
-                    return Parameter.Label;
+                if(string.IsNullOrEmpty(Parameter.label)) {
+                    return Parameter.label;
                 }
-                return Parameter.Label;
+                return Parameter.label;
             }
         }
 
@@ -190,7 +190,7 @@ namespace MpWpfApp {
                 if (Parameter == null) {
                     return string.Empty;
                 }
-                return Parameter.FormatInfo;
+                return Parameter.formatInfo;
             }
         }
 

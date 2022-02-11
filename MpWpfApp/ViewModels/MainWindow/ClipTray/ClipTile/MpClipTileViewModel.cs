@@ -528,7 +528,7 @@ using System.Speech.Synthesis;
                     return false;
                 }
                 return //HeadItem.CopyItemType == MpCopyItemType.Csv ||
-                        HeadItem.CopyItemType == MpCopyItemType.Html ||
+                        //HeadItem.CopyItemType == MpCopyItemType.Html ||
                         HeadItem.CopyItemType == MpCopyItemType.Text;
             }
         }

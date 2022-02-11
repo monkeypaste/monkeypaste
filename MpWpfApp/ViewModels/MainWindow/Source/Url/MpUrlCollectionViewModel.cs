@@ -49,7 +49,7 @@ namespace MpWpfApp {
                 var uvm = await CreateUrlViewModel(url);
                 UrlViewModels.Add(uvm);
             }
-            await Task.WhenAll(UrlViewModels.Select(x => UpdateRejection(x)));
+            //await Task.WhenAll(UrlViewModels.Select(x => UpdateRejection(x)));
             OnPropertyChanged(nameof(UrlViewModels));
 
             IsBusy = false;
@@ -195,7 +195,7 @@ namespace MpWpfApp {
                     var iconBmpSrc = MpHelpers.GetUrlFavicon(UrlPath);
                     string title = await MpHelpers.GetUrlTitle(UrlPath);
                     var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                    url = await MpUrl.Create(UrlPath, title, MpPreferences.ThisAppSource.App);
+                    url = await MpUrl.Create(UrlPath, title);
                     uvm = await CreateUrlViewModel(url);
                     await UpdateRejection(uvm);
                 }

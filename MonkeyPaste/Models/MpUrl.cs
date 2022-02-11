@@ -110,7 +110,7 @@ namespace MonkeyPaste {
         public int RootId => Id;
         #endregion
 
-        public static async Task<MpUrl> Create(string urlPath,string urlTitle, MpApp app) {
+        public static async Task<MpUrl> Create(string urlPath,string urlTitle) {
             var dupCheck = await MpDataModelProvider.GetUrlByPath(urlPath);
             if(dupCheck != null) {
                 dupCheck = await MpDb.GetItemAsync<MpUrl>(dupCheck.Id);
@@ -127,19 +127,16 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(domainStr)) {
                 MpConsole.WriteTraceLine("Ignoring mproperly formatted source url: " + urlPath);
                 return null;
+            }
+            var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
+            if (favIconImg64 == MpBase64Images.UnknownFavIcon) {
+                //url has no and result is google's default
+                return null;
             } else {
-                var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
-                if(favIconImg64 == MpBase64Images.UnknownFavIcon && app != null) {
-                    //url has no favicon so use application's icon
-                    MpConsole.WriteLine($"Url: {urlPath} has no favicon, using app: {app.AppPath}");
-                    newUrl.Icon = app.Icon;
-                    newUrl.IconId = app.IconId;
-                } else {
-                    newUrl.Icon = await MpIcon.Create(favIconImg64);
-                    newUrl.IconId = newUrl.Icon.Id;
-                }                
-            } 
-            if(newUrl.Icon == null) {
+                newUrl.Icon = await MpIcon.Create(favIconImg64);
+                newUrl.IconId = newUrl.Icon.Id;
+            }
+            if (newUrl.Icon == null) {
                 newUrl.Icon = MpPreferences.ThisAppSource.PrimarySource.SourceIcon;
                 newUrl.IconId = MpPreferences.ThisAppSource.PrimarySource.SourceIcon.Id;
             }

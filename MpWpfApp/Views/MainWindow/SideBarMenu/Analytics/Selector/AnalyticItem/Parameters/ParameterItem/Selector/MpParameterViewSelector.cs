@@ -47,17 +47,17 @@ namespace MpWpfApp {
 
             var aipvm = item as MpAnalyticItemParameterViewModel;
             
-            switch(aipvm.Parameter.ParameterType) {
-                case MpAnalyticItemParameterType.ComboBox:
-                    if (aipvm.Parameter.IsMultiValue) {
+            switch(aipvm.Parameter.parameterControlType) {
+                case MpAnalyticItemParameterControlType.ComboBox:
+                    if (aipvm.Parameter.isMultiValue) {
                         return MultiSelectComboBoxTemplate;
                     }
                     return ComboBoxTemplate;
-                case MpAnalyticItemParameterType.Text:
+                case MpAnalyticItemParameterControlType.Text:
                     return TextBoxTemplate;
-                case MpAnalyticItemParameterType.CheckBox:
+                case MpAnalyticItemParameterControlType.CheckBox:
                     return CheckBoxTemplate;
-                case MpAnalyticItemParameterType.Slider:
+                case MpAnalyticItemParameterControlType.Slider:
                     return SliderTemplate;
                 default:
                     throw new Exception("Unsupportted parameter type");

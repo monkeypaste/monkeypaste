@@ -5,12 +5,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Annotations;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -100,6 +102,7 @@ namespace MpWpfApp {
 
                 MpHelpers.RunOnMainThread(async () => {
                     await CreateHyperlinksAsync(CTS.Token);
+
                 });
 
                 //MpMessenger.Register<MpMessageType>(
@@ -785,5 +788,6 @@ namespace MpWpfApp {
         }
 
         #endregion
+
     }
 }

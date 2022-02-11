@@ -49,7 +49,7 @@ namespace MpWpfApp {
                 if(Parameter == null) {
                     return false;
                 }
-                return Parameter.IsMultiValue;
+                return Parameter.isMultiValue;
             }
         }
 

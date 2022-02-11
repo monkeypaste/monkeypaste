@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MonkeyPaste.Plugin;
+using Newtonsoft.Json;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
@@ -18,9 +19,9 @@ namespace MonkeyPaste {
         [Column("MpAnalyticItemPresetGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [ForeignKey(typeof(MpAnalyticItem))]
-        [Column("fk_MpAnalyticItemId")]
-        public int AnalyticItemId { get; set; }
+        //[ForeignKey(typeof(MpAnalyticItem))]
+        //[Column("fk_MpAnalyticItemId")]
+        public int AnalyzerPluginSudoId { get; set; }
 
         [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
@@ -50,8 +51,8 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [ManyToOne]
-        public MpAnalyticItem AnalyticItem { get; set; }
+        //[ManyToOne]
+        //public MpAnalyticItem AnalyticItem { get; set; }
 
         [OneToOne]
         public MpIcon Icon { get; set; }
@@ -110,22 +111,28 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAnalyticItemPreset> Create(
-            MpAnalyticItem analyticItem = null, 
+            int analyzerSudoId = 0, 
             string label = "",
             MpIcon icon = null, 
             bool isDefault = false, 
             bool isQuickAction = false, 
             int sortOrderIdx = -1, 
-            string description = "") {
-            if (analyticItem == null || analyticItem.Icon == null) {
-                throw new Exception("Preset must be associated with an item");
+            string description = "",
+            List<MpAnalyticItemParameterFormat> parameters = null) {
+            
+            if(icon == null) {
+                throw new Exception("needs icon");
             }
-            icon = icon == null ? analyticItem.Icon : icon;
+            if(analyzerSudoId <= 0) {
+                throw new Exception("needs analyzer id");
+            }
+            if(parameters == null || parameters.Count == 0) {
+                throw new Exception("needs parameters");
+            }
+
             var newAnalyticItemPreset = new MpAnalyticItemPreset() {
-                Id = 0,
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
-                AnalyticItem = analyticItem,
-                AnalyticItemId = analyticItem.Id,
+                AnalyzerPluginSudoId = analyzerSudoId,
                 Icon = icon,
                 IconId = icon.Id,
                 Label = label,
@@ -139,28 +146,19 @@ namespace MonkeyPaste {
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 
-            string formatJson = null;
-
-            //for local plugins resource file is in same folder as its console application and named "parameters.json"
-            formatJson = MpFileIo.ReadTextFromFileOrResource(analyticItem.ParameterFormatResourcePath);
-
-
-            var paramlist = JsonConvert.DeserializeObject<MonkeyPaste.Plugin.MpAnalyzerPluginFormat>(
-                formatJson, new MpJsonEnumConverter()).parameters;
-
-            foreach(var param in paramlist.OrderBy(x=>x.SortOrderIdx)) {
+            foreach(var param in parameters.OrderBy(x=>x.sortOrderIdx)) {
                 string defValue = string.Empty;
-                if(param.Values != null && param.Values.Count > 0) {
-                    if(param.Values.Any(x=>x.IsDefault)) {
-                        defValue = string.Join(",",param.Values.Where(x => x.IsDefault).Select(x=>x.Value));
+                if(param.values != null && param.values.Count > 0) {
+                    if(param.values.Any(x=>x.isDefault)) {
+                        defValue = string.Join(",",param.values.Where(x => x.isDefault).Select(x=>x.value));
                     } else {
-                        defValue = param.Values[0].Value;
+                        defValue = param.values[0].value;
                     }
                 }
 
                 var paramPreset = await MpAnalyticItemPresetParameterValue.Create(
                     newAnalyticItemPreset,
-                    param.EnumId,
+                    param.enumId,
                     defValue);
 
                 newAnalyticItemPreset.PresetParameterValues.Add(paramPreset);
@@ -172,7 +170,7 @@ namespace MonkeyPaste {
 
         public object Clone() {
             var caip = new MpAnalyticItemPreset() {
-                AnalyticItemId = this.AnalyticItemId,
+                AnalyticItemPresetGuid = this.AnalyticItemPresetGuid,
                 Label = this.Label + " Clone",
                 Description = this.Description,
                 PresetParameterValues = this.PresetParameterValues.Select(x=>x.Clone() as MpAnalyticItemPresetParameterValue).ToList()

@@ -41,9 +41,6 @@ namespace MpWpfApp {
                 return paraDict;
             }
         }
-
-        public MpAnalyticItemParameterViewModel SelectedParameter => ParameterViewModels.FirstOrDefault(x => x.IsSelected);
-
         public MpMenuItemViewModel MenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
@@ -90,12 +87,12 @@ namespace MpWpfApp {
         public bool HasAnyParamValueChanged => ParameterViewModels.Any(x => x.HasValueChanged);
 
         public bool IsAllValid => ParameterViewModels.All(x => x.IsValid);
+        public bool IsEditingParameters { get; set; }
 
         public bool IsSelected { get; set; }
 
         public bool IsHovering { get; set; }
 
-        public bool IsEditingParameters { get; set; }
 
         public bool IsExpanded { get; set; }
 
@@ -199,12 +196,12 @@ namespace MpWpfApp {
             }
         }
 
-        public int ParentAnalyticItemId {
+        public int AnalyzerPluginSudoId {
             get {
                 if (Preset == null) {
                     return 0;
                 }
-                return Preset.AnalyticItemId;
+                return Preset.AnalyzerPluginSudoId;
             }
         }
 
@@ -262,34 +259,15 @@ namespace MpWpfApp {
         public async Task InitializeAsync(MpAnalyticItemPreset aip) {
             IsBusy = true;
 
-
             ParameterViewModels.Clear();
 
-            if(aip == null) {
-                Preset = await MpAnalyticItemPreset.Create(
-                    Parent.AnalyticItem, "Default", Parent.AnalyticItem.Icon, true, false, 0);
-            } else {
-                Preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
-            }
+            Preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
-            List<MpAnalyticItemParameterFormat> paramlist = null;
-            
-            if (Parent is MpPluginAnalyzerViewModel pavm) {
-                paramlist = pavm.AnalyzerPluginFormat.parameters;
-            } else {
-                var assembly = typeof(MpDb).Assembly;
+            List<MpAnalyticItemParameterFormat> paramlist = Parent.AnalyzerPluginFormat.parameters;
 
-                string formatJson = MpFileIo.ReadTextFromFileOrResource(Parent.AnalyticItem.ParameterFormatResourcePath, assembly);
-
-                paramlist = JsonConvert.DeserializeObject<MpAnalyzerPluginFormat>(
-                    formatJson, new MpJsonEnumConverter()).parameters;
-            }
-
-            
-
-            foreach (var param in paramlist.OrderBy(x => x.SortOrderIdx)) {
-                var presetVal = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == param.EnumId);
-                var naipvm = await CreateParameterViewModel(param,presetVal);
+            foreach (var param in paramlist.OrderBy(x => x.sortOrderIdx)) {
+                var presetVal = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == param.enumId);
+                var naipvm = await CreateParameterViewModel(param, presetVal);
                 ParameterViewModels.Add(naipvm);
             }
 
@@ -302,50 +280,52 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
+
+
         public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameterFormat aip, MpAnalyticItemPresetParameterValue aippv) {
             MpAnalyticItemParameterViewModel naipvm = null;
 
-            switch (aip.ParameterType) {
-                case MpAnalyticItemParameterType.ComboBox:
-                    if(aip.IsMultiValue) {
+            switch (aip.parameterControlType) {
+                case MpAnalyticItemParameterControlType.ComboBox:
+                    if(aip.isMultiValue) {
                         naipvm = new MpMultiSelectComboBoxParameterViewModel(this);
                     } else {
                         naipvm = new MpComboBoxParameterViewModel(this);
                     }                    
                     break;
-                case MpAnalyticItemParameterType.Text:
+                case MpAnalyticItemParameterControlType.Text:
                     naipvm = new MpTextBoxParameterViewModel(this);
                     break;
-                case MpAnalyticItemParameterType.CheckBox:
+                case MpAnalyticItemParameterControlType.CheckBox:
                     naipvm = new MpCheckBoxParameterViewModel(this);
                     break;
-                case MpAnalyticItemParameterType.Slider:
+                case MpAnalyticItemParameterControlType.Slider:
                     naipvm = new MpSliderParameterViewModel(this);
                     break;
-                case MpAnalyticItemParameterType.Content:
+                case MpAnalyticItemParameterControlType.Hidden:
                     naipvm = new MpContentParameterViewModel(this);
                     break;
                 default:
-                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterType), aip.ParameterType));
+                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterControlType), aip.parameterControlType));
             }
 
             naipvm.PropertyChanged += ParameterViewModels_PropertyChanged;
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 
-            if (aip.IsValueDeferred) {
+            if (aip.isValueDeferred) {
                 aip = await Parent.DeferredCreateParameterModel(aip);
             }
 
             if(naipvm is MpSliderParameterViewModel) {
                 //Debugger.Break();
             }
-            MpAnalyticItemParameterValue aipv = aippv == null ? null: aip.Values.FirstOrDefault(x => x.Value == aippv.Value);
+            MpAnalyticItemParameterValue aipv = aippv == null ? null: aip.values.FirstOrDefault(x => x.value == aippv.Value);
             if (aipv != null) {
-                aip.Values.ForEach(x => x.IsDefault = x.Value == aipv.Value);
-            } else if (aip.Values.Count > 0) {
-                if(aip.IsMultiValue) {
+                aip.values.ForEach(x => x.isDefault = x.value == aipv.value);
+            } else if (aip.values.Count > 0) {
+                if(aip.isMultiValue) {
                     var mvl = aippv.Value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                    aip.Values.ForEach(x => x.IsDefault = mvl.Any(y => y.ToLower() == x.Value.ToLower()));
+                    aip.values.ForEach(x => x.isDefault = mvl.Any(y => y.ToLower() == x.value.ToLower()));
                 } else {
                     //aip.Values.FirstOrDefault(x => x.IsDefault).Value = aippv.Value;
                 }
@@ -508,9 +488,9 @@ namespace MpWpfApp {
                         await presetValue.WriteToDatabaseAsync();
                     }
                     if(paramVm is MpComboBoxParameterViewModel cmbvm) {
-                        paramVm.Parameter.Values.ForEach(x => x.IsDefault = x.Value == paramVm.CurrentValue);
+                        paramVm.Parameter.values.ForEach(x => x.isDefault = x.value == paramVm.CurrentValue);
                     } else {
-                        paramVm.Parameter.Values.FirstOrDefault(x => x.IsDefault).Value = paramVm.CurrentValue;
+                        paramVm.Parameter.values.FirstOrDefault(x => x.isDefault).value = paramVm.CurrentValue;
                     }
                 }
                 if(HasModelChanged) {

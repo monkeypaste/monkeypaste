@@ -8,7 +8,8 @@
            d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
                                             IsDesignTimeCreatable=False}"
            Background="Transparent"
-           IsEnabled="{Binding IsReadOnly, Converter={StaticResource BoolFlipConverter}}"
+           IsEnabled="{Binding IsReadOnly,
+                               Converter={StaticResource BoolFlipConverter}}"
            MouseEnter="Hyperlink_MouseEnter"
            MouseLeave="Hyperlink_MouseLeave"
            PreviewMouseLeftButtonDown="Hyperlink_PreviewMouseLeftButtonDown"

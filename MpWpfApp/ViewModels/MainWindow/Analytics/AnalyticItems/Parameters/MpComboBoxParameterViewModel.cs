@@ -80,9 +80,9 @@ namespace MpWpfApp {
 
             ValueViewModels.Clear();
 
-            foreach (var valueSeed in Parameter.Values) {
+            foreach (var valueSeed in Parameter.values) {
                 var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
-                naipvvm.IsSelected = valueSeed.IsDefault;
+                naipvvm.IsSelected = valueSeed.isDefault;
                 ValueViewModels.Add(naipvvm);
             }
 

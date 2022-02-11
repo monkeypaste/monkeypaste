@@ -60,7 +60,7 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        protected override async Task<MpRestTransaction> ExecuteAnalysis(object obj) {
+        protected override async Task<MpAnalyzerTransaction> ExecuteAnalysis(object obj) {
             IsBusy = true;
 
             var paramLookup = SelectedPresetViewModel.ParamLookup;
@@ -98,7 +98,7 @@ namespace MpWpfApp {
 
             //return new Tuple<object, object>(resultData,jsonReq);
 
-            return new MpRestTransaction() {
+            return new MpAnalyzerTransaction() {
                 Request = jsonReq,
                 Response = resultData
             };

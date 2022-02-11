@@ -59,7 +59,8 @@
                            Foreground="White"
                            Text="Actions" />
                 <DockPanel Grid.Row="1"
-                           LastChildFill="True" VerticalAlignment="Top">
+                           LastChildFill="True"
+                           VerticalAlignment="Top">
                     <Button BorderThickness="0"
                             DockPanel.Dock="Right"
                             MaxHeight="30"
@@ -86,7 +87,8 @@
                                                        NotifyOnTargetUpdated=True}"
                               MinWidth="200"
                               MaxHeight="40"
-                              ItemsSource="{Binding Items, IsAsync=True}"
+                              ItemsSource="{Binding Items,
+                                                    IsAsync=True}"
                               SelectedItem="{Binding SelectedItem,
                                                      Mode=TwoWay,
                                                      UpdateSourceTrigger=PropertyChanged,
@@ -105,13 +107,13 @@
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
                                 <Setter Property="HorizontalAlignment"
-                                                Value="Stretch"/>
+                                        Value="Stretch" />
                                 <Setter Property="VerticalAlignment"
-                                                Value="Center"/>
+                                        Value="Center" />
                                 <Setter Property="VerticalContentAlignment"
-                                                Value="Center"/>
+                                        Value="Center" />
                                 <Setter Property="Padding"
-                                                Value="3"/>
+                                        Value="3" />
                             </Style>
                         </ComboBox.ItemContainerStyle>
                     </ComboBox>

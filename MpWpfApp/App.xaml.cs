@@ -14,6 +14,7 @@ namespace MpWpfApp {
     /// </summary>
     public partial class App : Application {
         protected override async void OnStartup(StartupEventArgs e) {
+            
             //PresentationTraceSources.Refresh();
             //PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());
             //PresentationTraceSources.DataBindingSource.Listeners.Add(new MpDebugTraceListener());

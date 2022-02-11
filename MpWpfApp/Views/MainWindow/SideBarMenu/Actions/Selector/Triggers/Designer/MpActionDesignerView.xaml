@@ -45,8 +45,7 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <local:MpDesignerCanvas x:Name="ActionDesignerCanvas"
-                                                
-                                   Loaded="ZoomAndPanControl_Loaded"
+                                                Loaded="ZoomAndPanControl_Loaded"
                                                 ShowVoronoi="True"
                                                 ShowGrid="True"
                                                 MinDist="100.1"

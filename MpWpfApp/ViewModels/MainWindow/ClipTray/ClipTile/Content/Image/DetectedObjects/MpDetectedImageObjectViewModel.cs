@@ -143,11 +143,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.Confidence;
+                return DetectedImageObject.Score;
             }
             set {
                 if (Confidence != value) {
-                    DetectedImageObject.Confidence = value;
+                    DetectedImageObject.Score = value;
                     OnPropertyChanged(nameof(Confidence));
                     OnPropertyChanged(nameof(DetectedImageObject));
                 }
@@ -159,11 +159,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return string.Empty;
                 }
-                return DetectedImageObject.ObjectTypeName;
+                return DetectedImageObject.Label;
             }
             set {
                 if (ObjectTypeName != value) {
-                    DetectedImageObject.ObjectTypeName = value;
+                    DetectedImageObject.Label = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ObjectTypeName));
                 }

@@ -1,10 +1,13 @@
 ﻿using MonkeyPaste;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Annotations;
+using System.Windows.Annotations.Storage;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -112,6 +115,19 @@ namespace MpWpfApp {
             fe.ContextMenu = MpContextMenuView.Instance;
             fe.ContextMenu.PlacementTarget = this;
             fe.ContextMenu.IsOpen = true;
+        }
+
+        private MemoryStream annontationStream = null;
+        private AnnotationService service;
+
+        private void FlowDocumentScrollViewer_Loaded(object sender, RoutedEventArgs e) {
+            var sdsv = sender as FlowDocumentScrollViewer;
+            service = new AnnotationService(sdsv);
+
+            annontationStream = new MemoryStream();
+            AnnotationStore store = new XmlStreamStore(annontationStream);
+
+            service.Enable(store);
         }
     }
 }

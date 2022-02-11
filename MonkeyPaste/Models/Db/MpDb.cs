@@ -793,27 +793,27 @@ namespace MonkeyPaste {
 
             #region Anayltic Items
 
-            var ai1 = await MpAnalyticItem.Create(
-                        "https://api.cognitive.microsofttranslator.com/{0}",
-                        MpPreferences.AzureCognitiveServicesKey,
-                        MpCopyItemType.Text,
-                        MpOutputFormatType.Text,
-                        "Language Translator",
-                        "Azure Cognitive-Services Language Translator",
-                        MpFileIo.ReadTextFromResource(
-                            "MonkeyPaste.Resources.Data.Analytics.Formats.Azure.azuretranslator.json", 
-                            typeof(MpDb).Assembly));
+            //var ai1 = await MpAnalyticItem.Create(
+            //            "https://api.cognitive.microsofttranslator.com/{0}",
+            //            MpPreferences.AzureCognitiveServicesKey,
+            //            MpCopyItemType.Text,
+            //            MpAnalyzerOutputFormatFlags.Text,
+            //            "Language Translator",
+            //            "Azure Cognitive-Services Language Translator",
+            //            MpFileIo.ReadTextFromResource(
+            //                "MonkeyPaste.Resources.Data.Analytics.Formats.Azure.azuretranslator.json", 
+            //                typeof(MpDb).Assembly));
 
-            var ai2 = await MpAnalyticItem.Create(
-                        "https://api.openai.com/v1/",
-                        MpPreferences.RestfulOpenAiApiKey,
-                        MpCopyItemType.Text,
-                        MpOutputFormatType.Text,
-                        "Open Ai",
-                        "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.",
-                        MpFileIo.ReadTextFromResource(
-                            "MonkeyPaste.Resources.Data.Analytics.Formats.OpenAi.openai.json",
-                            typeof(MpDb).Assembly));
+            //var ai2 = await MpAnalyticItem.Create(
+            //            "https://api.openai.com/v1/",
+            //            MpPreferences.RestfulOpenAiApiKey,
+            //            MpCopyItemType.Text,
+            //            MpAnalyzerOutputFormatFlags.Text,
+            //            "Open Ai",
+            //            "OpenAI is an artificial intelligence research laboratory consisting of the for-profit corporation OpenAI LP and its parent company, the non-profit OpenAI Inc.",
+            //            MpFileIo.ReadTextFromResource(
+            //                "MonkeyPaste.Resources.Data.Analytics.Formats.OpenAi.openai.json",
+            //                typeof(MpDb).Assembly));
 
             // TODO add other analyzers here or better load w/ json
 

@@ -15,7 +15,7 @@ namespace MonkeyPaste {
     public static class MpPluginManager {
 
         #region Properties
-        public static ObservableCollection<MpPlugin> Plugins { get; set; } = new ObservableCollection<MpPlugin>();
+        public static ObservableCollection<MpPluginFormat> Plugins { get; set; } = new ObservableCollection<MpPluginFormat>();
         #endregion
 
         #region Public Methods
@@ -84,7 +84,7 @@ namespace MonkeyPaste {
                     }
                     string manifestJson = MpFileIo.ReadTextFromFile(manifestPath);
 
-                    var plugin = JsonConvert.DeserializeObject<MpPlugin>(manifestJson);
+                    var plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestJson);
                     if (pluginAssembly != null) {
                         for (int i = 0; i < pluginAssembly.GetTypes().Length; i++) {
                             var curType = pluginAssembly.GetTypes()[i];
@@ -92,14 +92,15 @@ namespace MonkeyPaste {
                                 var pluginObj = Activator.CreateInstance(curType);
 
                                 if (pluginObj != null) {
-                                    plugin.Components.Add(pluginObj);
+                                    plugin.LoadedComponent = pluginObj;
+                                    break;
                                 }
                             }
                         }
                     }
 
-                    if(!string.IsNullOrWhiteSpace(pluginExePath)) {
-                        plugin.Components.Add(new MpCommandLinePlugin() { Endpoint = pluginExePath });
+                    if(!string.IsNullOrWhiteSpace(pluginExePath) && plugin.LoadedComponent == null) {
+                        plugin.LoadedComponent = new MpCommandLinePlugin() { Endpoint = pluginExePath };
 
                         //var af = plugin.types
                         //            .Where(x => x.analyzers != null && x.analyzers.Count > 0)

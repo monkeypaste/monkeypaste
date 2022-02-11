@@ -48,18 +48,18 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAnalyticItemPresetParameterValue> Create(
-            MpAnalyticItemPreset parentItem = null, 
+            MpAnalyticItemPreset preset = null, 
             int paramEnumId = 0, 
             string value = "") {
-            if (parentItem == null) {
+            if (preset == null) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
-            var dupItem = await MpDataModelProvider.GetAnalyticItemPresetValue(parentItem.Id, paramEnumId);
+            var dupItem = await MpDataModelProvider.GetAnalyticItemPresetValue(preset.Id, paramEnumId);
             if (dupItem != null) {
-                MpConsole.WriteLine($"Updating preset {parentItem.Label} for {paramEnumId}");
+                MpConsole.WriteLine($"Updating preset {preset.Label} for {paramEnumId}");
 
                 dupItem = await MpDb.GetItemAsync<MpAnalyticItemPresetParameterValue>(dupItem.Id);
-                dupItem.AnalyticItemPresetId = parentItem.Id;
+                dupItem.AnalyticItemPresetId = preset.Id;
                 dupItem.ParameterEnumId = paramEnumId;
                 dupItem.Value = value;
                 await dupItem.WriteToDatabaseAsync();
@@ -68,8 +68,8 @@ namespace MonkeyPaste {
 
             var newAnalyticItemPresetParameterValue = new MpAnalyticItemPresetParameterValue() {
                 AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
-                AnalyticItemPreset = parentItem,
-                AnalyticItemPresetId = parentItem.Id,
+                AnalyticItemPreset = preset,
+                AnalyticItemPresetId = preset.Id,
                 ParameterEnumId = paramEnumId,
                 Value = value
             };
