@@ -105,16 +105,26 @@ namespace MpWpfApp {
                     Title = "Select Image for Icon",
                     InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
                 };
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+
+                MpContextMenuView.Instance.CloseMenu();
                 bool? openResult = openFileDialog.ShowDialog();
                 if (openResult != null && openResult.Value) {
                     string imagePath = openFileDialog.FileName;
                     var bmpSrc = (BitmapSource)new BitmapImage(new Uri(imagePath));
 
                     var icon = await uivm.GetIcon();
-                    icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
-                    await icon.CreateOrUpdateBorder();
+                    if(icon == null) {
+                        // likely means its current icon is a default reference to a parent
+                        icon = await MpIcon.Create(bmpSrc.ToBase64String(), false);
+                    } else {
+                        icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
+                        await icon.CreateOrUpdateBorder();
+                    }
+
                     uivm.SetIconCommand.Execute(icon);
                 }
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
             });
 
         public ICommand ChangeIconCommand => new RelayCommand<object>(
@@ -124,29 +134,39 @@ namespace MpWpfApp {
 
                 if (fe.DataContext is MpIUserColorViewModel ucvm) {
                     string hexColor = ucvm.GetColor();
-                    mivm.SubItems.Add(MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(ucvm));
+                     mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
+                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(ucvm)
+                     };
                 }
 
-                if (fe.DataContext is MpIUserIconViewModel uivm) {
-                    mivm.SubItems.Add(
-                        new MpMenuItemViewModel() {
-                            Header = "Choose Image...",
-                            IconResourceKey = Application.Current.Resources["ImageIcon"] as string,
-                            Command = SelectImagePathCommand,
-                            CommandParameter = uivm
-                        });
-                }
+                 if (fe.DataContext is MpIUserIconViewModel uivm) {
+                     if (mivm.SubItems == null) {
+                         mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>();
+                     } else {
+                         mivm.SubItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
+                     }
+                     mivm.SubItems.Add(
+                         new MpMenuItemViewModel() {
+                             Header = "Choose Image...",
+                             IconResourceKey = Application.Current.Resources["ImageIcon"] as string,
+                             Command = SelectImagePathCommand,
+                             CommandParameter = uivm
+                         });
+                 }
 
-                fe.ContextMenu = new MpContextMenuView();
-                fe.ContextMenu.DataContext = mivm;
-                fe.ContextMenu.PlacementTarget = fe;
-                fe.ContextMenu.IsOpen = true;
+                 MpContextMenuView.Instance.DataContext = mivm;
+                 MpContextMenuView.Instance.PlacementTarget = fe;
+                 MpContextMenuView.Instance.IsOpen = true;
             },(args)=> {
                 if(args !=  null) {
-                    if(args is MpIUserIconViewModel uivm) {
+                    object dc = args;
+                    if(args is FrameworkElement fe) {
+                        dc = fe.DataContext;
+                    }
+                    if(dc is MpIUserIconViewModel uivm) {
                         return !uivm.IsReadOnly;
                     }
-                    if (args is MpIUserColorViewModel ucvm) {
+                    if (dc is MpIUserColorViewModel ucvm) {
                         return !ucvm.IsReadOnly;
                     }
                 }

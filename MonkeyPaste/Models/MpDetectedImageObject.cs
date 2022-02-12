@@ -62,6 +62,12 @@ namespace MonkeyPaste {
             double h = 0, 
             string label = "",
             string description = "") {
+            var dupCheck = await MpDataModelProvider.GetDetectedImageObjectByData(cid, x, y, w, h, c, label, description);
+            if(dupCheck != null) {
+                MpConsole.WriteTraceLine($"Duplicate detected image object detected ignoring create");
+                return dupCheck;
+            }
+
             var ndio = new MpDetectedImageObject() {
                 DetectedImageObjectGuid = System.Guid.NewGuid(),
                 CopyItemId = cid,

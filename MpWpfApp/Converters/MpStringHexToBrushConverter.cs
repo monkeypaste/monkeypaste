@@ -16,7 +16,7 @@ namespace MpWpfApp {
                 try {
                     opacity = System.Convert.ToDouble(opacity);
                 }catch(Exception ex) {
-                    MpConsole.WriteTraceLine($"Couldn't convert param '{paramStr}' to a double for opacity");
+                    MpConsole.WriteTraceLine($"Couldn't convert param '{paramStr}' to a double for opacity",ex);
                     opacity = 1.0;
                 }
                 b.Opacity = opacity;                

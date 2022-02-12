@@ -9,23 +9,12 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpSourceCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpSourceCollectionViewModel> {
+    public class MpSourceCollectionViewModel : 
+        MpSelectorViewModelBase<object,MpSourceViewModel>, 
+        MpISingletonViewModel<MpSourceCollectionViewModel> {
         #region Properties
 
         #region View Models
-
-        public ObservableCollection<MpSourceViewModel> Items { get; set; } = new ObservableCollection<MpSourceViewModel>();
-
-        public MpSourceViewModel SelectedItem {
-            get => Items.FirstOrDefault(x => x.IsSelected);
-            set {
-                Items.ForEach(x => x.IsSelected = false);
-                if(value != null) {
-                    value.IsSelected = true;
-                }
-                OnPropertyChanged(nameof(SelectedItem));
-            }
-        }
 
         #endregion
 
@@ -37,16 +26,10 @@ namespace MpWpfApp {
         private static MpSourceCollectionViewModel _instance;
         public static MpSourceCollectionViewModel Instance => _instance ?? (_instance = new MpSourceCollectionViewModel());
 
-        public MpSourceCollectionViewModel() : base(null) {
-
-        }
+        public MpSourceCollectionViewModel() : base(null) { }
 
         public async Task Init() {
             IsBusy = true;
-
-            //await MpIconCollectionViewModel.Instance.Init();
-            //await MpAppCollectionViewModel.Instance.Init();
-            //await MpUrlCollectionViewModel.Instance.Init();
 
             var sl = await MpDb.GetItemsAsync<MpSource>();
             foreach(var s in sl) {

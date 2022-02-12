@@ -17,12 +17,12 @@ namespace MpWpfApp {
 
         #region State
 
-        
+
         #endregion
 
         #region Model
 
-        public override string CurrentValue { get; set; }
+        public override string CurrentValue => DefaultValue;
 
         public override string DefaultValue => _defaultValue;
 

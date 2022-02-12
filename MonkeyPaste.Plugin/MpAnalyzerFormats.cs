@@ -147,7 +147,7 @@ namespace MonkeyPaste.Plugin {
     public class MpAnalyzerPresetValueFormat {
         public int enumId { get; set; } = 0;
 
-        public string label { get; set; } = string.Empty;
+        //public string label { get; set; } = string.Empty;
         public string value { get; set; } = string.Empty;
     }
 }

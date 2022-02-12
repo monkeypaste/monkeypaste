@@ -22,8 +22,9 @@
                                        Converter={StaticResource BoolFlipConverter}}"
             PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
             PreviewMouseRightButtonDown="Border_PreviewMouseRightButtonDown"
-            MouseEnter="ContentListItemView_MouseEnter"
-            MouseLeave="ContentListItemView_MouseLeave"
+            local:MpHoverableExtension.IsEnabled="True"
+            local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                            Mode=TwoWay}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Border.Resources>
@@ -31,7 +32,7 @@
                 <local:MpRtbView DataContext="{Binding}" />
             </DataTemplate>
             <DataTemplate x:Key="FlowDocumentScrollViewerContentTemplate">
-                <FlowDocumentScrollViewer Loaded="FlowDocumentScrollViewer_Loaded"/>
+                <FlowDocumentScrollViewer Loaded="FlowDocumentScrollViewer_Loaded" />
             </DataTemplate>
             <DataTemplate x:Key="ImageContentTemplate">
                 <local:MpImageItemView DataContext="{Binding}" />

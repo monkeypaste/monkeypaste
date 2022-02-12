@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /i /e /s /y /f &quot;..\*&quot; &quot;$(SolutionDir)\MpWpfApp\bin\Debug\Plugins&quot;" />
+    <Exec Command="mkdir -p &quot;$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)&quot;&#xD;&#xA;copy &quot;$(ProjectDir)manifest.json&quot; &quot;$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)&quot;" />
   </Target>
 
 </Project>

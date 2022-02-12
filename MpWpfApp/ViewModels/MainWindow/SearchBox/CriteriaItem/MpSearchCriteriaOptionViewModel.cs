@@ -11,8 +11,6 @@ namespace MpWpfApp {
     public class MpSearchCriteriaOptionViewModel : MpViewModelBase<MpSearchCriteriaOptionViewModel> {
         #region Private Variables
 
-        private MpContentFilterType _filterType = MpContentFilterType.None;
-
         #endregion
 
         #region Properties

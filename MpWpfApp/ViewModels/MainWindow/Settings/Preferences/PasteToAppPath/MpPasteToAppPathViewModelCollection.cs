@@ -48,7 +48,7 @@ namespace MpWpfApp {
                     }
                     var processPath = kvp.Key;
                     var processName = MpProcessManager.GetProcessApplicationName(kvp.Value[0]);
-                    var avm = MpAppCollectionViewModel.Instance.AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower());
+                    var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower());
                     var rpmivm = new MpMenuItemViewModel() {
                         Header = processName,
                         IconId = avm == null ? 0 : avm.IconId,
@@ -60,7 +60,6 @@ namespace MpWpfApp {
                                 new MpPasteToAppPath() {
                                     AppPath = processPath,
                                     AppName = MpProcessManager.GetProcessMainWindowTitle(handle),
-                                    Icon = avm == null ? new MpIcon() : avm.SourceIcon,
                                     IconId = avm == null ? 0 : avm.IconId,
                                     IsAdmin = MpProcessManager.IsProcessAdmin(handle)
                                 },
@@ -368,20 +367,19 @@ namespace MpWpfApp {
                         }
                     }
                 }
-                var avm = MpAppCollectionViewModel.Instance.AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == appPath);
+                var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath);
                 if(avm == null) {
                     var icon = await MpIcon.Create(MpProcessIconBuilder.GetBase64BitmapFromPath(appPath));
                     var app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
                     await Task.Delay(300);
-                    avm = MpAppCollectionViewModel.Instance.AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == appPath);
+                    avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath);
                     if(avm == null) {
-                        throw new Exception("Cannot add app");
+                        
                     }
                 }
                 var nptap = new MpPasteToAppPath() {
                     AppPath = appPath,
                     AppName = avm.AppName,
-                    Icon = avm.App.Icon,
                     IconId = avm.IconId,
                     IsAdmin = false,
                     IsSilent = false,

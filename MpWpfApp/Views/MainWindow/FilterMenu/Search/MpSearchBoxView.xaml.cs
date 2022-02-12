@@ -79,7 +79,7 @@ namespace MpWpfApp {
         }
 
         private void InitContextMenu() {
-            MpHelpers.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread(() => {
                 _searchByContextMenu = new ContextMenu();
 
                 foreach (var sfvm in BindingContext.Filters) {

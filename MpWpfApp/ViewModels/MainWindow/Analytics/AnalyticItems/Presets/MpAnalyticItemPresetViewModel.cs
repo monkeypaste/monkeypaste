@@ -19,7 +19,9 @@ using Windows.UI.Xaml.Controls.Maps;
 
 namespace MpWpfApp {
     public class MpAnalyticItemPresetViewModel : 
-        MpViewModelBase<MpAnalyticItemViewModel>, 
+        MpSelectorViewModelBase<MpAnalyticItemViewModel, MpAnalyticItemParameterViewModel>,
+        MpISelectableViewModel,
+        MpIHoverableViewModel,
         MpIMenuItemViewModel,
         MpITriggerActionViewModel, 
         MpISidebarItemViewModel,
@@ -30,12 +32,10 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public ObservableCollection<MpAnalyticItemParameterViewModel> ParameterViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterViewModel>();
-
         public Dictionary<int, MpAnalyticItemParameterViewModel> ParamLookup {
             get {
                 var paraDict = new Dictionary<int, MpAnalyticItemParameterViewModel>();
-                foreach (var pvm in ParameterViewModels) {
+                foreach (var pvm in Items) {
                     paraDict.Add(pvm.ParamEnumId, pvm);
                 }
                 return paraDict;
@@ -82,17 +82,15 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool CanSave => HasAnyParamValueChanged || HasModelChanged;
+        public bool HasAnyParameterValueChanged => Items.Any(x => x.HasModelChanged);
 
-        public bool HasAnyParamValueChanged => ParameterViewModels.Any(x => x.HasValueChanged);
+        public bool IsAllValid => Items.All(x => x.IsValid);
 
-        public bool IsAllValid => ParameterViewModels.All(x => x.IsValid);
         public bool IsEditingParameters { get; set; }
 
         public bool IsSelected { get; set; }
 
         public bool IsHovering { get; set; }
-
 
         public bool IsExpanded { get; set; }
 
@@ -175,8 +173,8 @@ namespace MpWpfApp {
             set {
                 if(IsQuickAction != value) {
                     Preset.IsQuickAction = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsQuickAction));
-                    Task.Run(async () => { await Preset.WriteToDatabaseAsync(); });
                 }
             }
         }
@@ -191,17 +189,18 @@ namespace MpWpfApp {
             set {
                 if(IconId != value) {
                     Preset.IconId = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IconId));
                 }
             }
         }
 
-        public int AnalyzerPluginSudoId {
+        public string AnalyzerPluginGuid {
             get {
                 if (Preset == null) {
-                    return 0;
+                    return string.Empty;
                 }
-                return Preset.AnalyzerPluginSudoId;
+                return Preset.AnalyzerPluginGuid;
             }
         }
 
@@ -259,22 +258,36 @@ namespace MpWpfApp {
         public async Task InitializeAsync(MpAnalyticItemPreset aip) {
             IsBusy = true;
 
-            ParameterViewModels.Clear();
+            Items.Clear();
 
             Preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
-            List<MpAnalyticItemParameterFormat> paramlist = Parent.AnalyzerPluginFormat.parameters;
+            foreach (var paramVal in Preset.PresetParameterValues) {
+                // loop through each preset value and find matching parameter
+                var param = Parent.AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.enumId == paramVal.ParameterEnumId);
+                if(param == null) {
+                    throw new Exception($"Error no parameter matching enumId: {paramVal.ParameterEnumId}");
+                }
+                
+                if(param.values.Any(x=>x.isDefault)) {
+                    //if parameter has a default value it needs to be swapped with preset value
+                    param.values.FirstOrDefault(x => x.isDefault).value = paramVal.Value;
+                } else {
+                    param.values.Add(
+                        new MpAnalyticItemParameterValue() {
+                            value = paramVal.Value,
+                            isDefault = true
+                        });
+                }
 
-            foreach (var param in paramlist.OrderBy(x => x.sortOrderIdx)) {
-                var presetVal = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == param.enumId);
-                var naipvm = await CreateParameterViewModel(param, presetVal);
-                ParameterViewModels.Add(naipvm);
+                var naipvm = await CreateParameterViewModel(param);
+                Items.Add(naipvm);
             }
 
             OnPropertyChanged(nameof(ShortcutViewModel));
-            OnPropertyChanged(nameof(ParameterViewModels));
-            OnPropertyChanged(nameof(HasAnyParamValueChanged));
-            ParameterViewModels.ForEach(x => x.Validate());
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(HasAnyParameterValueChanged));
+            Items.ForEach(x => x.Validate());
             HasModelChanged = false;
 
             IsBusy = false;
@@ -282,12 +295,13 @@ namespace MpWpfApp {
 
 
 
-        public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(MpAnalyticItemParameterFormat aip, MpAnalyticItemPresetParameterValue aippv) {
+        public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(
+            MpAnalyticItemParameterFormat aipf) {
             MpAnalyticItemParameterViewModel naipvm = null;
 
-            switch (aip.parameterControlType) {
+            switch (aipf.parameterControlType) {
                 case MpAnalyticItemParameterControlType.ComboBox:
-                    if(aip.isMultiValue) {
+                    if(aipf.isMultiValue) {
                         naipvm = new MpMultiSelectComboBoxParameterViewModel(this);
                     } else {
                         naipvm = new MpComboBoxParameterViewModel(this);
@@ -306,32 +320,17 @@ namespace MpWpfApp {
                     naipvm = new MpContentParameterViewModel(this);
                     break;
                 default:
-                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterControlType), aip.parameterControlType));
+                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterControlType), aipf.parameterControlType));
             }
 
             naipvm.PropertyChanged += ParameterViewModels_PropertyChanged;
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 
-            if (aip.isValueDeferred) {
-                aip = await Parent.DeferredCreateParameterModel(aip);
+            if (aipf.isValueDeferred) {
+                aipf = await Parent.DeferredCreateParameterModel(aipf);
             }
 
-            if(naipvm is MpSliderParameterViewModel) {
-                //Debugger.Break();
-            }
-            MpAnalyticItemParameterValue aipv = aippv == null ? null: aip.values.FirstOrDefault(x => x.value == aippv.Value);
-            if (aipv != null) {
-                aip.values.ForEach(x => x.isDefault = x.value == aipv.value);
-            } else if (aip.values.Count > 0) {
-                if(aip.isMultiValue) {
-                    var mvl = aippv.Value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                    aip.values.ForEach(x => x.isDefault = mvl.Any(y => y.ToLower() == x.value.ToLower()));
-                } else {
-                    //aip.Values.FirstOrDefault(x => x.IsDefault).Value = aippv.Value;
-                }
-            }
-
-            await naipvm.InitializeAsync(aip);
+            await naipvm.InitializeAsync(aipf);
 
             return naipvm;
         }
@@ -354,14 +353,23 @@ namespace MpWpfApp {
         }
 
         public async Task<MpIcon> GetIcon() {
+            if(Parent == null) {
+                return null;
+            }
+            if(Parent.IconId == IconId) {
+                // this ensures icon change will not propagate since its default reference
+                return null;
+            }
             await Task.Delay(1);
-            return Preset.Icon;
+            var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
+            if(ivm == null) {
+                return null;
+            }
+            return ivm.Icon;
         }
         public ICommand SetIconCommand => new RelayCommand<object>(
             async (args) => {
-                Preset.Icon = args as MpIcon;
-                IconId = Preset.Icon.Id;
-                await Preset.WriteToDatabaseAsync();
+                IconId = (args as MpIcon).Id;
             });
 
         #endregion
@@ -412,31 +420,37 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
+                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedPresetViewModel));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
                     break;
                 case nameof(IsEditingParameters):
                     if(IsEditingParameters) {
-                        Parent.PresetViewModels.Where(x => x != this).ForEach(x => x.IsEditingParameters = false);
+                        Parent.Items.Where(x => x != this).ForEach(x => x.IsEditingParameters = false);
                         ManagePresetCommand.Execute(null);
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
-                    OnPropertyChanged(nameof(HasAnyParamValueChanged));
+                    OnPropertyChanged(nameof(HasAnyParameterValueChanged));
                     OnPropertyChanged(nameof(HasModelChanged));
-                    OnPropertyChanged(nameof(CanSave));
                     break;
                 //case nameof(IsEditingMatchers):
                 //    if (IsEditingMatchers) {
-                //        Parent.PresetViewModels.ForEach(x => x.IsEditingParameters = false);
-                //        Parent.PresetViewModels.Where(x => x != this).ForEach(x => x.IsEditingMatchers = false);
+                //        Parent.Items.ForEach(x => x.IsEditingParameters = false);
+                //        Parent.Items.Where(x => x != this).ForEach(x => x.IsEditingMatchers = false);
                 //        ManageMatchersCommand.Execute(null);
                 //    }
                 //    OnPropertyChanged(nameof(MatcherViewModels));
                 //    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingMatchers));
                 //    break;
                 case nameof(HasModelChanged):
-                    OnPropertyChanged(nameof(CanSave));
+                    if(HasModelChanged) {
+                        Task.Run(async () => { 
+                            await Preset.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
+                    }
                     break;
             } 
         }
@@ -453,7 +467,7 @@ namespace MpWpfApp {
                     if (ppv != null) {
                         ppv.Value = pvm.CurrentValue;
                     }
-                    OnPropertyChanged(nameof(CanSave));
+                    OnPropertyChanged(nameof(HasAnyParameterValueChanged));
                     break;
             }
         }
@@ -469,16 +483,16 @@ namespace MpWpfApp {
                 var aip = await MpDb.GetItemAsync<MpAnalyticItemPreset>(AnalyticItemPresetId);
                 Preset = aip;
 
-                ParameterViewModels.ForEach(x => x.CurrentValue = x.DefaultValue);
-                OnPropertyChanged(nameof(HasAnyParamValueChanged));
+                Items.ForEach(x => x.CurrentValue = x.DefaultValue);
+                OnPropertyChanged(nameof(HasAnyParameterValueChanged));
                 HasModelChanged = false;
                 IsEditingParameters = false;
             },
-            CanSave);
+            HasAnyParameterValueChanged);
 
         public ICommand SaveChangesCommand => new RelayCommand(
             async () => {
-                foreach (var paramVm in ParameterViewModels) {
+                foreach (var paramVm in Items) {
                     var presetValue = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == paramVm.ParamEnumId);
                     if(presetValue == null) {
                         presetValue = await MpAnalyticItemPresetParameterValue.Create(
@@ -493,26 +507,24 @@ namespace MpWpfApp {
                         paramVm.Parameter.values.FirstOrDefault(x => x.isDefault).value = paramVm.CurrentValue;
                     }
                 }
-                if(HasModelChanged) {
-                    await Preset.WriteToDatabaseAsync();
-                    HasModelChanged = false;
-                }
-                OnPropertyChanged(nameof(CanSave));
+
+                Items.ForEach(x => x.HasModelChanged = false);
+                OnPropertyChanged(nameof(HasAnyParameterValueChanged));
             },
-           CanSave);
+           HasAnyParameterValueChanged);
 
         public ICommand ManagePresetCommand => new RelayCommand(
             () => {
-                Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
-                Parent.PresetViewModels.ForEach(x => x.IsEditingParameters = x == this);
-                Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
+                Parent.Items.ForEach(x => x.IsSelected = x == this);
+                Parent.Items.ForEach(x => x.IsEditingParameters = x == this);
+                Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
             }, !IsEditingParameters && !Parent.IsAnyEditingParameters);
 
 
         //public ICommand ExecutePresetCommand => new RelayCommand(
         //    () => {
-        //        Parent.PresetViewModels.ForEach(x => x.IsSelected = x == this);
-        //        Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
+        //        Parent.Items.ForEach(x => x.IsSelected = x == this);
+        //        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
         //        Parent.ExecuteAnalysisCommand.Execute(null);
         //    }, ()=>Parent.CanExecuteAnalysis(this));
 

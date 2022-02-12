@@ -35,13 +35,9 @@ using System.Speech.Synthesis;
         MpIResizableViewModel {
         #region Private Variables
 
-        private double _unexpandedHeight = 0;
         private List<string> _tempFileList = new List<string>();
-        //container
-
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
-        private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
 
         #endregion
 

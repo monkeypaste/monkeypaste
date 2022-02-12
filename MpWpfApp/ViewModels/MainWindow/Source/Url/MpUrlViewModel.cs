@@ -6,35 +6,57 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpUrlViewModel : MpViewModelBase<MpUrlCollectionViewModel> {
+    public class MpUrlViewModel : 
+        MpViewModelBase<MpUrlCollectionViewModel>,
+        MpIHoverableViewModel,
+        MpISelectableViewModel,
+        MpISourceItem {
         #region Properties
 
         #region View Models
 
-        public MpIconViewModel IconViewModel {
-            get {
-                if (Url == null) {
-                    return null;
-                }
-                return MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
-            }
-        }
+        //public MpIconViewModel IconViewModel {
+        //    get {
+        //        if (Url == null) {
+        //            return null;
+        //        }
+        //        return MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
+        //    }
+        //}
 
         #endregion
 
+
+        #region State
+
+        public bool IsSelected { get; set; }
+
+        public bool IsHovering { get; set; }
+
+        //public bool IsNew {
+        //    get {
+        //        return Url != null && UrlId == 0;
+        //    }
+        //}
+        #endregion
+
+        #region Model
+
+
         #region MpISourceItemViewModel Implementation
 
-        public MpIcon SourceIcon {
-            get {
-                if (IconViewModel == null) {
-                    return null;
-                }
-                return IconViewModel.Icon;
-            }
-        }
+        //public MpIcon SourceIcon {
+        //    get {
+        //        if (IconViewModel == null) {
+        //            return null;
+        //        }
+        //        return IconViewModel.Icon;
+        //    }
+        //}
 
         public string SourcePath {
             get {
@@ -72,32 +94,6 @@ namespace MpWpfApp {
             }
         }
 
-        #endregion
-
-        #region State
-
-        public bool IsSelected { get; set; }
-
-        public bool IsHovering { get; set; }
-
-        //public bool IsNew {
-        //    get {
-        //        return Url != null && UrlId == 0;
-        //    }
-        //}
-        #endregion
-
-        #region Model
-
-        public int UrlId {
-            get {
-                if(Url == null) {
-                    return 0;
-                }
-                return Url.Id;
-            }
-        }
-
 
         public int IconId {
             get {
@@ -105,6 +101,17 @@ namespace MpWpfApp {
                     return 0;
                 }
                 return Url.IconId;
+            }
+        }
+
+        #endregion
+
+        public int UrlId {
+            get {
+                if(Url == null) {
+                    return 0;
+                }
+                return Url.Id;
             }
         }
 
@@ -136,9 +143,9 @@ namespace MpWpfApp {
             set {
                 if(Url != null && Url.IsRejected != value) {
                     Url.IsDomainRejected = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsRejected));
                     OnPropertyChanged(nameof(Url));
-                    HasModelChanged = true;
                 }
             }
         }
@@ -153,9 +160,9 @@ namespace MpWpfApp {
             set {
                 if (Url != null && Url.IsUrlRejected != value) {
                     Url.IsUrlRejected = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsSubRejected));
                     OnPropertyChanged(nameof(Url));
-                    HasModelChanged = true;
                 }
             }
         }
@@ -174,7 +181,7 @@ namespace MpWpfApp {
         public MpUrlViewModel(MpUrlCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpUrlViewModel_PropertyChanged;
         }
-        
+
         public async Task InitializeAsync(MpUrl url) {
             IsBusy = true;
             Url = url;
@@ -184,33 +191,82 @@ namespace MpWpfApp {
 
             IsBusy = false;
         }
+        public async Task RejectUrlOrDomain(bool isDomain) {
+            IsBusy = true;
+
+            bool wasCanceled = false;
+
+            List<MpCopyItem> clipsFromUrl = new List<MpCopyItem>();
+            MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + UrlPath + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
+            if (confirmExclusionResult == MessageBoxResult.Yes) {
+                IsBusy = true;
+                if(isDomain) {
+                    clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlDomain(UrlDomainPath);
+                } else {
+                    clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlId(UrlId);
+                }                
+            } else if (confirmExclusionResult == MessageBoxResult.Cancel) {
+                wasCanceled = true;
+            }
+
+
+            if (wasCanceled) {
+                IsBusy = false;
+                return;
+            }
+
+            await Task.WhenAll(clipsFromUrl.Select(x => x.DeleteFromDatabaseAsync()));
+
+            IsBusy = false;
+            return;
+        }
+
 
         private void MpUrlViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsRejected):
-                    if(IsBusy || Parent.IsBusy) {
-                        return;
+                    if(IsRejected) {
+                        MpHelpers.RunOnMainThread(async() => { await RejectUrlOrDomain(true); });
                     }
-                    Task.Run(async () => {
-                        bool isRejected = await MpUrlCollectionViewModel.Instance.UpdateDomainRejection(this, IsRejected);
-                        if(isRejected != Url.IsRejected) {
-                            await Url.WriteToDatabaseAsync();
-                        }
-                    });
                     break;
                 case nameof(IsSubRejected):
-                    if (IsBusy || Parent.IsBusy) {
-                        return;
+                    if (IsSubRejected) {
+                        MpHelpers.RunOnMainThread(async () => { await RejectUrlOrDomain(false); });
                     }
-                    Task.Run(async () => {
-                        bool isRejected = await MpUrlCollectionViewModel.Instance.UpdateUrlRejection(this, IsSubRejected);
-                        if (isRejected != Url.IsUrlRejected) {
-                            await Url.WriteToDatabaseAsync();
-                        }
-                    });
+                    break;
+                case nameof(HasModelChanged):
+                    Task.Run(Url.WriteToDatabaseAsync);
                     break;
             }
         }
+        #endregion
+
+        #region Protected Methods
+
+        #region Db Event Handlers
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpUrl url) {
+                if (url.Id == UrlId) {
+                    Url = url;
+                } else if(url.UrlDomainPath.ToLower() == UrlDomainPath.ToLower()) {
+                    if(url.IsRejected && !IsRejected) {
+                        //when this url's domain is rejected this url needs to know without notifying user
+                        SupressPropertyChangedNotification = true;
+                        IsRejected = true;
+                        SupressPropertyChangedNotification = false;
+                        HasModelChanged = true;
+                    } else if(!url.IsRejected && IsRejected) {
+                        IsRejected = false;
+                    }
+                    
+                }
+
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Commands

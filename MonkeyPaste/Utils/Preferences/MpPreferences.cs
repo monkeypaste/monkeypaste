@@ -327,6 +327,8 @@ namespace MonkeyPaste {
 
         public static MpSource ThisAppSource { get; set; }
 
+        public static MpIcon ThisAppIcon { get; set; }
+
         public static MpUserDevice ThisUserDevice { get; set; }
 
         public static string AppStorageFilePath {

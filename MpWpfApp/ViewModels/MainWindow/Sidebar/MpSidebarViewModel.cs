@@ -272,11 +272,6 @@ namespace MpWpfApp {
         }
         
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
-            switch(msg) {
-                //case MpMessageType.UnexpandComplete:
-                //case MpMessageType.ResizingMainWindowComplete:
-                //    break;
-            }
         }
 
 

@@ -47,7 +47,7 @@
               Visibility="{Binding IsAnyEditingParameters,
                                    Converter={StaticResource BoolToVisibilityConverter},
                                    FallbackValue='Collapsed'}">
-            <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedItem.SelectedPresetViewModel}" />
+            <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedPresetViewModel}" />
         </Grid>
     </StackPanel>
 </local:MpUserControl>

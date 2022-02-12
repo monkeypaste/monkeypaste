@@ -15,65 +15,6 @@
     <Grid x:Name="ParamGrid"
           Background="DarkViolet">
         <Grid.Resources>
-            <Style x:Key="MultiSelectComboBox"
-                   TargetType="{x:Type ComboBox}">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ComboBox}">
-                            <Grid SnapsToDevicePixels="true"
-                                  x:Name="MainGrid"
-                                  Height="Auto"
-                                  Width="Auto">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="0" />
-                                </Grid.ColumnDefinitions>
-                                <Popup AllowsTransparency="true"
-                                       IsOpen="{Binding Path=IsDropDownOpen,
-                                                        RelativeSource={RelativeSource TemplatedParent}}"
-                                       Placement="Bottom"
-                                       PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
-                                       Margin="1"
-                                       x:Name="PART_Popup"
-                                       Grid.ColumnSpan="2">
-                                    <Border x:Name="DropDownBorder"
-                                            MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                            MinWidth="{Binding Path=ActualWidth,
-                                                               ElementName=MainGrid}">
-                                        <ScrollViewer CanContentScroll="true">
-                                            <ListBox x:Name="lstBox"
-                                                     Loaded="lstBox_Loaded"
-                                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                     KeyboardNavigation.DirectionalNavigation="Contained"
-                                                     SelectionMode="Multiple"
-                                                     SelectionChanged="lstBox_SelectionChanged"
-                                                     ItemsSource="{TemplateBinding ItemsSource}" />
-                                        </ScrollViewer>
-                                    </Border>
-                                </Popup>
-                                <ToggleButton Background="{TemplateBinding Background}"
-                                              BorderBrush="{TemplateBinding BorderBrush}"
-                                              Grid.ColumnSpan="2"
-                                              IsChecked="{Binding Path=IsDropDownOpen,
-                                                                  Mode=TwoWay,
-                                                                  RelativeSource={RelativeSource TemplatedParent}}"
-                                              Style="{DynamicResource ToggleButtonStyle}" />
-                                <ItemsControl IsHitTestVisible="false"
-                                              ItemsSource="{Binding Path=SelectedItems,
-                                                                    ElementName=lstBox}"
-                                              Margin="4,0,0,0">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel IsItemsHost="True"
-                                                        Orientation="Horizontal" />
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
             <DataTemplate x:Key="MultiSelectComboBoxParameter"
                           DataType="local:MpMultiSelectComboBoxParameterViewModel">
                 <DockPanel LastChildFill="False">

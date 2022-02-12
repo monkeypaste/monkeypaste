@@ -12,8 +12,10 @@
                      d:DesignHeight="450"
                      d:DesignWidth="800">
     <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  HorizontalContentAlignment="Left"
+                  VerticalContentAlignment="Top"
                   Visibility="{Binding Parent.Parent.IsSelected,
                                        Converter={StaticResource BoolToVisibilityConverter}}"
                   ItemsSource="{Binding Items}">
@@ -68,7 +70,14 @@
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <Canvas x:Name="ClipTileImageDetectedObjectsCanvas"
-                        IsItemsHost="True" />
+                        IsItemsHost="True">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="{Binding Data.Parent.CopyItemData,
+                                                          Converter={StaticResource Base64StringToBitmapSourceConverter},
+                                                          Source={StaticResource DetectedImageObjectCollectionViewModelProxy}}"
+                                    TileMode="None" />
+                    </Canvas.Background>
+                </Canvas>
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemContainerStyle>

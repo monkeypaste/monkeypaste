@@ -806,8 +806,7 @@ namespace MpWpfApp {
         
 
         private void MpSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
-            }
+
         }
 
 

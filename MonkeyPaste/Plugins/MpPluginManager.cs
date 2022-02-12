@@ -34,12 +34,12 @@ namespace MonkeyPaste {
 
             try {
                 foreach (var pdp in Directory.GetDirectories(pluginRootFolderPath)) {
-
-
                     
 
-                    //loop through each plugin subdirectory which needs a .dll or .exe with the same name as the folder 
-                    //name which should be the plugin name as well;                    
+                    //loop through each plugin subdirectory which needs a:
+                    // .dll or
+                    // .exe
+                    // with the same name as the folder name which should be the plugin name as well;                    
                     Assembly pluginAssembly = null;
                     string pluginExePath = null;
                     foreach (var pdf in Directory.GetFiles(pdp)) {
@@ -126,6 +126,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
+
         #endregion
     }
 }

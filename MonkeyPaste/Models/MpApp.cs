@@ -8,9 +8,9 @@ using System.Linq;
 using System.IO;
 
 namespace MonkeyPaste {
-    public class MpApp : MpDbModelBase, MpISourceItem, MpISyncableDbObject {
-        
-#region Columns
+    public class MpApp : MpDbModelBase, MpISourceItem, MpISyncableDbObject {        
+        #region Columns
+
         [Column("pk_MpAppId")]
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
@@ -38,10 +38,11 @@ namespace MonkeyPaste {
         public int UserDeviceId { get; set; }
 
         #endregion
+
         #region Fk Models
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpIcon Icon { get; set; }
+        //[OneToOne(CascadeOperations = CascadeOperation.All)]
+        //public MpIcon Icon { get; set; }
 
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpUserDevice UserDevice { get; set; }
@@ -88,8 +89,8 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsSubRejected => IsRejected;
 
-        [Ignore]
-        public MpIcon SourceIcon => Icon;
+        //[Ignore]
+        //public MpIcon SourceIcon => Icon;
 
         [Ignore]
         public string SourcePath => AppPath;
@@ -101,7 +102,10 @@ namespace MonkeyPaste {
         public int RootId => Id;
         #endregion
 
-        public static async Task<MpApp> Create(string appPath, string appName, MpIcon icon) {
+        public static async Task<MpApp> Create(
+            string appPath = "", 
+            string appName = "", 
+            MpIcon icon = null) {
             var dupApp = await MpDataModelProvider.GetAppByPath(appPath);
             if (dupApp != null) {
                 dupApp = await MpDb.GetItemAsync<MpApp>(dupApp.Id);
@@ -124,7 +128,6 @@ namespace MonkeyPaste {
                 AppPath = appPath,
                 AppName = appName,
                 IconId = icon.Id,
-                Icon = icon,
                 UserDeviceId = thisDevice.Id,
                 UserDevice = thisDevice,
                 ProcessName = Path.GetFileName(appPath)
@@ -156,8 +159,8 @@ namespace MonkeyPaste {
                         appFromLog.UserDeviceId = appFromLog.UserDevice.Id;
                         break;
                     case "fk_MpIconId":
-                        appFromLog.Icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
-                        appFromLog.IconId = appFromLog.Icon.Id;
+                        var icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
+                        appFromLog.IconId = icon.Id;
                         break;
                     case "SourcePath":
                         appFromLog.AppPath = li.AffectedColumnValue;
@@ -184,8 +187,8 @@ namespace MonkeyPaste {
             };
             a.UserDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", objParts[1]) as MpUserDevice;
             a.UserDeviceId = a.UserDevice.Id;
-            a.Icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", objParts[2]) as MpIcon;
-            a.IconId = a.Icon.Id;
+            var icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", objParts[2]) as MpIcon;
+            a.IconId = icon.Id;
 
             a.AppPath = objParts[3];
             a.AppName = objParts[4];
@@ -201,7 +204,7 @@ namespace MonkeyPaste {
                 ParseToken,
                 AppGuid.ToString(),
                 UserDevice.UserDeviceGuid.ToString(),
-                Icon.IconGuid.ToString(),
+                MpDb.GetItem<MpIcon>(IconId).Guid,
                 AppPath,
                 AppName,
                 IsAppRejected ? "1" : "0");
@@ -234,7 +237,7 @@ namespace MonkeyPaste {
             diffLookup = CheckValue(IconId, other.IconId,
                 "fk_MpIconId",
                 diffLookup,
-                Icon.IconGuid.ToString());
+                MpDb.GetItem<MpIcon>(IconId).Guid);
             diffLookup = CheckValue(AppPath, other.AppPath,
                 "SourcePath",
                 diffLookup);

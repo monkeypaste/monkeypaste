@@ -21,7 +21,6 @@ namespace MpWpfApp {
     }
 
     public static class MpWpfImagingHelper {
-        private static Random _Rand;
         private static List<List<Brush>> _colors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),

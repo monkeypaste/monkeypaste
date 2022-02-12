@@ -37,7 +37,7 @@ namespace MpWpfApp {
             var items = MpAnalyticItemCollectionViewModel.Instance.AllPresets;
 
             ListCollectionView lcv = new ListCollectionView(items);
-            lcv.GroupDescriptions.Add(new PropertyGroupDescription("ParentAnalyticItemId",new MpAnalyticItemIdToTitleConverter()));
+            lcv.GroupDescriptions.Add(new PropertyGroupDescription("ParentAnalyticItemGuid",new MpAnalyticItemGuidToTitleConverter()));
             
             var cb = sender as ComboBox;
             cb.ItemsSource = lcv;

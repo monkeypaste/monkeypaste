@@ -27,7 +27,7 @@
             <DataGrid x:Name="AnalyticItemDatagrid"
                       dd:DragDrop.IsDragSource="True"
                       dd:DragDrop.IsDropTarget="True"
-                      ItemsSource="{Binding PresetViewModels}"
+                      ItemsSource="{Binding Items}"
                       SelectionMode="Single"
                       BorderThickness="10"
                       HeadersVisibility="None"
@@ -43,27 +43,39 @@
                     <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
                                      Color="Transparent" />
                 </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged}" />
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="50"
                                             Header="Icon">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button x:Name="PresetIcon"
-                                        BorderThickness="0"
-                                        Height="40"
-                                        Cursor="Hand"
-                                        Background="Transparent"
-                                        Template="{StaticResource SearchButtonControlTemplate}"
-                                        Command="{Binding ChangeIconCommand,
-                                                          Source={x:Static local:MpIconCollectionViewModel.Instance}}"
-                                        CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                                    <Image Width="20"
-                                           Height="20"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Source="{Binding IconId,
-                                                            Converter={StaticResource IconIdToImageSourceConverter}}" />
-                                </Button>
+                                <Border x:Name="ButtonBorder"
+                                        BorderThickness="0">
+                                    <Button x:Name="PresetIcon"
+                                            BorderThickness="0"
+                                            Height="40"
+                                            Cursor="Hand"
+                                            Background="Transparent"
+                                            DataContext="{Binding}"
+                                            Template="{StaticResource SearchButtonControlTemplate}"
+                                            Command="{Binding ChangeIconCommand,
+                                                              Source={x:Static local:MpIconCollectionViewModel.Instance}}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}}">
+                                        <Image Width="20"
+                                               Height="20"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Source="{Binding IconId,
+                                                                Converter={StaticResource IconIdToImageSourceConverter}}" />
+                                    </Button>
+                                </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

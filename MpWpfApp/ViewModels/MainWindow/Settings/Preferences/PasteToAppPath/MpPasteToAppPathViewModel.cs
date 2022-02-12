@@ -50,9 +50,8 @@ namespace MpWpfApp {
         }
 
         public ICommand SetIconCommand => new RelayCommand<object>(
-            async (args) => {
-                PasteToAppPath.Icon = args as MpIcon;
-                IconId = PasteToAppPath.Icon.Id;
+            async (args) => {                
+                IconId = (args as MpIcon).Id;
                 await PasteToAppPath.WriteToDatabaseAsync();
 
             });
@@ -146,7 +145,7 @@ namespace MpWpfApp {
 
         public bool IsHidden => IsRuntime && Parent.HiddenHandles.Contains(Handle);
 
-        public IntPtr Handle { get; set; }
+        public IntPtr Handle { get; set; } = IntPtr.Zero;
         #endregion
 
         #region Model Properties
@@ -161,7 +160,7 @@ namespace MpWpfApp {
             set {
                 if(PasteToAppPath != null && PasteToAppPath.PressEnter != value) {
                     PasteToAppPath.PressEnter = value;
-                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(PressEnter));
                 }
             }
@@ -177,7 +176,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath.WindowState != (int)value) {
                     PasteToAppPath.WindowState = (int)value;
-                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(WindowState));
                 }
             }
@@ -192,6 +191,7 @@ namespace MpWpfApp {
             set {
                 if(IconId != value) {
                     PasteToAppPath.IconId = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IconId));
                 }
             }
@@ -210,7 +210,7 @@ namespace MpWpfApp {
             set {
                 if(PasteToAppPath != null && PasteToAppPath.Args != value) {
                     PasteToAppPath.Args = value;
-                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(Args));
                 }
             }
@@ -229,7 +229,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath != null && PasteToAppPath.Label != value) {
                     PasteToAppPath.Label = value;
-                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(Label));
                 }
             }
@@ -245,7 +245,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath != null && PasteToAppPath.IsSilent != value) {
                     PasteToAppPath.IsSilent = value;
-                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsSilent));
                     OnPropertyChanged(nameof(AppName));
                 }
@@ -262,7 +262,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath != null && PasteToAppPath.IsAdmin != value) {
                     PasteToAppPath.IsAdmin = value;
-                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsAdmin));
                     OnPropertyChanged(nameof(AppName));
                 }
@@ -282,7 +282,7 @@ namespace MpWpfApp {
             set {
                 if(PasteToAppPath.AppName != value && PasteToAppPath.AppPath != value) {
                     PasteToAppPath.AppName = value;
-                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(AppName));
                 }
             }
@@ -298,7 +298,7 @@ namespace MpWpfApp {
             set {
                 if (PasteToAppPath != null && PasteToAppPath.AppPath != value) {
                     PasteToAppPath.AppPath = value;
-                    Task.Run(async () => { await PasteToAppPath.WriteToDatabaseAsync(); });
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(AppPath));
                 }
             }
@@ -314,33 +314,13 @@ namespace MpWpfApp {
             set {
                 if(PasteToAppPath != null && PasteToAppPath.PasteToAppPathId != value) {
                     PasteToAppPath.PasteToAppPathId = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(PasteToAppPathId));
                 }
             }
         }
 
-        private MpPasteToAppPath _pasteToAppPath;
-        public MpPasteToAppPath PasteToAppPath {
-            get {
-                return _pasteToAppPath;
-            }
-            set {
-                if(_pasteToAppPath != value) {
-                    _pasteToAppPath = value;
-                    OnPropertyChanged(nameof(PasteToAppPath));
-                    OnPropertyChanged(nameof(PasteToAppPathId));
-                    OnPropertyChanged(nameof(AppPath));
-                    OnPropertyChanged(nameof(IsAdmin));
-                    OnPropertyChanged(nameof(WindowState));
-                    OnPropertyChanged(nameof(IsSilent));
-                    OnPropertyChanged(nameof(AppName));
-                    OnPropertyChanged(nameof(IconId));
-                    OnPropertyChanged(nameof(Args));
-                    OnPropertyChanged(nameof(Label));
-                    OnPropertyChanged(nameof(PressEnter));
-                }
-            }
-        }
+        public MpPasteToAppPath PasteToAppPath { get; set; }
         #endregion
 
         #endregion
@@ -348,15 +328,29 @@ namespace MpWpfApp {
         #region Public Methods
         public MpPasteToAppPathViewModel() : base(null) { }
 
-        public MpPasteToAppPathViewModel(MpPasteToAppPathViewModelCollection parent, MpPasteToAppPath pasteToAppPath, IntPtr handle) : base(parent) {
-            //constructor used for running applications
+        public MpPasteToAppPathViewModel(MpPasteToAppPathViewModelCollection parent, MpPasteToAppPath pasteToAppPath) : base(parent) {
+            //constructor used for user defined paste to applications
+            PropertyChanged += MpPasteToAppPathViewModel_PropertyChanged;
             PasteToAppPath = pasteToAppPath;
+        }
+
+        public MpPasteToAppPathViewModel(MpPasteToAppPathViewModelCollection parent, MpPasteToAppPath pasteToAppPath, IntPtr handle) : this(parent,pasteToAppPath) {
+            //constructor used for running applications
             Handle = handle;
         }
 
-        public MpPasteToAppPathViewModel(MpPasteToAppPathViewModelCollection parent, MpPasteToAppPath pasteToAppPath) : base(parent) {
-            //constructor used for user defined paste to applications
-            PasteToAppPath = pasteToAppPath;
+        private void MpPasteToAppPathViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(HasModelChanged):
+                    if(HasModelChanged) {
+
+                        Task.Run(async () => { 
+                            await PasteToAppPath.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
+                    }
+                    break;
+            }
         }
 
         public string Validate() {

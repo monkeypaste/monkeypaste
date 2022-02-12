@@ -20,6 +20,7 @@ namespace MonkeyPaste {
         private static MpIDbInfo _dbInfo;
         private static object _rdLock = new object();
         private static SQLiteAsyncConnection _connectionAsync;
+        private static SQLiteConnection _connection;
         #endregion
 
         #region Properties
@@ -68,6 +69,8 @@ namespace MonkeyPaste {
         }
         #region Queries
 
+        #region Async
+
         public static async Task<TableMapping> GetTableMappingAsync(string tableName) {
             await Task.Delay(1);
             if (_connectionAsync == null) {
@@ -78,13 +81,6 @@ namespace MonkeyPaste {
                     .Where(x => x.TableName.ToLower() == tableName.ToLower()).FirstOrDefault();
         }
 
-        public static async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
-            if (_connectionAsync == null) {
-                CreateConnection();
-            }
-            var result = await _connectionAsync.QueryAsync<T>(query, args);
-            return result;
-        }
 
         public static async Task<List<object>> QueryAsync(string tableName,string query, params object[] args) {
             if (_connectionAsync == null) {
@@ -101,6 +97,15 @@ namespace MonkeyPaste {
                 return new List<object>();
             }
             var result = await _connectionAsync.QueryAsync(qtm, query, args);
+            return result;
+        }
+
+
+        public static async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
+            if (_connectionAsync == null) {
+                CreateConnection();
+            }
+            var result = await _connectionAsync.QueryAsync<T>(query, args);
             return result;
         }
 
@@ -122,14 +127,14 @@ namespace MonkeyPaste {
 
         public static async Task<List<T>> GetItemsAsync<T>() where T : new() {
             if (_connectionAsync == null) {
-                await InitDb ();
+                CreateConnection();
             }
             var dbol = await _connectionAsync.GetAllWithChildrenAsync<T>(recursive: true);
             return dbol;
         }
         public static async Task<T> GetItemAsync<T>(int id) where T : new() {
             if (_connectionAsync == null) {
-                await InitDb();
+                CreateConnection();
             }
             var dbo = await _connectionAsync.GetWithChildrenAsync<T>(id, true);
             return dbo;
@@ -143,32 +148,13 @@ namespace MonkeyPaste {
             return result;
         }
 
-        //public static async Task RunInMutex(Func<Task> action) {
-        //    try {
-        //        await mutex.WaitAsync();
-        //        await action.Invoke();
-        //    }
-        //    finally {
-        //        mutex.Release();
-        //    }
-        //}
-
-        //public static async Task<T> RunInMutex<T>(Func<Task<T>> action) {
-        //    try {
-        //        await mutex.WaitAsync();
-        //        return await action.Invoke();
-        //    }
-        //    finally {
-        //        mutex.Release();
-        //    }
-        //}
-
-        private static async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {            
+        private static async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+            if (_connectionAsync == null) {
+                CreateConnection();
+            }
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
 
-            if (_connectionAsync == null) {
-                await InitDb();
-            }
+            
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot add null item, ignoring...");
                 return;
@@ -190,10 +176,11 @@ namespace MonkeyPaste {
         }
 
         private static async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
             if (_connectionAsync == null) {
-                await InitDb();
+                CreateConnection();
             }
+            sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
+            
 
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
@@ -218,10 +205,11 @@ namespace MonkeyPaste {
         }
 
         public static async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
-            sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
             if (_connectionAsync == null) {
-                await InitDb();
+                CreateConnection(); ;
             }
+            sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
+            
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot delete null item, ignoring...");
                 return;
@@ -268,7 +256,44 @@ namespace MonkeyPaste {
             var dbo = Activator.CreateInstance(typeof(T));
             return (T)dbo;
         }
-        
+
+        #endregion
+
+        #region Sync
+
+        public static T GetItem<T>(int id) where T : new() {
+            if (_connection == null) {
+                CreateConnection();
+            }
+            var dbo = _connection.Get<T>(id);
+            return dbo;
+        }
+
+        public static List<T> Query<T>(string query, params object[] args) where T : new() {
+            if (_connection == null) {
+                CreateConnection();
+            }
+            var result = _connection.Query<T>(query, args);
+            return result;
+        }
+
+        public static T QueryScalar<T>(string query, params object[] args) {
+            if (_connection == null) {
+                CreateConnection();
+            }
+            var result = _connection.ExecuteScalar<T>(query, args);
+            return result;
+        }
+
+        public static List<T> QueryScalars<T>(string query, params object[] args) {
+            if (_connection == null) {
+                CreateConnection();
+            }
+            var result = _connection.QueryScalars<T>(query, args);
+            return result;
+        }
+        #endregion
+
         #endregion
 
         public static byte[] GetDbFileBytes() {
@@ -358,7 +383,7 @@ namespace MonkeyPaste {
             MpPreferences.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpPreferences.ThisDeviceGuid);
 
             MpPreferences.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.ThisDeviceSourceId);
-
+            MpPreferences.ThisAppIcon = await GetItemAsync<MpIcon>(MpPreferences.ThisAppSource.App.IconId);
             if(isNewDb) {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
@@ -369,20 +394,27 @@ namespace MonkeyPaste {
         }
 
         private static void CreateConnection() {
+            if(_connection != null && _connectionAsync != null) {
+                return;
+            }
+
+            var _connStr = new SQLiteConnectionString(
+                            databasePath: _dbInfo.GetDbFilePath(),
+                            storeDateTimeAsTicks: true,
+                            openFlags: SQLiteOpenFlags.ReadWrite |
+                                       SQLiteOpenFlags.Create |
+                                       SQLiteOpenFlags.SharedCache |
+                                       SQLiteOpenFlags.FullMutex);
+
             if (_connectionAsync == null) {
                 SQLitePCL.Batteries.Init();
-                var _connStr = new SQLiteConnectionString(
-                                databasePath: _dbInfo.GetDbFilePath(),
-                                storeDateTimeAsTicks: true,
-                                openFlags: SQLiteOpenFlags.ReadWrite |
-                                           SQLiteOpenFlags.Create |
-                                           SQLiteOpenFlags.SharedCache |
-                                           SQLiteOpenFlags.FullMutex
-                                );
+
                 _connectionAsync = new SQLiteAsyncConnection(_connStr) { Trace = true };
-                SQLitePCL.raw.sqlite3_create_function(
-                    _connectionAsync.GetConnection().Handle, 
-                    "REGEXP", 2, null, MatchRegex);                
+                SQLitePCL.raw.sqlite3_create_function(_connectionAsync.GetConnection().Handle,"REGEXP",2, null, MatchRegex);                
+            }
+            if(_connection == null) {
+                _connection = new SQLiteConnection(_connStr) { Trace = true };
+                SQLitePCL.raw.sqlite3_create_function(_connection.Handle, "REGEXP", 2, null, MatchRegex);
             }
         }
 
@@ -399,7 +431,6 @@ namespace MonkeyPaste {
         }
 
         private static async Task InitTables() {
-            await _connectionAsync.CreateTableAsync<MpAnalyticItem>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPreset>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPresetParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();

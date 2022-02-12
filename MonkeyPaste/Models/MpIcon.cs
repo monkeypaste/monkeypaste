@@ -242,10 +242,12 @@ namespace MonkeyPaste {
                 "fk_IconDbImageId",
                 diffLookup,
                 IconImage.DbImageGuid.ToString());
-            diffLookup = CheckValue(IconBorderImageId, other.IconBorderImageId,
+            if(IconBorderImageId > 0) {
+                diffLookup = CheckValue(IconBorderImageId, other.IconBorderImageId,
                 "fk_IconBorderDbImageId",
                 diffLookup,
                 IconBorderImage.DbImageGuid.ToString());
+            }
             diffLookup = CheckValue(HexColor1, other.HexColor1,
                 "HexColor1",
                 diffLookup);

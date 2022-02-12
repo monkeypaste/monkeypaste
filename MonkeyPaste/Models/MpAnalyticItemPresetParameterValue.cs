@@ -25,7 +25,7 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [ManyToOne]
+        [ManyToOne(CascadeOperations = CascadeOperation.All)]
         public MpAnalyticItemPreset AnalyticItemPreset { get; set; }
 
         #endregion

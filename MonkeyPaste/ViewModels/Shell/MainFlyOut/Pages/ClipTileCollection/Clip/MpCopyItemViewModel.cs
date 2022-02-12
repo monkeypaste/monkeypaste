@@ -55,10 +55,10 @@ namespace MonkeyPaste {
             get {
                 return true;
 
-                if (CopyItem == null) {
-                    return false;
-                }
-                return IsExpanded || CopyItem.Title != "Untitled";
+                //if (CopyItem == null) {
+                //    return false;
+                //}
+                //return IsExpanded || CopyItem.Title != "Untitled";
             }
         }
 
@@ -105,7 +105,10 @@ namespace MonkeyPaste {
                 if (CopyItem == null || CopyItem.Source == null) {
                     return null;
                 }
-                return (StreamImageSource)new MpImageConverter().Convert(CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64, typeof(ImageSource));
+                var imgStr = MpDb.GetItem<MpDbImage>(
+                                MpDb.GetItem<MpIcon>(CopyItem.Source.PrimarySource.IconId).IconImageId).ImageBase64;
+
+                return (StreamImageSource)new MpImageConverter().Convert(imgStr, typeof(ImageSource));
             }
         }
 
@@ -132,6 +135,7 @@ namespace MonkeyPaste {
         }
 
         #endregion
+
         #region Public Methods
 
         #endregion

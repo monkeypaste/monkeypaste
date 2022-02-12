@@ -81,7 +81,7 @@ namespace MpWpfApp {
 
             MpProcessHelper.MpProcessManager.Init(
                 MpPreferences.FallbackProcessPath,
-                MpAppCollectionViewModel.Instance.AppViewModels.Select(x => x.AppPath).ToArray(),
+                MpAppCollectionViewModel.Instance.Items.Select(x => x.AppPath).ToArray(),
                 new MpWpfIconBuilder());
         }
     }

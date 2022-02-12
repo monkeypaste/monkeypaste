@@ -793,12 +793,14 @@ namespace MpWpfApp {
 
 
         public async Task UpdateColorPallete() {
+            var icon = await MpDb.GetItemAsync<MpIcon>(CopyItem.Source.PrimarySource.IconId);
+
             var pallete = new List<string>{
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor1,
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor3,
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor3,
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor4,
-                    CopyItem.Source.PrimarySource.SourceIcon.HexColor5
+                    icon.HexColor1,
+                    icon.HexColor3,
+                    icon.HexColor3,
+                    icon.HexColor4,
+                    icon.HexColor5
                 };
 
             var tagColors = await MpDataModelProvider.GetTagColorsForCopyItem(CopyItemId);

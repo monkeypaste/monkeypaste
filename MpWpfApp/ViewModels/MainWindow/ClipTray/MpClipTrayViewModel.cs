@@ -1246,8 +1246,8 @@ namespace MpWpfApp {
                 if (sender is MpCopyItem ci) {
                     ci.StartSync(e.SourceGuid);
                     ci.Source.App.StartSync(e.SourceGuid);
-                    ci.Source.App.Icon.StartSync(e.SourceGuid);
-                    ci.Source.App.Icon.IconImage.StartSync(e.SourceGuid);
+                    //ci.Source.App.Icon.StartSync(e.SourceGuid);
+                    //ci.Source.App.Icon.IconImage.StartSync(e.SourceGuid);
 
                     var dupCheck = GetContentItemViewModelById(ci.Id);
                     if (dupCheck == null) {
@@ -1261,8 +1261,8 @@ namespace MpWpfApp {
                         //dupCheck.CopyItem = ci;
                     }
                     ci.Source.App.EndSync();
-                    ci.Source.App.Icon.EndSync();
-                    ci.Source.App.Icon.IconImage.EndSync();
+                    //ci.Source.App.Icon.EndSync();
+                    //ci.Source.App.Icon.IconImage.EndSync();
                     ci.EndSync();
 
                     ResetClipSelection();
@@ -1880,23 +1880,24 @@ namespace MpWpfApp {
 
         public ICommand ExcludeSubSelectedItemApplicationCommand => new RelayCommand(
             async () => {
-                await MpAppCollectionViewModel.Instance.UpdateRejection(
-                        MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(
-                            PrimaryItem.PrimaryItem.CopyItem.Source.AppId), true);
+                var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == PrimaryItem.PrimaryItem.CopyItem.Source.AppId);
+                if(avm == null) {
+                    return;
+                }
+                await avm.RejectApp();
             },
-            () => {
-                return SelectedItems.Count == 1;
-            });
+            PrimaryItem != null && PrimaryItem.PrimaryItem != null);
 
         public ICommand ExcludeSubSelectedItemUrlDomainCommand => new RelayCommand(
             async () => {
-                await MpUrlCollectionViewModel.Instance.UpdateDomainRejection(
-                        MpUrlCollectionViewModel.Instance.GetUrlViewModelByUrlId(
-                            PrimaryItem.PrimaryItem.CopyItem.Source.UrlId), true);
+                var uvm = MpUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == PrimaryItem.PrimaryItem.CopyItem.Source.UrlId);
+                if(uvm == null) {
+                    MpConsole.WriteTraceLine("Error cannot find url id: " + PrimaryItem.PrimaryItem.CopyItem.Source.UrlId);
+                    return;
+                }
+                await uvm.RejectUrlOrDomain(true);
             },
-            () => {
-                return SelectedItems.Count == 1;
-            });
+            PrimaryItem != null && PrimaryItem.PrimaryItem != null);
 
         public ICommand SearchWebCommand => new RelayCommand<object>(
             (args) => {
@@ -2046,7 +2047,7 @@ namespace MpWpfApp {
             });
 
         public ICommand ChangeSelectedClipsColorCommand => new RelayCommand<object>(
-            async (hexStr) => {
+             (hexStr) => {
                 PrimaryItem.PrimaryItem.SetColorCommand.Execute(hexStr.ToString());
             });
 
@@ -2345,10 +2346,10 @@ namespace MpWpfApp {
         public ICommand AnalyzeSelectedItemCommand => new RelayCommand<int>(
             async (presetId) => {
                 var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>((int)presetId);
-                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyzerPluginSudoId == preset.AnalyzerPluginSudoId);
-                var presetVm = analyticItemVm.PresetViewModels.FirstOrDefault(x => x.Preset.Id == preset.Id);                
+                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyzerPluginGuid == preset.AnalyzerPluginGuid);
+                var presetVm = analyticItemVm.Items.FirstOrDefault(x => x.Preset.Id == preset.Id);                
 
-                var prevSelectedPresetVm = analyticItemVm.SelectedPresetViewModel;
+                var prevSelectedPresetVm = analyticItemVm.SelectedItem;
                 analyticItemVm.SelectPresetCommand.Execute(presetVm);
                 analyticItemVm.ExecuteAnalysisCommand.Execute(PrimaryItem.PrimaryItem);
             });

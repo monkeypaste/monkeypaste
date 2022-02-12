@@ -36,8 +36,8 @@ namespace MonkeyPaste {
 
         #region Fk Objects
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpIcon Icon { get; set; }
+        //[OneToOne(CascadeOperations = CascadeOperation.All)]
+        //public MpIcon Icon { get; set; }
 
         #endregion
 
@@ -90,15 +90,15 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsSubRejected => IsUrlRejected;
 
-        [Ignore]
-        public MpIcon SourceIcon {
-            get {
-                if (Icon == null) {
-                    return null;
-                }
-                return Icon;
-            }
-        }
+        //[Ignore]
+        //public MpIcon SourceIcon {
+        //    get {
+        //        if (Icon == null) {
+        //            return null;
+        //        }
+        //        return Icon;
+        //    }
+        //}
 
         [Ignore]
         public string SourcePath => UrlPath;
@@ -133,12 +133,11 @@ namespace MonkeyPaste {
                 //url has no and result is google's default
                 return null;
             } else {
-                newUrl.Icon = await MpIcon.Create(favIconImg64);
-                newUrl.IconId = newUrl.Icon.Id;
+                var icon = await MpIcon.Create(favIconImg64);
+                newUrl.IconId = icon.Id;
             }
-            if (newUrl.Icon == null) {
-                newUrl.Icon = MpPreferences.ThisAppSource.PrimarySource.SourceIcon;
-                newUrl.IconId = MpPreferences.ThisAppSource.PrimarySource.SourceIcon.Id;
+            if (newUrl.IconId == 0) {
+                newUrl.IconId = MpPreferences.ThisAppSource.PrimarySource.IconId;
             }
 
             await newUrl.WriteToDatabaseAsync();
@@ -162,8 +161,8 @@ namespace MonkeyPaste {
                         url.UrlGuid = System.Guid.Parse(li.AffectedColumnValue);
                         break;
                     case "fk_MpIconinId":
-                        url.Icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
-                        url.IconId = url.Icon.Id;
+                        var icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
+                        url.IconId = icon.Id;
                         break;
                     case "UrlPath":
                         url.UrlPath = li.AffectedColumnValue;
@@ -186,8 +185,8 @@ namespace MonkeyPaste {
                 UrlGuid = System.Guid.Parse(objParts[0])
             };
 
-            url.Icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", objParts[1]) as MpIcon;
-            url.IconId = url.Icon.Id;
+            var icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", objParts[1]) as MpIcon;
+            url.IconId = icon.Id;
             url.UrlPath = objParts[2];
             url.UrlTitle = objParts[3];
             return url;
@@ -198,7 +197,7 @@ namespace MonkeyPaste {
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
                 ParseToken,
                 UrlGuid.ToString(),
-                Icon.IconGuid.ToString(),
+                MpDb.GetItem<MpIcon>(IconId).Guid,
                 UrlPath,
                 UrlTitle);
         }
@@ -224,7 +223,7 @@ namespace MonkeyPaste {
             diffLookup = CheckValue(IconId, other.IconId,
                 "fk_MpIconId",
                 diffLookup,
-                Icon.IconGuid.ToString());
+                MpDb.GetItem<MpIcon>(IconId).Guid);
             diffLookup = CheckValue(UrlPath, other.UrlPath,
                 "UrlPath",
                 diffLookup);

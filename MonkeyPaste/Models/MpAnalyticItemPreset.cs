@@ -19,9 +19,7 @@ namespace MonkeyPaste {
         [Column("MpAnalyticItemPresetGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        //[ForeignKey(typeof(MpAnalyticItem))]
-        //[Column("fk_MpAnalyticItemId")]
-        public int AnalyzerPluginSudoId { get; set; }
+        public string AnalyzerPluginGuid { get; set; }
 
         [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
@@ -54,13 +52,13 @@ namespace MonkeyPaste {
         //[ManyToOne]
         //public MpAnalyticItem AnalyticItem { get; set; }
 
-        [OneToOne]
-        public MpIcon Icon { get; set; }
+        //[OneToOne]
+        //public MpIcon Icon { get; set; }
 
-        [OneToOne]
-        public MpShortcut Shortcut { get; set; }
+        //[OneToOne]
+        //public MpShortcut Shortcut { get; set; }
 
-        [OneToMany]
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<MpAnalyticItemPresetParameterValue> PresetParameterValues { get; set; } = new List<MpAnalyticItemPresetParameterValue>();
         #endregion
 
@@ -111,19 +109,20 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAnalyticItemPreset> Create(
-            int analyzerSudoId = 0, 
+            string analyzerPluginGuid = "", 
             string label = "",
-            MpIcon icon = null, 
+            string description = "",
+            int iconId = 0, 
             bool isDefault = false, 
             bool isQuickAction = false, 
             int sortOrderIdx = -1, 
-            string description = "",
-            List<MpAnalyticItemParameterFormat> parameters = null) {
+            List<MpAnalyticItemParameterFormat> parameters = null,
+            List<MpAnalyzerPresetValueFormat> values = null) {
             
-            if(icon == null) {
+            if(iconId == 0) {
                 throw new Exception("needs icon");
             }
-            if(analyzerSudoId <= 0) {
+            if(string.IsNullOrEmpty(analyzerPluginGuid)) {
                 throw new Exception("needs analyzer id");
             }
             if(parameters == null || parameters.Count == 0) {
@@ -132,29 +131,34 @@ namespace MonkeyPaste {
 
             var newAnalyticItemPreset = new MpAnalyticItemPreset() {
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
-                AnalyzerPluginSudoId = analyzerSudoId,
-                Icon = icon,
-                IconId = icon.Id,
+                AnalyzerPluginGuid = analyzerPluginGuid,
                 Label = label,
                 Description = description,
-                SortOrderIdx = sortOrderIdx,
+                IconId = iconId,
+                IsDefault = isDefault,
                 IsQuickAction = isQuickAction,
-                Shortcut = null,
-                ShortcutId = 0,
-                IsDefault = isDefault
-            };
+                SortOrderIdx = sortOrderIdx,
+                ShortcutId = 0};
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 
             foreach(var param in parameters.OrderBy(x=>x.sortOrderIdx)) {
+                
                 string defValue = string.Empty;
-                if(param.values != null && param.values.Count > 0) {
-                    if(param.values.Any(x=>x.isDefault)) {
-                        defValue = string.Join(",",param.values.Where(x => x.isDefault).Select(x=>x.value));
+                if(values != null && values.Count > 0) {
+                    var paramVal = values.FirstOrDefault(x => x.enumId == param.enumId);
+                    if(paramVal != null) {
+                        defValue = paramVal.value;
+                    }
+                } 
+                if (string.IsNullOrEmpty(defValue) && param.values != null && param.values.Count > 0) {
+                    if (param.values.Any(x => x.isDefault)) {
+                        defValue = string.Join(",", param.values.Where(x => x.isDefault).Select(x => x.value));
                     } else {
                         defValue = param.values[0].value;
                     }
                 }
+
 
                 var paramPreset = await MpAnalyticItemPresetParameterValue.Create(
                     newAnalyticItemPreset,

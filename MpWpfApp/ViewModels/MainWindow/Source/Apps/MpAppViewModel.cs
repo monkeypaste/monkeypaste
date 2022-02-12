@@ -9,32 +9,36 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpAppViewModel : MpViewModelBase<MpAppCollectionViewModel> {
+    public class MpAppViewModel : 
+        MpViewModelBase<MpAppCollectionViewModel>,
+        MpISelectableViewModel,
+        MpIHoverableViewModel,
+        MpISourceItem {
         #region Properties
 
         #region View Models
 
-        public MpIconViewModel IconViewModel {
-            get {
-                if(App == null) {
-                    return null;
-                }
-                return MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
-            }
-        }
+        //public MpIconViewModel IconViewModel {
+        //    get {
+        //        if(App == null) {
+        //            return null;
+        //        }
+        //        return MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
+        //    }
+        //}
 
         #endregion
 
         #region MpISourceItemViewModel Implementation
 
-        public MpIcon SourceIcon {
-            get {
-                if(IconViewModel == null) {
-                    return null;
-                }
-                return IconViewModel.Icon;
-            }
-        } 
+        //public MpIcon SourceIcon {
+        //    get {
+        //        if(IconViewModel == null) {
+        //            return null;
+        //        }
+        //        return IconViewModel.Icon;
+        //    }
+        //} 
 
         public string SourcePath {
             get {
@@ -140,9 +144,9 @@ namespace MpWpfApp {
             set {
                 if(App != null && App.IsAppRejected != value) {
                     App.IsAppRejected = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsRejected));
                     OnPropertyChanged(nameof(App));
-                    HasModelChanged = true;
                 }
             }
         }
@@ -173,21 +177,50 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
+
+
+        public async Task RejectApp() {
+            IsBusy = true;
+            bool wasCanceled = false;
+
+            var clipsFromApp = await MpDataModelProvider.GetCopyItemsByAppId(AppId);
+
+            if (clipsFromApp != null && clipsFromApp.Count > 0) {
+                MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
+                if (confirmExclusionResult == MessageBoxResult.Cancel) {
+                    wasCanceled = true;
+                }
+            }
+            if (wasCanceled) {
+                IsBusy = false;
+                return;
+            }
+
+            await Task.WhenAll(clipsFromApp.Select(x => x.DeleteFromDatabaseAsync()));
+            IsBusy = false;
+        }
+
         private void MpAppViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsRejected):
-                    if(IsBusy) {
-                        return;
+                    if(IsRejected) {
+                        MpHelpers.RunOnMainThread(async()=> { await RejectApp(); });
                     }
-                    Task.Run(async () => {
-                        bool isRejected = await MpAppCollectionViewModel.Instance.UpdateRejection(this, IsRejected);
-                        if(isRejected != App.IsAppRejected) {
-                            await App.WriteToDatabaseAsync();
-                        }
-                    });
+                    break;
+
+                case nameof(HasModelChanged):
+                    Task.Run(App.WriteToDatabaseAsync);
                     break;
             }
         }
+
+        #endregion
+
+        #region Protected Methods
+
+        #region Db Event Handlers
+
+        #endregion
 
         #endregion
 

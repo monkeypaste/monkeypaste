@@ -12,25 +12,15 @@ using System.IO;
 using MpProcessHelper;
 
 namespace MpWpfApp {
-    public class MpAppCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpAppCollectionViewModel> {
+    public class MpAppCollectionViewModel : 
+        MpSelectorViewModelBase<object,MpAppViewModel>, 
+        MpISingletonViewModel<MpAppCollectionViewModel> {
         #region Private Variables
 
         #endregion
         #region Properties
 
         #region View Models
-
-        public ObservableCollection<MpAppViewModel> AppViewModels { get; set; } = new ObservableCollection<MpAppViewModel>();
-
-        public MpAppViewModel SelectedAppViewModel {
-            get => AppViewModels.FirstOrDefault(x => x.IsSelected);
-            set {
-                AppViewModels.ForEach(x => x.IsSelected = false);
-                if(value != null) {
-                    AppViewModels.ForEach(x => x.IsSelected = x.AppId == value.AppId);
-                }
-            }
-        }
 
         #endregion
         #endregion
@@ -40,7 +30,6 @@ namespace MpWpfApp {
         private static MpAppCollectionViewModel _instance;
         public static MpAppCollectionViewModel Instance => _instance ?? (_instance = new MpAppCollectionViewModel());
 
-
         public MpAppCollectionViewModel() : base(null) {
             MpHelpers.RunOnMainThreadAsync(Init);
         }
@@ -49,12 +38,12 @@ namespace MpWpfApp {
             IsBusy = true;
 
             var appl = await MpDb.GetItemsAsync<MpApp>();
-            AppViewModels.Clear();
+            Items.Clear();
             foreach (var app in appl) {
                 var avm = await CreateAppViewModel(app);
-                AppViewModels.Add(avm);
+                Items.Add(avm);
             }
-            OnPropertyChanged(nameof(AppViewModels));
+            OnPropertyChanged(nameof(Items));
 
             IsBusy = false;
         }
@@ -63,70 +52,28 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public MpAppViewModel GetAppViewModelByAppId(int appId) {
-            return AppViewModels.FirstOrDefault(x => x.AppId == appId);
-        }
-
-        public MpAppViewModel GetAppViewModelByProcessPath(string processPath) {
-            return AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower());
-        }
-
-        public async Task<bool> UpdateRejection(MpAppViewModel app, bool rejectApp) {
-            IsBusy = true;
-            var avm = GetAppViewModelByProcessPath(app.AppPath);
-            if (avm != null) {
-                bool wasCanceled = false;
-                if (rejectApp) {
-                    var clipsFromApp = await MpDataModelProvider.GetCopyItemsByAppId(app.AppId);
-                    IsBusy = false;
-                    
-                    if (clipsFromApp != null && clipsFromApp.Count > 0) {
-                        MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + app.AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                        if (confirmExclusionResult == MessageBoxResult.Cancel) {
-                            wasCanceled = true;
-                        } else {
-                            MpApp appToReject = app.App;
-                            if (confirmExclusionResult == MessageBoxResult.Yes) {
-                                IsBusy = true;
-
-                                await Task.WhenAll(clipsFromApp.Select(x => x.DeleteFromDatabaseAsync()));
-                            }
-                        }
-                    }
-                }
-                if (wasCanceled) {
-                    IsBusy = false;
-                    return app.IsRejected;
-                }
-
-                avm.IsRejected = rejectApp;
-                await avm.App.WriteToDatabaseAsync();
-
-            } else {
-                MonkeyPaste.MpConsole.WriteLine("AppCollection.UpdateRejection error, app: " + app.AppName + " is not in collection");
-            }
-            IsBusy = false;
-            return rejectApp;
-        }
-
-
-
-        public bool IsAppRejected(string processPath) {
-            var avm = GetAppViewModelByProcessPath(processPath);
-            if(avm == null) {
-                return false;
-            }
-            return avm.IsRejected;
-        }
-
-        public void Remove(MpAppViewModel avm) {
-            AppViewModels.Remove(avm);
-        }
-
         public async Task<MpAppViewModel> CreateAppViewModel(MpApp app) {
             var avm = new MpAppViewModel(this);
             await avm.InitializeAsync(app);
             return avm;
+        }
+
+        public bool IsAppRejected(string processPath) {
+            return Items.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower() && x.IsRejected) != null;
+        }
+
+
+        #endregion
+
+        #region Protected Methods
+
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if(e is MpApp a) {
+                Task.Run(async () => {
+                    var avm = await CreateAppViewModel(a);
+                    Items.Add(avm);
+                });
+            }
         }
         #endregion
 
@@ -151,16 +98,16 @@ namespace MpWpfApp {
                         appPath = MpHelpers.GetShortcutTargetPath(openFileDialog.FileName);
                     }
                     MpApp app = null;
-                    var avm = AppViewModels.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
+                    var avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
                     if (avm == null) {
                         var iconBmpSrc = MpProcessIconBuilder.GetBase64BitmapFromPath(appPath).ToBitmapSource();
                         var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                         app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
                         avm = await CreateAppViewModel(app);
-                        AppViewModels.Add(avm);
+                        Items.Add(avm);
                     }
 
-                    SelectedAppViewModel = avm;
+                    SelectedItem = avm;
                 }
             });
 

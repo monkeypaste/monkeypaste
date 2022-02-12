@@ -39,8 +39,8 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpIcon Icon { get; set; }
+        //[OneToOne(CascadeOperations = CascadeOperation.All)]
+        //public MpIcon Icon { get; set; }
         #endregion
 
         #region Properties
@@ -100,8 +100,8 @@ namespace MonkeyPaste {
         #endregion
         
         public static async Task<MpPasteToAppPath> Create(
-            string appPath,
-            string appName,
+            string appPath = "",
+            string appName = "",
             string iconStr = "",
             bool isAdmin = false,
             bool isSilent = false,

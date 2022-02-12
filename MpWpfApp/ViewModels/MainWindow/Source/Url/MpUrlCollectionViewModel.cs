@@ -9,24 +9,15 @@ using System.Windows;
 using System.Windows.Input;
 using MonkeyPaste;
 using System.IO;
+using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {
-    public class MpUrlCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpUrlCollectionViewModel> {
+    public class MpUrlCollectionViewModel : 
+        MpSelectorViewModelBase<object,MpUrlViewModel>, 
+        MpISingletonViewModel<MpUrlCollectionViewModel> {
         #region Properties
 
         #region View Models
-                
-        public ObservableCollection<MpUrlViewModel> UrlViewModels { get; set; } = new ObservableCollection<MpUrlViewModel>();
-
-        public MpUrlViewModel SelectedUrlViewModel {
-            get => UrlViewModels.FirstOrDefault(x => x.IsSelected);
-            set {
-                UrlViewModels.ForEach(x => x.IsSelected = false);
-                if(value != null) {
-                    UrlViewModels.ForEach(x => x.IsSelected = x.UrlId == value.UrlId);
-                }
-            }
-        }
 
         #endregion
         #endregion
@@ -44,13 +35,13 @@ namespace MpWpfApp {
             IsBusy = true;
 
             var urll = await MpDb.GetItemsAsync<MpUrl>();
-            UrlViewModels.Clear();
+            Items.Clear();
             foreach (var url in urll) {
                 var uvm = await CreateUrlViewModel(url);
-                UrlViewModels.Add(uvm);
+                Items.Add(uvm);
             }
-            //await Task.WhenAll(UrlViewModels.Select(x => UpdateRejection(x)));
-            OnPropertyChanged(nameof(UrlViewModels));
+            //await Task.WhenAll(Items.Select(x => UpdateRejection(x)));
+            OnPropertyChanged(nameof(Items));
 
             IsBusy = false;
         }
@@ -59,124 +50,50 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public MpUrlViewModel GetUrlViewModelByUrlId(int UrlId) {
-            foreach(var avm in UrlViewModels.Where(x => x.UrlId == UrlId)) {
-                return avm;
-            }
-            return null;
-        }
-
-        public MpUrlViewModel GetUrlViewModelByUrlPath(string urlPath) {
-            foreach (var avm in UrlViewModels.Where(x => x.UrlPath.ToLower() == urlPath.ToLower())) {
-                return avm;
-            }
-            return null;
-        }
-
-        public MpUrlViewModel GetUrlViewModelByDomainPath(string domainPath) {
-            foreach (var avm in UrlViewModels.Where(x => x.UrlDomainPath.ToLower() == domainPath.ToLower())) {
-                return avm;
-            }
-            return null;
-        }
-
-        public async Task UpdateRejection(MpUrlViewModel uvm) {
-            await UpdateDomainRejection(uvm, uvm.Url.IsDomainRejected);
-            await UpdateUrlRejection(uvm, uvm.Url.IsUrlRejected);
-        }
-
-        public async Task<bool> UpdateUrlRejection(MpUrlViewModel url, bool rejectUrl) {
-            if (GetUrlViewModelByUrlPath(url.UrlPath) != null) {
-                bool wasCanceled = false;
-                if (rejectUrl) {
-                    List<MpCopyItem> clipsFromUrl = new List<MpCopyItem>();
-                    MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + url.UrlPath + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                    if (confirmExclusionResult == MessageBoxResult.Yes) {
-                        IsBusy = true;
-                        clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlId(url.UrlId);
-                    } else if(confirmExclusionResult == MessageBoxResult.Cancel) {
-                        wasCanceled = true;
-                    }
-
-                    await Task.WhenAll(clipsFromUrl.Select(x => x.DeleteFromDatabaseAsync()));
-                }
-                if (wasCanceled) {
-                    IsBusy = false;
-                    return url.IsSubRejected;
-                }
-                int UrlIdx = UrlViewModels.IndexOf(url);
-                UrlViewModels[UrlIdx].Url.IsUrlRejected = rejectUrl;
-                await UrlViewModels[UrlIdx].Url.WriteToDatabaseAsync();
-
-            } else {
-                MonkeyPaste.MpConsole.WriteLine("UrlCollection.UpdateRejection error, Url: " + url.UrlDomainPath + " is not in collection");
-            }
-
-            IsBusy = false;
-            return rejectUrl;
-        }
-
-        public async Task<bool> UpdateDomainRejection(MpUrlViewModel url, bool rejectDomain) {
-            if (GetUrlViewModelByUrlPath(url.UrlPath) != null) {
-                bool wasCanceled = false;
-                if (rejectDomain) {
-                    List<MpCopyItem> clipsFromUrl = new List<MpCopyItem>();
-                    MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + url.UrlDomainPath + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                    if (confirmExclusionResult == MessageBoxResult.Yes) {
-                        IsBusy = true;
-                        clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlDomain(url.UrlDomainPath);
-                    } else if(confirmExclusionResult == MessageBoxResult.Cancel) {
-                            wasCanceled = true;
-                    } 
-
-                    await Task.WhenAll(clipsFromUrl.Select(x => x.DeleteFromDatabaseAsync()));
-
-
-
-                }
-                if (wasCanceled) {
-                    IsBusy = false;
-                    return url.IsRejected;
-                }
-                int UrlIdx = UrlViewModels.IndexOf(url);
-                UrlViewModels[UrlIdx].Url.IsDomainRejected = rejectDomain;
-                await UrlViewModels[UrlIdx].Url.WriteToDatabaseAsync();
-
-            } else {
-                MonkeyPaste.MpConsole.WriteLine("UrlCollection.UpdateRejection error, Url: " + url.UrlDomainPath + " is not in collection");
-            }
-            IsBusy = true;
-            UrlViewModels.Where(x => x.UrlDomainPath.ToLower() == url.UrlDomainPath.ToLower()).ForEach(x => x.IsRejected = rejectDomain);
-            UrlViewModels.Where(x => x.UrlDomainPath.ToLower() == url.UrlDomainPath.ToLower()).ForEach(x => x.IsSubRejected = rejectDomain);
-            IsBusy = false;
-            return rejectDomain;
-        }
-
-        public bool IsRejected(string domain) {
-            var avm = GetUrlViewModelByUrlPath(domain);
-            if(avm == null) {
-                return false;
-            }
-            return avm.IsRejected;
-        }
-
-        public bool IsUrlRejected(string url) {
-            var avm = GetUrlViewModelByUrlPath(url);
-            if (avm == null) {
-                return false;
-            }
-            return avm.IsRejected;
-        }
-
-        public void Remove(MpUrlViewModel avm) {
-            UrlViewModels.Remove(avm);
-        }
-
         public async Task<MpUrlViewModel> CreateUrlViewModel(MpUrl url) {
             var uvm = new MpUrlViewModel(this);
             await uvm.InitializeAsync(url);
             return uvm;
         }
+
+        public bool IsRejected(string domain) {
+            return Items.FirstOrDefault(x => x.UrlDomainPath.ToLower() == domain.ToLower() && x.IsRejected) != null;
+        }
+
+        public bool IsUrlRejected(string url) {
+            return Items.FirstOrDefault(x => x.UrlPath.ToLower() == url.ToLower() && x.IsSubRejected) != null;
+        }
+
+        public void Remove(MpUrlViewModel avm) {
+            Items.Remove(avm);
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        #region Db Event Handlers
+
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if (e is MpUrl url) {
+                MpHelpers.RunOnMainThread(async () => {
+                    var uvm = await CreateUrlViewModel(url);
+                    Items.Add(uvm);
+                    OnPropertyChanged(nameof(Items));
+                });
+            }
+        }
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpUrl url) {
+                var uvm = Items.FirstOrDefault(x => x.UrlId == url.Id);
+                if (uvm != null) {
+                    Items.Remove(uvm);
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Commands
@@ -190,16 +107,15 @@ namespace MpWpfApp {
                 }
 
                 MpUrl url = null;
-                var uvm = UrlViewModels.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
+                var uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
                 if (uvm == null) {
                     var iconBmpSrc = MpHelpers.GetUrlFavicon(UrlPath);
                     string title = await MpHelpers.GetUrlTitle(UrlPath);
                     var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                     url = await MpUrl.Create(UrlPath, title);
                     uvm = await CreateUrlViewModel(url);
-                    await UpdateRejection(uvm);
                 }
-                SelectedUrlViewModel = uvm;
+                SelectedItem = uvm;
             });
 
         

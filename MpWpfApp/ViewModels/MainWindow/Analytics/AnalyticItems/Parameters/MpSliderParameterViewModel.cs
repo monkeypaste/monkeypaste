@@ -40,6 +40,7 @@ namespace MpWpfApp {
             set {
                 if(SliderValue != value) {
                     CurrentValue = value.ToString();
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(SliderValue));
                 }
             }
@@ -93,8 +94,7 @@ namespace MpWpfApp {
             }
         }
 
-        #endregion
-        
+        #endregion        
 
         #endregion
 

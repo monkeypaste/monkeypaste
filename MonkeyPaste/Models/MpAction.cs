@@ -127,7 +127,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public bool IsReadOnly {
+        public override bool IsReadOnly {
             get => ReadOnly == 1;
             set => ReadOnly = value ? 1 : 0;
         }
@@ -184,7 +184,7 @@ namespace MonkeyPaste {
                         break;
                 }
                 if (string.IsNullOrEmpty(iconStr)) {
-                    iconId = MpPreferences.ThisAppSource.PrimarySource.SourceIcon.Id;
+                    iconId = MpPreferences.ThisAppIcon.Id;
                 } else { 
                     var icon = await MpIcon.Create(iconStr, false);
                     iconId = icon.Id;

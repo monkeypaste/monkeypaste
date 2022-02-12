@@ -8,7 +8,6 @@ using Windows.UI.Core;
 using System.Windows.Controls;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using MonkeyPaste;
 using System.Windows.Media;
 using ZoomAndPan;
 namespace MpWpfApp {
@@ -21,8 +20,6 @@ namespace MpWpfApp {
 
         private double _originalZoomFactor;
         private MpSize _originalSize;
-
-        private double _mouseWheelDampening = 0.008;
 
         #endregion
 

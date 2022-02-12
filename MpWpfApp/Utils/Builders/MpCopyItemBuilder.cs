@@ -34,7 +34,7 @@ namespace MpWpfApp {
 
                     processPath = MpPreferences.ThisAppSource.App.AppPath;
                     appName = MpPreferences.ThisAppSource.App.AppName;
-                    processIconImg64 = MpPreferences.ThisAppSource.App.Icon.IconImage.ImageBase64;
+                    processIconImg64 = MpBase64Images.AppIcon;
                 } else {
                     processPath = MpProcessManager.GetProcessPath(processHandle);
                     appName = MpProcessManager.GetProcessApplicationName(processHandle);

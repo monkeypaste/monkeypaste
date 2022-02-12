@@ -48,21 +48,6 @@ namespace MpWpfApp {
             }
         }
 
-        private void ContentListItemView_MouseEnter(object sender, MouseEventArgs e) {
-            BindingContext.IsHovering = true;
-            //if (!MpDragDropManager.IsDragAndDrop &&
-            //    (!BindingContext.Parent.IsExpanded || !BindingContext.IsSelected)) {
-            //    //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.OverDragItem;
-            //}
-        }
-
-        private void ContentListItemView_MouseLeave(object sender, MouseEventArgs e) {
-            BindingContext.IsHovering = false;
-            if (!MpDragDropManager.IsDragAndDrop) {
-                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
-            }
-        }
-
         #region Event Handlers
 
         #region View Model Ui Requests
@@ -112,9 +97,8 @@ namespace MpWpfApp {
             var fe = sender as FrameworkElement;
 
             MpContextMenuView.Instance.DataContext = MpClipTrayViewModel.Instance.MenuItemViewModel;
-            fe.ContextMenu = MpContextMenuView.Instance;
-            fe.ContextMenu.PlacementTarget = this;
-            fe.ContextMenu.IsOpen = true;
+            MpContextMenuView.Instance.PlacementTarget = this;
+            MpContextMenuView.Instance.IsOpen = true;
         }
 
         private MemoryStream annontationStream = null;

@@ -11,26 +11,6 @@ namespace MonkeyPaste {
         new Task<T> Build(object args);
     }
 
-    public interface MpIAnalyticItemBuilder : MpIModelBuilder<MpAnalyticItem> {
-        /*args:
-        string endPoint,
-            string apiKey,
-            MpCopyItemType format,
-            string title,
-            string description,
-            MpIconBuilder iconBuilder
-        */
-        //Task<MpAnalyticItem> Build(params object[] args);
-
-        Task<MpAnalyticItem> Build(
-            string endPoint,
-            string apiKey,
-            MpCopyItemType format,
-            string title,
-            string description,
-            MpIconBuilderBase iconBuilder);
-    }
-
     public interface MpICopyItemBuilder {
         Task<MpCopyItem> Create();
     }

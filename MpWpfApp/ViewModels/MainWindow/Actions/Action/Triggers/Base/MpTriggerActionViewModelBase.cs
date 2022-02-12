@@ -165,7 +165,7 @@ namespace MpWpfApp {
 
 
         public ICommand SelectTriggerTypeCommand => new RelayCommand<object>(
-            async (args) => {
+            (args) => {
                 ///IsDropDownOpen = false;
 
                 TriggerType = (MpTriggerType)args;

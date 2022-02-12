@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using static SQLite.SQLite3;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
     public static class MpDataModelProvider {
@@ -500,6 +501,15 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task<MpDetectedImageObject> GetDetectedImageObjectByData(int ciid,double x,double y,double w,double h,double s,string label,string description) {
+            string query = string.Format(@"select * from MpDetectedImageObject where fk_MpCopyItemId=? and X=? and Y=? and Width=? and Height=? and Score=? and Label=? and Description=?");
+            var result = await MpDb.QueryAsync<MpDetectedImageObject>(query, ciid,x,y,w,h,s,label,description);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
         #endregion
 
         #region MpCopyItemTag
@@ -635,27 +645,9 @@ namespace MonkeyPaste {
         #region MpAnalytic Item
 
         public static async Task<int> GetAnalyticItemCount() {
-            string query = $"select count(pk_MpAnalyticItemId) from MpAnalyticItem";
+            string query = $"select DISTINCT count(AnalyzerPluginGuid) from MpAnalyticItemPreset";
             var result = await MpDb.QueryScalarAsync<int>(query);
             return result;
-        }
-
-        public static async Task<MpAnalyticItem> GetAnalyticItemByEndpoint(string endPoint) {
-            string query = $"select * from MpAnalyticItem where EndPoint=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItem>(query, endPoint);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
-
-        public static async Task<MpAnalyticItem> GetAnalyticItemByGuid(string guid) {
-            string query = $"select * from MpAnalyticItem where MpAnalyticItemGuid=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItem>(query, guid);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
         }
 
         public static async Task<List<MpAnalyticItemPreset>> GetAllQuickActionAnalyzers() {
@@ -668,16 +660,6 @@ namespace MonkeyPaste {
             string query = $"select * from MpAnalyticItemPreset where pk_MpAnalyticItemPresetId in (select fk_MpAnalyticItemPresetId from MpShortcut where fk_MpAnalyticItemPresetId > 0)";
             var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query);
             return result;
-        }
-
-
-        public static async Task<MpAnalyticItemPreset> GetAnalyticItemDefaultPreset(string aguid) {
-            string query = $"select * from MpAnalyticItemPreset where AnalyzerPluginGuid=? and b_IsDefault=1";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query, aguid);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
         }
 
         public static async Task<List<MpAnalyticItemPreset>> GetAnalyticItemPresetsByAnalyzerGuid(string aguid) {

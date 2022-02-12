@@ -9,7 +9,10 @@ using SQLite;
 using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
-    public abstract class MpAnalyticItemParameterViewModel : MpViewModelBase<MpAnalyticItemPresetViewModel> {
+    public abstract class MpAnalyticItemParameterViewModel : 
+        MpViewModelBase<MpAnalyticItemPresetViewModel>,
+        MpISelectableViewModel,
+        MpIHoverableViewModel {
         #region Private Variables
 
         #endregion
@@ -60,14 +63,6 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; } = false;
 
-        public bool HasValueChanged {
-            get {
-                if(CurrentValue != DefaultValue) {
-                    return true;
-                }
-                return false;
-            }
-        }
         #endregion
 
         #region Model
@@ -161,6 +156,15 @@ namespace MpWpfApp {
                     return 0;
                 }
                 return Parameter.enumId;
+            }
+        }
+
+        public bool IsReadOnly {
+            get {
+                if (Parameter == null) {
+                    return false;
+                }
+                return Parameter.isReadOnly;
             }
         }
 

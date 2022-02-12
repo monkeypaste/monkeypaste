@@ -262,7 +262,12 @@ namespace MonkeyPaste {
             return result;
         }
 
-        
+        public static string ToBase64String(this byte[] bytes) {
+            if(bytes == null) {
+                return string.Empty;
+            }
+            return Convert.ToBase64String(bytes);
+        }
         #endregion
 
         #region Visual

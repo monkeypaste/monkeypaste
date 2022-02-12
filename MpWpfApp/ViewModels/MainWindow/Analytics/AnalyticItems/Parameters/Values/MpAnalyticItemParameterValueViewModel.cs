@@ -42,8 +42,6 @@ namespace MpWpfApp {
 
         public int ValueIdx { get; set; } = 0;
 
-        public bool HasChanged { get; set; } = false;
-
         #endregion
 
         #region Model
@@ -93,7 +91,8 @@ namespace MpWpfApp {
             }
             set {
                 if (Value != value) {
-                    HasChanged = AnalyticItemParameterValue.value != value;
+                    //HasModelChanged = AnalyticItemParameterValue.value != value;
+                    HasModelChanged = true;
                     AnalyticItemParameterValue.value = value;
                     OnPropertyChanged(nameof(Value));
                 }
@@ -181,7 +180,8 @@ namespace MpWpfApp {
 
         private void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(Value):
+                case nameof(HasModelChanged):
+                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.HasAnyParameterValueChanged));
                     break;
             }
             Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAllValid));

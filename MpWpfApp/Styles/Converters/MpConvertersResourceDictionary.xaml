@@ -50,10 +50,8 @@
     <local:MpDbImageIdToBitmapSourceConverter x:Key="DbImageIdToBitmapSourceConverter" />
     <local:MpShorcutIdToKeyStringConverter x:Key="ShorcutIdToKeyStringConverter" />
     <local:MpEnumToIntConverter x:Key="EnumToIntConverter" />
-    <local:MpAnalyticItemIdToTitleConverter x:Key="AnalyticItemIdToTitleConverter" />
     <local:MpItemToItemsSourceConverter x:Key="ItemToItemsSourceConverter" />
     <local:MpCollectionToGroupedCollectionConverter x:Key="CollectionToGroupedCollectionConverter" />
-    <local:MpAnalyticItemIdToIconSourceConverter x:Key="AnalyticItemIdToIconSourceConverter" />
     <local:MpTagIdToBrushConverter x:Key="TagIdToBrushConverter" />
     <local:MpTagIdToTagNameConverter x:Key="TagIdToTagNameConverter" />
     <local:MpTagIdToThicknessNameConverter x:Key="TagIdToThicknessNameConverter" />
@@ -65,5 +63,9 @@
     <local:MpStringHexToImageSourceConverter x:Key="StringHexToImageSourceConverter" />
     <local:MpObjectToImageSourceOrIconConverter x:Key="ObjectToImageSourceOrIconConverter" />
     <local:MpObjectToTooltipConverter x:Key="ObjectToTooltipConverter" />
+
+
+    <local:MpAnalyticItemGuidToIconSourceConverter x:Key="AnalyticItemGuidToIconSourceConverter" />
+    <local:MpAnalyticItemGuidToTitleConverter x:Key="AnalyticItemGuidToTitleConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

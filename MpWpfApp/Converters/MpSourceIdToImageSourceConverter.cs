@@ -14,7 +14,7 @@ namespace MpWpfApp {
                 if(svm == null) {
                     return null;
                 }
-                return new MpIconIdToImageSourceConverter().Convert(svm.PrimarySource.SourceIcon.Id, targetType, parameter, culture);
+                return new MpIconIdToImageSourceConverter().Convert(svm.PrimarySource.IconId, targetType, parameter, culture);
 
                 //string paramStr = string.Empty;
                 //MpIconViewModel ivm = null;

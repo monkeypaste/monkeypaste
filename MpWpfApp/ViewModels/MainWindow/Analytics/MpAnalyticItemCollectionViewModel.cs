@@ -56,7 +56,7 @@ namespace MpWpfApp {
 
         public List<MpAnalyticItemPresetViewModel> AllPresets {
             get {
-                return Items.OrderBy(x => x.Title).SelectMany(x => x.PresetViewModels).ToList();
+                return Items.OrderBy(x => x.Title).SelectMany(x => x.Items).ToList();
             }
         }
 
@@ -65,7 +65,7 @@ namespace MpWpfApp {
                 if(SelectedItem == null) {
                     return null;
                 }
-                return SelectedItem.SelectedPresetViewModel;
+                return SelectedItem.SelectedItem;
             }
         }
 
@@ -76,14 +76,8 @@ namespace MpWpfApp {
         public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultAnalyzerPanelWidth;
         public bool IsSidebarVisible { get; set; } = false;
 
-        public MpISidebarItemViewModel NextSidebarItem {
-            get {
-                if(SelectedPresetViewModel == null) {
-                    return null;
-                }
-                return SelectedPresetViewModel;
-            }
-        }
+        public MpISidebarItemViewModel NextSidebarItem => SelectedPresetViewModel;
+
         public MpISidebarItemViewModel PreviousSidebarItem => null;
 
         #endregion
@@ -164,7 +158,7 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItemPresetViewModel GetPresetViewModelById(int aipid) {
-            var aipvm = Items.SelectMany(x => x.PresetViewModels).FirstOrDefault(x => x.AnalyticItemPresetId == aipid);
+            var aipvm = Items.SelectMany(x => x.Items).FirstOrDefault(x => x.AnalyticItemPresetId == aipid);
             return aipvm;
         }
 
@@ -224,11 +218,11 @@ namespace MpWpfApp {
                     if(Items.Count > 0) {
                         if (SelectedItem == null) {
                             Items[0].IsSelected = true;
-                            SelectedItem.PresetViewModels.ForEach(x => x.IsEditingParameters = false);
+                            SelectedItem.Items.ForEach(x => x.IsEditingParameters = false);
                         }
                         if (!SelectedItem.IsAnyEditingParameters) {
-                            SelectedItem.PresetViewModels.ForEach(x => x.IsSelected = x == SelectedItem.PresetViewModels[0]);
-                            //SelectedItem.PresetViewModels.ForEach(x => x.IsEditing = x == SelectedItem.PresetViewModels[0]);
+                            SelectedItem.Items.ForEach(x => x.IsSelected = x == SelectedItem.Items[0]);
+                            //SelectedItem.Items.ForEach(x => x.IsEditing = x == SelectedItem.Items[0]);
                         }
                     }
                     OnPropertyChanged(nameof(SelectedItem));
@@ -243,8 +237,8 @@ namespace MpWpfApp {
         #region Commands
 
         public ICommand ManageItemCommand => new RelayCommand<object>(
-            (itemId) => {
-                Items.ForEach(x => x.IsSelected = x.AnalyzerPluginSudoId == (int)itemId);
+            (itemGuid) => {
+                Items.ForEach(x => x.IsSelected = x.AnalyzerPluginGuid == itemGuid.ToString());
                 SelectedItem.ManageAnalyticItemCommand.Execute(null);
             }, (itemId) => itemId != null);
 

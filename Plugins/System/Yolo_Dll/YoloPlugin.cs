@@ -15,7 +15,7 @@ namespace Yolo_Dll {
         private YoloScorer<YoloCocoP5Model> _yoloWrapper = null;
 
         public YoloPlugin() {
-            var fileName = "Yolo.Assets.Weights.yolov5s.onnx";
+            var fileName = "Yolo_Dll.Assets.Weights.yolov5s.onnx";
             var assembly = Assembly.GetExecutingAssembly();
             using (var stream = assembly.GetManifestResourceStream(fileName)) {
                 if (stream == null) {

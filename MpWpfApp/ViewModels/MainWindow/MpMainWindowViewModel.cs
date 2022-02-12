@@ -172,6 +172,7 @@ namespace MpWpfApp {
         }
 
         public async Task Init() {
+            await Task.Delay(1);
             MpConsole.WriteLine("MainWindow Init");
             PropertyChanged += MpMainWindowViewModel_PropertyChanged;
 
@@ -362,7 +363,7 @@ namespace MpWpfApp {
                 timer.Start();
             },
             () => {
-                return (Application.Current.MainWindow == null ||
+                return (Application.Current.MainWindow != null ||
                    //Application.Current.MainWindow.Visibility != Visibility.Visible ||
                    !MpMainWindowViewModel.Instance.IsMainWindowLoading ||
                    !MpMainWindowViewModel.Instance.IsShowingDialog) && !IsMainWindowOpen && !IsMainWindowOpening;
@@ -383,7 +384,7 @@ namespace MpWpfApp {
                         pasteDataObject = (MpDataObject)args;
                     }
                 }
-                string test;
+
                 bool wasMainWindowLocked = IsMainWindowLocked;
                 if (pasteSelected) {
                     if (MpClipTrayViewModel.Instance.IsAnyPastingTemplate) {

@@ -299,12 +299,12 @@ namespace MpWpfApp {
         }
 
         private void MpDbObject_SyncUpdate(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.RunOnMainThread(() => {
-            });
+            //MpHelpers.RunOnMainThread(() => {
+            //});
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-            MpHelpers.RunOnMainThread(async() => {
+           // MpHelpers.RunOnMainThread(async() => {
                 //if (sender is MpTag t) {
                 //    t.StartSync(e.SourceGuid);
                 //    var dupCheck = Items.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
@@ -317,7 +317,7 @@ namespace MpWpfApp {
                 //    }
                 //    t.EndSync();
                 //}
-            });
+           // });
         }
 
         #endregion

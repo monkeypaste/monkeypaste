@@ -8,7 +8,6 @@ using Windows.UI.Core;
 using System.Windows.Controls;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using MonkeyPaste;
 
 namespace MpWpfApp {
 

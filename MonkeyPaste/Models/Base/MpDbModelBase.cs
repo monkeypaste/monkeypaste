@@ -26,7 +26,7 @@ namespace MonkeyPaste {
         public string Guid { get; set; }
 
         [Ignore]
-        public bool IsReadOnly { get; set; } = false;
+        public virtual bool IsReadOnly { get; set; } = false;
 
         #endregion
 

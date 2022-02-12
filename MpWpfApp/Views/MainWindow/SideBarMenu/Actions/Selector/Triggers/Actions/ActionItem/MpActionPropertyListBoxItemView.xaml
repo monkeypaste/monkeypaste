@@ -439,7 +439,7 @@
                                       ItemsSource="{Binding AllPresets,
                                                             Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance},
                                                             Converter={StaticResource CollectionToGroupedCollectionConverter},
-                                                            ConverterParameter=ParentAnalyticItemId}">
+                                                            ConverterParameter=ParentAnalyticItemGuid}">
                                 <ComboBox.GroupStyle>
                                     <GroupStyle>
                                         <GroupStyle.HeaderTemplate>
@@ -448,7 +448,7 @@
                                                     <DockPanel Margin="10,5">
                                                         <Image DockPanel.Dock="Left"
                                                                Source="{Binding Name,
-                                                                                Converter={StaticResource AnalyticItemIdToIconSourceConverter}}"
+                                                                                Converter={StaticResource AnalyticItemGuidToIconSourceConverter}}"
                                                                Width="15"
                                                                Height="15"
                                                                Stretch="Fill" />
@@ -458,7 +458,7 @@
                                                                    FontWeight="SemiBold"
                                                                    FontSize="16"
                                                                    Text="{Binding Name,
-                                                                                  Converter={StaticResource AnalyticItemIdToTitleConverter}}" />
+                                                                                  Converter={StaticResource AnalyticItemGuidToTitleConverter}}" />
                                                     </DockPanel>
                                                 </Border>
                                             </DataTemplate>

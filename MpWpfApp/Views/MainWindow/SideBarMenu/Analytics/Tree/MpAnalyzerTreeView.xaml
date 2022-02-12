@@ -20,7 +20,7 @@
                   ItemsSource="{Binding Items}">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemViewModel}"
-                                          ItemsSource="{Binding PresetViewModels}">
+                                          ItemsSource="{Binding Items}">
                     <local:MpAnalyticItemView DataContext="{Binding}" />
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type local:MpAnalyticItemPresetViewModel}">
