@@ -63,7 +63,8 @@
                 <i:Interaction.Behaviors>
                     <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
                                             AffectsContent="True"
-                                            DoubleClickControl="{Binding ElementName=FrameGripButton}"
+                                            BoundElement="{Binding ElementName=MainWindowGrid}"
+                                            DoubleClickFrameworkElement="{Binding ElementName=FrameGripButton}"
                                             IsResizing="{Binding IsResizing,
                                                                  Mode=TwoWay,
                                                                  UpdateSourceTrigger=PropertyChanged,
@@ -220,7 +221,7 @@
                               DragStarted="SidebarGridSplitter_DragStarted">
                     <i:Interaction.Behaviors>
                         <local:MpResizeBehavior x:Name="SidebarResizeBehvior"
-                                                DoubleClickControl="{Binding ElementName=SidebarGridSplitter}"
+                                                DoubleClickFrameworkElement="{Binding ElementName=SidebarGridSplitter}"
                                                 IsResizing="{Binding IsResizing,
                                                                      Mode=TwoWay,
                                                                      UpdateSourceTrigger=PropertyChanged,

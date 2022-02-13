@@ -165,7 +165,7 @@
                                                 NotifyOnTargetUpdated=True}">
                             <i:Interaction.Behaviors>
                                 <local:MpResizeBehavior x:Name="CompareDataTextBoxResizeBehvior"
-                                                        DoubleClickControl="{Binding ElementName=CompareDataTextBox}"
+                                                        DoubleClickFrameworkElement="{Binding ElementName=CompareDataTextBox}"
                                                         ResizableEdge1="Bottom"
                                                         BoundHeight="{Binding Height,
                                                                               ElementName=CompareDataTextBox}"

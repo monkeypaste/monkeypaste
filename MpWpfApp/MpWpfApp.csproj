@@ -222,6 +222,7 @@
     <Compile Include="Converters\MpSourceIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringHexToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringToDateTimeConverter.cs" />
+    <Compile Include="Converters\MpStringToSizeConverter.cs" />
     <Compile Include="Converters\MpStringToThemeBrushConverter.cs" />
     <Compile Include="Converters\MpTagIdToBrushConverter.cs" />
     <Compile Include="Converters\MpTagIdToTagNameConverter.cs" />
@@ -240,6 +241,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>UserUiStrings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpWpfIconBuilder.cs" />
     <Compile Include="Utils\Builders\MpWpfPasteObjectBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
@@ -976,6 +978,10 @@
     <None Include="Resources\Assets\Weights\yolov5n.onnx" />
     <None Include="Resources\Assets\Weights\yolov5n6.onnx" />
     <None Include="Resources\Assets\Weights\yolov5s.onnx" />
+    <None Include="Resources\Plugins\Azure\Translator\manifest.json" />
+    <Resource Include="Styles\Shaders\InvertColor\MpInvertColorShader.ps">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Icons\FontAwesome\FontAwesome5Brands.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -1282,6 +1288,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />
     <Resource Include="Utils\RESTful\RestExample1.xml" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample1.html" />

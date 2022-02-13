@@ -206,7 +206,7 @@ namespace MonkeyPaste {
 
         public static async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             if (_connectionAsync == null) {
-                CreateConnection(); ;
+                CreateConnection();
             }
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
             
@@ -1102,7 +1102,7 @@ namespace MonkeyPaste {
                     , Y real NOT NULL
                     , Width real NOT NULL
                     , Height real NOT NULL                    
-                    , ObjectTypeName text
+                    , Label text
                     );
                     
                     CREATE TABLE MpTextToken (

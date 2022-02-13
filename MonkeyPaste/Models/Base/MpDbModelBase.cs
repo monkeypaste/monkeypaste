@@ -65,6 +65,7 @@ namespace MonkeyPaste {
                 await addOrUpdateByDboTypeAsyncMethod.InvokeAsync(null, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine(ex);
+                
                 Debugger.Break();
             }
 

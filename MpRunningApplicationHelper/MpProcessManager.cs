@@ -270,9 +270,6 @@ namespace MpProcessHelper {
             UpdateHandleStack(LastHandle);
 
             string processName = GetProcessPath(LastHandle);
-            if (processName.ToLower().Contains("powershell")) {
-                Debugger.Break();
-            }
             if (!_knownAppPaths.Contains(processName)) {
                 //var iconBmpSrc = _iconLoader.GetIconImage(processName);
                 //var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());

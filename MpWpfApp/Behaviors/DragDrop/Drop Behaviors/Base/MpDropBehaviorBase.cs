@@ -20,7 +20,8 @@ namespace MpWpfApp {
         Tile,
         Tray,
         External,
-        Resize
+        Resize,
+        Move
     }
 
     public abstract class MpDropBehaviorBase<T> : MpBehavior<T>, MpIContentDropTarget where T : FrameworkElement {

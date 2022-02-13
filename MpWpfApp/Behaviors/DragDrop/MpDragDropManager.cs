@@ -13,11 +13,11 @@ namespace MpWpfApp {
 
         private const double MINIMUM_DRAG_DISTANCE = 10;
 
-        private static  Point _mouseStartPosition;
+        private static Point _mouseStartPosition;
 
-        private static  MpIContentDropTarget _curDropTarget;
+        private static MpIContentDropTarget _curDropTarget;
 
-        private static  List<MpIContentDropTarget> _dropTargets {
+        private static List<MpIContentDropTarget> _dropTargets {
             get {
                 List<MpIContentDropTarget> dtl = new List<MpIContentDropTarget>();
 
@@ -33,6 +33,8 @@ namespace MpWpfApp {
                 dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsEnabled).ToList());
 
                 dtl.Add((Application.Current.MainWindow as MpMainWindow).ExternalDropBehavior);
+
+                dtl.Add((Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior);
 
                 return dtl;
             }

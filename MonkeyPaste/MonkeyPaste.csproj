@@ -66,6 +66,7 @@
     <Compile Remove="Views\Shell\MpMainShell.xaml.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Data\Analytics\Formats\azurevision.json" />
+    <None Remove="Resources\Data\db.create" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Html\Editor\Editor2.html" />
     <None Remove="Resources\Html\Editor\Editor2.js" />

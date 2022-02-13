@@ -9,10 +9,21 @@ namespace MpWpfApp {
             if (value is string valueStr) {
                 var bmpSrc = valueStr.ToBitmapSource();
                 bmpSrc.Freeze();
+
+                Stretch stretchType = Stretch.Fill;
+                if(parameter is string paramStr) {
+                    paramStr = paramStr.ToLower();
+                    if(paramStr == "none") {
+                        stretchType = Stretch.None;
+                    } else if(paramStr == "uniform") {
+                        stretchType = Stretch.Uniform;
+                    } else if(paramStr == "uniformtofill") {
+                        stretchType = Stretch.UniformToFill;
+                    }
+                }
                 return new ImageBrush() {
                     ImageSource = bmpSrc,
-                    Stretch = Stretch.Fill,
-                    
+                    Stretch = stretchType   
                 };
             }
             return null;

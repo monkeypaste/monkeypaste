@@ -14,6 +14,7 @@ using System.Web;
 using System.Windows;
 using MonkeyPaste.Plugin;
 using System.Diagnostics;
+using System.IO;
 
 namespace MpWpfApp {
     public class MpAnalyticItemViewModel : 
@@ -36,6 +37,9 @@ namespace MpWpfApp {
         public MpMenuItemViewModel MenuItemViewModel {
             get { 
                 var subItems = Items.Select(x => x.MenuItemViewModel).ToList();
+                if(subItems.Count > 0) {
+                    subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
+                }
                 subItems.Add(
                     new MpMenuItemViewModel() {
                         IconResourceKey = Application.Current.Resources["CogIcon"] as string,
@@ -394,8 +398,7 @@ namespace MpWpfApp {
                 guid: PluginFormat.guid);
 
             AnalyticItem.Presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
-            bool isNew = AnalyticItem.Presets == null || AnalyticItem.Presets.Count == 0;
-                       
+            bool isNew = AnalyticItem.Presets == null || AnalyticItem.Presets.Count == 0;                       
 
             Items.Clear();
 
@@ -441,12 +444,6 @@ namespace MpWpfApp {
             await naipvm.InitializeAsync(aip);
             return naipvm;
         }
-
-        //public async Task<MpAnalyticItemPresetViewModel> CreatePresetViewModel(MpAnalyzerPresetFormat aip) {
-        //    MpAnalyticItemPresetViewModel naipvm = new MpAnalyticItemPresetViewModel(this);
-        //    await naipvm.InitializeAsync(aip);
-        //    return naipvm;
-        //}
 
         public string GetUniquePresetName() {
             int uniqueIdx = 1;
@@ -682,11 +679,18 @@ namespace MpWpfApp {
                 }
                 if (paramFormat.parameterControlType == MpAnalyticItemParameterControlType.Hidden) {
                     // TODO (maybe)need to implement a request format so other properties can be passed
+                    if (paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.FilePath) {
+                        requestItem = new MpAnalyzerPluginRequestItemFormat() {
+                            enumId = kvp.Key,
+                            value = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), ci.ItemData.ToByteArray(), true)
+                        };
+                    } else {
+                        requestItem = new MpAnalyzerPluginRequestItemFormat() {
+                            enumId = kvp.Key,
+                            value = ci.ItemData.ToString()
+                        };
+                    }
                     
-                    requestItem = new MpAnalyzerPluginRequestItemFormat() {
-                        enumId = kvp.Key,
-                        value = ci.ItemData.ToString()
-                    };
                 } else {
                     requestItem = new MpAnalyzerPluginRequestItemFormat() {
                         enumId = kvp.Key,

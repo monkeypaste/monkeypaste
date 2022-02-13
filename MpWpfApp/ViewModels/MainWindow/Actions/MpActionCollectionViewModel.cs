@@ -221,6 +221,8 @@ namespace MpWpfApp {
 
             OnPropertyChanged(nameof(Items));
 
+            NotifyViewportChanged();
+
             IsBusy = false;
         }
 
@@ -350,14 +352,14 @@ namespace MpWpfApp {
         private void MpMatcherCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSidebarVisible):
-                    MpSidebarViewModel.Instance.OnPropertyChanged(nameof(MpSidebarViewModel.Instance.IsAnySidebarOpen));
-                    
+                    MpSidebarViewModel.Instance.OnPropertyChanged(nameof(MpSidebarViewModel.Instance.IsAnySidebarOpen));                   
 
                     if (IsSidebarVisible) {
                         MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpTagTrayViewModel.Instance.IsSidebarVisible = false;
 
                     }
+                    NotifyViewportChanged();
                     break;
                 case nameof(SelectedItem):
                     CameraZoomFactor = 1.0;

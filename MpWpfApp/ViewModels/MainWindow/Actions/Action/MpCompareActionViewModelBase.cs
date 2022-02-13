@@ -16,7 +16,7 @@ namespace MpWpfApp {
         public bool IsCaseSensitive { get; set; }
     }
 
-    public class MpCompareActionViewModelBase : MpActionViewModelBase {
+    public class MpCompareActionViewModelBase : MpActionViewModelBase, MpIResizableViewModel {
         #region Private Variables
         #endregion
 
@@ -87,6 +87,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsResizing { get; set; }
+        public bool CanResize { get; set; }
         #endregion
 
         #region Business Logic
@@ -443,6 +445,7 @@ namespace MpWpfApp {
               (args) => {
                  ComparePropertyPathType = (MpComparePropertyPathType)args;
               });
+
 
         #endregion
     }

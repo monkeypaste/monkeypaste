@@ -190,7 +190,7 @@ CREATE TABLE MpDetectedImageObject (
 , Y real NOT NULL
 , Width real NOT NULL
 , Height real NOT NULL                    
-, ObjectTypeName text
+, Label text
 , CONSTRAINT FK_MpDetectedImageObject_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
 );
                     

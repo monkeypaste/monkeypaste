@@ -12,22 +12,29 @@
                      d:DesignHeight="450"
                      d:DesignWidth="800">
 
-    <Grid>
-        <!--<Image x:Name="ClipTileAppIconImage"
+    <Viewbox Width="{Binding Parent.TileContentWidth}"
+             Height="{Binding EditorHeight}"
+             DataContext="{Binding}"
+             Stretch="Uniform">
+        <Grid>
+            <Image x:Name="ClipTileAppIconImage"
                    Source="{Binding CopyItemData,
                                     Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                    Stretch="Uniform"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Visibility="Visible" />-->
-        <!--<Viewbox Width="412"
-             Height="412"
-             DataContext="{Binding}"
-             Stretch="Fill">-->
-        <local:MpDetectedObjectsCollectionView Width="{Binding Parent.Parent.TileContentWidth}"
-                                               Height="{Binding Parent.EditorHeight}"
-                                               DataContext="{Binding DetectedImageObjectCollectionViewModel}" />
+                   Width="{Binding CopyItemData,
+                                   Converter={StaticResource StringToSizeConverter},
+                                   ConverterParameter=width}"
+                   Height="{Binding CopyItemData,
+                                    Converter={StaticResource StringToSizeConverter},
+                                    ConverterParameter=height}" />
+            <local:MpDetectedObjectsCollectionView Width="{Binding Parent.CopyItemData,
+                                                                   Converter={StaticResource StringToSizeConverter},
+                                                                   ConverterParameter=width}"
+                                                   Height="{Binding Parent.CopyItemData,
+                                                                    Converter={StaticResource StringToSizeConverter},
+                                                                    ConverterParameter=height}"
+                                                   DataContext="{Binding DetectedImageObjectCollectionViewModel}" />
+        </Grid>
 
-        <!--</Viewbox>-->
-    </Grid>
+    </Viewbox>
 </local:MpUserControl>

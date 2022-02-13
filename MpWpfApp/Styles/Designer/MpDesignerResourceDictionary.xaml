@@ -64,10 +64,6 @@
     <!--  Designer Item Template  -->
     <Style x:Key="ResizableDesignerControlStyle"
            TargetType="{x:Type ContentControl}">
-        <Setter Property="MinHeight"
-                Value="20" />
-        <Setter Property="MinWidth"
-                Value="20" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContentControl">

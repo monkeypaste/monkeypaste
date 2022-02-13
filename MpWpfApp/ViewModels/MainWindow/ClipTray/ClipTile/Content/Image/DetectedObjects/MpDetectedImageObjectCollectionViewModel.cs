@@ -13,7 +13,8 @@ using MonkeyPaste;
 using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
-    public class MpDetectedImageObjectCollectionViewModel : MpViewModelBase<MpContentItemViewModel> {
+    public class MpDetectedImageObjectCollectionViewModel : 
+        MpSelectorViewModelBase<MpContentItemViewModel,MpDetectedImageObjectViewModel> {
         #region Private Variables
         private bool _isEnabled = false;
         #endregion
@@ -22,56 +23,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public ObservableCollection<MpDetectedImageObjectViewModel> Items { get; set; } = new ObservableCollection<MpDetectedImageObjectViewModel>();
-
         #endregion
-
-        private BitmapSource _copyItemBmp = null;
-        public BitmapSource CopyItemBmp {
-            get {
-                if(_copyItemBmp == null) {
-                    return new BitmapImage();
-                }
-                return _copyItemBmp;
-            }
-            set {
-                if(_copyItemBmp != value) {
-                    _copyItemBmp = value;
-                    OnPropertyChanged(nameof(CopyItemBmp));
-                    OnPropertyChanged(nameof(CopyItemBmpWidth));
-                    OnPropertyChanged(nameof(CopyItemBmpHeight));
-                    OnPropertyChanged(nameof(CopyItemBmpImageBrush));
-                }
-            }
-        }
-
-        public double CopyItemBmpHeight {
-            get {
-                if(CopyItemBmp == null) {
-                    return 0;
-                }
-                return CopyItemBmp.Height;
-            }
-        }
-
-        public double CopyItemBmpWidth {
-            get {
-                if (CopyItemBmp == null) {
-                    return 0;
-                }
-                return CopyItemBmp.Width;
-            }
-        }
-
-
-        public ImageBrush CopyItemBmpImageBrush {
-            get {
-                if (CopyItemBmp == null) {
-                    return new ImageBrush();
-                }
-                return new ImageBrush(CopyItemBmp);
-            }
-        }
         #endregion
 
         #region Public Methods
@@ -97,7 +49,6 @@ namespace MpWpfApp {
             
             OnPropertyChanged(nameof(Items));
 
-            CopyItemBmp = ci.ItemData.ToBitmapSource();
 
             IsBusy = false;
         }

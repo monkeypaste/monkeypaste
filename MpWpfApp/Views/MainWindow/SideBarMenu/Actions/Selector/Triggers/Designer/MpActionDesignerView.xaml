@@ -18,6 +18,11 @@
                              Opacity="0.7" />
         </Grid.Background>
         <zoompan:ZoomAndPanControl x:Name="ZoomAndPanControl"
+                                   ContentViewportWidth="{Binding ViewportWidth,
+                                                                  Source={x:Static local:MpActionCollectionViewModel.Instance},
+                                                                  Mode=TwoWay}"
+                                   ContentViewportHeight="{Binding ViewportHeight,
+                                                                   Source={x:Static local:MpActionCollectionViewModel.Instance}}"
                                    Width="{Binding DesignerWidth,
                                                    Source={x:Static local:MpActionCollectionViewModel.Instance},
                                                    Mode=TwoWay}"
@@ -28,7 +33,6 @@
                                                 ZoomFactor="0.25"
                                                 ViewportCameraViewModel="{x:Static local:MpActionCollectionViewModel.Instance}" />
             </i:Interaction.Behaviors>
-            <!--<Viewbox Stretch="UniformToFill">-->
             <ListBox x:Name="ActionDesignerListBox"
                      Loaded="ActionDesignerListBox_Loaded"
                      Background="Transparent"
@@ -46,8 +50,8 @@
                     <ItemsPanelTemplate>
                         <local:MpDesignerCanvas x:Name="ActionDesignerCanvas"
                                                 Loaded="ZoomAndPanControl_Loaded"
-                                                ShowVoronoi="True"
-                                                ShowGrid="True"
+                                                ShowVoronoi="False"
+                                                ShowGrid="False"
                                                 MinDist="100.1"
                                                 TipWidth="10"
                                                 TailWidth="3"
@@ -135,7 +139,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <!--</Viewbox>-->
         </zoompan:ZoomAndPanControl>
         <!--</local:MpDesignerViewbox>-->
         <Button x:Name="AddNewActionButton"

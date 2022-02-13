@@ -43,7 +43,8 @@ namespace MonkeyPaste.Plugin {
         RichText,
         Html,
         Image,
-        Base64Text
+        Base64Text,
+        FilePath
     }
 
     public class MpAnalyzerPluginRequestItemFormat {

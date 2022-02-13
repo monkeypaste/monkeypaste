@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1477D1E5-412E-4A26-8D1D-069DE45AE9B8}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Yolo</RootNamespace>
-    <AssemblyName>Yolo</AssemblyName>
+    <RootNamespace>Yolo_Cmd</RootNamespace>
+    <AssemblyName>Yolo_Cmd</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -99,8 +99,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /i /e /s /y /f "..\Debug\*" "$(SolutionDir)\MpWpfApp\bin\Debug\Plugins\$(ProjectName)"
-xcopy /i /e /s /y /f "..\..\*.json" "$(SolutionDir)\MpWpfApp\bin\Debug\Plugins\$(ProjectName)"</PostBuildEvent>
+    <PostBuildEvent>if not exist "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)" md "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)"
+xcopy /D /Y "$(TargetDir)\*" "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)"
+copy "$(ProjectDir)manifest.json" "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\..\..\packages\Microsoft.ML.OnnxRuntime.Managed.1.10.0\build\netstandard2.0\Microsoft.ML.OnnxRuntime.Managed.targets" Condition="Exists('..\..\..\packages\Microsoft.ML.OnnxRuntime.Managed.1.10.0\build\netstandard2.0\Microsoft.ML.OnnxRuntime.Managed.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

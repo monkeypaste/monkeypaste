@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Utilities;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -96,13 +97,20 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
                 return null;
             }
-            using var httpClient = new HttpClient();
-            byte[] bytes = await httpClient.GetByteArrayAsync(url);
-
-            using var fs = new FileStream("favicon.ico", FileMode.Create);
-            fs.Write(bytes, 0, bytes.Length);
-
-            return bytes;
+            using (var httpClient = new HttpClient()) {
+                try {
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", "C# App");
+                    byte[] bytes = await httpClient.GetByteArrayAsync(url);
+                    using (var fs = new FileStream("favicon.ico", FileMode.Create)) {                    
+                        fs.Write(bytes, 0, bytes.Length);
+                        return bytes;
+                    
+                    }
+                } catch (Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                }
+            }
+            return null;
         }
 
         public static byte[] ReadBytesFromUri(string url) {

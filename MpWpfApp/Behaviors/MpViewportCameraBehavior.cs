@@ -15,7 +15,7 @@ namespace MpWpfApp {
     public class MpViewportCameraBehavior : MpBehavior<ZoomAndPanControl> {
         #region Private Variables
 
-        private Point _contentMouseDownPosition; //control
+        private Point _lastContentPosition; //control
         private Point _viewportMouseDownPosition; //content
 
         private double _originalZoomFactor;
@@ -70,6 +70,8 @@ namespace MpWpfApp {
             MpMessenger.Register(
                 MpActionCollectionViewModel.Instance,
                 ReceivedActionCollectionViewModelMessage);
+
+            ScaleToContent();
         }
 
         
@@ -103,9 +105,12 @@ namespace MpWpfApp {
 
         public void ScaleToContent() {
             var astavml = MpActionCollectionViewModel.Instance.AllSelectedTriggerActions;
-           
+           if(astavml.Count == 0) {
+                return;
+            }
             var contentRect = new Rect();
-            
+            contentRect.Location = new Point(
+                astavml.Min(x => x.Location.X), astavml.Min(x => x.Location.Y));
             foreach (var avm in astavml) {
                 contentRect.Union(new Rect(avm.Location, new Size(avm.Width, avm.Height)));
             }
@@ -125,7 +130,7 @@ namespace MpWpfApp {
 
             AssociatedObject.ZoomTo(contentRect);
 
-            AssociatedObject.ScaleToFit();
+            //AssociatedObject.ScaleToFit();
         }
 
         private void ReceivedActionCollectionViewModelMessage(MpMessageType msg) {
@@ -160,15 +165,19 @@ namespace MpWpfApp {
 
             var contentMousePosition = e.GetPosition(AssociatedObject);
 
-            Vector offset = _contentMouseDownPosition - contentMousePosition;
+            Vector offset1 = _lastContentPosition - contentMousePosition;
+            _lastContentPosition = contentMousePosition;
+            //var viewportMousePosition = e.GetPosition(AssociatedObject.GetVisualDescendent<ListBox>());
 
-            AssociatedObject.ContentOffsetX = offset.X;
-            AssociatedObject.ContentOffsetY = offset.Y;
+            //Vector offset = viewportMousePosition - _viewportMouseDownPosition;
+
+            AssociatedObject.ContentOffsetX += offset1.X;
+            AssociatedObject.ContentOffsetY += offset1.Y;
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             var lb = AssociatedObject.GetVisualDescendent<ListBox>();
-            _contentMouseDownPosition = e.GetPosition(AssociatedObject);
+            _lastContentPosition = e.GetPosition(AssociatedObject);
             _viewportMouseDownPosition = e.GetPosition(lb);
 
             if (ViewportCameraViewModel.CanPan) {
