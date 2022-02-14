@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemParameterValueViewModel : MpViewModelBase<MpAnalyticItemParameterViewModel>  {
+    public class MpComboBoxParameterValueViewModel : MpViewModelBase<MpAnalyticItemParameterViewModel>  {
         #region Private Variables
 
         #endregion
@@ -106,9 +106,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpAnalyticItemParameterValueViewModel() : base(null) { }
+        public MpComboBoxParameterValueViewModel() : base(null) { }
 
-        public MpAnalyticItemParameterValueViewModel(MpAnalyticItemParameterViewModel parent) : base(parent) {
+        public MpComboBoxParameterValueViewModel(MpAnalyticItemParameterViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
         }
 
@@ -133,7 +133,7 @@ namespace MpWpfApp {
 
         #region Equals Override
 
-        public bool Equals(MpAnalyticItemParameterValueViewModel other) {
+        public bool Equals(MpComboBoxParameterValueViewModel other) {
             if (other == null)
                 return false;
 
@@ -147,7 +147,7 @@ namespace MpWpfApp {
             if (obj == null)
                 return false;
 
-            MpAnalyticItemParameterValueViewModel personObj = obj as MpAnalyticItemParameterValueViewModel;
+            MpComboBoxParameterValueViewModel personObj = obj as MpComboBoxParameterValueViewModel;
             if (personObj == null)
                 return false;
             else
@@ -158,14 +158,14 @@ namespace MpWpfApp {
             return this.Value.GetHashCode();
         }
 
-        public static bool operator ==(MpAnalyticItemParameterValueViewModel person1, MpAnalyticItemParameterValueViewModel person2) {
+        public static bool operator ==(MpComboBoxParameterValueViewModel person1, MpComboBoxParameterValueViewModel person2) {
             if (((object)person1) == null || ((object)person2) == null)
                 return Object.Equals(person1, person2);
 
             return person1.Equals(person2);
         }
 
-        public static bool operator !=(MpAnalyticItemParameterValueViewModel person1, MpAnalyticItemParameterValueViewModel person2) {
+        public static bool operator !=(MpComboBoxParameterValueViewModel person1, MpComboBoxParameterValueViewModel person2) {
             if (((object)person1) == null || ((object)person2) == null)
                 return !Object.Equals(person1, person2);
 

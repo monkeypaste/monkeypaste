@@ -36,6 +36,7 @@
             <ListBox x:Name="ActionDesignerListBox"
                      Loaded="ActionDesignerListBox_Loaded"
                      Background="Transparent"
+                     SelectedValuePath=""
                      Height="Auto"
                      BorderThickness="0"
                      SelectionChanged="ActionDesignerListBox_SelectionChanged"

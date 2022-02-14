@@ -67,6 +67,15 @@ namespace MpWpfApp {
 
         #region Model
 
+        public bool IsVisible {
+            get {
+                if (Parameter == null) {
+                    return false;
+                }
+                return Parameter.isVisible;
+            }
+        }
+
         public virtual string CurrentValue { get; set; }
 
         public virtual string DefaultValue { 
@@ -119,15 +128,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(IntValue));
                     OnPropertyChanged(nameof(CurrentValue));
                 }
-            }
-        }
-
-        public bool IsVisible {
-            get {
-                if(Parameter == null) {
-                    return false;
-                }
-                return Parameter.isVisible;
             }
         }
 
@@ -224,8 +224,8 @@ namespace MpWpfApp {
 
         public abstract Task InitializeAsync(MpAnalyticItemParameterFormat aip);
         
-        public async Task<MpAnalyticItemParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, MpAnalyticItemParameterValue valueSeed) {
-            var naipvvm = new MpAnalyticItemParameterValueViewModel(this);
+        public async Task<MpComboBoxParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, MpAnalyticItemParameterValue valueSeed) {
+            var naipvvm = new MpComboBoxParameterValueViewModel(this);
             naipvvm.PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
             await naipvvm.InitializeAsync(idx, valueSeed);
             return naipvvm;

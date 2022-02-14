@@ -56,6 +56,8 @@ namespace MonkeyPaste.Plugin {
         public string endpoint { get; set; } = string.Empty;
         public string apiKey { get; set; } = string.Empty;
 
+        public MpHttpTransactionFormat http { get; set; }
+
         public MpAnalyzerPluginInputFormat inputType { get; set; } = null;
         public MpAnalyzerPluginOutputFormat outputType { get; set; } = null;
 
@@ -72,8 +74,8 @@ namespace MonkeyPaste.Plugin {
     public class MpAnalyzerPluginOutputFormat {
         public bool text { get; set; } = false;
         public bool image { get; set; } = false;
-        public bool box { get; set; } = false;
-        public bool token { get; set; } = false;
+        public bool imageToken { get; set; } = false;
+        public bool textToken { get; set; } = false;
         public bool file { get; set; } = false;
     }
 
@@ -95,6 +97,8 @@ namespace MonkeyPaste.Plugin {
         public bool isVisible { get; set; } = true;
 
         public List<MpAnalyticItemParameterValue> values { get; set; } = new List<MpAnalyticItemParameterValue>();
+
+        public MpHttpTransactionFormat deferredValueTransaction { get; set; }
     }
 
     public class MpAnalyticItemParameterValue {
@@ -103,6 +107,17 @@ namespace MonkeyPaste.Plugin {
         public bool isDefault { get; set; } = false;
         public bool isMinimum { get; set; } = false;
         public bool isMaximum { get; set; } = false;
+    }
+
+    public class MpComboBoxControlFormat {
+        public string displayPath { get; set; }
+        public string valuePath { get; set; }
+    }
+
+    public class MpSliderControlFormat {
+        public string minimum { get; set; }
+        public string maximum { get; set; }
+        public string tickFrequency { get; set; }
     }
 
     public abstract class MpAnalyzerResponseValueFormatBase : MpIDescriptor {
@@ -114,7 +129,7 @@ namespace MonkeyPaste.Plugin {
         public double Score { get; set; } = 0;
     }
 
-    public class MpAnalyzerPluginBoxResponseValueFormat : 
+    public class MpAnalyzerPluginImageTokenResponseValueFormat : 
         MpAnalyzerResponseValueFormatBase, 
         MpIImageDescriptorBox {
         [JsonProperty("x")]
@@ -127,7 +142,14 @@ namespace MonkeyPaste.Plugin {
         public double Height { get; set; } = 0;
     }
 
-    public class MpAnalyzerPluginTextResponseValueFormat :
+    public class MpAnalyzerPluginTextResponseValueFormat {
+        //if JSONPath returns null value is constant string
+        public List<string> titlePath { get; set; }
+        public List<string> dataPath { get; set; }
+        public List<string> descriptionPath { get; set; }
+    }
+
+    public class MpAnalyzerPluginTextTokenResponseValueFormat :
         MpAnalyzerResponseValueFormatBase, 
         MpITextDescriptorRange {
         [JsonProperty("start")]

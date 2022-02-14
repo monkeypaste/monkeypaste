@@ -14,7 +14,7 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public virtual ObservableCollection<MpAnalyticItemParameterValueViewModel> SelectedViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
+        public virtual ObservableCollection<MpComboBoxParameterValueViewModel> SelectedViewModels { get; set; } = new ObservableCollection<MpComboBoxParameterValueViewModel>();
         
         #endregion
         

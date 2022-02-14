@@ -38,7 +38,7 @@ namespace Yolo_Dll {
                 bmp = new Bitmap(ms);
             }
 
-            var boxList = new List<MpAnalyzerPluginBoxResponseValueFormat>();
+            var boxList = new List<MpAnalyzerPluginImageTokenResponseValueFormat>();
 
             List<YoloPrediction> predictions = _yoloWrapper.Predict(bmp);
             using (var graphics = System.Drawing.Graphics.FromImage(bmp)) {
@@ -46,7 +46,7 @@ namespace Yolo_Dll {
                     double score = Math.Round(item.Score, 2);
 
                     if (score >= confidence) {
-                        var box = new MpAnalyzerPluginBoxResponseValueFormat() {
+                        var box = new MpAnalyzerPluginImageTokenResponseValueFormat() {
                             X = (double)item.Rectangle.X,
                             Y = (double)item.Rectangle.Y,
                             Width = (double)item.Rectangle.Width,

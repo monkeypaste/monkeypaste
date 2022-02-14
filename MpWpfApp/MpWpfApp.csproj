@@ -287,7 +287,7 @@
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\MpAnalyticItemCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Values\MpAnalyticItemParameterValueViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Values\MpComboBoxParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />

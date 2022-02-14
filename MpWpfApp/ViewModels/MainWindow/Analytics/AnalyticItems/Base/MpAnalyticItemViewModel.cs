@@ -273,7 +273,7 @@ namespace MpWpfApp {
                 if (AnalyzerPluginFormat.outputType.file) {
                     flags |= MpAnalyzerOutputFormatFlags.File;
                 }
-                if (AnalyzerPluginFormat.outputType.box) {
+                if (AnalyzerPluginFormat.outputType.imageToken) {
                     flags |= MpAnalyzerOutputFormatFlags.BoundingBox;
                 }
 
@@ -712,8 +712,8 @@ namespace MpWpfApp {
             }
 
 
-            if (AnalyzerPluginFormat.outputType.box) {
-                var boxes = JsonConvert.DeserializeObject<List<MpAnalyzerPluginBoxResponseValueFormat>>
+            if (AnalyzerPluginFormat.outputType.imageToken) {
+                var boxes = JsonConvert.DeserializeObject<List<MpAnalyzerPluginImageTokenResponseValueFormat>>
                                 (resultObj.ToString()).Cast<MpIImageDescriptorBox>().ToList();
                 return boxes;
             }

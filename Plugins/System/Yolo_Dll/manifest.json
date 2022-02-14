@@ -13,7 +13,7 @@
       "image": true
     },
     "outputType": {
-      "box": true
+      "imageToken": true
     },
     "parameters": [
       {

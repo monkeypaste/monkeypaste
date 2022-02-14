@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste;
 using MonkeyPaste.Plugin;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -124,6 +125,11 @@ namespace MpWpfApp {
             //    }
             //    ResetToDefault();
             //}
+            if(!string.IsNullOrEmpty(FormatInfo)) {
+                var sliderFormat = JsonConvert.DeserializeObject<MpSliderControlFormat>(FormatInfo);
+                // TODO update manifests and properties to set min/max/ticks
+
+            }
             ResetToDefault();
 
             OnPropertyChanged(nameof(Min));

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using MonkeyPaste;
 using MonkeyPaste.Plugin;
 
@@ -16,10 +17,10 @@ namespace MpWpfApp {
         #region View Models
         //public MpAnalyticItemParameterValueViewModel DefaultValueViewModel { get; set; }
 
-        public virtual ObservableCollection<MpAnalyticItemParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpAnalyticItemParameterValueViewModel>();
+        public virtual ObservableCollection<MpComboBoxParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpComboBoxParameterValueViewModel>();
 
 
-        public virtual MpAnalyticItemParameterValueViewModel CurrentValueViewModel {
+        public virtual MpComboBoxParameterValueViewModel CurrentValueViewModel {
             get => ValueViewModels.FirstOrDefault(x => x.IsSelected);
             set {
                 if (value != CurrentValueViewModel) {
