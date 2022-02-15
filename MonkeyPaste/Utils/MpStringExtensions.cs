@@ -91,6 +91,9 @@ namespace MonkeyPaste {
         }
 
         public static bool IsStringBase64(this string str) {
+            if (string.IsNullOrEmpty(str)) {
+                return false;
+            }
             try {
                 // If no exception is caught, then it is possibly a base64 encoded string
                 byte[] data = Convert.FromBase64String(str);

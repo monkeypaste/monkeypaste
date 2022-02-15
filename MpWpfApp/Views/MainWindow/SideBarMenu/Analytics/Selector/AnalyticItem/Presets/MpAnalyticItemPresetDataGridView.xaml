@@ -67,7 +67,8 @@
                                             Template="{StaticResource SearchButtonControlTemplate}"
                                             Command="{Binding ChangeIconCommand,
                                                               Source={x:Static local:MpIconCollectionViewModel.Instance}}"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}}">
+                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                                      AncestorType=Border}}">
                                         <Image Width="20"
                                                Height="20"
                                                HorizontalAlignment="Center"

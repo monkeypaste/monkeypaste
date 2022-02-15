@@ -264,23 +264,25 @@ namespace MpWpfApp {
 
             foreach (var paramVal in Preset.PresetParameterValues) {
                 // loop through each preset value and find matching parameter
-                var param = Parent.AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.enumId == paramVal.ParameterEnumId);
-                if(param == null) {
-                    throw new Exception($"Error no parameter matching enumId: {paramVal.ParameterEnumId}");
-                }
-                
-                if(param.values.Any(x=>x.isDefault)) {
-                    //if parameter has a default value it needs to be swapped with preset value
-                    param.values.FirstOrDefault(x => x.isDefault).value = paramVal.Value;
-                } else {
-                    param.values.Add(
-                        new MpAnalyticItemParameterValue() {
-                            value = paramVal.Value,
-                            isDefault = true
-                        });
-                }
+                var paramFormat = Parent.AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.enumId == paramVal.ParameterEnumId);
+                //if(param == null) {
+                //    throw new Exception($"Error no parameter matching enumId: {paramVal.ParameterEnumId}");
+                //}
+                //paramFormat.values.ForEach(x => x.isDefault = false);
 
-                var naipvm = await CreateParameterViewModel(param);
+                //if (paramFormat.values.Any(x => x.value == paramVal.Value)) {
+                //    //if parameter has a default value it needs to be swapped with preset value
+                //    paramFormat.values.FirstOrDefault(x => x.isDefault).value = paramVal.Value;
+                //} else if(paramFormat.values.Count == 0) {
+                //    paramFormat.values.Add(
+                //        new MpAnalyticItemParameterValue() {
+                //            value = paramVal.Value,
+                //            isDefault = true
+                //        });
+                //} else {
+
+                //}
+                var naipvm = await CreateParameterViewModel(paramFormat,paramVal);
                 Items.Add(naipvm);
             }
 
@@ -296,7 +298,8 @@ namespace MpWpfApp {
 
 
         public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(
-            MpAnalyticItemParameterFormat aipf) {
+            MpAnalyticItemParameterFormat aipf,
+            MpAnalyticItemPresetParameterValue aipv) {
             MpAnalyticItemParameterViewModel naipvm = null;
 
             switch (aipf.parameterControlType) {
@@ -330,7 +333,7 @@ namespace MpWpfApp {
                 aipf = await Parent.DeferredCreateParameterModel(aipf);
             }
 
-            await naipvm.InitializeAsync(aipf);
+            await naipvm.InitializeAsync(aipf,aipv);
 
             return naipvm;
         }
@@ -485,6 +488,8 @@ namespace MpWpfApp {
 
                 Items.ForEach(x => x.CurrentValue = x.DefaultValue);
                 OnPropertyChanged(nameof(HasAnyParameterValueChanged));
+                Items.ForEach(x => x.HasModelChanged = false);
+                Items.Where(x => x is MpComboBoxParameterViewModel).Cast<MpComboBoxParameterViewModel>().ForEach(x => x.Items.ForEach(y => y.HasModelChanged = false));
                 HasModelChanged = false;
                 IsEditingParameters = false;
             },

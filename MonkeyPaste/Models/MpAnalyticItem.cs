@@ -33,10 +33,6 @@ namespace MonkeyPaste {
 
         public int SortOrderIdx { get; set; } = -1;
 
-        public string EndPoint { get; set; }
-
-        public string ApiKey { get; set; }
-
         public List<MpAnalyticItemPreset> Presets { get; set; } = new List<MpAnalyticItemPreset>();
         
         public MpBillableItem BillableItem { get; set; }
@@ -47,8 +43,6 @@ namespace MonkeyPaste {
 
 
         public static async Task<MpAnalyticItem> Create(
-            string endPoint = "",
-            string apiKey = "",
             MpAnalyzerInputFormatFlags inputFormat = MpAnalyzerInputFormatFlags.None,
             MpAnalyzerOutputFormatFlags outputFormat = MpAnalyzerOutputFormatFlags.None,
             string title = "",
@@ -61,23 +55,16 @@ namespace MonkeyPaste {
                 sortOrderIdx = await MpDataModelProvider.GetAnalyticItemCount();
             }
 
-            iconUrl = string.IsNullOrEmpty(iconUrl) ? endPoint : iconUrl;
             MpIcon icon = null;
 
             if (!string.IsNullOrEmpty(iconUrl)) {
                 var bytes = await MpFileIo.ReadBytesFromUriAsync(iconUrl);
                 icon = await MpIcon.Create(bytes.ToBase64String(), false);
-            } else if(!string.IsNullOrEmpty(endPoint)) {
-                var domainStr = MpHelpers.GetUrlDomain(iconUrl);
-                var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
-                icon = await MpIcon.Create(favIconImg64);
-            }
+            } 
             icon = icon == null ? MpPreferences.ThisAppIcon : icon;
 
             var newAnalyticItem = new MpAnalyticItem() {
                 Guid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid().ToString() : guid,
-                EndPoint = endPoint,
-                ApiKey = apiKey,
                 IconId = icon.Id,
                 InputFormatFlags = inputFormat,
                 OutputFormatFlags = outputFormat,

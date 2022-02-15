@@ -129,13 +129,12 @@ namespace MonkeyPaste {
                 return null;
             }
             var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
-            if (favIconImg64 == MpBase64Images.UnknownFavIcon) {
+            if (favIconImg64 == MpBase64Images.UnknownFavIcon || favIconImg64 == null) {
                 //url has no and result is google's default
-                return null;
-            } else {
-                var icon = await MpIcon.Create(favIconImg64);
-                newUrl.IconId = icon.Id;
+                favIconImg64 = MpBase64Images.QuestionMark;
             }
+            var icon = await MpIcon.Create(favIconImg64);
+            newUrl.IconId = icon.Id;
             if (newUrl.IconId == 0) {
                 newUrl.IconId = MpPreferences.ThisAppSource.PrimarySource.IconId;
             }

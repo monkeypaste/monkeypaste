@@ -28,21 +28,21 @@ namespace MpWpfApp {
             get => string.Join(",", SelectedViewModels.Select(x => x.Value));
             set {
                 if(CurrentValue != value) {
-                    ValueViewModels.ForEach(x => x.IsSelected = false);
+                    Items.ForEach(x => x.IsSelected = false);
                     if (value != null) {
-                        var ncvvm = ValueViewModels.FirstOrDefault(x => x.Value == value);
+                        var ncvvm = Items.FirstOrDefault(x => x.Value == value);
                         if (ncvvm == null) {
                             throw new Exception("Cannot set combobox to: " + value);
                         }
                         ncvvm.IsSelected = true;
                     }
                     OnPropertyChanged(nameof(CurrentValue));
-                    OnPropertyChanged(nameof(CurrentValueViewModel));
+                    OnPropertyChanged(nameof(SelectedItem));
                 }
             }
         }
 
-        public override string DefaultValue => ValueViewModels.FirstOrDefault(x => x.IsDefault)?.Value;
+        public override string DefaultValue => Items.FirstOrDefault(x => x.IsDefault)?.Value;
 
         public bool IsMultiValue {
             get {
@@ -67,12 +67,33 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip) {
-            await base.InitializeAsync(aip);
-            foreach (var spv in ValueViewModels.Where(x => x.IsDefault)) {
+        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aipf, MpAnalyticItemPresetParameterValue aipv) {
+            IsBusy = true;
+
+            Parameter = aipf;
+
+            Items.Clear();
+
+            foreach (var paramVal in Parameter.values) {
+                var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, paramVal);
+                naipvvm.IsSelected = aipv.Value.Contains(paramVal.value);
+                Items.Add(naipvvm);
+            }
+
+            foreach (var spv in Items.Where(x => x.IsDefault)) {
                 SelectedViewModels.Add(spv);
             }
+
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(CurrentValue));
+            OnPropertyChanged(nameof(DefaultValue));
+
             OnPropertyChanged(nameof(SelectedViewModels));
+
+
+            IsBusy = false;
+
+
         }
 
         #endregion

@@ -47,13 +47,13 @@ namespace Yolo_Dll {
 
                     if (score >= confidence) {
                         var box = new MpAnalyzerPluginImageTokenResponseValueFormat() {
-                            X = (double)item.Rectangle.X,
-                            Y = (double)item.Rectangle.Y,
-                            Width = (double)item.Rectangle.Width,
-                            Height = (double)item.Rectangle.Height,
-                            Score = (double)item.Score,
-                            Label = item.Label.Name,
-                            Description = Enum.GetName(typeof(YoloLabelKind), item.Label.Kind)
+                            x = (double)item.Rectangle.X,
+                            y = (double)item.Rectangle.Y,
+                            width = (double)item.Rectangle.Width,
+                            height = (double)item.Rectangle.Height,
+                            score = (double)item.Score,
+                            label = item.Label.Name,
+                            description = Enum.GetName(typeof(YoloLabelKind), item.Label.Kind)
                         };
                         boxList.Add(box);
                     }

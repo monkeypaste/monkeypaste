@@ -8,18 +8,18 @@
               x:Name="ThisPage"
               BackgroundColor="Transparent"
               BackgroundInputTransparent="True"
-              HasSystemPadding="True" 
-              SystemPaddingSides="All"              
+              HasSystemPadding="True"
+              SystemPaddingSides="All"
               CloseWhenBackgroundIsClicked="False">
     <rg:PopupPage.Animation>
-        <rga:MoveAnimation  PositionIn="Bottom"
+        <rga:MoveAnimation PositionIn="Bottom"
                            PositionOut="Bottom" />
     </rg:PopupPage.Animation>
     <StackLayout VerticalOptions="End"
                  BackgroundColor="#43A047">
         <BoxView HeightRequest="{Binding Source={x:Reference ThisPage}, Path=SystemPadding.Top}" />
-        <Label x:Name="MessageLabel" 
-               Margin="10, 0, 0, 5"
+        <Label x:Name="MessageLabel"
+               Margin="10,0,0,5"
                TextColor="White"
                VerticalOptions="Center" />
     </StackLayout>

@@ -128,6 +128,8 @@ namespace MonkeyPaste {
             MpSource source = null, 
             string data = "", 
             MpCopyItemType itemType = MpCopyItemType.None,
+            string title = "",
+            string description = "",
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
             if (MpPreferences.IgnoreNewDuplicates && dupCheck != null) {
@@ -147,8 +149,9 @@ namespace MonkeyPaste {
                     var curItem = new MpCopyItem() {
                         CopyItemGuid = System.Guid.NewGuid(),
                         CopyDateTime = DateTime.Now,
-                        Title = "Untitled" + (++count),
+                        Title = string.IsNullOrEmpty(title) ? "Untitled" + (++count) : title,
                         ItemData = pl[i],
+                        ItemDescription = description,
                         ItemType = itemType,
                         SourceId = source.Id,
                         Source = source,
@@ -172,7 +175,8 @@ namespace MonkeyPaste {
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,
-                Title = "Untitled" + (++count),
+                Title = string.IsNullOrEmpty(title) ? "Untitled" + (++count) : title,
+                ItemDescription = description,
                 ItemData = data,
                 ItemType = itemType,
                 SourceId = source.Id,

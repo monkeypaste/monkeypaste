@@ -656,6 +656,9 @@ namespace MonkeyPaste {
                 string urlDomain = GetUrlDomain(url);
                 Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
                 var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
+                if(bytes == null) {
+                    return null;
+                }
                 return Convert.ToBase64String(bytes); //new MpImageConverter().Convert(bytes, typeof(string)) as string;
             }
             catch (Exception ex) {

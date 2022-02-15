@@ -320,6 +320,11 @@ namespace MpWpfApp {
         }
 
         public override async Task PerformAction(object arg) {
+            if(ComparePropertyPathType == MpComparePropertyPathType.None) {
+                // TODO this should invalidate or notify user if node has children
+                // that unset compare will never create match
+                return;
+            }
             MpCopyItem ci = null;
             if (arg is MpCopyItem) {
                 ci = arg as MpCopyItem;

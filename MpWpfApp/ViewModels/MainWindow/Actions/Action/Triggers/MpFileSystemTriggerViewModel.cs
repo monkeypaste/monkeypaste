@@ -63,7 +63,11 @@ namespace MpWpfApp {
                     case WatcherChangeTypes.Created:
                         var app = MpPreferences.ThisAppSource.App;
                         var source = await MpSource.Create(app, null);
-                        ci = await MpCopyItem.Create(source, e.FullPath, MpCopyItemType.FileList, true);
+                        ci = await MpCopyItem.Create(
+                            source: source,
+                            itemType: MpCopyItemType.FileList,
+                            data: e.FullPath,
+                            suppressWrite: true);
                         break;
                     case WatcherChangeTypes.Renamed:
                         RenamedEventArgs re = e as RenamedEventArgs;

@@ -101,11 +101,9 @@
                             ToolTipService.InitialShowDelay="2"
                             ToolTip="{Binding ParameterTooltipText}"
                             BorderBrush="{Binding ParameterBorderBrush}">
-                        <ComboBox ItemsSource="{Binding ValueViewModels}"
-                                  SelectedItem="{Binding CurrentValueViewModel,
-                                                         Mode=TwoWay,
-                                                         UpdateSourceTrigger=PropertyChanged,
-                                                         NotifyOnTargetUpdated=True}"
+                        <ComboBox ItemsSource="{Binding Items}"
+                                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                  IsSynchronizedWithCurrentItem="False"
                                   HorizontalAlignment="Right"
                                   MinWidth="80">
                             <ComboBox.ItemTemplate>
@@ -117,9 +115,7 @@
                                 <Style TargetType="ComboBoxItem">
                                     <Setter Property="IsSelected"
                                             Value="{Binding IsSelected,
-                                                            Mode=TwoWay,
-                                                            UpdateSourceTrigger=PropertyChanged,
-                                                            NotifyOnTargetUpdated=True}" />
+                                                            Mode=TwoWay}" />
                                 </Style>
                             </ComboBox.ItemContainerStyle>
                         </ComboBox>

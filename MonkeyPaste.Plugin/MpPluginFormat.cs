@@ -25,7 +25,7 @@ namespace MonkeyPaste.Plugin {
 
         public MpAnalyzerPluginFormat analyzer { get; set; } = null;
 
-        public object LoadedComponent { get; set; } = null;
+        public object Component { get; set; } = null;
     }
 
     public class MpPluginIoTypeFormat {

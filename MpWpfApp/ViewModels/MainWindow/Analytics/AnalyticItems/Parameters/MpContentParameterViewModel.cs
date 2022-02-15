@@ -40,35 +40,12 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip) {
+        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aipf, MpAnalyticItemPresetParameterValue aipv) {
             IsBusy = true;
 
-            Parameter = aip;
+            Parameter = aipf;
 
-            if(Parameter.values.Count > 0) {
-                var defParamVal = aip.values.FirstOrDefault(x => x.isDefault);
-                if(defParamVal == null) {
-                    _defaultValue = aip.values[0].value;
-                } else {
-                    _defaultValue = defParamVal.value;
-                }                
-            } else {
-                _defaultValue = string.Empty;
-            }
-            
-
-            //if(Parameter == null || Parameter.Values == null) {
-            //    ResetToDefault();
-            //} else {
-            //    MpAnalyticItemParameterValue defVal = Parameter.Values.FirstOrDefault(x => x.IsDefault);
-            //    if (defVal != null) {
-            //        _defaultValue = defVal.Value;
-            //    } else {
-            //        _defaultValue = string.Empty;
-            //    }
-
-            //    CurrentValue = _defaultValue;
-            //}
+            _defaultValue = aipv.Value;
 
             OnPropertyChanged(nameof(DefaultValue));
             OnPropertyChanged(nameof(CurrentValue));

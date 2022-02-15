@@ -6,22 +6,26 @@ using System.Text;
 
 namespace MonkeyPaste.Plugin {
     public interface MpIDescriptor {
-        string Label { get; set; }
-        string Description { get; set; }
+        string label { get; set; }
+        string description { get; set; }
 
-        double Score { get; set; }
+        double score { get; set; }
     }
 
     public interface MpIImageDescriptorBox : MpIDescriptor {
-        double X { get; set; }
-        double Y { get; set; }
-        double Width { get; set; }
-        double Height { get; set; }
+        double x { get; set; }
+        double y { get; set; }
+        double width { get; set; }
+        double height { get; set; }
     }
 
-    public interface MpITextDescriptorRange : MpIDescriptor {
-        int RangeStart { get; set; }
-        int RangeEnd { get; set; }
+    public interface MpITextTokenDescriptorRange : MpIDescriptor {
+        int rangeStart { get; set; }
+        int rangeEnd { get; set; }
+    }
+
+    public interface MpITextDescriptor : MpIDescriptor {
+        string content { get; set; }
     }
 
     public enum MpAnalyticItemParameterControlType {
@@ -53,9 +57,6 @@ namespace MonkeyPaste.Plugin {
     }
 
     public class MpAnalyzerPluginFormat {
-        public string endpoint { get; set; } = string.Empty;
-        public string apiKey { get; set; } = string.Empty;
-
         public MpHttpTransactionFormat http { get; set; }
 
         public MpAnalyzerPluginInputFormat inputType { get; set; } = null;
@@ -121,41 +122,34 @@ namespace MonkeyPaste.Plugin {
     }
 
     public abstract class MpAnalyzerResponseValueFormatBase : MpIDescriptor {
-        [JsonProperty("label")]
-        public string Label { get; set; } = string.Empty;
-        [JsonProperty("description")]
-        public string Description { get; set; } = string.Empty;
-        [JsonProperty("score")]
-        public double Score { get; set; } = 0;
+        public string label { get; set; } = string.Empty;
+        public string description { get; set; } = string.Empty;
+        public double score { get; set; } = 0;
     }
 
     public class MpAnalyzerPluginImageTokenResponseValueFormat : 
         MpAnalyzerResponseValueFormatBase, 
         MpIImageDescriptorBox {
-        [JsonProperty("x")]
-        public double X { get; set; } = 0;
-        [JsonProperty("y")]
-        public double Y { get; set; } = 0;
-        [JsonProperty("width")]
-        public double Width { get; set; } = 0;
-        [JsonProperty("height")]
-        public double Height { get; set; } = 0;
+        public double x { get; set; } = 0;
+        public double y { get; set; } = 0;
+        public double width { get; set; } = 0;
+        public double height { get; set; } = 0;
     }
 
-    public class MpAnalyzerPluginTextResponseValueFormat {
+    public class MpAnalyzerPluginTextResponseValueFormat : 
+        MpAnalyzerResponseValueFormatBase, MpITextDescriptor {
         //if JSONPath returns null value is constant string
-        public List<string> titlePath { get; set; }
-        public List<string> dataPath { get; set; }
-        public List<string> descriptionPath { get; set; }
+        public string contentPath { get; set; }
+        public string titlePath { get; set; }
+        public string descriptionPath { get; set; }
+        public string content { get; set; }
     }
 
     public class MpAnalyzerPluginTextTokenResponseValueFormat :
         MpAnalyzerResponseValueFormatBase, 
-        MpITextDescriptorRange {
-        [JsonProperty("start")]
-        public int RangeStart { get; set; }
-        [JsonProperty("end")]
-        public int RangeEnd { get; set; }
+        MpITextTokenDescriptorRange {
+        public int rangeStart { get; set; }
+        public int rangeEnd { get; set; }
     }
 
     public class MpAnalyzerPresetFormat {

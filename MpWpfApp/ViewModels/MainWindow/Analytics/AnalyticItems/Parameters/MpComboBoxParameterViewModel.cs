@@ -17,17 +17,18 @@ namespace MpWpfApp {
         #region View Models
         //public MpAnalyticItemParameterValueViewModel DefaultValueViewModel { get; set; }
 
-        public virtual ObservableCollection<MpComboBoxParameterValueViewModel> ValueViewModels { get; set; } = new ObservableCollection<MpComboBoxParameterValueViewModel>();
+        public virtual ObservableCollection<MpComboBoxParameterValueViewModel> Items { get; set; } = new ObservableCollection<MpComboBoxParameterValueViewModel>();
 
 
-        public virtual MpComboBoxParameterValueViewModel CurrentValueViewModel {
-            get => ValueViewModels.FirstOrDefault(x => x.IsSelected);
+        public virtual MpComboBoxParameterValueViewModel SelectedItem {
+            get => Items.FirstOrDefault(x => x.IsSelected);
             set {
-                if (value != CurrentValueViewModel) {
-                    ValueViewModels.ForEach(x => x.IsSelected = false);
+                if (value != SelectedItem) {
+                    Items.ForEach(x => x.IsSelected = false);
                     if (value != null) {
                         value.IsSelected = true;
                     }
+                    OnPropertyChanged(nameof(CurrentValue));
                 }
             }
         }
@@ -40,24 +41,25 @@ namespace MpWpfApp {
         #region Model
 
         public override string CurrentValue {
-            get => CurrentValueViewModel?.Value;
+            get => SelectedItem?.Value;
             set {
                 if(CurrentValue != value) {
-                    ValueViewModels.ForEach(x => x.IsSelected = false);
+                    Items.ForEach(x => x.IsSelected = false);
                     if (value != null) {
-                        var ncvvm = ValueViewModels.FirstOrDefault(x => x.Value == value);
+                        var ncvvm = Items.FirstOrDefault(x => x.Value == value);
                         if (ncvvm == null) {
                             throw new Exception("Cannot set combobox to: " + value);
                         }
                         ncvvm.IsSelected = true;
                     }
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CurrentValue));
-                    OnPropertyChanged(nameof(CurrentValueViewModel));
+                    OnPropertyChanged(nameof(SelectedItem));
                 }
             }
         }
 
-        public override string DefaultValue => ValueViewModels.FirstOrDefault(x => x.IsDefault)?.Value;
+        public override string DefaultValue => Items.FirstOrDefault(x => x.IsDefault)?.Value;
 
 
         #endregion
@@ -74,28 +76,38 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip) {
+        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip, MpAnalyticItemPresetParameterValue aipv) { 
             IsBusy = true;
             
             Parameter = aip;
 
-            ValueViewModels.Clear();
+            Items.Clear();
 
-            foreach (var valueSeed in Parameter.values) {
-                var naipvvm = await CreateAnalyticItemParameterValueViewModel(ValueViewModels.Count, valueSeed);
-                naipvvm.IsSelected = valueSeed.isDefault;
-                ValueViewModels.Add(naipvvm);
+            foreach (var paramVal in Parameter.values) {
+                var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, paramVal);
+                naipvvm.IsSelected = paramVal.value == aipv.Value;
+                Items.Add(naipvvm);
             }
 
-            if (ValueViewModels.All(x=>x.IsSelected == false) && ValueViewModels.Count > 0) {
-                ValueViewModels[0].IsSelected = true;
+            if (Items.All(x=>x.IsSelected == false) && Items.Count > 0) {
+                Items[0].IsSelected = true;
             }
 
-            OnPropertyChanged(nameof(ValueViewModels));
+            OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(CurrentValue));
             OnPropertyChanged(nameof(DefaultValue));
 
             IsBusy = false;
+        }
+
+
+        public async Task<MpComboBoxParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(
+            int idx,
+            MpAnalyticItemParameterValue valueSeed) {
+            var naipvvm = new MpComboBoxParameterValueViewModel(this);
+            naipvvm.PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
+            await naipvvm.InitializeAsync(idx, valueSeed);
+            return naipvvm;
         }
 
         #endregion

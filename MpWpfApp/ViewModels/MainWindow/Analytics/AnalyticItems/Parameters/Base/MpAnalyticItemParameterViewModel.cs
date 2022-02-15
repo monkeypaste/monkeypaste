@@ -222,14 +222,8 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public abstract Task InitializeAsync(MpAnalyticItemParameterFormat aip);
+        public abstract Task InitializeAsync(MpAnalyticItemParameterFormat aip, MpAnalyticItemPresetParameterValue aipv);
         
-        public async Task<MpComboBoxParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(int idx, MpAnalyticItemParameterValue valueSeed) {
-            var naipvvm = new MpComboBoxParameterValueViewModel(this);
-            naipvvm.PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
-            await naipvvm.InitializeAsync(idx, valueSeed);
-            return naipvvm;
-        }
 
         public void ResetToDefault() {
             CurrentValue = DefaultValue;
@@ -249,6 +243,11 @@ namespace MpWpfApp {
 
         private void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
+                case nameof(HasModelChanged):
+                    if(HasModelChanged) {
+                        Parent.OnPropertyChanged(nameof(Parent.HasAnyParameterValueChanged));
+                    }
+                    break;
                 case nameof(ValidationMessage):
                     OnPropertyChanged(nameof(IsValid));
                     break;

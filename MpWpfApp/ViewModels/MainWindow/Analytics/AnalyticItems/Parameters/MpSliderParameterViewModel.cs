@@ -109,29 +109,18 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip) {
+        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aipf, MpAnalyticItemPresetParameterValue aipv) {
             IsBusy = true;
 
-            Parameter = aip;
+            Parameter = aipf;
 
-            //if (Parameter == null || Parameter.Values == null) {
-            //    ResetToDefault();
-            //} else {
-            //    MpAnalyticItemParameterValue defVal = Parameter.Values.FirstOrDefault(x => x.IsDefault);
-            //    if (defVal != null) {
-            //        _defaultValue = defVal.Value;
-            //    } else {
-            //        _defaultValue = "0";
-            //    }
-            //    ResetToDefault();
-            //}
-            if(!string.IsNullOrEmpty(FormatInfo)) {
-                var sliderFormat = JsonConvert.DeserializeObject<MpSliderControlFormat>(FormatInfo);
-                // TODO update manifests and properties to set min/max/ticks
-
+            CurrentValue = aipv.Value;
+            if (DefaultValue != CurrentValue) {
+                if(Parameter.values.Any(x=>x.isDefault)) {
+                    Parameter.values.FirstOrDefault(x => x.isDefault).value = aipv.Value;
+                }
             }
-            ResetToDefault();
-
+            
             OnPropertyChanged(nameof(Min));
             OnPropertyChanged(nameof(Max));
             OnPropertyChanged(nameof(DefaultValue));

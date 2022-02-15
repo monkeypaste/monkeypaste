@@ -2697,4 +2697,7 @@
     </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /u /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

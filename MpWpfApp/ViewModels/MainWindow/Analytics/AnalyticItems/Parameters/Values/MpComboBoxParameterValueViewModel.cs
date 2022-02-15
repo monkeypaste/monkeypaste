@@ -41,6 +41,7 @@ namespace MpWpfApp {
         public bool IsSelected { get; set; } = false;
 
         public int ValueIdx { get; set; } = 0;
+               
 
         #endregion
 
@@ -180,7 +181,20 @@ namespace MpWpfApp {
 
         private void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    if(IsBusy || Parent.IsBusy) {
+                        return;
+                    } 
+                    HasModelChanged = true;
+                    break;
                 case nameof(HasModelChanged):
+                    if (IsBusy || Parent.IsBusy) {
+                        return;
+                    }
+                    if (HasModelChanged) {
+                        Parent.HasModelChanged = true;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.HasAnyParameterValueChanged));
                     break;
             }

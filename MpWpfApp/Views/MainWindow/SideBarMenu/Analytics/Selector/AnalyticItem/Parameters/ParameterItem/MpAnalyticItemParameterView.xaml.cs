@@ -25,7 +25,7 @@ namespace MpWpfApp {
         private void lstBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var lb = sender as ListBox;            
 
-            foreach(var aipvvm in (BindingContext as MpMultiSelectComboBoxParameterViewModel).ValueViewModels) {
+            foreach(var aipvvm in (BindingContext as MpMultiSelectComboBoxParameterViewModel).Items) {
                 aipvvm.IsSelected = lb.SelectedItems.Contains(aipvvm);
             }
         }

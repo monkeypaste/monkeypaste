@@ -93,11 +93,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.X;
+                return DetectedImageObject.x;
             }
             set {
                 if(X != value) {
-                    DetectedImageObject.X = value;
+                    DetectedImageObject.x = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(X));
                 }
@@ -109,11 +109,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.Y;
+                return DetectedImageObject.y;
             }
             set {
                 if (Y != value) {
-                    DetectedImageObject.Y = value;
+                    DetectedImageObject.y = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Y));
                 }
@@ -125,11 +125,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.Width;
+                return DetectedImageObject.width;
             }
             set {
                 if (Height != value) {
-                    DetectedImageObject.Width = value;
+                    DetectedImageObject.width = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Width));
                 }
@@ -141,11 +141,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.Height;
+                return DetectedImageObject.height;
             }
             set {
                 if(Height != value) {
-                    DetectedImageObject.Height = value;
+                    DetectedImageObject.height = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Height));
                 }
@@ -157,11 +157,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.Score;
+                return DetectedImageObject.score;
             }
             set {
                 if (Score != value) {
-                    DetectedImageObject.Score = value;
+                    DetectedImageObject.score = value;
                     OnPropertyChanged(nameof(Score));
                 }
             }
@@ -172,11 +172,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return string.Empty;
                 }
-                return DetectedImageObject.Label;
+                return DetectedImageObject.label;
             }
             set {
                 if (Label != value) {
-                    DetectedImageObject.Label = value;
+                    DetectedImageObject.label = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Label));
                 }

@@ -30,21 +30,12 @@ namespace MpWpfApp {
 
         public MpCheckBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip) {
+        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aipf,MpAnalyticItemPresetParameterValue aipv) {
             IsBusy = true;
 
-            Parameter = aip;
+            Parameter = aipf;
 
-            if (Parameter == null || Parameter.values == null) {
-                ResetToDefault();
-            } else {
-                MpAnalyticItemParameterValue defVal = Parameter.values.FirstOrDefault(x => x.isDefault);
-                if (defVal != null) {
-                    _defaultValue = defVal.value;
-                } else {
-                    _defaultValue = "0";
-                }
-            }
+            CurrentValue = _defaultValue = aipv.Value;
 
             OnPropertyChanged(nameof(DefaultValue));
             OnPropertyChanged(nameof(BoolValue));

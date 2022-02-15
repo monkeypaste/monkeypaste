@@ -342,7 +342,7 @@ namespace MpWpfApp {
 
         public MpAnalyzerPluginFormat AnalyzerPluginFormat => PluginFormat == null ? null : PluginFormat.analyzer;
 
-        public MpIAnalyzerPluginComponent AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.LoadedComponent as MpIAnalyzerPluginComponent;
+        public MpIAnalyzerPluginComponent AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.Component as MpIAnalyzerPluginComponent;
         
         #endregion
 
@@ -388,8 +388,6 @@ namespace MpWpfApp {
             }
 
             AnalyticItem = await MpAnalyticItem.Create(
-                endPoint: AnalyzerPluginFormat.endpoint,
-                apiKey: AnalyzerPluginFormat.apiKey,
                 inputFormat: InputFormatFlags,
                 outputFormat: OutputFormatFlags,
                 title: PluginFormat.title,
@@ -404,7 +402,39 @@ namespace MpWpfApp {
 
             if (isNew) {
                 //for new plugins create default presets
-                foreach(var preset in AnalyzerPluginFormat.presets) {
+                if(AnalyzerPluginFormat.presets == null || AnalyzerPluginFormat.presets.Count == 0) {
+                    AnalyzerPluginFormat.presets = new List<MpAnalyzerPresetFormat>();
+
+                    var paramPresetValues = new List<MpAnalyzerPresetValueFormat>();
+                    //derive default preset & preset values from parameter formats
+                    if (AnalyzerPluginFormat.parameters != null) {
+                        foreach (var param in AnalyzerPluginFormat.parameters) {
+                            string defVal = string.Empty;
+                            
+                            if(param.values != null) {
+                                var defParamVal = param.values.FirstOrDefault(x => x.isDefault);
+                                if (defParamVal == null && param.values.Count > 0) {
+                                    defVal = param.values[0].value;
+                                } else {
+                                    defVal = defParamVal.value;
+                                }
+                            }
+                            var presetVal = new MpAnalyzerPresetValueFormat() {
+                                enumId = param.enumId,
+                                value = defVal
+                            };
+                            paramPresetValues.Add(presetVal);
+                        }
+                    }
+                    MpAnalyzerPresetFormat apf = new MpAnalyzerPresetFormat() {
+                        description = "Auto-generated default preset",
+                        isDefault = true,
+                        label = "Default",
+                        values = paramPresetValues
+                    };
+                    AnalyzerPluginFormat.presets.Add(apf);
+                } 
+                foreach (var preset in AnalyzerPluginFormat.presets) {
                     var aip = await MpAnalyticItemPreset.Create(
                         analyzerPluginGuid: AnalyticItem.Guid,
                         isDefault: preset.isDefault,
@@ -516,15 +546,16 @@ namespace MpWpfApp {
             object response = trans.Response;
             MpCopyItem targetCopyItem = null;
 
+            /////////////// BOX FORMAT ///////////////////////
             if (response is List<MpIImageDescriptorBox> idbl) {
                 var diol = idbl.Select(x => new MpDetectedImageObject() {
-                    X = x.X,
-                    Y = x.Y,
-                    Width = x.Width,
-                    Height = x.Height,
-                    Label = x.Label,
-                    Description = x.Description,
-                    Score = x.Score,
+                    x = x.x,
+                    y = x.y,
+                    width = x.width,
+                    height = x.height,
+                    label = x.label,
+                    description = x.description,
+                    score = x.score,
                     Guid = System.Guid.NewGuid().ToString()
                 }).ToList();
                 diol.ForEach(x => x.CopyItemId = sourceCopyItem.Id);
@@ -534,16 +565,20 @@ namespace MpWpfApp {
                 }
                 
             }
-            
-            List<MpITextDescriptorRange> tdrl = new List<MpITextDescriptorRange>();
-            if(response is MpITextDescriptorRange tdr) {
+            /////////////////// TEXT TOKEN FORMAT ///////////////////////////
+            List<MpITextTokenDescriptorRange> tdrl = new List<MpITextTokenDescriptorRange>();
+            if(response is MpITextTokenDescriptorRange tdr) {
                 tdrl.Add(tdr);
-            } else if(response is List<MpITextDescriptorRange> temp) {
+            } else if(response is List<MpITextTokenDescriptorRange> temp) {
                 tdrl = temp;
             }
             if(tdrl.Count > 0) {
                 var app = MpPreferences.ThisAppSource.App;
-                var url = await MpUrlBuilder.Create(AnalyticItem.EndPoint, request.ToString());
+                string endpoint = AnalyzerPluginFormat.http != null ? AnalyzerPluginFormat.http.request.url.raw : null;
+                MpUrl url = null;
+                if(!string.IsNullOrEmpty(endpoint)) {
+                    url = await MpUrlBuilder.Create(endpoint, request.ToString());
+                }
                 var source = await MpSource.Create(app, url);
 
                 targetCopyItem = await MpCopyItem.Create(
@@ -551,8 +586,24 @@ namespace MpWpfApp {
                     data: response.ToString(),
                     itemType: MpCopyItemType.Text,
                     suppressWrite: suppressWrite);
+            }
+            //////////////// TEXT FORMAT /////////////////////////////////
+            if(response is MpITextDescriptor td) {
+                var app = MpPreferences.ThisAppSource.App;
+                string endpoint = AnalyzerPluginFormat.http != null ? AnalyzerPluginFormat.http.request.url.raw : null;
+                MpUrl url = null;
+                if (!string.IsNullOrEmpty(endpoint)) {
+                    url = await MpUrlBuilder.Create(endpoint, request.ToString());
+                }
+                var source = await MpSource.Create(app, url);
 
-                
+                targetCopyItem = await MpCopyItem.Create(
+                    source: source,
+                    data: td.content,
+                    title: td.label,
+                    description: td.description,
+                    itemType: MpCopyItemType.Text,
+                    suppressWrite: suppressWrite);
             }
 
             if (suppressWrite == false && targetCopyItem != null) {
@@ -684,6 +735,11 @@ namespace MpWpfApp {
                             enumId = kvp.Key,
                             value = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), ci.ItemData.ToByteArray(), true)
                         };
+                    } else if(paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.PlainText) {
+                        requestItem = new MpAnalyzerPluginRequestItemFormat() {
+                            enumId = kvp.Key,
+                            value = ci.ItemData.ToPlainText()
+                        };
                     } else {
                         requestItem = new MpAnalyzerPluginRequestItemFormat() {
                             enumId = kvp.Key,
@@ -713,9 +769,19 @@ namespace MpWpfApp {
 
 
             if (AnalyzerPluginFormat.outputType.imageToken) {
-                var boxes = JsonConvert.DeserializeObject<List<MpAnalyzerPluginImageTokenResponseValueFormat>>
+                try {
+                    var boxes = JsonConvert.DeserializeObject<List<MpAnalyzerPluginImageTokenResponseValueFormat>>
                                 (resultObj.ToString()).Cast<MpIImageDescriptorBox>().ToList();
-                return boxes;
+                    return boxes;
+                } catch {
+                    return null;
+                }
+            } else if(AnalyzerPluginFormat.outputType.text) {
+                try {
+                    return resultObj;
+                } catch {
+                    return null;
+                }                
             }
             return null;
         }

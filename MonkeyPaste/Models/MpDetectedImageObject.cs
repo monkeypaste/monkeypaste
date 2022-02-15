@@ -22,16 +22,16 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; }
 
-        public double Score { get; set; } = 0;
+        public double score { get; set; } = 0;
 
-        public double X { get; set; } = 0;
-        public double Y { get; set; } = 0;
+        public double x { get; set; } = 0;
+        public double y { get; set; } = 0;
 
-        public double Width { get; set; } = 0;
-        public double Height { get; set; } = 0;
+        public double width { get; set; } = 0;
+        public double height { get; set; } = 0;
 
-        public string Label { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string label { get; set; } = string.Empty;
+        public string description { get; set; } = string.Empty;
 
         #endregion
 
@@ -71,13 +71,13 @@ namespace MonkeyPaste {
             var ndio = new MpDetectedImageObject() {
                 DetectedImageObjectGuid = System.Guid.NewGuid(),
                 CopyItemId = cid,
-                Score = c,
-                X = x,
-                Y = y,
-                Width = w,
-                Height = h,
-                Label = label,
-                Description = description
+                score = c,
+                x = x,
+                y = y,
+                width = w,
+                height = h,
+                label = label,
+                description = description
             };
 
             await ndio.WriteToDatabaseAsync();
