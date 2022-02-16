@@ -2,7 +2,7 @@
 using System.Windows.Documents;
 
 namespace MpWpfApp {
-    public class MpClipTileTitleHighlightBehavior : MpHighlightBehaviorBase<MpClipTileTitleView> {
+    public class MpClipTileTitleHighlightBehavior : MpHighlightBehaviorBase<MpClipTileTitleView> {        
         protected override TextRange ContentRange {
             get {
                 if(AssociatedObject == null || AssociatedObject.ClipTileTitleTextBlock == null) {

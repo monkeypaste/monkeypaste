@@ -35,7 +35,7 @@ namespace MpWpfApp {
 
                 // Request headers.
                 client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _subscriptionKey);
-
+                
                 // Request parameters. A third optional parameter is "details".
                 // The Analyze Image method returns information about the following
                 // visual features:
@@ -72,7 +72,6 @@ namespace MpWpfApp {
                     // and "multipart/form-data".
                     content.Headers.ContentType =
                         new MediaTypeHeaderValue("application/octet-stream");
-
                     // Asynchronously call the REST API method.
                     response = await client.PostAsync(uri, content);
                 }

@@ -64,17 +64,25 @@
         },
         "body": {
           "mode": "parameterized",
-          "raw": "[{\"Text\": \"@3\"}]",
+          "raw": "[{\"Text\":\"@3\"}]",
           "encoding": "UTF8",
           "mediaType": "application/json"
         }
       },
-      "response": {
-        "text": {
-          "titlePath": "Azure Translation",
-          "contentPath": "translations[0].text",
-          "descriptionPath": "detectedLanguage.language"
-        }
+      "responseMap": {
+        "titlePath": [
+          "Azure Translation of ",
+          "@4"
+        ],
+        "contentPath": [
+          "translations[0].text"
+        ],
+        "descriptionPath": [
+          "Detected Language:",
+          "detectedLanguage.language",
+          " \r\nScore: ",
+          "detectedLanguage.score"
+        ]
       }
     },
     "parameters": [
@@ -524,13 +532,9 @@
         "isRequired": true,
         "values": [
           {
-            "label": "Auto-Detect",
-            "value": "",
-            "isDefault": true
-          },
-          {
             "label": "Afrikaans - Afrikaans",
-            "value": "af"
+            "value": "af",
+            "isDefault": true
           },
           {
             "label": "Amharic - አማርኛ",
@@ -962,6 +966,21 @@
         "values": [
           {
             "value": "ItemData"
+          }
+        ]
+      },
+      {
+        "label": "Source Title",
+        "description": "The title of the content",
+        "parameterControlType": "Hidden",
+        "parameterValueType": "PlainText",
+        "enumId": 4,
+        "sortOrderIdx": 3,
+        "isRequired": false,
+        "isVisible": false,
+        "values": [
+          {
+            "value": "Title"
           }
         ]
       }

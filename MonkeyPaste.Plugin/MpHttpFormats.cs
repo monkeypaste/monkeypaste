@@ -8,7 +8,7 @@ namespace MonkeyPaste.Plugin {
 
         public MpHttpRequestFormat request { get; set; }
 
-        public MpHttpResponseFormat response { get; set; }
+        public MpPluginResponseContentMap responseMap { get; set; }
     }
 
     #region Request
@@ -34,7 +34,7 @@ namespace MonkeyPaste.Plugin {
     public class MpHttpBodyFormat {
         public string mode { get; set; }
         public string raw { get; set; }
-        public string encoding { get; set; }
+        public string encoding { get; set; } = "UTF8";
         public string mediaType { get; set; }
     }
 
@@ -55,17 +55,21 @@ namespace MonkeyPaste.Plugin {
         public string key { get; set; }
         public string value { get; set; }
         public bool isEnumId { get; set; }
+        public bool omitIfNullOrEmpty { get; set; }
     }
 
     #endregion
 
     #region Response 
 
-    public class MpHttpResponseFormat {
-        public MpAnalyzerPluginTextResponseValueFormat text { get; set; }
-        public List<MpAnalyzerPluginTextTokenResponseValueFormat> textTokens { get; set; }
-        public List<MpAnalyzerPluginImageTokenResponseValueFormat> imageTokens { get; set; }
-    }
+    //public class MpHttpResponseFormat {
+        
+
+    //    public MpPluginResponseContentMap responseToContentMap { get; set; }
+    //    public List<MpAnalyzerPluginTextResponseFormat> text { get; set; }
+    //    public List<MpAnalyzerPluginTextTokenResponseValueFormat> textTokens { get; set; }
+    //    public List<MpAnalyzerPluginImageTokenResponseValueFormat> imageTokens { get; set; }
+    //}
 
     #endregion
 }

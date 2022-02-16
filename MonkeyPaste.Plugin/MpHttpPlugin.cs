@@ -9,12 +9,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+using System.Web;
 
 namespace MonkeyPaste.Plugin {
     public class MpHttpPlugin : MpIAnalyzerPluginComponent {
         #region Private Variables
 
-        private MpHttpTransactionFormat _httpTransactionFormat;
+        private List<MpAnalyzerPluginRequestItemFormat> reqParams;
+        private MpHttpTransactionFormat _httpTransactionFormat;        
 
         private readonly string _paramRefRegEx = @"@[0-9]*";
         #endregion
@@ -47,11 +50,11 @@ namespace MonkeyPaste.Plugin {
         #region Public Methods
 
         public async Task<object> AnalyzeAsync(object args) {
-            var requestParams = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
-            if(requestParams == null) {
+            reqParams = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
+            if(reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
                 Console.WriteLine($"With args: {args}");
-                requestParams = new List<MpAnalyzerPluginRequestItemFormat>();
+                reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
             }
             using (var client = new HttpClient()) {
                 using (var request = new HttpRequestMessage()) {
@@ -66,15 +69,21 @@ namespace MonkeyPaste.Plugin {
                                 request.Headers.Add(kvp.key, kvp.value);
                             }
                         }
+                        
                     }
-                    request.RequestUri = CreateRequestUri(requestParams);
-                    request.Content = CreateRequestContent(requestParams);
+                    request.RequestUri = CreateRequestUri();
+                    request.Content = CreateRequestContent();
 
                     try {
                         var response = await client.SendAsync(request);
 
+                        if(!response.IsSuccessStatusCode) {
+                            Debugger.Break();
+                        }
+                        
                         string responseStr = await response.Content.ReadAsStringAsync();
-
+                        
+                        request.Content.Dispose();
                         var responseObj = CreateResponse(responseStr);
                         return responseObj;
                     }
@@ -91,7 +100,7 @@ namespace MonkeyPaste.Plugin {
 
         #region Private Methods
 
-        private Uri CreateRequestUri(List<MpAnalyzerPluginRequestItemFormat> reqParams) {
+        private Uri CreateRequestUri() {
             if (_httpTransactionFormat == null ||
                 _httpTransactionFormat.request == null ||
                 _httpTransactionFormat.request.url == null) {
@@ -104,16 +113,11 @@ namespace MonkeyPaste.Plugin {
             foreach (var qkvp in urlFormat.query) {
                 string queryVal = qkvp.value;
                 if (qkvp.isEnumId) {
-                    int enumId = GetParamId(qkvp.value);
-                    var enumParam = reqParams.FirstOrDefault(x => x.enumId == enumId);
-                    if(enumParam == null) {
-                        Console.WriteLine($"Error parsing dynamic query item, enumId: '{enumId}' does not exist");
-                        Console.WriteLine($"In request with params: ");
-                        Console.WriteLine(JsonConvert.SerializeObject(reqParams));
-                        return null;
+                    queryVal = GetParamValue(qkvp.value);
+                    if(string.IsNullOrEmpty(queryVal) && qkvp.omitIfNullOrEmpty) {
+                        continue;
                     }
-                    queryVal = enumParam.value;
-                }
+                }                
                 uriStr += string.Format(@"{0}={1}&", qkvp.key, queryVal);
             }
             uriStr = uriStr.Substring(0, uriStr.Length - 1);
@@ -124,20 +128,31 @@ namespace MonkeyPaste.Plugin {
             return new Uri(uriStr);
         }
 
-        private HttpContent CreateRequestContent(List<MpAnalyzerPluginRequestItemFormat> reqParams) {
+        private HttpContent CreateRequestContent() {
             // TODO may need to add property to discern between different types of HttpContent here
             string mediaType = _httpTransactionFormat.request.body.mediaType;
 
-            Encoding reqEncoding = null;
+            Encoding reqEncoding = Encoding.UTF8;
             if(_httpTransactionFormat.request.body.encoding.ToUpper() == "UTF8") {
                 reqEncoding = Encoding.UTF8;
             }
 
-            string body = CreatRequestBody(reqParams);
-            return new StringContent(body, reqEncoding, mediaType);
+            string body = CreatRequestBody();
+            if(mediaType.ToLower() == "application/json") {
+                var sc = new StringContent(body, reqEncoding, mediaType);
+                sc.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
+                return sc;
+            } else if(mediaType.ToLower() == "application/octet-stream") {
+                var bac = new ByteArrayContent(Convert.FromBase64String(body));
+                bac.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
+                return bac;
+            } else {
+                throw new Exception("Currently unsupported mediaType");
+            }
+            
         }
 
-        private string CreatRequestBody(List<MpAnalyzerPluginRequestItemFormat> reqParams) {
+        private string CreatRequestBody() {
             string raw = _httpTransactionFormat.request.body.raw;
             if(!string.IsNullOrEmpty(raw)  && 
                _httpTransactionFormat.request.body.mode.ToLower() == "parameterized") {
@@ -147,19 +162,20 @@ namespace MonkeyPaste.Plugin {
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
-                            int enumId = GetParamId(c.Value);
-                            var paramEnum = reqParams.FirstOrDefault(x => x.enumId == enumId);
-                            if(paramEnum == null) {
-                                Console.WriteLine($"Parameter '{c.Value}' not provided in request: ");
-                                Console.WriteLine(JsonConvert.SerializeObject(reqParams));
-                            }
-                            raw = raw.Replace(c.Value, paramEnum.value);// JsonConvert.SerializeObject(raw.Replace(c.Value, paramEnum.value));
+                            string paramVal = GetParamValue(c.Value);
+                            string escapedParamVal = HttpUtility.JavaScriptStringEncode(paramVal);
 
-
-                            System.Object[] body = new System.Object[] { new { Text = paramEnum.value } };
+                            raw = raw.Replace(c.Value, escapedParamVal);// JsonConvert.SerializeObject(raw.Replace(c.Value, paramEnum.value));
+                            //raw = JsonConvert.SerializeObject(raw);
+                            
+                            System.Object[] body = new System.Object[] { new { Text = paramVal } };
                             var test = JsonConvert.SerializeObject(body);
 
-                            Console.WriteLine("Raw:");
+                            Console.WriteLine("Raw Param: ");
+                            Console.WriteLine(paramVal);
+                            Console.WriteLine("serialized param: ");
+                            Console.WriteLine(escapedParamVal);
+                            Console.WriteLine("Final Raw:");
                             Console.WriteLine(raw);
                             Console.WriteLine("Test:");
                             Console.WriteLine(test);
@@ -169,6 +185,18 @@ namespace MonkeyPaste.Plugin {
 
             }
             return raw;
+        }
+
+        private string GetParamValue(string queryParamValueStr) {
+            int enumId = GetParamId(queryParamValueStr);
+            var enumParam = reqParams.FirstOrDefault(x => x.enumId == enumId);
+            if (enumParam == null) {
+                Console.WriteLine($"Error parsing dynamic query item, enumId: '{enumId}' does not exist");
+                Console.WriteLine($"In request with params: ");
+                Console.WriteLine(JsonConvert.SerializeObject(reqParams));
+                return null;
+            }
+            return enumParam.value;
         }
 
         private int GetParamId(string queryParamValueStr) {
@@ -185,103 +213,53 @@ namespace MonkeyPaste.Plugin {
             }
         }
 
-        private string FindPropertyValue(JContainer c, string propertyName) {
-            if(c is JArray ja) {
-                foreach (JObject o in ja.Children<JObject>()) {
-                    string result = FindPropertyValue(o, propertyName);
-                    if (result != null) {
-                        return result;
-                    }
-                }
-            } 
-            if(c is JObject jo) {
-                foreach (JProperty p in jo.Properties()) {
-                    if (p.Name.ToLower() == propertyName.ToLower()) {
-                        return p.Value.ToString();
-                    }
-                }
-                foreach (JProperty p in jo.Properties()) {
-                    string result = FindPropertyValue(p, propertyName);
-                    if (result != null) {
-                        return result;
+        private string QueryJsonPath(JObject jo, string propertyPath, bool omitIfNull) {
+            string result = string.Empty;
+            if(propertyPath.StartsWith("@")) {
+                return GetParamValue(propertyPath);
+            }
+            try {
+                JToken dataToken = jo.SelectToken(propertyPath, false);
+                if (dataToken == null) {
+                    if(!omitIfNull) {
+                        result = propertyPath;
                     }                    
-                }
-            } 
-            if(c is JProperty jp) {
-                foreach(JObject o in jp.Children<JObject>()) {
-                    string result = FindPropertyValue(o, propertyName);
-                    if (result != null) {
-                        return result;
-                    }
+                } else {
+                    result = dataToken.ToString();
                 }
             }
-            
-            
-            return null;
+            catch (Exception ex) {
+                Console.WriteLine("Error parsing resposne: " + ex);
+                if (!omitIfNull) {
+                    result = propertyPath;
+                }
+            }
+            return result;
         }
 
         private object CreateResponse(string responseStr) {
-            if(_httpTransactionFormat.response.text != null) {
-                var tf = _httpTransactionFormat.response.text;
-                JObject o = null;
-                if(responseStr.StartsWith("[")) {
-                    JArray a = JArray.Parse(responseStr);
-                    o = a.Children<JObject>().First();
-                } else {
-                    o = JObject.Parse(responseStr);
-                }
+            var textResponse = new MpAnalyzerPluginTextResponseFormat() {
+                label = string.Empty,
+                description = string.Empty,
+                content = responseStr
+            };
+            var responseMap = _httpTransactionFormat.responseMap;
 
-                try {
-                    JToken dataToken = o.SelectToken(_httpTransactionFormat.response.text.contentPath, false);
-                    if (dataToken == null) {
-                        tf.content = _httpTransactionFormat.response.text.contentPath;
-                    } else {
-                        tf.content = dataToken.ToString();
-                    }
-                }
-                catch (Exception ex) {
-                    Console.WriteLine("Error parsing resposne: " + ex);
-                    if (!string.IsNullOrEmpty(_httpTransactionFormat.response.text.contentPath)) {
-                        tf.content = _httpTransactionFormat.response.text.contentPath;
-                    }
-                }
-
-                try {
-                    JToken titleToken = o.SelectToken(_httpTransactionFormat.response.text.titlePath, false);
-                    if (titleToken == null) {
-                        tf.label = _httpTransactionFormat.response.text.titlePath;
-                    } else {
-                        tf.label = titleToken.ToString();
-                    }
-                }
-                catch (Exception ex) {
-                    Console.WriteLine("Error parsing resposne: " + ex);
-                    if (!string.IsNullOrEmpty(_httpTransactionFormat.response.text.titlePath)) {
-                        tf.label = _httpTransactionFormat.response.text.titlePath;
-                    }
-                }
-
-
-                try {
-                    JToken descriptionToken = o.SelectToken(_httpTransactionFormat.response.text.descriptionPath, false);
-                    if (descriptionToken == null) {
-                        tf.description = _httpTransactionFormat.response.text.descriptionPath;
-                    } else {
-                        tf.description = descriptionToken.ToString();
-                    }
-                    return tf;
-                }
-                catch (Exception ex) {
-                    Console.WriteLine("Error parsing resposne: " + ex);
-                    if (!string.IsNullOrEmpty(_httpTransactionFormat.response.text.description)) {
-                        tf.description = _httpTransactionFormat.response.text.descriptionPath;
-                    }
-                }
-                return tf;
-               
+            JObject o = null;
+            if (responseStr.StartsWith("[")) {
+                JArray a = JArray.Parse(responseStr);
+                o = a.Children<JObject>().First();
+            } else {
+                o = JObject.Parse(responseStr);
             }
-            return null;
+
+            textResponse.label = string.Join(string.Empty, responseMap.titlePath.Select(x => QueryJsonPath(o, x, responseMap.omitTitleIfPathNotFound)));
+            textResponse.content = string.Join(string.Empty, responseMap.contentPath.Select(x => QueryJsonPath(o, x, responseMap.omitContentIfPathNotFound)));
+            textResponse.description = string.Join(string.Empty, responseMap.descriptionPath.Select(x => QueryJsonPath(o, x, responseMap.omitDescriptionIfPathNotFound)));
+
+            return textResponse;
         }
+
         #endregion
     }
 }

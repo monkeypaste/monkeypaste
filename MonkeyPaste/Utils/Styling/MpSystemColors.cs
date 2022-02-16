@@ -9,6 +9,9 @@ namespace MonkeyPaste {
         public static string Red => "#FFFF0000"; //red
         public static string Transparent => "#00FFFFFF"; //transparent
 
+        public static string DefaultControlBackground1 => "#FFF0F0F0";
+        public static string DefaultControlBackground2 => "#FFE5E5E5";
+
         public static string IsSelectedBorderColor => Red;
         public static string IsHoveringBorderColor => Yellow;
         public static string IsInactiveBorderColor => Transparent;

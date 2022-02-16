@@ -668,6 +668,12 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task<List<MpAnalyticItemPresetParameterValue>> GetAnalyticItemPresetValuesByPresetId(int presetId) {
+            string query = $"select * from MpAnalyticItemPresetParameterValue where fk_MpAnalyticItemPresetId=?";
+            var result = await MpDb.QueryAsync<MpAnalyticItemPresetParameterValue>(query, presetId);
+            return result;
+        }
+
         public static async Task<MpAnalyticItemPresetParameterValue> GetAnalyticItemPresetValue(int presetid, int paramEnumId) {
             string query = $"select * from MpAnalyticItemPresetParameterValue where fk_MpAnalyticItemPresetId=? and ParameterEnumId=?";
             var result = await MpDb.QueryAsync<MpAnalyticItemPresetParameterValue>(query, presetid, paramEnumId);

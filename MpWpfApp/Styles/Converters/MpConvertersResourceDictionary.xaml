@@ -64,6 +64,7 @@
     <local:MpObjectToImageSourceOrIconConverter x:Key="ObjectToImageSourceOrIconConverter" />
     <local:MpObjectToTooltipConverter x:Key="ObjectToTooltipConverter" />
     <local:MpStringToSizeConverter x:Key="StringToSizeConverter" />
+    <local:MpEnumToItemSourceLabelsConverter x:Key="EnumToItemSourceLabelsConverter" />
 
     <local:MpAnalyticItemGuidToIconSourceConverter x:Key="AnalyticItemGuidToIconSourceConverter" />
     <local:MpAnalyticItemGuidToTitleConverter x:Key="AnalyticItemGuidToTitleConverter" />

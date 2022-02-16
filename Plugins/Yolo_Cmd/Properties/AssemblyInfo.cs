@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Yolo")]
+[assembly: AssemblyProduct("Yolo_Cmd")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1477d1e5-412e-4a26-8d1d-069de45ae9b8")]
+[assembly: Guid("50ac24df-54a3-4c83-90d1-4684503cb92c")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -1,5 +1,7 @@
 ﻿namespace MpWpfApp {
     public static class MpSystemColors {
+        public static string Black => "#FF000000";
+        public static string White => "#FFFFFFFF";
         public static string DarkGray => "#FF696969"; //DimGray
         public static string Gray => "#FFC0C0C0"; //silver
         public static string LightGray => "#FFDCDCDC"; //gainsboro

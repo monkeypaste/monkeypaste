@@ -1,9 +1,10 @@
 ﻿
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Plugin {
-    public interface MpIPlugin { 
-    }
+    public interface MpIPlugin { }
+
 
     public interface MpIClipboardItemPluginComponent : MpIPlugin {
         object GetDataObject();

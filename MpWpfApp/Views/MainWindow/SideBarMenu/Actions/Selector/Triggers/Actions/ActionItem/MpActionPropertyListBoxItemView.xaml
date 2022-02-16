@@ -63,8 +63,11 @@
                          Grid.ColumnSpan="2"
                          DockPanel.Dock="Left"
                          Foreground="Black"
-                         Background="Transparent"
-                         BorderThickness="0"
+                         Background="{Binding LabelBackgroundBrushHexColor,
+                                              Converter={StaticResource StringHexToBrushConverter}}"
+                         BorderThickness="1"
+                         BorderBrush="{Binding LabelBorderBrushHexColor,
+                                               Converter={StaticResource StringHexToBrushConverter}}"
                          Margin="5,5,15,5"
                          Padding="3"
                          VerticalAlignment="Center"
@@ -72,8 +75,12 @@
                          FontSize="14"
                          FontWeight="SemiBold"
                          local:MpHoverableExtension.IsEnabled="True"
+                         local:MpHoverableExtension.IsHovering="{Binding IsHoveringOverLabel,
+                                                                         Mode=TwoWay}"
                          local:MpHoverableExtension.HoverCursor="IBeam"
                          local:MpIsFocusedExtension.IsEnabled="True"
+                         local:MpIsFocusedExtension.IsFocused="{Binding IsLabelFocused,
+                                                                        Mode=TwoWay}"
                          Text="{Binding Label,
                                         Mode=TwoWay,
                                         UpdateSourceTrigger=PropertyChanged,
@@ -91,6 +98,41 @@
                     Background="Transparent"
                     Margin="0,0,0,5">
                 <Border.Resources>
+                    <Style x:Key="ActionPropertyComboBoxStyle"
+                           TargetType="ComboBox">
+                        <Setter Property="MinWidth"
+                                Value="100" />
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                    </Style>
+                    <Style x:Key="ActionPropertyComboBoxStyle_Border"
+                           TargetType="Border">
+                        <Setter Property="CornerRadius"
+                                Value="5" />
+                        <Setter Property="Padding"
+                                Value="3" />
+                        <Setter Property="VerticalAlignment"
+                                Value="Center" />
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush EndPoint="0,1">
+                                    <GradientStop Offset="0"
+                                                  Color="{Binding Source={x:Static pcl:MpSystemColors.DefaultControlBackground1}}" />
+                                    <GradientStop Offset="1"
+                                                  Color="{Binding Source={x:Static pcl:MpSystemColors.DefaultControlBackground2}}" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <Style x:Key="ActionPropertyComboBoxItemStyle"
+                           TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalAlignment"
+                                Value="Stretch" />
+                        <Setter Property="VerticalAlignment"
+                                Value="Center" />
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center" />
+                    </Style>
                     <!--  Trigger  -->
                     <DataTemplate x:Key="TriggerPropertiesTemplate"
                                   DataType="{x:Type local:MpTriggerActionViewModelBase}">
@@ -207,31 +249,25 @@
                                        FontWeight="SemiBold"
                                        Text="Field"
                                        Margin="10" />
-                            <ComboBox Grid.Row="0"
-                                      Grid.Column="1"
-                                      MinWidth="100"
-                                      MinHeight="28"
-                                      Margin="10"
-                                      IsSynchronizedWithCurrentItem="False"
-                                      SelectionChanged="ComboBox_SelectionChanged"
-                                      SelectedItem="{Binding SelectedComparePropertyPathMenuItemViewModel,
-                                                             Mode=TwoWay}"
-                                      ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
-                                      ItemsSource="{Binding ComparePropertyPathsMenuItemViewModel.SubItems}">
-                                <ComboBox.ItemContainerStyle>
-                                    <Style TargetType="ComboBoxItem">
-                                        <Setter Property="IsSelected"
-                                                Value="{Binding IsSelected,
-                                                                Mode=TwoWay}" />
-                                    </Style>
-                                </ComboBox.ItemContainerStyle>
-                            </ComboBox>
+                            <Border Grid.Row="0"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+                                <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
+                                          ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
+                                          IsSynchronizedWithCurrentItem="False"
+                                          SelectedIndex="{Binding ComparePropertyPathType,
+                                                                  Converter={StaticResource EnumToIntConverter},
+                                                                  ConverterParameter=MonkeyPaste.MpComparePropertyPathType,
+                                                                  Mode=TwoWay}"
+                                          ItemsSource="{Binding .,
+                                                                Converter={StaticResource EnumToItemSourceLabelsConverter},
+                                                                ConverterParameter=MonkeyPaste.MpComparePropertyPathType}" />
+                            </Border>
 
                             <!--  START Item Type / Compare Type Row  -->
                             <!--  Item Type Chooser  -->
                             <TextBlock Grid.Row="1"
                                        Grid.Column="0"
-                                       Grid.RowSpan="3"
                                        Visibility="{Binding IsItemTypeCompare,
                                                             Converter={StaticResource BoolToVisibilityConverter}}"
                                        VerticalAlignment="Center"
@@ -239,27 +275,22 @@
                                        FontWeight="SemiBold"
                                        Text="Type"
                                        Margin="10" />
-                            <ComboBox Grid.Row="1"
-                                      Grid.Column="1"
-                                      Grid.RowSpan="3"
-                                      MinWidth="100"
-                                      Visibility="{Binding IsItemTypeCompare,
-                                                           Converter={StaticResource BoolToVisibilityConverter}}"
-                                      Margin="10,5"
-                                      IsSynchronizedWithCurrentItem="False"
-                                      SelectionChanged="ComboBox_SelectionChanged"
-                                      SelectedItem="{Binding SelectedContentTypeMenuItemViewModel,
-                                                             Mode=OneWay}"
-                                      ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
-                                      ItemsSource="{Binding ContentTypeCompareDataMenuItemViewModel.SubItems}">
-                                <ComboBox.ItemContainerStyle>
-                                    <Style TargetType="ComboBoxItem">
-                                        <Setter Property="IsSelected"
-                                                Value="{Binding IsSelected,
-                                                                Mode=TwoWay}" />
-                                    </Style>
-                                </ComboBox.ItemContainerStyle>
-                            </ComboBox>
+                            <Border Grid.Row="1"
+                                    Grid.Column="1"
+                                    Visibility="{Binding IsItemTypeCompare,
+                                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                                    Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+                                <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
+                                          ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
+                                          IsSynchronizedWithCurrentItem="False"
+                                          SelectedIndex="{Binding ContentItemType,
+                                                                  Converter={StaticResource EnumToIntConverter},
+                                                                  ConverterParameter=MonkeyPaste.MpCopyItemType,
+                                                                  Mode=TwoWay}"
+                                          ItemsSource="{Binding .,
+                                                                Converter={StaticResource EnumToItemSourceLabelsConverter},
+                                                                ConverterParameter=MonkeyPaste.MpCopyItemType}" />
+                            </Border>
 
                             <!--  Compare Type  -->
                             <TextBlock Grid.Row="1"
@@ -271,26 +302,22 @@
                                        FontWeight="SemiBold"
                                        Text="Type"
                                        Margin="10" />
-                            <ComboBox Grid.Row="1"
-                                      Grid.Column="1"
-                                      Visibility="{Binding IsItemTypeCompare,
-                                                           Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                      MinWidth="100"
-                                      Margin="10"
-                                      IsSynchronizedWithCurrentItem="False"
-                                      SelectionChanged="ComboBox_SelectionChanged"
-                                      SelectedItem="{Binding SelectedCompareTypeMenuItemViewModel,
-                                                             Mode=TwoWay}"
-                                      ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}"
-                                      ItemsSource="{Binding CompareTypesMenuItemViewModel.SubItems}">
-                                <ComboBox.ItemContainerStyle>
-                                    <Style TargetType="ComboBoxItem">
-                                        <Setter Property="IsSelected"
-                                                Value="{Binding IsSelected,
-                                                                Mode=TwoWay}" />
-                                    </Style>
-                                </ComboBox.ItemContainerStyle>
-                            </ComboBox>
+                            <Border Grid.Row="1"
+                                    Grid.Column="1"
+                                    Visibility="{Binding IsItemTypeCompare,
+                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                    Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+                                <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
+                                          ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
+                                          IsSynchronizedWithCurrentItem="False"
+                                          SelectedIndex="{Binding CompareType,
+                                                                  Converter={StaticResource EnumToIntConverter},
+                                                                  ConverterParameter=MonkeyPaste.MpCompareType,
+                                                                  Mode=TwoWay}"
+                                          ItemsSource="{Binding .,
+                                                                Converter={StaticResource EnumToItemSourceLabelsConverter},
+                                                                ConverterParameter=MonkeyPaste.MpCompareType}" />
+                            </Border>
 
                             <!--  END Item Type / Compare Type Row  -->
 
@@ -439,7 +466,7 @@
                                       ItemsSource="{Binding AllPresets,
                                                             Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance},
                                                             Converter={StaticResource CollectionToGroupedCollectionConverter},
-                                                            ConverterParameter=ParentAnalyticItemGuid}">
+                                                            ConverterParameter=AnalyzerPluginGuid}">
                                 <ComboBox.GroupStyle>
                                     <GroupStyle>
                                         <GroupStyle.HeaderTemplate>

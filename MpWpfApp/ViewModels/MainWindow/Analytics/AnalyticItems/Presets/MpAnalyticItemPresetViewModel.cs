@@ -65,8 +65,8 @@ namespace MpWpfApp {
         public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultAnalyzerPanelWidth;
         public bool IsSidebarVisible { get; set; } = false;
 
-        public MpISidebarItemViewModel NextSidebarItem { get; }
-        public MpISidebarItemViewModel PreviousSidebarItem { get; }
+        public MpISidebarItemViewModel NextSidebarItem => null;
+        public MpISidebarItemViewModel PreviousSidebarItem => MpAnalyticItemCollectionViewModel.Instance;
 
         #endregion
 
@@ -261,6 +261,11 @@ namespace MpWpfApp {
             Items.Clear();
 
             Preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
+
+            if(Preset == null) {
+                // Probably modified a manifest file
+                Debugger.Break();
+            }
 
             foreach (var paramVal in Preset.PresetParameterValues) {
                 // loop through each preset value and find matching parameter
@@ -509,7 +514,12 @@ namespace MpWpfApp {
                     if(paramVm is MpComboBoxParameterViewModel cmbvm) {
                         paramVm.Parameter.values.ForEach(x => x.isDefault = x.value == paramVm.CurrentValue);
                     } else {
-                        paramVm.Parameter.values.FirstOrDefault(x => x.isDefault).value = paramVm.CurrentValue;
+                        var defParam = paramVm.Parameter.values.FirstOrDefault(x => x.isDefault);
+                        if(defParam != null) {
+                            defParam.value = paramVm.CurrentValue;
+                        } else if(paramVm.Parameter.values.Count > 0) {
+                            paramVm.Parameter.values[0].value = paramVm.CurrentValue;
+                        }
                     }
                 }
 

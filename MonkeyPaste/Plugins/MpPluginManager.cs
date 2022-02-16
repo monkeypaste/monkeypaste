@@ -65,6 +65,7 @@ namespace MonkeyPaste {
 
         private static object GetPluginComponent(string manifestPath, MpPluginFormat plugin) {
             try {
+                plugin.manifestLastModifiedDateTime = File.GetLastWriteTimeUtc(manifestPath);
                 string pluginDir = Path.GetDirectoryName(manifestPath);
                 string pluginName = Path.GetFileName(pluginDir);
                 if (plugin.ioType.isDll) {

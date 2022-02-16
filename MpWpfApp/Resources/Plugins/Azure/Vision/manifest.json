@@ -1,0 +1,208 @@
+﻿{
+  "title": "Azure Computer Vision",
+  "description": "Provides descriptive information about a given image",
+  "version": "1.0",
+  "credits": "Microsoft",
+  "guid": "34cbd44d-dc32-4bf6-a3b6-efc7bafea22c",
+  "iconUrl": "https://docs.microsoft.com/en-us/answers/topics/25438/icon.html?t=282210",
+  "ioType": {
+    "isHttp": true
+  },
+  "analyzer": {
+    "inputType": {
+      "image": true
+    },
+    "outputType": {
+      "text": true
+    },
+    "http": {
+      "name": "DescribeImage",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Ocp-Apim-Subscription-Key",
+            "value": "b455280a2c66456e926b66a1e6656ce3"
+          }
+        ],
+        "url": {
+          "raw": "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0",
+          "protocol": "https",
+          "host": [
+            "mp-azure-cognitive-services-resource-instance",
+            "cognitiveservices",
+            "azure",
+            "com"
+          ],
+          "path": [
+            "vision",
+            "v3.1",
+            "analyze"
+          ],
+          "query": [
+            {
+              "key": "visualFeatures",
+              "isEnumId": true,
+              "omitIfNullOrEmpty": true,
+              "value": "@2"
+            },
+            {
+              "key": "details",
+              "isEnumId": true,
+              "omitIfNullOrEmpty": true,
+              "value": "@3"
+            }
+          ]
+        },
+        "body": {
+          "mode": "parameterized",
+          "raw": "@4",
+          "mediaType": "application/octet-stream"
+        }
+      },
+      "responseMap": {
+        "titlePath": [
+          ""
+        ],
+        "contentPath": [
+          "@4"
+        ],
+        "descriptionPath": [
+          "$.['categories']",
+          "$.['color']",
+          "$.['tags']",
+          "$.['description']",
+          "$.['faces']",
+          "$.['objects']"
+        ]
+      }
+    },
+    "parameters": [
+      {
+        "label": "Language",
+        "parameterControlType": "ComboBox",
+        "parameterValueType": "PlainText",
+        "enumId": 1,
+        "sortOrderIdx": 0,
+        "isReadOnly": false,
+        "isRequired": false,
+        "isValueDeferred": false,
+        "isVisible": false,
+        "values": [
+          {
+            "label": "English",
+            "value": "en",
+            "isDefault": true
+          },
+          {
+            "label": "Spanish",
+            "value": "es",
+            "isDefault": false
+          },
+          {
+            "label": "Japanese",
+            "value": "ja",
+            "isDefault": false
+          },
+          {
+            "label": "Portuguese",
+            "value": "pt",
+            "isDefault": false
+          },
+          {
+            "label": "Simplified Chinese",
+            "value": "zh",
+            "isDefault": false
+          }
+        ]
+      },
+      {
+        "label": "Visual Features",
+        "parameterControlType": "ComboBox",
+        "parameterValueType": "Csv",
+        "enumId": 2,
+        "sortOrderIdx": 1,
+        "isRequired": false,
+        "isMultiValue": true,
+        "values": [
+          {
+            "label": "Adult",
+            "value": "adult",
+            "isDefault": false
+          },
+          {
+            "label": "Brands",
+            "value": "brands",
+            "isDefault": false
+          },
+          {
+            "label": "Categories",
+            "value": "categories",
+            "isDefault": true
+          },
+          {
+            "label": "Color Scheme",
+            "value": "color",
+            "isDefault": true
+          },
+          {
+            "label": "Description",
+            "value": "description",
+            "isDefault": true
+          },
+          {
+            "label": "Faces",
+            "value": "faces",
+            "isDefault": true
+          },
+          {
+            "label": "Objects",
+            "value": "objects",
+            "isDefault": true
+          },
+          {
+            "label": "Tags",
+            "value": "tags",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Details",
+        "parameterControlType": "ComboBox",
+        "parameterValueType": "Csv",
+        "enumId": 3,
+        "sortOrderIdx": 2,
+        "isReadOnly": false,
+        "isMultiValue": true,
+        "values": [
+          {
+            "label": "Celebrities",
+            "value": "celebrities",
+            "isDefault": true
+          },
+          {
+            "label": "Landmarks",
+            "value": "landmarks",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The image to describe",
+        "parameterControlType": "Hidden",
+        "parameterValueType": "Base64Text",
+        "enumId": 4,
+        "sortOrderIdx": 3,
+        "isRequired": true,
+        "isVisible": false,
+        "values": [
+          {
+            "value": "ItemData"
+          }
+        ]
+      }
+    ]
+  }
+}

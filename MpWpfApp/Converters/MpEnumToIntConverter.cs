@@ -16,17 +16,21 @@ namespace MpWpfApp {
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(parameter == null || value == null) {
-                return (int)value;
+            if(parameter == null) {
+                throw new Exception("Must have parameter of enum type to convert back");
             }
-            string enumTypeStr = parameter as string;
-            if(string.IsNullOrEmpty(enumTypeStr) || (int)value < 0) {
-                return (int)value;
-            }
-            var enumType = Assembly.GetAssembly(typeof(MpDb)).GetType(enumTypeStr);
+            int intVal = System.Convert.ToInt32(value.ToString());
+            string paramStr = parameter.ToString();
+            return Enum.Parse(typeof(MpDb).Assembly.GetType(paramStr), intVal.ToString());
 
-            var result = Enum.ToObject(enumType, (int)value);
-            return result;
+            //string enumTypeStr = parameter as string;
+            //if(string.IsNullOrEmpty(enumTypeStr) || (int)value < 0) {
+            //    return (int)value;
+            //}
+            //var enumType = Assembly.GetAssembly(typeof(MpDb)).GetType(enumTypeStr);
+
+            //var result = Enum.ToObject(enumType, (int)value);
+            //return result;
         }
     }
 }

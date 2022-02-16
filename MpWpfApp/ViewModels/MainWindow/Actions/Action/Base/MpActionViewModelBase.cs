@@ -155,6 +155,24 @@ namespace MpWpfApp {
             }
         }
 
+        public string LabelBorderBrushHexColor {
+            get {
+                if(IsHoveringOverLabel || IsLabelFocused) {
+                    return MpSystemColors.White;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+
+        public string LabelBackgroundBrushHexColor {
+            get {
+                if (IsLabelFocused) {
+                    return MpSystemColors.White;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+
         public string IconResourceKeyStr {
             get {
                 string resourceKey = string.Empty;
@@ -230,6 +248,10 @@ namespace MpWpfApp {
         public string ValidationText { get; set; }
 
         public bool IsAnyChildSelected => this.FindAllChildren().Any(x => x.IsSelected);
+
+        public bool IsHoveringOverLabel { get; set; } = false;
+
+        public bool IsLabelFocused { get; set; } = false;
 
         #endregion
 

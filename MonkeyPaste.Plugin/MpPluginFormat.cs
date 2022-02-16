@@ -21,6 +21,8 @@ namespace MonkeyPaste.Plugin {
         public string guid { get; set; } = string.Empty;
         public string iconUrl { get; set; } = string.Empty;
 
+        public DateTime manifestLastModifiedDateTime { get; set; }
+
         public MpPluginIoTypeFormat ioType { get; set; } = new MpPluginIoTypeFormat();
 
         public MpAnalyzerPluginFormat analyzer { get; set; } = null;

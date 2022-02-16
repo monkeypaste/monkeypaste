@@ -36,7 +36,7 @@
                         <ListBox x:Name="MultiSelectComboBox"
                                  Background="Transparent"
                                  HorizontalContentAlignment="Stretch"
-                                 ItemsSource="{Binding ValueViewModels}"
+                                 ItemsSource="{Binding Items}"
                                  SelectionMode="Multiple"
                                  HorizontalAlignment="Right"
                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"

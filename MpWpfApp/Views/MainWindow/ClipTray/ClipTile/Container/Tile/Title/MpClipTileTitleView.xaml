@@ -119,6 +119,12 @@
                 MinWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMinWidth}"
                 HorizontalAlignment="Left">
             <!--  Clip Title TextBlock  -->
+
+            <!--<local:MpAutoScaleTextBlock Text="{Binding Path=Text,
+                                                       ElementName=ClipTileTitleTextBox}"
+                                        Foreground="White"
+                                        Visibility="{Binding IsEditingTitle,
+                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}" />-->
             <TextBlock x:Name="ClipTileTitleTextBlock"
                        Text="{Binding Path=Text,
                                       ElementName=ClipTileTitleTextBox}"

@@ -156,6 +156,7 @@
     <Compile Include="Behaviors\MpMoveBehavior.cs" />
     <Compile Include="Behaviors\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpBootstrapper.cs" />
+    <Compile Include="Controls\MpAutoScaleTextBlock.cs" />
     <Compile Include="Controls\MpDesignerCanvas.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Converters\MpDbImageIdToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpDbImageIdToIconConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
+    <Compile Include="Converters\MpEnumToItemSourceLabelsConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
     <Compile Include="Converters\MpObjectToImageSourceOrIconConverter.cs" />
     <Compile Include="Converters\MpItemToItemsSourceConverter.cs" />
@@ -979,6 +981,7 @@
     <None Include="Resources\Assets\Weights\yolov5n6.onnx" />
     <None Include="Resources\Assets\Weights\yolov5s.onnx" />
     <None Include="Resources\Plugins\Azure\Translator\manifest.json" />
+    <None Include="Resources\Plugins\Azure\Vision\manifest.json" />
     <Resource Include="Styles\Shaders\InvertColor\MpInvertColorShader.ps">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -2698,6 +2701,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /u /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

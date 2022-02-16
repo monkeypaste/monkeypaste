@@ -43,6 +43,8 @@ namespace MonkeyPaste {
         [Column("IsQuickAction")]
         public int QuickAction { get; set; } = 0;
 
+        public DateTime ManifestLastModifiedDateTime { get; set; } = DateTime.MinValue;
+
 
         public int Pinned { get; set; } = 0;
         #endregion
@@ -117,7 +119,8 @@ namespace MonkeyPaste {
             bool isQuickAction = false, 
             int sortOrderIdx = -1, 
             List<MpAnalyticItemParameterFormat> parameters = null,
-            List<MpAnalyzerPresetValueFormat> values = null) {
+            List<MpAnalyzerPresetValueFormat> values = null,
+            DateTime? manifestLastModifiedDateTime = null) {
             
             if(iconId == 0) {
                 throw new Exception("needs icon");
@@ -138,7 +141,8 @@ namespace MonkeyPaste {
                 IsDefault = isDefault,
                 IsQuickAction = isQuickAction,
                 SortOrderIdx = sortOrderIdx,
-                ShortcutId = 0};
+                ShortcutId = 0,
+                ManifestLastModifiedDateTime = manifestLastModifiedDateTime.HasValue ? manifestLastModifiedDateTime.Value : DateTime.Now};
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 

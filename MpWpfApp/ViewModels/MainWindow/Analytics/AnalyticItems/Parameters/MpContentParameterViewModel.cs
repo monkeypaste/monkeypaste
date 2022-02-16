@@ -57,53 +57,12 @@ namespace MpWpfApp {
         }
 
         private void MpContentParameterViewModel_OnValidate(object sender, EventArgs e) {
-            //if (!IsRequired) {
-            //    return true;
-            //}
-            //if (Parameter == null || CurrentValue == null) {
-            //    return false;
-            //}
-
-            var minCond = Parameter.values.FirstOrDefault(x => x.isMinimum);
-            if (minCond != null) {
-                int minLength = 0;
-                try {
-                    minLength = Convert.ToInt32(minCond.value);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Minimum val: {minCond.value} could not conver to int, exception: {ex}");
-                }
-                if (CurrentValue.Length < minLength) {
-                    ValidationMessage = $"{Label} must be at least {minLength} characters";
-                } else {
-                    ValidationMessage = string.Empty;
-                }
-            }
-            if(IsValid) {
-                var maxCond = Parameter.values.FirstOrDefault(x => x.isMaximum);
-                if (maxCond != null) {
-                    // TODO should cap all input string but especially here
-                    int maxLength = int.MaxValue;
-                    try {
-                        maxLength = Convert.ToInt32(maxCond.value);
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Maximum val: {minCond.value} could not conver to int, exception: {ex}");
-                    }
-                    if (CurrentValue.Length > maxLength) {
-                        ValidationMessage = $"{Label} can be no more than {maxLength} characters";
-                    } else {
-                        ValidationMessage = string.Empty;
-                    }
-                }
-            }
-
-            if(IsValid) {
-                if (!string.IsNullOrEmpty(FormatInfo)) {
-                    if (CurrentValue.IndexOfAny(FormatInfo.ToCharArray()) != -1) {
-                        ValidationMessage = $"{Label} cannot contain '{FormatInfo}' characters";
-                    }
-                }
+            bool isValidPath = new MpCompareActionViewModelBase(null).PhysicalComparePropertyPaths.Contains(CurrentValue);
+            
+            if(isValidPath) {
+                ValidationMessage = string.Empty;
+            } else {
+                ValidationMessage = $"Property path '{CurrentValue}' is not valid";
             }
 
             OnPropertyChanged(nameof(IsValid));

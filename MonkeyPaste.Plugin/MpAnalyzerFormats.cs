@@ -5,28 +5,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste.Plugin {
-    public interface MpIDescriptor {
-        string label { get; set; }
-        string description { get; set; }
-
-        double score { get; set; }
-    }
-
-    public interface MpIImageDescriptorBox : MpIDescriptor {
-        double x { get; set; }
-        double y { get; set; }
-        double width { get; set; }
-        double height { get; set; }
-    }
-
-    public interface MpITextTokenDescriptorRange : MpIDescriptor {
-        int rangeStart { get; set; }
-        int rangeEnd { get; set; }
-    }
-
-    public interface MpITextDescriptor : MpIDescriptor {
-        string content { get; set; }
-    }
 
     public enum MpAnalyticItemParameterControlType {
         None = 0,
@@ -48,7 +26,8 @@ namespace MonkeyPaste.Plugin {
         Html,
         Image,
         Base64Text,
-        FilePath
+        FilePath,
+        Csv
     }
 
     public class MpAnalyzerPluginRequestItemFormat {
@@ -127,31 +106,6 @@ namespace MonkeyPaste.Plugin {
         public double score { get; set; } = 0;
     }
 
-    public class MpAnalyzerPluginImageTokenResponseValueFormat : 
-        MpAnalyzerResponseValueFormatBase, 
-        MpIImageDescriptorBox {
-        public double x { get; set; } = 0;
-        public double y { get; set; } = 0;
-        public double width { get; set; } = 0;
-        public double height { get; set; } = 0;
-    }
-
-    public class MpAnalyzerPluginTextResponseValueFormat : 
-        MpAnalyzerResponseValueFormatBase, MpITextDescriptor {
-        //if JSONPath returns null value is constant string
-        public string contentPath { get; set; }
-        public string titlePath { get; set; }
-        public string descriptionPath { get; set; }
-        public string content { get; set; }
-    }
-
-    public class MpAnalyzerPluginTextTokenResponseValueFormat :
-        MpAnalyzerResponseValueFormatBase, 
-        MpITextTokenDescriptorRange {
-        public int rangeStart { get; set; }
-        public int rangeEnd { get; set; }
-    }
-
     public class MpAnalyzerPresetFormat {
         public bool isDefault { get; set; } = false;
 
@@ -167,4 +121,6 @@ namespace MonkeyPaste.Plugin {
         //public string label { get; set; } = string.Empty;
         public string value { get; set; } = string.Empty;
     }
+
+
 }

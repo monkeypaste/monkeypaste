@@ -397,6 +397,18 @@ namespace MpWpfApp {
 
             AnalyticItem.Presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
             bool isNew = AnalyticItem.Presets == null || AnalyticItem.Presets.Count == 0;                       
+            if(!isNew && AnalyticItem.Presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime)) {
+                //if manifest has been modified presets need to be wiped and reset
+                // TODO maybe less forceably handle add/remove/update of presets when manifest changes
+                
+                foreach(var preset in AnalyticItem.Presets) {
+                    var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
+                    await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
+                }
+                await Task.WhenAll(AnalyticItem.Presets.Select(x => x.DeleteFromDatabaseAsync()));
+                AnalyticItem.Presets = new List<MpAnalyticItemPreset>();
+                isNew = true;
+            }
 
             Items.Clear();
 
@@ -443,11 +455,13 @@ namespace MpWpfApp {
                         sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(preset),
                         description: preset.description,
                         parameters: AnalyzerPluginFormat.parameters,
-                        values: preset.values);
+                        values: preset.values,
+                        manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
 
                     AnalyticItem.Presets.Add(aip);
                 }
             } 
+
             if (AnalyticItem.Presets.All(x => x.IsDefault == false)) {
                 //this ensures at least one preset exists and not all can be deleted
                 AnalyticItem.Presets[0].IsDefault = true;
@@ -729,21 +743,27 @@ namespace MpWpfApp {
                     continue;
                 }
                 if (paramFormat.parameterControlType == MpAnalyticItemParameterControlType.Hidden) {
+                    string data = ci.GetPropertyValue(paramFormat.values[0].value) as string;
                     // TODO (maybe)need to implement a request format so other properties can be passed
                     if (paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.FilePath) {
                         requestItem = new MpAnalyzerPluginRequestItemFormat() {
                             enumId = kvp.Key,
-                            value = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), ci.ItemData.ToByteArray(), true)
+                            value = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), data.ToByteArray(), true)
                         };
                     } else if(paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.PlainText) {
                         requestItem = new MpAnalyzerPluginRequestItemFormat() {
                             enumId = kvp.Key,
-                            value = ci.ItemData.ToPlainText()
+                            value = data.ToPlainText()
+                        };
+                    } else if (paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.Base64Text) {
+                        requestItem = new MpAnalyzerPluginRequestItemFormat() {
+                            enumId = kvp.Key,
+                            value = data.ToByteArray().ToBase64String()
                         };
                     } else {
                         requestItem = new MpAnalyzerPluginRequestItemFormat() {
                             enumId = kvp.Key,
-                            value = ci.ItemData.ToString()
+                            value = data.ToString()
                         };
                     }
                     
