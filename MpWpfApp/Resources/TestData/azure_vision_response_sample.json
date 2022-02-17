@@ -1,0 +1,228 @@
+{
+  "categories": [
+    {
+      "name": "people_group",
+      "score": 0.80859375,
+      "detail": {
+        "celebrities": [
+          {
+            "name": "Tim Robbins",
+            "confidence": 0.9999910593032837,
+            "faceRectangle": {
+              "left": 460,
+              "top": 47,
+              "width": 50,
+              "height": 50
+            }
+          },
+          {
+            "name": "Charlize Theron",
+            "confidence": 0.9808109402656555,
+            "faceRectangle": {
+              "left": 97,
+              "top": 92,
+              "width": 49,
+              "height": 49
+            }
+          },
+          {
+            "name": "Sean Penn",
+            "confidence": 0.9961344003677368,
+            "faceRectangle": {
+              "left": 206,
+              "top": 118,
+              "width": 48,
+              "height": 48
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "color": {
+    "dominantColorForeground": "Black",
+    "dominantColorBackground": "White",
+    "dominantColors": [
+      "White",
+      "Black"
+    ],
+    "accentColor": "181D23",
+    "isBwImg": false,
+    "isBWImg": false
+  },
+  "tags": [
+    {
+      "name": "person",
+      "confidence": 0.9981362819671631
+    },
+    {
+      "name": "wine",
+      "confidence": 0.9887799620628357
+    },
+    {
+      "name": "indoor",
+      "confidence": 0.9738012552261353
+    },
+    {
+      "name": "wedding dress",
+      "confidence": 0.9619781970977783
+    },
+    {
+      "name": "bride",
+      "confidence": 0.9412243366241455
+    },
+    {
+      "name": "dress",
+      "confidence": 0.862946093082428
+    },
+    {
+      "name": "curtain",
+      "confidence": 0.855199933052063
+    },
+    {
+      "name": "standing",
+      "confidence": 0.8317896723747253
+    },
+    {
+      "name": "suit",
+      "confidence": 0.7997269034385681
+    },
+    {
+      "name": "posing",
+      "confidence": 0.7365117073059082
+    },
+    {
+      "name": "wedding",
+      "confidence": 0.6982574462890625
+    },
+    {
+      "name": "people",
+      "confidence": 0.6689982414245606
+    },
+    {
+      "name": "couple",
+      "confidence": 0.666380763053894
+    },
+    {
+      "name": "smile",
+      "confidence": 0.6111418008804321
+    },
+    {
+      "name": "fashion accessory",
+      "confidence": 0.50831139087677
+    },
+    {
+      "name": "dressed",
+      "confidence": 0.4675471782684326
+    }
+  ],
+  "description": {
+    "tags": [
+      "person",
+      "wine",
+      "indoor",
+      "curtain",
+      "standing",
+      "posing",
+      "people",
+      "couple",
+      "dressed"
+    ],
+    "captions": [
+      {
+        "text": "Tim Robbins, Charlize Theron, Sean Penn et al. holding trophies",
+        "confidence": 0.6147781014442444
+      }
+    ]
+  },
+  "faces": [
+    {
+      "age": 44,
+      "gender": "Male",
+      "faceRectangle": {
+        "left": 460,
+        "top": 47,
+        "width": 50,
+        "height": 50
+      }
+    },
+    {
+      "age": 44,
+      "gender": "Female",
+      "faceRectangle": {
+        "left": 97,
+        "top": 92,
+        "width": 49,
+        "height": 49
+      }
+    },
+    {
+      "age": 47,
+      "gender": "Male",
+      "faceRectangle": {
+        "left": 206,
+        "top": 118,
+        "width": 48,
+        "height": 48
+      }
+    },
+    {
+      "age": 32,
+      "gender": "Female",
+      "faceRectangle": {
+        "left": 375,
+        "top": 134,
+        "width": 43,
+        "height": 43
+      }
+    }
+  ],
+  "objects": [
+    {
+      "rectangle": {
+        "x": 312,
+        "y": 100,
+        "w": 137,
+        "h": 256
+      },
+      "object": "person",
+      "confidence": 0.903
+    },
+    {
+      "rectangle": {
+        "x": 414,
+        "y": 13,
+        "w": 190,
+        "h": 347
+      },
+      "object": "person",
+      "confidence": 0.891
+    },
+    {
+      "rectangle": {
+        "x": 8,
+        "y": 63,
+        "w": 176,
+        "h": 292
+      },
+      "object": "person",
+      "confidence": 0.898
+    },
+    {
+      "rectangle": {
+        "x": 162,
+        "y": 77,
+        "w": 161,
+        "h": 282
+      },
+      "object": "person",
+      "confidence": 0.892
+    }
+  ],
+  "requestId": "6de2d2c8-9456-4d22-a04d-218969014d90",
+  "metadata": {
+    "height": 360,
+    "width": 640,
+    "format": "Bmp"
+  }
+}

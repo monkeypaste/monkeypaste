@@ -396,19 +396,19 @@ namespace MpWpfApp {
                 guid: PluginFormat.guid);
 
             AnalyticItem.Presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
-            bool isNew = AnalyticItem.Presets == null || AnalyticItem.Presets.Count == 0;                       
-            if(!isNew && AnalyticItem.Presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime)) {
-                //if manifest has been modified presets need to be wiped and reset
-                // TODO maybe less forceably handle add/remove/update of presets when manifest changes
-                
-                foreach(var preset in AnalyticItem.Presets) {
-                    var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
-                    await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
-                }
-                await Task.WhenAll(AnalyticItem.Presets.Select(x => x.DeleteFromDatabaseAsync()));
-                AnalyticItem.Presets = new List<MpAnalyticItemPreset>();
-                isNew = true;
-            }
+            bool isNew = AnalyticItem.Presets == null || AnalyticItem.Presets.Count == 0;
+            //if (!isNew && AnalyticItem.Presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime)) {
+            //    //if manifest has been modified presets need to be wiped and reset
+            //    // TODO maybe less forceably handle add/remove/update of presets when manifest changes
+
+            //    foreach (var preset in AnalyticItem.Presets) {
+            //        var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
+            //        await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
+            //    }
+            //    await Task.WhenAll(AnalyticItem.Presets.Select(x => x.DeleteFromDatabaseAsync()));
+            //    AnalyticItem.Presets = new List<MpAnalyticItemPreset>();
+            //    isNew = true;
+            //}
 
             Items.Clear();
 
@@ -424,11 +424,21 @@ namespace MpWpfApp {
                             string defVal = string.Empty;
                             
                             if(param.values != null) {
-                                var defParamVal = param.values.FirstOrDefault(x => x.isDefault);
-                                if (defParamVal == null && param.values.Count > 0) {
-                                    defVal = param.values[0].value;
+                                if(param.isMultiValue) {
+                                    var defParamMultiVal = param.values.Where(x => x.isDefault).ToList();
+                                    if ((defParamMultiVal == null || defParamMultiVal.Count == 0) && 
+                                        param.values.Count > 0) {
+                                        defVal = param.values[0].value;
+                                    } else {
+                                        defVal = string.Join(",",defParamMultiVal.Select(x=>x.value));
+                                    }
                                 } else {
-                                    defVal = defParamVal.value;
+                                    var defParamVal = param.values.FirstOrDefault(x => x.isDefault);
+                                    if (defParamVal == null && param.values.Count > 0) {
+                                        defVal = param.values[0].value;
+                                    } else {
+                                        defVal = defParamVal.value;
+                                    }
                                 }
                             }
                             var presetVal = new MpAnalyzerPresetValueFormat() {
@@ -787,6 +797,7 @@ namespace MpWpfApp {
                 return null;
             }
 
+            
 
             if (AnalyzerPluginFormat.outputType.imageToken) {
                 try {

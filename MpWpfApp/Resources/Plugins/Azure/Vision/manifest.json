@@ -60,20 +60,45 @@
           "mediaType": "application/octet-stream"
         }
       },
-      "responseMap": {
-        "titlePath": [
-          ""
-        ],
-        "contentPath": [
-          "@4"
-        ],
-        "descriptionPath": [
-          "$.['categories']",
-          "$.['color']",
-          "$.['tags']",
-          "$.['description']",
-          "$.['faces']",
-          "$.['objects']"
+      "response": {
+        "annotations": [
+          {
+            "name": "Title",
+            "label": {
+              "valuePath": "$.['description']['captions'][0].text"
+            },
+            "score": {
+              "valuePath": "$.['description']['captions'][0].confidence"
+            }
+          },
+          {
+            "name": "objects",
+            "dynamicChildren": [
+              {
+                "name": "detectedObjectBox",
+                "label": {
+                  "valuePath": "$.['objects'][#].object"
+                },
+                "score": {
+                  "valuePath": "$.['objects'][#].confidence"
+                },
+                "box": {
+                  "x": {
+                    "valuePath": "$.['objects'][#].rectangle.x"
+                  },
+                  "y": {
+                    "valuePath": "$.['objects'][#].rectangle.y"
+                  },
+                  "width": {
+                    "valuePath": "$.['objects'][#].rectangle.w"
+                  },
+                  "height": {
+                    "valuePath": "$.['objects'][#].rectangle.h"
+                  }
+                }
+              }
+            ]
+          }
         ]
       }
     },
@@ -128,12 +153,12 @@
           {
             "label": "Adult",
             "value": "adult",
-            "isDefault": false
+            "isDefault": true
           },
           {
             "label": "Brands",
             "value": "brands",
-            "isDefault": false
+            "isDefault": true
           },
           {
             "label": "Categories",

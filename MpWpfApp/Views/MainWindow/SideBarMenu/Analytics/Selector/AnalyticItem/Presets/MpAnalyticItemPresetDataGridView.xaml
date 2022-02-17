@@ -89,6 +89,7 @@
                                          Padding="5"
                                          Background="White"
                                          BorderThickness="0"
+                                         local:MpIsFocusedExtension.IsEnabled="True"
                                          Text="{Binding Label,
                                                         Mode=TwoWay,
                                                         NotifyOnSourceUpdated=True,

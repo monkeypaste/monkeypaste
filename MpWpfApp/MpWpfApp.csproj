@@ -560,6 +560,9 @@
     <Compile Include="Views\Reusable\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reusable\Reports\MpAnalysisReportView.xaml.cs">
+      <DependentUpon>MpAnalysisReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -641,6 +644,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\ListBoxes\MpAnimatedListBoxResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Reports\MpAnalysisReportResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -868,6 +875,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Reusable\Reports\MpAnalysisReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Settings\Account\MpAccountTabPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -982,6 +993,7 @@
     <None Include="Resources\Assets\Weights\yolov5s.onnx" />
     <None Include="Resources\Plugins\Azure\Translator\manifest.json" />
     <None Include="Resources\Plugins\Azure\Vision\manifest.json" />
+    <None Include="Resources\TestData\azure_vision_response_sample.json" />
     <Resource Include="Styles\Shaders\InvertColor\MpInvertColorShader.ps">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

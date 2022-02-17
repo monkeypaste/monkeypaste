@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public class MpJsonEnumConverter : JsonConverter {

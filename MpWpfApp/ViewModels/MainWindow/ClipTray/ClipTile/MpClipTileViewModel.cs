@@ -926,7 +926,10 @@ using System.Speech.Synthesis;
         #region View Event Invokers
 
         public void RequestListRefresh() {
-            OnListBoxRefresh?.Invoke(this, null);
+            //OnListBoxRefresh?.Invoke(this, null);
+            CollectionViewSource.GetDefaultView(ItemViewModels).Refresh();
+            //OnPropertyChanged(nameof(ItemViewModels));
+            //ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.CopyItem)));
         }
 
         public void RequestScrollIntoView(object obj) {

@@ -214,7 +214,7 @@
                               Grid.Column="0"
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch"
-                              Width="3"
+                              Width="5"
                               local:MpHoverableExtension.IsEnabled="True"
                               local:MpHoverableExtension.HoverCursor="ResizeWE"
                               IsEnabled="{Binding IsAnySidebarOpen}"

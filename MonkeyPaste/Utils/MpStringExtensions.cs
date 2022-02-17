@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -9,6 +10,11 @@ using System.Text.RegularExpressions;
 namespace MonkeyPaste {
     public static class MpStringExtensions {
         private static Random _Rand;
+
+        public static string ToPrettyPrintJson(this string jsonStr) {
+            JToken jt = JToken.Parse(jsonStr);
+            return jt.ToString();
+        }
 
         public static string Escape(this string badString) {
             return badString.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace(">", "&gt;").Replace("<", "&lt;");

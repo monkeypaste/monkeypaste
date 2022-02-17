@@ -185,10 +185,17 @@ namespace MpWpfApp {
                     if(IsBusy || Parent.IsBusy) {
                         return;
                     } 
+                    if(Parent is MpMultiSelectComboBoxParameterViewModel mscbpvm) {
+                        mscbpvm.OnPropertyChanged(nameof(mscbpvm.SelectedItems));
+                    } else if(Parent is MpComboBoxParameterViewModel cbpvm) {
+                        cbpvm.OnPropertyChanged(nameof(cbpvm.SelectedItem));
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
                     HasModelChanged = true;
                     break;
                 case nameof(HasModelChanged):
                     if (IsBusy || Parent.IsBusy) {
+                        //workaround for initializing where value falls back to parameter default and not preset value
                         return;
                     }
                     if (HasModelChanged) {

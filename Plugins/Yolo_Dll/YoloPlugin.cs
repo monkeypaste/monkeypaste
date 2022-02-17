@@ -31,14 +31,16 @@ namespace Yolo_Dll {
             var reqParts = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
 
             double confidence = Convert.ToDouble(reqParts.FirstOrDefault(x => x.enumId == 1).value);
-            var bytes = Convert.FromBase64String(reqParts.FirstOrDefault(x => x.enumId == 2).value);            
-            
+            var bytes = Convert.FromBase64String(reqParts.FirstOrDefault(x => x.enumId == 2).value);
+
             Bitmap bmp;
             using (var ms = new MemoryStream(bytes)) {
                 bmp = new Bitmap(ms);
             }
 
-            var boxList = new List<MpAnalyzerPluginImageTokenResponseValueFormat>();
+            
+
+            var boxList = new List<MpPluginResponseAnnotationFormat>();
 
             List<YoloPrediction> predictions = _yoloWrapper.Predict(bmp);
             using (var graphics = System.Drawing.Graphics.FromImage(bmp)) {
@@ -46,20 +48,21 @@ namespace Yolo_Dll {
                     double score = Math.Round(item.Score, 2);
 
                     if (score >= confidence) {
-                        var box = new MpAnalyzerPluginImageTokenResponseValueFormat() {
-                            x = (double)item.Rectangle.X,
-                            y = (double)item.Rectangle.Y,
-                            width = (double)item.Rectangle.Width,
-                            height = (double)item.Rectangle.Height,
-                            score = (double)item.Score,
-                            label = item.Label.Name,
-                            description = Enum.GetName(typeof(YoloLabelKind), item.Label.Kind)
+                        var boxAnnotation = new MpPluginResponseAnnotationFormat(item.Label.Name, (double)item.Score) {
+                            box = new MpAnalyzerPluginImageTokenResponseValueFormat(
+                                    (double)item.Rectangle.X,
+                                    (double)item.Rectangle.Y,
+                                    (double)item.Rectangle.Width,
+                                    (double)item.Rectangle.Height)
                         };
-                        boxList.Add(box);
+                        boxList.Add(boxAnnotation);
                     }
                 }
             }
-            return JsonConvert.SerializeObject(boxList);
+            var response = new MpPluginResponseAnnotationFormat() {
+                children = boxList
+            };
+            return JsonConvert.SerializeObject(response);
         }
     }
 }

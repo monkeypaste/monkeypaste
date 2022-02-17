@@ -2150,9 +2150,14 @@ namespace MpWpfApp {
 
         public ICommand DeleteSelectedClipsCommand => new RelayCommand(
             async () => {
+                while(IsBusy) { await Task.Delay(100); }
+
+                IsBusy = true;
+
                 await Task.WhenAll(SelectedModels.Select(x => x.DeleteFromDatabaseAsync()).ToArray());
 
                 //db delete event is handled in clip tile
+                IsBusy = false;
             },
             () => {
                 return MpMainWindowViewModel.Instance.IsShowingDialog == false &&

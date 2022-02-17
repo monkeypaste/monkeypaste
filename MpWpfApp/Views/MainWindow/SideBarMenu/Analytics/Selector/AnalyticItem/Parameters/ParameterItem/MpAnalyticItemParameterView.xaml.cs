@@ -39,7 +39,7 @@ namespace MpWpfApp {
 
         private void MultiSelectComboBox_Loaded(object sender, RoutedEventArgs e) {
             var mscb = sender as ComboBox;
-            foreach (var aipvvm in (BindingContext as MpMultiSelectComboBoxParameterViewModel).SelectedViewModels) {
+            foreach (var aipvvm in (BindingContext as MpMultiSelectComboBoxParameterViewModel).SelectedItems) {
                 ((ListBox)mscb.Template.FindName("lstBox", mscb)).SelectedItems.Add(aipvvm);
             }
         }

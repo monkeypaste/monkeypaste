@@ -11,8 +11,8 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Web;
-
-namespace MonkeyPaste.Plugin {
+using MonkeyPaste.Plugin;
+namespace MonkeyPaste {
     public class MpHttpPlugin : MpIAnalyzerPluginComponent {
         #region Private Variables
 
@@ -82,7 +82,10 @@ namespace MonkeyPaste.Plugin {
                         }
                         
                         string responseStr = await response.Content.ReadAsStringAsync();
-                        
+
+                        Console.WriteLine($"Response from '{request.RequestUri.AbsoluteUri}':");
+                        Console.WriteLine(responseStr.ToPrettyPrintJson());
+
                         request.Content.Dispose();
                         var responseObj = CreateResponse(responseStr);
                         return responseObj;
@@ -168,17 +171,17 @@ namespace MonkeyPaste.Plugin {
                             raw = raw.Replace(c.Value, escapedParamVal);// JsonConvert.SerializeObject(raw.Replace(c.Value, paramEnum.value));
                             //raw = JsonConvert.SerializeObject(raw);
                             
-                            System.Object[] body = new System.Object[] { new { Text = paramVal } };
-                            var test = JsonConvert.SerializeObject(body);
+                            //System.Object[] body = new System.Object[] { new { Text = paramVal } };
+                            //var test = JsonConvert.SerializeObject(body);
 
-                            Console.WriteLine("Raw Param: ");
-                            Console.WriteLine(paramVal);
-                            Console.WriteLine("serialized param: ");
-                            Console.WriteLine(escapedParamVal);
-                            Console.WriteLine("Final Raw:");
-                            Console.WriteLine(raw);
-                            Console.WriteLine("Test:");
-                            Console.WriteLine(test);
+                            //Console.WriteLine("Raw Param: ");
+                            //Console.WriteLine(paramVal);
+                            //Console.WriteLine("serialized param: ");
+                            //Console.WriteLine(escapedParamVal);
+                            //Console.WriteLine("Final Raw:");
+                            //Console.WriteLine(raw);
+                            //Console.WriteLine("Test:");
+                            //Console.WriteLine(test);
                         }
                     }
                 }
@@ -213,53 +216,74 @@ namespace MonkeyPaste.Plugin {
             }
         }
 
-        private string QueryJsonPath(JObject jo, string propertyPath, bool omitIfNull) {
-            string result = string.Empty;
-            if(propertyPath.StartsWith("@")) {
-                return GetParamValue(propertyPath);
-            }
-            try {
-                JToken dataToken = jo.SelectToken(propertyPath, false);
-                if (dataToken == null) {
-                    if(!omitIfNull) {
-                        result = propertyPath;
-                    }                    
-                } else {
-                    result = dataToken.ToString();
-                }
-            }
-            catch (Exception ex) {
-                Console.WriteLine("Error parsing resposne: " + ex);
-                if (!omitIfNull) {
-                    result = propertyPath;
-                }
-            }
-            return result;
-        }
-
         private object CreateResponse(string responseStr) {
-            var textResponse = new MpAnalyzerPluginTextResponseFormat() {
-                label = string.Empty,
-                description = string.Empty,
-                content = responseStr
-            };
-            var responseMap = _httpTransactionFormat.responseMap;
+            var response = _httpTransactionFormat.response;
 
-            JObject o = null;
+            JObject jo;
             if (responseStr.StartsWith("[")) {
                 JArray a = JArray.Parse(responseStr);
-                o = a.Children<JObject>().First();
+                jo = a.Children<JObject>().First();
             } else {
-                o = JObject.Parse(responseStr);
+                jo = JObject.Parse(responseStr);
             }
 
-            textResponse.label = string.Join(string.Empty, responseMap.titlePath.Select(x => QueryJsonPath(o, x, responseMap.omitTitleIfPathNotFound)));
-            textResponse.content = string.Join(string.Empty, responseMap.contentPath.Select(x => QueryJsonPath(o, x, responseMap.omitContentIfPathNotFound)));
-            textResponse.description = string.Join(string.Empty, responseMap.descriptionPath.Select(x => QueryJsonPath(o, x, responseMap.omitDescriptionIfPathNotFound)));
+            response.annotations = CreateAnnotations(_httpTransactionFormat.response.annotations,jo);
+            //textResponse.label = string.Join(string.Empty, response.titlePath.Select(x => QueryJsonPath(o, x, response.omitTitleIfPathNotFound)));
+            //textResponse.content = string.Join(string.Empty, response.contentPath.Select(x => QueryJsonPath(o, x, response.omitContentIfPathNotFound)));
+            //textResponse.description = string.Join(string.Empty, response.descriptionPath.Select(x => QueryJsonPath(o, x, response.omitDescriptionIfPathNotFound)));
 
-            return textResponse;
+            return response;
         }
 
+        private List<MpPluginResponseAnnotationFormat> CreateAnnotations(List<MpPluginResponseAnnotationFormat> al, JObject jo, int idx = 0) {
+            if(al == null) {
+                return null;
+            }
+
+            for (int i = 0; i < al.Count; i++) {
+                al[i] = CreateAnnotation(al[i], jo, i);
+            }
+            return al;
+        }
+
+        private MpPluginResponseAnnotationFormat CreateAnnotation(MpPluginResponseAnnotationFormat a, JObject jo, int idx = 0) {
+            try {
+                if (a.label != null) {
+                    a.label.SetValue(jo, reqParams, idx);
+                }
+                if (a.score != null) {
+                    a.score.SetValue(jo, reqParams, idx);
+                }
+                if (a.box != null) {
+                    a.box.x.SetValue(jo, reqParams, idx);
+                    a.box.y.SetValue(jo, reqParams, idx);
+                    a.box.width.SetValue(jo, reqParams, idx);
+                    a.box.height.SetValue(jo, reqParams, idx);
+                }
+            }catch(MpJsonPathPropertyException jppex) {
+                Console.WriteLine(jppex);
+                return null;
+            }
+            if(a.dynamicChildren != null && a.dynamicChildren.Count > 0) {
+                if(a.children == null) {
+                    a.children = new List<MpPluginResponseAnnotationFormat>();
+                }
+                for (int i = 0; i < a.dynamicChildren.Count; i++) {
+                    int curDynamicChildIdx = 0;
+                    while(true) {
+                        var childAnnotationFormat = CreateAnnotation(a.dynamicChildren[i], jo, curDynamicChildIdx);
+                        if(childAnnotationFormat == null) {
+                            break;
+                        }
+                        a.children.Add(childAnnotationFormat);
+                        curDynamicChildIdx++;
+                    }                 
+                }
+            }
+            return a;
+        }
+
+        
         #endregion
     }
 }

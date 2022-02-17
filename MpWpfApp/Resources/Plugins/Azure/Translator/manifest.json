@@ -69,7 +69,7 @@
           "mediaType": "application/json"
         }
       },
-      "responseMap": {
+      "response": {
         "titlePath": [
           "Azure Translation of ",
           "@4"
