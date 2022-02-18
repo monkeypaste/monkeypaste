@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
-    public class MpDetectedImageObject : MpDbModelBase, MpIImageDescriptorBox {
+    public class MpDetectedImageObject : MpDbModelBase {
         #region Columns
 
         [Column("pk_MpDetectedImageObjectId")]
@@ -22,16 +22,18 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; }
 
-        public double score { get; set; } = 0;
+        public double Score { get; set; } = 0;
 
-        public double x { get; set; } = 0;
-        public double y { get; set; } = 0;
+        public double X { get; set; } = 0;
+        public double Y { get; set; } = 0;
 
-        public double width { get; set; } = 0;
-        public double height { get; set; } = 0;
+        public double Width { get; set; } = 0;
+        public double Height { get; set; } = 0;
 
-        public string label { get; set; } = string.Empty;
-        public string description { get; set; } = string.Empty;
+        public string Label { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string HexColor { get; set; } = MpSystemColors.LightGray;
+
 
         #endregion
 
@@ -52,7 +54,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         public static async Task<MpDetectedImageObject> Create(
             int cid = 0, 
             double c = 0, 
@@ -61,8 +62,9 @@ namespace MonkeyPaste {
             double w = 0, 
             double h = 0, 
             string label = "",
-            string description = "") {
-            var dupCheck = await MpDataModelProvider.GetDetectedImageObjectByData(cid, x, y, w, h, c, label, description);
+            string description = "",
+            string hexColor = "") {
+            var dupCheck = await MpDataModelProvider.GetDetectedImageObjectByData(cid, x, y, w, h, c, label, description,hexColor);
             if(dupCheck != null) {
                 MpConsole.WriteTraceLine($"Duplicate detected image object detected ignoring create");
                 return dupCheck;
@@ -71,13 +73,14 @@ namespace MonkeyPaste {
             var ndio = new MpDetectedImageObject() {
                 DetectedImageObjectGuid = System.Guid.NewGuid(),
                 CopyItemId = cid,
-                score = c,
-                x = x,
-                y = y,
-                width = w,
-                height = h,
-                label = label,
-                description = description
+                Score = c,
+                X = x,
+                Y = y,
+                Width = w,
+                Height = h,
+                Label = label,
+                Description = description,
+                HexColor = string.IsNullOrEmpty(hexColor) ? MpSystemColors.LightGray : hexColor
             };
 
             await ndio.WriteToDatabaseAsync();

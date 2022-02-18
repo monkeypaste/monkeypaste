@@ -41,8 +41,6 @@ namespace MonkeyPaste.Plugin {
         }
     }
     public class MpJsonPathProperty {
-        public int thisIndex { get; set; } = -1;
-
         public string value { get; private set; }
         public string valuePath { get; set; }
 

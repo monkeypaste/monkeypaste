@@ -1110,12 +1110,12 @@ namespace MpWpfApp {
             return Math.Abs(Math.Abs(b) - Math.Abs(a));
         }
         public static DoubleAnimation AnimateDoubleProperty(
-            double from, 
-            double to, 
-            double dt, 
-            object obj, 
-            DependencyProperty property, 
-            EventHandler onCompleted) {
+            double from = 0, 
+            double to = 0, 
+            double dt = 0, 
+            object obj = null, 
+            DependencyProperty property =  null, 
+            EventHandler onCompleted = null) {
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = from;
             animation.To = to;

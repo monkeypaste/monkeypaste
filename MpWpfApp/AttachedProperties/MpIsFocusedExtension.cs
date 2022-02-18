@@ -33,6 +33,25 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region SelectAllOnFocus
+
+        public static bool GetSelectAllOnFocus(DependencyObject obj) {
+            return (bool)obj.GetValue(SelectAllOnFocusProperty);
+        }
+        public static void SetSelectAllOnFocus(DependencyObject obj, bool value) {
+            obj.SetValue(SelectAllOnFocusProperty, value);
+        }
+        public static readonly DependencyProperty SelectAllOnFocusProperty =
+          DependencyProperty.RegisterAttached(
+            "SelectAllOnFocus",
+            typeof(bool),
+            typeof(MpIsFocusedExtension),
+            new FrameworkPropertyMetadata {
+                DefaultValue = false
+            });
+
+        #endregion
+
         #region IsEnabled
 
         public static bool GetIsEnabled(DependencyObject obj) {
@@ -145,6 +164,11 @@ namespace MpWpfApp {
         private static void GotFocus(DependencyObject dpo) {
             IsAnyTextBoxFocused = true;
             SetIsFocused(dpo, true);
+            if (GetSelectAllOnFocus(dpo)) {
+                if (dpo is TextBoxBase tbb) {
+                    tbb.SelectAll();
+                }
+            }
         }
 
         private static void LostFocus(DependencyObject dpo) {

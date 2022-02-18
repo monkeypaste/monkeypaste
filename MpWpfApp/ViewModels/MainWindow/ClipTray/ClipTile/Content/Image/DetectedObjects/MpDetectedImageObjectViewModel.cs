@@ -20,25 +20,6 @@ namespace MpWpfApp {
 
         #region Properties
                 
-        #region Appearance
-
-        public double FontSize {
-            get {
-                return Math.Max(8, Math.Min(Width, Height) / 5);
-            }
-        }
-
-        public Brush BorderBrush {
-            get {
-                if (IsHovering) {
-                    return Brushes.Yellow;
-                }
-                return Brushes.Blue;
-            }
-        }
-
-        #endregion
-
         #region State
 
         #region MpISelectableViewModel Implementation
@@ -73,6 +54,22 @@ namespace MpWpfApp {
 
         #region Appearance 
 
+
+        public double FontSize {
+            get {
+                return Math.Max(8, Math.Min(Width, Height) / 5);
+            }
+        }
+
+        public Brush BorderBrush {
+            get {
+                if (IsHovering) {
+                    return Brushes.Yellow;
+                }
+                return Brushes.Blue;
+            }
+        }
+
         public string BorderHexColorStr {
             get {
                 if(IsSelected) {
@@ -81,23 +78,48 @@ namespace MpWpfApp {
                 if(IsHovering) {
                     return MpSystemColors.IsHoveringBorderColor;
                 }
-                return MpSystemColors.Gray;
+                return HexColor;
             }
         }
+
+        public double DisplayScore { get; set; } = 0;
+
+        public ProgressArc BackgroundCircle => new ProgressArc(1);
+
+        public ProgressArc ValueCircle => new ProgressArc(DisplayScore);
+
+        public int ScoreLabelValue => (int)(DisplayScore * 100);
+
         #endregion
 
         #region Model
+
+        public string HexColor {
+            get {
+                if(DetectedImageObject == null) {
+                    return MpSystemColors.Transparent;
+                }
+                return DetectedImageObject.HexColor;
+            }
+            set {
+                if(HexColor != value) {
+                    DetectedImageObject.HexColor = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(HexColor));
+                }
+            }
+        }
 
         public double X {
             get {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.x;
+                return DetectedImageObject.X;
             }
             set {
                 if(X != value) {
-                    DetectedImageObject.x = value;
+                    DetectedImageObject.X = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(X));
                 }
@@ -109,11 +131,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.y;
+                return DetectedImageObject.Y;
             }
             set {
                 if (Y != value) {
-                    DetectedImageObject.y = value;
+                    DetectedImageObject.Y = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Y));
                 }
@@ -125,11 +147,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.width;
+                return DetectedImageObject.Width;
             }
             set {
                 if (Height != value) {
-                    DetectedImageObject.width = value;
+                    DetectedImageObject.Width = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Width));
                 }
@@ -141,11 +163,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.height;
+                return DetectedImageObject.Height;
             }
             set {
                 if(Height != value) {
-                    DetectedImageObject.height = value;
+                    DetectedImageObject.Height = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Height));
                 }
@@ -157,12 +179,13 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return 0;
                 }
-                return DetectedImageObject.score;
+                return DetectedImageObject.Score;
             }
             set {
                 if (Score != value) {
-                    DetectedImageObject.score = value;
+                    DetectedImageObject.Score = value;
                     OnPropertyChanged(nameof(Score));
+                    OnPropertyChanged(nameof(ValueCircle));
                 }
             }
         }
@@ -172,11 +195,11 @@ namespace MpWpfApp {
                 if (DetectedImageObject == null) {
                     return string.Empty;
                 }
-                return DetectedImageObject.label;
+                return DetectedImageObject.Label;
             }
             set {
                 if (Label != value) {
-                    DetectedImageObject.label = value;
+                    DetectedImageObject.Label = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Label));
                 }
@@ -239,6 +262,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        
         #endregion
 
         #region Commands

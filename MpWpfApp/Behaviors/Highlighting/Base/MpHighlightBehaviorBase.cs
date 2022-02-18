@@ -176,7 +176,10 @@ namespace MpWpfApp {
 
         private List<KeyValuePair<TextRange, Brush>> FindNonTransparentRangeList() {
             var matchRangeList = new List<KeyValuePair<TextRange, Brush>>();
-            if(HighlightType == MpHighlightType.Source) {
+            //if(HighlightType == MpHighlightType.Source) {
+            //    return matchRangeList;
+            //}
+            if (ContentRange == null) {
                 return matchRangeList;
             }
 

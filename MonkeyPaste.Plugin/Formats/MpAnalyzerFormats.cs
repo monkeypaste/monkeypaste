@@ -100,11 +100,11 @@ namespace MonkeyPaste.Plugin {
         public string tickFrequency { get; set; }
     }
 
-    public abstract class MpAnalyzerResponseValueFormatBase : MpIDescriptor {
-        public string label { get; set; } = string.Empty;
-        public string description { get; set; } = string.Empty;
-        public double score { get; set; } = 0;
-    }
+    //public abstract class MpAnalyzerResponseValueFormatBase : MpIDescriptor {
+    //    public string label { get; set; } = string.Empty;
+    //    public string description { get; set; } = string.Empty;
+    //    public double score { get; set; } = 0;
+    //}
 
     public class MpAnalyzerPresetFormat {
         public bool isDefault { get; set; } = false;

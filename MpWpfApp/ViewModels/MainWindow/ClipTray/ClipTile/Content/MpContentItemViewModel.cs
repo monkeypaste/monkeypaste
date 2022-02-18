@@ -836,6 +836,16 @@ namespace MpWpfApp {
                 if(sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
+            } else if(e is MpDetectedImageObject dio) {
+                if(dio.CopyItemId == CopyItemId) {
+                    MpHelpers.RunOnMainThread(async () => {
+                        if(DetectedImageObjectCollectionViewModel == null) {
+                            DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(this);
+                        }
+                        await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
+                        OnPropertyChanged(nameof(HasDetectedObjects));
+                    });
+                }
             }
         }
 

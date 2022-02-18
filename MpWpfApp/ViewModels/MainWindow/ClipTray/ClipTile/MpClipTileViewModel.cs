@@ -1098,8 +1098,9 @@ using System.Speech.Synthesis;
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                var civm = ItemViewModels.Where(x => x.CopyItemId == ci.Id);
+                if(ItemViewModels.Any(x=>x.CopyItemId == ci.CompositeParentCopyItemId || ci.Id == x.CompositeParentCopyItemId)) {
 
+                }
             }
         }
 

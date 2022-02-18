@@ -441,6 +441,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
             await _connectionAsync.CreateTableAsync<MpDetectedImageObject>();
+            await _connectionAsync.CreateTableAsync<MpHttpTransaction>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
             await _connectionAsync.CreateTableAsync<MpAction>();
             await _connectionAsync.CreateTableAsync<MpPasteHistory>();

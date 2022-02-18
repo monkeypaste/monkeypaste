@@ -76,6 +76,9 @@
             "dynamicChildren": [
               {
                 "name": "detectedObjectBox",
+                "appearance": {
+                  "color": "#FF00FF7F"
+                },
                 "label": {
                   "valuePath": "$.['objects'][#].object"
                 },
@@ -96,6 +99,62 @@
                     "valuePath": "$.['objects'][#].rectangle.h"
                   }
                 }
+              }
+            ]
+          },
+          {
+            "name": "tags",
+            "dynamicChildren": [
+              {
+                "name": "tagLabelAndScore",
+                "label": {
+                  "valuePath": "$.['tags'][#].name"
+                },
+                "score": {
+                  "valuePath": "$.['tags'][#].confidence"
+                }
+              }
+            ]
+          },
+          {
+            "name": "categories",
+            "label": {
+              "valuePath": "$.['categories'][0].name"
+            },
+            "score": {
+              "valuePath": "$.['categories'][0].score"
+            },
+            "children": [
+              {
+                "name": "detail",
+                "dynamicChildren": [
+                  {
+                    "name": "celebrityFace",
+                    "appearance": {
+                      "color": "#FFFFB6C1"
+                    },
+                    "label": {
+                      "valuePath": "$.['categories'][0].detail.celebrities[#].name"
+                    },
+                    "score": {
+                      "valuePath": "$.['categories'][0].detail.celebrities[#].confidence"
+                    },
+                    "box": {
+                      "x": {
+                        "valuePath": "$.['categories'][0].detail.celebrities[#].faceRectangle.left"
+                      },
+                      "y": {
+                        "valuePath": "$.['categories'][0].detail.celebrities[#].faceRectangle.top"
+                      },
+                      "width": {
+                        "valuePath": "$.['categories'][0].detail.celebrities[#].faceRectangle.width"
+                      },
+                      "height": {
+                        "valuePath": "$.['categories'][0].detail.celebrities[#].faceRectangle.height"
+                      }
+                    }
+                  }
+                ]
               }
             ]
           }

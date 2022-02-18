@@ -1826,7 +1826,11 @@ namespace MpWpfApp {
                 var cil = await MpDataModelProvider.FetchCopyItemRangeAsync(idx, loadCount);
 
                 for (int i = 0; i < cil.Count; i++) {
-                    if (PinnedItems.Any(x => x.HeadItem.CopyItemId == cil[i].Id)) {
+                    if (PinnedItems.Any(x => x.HeadItem.CopyItemId == cil[i].Id) ||
+                        i >= Items.Count) {
+                        // NOTE checking i w/ item count is probably a side affect bug
+                        //of resizing window and tile/scoll offset and tray dimensions
+                        //not all updating
                         continue;
                     }
                     if (Items[i].IsSelected) {

@@ -65,8 +65,12 @@
     <local:MpObjectToTooltipConverter x:Key="ObjectToTooltipConverter" />
     <local:MpStringToSizeConverter x:Key="StringToSizeConverter" />
     <local:MpEnumToItemSourceLabelsConverter x:Key="EnumToItemSourceLabelsConverter" />
-
+    <local:MpStringHexToWinMediaColorConverter x:Key="StringHexToWinMediaColorConverter" />
     <local:MpAnalyticItemGuidToIconSourceConverter x:Key="AnalyticItemGuidToIconSourceConverter" />
     <local:MpAnalyticItemGuidToTitleConverter x:Key="AnalyticItemGuidToTitleConverter" />
+    <local:MpDiameterToStartPointConverter x:Key="DiameterToStartPointConverter" />
+    <local:MpScoreToSegmentPointConverter x:Key="ScoreToSegmentPointConverter" />
+    <local:MpScoreToIsLargeArcConverter x:Key="ScoreToIsLargeArcConverter" />
+    <local:MpScoreLimiterConverter x:Key="ScoreLimiterConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

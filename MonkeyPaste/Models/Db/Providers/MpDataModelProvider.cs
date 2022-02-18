@@ -501,9 +501,9 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<MpDetectedImageObject> GetDetectedImageObjectByData(int ciid,double x,double y,double w,double h,double s,string label,string description) {
-            string query = string.Format(@"select * from MpDetectedImageObject where fk_MpCopyItemId=? and X=? and Y=? and Width=? and Height=? and Score=? and Label=? and Description=?");
-            var result = await MpDb.QueryAsync<MpDetectedImageObject>(query, ciid,x,y,w,h,s,label,description);
+        public static async Task<MpDetectedImageObject> GetDetectedImageObjectByData(int ciid,double x,double y,double w,double h,double s,string label,string description,string c) {
+            string query = string.Format(@"select * from MpDetectedImageObject where fk_MpCopyItemId=? and X=? and Y=? and Width=? and Height=? and Score=? and Label=? and Description=? and HexColor=?");
+            var result = await MpDb.QueryAsync<MpDetectedImageObject>(query, ciid,x,y,w,h,s,label,description,c);
             if (result == null || result.Count == 0) {
                 return null;
             }

@@ -1,0 +1,230 @@
+{
+  "categories": [],
+  "adult": {
+    "isAdultContent": false,
+    "isRacyContent": false,
+    "isGoryContent": false,
+    "adultScore": 0.004809280391782522,
+    "racyScore": 0.007183143403381109,
+    "goreScore": 0.1027374342083931
+  },
+  "color": {
+    "dominantColorForeground": "Brown",
+    "dominantColorBackground": "Brown",
+    "dominantColors": [
+      "Brown"
+    ],
+    "accentColor": "684528",
+    "isBwImg": false,
+    "isBWImg": false
+  },
+  "tags": [
+    {
+      "name": "animal",
+      "confidence": 0.9789923429489136
+    },
+    {
+      "name": "grass",
+      "confidence": 0.9699687957763672
+    },
+    {
+      "name": "cattle",
+      "confidence": 0.9672636389732361
+    },
+    {
+      "name": "cow",
+      "confidence": 0.8340009450912476
+    },
+    {
+      "name": "hay",
+      "confidence": 0.8253458738327026
+    },
+    {
+      "name": "livestock",
+      "confidence": 0.7987529039382935
+    },
+    {
+      "name": "goat",
+      "confidence": 0.7143263816833496
+    },
+    {
+      "name": "bull",
+      "confidence": 0.6668627262115479
+    },
+    {
+      "name": "group",
+      "confidence": 0.6275402903556824
+    },
+    {
+      "name": "mammal",
+      "confidence": 0.6023078560829163,
+      "hint": "animal"
+    },
+    {
+      "name": "sheep",
+      "confidence": 0.54606693983078
+    },
+    {
+      "name": "bovine",
+      "confidence": 0.5429664850234985
+    },
+    {
+      "name": "horse",
+      "confidence": 0.5125572085380554
+    },
+    {
+      "name": "herd",
+      "confidence": 0.5079358816146851
+    },
+    {
+      "name": "dry",
+      "confidence": 0.3997076749801636
+    },
+    {
+      "name": "several",
+      "confidence": 0.1021641194820404
+    }
+  ],
+  "description": {
+    "tags": [
+      "grass",
+      "hay",
+      "group",
+      "mammal",
+      "dry",
+      "several"
+    ],
+    "captions": [
+      {
+        "text": "a group of animals in a barn",
+        "confidence": 0.5060526728630066
+      }
+    ]
+  },
+  "faces": [],
+  "objects": [
+    {
+      "rectangle": {
+        "x": 209,
+        "y": 179,
+        "w": 306,
+        "h": 210
+      },
+      "object": "mammal",
+      "confidence": 0.66,
+      "parent": {
+        "object": "animal",
+        "confidence": 0.66
+      }
+    },
+    {
+      "rectangle": {
+        "x": 95,
+        "y": 346,
+        "w": 183,
+        "h": 169
+      },
+      "object": "merino sheep",
+      "confidence": 0.557,
+      "parent": {
+        "object": "sheep",
+        "confidence": 0.6,
+        "parent": {
+          "object": "mammal",
+          "confidence": 0.764,
+          "parent": {
+            "object": "animal",
+            "confidence": 0.765
+          }
+        }
+      }
+    },
+    {
+      "rectangle": {
+        "x": 212,
+        "y": 358,
+        "w": 142,
+        "h": 217
+      },
+      "object": "merino sheep",
+      "confidence": 0.618,
+      "parent": {
+        "object": "sheep",
+        "confidence": 0.644,
+        "parent": {
+          "object": "mammal",
+          "confidence": 0.795,
+          "parent": {
+            "object": "animal",
+            "confidence": 0.795
+          }
+        }
+      }
+    },
+    {
+      "rectangle": {
+        "x": 347,
+        "y": 375,
+        "w": 89,
+        "h": 230
+      },
+      "object": "merino sheep",
+      "confidence": 0.709,
+      "parent": {
+        "object": "sheep",
+        "confidence": 0.728,
+        "parent": {
+          "object": "mammal",
+          "confidence": 0.902,
+          "parent": {
+            "object": "animal",
+            "confidence": 0.902
+          }
+        }
+      }
+    },
+    {
+      "rectangle": {
+        "x": 448,
+        "y": 303,
+        "w": 158,
+        "h": 294
+      },
+      "object": "mammal",
+      "confidence": 0.861,
+      "parent": {
+        "object": "animal",
+        "confidence": 0.861
+      }
+    },
+    {
+      "rectangle": {
+        "x": 192,
+        "y": 470,
+        "w": 134,
+        "h": 135
+      },
+      "object": "merino sheep",
+      "confidence": 0.543,
+      "parent": {
+        "object": "sheep",
+        "confidence": 0.595,
+        "parent": {
+          "object": "mammal",
+          "confidence": 0.767,
+          "parent": {
+            "object": "animal",
+            "confidence": 0.772
+          }
+        }
+      }
+    }
+  ],
+  "brands": [],
+  "requestId": "c4f7d12a-89f1-46ec-81f7-8f6bebd664e3",
+  "metadata": {
+    "height": 721,
+    "width": 721,
+    "format": "Bmp"
+  }
+}

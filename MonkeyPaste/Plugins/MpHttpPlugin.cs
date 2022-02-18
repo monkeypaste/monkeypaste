@@ -16,6 +16,464 @@ namespace MonkeyPaste {
     public class MpHttpPlugin : MpIAnalyzerPluginComponent {
         #region Private Variables
 
+        private string _testResponse = @"{
+	""categories"": [],
+	""adult"": {
+		""isAdultContent"": false,
+		""isRacyContent"": false,
+		""isGoryContent"": false,
+		""adultScore"": 0.004809280391782522,
+		""racyScore"": 0.007183143403381109,
+		""goreScore"": 0.1027374342083931
+	},
+	""color"": {
+		""dominantColorForeground"": ""Brown"",
+		""dominantColorBackground"": ""Brown"",
+		""dominantColors"": [
+			""Brown""
+		],
+		""accentColor"": ""684528"",
+		""isBwImg"": false,
+		""isBWImg"": false
+	},
+	""tags"": [
+		{
+			""name"": ""animal"",
+			""confidence"": 0.9789923429489136
+		},
+		{
+			""name"": ""grass"",
+			""confidence"": 0.9699687957763672
+		},
+		{
+			""name"": ""cattle"",
+			""confidence"": 0.9672636389732361
+		},
+		{
+			""name"": ""cow"",
+			""confidence"": 0.8340009450912476
+		},
+		{
+			""name"": ""hay"",
+			""confidence"": 0.8253458738327026
+		},
+		{
+			""name"": ""livestock"",
+			""confidence"": 0.7987529039382935
+		},
+		{
+			""name"": ""goat"",
+			""confidence"": 0.7143263816833496
+		},
+		{
+			""name"": ""bull"",
+			""confidence"": 0.6668627262115479
+		},
+		{
+			""name"": ""group"",
+			""confidence"": 0.6275402903556824
+		},
+		{
+			""name"": ""mammal"",
+			""confidence"": 0.6023078560829163,
+			""hint"": ""animal""
+		},
+		{
+			""name"": ""sheep"",
+			""confidence"": 0.54606693983078
+		},
+		{
+			""name"": ""bovine"",
+			""confidence"": 0.5429664850234985
+		},
+		{
+			""name"": ""horse"",
+			""confidence"": 0.5125572085380554
+		},
+		{
+			""name"": ""herd"",
+			""confidence"": 0.5079358816146851
+		},
+		{
+			""name"": ""dry"",
+			""confidence"": 0.3997076749801636
+		},
+		{
+			""name"": ""several"",
+			""confidence"": 0.1021641194820404
+		}
+	],
+	""description"": {
+		""tags"": [
+			""grass"",
+			""hay"",
+			""group"",
+			""mammal"",
+			""dry"",
+			""several""
+		],
+		""captions"": [
+			{
+				""text"": ""a group of animals in a barn"",
+				""confidence"": 0.5060526728630066
+			}
+		]
+	},
+	""faces"": [],
+	""objects"": [
+		{
+			""rectangle"": {
+				""x"": 209,
+				""y"": 179,
+				""w"": 306,
+				""h"": 210
+			},
+			""object"": ""mammal"",
+			""confidence"": 0.66,
+			""parent"": {
+				""object"": ""animal"",
+				""confidence"": 0.66
+			}
+		},
+		{
+			""rectangle"": {
+				""x"": 95,
+				""y"": 346,
+				""w"": 183,
+				""h"": 169
+			},
+			""object"": ""merino sheep"",
+			""confidence"": 0.557,
+			""parent"": {
+				""object"": ""sheep"",
+				""confidence"": 0.6,
+				""parent"": {
+					""object"": ""mammal"",
+					""confidence"": 0.764,
+					""parent"": {
+						""object"": ""animal"",
+						""confidence"": 0.765
+					}
+				}
+			}
+		},
+		{
+			""rectangle"": {
+				""x"": 212,
+				""y"": 358,
+				""w"": 142,
+				""h"": 217
+			},
+			""object"": ""merino sheep"",
+			""confidence"": 0.618,
+			""parent"": {
+				""object"": ""sheep"",
+				""confidence"": 0.644,
+				""parent"": {
+					""object"": ""mammal"",
+					""confidence"": 0.795,
+					""parent"": {
+						""object"": ""animal"",
+						""confidence"": 0.795
+					}
+				}
+			}
+		},
+		{
+			""rectangle"": {
+				""x"": 347,
+				""y"": 375,
+				""w"": 89,
+				""h"": 230
+			},
+			""object"": ""merino sheep"",
+			""confidence"": 0.709,
+			""parent"": {
+				""object"": ""sheep"",
+				""confidence"": 0.728,
+				""parent"": {
+					""object"": ""mammal"",
+					""confidence"": 0.902,
+					""parent"": {
+						""object"": ""animal"",
+						""confidence"": 0.902
+					}
+				}
+			}
+		},
+		{
+			""rectangle"": {
+				""x"": 448,
+				""y"": 303,
+				""w"": 158,
+				""h"": 294
+			},
+			""object"": ""mammal"",
+			""confidence"": 0.861,
+			""parent"": {
+				""object"": ""animal"",
+				""confidence"": 0.861
+			}
+		},
+		{
+			""rectangle"": {
+				""x"": 192,
+				""y"": 470,
+				""w"": 134,
+				""h"": 135
+			},
+			""object"": ""merino sheep"",
+			""confidence"": 0.543,
+			""parent"": {
+				""object"": ""sheep"",
+				""confidence"": 0.595,
+				""parent"": {
+					""object"": ""mammal"",
+					""confidence"": 0.767,
+					""parent"": {
+						""object"": ""animal"",
+						""confidence"": 0.772
+					}
+				}
+			}
+		}
+	],
+	""brands"": [],
+	""requestId"": ""c4f7d12a-89f1-46ec-81f7-8f6bebd664e3"",
+	""metadata"": {
+		""height"": 721,
+		""width"": 721,
+		""format"": ""Bmp""
+	}
+}";
+        private string _testResponse2 = @"{
+	""categories"": [
+		{
+			""name"": ""people_group"",
+			""score"": 0.80859375,
+			""detail"": {
+				""celebrities"": [
+					{
+						""name"": ""Tim Robbins"",
+						""confidence"": 0.9999910593032837,
+						""faceRectangle"": {
+							""left"": 460,
+							""top"": 47,
+							""width"": 50,
+							""height"": 50
+						}
+					},
+					{
+						""name"": ""Charlize Theron"",
+						""confidence"": 0.9808109402656555,
+						""faceRectangle"": {
+							""left"": 97,
+							""top"": 92,
+							""width"": 49,
+							""height"": 49
+						}
+					},
+					{
+						""name"": ""Sean Penn"",
+						""confidence"": 0.9961344003677368,
+						""faceRectangle"": {
+							""left"": 206,
+							""top"": 118,
+							""width"": 48,
+							""height"": 48
+						}
+					}
+				]
+			}
+		}
+	],
+	""color"": {
+		""dominantColorForeground"": ""Black"",
+		""dominantColorBackground"": ""White"",
+		""dominantColors"": [
+			""White"",
+			""Black""
+		],
+		""accentColor"": ""181D23"",
+		""isBwImg"": false,
+		""isBWImg"": false
+	},
+	""tags"": [
+		{
+			""name"": ""person"",
+			""confidence"": 0.9981362819671631
+		},
+		{
+			""name"": ""wine"",
+			""confidence"": 0.9887799620628357
+		},
+		{
+			""name"": ""indoor"",
+			""confidence"": 0.9738012552261353
+		},
+		{
+			""name"": ""wedding dress"",
+			""confidence"": 0.9619781970977783
+		},
+		{
+			""name"": ""bride"",
+			""confidence"": 0.9412243366241455
+		},
+		{
+			""name"": ""dress"",
+			""confidence"": 0.862946093082428
+		},
+		{
+			""name"": ""curtain"",
+			""confidence"": 0.855199933052063
+		},
+		{
+			""name"": ""standing"",
+			""confidence"": 0.8317896723747253
+		},
+		{
+			""name"": ""suit"",
+			""confidence"": 0.7997269034385681
+		},
+		{
+			""name"": ""posing"",
+			""confidence"": 0.7365117073059082
+		},
+		{
+			""name"": ""wedding"",
+			""confidence"": 0.6982574462890625
+		},
+		{
+			""name"": ""people"",
+			""confidence"": 0.6689982414245606
+		},
+		{
+			""name"": ""couple"",
+			""confidence"": 0.666380763053894
+		},
+		{
+			""name"": ""smile"",
+			""confidence"": 0.6111418008804321
+		},
+		{
+			""name"": ""fashion accessory"",
+			""confidence"": 0.50831139087677
+		},
+		{
+			""name"": ""dressed"",
+			""confidence"": 0.4675471782684326
+		}
+	],
+	""description"": {
+		""tags"": [
+			""person"",
+			""wine"",
+			""indoor"",
+			""curtain"",
+			""standing"",
+			""posing"",
+			""people"",
+			""couple"",
+			""dressed""
+		],
+		""captions"": [
+			{
+				""text"": ""Tim Robbins, Charlize Theron, Sean Penn et al. holding trophies"",
+				""confidence"": 0.6147781014442444
+			}
+		]
+	},
+	""faces"": [
+		{
+			""age"": 44,
+			""gender"": ""Male"",
+			""faceRectangle"": {
+				""left"": 460,
+				""top"": 47,
+				""width"": 50,
+				""height"": 50
+			}
+		},
+		{
+			""age"": 44,
+			""gender"": ""Female"",
+			""faceRectangle"": {
+				""left"": 97,
+				""top"": 92,
+				""width"": 49,
+				""height"": 49
+			}
+		},
+		{
+			""age"": 47,
+			""gender"": ""Male"",
+			""faceRectangle"": {
+				""left"": 206,
+				""top"": 118,
+				""width"": 48,
+				""height"": 48
+			}
+		},
+		{
+			""age"": 32,
+			""gender"": ""Female"",
+			""faceRectangle"": {
+				""left"": 375,
+				""top"": 134,
+				""width"": 43,
+				""height"": 43
+			}
+		}
+	],
+	""objects"": [
+		{
+			""rectangle"": {
+				""x"": 312,
+				""y"": 100,
+				""w"": 137,
+				""h"": 256
+			},
+			""object"": ""person"",
+			""confidence"": 0.903
+		},
+		{
+			""rectangle"": {
+				""x"": 414,
+				""y"": 13,
+				""w"": 190,
+				""h"": 347
+			},
+			""object"": ""person"",
+			""confidence"": 0.891
+		},
+		{
+			""rectangle"": {
+				""x"": 8,
+				""y"": 63,
+				""w"": 176,
+				""h"": 292
+			},
+			""object"": ""person"",
+			""confidence"": 0.898
+		},
+		{
+			""rectangle"": {
+				""x"": 162,
+				""y"": 77,
+				""w"": 161,
+				""h"": 282
+			},
+			""object"": ""person"",
+			""confidence"": 0.892
+		}
+	],
+	""requestId"": ""6de2d2c8-9456-4d22-a04d-218969014d90"",
+	""metadata"": {
+		""height"": 360,
+		""width"": 640,
+		""format"": ""Bmp""
+	}
+}";
         private List<MpAnalyzerPluginRequestItemFormat> reqParams;
         private MpHttpTransactionFormat _httpTransactionFormat;        
 
@@ -50,6 +508,8 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public async Task<object> AnalyzeAsync(object args) {
+            string unalteredHttpFormat = JsonConvert.SerializeObject(_httpTransactionFormat);
+
             reqParams = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
             if(reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
@@ -75,19 +535,24 @@ namespace MonkeyPaste {
                     request.Content = CreateRequestContent();
 
                     try {
-                        var response = await client.SendAsync(request);
+                        //var response = await client.SendAsync(request);
 
-                        if(!response.IsSuccessStatusCode) {
-                            Debugger.Break();
-                        }
-                        
-                        string responseStr = await response.Content.ReadAsStringAsync();
+                        //if(!response.IsSuccessStatusCode) {
+                        //    Debugger.Break();
+                        //}
+
+                        //string responseStr = await response.Content.ReadAsStringAsync();
+
+                        string responseStr = _testResponse2;
 
                         Console.WriteLine($"Response from '{request.RequestUri.AbsoluteUri}':");
                         Console.WriteLine(responseStr.ToPrettyPrintJson());
 
                         request.Content.Dispose();
                         var responseObj = CreateResponse(responseStr);
+
+                        //reset format or subsequent requests compound data 
+                        _httpTransactionFormat = JsonConvert.DeserializeObject<MpHttpTransactionFormat>(unalteredHttpFormat);
                         return responseObj;
                     }
                     catch (Exception ex) {
@@ -260,25 +725,35 @@ namespace MonkeyPaste {
                     a.box.width.SetValue(jo, reqParams, idx);
                     a.box.height.SetValue(jo, reqParams, idx);
                 }
-            }catch(MpJsonPathPropertyException jppex) {
+                a.children = CreateAnnotations(a.children, jo, 0);
+                //if(a.children != null && a.children.Count > 0) {
+                //    for (int i = 0; i < a.children.Count; i++) {
+                //        a.children[i] = CreateAnnotation(a.children[i], jo,)
+                //    }
+                //}
+            
+                if(a.dynamicChildren != null && a.dynamicChildren.Count > 0) {                    
+                    for (int i = 0; i < a.dynamicChildren.Count; i++) {
+                        int curDynamicChildIdx = 0;
+                        while(true) {
+                            var newChild = JsonConvert.DeserializeObject<MpPluginResponseAnnotationFormat>(
+                                        JsonConvert.SerializeObject(a.dynamicChildren[i]));
+                            newChild = CreateAnnotation(newChild, jo, curDynamicChildIdx);
+                            if(newChild == null) {
+                                break;
+                            }
+                            if (a.children == null) {
+                                a.children = new List<MpPluginResponseAnnotationFormat>();
+                            }
+                            a.children.Add(newChild);
+                            curDynamicChildIdx++;
+                        }                 
+                    }
+                }
+            }
+            catch (MpJsonPathPropertyException jppex) {
                 Console.WriteLine(jppex);
                 return null;
-            }
-            if(a.dynamicChildren != null && a.dynamicChildren.Count > 0) {
-                if(a.children == null) {
-                    a.children = new List<MpPluginResponseAnnotationFormat>();
-                }
-                for (int i = 0; i < a.dynamicChildren.Count; i++) {
-                    int curDynamicChildIdx = 0;
-                    while(true) {
-                        var childAnnotationFormat = CreateAnnotation(a.dynamicChildren[i], jo, curDynamicChildIdx);
-                        if(childAnnotationFormat == null) {
-                            break;
-                        }
-                        a.children.Add(childAnnotationFormat);
-                        curDynamicChildIdx++;
-                    }                 
-                }
             }
             return a;
         }
