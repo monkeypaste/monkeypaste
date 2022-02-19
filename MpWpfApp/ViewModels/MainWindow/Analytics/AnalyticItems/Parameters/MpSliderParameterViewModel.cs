@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MpWpfApp {
     public class MpSliderParameterViewModel : MpAnalyticItemParameterViewModel {
         #region Private Variables
-        //private string _defaultValue;
+        private string _defaultValue;
         #endregion
 
         #region Properties
@@ -19,9 +19,31 @@ namespace MpWpfApp {
 
         #region Model
 
-        public override string CurrentValue { get; set; } = string.Empty;
+        public override string CurrentValue { 
+            get {
+                if (_currentValue == null || Parameter == null) {
+                    return "0";
+                }
 
-        //public override string DefaultValue => _defaultValue;
+                switch (Parameter.parameterValueType) {
+                    case MpAnalyticItemParameterValueUnitType.Integer:
+                        return IntValue.ToString();
+                    case MpAnalyticItemParameterValueUnitType.Decimal:
+                        return Math.Round(DoubleValue, 2).ToString();
+                    default:
+                        return DoubleValue.ToString();
+                }
+            }
+            set {
+                if(_currentValue != value) {
+                    _currentValue = value == null ? "0":value;
+                    OnPropertyChanged(nameof(CurrentValue));
+                    OnPropertyChanged(nameof(SliderValue));
+                }
+            }
+        }
+
+        public override string DefaultValue => _defaultValue;
 
         public double SliderValue {
             get {
@@ -115,11 +137,13 @@ namespace MpWpfApp {
             Parameter = aipf;
 
             CurrentValue = aipv.Value;
-            if (DefaultValue != CurrentValue) {
-                if(Parameter.values.Any(x=>x.isDefault)) {
-                    Parameter.values.FirstOrDefault(x => x.isDefault).value = aipv.Value;
-                }
+            if (Parameter.values.Any(x => x.isDefault)) {
+                _defaultValue = Parameter.values.FirstOrDefault(x => x.isDefault).value = CurrentValue;
+            } else {
+                _defaultValue = CurrentValue;
+
             }
+
             
             OnPropertyChanged(nameof(Min));
             OnPropertyChanged(nameof(Max));

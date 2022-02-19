@@ -77,7 +77,9 @@
               {
                 "name": "detectedObjectBox",
                 "appearance": {
-                  "color": "#FF00FF7F"
+                  "color": {
+                    "value": "#FF00FF7F"
+                  }
                 },
                 "label": {
                   "valuePath": "$.['objects'][#].object"
@@ -131,7 +133,9 @@
                   {
                     "name": "celebrityFace",
                     "appearance": {
-                      "color": "#FFFFB6C1"
+                      "color": {
+                        "value": "#FFFFB6C1"
+                      }
                     },
                     "label": {
                       "valuePath": "$.['categories'][0].detail.celebrities[#].name"
@@ -157,6 +161,89 @@
                 ]
               }
             ]
+          },
+          {
+            "name": "adult",
+            "children": [
+              {
+                "name": "isAdultContent",
+                "label": {
+                  "value": "Is Adult Content: {0}",
+                  "valuePath": "$.['adult'].isAdultContent"
+                },
+                "score": {
+                  "valuePath": "$.['adult'].adultScore"
+                }
+              },
+              {
+                "name": "isRacyContent",
+                "label": {
+                  "value": "Is Racy Content: {0}",
+                  "valuePath": "$.['adult'].isRacyContent"
+                },
+                "score": {
+                  "valuePath": "$.['adult'].racyScore"
+                }
+              },
+              {
+                "name": "isGoryContent",
+                "label": {
+                  "value": "Is Gory Content: {0}",
+                  "valuePath": "$.['adult'].isGoryContent"
+                },
+                "score": {
+                  "valuePath": "$.['adult'].goreScore"
+                }
+              }
+            ]
+          },
+          {
+            "name": "color",
+            "label": {
+              "value": "Color Analysis"
+            },
+            "children": [
+              {
+                "name": "dominantColorForeground",
+                "label": {
+                  "valuePath": "$.['color'].dominantColorForeground"
+                },
+                "appearance": {
+                  "color": {
+                    "valuePath": "$.['color'].dominantColorForeground"
+                  }
+                }
+              },
+              {
+                "name": "dominantColorBackground",
+                "label": {
+                  "valuePath": "$.['color'].dominantColorBackground"
+                },
+                "appearance": {
+                  "color": {
+                    "valuePath": "$.['color'].dominantColorBackground"
+                  }
+                }
+              },
+              {
+                "name": "accentColor",
+                "label": {
+                  "valuePath": "$.['color'].dominantColorBackground"
+                },
+                "appearance": {
+                  "color": {
+                    "valuePath": "$.['color'].dominantColorBackground"
+                  }
+                }
+              },
+              {
+                "name": "isBlackAndWhite",
+                "label": {
+                  "value": "Is Black & White? {0}",
+                  "valuePath": "$.['color'].isBwImg"
+                }
+              }
+            ]
           }
         ]
       }
@@ -167,7 +254,6 @@
         "parameterControlType": "ComboBox",
         "parameterValueType": "PlainText",
         "enumId": 1,
-        "sortOrderIdx": 0,
         "isReadOnly": false,
         "isRequired": false,
         "isValueDeferred": false,
@@ -205,7 +291,6 @@
         "parameterControlType": "ComboBox",
         "parameterValueType": "Csv",
         "enumId": 2,
-        "sortOrderIdx": 1,
         "isRequired": false,
         "isMultiValue": true,
         "values": [
@@ -256,7 +341,6 @@
         "parameterControlType": "ComboBox",
         "parameterValueType": "Csv",
         "enumId": 3,
-        "sortOrderIdx": 2,
         "isReadOnly": false,
         "isMultiValue": true,
         "values": [
@@ -278,7 +362,6 @@
         "parameterControlType": "Hidden",
         "parameterValueType": "Base64Text",
         "enumId": 4,
-        "sortOrderIdx": 3,
         "isRequired": true,
         "isVisible": false,
         "values": [

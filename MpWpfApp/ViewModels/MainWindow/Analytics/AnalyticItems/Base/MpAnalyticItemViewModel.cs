@@ -571,110 +571,51 @@ namespace MpWpfApp {
             MpCopyItem targetCopyItem = null;
 
             if(response is MpPluginResponseFormat prf) {
-                await CreateAnnotations(prf,sourceCopyItem,suppressWrite);
+                targetCopyItem = await CreateNewContentItem(prf, sourceCopyItem, suppressWrite);
+                await CreateTokenAnnotations(prf,targetCopyItem,suppressWrite);
             }
 
-            /////////////// BOX FORMAT ///////////////////////
-            //if (response is List<MpIImageDescriptorBox> idbl) {
-            //    var diol = idbl.Select(x => new MpDetectedImageObject() {
-            //        X = x.X,
-            //        Y = x.Y,
-            //        Width = x.Width,
-            //        Height = x.Height,
-            //        Label = x.Label,
-            //        Description = x.Description,
-            //        Score = x.Score,
-            //        Guid = System.Guid.NewGuid().ToString()
-            //    }).ToList();
-            //    diol.ForEach(x => x.CopyItemId = sourceCopyItem.Id);
-            //    if(!suppressWrite) {
-            //        await Task.WhenAll(diol.Select(x => x.WriteToDatabaseAsync()));
-            //        targetCopyItem = sourceCopyItem;
-            //    }
-                
-            //}
-            ///////////////////// TEXT TOKEN FORMAT ///////////////////////////
-            //List<MpITextTokenDescriptorRange> tdrl = new List<MpITextTokenDescriptorRange>();
-            //if(response is MpITextTokenDescriptorRange tdr) {
-            //    tdrl.Add(tdr);
-            //} else if(response is List<MpITextTokenDescriptorRange> temp) {
-            //    tdrl = temp;
-            //}
-            //if(tdrl.Count > 0) {
-            //    var app = MpPreferences.ThisAppSource.App;
-            //    string endpoint = AnalyzerPluginFormat.http != null ? AnalyzerPluginFormat.http.request.url.raw : null;
-            //    MpUrl url = null;
-            //    if(!string.IsNullOrEmpty(endpoint)) {
-            //        url = await MpUrlBuilder.Create(endpoint, request.ToString());
-            //    }
-            //    var source = await MpSource.Create(app, url);
+            if (suppressWrite == false && targetCopyItem != null) {
+                //create is suppressed when its part of a match expression
+                if (sourceCopyItem.Id != targetCopyItem.Id) {
+                    var pci = await MpDb.GetItemAsync<MpCopyItem>(sourceCopyItem.Id);
 
-            //    targetCopyItem = await MpCopyItem.Create(
-            //        source: source,
-            //        data: response.ToString(),
-            //        itemType: MpCopyItemType.Text,
-            //        suppressWrite: suppressWrite);
-            //}
-            ////////////////// TEXT FORMAT /////////////////////////////////
-            //if(response is MpITextDescriptor td) {
-            //    var app = MpPreferences.ThisAppSource.App;
-            //    string endpoint = AnalyzerPluginFormat.http != null ? AnalyzerPluginFormat.http.request.url.raw : null;
-            //    MpUrl url = null;
-            //    if (!string.IsNullOrEmpty(endpoint)) {
-            //        url = await MpUrlBuilder.Create(endpoint, request.ToString());
-            //    }
-            //    var source = await MpSource.Create(app, url);
+                    int parentSortOrderIdx = pci.CompositeSortOrderIdx;
+                    List<MpCopyItem> ppccil = null;
 
-            //    targetCopyItem = await MpCopyItem.Create(
-            //        source: source,
-            //        data: td.content,
-            //        title: td.Label,
-            //        description: td.Description,
-            //        itemType: MpCopyItemType.Text,
-            //        suppressWrite: suppressWrite);
-            //}
+                    if (pci.CompositeParentCopyItemId > 0) {
+                        //when this items parent is a composite child, adjust fk/sort so theres single parent
+                        var ppci = await MpDb.GetItemAsync<MpCopyItem>(pci.CompositeParentCopyItemId);
+                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
+                        ppccil.Insert(0, ppci);
+                    } else {
+                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.Id);
+                        ppccil.Insert(0, pci);
+                    }
+                    ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
+                    for (int i = 0; i < ppccil.Count; i++) {
+                        var cci = ppccil[i];
+                        if (cci.Id == sourceCopyItem.Id) {
+                            targetCopyItem.CompositeParentCopyItemId = sourceCopyItem.Id;
+                            targetCopyItem.CompositeSortOrderIdx = i + 1;
+                            await targetCopyItem.WriteToDatabaseAsync();
+                        } else if (i > parentSortOrderIdx) {
+                            ppccil[i].CompositeSortOrderIdx += 1;
+                            await ppccil[i].WriteToDatabaseAsync();
+                        }
+                    }
+                }
 
-            //if (suppressWrite == false && targetCopyItem != null) {
-            //    //create is suppressed when its part of a match expression
-            //    if(sourceCopyItem.Id != targetCopyItem.Id) {
-            //        var pci = await MpDb.GetItemAsync<MpCopyItem>(sourceCopyItem.Id);
+                var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sourceCopyItem.Id);
+                if (scivm != null) {
+                    //analysis content is  linked with visible item in tray
+                    await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
+                }
+                if (!suppressWrite) {
 
-            //        int parentSortOrderIdx = pci.CompositeSortOrderIdx;
-            //        List<MpCopyItem> ppccil = null;
-
-            //        if (pci.CompositeParentCopyItemId > 0) {
-            //            //when this items parent is a composite child, adjust fk/sort so theres single parent
-            //            var ppci = await MpDb.GetItemAsync<MpCopyItem>(pci.CompositeParentCopyItemId);
-            //            ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
-            //            ppccil.Insert(0, ppci);
-            //        } else {
-            //            ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.Id);
-            //            ppccil.Insert(0, pci);
-            //        }
-            //        ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
-            //        for (int i = 0; i < ppccil.Count; i++) {
-            //            var cci = ppccil[i];
-            //            if (cci.Id == sourceCopyItem.Id) {
-            //                targetCopyItem.CompositeParentCopyItemId = sourceCopyItem.Id;
-            //                targetCopyItem.CompositeSortOrderIdx = i + 1;
-            //                await targetCopyItem.WriteToDatabaseAsync();
-            //            } else if (i > parentSortOrderIdx) {
-            //                ppccil[i].CompositeSortOrderIdx += 1;
-            //                await ppccil[i].WriteToDatabaseAsync();
-            //            }
-            //        }
-            //    }
-
-            //    var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sourceCopyItem.Id);
-            //    if (scivm != null) {
-            //        //analysis content is  linked with visible item in tray
-            //        await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
-            //    }
-            //    if(!suppressWrite) {
-
-            //        MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-            //    }
-            //}
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                }
+            }
 
 
             return targetCopyItem;
@@ -730,40 +671,72 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task CreateAnnotations(MpPluginResponseFormat prf, MpCopyItem sourceCopyItem, bool suppressWrite = false) {
-            if(prf == null || prf.annotations == null) {
-                return;
+        private async Task<MpCopyItem> CreateNewContentItem(MpPluginResponseFormat prf, MpCopyItem sourceCopyItem, bool suppressWrite = false) {
+            if(prf == null || prf.newContentItem == null) {
+                return sourceCopyItem;
             }
-            await Task.WhenAll(prf.annotations.Select(x => CreateAnnotation(x, sourceCopyItem, suppressWrite)));
+            var app = MpPreferences.ThisAppSource.App;
+            string endpoint = AnalyzerPluginFormat.http != null ? AnalyzerPluginFormat.http.request.url.raw : null;
+            MpUrl url = null;
+            if (!string.IsNullOrEmpty(endpoint)) {
+                url = await MpUrlBuilder.Create(endpoint, $"{Title} Analysis");
+            }
+            var source = await MpSource.Create(app, url);
+
+            var targetCopyItem = await MpCopyItem.Create(
+                source: source,
+                title: prf.newContentItem.label.value,
+                data:prf.newContentItem.content.value,
+                itemType: MpCopyItemType.Text,
+                suppressWrite: suppressWrite);
+
+            return targetCopyItem;
         }
 
-        private async Task CreateAnnotation(MpPluginResponseAnnotationFormat a, MpCopyItem sourceCopyItem, bool suppressWrite = false) {
+        private async Task CreateTokenAnnotations(MpPluginResponseFormat prf, MpCopyItem sourceCopyItem, bool suppressWrite = false) {
+            if (prf == null || prf.annotations == null) {
+                return;
+            }
+            await Task.WhenAll(prf.annotations.Select(x => CreateTokenAnnotation(x, sourceCopyItem, suppressWrite)));
+        }
+
+        private async Task CreateTokenAnnotation(MpPluginResponseAnnotationFormat a, MpCopyItem sourceCopyItem, bool suppressWrite = false) {
             if (a == null) {
                 return;
             }
-            if (a.box != null) {
-                var contentBox = new MpDetectedImageObject() {
-                    CopyItemId = sourceCopyItem.Id,
-                    X = a.box.x.value,
-                    Y = a.box.y.value,
-                    Width = a.box.width.value,
-                    Height = a.box.height.value,
-                    Label = a.label.value,
-                    Score = a.score.value,
-                    HexColor = a.appearance.color,
-                    Guid = System.Guid.NewGuid().ToString()
-                };
-                if (a.minScore != 0 || a.maxScore != 1) {
-                    //normalize scoring from 0-1
-                    contentBox.Score = (a.maxScore - a.minScore) / contentBox.Score;
-                }
 
-                if (!suppressWrite) {
-                    await contentBox.WriteToDatabaseAsync();
-                }
+            if(sourceCopyItem.ItemType == MpCopyItemType.Image) {
+                if(a.box != null) {
+                    MpDetectedImageObject contentBox = new MpDetectedImageObject() {
+                        CopyItemId = sourceCopyItem.Id,
+                        X = a.box.x.value,
+                        Y = a.box.y.value,
+                        Width = a.box.width.value,
+                        Height = a.box.height.value,
+                        Label = a.label.value,
+                        Score = a.score.value,
+                        HexColor = a.appearance.color.value,
+                        Guid = System.Guid.NewGuid().ToString()
+                    };
+                    if (a.score != null && (a.minScore != 0 || a.maxScore != 1)) {
+                        //normalize scoring from 0-1
+                        contentBox.Score = (a.maxScore - a.minScore) / contentBox.Score;
+                    }
+
+                    if (!suppressWrite) {
+                        await contentBox.WriteToDatabaseAsync();
+                    }
+                } 
+                
+            } else if(sourceCopyItem.ItemType == MpCopyItemType.Text) {
+                if(a.range != null) {
+                    
+                } 
             }
+
+            
             if (a.children != null) {
-                await Task.WhenAll(a.children.Select(x => CreateAnnotation(x, sourceCopyItem, suppressWrite)));
+                await Task.WhenAll(a.children.Select(x => CreateTokenAnnotation(x, sourceCopyItem, suppressWrite)));
             }
         }
 
@@ -832,30 +805,6 @@ namespace MpWpfApp {
         private async Task<object> GetResponse(string requestStr) {
             var result = await AnalyzerPluginComponent.AnalyzeAsync(requestStr);
             return result;
-
-            //if (resultObj == null) {
-            //    Debugger.Break();
-            //    return null;
-            //}
-
-            
-
-            //if (AnalyzerPluginFormat.outputType.imageToken) {
-            //    try {
-            //        var boxes = JsonConvert.DeserializeObject<List<MpAnalyzerPluginImageTokenResponseValueFormat>>
-            //                    (resultObj.ToString()).Cast<MpIImageDescriptorBox>().ToList();
-            //        return boxes;
-            //    } catch {
-            //        return null;
-            //    }
-            //} else if(AnalyzerPluginFormat.outputType.text) {
-            //    try {
-            //        return resultObj;
-            //    } catch {
-            //        return null;
-            //    }                
-            //}
-            //return null;
         }
 
         #endregion
@@ -928,6 +877,10 @@ namespace MpWpfApp {
                 sci = argParts[1] as MpCopyItem;
             }
 
+            if(sci == null || spvm == null) {
+                return false;
+            }
+
             bool isOkType = false;
             switch(sci.ItemType) {
                 case MpCopyItemType.Text:
@@ -940,10 +893,8 @@ namespace MpWpfApp {
                     isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.File);
                     break;
             }
-
-            return spvm != null &&
-                   spvm.IsAllValid && 
-                   sci != null &&
+            spvm.Items.ForEach(x => x.Validate());
+            return spvm.IsAllValid && 
                    isOkType;
         }
 

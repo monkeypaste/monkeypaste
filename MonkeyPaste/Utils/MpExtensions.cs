@@ -391,13 +391,24 @@ namespace MonkeyPaste {
                 if (propObj == null) {
                     throw new Exception($"Property {propPathPart} not found on object: {propObj.GetType()}");
                 }
+
+                if (propInfo == null) {
+                    //this breaks when combining static/dynamic content parameters for http requests
+                    //but returning the path is intended flow
+                    return propertyPath;
+                }
                 propInfo.GetValue(propObj);
 
                 if (i < propPathParts.Length - 1) {
                     propObj = propInfo.GetValue(propObj);
                 }
             }
-            return propInfo.GetValue(propObj, index);
+            try {
+                return propInfo.GetValue(propObj, index);
+            }catch(Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+                return propertyPath;
+            }            
         }
 
         public static T GetPropertyValue<T>(this object obj, string propertyPath, object[] index = null) 

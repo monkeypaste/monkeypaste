@@ -8,5 +8,6 @@ namespace MonkeyPaste {
             byte[] argb = new byte[] { a, r, g, b };
             return "#" + BitConverter.ToString(argb).Replace("-", "");
         }
+
     }
 }

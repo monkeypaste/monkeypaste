@@ -76,7 +76,16 @@ namespace MpWpfApp {
             }
         }
 
-        public virtual string CurrentValue { get; set; }
+        protected virtual string _currentValue { get; set; }
+        public virtual string CurrentValue {
+            get => _currentValue;
+            set {
+                if(_currentValue != value) {
+                    _currentValue = value;
+                    OnPropertyChanged(nameof(CurrentValue));
+                }
+            }
+        }
 
         public virtual string DefaultValue { 
             get {
@@ -89,11 +98,11 @@ namespace MpWpfApp {
 
         public double DoubleValue {
             get {
-                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                if (string.IsNullOrWhiteSpace(_currentValue)) {
                     return 0;
                 }
                 try {
-                    return Convert.ToDouble(CurrentValue);
+                    return Convert.ToDouble(_currentValue);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine(ex);
@@ -102,16 +111,16 @@ namespace MpWpfApp {
             }
             set {
                 if (DoubleValue != value) {
-                    CurrentValue = value.ToString();
+                    _currentValue = value.ToString();
                     OnPropertyChanged(nameof(DoubleValue));
-                    OnPropertyChanged(nameof(CurrentValue));
+                    OnPropertyChanged(nameof(_currentValue));
                 }
             }
         }
 
         public int IntValue {
             get {
-                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                if (string.IsNullOrWhiteSpace(_currentValue)) {
                     return 0;
                 }
                 try {
@@ -124,28 +133,28 @@ namespace MpWpfApp {
             }
             set {
                 if (IntValue != value) {
-                    CurrentValue = value.ToString();
+                    _currentValue = value.ToString();
                     OnPropertyChanged(nameof(IntValue));
-                    OnPropertyChanged(nameof(CurrentValue));
+                    OnPropertyChanged(nameof(_currentValue));
                 }
             }
         }
 
         public bool BoolValue {
             get {
-                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                if (string.IsNullOrWhiteSpace(_currentValue)) {
                     return false;
                 }
-                if (CurrentValue != "0" && CurrentValue != "1") {
-                    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
+                if (_currentValue != "0" && _currentValue != "1") {
+                    throw new Exception("Cannot convert value " + _currentValue + " to boolean");
                 }
-                return CurrentValue == "1";
+                return _currentValue == "1";
             }
             set {
                 if (BoolValue != value) {
-                    CurrentValue = value ? "1" : "0";
+                    _currentValue = value ? "1" : "0";
                     OnPropertyChanged(nameof(BoolValue));
-                    OnPropertyChanged(nameof(CurrentValue));
+                    OnPropertyChanged(nameof(_currentValue));
                 }
             }
         }
@@ -249,6 +258,9 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(ValidationMessage):
+                    if(!string.IsNullOrEmpty(ValidationMessage)) {
+                        MpConsole.WriteLine(Parent.Parent.Title+" "+Parent.Label+" "+ ValidationMessage);
+                    }
                     OnPropertyChanged(nameof(IsValid));
                     break;
             }

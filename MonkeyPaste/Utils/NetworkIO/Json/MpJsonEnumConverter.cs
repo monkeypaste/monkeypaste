@@ -48,4 +48,21 @@ namespace MonkeyPaste {
             throw new NotImplementedException();
         }
     }
+
+    public class MpJsonPathPropertyConverter : JsonConverter {
+        public override bool CanConvert(Type objectType) {
+            return objectType == typeof(MpJsonPathProperty);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {                        
+            if (reader.Value == null) {
+                return null;
+            }
+            
+            return Activator.CreateInstance(objectType, reader.Value);
+        }
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
+            throw new NotImplementedException();
+        }
+    }
 }

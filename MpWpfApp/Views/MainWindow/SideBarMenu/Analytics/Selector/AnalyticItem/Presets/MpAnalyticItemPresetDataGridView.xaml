@@ -36,6 +36,7 @@
                       HorizontalAlignment="Stretch"
                       MaxHeight="150"
                       CanUserAddRows="False"
+                      CanUserDeleteRows="False"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       IsReadOnly="False"
                       AutoGenerateColumns="False">

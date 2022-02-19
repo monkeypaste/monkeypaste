@@ -68,7 +68,6 @@ namespace MonkeyPaste.Plugin {
         public MpAnalyticItemParameterValueUnitType parameterValueType { get; set; } = MpAnalyticItemParameterValueUnitType.None;
 
         public int enumId { get; set; } = 0;
-        public int sortOrderIdx { get; set; } = 0;
         public bool isReadOnly { get; set; } = false;
         public bool isRequired { get; set; } = false;
         public bool isMultiValue { get; set; } = false;

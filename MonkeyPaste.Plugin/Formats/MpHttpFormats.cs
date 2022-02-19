@@ -28,6 +28,8 @@ namespace MonkeyPaste.Plugin {
     public class MpHttpHeaderItemFormat {
         public string key { get; set; }
         public string value { get; set; }
+        public MpJsonPathProperty valuePath { get; set; }
+
         public string type { get; set; }
     }
 
@@ -47,6 +49,8 @@ namespace MonkeyPaste.Plugin {
 
         // joined w/ '/' seperator and terminated with '?' or "" if no query
         public List<string> path { get; set; } = new List<string>();
+        
+        public List<MpJsonPathProperty> dynamicPath { get; set; }
 
         public List<MpHttpQueryArgument> query { get; set; }
     }

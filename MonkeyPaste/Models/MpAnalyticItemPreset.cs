@@ -146,8 +146,7 @@ namespace MonkeyPaste {
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 
-            foreach(var param in parameters.OrderBy(x=>x.sortOrderIdx)) {
-                
+            foreach(var param in parameters) {                
                 string defValue = string.Empty;
                 if(values != null && values.Count > 0) {
                     var paramVal = values.FirstOrDefault(x => x.enumId == param.enumId);

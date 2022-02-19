@@ -15,6 +15,7 @@ using MonkeyPaste.Plugin;
 namespace MonkeyPaste {
     public class MpHttpPlugin : MpIAnalyzerPluginComponent {
         #region Private Variables
+        private bool _showDebug = true;
 
         private string _testResponse = @"{
 	""categories"": [],
@@ -516,6 +517,7 @@ namespace MonkeyPaste {
                 Console.WriteLine($"With args: {args}");
                 reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
             }
+            
             using (var client = new HttpClient()) {
                 using (var request = new HttpRequestMessage()) {
                     request.Method = RequestMethod;
@@ -525,9 +527,13 @@ namespace MonkeyPaste {
                         foreach(var kvp in _httpTransactionFormat.request.header) {
                             if (kvp.type == "guid") {
                                 request.Headers.Add(kvp.key, System.Guid.NewGuid().ToString());
+                            } else if (kvp.valuePath != null) {
+                                kvp.valuePath.SetValue(null, reqParams, 0);
+                                request.Headers.Add(kvp.key, kvp.valuePath.value);
                             } else {
                                 request.Headers.Add(kvp.key, kvp.value);
                             }
+                            Console.WriteLine($"Header Item: key: '{kvp.key}' value: '{(kvp.valuePath != null ? kvp.valuePath.value : kvp.value)}'");
                         }
                         
                     }
@@ -535,15 +541,15 @@ namespace MonkeyPaste {
                     request.Content = CreateRequestContent();
 
                     try {
-                        //var response = await client.SendAsync(request);
+                        var response = await client.SendAsync(request);
 
-                        //if(!response.IsSuccessStatusCode) {
-                        //    Debugger.Break();
-                        //}
+                        if (!response.IsSuccessStatusCode) {
+                            Debugger.Break();
+                        }
 
-                        //string responseStr = await response.Content.ReadAsStringAsync();
+                        string responseStr = await response.Content.ReadAsStringAsync();
 
-                        string responseStr = _testResponse2;
+                        // string responseStr = _testResponse2;
 
                         Console.WriteLine($"Response from '{request.RequestUri.AbsoluteUri}':");
                         Console.WriteLine(responseStr.ToPrettyPrintJson());
@@ -577,22 +583,31 @@ namespace MonkeyPaste {
             var urlFormat = _httpTransactionFormat.request.url;
             string uriStr = string.Format(@"{0}://", urlFormat.protocol);
             uriStr += string.Join(".", urlFormat.host) + "/";
-            uriStr += string.Join("/", urlFormat.path) + "?";
-            foreach (var qkvp in urlFormat.query) {
-                string queryVal = qkvp.value;
-                if (qkvp.isEnumId) {
-                    queryVal = GetParamValue(qkvp.value);
-                    if(string.IsNullOrEmpty(queryVal) && qkvp.omitIfNullOrEmpty) {
-                        continue;
+            if(urlFormat.dynamicPath != null) {
+                urlFormat.dynamicPath.ForEach(x => x.SetValue(null, reqParams));
+                uriStr += string.Join("/", urlFormat.dynamicPath.Select(x => x.value)) + "?";
+            } else {
+                uriStr += string.Join("/", urlFormat.path) + "?";
+            }
+
+            if(urlFormat.query != null) {
+                foreach (var qkvp in urlFormat.query) {
+                    string queryVal = qkvp.value;
+                    if (qkvp.isEnumId) {
+                        queryVal = GetParamValue(qkvp.value);
+                        if (string.IsNullOrEmpty(queryVal) && qkvp.omitIfNullOrEmpty) {
+                            continue;
+                        }
                     }
-                }                
-                uriStr += string.Format(@"{0}={1}&", qkvp.key, queryVal);
+                    uriStr += string.Format(@"{0}={1}&", qkvp.key, queryVal);
+                }
             }
             uriStr = uriStr.Substring(0, uriStr.Length - 1);
             if(!Uri.IsWellFormedUriString(uriStr,UriKind.Absolute)) {
                 Console.WriteLine("Uri string is not properly defined: " + uriStr);
                 return null;
             }
+            Console.WriteLine("UriStr: " + uriStr);
             return new Uri(uriStr);
         }
 
@@ -604,7 +619,8 @@ namespace MonkeyPaste {
             if(_httpTransactionFormat.request.body.encoding.ToUpper() == "UTF8") {
                 reqEncoding = Encoding.UTF8;
             }
-
+            Console.WriteLine("Content-Encoding: " + reqEncoding.ToString());
+            Console.WriteLine("Media-Type", mediaType);
             string body = CreatRequestBody();
             if(mediaType.ToLower() == "application/json") {
                 var sc = new StringContent(body, reqEncoding, mediaType);
@@ -652,6 +668,7 @@ namespace MonkeyPaste {
                 }
 
             }
+            Console.WriteLine("Request Body: " + raw);
             return raw;
         }
 
@@ -692,12 +709,22 @@ namespace MonkeyPaste {
                 jo = JObject.Parse(responseStr);
             }
 
+            response.newContentItem = CreateNewContent(_httpTransactionFormat.response.newContentItem, jo);
             response.annotations = CreateAnnotations(_httpTransactionFormat.response.annotations,jo);
-            //textResponse.label = string.Join(string.Empty, response.titlePath.Select(x => QueryJsonPath(o, x, response.omitTitleIfPathNotFound)));
-            //textResponse.content = string.Join(string.Empty, response.contentPath.Select(x => QueryJsonPath(o, x, response.omitContentIfPathNotFound)));
-            //textResponse.description = string.Join(string.Empty, response.descriptionPath.Select(x => QueryJsonPath(o, x, response.omitDescriptionIfPathNotFound)));
-
             return response;
+        }
+
+        private MpPluginResponseNewContentFormat CreateNewContent(MpPluginResponseNewContentFormat prncf, JObject jo) {
+            if(prncf == null) {
+                return null;
+            }
+
+            prncf = CreateElement(prncf, jo, 0) as MpPluginResponseNewContentFormat;
+            if (prncf.content != null) {
+                prncf.content.SetValue(jo, reqParams);
+            }
+            prncf.annotations = CreateAnnotations(prncf.annotations, jo, 0);
+            return prncf;
         }
 
         private List<MpPluginResponseAnnotationFormat> CreateAnnotations(List<MpPluginResponseAnnotationFormat> al, JObject jo, int idx = 0) {
@@ -712,34 +739,43 @@ namespace MonkeyPaste {
         }
 
         private MpPluginResponseAnnotationFormat CreateAnnotation(MpPluginResponseAnnotationFormat a, JObject jo, int idx = 0) {
+            a = CreateElement(a, jo, idx) as MpPluginResponseAnnotationFormat;
             try {
-                if (a.label != null) {
-                    a.label.SetValue(jo, reqParams, idx);
-                }
-                if (a.score != null) {
-                    a.score.SetValue(jo, reqParams, idx);
-                }
                 if (a.box != null) {
                     a.box.x.SetValue(jo, reqParams, idx);
                     a.box.y.SetValue(jo, reqParams, idx);
                     a.box.width.SetValue(jo, reqParams, idx);
                     a.box.height.SetValue(jo, reqParams, idx);
                 }
+                
+            }
+            catch (MpJsonPathPropertyException jppex) {
+                Console.WriteLine(jppex);
+                return null;
+            }
+            return a;
+        }
+
+        private MpPluginResponseItemBaseFormat CreateElement(MpPluginResponseItemBaseFormat a,JObject jo, int idx = 0) {
+            try {
+                if (a.label != null) {
+                    a.label.SetValue(jo, reqParams, idx);
+                    a.label = a.label.omitIfPathNotFound && a.label.value == null ? null : a.label;
+                }
+                if (a.score != null) {
+                    a.score.SetValue(jo, reqParams, idx);
+                    a.score = a.score.omitIfPathNotFound && a.score.value == null ? null : a.score;
+                }
                 a.children = CreateAnnotations(a.children, jo, 0);
-                //if(a.children != null && a.children.Count > 0) {
-                //    for (int i = 0; i < a.children.Count; i++) {
-                //        a.children[i] = CreateAnnotation(a.children[i], jo,)
-                //    }
-                //}
-            
-                if(a.dynamicChildren != null && a.dynamicChildren.Count > 0) {                    
+
+                if (a.dynamicChildren != null && a.dynamicChildren.Count > 0) {
                     for (int i = 0; i < a.dynamicChildren.Count; i++) {
                         int curDynamicChildIdx = 0;
-                        while(true) {
+                        while (true) {
                             var newChild = JsonConvert.DeserializeObject<MpPluginResponseAnnotationFormat>(
                                         JsonConvert.SerializeObject(a.dynamicChildren[i]));
                             newChild = CreateAnnotation(newChild, jo, curDynamicChildIdx);
-                            if(newChild == null) {
+                            if (newChild == null) {
                                 break;
                             }
                             if (a.children == null) {
@@ -747,7 +783,7 @@ namespace MonkeyPaste {
                             }
                             a.children.Add(newChild);
                             curDynamicChildIdx++;
-                        }                 
+                        }
                     }
                 }
             }
@@ -757,8 +793,6 @@ namespace MonkeyPaste {
             }
             return a;
         }
-
-        
         #endregion
     }
 }

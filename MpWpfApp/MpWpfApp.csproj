@@ -995,6 +995,7 @@
     <None Include="Resources\Assets\Weights\yolov5s.onnx" />
     <None Include="Resources\Plugins\Azure\Translator\manifest.json" />
     <None Include="Resources\Plugins\Azure\Vision\manifest.json" />
+    <None Include="Resources\Plugins\OpenAi\manifest.json" />
     <None Include="Resources\TestData\azure_vision_response_sample2.json" />
     <None Include="Resources\TestData\azure_vision_response_sample.json" />
     <Resource Include="Styles\Shaders\InvertColor\MpInvertColorShader.ps">

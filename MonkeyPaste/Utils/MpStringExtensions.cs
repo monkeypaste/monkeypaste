@@ -97,6 +97,21 @@ namespace MonkeyPaste {
             return MpRegEx.IsMatch(MpSubTextTokenType.HexColor, str);
         }
 
+        public static bool IsStringNamedColor(this string str) {
+            if (string.IsNullOrWhiteSpace(str)) {
+                return false;
+            }
+            return MpSystemColors.X11ColorNames.Contains(str.ToLower());
+        }
+
+        public static string NamedColorToHex(this string str) {
+            if (!IsStringNamedColor(str)) {
+                throw new Exception($"'{str}' is not an X11 color name sowwy");
+            }
+            var propInfo = typeof(MpSystemColors).GetProperty(str.ToLower());
+            return propInfo.GetValue(null) as string;
+        }
+
         private static Regex _IsNotBase64RegEx;
         public static bool IsStringBase64(this string str) {
             // Check that the length is a multiple of 4 characters

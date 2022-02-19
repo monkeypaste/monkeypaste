@@ -57,13 +57,7 @@ namespace MpWpfApp {
         }
 
         private void MpContentParameterViewModel_OnValidate(object sender, EventArgs e) {
-            bool isValidPath = new MpCompareActionViewModelBase(null).PhysicalComparePropertyPaths.Contains(CurrentValue);
-            
-            if(isValidPath) {
-                ValidationMessage = string.Empty;
-            } else {
-                ValidationMessage = $"Property path '{CurrentValue}' is not valid";
-            }
+            ValidationMessage = string.Empty;
 
             OnPropertyChanged(nameof(IsValid));
         }

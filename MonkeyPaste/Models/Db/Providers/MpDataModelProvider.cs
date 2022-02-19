@@ -766,26 +766,26 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region MpToken
+        #region MpContentToken
 
-        public static async Task<MpToken> GetToken(int copyItemId, int actionId, string matchData) {
-            string query = string.Format(@"select * from MpToken where fk_MpCopyItemId=? and fk_MpActionId=? and MatchData=?");
-            var result = await MpDb.QueryAsync<MpToken>(query, copyItemId, actionId,matchData);
+        public static async Task<MpContentToken> GetToken(int copyItemId, int actionId, string matchData) {
+            string query = string.Format(@"select * from MpContentToken where fk_MpCopyItemId=? and fk_MpActionId=? and MatchData=?");
+            var result = await MpDb.QueryAsync<MpContentToken>(query, copyItemId, actionId,matchData);
             if (result == null || result.Count == 0) {
                 return null;
             }
             return result[0];
         }
 
-        public static async Task<List<MpToken>> GetTokenByActionId(int actionId) {
-            string query = $"select * from MpToken where fk_MpActionId=?";
-            var result = await MpDb.QueryAsync<MpToken>(query, actionId);
+        public static async Task<List<MpContentToken>> GetTokenByActionId(int actionId) {
+            string query = $"select * from MpContentToken where fk_MpActionId=?";
+            var result = await MpDb.QueryAsync<MpContentToken>(query, actionId);
             return result;
         }
 
-        public static async Task<List<MpToken>> GetTokenByCopyItemId(int copyItemId) {
-            string query = $"select * from MpToken where fk_MpCopyItemId=?";
-            var result = await MpDb.QueryAsync<MpToken>(query, copyItemId);
+        public static async Task<List<MpContentToken>> GetTokenByCopyItemId(int copyItemId) {
+            string query = $"select * from MpContentToken where fk_MpCopyItemId=?";
+            var result = await MpDb.QueryAsync<MpContentToken>(query, copyItemId);
             return result;
         }
 

@@ -70,19 +70,28 @@
         }
       },
       "response": {
-        "titlePath": [
-          "Azure Translation of ",
-          "@4"
-        ],
-        "contentPath": [
-          "translations[0].text"
-        ],
-        "descriptionPath": [
-          "Detected Language:",
-          "detectedLanguage.language",
-          " \r\nScore: ",
-          "detectedLanguage.score"
-        ]
+        "newContentItem": {
+          "name": "TranslatedContent",
+          "label": {
+            "value": "Azure Translation of {0}",
+            "valuePath": "@4"
+          },
+          "content": {
+            "valuePath": "$.['translations'][0].text"
+          },
+          "annotations": [
+            {
+              "name": "detectedLanguage",
+              "label": {
+                "value": "Detected Language: {0}",
+                "valuePath": "$.['detectedLanguage'].language"
+              },
+              "score": {
+                "valuePath": "$.['detectedLanguage'].score"
+              }
+            }
+          ]
+        }
       }
     },
     "parameters": [
@@ -91,7 +100,6 @@
         "parameterControlType": "ComboBox",
         "parameterValueType": "PlainText",
         "enumId": 1,
-        "sortOrderIdx": 0,
         "isReadOnly": false,
         "isRequired": false,
         "values": [
@@ -527,7 +535,6 @@
         "parameterControlType": "ComboBox",
         "parameterValueType": "PlainText",
         "enumId": 2,
-        "sortOrderIdx": 1,
         "isReadOnly": false,
         "isRequired": true,
         "values": [
@@ -960,7 +967,6 @@
         "parameterControlType": "Hidden",
         "parameterValueType": "PlainText",
         "enumId": 3,
-        "sortOrderIdx": 2,
         "isRequired": false,
         "isVisible": false,
         "values": [
@@ -975,7 +981,6 @@
         "parameterControlType": "Hidden",
         "parameterValueType": "PlainText",
         "enumId": 4,
-        "sortOrderIdx": 3,
         "isRequired": false,
         "isVisible": false,
         "values": [
