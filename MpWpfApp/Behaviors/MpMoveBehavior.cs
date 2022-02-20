@@ -57,7 +57,6 @@ namespace MpWpfApp {
 
         #endregion
 
-
         #region IsMoving DependencyProperty
 
         public bool IsMoving {
@@ -134,7 +133,6 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-
         public void Move(double dx, double dy) {
             if (Math.Abs(dx + dy) < 0.1) {
                 return;
@@ -156,7 +154,7 @@ namespace MpWpfApp {
         #region Manual Resize Event Handlers
 
         private void AssociatedObject_MouseEnter(object sender, MouseEventArgs e) {
-            if(!IsAnyMoving) {
+            if(!IsAnyMoving && !MpDragDropManager.IsDragAndDrop) {
                 //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeAll;
                 CanMove = true;
             }
@@ -170,10 +168,15 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            if (Mouse.LeftButton == MouseButtonState.Released) {
+            if (Mouse.LeftButton == MouseButtonState.Released ||
+                MpDragDropManager.IsDragAndDrop) {
                 IsMoving = false;
                 return;
             }            
+
+            if(IsAnyMoving && !IsMoving) {
+                return;
+            }
 
             var mwmp = e.GetPosition(Application.Current.MainWindow);
 
@@ -188,8 +191,12 @@ namespace MpWpfApp {
                     return;
                 }
             }
-
             Move(delta.X, delta.Y);
+            //if (AssociatedObject.DataContext is MpActionViewModelBase avm) {
+            //    avm.MoveDesignerItemCommand.Execute(delta);
+            //} else {
+            //    Move(delta.X, delta.Y);
+            //}            
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {

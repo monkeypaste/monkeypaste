@@ -22,7 +22,7 @@ namespace MpWpfApp {
 
         public static double TargetMargin = 3;
 
-        public override bool IsEnabled { get; set; } = true;
+        public override bool IsDropEnabled { get; set; } = true;
 
         public override MpDropType DropType => MpDropType.Tile;
 
@@ -66,10 +66,10 @@ namespace MpWpfApp {
         protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ResizingMainWindowComplete:
-                    if (IsEnabled) {
+                    if (IsDropEnabled) {
                         RefreshDropRects();
                     }
-                    IsEnabled = true;
+                    IsDropEnabled = true;
                     UpdateAdorner();
                     break;
             }

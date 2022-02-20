@@ -21,7 +21,8 @@ namespace MpWpfApp {
         Tray,
         External,
         Resize,
-        Move
+        Move,
+        Action
     }
 
     public abstract class MpDropBehaviorBase<T> : MpBehavior<T>, MpIContentDropTarget where T : FrameworkElement {
@@ -59,7 +60,7 @@ namespace MpWpfApp {
 
         #region Abstracts
 
-        public abstract bool IsEnabled { get; set; }
+        public abstract bool IsDropEnabled { get; set; }
         public abstract MpDropType DropType { get; }
 
         public abstract UIElement RelativeToElement { get; }
@@ -183,7 +184,7 @@ namespace MpWpfApp {
             UpdateAdorner();
         }
 
-        public abstract Task StartDrop();
+        public abstract Task StartDrop(); 
 
         public void ContinueDragOverTarget() {
             int newDropIdx = GetDropTargetRectIdx();
@@ -233,8 +234,7 @@ namespace MpWpfApp {
                     adornerLayer.Add(DropLineAdorner);
                     RefreshDropRects();
                 }
-            }
-            
+            }            
 
             IsDebugEnabled = false;
 

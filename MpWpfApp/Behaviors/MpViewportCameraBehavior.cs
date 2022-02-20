@@ -9,10 +9,10 @@ using System.Windows.Controls;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Media;
-using ZoomAndPan;
+
 namespace MpWpfApp {
 
-    public class MpViewportCameraBehavior : MpBehavior<ZoomAndPanControl> {
+    public class MpViewportCameraBehavior : MpBehavior<Control> {
         #region Private Variables
 
         private Point _lastContentPosition; //control
@@ -128,9 +128,9 @@ namespace MpWpfApp {
             contentRect.Width += 100;
             contentRect.Height += 100;
 
-            AssociatedObject.ZoomTo(contentRect);
+            //AssociatedObject.ZoomTo(contentRect);
 
-            //AssociatedObject.ScaleToFit();
+            ////AssociatedObject.ScaleToFit();
         }
 
         private void ReceivedActionCollectionViewModelMessage(MpMessageType msg) {
@@ -151,7 +151,7 @@ namespace MpWpfApp {
                 deltaZoom = -ZoomFactor;
             }
             var contentMousePosition = e.GetPosition(AssociatedObject);
-            AssociatedObject.ZoomAboutPoint(AssociatedObject.ContentScale + deltaZoom, contentMousePosition);
+            //AssociatedObject.ZoomAboutPoint(AssociatedObject.ContentScale + deltaZoom, contentMousePosition);
             e.Handled = true;
         }
 
@@ -167,12 +167,12 @@ namespace MpWpfApp {
 
             Vector offset1 = _lastContentPosition - contentMousePosition;
             _lastContentPosition = contentMousePosition;
-            //var viewportMousePosition = e.GetPosition(AssociatedObject.GetVisualDescendent<ListBox>());
+            ////var viewportMousePosition = e.GetPosition(AssociatedObject.GetVisualDescendent<ListBox>());
 
-            //Vector offset = viewportMousePosition - _viewportMouseDownPosition;
+            ////Vector offset = viewportMousePosition - _viewportMouseDownPosition;
 
-            AssociatedObject.ContentOffsetX += offset1.X;
-            AssociatedObject.ContentOffsetY += offset1.Y;
+            //AssociatedObject.ContentOffsetX += offset1.X;
+            //AssociatedObject.ContentOffsetY += offset1.Y;
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {

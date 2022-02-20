@@ -29,7 +29,7 @@ namespace MpWpfApp {
         public override FrameworkElement AdornedElement => AssociatedObject;
         public override Orientation AdornerOrientation => Orientation.Horizontal;
 
-        public override bool IsEnabled { get; set; } = true;
+        public override bool IsDropEnabled { get; set; } = true;
 
         public override UIElement RelativeToElement {
             get {

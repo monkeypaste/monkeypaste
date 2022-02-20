@@ -356,11 +356,6 @@ namespace MonkeyPaste {
             return dateTime;
         }
 
-        public static void AssertNotNull(this object obj, string message) {
-            if(obj == null) {
-                MpConsole.WriteLine($"{DateTime.Now} {message} is null");
-            }
-        }
         #endregion
 
         #region Reflection

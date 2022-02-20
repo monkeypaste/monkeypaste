@@ -22,19 +22,19 @@ namespace MpWpfApp {
                 List<MpIContentDropTarget> dtl = new List<MpIContentDropTarget>();
 
                 var clvl = Application.Current.MainWindow.GetVisualDescendents<MpContentListView>();
-                dtl.AddRange(clvl.Select(x => x.ContentListDropBehavior).Where(x => x.IsEnabled).ToList());
+                dtl.AddRange(clvl.Select(x => x.ContentListDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
                 var rtbvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbView>();
-                dtl.AddRange(rtbvl.Select(x => x.RtbViewDropBehavior).Where(x => x.IsEnabled).ToList());
+                dtl.AddRange(rtbvl.Select(x => x.RtbViewDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
                 dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().ClipTrayDropBehavior);
 
                 var adivl = Application.Current.MainWindow.GetVisualDescendents<MpActionDesignerItemView>();
-                dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsEnabled).ToList());
+                dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
                 dtl.Add((Application.Current.MainWindow as MpMainWindow).ExternalDropBehavior);
 
-                dtl.Add((Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior);
+                //dtl.Add((Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior);
 
                 return dtl;
             }
@@ -108,7 +108,7 @@ namespace MpWpfApp {
 
         private static MpIContentDropTarget SelectDropTarget(object dragData) {
             MpIContentDropTarget selectedTarget = null;
-            foreach (var dt in _dropTargets.Where(x => x.IsEnabled)) {
+            foreach (var dt in _dropTargets.Where(x => x.IsDropEnabled)) {
                 if (!dt.IsDragDataValid(MpShortcutCollectionViewModel.Instance.IsCtrlDown, dragData)) {
                     continue;
                 }

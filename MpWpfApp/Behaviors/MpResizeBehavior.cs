@@ -19,7 +19,7 @@ namespace MpWpfApp {
         Bottom = 0b_1000
     }
 
-    public class MpResizeBehavior : MpDropBehaviorBase<FrameworkElement> {
+    public class MpResizeBehavior : MpBehavior<FrameworkElement> {
         #region Private Variables
         private static List<MpResizeBehavior> _allResizers = new List<MpResizeBehavior>();
 
@@ -32,7 +32,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-
 
         public static bool IsAnyResizing => _allResizers
             .Where(x => x != null && x.AssociatedObject != null && x.AssociatedObject.DataContext != null)
@@ -251,55 +250,55 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region DropBehaviorBase Implementation
+        //#region DropBehaviorBase Implementation
 
-        public override bool IsEnabled { get; set; } = true;
-        public override MpDropType DropType => MpDropType.Resize;
-        public override UIElement RelativeToElement => BoundElement;
-        public override FrameworkElement AdornedElement => AssociatedObject;
-        public override Orientation AdornerOrientation => Orientation.Horizontal;
-        public override MpCursorType MoveCursor { get; }
-        public override MpCursorType CopyCursor { get; }
+        //public override bool IsEnabled { get; set; } = true;
+        //public override MpDropType DropType => MpDropType.Resize;
+        //public override UIElement RelativeToElement => BoundElement;
+        //public override FrameworkElement AdornedElement => AssociatedObject;
+        //public override Orientation AdornerOrientation => Orientation.Horizontal;
+        //public override MpCursorType MoveCursor { get; }
+        //public override MpCursorType CopyCursor { get; }
 
-        public override List<Rect> GetDropTargetRects() {
-            var r = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
-            var edgeRects = new List<Rect>();
+        //public override List<Rect> GetDropTargetRects() {
+        //    var r = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
+        //    var edgeRects = new List<Rect>();
 
-            if (ResizableEdges.HasFlag(MpRectEdgeFlags.Left)) {
-                Rect lr = new Rect(r.Left, r.Top, r.Left, r.Bottom);
-                lr.Inflate(new Size(MaxDistance, MaxDistance));
-                edgeRects.Add(lr);
-            }
-            if (ResizableEdges.HasFlag(MpRectEdgeFlags.Right)) {
-                Rect rr = new Rect(r.Right, r.Top, r.Right, r.Bottom);
-                rr.Inflate(new Size(MaxDistance, MaxDistance));
-                edgeRects.Add(rr);
-            }
-            if (ResizableEdges.HasFlag(MpRectEdgeFlags.Top)) {
-                Rect tr = new Rect(r.Left, r.Top, r.Right, r.Top);
-                tr.Inflate(new Size(MaxDistance, MaxDistance));
-                edgeRects.Add(tr);
-            }
-            if (ResizableEdges.HasFlag(MpRectEdgeFlags.Bottom)) {
-                Rect br = new Rect(r.Left, r.Bottom, r.Right, r.Bottom);
-                br.Inflate(new Size(MaxDistance, MaxDistance));
-                edgeRects.Add(br);
-            }
-            return edgeRects;
-        }
+        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Left)) {
+        //        Rect lr = new Rect(r.Left, r.Top, r.Left, r.Bottom);
+        //        lr.Inflate(new Size(MaxDistance, MaxDistance));
+        //        edgeRects.Add(lr);
+        //    }
+        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Right)) {
+        //        Rect rr = new Rect(r.Right, r.Top, r.Right, r.Bottom);
+        //        rr.Inflate(new Size(MaxDistance, MaxDistance));
+        //        edgeRects.Add(rr);
+        //    }
+        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Top)) {
+        //        Rect tr = new Rect(r.Left, r.Top, r.Right, r.Top);
+        //        tr.Inflate(new Size(MaxDistance, MaxDistance));
+        //        edgeRects.Add(tr);
+        //    }
+        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Bottom)) {
+        //        Rect br = new Rect(r.Left, r.Bottom, r.Right, r.Bottom);
+        //        br.Inflate(new Size(MaxDistance, MaxDistance));
+        //        edgeRects.Add(br);
+        //    }
+        //    return edgeRects;
+        //}
 
-        public override async Task StartDrop() {
-            await Task.Delay(1);
-        }
+        //public override async Task StartDrop() {
+        //    await Task.Delay(1);
+        //}
 
-        public override bool IsDragDataValid(bool isCopy, object dragData) {
-            return base.IsDragDataValid(isCopy, dragData);
-        }
+        //public override bool IsDragDataValid(bool isCopy, object dragData) {
+        //    return base.IsDragDataValid(isCopy, dragData);
+        //}
 
-        public override void AutoScrollByMouse() {
+        //public override void AutoScrollByMouse() {
             
-        }
-        #endregion
+        //}
+        //#endregion
 
         protected override void OnLoad() {
             base.OnLoad();

@@ -18,7 +18,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        public override bool IsEnabled { get; set; } = true;
+        public override bool IsDropEnabled { get; set; } = true;
 
         public override MpDropType DropType => MpDropType.Content;
 
@@ -72,6 +72,10 @@ namespace MpWpfApp {
         }
 
         public override bool IsDragDataValid(bool isCopy,object dragData) {
+            if(AssociatedObject.DataContext is MpActionViewModelBase avm && !avm.IsEnabled) {
+                return false;
+            }
+
             var cil = dragData as List<MpCopyItem>;
             return cil != null && cil.Count == 1;
         }
@@ -94,9 +98,9 @@ namespace MpWpfApp {
         public override void AutoScrollByMouse() {
             double _minScrollDist = 5;
 
-            var zapc = AssociatedObject.GetVisualAncestor<ZoomAndPan.ZoomAndPanControl>();
-
-            var zapc_mp = Mouse.GetPosition(zapc);
+            var zoomBorder = AssociatedObject.GetVisualAncestor<ZoomBorder>();
+            
+            var zapc_mp = Mouse.GetPosition(zoomBorder);
             Rect zapc_rect = new Rect(0, 0, AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);
             if (!zapc_rect.Contains(zapc_mp)) {
                 return;
@@ -104,24 +108,26 @@ namespace MpWpfApp {
 
             bool hasChanged = false;
 
+            Point translateOffset = new Point();
             if (Math.Abs(zapc_rect.Right - zapc_mp.X) <= _minScrollDist) {
-                zapc.ContentOffsetX -= _autoScrollVelocity;
+                translateOffset.X -= _autoScrollVelocity;
                 hasChanged = true;
             } else if (Math.Abs(zapc_rect.Left - zapc_mp.X) <= _minScrollDist) {
-                zapc.ContentOffsetX += _autoScrollVelocity;
+                translateOffset.X += _autoScrollVelocity;
                 hasChanged = true;
             }
 
             if (Math.Abs(zapc_rect.Top - zapc_mp.Y) <= _minScrollDist) {
-                zapc.ContentOffsetY -= _autoScrollVelocity;
+                translateOffset.Y -= _autoScrollVelocity;
                 hasChanged = true;
             } else if (Math.Abs(zapc_rect.Bottom - zapc_mp.Y) <= _minScrollDist) {
-                zapc.ContentOffsetY += _autoScrollVelocity;
+                translateOffset.Y += _autoScrollVelocity;
                 hasChanged = true;
             }
 
             if (hasChanged) {
                 _autoScrollVelocity += _autoScrollAccumulator;
+                zoomBorder.Translate(translateOffset.X, translateOffset.Y);
             }
         }
     }

@@ -6,7 +6,6 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
                      xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                     xmlns:zoompan="clr-namespace:ZoomAndPan;assembly=ZoomAndPan"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpTriggerActionViewModelBase"
                      mc:Ignorable="d"
@@ -17,27 +16,27 @@
             <SolidColorBrush Color="Gray"
                              Opacity="0.7" />
         </Grid.Background>
-        <zoompan:ZoomAndPanControl x:Name="ZoomAndPanControl"
+        <!--<zoompan:ZoomAndPanControl x:Name="ZoomAndPanControl"
                                    ContentViewportWidth="{Binding ViewportWidth,
                                                                   Source={x:Static local:MpActionCollectionViewModel.Instance},
                                                                   Mode=TwoWay}"
                                    ContentViewportHeight="{Binding ViewportHeight,
                                                                    Source={x:Static local:MpActionCollectionViewModel.Instance}}"
-                                   Width="{Binding DesignerWidth,
-                                                   Source={x:Static local:MpActionCollectionViewModel.Instance},
-                                                   Mode=TwoWay}"
-                                   Height="{Binding DesignerHeight,
-                                                    Source={x:Static local:MpActionCollectionViewModel.Instance}}">
-            <i:Interaction.Behaviors>
-                <local:MpViewportCameraBehavior x:Name="ActionDesignerViewportBehavior"
-                                                ZoomFactor="0.25"
-                                                ViewportCameraViewModel="{x:Static local:MpActionCollectionViewModel.Instance}" />
-            </i:Interaction.Behaviors>
+                                   ">-->
+        <local:ZoomBorder ClipToBounds="True"
+                          ShowGrid="{Binding IsAnySelected,
+                                             Converter={StaticResource BoolToVisibilityConverter},
+                                             Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                          OriginThickness="3"
+                          GridLineThickness="1"
+                          GridLineSpacing="30"
+                          OriginBrush="Chartreuse"
+                          GridLineBrush="Chartreuse">
             <ListBox x:Name="ActionDesignerListBox"
+                     ClipToBounds="False"
                      Loaded="ActionDesignerListBox_Loaded"
                      Background="Transparent"
                      SelectedValuePath=""
-                     Height="Auto"
                      BorderThickness="0"
                      SelectionChanged="ActionDesignerListBox_SelectionChanged"
                      IsSynchronizedWithCurrentItem="False"
@@ -47,10 +46,41 @@
                      ScrollViewer.IsDeferredScrollingEnabled="True"
                      ItemsSource="{Binding AllSelectedTriggerActions,
                                            Source={x:Static local:MpActionCollectionViewModel.Instance}}">
+                <ListBox.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="{Binding ScaleX,
+                                                         Source={x:Static local:MpActionCollectionViewModel.Instance},
+                                                         Mode=OneWayToSource}"
+                                        ScaleY="{Binding ScaleY,
+                                                         Source={x:Static local:MpActionCollectionViewModel.Instance},
+                                                         Mode=OneWayToSource}" />
+                        <TranslateTransform />
+                    </TransformGroup>
+                </ListBox.RenderTransform>
+                <ListBox.Template>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border x:Name="Bd"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                Padding="1"
+                                SnapsToDevicePixels="true">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </ListBox.Template>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <local:MpDesignerCanvas x:Name="ActionDesignerCanvas"
-                                                Loaded="ZoomAndPanControl_Loaded"
+                                                ClipToBounds="False"
                                                 ShowVoronoi="False"
                                                 ShowGrid="False"
                                                 MinDist="100.1"
@@ -59,16 +89,6 @@
                                                 TransitionLineBorderBrush="White"
                                                 TransitionLineThickness="1"
                                                 EmptyLineBrush="Orange"
-                                                OriginThickness="1"
-                                                GridLineThickness="1"
-                                                GridLineSpacing="30"
-                                                OriginBrush="Chartreuse"
-                                                GridLineBrush="Chartreuse"
-                                                Width="{Binding ViewportWidth,
-                                                                Source={x:Static local:MpActionCollectionViewModel.Instance},
-                                                                Mode=TwoWay}"
-                                                Height="{Binding ViewportHeight,
-                                                                 Source={x:Static local:MpActionCollectionViewModel.Instance}}"
                                                 IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
@@ -140,7 +160,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </zoompan:ZoomAndPanControl>
+        </local:ZoomBorder>
+        <!--</zoompan:ZoomAndPanControl>-->
         <!--</local:MpDesignerViewbox>-->
         <Button x:Name="AddNewActionButton"
                 Visibility="{Binding IsAnySelected,

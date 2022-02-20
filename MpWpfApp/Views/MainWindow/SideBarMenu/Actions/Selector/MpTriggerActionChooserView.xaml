@@ -13,9 +13,12 @@
                      d:DataContext="{d:DesignInstance Type=local:MpActionCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
 
-    <DockPanel LastChildFill="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Border Grid.Column="0"
-                DockPanel.Dock="Left"
                 CornerRadius="3"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -49,7 +52,7 @@
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
-                    <RowDefinition Height="40" />
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
@@ -60,7 +63,8 @@
                            Text="Actions" />
                 <DockPanel Grid.Row="1"
                            LastChildFill="True"
-                           VerticalAlignment="Top">
+                           VerticalAlignment="Top"
+                           Margin="0,0,0,10">
                     <Button BorderThickness="0"
                             DockPanel.Dock="Right"
                             MaxHeight="30"
@@ -124,8 +128,9 @@
         </Border>
         <Grid x:Name="ActionDesignerGrid"
               Grid.Column="1"
-              HorizontalAlignment="Stretch"
-              SizeChanged="DetailGrid_SizeChanged"
+              local:MpSizeObserverExtension.IsEnabled="True"
+              local:MpSizeObserverExtension.ObservedWidth="{Binding DesignerWidth, Mode=OneWayToSource}"
+              local:MpSizeObserverExtension.ObservedHeight="{Binding DesignerHeight, Mode=OneWayToSource}"
               DataContext="{Binding}">
             <i:Interaction.Behaviors>
                 <local:MpResizeBehavior x:Name="DesignerResizeBehvior"
@@ -152,5 +157,5 @@
             </i:Interaction.Behaviors>
             <local:MpActionDesignerView DataContext="{Binding SelectedItem}" />
         </Grid>
-    </DockPanel>
+    </Grid>
 </local:MpUserControl>

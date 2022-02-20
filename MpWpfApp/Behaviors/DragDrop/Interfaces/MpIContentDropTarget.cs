@@ -7,7 +7,7 @@ using System.Windows.Input;
 namespace MpWpfApp {
     public interface MpIContentDropTarget {
         object DataContext { get; }
-        bool IsEnabled { get; set; }
+        bool IsDropEnabled { get; set; }
         bool IsDebugEnabled { get; set; }
 
         int DropIdx { get; set; }

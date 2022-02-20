@@ -169,6 +169,7 @@
     <Compile Include="Controls\MpResizeThumb.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpBindableListBox.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpMultiComboBox.cs" />
+    <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
@@ -2665,10 +2666,6 @@
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Desktop\DotNetExamples\SimpleZoomAndPanSample\ZoomAndPan\ZoomAndPan.csproj">
-      <Project>{468adede-6f5e-40c0-99c9-c6dac4fac934}</Project>
-      <Name>ZoomAndPan</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj">
       <Project>{faf48e9e-e646-44d0-be02-ad1a9e9dfcd8}</Project>
       <Name>MonkeyPaste.Plugin</Name>

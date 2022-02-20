@@ -23,7 +23,7 @@ namespace MpWpfApp {
         public override Orientation AdornerOrientation => Orientation.Vertical;
         public override FrameworkElement AdornedElement => AssociatedObject.ClipTray;
 
-        public override bool IsEnabled { get; set; } = true;
+        public override bool IsDropEnabled { get; set; } = true;
 
         public override MpDropType DropType => MpDropType.Tray;
 

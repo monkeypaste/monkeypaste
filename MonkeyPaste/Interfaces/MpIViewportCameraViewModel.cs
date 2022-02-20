@@ -16,7 +16,7 @@
         double DesignerWidth { get; set; }
         double DesignerHeight { get; set; }
 
-        double ViewportWidth { get; set; }
-        double ViewportHeight { get; set; }
+        double ViewportWidth { get;  }
+        double ViewportHeight { get; }
     }
 }

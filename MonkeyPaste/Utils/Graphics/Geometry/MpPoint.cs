@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Drawing;
 
 namespace MonkeyPaste {
-    public class MpPoint {
+    public class MpPoint : ICloneable {
         public double X { get; set; } = 0;
         public double Y { get; set; } = 0;
 
@@ -43,8 +44,18 @@ namespace MonkeyPaste {
             return Math.Sqrt(Math.Pow(other.X - X, 2) + Math.Pow(other.Y - Y, 2));
         }
 
+        public void Normalize() {
+            double distance = Math.Sqrt(X * X + Y * Y);
+            X /= distance;
+            Y /= distance;
+        }
+
         public override string ToString() {
             return string.Format(@"X: {0}, Y: {1}", X, Y);
+        }
+
+        public object Clone() {
+            return new MpPoint(X, Y);
         }
     }
 }

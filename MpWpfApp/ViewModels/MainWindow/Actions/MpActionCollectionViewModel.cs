@@ -165,12 +165,24 @@ namespace MpWpfApp {
         public double CameraX { get; set; } = 0;
         public double CameraY { get; set; } = 0;
 
+        public double ScaleX { get; set; } = 1;
+        public double ScaleY { get; set; } = 1;
+
         public double DesignerWidth { get; set; } = MpMeasurements.Instance.DefaultDesignerWidth;
         public double DesignerHeight { get; set; } = MpClipTrayViewModel.Instance.ClipTrayHeight;
 
-        public double ViewportWidth { get; set; } = 2000;
-        public double ViewportHeight { get; set; } = 2000;
+        public double ViewportWidth {
+            get => DesignerWidth / ScaleX;
+            set => DesignerWidth = value * ScaleX;
+        }
+        public double ViewportHeight {
+            get => DesignerHeight / ScaleY;
+            set => DesignerHeight = value * ScaleY;
+        }
 
+        public Point DefaultTriggerLocation => new Point(
+            (ViewportWidth / 2) - (MpMeasurements.Instance.DesignerItemDiameter / 2),
+            (ViewportHeight / 2) - (MpMeasurements.Instance.DesignerItemDiameter / 2));
 
         #endregion
 
@@ -193,6 +205,7 @@ namespace MpWpfApp {
 
         public bool IsUnselectedChooserItemHidden => IsChooserDropDownOpen || Items.Count == 0;
 
+
         #endregion
 
         #endregion
@@ -210,6 +223,7 @@ namespace MpWpfApp {
         public async Task Init() {
             IsBusy = true;
 
+            Items.Clear();
             var tal = await MpDataModelProvider.GetAllTriggerActions();
 
             foreach (var ta in tal) {
@@ -260,9 +274,6 @@ namespace MpWpfApp {
 
             await tavm.InitializeAsync(a);
 
-            var eavm = await tavm.CreateEmptyActionViewModel();
-            tavm.Items.Add(eavm);
-
             return tavm;
         }
 
@@ -274,6 +285,33 @@ namespace MpWpfApp {
 
         public void DisableAll() {
             Items.ForEach(x => x.Disable());
+        }
+
+        #region DesignerItem Placement Methods
+
+        public Point FindOpenDesignerLocation(Point anchorPoint, object ignoreItem = null) {
+            int attempts = 0;
+            int maxAttempts = 10;
+            int count = 4;
+            double dtheta = (2 * Math.PI) / count;
+            double r = MpMeasurements.Instance.DesignerItemDiameter * 2;
+            while (attempts <= maxAttempts) {
+                double theta = 0;
+                for (int i = 0; i < count; i++) {
+                    var tp = new Point();
+                    tp.X = (double)(anchorPoint.X + r * Math.Cos(theta));
+                    tp.Y = (double)(anchorPoint.Y + r * Math.Sin(theta));
+                    if (!OverlapsItem(tp)) {
+                        return tp;
+                    }
+                    theta += dtheta;
+                }
+                r += MpMeasurements.Instance.DesignerItemDiameter * 2;
+
+                attempts++;
+            }
+
+            return new Point(MpHelpers.Rand.NextDouble() * DesignerWidth, MpHelpers.Rand.NextDouble() * DesignerHeight);
         }
 
         public bool OverlapsItem(Point targetTopLeft) {
@@ -314,10 +352,16 @@ namespace MpWpfApp {
         }
 
         public void ClearAllOverlaps() {
-            foreach(var avm in AllSelectedTriggerActions) {
+            foreach (var avm in AllSelectedTriggerActions) {
                 ClearAreaAtPoint(avm.Location, avm);
             }
         }
+
+        public void NotifyViewportChanged() {
+            MpMessenger.Send(MpMessageType.ActionViewportChanged);
+        }
+
+        #endregion
 
         public string GetUniqueTriggerName(string prefix) {
             int uniqueIdx = 1;
@@ -336,9 +380,6 @@ namespace MpWpfApp {
             return prefix + uniqueIdx;
         }
 
-        public void NotifyViewportChanged() {
-            MpMessenger.Send(MpMessageType.ActionViewportChanged);
-        }
 
         #endregion
 
@@ -367,13 +408,26 @@ namespace MpWpfApp {
                     NotifyViewportChanged();
                     //OnPropertyChanged(nameof(AllSelectedTriggerActions));
                     break;
-                case nameof(DesignerWidth):
-                case nameof(DesignerHeight):
-                case nameof(CameraZoomFactor):
+                //case nameof(DesignerWidth):
+                //case nameof(DesignerHeight):
+                //case nameof(CameraZoomFactor):
+                //    OnPropertyChanged(nameof(ViewportWidth));
+                //    OnPropertyChanged(nameof(ViewportHeight));
+                //    break;
+                //case nameof(ViewportWidth):
+                //case nameof(ViewportHeight):
+                //    OnPropertyChanged(nameof(DesignerWidth));
+                //    OnPropertyChanged(nameof(DesignerHeight));
+                //    break;
+                case nameof(ScaleX):
+                case nameof(ScaleY):
+                    OnPropertyChanged(nameof(DesignerWidth));
+                    OnPropertyChanged(nameof(DesignerHeight));
                     OnPropertyChanged(nameof(ViewportWidth));
                     OnPropertyChanged(nameof(ViewportHeight));
                     break;
                 case nameof(PrimaryAction):
+                    OnPropertyChanged(nameof(IsAnySelected));
                     AllSelectedTriggerActions
                         .Where(x => x is MpEmptyActionViewModel)
                         .Cast<MpEmptyActionViewModel>()
@@ -385,6 +439,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        public ICommand ResetDesignerCommand => new RelayCommand(
+            () => {
+
+            });
 
         public ICommand ShowActionSelectorMenuCommand => new RelayCommand<object>(
              (args) => {
@@ -407,10 +466,9 @@ namespace MpWpfApp {
                          label: GetUniqueTriggerName("Trigger"),
                          actionType: MpActionType.Trigger,
                          actionObjId: (int)tt,
-                         sortOrderIdx: Items.Count);
+                         sortOrderIdx: Items.Count,
+                         location: DefaultTriggerLocation.ToMpPoint());
 
-                 na.X = (ViewportWidth / 2) - MpMeasurements.Instance.DesignerItemSize;
-                 na.Y = ViewportHeight / 2;
                  var navm = await CreateTriggerViewModel(na);
 
                  Items.Add(navm);
@@ -420,6 +478,7 @@ namespace MpWpfApp {
 
                  OnPropertyChanged(nameof(Items));
 
+                 OnPropertyChanged(nameof(IsAnySelected));
                  NotifyViewportChanged();
 
                  IsBusy = false;

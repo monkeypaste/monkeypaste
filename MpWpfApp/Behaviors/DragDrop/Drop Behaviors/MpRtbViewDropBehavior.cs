@@ -12,7 +12,7 @@ using System.Windows.Input;
 namespace MpWpfApp {
     public class MpRtbViewDropBehavior : MpDropBehaviorBase<MpRtbView> {
         
-        public override bool IsEnabled { get; set; } = true;
+        public override bool IsDropEnabled { get; set; } = true;
 
         public override MpDropType DropType => MpDropType.Content;
 
@@ -57,10 +57,10 @@ namespace MpWpfApp {
         protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ResizingMainWindowComplete:
-                    if (IsEnabled) {
+                    if (IsDropEnabled) {
                         RefreshDropRects();
                     }
-                    IsEnabled = true;
+                    IsDropEnabled = true;
                     UpdateAdorner();
                     break;
             }

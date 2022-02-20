@@ -26,11 +26,11 @@ namespace MpWpfApp {
 
         private void ActionDesignerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var lb = sender as ListBox;
-            lb.ScrollIntoView(MpActionCollectionViewModel.Instance.PrimaryAction);
+            //lb.ScrollIntoView(MpActionCollectionViewModel.Instance.PrimaryAction);
         }
 
         private void ZoomAndPanControl_Loaded(object sender, RoutedEventArgs e) {
-            ZoomAndPanControl.ScaleToFit();
+            //ZoomAndPanControl.ScaleToFit();
         }
 
         private void ActionDesignerListBox_Loaded(object sender, RoutedEventArgs e) {
@@ -42,9 +42,13 @@ namespace MpWpfApp {
         private void ReceivedActionCollectionViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ActionViewportChanged:
-                    ActionDesignerListBox.Items.Refresh();
+                    //ActionDesignerListBox.Items.Refresh();
                     break;
             }
+        }
+
+        private void ZoomBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+
         }
     }
 }

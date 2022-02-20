@@ -143,7 +143,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAction> Create(
-            MpActionType actionType,
+            MpActionType actionType = MpActionType.None,
             int actionObjId = 0,
             string label = "",
             int parentId = 0,
@@ -154,7 +154,9 @@ namespace MonkeyPaste {
             string arg4 = "",
             int iconId = 0,
             string description = "",
-            bool isReadOnly = false) {
+            bool isReadOnly = false,
+            MpPoint location = null,
+            bool suppressWrite = false) {
 
             //var dupCheck = await MpDataModelProvider.GetActionByLabel(label);
             //if(dupCheck != null) {
@@ -164,7 +166,7 @@ namespace MonkeyPaste {
             if(sortOrderIdx == 0 && parentId > 0) {
                 sortOrderIdx = await MpDataModelProvider.GetChildActionCount(parentId);
             }
-            if(actionType == MpActionType.Trigger && iconId == 0) {
+            if(!suppressWrite && actionType == MpActionType.Trigger && iconId == 0) {
                 string iconStr = null;
                 switch ((MpTriggerType)actionObjId) {
                     case MpTriggerType.ContentAdded:
@@ -190,7 +192,7 @@ namespace MonkeyPaste {
                     iconId = icon.Id;
                 }
             }
-
+            location = location == null ? new MpPoint() : location;
             var mr = new MpAction() {
                 ActionGuid = System.Guid.NewGuid(),
                 Label = label,
@@ -204,9 +206,13 @@ namespace MonkeyPaste {
                 SortOrderIdx = sortOrderIdx,
                 IconId = iconId,
                 Description = description,
+                X = location.X,
+                Y = location.Y
             };
 
-            await mr.WriteToDatabaseAsync();
+            if(!suppressWrite) {
+                await mr.WriteToDatabaseAsync();
+            }
             return mr;
         }
 

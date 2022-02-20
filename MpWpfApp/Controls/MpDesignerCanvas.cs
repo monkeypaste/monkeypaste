@@ -11,11 +11,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace MpWpfApp {
 
@@ -137,23 +135,33 @@ namespace MpWpfApp {
             InvalidateVisual();
         }
 
-        private void DrawGrid(DrawingContext dc) {
-            var zc = this.GetVisualAncestor<ZoomAndPan.ZoomAndPanControl>();
-            Point offset = new Point(zc.ContentOffsetX, zc.ContentOffsetY);
-            offset.X = MonkeyPaste.MpMathHelpers.WrapValue(offset.X, -GridLineSpacing, GridLineSpacing);
-            offset.Y = MonkeyPaste.MpMathHelpers.WrapValue(offset.Y, -GridLineSpacing, GridLineSpacing);
+        private void DrawGrid(DrawingContext dc) {            
+            Point offset = new Point(10, 10);
 
-            int HorizontalGridLineCount = (int)(RenderSize.Width / GridLineSpacing);
+            var lb = this.GetVisualAncestor<ListBox>();
+            var st = (ScaleTransform)((TransformGroup)lb.RenderTransform).Children.First(tr => tr is ScaleTransform);
+            Size gs = new Size(RenderSize.Width / st.ScaleX, RenderSize.Height / st.ScaleY);
 
-            double xStep = RenderSize.Width / HorizontalGridLineCount;
-            double curX = 0;
-            for (int x = 0; x < HorizontalGridLineCount; x++) {
-                Point p1 = new Point(curX, 0);
+
+            int HorizontalGridLineCount = (int)((gs.Width * 2) / GridLineSpacing);
+            int VerticalGridLineCount = (int)((gs.Height * 2) / GridLineSpacing);
+
+            double yStep = gs.Height / VerticalGridLineCount;
+            double xStep = gs.Width / HorizontalGridLineCount;
+
+            double startX = -(gs.Width);
+            double startY = -(gs.Height); 
+
+            double curX = startX;
+            double curY = startY;
+
+            for (int c = 0; c < HorizontalGridLineCount; c++) {
+                Point p1 = new Point(curX, startY);
                 p1 = (Point)(p1 - offset);
-                Point p2 = new Point(curX, RenderSize.Height);
+                Point p2 = new Point(curX, gs.Height);
                 p2 = (Point)(p2 - offset);
 
-                bool isOrigin = x == (int)(HorizontalGridLineCount / 2);
+                bool isOrigin = c == (int)(HorizontalGridLineCount / 2);
                 if (isOrigin) {
                     dc.DrawLine(new Pen(OriginBrush, OriginThickness), p1, p2);
                 } else {
@@ -163,16 +171,13 @@ namespace MpWpfApp {
                 curX += xStep;
             }
 
-            int VerticalGridLineCount = (int)(RenderSize.Height / GridLineSpacing);
-            double yStep = RenderSize.Height / VerticalGridLineCount;
-            double curY = 0;
-            for (int y = 0; y < VerticalGridLineCount; y++) {
-                Point p1 = new Point(0, curY);
+            for (int r = 0; r < VerticalGridLineCount; r++) {
+                Point p1 = new Point(startX, curY);
                 p1 = (Point)(p1 - offset);
-                Point p2 = new Point(RenderSize.Width, curY);
+                Point p2 = new Point(gs.Width, curY);
                 p2 = (Point)(p2 - offset);
 
-                bool isOrigin = y == (int)(VerticalGridLineCount / 2);
+                bool isOrigin = r == (int)(VerticalGridLineCount / 2);
                 if (isOrigin) {
                     dc.DrawLine(new Pen(OriginBrush, OriginThickness), p1, p2);
                 } else {

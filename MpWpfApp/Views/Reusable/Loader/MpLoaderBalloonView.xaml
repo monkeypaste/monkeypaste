@@ -204,7 +204,7 @@
             <Border x:Name="ProgressBarContainer"
                     Grid.Row="1"
                     Grid.Column="1"
-                    local:MpSizeObserverExtension.Observe="True"
+                    local:MpSizeObserverExtension.IsEnabled="True"
                     local:MpSizeObserver.ObservedWidth="{Binding ProgressTotalBarWidth,
                                                                  Mode=OneWayToSource}"
                     BorderThickness="1"

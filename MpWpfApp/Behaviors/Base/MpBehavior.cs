@@ -4,11 +4,27 @@ using System.Windows;
 using System.Windows.Documents;
 
 namespace MpWpfApp {
+    
     public abstract class MpBehavior<T> : Behavior<T> where T: FrameworkElement {
         protected bool _wasUnloaded;
         protected object _dataContext;
         protected bool _isLoaded = false;
-        
+
+        #region IsEnabled DependencyProperty
+
+        public bool IsEnabled {
+            get { return (bool)GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsEnabledProperty =
+             DependencyProperty.Register(
+                 "IsEnabled", typeof(bool),
+                 typeof(MpBehavior<T>),
+                 new FrameworkPropertyMetadata(true));
+
+        #endregion
+
         protected override void OnAttached() {
             base.OnAttached();
             AssociatedObject.Loaded += AssociatedObject_Loaded;
