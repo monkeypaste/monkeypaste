@@ -39,9 +39,9 @@ namespace MonkeyPaste {
         [Indexed]
         public string ItemData { get; set; } = string.Empty;
 
-        [ForeignKey(typeof(MpDbImage))]
-        [Column("fk_MpDbImageId")]
-        public int ItemImageId { get; set; }
+        [ForeignKey(typeof(MpIcon))]
+        [Column("fk_MpIconId")]
+        public int IconId { get; set; }
 
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_SsMpDbImageId")]
@@ -53,8 +53,8 @@ namespace MonkeyPaste {
 
         public int PasteCount { get; set; } = 0;
 
-        [Column("HexColor")]
-        public string ItemColor { get; set; } = string.Empty;
+        //[Column("HexColor")]
+        //public string ItemColor { get; set; } = string.Empty;
         #endregion
 
         #region Fk Models
@@ -62,11 +62,12 @@ namespace MonkeyPaste {
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeInsert)]
         public MpSource Source { get; set; }
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpDbImage SsDbImage { get; set; }
+        //[OneToOne(CascadeOperations = CascadeOperation.All)]
+        //public MpDbImage SsDbImage { get; set; }
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
-        public MpDbImage ItemDbImage { get; set; }
+        //[OneToOne(CascadeOperations = CascadeOperation.All)]
+        //public MpDbImage ItemDbImage { get; set; }
+
 
         //[OneToMany(inverseProperty: nameof(Parent), CascadeOperations = CascadeOperation.CascadeRead)]
         //public List<MpCopyItem> CompositeItems { get; set; }
@@ -130,6 +131,7 @@ namespace MonkeyPaste {
             MpCopyItemType itemType = MpCopyItemType.None,
             string title = "",
             string description = "",
+            List<int> iconIdList = null,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
             if (MpPreferences.IgnoreNewDuplicates && dupCheck != null) {
@@ -146,6 +148,10 @@ namespace MonkeyPaste {
                 MpCopyItem parentItem = null;
                 var pl = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < pl.Length; i++) {
+                    int iconId = 0;
+                    if(iconIdList != null && i < iconIdList.Count) {
+                        iconId = iconIdList[i];
+                    }
                     var curItem = new MpCopyItem() {
                         CopyItemGuid = System.Guid.NewGuid(),
                         CopyDateTime = DateTime.Now,
@@ -155,6 +161,7 @@ namespace MonkeyPaste {
                         ItemType = itemType,
                         SourceId = source.Id,
                         Source = source,
+                        IconId = iconId,
                         CopyCount = 1,
                         CompositeSortOrderIdx = i,
                         CompositeParentCopyItemId = 0
@@ -179,6 +186,7 @@ namespace MonkeyPaste {
                 ItemDescription = description,
                 ItemData = data,
                 ItemType = itemType,
+                IconId = iconIdList != null && iconIdList.Count > 0 ? iconIdList[0]:0,
                 SourceId = source.Id,
                 Source = source,
                 CopyCount = 1
@@ -389,7 +397,7 @@ namespace MonkeyPaste {
                 ItemType = this.ItemType,
                 Title = isReplica ? this.Title + " Copy":this.Title,
                 ItemData = this.ItemData,
-                ItemColor = this.ItemColor,
+                IconId = this.IconId,
                 Source = this.Source,
                 SourceId = this.Source.Id,
                 CopyCount = 1,

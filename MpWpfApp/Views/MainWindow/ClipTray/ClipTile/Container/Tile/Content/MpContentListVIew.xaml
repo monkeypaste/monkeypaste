@@ -47,7 +47,7 @@
                      MouseDown="ContentListBox_MouseDown"
                      ClipToBounds="True"
                      HorizontalAlignment="Stretch"
-                     HorizontalContentAlignment="Stretch"
+                     HorizontalContentAlignment="Left"
                      VerticalAlignment="Stretch"
                      VerticalContentAlignment="Stretch"
                      BorderThickness="0"

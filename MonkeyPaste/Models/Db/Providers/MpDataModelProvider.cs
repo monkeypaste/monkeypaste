@@ -318,6 +318,13 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public static async Task<string> GetIconHexColor(int iconId, int hexColorIdx = 0) {
+            string hexFieldStr = string.Format(@"HexColor{0}", Math.Min(hexColorIdx + 1, 5));
+            string query = $"select {hexFieldStr} from MpIcon where pk_MpIconId=?";
+            string result = await MpDb.QueryScalarAsync<string>(query, iconId);
+            return result;
+        }
+
         #endregion MpIcon
 
         #region MpApp

@@ -119,6 +119,7 @@ namespace MpWpfApp {
                         MpConsole.WriteTraceLine(@"Error parsing url from htmlData: " + htmlData, ex);
                     }
                 }
+                List<int> iconIdList = null;
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
                     itemData = itemData.ToPlainText();
@@ -132,6 +133,14 @@ namespace MpWpfApp {
                         }
                         return null;
                     }
+                } else if(itemType == MpCopyItemType.FileList) {
+                    iconIdList = new List<int>();
+                    var fl = itemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach(var f in fl) {
+                        var iconBmpSrc = MpShellEx.GetBitmapFromPath(f, MpShellEx.IconSizeEnum.MediumIcon32);
+                        var fi = await MpIcon.Create(iconImgBase64: iconBmpSrc.ToBase64String());
+                        iconIdList.Add(fi.Id);
+                    }
                 }
 
                 if (app == null) {
@@ -141,7 +150,11 @@ namespace MpWpfApp {
                     await MpDb.AddOrUpdateAsync<MpUrl>(url);
                 }
                 var source = await MpSource.Create(app, url);
-                var ci = await MpCopyItem.Create(source, itemData, itemType);
+                var ci = await MpCopyItem.Create(
+                    source: source,
+                    data: itemData,
+                    itemType: itemType,
+                    iconIdList: iconIdList);
                 return ci;
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine(ex);

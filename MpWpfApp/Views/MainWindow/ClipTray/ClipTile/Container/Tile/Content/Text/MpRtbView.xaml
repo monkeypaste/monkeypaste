@@ -30,7 +30,8 @@
                      VerticalContentAlignment="Stretch"
                      local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData}"
                      AutoWordSelection="False"
-                     Background="{Binding ItemBackgroundBrush}"
+                     Background="{Binding ItemBackgroundHexColor,
+                                          Converter={StaticResource StringHexToBrushConverter}}"
                      Foreground="{Binding ElementName=Rtb,
                                           Path=Background,
                                           Converter={StaticResource BackgroundBrushToForegroundBrushConverter}}"

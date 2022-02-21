@@ -61,23 +61,44 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public List<string> HexColors => new List<string>() { 
-            HexColor1,
-            HexColor2,
-            HexColor3,
-            HexColor4,
-            HexColor5        
-        };
+        public List<string> HexColors {
+            get {
+                return new List<string>() {
+                            HexColor1,
+                            HexColor2,
+                            HexColor3,
+                            HexColor4,
+                            HexColor5
+                        };
+            }
+            set {
+                if(value == null) {
+                    HexColors.ForEach(x => x = string.Empty);
+                } else {
+                    int count = Math.Min(HexColors.Count, value.Count);
+                    for (int i = 0; i < count; i++) {
+                        HexColors[i] = value[i];
+                    }
+                }
+            }
+        }
 
         #endregion
 
         #region Statics
 
-        public static async Task<MpIcon> Create(string iconImgBase64, bool createBorder = true, string guid = "") {
-            var dupCheck = await MpDataModelProvider.GetIconByImageStr(iconImgBase64);
-            if(dupCheck != null) {
-                dupCheck = await MpDb.GetItemAsync<MpIcon>(dupCheck.Id);
-                return dupCheck;
+        public static async Task<MpIcon> Create(
+            string iconImgBase64 = "",
+            List<string> hexColors = null,
+            bool createBorder = true, 
+            string guid = "") {
+            MpIcon dupCheck = null;
+            if(!string.IsNullOrEmpty(iconImgBase64)) {
+                dupCheck = await MpDataModelProvider.GetIconByImageStr(iconImgBase64);
+                if (dupCheck != null) {
+                    dupCheck = await MpDb.GetItemAsync<MpIcon>(dupCheck.Id);
+                    return dupCheck;
+                }
             }
 
             var iconImage = await MpDbImage.Create(iconImgBase64);
@@ -85,7 +106,8 @@ namespace MonkeyPaste {
             var newIcon = new MpIcon() {
                 IconGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid():System.Guid.Parse(guid),
                 IconImageId = iconImage.Id,
-                IconImage = iconImage
+                IconImage = iconImage,
+                HexColors = hexColors
             };
 
             if(createBorder) {

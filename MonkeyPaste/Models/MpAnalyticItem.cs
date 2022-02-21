@@ -59,7 +59,9 @@ namespace MonkeyPaste {
 
             if (!string.IsNullOrEmpty(iconUrl)) {
                 var bytes = await MpFileIo.ReadBytesFromUriAsync(iconUrl);
-                icon = await MpIcon.Create(bytes.ToBase64String(), false);
+                icon = await MpIcon.Create(
+                    iconImgBase64: bytes.ToBase64String(), 
+                    createBorder: false);
             } 
             icon = icon == null ? MpPreferences.ThisAppIcon : icon;
 

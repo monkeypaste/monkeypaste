@@ -1,0 +1,133 @@
+﻿<local:MpUserControl x:Class="MpWpfApp.MpTagTabView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:wpfspark="clr-namespace:WPFSpark;assembly=WPFSpark"
+                     x:TypeArguments="local:MpTagTileViewModel"
+                     mc:Ignorable="d"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800"
+                     d:DataContext="{d:DesignInstance Type=local:MpTagTileViewModel,
+                                                      IsDesignTimeCreatable=False}">
+    <i:Interaction.Behaviors>
+        <local:MpTagTileNotificationBehavior x:Name="TagTileNotificationBehavior" />
+    </i:Interaction.Behaviors>
+    <AdornerDecorator>
+        <StackPanel Orientation="Horizontal"
+                    PreviewMouseRightButtonDown="StackPanel_PreviewMouseRightButtonDown">
+            <local:MpClipBorder x:Name="TagTileBorder"
+                                Loaded="TagTileBorder_Loaded"
+                                Unloaded="TagTileBorder_Unloaded"
+                                local:MpHoverableExtension.IsEnabled="True"
+                                local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                                Mode=TwoWay}"
+                                LostFocus="TagTileBorder_LostFocus"
+                                PreviewMouseLeftButtonDown="TagTileBorder_PreviewMouseLeftButtonDown"
+                                CornerRadius="10"
+                                Margin="5,3,0,0"
+                                Padding="7,5,7,5"
+                                Focusable="False"
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Left"
+                                Background="{Binding TagBorderBackgroundBrush}"
+                                BorderBrush="{Binding TagBorderBrush}"
+                                Tag="{Binding DataContext,
+                                              RelativeSource={RelativeSource Mode=Self}}"
+                                BorderThickness="1.5"
+                                Height="{Binding TagHeight}">
+                <local:MpClipBorder.Resources>
+                    <local:MpBindingProxy x:Key="TagTileVmProxy"
+                                          Data="{Binding}" />
+                </local:MpClipBorder.Resources>
+                <StackPanel Orientation="Horizontal">
+                    <Grid DockPanel.Dock="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <!--  Tag Count Box  -->
+                        <local:MpClipBorder x:Name="TagCountBorder"
+                                            CornerRadius="5"
+                                            Grid.Column="0"
+                                            Grid.Row="0"
+                                            MinWidth="20"
+                                            Margin="3,0,0,0"
+                                            Padding="5,5,5,5"
+                                            BorderThickness="0"
+                                            Background="{Binding TagHexColor,
+                                                                 Mode=TwoWay,
+                                                                 UpdateSourceTrigger=PropertyChanged,
+                                                                 NotifyOnTargetUpdated=True,
+                                                                 NotifyOnSourceUpdated=True,
+                                                                 Converter={StaticResource StringHexToBrushConverter}}">
+                            <TextBlock Background="Transparent"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Text="{Binding TagClipCount,
+                                                      Converter={StaticResource IntToStringConverter}}"
+                                       Foreground="{Binding TagCountTextColor}" />
+                        </local:MpClipBorder>
+                        <TextBlock x:Name="TagTextBlock"
+                                   Grid.Column="1"
+                                   Grid.Row="0"
+                                   Margin="5,0,0,0"
+                                   Background="Transparent"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Visibility="{Binding IsEditing,
+                                                        Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                   FontSize="{Binding TagFontSize}"
+                                   FontWeight="SemiBold"
+                                   Foreground="{Binding TagTextColor}"
+                                   Text="{Binding TagName,
+                                                  Mode=TwoWay,
+                                                  UpdateSourceTrigger=PropertyChanged,
+                                                  NotifyOnTargetUpdated=True,
+                                                  NotifyOnSourceUpdated=True}" />
+                        <TextBox x:Name="TagTextBox"
+                                 IsVisibleChanged="TagTextBox_IsVisibleChanged"
+                                 LostFocus="TagTextBox_LostFocus"
+                                 PreviewKeyDown="TagTextBox_PreviewKeyDown"
+                                 TextChanged="TagTextBox_TextChanged"
+                                 local:MpIsFocusedExtension.IsEnabled="True"
+                                 Grid.Row="0"
+                                 Grid.Column="1"
+                                 Margin="5,0,0,0"
+                                 Background="White"
+                                 Foreground="Black"
+                                 IsReadOnly="False"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Visibility="{Binding IsEditing,
+                                                      Converter={StaticResource BoolToVisibilityConverter}}"
+                                 FontSize="{Binding TagFontSize}"
+                                 Text="{Binding TagName,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnTargetUpdated=True,
+                                                NotifyOnSourceUpdated=True}" />
+                    </Grid>
+                </StackPanel>
+            </local:MpClipBorder>
+            <StackPanel x:Name="AddTagButtonPanel"
+                        Margin="10,5,5,0">
+                <Button x:Name="AddTagButton"
+                        Visibility="{Binding IsAllTag,
+                                             Converter={StaticResource BoolToVisibilityConverter},
+                                             ConverterParameter={StaticResource Hide}}"
+                        Height="30"
+                        Width="30"
+                        ToolTip="Add Collection"
+                        ToolTipService.InitialShowDelay="100"
+                        Style="{StaticResource RoundedButton}"
+                        Command="{Binding AddChildTagCommand}">
+                    <Image Stretch="Fill"
+                           Source="/MpWpfApp;component/Resources/Images/add4.png" />
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </AdornerDecorator>
+</local:MpUserControl>

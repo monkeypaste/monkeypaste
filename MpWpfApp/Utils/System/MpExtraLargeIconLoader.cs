@@ -185,14 +185,14 @@ namespace MpWpfApp {
 
         private static BitmapSource GetBitmapFromIconHandle(IntPtr hIcon) {
             if (hIcon == IntPtr.Zero) {
-                throw new System.IO.FileNotFoundException();
+                return null;
             }
             using (var myIcon = System.Drawing.Icon.FromHandle(hIcon)) {
                 using (var bitmap = myIcon.ToBitmap()) {
                     myIcon.Dispose();
                     DestroyIcon(hIcon);
                     SendMessage(hIcon, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                    return MpHelpers.ConvertBitmapToBitmapSource(bitmap);
+                    return bitmap.ToBitmapSource();                    
                 }                    
             }
         }
@@ -225,7 +225,7 @@ namespace MpWpfApp {
             var retval = SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
             if (retval == 0) {
                 // This occurs from a COM exception likely from the AddTileThread so in this case just return the app icon handle
-                return MpResolver.Resolve<MpProcessHelper.MpProcessManager>().ThisAppHandle;
+                return IntPtr.Zero;
             }
             var iconIndex = shinfo.iIcon;
             var iImageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");

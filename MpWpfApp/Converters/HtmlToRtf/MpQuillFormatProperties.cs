@@ -14,6 +14,7 @@ namespace MpWpfApp {
         public static MpQuillFormatProperties Instance { get { return _Lazy.Value; } }
         #endregion
 
+        public readonly string QuillHeader = "<!-- QuillFormat -->";
 
         public string[] QuillTagNames {
             get {

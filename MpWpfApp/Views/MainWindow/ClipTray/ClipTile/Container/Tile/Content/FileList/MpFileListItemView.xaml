@@ -8,6 +8,8 @@
                             x:TypeArguments="local:MpContentItemViewModel"
                             mc:Ignorable="d"
                             d:DesignHeight="450"
+                            Background="{Binding ItemBackgroundHexColor,
+                                                 Converter={StaticResource StringHexToBrushConverter}}"
                             d:DesignWidth="800"
                             d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
                                                              IsDesignTimeCreatable=False}">
@@ -18,13 +20,12 @@
                 Loaded="FileListItemPanel_Loaded"
                 Unloaded="FileListItemPanel_Unloaded"
                 Orientation="Horizontal"
+                Margin="3"
                 MinHeight="22"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Background="{Binding ItemBackgroundBrush}">
-        <Image Source="{Binding CopyItemData,
-                                Converter={StaticResource FilePathStringToIconConverter},
-                                ConverterParameter=15}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Stretch">
+        <Image Source="{Binding IconId,
+                                Converter={StaticResource IconIdToImageSourceConverter}}"
                Width="15"
                Height="15"
                Stretch="Fill" />

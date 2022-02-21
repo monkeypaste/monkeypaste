@@ -110,7 +110,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
-    <Compile Include="AttachedProperties\MpResizerExtension.cs" />
     <Compile Include="AttachedProperties\MpIsFocusedExtension.cs" />
     <Compile Include="AttachedProperties\MpPopupMenuExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
@@ -161,8 +160,6 @@
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
     <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
-    <Compile Include="Controls\Adorners\Resizer\MpResizeChildHelper.cs" />
-    <Compile Include="Controls\Adorners\Resizer\MpResizeAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMoveThumb.cs" />
@@ -263,6 +260,7 @@
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpCsvReader.cs" />
     <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
+    <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcherViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpMacroActionViewModel.cs" />
@@ -368,6 +366,12 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
+    <Compile Include="Views\MainWindow\FilterMenu\TagTabs\MpTagTabsView.xaml.cs">
+      <DependentUpon>MpTagTabsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\FilterMenu\TagTabs\TagTab\MpTagTabView.xaml.cs">
+      <DependentUpon>MpTagTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionChooserView.xaml.cs">
       <DependentUpon>MpTriggerActionChooserView.xaml</DependentUpon>
     </Compile>
@@ -614,10 +618,6 @@
     <Compile Include="Views\SystemTray\MpSystemTrayView.xaml.cs">
       <DependentUpon>MpSystemTrayView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Controls\Adorners\Resizer\MpResizeAdornerTriangle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\MultiSelectComboBox\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -677,6 +677,14 @@
     <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\FilterMenu\TagTabs\MpTagTabsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\FilterMenu\TagTabs\TagTab\MpTagTabView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionChooserView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -1239,6 +1247,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.ML.OnnxRuntime">
       <Version>1.10.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.1108.44</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.SDK.Contracts">
       <Version>10.0.22000.196</Version>

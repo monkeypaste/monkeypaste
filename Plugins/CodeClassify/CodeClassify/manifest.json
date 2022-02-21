@@ -1,0 +1,938 @@
+{
+  "title": "Code Language Detector",
+  "description": "Attempts to detect coding language of a snippet",
+  "version": "1.0",
+  "credits": "Highlight.js & Jason O'Neill'",
+  "guid": "109f8a59-e5de-4ab9-b85c-e3045e829bb6",
+  "iconUrl": "https://avatars.githubusercontent.com/u/9039821?s=280&v=4",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "Supported Languages",
+        "parameterControlType": "ComboBox",
+        "parameterValueType": "Csv",
+        "enumId": 1,
+        "isRequired": true,
+        "isMultiValue": true,
+        "values": [
+          {
+            "label": "1C",
+            "value": "1c"
+          },
+          {
+            "label": "4D",
+            "value": "4d"
+          },
+          {
+            "label": "ABAP",
+            "value": "sap-abap, abap"
+          },
+          {
+            "label": "ABNF",
+            "value": "abnf"
+          },
+          {
+            "label": "Access logs",
+            "value": "accesslog"
+          },
+          {
+            "label": "Ada",
+            "value": "ada"
+          },
+          {
+            "label": "Arduino (C++ w/Arduino libs)",
+            "value": "arduino, ino"
+          },
+          {
+            "label": "ARM assembler",
+            "value": "armasm, arm"
+          },
+          {
+            "label": "AVR assembler",
+            "value": "avrasm"
+          },
+          {
+            "label": "ActionScript",
+            "value": "actionscript, as"
+          },
+          {
+            "label": "Alan IF",
+            "value": "alan, i"
+          },
+          {
+            "label": "Alan",
+            "value": "ln"
+          },
+          {
+            "label": "AngelScript",
+            "value": "angelscript, asc"
+          },
+          {
+            "label": "Apache",
+            "value": "apache, apacheconf"
+          },
+          {
+            "label": "AppleScript",
+            "value": "applescript, osascript"
+          },
+          {
+            "label": "Arcade",
+            "value": "arcade"
+          },
+          {
+            "label": "AsciiDoc",
+            "value": "asciidoc, adoc"
+          },
+          {
+            "label": "AspectJ",
+            "value": "aspectj"
+          },
+          {
+            "label": "AutoHotkey",
+            "value": "autohotkey"
+          },
+          {
+            "label": "AutoIt",
+            "value": "autoit"
+          },
+          {
+            "label": "Awk",
+            "value": "awk, mawk, nawk, gawk"
+          },
+          {
+            "label": "Bash",
+            "value": "bash, sh, zsh",
+            "isDefault": true
+          },
+          {
+            "label": "Basic",
+            "value": "basic"
+          },
+          {
+            "label": "BBCode",
+            "value": "bbcode"
+          },
+          {
+            "label": "Blade (Laravel)",
+            "value": "blade"
+          },
+          {
+            "label": "BNF",
+            "value": "bnf"
+          },
+          {
+            "label": "Brainfuck",
+            "value": "brainfuck, bf"
+          },
+          {
+            "label": "C#",
+            "value": "csharp, cs",
+            "isDefault": true
+          },
+          {
+            "label": "C",
+            "value": "c, h",
+            "isDefault": true
+          },
+          {
+            "label": "C++",
+            "value": "cpp, hpp, cc, hh, c++, h++, cxx, hxx",
+            "isDefault": true
+          },
+          {
+            "label": "C/AL",
+            "value": "cal"
+          },
+          {
+            "label": "Cache Object Script",
+            "value": "cos, cls"
+          },
+          {
+            "label": "CMake",
+            "value": "cmake, cmake.in"
+          },
+          {
+            "label": "Coq",
+            "value": "coq"
+          },
+          {
+            "label": "CSP",
+            "value": "csp"
+          },
+          {
+            "label": "CSS",
+            "value": "css",
+            "isDefault": true
+          },
+          {
+            "label": "Cap’n Proto",
+            "value": "capnproto, capnp"
+          },
+          {
+            "label": "Chaos",
+            "value": "chaos, kaos"
+          },
+          {
+            "label": "Chapel",
+            "value": "chapel, chpl"
+          },
+          {
+            "label": "Cisco CLI",
+            "value": "cisco"
+          },
+          {
+            "label": "Clojure",
+            "value": "clojure, clj"
+          },
+          {
+            "label": "CoffeeScript",
+            "value": "coffeescript, coffee, cson, iced"
+          },
+          {
+            "label": "CpcdosC+",
+            "value": "cpc"
+          },
+          {
+            "label": "Crmsh",
+            "value": "crmsh, crm, pcmk"
+          },
+          {
+            "label": "Crystal",
+            "value": "crystal, cr"
+          },
+          {
+            "label": "cURL",
+            "value": "curl"
+          },
+          {
+            "label": "Cypher (Neo4j)",
+            "value": "cypher"
+          },
+          {
+            "label": "D",
+            "value": "d"
+          },
+          {
+            "label": "Dafny",
+            "value": "dafny"
+          },
+          {
+            "label": "Dart",
+            "value": "dart"
+          },
+          {
+            "label": "Delphi",
+            "value": "dpr, dfm, pas, pascal"
+          },
+          {
+            "label": "Diff",
+            "value": "diff, patch",
+            "isDefault": true
+          },
+          {
+            "label": "Django",
+            "value": "django, jinja"
+          },
+          {
+            "label": "DNS Zone file",
+            "value": "dns, zone, bind"
+          },
+          {
+            "label": "Dockerfile",
+            "value": "dockerfile, docker"
+          },
+          {
+            "label": "DOS",
+            "value": "dos, bat, cmd"
+          },
+          {
+            "label": "dsconfig",
+            "value": "dsconfig"
+          },
+          {
+            "label": "DTS (Device Tree)",
+            "value": "dts"
+          },
+          {
+            "label": "Dust",
+            "value": "dust, dst"
+          },
+          {
+            "label": "Dylan",
+            "value": "dylan"
+          },
+          {
+            "label": "EBNF",
+            "value": "ebnf"
+          },
+          {
+            "label": "Elixir",
+            "value": "elixir"
+          },
+          {
+            "label": "Elm",
+            "value": "elm"
+          },
+          {
+            "label": "Erlang",
+            "value": "erlang, erl"
+          },
+          {
+            "label": "Excel",
+            "value": "excel, xls, xlsx"
+          },
+          {
+            "label": "Extempore",
+            "value": "extempore, xtlang, xtm"
+          },
+          {
+            "label": "F#",
+            "value": "fsharp, fs"
+          },
+          {
+            "label": "FIX",
+            "value": "fix"
+          },
+          {
+            "label": "Fortran",
+            "value": "fortran, f90, f95"
+          },
+          {
+            "label": "G-Code",
+            "value": "gcode, nc"
+          },
+          {
+            "label": "Gams",
+            "value": "gams, gms"
+          },
+          {
+            "label": "GAUSS",
+            "value": "gauss, gss"
+          },
+          {
+            "label": "GDScript",
+            "value": "godot, gdscript"
+          },
+          {
+            "label": "Gherkin",
+            "value": "gherkin"
+          },
+          {
+            "label": "Glimmer and EmberJS",
+            "value": "hbs, glimmer, html.hbs, html.handlebars, htmlbars"
+          },
+          {
+            "label": "GN for Ninja",
+            "value": "gn, gni"
+          },
+          {
+            "label": "Go",
+            "value": "go, golang",
+            "isDefault": true
+          },
+          {
+            "label": "Grammatical Framework",
+            "value": "gf"
+          },
+          {
+            "label": "Golo",
+            "value": "golo, gololang"
+          },
+          {
+            "label": "Gradle",
+            "value": "gradle"
+          },
+          {
+            "label": "GraphQL",
+            "value": "graphql"
+          },
+          {
+            "label": "Groovy",
+            "value": "groovy"
+          },
+          {
+            "label": "GSQL",
+            "value": "gsql"
+          },
+          {
+            "label": "HTML, XML",
+            "value": "xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, svg",
+            "isDefault": true
+          },
+          {
+            "label": "HTTP",
+            "value": "http, https"
+          },
+          {
+            "label": "Haml",
+            "value": "haml"
+          },
+          {
+            "label": "Handlebars",
+            "value": "handlebars, hbs, html.hbs, html.handlebars"
+          },
+          {
+            "label": "Haskell",
+            "value": "haskell, hs"
+          },
+          {
+            "label": "Haxe",
+            "value": "haxe, hx"
+          },
+          {
+            "label": "High-level shader language",
+            "value": "hlsl"
+          },
+          {
+            "label": "Hy",
+            "value": "hy, hylang"
+          },
+          {
+            "label": "Ini, TOML",
+            "value": "ini, toml",
+            "isDefault": true
+          },
+          {
+            "label": "Inform7",
+            "value": "inform7, i7"
+          },
+          {
+            "label": "IRPF90",
+            "value": "irpf90"
+          },
+          {
+            "label": "JSON",
+            "value": "json",
+            "isDefault": true
+          },
+          {
+            "label": "Java",
+            "value": "java, jsp",
+            "isDefault": true
+          },
+          {
+            "label": "JavaScript",
+            "value": "javascript, js, jsx",
+            "isDefault": true
+          },
+          {
+            "label": "Jolie",
+            "value": "jolie, iol, ol"
+          },
+          {
+            "label": "Julia",
+            "value": "julia, julia-repl"
+          },
+          {
+            "label": "Kotlin",
+            "value": "kotlin, kt",
+            "isDefault": true
+          },
+          {
+            "label": "LaTeX",
+            "value": "tex"
+          },
+          {
+            "label": "Leaf",
+            "value": "leaf"
+          },
+          {
+            "label": "Lean",
+            "value": "lean"
+          },
+          {
+            "label": "Lasso",
+            "value": "lasso, ls, lassoscript"
+          },
+          {
+            "label": "Less",
+            "value": "less",
+            "isDefault": true
+          },
+          {
+            "label": "LDIF",
+            "value": "ldif"
+          },
+          {
+            "label": "Lisp",
+            "value": "lisp"
+          },
+          {
+            "label": "LiveCode Server",
+            "value": "livecodeserver"
+          },
+          {
+            "label": "LiveScript",
+            "value": "livescript, ls"
+          },
+          {
+            "label": "Lua",
+            "value": "lua",
+            "isDefault": true
+          },
+          {
+            "label": "Makefile",
+            "value": "makefile, mk, mak, make",
+            "isDefault": true
+          },
+          {
+            "label": "Markdown",
+            "value": "markdown, md, mkdown, mkd",
+            "isDefault": true
+          },
+          {
+            "label": "Mathematica",
+            "value": "mathematica, mma, wl"
+          },
+          {
+            "label": "Matlab",
+            "value": "matlab"
+          },
+          {
+            "label": "Maxima",
+            "value": "maxima"
+          },
+          {
+            "label": "Maya Embedded Language",
+            "value": "mel"
+          },
+          {
+            "label": "Mercury",
+            "value": "mercury"
+          },
+          {
+            "label": "mIRC Scripting Language",
+            "value": "mirc, mrc"
+          },
+          {
+            "label": "Mizar",
+            "value": "mizar"
+          },
+          {
+            "label": "MKB",
+            "value": "mkb"
+          },
+          {
+            "label": "Mojolicious",
+            "value": "mojolicious"
+          },
+          {
+            "label": "Monkey",
+            "value": "monkey"
+          },
+          {
+            "label": "Moonscript",
+            "value": "moonscript, moon"
+          },
+          {
+            "label": "N1QL",
+            "value": "n1ql"
+          },
+          {
+            "label": "NSIS",
+            "value": "nsis"
+          },
+          {
+            "label": "Never",
+            "value": "never"
+          },
+          {
+            "label": "Nginx",
+            "value": "nginx, nginxconf"
+          },
+          {
+            "label": "Nim",
+            "value": "nim, nimrod"
+          },
+          {
+            "label": "Nix",
+            "value": "nix"
+          },
+          {
+            "label": "Object Constraint Language",
+            "value": "ocl"
+          },
+          {
+            "label": "OCaml",
+            "value": "ocaml, ml"
+          },
+          {
+            "label": "Objective C",
+            "value": "objectivec, mm, objc, obj-c, obj-c++, objective-c++",
+            "isDefault": true
+          },
+          {
+            "label": "OpenGL Shading Language",
+            "value": "glsl"
+          },
+          {
+            "label": "OpenSCAD",
+            "value": "openscad, scad"
+          },
+          {
+            "label": "Oracle Rules Language",
+            "value": "ruleslanguage"
+          },
+          {
+            "label": "Oxygene",
+            "value": "oxygene"
+          },
+          {
+            "label": "PF",
+            "value": "pf, pf.conf"
+          },
+          {
+            "label": "PHP",
+            "value": "php",
+            "isDefault": true
+          },
+          {
+            "label": "Papyrus",
+            "value": "papyrus, psc"
+          },
+          {
+            "label": "Parser3",
+            "value": "parser3"
+          },
+          {
+            "label": "Perl",
+            "value": "perl, pl, pm",
+            "isDefault": true
+          },
+          {
+            "label": "Pine Script",
+            "value": "pine, pinescript"
+          },
+          {
+            "label": "Plaintext",
+            "value": "plaintext, txt, text",
+            "isDefault": true
+          },
+          {
+            "label": "Pony",
+            "value": "pony"
+          },
+          {
+            "label": "PostgreSQL & PL/pgSQL",
+            "value": "pgsql, postgres, postgresql"
+          },
+          {
+            "label": "PowerShell",
+            "value": "powershell, ps, ps1"
+          },
+          {
+            "label": "Processing",
+            "value": "processing"
+          },
+          {
+            "label": "Prolog",
+            "value": "prolog"
+          },
+          {
+            "label": "Properties",
+            "value": "properties"
+          },
+          {
+            "label": "Protocol Buffers",
+            "value": "protobuf"
+          },
+          {
+            "label": "Puppet",
+            "value": "puppet, pp"
+          },
+          {
+            "label": "Python",
+            "value": "python, py, gyp",
+            "isDefault": true
+          },
+          {
+            "label": "Python profiler results",
+            "value": "profile"
+          },
+          {
+            "label": "Python REPL",
+            "value": "python-repl, pycon",
+            "isDefault": true
+          },
+          {
+            "label": "Q#",
+            "value": "qsharp"
+          },
+          {
+            "label": "Q",
+            "value": "k, kdb"
+          },
+          {
+            "label": "QML",
+            "value": "qml"
+          },
+          {
+            "label": "R",
+            "value": "r",
+            "isDefault": true
+          },
+          {
+            "label": "Razor CSHTML",
+            "value": "cshtml, razor, razor-cshtml"
+          },
+          {
+            "label": "ReasonML",
+            "value": "reasonml, re"
+          },
+          {
+            "label": "Rebol & Red",
+            "value": "redbol, rebol, red, red-system"
+          },
+          {
+            "label": "RenderMan RIB",
+            "value": "rib"
+          },
+          {
+            "label": "RenderMan RSL",
+            "value": "rsl"
+          },
+          {
+            "label": "RiScript",
+            "value": "risc, riscript"
+          },
+          {
+            "label": "Roboconf",
+            "value": "graph, instances"
+          },
+          {
+            "label": "Robot Framework",
+            "value": "robot, rf"
+          },
+          {
+            "label": "RPM spec files",
+            "value": "rpm-specfile, rpm, spec, rpm-spec, specfile"
+          },
+          {
+            "label": "Ruby",
+            "value": "ruby, rb, gemspec, podspec, thor, irb",
+            "isDefault": true
+          },
+          {
+            "label": "Rust",
+            "value": "rust, rs",
+            "isDefault": true
+          },
+          {
+            "label": "SAS",
+            "value": "SAS, sas"
+          },
+          {
+            "label": "SCSS",
+            "value": "scss",
+            "isDefault": true
+          },
+          {
+            "label": "SQL",
+            "value": "sql",
+            "isDefault": true
+          },
+          {
+            "label": "STEP Part 21",
+            "value": "p21, step, stp"
+          },
+          {
+            "label": "Scala",
+            "value": "scala"
+          },
+          {
+            "label": "Scheme",
+            "value": "scheme"
+          },
+          {
+            "label": "Scilab",
+            "value": "scilab, sci"
+          },
+          {
+            "label": "Shape Expressions",
+            "value": "shexc"
+          },
+          {
+            "label": "Shell",
+            "value": "shell, console"
+          },
+          {
+            "label": "Smali",
+            "value": "smali"
+          },
+          {
+            "label": "Smalltalk",
+            "value": "smalltalk, st"
+          },
+          {
+            "label": "SML",
+            "value": "sml, ml"
+          },
+          {
+            "label": "Solidity",
+            "value": "solidity, sol"
+          },
+          {
+            "label": "Splunk SPL",
+            "value": "spl"
+          },
+          {
+            "label": "Stan",
+            "value": "stan, stanfuncs"
+          },
+          {
+            "label": "Stata",
+            "value": "stata"
+          },
+          {
+            "label": "Structured Text",
+            "value": "iecst, scl, stl, structured-text"
+          },
+          {
+            "label": "Stylus",
+            "value": "stylus, styl"
+          },
+          {
+            "label": "SubUnit",
+            "value": "subunit"
+          },
+          {
+            "label": "Supercollider",
+            "value": "supercollider, sc"
+          },
+          {
+            "label": "Svelte",
+            "value": "svelte"
+          },
+          {
+            "label": "Swift",
+            "value": "swift",
+            "isDefault": true
+          },
+          {
+            "label": "Tcl",
+            "value": "tcl, tk"
+          },
+          {
+            "label": "Terraform (HCL)",
+            "value": "terraform, tf, hcl"
+          },
+          {
+            "label": "Test Anything Protocol",
+            "value": "tap"
+          },
+          {
+            "label": "Thrift",
+            "value": "thrift"
+          },
+          {
+            "label": "TP",
+            "value": "tp"
+          },
+          {
+            "label": "Transact-SQL",
+            "value": "tsql"
+          },
+          {
+            "label": "Twig",
+            "value": "twig, craftcms"
+          },
+          {
+            "label": "TypeScript",
+            "value": "typescript, ts",
+            "isDefault": true
+          },
+          {
+            "label": "Unicorn Rails log",
+            "value": "unicorn-rails-log"
+          },
+          {
+            "label": "VB.Net",
+            "value": "vbnet, vb",
+            "isDefault": true
+          },
+          {
+            "label": "VBA",
+            "value": "vba"
+          },
+          {
+            "label": "VBScript",
+            "value": "vbscript, vbs"
+          },
+          {
+            "label": "VHDL",
+            "value": "vhdl"
+          },
+          {
+            "label": "Vala",
+            "value": "vala"
+          },
+          {
+            "label": "Verilog",
+            "value": "verilog, v"
+          },
+          {
+            "label": "Vim Script",
+            "value": "vim"
+          },
+          {
+            "label": "X#",
+            "value": "xsharp, xs, prg"
+          },
+          {
+            "label": "X++",
+            "value": "axapta, x++"
+          },
+          {
+            "label": "x86 Assembly",
+            "value": "x86asm"
+          },
+          {
+            "label": "XL",
+            "value": "xl, tao"
+          },
+          {
+            "label": "XQuery",
+            "value": "xquery, xpath, xq"
+          },
+          {
+            "label": "YAML",
+            "value": "yml, yaml",
+            "isDefault": true
+          },
+          {
+            "label": "ZenScript",
+            "value": "zenscript, zs"
+          },
+          {
+            "label": "Zephir",
+            "value": "zephir, zep"
+          }
+
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The Snippet to deetect",
+        "parameterControlType": "Hidden",
+        "parameterValueType": "PlainText",
+        "enumId": 2,
+        "isRequired": true,
+        "isVisible": false,
+        "values": [
+          {
+            "value": "ItemData"
+          }
+        ]
+      }
+    ]
+  }
+}

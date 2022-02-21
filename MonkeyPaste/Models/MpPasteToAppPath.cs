@@ -110,7 +110,10 @@ namespace MonkeyPaste {
             int windowState = 1,
             bool pressEnter = false) {
 
-            var icon = await MpIcon.Create(iconStr, false);
+            var icon = await MpIcon.Create(
+                iconImgBase64: iconStr, 
+                createBorder: false);
+
             var pasteToAppPath = new MpPasteToAppPath() {
                 PasteToAppPathGuid = System.Guid.NewGuid(),
                 IconId = icon.Id,

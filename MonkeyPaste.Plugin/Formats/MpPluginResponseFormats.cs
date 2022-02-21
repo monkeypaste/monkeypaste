@@ -8,7 +8,7 @@ namespace MonkeyPaste.Plugin {
         public List<MpPluginResponseAnnotationFormat> annotations { get; set; }
     }
 
-    public abstract class MpPluginResponseItemBaseFormat {
+    public class MpPluginResponseItemBaseFormat {
         public string name { get; set; }
 
         public MpJsonPathProperty label { get; set; }

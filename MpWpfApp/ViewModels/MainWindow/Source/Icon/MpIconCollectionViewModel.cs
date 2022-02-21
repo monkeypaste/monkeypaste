@@ -116,7 +116,9 @@ namespace MpWpfApp {
                     var icon = await uivm.GetIcon();
                     if(icon == null) {
                         // likely means its current icon is a default reference to a parent
-                        icon = await MpIcon.Create(bmpSrc.ToBase64String(), false);
+                        icon = await MpIcon.Create(
+                            iconImgBase64: bmpSrc.ToBase64String(), 
+                            createBorder: false);
                     } else {
                         icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
                         await icon.CreateOrUpdateBorder();

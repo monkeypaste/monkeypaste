@@ -57,6 +57,7 @@ namespace MonkeyPaste.Plugin {
         public bool imageToken { get; set; } = false;
         public bool textToken { get; set; } = false;
         public bool file { get; set; } = false;
+        public bool actionInput { get; set; } = false;
     }
 
     public class MpAnalyticItemParameterFormat {

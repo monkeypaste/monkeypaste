@@ -15,6 +15,7 @@ using System.Windows;
 using MonkeyPaste.Plugin;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.Web.WebView2.Wpf;
 
 namespace MpWpfApp {
     public class MpAnalyticItemViewModel : 
@@ -803,7 +804,23 @@ namespace MpWpfApp {
         }
 
         private async Task<object> GetResponse(string requestStr) {
-            var result = await AnalyzerPluginComponent.AnalyzeAsync(requestStr);
+            bool isDone = false;
+            var wv = new WebView2() {
+                Visibility = Visibility.Hidden
+            };
+            wv.Initialized += (s, e) => {
+                isDone = true;
+            };
+            (Application.Current.MainWindow as MpMainWindow).MainWindowCanvas.Children.Add(wv);
+            while(!isDone) {
+                await Task.Delay(100);
+            }
+            await wv.EnsureCoreWebView2Async();
+
+            object[] args = new object[] { wv, requestStr };
+            var result = await AnalyzerPluginComponent.AnalyzeAsync(args);
+
+            (Application.Current.MainWindow as MpMainWindow).MainWindowCanvas.Children.Remove(wv);
             return result;
         }
 

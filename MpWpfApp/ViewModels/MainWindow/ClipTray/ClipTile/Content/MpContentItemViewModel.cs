@@ -116,27 +116,17 @@ namespace MpWpfApp {
             }
         }
 
-        private Brush _itemBackgroundBrush;
-        public Brush ItemBackgroundBrush {
+        public string ItemBackgroundHexColor {
             get {
-                if (MpDragDropManager.IsDragAndDrop) {
-                    return MpThemeColors.Instance.CurrentTheme.ToArray()[(int)MpThemeItemType.Clip_Tile_Content_Item_Background_Color].Value;
+                if(MpDragDropManager.IsDragAndDrop) {
+                    return MpSystemColors.White;
                 }
                 if (IsHovering &&
                     ((!IsReadOnly && !IsSelected) || IsReadOnly) &&
                     Parent.Count > 1) {
-                    if(string.IsNullOrEmpty(CopyItem.ItemColor)) {
-                        if(_itemBackgroundBrush == null) {
-                            _itemBackgroundBrush = MpWpfColorHelpers.GetRandomBrushColor();
-                        }
-                    } else if(_itemBackgroundBrush != CopyItemColorBrush) {
-                        _itemBackgroundBrush = CopyItemColorBrush;
-                    }
-                    return MpWpfColorHelpers.GetLighterBrush(_itemBackgroundBrush, 0.75);
+                    return MpColorHelpers.GetLighterHexColor(CopyItemHexColor, 0.75);
                 }
-
-                return MpThemeColors.Instance.CurrentTheme.ToArray()[(int)MpThemeItemType.Clip_Tile_Content_Item_Background_Color].Value;
-
+                return MpSystemColors.White;
             }
         }
 
@@ -155,6 +145,7 @@ namespace MpWpfApp {
         public Brush ItemSeparatorBrush {
             get {
                 if(//MpContentDropManager.Instance.IsDragAndDrop ||
+                    CopyItemType == MpCopyItemType.FileList ||
                    Parent == null ||
                    Parent.Count == 1 ||
                    ItemIdx == Parent.Count - 1 ||
@@ -178,9 +169,6 @@ namespace MpWpfApp {
 
         public Rect ItemSeparatorBrushRect {
             get {
-                if(CopyItemType == MpCopyItemType.FileList) {
-                    return MpMeasurements.Instance.SolidBorderRect;
-                }
                 return MpMeasurements.Instance.DottedBorderRect;
             }
         }
@@ -529,21 +517,6 @@ namespace MpWpfApp {
             }
         }
 
-        public Brush CopyItemColorBrush {
-            get {
-                if (CopyItem == null) {
-                    return Brushes.Red;
-                }
-                return new SolidColorBrush(CopyItem.ItemColor.ToWinMediaColor());
-            }
-            set {
-                if (CopyItem != null && CopyItem.ItemColor != value.ToHex()) {
-                    CopyItem.ItemColor = value.ToHex();
-                    OnPropertyChanged(nameof(CopyItemColorBrush));
-                }
-            }
-        }
-
         public string CopyItemData {
             get {
                 if (CopyItem == null) {
@@ -560,17 +533,49 @@ namespace MpWpfApp {
             }
         }
 
-        public string CopyItemColor {
+        public int IconId {
             get {
-                if (CopyItem == null) {
-                    return string.Empty;
+                if(CopyItem == null) {
+                    return 0;
                 }
-                return CopyItem.ItemColor;
+                return CopyItem.IconId;
             }
             set {
-                if (CopyItemColor != value) {
-                    CopyItem.ItemColor = value;
-                    OnPropertyChanged(nameof(CopyItemColor));
+                if(IconId != value) {
+                    CopyItem.IconId = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IconId));
+                }
+            }
+        }
+
+        private string _copyItemHexColor = string.Empty;
+        public string CopyItemHexColor {
+            get {
+                if(string.IsNullOrEmpty(_copyItemHexColor)) {
+                    _copyItemHexColor = MpColorHelpers.GetRandomHexColor();
+                }
+                return _copyItemHexColor;
+            }
+            set {
+                if (CopyItemHexColor != value) {
+                    _copyItemHexColor = value;
+                    OnPropertyChanged(nameof(CopyItemHexColor));
+                    Task.Run(async () => {
+                        MpIcon icon = null;
+                        if(IconId == 0) {
+                            icon = await MpIcon.Create(
+                                iconImgBase64: string.Empty,
+                                hexColors: new List<string> { CopyItemHexColor },
+                                createBorder: false);
+                            IconId = icon.Id;
+                            return;
+                        }
+                        icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+                        icon.HexColor1 = CopyItemHexColor;
+                        await icon.WriteToDatabaseAsync();
+
+                    });
                 }
             }
         }
@@ -619,6 +624,9 @@ namespace MpWpfApp {
             }
             CopyItem = ci;
 
+            if(IconId > 0) {
+                CopyItemHexColor = await MpDataModelProvider.GetIconHexColor(IconId);
+            }
 
             IsNewAndFirstLoad = !MpMainWindowViewModel.Instance.IsMainWindowLoading;
 
@@ -649,10 +657,10 @@ namespace MpWpfApp {
         public async Task GatherAnalytics() {
             var analyticTasks = new List<Task>();
             Task<string> urlTask = null, ocrTask = null, cvTask = null;
-            if (CopyItem.SsDbImage != null) {
-                urlTask = MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.SsDbImage.ImageBase64.ToBitmapSource());
-                analyticTasks.Add(urlTask);
-            }
+            //if (CopyItem.SsDbImage != null) {
+            //    urlTask = MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.SsDbImage.ImageBase64.ToBitmapSource());
+            //    analyticTasks.Add(urlTask);
+            //}
 
             //if (CopyItem.ItemType == MpCopyItemType.Image) {
             //    var itemBmpBytes = MpHelpers.ConvertBitmapSourceToByteArray(CopyItem.ItemData.ToBitmapSource());
@@ -807,8 +815,8 @@ namespace MpWpfApp {
 
             pallete.InsertRange(0, tagColors);
 
-            if(!string.IsNullOrEmpty(CopyItem.ItemColor)) {
-                pallete.Insert(0,CopyItem.ItemColor);
+            if(!string.IsNullOrEmpty(CopyItemHexColor)) {
+                pallete.Insert(0,CopyItemHexColor);
             }
             ColorPallete = pallete.Take(5).ToArray();
 
@@ -1163,23 +1171,22 @@ namespace MpWpfApp {
         }
 
         public string GetColor() {
-            return CopyItem.ItemColor;
+            return CopyItemHexColor;
         }
 
         public ICommand SetColorCommand => new RelayCommand<string>(
             async (args) => {
-                CopyItemColor = args as string;
+                CopyItemHexColor = args as string;
                 await CopyItem.WriteToDatabaseAsync();
 
-                CopyItemColorBrush = CopyItemColor.ToSolidColorBrush();
-                TitleSwirlViewModel.ForceBrush(CopyItemColorBrush);
+                TitleSwirlViewModel.ForceBrush(CopyItemHexColor.ToSolidColorBrush());
 
                 MpContextMenuView.Instance.CloseMenu();
             });
 
         public ICommand ChangeColorCommand => new RelayCommand<Brush>(
             async (b) => {
-                CopyItem.ItemColor = b.ToHex();
+                CopyItemHexColor = b.ToHex();
                 TitleSwirlViewModel.ForceBrush(b);
                 await CopyItem.WriteToDatabaseAsync();
             });

@@ -117,12 +117,12 @@ namespace MpWpfApp {
             double max = 764.83331517396653;
             double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
             return d / max;
-}
+        }
 
         public static Color GetRandomColor() {
             if (_Rand == null) {
                 _Rand = new Random((int)DateTime.Now.Ticks);
-}
+            }
             int x = _Rand.Next(0, _colors.Count);
             int y = _Rand.Next(0, _colors[0].Count);
 

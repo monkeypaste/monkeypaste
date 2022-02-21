@@ -29,7 +29,6 @@ namespace MpWpfApp {
                 return;
             }
             test = true;
-            new ResizeAdorner(sender as TextBox, 3000, 3000);
         }
     }
 }

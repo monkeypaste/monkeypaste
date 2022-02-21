@@ -125,6 +125,10 @@ namespace MpWpfApp {
 
         public static bool IsStringQuillText(this string text) {
             if (IsStringPlainText(text)) {
+                if(!text.StartsWith(MpQuillFormatProperties.Instance.QuillHeader)) {
+                    // TODO need to prefix quill html w/ this tag just differentiate normal html
+                    return false;
+                }
                 foreach (var qt in MpQuillFormatProperties.Instance.QuillOpenTags) {
                     if (text.Contains(qt)) {
                         return true;

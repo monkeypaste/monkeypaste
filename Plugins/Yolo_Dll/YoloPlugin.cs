@@ -22,7 +22,7 @@ namespace Yolo_Dll {
                     throw new FileNotFoundException("Cannot find mappings file.", fileName);
                 }
                 _yoloWrapper = new YoloScorer<YoloCocoP5Model>(stream, null);
-            }                
+            }
         }
 
         public async Task<object> AnalyzeAsync(object args) {
@@ -38,30 +38,34 @@ namespace Yolo_Dll {
                 bmp = new Bitmap(ms);
             }
 
-            
-
             var boxList = new List<MpPluginResponseAnnotationFormat>();
-
+            
             List<YoloPrediction> predictions = _yoloWrapper.Predict(bmp);
             using (var graphics = System.Drawing.Graphics.FromImage(bmp)) {
                 foreach (var item in predictions) {
                     double score = Math.Round(item.Score, 2);
 
                     if (score >= confidence) {
-                        var boxAnnotation = new MpPluginResponseAnnotationFormat(item.Label.Name, (double)item.Score) {
+                        var boxAnnotation = new MpPluginResponseAnnotationFormat() {
+                            score = new MpJsonPathProperty<double>((double)item.Score),
+                            label = new MpJsonPathProperty(item.Label.Name),
+                            description = new MpJsonPathProperty(item.Label.Kind.ToString()),
                             box = new MpAnalyzerPluginImageTokenResponseValueFormat(
-                                    (double)item.Rectangle.X,
-                                    (double)item.Rectangle.Y,
-                                    (double)item.Rectangle.Width,
-                                    (double)item.Rectangle.Height)
+                                            (double)item.Rectangle.X,
+                                            (double)item.Rectangle.Y,
+                                            (double)item.Rectangle.Width,
+                                            (double)item.Rectangle.Height)
                         };
                         boxList.Add(boxAnnotation);
                     }
                 }
             }
+
             var response = new MpPluginResponseAnnotationFormat() {
+                name = "Yolo_Dll Response",
                 children = boxList
             };
+
             return JsonConvert.SerializeObject(response);
         }
     }
