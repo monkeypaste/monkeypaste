@@ -15,18 +15,5 @@ namespace MpWpfApp {
         public MpEventEnabledFlowDocument() : base() {
             //IsOptimalParagraphEnabled = true;
         }
-
-        public static FlowDocument operator +(MpEventEnabledFlowDocument a, MpEventEnabledFlowDocument b) {
-            if (a == null || b == null) {
-                if (a == null && b == null) {
-                    return string.Empty.ToFlowDocument();
-                }
-                if (a == null) {
-                    return b;
-                }
-                return a;
-            }
-            return MpWpfRichDocumentExtensions.CombineFlowDocuments(a, b, true);
-        }
     }
 }

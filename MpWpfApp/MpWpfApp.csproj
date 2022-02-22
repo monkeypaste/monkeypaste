@@ -149,7 +149,6 @@
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Base\MpHighlightBehaviorBase.cs" />
     <Compile Include="Behaviors\MpImageObjectRecognitionBehavior.cs" />
-    <Compile Include="Behaviors\MpViewportCameraBehavior.cs" />
     <Compile Include="Behaviors\MpPagingListBoxBehavior.cs" />
     <Compile Include="Behaviors\MpTagTileNotificationBehavior.cs" />
     <Compile Include="Behaviors\MpMoveBehavior.cs" />
@@ -164,9 +163,10 @@
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMoveThumb.cs" />
     <Compile Include="Controls\MpResizeThumb.cs" />
+    <Compile Include="Controls\MpRichTextBox.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpBindableListBox.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpMultiComboBox.cs" />
-    <Compile Include="Controls\ZoomBorder.cs" />
+    <Compile Include="Controls\MpZoomBorder.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
@@ -262,6 +262,7 @@
     <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcherViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\MpTransformActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpMacroActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpAnalyzeActionViewModel.cs" />
@@ -366,12 +367,6 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
-    <Compile Include="Views\MainWindow\FilterMenu\TagTabs\MpTagTabsView.xaml.cs">
-      <DependentUpon>MpTagTabsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\FilterMenu\TagTabs\TagTab\MpTagTabView.xaml.cs">
-      <DependentUpon>MpTagTabView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionChooserView.xaml.cs">
       <DependentUpon>MpTriggerActionChooserView.xaml</DependentUpon>
     </Compile>
@@ -677,14 +672,6 @@
     <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\FilterMenu\TagTabs\MpTagTabsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\FilterMenu\TagTabs\TagTab\MpTagTabView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionChooserView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -1319,6 +1306,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\wand.png" />
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />
     <Resource Include="Utils\RESTful\RestExample1.xml" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />

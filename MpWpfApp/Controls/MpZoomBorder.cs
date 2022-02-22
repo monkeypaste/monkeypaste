@@ -8,11 +8,21 @@ using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
-    public class ZoomBorder : Border {
+    public class MpZoomBorder : Border {
         // from https://stackoverflow.com/a/6782715/105028
         private UIElement child = null;
         private Point tt_origin;
         private Point mp_start;
+
+        private Point grid_offset {
+            get {
+                if(child == null) {
+                    return new Point();
+                }
+                var tt = GetTranslateTransform(child);
+                return new Point(tt.X, tt.Y);
+            }
+        }
 
         private TranslateTransform GetTranslateTransform(UIElement element) {
             return (TranslateTransform)((TransformGroup)element.RenderTransform)
@@ -37,13 +47,6 @@ namespace MpWpfApp {
         public void Initialize(UIElement element) {
             this.child = element;
             if (child != null) {
-                //TransformGroup group = new TransformGroup();
-                //ScaleTransform st = new ScaleTransform();
-                //group.Children.Add(st);
-                //TranslateTransform tt = new TranslateTransform();
-                //group.Children.Add(tt);
-                //child.RenderTransform = group;
-                //child.RenderTransformOrigin = new Point(0.0, 0.0);
                 this.PreviewMouseWheel += child_MouseWheel;
                 this.MouseLeftButtonDown += child_MouseLeftButtonDown;
                 this.MouseLeftButtonUp += child_MouseLeftButtonUp;
@@ -156,7 +159,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty ShowGridProperty =
             DependencyProperty.Register(
                 "ShowGrid", typeof(bool),
-                typeof(ZoomBorder),
+                typeof(MpZoomBorder),
                 new FrameworkPropertyMetadata(default(bool)));
 
         #endregion

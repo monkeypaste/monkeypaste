@@ -7,52 +7,39 @@
                      xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
                      xmlns:sys="clr-namespace:System;assembly=mscorlib"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpTriggerActionViewModelBase"
+                     x:TypeArguments="local:MpActionCollectionViewModel"
                      mc:Ignorable="d"
-                     d:DataContext="{d:DesignInstance Type=local:MpTriggerActionViewModelBase,
+                     d:DataContext="{d:DesignInstance Type=local:MpActionCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Grid>
         <Grid.Background>
             <SolidColorBrush Color="Gray"
                              Opacity="0.7" />
         </Grid.Background>
-        <!--<zoompan:ZoomAndPanControl x:Name="ZoomAndPanControl"
-                                   ContentViewportWidth="{Binding ViewportWidth,
-                                                                  Source={x:Static local:MpActionCollectionViewModel.Instance},
-                                                                  Mode=TwoWay}"
-                                   ContentViewportHeight="{Binding ViewportHeight,
-                                                                   Source={x:Static local:MpActionCollectionViewModel.Instance}}"
-                                   ">-->
-        <local:ZoomBorder ClipToBounds="True"
-                          ShowGrid="{Binding IsAnySelected,
-                                             Converter={StaticResource BoolToVisibilityConverter},
-                                             Source={x:Static local:MpActionCollectionViewModel.Instance}}"
-                          OriginThickness="3"
-                          GridLineThickness="1"
-                          GridLineSpacing="30"
-                          OriginBrush="Chartreuse"
-                          GridLineBrush="Chartreuse">
+        <local:MpZoomBorder ClipToBounds="True"
+                            DataContext="{Binding}"
+                            ShowGrid="{Binding IsAnySelected}"
+                            OriginThickness="1.5"
+                            GridLineThickness="0.5"
+                            GridLineSpacing="30"
+                            OriginBrush="Chartreuse"
+                            GridLineBrush="Chartreuse">
             <ListBox x:Name="ActionDesignerListBox"
                      ClipToBounds="False"
-                     Loaded="ActionDesignerListBox_Loaded"
                      Background="Transparent"
                      SelectedValuePath=""
                      BorderThickness="0"
-                     SelectionChanged="ActionDesignerListBox_SelectionChanged"
                      IsSynchronizedWithCurrentItem="False"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      ScrollViewer.CanContentScroll="False"
                      ScrollViewer.IsDeferredScrollingEnabled="True"
-                     ItemsSource="{Binding AllSelectedTriggerActions,
-                                           Source={x:Static local:MpActionCollectionViewModel.Instance}}">
+                     ItemsSource="{Binding AllSelectedTriggerActions}">
                 <ListBox.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="{Binding ScaleX,
-                                                         Source={x:Static local:MpActionCollectionViewModel.Instance},
                                                          Mode=OneWayToSource}"
                                         ScaleY="{Binding ScaleY,
-                                                         Source={x:Static local:MpActionCollectionViewModel.Instance},
                                                          Mode=OneWayToSource}" />
                         <TranslateTransform />
                     </TransformGroup>
@@ -82,7 +69,6 @@
                         <local:MpDesignerCanvas x:Name="ActionDesignerCanvas"
                                                 ClipToBounds="False"
                                                 ShowVoronoi="False"
-                                                ShowGrid="False"
                                                 MinDist="100.1"
                                                 TipWidth="10"
                                                 TailWidth="3"
@@ -160,28 +146,24 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </local:ZoomBorder>
+        </local:MpZoomBorder>
         <!--</zoompan:ZoomAndPanControl>-->
         <!--</local:MpDesignerViewbox>-->
         <Button x:Name="AddNewActionButton"
                 Visibility="{Binding IsAnySelected,
-                                     Converter={StaticResource BoolToVisibilityFlipConverter},
-                                     Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Background="Transparent"
                 BorderThickness="0"
                 local:MpHoverableExtension.IsEnabled="True"
                 local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                                Mode=TwoWay,
-                                                                Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                                                                Mode=TwoWay}"
                 Style="{StaticResource SemiTransparentButton}"
-                Command="{Binding AddTriggerCommand,
-                                  Source={x:Static local:MpActionCollectionViewModel.Instance}}">
+                Command="{Binding AddTriggerCommand}">
             <StackPanel Orientation="Vertical">
                 <Grid>
-                    <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor,
-                                              Source={x:Static local:MpActionCollectionViewModel.Instance}}"
+                    <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor}"
                              Fill="Transparent"
                              StrokeThickness="3"
                              Width="50"

@@ -168,7 +168,7 @@
                                       Grid.Column="1"
                                       DataContext="{x:Static local:MpClipTileSortViewModel.Instance}" />
                 <!--  Tag Tray  -->
-                <local:MpTagTabsView x:Name="TagTrayView"
+                <local:MpTagTrayView x:Name="TagTrayView"
                                      Grid.Column="2"
                                      DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
                 <!--  Search  -->

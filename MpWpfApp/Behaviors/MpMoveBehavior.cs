@@ -192,11 +192,6 @@ namespace MpWpfApp {
                 }
             }
             Move(delta.X, delta.Y);
-            //if (AssociatedObject.DataContext is MpActionViewModelBase avm) {
-            //    avm.MoveDesignerItemCommand.Execute(delta);
-            //} else {
-            //    Move(delta.X, delta.Y);
-            //}            
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {

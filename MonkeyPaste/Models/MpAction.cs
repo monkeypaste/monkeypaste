@@ -57,7 +57,8 @@ namespace MonkeyPaste {
         Compare,   //MatcherTypeEnumId
         Trigger,    //TriggerTypeEnumId 
         Macro,
-        Timer
+        Timer,
+        Transform
     }
 
     public class MpAction : MpDbModelBase {

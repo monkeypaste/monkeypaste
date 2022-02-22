@@ -1158,7 +1158,7 @@ namespace MpWpfApp {
         public void AdjustScrollOffsetToResize(double oldHeadTrayX, double oldScrollOfset) {
             double oldScrollOffsetDiffWithHead = oldScrollOfset - oldHeadTrayX;
 
-            double newHeadTrayX = HeadItem.TrayX;
+            double newHeadTrayX = HeadItem == null ? 0 : HeadItem.TrayX;
             double headOffsetRatio = newHeadTrayX / oldHeadTrayX;
             headOffsetRatio = double.IsNaN(headOffsetRatio) ? 0 : headOffsetRatio;
             double newScrollOfsetDiffWithHead = headOffsetRatio * oldScrollOffsetDiffWithHead;

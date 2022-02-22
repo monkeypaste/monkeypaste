@@ -90,6 +90,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(AllSelectedTriggerActions));
                     OnPropertyChanged(nameof(SelectedActions));
                     OnPropertyChanged(nameof(PrimaryAction));
+                    OnPropertyChanged(nameof(IsAnySelected));
                 }
             }
         }
@@ -152,18 +153,6 @@ namespace MpWpfApp {
         #endregion
 
         #region MpIViewportCameraViewModel Implementation
-
-        public bool IsPanning { get; set; } = false;
-        public bool IsZooming { get; set; } = false;
-        public bool CanZoom => SelectedItem != null;
-        public bool CanPan => SelectedItem != null && AllSelectedTriggerActions.All(x => !x.IsMoving && !x.CanMove);
-
-        public double MaxCameraZoomFactor => 10.0;
-        public double MinCameraZoomFactor => 0.1;
-        public double CameraZoomFactor { get; set; } = 1.0;
-
-        public double CameraX { get; set; } = 0;
-        public double CameraY { get; set; } = 0;
 
         public double ScaleX { get; set; } = 1;
         public double ScaleY { get; set; } = 1;
@@ -403,7 +392,6 @@ namespace MpWpfApp {
                     NotifyViewportChanged();
                     break;
                 case nameof(SelectedItem):
-                    CameraZoomFactor = 1.0;
                     OnPropertyChanged(nameof(IsAnySelected));
                     NotifyViewportChanged();
                     //OnPropertyChanged(nameof(AllSelectedTriggerActions));

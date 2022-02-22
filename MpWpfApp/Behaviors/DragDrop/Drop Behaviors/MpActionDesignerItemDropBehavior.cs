@@ -98,7 +98,7 @@ namespace MpWpfApp {
         public override void AutoScrollByMouse() {
             double _minScrollDist = 5;
 
-            var zoomBorder = AssociatedObject.GetVisualAncestor<ZoomBorder>();
+            var zoomBorder = AssociatedObject.GetVisualAncestor<MpZoomBorder>();
             
             var zapc_mp = Mouse.GetPosition(zoomBorder);
             Rect zapc_rect = new Rect(0, 0, AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);

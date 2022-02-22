@@ -45,8 +45,6 @@ namespace MpWpfApp {
 
         public int GridLineSpacing { get; set; } = 35;
 
-        public bool ShowGrid { get; set; } = true;
-
         #endregion
 
 
@@ -91,15 +89,17 @@ namespace MpWpfApp {
                 return;
             }
 
-            var tavm = DataContext as MpTriggerActionViewModelBase;
+            var acvm = DataContext as MpActionCollectionViewModel;
+
+            if(acvm == null) {
+                return;
+            }
+            var tavm = acvm.SelectedItem;
 
             if(tavm == null) {
                 return;
             }
 
-            if(ShowGrid) {
-                DrawGrid(dc);
-            }
             if(ShowVoronoi) {
                 if(voroObj == null) {
                     VoroniTest(dc);
@@ -134,60 +134,6 @@ namespace MpWpfApp {
         private void _timer_Tick(object sender, EventArgs e) {
             InvalidateVisual();
         }
-
-        private void DrawGrid(DrawingContext dc) {            
-            Point offset = new Point(10, 10);
-
-            var lb = this.GetVisualAncestor<ListBox>();
-            var st = (ScaleTransform)((TransformGroup)lb.RenderTransform).Children.First(tr => tr is ScaleTransform);
-            Size gs = new Size(RenderSize.Width / st.ScaleX, RenderSize.Height / st.ScaleY);
-
-
-            int HorizontalGridLineCount = (int)((gs.Width * 2) / GridLineSpacing);
-            int VerticalGridLineCount = (int)((gs.Height * 2) / GridLineSpacing);
-
-            double yStep = gs.Height / VerticalGridLineCount;
-            double xStep = gs.Width / HorizontalGridLineCount;
-
-            double startX = -(gs.Width);
-            double startY = -(gs.Height); 
-
-            double curX = startX;
-            double curY = startY;
-
-            for (int c = 0; c < HorizontalGridLineCount; c++) {
-                Point p1 = new Point(curX, startY);
-                p1 = (Point)(p1 - offset);
-                Point p2 = new Point(curX, gs.Height);
-                p2 = (Point)(p2 - offset);
-
-                bool isOrigin = c == (int)(HorizontalGridLineCount / 2);
-                if (isOrigin) {
-                    dc.DrawLine(new Pen(OriginBrush, OriginThickness), p1, p2);
-                } else {
-                    dc.DrawLine(new Pen(GridLineBrush, GridLineThickness), p1, p2);
-                }
-
-                curX += xStep;
-            }
-
-            for (int r = 0; r < VerticalGridLineCount; r++) {
-                Point p1 = new Point(startX, curY);
-                p1 = (Point)(p1 - offset);
-                Point p2 = new Point(gs.Width, curY);
-                p2 = (Point)(p2 - offset);
-
-                bool isOrigin = r == (int)(VerticalGridLineCount / 2);
-                if (isOrigin) {
-                    dc.DrawLine(new Pen(OriginBrush, OriginThickness), p1, p2);
-                } else {
-                    dc.DrawLine(new Pen(GridLineBrush, GridLineThickness), p1, p2);
-                }
-
-                curY += yStep;
-            }
-        }
-
         private void DrawEmptyLine(DrawingContext dc, Point startPoint, Point endPoint, double dw) {
             Vector direction = endPoint - startPoint;
 
@@ -195,7 +141,7 @@ namespace MpWpfApp {
             normalizedDirection.Normalize();
 
             startPoint += normalizedDirection * dw;
-            endPoint -= normalizedDirection * (dw / 2);
+            endPoint.Y -= normalizedDirection.Y * (dw / 2);
 
             var emptyPen = new Pen(EmptyLineBrush, EmptyLineThickness) { DashStyle = EmptyLineDaskStyle };
 

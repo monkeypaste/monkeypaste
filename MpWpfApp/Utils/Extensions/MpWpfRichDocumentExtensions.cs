@@ -317,11 +317,23 @@ namespace MpWpfApp {
             }        
         }
 
-        public static FlowDocument ToFlowDocument(this string str, out Size docSize) {
-            FlowDocument fd = str.ToFlowDocument();
+        public static MpEventEnabledFlowDocument ToFlowDocument(this string str, out Size docSize) {
+            MpEventEnabledFlowDocument fd = str.ToFlowDocument() as MpEventEnabledFlowDocument;
             docSize = new Size(fd.PageWidth, fd.PageHeight);
             return fd;
         }
+
+        //public static FlowDocument TokenizeMatches(this FlowDocument fd, string matchValue, Uri uri, bool isCaseSensitive = false) {
+        //    var trl = MpHelpers.FindStringRangesFromPosition(fd.ContentStart, matchValue, isCaseSensitive);
+
+        //}
+
+        //public static Hyperlink ToHyperlink(this TextRange tr, Uri uri) {
+        //    var hl = new Hyperlink(tr.Start, tr.End);
+        //    hl.NavigateUri = uri;
+        //    hl.IsEnabled = true;
+            
+        //}
 
         public static string ToXaml(this string str) {
             if (string.IsNullOrEmpty(str)) {

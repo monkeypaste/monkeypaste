@@ -100,6 +100,8 @@
                 <Border.Resources>
                     <Style x:Key="ActionPropertyComboBoxStyle"
                            TargetType="ComboBox">
+                        <Setter Property="IsSynchronizedWithCurrentItem"
+                                Value="False" />
                         <Setter Property="MinWidth"
                                 Value="100" />
                         <Setter Property="BorderThickness"
@@ -133,6 +135,21 @@
                         <Setter Property="VerticalContentAlignment"
                                 Value="Center" />
                     </Style>
+                    <Style x:Key="ActionPropertyTextBlockStyle"
+                           TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment"
+                                Value="Center" />
+                        <Setter Property="HorizontalAlignment"
+                                Value="Right" />
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="Foreground"
+                                Value="Black" />
+                        <Setter Property="FontWeight"
+                                Value="SemiBold" />
+                        <Setter Property="Margin"
+                                Value="10" />
+                    </Style>
                     <!--  Trigger  -->
                     <DataTemplate x:Key="TriggerPropertiesTemplate"
                                   DataType="{x:Type local:MpTriggerActionViewModelBase}">
@@ -140,61 +157,26 @@
                               Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.5*" />
-                                <RowDefinition Height="0.2*" />
-                                <RowDefinition Height="0.3*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="0.2*" />
                                 <ColumnDefinition Width="0.6*" />
-                                <ColumnDefinition Width="0.2*" />
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Row="0"
                                        Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       FontWeight="SemiBold"
-                                       Text="Trigger"
-                                       Margin="10" />
-
-                            <ComboBox Grid.Row="0"
-                                      Grid.Column="1"
-                                      VerticalContentAlignment="Center"
-                                      Margin="0,5"
-                                      IsSynchronizedWithCurrentItem="False"
-                                      SelectionChanged="ComboBox_SelectionChanged"
-                                      SelectedIndex="{Binding TriggerType,
-                                                              Converter={StaticResource EnumToIntConverter},
-                                                              Mode=OneWay}"
-                                      ItemsSource="{Binding TriggerTypeMenuItemViewModel.SubItems}"
-                                      ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}">
-                                <ComboBox.ItemContainerStyle>
-                                    <Style TargetType="ComboBoxItem">
-                                        <Setter Property="HorizontalAlignment"
-                                                Value="Stretch" />
-                                    </Style>
-                                </ComboBox.ItemContainerStyle>
-                            </ComboBox>
-
-                            <TextBlock Grid.Row="1"
-                                       Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       FontWeight="SemiBold"
-                                       Margin="10"
-                                       Foreground="Black"
-                                       Text="Description" />
-                            <TextBox Grid.Row="1"
-                                     Grid.Column="1"
-                                     Grid.ColumnSpan="3"
-                                     Foreground="Black"
-                                     VerticalAlignment="Stretch"
-                                     FontSize="12"
-                                     local:MpIsFocusedExtension.IsEnabled="True"
-                                     Text="{Binding Description,
-                                                    Mode=TwoWay,
-                                                    UpdateSourceTrigger=PropertyChanged,
-                                                    NotifyOnTargetUpdated=True,
-                                                    NotifyOnSourceUpdated=True}" />
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       Text="Trigger" />
+                            <Border Grid.Row="0"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+                                <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
+                                          SelectedIndex="{Binding TriggerType,
+                                                                  Converter={StaticResource EnumToIntConverter},
+                                                                  Mode=OneWay}"
+                                          ItemsSource="{Binding TriggerTypeMenuItemViewModel.SubItems}"
+                                          ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}" />
+                            </Border>
                         </Grid>
                     </DataTemplate>
                     <!--  Action Container  -->
@@ -244,17 +226,13 @@
                             <!--  Compare Property Path  -->
                             <TextBlock Grid.Row="0"
                                        Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       FontWeight="SemiBold"
-                                       Text="Field"
-                                       Margin="10" />
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       Text="Field" />
                             <Border Grid.Row="0"
                                     Grid.Column="1"
                                     Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
                                 <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
                                           ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
-                                          IsSynchronizedWithCurrentItem="False"
                                           SelectedIndex="{Binding ComparePropertyPathType,
                                                                   Converter={StaticResource EnumToIntConverter},
                                                                   ConverterParameter=MonkeyPaste.MpComparePropertyPathType,
@@ -270,11 +248,8 @@
                                        Grid.Column="0"
                                        Visibility="{Binding IsItemTypeCompare,
                                                             Converter={StaticResource BoolToVisibilityConverter}}"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       FontWeight="SemiBold"
-                                       Text="Type"
-                                       Margin="10" />
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       Text="Type" />
                             <Border Grid.Row="1"
                                     Grid.Column="1"
                                     Visibility="{Binding IsItemTypeCompare,
@@ -297,11 +272,8 @@
                                        Grid.Column="0"
                                        Visibility="{Binding IsItemTypeCompare,
                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       FontWeight="SemiBold"
-                                       Text="Type"
-                                       Margin="10" />
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       Text="Type" />
                             <Border Grid.Row="1"
                                     Grid.Column="1"
                                     Visibility="{Binding IsItemTypeCompare,
@@ -309,7 +281,6 @@
                                     Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
                                 <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
                                           ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
-                                          IsSynchronizedWithCurrentItem="False"
                                           SelectedIndex="{Binding CompareType,
                                                                   Converter={StaticResource EnumToIntConverter},
                                                                   ConverterParameter=MonkeyPaste.MpCompareType,
@@ -325,35 +296,28 @@
 
                             <TextBlock Grid.Row="2"
                                        Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       FontWeight="SemiBold"
-                                       Text="Case Sensitive"
-                                       Margin="10" />
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       Text="Case Sensitive" />
                             <CheckBox Grid.Row="2"
                                       Grid.Column="1"
                                       IsEnabled="{Binding IsCompareTypeRegex,
                                                           Converter={StaticResource BoolFlipConverter}}"
                                       MinWidth="100"
-                                      Margin="10"
+                                      Margin="0,10"
                                       IsChecked="{Binding IsCaseSensitive,
                                                           Mode=TwoWay,
                                                           UpdateSourceTrigger=PropertyChanged,
                                                           NotifyOnSourceUpdated=True,
                                                           NotifyOnTargetUpdated=True}" />
-
-
-
                             <!--  Compare Data  -->
                             <TextBlock Grid.Row="3"
                                        Grid.Column="0"
                                        Visibility="{Binding IsItemTypeCompare,
                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       FontWeight="SemiBold"
-                                       Text="Data"
-                                       Margin="10,0,10,5" />
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Text="Data" />
 
                             <TextBox x:Name="CompareDataTextBox"
                                      Grid.Row="4"
@@ -361,77 +325,22 @@
                                      Grid.ColumnSpan="3"
                                      Visibility="{Binding IsItemTypeCompare,
                                                           Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                     MinHeight="30"
-                                     MinWidth="130"
-                                     Width="{Binding ActualWidth,
-                                                     RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                    AncestorType=Grid}}"
-                                     Height="{Binding CompareDataTextBoxHeight,
-                                                      Mode=TwoWay,
-                                                      UpdateSourceTrigger=PropertyChanged,
-                                                      NotifyOnSourceUpdated=True,
-                                                      NotifyOnTargetUpdated=True}"
+                                     HorizontalAlignment="Left"
+                                     HorizontalScrollBarVisibility="Visible"
+                                     VerticalScrollBarVisibility="Auto"
+                                     Padding="5"
+                                     MinHeight="20"
+                                     MaxWidth="300"
                                      FontSize="14"
                                      TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     AcceptsTab="True"
                                      local:MpIsFocusedExtension.IsEnabled="True"
                                      Text="{Binding CompareData,
                                                     Mode=TwoWay,
                                                     UpdateSourceTrigger=PropertyChanged,
                                                     NotifyOnSourceUpdated=True,
-                                                    NotifyOnTargetUpdated=True}">
-                                <i:Interaction.Behaviors>
-                                    <local:MpResizeBehavior x:Name="CompareDataTextBoxResizeBehvior"
-                                                            ResizableEdge1="Bottom"
-                                                            ResizableEdge2="Right"
-                                                            BoundWidth="{Binding CompareDataTextBoxWidth,
-                                                                                 Mode=TwoWay,
-                                                                                 UpdateSourceTrigger=PropertyChanged,
-                                                                                 NotifyOnSourceUpdated=True,
-                                                                                 NotifyOnTargetUpdated=True}"
-                                                            BoundHeight="{Binding CompareDataTextBoxHeight,
-                                                                                  Mode=TwoWay,
-                                                                                  UpdateSourceTrigger=PropertyChanged,
-                                                                                  NotifyOnSourceUpdated=True,
-                                                                                  NotifyOnTargetUpdated=True}"
-                                                            MinHeight="30"
-                                                            MinWidth="130" />
-
-                                </i:Interaction.Behaviors>
-                            </TextBox>
-                            <Rectangle Grid.Row="4"
-                                       Grid.Column="0"
-                                       Grid.ColumnSpan="3"
-                                       Visibility="{Binding IsItemTypeCompare,
-                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                       VerticalAlignment="Bottom"
-                                       Height="5"
-                                       HorizontalAlignment="Stretch"
-                                       Fill="Transparent"
-                                       local:MpHoverableExtension.IsEnabled="True"
-                                       local:MpHoverableExtension.HoverCursor="ResizeNS" />
-                            <Rectangle Grid.Row="4"
-                                       Grid.Column="0"
-                                       Grid.ColumnSpan="3"
-                                       Visibility="{Binding IsItemTypeCompare,
-                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                       VerticalAlignment="Stretch"
-                                       Width="5"
-                                       HorizontalAlignment="Right"
-                                       Fill="Transparent"
-                                       local:MpHoverableExtension.IsEnabled="True"
-                                       local:MpHoverableExtension.HoverCursor="ResizeWE" />
-                            <Rectangle Grid.Row="4"
-                                       Grid.Column="0"
-                                       Grid.ColumnSpan="3"
-                                       Visibility="{Binding IsItemTypeCompare,
-                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                       VerticalAlignment="Bottom"
-                                       Width="5"
-                                       Height="5"
-                                       HorizontalAlignment="Right"
-                                       Fill="Red"
-                                       local:MpHoverableExtension.IsEnabled="True"
-                                       local:MpHoverableExtension.HoverCursor="ResizeNWSE" />
+                                                    NotifyOnTargetUpdated=True}" />
                         </Grid>
                     </DataTemplate>
                     <!--  Analyze  -->
@@ -450,11 +359,8 @@
 
                             <TextBlock Grid.Row="0"
                                        Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       FontWeight="SemiBold"
-                                       Text="Analyzer"
-                                       Margin="10" />
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       Text="Analyzer" />
 
                             <ComboBox x:Name="AnalyzerPresetComboBox"
                                       Grid.Row="0"
@@ -570,60 +476,61 @@
 
                             <TextBlock Grid.Row="0"
                                        Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       FontWeight="SemiBold"
-                                       Text="Collection"
-                                       Margin="10" />
-
-                            <ComboBox x:Name="TagChooserComboBox"
-                                      Grid.Row="0"
-                                      Grid.Column="1"
-                                      MinWidth="150"
-                                      IsSynchronizedWithCurrentItem="False"
-                                      SelectedItem="{Binding SelectedTag,
-                                                             Mode=TwoWay}"
-                                      ItemsSource="{Binding Items,
-                                                            Source={x:Static local:MpTagTrayViewModel.Instance}}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Margin="3"
-                                                    Orientation="Horizontal"
-                                                    HorizontalAlignment="Stretch">
-                                            <Frame BorderThickness="0.7"
-                                                   BorderBrush="LightGray"
-                                                   Background="{Binding TagHexColor,
-                                                                        Converter={StaticResource StringHexToBrushConverter}}"
-                                                   Width="15"
-                                                   Height="15">
-                                                <Frame.Margin>
-                                                    <MultiBinding Converter="{StaticResource TagIdToThicknessNameConverter}">
-                                                        <Binding Path="DataContext.TagId"
-                                                                 RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                                                 AncestorType=Border}" />
-                                                        <Binding Path="IsDropDownOpen"
-                                                                 ElementName="TagChooserComboBox" />
-                                                        <Binding>
-                                                            <Binding.Source>
-                                                                <sys:Double>5.0</sys:Double>
-                                                            </Binding.Source>
-                                                        </Binding>
-                                                    </MultiBinding>
-                                                </Frame.Margin>
-                                            </Frame>
-                                            <TextBlock Margin="10,0,0,0"
-                                                       FontSize="16"
-                                                       Text="{Binding TagName}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                                <ComboBox.ItemContainerStyle>
-                                    <Style TargetType="ComboBoxItem">
-                                        <Setter Property="HorizontalAlignment"
-                                                Value="Stretch" />
-                                    </Style>
-                                </ComboBox.ItemContainerStyle>
-                            </ComboBox>
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       Text="Collection" />
+                            <Border Grid.Row="0"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+                                <ComboBox x:Name="TagChooserComboBox"
+                                          Grid.Row="0"
+                                          Grid.Column="1"
+                                          Style="{StaticResource ActionPropertyComboBoxStyle}"
+                                          MinWidth="150"
+                                          IsSynchronizedWithCurrentItem="False"
+                                          SelectedItem="{Binding SelectedTag,
+                                                                 Mode=TwoWay}"
+                                          ItemsSource="{Binding Items,
+                                                                Source={x:Static local:MpTagTrayViewModel.Instance}}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Margin="3"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Stretch">
+                                                <Frame BorderThickness="0.7"
+                                                       BorderBrush="LightGray"
+                                                       Background="{Binding TagHexColor,
+                                                                            Converter={StaticResource StringHexToBrushConverter}}"
+                                                       Width="15"
+                                                       Height="15">
+                                                    <Frame.Margin>
+                                                        <MultiBinding Converter="{StaticResource TagIdToThicknessNameConverter}">
+                                                            <Binding Path="DataContext.TagId"
+                                                                     RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                                                     AncestorType=Border}" />
+                                                            <Binding Path="IsDropDownOpen"
+                                                                     ElementName="TagChooserComboBox" />
+                                                            <Binding>
+                                                                <Binding.Source>
+                                                                    <sys:Double>5.0</sys:Double>
+                                                                </Binding.Source>
+                                                            </Binding>
+                                                        </MultiBinding>
+                                                    </Frame.Margin>
+                                                </Frame>
+                                                <TextBlock Margin="10,0,0,0"
+                                                           FontSize="16"
+                                                           Text="{Binding TagName}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                    <ComboBox.ItemContainerStyle>
+                                        <Style TargetType="ComboBoxItem">
+                                            <Setter Property="HorizontalAlignment"
+                                                    Value="Stretch" />
+                                        </Style>
+                                    </ComboBox.ItemContainerStyle>
+                                </ComboBox>
+                            </Border>
                         </Grid>
                     </DataTemplate>
                     <local:MpActionItemPropertiesTemplateSelector x:Key="ActionTemplateSelector"

@@ -13,6 +13,9 @@
                      d:DataContext="{d:DesignInstance Type=local:MpActionViewModelBase,
                                                       IsDesignTimeCreatable=False}">
     <local:MpUserControl.Resources>
+        
+        <!-- Trigger Circle -->
+        
         <DataTemplate x:Key="TriggerDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
             <Grid>
@@ -30,15 +33,22 @@
                                           Converter={StaticResource StringHexToBrushConverter}}"
                          Fill="{Binding ActionType,
                                         Converter={StaticResource ActionTypeToBrushConverter}}" />
-                <Image Width="{Binding Width}"
-                       Height="{Binding Height}"
+                <Image Width="20"
+                       Height="20"
+                       IsHitTestVisible="False"
+                       Stretch="UniformToFill"
+                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
                        HorizontalAlignment="Center"
-                       VerticalAlignment="Center" />
+                       VerticalAlignment="Center"/>
             </Grid>
         </DataTemplate>
+        
+        <!-- Compare Diamond -->
+        
         <DataTemplate x:Key="CompareDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
-            <Polygon Width="{Binding Width}"
+            <Grid>
+                <Polygon Width="{Binding Width}"
                      Height="{Binding Height}"
                      Points="0,25 25,0 50,25 25,50"
                      StrokeThickness="2.5"
@@ -53,10 +63,22 @@
                                       Converter={StaticResource StringHexToBrushConverter}}"
                      Fill="{Binding ActionType,
                                     Converter={StaticResource ActionTypeToBrushConverter}}" />
+                <Image Width="20"
+                       Height="20"
+                       IsHitTestVisible="False"
+                       Stretch="UniformToFill"
+                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </Grid>
         </DataTemplate>
+        
+        <!-- Analyze Box -->
+        
         <DataTemplate x:Key="AnalyzeDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
-            <Rectangle Width="{Binding Width}"
+            <Grid>
+                <Rectangle Width="{Binding Width}"
                        Height="{Binding Height}"
                        RadiusX="10"
                        RadiusY="10"
@@ -72,10 +94,22 @@
                                         Converter={StaticResource StringHexToBrushConverter}}"
                        Fill="{Binding ActionType,
                                       Converter={StaticResource ActionTypeToBrushConverter}}" />
+                <Image Width="20"
+                       Height="20"
+                       Stretch="UniformToFill"
+                       IsHitTestVisible="False"
+                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </Grid>
         </DataTemplate>
+        
+        <!-- Classify Triangle -->
+        
         <DataTemplate x:Key="ClassifyDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
-            <Polygon Points="25,0 50,48 0,48"
+            <Grid>
+                <Polygon Points="25,0 50,48 0,48"
                      Width="{Binding Width}"
                      Height="{Binding Height}"
                      StrokeThickness="2.5"
@@ -90,10 +124,23 @@
                                       Converter={StaticResource StringHexToBrushConverter}}"
                      Fill="{Binding ActionType,
                                     Converter={StaticResource ActionTypeToBrushConverter}}" />
+                <Image Width="20"
+                       Height="20"
+                       IsHitTestVisible="False"
+                       Stretch="UniformToFill"
+                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Margin="0,12,3,0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </Grid>
         </DataTemplate>
+        
+        <!-- Macro Box -->
+        
         <DataTemplate x:Key="MacroDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
-            <Rectangle Width="{Binding Width}"
+            <Grid>
+                <Rectangle Width="{Binding Width}"
                        Height="{Binding Height}"
                        RadiusX="10"
                        RadiusY="10"
@@ -109,7 +156,18 @@
                                         Converter={StaticResource StringHexToBrushConverter}}"
                        Fill="{Binding ActionType,
                                       Converter={StaticResource ActionTypeToBrushConverter}}" />
+                <Image Width="20"
+                       Height="20"
+                       IsHitTestVisible="False"
+                       Stretch="UniformToFill"
+                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </Grid>
         </DataTemplate>
+        
+        <!-- Empty Plus Circle -->
+        
         <DataTemplate x:Key="NoneDesignerTemplate"
                       DataType="local:MpEmptyActionViewModel">
             <Button Style="{StaticResource SemiTransparentButton}"
@@ -146,12 +204,12 @@
                                  Height="25" />
                         <Rectangle HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
-                                   Fill="DimGray"
+                                   Fill="LightGray"
                                    Height="15"
                                    Width="2" />
                         <Rectangle HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
-                                   Fill="DimGray"
+                                   Fill="LightGray"
                                    Height="2"
                                    Width="15" />
                     </Grid>

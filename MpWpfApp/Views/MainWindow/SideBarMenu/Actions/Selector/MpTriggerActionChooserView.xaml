@@ -155,7 +155,7 @@
                                                            Source={x:Static local:MpMeasurements.Instance}}" />
 
             </i:Interaction.Behaviors>
-            <local:MpActionDesignerView DataContext="{Binding SelectedItem}" />
+            <local:MpActionDesignerView DataContext="{Binding}" />
         </Grid>
     </Grid>
 </local:MpUserControl>

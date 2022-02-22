@@ -33,8 +33,6 @@ namespace MpWpfApp {
         MpITriggerActionViewModel {
         #region Private Variables
 
-        private Point _lastLocation;
-
         #endregion
 
         #region Properties
@@ -227,6 +225,9 @@ namespace MpWpfApp {
                     case MpActionType.Timer:
                         resourceKey = "AlarmClockIcon";
                         break;
+                    case MpActionType.Transform:
+                        resourceKey = "WandIcon";
+                        break;
                     case MpActionType.None:
                         resourceKey = "QuestionMarkIcon";
                         break;
@@ -241,7 +242,7 @@ namespace MpWpfApp {
 
         public bool IsPlaceholder => ActionType == MpActionType.None;
 
-        //public bool IsDropDownOpen { get; set; } = false;
+        public bool HasDescription => !string.IsNullOrEmpty(Description);
 
         public bool IsRootAction => ParentActionId == 0;
 
@@ -377,6 +378,21 @@ namespace MpWpfApp {
                     Action.ActionType = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ActionType));
+                }
+            }
+        }
+        public virtual string Description {
+            get {
+                if (Action == null) {
+                    return null;
+                }
+                return Action.Description;
+            }
+            set {
+                if (Description != value) {
+                    Action.Description = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(Description));
                 }
             }
         }
@@ -524,6 +540,9 @@ namespace MpWpfApp {
                 case MpActionType.Timer:
                     avm = new MpTimerActionViewModel(Parent);
                     break;
+                case MpActionType.Transform:
+                    avm = new MpTransformActionViewModel(Parent);
+                    break;
             }
 
             avm.ParentActionViewModel = this;
@@ -638,14 +657,13 @@ namespace MpWpfApp {
         private void MpActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
-                    //if(Parent == null) {
-                    //    return;
-                    //}
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                         if(Children.Any(x=>x is MpEmptyActionViewModel)) {
                             Children.Where(x => x is MpEmptyActionViewModel).ForEach(x => (x as MpEmptyActionViewModel).OnPropertyChanged("IsVisible"));
                         }
+
+                        IsExpanded = true;
                     }
                     if(this is MpTriggerActionViewModelBase && Parent.SelectedItem != this) {
                         Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
@@ -675,14 +693,11 @@ namespace MpWpfApp {
                         });
                     }
                     break;
-                case nameof(IsMoving):
-                    Parent.OnPropertyChanged(nameof(Parent.CanPan));
-                    break;
                 case nameof(Items):                
                     Parent.NotifyViewportChanged();
                     break;
                 case nameof(IsExpanded):
-                    if(IsExpanded) {
+                    if(IsExpanded && !IsSelected) {
                         IsSelected = true;
                     }
                     break;
@@ -694,36 +709,12 @@ namespace MpWpfApp {
                     }
 
                     AddChildEmptyActionViewModel.Location = DefaultEmptyActionLocation;
-                    //var eavm = Items.FirstOrDefault(x => x is MpEmptyActionViewModel);
-                    //if(eavm != null) {
-                    //    eavm.X = X;
-                    //    eavm.Y = Y - (Height * 1.75);
-                    //}
-                    //if(IsMoving) {
-                    //    Parent.NotifyViewportChanged();
-                    //}
-                    _lastLocation = Location;
                     break;
             }
         }
         #endregion
 
         #region Commands
-
-        public ICommand MoveDesignerItemCommand => new RelayCommand<Point>(
-            (deltaLocation) => {
-                double radius = MpMeasurements.Instance.DesignerItemDiameter / 2;
-                var newLocation = new Point(Location.X + deltaLocation.X, Location.Y + deltaLocation.Y);
-
-                var contactItem = Parent.GetItemNearPoint(newLocation, this, radius);
-                if(contactItem != null) {
-                    var diff = contactItem.Location - newLocation;
-                    diff.Normalize();
-                    var contactItemOffset = diff * radius;
-                    newLocation += contactItemOffset;
-                }
-                Location = newLocation;
-            });
 
         public ICommand ToggleIsEnabledCommand => new RelayCommand(
              () => {
@@ -798,12 +789,6 @@ namespace MpWpfApp {
                 await Task.WhenAll(grandChildren.Select(x => x.Action.WriteToDatabaseAsync()));
                 await avm.Action.DeleteFromDatabaseAsync();
 
-                //Items.Remove(avm);
-                //grandChildren.ForEach(x => Items.Add(x));
-                ////await UpdateSortOrder();
-                //OnPropertyChanged(nameof(Items));
-                
-                
                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
                 Parent.AllSelectedTriggerActions.Remove(avm);
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);

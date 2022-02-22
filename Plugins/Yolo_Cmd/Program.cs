@@ -98,12 +98,14 @@ namespace Yolo_Cmd {
                     double score = Math.Round(item.Score, 2);
 
                     if (score >= confidence) {
-                        var boxAnnotation = new MpPluginResponseAnnotationFormat(item.Label.Name, (double)item.Score) {
+                        var boxAnnotation = new MpPluginResponseAnnotationFormat() {
+                            label = new MpJsonPathProperty(item.Label.Name),
+                            score = new MpJsonPathProperty<double>(item.Score),
                             box = new MpAnalyzerPluginImageTokenResponseValueFormat(
-                                    (double)item.Rectangle.X,
-                                    (double)item.Rectangle.Y,
-                                    (double)item.Rectangle.Width,
-                                    (double)item.Rectangle.Height)
+                                    item.Rectangle.X,
+                                    item.Rectangle.Y,
+                                    item.Rectangle.Width,
+                                    item.Rectangle.Height)
                         };
                         boxList.Add(boxAnnotation);
                     }

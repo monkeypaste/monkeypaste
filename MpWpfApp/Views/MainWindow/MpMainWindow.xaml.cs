@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,8 +38,38 @@ namespace MpWpfApp {
             sw.Stop();
 
             MpConsole.WriteLine($"Mainwindow loading: {sw.ElapsedMilliseconds} ms");
+
+
+            HwndSource Source;
+            Source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
+            Source.AddHook(new HwndSourceHook(Window_Proc));
         }
 
+        private IntPtr Window_Proc(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam, ref bool Handled) {
+            Win32.COPYDATASTRUCT CopyData;
+            string Path;
+
+            if (Msg == Win32.WM_COPYDATA) {
+                CopyData = (Win32.COPYDATASTRUCT)Marshal.PtrToStructure(lParam, typeof(Win32.COPYDATASTRUCT));
+                Path = Marshal.PtrToStringUni(CopyData.lpData, CopyData.cbData / 2);
+
+                if (WindowState == WindowState.Minimized) {
+                    // Restore window from tray
+                }
+
+                // Do whatever we want with information
+
+                Activate();
+                Focus();
+            }
+
+            if (Msg == App.MessageId) {
+                Handled = true;
+                return new IntPtr(App.MessageId);
+            }
+
+            return IntPtr.Zero;
+        }
         private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {
             //DisableBlur();
         }

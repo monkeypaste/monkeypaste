@@ -19,36 +19,9 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpActionDesignerView.xaml
     /// </summary>
-    public partial class MpActionDesignerView : MpUserControl<MpTriggerActionViewModelBase> {
+    public partial class MpActionDesignerView : MpUserControl<MpActionCollectionViewModel> {
         public MpActionDesignerView() {
             InitializeComponent();
-        }
-
-        private void ActionDesignerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            var lb = sender as ListBox;
-            //lb.ScrollIntoView(MpActionCollectionViewModel.Instance.PrimaryAction);
-        }
-
-        private void ZoomAndPanControl_Loaded(object sender, RoutedEventArgs e) {
-            //ZoomAndPanControl.ScaleToFit();
-        }
-
-        private void ActionDesignerListBox_Loaded(object sender, RoutedEventArgs e) {
-            MpMessenger.Register(
-                MpActionCollectionViewModel.Instance,
-                ReceivedActionCollectionViewModelMessage);
-        }
-
-        private void ReceivedActionCollectionViewModelMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.ActionViewportChanged:
-                    //ActionDesignerListBox.Items.Refresh();
-                    break;
-            }
-        }
-
-        private void ZoomBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-
         }
     }
 }
