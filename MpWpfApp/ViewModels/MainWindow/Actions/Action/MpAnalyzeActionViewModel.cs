@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpAnalyzeOutput : MpActionOutput {
-        public MpCopyItem AnalysisItem { get; set; }
+        public MpCopyItem NewContentItem { get; set; }
     }
 
     public class MpAnalyzeActionViewModel : MpActionViewModelBase {
@@ -86,10 +86,17 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
+            MpCopyItem nci = null;
+            if(aipvm.Parent.LastResultContentItem != null && 
+               (aipvm.Parent.LastResultContentItem.Id != ci.Id ||
+               aipvm.Parent.LastResultContentItem.Id == 0)) {
+                nci = aipvm.Parent.LastResultContentItem;
+            }
             await base.PerformAction(new MpAnalyzeOutput() {
                 Previous = arg as MpActionOutput,
                 CopyItem = ci,
-                AnalysisItem = aipvm.Parent.LastResultContentItem
+                NewContentItem = nci,
+                OutputData = aipvm.Parent.LastTransaction.Response
             });
         }
         #endregion

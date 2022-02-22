@@ -163,7 +163,7 @@ using System.Speech.Synthesis;
                 DoCommandSelection();
                 var ivml = SelectedItems;
                 var cil = ivml.Select(x => x.CopyItem).ToList();
-                return MpAsyncHelpers.RunSync<string[]>(()=>MpCopyItemMerger.Instance.MergeFilePaths(cil)).ToList();
+                return MpCopyItemMerger.Instance.MergeFilePaths(cil).ToList();
             }
         }
 

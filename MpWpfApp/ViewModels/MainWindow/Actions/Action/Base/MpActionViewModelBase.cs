@@ -20,6 +20,7 @@ namespace MpWpfApp {
     public class MpActionOutput {
         public MpCopyItem CopyItem { get; set; }
         public MpActionOutput Previous { get; set; }
+        public object OutputData { get; set; }
     }
 
     public abstract class MpActionViewModelBase :

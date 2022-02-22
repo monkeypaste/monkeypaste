@@ -163,7 +163,6 @@
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMoveThumb.cs" />
     <Compile Include="Controls\MpResizeThumb.cs" />
-    <Compile Include="Controls\MpRichTextBox.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpBindableListBox.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpMultiComboBox.cs" />
     <Compile Include="Controls\MpZoomBorder.cs" />

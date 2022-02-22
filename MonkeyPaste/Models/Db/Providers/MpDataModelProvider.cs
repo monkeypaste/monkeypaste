@@ -296,8 +296,12 @@ namespace MonkeyPaste {
         }
 
         public static MpDbImage GetDbImageById(int dbImgId) {
-            var result = MpAsyncHelpers.RunSync<MpDbImage>(() => MpDb.GetItemAsync<MpDbImage>(dbImgId));
-            return result;
+            string query = $"select * from MpDbImage where pk_MpDbImageId=?";
+            var result = MpDb.Query<MpDbImage>(query, dbImgId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
         }
 
         #endregion
@@ -472,6 +476,12 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static List<MpCopyItem> GetCompositeChildren(int ciid) {
+            string query = string.Format(@"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
+            var result = MpDb.Query<MpCopyItem>(query);
+            return result;
+        }
+
         public static async Task<int> GetCompositeChildCountAsync(int ciid) {
             string query = string.Format(@"select count(*) from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
             var result = await MpDb.QueryScalarAsync<int>(query);
@@ -581,7 +591,7 @@ namespace MonkeyPaste {
 
         public static bool IsTagLinkedWithCopyItem(int tagId, int copyItemId) {
             string query = $"select count(*) from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?";
-            var result = MpAsyncHelpers.RunSync<int>(() => MpDb.QueryScalarAsync<int>(query, tagId, copyItemId));
+            var result = MpDb.QueryScalar<int>(query, tagId, copyItemId);
             return result > 0;
         }
 
@@ -617,9 +627,15 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        public static async Task<string> GetShortcutKeystring(MpShortcutType shortcutType, int commandId = 0) {
+        public static async Task<string> GetShortcutKeystringAsync(MpShortcutType shortcutType, int commandId = 0) {
             string query = string.Format(@"select KeyString from MpShortcut where e_ShortcutTypeId=? and fk_MpCommandId=?");
             var result = await MpDb.QueryScalarAsync<string>(query, (int)shortcutType, commandId);
+            return result;
+        }
+
+        public static string GetShortcutKeystring(MpShortcutType shortcutType, int commandId = 0) {
+            string query = string.Format(@"select KeyString from MpShortcut where e_ShortcutTypeId=? and fk_MpCommandId=?");
+            var result = MpDb.QueryScalar<string>(query, (int)shortcutType, commandId);
             return result;
         }
 

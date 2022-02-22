@@ -518,6 +518,12 @@ namespace MpWpfApp {
                                 var copyItemTemplate = templateModels.Where(x => x.TemplateToken == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().TextToken;
                                 var thl = await MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
                             } else {
+                                var hlCheck1 = matchRange.Start.Parent.FindParentOfType<Hyperlink>();
+                                var hlCheck2 = matchRange.End.Parent.FindParentOfType<Hyperlink>();
+                                if(hlCheck1 != null || hlCheck2 != null) {
+                                    //matched text is already a hyperlink (likely from html)
+                                    continue;
+                                }
                                 var matchRun = new Run(matchRange.Text);
                                 matchRange.Text = "";
 

@@ -317,8 +317,8 @@ namespace MpWpfApp {
             }        
         }
 
-        public static MpEventEnabledFlowDocument ToFlowDocument(this string str, out Size docSize) {
-            MpEventEnabledFlowDocument fd = str.ToFlowDocument() as MpEventEnabledFlowDocument;
+        public static FlowDocument ToFlowDocument(this string str, out Size docSize) {
+            FlowDocument fd = str.ToFlowDocument() as FlowDocument;
             docSize = new Size(fd.PageWidth, fd.PageHeight);
             return fd;
         }

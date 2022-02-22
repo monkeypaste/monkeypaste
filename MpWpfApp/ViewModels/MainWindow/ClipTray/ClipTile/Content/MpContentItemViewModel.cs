@@ -896,25 +896,23 @@ namespace MpWpfApp {
         }
 
         private void UpdateDetails() {
-            MpHelpers.RunOnMainThread((System.Action)(async () => {
-                _detailIdx = 1;
-                switch (CopyItem.ItemType) {
-                    case MonkeyPaste.MpCopyItemType.Image:
-                        var bmp = CopyItem.ItemData.ToBitmapSource();
-                        itemSize = new Size(bmp.Width, bmp.Height);
-                        break;
-                    case MonkeyPaste.MpCopyItemType.FileList:
-                        var fl = await MpCopyItemMerger.Instance.GetFileList(CopyItem);
-                        fc = fl.Count;
-                        ds = MpHelpers.FileListSize(fl.ToArray());
-                        break;
-                    case MonkeyPaste.MpCopyItemType.Text:
-                        lc = MpWpfStringExtensions.GetRowCount(CopyItem.ItemData.ToPlainText());
-                        cc = CopyItem.ItemData.ToPlainText().Length;
-                        itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
-                        break;
-                }
-            }));
+            _detailIdx = 1;
+            switch (CopyItem.ItemType) {
+                case MonkeyPaste.MpCopyItemType.Image:
+                    var bmp = CopyItem.ItemData.ToBitmapSource();
+                    itemSize = new Size(bmp.Width, bmp.Height);
+                    break;
+                case MonkeyPaste.MpCopyItemType.FileList:
+                    var fl = MpCopyItemMerger.Instance.GetFileList(CopyItem);
+                    fc = fl.Count;
+                    ds = MpHelpers.FileListSize(fl.ToArray());
+                    break;
+                case MonkeyPaste.MpCopyItemType.Text:
+                    lc = MpWpfStringExtensions.GetRowCount(CopyItem.ItemData.ToPlainText());
+                    cc = CopyItem.ItemData.ToPlainText().Length;
+                    itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                    break;
+            }
         }
 
         private void MpContentItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

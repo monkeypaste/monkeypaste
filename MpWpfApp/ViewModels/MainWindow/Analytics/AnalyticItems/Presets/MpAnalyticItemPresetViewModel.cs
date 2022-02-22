@@ -376,7 +376,7 @@ namespace MpWpfApp {
             return ivm.Icon;
         }
         public ICommand SetIconCommand => new RelayCommand<object>(
-            async (args) => {
+            (args) => {
                 IconId = (args as MpIcon).Id;
             });
 

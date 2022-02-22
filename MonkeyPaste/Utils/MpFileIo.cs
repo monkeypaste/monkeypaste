@@ -113,14 +113,14 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public static byte[] ReadBytesFromUri(string url) {
+        public static async Task<byte[]> ReadBytesFromUri(string url) {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
                 MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
                 return null;
             }
             using var httpClient = new HttpClient();
             //RunSync<object>(() => dpv.GetDataAsync(af).AsTask());
-            byte[] bytes = MpAsyncHelpers.RunSync<byte[]>(() => httpClient.GetByteArrayAsync(url));
+            byte[] bytes = await httpClient.GetByteArrayAsync(url);
 
             using var fs = new FileStream("favicon.ico", FileMode.Create);
             fs.Write(bytes, 0, bytes.Length);

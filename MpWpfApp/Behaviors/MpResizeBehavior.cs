@@ -395,7 +395,7 @@ namespace MpWpfApp {
         #region Manual Resize Event Handlers
 
         private void DoubleClickFrameworkElement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if (MpDragDropManager.IsDragAndDrop || AssociatedObject == null || !IsEnabled) {
+            if (MpDragDropManager.IsDragAndDrop || AssociatedObject == null || !IsEnabled || MpIsFocusedExtension.IsAnyTextBoxFocused) {
                 return;
             }
             if (e.ClickCount == 2) {

@@ -26,7 +26,8 @@ namespace MonkeyPaste {
         CopyDateTime,
         LastPasteDateTime, //seperator
         CopyCount,
-        PasteCount
+        PasteCount,
+        LastOutput
     }
     public enum MpCompareType {
         None = 0,

@@ -63,16 +63,16 @@ namespace MpWpfApp {
             return bmp;
         }
 
-        public async Task<string[]> MergeFilePaths(List<MpCopyItem> cil) {
+        public string[] MergeFilePaths(List<MpCopyItem> cil) {
             var fpl = new List<string>();
             foreach(var ci in cil) {
-                var fl = await GetFileList(ci);
+                var fl = GetFileList(ci);
                 fpl.AddRange(fl);
             }
             return fpl.ToArray();
         }
 
-        public async Task<List<string>> GetFileList(MpCopyItem CopyItem,string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
+        public List<string> GetFileList(MpCopyItem CopyItem,string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
             //returns path of tmp file for rt or img and actual paths of filelist
             var fileList = new List<string>();
             if (CopyItem.ItemType == MpCopyItemType.FileList) {
@@ -102,7 +102,7 @@ namespace MpWpfApp {
                         } else {
                             fileList.Add(MpHelpers.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
                         }
-                        var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(CopyItem.Id);
+                        var ccil = MpDataModelProvider.GetCompositeChildren(CopyItem.Id);
                         foreach (var cci in ccil) {
                             if (forceType == MpCopyItemType.Image) {
                                 fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));

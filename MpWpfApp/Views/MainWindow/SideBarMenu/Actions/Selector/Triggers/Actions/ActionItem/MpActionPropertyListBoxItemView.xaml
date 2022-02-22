@@ -104,6 +104,8 @@
                                 Value="False" />
                         <Setter Property="MinWidth"
                                 Value="100" />
+                        <Setter Property="MinHeight"
+                                Value="20"/>
                         <Setter Property="BorderThickness"
                                 Value="0" />
                     </Style>
@@ -330,6 +332,7 @@
                                      VerticalScrollBarVisibility="Auto"
                                      Padding="5"
                                      MinHeight="20"
+                                     MinWidth="240"
                                      MaxWidth="300"
                                      FontSize="14"
                                      TextWrapping="Wrap"

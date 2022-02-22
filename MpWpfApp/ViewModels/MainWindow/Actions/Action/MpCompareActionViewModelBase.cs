@@ -161,6 +161,9 @@ namespace MpWpfApp {
                 if (Action == null) {
                     return null;
                 }
+                if(IsItemTypeCompare) {
+                    return ContentItemType.ToString();
+                }
                 return Action.Arg2;
             }
             set {
@@ -229,18 +232,27 @@ namespace MpWpfApp {
                 // that unset compare will never create match
                 return;
             }
+            MpActionOutput ao = arg as MpActionOutput;
+
             MpCopyItem ci = null;
             if (arg is MpCopyItem) {
                 ci = arg as MpCopyItem;
             } else if (arg is MpCompareOutput co) {
                 ci = co.CopyItem;
-            } else if (arg is MpAnalyzeOutput ao) {
-                ci = ao.CopyItem;
+            } else if (arg is MpAnalyzeOutput ano) {
+                ci = ano.CopyItem;
             } else if (arg is MpClassifyOutput clo) {
                 ci = clo.CopyItem;
             }
 
-            object matchVal = ci.GetPropertyValue(PhysicalPropertyPath);
+            object matchVal = null;
+            if(ComparePropertyPathType == MpComparePropertyPathType.LastOutput) {
+                if(ao != null) {
+                    matchVal = ao.OutputData;
+                }                
+            } else {
+                matchVal = ci.GetPropertyValue(PhysicalPropertyPath);
+            }
             string compareStr = string.Empty;
             if (matchVal != null) {
                 compareStr = matchVal.ToString();

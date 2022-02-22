@@ -258,17 +258,6 @@ namespace MpWpfApp {
             },
             (args) => args != null);
 
-        public ICommand ExecuteAnalysisCommand => new RelayCommand<object>(
-            (args) => {
-                if(args is object[] argParts) {
-                    MpAnalyticItemPresetViewModel aipvm = null;
-                    if(argParts[0] is MpAnalyzerType analyzerType) {
-
-                    }
-
-                }
-            },
-            (args) => args != null);
         #endregion
     }
 }

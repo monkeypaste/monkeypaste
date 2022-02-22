@@ -1,0 +1,104 @@
+{
+  "title": "Code Language Detector",
+  "description": "Attempts to detect coding language of a snippet",
+  "version": "1.0",
+  "credits": "Bert Verhelst",
+  "guid": "92d88275-51b5-4e2d-9a5c-406522445851",
+  "iconUrl": "https://thumbs.dreamstime.com/b/raccoon-9-months-procyon-lotor-4610598.jpg",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "Supported Languages",
+        "parameterControlType": "ComboBox",
+        "parameterValueType": "Csv",
+        "enumId": 1,
+        "isRequired": true,
+        "isMultiValue": true,
+        "values": [
+          {
+            "label": "C#",
+            "value": "csharp",
+            "isDefault": true
+          },
+          {
+            "label": "C",
+            "value": "c",
+            "isDefault": true
+          },
+          {
+            "label": "C++",
+            "value": "c++",
+            "isDefault": true
+          },
+          {
+            "label": "CSS",
+            "value": "css",
+            "isDefault": true
+          },
+          {
+            "label": "HTML",
+            "value": "html",
+            "isDefault": true
+          },
+          {
+            "label": "JavaScript",
+            "value": "javascript",
+            "isDefault": true
+          },
+          {
+            "label": "Ruby",
+            "value": "ruby",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Confidence",
+        "description": "A value between 0 and 1 of the estimated accuracy of the analysis",
+        "parameterControlType": "Slider",
+        "parameterValueType": "Decimal",
+        "enumId": 2,
+        "sortOrderIdx": 0,
+        "isReadOnly": false,
+        "isRequired": true,
+        "values": [
+          {
+            "value": "0",
+            "isMinimum": true
+          },
+          {
+            "value": "1",
+            "isMaximum": true
+          },
+          {
+            "value": "0.1",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The Snippet to deetect",
+        "parameterControlType": "Hidden",
+        "parameterValueType": "PlainText",
+        "enumId": 3,
+        "isRequired": true,
+        "isVisible": false,
+        "values": [
+          {
+            "value": "ItemData"
+          }
+        ]
+      }
+    ]
+  }
+}

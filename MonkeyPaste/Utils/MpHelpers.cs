@@ -631,7 +631,7 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public static string GetUrlFavicon(String url) {
+        public static async Task<string> GetUrlFavicon(String url) {
             try {
                 string urlDomain = GetUrlDomain(url);
                 Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
@@ -642,7 +642,7 @@ namespace MonkeyPaste {
                 //if (img == null) {
                 //    return string.Empty;
                 //}
-                var bytes = MpFileIo.ReadBytesFromUri(favicon.AbsoluteUri);
+                var bytes = await MpFileIo.ReadBytesFromUri(favicon.AbsoluteUri);
                 return Convert.ToBase64String(bytes); //new MpImageConverter().Convert(bytes, typeof(string)) as string;
             }
             catch (Exception ex) {

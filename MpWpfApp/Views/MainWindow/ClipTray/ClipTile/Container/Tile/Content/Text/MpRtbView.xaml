@@ -18,7 +18,7 @@
     </i:Interaction.Behaviors>
 
     <AdornerDecorator>
-        <local:MpRichTextBox x:Name="Rtb"
+        <RichTextBox x:Name="Rtb"
                              DataContext="{Binding}"
                              Width="Auto"
                              Height="{Binding EditorHeight}"
@@ -60,10 +60,10 @@
                              MouseEnter="Rtb_MouseEnter"
                              MouseMove="Rtb_MouseMove"
                              MouseLeave="Rtb_MouseLeave">
-            <local:MpRichTextBox.Resources>
+            <RichTextBox.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                  Color="Blue" />
-            </local:MpRichTextBox.Resources>
-        </local:MpRichTextBox>
+            </RichTextBox.Resources>
+        </RichTextBox>
     </AdornerDecorator>
 </local:MpContentUserControl>

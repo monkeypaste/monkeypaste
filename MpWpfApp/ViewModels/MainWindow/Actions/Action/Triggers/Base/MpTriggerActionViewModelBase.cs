@@ -111,22 +111,6 @@ namespace MpWpfApp {
             }
         }
 
-        public string Description {
-            get {
-                if(Action == null) {
-                    return string.Empty;
-                }
-                return Action.Description;
-            }
-            set {
-                if(Description != value) {
-                    Action.Description = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(Description));
-                }
-            }
-        }
-
         #endregion
 
         #endregion

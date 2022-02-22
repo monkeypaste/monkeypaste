@@ -618,6 +618,10 @@ namespace MpWpfApp {
                 }
             }
 
+            if(targetCopyItem == null) {
+                //this should only occur during an action sequece
+                targetCopyItem = sourceCopyItem;
+            }
 
             return targetCopyItem;
         }
@@ -804,23 +808,7 @@ namespace MpWpfApp {
         }
 
         private async Task<object> GetResponse(string requestStr) {
-            bool isDone = false;
-            var wv = new WebView2() {
-                Visibility = Visibility.Hidden
-            };
-            wv.Initialized += (s, e) => {
-                isDone = true;
-            };
-            (Application.Current.MainWindow as MpMainWindow).MainWindowCanvas.Children.Add(wv);
-            while(!isDone) {
-                await Task.Delay(100);
-            }
-            await wv.EnsureCoreWebView2Async();
-
-            object[] args = new object[] { wv, requestStr };
-            var result = await AnalyzerPluginComponent.AnalyzeAsync(args);
-
-            (Application.Current.MainWindow as MpMainWindow).MainWindowCanvas.Children.Remove(wv);
+            var result = await AnalyzerPluginComponent.AnalyzeAsync(requestStr);
             return result;
         }
 
@@ -838,7 +826,7 @@ namespace MpWpfApp {
                 MpAnalyticItemPresetViewModel targetAnalyzer = null;
 
                 if (args != null && args is object[] argParts) {
-                    // when analyzer trigger from action not user selection
+                    // when analyzer is triggered from action not user selection
                     suppressCreateItem = true;
                     targetAnalyzer = argParts[0] as MpAnalyticItemPresetViewModel;
                     sourceCopyItem = argParts[1] as MpCopyItem;

@@ -74,7 +74,7 @@ namespace MonkeyPaste {
         public string InputGestureText {
             get {
                 if (ShortcutObjId > 0 || ShortcutType != MpShortcutType.None) {
-                    return MpAsyncHelpers.RunSync<string>(() => MpDataModelProvider.GetShortcutKeystring(ShortcutType, ShortcutObjId));
+                    return MpDataModelProvider.GetShortcutKeystring(ShortcutType, ShortcutObjId);
                 }
                 return _inputGestureText;
             }

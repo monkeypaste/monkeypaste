@@ -13,9 +13,9 @@
                      d:DataContext="{d:DesignInstance Type=local:MpActionViewModelBase,
                                                       IsDesignTimeCreatable=False}">
     <local:MpUserControl.Resources>
-        
-        <!-- Trigger Circle -->
-        
+
+        <!--  Trigger Circle  -->
+
         <DataTemplate x:Key="TriggerDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
             <Grid>
@@ -37,137 +37,142 @@
                        Height="20"
                        IsHitTestVisible="False"
                        Stretch="UniformToFill"
-                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Source="{Binding IconResourceKeyStr,
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
                        HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center" />
             </Grid>
         </DataTemplate>
-        
-        <!-- Compare Diamond -->
-        
+
+        <!--  Compare Diamond  -->
+
         <DataTemplate x:Key="CompareDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
             <Grid>
                 <Polygon Width="{Binding Width}"
-                     Height="{Binding Height}"
-                     Points="0,25 25,0 50,25 25,50"
-                     StrokeThickness="2.5"
-                     local:MpHoverableExtension.IsEnabled="True"
-                     local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                                     Mode=TwoWay,
-                                                                     UpdateSourceTrigger=PropertyChanged,
-                                                                     NotifyOnSourceUpdated=True,
-                                                                     NotifyOnTargetUpdated=True}"
-                     local:MpHoverableExtension.HoverCursor="ResizeAll"
-                     Stroke="{Binding BorderBrushHexColor,
-                                      Converter={StaticResource StringHexToBrushConverter}}"
-                     Fill="{Binding ActionType,
-                                    Converter={StaticResource ActionTypeToBrushConverter}}" />
+                         Height="{Binding Height}"
+                         Points="0,25 25,0 50,25 25,50"
+                         StrokeThickness="2.5"
+                         local:MpHoverableExtension.IsEnabled="True"
+                         local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                         Mode=TwoWay,
+                                                                         UpdateSourceTrigger=PropertyChanged,
+                                                                         NotifyOnSourceUpdated=True,
+                                                                         NotifyOnTargetUpdated=True}"
+                         local:MpHoverableExtension.HoverCursor="ResizeAll"
+                         Stroke="{Binding BorderBrushHexColor,
+                                          Converter={StaticResource StringHexToBrushConverter}}"
+                         Fill="{Binding ActionType,
+                                        Converter={StaticResource ActionTypeToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        IsHitTestVisible="False"
                        Stretch="UniformToFill"
-                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Source="{Binding IconResourceKeyStr,
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
             </Grid>
         </DataTemplate>
-        
-        <!-- Analyze Box -->
-        
+
+        <!--  Analyze Box  -->
+
         <DataTemplate x:Key="AnalyzeDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
-            <Grid>
+            <Grid RenderTransformOrigin="0.5,0.5">
                 <Rectangle Width="{Binding Width}"
-                       Height="{Binding Height}"
-                       RadiusX="10"
-                       RadiusY="10"
-                       StrokeThickness="2.5"
-                       local:MpHoverableExtension.IsEnabled="True"
-                       local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                                       Mode=TwoWay,
-                                                                       UpdateSourceTrigger=PropertyChanged,
-                                                                       NotifyOnSourceUpdated=True,
-                                                                       NotifyOnTargetUpdated=True}"
-                       local:MpHoverableExtension.HoverCursor="ResizeAll"
-                       Stroke="{Binding BorderBrushHexColor,
-                                        Converter={StaticResource StringHexToBrushConverter}}"
-                       Fill="{Binding ActionType,
-                                      Converter={StaticResource ActionTypeToBrushConverter}}" />
+                           Height="{Binding Height}"
+                           RadiusX="10"
+                           RadiusY="10"
+                           StrokeThickness="2.5"
+                           local:MpHoverableExtension.IsEnabled="True"
+                           local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                           Mode=TwoWay,
+                                                                           UpdateSourceTrigger=PropertyChanged,
+                                                                           NotifyOnSourceUpdated=True,
+                                                                           NotifyOnTargetUpdated=True}"
+                           local:MpHoverableExtension.HoverCursor="ResizeAll"
+                           Stroke="{Binding BorderBrushHexColor,
+                                            Converter={StaticResource StringHexToBrushConverter}}"
+                           Fill="{Binding ActionType,
+                                          Converter={StaticResource ActionTypeToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        Stretch="UniformToFill"
                        IsHitTestVisible="False"
-                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Source="{Binding IconResourceKeyStr,
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
             </Grid>
         </DataTemplate>
-        
-        <!-- Classify Triangle -->
-        
+
+        <!--  Classify Triangle  -->
+
         <DataTemplate x:Key="ClassifyDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
             <Grid>
                 <Polygon Points="25,0 50,48 0,48"
-                     Width="{Binding Width}"
-                     Height="{Binding Height}"
-                     StrokeThickness="2.5"
-                     local:MpHoverableExtension.IsEnabled="True"
-                     local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                                     Mode=TwoWay,
-                                                                     UpdateSourceTrigger=PropertyChanged,
-                                                                     NotifyOnSourceUpdated=True,
-                                                                     NotifyOnTargetUpdated=True}"
-                     local:MpHoverableExtension.HoverCursor="ResizeAll"
-                     Stroke="{Binding BorderBrushHexColor,
-                                      Converter={StaticResource StringHexToBrushConverter}}"
-                     Fill="{Binding ActionType,
-                                    Converter={StaticResource ActionTypeToBrushConverter}}" />
+                         Width="{Binding Width}"
+                         Height="{Binding Height}"
+                         StrokeThickness="2.5"
+                         local:MpHoverableExtension.IsEnabled="True"
+                         local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                         Mode=TwoWay,
+                                                                         UpdateSourceTrigger=PropertyChanged,
+                                                                         NotifyOnSourceUpdated=True,
+                                                                         NotifyOnTargetUpdated=True}"
+                         local:MpHoverableExtension.HoverCursor="ResizeAll"
+                         Stroke="{Binding BorderBrushHexColor,
+                                          Converter={StaticResource StringHexToBrushConverter}}"
+                         Fill="{Binding ActionType,
+                                        Converter={StaticResource ActionTypeToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        IsHitTestVisible="False"
                        Stretch="UniformToFill"
-                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Source="{Binding IconResourceKeyStr,
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
                        Margin="0,12,3,0"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
             </Grid>
         </DataTemplate>
-        
-        <!-- Macro Box -->
-        
+
+        <!--  Macro Box  -->
+
         <DataTemplate x:Key="MacroDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
             <Grid>
                 <Rectangle Width="{Binding Width}"
-                       Height="{Binding Height}"
-                       RadiusX="10"
-                       RadiusY="10"
-                       StrokeThickness="2.5"
-                       local:MpHoverableExtension.IsEnabled="True"
-                       local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                                       Mode=TwoWay,
-                                                                       UpdateSourceTrigger=PropertyChanged,
-                                                                       NotifyOnSourceUpdated=True,
-                                                                       NotifyOnTargetUpdated=True}"
-                       local:MpHoverableExtension.HoverCursor="ResizeAll"
-                       Stroke="{Binding BorderBrushHexColor,
-                                        Converter={StaticResource StringHexToBrushConverter}}"
-                       Fill="{Binding ActionType,
-                                      Converter={StaticResource ActionTypeToBrushConverter}}" />
+                           Height="{Binding Height}"
+                           RadiusX="10"
+                           RadiusY="10"
+                           StrokeThickness="2.5"
+                           local:MpHoverableExtension.IsEnabled="True"
+                           local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                           Mode=TwoWay,
+                                                                           UpdateSourceTrigger=PropertyChanged,
+                                                                           NotifyOnSourceUpdated=True,
+                                                                           NotifyOnTargetUpdated=True}"
+                           local:MpHoverableExtension.HoverCursor="ResizeAll"
+                           Stroke="{Binding BorderBrushHexColor,
+                                            Converter={StaticResource StringHexToBrushConverter}}"
+                           Fill="{Binding ActionType,
+                                          Converter={StaticResource ActionTypeToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        IsHitTestVisible="False"
                        Stretch="UniformToFill"
-                       Source="{Binding IconResourceKeyStr, Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Source="{Binding IconResourceKeyStr,
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
             </Grid>
         </DataTemplate>
-        
-        <!-- Empty Plus Circle -->
-        
+
+        <!--  Empty Plus Circle  -->
+
         <DataTemplate x:Key="NoneDesignerTemplate"
                       DataType="local:MpEmptyActionViewModel">
             <Button Style="{StaticResource SemiTransparentButton}"
