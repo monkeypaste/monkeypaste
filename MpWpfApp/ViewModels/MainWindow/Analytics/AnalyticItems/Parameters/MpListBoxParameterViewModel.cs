@@ -7,7 +7,7 @@ using MonkeyPaste;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
-    public class MpMultiSelectComboBoxParameterViewModel : MpComboBoxParameterViewModel {
+    public class MpListBoxParameterViewModel : MpComboBoxParameterViewModel {
         #region Private Variables
 
         #endregion
@@ -73,9 +73,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpMultiSelectComboBoxParameterViewModel() : base () { }
+        public MpListBoxParameterViewModel() : base () { }
 
-        public MpMultiSelectComboBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
+        public MpListBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 
         #endregion
 

@@ -4,6 +4,8 @@ using System.Text;
 
 namespace MonkeyPaste.Plugin {    
     public class MpPluginResponseFormat {
+        public string message { get; set; }
+
         public MpPluginResponseNewContentFormat newContentItem { get; set; }
         public List<MpPluginResponseAnnotationFormat> annotations { get; set; }
     }

@@ -113,7 +113,8 @@
                   Command="{Binding Command}"
                   CommandParameter="{Binding CommandParameter}">
             <MenuItem.Icon>
-                <Image Source="{Binding IconId, Converter={StaticResource IconIdToImageSourceConverter}}" />
+                <Image Source="{Binding IconId,
+                                        Converter={StaticResource IconIdToImageSourceConverter}}" />
             </MenuItem.Icon>
             <MenuItem.Header>
                 <DockPanel LastChildFill="False">

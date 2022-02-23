@@ -18,7 +18,7 @@
     "parameters": [
       {
         "label": "Supported Languages",
-        "parameterControlType": "ComboBox",
+        "parameterControlType": "ListBox",
         "parameterValueType": "Csv",
         "enumId": 1,
         "isRequired": true,

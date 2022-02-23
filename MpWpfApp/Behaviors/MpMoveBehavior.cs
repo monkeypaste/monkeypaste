@@ -139,7 +139,7 @@ namespace MpWpfApp {
             }
             var adivm = AssociatedObject.DataContext as MpIBoxViewModel;
             var newLoc = new Point(adivm.X + dx, adivm.Y + dy);
-            MpActionCollectionViewModel.Instance.ClearAreaAtPoint(newLoc, adivm);
+            //MpActionCollectionViewModel.Instance.ClearAreaAtPoint(newLoc, adivm);
             adivm.X = newLoc.X;
             adivm.Y = newLoc.Y;
 
@@ -155,14 +155,12 @@ namespace MpWpfApp {
 
         private void AssociatedObject_MouseEnter(object sender, MouseEventArgs e) {
             if(!IsAnyMoving && !MpDragDropManager.IsDragAndDrop) {
-                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeAll;
                 CanMove = true;
             }
         }
 
         private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {
             if(!IsMoving) {
-                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
                 CanMove = false;
             }
         }

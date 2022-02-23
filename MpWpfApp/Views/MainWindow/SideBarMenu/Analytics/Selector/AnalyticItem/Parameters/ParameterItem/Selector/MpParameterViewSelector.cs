@@ -13,32 +13,6 @@ namespace MpWpfApp {
 
     }
     public class MpParameterViewSelector : DataTemplateSelector {
-        private DataTemplate _comboBoxTemplate;
-        public DataTemplate ComboBoxTemplate {
-            get { return _comboBoxTemplate; }
-            set { _comboBoxTemplate = value; }
-        }
-
-        private DataTemplate _textBoxTemplate;
-        public DataTemplate TextBoxTemplate {
-            get { return _textBoxTemplate; }
-            set { _textBoxTemplate = value; }
-        }
-
-        private DataTemplate _checkBoxTemplate;
-        public DataTemplate CheckBoxTemplate {
-            get { return _checkBoxTemplate; }
-            set { _checkBoxTemplate = value; }
-        }
-
-        private DataTemplate _sliderTemplate;
-        public DataTemplate SliderTemplate {
-            get { return _sliderTemplate; }
-            set { _sliderTemplate = value; }
-        }
-
-        public DataTemplate MultiSelectComboBoxTemplate { get; set; }
-
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
             if(item == null || container == null) {
@@ -46,24 +20,17 @@ namespace MpWpfApp {
             }
 
             var aipvm = item as MpAnalyticItemParameterViewModel;
-            
-            switch(aipvm.Parameter.parameterControlType) {
-                case MpAnalyticItemParameterControlType.ComboBox:
-                    if (aipvm.Parameter.isMultiValue) {
-                        return MultiSelectComboBoxTemplate;
-                    }
-                    return ComboBoxTemplate;
-                case MpAnalyticItemParameterControlType.Text:
-                    return TextBoxTemplate;
-                case MpAnalyticItemParameterControlType.CheckBox:
-                    return CheckBoxTemplate;
-                case MpAnalyticItemParameterControlType.Slider:
-                    return SliderTemplate;
-                default:
-                    throw new Exception("Unsupportted parameter type");
+            if(aipvm == null) {
+                return null;
             }
+            string keyStr = aipvm.ControlType.ToString() + "Parameter";
 
-            throw new Exception("Uknown Item Type");
+            var g = (container as FrameworkElement).GetVisualAncestor<Grid>();
+            if(g == null || !g.Resources.Contains(keyStr)) {
+                return null;
+            }
+            var result = g.Resources[keyStr] as DataTemplate;
+            return result;
         }
     }
 }

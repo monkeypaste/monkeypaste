@@ -504,7 +504,9 @@ namespace MpWpfApp {
                 var ncit = await MpCopyItemTag.Create(TagId, ciid);
                 await ncit.WriteToDatabaseAsync();
             }
-            
+            if(ParentTreeItem != null) {
+                await ParentTreeItem.AddContentItem(ciid);
+            }
         }
 
         public async Task RemoveContentItem(int ciid) {
@@ -514,6 +516,9 @@ namespace MpWpfApp {
                 return;
             }
             await cit.DeleteFromDatabaseAsync();
+            if (ParentTreeItem != null) {
+                await ParentTreeItem.RemoveContentItem(ciid);
+            }
         }
 
         public bool IsLinked(MpCopyItem ci) {

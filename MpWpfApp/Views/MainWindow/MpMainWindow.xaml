@@ -180,11 +180,13 @@
             <!--  3rd row row for tray  -->
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="{Binding Path=SearchCriteriaListBoxHeight, Source={x:Static local:MpSearchBoxViewModel.Instance}}" />
+                    <RowDefinition Height="{Binding Path=SearchCriteriaListBoxHeight,
+                                                    Source={x:Static local:MpSearchBoxViewModel.Instance}}" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding TotalSidebarWidth, Source={x:Static local:MpSidebarViewModel.Instance}}" />
+                    <ColumnDefinition Width="{Binding TotalSidebarWidth,
+                                                      Source={x:Static local:MpSidebarViewModel.Instance}}" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 

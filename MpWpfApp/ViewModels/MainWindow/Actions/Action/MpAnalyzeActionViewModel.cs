@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,6 +80,11 @@ namespace MpWpfApp {
             }
 
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
+            if(aipvm == null) {
+                //db reference broken
+                Debugger.Break();
+                return;
+            }
             object[] args = new object[] { aipvm, ci };
             aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
 

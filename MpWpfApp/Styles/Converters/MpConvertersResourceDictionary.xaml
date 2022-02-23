@@ -72,5 +72,6 @@
     <local:MpScoreToSegmentPointConverter x:Key="ScoreToSegmentPointConverter" />
     <local:MpScoreToIsLargeArcConverter x:Key="ScoreToIsLargeArcConverter" />
     <local:MpScoreLimiterConverter x:Key="ScoreLimiterConverter" />
+    <local:MpBoolToSelectionModeConverter x:Key="BoolToSelectionModeConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

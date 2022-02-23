@@ -667,7 +667,7 @@ namespace MonkeyPaste {
             }
         }
 
-        private static string[] _domainExtensions = new string[] {
+        private static HashSet<string> _domainExtensions = new HashSet<string> {
             // TODO try to sort these by common use to make more efficient
             ".com",
             ".org",

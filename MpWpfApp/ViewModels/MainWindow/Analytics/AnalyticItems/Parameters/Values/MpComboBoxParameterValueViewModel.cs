@@ -185,7 +185,7 @@ namespace MpWpfApp {
                     if(IsBusy || Parent.IsBusy) {
                         return;
                     } 
-                    if(Parent is MpMultiSelectComboBoxParameterViewModel mscbpvm) {
+                    if(Parent is MpListBoxParameterViewModel mscbpvm) {
                         mscbpvm.OnPropertyChanged(nameof(mscbpvm.SelectedItems));
                     } else if(Parent is MpComboBoxParameterViewModel cbpvm) {
                         cbpvm.OnPropertyChanged(nameof(cbpvm.SelectedItem));

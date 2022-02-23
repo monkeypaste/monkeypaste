@@ -15,17 +15,30 @@
     <Grid x:Name="ParamGrid"
           Background="DarkViolet">
         <Grid.Resources>
-            <DataTemplate x:Key="MultiSelectComboBoxParameter"
-                          DataType="local:MpMultiSelectComboBoxParameterViewModel">
+            <Style x:Key="AnalyzerTextBlockStyle"
+                   TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment"
+                        Value="Left"/>
+                <Setter Property="VerticalAlignment"
+                        Value="Center"/>
+                <Setter Property="FontSize"
+                        Value="13"/>
+                <Setter Property="FontWeight"
+                        Value="SemiBold"/>
+                <Setter Property="Foreground"
+                        Value="White"/>
+                <Setter Property="Margin"
+                        Value="0,0,7,0"/>
+                <Setter Property="DockPanel.Dock"
+                        Value="Left"/>
+            </Style>
+            <!--  ListBox Parameter  -->
+
+            <DataTemplate x:Key="ListBoxParameter"
+                          DataType="local:MpListBoxParameterViewModel">
                 <DockPanel LastChildFill="False">
-                    <TextBlock Grid.Column="0"
-                               DockPanel.Dock="Left"
-                               Margin="0,0,7,0"
-                               HorizontalAlignment="Left"
+                    <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
                                VerticalAlignment="Top"
-                               FontWeight="SemiBold"
-                               FontSize="13"
-                               Foreground="White"
                                Text="{Binding Label}" />
                     <Border DockPanel.Dock="Right"
                             BorderThickness="0"
@@ -37,7 +50,8 @@
                                  Background="Transparent"
                                  HorizontalContentAlignment="Stretch"
                                  ItemsSource="{Binding Items}"
-                                 SelectionMode="Multiple"
+                                 SelectionMode="{Binding IsMultiValue,
+                                                         Converter={StaticResource BoolToSelectionModeConverter}}"
                                  HorizontalAlignment="Right"
                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                  MaxWidth="{Binding ActualWidth,
@@ -84,16 +98,13 @@
                     </Border>
                 </DockPanel>
             </DataTemplate>
+
+            <!--  ComboBox Parameter  -->
+
             <DataTemplate x:Key="ComboBoxParameter"
                           DataType="local:MpComboBoxParameterViewModel">
                 <DockPanel LastChildFill="False">
-                    <TextBlock Grid.Column="0"
-                               DockPanel.Dock="Left"
-                               Margin="0,0,7,0"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center"
-                               FontSize="13"
-                               Foreground="Black"
+                    <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
                                Text="{Binding Label}" />
                     <Border DockPanel.Dock="Right"
                             BorderThickness="0"
@@ -102,7 +113,8 @@
                             ToolTip="{Binding ParameterTooltipText}"
                             BorderBrush="{Binding ParameterBorderBrush}">
                         <ComboBox ItemsSource="{Binding Items}"
-                                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                  SelectedItem="{Binding SelectedItem,
+                                                         Mode=TwoWay}"
                                   IsSynchronizedWithCurrentItem="False"
                                   HorizontalAlignment="Right"
                                   MinWidth="80">
@@ -122,6 +134,9 @@
                     </Border>
                 </DockPanel>
             </DataTemplate>
+
+            <!--  TextBox Parameter  -->
+
             <DataTemplate x:Key="TextBoxParameter"
                           DataType="local:MpTextBoxParameterViewModel">
                 <Grid>
@@ -129,9 +144,7 @@
                         <ColumnDefinition Width="0.3*" />
                         <ColumnDefinition Width="0.7*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               Margin="0,0,7,0"
-                               HorizontalAlignment="Left"
+                    <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
                                Text="{Binding Label}" />
                     <TextBox Grid.Column="1"
                              Text="{Binding CurrentValue,
@@ -140,15 +153,23 @@
                                             NotifyOnTargetUpdated=True}" />
                 </Grid>
             </DataTemplate>
+
+            <!--  CheckBox Parameter  -->
+
             <DataTemplate x:Key="CheckBoxParameter"
                           DataType="local:MpCheckBoxParameterViewModel">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="0,0,7,0"
-                               HorizontalAlignment="Left"
+                    <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
                                Text="{Binding Label}" />
-                    <CheckBox IsChecked="{Binding BoolValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" />
+                    <CheckBox IsChecked="{Binding BoolValue,
+                                                  Mode=TwoWay,
+                                                  UpdateSourceTrigger=PropertyChanged,
+                                                  NotifyOnTargetUpdated=True}" />
                 </StackPanel>
             </DataTemplate>
+
+            <!--  Slider Parameter  -->
+
             <DataTemplate x:Key="SliderParameter"
                           DataType="local:MpSliderParameterViewModel">
                 <DockPanel MinWidth="200">
@@ -158,7 +179,7 @@
                         <TextBlock Text="{Binding Label}"
                                    VerticalAlignment="Top"
                                    HorizontalAlignment="Center"
-                                   Foreground="Black"
+                                   Style="{StaticResource AnalyzerTextBlockStyle}"
                                    TextWrapping="Wrap" />
                         <TextBox Text="{Binding SliderValue,
                                                 Mode=TwoWay,
@@ -183,12 +204,8 @@
                             IsSnapToTickEnabled="False" />
                 </DockPanel>
             </DataTemplate>
-            <local:MpParameterViewSelector x:Key="ParameterViewSelector"
-                                           MultiSelectComboBoxTemplate="{StaticResource MultiSelectComboBoxParameter}"
-                                           ComboBoxTemplate="{StaticResource ComboBoxParameter}"
-                                           TextBoxTemplate="{StaticResource TextBoxParameter}"
-                                           CheckBoxTemplate="{StaticResource CheckBoxParameter}"
-                                           SliderTemplate="{StaticResource SliderParameter}" />
+                
+            <local:MpParameterViewSelector x:Key="ParameterViewSelector" />
         </Grid.Resources>
         <ContentControl Content="{Binding}"
                         Margin="5"

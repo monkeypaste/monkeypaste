@@ -319,32 +319,32 @@ namespace MpWpfApp {
             return null;
         }
 
-        public void ClearAreaAtPoint(Point p, object ignoreItem = null) {
-            var overlapItem = GetItemNearPoint(p, ignoreItem);
-            if (overlapItem != null) {
-                Point tempLoc = p;
-                do {
-                    var overlapLoc = new Point(overlapItem.X, overlapItem.Y);
-                    double distToMove = overlapLoc.Distance(tempLoc) + 10;
+        //public void ClearAreaAtPoint(Point p, object ignoreItem = null) {
+        //    var overlapItem = GetItemNearPoint(p, ignoreItem);
+        //    if (overlapItem != null) {
+        //        Point tempLoc = p;
+        //        do {
+        //            var overlapLoc = new Point(overlapItem.X, overlapItem.Y);
+        //            double distToMove = overlapLoc.Distance(tempLoc) + 10;
 
-                    var dir = overlapLoc - tempLoc;
-                    dir.Normalize();
-                    dir = new Vector(-dir.Y, dir.X);
-                    overlapLoc += dir * distToMove;
-                    overlapItem.X = overlapLoc.X;
-                    overlapItem.Y = overlapLoc.Y;
+        //            var dir = overlapLoc - tempLoc;
+        //            dir.Normalize();
+        //            dir = new Vector(-dir.Y, dir.X);
+        //            overlapLoc += dir * distToMove;
+        //            overlapItem.X = overlapLoc.X;
+        //            overlapItem.Y = overlapLoc.Y;
 
-                    overlapItem = GetItemNearPoint(overlapLoc, overlapItem);
-                    tempLoc = overlapLoc;
-                } while (overlapItem != null && overlapItem != ignoreItem);
-            }
-        }
+        //            overlapItem = GetItemNearPoint(overlapLoc, overlapItem);
+        //            tempLoc = overlapLoc;
+        //        } while (overlapItem != null && overlapItem != ignoreItem);
+        //    }
+        //}
 
-        public void ClearAllOverlaps() {
-            foreach (var avm in AllSelectedTriggerActions) {
-                ClearAreaAtPoint(avm.Location, avm);
-            }
-        }
+        //public void ClearAllOverlaps() {
+        //    foreach (var avm in AllSelectedTriggerActions) {
+        //        ClearAreaAtPoint(avm.Location, avm);
+        //    }
+        //}
 
         public void NotifyViewportChanged() {
             MpMessenger.Send(MpMessageType.ActionViewportChanged);

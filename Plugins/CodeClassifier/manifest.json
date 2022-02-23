@@ -17,8 +17,8 @@
     },
     "parameters": [
       {
-        "label": "Supported Languages",
-        "parameterControlType": "ComboBox",
+        "label": "Language",
+        "parameterControlType": "ListBox",
         "parameterValueType": "Csv",
         "enumId": 1,
         "isRequired": true,
@@ -69,7 +69,7 @@
         "enumId": 2,
         "sortOrderIdx": 0,
         "isReadOnly": false,
-        "isRequired": true,
+        "isRequired": false,
         "values": [
           {
             "value": "0",
@@ -86,16 +86,31 @@
         ]
       },
       {
-        "label": "Source Content",
-        "description": "The Snippet to deetect",
+        "label": "Content for Detection",
+        "description": "The Snippet to detect",
         "parameterControlType": "Hidden",
         "parameterValueType": "PlainText",
         "enumId": 3,
-        "isRequired": true,
+        "isRequired": false,
         "isVisible": false,
         "values": [
           {
             "value": "ItemData"
+          }
+        ]
+      },
+      {
+        "label": "Train",
+        "description": "When classifier is wrong. Select & Execute with appropriate language to improve accuracy.",
+        "parameterControlType": "CheckBox",
+        "parameterValueType": "Bool",
+        "enumId": 4,
+        "isRequired": false,
+        "isVisible": true,
+        "values": [
+          {
+            "value": false,
+            "isDefault": true
           }
         ]
       }

@@ -288,7 +288,7 @@
       },
       {
         "label": "Visual Features",
-        "parameterControlType": "ComboBox",
+        "parameterControlType": "ListBox",
         "parameterValueType": "Csv",
         "enumId": 2,
         "isRequired": false,
@@ -338,7 +338,7 @@
       },
       {
         "label": "Details",
-        "parameterControlType": "ComboBox",
+        "parameterControlType": "ListBox",
         "parameterValueType": "Csv",
         "enumId": 3,
         "isReadOnly": false,

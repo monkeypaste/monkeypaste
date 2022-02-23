@@ -176,6 +176,7 @@
     <Compile Include="Converters\MpBackgroundBrushToForegroundBrushConverter.cs" />
     <Compile Include="Converters\MpBase64StringToIconConverter.cs" />
     <Compile Include="Converters\MpBase64ToImageBrushConverter.cs" />
+    <Compile Include="Converters\MpBoolToSelectionModeConverter.cs" />
     <Compile Include="Converters\MpDiameterToStartPointConverter.cs" />
     <Compile Include="Converters\MpCollectionToGroupedCollectionConverter.cs" />
     <Compile Include="Converters\MpDoubleToThicknessIndentLevelConverter.cs" />
@@ -282,7 +283,7 @@
     <Compile Include="Utils\RESTful\MpYoloTransaction.cs" />
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpMultiSelectComboBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpListBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpContentParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />

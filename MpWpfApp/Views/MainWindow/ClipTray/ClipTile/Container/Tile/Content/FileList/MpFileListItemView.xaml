@@ -50,7 +50,8 @@
                            IsEnabled="{Binding Parent.IsSelected}"
                            NavigateUri="{Binding CopyItemData}">
                     <Hyperlink.Inlines>
-                        <Run Text="{Binding CopyItemData, Converter={StaticResource AbsoluteToRelativePathStringConverter}}" />
+                        <Run Text="{Binding CopyItemData,
+                                            Converter={StaticResource AbsoluteToRelativePathStringConverter}}" />
                     </Hyperlink.Inlines>
                 </Hyperlink>
             </TextBlock.Inlines>

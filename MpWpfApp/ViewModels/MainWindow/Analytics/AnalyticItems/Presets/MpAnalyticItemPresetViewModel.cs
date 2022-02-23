@@ -308,14 +308,13 @@ namespace MpWpfApp {
             MpAnalyticItemParameterViewModel naipvm = null;
 
             switch (aipf.parameterControlType) {
-                case MpAnalyticItemParameterControlType.ComboBox:
-                    if(aipf.isMultiValue) {
-                        naipvm = new MpMultiSelectComboBoxParameterViewModel(this);
-                    } else {
-                        naipvm = new MpComboBoxParameterViewModel(this);
-                    }                    
+                case MpAnalyticItemParameterControlType.ListBox:
+                    naipvm = new MpListBoxParameterViewModel(this);
                     break;
-                case MpAnalyticItemParameterControlType.Text:
+                case MpAnalyticItemParameterControlType.ComboBox:
+                    naipvm = new MpComboBoxParameterViewModel(this);
+                    break;
+                case MpAnalyticItemParameterControlType.TextBox:
                     naipvm = new MpTextBoxParameterViewModel(this);
                     break;
                 case MpAnalyticItemParameterControlType.CheckBox:

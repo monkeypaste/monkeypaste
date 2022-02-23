@@ -15,8 +15,8 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="350" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0"
                 CornerRadius="3"
@@ -129,8 +129,10 @@
         <Grid x:Name="ActionDesignerGrid"
               Grid.Column="1"
               local:MpSizeObserverExtension.IsEnabled="True"
-              local:MpSizeObserverExtension.ObservedWidth="{Binding DesignerWidth, Mode=OneWayToSource}"
-              local:MpSizeObserverExtension.ObservedHeight="{Binding DesignerHeight, Mode=OneWayToSource}"
+              local:MpSizeObserverExtension.ObservedWidth="{Binding DesignerWidth,
+                                                                    Mode=OneWayToSource}"
+              local:MpSizeObserverExtension.ObservedHeight="{Binding DesignerHeight,
+                                                                     Mode=OneWayToSource}"
               DataContext="{Binding}">
             <i:Interaction.Behaviors>
                 <local:MpResizeBehavior x:Name="DesignerResizeBehvior"

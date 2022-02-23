@@ -127,7 +127,9 @@
                        FontStyle="Oblique"
                        FontSize="34" />
         </Grid>
-        <Viewbox Visibility="{Binding IsRequery, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource Hide}}">
+        <Viewbox Visibility="{Binding IsRequery,
+                                      Converter={StaticResource BoolToVisibilityConverter},
+                                      ConverterParameter={StaticResource Hide}}">
             <local:MpSpinnerApple Margin="20"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Center" />

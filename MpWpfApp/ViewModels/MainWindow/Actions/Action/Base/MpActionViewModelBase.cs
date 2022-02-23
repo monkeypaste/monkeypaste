@@ -33,6 +33,8 @@ namespace MpWpfApp {
         MpIMovableViewModel,
         MpITriggerActionViewModel {
         #region Private Variables
+        
+        private Point _lastLocation;
 
         #endregion
 
@@ -705,11 +707,14 @@ namespace MpWpfApp {
                 case nameof(Location):
                 case nameof(X):
                 case nameof(Y):
+                    
                     if(AddChildEmptyActionViewModel == null) {
                         break;
                     }
 
                     AddChildEmptyActionViewModel.Location = DefaultEmptyActionLocation;
+
+                    _lastLocation = Location;
                     break;
             }
         }
@@ -759,7 +764,7 @@ namespace MpWpfApp {
                  AddChildEmptyActionViewModel.IsSelected = false;
                  navm.IsSelected = true;
 
-                 Parent.ClearAllOverlaps();
+                 //Parent.ClearAllOverlaps();
 
                  OnPropertyChanged(nameof(Items));
 

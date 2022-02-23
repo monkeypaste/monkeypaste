@@ -179,7 +179,9 @@
                                Height="3"
                                Width="30" />
                 </Grid>
-                <Label HorizontalAlignment="Center">Add New</Label>
+                <Label HorizontalAlignment="Center">
+                    Add New
+                </Label>
             </StackPanel>
         </Button>
     </Grid>

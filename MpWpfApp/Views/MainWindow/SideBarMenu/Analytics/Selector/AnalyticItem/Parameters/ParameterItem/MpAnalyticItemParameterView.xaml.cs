@@ -25,7 +25,7 @@ namespace MpWpfApp {
         private void lstBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var lb = sender as ListBox;            
 
-            foreach(var aipvvm in (BindingContext as MpMultiSelectComboBoxParameterViewModel).Items) {
+            foreach(var aipvvm in (BindingContext as MpListBoxParameterViewModel).Items) {
                 aipvvm.IsSelected = lb.SelectedItems.Contains(aipvvm);
             }
         }
@@ -39,7 +39,7 @@ namespace MpWpfApp {
 
         private void MultiSelectComboBox_Loaded(object sender, RoutedEventArgs e) {
             var mscb = sender as ComboBox;
-            foreach (var aipvvm in (BindingContext as MpMultiSelectComboBoxParameterViewModel).SelectedItems) {
+            foreach (var aipvvm in (BindingContext as MpListBoxParameterViewModel).SelectedItems) {
                 ((ListBox)mscb.Template.FindName("lstBox", mscb)).SelectedItems.Add(aipvvm);
             }
         }

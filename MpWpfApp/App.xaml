@@ -165,7 +165,8 @@
                           Command="{Binding Command}"
                           CommandParameter="{Binding CommandParameter}">
                     <MenuItem.Icon>
-                        <Image Source="{Binding IconId, Converter={StaticResource IconIdToImageSourceConverter}}" />
+                        <Image Source="{Binding IconId,
+                                                Converter={StaticResource IconIdToImageSourceConverter}}" />
                     </MenuItem.Icon>
                     <MenuItem.Header>
                         <DockPanel LastChildFill="False">
@@ -413,8 +414,12 @@
             </DataTemplate>
 
             <!--  Color Palletes  -->
-            <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>
-            <SolidColorBrush x:Key="AppColorLight">MediumPurple</SolidColorBrush>
+            <SolidColorBrush x:Key="AppColorDark">
+                DarkViolet
+            </SolidColorBrush>
+            <SolidColorBrush x:Key="AppColorLight">
+                MediumPurple
+            </SolidColorBrush>
             <SolidColorBrush x:Key="ClipTileTitleTextBoxBackgroundBrush"
                              Opacity="0.5"
                              Color="White" />

@@ -212,7 +212,8 @@
                     <RotateTransform x:Name="ClipTileAppIconImageButtonRotateTransform" />
                 </Button.RenderTransform>
                 <Button.ContextMenu>
-                    <local:MpClipTileSourceIconContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
+                    <local:MpClipTileSourceIconContextMenu DataContext="{Binding PlacementTarget.DataContext,
+                                                                                 RelativeSource={RelativeSource Self}}" />
                 </Button.ContextMenu>
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"

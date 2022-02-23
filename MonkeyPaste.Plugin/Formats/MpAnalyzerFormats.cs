@@ -9,8 +9,9 @@ namespace MonkeyPaste.Plugin {
     public enum MpAnalyticItemParameterControlType {
         None = 0,
         Button,
-        Text,
+        TextBox,
         ComboBox,
+        ListBox,
         CheckBox,
         Slider,
         Hidden
@@ -37,6 +38,7 @@ namespace MonkeyPaste.Plugin {
 
     public class MpAnalyzerPluginFormat {
         public MpHttpTransactionFormat http { get; set; }
+        public MpDllTransactionFormat dll { get; set; }
 
         public MpAnalyzerPluginInputFormat inputType { get; set; } = null;
         public MpAnalyzerPluginOutputFormat outputType { get; set; } = null;

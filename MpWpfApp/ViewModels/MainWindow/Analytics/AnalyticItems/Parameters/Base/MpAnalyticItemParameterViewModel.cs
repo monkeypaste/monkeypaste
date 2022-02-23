@@ -145,14 +145,14 @@ namespace MpWpfApp {
                 if (string.IsNullOrWhiteSpace(_currentValue)) {
                     return false;
                 }
-                if (_currentValue != "0" && _currentValue != "1") {
+                if (_currentValue.ToLower() != "false" && _currentValue.ToLower() != "true") {
                     throw new Exception("Cannot convert value " + _currentValue + " to boolean");
                 }
-                return _currentValue == "1";
+                return _currentValue.ToLower() == "true";
             }
             set {
                 if (BoolValue != value) {
-                    _currentValue = value ? "1" : "0";
+                    _currentValue = value ? "True" : "False";
                     OnPropertyChanged(nameof(BoolValue));
                     OnPropertyChanged(nameof(_currentValue));
                 }
@@ -204,6 +204,24 @@ namespace MpWpfApp {
                     return string.Empty;
                 }
                 return Parameter.formatInfo;
+            }
+        }
+
+        public MpAnalyticItemParameterControlType ControlType {
+            get {
+                if(Parameter == null) {
+                    return MpAnalyticItemParameterControlType.None;
+                }
+                return Parameter.parameterControlType;
+            }
+        }
+
+        public MpAnalyticItemParameterValueUnitType ValueType {
+            get {
+                if (Parameter == null) {
+                    return MpAnalyticItemParameterValueUnitType.None;
+                }
+                return Parameter.parameterValueType;
             }
         }
 

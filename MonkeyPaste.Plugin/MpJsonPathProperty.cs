@@ -5,7 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MonkeyPaste.Plugin {    
+namespace MonkeyPaste.Plugin {
+    public enum MpJsonDataTokenType {
+        None = 0,
+        RequestParam, // @<enumId>
+        Subsititution, // value: '...{0}...' where valuePath={0}
+        PathIndex, // [#] where # is swapped for * and Property is list
+        Eof, // <EOF> used to denoted contentEnd for text range annotation
+    }
+
     public class MpJsonPathProperty {
         private static readonly string _inputParamRegexStr = @"@[0-9]*";
         private static Regex _inputParamRegex;
