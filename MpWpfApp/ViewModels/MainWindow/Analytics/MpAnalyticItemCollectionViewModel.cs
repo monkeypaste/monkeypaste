@@ -72,8 +72,8 @@ namespace MpWpfApp {
         #endregion
 
         #region MpISidebarItemViewModel Implementation
-        public double SidebarWidth { get; set; } = MpMeasurements.Instance.DefaultAnalyzerPanelWidth;
-        public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultAnalyzerPanelWidth;
+        public double SidebarWidth { get; set; } = MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
+        public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
         public bool IsSidebarVisible { get; set; } = false;
 
         public MpISidebarItemViewModel NextSidebarItem => SelectedPresetViewModel;

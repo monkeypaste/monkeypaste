@@ -160,7 +160,9 @@ namespace MpWpfApp {
 
         #region Analyzers
 
-        public double DefaultAnalyzerPanelWidth => 600;
+        public double DefaultAnalyzerPresetPanelWidth => 400;
+
+        public double DefaultAnalyzerParameterPanelWidth => 400;
 
         #endregion
 

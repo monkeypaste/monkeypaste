@@ -43,8 +43,7 @@
                                               Visibility="{Binding IsSidebarVisible,
                                                                    Converter={StaticResource BoolToVisibilityConverter}}" />
             <local:MpTriggerActionChooserView x:Name="ActionCollectionView"
-                                              MinWidth="{Binding DefaultActionPanelWidth,
-                                                                 Source={x:Static local:MpMeasurements.Instance}}"
+                                              MinWidth="{Binding SidebarWidth}"
                                               VerticalAlignment="Stretch"
                                               DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
                                               Visibility="{Binding IsSidebarVisible,

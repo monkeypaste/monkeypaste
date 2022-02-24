@@ -572,6 +572,10 @@ namespace MpWpfApp {
             if (IsEnabled) {
                 return;
             }
+            Validate();
+            if(!IsValid) {
+                return;
+            }
             if (ParentActionViewModel != null) {
                 if (ParentActionViewModel.OnActionComplete != null) {
                     ParentActionViewModel.OnActionComplete -= OnActionTriggered;
@@ -606,15 +610,14 @@ namespace MpWpfApp {
             this.FindAllChildren().ForEach(x => x.Validate());
             if(ActionType == MpActionType.None) {
                 ValidationText = "Select Action Type";
-            } else if(ParentActionViewModel != null && 
-                ParentActionViewModel.ActionType != MpActionType.Compare && this is MpCompareActionViewModelBase) {
-                ValidationText = "Macro's must be root level action's or a compare output";
+            } else {
+                ValidationText = string.Empty;
             }
         }
 
 
         public virtual async Task PerformAction(object arg) {
-            if (arg == null) {
+            if (arg == null || !IsValid) {
                 return;
             }
             await Task.Delay(1);

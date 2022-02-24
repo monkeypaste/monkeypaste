@@ -204,6 +204,7 @@
     <Compile Include="Converters\MpMultiSelectHoverableToBrushConverter.cs" />
     <Compile Include="Converters\MpObjectToTooltipConverter.cs" />
     <Compile Include="Converters\MpShorcutIdToKeyStringConverter.cs" />
+    <Compile Include="Converters\MpSliderValueWidthConverter.cs" />
     <Compile Include="Converters\MpStringHexToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToImageSourceConverter.cs" />
@@ -367,39 +368,62 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionChooserView.xaml.cs">
-      <DependentUpon>MpTriggerActionChooserView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\MpContentUserControl.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\ButtonColumn\MpSidebarView.xaml.cs">
+      <DependentUpon>MpSidebarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionPropertyListBoxItemView.xaml.cs">
-      <DependentUpon>MpActionPropertyListBoxItemView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemOptionsView.xaml.cs">
-      <DependentUpon>MpActionTreeItemOptionsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Bases\MpActionComboBoxItem.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Bases\MpActionComboBoxItem.xaml.cs">
       <DependentUpon>MpActionComboBoxItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\Selector\MpCompareActionItemCompareDataTemplateSelector.cs" />
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\MpActionPropertyListBoxView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\MpTriggerActionChooserView.xaml.cs">
+      <DependentUpon>MpTriggerActionChooserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Actions\ActionItem\MpActionPropertyListBoxItemView.xaml.cs">
+      <DependentUpon>MpActionPropertyListBoxItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemOptionsView.xaml.cs">
+      <DependentUpon>MpActionTreeItemOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Actions\ActionItem\Selector\MpActionItemPropertiesTemplateSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Actions\ActionItem\Selector\MpCompareActionItemCompareDataTemplateSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Actions\MpActionPropertyListBoxView.xaml.cs">
       <DependentUpon>MpActionPropertyListBoxView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\DesignerItem\MpActionDesignerItemView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Designer\DesignerItem\MpActionDesignerItemView.xaml.cs">
       <DependentUpon>MpActionDesignerItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\DesignerItem\Selector\MpActionDesignerItemTemplateSelector.cs" />
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\MpActionDesignerView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Designer\DesignerItem\Selector\MpActionDesignerItemTemplateSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Designer\MpActionDesignerView.xaml.cs">
       <DependentUpon>MpActionDesignerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
-      <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\MpTriggerActionTreeView.xaml.cs">
+      <DependentUpon>MpTriggerActionTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml.cs">
+      <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml.cs">
       <DependentUpon>MpAnalyticItemPresetParameterListBoxView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Presets\MpAnalyticItemPresetDataGridView.xaml.cs">
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\MpAnalyticItemParameterView.xaml.cs">
+      <DependentUpon>MpAnalyticItemParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Selector\MpParameterViewSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Presets\MpAnalyticItemPresetDataGridView.xaml.cs">
       <DependentUpon>MpAnalyticItemPresetDataGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\MpContentUserControl.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
+      <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Tree\MpAnalyticItemTreeView.xaml.cs">
+      <DependentUpon>MpAnalyticItemTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Tree\MpAnalyzerTreeView.xaml.cs">
+      <DependentUpon>MpAnalyzerTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\TagTree\MpTagTreeView.xaml.cs">
+      <DependentUpon>MpTagTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Reusable\ContextMenu\Selector\MpContextMenuItemContainerSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\MpClipTrayContainerView.xaml.cs">
       <DependentUpon>MpClipTrayContainerView.xaml</DependentUpon>
@@ -410,16 +434,6 @@
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml.cs">
       <DependentUpon>MpTagTrayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyticItemTreeView.xaml.cs">
-      <DependentUpon>MpAnalyticItemTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyzerTreeView.xaml.cs">
-      <DependentUpon>MpAnalyzerTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\MpTriggerActionTreeView.xaml.cs">
-      <DependentUpon>MpTriggerActionTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\Selector\MpActionItemPropertiesTemplateSelector.cs" />
     <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarContainerView.xaml.cs">
       <DependentUpon>MpSidebarContainerView.xaml</DependentUpon>
     </Compile>
@@ -457,13 +471,6 @@
     <Compile Include="ViewModels\Reusable\MpCursorViewModel.cs" />
     <Compile Include="Views\Base\MpUserControl.cs" />
     <Compile Include="Views\Base\MpWindow.cs" />
-    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml.cs">
-      <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\MpAnalyticItemParameterView.xaml.cs">
-      <DependentUpon>MpAnalyticItemParameterView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Selector\MpParameterViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml.cs">
       <DependentUpon>MpClipTileContainerView.xaml</DependentUpon>
     </Compile>
@@ -540,12 +547,6 @@
     <Compile Include="Views\MainWindow\MpMainWindow.xaml.cs">
       <DependentUpon>MpMainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\TagTree\MpTagTreeView.xaml.cs">
-      <DependentUpon>MpTagTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarView.xaml.cs">
-      <DependentUpon>MpSidebarView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
@@ -558,6 +559,9 @@
     </Compile>
     <Compile Include="Views\Reusable\MessageBoxes\MpMessageBox.xaml.cs">
       <DependentUpon>MpMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\MpSliderBorder.xaml.cs">
+      <DependentUpon>MpSliderBorder.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
@@ -673,54 +677,6 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\MpTriggerActionChooserView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionPropertyListBoxItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemOptionsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Bases\MpActionComboBoxItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Actions\MpActionPropertyListBoxView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\DesignerItem\MpActionDesignerItemView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\Designer\MpActionDesignerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\MpAnalyticItemSelectorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Presets\MpAnalyticItemPresetDataGridView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\MpAnalyticItemParameterView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -833,25 +789,73 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyticItemTreeView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\ButtonColumn\MpSidebarView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Analytics\Tree\MpAnalyzerTreeView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Bases\MpActionComboBoxItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\Actions\Selector\Triggers\MpTriggerActionTreeView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\MpTriggerActionChooserView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\TagTree\MpTagTreeView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Actions\ActionItem\MpActionPropertyListBoxItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\MpSidebarView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Actions\ActionItem\MpActionTreeItemOptionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Actions\MpActionPropertyListBoxView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Designer\DesignerItem\MpActionDesignerItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Designer\MpActionDesignerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\MpTriggerActionTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\MpAnalyticItemParameterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Presets\MpAnalyticItemPresetDataGridView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\MpAnalyticItemSelectorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Tree\MpAnalyticItemTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Tree\MpAnalyzerTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\TagTree\MpTagTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\MpSidebarContainerView.xaml">
       <SubType>Designer</SubType>
@@ -870,6 +874,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Reusable\MessageBoxes\MpMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\MpSliderBorder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

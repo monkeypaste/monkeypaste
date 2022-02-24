@@ -67,7 +67,23 @@ namespace MpWpfApp {
 
         #region Public Overrides
 
+        public override void Validate() {
+            base.Validate();
+            if(!IsValid) {
+                return;
+            }
+            var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
+            if (aipvm == null) {
+                ValidationText = $"Analyzer not found";
+            } else {
+                ValidationText = string.Empty;
+            }
+        }
+
         public override async Task PerformAction(object arg) {
+            if(!IsValid) {
+                return;
+            }
             MpCopyItem ci = null;
             if(arg is MpCopyItem) {
                 ci = arg as MpCopyItem;
@@ -80,11 +96,7 @@ namespace MpWpfApp {
             }
 
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
-            if(aipvm == null) {
-                //db reference broken
-                Debugger.Break();
-                return;
-            }
+            
             object[] args = new object[] { aipvm, ci };
             aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
 

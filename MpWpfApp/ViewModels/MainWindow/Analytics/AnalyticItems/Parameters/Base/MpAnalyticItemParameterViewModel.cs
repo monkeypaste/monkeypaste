@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using MonkeyPaste;
@@ -53,9 +54,12 @@ namespace MpWpfApp {
             }
         }
 
-        #endregion
 
+
+        #endregion
         #region State
+
+        public bool HasDescription => !string.IsNullOrEmpty(Description);
 
         public bool IsHovering { get; set; } = false;
 
@@ -222,6 +226,15 @@ namespace MpWpfApp {
                     return MpAnalyticItemParameterValueUnitType.None;
                 }
                 return Parameter.parameterValueType;
+            }
+        }
+
+        public string Description {
+            get {
+                if(Parameter == null) {
+                    return string.Empty;
+                }
+                return Parameter.description;
             }
         }
 

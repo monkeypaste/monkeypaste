@@ -18,6 +18,7 @@
     "parameters": [
       {
         "label": "Language",
+        "description": "To add a language, open manifest.json of this plug-in and add it to the language parameter. Then restart and train with a few examples."
         "parameterControlType": "ListBox",
         "parameterValueType": "Csv",
         "enumId": 1,
@@ -80,7 +81,7 @@
             "isMaximum": true
           },
           {
-            "value": "0.1",
+            "value": "0.3",
             "isDefault": true
           }
         ]

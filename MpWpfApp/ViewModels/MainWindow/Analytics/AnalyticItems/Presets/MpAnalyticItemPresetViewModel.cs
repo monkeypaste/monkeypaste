@@ -61,8 +61,8 @@ namespace MpWpfApp {
         #endregion
 
         #region MpISidebarItemViewModel Implementation
-        public double SidebarWidth { get; set; } = MpMeasurements.Instance.DefaultAnalyzerPanelWidth;
-        public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultAnalyzerPanelWidth;
+        public double SidebarWidth { get; set; } = MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
+        public double DefaultSidebarWidth => MpMeasurements.Instance.DefaultAnalyzerPresetPanelWidth;
         public bool IsSidebarVisible { get; set; } = false;
 
         public MpISidebarItemViewModel NextSidebarItem => null;
@@ -426,6 +426,15 @@ namespace MpWpfApp {
         private void MpPresetParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
+                    //if(Parent.Parent.IsSidebarVisible) {
+                    //    if (IsSelected) {
+                    //        Parent.Items.ForEach(x => x.IsEditingParameters = x.AnalyticItemPresetId == AnalyticItemPresetId);
+                    //    } else {
+                    //        IsEditingParameters = false;
+                    //    }
+                    //}
+
+                    
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));

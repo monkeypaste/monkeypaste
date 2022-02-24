@@ -250,7 +250,10 @@ namespace MpWpfApp {
                 case MpMessageType.JumpToIdxCompleted:
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.TrayScrollChanged:
-                    _dropTargets.ForEach(x => x.UpdateAdorner());
+                    if(IsCheckingForDrag || IsDragAndDrop) {
+                        _dropTargets.ForEach(x => x.UpdateAdorner());
+                    }
+                    
                     break;
             }
         }

@@ -5,6 +5,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                      x:TypeArguments="local:MpAnalyticItemParameterViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
@@ -18,35 +19,32 @@
             <Style x:Key="AnalyzerTextBlockStyle"
                    TargetType="TextBlock">
                 <Setter Property="HorizontalAlignment"
-                        Value="Left"/>
+                        Value="Left" />
                 <Setter Property="VerticalAlignment"
-                        Value="Center"/>
+                        Value="Top" />
                 <Setter Property="FontSize"
-                        Value="13"/>
+                        Value="13" />
                 <Setter Property="FontWeight"
-                        Value="SemiBold"/>
+                        Value="SemiBold" />
                 <Setter Property="Foreground"
-                        Value="White"/>
+                        Value="White" />
                 <Setter Property="Margin"
-                        Value="0,0,7,0"/>
+                        Value="5,5,7,0" />
                 <Setter Property="DockPanel.Dock"
-                        Value="Left"/>
+                        Value="Left" />
             </Style>
+
             <!--  ListBox Parameter  -->
 
             <DataTemplate x:Key="ListBoxParameter"
                           DataType="local:MpListBoxParameterViewModel">
-                <DockPanel LastChildFill="False">
-                    <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
-                               VerticalAlignment="Top"
-                               Text="{Binding Label}" />
-                    <Border DockPanel.Dock="Right"
+                <Border DockPanel.Dock="Right"
                             BorderThickness="0"
                             CornerRadius="2"
                             ToolTipService.InitialShowDelay="2"
                             ToolTip="{Binding ParameterTooltipText}"
                             BorderBrush="{Binding ParameterBorderBrush}">
-                        <ListBox x:Name="MultiSelectComboBox"
+                    <ListBox x:Name="MultiSelectComboBox"
                                  Background="Transparent"
                                  HorizontalContentAlignment="Stretch"
                                  ItemsSource="{Binding Items}"
@@ -57,157 +55,142 @@
                                  MaxWidth="{Binding ActualWidth,
                                                     RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
                                  MinWidth="80">
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListBoxItem}">
-                                    <Setter Property="IsSelected"
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="IsSelected"
                                             Value="{Binding IsSelected,
                                                             Mode=TwoWay,
                                                             NotifyOnTargetUpdated=True,
                                                             NotifyOnSourceUpdated=True,
                                                             UpdateSourceTrigger=PropertyChanged}" />
-                                    <Setter Property="HorizontalContentAlignment"
+                                <Setter Property="HorizontalContentAlignment"
                                             Value="Left" />
-                                    <Setter Property="VerticalAlignment"
+                                <Setter Property="VerticalAlignment"
                                             Value="Stretch" />
-                                    <Setter Property="VerticalContentAlignment"
+                                <Setter Property="VerticalContentAlignment"
                                             Value="Stretch" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                <ContentPresenter />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Border BorderThickness="1"
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="1"
                                             Background="Transparent"
                                             BorderBrush="{Binding BorderBrush}">
-                                        <TextBlock Background="{Binding BackgroundBrush}"
+                                    <TextBlock Background="{Binding BackgroundBrush}"
                                                    Foreground="OldLace"
                                                    local:MpHoverableExtension.IsEnabled="True"
                                                    local:MpHoverableExtension.IsHovering="{Binding IsHovering,
                                                                                                    Mode=TwoWay}"
                                                    Text="{Binding Label}" />
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Border>
-                </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
             </DataTemplate>
 
             <!--  ComboBox Parameter  -->
 
             <DataTemplate x:Key="ComboBoxParameter"
                           DataType="local:MpComboBoxParameterViewModel">
-                <DockPanel LastChildFill="False">
-                    <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
-                               Text="{Binding Label}" />
-                    <Border DockPanel.Dock="Right"
+                <Border DockPanel.Dock="Right"
                             BorderThickness="0"
                             CornerRadius="2"
                             ToolTipService.InitialShowDelay="2"
                             ToolTip="{Binding ParameterTooltipText}"
                             BorderBrush="{Binding ParameterBorderBrush}">
-                        <ComboBox ItemsSource="{Binding Items}"
+                    <ComboBox ItemsSource="{Binding Items}"
                                   SelectedItem="{Binding SelectedItem,
                                                          Mode=TwoWay}"
                                   IsSynchronizedWithCurrentItem="False"
                                   HorizontalAlignment="Right"
                                   MinWidth="80">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Label}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                            <ComboBox.ItemContainerStyle>
-                                <Style TargetType="ComboBoxItem">
-                                    <Setter Property="IsSelected"
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Label}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="IsSelected"
                                             Value="{Binding IsSelected,
                                                             Mode=TwoWay}" />
-                                </Style>
-                            </ComboBox.ItemContainerStyle>
-                        </ComboBox>
-                    </Border>
-                </DockPanel>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
+                </Border>
             </DataTemplate>
 
             <!--  TextBox Parameter  -->
 
             <DataTemplate x:Key="TextBoxParameter"
                           DataType="local:MpTextBoxParameterViewModel">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.3*" />
-                        <ColumnDefinition Width="0.7*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
-                               Text="{Binding Label}" />
-                    <TextBox Grid.Column="1"
-                             Text="{Binding CurrentValue,
+                <TextBox Text="{Binding CurrentValue,
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=PropertyChanged,
                                             NotifyOnTargetUpdated=True}" />
-                </Grid>
             </DataTemplate>
 
             <!--  CheckBox Parameter  -->
 
             <DataTemplate x:Key="CheckBoxParameter"
                           DataType="local:MpCheckBoxParameterViewModel">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
-                               Text="{Binding Label}" />
-                    <CheckBox IsChecked="{Binding BoolValue,
-                                                  Mode=TwoWay,
-                                                  UpdateSourceTrigger=PropertyChanged,
-                                                  NotifyOnTargetUpdated=True}" />
-                </StackPanel>
+
+                <CheckBox IsChecked="{Binding BoolValue,
+                                              Mode=TwoWay,
+                                              UpdateSourceTrigger=PropertyChanged,
+                                              NotifyOnTargetUpdated=True}" />
             </DataTemplate>
 
             <!--  Slider Parameter  -->
 
             <DataTemplate x:Key="SliderParameter"
                           DataType="local:MpSliderParameterViewModel">
-                <DockPanel MinWidth="200">
-                    <StackPanel Orientation="Vertical"
-                                MaxWidth="80"
-                                DockPanel.Dock="Left">
-                        <TextBlock Text="{Binding Label}"
-                                   VerticalAlignment="Top"
-                                   HorizontalAlignment="Center"
-                                   Style="{StaticResource AnalyzerTextBlockStyle}"
-                                   TextWrapping="Wrap" />
-                        <TextBox Text="{Binding SliderValue,
-                                                Mode=TwoWay,
-                                                UpdateSourceTrigger=PropertyChanged,
-                                                NotifyOnTargetUpdated=True,
-                                                NotifyOnSourceUpdated=True}"
-                                 HorizontalAlignment="Stretch" />
-                    </StackPanel>
-                    <Slider Minimum="{Binding Min}"
-                            Maximum="{Binding Max}"
-                            Margin="0,15,0,0"
-                            Width="120"
-                            HorizontalAlignment="Right"
-                            DockPanel.Dock="Right"
-                            Value="{Binding SliderValue,
-                                            Mode=TwoWay,
-                                            UpdateSourceTrigger=PropertyChanged,
-                                            NotifyOnTargetUpdated=True,
-                                            NotifyOnSourceUpdated=True}"
-                            TickPlacement="None"
-                            TickFrequency="{Binding TickFrequency}"
-                            IsSnapToTickEnabled="False" />
-                </DockPanel>
+                <local:MpSliderBorder DataContext="{Binding}"
+                                      HorizontalAlignment="Right"
+                                      Width="120" />
             </DataTemplate>
-                
+
             <local:MpParameterViewSelector x:Key="ParameterViewSelector" />
         </Grid.Resources>
-        <ContentControl Content="{Binding}"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.5*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0"
+                    Orientation="Horizontal"
+                    DockPanel.Dock="Left">
+            <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
+                       Text="{Binding Label}" />
+            <Border Width="16"
+                    Height="16"
+                    Visibility="{Binding HasDescription,
+                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                    CornerRadius="9"
+                    BorderThickness="1"
+                    BorderBrush="White"
+                    ToolTip="{Binding Description}"
+                    ToolTipService.InitialShowDelay="0"
+                    Background="RoyalBlue">
+                <TextBlock FontSize="10"
+                           FontWeight="Bold"
+                           ClipToBounds="False"
+                           Foreground="White"
+                           Background="Transparent"
+                           Text="i"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+            </Border>
+        </StackPanel>
+        <ContentControl Grid.Column="1"
+                        Content="{Binding}"
                         Margin="5"
                         ContentTemplateSelector="{StaticResource ParameterViewSelector}" />
     </Grid>

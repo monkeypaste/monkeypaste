@@ -47,7 +47,12 @@
               Visibility="{Binding IsAnyEditingParameters,
                                    Converter={StaticResource BoolToVisibilityConverter},
                                    FallbackValue='Collapsed'}">
-            <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedPresetViewModel}" />
+            <local:MpAnalyticItemPresetParameterListBoxView Width="{Binding SidebarWidth,
+                                                                            Mode=TwoWay,
+                                                                            UpdateSourceTrigger=PropertyChanged,
+                                                                            NotifyOnSourceUpdated=True,
+                                                                            NotifyOnTargetUpdated=True}"
+                                                            DataContext="{Binding SelectedPresetViewModel}" />
         </Grid>
     </StackPanel>
 </local:MpUserControl>

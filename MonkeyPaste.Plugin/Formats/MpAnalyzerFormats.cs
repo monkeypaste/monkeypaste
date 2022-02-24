@@ -75,6 +75,8 @@ namespace MonkeyPaste.Plugin {
         public bool isRequired { get; set; } = false;
         public bool isMultiValue { get; set; } = false;
         public string formatInfo { get; set; } = string.Empty; // may be used for additional validation
+        public int precision { get; set; } = 7;
+
         public bool isValueDeferred { get; set; } = false; // TODO isValueDeferred is a placeholder and should be a seperate nullable json object for pulling values from http
         public bool isVisible { get; set; } = true;
 
@@ -109,6 +111,8 @@ namespace MonkeyPaste.Plugin {
     //}
 
     public class MpAnalyzerPresetFormat {
+        public string guid { get; set; }
+
         public bool isDefault { get; set; } = false;
 
         public string label { get; set; } = string.Empty;

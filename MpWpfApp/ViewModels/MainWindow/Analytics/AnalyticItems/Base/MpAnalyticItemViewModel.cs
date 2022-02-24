@@ -15,7 +15,6 @@ using System.Windows;
 using MonkeyPaste.Plugin;
 using System.Diagnostics;
 using System.IO;
-using Microsoft.Web.WebView2.Wpf;
 
 namespace MpWpfApp {
     public class MpAnalyticItemViewModel : 
@@ -116,10 +115,10 @@ namespace MpWpfApp {
 
         public string ApiName {
             get {
-                if (AnalyticItem == null) {
+                if (PluginFormat == null) {
                     return string.Empty;
                 }
-                return AnalyticItem.Title;
+                return PluginFormat.title;
             }
         }
 
@@ -282,36 +281,23 @@ namespace MpWpfApp {
             }
         }
 
-        public int IconId {
-            get {
-                if (AnalyticItem == null) {
-                    return 0;
-                }
-                return AnalyticItem.IconId;
-            }
-        }
+        public int IconId { get; private set; }
 
         public string Title {
             get {
-                if (AnalyticItem == null) {
+                if (PluginFormat == null) {
                     return string.Empty;
                 }
-                return AnalyticItem.Title;
-            }
-            set {
-                if (Title != value) {
-                    Title = value;
-                    OnPropertyChanged(nameof(Title));
-                }
+                return PluginFormat.title;
             }
         }
 
         public string Description {
             get {
-                if (AnalyticItem == null) {
+                if (PluginFormat == null) {
                     return string.Empty;
                 }
-                return AnalyticItem.Description;
+                return PluginFormat.description;
             }
         }
 
@@ -324,18 +310,11 @@ namespace MpWpfApp {
         //    }
         //}
 
-        public string AnalyzerPluginGuid => AnalyticItem == null ? string.Empty : AnalyticItem.Guid;
+        public string AnalyzerPluginGuid => PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpBillableItem BillableItem {
-            get {
-                if (AnalyticItem == null) {
-                    return null;
-                }
-                return AnalyticItem.BillableItem;
-            }
-        }
+        public MpBillableItem BillableItem { get; set; }
 
-        public MpAnalyticItem AnalyticItem { get; private set; }
+        //public MpAnalyticItem AnalyticItem { get; private set; }
 
         #region Plugin
 
@@ -388,28 +367,35 @@ namespace MpWpfApp {
                 throw new Exception("Cannot find component");
             }
 
-            AnalyticItem = await MpAnalyticItem.Create(
-                inputFormat: InputFormatFlags,
-                outputFormat: OutputFormatFlags,
-                title: PluginFormat.title,
-                description: PluginFormat.description,
-                iconUrl: PluginFormat.iconUrl,
-                guid: PluginFormat.guid);
+            if(string.IsNullOrEmpty(PluginFormat.iconUrl)) {
+                IconId = MpPreferences.ThisAppIcon.Id;
+            } else {
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl);
+                var icon = await MpIcon.Create(
+                    iconImgBase64: bytes.ToBase64String(),
+                    createBorder: false);
+                IconId = icon.Id;
+            }
 
-            AnalyticItem.Presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
-            bool isNew = AnalyticItem.Presets == null || AnalyticItem.Presets.Count == 0;
-            //if (!isNew && AnalyticItem.Presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime)) {
-            //    //if manifest has been modified presets need to be wiped and reset
-            //    // TODO maybe less forceably handle add/remove/update of presets when manifest changes
+            
+            var presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
+            
+            bool isNew = presets == null || presets.Count == 0;
 
-            //    foreach (var preset in AnalyticItem.Presets) {
-            //        var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
-            //        await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
-            //    }
-            //    await Task.WhenAll(AnalyticItem.Presets.Select(x => x.DeleteFromDatabaseAsync()));
-            //    AnalyticItem.Presets = new List<MpAnalyticItemPreset>();
-            //    isNew = true;
-            //}
+            if (!isNew && presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime)) {
+                //if manifest has been modified
+                
+                // TODO maybe less forceably handle add/remove/update of presets when manifest changes
+
+                foreach (var preset in presets) {
+                    var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
+                    await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
+                }
+                await Task.WhenAll(presets.Select(x => x.DeleteFromDatabaseAsync()));
+                presets = new List<MpAnalyticItemPreset>();
+                AnalyzerPluginFormat.presets = new List<MpAnalyzerPresetFormat>();
+                isNew = true;
+            }
 
             Items.Clear();
 
@@ -459,33 +445,33 @@ namespace MpWpfApp {
                 } 
                 foreach (var preset in AnalyzerPluginFormat.presets) {
                     var aip = await MpAnalyticItemPreset.Create(
-                        analyzerPluginGuid: AnalyticItem.Guid,
+                        analyzerPluginGuid: PluginFormat.guid,
                         isDefault: preset.isDefault,
                         label: preset.label,
-                        iconId: AnalyticItem.IconId,
+                        iconId: IconId,
                         sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(preset),
                         description: preset.description,
                         parameters: AnalyzerPluginFormat.parameters,
                         values: preset.values,
                         manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
 
-                    AnalyticItem.Presets.Add(aip);
+                    presets.Add(aip);
                 }
             } 
 
-            if (AnalyticItem.Presets.All(x => x.IsDefault == false)) {
+            if (presets.All(x => x.IsDefault == false)) {
                 //this ensures at least one preset exists and not all can be deleted
-                AnalyticItem.Presets[0].IsDefault = true;
+                presets[0].IsDefault = true;
             }
 
-            foreach (var preset in AnalyticItem.Presets) {
+            foreach (var preset in presets) {
                 var naipvm = await CreatePresetViewModel(preset);
                 Items.Add(naipvm);
             }
             Items.OrderBy(x => x.SortOrderIdx);
 
             var defPreset = Items.FirstOrDefault(x => x.IsDefault);
-            MpAssert.Assert(defPreset, $"Error no default preset for anayltic item {AnalyticItem.Title}");
+            MpAssert.Assert(defPreset, $"Error no default preset for anayltic item {Title}");
 
 
             OnPropertyChanged(nameof(IconId));
@@ -653,15 +639,18 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsSelected):
                     //if (IsSelected) {
-                    //    Parent.Items.ForEach(x => x.IsSelected = x.AnalyticItemId == AnalyticItemId);
+                    //    if(SelectedItem == null && Items.Count > 0) {
+                    //        SelectedItem = Items[0];
+                    //    }
+                    //} else {
+                    //    Items.ForEach(x => x.IsSelected = false);
                     //}
-                    //if(IsSelected && Parent.SelectedItemIdx != Parent.Items.IndexOf(this)) {
-                    //    Parent.SelectedItemIdx = Parent.Items.IndexOf(this);
-                    //}
+                    SelectedItem = DefaultPresetViewModel;
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     OnPropertyChanged(nameof(ItemBackgroundBrush));
                     OnPropertyChanged(nameof(ItemTitleForegroundBrush));
+
                     break;
                 case nameof(IsHovering):
                     OnPropertyChanged(nameof(ItemBackgroundBrush));
@@ -838,7 +827,6 @@ namespace MpWpfApp {
                     }                    
                     sourceCopyItem = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
                 }
-
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedItem));
 
