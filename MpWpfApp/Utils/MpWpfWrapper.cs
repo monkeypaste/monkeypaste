@@ -7,51 +7,23 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpWpfWrapper : MpINativeInterfaceWrapper {
-        public MpWpfDbInfo DbInfo { private get; set; }
-        public MpWpfPreferences WpfPreferences { private get; set; }
-        public MpWpfQueryInfo QueryInfo { private get; set; }
-        public MpWpfIconBuilder IconBuilder { private get; set; }
-        public MpWpfCustomColorChooserMenu CustomColorChooserMenu { private get; set; }
+        public MpICursor Cursor { get; }
+        public MpIDbInfo DbInfo { get; }
+        public MpIPreferenceIO PreferenceIO { get; }
+        public MpIQueryInfo QueryInfo { get; }
+        public MpIconBuilderBase IconBuilder { get; }
+        public MpICustomColorChooserMenu CustomColorChooserMenu { get; }
+        public MpIKeyboardInteractionService KeyboardInteractionService { get; }
+        public MpIGlobalTouch GlobalTouch { get; }
+        public MpIUiLocationFetcher LocationFetcher { get; }
 
         public MpWpfWrapper() {
+            Cursor = new MpWpfCursor();
             DbInfo = new MpWpfDbInfo();
-            WpfPreferences = new MpWpfPreferences();
+            PreferenceIO = new MpWpfPreferences();
             QueryInfo = new MpWpfQueryInfo();
             IconBuilder = new MpWpfIconBuilder();
             CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
-        }
-
-
-        public MpIDbInfo GetDbInfo() {
-            return DbInfo;
-        }
-
-        public MpIGlobalTouch GetGlobalTouch() {
-            throw new System.NotImplementedException();
-        }
-
-        public MpIconBuilderBase GetIconBuilder() {
-            return IconBuilder;
-        }
-
-        public MpIKeyboardInteractionService GetKeyboardInteractionService() {
-            throw new System.NotImplementedException();
-        }
-
-        public MpIUiLocationFetcher GetLocationFetcher() {
-            throw new System.NotImplementedException();
-        }
-
-        public MpIPreferenceIO GetPreferenceIO() {
-            return WpfPreferences;
-        }
-
-        public MpIQueryInfo GetQueryInfo() {
-            return QueryInfo;
-        }
-
-        public MpICustomColorChooserMenu GetCustomColorChooserMenu() {
-            return CustomColorChooserMenu;
         }
     }
 }

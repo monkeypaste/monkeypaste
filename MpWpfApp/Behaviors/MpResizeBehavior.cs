@@ -411,7 +411,7 @@ namespace MpWpfApp {
                 return;
             }
             if (!IsResizing && !AssociatedObject.IsMouseCaptured) {
-                //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                //MpCursorStack.CurrentCursor = MpCursorType.Default;
                 CanResize = false;
             }
         }
@@ -459,7 +459,7 @@ namespace MpWpfApp {
                 } else {
                     CanResize = false;
                     if(!CanAnyResize) {
-                        //MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                        //MpCursorStack.CurrentCursor = MpCursorType.Default;
                     }                    
                 }
             }

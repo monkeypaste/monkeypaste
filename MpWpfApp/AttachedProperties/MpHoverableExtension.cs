@@ -352,7 +352,7 @@ namespace MpWpfApp {
 
             MpCursorType? hoverCursor = GetHoverCursor(dpo);
             if (hoverCursor.HasValue) {
-                MpCursorViewModel.Instance.CurrentCursor = hoverCursor.Value;
+                MpCursorStack.PushCursor(dpo, hoverCursor.Value);
             }
 
             if (dpo is FrameworkElement fe) {
@@ -361,11 +361,12 @@ namespace MpWpfApp {
         }
 
         private static void Fe_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
-            var dpo = sender as DependencyObject;
+            var dpo = sender as DependencyObject; 
+
             SetIsHovering(dpo, false);
             MpCursorType? hoverCursor = GetHoverCursor(dpo);
             if (hoverCursor.HasValue) {
-                MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+                MpCursorStack.PopCursor(dpo);
             }
             if (dpo is Control c) {
                 UpdateBrushes(c);

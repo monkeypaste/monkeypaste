@@ -98,24 +98,28 @@ namespace MpWpfApp {
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
             
             object[] args = new object[] { aipvm, ci };
-            aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
+            if(aipvm != null && 
+               aipvm.Parent != null &&
+               aipvm.Parent.ExecuteAnalysisCommand.CanExecute(args)) {
+                aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
 
-            while (aipvm.Parent.IsBusy) {
-                await Task.Delay(100);
-            }
+                while (aipvm.Parent.IsBusy) {
+                    await Task.Delay(100);
+                }
 
-            MpCopyItem nci = null;
-            if(aipvm.Parent.LastResultContentItem != null && 
-               (aipvm.Parent.LastResultContentItem.Id != ci.Id ||
-               aipvm.Parent.LastResultContentItem.Id == 0)) {
-                nci = aipvm.Parent.LastResultContentItem;
+                MpCopyItem nci = null;
+                if (aipvm.Parent.LastResultContentItem != null &&
+                   (aipvm.Parent.LastResultContentItem.Id != ci.Id ||
+                   aipvm.Parent.LastResultContentItem.Id == 0)) {
+                    nci = aipvm.Parent.LastResultContentItem;
+                }
+                await base.PerformAction(new MpAnalyzeOutput() {
+                    Previous = arg as MpActionOutput,
+                    CopyItem = ci,
+                    NewContentItem = nci,
+                    OutputData = aipvm.Parent.LastTransaction.Response
+                });
             }
-            await base.PerformAction(new MpAnalyzeOutput() {
-                Previous = arg as MpActionOutput,
-                CopyItem = ci,
-                NewContentItem = nci,
-                OutputData = aipvm.Parent.LastTransaction.Response
-            });
         }
         #endregion
     }

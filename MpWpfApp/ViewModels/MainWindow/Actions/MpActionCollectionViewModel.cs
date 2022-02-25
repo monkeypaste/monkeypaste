@@ -420,6 +420,8 @@ namespace MpWpfApp {
                         .Where(x => x is MpEmptyActionViewModel)
                         .Cast<MpEmptyActionViewModel>()
                         .ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
+                    AllSelectedTriggerActions
+                        .ForEach(x => x.OnPropertyChanged(nameof(x.IsLabelVisible)));
                     break;
             }
         }

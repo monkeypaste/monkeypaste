@@ -218,19 +218,23 @@ namespace MpWpfApp {
         }
 
         private static void UpdateCursor() {
+            MpCursorStack.PopCursor(nameof(MpDragDropManager));
+
             MpCursorType currentCursor = MpCursorType.Default;
 
             if (!IsDragAndDrop) {
-                currentCursor = MpCursorType.Default;
+                return;
             } else if (!IsDropValid) {
                 currentCursor = MpCursorType.Invalid;
             } else if (IsDragCopy) {
                 currentCursor = _curDropTarget.CopyCursor;
             } else if (IsDragAndDrop) {
                 currentCursor = _curDropTarget.MoveCursor;
+            } else {
+                return;
             }
 
-            MpCursorViewModel.Instance.CurrentCursor = currentCursor;
+            MpCursorStack.PushCursor(nameof(MpDragDropManager), currentCursor);
         }
 
         private static void Instance_OnMainWindowHide(object sender, EventArgs e) {

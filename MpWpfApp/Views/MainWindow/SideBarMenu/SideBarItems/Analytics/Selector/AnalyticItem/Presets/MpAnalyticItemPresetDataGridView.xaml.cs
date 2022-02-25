@@ -25,14 +25,14 @@ namespace MpWpfApp {
         //private void Button_MouseEnter(object sender, MouseEventArgs e) {
         //    var pvm = (sender as FrameworkElement).DataContext as MpAnalyticItemPresetViewModel;
         //    if (pvm != null && pvm.IsDefault) {
-        //        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Invalid;
+        //        MpCursorStack.CurrentCursor = MpCursorType.Invalid;
         //    } else {
-        //        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        //        MpCursorStack.CurrentCursor = MpCursorType.Default;
         //    }
         //}
 
         //private void Button_MouseLeave(object sender, MouseEventArgs e) {
-        //    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        //    MpCursorStack.CurrentCursor = MpCursorType.Default;
         //}
     }
 }

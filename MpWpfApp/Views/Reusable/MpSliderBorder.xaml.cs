@@ -32,13 +32,29 @@ namespace MpWpfApp {
             if(!IsEnabled) {
                 return;
             }
+            var tbl = SliderValueTextBox.TranslatePoint(new Point(), SliderBorder);
+            var tbr = new Rect(tbl, new Size(SliderValueTextBox.ActualWidth, SliderValueTextBox.ActualHeight));
+
+            var mp = e.GetPosition(SliderBorder);
+            
+            if(tbr.Contains(mp)) {
+                return;
+            }
+            SliderValueTextBox.KillFocus();
+
             _isSliding = Mouse.Capture(SliderBorder);
             if(_isSliding) {
-                _lastMousePosition = e.GetPosition(SliderBorder);
-                SliderValueTextBox.IsHitTestVisible = false;
+                _lastMousePosition = mp;
+                //SliderValueTextBox.IsHitTestVisible = false;
                 e.Handled = true;
+                var sbr = new Rect(new Point(), SliderBorder.RenderSize);
+                if (sbr.Contains(mp)) {
+                    double newWidth = mp.X;
+                    double widthPercent = newWidth / SliderBorder.ActualWidth;
+                    double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
+                    BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
+                }
             }
-
         }
 
         private void Border_MouseMove(object sender, MouseEventArgs e) {
@@ -50,11 +66,18 @@ namespace MpWpfApp {
                 _isSliding = false;
                 return;
             }
-            var mp = e.GetPosition(SliderBorder);
-            double deltaX = mp.X - _lastMousePosition.X;
+            double newWidth;
 
-            double newWidth = SliderValueRectangle.Width + deltaX;
-            newWidth = Math.Min(Math.Max(0, newWidth), SliderBorder.ActualWidth);
+            var mp = e.GetPosition(SliderBorder);
+            var sbr = new Rect(new Point(), SliderBorder.RenderSize);
+            if(sbr.Contains(mp)) {
+                newWidth = mp.X;
+            } else {
+                double deltaX = mp.X - _lastMousePosition.X;
+
+                newWidth = SliderValueRectangle.ActualWidth + deltaX;
+                newWidth = Math.Min(Math.Max(0, newWidth), SliderBorder.ActualWidth);
+            }
 
             double widthPercent = newWidth / SliderBorder.ActualWidth;
             double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
@@ -65,7 +88,7 @@ namespace MpWpfApp {
 
         private void Border_MouseUp(object sender, MouseButtonEventArgs e) {
             if(_isSliding) {
-                SliderValueTextBox.IsHitTestVisible = true;
+                //SliderValueTextBox.IsHitTestVisible = true;
                 _isSliding = false;
                 _lastMousePosition = new Point();
                 if(SliderBorder.IsMouseCaptured) {
@@ -80,7 +103,7 @@ namespace MpWpfApp {
                 _ValueRegEx = new Regex(@"[^0-9.-]", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
             }
             var keyStr = new KeyConverter().ConvertToString(e.Key);
-            if(_ValueRegEx.IsMatch(keyStr)) {
+            if(_ValueRegEx.IsMatch(keyStr) && e.Key != Key.Delete && e.Key != Key.Back) {
                 e.Handled = true;
             }
         }
@@ -94,5 +117,6 @@ namespace MpWpfApp {
             double percentFilled = BindingContext.SliderValue / (BindingContext.MaxValue - BindingContext.MinValue);
             SliderValueRectangle.Width = SliderBorder.ActualWidth * percentFilled;
         }
+
     }
 }

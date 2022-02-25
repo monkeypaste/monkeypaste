@@ -263,6 +263,7 @@
   <ItemGroup>
     <Folder Include="Utils\DragDrop\" />
     <Folder Include="Utils\Styling\" />
+    <Folder Include="ViewModels\Reusable\Loader\" />
     <Folder Include="ViewModels\Reusable\Theme\" />
   </ItemGroup>
 

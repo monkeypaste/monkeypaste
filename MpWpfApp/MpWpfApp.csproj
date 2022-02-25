@@ -185,7 +185,6 @@
     <Compile Include="Converters\MpEnumToIntConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
     <Compile Include="Converters\MpBoolToBrushConverter.cs" />
-    <Compile Include="Converters\MpBoolToCursorConverter.cs" />
     <Compile Include="Converters\MpBoolToHAlignmentConverter.cs" />
     <Compile Include="Converters\MpBoolToIconSourceConverter.cs" />
     <Compile Include="Converters\MpBoolToImageSourceConverter.cs" />
@@ -261,6 +260,7 @@
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\MpCsvReader.cs" />
     <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
+    <Compile Include="Utils\MpWpfCursor.cs" />
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcherViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTransformActionViewModel.cs" />
@@ -415,12 +415,6 @@
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
       <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Tree\MpAnalyticItemTreeView.xaml.cs">
-      <DependentUpon>MpAnalyticItemTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Tree\MpAnalyzerTreeView.xaml.cs">
-      <DependentUpon>MpAnalyzerTreeView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\TagTree\MpTagTreeView.xaml.cs">
       <DependentUpon>MpTagTreeView.xaml</DependentUpon>
     </Compile>
@@ -468,7 +462,6 @@
     <Compile Include="ViewModels\MainWindow\TagTray\MpTagTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\MpTagTileViewModel.cs" />
     <Compile Include="ViewModels\Reusable\MpMarqueeTextBlockViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\MpCursorViewModel.cs" />
     <Compile Include="Views\Base\MpUserControl.cs" />
     <Compile Include="Views\Base\MpWindow.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml.cs">
@@ -842,14 +835,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\MpAnalyticItemSelectorView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Tree\MpAnalyticItemTreeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Tree\MpAnalyzerTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

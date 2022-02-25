@@ -243,6 +243,15 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsLabelVisible {
+            get {
+                if(Parent == null) {
+                    return false;
+                }
+                return Parent.PrimaryAction.ActionId == ActionId && !IsEmptyAction;
+            }
+        }
+
         public bool IsPlaceholder => ActionType == MpActionType.None;
 
         public bool HasDescription => !string.IsNullOrEmpty(Description);

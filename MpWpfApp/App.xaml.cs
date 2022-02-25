@@ -20,6 +20,7 @@ namespace MpWpfApp {
         public static uint MessageId;
 
         protected override async void OnStartup(StartupEventArgs e) {
+            // single-instance stuff from https://stackoverflow.com/a/5919904/105028
 
             //PresentationTraceSources.Refresh();
             //PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());
@@ -39,9 +40,6 @@ namespace MpWpfApp {
             SingleMutex = new Mutex(false, "MonkeyPaste");
 
             if (AllowMultipleInstances || (!AllowMultipleInstances && SingleMutex.WaitOne(1, true))) {
-                //new Main();
-
-
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 

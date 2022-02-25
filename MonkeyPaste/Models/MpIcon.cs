@@ -124,7 +124,7 @@ namespace MonkeyPaste {
         public MpIcon() { }
 
         public async Task CreateOrUpdateBorder(string forceHexColor = "") {
-            var iconBuilder = MpNativeWrapper.GetIconBuilder();
+            var iconBuilder = MpNativeWrapper.Services.IconBuilder;
             if(iconBuilder == null) {
                 //make border same as icon if no builder
                 var iconBorderImage = await MpDbImage.Create(IconImage.ImageBase64);

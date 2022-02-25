@@ -114,11 +114,11 @@ namespace MpWpfApp {
         }
 
         //private void GridSplitter_MouseEnter(object sender, MouseEventArgs e) {
-        //    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.ResizeWE;
+        //    MpCursorStack.CurrentCursor = MpCursorType.ResizeWE;
         //}
 
         //private void GridSplitter_MouseLeave(object sender, MouseEventArgs e) {
-        //    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
+        //    MpCursorStack.CurrentCursor = MpCursorType.Default;
         //}
 
         //private void GridSplitter_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {

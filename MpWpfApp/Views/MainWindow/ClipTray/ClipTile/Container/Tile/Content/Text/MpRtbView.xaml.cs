@@ -237,11 +237,11 @@ namespace MpWpfApp {
         private void Rtb_MouseEnter(object sender, MouseEventArgs e) {
             if (!BindingContext.Parent.IsReadOnly) {
                 if (BindingContext.IsSelected) {
-                    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+                    MpCursorStack.PushCursor(this, MpCursorType.IBeam);
                     return;
                 }
             }
-
+            MpCursorStack.PopCursor(this);
             //MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
@@ -249,16 +249,19 @@ namespace MpWpfApp {
             e.Handled = false;
             if (!BindingContext.Parent.IsReadOnly) {
                 if (BindingContext.IsSelected) {
-                    MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
+                    if(MpCursorStack.CurrentCursor != MpCursorType.IBeam) {
+                        MpCursorStack.PushCursor(this, MpCursorType.IBeam);
+                    }
                     return;
                 }
             }
-
+            MpCursorStack.PopCursor(this);
             //MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
         }
 
         private void Rtb_MouseLeave(object sender, MouseEventArgs e) {
             //MpMouseViewModel.Instance.CurrentCursor = MpCursorType.Default;
+            MpCursorStack.PopCursor(this);
         }
 
         
@@ -544,29 +547,28 @@ namespace MpWpfApp {
                                     // and they aren't holding ctrl until they see the message it will change cursor while
                                     // over link
                                     if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-                                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Link;
+                                        MpCursorStack.PushCursor(hl, MpCursorType.Link);                                        
                                     } else {
-                                        if (rtbvm.IsEditingContent) {
-                                            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;
-                                        } else {
-                                            MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
-                                        }
+                                        MpCursorStack.PopCursor(hl);
                                     }
                                 };
                                 MouseEventHandler hlMouseEnter = (object o, MouseEventArgs e) => {
-                                    if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-                                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Link;
-                                    }                                    
+                                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+                                        MpCursorStack.PushCursor(hl, MpCursorType.Link);
+                                    } else {
+                                        MpCursorStack.PopCursor(hl);
+                                    }
                                     hl.IsEnabled = true;
                                     //Keyboard.AddKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
                                     rtbvm.IsOverHyperlink = true;
                                 };
                                 MouseEventHandler hlMouseLeave = (object o, MouseEventArgs e) => {
-                                    if (rtbvm.Parent.IsAnyEditingContent) {
-                                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.IBeam;                                        
-                                    } else {
-                                        MpCursorViewModel.Instance.CurrentCursor = MpCursorType.Default;
-                                    }
+                                    //if (rtbvm.Parent.IsAnyEditingContent) {
+                                    //    MpCursorStack.PushCursor(hl, MpCursorType.IBeam);
+                                    //} else {
+                                        
+                                    //}
+                                    MpCursorStack.PopCursor(hl);
                                     hl.IsEnabled = false;
                                     //Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
                                     rtbvm.IsOverHyperlink = false;

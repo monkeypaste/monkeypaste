@@ -11,7 +11,7 @@ using System.Windows;
 using Microsoft.Web.WebView2.Wpf;
 using Microsoft.Web.WebView2.Core;
 
-namespace CodeClassify {
+namespace HighlightJs {
 
     public class HighlightJs : MpIAnalyzerPluginComponent {        
         private string[] commonLanguages = new string[] { "cpp", "cs", "css", "javascript", "java", "objectivec", "perl", "php", "python", "ruby", "sql", "xml", "autohotkey", "lua", "actionscript", "swift", "vbscript" };

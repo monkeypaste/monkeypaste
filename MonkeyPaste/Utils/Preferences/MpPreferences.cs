@@ -833,7 +833,7 @@ namespace MonkeyPaste {
         #region Preferences
         public static string KnownFileExtensionsPsv {
             get {
-                return Default.Get(nameof(KnownFileExtensionsPsv), @"rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx");
+                return Default.Get(nameof(KnownFileExtensionsPsv), MpRegEx.KnownFileExtensions);
             }
             set {
                 Default.Set(nameof(KnownFileExtensionsPsv), value);

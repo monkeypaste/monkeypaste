@@ -37,6 +37,13 @@ namespace MpWpfApp {
             return MpHelpers.ConvertKeyToString(key);
         }
 
+        public static void KillFocus(this Control control) {
+            // Kill logical focus
+            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(control), null);
+            // Kill keyboard focus
+            Keyboard.ClearFocus();
+        }
+
         #endregion
 
         #region System

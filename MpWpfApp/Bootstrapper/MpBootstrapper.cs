@@ -12,7 +12,7 @@ using System.Windows;
 namespace MpWpfApp {
     public class MpBootstrapper : MpBootstrapperBase {
 
-        public MpBootstrapper(MpINativeInterfaceWrapper niw, MpLoaderBalloonViewModel loader) : base(niw,loader) {
+        public MpBootstrapper(MpINativeInterfaceWrapper niw) : base(niw) {
             if(_items == null) {
                 _items = new List<MpBootstrappedItem>();
             } 
@@ -23,8 +23,6 @@ namespace MpWpfApp {
 
                     new MpBootstrappedItem(typeof(MpMeasurements)),
                     new MpBootstrappedItem(typeof(MpFileSystemWatcherViewModel)),
-
-                    new MpBootstrappedItem(typeof(MpCursorViewModel)),
 
                     new MpBootstrappedItem(typeof(MpIconCollectionViewModel)),
                     new MpBootstrappedItem(typeof(MpAppCollectionViewModel)),
@@ -62,12 +60,12 @@ namespace MpWpfApp {
         }
 
         public static async Task Init() {
-            _loader = new MpLoaderBalloonViewModel();
+            await MpLoaderBalloonViewModel.Instance.Init();
 
-            MpLoaderBalloonView.Init(_loader);
+            MpLoaderBalloonView.Init();
             
 
-            var bootstrapper = new MpBootstrapper(new MpWpfWrapper(), _loader);
+            var bootstrapper = new MpBootstrapper(new MpWpfWrapper());
 
             await bootstrapper.Initialize();
         }

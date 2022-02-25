@@ -19,6 +19,7 @@ namespace MonkeyPaste.Plugin {
         public string version { get; set; } = string.Empty;
         public string credits { get; set; } = string.Empty;
         public string guid { get; set; } = string.Empty;
+        public string url { get; set; } = string.Empty;
         public string iconUrl { get; set; } = string.Empty;
 
         public DateTime manifestLastModifiedDateTime { get; set; }

@@ -28,9 +28,9 @@ namespace MpWpfApp {
         private bool isClosing = false;
 
 
-        public static void Init(MpLoaderBalloonViewModel lbvm) {
+        public static void Init() {
             Application.Current.Dispatcher.Invoke(() => {
-                _instance = new MpLoaderBalloonView(lbvm);
+                _instance = new MpLoaderBalloonView(MpLoaderBalloonViewModel.Instance);
 
                 _tbi = new TaskbarIcon();
                 _tbi.ShowCustomBalloon(
@@ -49,6 +49,8 @@ namespace MpWpfApp {
             DataContext = lbvm;
             TaskbarIcon.AddBalloonClosingHandler(this, OnBalloonClosing);
         }
+
+        
 
         public void CloseBalloon() {            
             TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
@@ -121,7 +123,14 @@ namespace MpWpfApp {
         }
 
         private void grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            var mwvm = (Application.Current.MainWindow as MpMainWindow).DataContext as MpMainWindowViewModel;
+            var mw = Application.Current.MainWindow as MpMainWindow;
+            if(mw == null) {
+                return;
+            }
+            var mwvm = mw.DataContext as MpMainWindowViewModel;
+            if(mwvm == null) {
+                return;
+            }
             mwvm.ShowWindowCommand.Execute(null);
         }
 

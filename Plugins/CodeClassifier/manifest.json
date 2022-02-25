@@ -4,6 +4,7 @@
   "version": "1.0",
   "credits": "Bert Verhelst",
   "guid": "92d88275-51b5-4e2d-9a5c-406522445851",
+  "url": "https://github.com/bertyhell/CodeClassifier",
   "iconUrl": "https://thumbs.dreamstime.com/b/raccoon-9-months-procyon-lotor-4610598.jpg",
   "ioType": {
     "isDll": true
@@ -18,7 +19,7 @@
     "parameters": [
       {
         "label": "Language",
-        "description": "To add a language, open manifest.json of this plug-in and add it to the language parameter. Then restart and train with a few examples."
+        "description": "To add a language, open manifest.json of this plug-in and add it to the language parameter. Then restart and train with a few examples.",
         "parameterControlType": "ListBox",
         "parameterValueType": "Csv",
         "enumId": 1,

@@ -19,7 +19,8 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static void Init() {
+        public static async Task Init() {
+            Plugins.Clear();
             //find plugin folder in main app folder
             string pluginRootFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
 
@@ -31,7 +32,7 @@ namespace MonkeyPaste {
             var manifestPaths = FindManifestPaths(pluginRootFolderPath);
 
             foreach(var manifestPath in manifestPaths) {
-                var plugin = LoadPlugin(manifestPath);
+                var plugin = await LoadPlugin(manifestPath);
                 if (plugin == null) {
                     continue;
                 }
@@ -56,61 +57,93 @@ namespace MonkeyPaste {
             }            
         }
 
-        private static MpPluginFormat LoadPlugin(string manifestPath) {
+        private static async Task<MpPluginFormat> LoadPlugin(string manifestPath) {
             string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
-            MpPluginFormat plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);
-            plugin.Component = GetPluginComponent(manifestPath, plugin);
+            if(string.IsNullOrEmpty(manifestStr)) {
+                MpLoaderBalloonViewModel.Instance.SetNotification(
+                    notificationType: MpLoaderNotificationType.InvalidPlugin,
+                    exceptionType: MpLoaderExceptionSeverityType.WarningWithOption,
+                    msg: $"Plugin manifest not found in '{manifestPath}'");
+
+                while(MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.None) {
+                    await Task.Delay(100);
+                }
+                if(MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.Retry) {
+                    var retryPlugin = await LoadPlugin(manifestPath);
+                    return retryPlugin;
+                }
+                return null;
+            }
+            MpPluginFormat plugin = null;
+            try {
+                plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);                
+            } catch(Exception ex) {                
+                MpLoaderBalloonViewModel.Instance.SetNotification(
+                    notificationType: MpLoaderNotificationType.InvalidPlugin,
+                    exceptionType: MpLoaderExceptionSeverityType.WarningWithOption,
+                    msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}");
+
+                while (MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.None) {
+                    await Task.Delay(100);
+                }
+                if (MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.Retry) {
+                    var retryPlugin = await LoadPlugin(manifestPath);
+                    return retryPlugin;
+                }
+                return null;
+            }
+            if(plugin != null) {
+                try {
+                    plugin.Component = GetPluginComponent(manifestPath, plugin);
+                } catch(Exception ex) {
+                    MpLoaderBalloonViewModel.Instance.SetNotification(
+                    notificationType: MpLoaderNotificationType.InvalidPlugin,
+                    exceptionType: MpLoaderExceptionSeverityType.WarningWithOption,
+                    msg: ex.Message);
+
+                    while (MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.None) {
+                        await Task.Delay(100);
+                    }
+                    if (MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.Retry) {
+                        var retryPlugin = await LoadPlugin(manifestPath);
+                        return retryPlugin;
+                    }
+                    return null;
+                }
+                
+            }
             return plugin;
         }
 
         private static object GetPluginComponent(string manifestPath, MpPluginFormat plugin) {
-            try {
-                plugin.manifestLastModifiedDateTime = File.GetLastWriteTime(manifestPath);
-                string pluginDir = Path.GetDirectoryName(manifestPath);
-                string pluginName = Path.GetFileName(pluginDir);
-                if (plugin.ioType.isDll) {
-                    string dllPath = Path.Combine(pluginDir, string.Format(@"{0}.dll", pluginName));
-                    if (!File.Exists(dllPath)) {
-                        MpConsole.WriteTraceLine(@"Warning! Plugin flagged as dll type does not have a dll matching folder w/ manifest.json in it, ignoring");
-                        return null;
-                    }
-                    Assembly pluginAssembly = null;
-                    try {
-                        pluginAssembly = Assembly.LoadFrom(dllPath);
-                    } catch(Exception ex) {
-                        MpConsole.WriteTraceLine(@"Error loading dll: " + dllPath);
-                        MpConsole.WriteLine(ex);
-                        return null;
-                    }
-                    if (pluginAssembly != null) {
-                        for (int i = 0; i < pluginAssembly.GetTypes().Length; i++) {
-                            var curType = pluginAssembly.GetTypes()[i];
-                            if (curType.GetInterface("MonkeyPaste.Plugin.MpIPlugin") != null) {
-                                var pluginObj = Activator.CreateInstance(curType);
-                                if (pluginObj != null) {
-                                    return pluginObj;
-                                }
-                            }
+            plugin.manifestLastModifiedDateTime = File.GetLastWriteTime(manifestPath);
+            string pluginDir = Path.GetDirectoryName(manifestPath);
+            string pluginName = Path.GetFileName(pluginDir);
+            if (plugin.ioType.isDll) {
+                string dllPath = Path.Combine(pluginDir, string.Format(@"{0}.dll", pluginName));
+                if (!File.Exists(dllPath)) {
+                    throw new MpPluginLoaderException($"Error, Plugin '{pluginName}' is flagged as dll type in '{manifestPath}' but does not have a matching '{pluginName}.dll' in its folder.");
+                }
+                Assembly pluginAssembly = Assembly.LoadFrom(dllPath);
+                for (int i = 0; i < pluginAssembly.GetTypes().Length; i++) {
+                    var curType = pluginAssembly.GetTypes()[i];
+                    if (curType.GetInterface("MonkeyPaste.Plugin.MpIPlugin") != null) {
+                        var pluginObj = Activator.CreateInstance(curType);
+                        if (pluginObj != null) {
+                            return pluginObj;
                         }
                     }
-                } else if(plugin.ioType.isCommandLine) {
-                    string exePath = Path.Combine(pluginDir, string.Format(@"{0}.exe", pluginName));
-                    if (!File.Exists(exePath)) {
-                        MpConsole.WriteTraceLine(@"Warning! Plugin flagged as exe type does not have a exe matching folder w/ manifest.json in it, ignoring");
-                        return null;
-                    }
-                    return new MpCommandLinePlugin() { Endpoint = exePath };
-                } else if(plugin.ioType.isHttp) {
-                    return new MpHttpPlugin(plugin.analyzer.http);
-                } else {
-                    throw new Exception(@"Unknown or undefined plugin type: " + JsonConvert.SerializeObject(plugin.ioType));
                 }
-            } catch(Exception ex) {
-                MpConsole.WriteTraceLine("Error loading plugin w/ manifest " + manifestPath);
-                MpConsole.WriteLine(ex);
-                return null;
+            } else if (plugin.ioType.isCommandLine) {
+                string exePath = Path.Combine(pluginDir, string.Format(@"{0}.exe", pluginName));
+                if (!File.Exists(exePath)) {
+                    throw new MpPluginLoaderException($"Error, Plugin '{pluginName}' is flagged as a CLI type in '{manifestPath}' but does not have a matching '{pluginName}.exe' in its folder.");
+                }
+                return new MpCommandLinePlugin() { Endpoint = exePath };
+            } else if (plugin.ioType.isHttp) {
+                return new MpHttpPlugin(plugin.analyzer.http);
             }
-            return null;
+            throw new MpPluginLoaderException(@"Unknown or undefined plugin type: " + JsonConvert.SerializeObject(plugin.ioType));
         }
         #endregion
     }

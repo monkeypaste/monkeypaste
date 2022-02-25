@@ -21,14 +21,14 @@ namespace MonkeyPaste {
 
     public static class MpRegEx {
         private static bool _isLoaded = false;
-
+        public static string KnownFileExtensions = @"rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx";
         public static List<Regex> RegExList { get; set; }
 
         private static string[] _regExStrings = new string[]{
             //none
             string.Empty,
             //File or folder path
-            @"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+MpPreferences.KnownFileExtensionsPsv+@")|(\\|\w))$",
+            @"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+KnownFileExtensions+@")|(\\|\w))$",
             //WebLink ( NOTE for '"https://url.com"' this includes the last '"' in the match )
             @"(?:https?://|www\.)\S+", 
             //@"[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)",

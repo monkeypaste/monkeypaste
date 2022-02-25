@@ -20,7 +20,6 @@
     <local:MpBase64StringToBitmapSourceConverter x:Key="Base64StringToBitmapSourceConverter" />
     <local:MpBrushToImageConverter x:Key="BrushToImageConverter" />
     <local:MpBrushToColorConverter x:Key="BrushToColorConverter" />
-    <local:MpBoolToCursorConverter x:Key="BoolToCursorConverter" />
     <local:MpBoolToHAlignmentConverter x:Key="BoolToHAlignmentConverter" />
     <local:MpAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
     <local:MpFilePathStringToIconConverter x:Key="FilePathStringToIconConverter" />

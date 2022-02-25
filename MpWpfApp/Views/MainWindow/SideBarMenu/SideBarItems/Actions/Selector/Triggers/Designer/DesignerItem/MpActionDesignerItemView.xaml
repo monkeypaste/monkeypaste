@@ -79,7 +79,7 @@
 
         <DataTemplate x:Key="AnalyzeDesignerTemplate"
                       DataType="local:MpActionViewModelBase">
-            <Grid RenderTransformOrigin="0.5,0.5">
+            <Grid>
                 <Rectangle Width="{Binding Width}"
                            Height="{Binding Height}"
                            RadiusX="10"
@@ -228,7 +228,6 @@
                     ClipToBounds="False"
                     Background="Transparent"
                     Content="{Binding}"
-                    VerticalAlignment="Top"
                     ContentTemplateSelector="{StaticResource ActionDesignerItemTemplateSelector}">
         <ContentControl.Effect>
             <DropShadowEffect RenderingBias="Quality"

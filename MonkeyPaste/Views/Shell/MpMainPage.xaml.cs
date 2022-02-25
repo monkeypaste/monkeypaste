@@ -23,12 +23,10 @@ namespace MonkeyPaste {
         public MpMainPage(MpINativeInterfaceWrapper niw) {
             IsLoaded = true;
 
-            
-
             NativeWrapper = niw;
-            GlobalTouchService = niw.GetGlobalTouch();
-            LayoutService = niw.GetKeyboardInteractionService();
-            DbInfo = niw.GetDbInfo();
+            GlobalTouchService = niw.GlobalTouch;
+            LayoutService = niw.KeyboardInteractionService;
+            DbInfo = niw.DbInfo;
 
             InitializeComponent();
 
