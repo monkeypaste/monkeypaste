@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MpWpfApp {
     public class MpContentTaggedTriggerViewModel : MpTriggerActionViewModelBase {
@@ -35,28 +37,35 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override void Enable() {
-            if(!IsEnabled) {
+        public override async Task Enable() {
+
+            if (IsEnabled) {
+                return;
+            }
+            await Validate();
+            if (IsValid) {
                 var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
                 if (ttvm != null) {
                     ttvm.RegisterTrigger(this);
+                    IsEnabled = true;
                 }
             }
-            
-            base.Enable();
+            await base.Enable();
         }
 
-        public override void Disable() {
-            if (IsEnabled) {
-                var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-                if (ttvm != null) {
-                    ttvm.UnregisterTrigger(this);
-                }
+        public override async Task Disable() {
+            if (!IsEnabled) {
+                return;
             }
 
-            base.Disable();
-        }
+            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+            if (ttvm != null) {
+                ttvm.UnregisterTrigger(this);
+            }
 
+            IsEnabled = false;
+            await base.Disable();
+        }
         #endregion
 
 

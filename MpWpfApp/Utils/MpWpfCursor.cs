@@ -28,13 +28,16 @@ namespace MpWpfApp {
                 {MpCursorType.ResizeNWSE, Cursors.SizeNWSE },
                 {MpCursorType.ResizeNESW, Cursors.SizeNESW },
                 {MpCursorType.ResizeAll, Cursors.SizeAll },
-                {MpCursorType.Link, Cursors.Hand },
+                {MpCursorType.Hand, Cursors.Hand },
             };
 
         public void SetCursor(MpCursorType newCursor) {
             if (MpClipTrayViewModel.Instance.IsScrolling ||
                MpClipTrayViewModel.Instance.IsLoadingMore) {
                 return;
+            }
+            if(newCursor != MpCursorType.Default) {
+                newCursor = newCursor;
             }
             if (Application.Current.Dispatcher.CheckAccess()) {
                 Cursor cursor = _cursorLookup[newCursor];

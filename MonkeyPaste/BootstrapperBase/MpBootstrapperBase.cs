@@ -13,7 +13,7 @@ namespace MonkeyPaste {
                 new List<MpBootstrappedItem>() {
                     new MpBootstrappedItem(typeof(MpConsole)),
                     new MpBootstrappedItem(typeof(MpNativeWrapper),niw),
-                    new MpBootstrappedItem(typeof(MpCursorStack),niw.Cursor),
+                    new MpBootstrappedItem(typeof(MpCursor),niw.Cursor),
                     new MpBootstrappedItem(typeof(MpPreferences),niw.PreferenceIO),                    
                     new MpBootstrappedItem(typeof(MpRegEx)),
                     new MpBootstrappedItem(typeof(MpDb),niw.DbInfo),
@@ -27,8 +27,8 @@ namespace MonkeyPaste {
 
         protected void ReportItemLoading(MpBootstrappedItem item, int index) {
             MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
-            MpLoaderBalloonViewModel.Instance.Info = $"Loading {item.Label}";
-            MpLoaderBalloonViewModel.Instance.PercentLoaded = (double)((double)(index + 1) / (double)_items.Count);
+            MpNotificationBalloonViewModel.Instance.Info = $"Loading {item.Label}";
+            MpNotificationBalloonViewModel.Instance.PercentLoaded = (double)((double)(index + 1) / (double)_items.Count);
         }
     }
 }

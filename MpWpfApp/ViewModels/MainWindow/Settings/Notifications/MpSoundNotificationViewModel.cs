@@ -7,52 +7,19 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MonkeyPaste;
 namespace MpWpfApp {
-    public class MpNotificationViewModel : MpViewModelBase {
+    public class MpSoundNotificationViewModel : MpViewModelBase {
         #region Properties
-        private MpNotificationType _notificationType = MpNotificationType.None;
-        public MpNotificationType NotificationType {
-            get {
-                return _notificationType;
-            }
-            set {
-                if(_notificationType != value) {
-                    _notificationType = value;
-                    OnPropertyChanged(nameof(NotificationType));
-                }
-            }
-        }
+        public MpSoundNotificationType NotificationType { get; set; } = MpSoundNotificationType.None;
 
-        private bool _isVisual = false;
-        public bool IsVisual {
-            get {
-                return _isVisual;
-            }
-            set {
-                if (_isVisual != value) {
-                    _isVisual = value;
-                    OnPropertyChanged(nameof(IsVisual));
-                }
-            }
-        }
+        public bool IsVisual { get; set; }
 
-        private bool _isAudible = false;
-        public bool IsAudible {
-            get {
-                return _isAudible;
-            }
-            set {
-                if (_isAudible != value) {
-                    _isAudible = value;
-                    OnPropertyChanged(nameof(IsAudible));
-                }
-            }
-        }
+        public bool IsAudible { get; set; }
 
         private object _property = null;
         #endregion
 
         #region Public Methods
-        public MpNotificationViewModel(MpNotificationType type, object notificationProperty) : base(null) {
+        public MpSoundNotificationViewModel(MpSoundNotificationType type, object notificationProperty) : base(null) {
             //PropertyChanged += (s, e) => {
                 //switch (e.PropertyName) {
                     //case nameof(NotificationType):
@@ -81,11 +48,11 @@ namespace MpWpfApp {
             return (bool)_property;
         }
         private void PerformNotification() {
-            MonkeyPaste.MpConsole.WriteLine("Executed " + Enum.GetName(typeof(MpNotificationType), NotificationType));
+            MonkeyPaste.MpConsole.WriteLine("Executed " + Enum.GetName(typeof(MpSoundNotificationType), NotificationType));
         }
         #endregion
     }
-    public enum MpNotificationType {
+    public enum MpSoundNotificationType {
         None = 0,
         NotificationDoPasteSound,
         NotificationDoCopySound,

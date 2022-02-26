@@ -67,17 +67,20 @@ namespace MpWpfApp {
 
         #region Public Overrides
 
-        public override void Validate() {
-            base.Validate();
+        public override async Task<bool> Validate() {
+            await base.Validate();
             if(!IsValid) {
-                return;
+                return IsValid;
             }
+
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
             if (aipvm == null) {
-                ValidationText = $"Analyzer not found";
+                ValidationText = $"Analyzer for Action '{RootTriggerActionViewModel.Label}/{Label}' not found";
+                await ShowValidationNotification();
             } else {
                 ValidationText = string.Empty;
             }
+            return IsValid;
         }
 
         public override async Task PerformAction(object arg) {

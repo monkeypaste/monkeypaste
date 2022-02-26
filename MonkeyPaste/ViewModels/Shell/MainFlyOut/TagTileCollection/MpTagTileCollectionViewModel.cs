@@ -109,7 +109,9 @@ namespace MonkeyPaste {
                     if (SelectedTagViewModel != null && CopyItemCollectionViewModel != null) {
                         ClearSelection();
                         SelectedTagViewModel.IsSelected = true;
-                        CopyItemCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
+                        Device.BeginInvokeOnMainThread(async () => {
+                            await CopyItemCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
+                        });
                     }
                     break;
             }

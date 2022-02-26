@@ -15,7 +15,8 @@ namespace MpWpfApp {
         MpActionViewModelBase,
         MpIResizableViewModel,
         MpISidebarItemViewModel,
-        MpIMenuItemViewModel {
+        MpIMenuItemViewModel,
+        MpIDesignerItemSettingsViewModel {
         #region Properties
 
         #region View Models
@@ -85,6 +86,7 @@ namespace MpWpfApp {
 
         #endregion
 
+
         #region Appearance
 
         #endregion
@@ -94,6 +96,96 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
+
+        #region MpIDesignerItemSettingsViewModel Implementation
+
+        private void SetDesignerItemSettings(double scaleX, double scaleY, double offsetX, double offsetY) {
+            string arg2 = string.Join(",", new string[] { scaleX.ToString(), scaleY.ToString(), offsetX.ToString(), offsetY.ToString() });
+            Arg2 = arg2;
+        }
+
+        private MpPoint ParseScale(string text) {
+            if(string.IsNullOrEmpty(Arg2)) {
+                return new MpPoint(1,1);
+            }
+            var arg2Parts = Arg2.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            MpPoint scale = new MpPoint(1,1);
+            try {
+                scale.X = Convert.ToDouble(arg2Parts[0]);
+                scale.Y = Convert.ToDouble(arg2Parts[1]);
+            }catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Error parsing scale from arg2: '{Arg2}'");
+                MpConsole.WriteLine(ex);
+            }
+            return scale;
+        }
+
+        private MpPoint ParseTranslationOffset(string text) {
+            if (string.IsNullOrEmpty(Arg2)) {
+                return new MpPoint();
+            }
+            var arg2Parts = Arg2.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            MpPoint offset = new MpPoint();
+            try {
+                offset.X = Convert.ToDouble(arg2Parts[2]);
+                offset.Y = Convert.ToDouble(arg2Parts[3]);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error parsing offset from arg2: '{Arg2}'");
+                MpConsole.WriteLine(ex);
+            }
+            return offset;
+        }
+
+        public double ScaleX {
+            get {
+                return ParseScale(Arg2).X;
+            }
+            set {
+                if(ScaleX != value) {
+                    SetDesignerItemSettings(value, ScaleY, TranslateOffsetX, TranslateOffsetY);
+                    OnPropertyChanged(nameof(ScaleX));
+                }
+            }
+        }
+        public double ScaleY {
+            get {
+                return ParseScale(Arg2).Y;
+            }
+            set {
+                if (ScaleY != value) {
+                    SetDesignerItemSettings(ScaleX, value, TranslateOffsetX, TranslateOffsetY);
+                    OnPropertyChanged(nameof(ScaleY));
+                }
+            }
+        }
+
+        public double TranslateOffsetX {
+            get {
+                return ParseTranslationOffset(Arg2).X;
+            }
+            set {
+                if (TranslateOffsetX != value) {
+                    SetDesignerItemSettings(ScaleX, ScaleY, value, TranslateOffsetY);
+                    OnPropertyChanged(nameof(TranslateOffsetX));
+                }
+            }
+        }
+        public double TranslateOffsetY {
+            get {
+                return ParseTranslationOffset(Arg2).Y;
+            }
+            set {
+                if (TranslateOffsetY != value) {
+                    SetDesignerItemSettings(ScaleX, ScaleY, TranslateOffsetX, value);
+                    OnPropertyChanged(nameof(TranslateOffsetY));
+                }
+            }
+        }
+
+
+        #endregion
 
         public MpTriggerType TriggerType {
             get {
@@ -125,12 +217,6 @@ namespace MpWpfApp {
 
         #region Public Mehthods
 
-        public override void Validate() {
-            if(TriggerType != MpTriggerType.ParentOutput && string.IsNullOrWhiteSpace(Label)) {
-                ValidationText = "Trigger Action Must Have Name";
-            }
-        }
-
         #endregion
 
         #region Private Methods
@@ -161,6 +247,8 @@ namespace MpWpfApp {
                     });
                 }
             });
+
+
         #endregion
     }
 }

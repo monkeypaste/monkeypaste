@@ -1347,15 +1347,15 @@ namespace MpWpfApp {
 
             int totalItems =  MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
 
-            MpLoaderBalloonView.Instance.BindingContext.PostLoadedMessage =
-                $"Successfully loaded w/ {totalItems} items";
+            //MpNotificationBalloonView.Instance.BindingContext.PostLoadedMessage =
+            //    $"Successfully loaded w/ {totalItems} items";
 
             MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
             MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
 
             await Task.Delay(3000);
 
-            MpLoaderBalloonView.Instance.CloseBalloon();
+            //MpNotificationBalloonView.Instance.CloseBalloon();
         }
 
 

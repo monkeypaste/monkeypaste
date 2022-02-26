@@ -445,7 +445,7 @@
     <Compile Include="ViewModels\MainWindow\Settings\MpSettingsWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpStandardBalloonViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpNotificationCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpNotificationViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundNotificationViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerGroupCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModel.cs" />
@@ -544,8 +544,8 @@
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\ContextMenu\Selector\MpSelectorItemDataTemplateSelector.cs" />
-    <Compile Include="Views\Reusable\Loader\MpLoaderBalloonView.xaml.cs">
-      <DependentUpon>MpLoaderBalloonView.xaml</DependentUpon>
+    <Compile Include="Views\Reusable\Loader\MpNotificationBalloonView.xaml.cs">
+      <DependentUpon>MpNotificationBalloonView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml.cs">
       <DependentUpon>MpTextBoxMessageBox.xaml</DependentUpon>
@@ -850,7 +850,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Reusable\Loader\MpLoaderBalloonView.xaml">
+    <Page Include="Views\Reusable\Loader\MpNotificationBalloonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,4 +1,6 @@
-﻿namespace MpWpfApp {
+﻿using System.Threading.Tasks;
+
+namespace MpWpfApp {
     public class MpParentOutputTriggerViewModel : MpTriggerActionViewModelBase {
         #region Properties
 
@@ -18,28 +20,32 @@
 
         #region Public Methods
 
-        public override void Enable() {
-            if(!IsEnabled) {
+        public override async Task Enable() {
+
+            if (IsEnabled) {
+                return;
+            }
+            await Validate();
+            if (IsValid) {
                 if (ParentActionViewModel == null) {
                     throw new System.Exception("Parent should be found in init");
                 }
                 ParentActionViewModel.RegisterTrigger(this);
+                IsEnabled = true;
             }
-
-            base.Enable(); 
+            await base.Enable();
         }
 
-        public override void Disable() {
-            if(IsEnabled) {
-                if (ParentActionViewModel == null) {
-                    throw new System.Exception("Parent should be found in init");
-                }
-                ParentActionViewModel.UnregisterTrigger(this);
+        public override async Task Disable() {
+            if (!IsEnabled) {
+                return;
             }
 
-            base.Disable();
-        }
+            MpFileSystemWatcherViewModel.Instance.UnregisterTrigger(this);
 
+            IsEnabled = false;
+            await base.Disable();
+        }
         #endregion
     }
 }

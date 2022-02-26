@@ -345,7 +345,65 @@ namespace MpWpfApp {
 
         #endregion
 
-        
+        public string Arg1 {
+            get {
+                if(Action == null) {
+                    return string.Empty;
+                }
+                return Action.Arg1;
+            }
+            set {
+                if(Arg1 != value) {
+                    Action.Arg1 = value; // NOTE no HasModelChanged for abstract fields
+                    OnPropertyChanged(nameof(Arg1));
+                }
+            }
+        }
+
+        public string Arg2 {
+            get {
+                if (Action == null) {
+                    return string.Empty;
+                }
+                return Action.Arg2;
+            }
+            set {
+                if (Arg2 != value) {
+                    Action.Arg2 = value; // NOTE no HasModelChanged for abstract fields
+                    OnPropertyChanged(nameof(Arg2));
+                }
+            }
+        }
+
+        public string Arg3 {
+            get {
+                if (Action == null) {
+                    return string.Empty;
+                }
+                return Action.Arg3;
+            }
+            set {
+                if (Arg3 != value) {
+                    Action.Arg3 = value; // NOTE no HasModelChanged for abstract fields
+                    OnPropertyChanged(nameof(Arg3));
+                }
+            }
+        }
+
+        public string Arg4 {
+            get {
+                if (Action == null) {
+                    return string.Empty;
+                }
+                return Action.Arg4;
+            }
+            set {
+                if (Arg4 != value) {
+                    Action.Arg4 = value; // NOTE no HasModelChanged for abstract fields
+                    OnPropertyChanged(nameof(Arg4));
+                }
+            }
+        }
 
         public bool IsReadOnly {
             get {
@@ -576,12 +634,11 @@ namespace MpWpfApp {
             return eavm;
         }
 
-        public virtual void Enable() {
-            Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Enable());
+        public virtual async Task Enable() {
             if (IsEnabled) {
                 return;
             }
-            Validate();
+            await Validate();
             if(!IsValid) {
                 return;
             }
@@ -593,17 +650,20 @@ namespace MpWpfApp {
             }
 
             IsEnabled = true;
+
+            await Task.WhenAll(Children.OrderBy(x => x.SortOrderIdx).Select(x => x.Enable()));
         }
 
-        public virtual void Disable() {
+        public virtual async Task Disable() {
             if(!IsEnabled) {
                 return;
             }
             if (ParentActionViewModel != null) {
                 ParentActionViewModel.OnActionComplete -= OnActionTriggered;
             }
-            Children.OrderBy(x => x.SortOrderIdx).ForEach(x => x.Disable());
             IsEnabled = false;
+
+            await Task.WhenAll(Children.OrderBy(x => x.SortOrderIdx).Select(x => x.Disable()));
         }
 
         public void OnActionTriggered(object sender, object args) {
@@ -615,13 +675,10 @@ namespace MpWpfApp {
             Task.Run(()=>PerformAction(args));
         }
         
-        public virtual void Validate() {
-            this.FindAllChildren().ForEach(x => x.Validate());
-            if(ActionType == MpActionType.None) {
-                ValidationText = "Select Action Type";
-            } else {
-                ValidationText = string.Empty;
-            }
+        public virtual async Task<bool> Validate() {            
+            await Task.WhenAll(this.FindAllChildren().Select(x => x.Validate()));
+            
+            return IsValid;
         }
 
 
@@ -659,6 +716,18 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
+        protected async Task ShowValidationNotification() {
+            var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
+                    notificationType: MpNotificationType.InvalidAction,
+                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
+                    msg: ValidationText);
+
+
+            if (userAction == MpNotificationUserActionType.Retry) {
+                await Validate();
+            }
+
+        }
 
         #endregion
 
@@ -689,11 +758,13 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(BorderBrushHexColor));
                     break;
                 case nameof(IsEnabled):
-                    if (IsEnabled) {
-                        Enable();
-                    } else {
-                        Disable();
-                    }
+                    Task.Run(async () => {
+                        if (IsEnabled) {
+                            await Enable();
+                        } else {
+                            await Disable();
+                        }
+                    });
                     break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
@@ -799,7 +870,7 @@ namespace MpWpfApp {
                 IsBusy = true;
 
                 var avm = args as MpActionViewModelBase;
-                avm.Disable();
+                await avm.Disable();
 
                 var grandChildren = Parent.AllSelectedTriggerActions.Where(x => x.ParentActionId == avm.ActionId && !x.IsEmptyAction);
                 grandChildren.ForEach(x => x.ParentActionId = ActionId);

@@ -218,7 +218,7 @@ namespace MpWpfApp {
         }
 
         private static void UpdateCursor() {
-            MpCursorStack.PopCursor(nameof(MpDragDropManager));
+            MpCursor.UnsetCursor(nameof(MpDragDropManager));
 
             MpCursorType currentCursor = MpCursorType.Default;
 
@@ -234,7 +234,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpCursorStack.PushCursor(nameof(MpDragDropManager), currentCursor);
+            MpCursor.SetCursor(nameof(MpDragDropManager), currentCursor);
         }
 
         private static void Instance_OnMainWindowHide(object sender, EventArgs e) {

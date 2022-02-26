@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,10 +11,14 @@ using System.Windows.Threading;
 namespace MpWpfApp {
     public class MpZoomBorder : Border {
         // from https://stackoverflow.com/a/6782715/105028
+        #region Private Variables
+        private DispatcherTimer _renderTimer = null;
+
         private UIElement child = null;
+
         private Point tt_origin;
         private Point mp_start;
-
+                
         private Point grid_offset {
             get {
                 if(child == null) {
@@ -24,15 +29,57 @@ namespace MpWpfApp {
             }
         }
 
-        private TranslateTransform GetTranslateTransform(UIElement element) {
-            return (TranslateTransform)((TransformGroup)element.RenderTransform)
-              .Children.First(tr => tr is TranslateTransform);
+        #endregion
+
+        #region Properties
+
+        #region DesignerItem DependencyProperty
+
+        public MpIDesignerItemSettingsViewModel DesignerItem {
+            get { return (MpIDesignerItemSettingsViewModel)GetValue(DesignerItemProperty); }
+            set { SetValue(DesignerItemProperty, value); }
         }
 
-        private ScaleTransform GetScaleTransform(UIElement element) {
-            return (ScaleTransform)((TransformGroup)element.RenderTransform)
-              .Children.First(tr => tr is ScaleTransform);
+        public static readonly DependencyProperty DesignerItemProperty =
+            DependencyProperty.Register(
+                "DesignerItem", typeof(MpIDesignerItemSettingsViewModel),
+                typeof(MpZoomBorder),
+                new FrameworkPropertyMetadata { 
+                    DefaultValue = default(MpIDesignerItemSettingsViewModel),
+                    PropertyChangedCallback = (sender,e) => {
+                        var zb = sender as MpZoomBorder;
+                        zb.Reset();
+                    }
+                });
+
+        #endregion               
+
+        #region ShowGrid DependencyProperty
+
+        public bool ShowGrid {
+            get { return (bool)GetValue(ShowGridProperty); }
+            set { SetValue(ShowGridProperty, value); }
         }
+
+        public static readonly DependencyProperty ShowGridProperty =
+            DependencyProperty.Register(
+                "ShowGrid", typeof(bool),
+                typeof(MpZoomBorder),
+                new FrameworkPropertyMetadata(default(bool)));
+
+        #endregion
+
+        #region Bg Grid Properties
+
+        public Brush GridLineBrush { get; set; } = Brushes.LightBlue;
+        public double GridLineThickness { get; set; } = 1;
+
+        public Brush OriginBrush { get; set; } = Brushes.Cyan;
+        public double OriginThickness { get; set; } = 3;
+
+        public int GridLineSpacing { get; set; } = 35;
+
+        #endregion
 
         public override UIElement Child {
             get { return base.Child; }
@@ -43,6 +90,10 @@ namespace MpWpfApp {
                 base.Child = value;
             }
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void Initialize(UIElement element) {
             this.child = element;
@@ -56,24 +107,54 @@ namespace MpWpfApp {
         }
 
         public void Reset() {
+            MpPoint scale = new MpPoint(1, 1);
+            MpPoint offset = new MpPoint();
+            if(DesignerItem != default) {
+                scale = new MpPoint(DesignerItem.ScaleX, DesignerItem.ScaleY);
+                offset = new MpPoint(DesignerItem.TranslateOffsetX, DesignerItem.TranslateOffsetY);
+            }
             if (child != null) {
                 // reset zoom
                 var st = GetScaleTransform(child);
-                st.ScaleX = 1.0;
-                st.ScaleY = 1.0;
+                st.ScaleX = scale.X;
+                st.ScaleY = scale.Y;
 
                 // reset pan
                 var tt = GetTranslateTransform(child);
-                tt.X = 0.0;
-                tt.Y = 0.0;
+                tt.X = offset.X;
+                tt.Y = offset.Y;
             }
         }
 
         public void Translate(double x, double y) {
+            // NOTE to be used by DesignerItem Drop Behavior
             var tt = GetTranslateTransform(child);
             tt.X = tt_origin.X - x;
             tt.Y = tt_origin.Y - y;
         }
+
+        #endregion
+
+        #region Protected Methods
+
+        protected override void OnRender(DrawingContext dc) {
+            base.OnRender(dc);
+
+            if (_renderTimer == null) {
+                _renderTimer = new DispatcherTimer();
+                _renderTimer.Interval = TimeSpan.FromMilliseconds(50);
+                _renderTimer.Tick += (s, e) => InvalidateVisual();
+
+                _renderTimer.Start();
+            }
+            if (ShowGrid) {
+                DrawGrid(dc);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
 
         #region Child Events
 
@@ -99,9 +180,17 @@ namespace MpWpfApp {
                 tt.X = absoluteX - relative.X * st.ScaleX;
                 tt.Y = absoluteY - relative.Y * st.ScaleY;
 
-                double zoomCorrected = zoom * st.ScaleX; 
-                st.ScaleX += zoomCorrected; 
+                double zoomCorrected = zoom * st.ScaleX;
+                st.ScaleX += zoomCorrected;
                 st.ScaleY += zoomCorrected;
+
+                if(DesignerItem != null) {
+                    DesignerItem.ScaleX = st.ScaleX;
+                    DesignerItem.ScaleY = st.ScaleY;
+                    if (DataContext is MpActionCollectionViewModel acvm) {
+                        acvm.HasModelChanged = true;
+                    }
+                }
             }
         }
 
@@ -110,7 +199,7 @@ namespace MpWpfApp {
                 var tt = GetTranslateTransform(child);
                 mp_start = e.GetPosition(this);
                 tt_origin = new Point(tt.X, tt.Y);
-                this.Cursor = System.Windows.Input.Cursors.Hand;
+                MpCursor.SetCursor(DataContext, MpCursorType.Hand);
                 child.CaptureMouse();
             }
         }
@@ -118,7 +207,10 @@ namespace MpWpfApp {
         private void child_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             if (child != null) {
                 child.ReleaseMouseCapture();
-                this.Cursor = System.Windows.Input.Cursors.Arrow;
+                MpCursor.UnsetCursor(DataContext);
+                if(DataContext is MpActionCollectionViewModel acvm) {
+                    acvm.HasModelChanged = true;
+                }
             }
         }
 
@@ -133,54 +225,27 @@ namespace MpWpfApp {
                     Vector v = mp_start - e.GetPosition(this);
                     tt.X = tt_origin.X - v.X;
                     tt.Y = tt_origin.Y - v.Y;
+
+                    if (DesignerItem != null) {
+                        DesignerItem.TranslateOffsetX = tt.X;
+                        DesignerItem.TranslateOffsetY = tt.Y;
+                    }
                 }
             }
         }
 
         #endregion
 
-        #region Bg Grid
-
-        public Brush GridLineBrush { get; set; } = Brushes.LightBlue;
-        public double GridLineThickness { get; set; } = 1;
-
-        public Brush OriginBrush { get; set; } = Brushes.Cyan;
-        public double OriginThickness { get; set; } = 3;
-
-        public int GridLineSpacing { get; set; } = 35;
-
-        #region ShowGrid DependencyProperty
-
-        public bool ShowGrid {
-            get { return (bool)GetValue(ShowGridProperty); }
-            set { SetValue(ShowGridProperty, value); }
+        private TranslateTransform GetTranslateTransform(UIElement element) {
+            return (TranslateTransform)((TransformGroup)element.RenderTransform)
+              .Children.First(tr => tr is TranslateTransform);
         }
 
-        public static readonly DependencyProperty ShowGridProperty =
-            DependencyProperty.Register(
-                "ShowGrid", typeof(bool),
-                typeof(MpZoomBorder),
-                new FrameworkPropertyMetadata(default(bool)));
-
-        #endregion
-
-
-        DispatcherTimer _timer = null;
-        protected override void OnRender(DrawingContext dc) {
-            base.OnRender(dc);
-
-            if(_timer == null) {
-                _timer = new DispatcherTimer();
-                _timer.Interval = TimeSpan.FromMilliseconds(50);
-                _timer.Tick += (s, e) => InvalidateVisual();
-
-                _timer.Start();
-            }
-            if(ShowGrid) {
-                DrawGrid(dc);
-            }
+        private ScaleTransform GetScaleTransform(UIElement element) {
+            return (ScaleTransform)((TransformGroup)element.RenderTransform)
+              .Children.First(tr => tr is ScaleTransform);
         }
-
+        
         private void DrawGrid(DrawingContext dc) {
             Point offset = new Point(10, 10);
 
@@ -226,5 +291,6 @@ namespace MpWpfApp {
         }
 
         #endregion
+
     }
 }

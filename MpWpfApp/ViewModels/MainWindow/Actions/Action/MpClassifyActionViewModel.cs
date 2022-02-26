@@ -68,6 +68,26 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
+        public override async Task<bool> Validate() {
+            await base.Validate();
+
+            if (!IsValid) {
+                return IsValid;
+            }
+            if(TagId <= 0) {
+                return IsValid;
+            }
+
+            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+            if (ttvm == null) {
+                ValidationText = $"Tag for Classifier '{RootTriggerActionViewModel.Label}/{Label}' not found";
+                await ShowValidationNotification();
+            } else {
+                ValidationText = string.Empty;
+            }
+            return IsValid;
+        }
+
         public override async Task PerformAction(object arg) {
             MpCopyItem ci = null;
             if (arg is MpCopyItem) {

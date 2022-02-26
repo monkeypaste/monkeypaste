@@ -18,41 +18,35 @@ using Hardcodet.Wpf.TaskbarNotification;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public partial class MpLoaderBalloonView : MpUserControl<MpLoaderBalloonViewModel> {
+    public partial class MpNotificationBalloonView : 
+        MpUserControl<MpNotificationBalloonViewModel>, MpINotificationBalloonView {
 
         private static TaskbarIcon _tbi = null;
-
-        private static MpLoaderBalloonView _instance;
-        public static MpLoaderBalloonView Instance => _instance ?? (_instance = new MpLoaderBalloonView());
 
         private bool isClosing = false;
 
 
-        public static void Init() {
-            Application.Current.Dispatcher.Invoke(() => {
-                _instance = new MpLoaderBalloonView(MpLoaderBalloonViewModel.Instance);
-
-                _tbi = new TaskbarIcon();
-                _tbi.ShowCustomBalloon(
-                    _instance,
-                    System.Windows.Controls.Primitives.PopupAnimation.Slide,
-                    null);
-            });
+        public void ShowBalloon() {
+            _tbi.ShowCustomBalloon(
+                this,
+                System.Windows.Controls.Primitives.PopupAnimation.Slide,
+                null);
         }
 
-        private MpLoaderBalloonView() {
-            throw new Exception("no");
+        public void HideBalloon() {
+            CloseBalloon();
         }
 
-        public MpLoaderBalloonView(MpLoaderBalloonViewModel lbvm) {            
+
+        public MpNotificationBalloonView() {
             InitializeComponent();
-            DataContext = lbvm;
             TaskbarIcon.AddBalloonClosingHandler(this, OnBalloonClosing);
+            _tbi = new TaskbarIcon();
         }
 
         
 
-        public void CloseBalloon() {            
+        public void CloseBalloon() {
             TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
             if(taskbarIcon == null) {
                 return;
@@ -108,6 +102,7 @@ namespace MpWpfApp {
         private void OnFadeOutCompleted(object sender, EventArgs e) {
             Popup pp = (Popup)Parent;
             pp.IsOpen = false;
+            BindingContext.IsVisible = false;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e) {

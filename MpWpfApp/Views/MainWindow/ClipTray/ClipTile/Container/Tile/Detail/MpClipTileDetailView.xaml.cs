@@ -83,11 +83,11 @@ namespace MpWpfApp {
         }
 
         private void ClipTileToggleEditButton_MouseEnter(object sender, MouseEventArgs e) {
-            MpCursorStack.PushCursor(this,MpCursorType.Link);
+            MpCursor.SetCursor(this,MpCursorType.Hand);
         }
 
         private void ClipTileToggleEditButton_MouseLeave(object sender, MouseEventArgs e) {
-            MpCursorStack.PopCursor(this);
+            MpCursor.UnsetCursor(this);
         }
     }
 }

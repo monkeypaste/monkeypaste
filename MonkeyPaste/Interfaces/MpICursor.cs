@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         ResizeNWSE,
         ResizeNESW,
         ResizeAll,
-        Link
+        Hand
     }
 
     public interface MpICursor {

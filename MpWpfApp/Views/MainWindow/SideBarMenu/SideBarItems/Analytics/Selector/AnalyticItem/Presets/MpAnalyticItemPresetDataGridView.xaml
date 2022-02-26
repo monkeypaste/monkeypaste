@@ -152,17 +152,25 @@
                     <DataGridTemplateColumn MinWidth="40">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Background="Transparent"
-                                        BorderThickness="0"
-                                        ToolTip="Analyze"
-                                        Command="{Binding Parent.ExecuteAnalysisCommand}"
-                                        CommandParameter="{Binding}">
-                                    <Image Width="20"
-                                           Height="20"
-                                           Source="{Binding .,
-                                                            Converter={StaticResource StringResourceToImageSourceConverter},
-                                                            Source={StaticResource ExecuteIcon}}" />
-                                </Button>
+                                <Grid>
+                                    <Button Background="Transparent"
+                                            BorderThickness="0"
+                                            ToolTip="Analyze"
+                                            Visibility="{Binding Parent.IsBusy,
+                                                                 Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                            Command="{Binding Parent.ExecuteAnalysisCommand}"
+                                            CommandParameter="{Binding}">
+                                        <Image Width="20"
+                                               Height="20"
+                                               Source="{Binding .,
+                                                                Converter={StaticResource StringResourceToImageSourceConverter},
+                                                                Source={StaticResource ExecuteIcon}}" />
+                                    </Button>
+                                    <local:MpSpinnerPiston Width="20"
+                                                           Height="20"
+                                                           Visibility="{Binding Parent.IsBusy,
+                                                                                Converter={StaticResource BoolToVisibilityConverter}}" />
+                                </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

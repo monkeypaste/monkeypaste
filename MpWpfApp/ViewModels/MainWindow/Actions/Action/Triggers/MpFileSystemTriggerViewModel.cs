@@ -1,5 +1,7 @@
 ﻿using MonkeyPaste;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpFileSystemTriggerViewModel : MpTriggerActionViewModelBase, MpIFileSystemEventHandler {
@@ -37,18 +39,29 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override void Enable() {
-            if(!IsEnabled) {
-                MpFileSystemWatcherViewModel.Instance.RegisterTrigger(this);
+        public override async Task Enable() {
+
+            if (IsEnabled) {
+                return;
             }
-            base.Enable();
+            await Validate();
+            if (IsValid) {
+
+                MpFileSystemWatcherViewModel.Instance.RegisterTrigger(this);
+                IsEnabled = true;
+            }
+            await base.Enable();
         }
 
-        public override void Disable() {
-            if(IsEnabled) {
-                MpFileSystemWatcherViewModel.Instance.UnregisterTrigger(this);
+        public override async Task Disable() {
+            if (!IsEnabled) {
+                return;
             }
-            base.Disable();
+
+            MpFileSystemWatcherViewModel.Instance.UnregisterTrigger(this);
+
+            IsEnabled = false;
+            await base.Disable();
         }
 
         #endregion

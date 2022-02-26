@@ -60,15 +60,13 @@ namespace MonkeyPaste {
         private static async Task<MpPluginFormat> LoadPlugin(string manifestPath) {
             string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
             if(string.IsNullOrEmpty(manifestStr)) {
-                MpLoaderBalloonViewModel.Instance.SetNotification(
-                    notificationType: MpLoaderNotificationType.InvalidPlugin,
-                    exceptionType: MpLoaderExceptionSeverityType.WarningWithOption,
+                var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
+                    notificationType: MpNotificationType.InvalidPlugin,
+                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                     msg: $"Plugin manifest not found in '{manifestPath}'");
 
-                while(MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.None) {
-                    await Task.Delay(100);
-                }
-                if(MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.Retry) {
+                
+                if(userAction == MpNotificationUserActionType.Retry) {
                     var retryPlugin = await LoadPlugin(manifestPath);
                     return retryPlugin;
                 }
@@ -78,15 +76,12 @@ namespace MonkeyPaste {
             try {
                 plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);                
             } catch(Exception ex) {                
-                MpLoaderBalloonViewModel.Instance.SetNotification(
-                    notificationType: MpLoaderNotificationType.InvalidPlugin,
-                    exceptionType: MpLoaderExceptionSeverityType.WarningWithOption,
+                var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
+                    notificationType: MpNotificationType.InvalidPlugin,
+                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                     msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}");
 
-                while (MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.None) {
-                    await Task.Delay(100);
-                }
-                if (MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.Retry) {
+                if (userAction == MpNotificationUserActionType.Retry) {
                     var retryPlugin = await LoadPlugin(manifestPath);
                     return retryPlugin;
                 }
@@ -96,15 +91,12 @@ namespace MonkeyPaste {
                 try {
                     plugin.Component = GetPluginComponent(manifestPath, plugin);
                 } catch(Exception ex) {
-                    MpLoaderBalloonViewModel.Instance.SetNotification(
-                    notificationType: MpLoaderNotificationType.InvalidPlugin,
-                    exceptionType: MpLoaderExceptionSeverityType.WarningWithOption,
+                    var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
+                    notificationType: MpNotificationType.InvalidPlugin,
+                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                     msg: ex.Message);
 
-                    while (MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.None) {
-                        await Task.Delay(100);
-                    }
-                    if (MpLoaderBalloonViewModel.Instance.LastNotificationResult == MpLoaderNotificationResultType.Retry) {
+                    if (userAction == MpNotificationUserActionType.Retry) {
                         var retryPlugin = await LoadPlugin(manifestPath);
                         return retryPlugin;
                     }

@@ -37,7 +37,7 @@
                                                       Converter={StaticResource BoolToVisibilityConverter}}"
                                  DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
             <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
-                                              MinWidth="{Binding DefaultAnalyzerPanelWidth,
+                                              MinWidth="{Binding DefaultAnalyzerPresetPanelWidth,
                                                                  Source={x:Static local:MpMeasurements.Instance}}"
                                               DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
                                               Visibility="{Binding IsSidebarVisible,

@@ -15,8 +15,8 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        private ObservableCollection<MpNotificationViewModel> _notificationViewModels = new ObservableCollection<MpNotificationViewModel>();
-        public ObservableCollection<MpNotificationViewModel> NotificationViewModels {
+        private ObservableCollection<MpSoundNotificationViewModel> _notificationViewModels = new ObservableCollection<MpSoundNotificationViewModel>();
+        public ObservableCollection<MpSoundNotificationViewModel> NotificationViewModels {
             get {
                 return _notificationViewModels;
             }
@@ -38,7 +38,7 @@ namespace MpWpfApp {
 
         #region Private Methods
         private MpNotificationCollectionViewModel() : base(null) {
-            NotificationViewModels.Add(new MpNotificationViewModel(MpNotificationType.NotificationDoCopySound, MpPreferences.NotificationDoCopySound));
+            NotificationViewModels.Add(new MpSoundNotificationViewModel(MpSoundNotificationType.NotificationDoCopySound, MpPreferences.NotificationDoCopySound));
             NotificationViewModels[0].PerformNotificationCommand.Execute(null);
 
             MpPreferences.NotificationDoCopySound = false;

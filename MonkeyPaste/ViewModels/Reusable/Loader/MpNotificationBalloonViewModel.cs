@@ -8,14 +8,21 @@ using System.Windows;
 using System.Windows.Input;
 using MonkeyPaste;
 namespace MonkeyPaste {
-    public enum MpLoaderNotificationType { 
+    public enum MpNotifierStateType {
+        None = 0,
+        Startup,
+        Warning
+    }
+
+    public enum MpNotificationType { 
         None = 0,
         InvalidPlugin,
+        InvalidAction,
         DbError,
         LoadComplete
     }
 
-    public enum MpLoaderExceptionSeverityType {
+    public enum MpNotificationExceptionSeverityType {
         None = 0,
         Warning,
         WarningWithOption,
@@ -23,19 +30,22 @@ namespace MonkeyPaste {
         ErrorAndShutdown
     }
 
-    public enum MpLoaderNotificationResultType {
+    public enum MpNotificationUserActionType {
         None = 0,
         Ignore,
         Retry,
         Shutdown
     }
 
-    public class MpLoaderBalloonViewModel : MpViewModelBase, MpISingletonViewModel<MpLoaderBalloonViewModel> {
+    public class MpNotificationBalloonViewModel : MpViewModelBase {
         #region Static Variables
         #endregion
 
         #region Private Variables
         private int _updateCount = 0;
+
+        private MpINotificationBalloonView _nbv;
+
         #endregion
 
 
@@ -43,8 +53,8 @@ namespace MonkeyPaste {
 
         #region MpISingletonViewModel Implementation
 
-        private static MpLoaderBalloonViewModel _instance;
-        public static MpLoaderBalloonViewModel Instance => _instance ?? (_instance = new MpLoaderBalloonViewModel());
+        private static MpNotificationBalloonViewModel _instance;
+        public static MpNotificationBalloonViewModel Instance => _instance ?? (_instance = new MpNotificationBalloonViewModel());
 
         #endregion
 
@@ -53,22 +63,30 @@ namespace MonkeyPaste {
 
         #region State
 
+        public bool IsVisible { get; set; } = false;
+
+        public bool IsStartupState => NotifierState == MpNotifierStateType.Startup;
+
+        public bool IsWarningState => NotifierState == MpNotifierStateType.Warning;
+
         public bool IsLoaded => PercentLoaded >= 1.0;
 
         public double PercentLoaded { get; set; }
 
-        public bool IsValid => string.IsNullOrEmpty(ValidationMessage);                
+        public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
 
-        public MpLoaderNotificationType CurrentNotification { get; set; } = MpLoaderNotificationType.None;
+        public MpNotifierStateType NotifierState { get; set; } = MpNotifierStateType.None;
 
-        public MpLoaderExceptionSeverityType ExceptionType { get; set; } = MpLoaderExceptionSeverityType.None;
+        public MpNotificationType CurrentNotification { get; set; } = MpNotificationType.None;
+
+        public MpNotificationExceptionSeverityType ExceptionType { get; set; } = MpNotificationExceptionSeverityType.None;
 
         public bool ShowIgnoreButton {
             get {
                 if(IsValid) {
                     return false;
                 }
-                return ExceptionType != MpLoaderExceptionSeverityType.ErrorAndShutdown;
+                return ExceptionType != MpNotificationExceptionSeverityType.ErrorAndShutdown;
             }
         }
 
@@ -77,7 +95,7 @@ namespace MonkeyPaste {
                 if (IsValid) {
                     return false;
                 }
-                return ExceptionType != MpLoaderExceptionSeverityType.ErrorAndShutdown;
+                return ExceptionType != MpNotificationExceptionSeverityType.ErrorAndShutdown;
             }
         }
 
@@ -90,22 +108,22 @@ namespace MonkeyPaste {
             }
         }
 
-        public MpLoaderNotificationResultType LastNotificationResult { get; set; } = MpLoaderNotificationResultType.None;
+        public MpNotificationUserActionType LastNotificationResult { get; set; } = MpNotificationUserActionType.None;
         #endregion
 
         #region Appearance
 
         public string NotificationTextForegroundColor {
             get {
-                if(ExceptionType == MpLoaderExceptionSeverityType.Warning || 
-                    ExceptionType == MpLoaderExceptionSeverityType.WarningWithOption) {
+                if(ExceptionType == MpNotificationExceptionSeverityType.Warning || 
+                    ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption) {
                     return MpSystemColors.Yellow;
                 }
-                if(ExceptionType == MpLoaderExceptionSeverityType.ErrorAndShutdown ||
-                    ExceptionType == MpLoaderExceptionSeverityType.ErrorWithOption) {
+                if(ExceptionType == MpNotificationExceptionSeverityType.ErrorAndShutdown ||
+                    ExceptionType == MpNotificationExceptionSeverityType.ErrorWithOption) {
                     return MpSystemColors.Red;
                 }
-                if(ExceptionType != MpLoaderExceptionSeverityType.None) {
+                if(ExceptionType != MpNotificationExceptionSeverityType.None) {
                     return MpSystemColors.royalblue;
                 }
                 return MpSystemColors.Black;
@@ -117,8 +135,6 @@ namespace MonkeyPaste {
         public double ProgressBarCurrentWidth => ProgressTotalBarWidth * PercentLoaded;
 
         #endregion
-
-
 
         public string ValidationMessage { get; set; }
 
@@ -138,25 +154,65 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public MpLoaderBalloonViewModel() : base(null) {
+        public MpNotificationBalloonViewModel() : base(null) {
             PropertyChanged += MpStandardBalloonViewModel_PropertyChanged;
         }
 
-
-        public async Task Init() {
+        public async Task Init(MpINotificationBalloonView nbv) {
             await Task.Delay(1);
+            _nbv = nbv;
+
+            NotifierState = MpNotifierStateType.Startup;
+            _nbv.SetDataContext(this);
+        }
+
+        public async Task<MpNotificationUserActionType> ShowUserActions(
+            MpNotificationType notificationType = MpNotificationType.None,
+            MpNotificationExceptionSeverityType exceptionType = MpNotificationExceptionSeverityType.None,
+            MpNotificationUserActionType result = MpNotificationUserActionType.None,
+            string msg = "",
+            double maxShowTimeMs = 100000) {
+            SetNotification(notificationType, exceptionType, result, msg);
+
+            DateTime startTime = DateTime.Now;
+            while (LastNotificationResult == MpNotificationUserActionType.None &&
+                   DateTime.Now - startTime <= TimeSpan.FromMilliseconds(maxShowTimeMs)) {
+                await Task.Delay(100);
+            }
+            return LastNotificationResult;
         }
 
         public void SetNotification(
-            MpLoaderNotificationType notificationType = MpLoaderNotificationType.None, 
-            MpLoaderExceptionSeverityType exceptionType = MpLoaderExceptionSeverityType.None, 
-            MpLoaderNotificationResultType result = MpLoaderNotificationResultType.None,
+            MpNotificationType notificationType = MpNotificationType.None, 
+            MpNotificationExceptionSeverityType exceptionType = MpNotificationExceptionSeverityType.None, 
+            MpNotificationUserActionType result = MpNotificationUserActionType.None,
             string msg = "") {
             LastNotificationResult = result;
 
             CurrentNotification = notificationType;
             ExceptionType = exceptionType;
             ValidationMessage = msg;
+
+            if (!IsVisible) {
+                ShowBalloon();
+            }
+        }
+
+
+        public void ShowBalloon() {
+            if (IsVisible) {
+                return;
+            }
+            _nbv.ShowBalloon();
+            IsVisible = true;
+        }
+
+        public void HideBalloon() {
+            if (!IsVisible) {
+                return;
+            }
+            _nbv.HideBalloon();
+            IsVisible = false;
         }
         #endregion
 
@@ -190,13 +246,13 @@ namespace MonkeyPaste {
         public ICommand IgnoreCommand => new MpRelayCommand(
             () => {
                 SetNotification(
-                    result: MpLoaderNotificationResultType.Ignore);
+                    result: MpNotificationUserActionType.Ignore);
             });
 
         public ICommand RetryCommand => new MpRelayCommand(
             () => {
                 SetNotification(
-                    result: MpLoaderNotificationResultType.Retry);
+                    result: MpNotificationUserActionType.Retry);
             });
 
         public ICommand ShutdownCommand => new MpRelayCommand(

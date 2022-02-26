@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste {
-    public interface MpIViewportCameraViewModel {
+    public interface MpIDesignerSettingsViewModel {
         double ScaleX { get; set; }
         double ScaleY { get; set; }
 

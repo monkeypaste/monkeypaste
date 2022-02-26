@@ -20,9 +20,9 @@ namespace MonkeyPaste {
             set {
                 SetProperty(ref _isBusy, value);
                 if(_isBusy) {
-                    MpCursorStack.PushCursor(this, MpCursorType.Waiting);
+                    MpCursor.SetCursor(this, MpCursorType.Waiting);
                 } else {
-                    MpCursorStack.PopCursor(this);
+                    MpCursor.UnsetCursor(this);
                 }
                 //OnBusyChanged?.Invoke(this, _isBusy);
                 //MpCursorStack.NotifyAppBusy(_isBusy);

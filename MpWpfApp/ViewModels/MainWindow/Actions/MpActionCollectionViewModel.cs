@@ -22,7 +22,7 @@ namespace MpWpfApp {
         MpIHoverableViewModel,
         MpIResizableViewModel,
         MpISidebarItemViewModel,
-        MpIViewportCameraViewModel {
+        MpIDesignerSettingsViewModel {
         #region Private Variables
 
         #endregion
@@ -220,7 +220,7 @@ namespace MpWpfApp {
                 Items.Add(tavm);
             }
 
-            EnabledAll();
+            await EnabledAll();
 
             OnPropertyChanged(nameof(Items));
 
@@ -266,14 +266,15 @@ namespace MpWpfApp {
             return tavm;
         }
 
-        public void EnabledAll() {
+        public async Task EnabledAll() {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
-            Items.ForEach(x => x.Enable());
+
+            await Task.WhenAll(Items.Select(x => x.Enable()));
         }
 
-        public void DisableAll() {
-            Items.ForEach(x => x.Disable());
+        public async Task DisableAll() {
+            await Task.WhenAll(Items.Select(x => x.Disable()));
         }
 
         #region DesignerItem Placement Methods
@@ -372,7 +373,14 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Protected Methods
+
+        
+
+        #endregion
         #region Private Methods
+
+
 
         private async Task UpdateSortOrder() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
@@ -422,6 +430,17 @@ namespace MpWpfApp {
                         .ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
                     AllSelectedTriggerActions
                         .ForEach(x => x.OnPropertyChanged(nameof(x.IsLabelVisible)));
+                    break;
+                case nameof(HasModelChanged):
+                    if(SelectedItem == null) {
+                        return;
+                    }
+                    if(HasModelChanged) {
+                        Task.Run(async () => {
+                            await SelectedItem.Action.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
+                    }
                     break;
             }
         }
@@ -479,7 +498,7 @@ namespace MpWpfApp {
                 IsBusy = true;
 
                 var tavm = args as MpTriggerActionViewModelBase;
-                tavm.Disable();
+                await tavm.Disable();
                 var deleteTasks = tavm.FindAllChildren().Select(x => x.Action.DeleteFromDatabaseAsync()).ToList();
                 deleteTasks.Add(tavm.Action.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks);

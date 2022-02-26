@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpShortcutTriggerViewModel : MpTriggerActionViewModelBase {
@@ -36,24 +37,51 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override void Enable() {
-            if(!IsEnabled) {
+        public override async Task<bool> Validate() {
+            await base.Validate();
+
+            if (!IsValid) {
+                return IsValid;
+            }
+
+            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+            if (scvm == null) {
+                ValidationText = $"Analyzer for Action '{RootTriggerActionViewModel.Label}/{Label}' not found";
+                await ShowValidationNotification();
+            } else {
+                ValidationText = string.Empty;
+            }
+            return IsValid;
+        }
+
+        public override async Task Enable() {
+
+            if (IsEnabled) {
+                return;
+            }
+            await Validate();
+            if(IsValid) {
                 var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
                 if (scvm != null) {
                     scvm.RegisterTrigger(this);
+                    IsEnabled = true;
                 }
             }
-            base.Enable();
+            await base.Enable();
         }
 
-        public override void Disable() {
-            if (IsEnabled) {
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
-                if (scvm != null) {
-                    scvm.UnregisterTrigger(this);
-                }
+        public override async Task Disable() {
+            if(!IsEnabled) {
+                return;
             }
-            base.Disable();
+
+            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+            if (scvm != null) {
+                scvm.UnregisterTrigger(this);
+            }
+
+            IsEnabled = false;
+            await base.Disable();
         }
 
         #endregion

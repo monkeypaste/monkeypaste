@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -8,58 +9,16 @@ namespace MonkeyPaste {
     public static class MpConsole {
         public static double MaxLogFileSizeInMegaBytes = 3.25;
 
-        public static int LogWriteToFileIntervalInMs = 1000 * 60;
+        public static bool LogToFile { get; set; } = false;
+        public static bool LogToConsole { get; set; } = true;
 
-        private static bool _logToFile = false;
-        public static bool LogToFile {
-            get {
-                return _logToFile;
-            }
-            set {
-                if (_logToFile != value) {
-                    _logToFile = value;
-                    if (LogToFile) {
-                        Init();
-                    }
-                }
-            }
-        }
-
-        public static string LogFilePath {
-            get {
-                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"log.txt";
-            }
-        }
-
-        private static StringBuilder _sb = new StringBuilder();
-
-        private static bool _isLoaded = false;
+        public static string LogFilePath => Path.Combine(Directory.GetCurrentDirectory(), "log.txt");
 
         public static void Init() {
-            if(!LogToFile) {
-                _isLoaded = true;
-                return;
-            }
-            if(_isLoaded) {
-                return;
-            }
             try {
                 if (File.Exists(LogFilePath)) {
                     File.Delete(LogFilePath);                 
                 }
-
-                var writeLogTimer = new System.Timers.Timer() {
-                    Interval = LogWriteToFileIntervalInMs,
-                    AutoReset = true
-                };
-
-                writeLogTimer.Elapsed += (s, e) => {
-                    MpFileIo.AppendTextToFile(LogFilePath, _sb.ToString());
-                    _sb.Clear();
-                };
-
-                writeLogTimer.Start();
-                _isLoaded = true;
             }
             catch(Exception ex) {
                 WriteTraceLine(@"Error deleting previus log file w/ path: " + LogFilePath + " with exception: " + ex);
@@ -73,62 +32,67 @@ namespace MonkeyPaste {
         public static void WriteLine(string line) {
             line = line == null ? string.Empty : line;
             string str = line.ToString();
-            string test = RuntimeInformation.FrameworkDescription;
-            if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework")) {
+            str = $"[{DateTime.Now.ToString()}] {str}";
+            if (LogToConsole) {
+                if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework")) {
+                    Console.WriteLine(str);
+                    return;
+                }
+                Console.WriteLine("");
+                Console.WriteLine(@"-----------------------------------------------------------------------");
+                Console.WriteLine("");
                 Console.WriteLine(str);
-                return;
+                Console.WriteLine("");
+                Console.Write(@"-----------------------------------------------------------------------");
+                Console.WriteLine("");
             }
-            Console.WriteLine("");
-            Console.WriteLine(@"-----------------------------------------------------------------------");
-            Console.WriteLine("");
-            Console.WriteLine(str);
-            Console.WriteLine("");
-            Console.Write(@"-----------------------------------------------------------------------");
-            Console.WriteLine("");
+            if(LogToFile) {
+                WriteLogLine(str);
+            }
         }
 
         public static void WriteLine(object line, params object[] args) {
             line = line == null ? string.Empty : line;
             string str = line.ToString();
             str = $"[{DateTime.Now.ToString()}] {str}";
-            if (args != null && args.Length > 0) {
-                str = string.Format(str, args);
-            }
-            if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework")) {
+            if (LogToConsole) {
+                if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework")) {
+                    Console.WriteLine(str);
+                    return;
+                }
+                Console.WriteLine("");
+                Console.WriteLine(@"-----------------------------------------------------------------------");
+                Console.WriteLine("");
                 Console.WriteLine(str);
-                return;
+                Console.WriteLine("");
+                Console.Write(@"-----------------------------------------------------------------------");
+                Console.WriteLine("");
             }
-            Console.WriteLine("");
-            Console.WriteLine(@"-----------------------------------------------------------------------");
-            Console.WriteLine("");
-            Console.WriteLine(str);
-            Console.WriteLine("");
-            Console.Write(@"-----------------------------------------------------------------------");
-            Console.WriteLine("");
+            if (LogToFile) {
+                WriteLogLine(str);
+            }
         }
 
         public static void WriteTraceLine(object line, object args = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
-            if(!_isLoaded) {
-                Init();
-            }
             line = line == null ? string.Empty: line;
             if(args != null) {
                 line += args.ToString();
             }
 
             line = $"[{DateTime.Now.ToString()}] {line}";
-            //args = args == null ? string.Empty : args;
-            string outStr = string.Empty;
-            Console.WriteLine("");
-            Console.WriteLine(@"-----------------------------------------------------------------------");
-            Console.WriteLine("File: "+callerFilePath);
-            Console.WriteLine("Member: " + callerName);
-            Console.WriteLine("Line: " + lineNum);
-            Console.WriteLine("Msg: " + line);
-            Console.WriteLine(@"-----------------------------------------------------------------------");
-            Console.WriteLine("");
-
-            _sb.AppendLine(string.Format(@"[{0}] : {1}", DateTime.Now, outStr));
+            if (LogToConsole) {
+                Console.WriteLine("");
+                Console.WriteLine(@"-----------------------------------------------------------------------");
+                Console.WriteLine("File: " + callerFilePath);
+                Console.WriteLine("Member: " + callerName);
+                Console.WriteLine("Line: " + lineNum);
+                Console.WriteLine("Msg: " + line);
+                Console.WriteLine(@"-----------------------------------------------------------------------");
+                Console.WriteLine("");
+            }
+            if (LogToFile) {
+                WriteLogLine(line);
+            }
         }
 
         public static void WriteTraceLine(string format,object args, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath="",[CallerLineNumber] int lineNum = 0) {
@@ -138,6 +102,17 @@ namespace MonkeyPaste {
                 WriteTraceLine(format, args, callerName, callerFilePath, lineNum);
             }
             
+        }
+
+        public static void WriteLogLine(object line, params object[] args) {
+            line = line == null ? string.Empty : line;
+            string str = line.ToString();
+            str = $"[{DateTime.Now.ToString()}] {str}";
+            if (args != null && args.Length > 0) {
+                str = string.Format(str, args);
+            }
+            line = $"[{DateTime.Now.ToString()}] {line}";
+            File.AppendAllLines(LogFilePath, new List<string> { line.ToString() });
         }
     }
 }

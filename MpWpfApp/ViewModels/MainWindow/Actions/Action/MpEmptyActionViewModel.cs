@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpEmptyActionViewModel : MpActionViewModelBase {
@@ -43,6 +44,16 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+
+        public override async Task Enable() {
+            await Task.Delay(1);
+            IsEnabled = true;
+        }
+
+        public override async Task Disable() {
+            await Task.Delay(1);
+            IsEnabled = false;
+        }
 
         #endregion
     }

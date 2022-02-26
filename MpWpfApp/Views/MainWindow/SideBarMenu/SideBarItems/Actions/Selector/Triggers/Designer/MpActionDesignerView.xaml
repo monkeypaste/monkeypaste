@@ -18,6 +18,7 @@
         </Grid.Background>
         <local:MpZoomBorder ClipToBounds="True"
                             DataContext="{Binding}"
+                            DesignerItem="{Binding SelectedItem}"
                             ShowGrid="{Binding IsAnySelected}"
                             OriginThickness="1.5"
                             GridLineThickness="0.5"

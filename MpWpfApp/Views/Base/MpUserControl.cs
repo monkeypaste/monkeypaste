@@ -9,14 +9,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public abstract class MpUserControl : UserControl {
+    public abstract class MpUserControl : UserControl, MpIUserControl {
         //private ObservableCollection<Behavior> _behaviors = new ObservableCollection<Behavior>();
 
         public MpUserControl() : base() {
             OnLoad();
+        }
+
+
+
+        public void SetDataContext(object dataContext) {
+            DataContext = this;
         }
 
         public CancellationTokenSource CTS;
