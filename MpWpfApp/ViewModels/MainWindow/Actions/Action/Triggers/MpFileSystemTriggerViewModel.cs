@@ -1,4 +1,5 @@
-﻿using MonkeyPaste;
+﻿using FFImageLoading.Helpers.Exif;
+using MonkeyPaste;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,31 +38,16 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
-        public override async Task Enable() {
-
-            if (IsEnabled) {
-                return;
-            }
-            await Validate();
-            if (IsValid) {
-
-                MpFileSystemWatcherViewModel.Instance.RegisterTrigger(this);
-                IsEnabled = true;
-            }
+        protected override async Task Enable() {
             await base.Enable();
+            MpFileSystemWatcherViewModel.Instance.RegisterTrigger(this);
         }
 
-        public override async Task Disable() {
-            if (!IsEnabled) {
-                return;
-            }
-
-            MpFileSystemWatcherViewModel.Instance.UnregisterTrigger(this);
-
-            IsEnabled = false;
+        protected override async Task Disable() {
             await base.Disable();
+            MpFileSystemWatcherViewModel.Instance.UnregisterTrigger(this);
         }
 
         #endregion

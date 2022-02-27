@@ -67,26 +67,11 @@ namespace MpWpfApp {
 
         #region Public Overrides
 
-        public override async Task<bool> Validate() {
-            await base.Validate();
-            if(!IsValid) {
-                return IsValid;
-            }
-
-            var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
-            if (aipvm == null) {
-                ValidationText = $"Analyzer for Action '{RootTriggerActionViewModel.Label}/{Label}' not found";
-                await ShowValidationNotification();
-            } else {
-                ValidationText = string.Empty;
-            }
-            return IsValid;
-        }
-
         public override async Task PerformAction(object arg) {
-            if(!IsValid) {
+            if(!CanPerformAction(arg)) {
                 return;
             }
+
             MpCopyItem ci = null;
             if(arg is MpCopyItem) {
                 ci = arg as MpCopyItem;
@@ -124,6 +109,28 @@ namespace MpWpfApp {
                 });
             }
         }
+
+        #endregion
+
+        #region Protected Methods
+
+
+        protected override async Task<bool> Validate() {
+            await base.Validate();
+            if (!IsValid) {
+                return IsValid;
+            }
+
+            var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
+            if (aipvm == null) {
+                ValidationText = $"Analyzer for Action '{RootTriggerActionViewModel.Label}/{Label}' not found";
+                await ShowValidationNotification();
+            } else {
+                ValidationText = string.Empty;
+            }
+            return IsValid;
+        }
+
         #endregion
     }
 }

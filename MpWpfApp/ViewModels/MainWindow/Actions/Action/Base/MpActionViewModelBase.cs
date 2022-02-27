@@ -33,8 +33,9 @@ namespace MpWpfApp {
         MpIMovableViewModel,
         MpITriggerActionViewModel {
         #region Private Variables
-        
+
         private Point _lastLocation;
+        
 
         #endregion
 
@@ -256,9 +257,12 @@ namespace MpWpfApp {
 
         public bool HasDescription => !string.IsNullOrEmpty(Description);
 
-        public bool IsRootAction => ParentActionId == 0;
+        public bool IsRootAction => ParentActionId == 0 && this is MpTriggerActionViewModelBase;
+        
+        public bool LastIsEnabledState { get; set; } = false;
+       
+        public bool? IsEnabled { get; set; } = false;
 
-        public bool IsEnabled { get; set; } = false;
 
         public bool IsEditingDetails { get; set; }
 
@@ -280,7 +284,22 @@ namespace MpWpfApp {
 
         public bool IsLabelFocused { get; set; } = false;
 
+        public bool IsAnyChildSelected => this.FindAllChildren().Any(x => x.IsSelected);
 
+        public bool IsPropertyListItemVisible {
+            get {
+                if(Parent == null || this is MpEmptyActionViewModel) {
+                    return false;
+                }
+                if(IsRootAction) {
+                    return true;
+                }
+                if(IsSelected || ParentActionViewModel.IsExpanded || IsExpanded || ParentActionViewModel.IsSelected) {
+                    return true;
+                }
+                return false;
+            }
+        }
         public Point DefaultEmptyActionLocation => new Point(X, Y - (Height * 2));
 
         #endregion
@@ -634,56 +653,23 @@ namespace MpWpfApp {
             return eavm;
         }
 
-        public virtual async Task Enable() {
-            if (IsEnabled) {
-                return;
-            }
-            await Validate();
-            if(!IsValid) {
-                return;
-            }
-            if (ParentActionViewModel != null) {
-                if (ParentActionViewModel.OnActionComplete != null) {
-                    ParentActionViewModel.OnActionComplete -= OnActionTriggered;
-                }
-                ParentActionViewModel.OnActionComplete += OnActionTriggered;
-            }
-
-            IsEnabled = true;
-
-            await Task.WhenAll(Children.OrderBy(x => x.SortOrderIdx).Select(x => x.Enable()));
-        }
-
-        public virtual async Task Disable() {
-            if(!IsEnabled) {
-                return;
-            }
-            if (ParentActionViewModel != null) {
-                ParentActionViewModel.OnActionComplete -= OnActionTriggered;
-            }
-            IsEnabled = false;
-
-            await Task.WhenAll(Children.OrderBy(x => x.SortOrderIdx).Select(x => x.Disable()));
-        }
-
         public void OnActionTriggered(object sender, object args) {
-            if(!IsEnabled) {
+            if(!IsEnabled.HasValue) {
+                //if action has errors halt 
+                return;
+            }
+            if(!IsEnabled.Value) {
+                //if action is disabled pass parent output to child
                 OnActionComplete?.Invoke(this, args);
                 return;
             }
             //OnAction?.Invoke(this, ci);
             Task.Run(()=>PerformAction(args));
         }
-        
-        public virtual async Task<bool> Validate() {            
-            await Task.WhenAll(this.FindAllChildren().Select(x => x.Validate()));
-            
-            return IsValid;
-        }
 
 
         public virtual async Task PerformAction(object arg) {
-            if (arg == null || !IsValid) {
+            if (!CanPerformAction(arg)) {
                 return;
             }
             await Task.Delay(1);
@@ -708,14 +694,6 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
-        #region Db Event Handlers
-
-        #endregion
-
-        #endregion
-
-        #region Protected Methods
-
         protected async Task ShowValidationNotification() {
             var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
                     notificationType: MpNotificationType.InvalidAction,
@@ -726,7 +704,39 @@ namespace MpWpfApp {
             if (userAction == MpNotificationUserActionType.Retry) {
                 await Validate();
             }
+        }
 
+
+        protected virtual async Task<bool> Validate() {
+            if(!IsRootAction && ParentActionViewModel == null) {
+                // this shouldn't happen...
+                ValidationText = $"Action '{RootTriggerActionViewModel.Label}/{Label}' must be linked to a trigger";
+                await ShowValidationNotification();
+            } else {
+                ValidationText = string.Empty;
+            }
+
+            if(ActionType == MpActionType.None && !IsEmptyAction) {
+                ValidationText = $"Action '{RootTriggerActionViewModel.Label}/{Label}' must have a type to be enabled";
+                await ShowValidationNotification();
+            } else {
+                ValidationText = string.Empty;
+            }
+
+            return IsValid;
+        }
+
+        protected virtual async Task Enable() { await Task.Delay(1); }
+
+        protected virtual async Task Disable() { await Task.Delay(1); }
+
+        protected virtual bool CanPerformAction(object arg) {
+            if (!IsValid ||
+               !IsEnabled.HasValue ||
+               (IsEnabled.HasValue && !IsEnabled.Value)) {
+                return false;
+            }
+            return true;
         }
 
         #endregion
@@ -755,11 +765,16 @@ namespace MpWpfApp {
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryAction));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedActions));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
+                    OnPropertyChanged(nameof(IsPropertyListItemVisible));
+                    this.FindAllChildren().ForEach(x => x.OnPropertyChanged(nameof(IsPropertyListItemVisible)));
                     OnPropertyChanged(nameof(BorderBrushHexColor));
                     break;
                 case nameof(IsEnabled):
+                    if(!IsEnabled.HasValue) {
+                        break;
+                    }
                     Task.Run(async () => {
-                        if (IsEnabled) {
+                        if (IsEnabled.HasValue && IsEnabled.Value) {
                             await Enable();
                         } else {
                             await Disable();
@@ -786,6 +801,8 @@ namespace MpWpfApp {
                     if(IsExpanded && !IsSelected) {
                         IsSelected = true;
                     }
+                    OnPropertyChanged(nameof(IsPropertyListItemVisible));
+                    this.FindAllChildren().ForEach(x => x.OnPropertyChanged(nameof(IsPropertyListItemVisible)));
                     break;
                 case nameof(Location):
                 case nameof(X):
@@ -805,9 +822,38 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ToggleIsEnabledCommand => new RelayCommand(
-             () => {
-                 IsEnabled = !IsEnabled;
+        public ICommand ToggleIsEnabledCommand => new MpRelayCommand<bool>(
+            async (parentToggledState) => {
+                bool newIsEnabledState = false;
+                if(parentToggledState != null) {
+                    newIsEnabledState = (bool)parentToggledState;                    
+                } else {
+                    newIsEnabledState = !LastIsEnabledState;
+                }
+                
+                if (newIsEnabledState) {
+                    await Validate();
+                    if (!IsValid) {
+                        IsEnabled = null;
+                    } else {
+                        await Enable();
+                        if(ParentActionViewModel != null) {
+                            ParentActionViewModel.OnActionComplete += OnActionTriggered;
+                        }
+                        IsEnabled = true;
+                        LastIsEnabledState = true;
+                    }
+                } else {
+                    await Disable();
+                    if(ParentActionViewModel != null) {
+                        ParentActionViewModel.OnActionComplete -= OnActionTriggered;
+                    }
+                    IsEnabled = false;
+                    LastIsEnabledState = false;
+                }
+                if(IsEnabled.HasValue) {
+                    Children.ForEach(x => x.ToggleIsEnabledCommand.Execute(IsEnabled.Value));
+                }
             });
 
         public ICommand ShowActionSelectorMenuCommand => new RelayCommand<object>(

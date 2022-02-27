@@ -34,6 +34,9 @@
                             Value="{Binding IsSelected}" />
                     <Setter Property="FocusVisualStyle"
                             Value="{x:Null}" />
+                    <Setter Property="Margin"
+                            Value="{Binding ActionId,
+                                            Converter={StaticResource ActionIdToThicknessConverter}}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -57,8 +60,8 @@
                     <local:MpActionPropertyListBoxItemView BorderThickness="5"
                                                            BorderBrush="{Binding BorderBrushHexColor,
                                                                                  Converter={StaticResource StringHexToBrushConverter}}"
-                                                           Visibility="{Binding IsEmptyAction,
-                                                                                Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                           Visibility="{Binding IsPropertyListItemVisible,
+                                                                                Converter={StaticResource BoolToVisibilityConverter}}"
                                                            DataContext="{Binding}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>

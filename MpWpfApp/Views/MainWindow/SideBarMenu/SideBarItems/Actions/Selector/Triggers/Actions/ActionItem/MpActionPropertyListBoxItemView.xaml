@@ -13,7 +13,6 @@
                      d:DataContext="{d:DesignInstance Type=local:MpActionViewModelBase,
                                                       IsDesignTimeCreatable=False}">
     <Expander x:Name="ActionExpander"
-              HorizontalAlignment="Stretch"
               Padding="5,0"
               Background="{Binding ActionType,
                                    Converter={StaticResource ActionTypeToBrushConverter}}"
@@ -21,18 +20,20 @@
                                    Mode=TwoWay}">
         <Expander.Header>
             <StackPanel Orientation="Horizontal">
-                <ToggleButton x:Name="ToggleEnableButton"
-                              Grid.Row="0"
-                              Grid.Column="3"
-                              DockPanel.Dock="Right"
-                              HorizontalAlignment="Right"
-                              HorizontalContentAlignment="Right"
-                              BorderThickness="0"
-                              Margin="3,0"
-                              Background="Transparent"
-                              Template="{StaticResource FlatToggleButtonControlTemplate}"
-                              IsChecked="{Binding IsEnabled,
-                                                  Mode=TwoWay}">
+                <local:MpOneWayToggleButton x:Name="ToggleEnableButton"
+                                            Grid.Row="0"
+                                            Grid.Column="3"
+                                            DockPanel.Dock="Right"
+                                            HorizontalAlignment="Right"
+                                            HorizontalContentAlignment="Right"
+                                            BorderThickness="0"
+                                            Margin="3,0"
+                                            Background="Transparent"
+                                            IsThreeState="True"
+                                            Command="{Binding ToggleIsEnabledCommand}"
+                                            CommandParameter="{Binding LastIsEnabledState,
+                                                                       Converter={StaticResource BoolFlipConverter}}"
+                                            Template="{StaticResource FlatToggleButtonControlTemplate}">
                     <Grid HorizontalAlignment="Right">
                         <Ellipse Width="20"
                                  Height="20"
@@ -53,7 +54,7 @@
                                  Stroke="White"
                                  Fill="Lime" />
                     </Grid>
-                </ToggleButton>
+                </local:MpOneWayToggleButton>
                 <Image Margin="5,0,0,0"
                        Source="{Binding IconResourceKeyStr,
                                         Converter={StaticResource StringResourceToImageSourceConverter}}"

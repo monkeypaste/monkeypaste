@@ -35,36 +35,23 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
-        public override async Task Enable() {
-
-            if (IsEnabled) {
-                return;
-            }
-            await Validate();
-            if (IsValid) {
-                var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-                if (ttvm != null) {
-                    ttvm.RegisterTrigger(this);
-                    IsEnabled = true;
-                }
-            }
+        protected override async Task Enable() {
             await base.Enable();
+            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+            if (ttvm != null) {
+                ttvm.RegisterTrigger(this);
+                IsEnabled = true;
+            }
         }
 
-        public override async Task Disable() {
-            if (!IsEnabled) {
-                return;
-            }
-
+        protected override async Task Disable() {
+            await base.Disable();
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm != null) {
                 ttvm.UnregisterTrigger(this);
             }
-
-            IsEnabled = false;
-            await base.Disable();
         }
         #endregion
 

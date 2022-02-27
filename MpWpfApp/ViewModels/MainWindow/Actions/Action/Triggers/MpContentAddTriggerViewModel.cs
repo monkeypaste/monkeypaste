@@ -13,31 +13,16 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
-        public override async Task Enable() {
-
-            if (IsEnabled) {
-                return;
-            }
-            await Validate();
-            if (IsValid) {
-                MpClipTrayViewModel.Instance.RegisterTrigger(this);
-                IsEnabled = true;
-            }
+        protected override async Task Enable() {
             await base.Enable();
+            MpClipTrayViewModel.Instance.RegisterTrigger(this);
         }
 
-        public override async Task Disable() {
-            if (!IsEnabled) {
-                return;
-            }
-
-            MpClipTrayViewModel.Instance.UnregisterTrigger(this);
-
-            IsEnabled = false;
-
+        protected override async Task Disable() {
             await base.Disable();
+            MpClipTrayViewModel.Instance.UnregisterTrigger(this);
         }
         #endregion
     }

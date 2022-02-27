@@ -54,6 +54,7 @@
     <local:MpTagIdToBrushConverter x:Key="TagIdToBrushConverter" />
     <local:MpTagIdToTagNameConverter x:Key="TagIdToTagNameConverter" />
     <local:MpTagIdToThicknessNameConverter x:Key="TagIdToThicknessNameConverter" />
+    <local:MpActionIdToThicknessConverter x:Key="ActionIdToThicknessConverter" />
     <local:MpDoubleWithDeltaConverter x:Key="DoubleWithDeltaConverter" />
     <local:MpDoubleWithDeltaMultiConverter x:Key="DoubleWithDeltaMultiConverter" />
     <local:MpDoubleToThicknessIndentLevelConverter x:Key="DoubleToThicknessIndentLevelConverter" />

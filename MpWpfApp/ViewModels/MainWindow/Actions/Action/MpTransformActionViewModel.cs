@@ -60,6 +60,10 @@ namespace MpWpfApp {
         #region Protected Overrides
 
         public override async Task PerformAction(object arg) {
+            if (!CanPerformAction(arg)) {
+                return;
+            }
+
             MpCopyItem ci = null;
             //if (arg is MpCopyItem) {
             //    ci = arg as MpCopyItem;

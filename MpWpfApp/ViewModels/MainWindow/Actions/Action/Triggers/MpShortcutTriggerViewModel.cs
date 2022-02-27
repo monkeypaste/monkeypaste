@@ -35,9 +35,9 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
-        public override async Task<bool> Validate() {
+        protected override async Task<bool> Validate() {
             await base.Validate();
 
             if (!IsValid) {
@@ -54,34 +54,20 @@ namespace MpWpfApp {
             return IsValid;
         }
 
-        public override async Task Enable() {
-
-            if (IsEnabled) {
-                return;
-            }
-            await Validate();
-            if(IsValid) {
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
-                if (scvm != null) {
-                    scvm.RegisterTrigger(this);
-                    IsEnabled = true;
-                }
-            }
+        protected override async Task Enable() {
             await base.Enable();
+            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+            if (scvm != null) {
+                scvm.RegisterTrigger(this);
+            }
         }
 
-        public override async Task Disable() {
-            if(!IsEnabled) {
-                return;
-            }
-
+        protected override async Task Disable() {
+            await base.Disable();
             var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.UnregisterTrigger(this);
             }
-
-            IsEnabled = false;
-            await base.Disable();
         }
 
         #endregion

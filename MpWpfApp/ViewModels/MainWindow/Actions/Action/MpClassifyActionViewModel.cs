@@ -68,13 +68,10 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        public override async Task<bool> Validate() {
+        protected override async Task<bool> Validate() {
             await base.Validate();
 
             if (!IsValid) {
-                return IsValid;
-            }
-            if(TagId <= 0) {
                 return IsValid;
             }
 
@@ -89,6 +86,10 @@ namespace MpWpfApp {
         }
 
         public override async Task PerformAction(object arg) {
+            if (!CanPerformAction(arg)) {
+                return;
+            }
+
             MpCopyItem ci = null;
             if (arg is MpCopyItem) {
                 ci = arg as MpCopyItem;
@@ -98,10 +99,6 @@ namespace MpWpfApp {
                 ci = ao.CopyItem;
             } else if (arg is MpClassifyOutput clo) {
                 ci = clo.CopyItem;
-            }
-
-            if (!IsEnabled) {
-                return;
             }
 
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);

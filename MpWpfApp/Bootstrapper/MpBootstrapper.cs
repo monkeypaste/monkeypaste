@@ -60,11 +60,13 @@ namespace MpWpfApp {
         }
 
         public static async Task Init() {
+
+            await MpNotificationBalloonViewModel.Instance.Init();
+
             var nbv = new MpNotificationBalloonView();
-
-            await MpNotificationBalloonViewModel.Instance.Init(nbv);
-
+            await MpNotificationBalloonViewModel.Instance.Attach(nbv);
             nbv.DataContext = MpNotificationBalloonViewModel.Instance;
+
 
             MpNotificationBalloonViewModel.Instance.ShowBalloon();
 

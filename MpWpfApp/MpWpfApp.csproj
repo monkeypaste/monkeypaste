@@ -162,6 +162,7 @@
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMoveThumb.cs" />
+    <Compile Include="Controls\MpOneWayToggleButton.cs" />
     <Compile Include="Controls\MpResizeThumb.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpBindableListBox.cs" />
     <Compile Include="Controls\MultiSelectComboBox\MpMultiComboBox.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\MpActionIdToThicknessConverter.cs" />
     <Compile Include="Converters\MpActionTypeToBrushConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemGuidToIconSourceConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemGuidToTitleConverter.cs" />
@@ -1300,6 +1302,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\wand.png" />
+    <Resource Include="Resources\Images\indent.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />
     <Resource Include="Utils\RESTful\RestExample1.xml" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />
@@ -2652,7 +2657,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Data\" />
-    <Folder Include="ViewModels\MainWindow\Actions\Action\Macro\Base\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />

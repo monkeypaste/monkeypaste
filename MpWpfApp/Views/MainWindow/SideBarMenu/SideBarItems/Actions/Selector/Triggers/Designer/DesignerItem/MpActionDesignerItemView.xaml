@@ -176,7 +176,7 @@
         <DataTemplate x:Key="NoneDesignerTemplate"
                       DataType="local:MpEmptyActionViewModel">
             <Button Style="{StaticResource SemiTransparentButton}"
-                    Visibility="{Binding IsVisible,
+                    Visibility="{Binding IsDesignerVisible,
                                          Converter={StaticResource BoolToVisibilityConverter}}"
                     local:MpHoverableExtension.IsEnabled="True"
                     local:MpHoverableExtension.IsHovering="{Binding IsHovering,

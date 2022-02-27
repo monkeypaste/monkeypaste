@@ -33,6 +33,10 @@ namespace MpWpfApp {
         #region Protected Overrides
 
         public override async Task PerformAction(object arg) {
+            if (!CanPerformAction(arg)) {
+                return;
+            }
+
             await Task.Delay(1);
         }
         #endregion

@@ -158,12 +158,15 @@ namespace MonkeyPaste {
             PropertyChanged += MpStandardBalloonViewModel_PropertyChanged;
         }
 
-        public async Task Init(MpINotificationBalloonView nbv) {
+        public async Task Init() {
+            await Task.Delay(1);
+            NotifierState = MpNotifierStateType.Startup;
+        }
+
+        public async Task Attach(MpINotificationBalloonView nbv) {
             await Task.Delay(1);
             _nbv = nbv;
-
-            NotifierState = MpNotifierStateType.Startup;
-            _nbv.SetDataContext(this);
+            //_nbv.SetDataContext(this);
         }
 
         public async Task<MpNotificationUserActionType> ShowUserActions(

@@ -5,7 +5,7 @@ namespace MpWpfApp {
     public class MpEmptyActionViewModel : MpActionViewModelBase {
         #region Properties
 
-        public bool IsVisible {
+        public bool IsDesignerVisible {
             get {
                 if(ParentActionViewModel == null ||
                     Parent.PrimaryAction == null) {
@@ -33,8 +33,8 @@ namespace MpWpfApp {
 
         private void MpEmptyActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(IsVisible):
-                    if(IsVisible && ParentActionViewModel != null) {
+                case nameof(IsDesignerVisible):
+                    if(IsDesignerVisible && ParentActionViewModel != null) {
                         X = ParentActionViewModel.X;
                         Y = ParentActionViewModel.Y - (Height * 1.75);
                     }
@@ -43,14 +43,14 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
-        public override async Task Enable() {
+        protected override async Task Enable() {
             await Task.Delay(1);
             IsEnabled = true;
         }
 
-        public override async Task Disable() {
+        protected override async Task Disable() {
             await Task.Delay(1);
             IsEnabled = false;
         }

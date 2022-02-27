@@ -72,7 +72,7 @@ namespace MpWpfApp {
         }
 
         public override bool IsDragDataValid(bool isCopy,object dragData) {
-            if(AssociatedObject.DataContext is MpActionViewModelBase avm && !avm.IsEnabled) {
+            if(AssociatedObject.DataContext is MpActionViewModelBase avm && !avm.IsValid) {
                 return false;
             }
 

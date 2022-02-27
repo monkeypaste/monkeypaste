@@ -226,12 +226,15 @@ namespace MpWpfApp {
             PropertyChanged += MpCompareActionViewModel_PropertyChanged;
         }
 
+        #endregion
+
+        #region Public Methods
+
         public override async Task PerformAction(object arg) {
-            if(ComparePropertyPathType == MpComparePropertyPathType.None) {
-                // TODO this should invalidate or notify user if node has children
-                // that unset compare will never create match
+            if (!CanPerformAction(arg)) {
                 return;
             }
+
             MpActionOutput ao = arg as MpActionOutput;
 
             MpCopyItem ci = null;

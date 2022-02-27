@@ -129,30 +129,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Visibility
-
-        private Visibility _processinngVisibility = Visibility.Hidden;
-        public Visibility ProcessingVisibility {
-            get {
-                return _processinngVisibility;
-            }
-            set {
-                if(_processinngVisibility != value) {
-                    _processinngVisibility = value;
-                    OnPropertyChanged(nameof(ProcessingVisibility));
-                    OnPropertyChanged(nameof(AppVisibility));
-                }
-            }
-        }
-
-
-        public Visibility AppVisibility {
-            get {
-                return ProcessingVisibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
-            }
-        }
-
-        #endregion
 
         #endregion
 

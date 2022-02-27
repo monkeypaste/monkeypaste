@@ -117,7 +117,7 @@ namespace MpWpfApp {
                 Point head;
 
                 var pavm = avm.ParentActionViewModel;
-                if (pavm == null || (avm is MpEmptyActionViewModel eavm && !eavm.IsVisible)) {
+                if (pavm == null || (avm is MpEmptyActionViewModel eavm && !eavm.IsDesignerVisible)) {
                     continue;
                 } else {
                     head = new Point(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));

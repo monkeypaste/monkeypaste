@@ -250,29 +250,6 @@
                                                Grid.Row="1"
                                                Grid.Column="1"
                                                DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
-                <Grid Background="DarkGray"
-                      Opacity="0.3"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"
-                      Grid.Row="0"
-                      Grid.Column="1"
-                      Visibility="{Binding ProcessingVisibility}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="2*" />
-                    </Grid.RowDefinitions>
-                    <Label x:Name="LoadingLabel"
-                           Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Foreground="White"
-                           FontSize="30"
-                           Content="Processing" />
-                    <Viewbox Grid.Row="1"
-                             Margin="20">
-                        <local:MpSpinnerCogs />
-                    </Viewbox>
-                </Grid>
             </Grid>
         </Grid>
         <!--</AdornerDecorator>-->

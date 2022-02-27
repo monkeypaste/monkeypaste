@@ -267,14 +267,16 @@ namespace MpWpfApp {
         }
 
         public async Task EnabledAll() {
+            await Task.Delay(1);
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
 
-            await Task.WhenAll(Items.Select(x => x.Enable()));
+            Items.ForEach(x => x.ToggleIsEnabledCommand.Execute(true));
         }
 
         public async Task DisableAll() {
-            await Task.WhenAll(Items.Select(x => x.Disable()));
+            await Task.Delay(1);
+            Items.ForEach(x => x.ToggleIsEnabledCommand.Execute(false));
         }
 
         #region DesignerItem Placement Methods
@@ -427,7 +429,7 @@ namespace MpWpfApp {
                     AllSelectedTriggerActions
                         .Where(x => x is MpEmptyActionViewModel)
                         .Cast<MpEmptyActionViewModel>()
-                        .ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
+                        .ForEach(x => x.OnPropertyChanged(nameof(x.IsDesignerVisible)));
                     AllSelectedTriggerActions
                         .ForEach(x => x.OnPropertyChanged(nameof(x.IsLabelVisible)));
                     break;
@@ -498,7 +500,8 @@ namespace MpWpfApp {
                 IsBusy = true;
 
                 var tavm = args as MpTriggerActionViewModelBase;
-                await tavm.Disable();
+                tavm.ToggleIsEnabledCommand.Execute(false);
+
                 var deleteTasks = tavm.FindAllChildren().Select(x => x.Action.DeleteFromDatabaseAsync()).ToList();
                 deleteTasks.Add(tavm.Action.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks);
