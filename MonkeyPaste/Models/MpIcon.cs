@@ -12,6 +12,13 @@ using System.Collections.ObjectModel;
 using System.Data;
 
 namespace MonkeyPaste {
+
+    public enum MpIconSize {
+        SmallIcon16 = 0x1,
+        MediumIcon32 = 0x0,
+        LargeIcon48 = 0x2,
+        ExtraLargeIcon = 0x4
+    }
     public class MpIcon : MpDbModelBase, MpISyncableDbObject {
         #region Columns
         [PrimaryKey,AutoIncrement]
@@ -87,11 +94,27 @@ namespace MonkeyPaste {
 
         #region Statics
 
+        public static async Task<MpIcon> Create2(
+            string iconUrl = "",
+            List<string> hexColors = null,
+            bool createBorder = true,
+            string guid = "",
+            bool suppressWrite = false) {
+            string base64FavIcon = await MpUrlHelpers.GetUrlFavIconAsync(iconUrl);
+            var result = await Create(
+                iconImgBase64: base64FavIcon,
+                hexColors: hexColors,
+                createBorder: createBorder,
+                guid: guid,
+                suppressWrite: suppressWrite);
+            return result;
+        }
         public static async Task<MpIcon> Create(
             string iconImgBase64 = "",
             List<string> hexColors = null,
             bool createBorder = true, 
-            string guid = "") {
+            string guid = "",
+            bool suppressWrite = false) {
             MpIcon dupCheck = null;
             if(!string.IsNullOrEmpty(iconImgBase64)) {
                 dupCheck = await MpDataModelProvider.GetIconByImageStr(iconImgBase64);
@@ -101,7 +124,7 @@ namespace MonkeyPaste {
                 }
             }
 
-            var iconImage = await MpDbImage.Create(iconImgBase64);
+            var iconImage = await MpDbImage.Create(iconImgBase64, suppressWrite);
 
             var newIcon = new MpIcon() {
                 IconGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid():System.Guid.Parse(guid),
@@ -111,8 +134,8 @@ namespace MonkeyPaste {
             };
 
             if(createBorder) {
-                await newIcon.CreateOrUpdateBorder();
-            } else {
+                await newIcon.CreateOrUpdateBorder(string.Empty,suppressWrite);
+            } else if(!suppressWrite) {
                 await newIcon.WriteToDatabaseAsync();
             }
 
@@ -123,7 +146,7 @@ namespace MonkeyPaste {
 
         public MpIcon() { }
 
-        public async Task CreateOrUpdateBorder(string forceHexColor = "") {
+        public async Task CreateOrUpdateBorder(string forceHexColor = "", bool suppressWrite = false) {
             var iconBuilder = MpNativeWrapper.Services.IconBuilder;
             if(iconBuilder == null) {
                 //make border same as icon if no builder
@@ -163,7 +186,9 @@ namespace MonkeyPaste {
                 HexColor5 = forceHexColor;
             }
 
-            await WriteToDatabaseAsync();
+            if(!suppressWrite) {
+                await WriteToDatabaseAsync();
+            }
         }
         #region Sync
 

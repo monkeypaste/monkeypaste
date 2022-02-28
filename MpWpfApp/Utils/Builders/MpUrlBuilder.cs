@@ -42,7 +42,7 @@ namespace MpWpfApp {
 
             string sourceUrl = sourceUrlLine.Replace(sourceTag, string.Empty).Replace(Environment.NewLine, string.Empty);
 
-            string sourceUrlTitle = await MonkeyPaste.MpHelpers.GetUrlTitleAsync(sourceUrl);
+            string sourceUrlTitle = await MpUrlHelpers.GetUrlTitle(sourceUrl);
 
             var result = await MpUrl.Create(sourceUrl, sourceUrlTitle);
             return result;
@@ -54,7 +54,7 @@ namespace MpWpfApp {
             }
             string sourceUrlTitle = title;
             if(string.IsNullOrEmpty(sourceUrlTitle)) {
-                sourceUrlTitle = await MonkeyPaste.MpHelpers.GetUrlTitleAsync(url);
+                sourceUrlTitle = await MpUrlHelpers.GetUrlTitle(url);
             }
 
             var result = await MpUrl.Create(url, sourceUrlTitle);

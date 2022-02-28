@@ -675,11 +675,11 @@ namespace MpWpfApp {
             if (urlTask != null) {
                 string detectedUrl = await urlTask;
                 if (!string.IsNullOrEmpty(detectedUrl)) {
-                    string urlTitle = await MpHelpers.GetUrlTitle(detectedUrl);
+                    string urlTitle = await MpUrlHelpers.GetUrlTitle(detectedUrl);
                     //CopyItemUrl = MpUrl.Create(detectedUrl, urlTitle);
                     //if (CopyItemUrlDomain == null) {
-                    //    string urlDomain = MpHelpers.GetUrlDomain(detectedUrl);
-                    //    string urlDomainTitle = await MpHelpers.GetUrlTitle(urlDomain);
+                    //    string urlDomain = MpUrlHelpers.GetUrlDomain(detectedUrl);
+                    //    string urlDomainTitle = await MpUrlHelpers.GetUrlTitle(urlDomain);
                     //    CopyItemUrlDomain = MpUrlDomain.Create(urlDomain,  urlDomainTitle);
                     //}
                 }

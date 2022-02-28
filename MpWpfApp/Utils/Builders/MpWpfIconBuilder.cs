@@ -20,7 +20,6 @@ namespace MpWpfApp {
             return CreateBorder(iconBase64.ToBitmapSource(), scale, hexColor.ToWinMediaColor()).ToBase64String();
         }
 
-
         public override List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5) {
             //var sw = new Stopwatch();
             //sw.Start();
@@ -55,6 +54,14 @@ namespace MpWpfApp {
             //sw.Stop();
             //MonkeyPaste.MpConsole.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return primaryIconColorList;
+        }
+
+        public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+            var bmpSrc = MpShellEx.GetBitmapFromPath(appPath,iconSize);
+            if(bmpSrc == null) {
+                return MpBase64Images.QuestionMark;
+            }
+            return bmpSrc.ToBase64String();
         }
     }
 }

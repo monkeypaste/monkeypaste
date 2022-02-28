@@ -121,19 +121,10 @@ namespace MpWpfApp {
             ref IntPtr picon);
     };
 
+
     public class MpShellEx {
-        private const int SHGFI_SMALLICON = 0x1;
-        private const int SHGFI_LARGEICON = 0x0;
-        private const int SHIL_JUMBO = 0x4;
-        private const int SHIL_EXTRALARGE = 0x2;
         private const int WM_CLOSE = 0x0010;
 
-        public enum IconSizeEnum {
-            SmallIcon16 = SHGFI_SMALLICON,
-            MediumIcon32 = SHGFI_LARGEICON,
-            LargeIcon48 = SHIL_EXTRALARGE,
-            ExtraLargeIcon = SHIL_JUMBO
-        }
 
         [DllImport("user32")]
         private static extern
@@ -161,17 +152,17 @@ namespace MpWpfApp {
         public static extern int DestroyIcon(
             IntPtr hIcon);
 
-        public static BitmapSource GetBitmapFromFolderPath(string filepath, IconSizeEnum iconsize) {
+        public static BitmapSource GetBitmapFromFolderPath(string filepath, MpIconSize iconsize) {
             IntPtr hIcon = GetIconHandleFromFolderPath(filepath, iconsize);
             return GetBitmapFromIconHandle(hIcon);
         }
 
-        public static BitmapSource GetBitmapFromFilePath(string filepath, IconSizeEnum iconsize) {
+        public static BitmapSource GetBitmapFromFilePath(string filepath, MpIconSize iconsize) {
             IntPtr hIcon = GetIconHandleFromFilePath(filepath, iconsize);
             return GetBitmapFromIconHandle(hIcon);
         }
 
-        public static BitmapSource GetBitmapFromPath(string filepath, IconSizeEnum iconsize) {
+        public static BitmapSource GetBitmapFromPath(string filepath, MpIconSize iconsize) {
             IntPtr hIcon = IntPtr.Zero;
             if (Directory.Exists(filepath)) {
                 hIcon = GetIconHandleFromFolderPath(filepath, iconsize);
@@ -197,7 +188,7 @@ namespace MpWpfApp {
             }
         }
 
-        private static IntPtr GetIconHandleFromFilePath(string filepath, IconSizeEnum iconsize) {
+        private static IntPtr GetIconHandleFromFilePath(string filepath, MpIconSize iconsize) {
             var shinfo = new SHFILEINFO();
             const uint SHGFI_SYSICONINDEX = 0x4000;
             const int FILE_ATTRIBUTE_NORMAL = 0x80;
@@ -205,7 +196,7 @@ namespace MpWpfApp {
             return GetIconHandleFromFilePathWithFlags(filepath, iconsize, ref shinfo, FILE_ATTRIBUTE_NORMAL, flags);
         }
 
-        private static IntPtr GetIconHandleFromFolderPath(string folderpath, IconSizeEnum iconsize) {
+        private static IntPtr GetIconHandleFromFolderPath(string folderpath, MpIconSize iconsize) {
             var shinfo = new SHFILEINFO();
 
             const uint SHGFI_ICON = 0x000000100;
@@ -217,7 +208,7 @@ namespace MpWpfApp {
 
         private static IntPtr GetIconHandleFromFilePathWithFlags(
             string filepath,
-            IconSizeEnum iconsize,
+            MpIconSize iconsize,
             ref SHFILEINFO shinfo,
             int fileAttributeFlag,
             uint flags) {

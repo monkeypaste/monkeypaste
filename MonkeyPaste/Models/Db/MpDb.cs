@@ -435,12 +435,14 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPresetParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
             await _connectionAsync.CreateTableAsync<MpBillableItem>();
+            await _connectionAsync.CreateTableAsync<MpCliTransaction>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
-            await _connectionAsync.CreateTableAsync<MpTextToken>();
+            await _connectionAsync.CreateTableAsync<MpCopyItemTransaction>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
             await _connectionAsync.CreateTableAsync<MpDetectedImageObject>();
+            await _connectionAsync.CreateTableAsync<MpDllTransaction>();
             await _connectionAsync.CreateTableAsync<MpHttpTransaction>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
             await _connectionAsync.CreateTableAsync<MpAction>();
@@ -451,6 +453,8 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpSource>();
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
             await _connectionAsync.CreateTableAsync<MpTag>();
+            await _connectionAsync.CreateTableAsync<MpTextAnnotation>();
+            await _connectionAsync.CreateTableAsync<MpTextToken>();
             await _connectionAsync.CreateTableAsync<MpContentToken>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
@@ -1214,11 +1218,11 @@ namespace MonkeyPaste {
         }
 
         public static bool IsConnectedToNetwork() {
-            return MpHelpers.IsConnectedToNetwork();
+            return MpNetworkHelpers.IsConnectedToNetwork();
         }
 
         public static bool IsConnectedToInternet() {
-            return MpHelpers.IsConnectedToInternet();
+            return MpNetworkHelpers.IsConnectedToInternet();
         }
         public static int GetSyncPort() {
             return 44381;
@@ -1230,21 +1234,21 @@ namespace MonkeyPaste {
             if (!IsConnectedToNetwork()) {
                 return "0.0.0.0";
             }
-            return MpHelpers.GetLocalIp4Address();
+            return MpNetworkHelpers.GetLocalIp4Address();
         }
 
         public static string[] GetAllLocalIp4Addresses() {
             if (!IsConnectedToNetwork()) {
                 return new string[] { "0.0.0.0" };
             }
-            return MpHelpers.GetAllLocalIPv4();
+            return MpNetworkHelpers.GetAllLocalIPv4();
         }
 
         public static string GetExternalIp4Address() {
             if (!IsConnectedToInternet()) {
                 return "0.0.0.0";
             }
-            return MpHelpers.GetExternalIp4Address();
+            return MpNetworkHelpers.GetExternalIp4Address();
         }
 
         public static async Task<List<MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {

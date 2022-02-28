@@ -137,8 +137,7 @@ namespace MpWpfApp {
                     iconIdList = new List<int>();
                     var fl = itemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     foreach(var f in fl) {
-                        var iconBmpSrc = MpShellEx.GetBitmapFromPath(f, MpShellEx.IconSizeEnum.MediumIcon32);
-                        var fi = await MpIcon.Create(iconImgBase64: iconBmpSrc.ToBase64String());
+                        var fi = await MpIcon.Create(iconImgBase64: MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(f));
                         iconIdList.Add(fi.Id);
                     }
                 }

@@ -483,8 +483,8 @@ namespace MonkeyPaste {
         }
 
         public static async Task<int> GetCompositeChildCountAsync(int ciid) {
-            string query = string.Format(@"select count(*) from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
-            var result = await MpDb.QueryScalarAsync<int>(query);
+            string query = @"select count(*) from MpCopyItem where fk_ParentCopyItemId=? order by CompositeSortOrderIdx";
+            var result = await MpDb.QueryScalarAsync<int>(query, ciid);
             return result;
         }
 
@@ -493,15 +493,34 @@ namespace MonkeyPaste {
         #region MpTextToken
 
         public static async Task<List<MpTextToken>> GetTemplatesAsync(int ciid) {
-            string query = string.Format(@"select * from MpTextToken where fk_MpCopyItemId={0}", ciid);
-            var result = await MpDb.QueryAsync<MpTextToken>(query);
+            string query = @"select * from MpTextToken where fk_MpCopyItemId=?";
+            var result = await MpDb.QueryAsync<MpTextToken>(query,ciid);
             return result;
         }
 
         public static async Task<MpTextToken> GetTemplateByNameAsync(int ciid, string templateName) {
             // NOTE may need to use '?' below
-            string query = string.Format(@"select * from MpTextToken where fk_MpCopyItemId={0} and TemplateName=?", ciid);
-            var result = await MpDb.QueryAsync<MpTextToken>(query,templateName);
+            string query = @"select * from MpTextToken where fk_MpCopyItemId=? and TemplateName=?";
+            var result = await MpDb.QueryAsync<MpTextToken>(query,ciid,templateName);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        #endregion
+
+        #region MpTextAnnotation
+
+        public static async Task<List<MpTextAnnotation>> GetTextAnnotations(int ciid) {
+            string query = @"select * from MpTextAnnotation where fk_MpCopyItemId=?";
+            var result = await MpDb.QueryAsync<MpTextAnnotation>(query);
+            return result;
+        }
+
+        public static async Task<MpTextAnnotation> GetTextAnnotationByData(int ciid, int sid, string label, string matchValue, string description) {
+            string query = @"select * from MpTextAnnotation where fk_MpCopyItemId=? and fk_SourceId=? and Label=? and MatchValue=? and Description=?";
+            var result = await MpDb.QueryAsync<MpTextAnnotation>(query, ciid, sid,label,matchValue, description);
             if (result == null || result.Count == 0) {
                 return null;
             }

@@ -33,7 +33,7 @@ namespace MonkeyPaste.Plugin {
 
     public class MpPluginIoTypeFormat {
         public bool isDll { get; set; } = false;
-        public bool isCommandLine { get; set; } = false;
+        public bool isCli { get; set; } = false;
         public bool isHttp { get; set; } = false;
     }
 

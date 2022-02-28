@@ -118,7 +118,7 @@
                              Foreground="Black"
                              TabIndex="1"
                              PreviewKeyDown="SelectedTemplateTextBox_PreviewKeyDown"
-                             Text="{Binding SelectedTemplate.TemplateText,
+                             Text="{Binding SelectedTemplate.MatchData,
                                             Mode=TwoWay,
                                             NotifyOnTargetUpdated=True,
                                             NotifyOnSourceUpdated=True,

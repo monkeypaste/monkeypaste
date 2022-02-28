@@ -27,7 +27,7 @@ namespace MonkeyPaste {
                 // since app shutdown cannot effectively be caught every time on start
                 // check if temp file list existed and log file and remove all temps
                 if (File.Exists(_lastTempListFilePath)) {
-                    string[] lastTempFileList = MpFileIo.ReadTextFromFile(_lastTempListFilePath).Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] lastTempFileList = MpFileIoHelpers.ReadTextFromFile(_lastTempListFilePath).Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var lastTempFileToDelete in lastTempFileList) {
                         if (File.Exists(lastTempFileToDelete)) {
                             File.Delete(lastTempFileToDelete);
@@ -47,7 +47,7 @@ namespace MonkeyPaste {
             if(_isLoaded) {
                 Init();
             }
-            MpFileIo.AppendTextToFile(TempFilePath, filePathToAppend);
+            MpFileIoHelpers.AppendTextToFile(TempFilePath, filePathToAppend);
         }
     }
 }

@@ -162,7 +162,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool HasText => !string.IsNullOrEmpty(TemplateText);
+        public bool HasText => !string.IsNullOrEmpty(MatchData);
 
         private bool _isEditingTemplate = false;
         public bool IsEditingTemplate {
@@ -216,21 +216,21 @@ namespace MpWpfApp {
                 }
                 if(Parent.Parent.IsPastingTemplate &&
                     HasText) {
-                    return TemplateText;
+                    return MatchData;
                 }
                 return TextToken.TemplateToken;
             }
         }
 
         private string _templateText = string.Empty;
-        public string TemplateText {
+        public string MatchData {
             get {
                 return _templateText;
             }
             set {
                 if (_templateText != value) {
                     _templateText = value;
-                    OnPropertyChanged(nameof(TemplateText));
+                    OnPropertyChanged(nameof(MatchData));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
                 }
             }
@@ -367,7 +367,7 @@ namespace MpWpfApp {
 
         public void Reset() {
             IsSelected = false;            
-            TemplateText = string.Empty;
+            MatchData = string.Empty;
             IsEditingTemplate = false;
             WasVisited = false;
         }
@@ -440,7 +440,7 @@ namespace MpWpfApp {
             get {
                 return new RelayCommand(
                     () => {
-                        TemplateText = string.Empty;
+                        MatchData = string.Empty;
                     },
                     ()=> {
                         return HasText;
@@ -494,12 +494,12 @@ namespace MpWpfApp {
         public override string ToString() {
             return string.Format(
                 @"Name:{0} Text:{1} Count:{2} IsEditing:{3} IsSelected:{4} WasNew:{5} IsNew:{6}",
-                TemplateName,TemplateText,InstanceCount,IsEditingTemplate?"T":"F",IsSelected?"T":"F",WasNewOnEdit ? "T" : "F",IsNew ? "T" : "F");
+                TemplateName,MatchData,InstanceCount,IsEditingTemplate?"T":"F",IsSelected?"T":"F",WasNewOnEdit ? "T" : "F",IsNew ? "T" : "F");
         }
 
         public object Clone() {
             var nthlvm = new MpTemplateViewModel(Parent, TextToken);
-            nthlvm.TemplateText = TemplateText;
+            nthlvm.MatchData = MatchData;
             return nthlvm;
         }
         #endregion

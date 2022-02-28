@@ -370,7 +370,7 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(PluginFormat.iconUrl)) {
                 IconId = MpPreferences.ThisAppIcon.Id;
             } else {
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl);
+                var bytes = await MpFileIoHelpers.ReadBytesFromUriAsync(PluginFormat.iconUrl);
                 var icon = await MpIcon.Create(
                     iconImgBase64: bytes.ToBase64String(),
                     createBorder: false);
@@ -517,6 +517,22 @@ namespace MpWpfApp {
             return SelectedItem.IsAllValid;
         }
 
+        public bool IsContentTypeValid(MpCopyItemType cit) {
+            bool isOkType = false;
+            switch (cit) {
+                case MpCopyItemType.Text:
+                    isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.Text);
+                    break;
+                case MpCopyItemType.Image:
+                    isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.Image);
+                    break;
+                case MpCopyItemType.FileList:
+                    isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.File);
+                    break;
+            }
+            return isOkType;
+        }
+
         #endregion
 
         #region Protected Methods
@@ -549,68 +565,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        protected virtual async Task<MpCopyItem> ApplyAnalysisToContent(
-            MpCopyItem sourceCopyItem, 
-            MpAnalyzerTransaction trans, 
-            bool suppressWrite) {
-            object request = trans.Request;
-            object response = trans.Response;
-            MpCopyItem targetCopyItem = null;
-
-            if(response is MpPluginResponseFormat prf) {
-                targetCopyItem = await CreateNewContentItem(prf, sourceCopyItem, suppressWrite);
-                await CreateTokenAnnotations(prf,targetCopyItem,suppressWrite);
-            }
-
-            if (suppressWrite == false && targetCopyItem != null) {
-                //create is suppressed when its part of a match expression
-                if (sourceCopyItem.Id != targetCopyItem.Id) {
-                    var pci = await MpDb.GetItemAsync<MpCopyItem>(sourceCopyItem.Id);
-
-                    int parentSortOrderIdx = pci.CompositeSortOrderIdx;
-                    List<MpCopyItem> ppccil = null;
-
-                    if (pci.CompositeParentCopyItemId > 0) {
-                        //when this items parent is a composite child, adjust fk/sort so theres single parent
-                        var ppci = await MpDb.GetItemAsync<MpCopyItem>(pci.CompositeParentCopyItemId);
-                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
-                        ppccil.Insert(0, ppci);
-                    } else {
-                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.Id);
-                        ppccil.Insert(0, pci);
-                    }
-                    ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
-                    for (int i = 0; i < ppccil.Count; i++) {
-                        var cci = ppccil[i];
-                        if (cci.Id == sourceCopyItem.Id) {
-                            targetCopyItem.CompositeParentCopyItemId = sourceCopyItem.Id;
-                            targetCopyItem.CompositeSortOrderIdx = i + 1;
-                            await targetCopyItem.WriteToDatabaseAsync();
-                        } else if (i > parentSortOrderIdx) {
-                            ppccil[i].CompositeSortOrderIdx += 1;
-                            await ppccil[i].WriteToDatabaseAsync();
-                        }
-                    }
-                }
-
-                var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sourceCopyItem.Id);
-                if (scivm != null) {
-                    //analysis content is  linked with visible item in tray
-                    await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
-                }
-                if (!suppressWrite) {
-
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                }
-            }
-
-            if(targetCopyItem == null) {
-                //this should only occur during an action sequece
-                targetCopyItem = sourceCopyItem;
-            }
-
-            return targetCopyItem;
-        }
+        
 
         protected virtual async Task TransformContent() {
             await Task.Delay(1);
@@ -665,7 +620,163 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task<MpCopyItem> CreateNewContentItem(MpPluginResponseFormat prf, MpCopyItem sourceCopyItem, bool suppressWrite = false) {
+        private async Task<MpCopyItem> ProcessTransaction(
+            MpAnalyzerTransaction trans, 
+            MpCopyItem sourceContent, 
+            bool suppressWrite = false) {                       
+            
+            if(trans.Response is MpPluginResponseFormat prf) {                
+                if (prf.message == MpPluginResponseFormat.RETRY_MESSAGE) {
+                    ExecuteAnalysisCommand.Execute(trans.CommandParameter);
+                    //return null to ignore and retry will loop or continue;
+                    return null;
+                }
+                MpCopyItemTransactionType transType = MpCopyItemTransactionType.None;
+                MpISourceTransaction transModel = null;
+                if (AnalyzerPluginFormat.http != null) {
+                    string urlPath;
+                    if (string.IsNullOrEmpty(trans.Request.ToString())) {
+                        urlPath = AnalyzerPluginFormat.http.request.url.raw;
+                    } else if (PluginFormat.Component is MpHttpPlugin httpPlugin) {
+                        urlPath = httpPlugin.GetRequestUri(trans.Request.ToString());
+                    } else {
+                        throw new MpPluginLoaderException("Http Plugin Component does not exist");
+                    }
+                    transType = MpCopyItemTransactionType.Http;
+
+                    transModel = await MpHttpTransaction.Create(
+                        presetId: SelectedItem.AnalyticItemPresetId,
+                        url: urlPath,
+                        urlName: SelectedItem.FullName,
+                        ip: MpNetworkHelpers.GetExternalIp4Address(),
+                        timeSent: trans.RequestTime,
+                        timeReceived: trans.ResponseTime,
+                        bytesSent: trans.Request.ToString().ToByteArray().Length,
+                        bytesReceived: JsonConvert.SerializeObject(prf).ToByteArray().Length,
+                        suppressWrite: suppressWrite);
+
+                } else {
+                    var pf = MpPluginManager.Plugins.FirstOrDefault(x => x.Value.guid == PluginFormat.guid);
+                    if (!string.IsNullOrWhiteSpace(pf.Key)) {
+                        string manifestPath = pf.Key;
+                        string pluginDir = Path.GetDirectoryName(manifestPath);
+                        string pluginName = Path.GetFileName(pluginDir);
+                        string processPath = Path.Combine(pluginDir, pluginName + ".exe");
+
+                        if(PluginFormat.ioType.isCli) {
+                            transType = MpCopyItemTransactionType.Cli;
+
+                            transModel = await MpCliTransaction.Create(
+                                presetId: SelectedItem.AnalyticItemPresetId,
+                                cliPath: processPath,
+                                cliName: SelectedItem.FullName,
+                                workingDirectory: pluginDir,
+                                args: trans.Request.ToString(),
+                                transDateTime: trans.RequestTime,
+                                suppressWrite: suppressWrite);
+                        } else if(PluginFormat.ioType.isDll) {
+                            transType = MpCopyItemTransactionType.Dll;
+
+                            transModel = await MpDllTransaction.Create(
+                                presetId: SelectedItem.AnalyticItemPresetId,
+                                dllPath: processPath,
+                                dllName: SelectedItem.FullName,
+                                args: trans.Request.ToString(),
+                                transDateTime: trans.RequestTime,
+                                suppressWrite: suppressWrite);
+                        } else {
+                            throw new MpPluginLoaderException($"Uknown ioType for plugin defined in '{manifestPath}'");
+                        }
+                    }
+                } 
+
+                if(transModel == null) {
+                    throw new Exception("Unknown error processing analyzer transaction");
+                }                
+
+                var cit = await MpCopyItemTransaction.Create(
+                    transType: transType, 
+                    transObjId: transModel.RootId, 
+                    copyItemId: sourceContent.Id, 
+                    suppressWrite: suppressWrite);
+
+                var source = await MpSource.Create(
+                    copyItemTransactionId: cit.Id,
+                    suppressWrite: suppressWrite);
+
+                var ci = await ApplyResponseToContent(trans,sourceContent,source.Id, trans.Response, suppressWrite);
+
+                return ci;
+            }
+            return null;
+        }
+
+        private async Task<MpCopyItem> ApplyResponseToContent(
+            MpAnalyzerTransaction trans,
+            MpCopyItem sourceCopyItem,
+            int transSourceId,
+            object response,
+            bool suppressWrite) {
+            MpCopyItem targetCopyItem = null;
+
+            if (response is MpPluginResponseFormat prf) {
+                targetCopyItem = await CreateNewContentItem(prf, sourceCopyItem, transSourceId, suppressWrite);                
+            } else {
+                targetCopyItem = sourceCopyItem;
+            }
+            await CreateAnnotations(trans, targetCopyItem, transSourceId, suppressWrite);
+
+            if (suppressWrite == false && targetCopyItem != null) {
+                //create is suppressed when its part of a match expression
+                if (sourceCopyItem.Id != targetCopyItem.Id) {
+                    var pci = await MpDb.GetItemAsync<MpCopyItem>(sourceCopyItem.Id);
+
+                    int parentSortOrderIdx = pci.CompositeSortOrderIdx;
+                    List<MpCopyItem> ppccil = null;
+
+                    if (pci.CompositeParentCopyItemId > 0) {
+                        //when this items parent is a composite child, adjust fk/sort so theres single parent
+                        var ppci = await MpDb.GetItemAsync<MpCopyItem>(pci.CompositeParentCopyItemId);
+                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
+                        ppccil.Insert(0, ppci);
+                    } else {
+                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.Id);
+                        ppccil.Insert(0, pci);
+                    }
+                    ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
+                    for (int i = 0; i < ppccil.Count; i++) {
+                        var cci = ppccil[i];
+                        if (cci.Id == sourceCopyItem.Id) {
+                            targetCopyItem.CompositeParentCopyItemId = sourceCopyItem.Id;
+                            targetCopyItem.CompositeSortOrderIdx = i + 1;
+                            await targetCopyItem.WriteToDatabaseAsync();
+                        } else if (i > parentSortOrderIdx) {
+                            ppccil[i].CompositeSortOrderIdx += 1;
+                            await ppccil[i].WriteToDatabaseAsync();
+                        }
+                    }
+                }
+
+                var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sourceCopyItem.Id);
+                if (scivm != null) {
+                    //analysis content is  linked with visible item in tray
+                    await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
+                }
+                if (!suppressWrite) {
+
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                }
+            }
+
+            if (targetCopyItem == null) {
+                //this should only occur during an action sequece
+                targetCopyItem = sourceCopyItem;
+            }
+
+            return targetCopyItem;
+        }
+
+        private async Task<MpCopyItem> CreateNewContentItem(MpPluginResponseFormat prf, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
             if(prf == null || prf.newContentItem == null) {
                 return sourceCopyItem;
             }
@@ -687,50 +798,61 @@ namespace MpWpfApp {
             return targetCopyItem;
         }
 
-        private async Task CreateTokenAnnotations(MpPluginResponseFormat prf, MpCopyItem sourceCopyItem, bool suppressWrite = false) {
-            if (prf == null || prf.annotations == null) {
+        private async Task CreateAnnotations(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
+            if (trans == null || trans.Response == null || trans.Response == null) {
                 return;
             }
-            await Task.WhenAll(prf.annotations.Select(x => CreateTokenAnnotation(x, sourceCopyItem, suppressWrite)));
+            if(trans.Response is MpPluginResponseFormat prf) {
+
+                await Task.WhenAll(prf.annotations.Select(x => CreateAnnotation(x, sourceCopyItem.Id, trans.RequestContent, transSourceId, suppressWrite)));
+            }
+            
         }
 
-        private async Task CreateTokenAnnotation(MpPluginResponseAnnotationFormat a, MpCopyItem sourceCopyItem, bool suppressWrite = false) {
+        private async Task CreateAnnotation(MpPluginResponseAnnotationFormat a, int copyItemId, object reqContent, int transSourceId, bool suppressWrite = false) {
             if (a == null) {
                 return;
             }
+            double score = 1;
 
-            if(sourceCopyItem.ItemType == MpCopyItemType.Image) {
-                if(a.box != null) {
-                    MpDetectedImageObject contentBox = new MpDetectedImageObject() {
-                        CopyItemId = sourceCopyItem.Id,
-                        X = a.box.x.value,
-                        Y = a.box.y.value,
-                        Width = a.box.width.value,
-                        Height = a.box.height.value,
-                        Label = a.label.value,
-                        Score = a.score.value,
-                        HexColor = a.appearance.color.value,
-                        Guid = System.Guid.NewGuid().ToString()
-                    };
-                    if (a.score != null && (a.minScore != 0 || a.maxScore != 1)) {
-                        //normalize scoring from 0-1
-                        contentBox.Score = (a.maxScore - a.minScore) / contentBox.Score;
-                    }
-
-                    if (!suppressWrite) {
-                        await contentBox.WriteToDatabaseAsync();
-                    }
-                } 
-                
-            } else if(sourceCopyItem.ItemType == MpCopyItemType.Text) {
-                if(a.range != null) {
-                    
-                } 
+            if (a.score != null && (a.minScore != 0 || a.maxScore != 1)) {
+                //normalize scoring from 0-1
+                score = (a.maxScore - a.minScore) / a.score.value;
             }
+            if (a.box != null) {
 
+                MpDetectedImageObject contentBox = await MpDetectedImageObject.Create(
+                    cid: copyItemId,
+                    x: a.box.x.value,
+                    y: a.box.y.value,
+                    w: a.box.width.value,
+                    h: a.box.height.value,
+                    label: a.label.value,
+                    c: score,
+                    hexColor: a.appearance == null || a.appearance.color == null ? null : a.appearance.color.value);                    
+
+                if (!suppressWrite) {
+                    await contentBox.WriteToDatabaseAsync();
+                }
+            } else if(a.label != null || a.description != null) {
+                int sIdx = 0;
+                int eIdx = reqContent.ToString().Length;
+                if (a.range != null) {
+                    sIdx = a.range.rangeStart.value;
+                    eIdx = a.range.rangeEnd.value;
+                }
+                var ta = await MpTextAnnotation.Create(
+                        copyItemId: copyItemId,
+                        sourceId: transSourceId,
+                        matchValue: reqContent.ToString().Substring(sIdx,eIdx-sIdx),
+                        label: a.label == null ? string.Empty : a.label.value,
+                        description: a.description == null ? string.Empty : a.description.value,
+                        score: score,
+                        suppressWrite: suppressWrite);
+            }
             
             if (a.children != null) {
-                await Task.WhenAll(a.children.Select(x => CreateTokenAnnotation(x, sourceCopyItem, suppressWrite)));
+                await Task.WhenAll(a.children.Select(x => CreateAnnotation(x, copyItemId,reqContent,transSourceId, suppressWrite)));
             }
         }
 
@@ -749,7 +871,9 @@ namespace MpWpfApp {
             }
         }
 
-        private string CreateRequest(MpCopyItem ci) {
+        private string CreateRequest(MpCopyItem ci, out object requestContent) {
+            object outRequestContent = null;
+
             var requestItems = new List<MpAnalyzerPluginRequestItemFormat>();
 
             foreach (var kvp in SelectedItem.ParamLookup) {
@@ -765,7 +889,7 @@ namespace MpWpfApp {
                     if (paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.FilePath) {
                         requestItem = new MpAnalyzerPluginRequestItemFormat() {
                             enumId = kvp.Key,
-                            value = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), data.ToByteArray(), true)
+                            value = MpFileIoHelpers.WriteByteArrayToFile(Path.GetTempFileName(), data.ToByteArray(), true)
                         };
                     } else if(paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.PlainText) {
                         requestItem = new MpAnalyzerPluginRequestItemFormat() {
@@ -783,6 +907,12 @@ namespace MpWpfApp {
                             value = data.ToString()
                         };
                     }
+                    if (outRequestContent == null) {
+                        outRequestContent = paramFormat.values;
+                    } else {
+                        // TODO deal w/ multiple hiddens somehow or not need to look at all the manifests
+                        Debugger.Break();
+                    }
                     
                 } else {
                     requestItem = new MpAnalyzerPluginRequestItemFormat() {
@@ -792,7 +922,7 @@ namespace MpWpfApp {
                 }
                 requestItems.Add(requestItem);
             }
-
+            requestContent = outRequestContent;
             return JsonConvert.SerializeObject(requestItems);
         }
 
@@ -830,18 +960,22 @@ namespace MpWpfApp {
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedItem));
 
-                MpAnalyzerTransaction transaction = new MpAnalyzerTransaction();
-                string requestStr = CreateRequest(sourceCopyItem);
+                string requestStr = CreateRequest(sourceCopyItem, out object requestContent);
+                var reqTime = DateTime.Now;
                 object responseData = await GetResponse(requestStr);
+                var respTime = DateTime.Now;
 
                 LastTransaction = new MpAnalyzerTransaction() {
+                    RequestTime = reqTime,
+                    ResponseTime = respTime,
+                    CommandParameter = args,
                     Request = requestStr,
-                    Response = responseData
+                    Response = responseData,
+                    RequestContent = requestContent
                 };
-                
-                LastResultContentItem = await ApplyAnalysisToContent(
-                    sourceCopyItem, LastTransaction, suppressCreateItem);
 
+                LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem, suppressCreateItem);                
+                
                 OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
 
                 IsBusy = false;
@@ -874,18 +1008,8 @@ namespace MpWpfApp {
                 return false;
             }
 
-            bool isOkType = false;
-            switch(sci.ItemType) {
-                case MpCopyItemType.Text:
-                    isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.Text);
-                    break;
-                case MpCopyItemType.Image:
-                    isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.Image);
-                    break;
-                case MpCopyItemType.FileList:
-                    isOkType = InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.File);
-                    break;
-            }
+            bool isOkType = IsContentTypeValid(sci.ItemType);
+
             spvm.Items.ForEach(x => x.Validate());
             return spvm.IsAllValid && 
                    isOkType;

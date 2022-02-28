@@ -38,7 +38,6 @@ namespace MonkeyPaste.Plugin {
 
     public class MpAnalyzerPluginFormat {
         public MpHttpTransactionFormat http { get; set; }
-        public MpDllTransactionFormat dll { get; set; }
 
         public MpAnalyzerPluginInputFormat inputType { get; set; } = null;
         public MpAnalyzerPluginOutputFormat outputType { get; set; } = null;
@@ -103,12 +102,6 @@ namespace MonkeyPaste.Plugin {
         public string maximum { get; set; }
         public string tickFrequency { get; set; }
     }
-
-    //public abstract class MpAnalyzerResponseValueFormatBase : MpIDescriptor {
-    //    public string label { get; set; } = string.Empty;
-    //    public string description { get; set; } = string.Empty;
-    //    public double score { get; set; } = 0;
-    //}
 
     public class MpAnalyzerPresetFormat {
         public string guid { get; set; }

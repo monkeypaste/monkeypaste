@@ -517,34 +517,22 @@ namespace MonkeyPaste {
                 Console.WriteLine($"With args: {args}");
                 reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
             }
-            
-            using (var client = new HttpClient()) {
-                using (var request = new HttpRequestMessage()) {
-                    request.Method = RequestMethod;
-                    if (_httpTransactionFormat != null &&
-                        _httpTransactionFormat.request != null &&
-                       _httpTransactionFormat.request.header != null) {
-                        foreach(var kvp in _httpTransactionFormat.request.header) {
-                            if (kvp.type == "guid") {
-                                request.Headers.Add(kvp.key, System.Guid.NewGuid().ToString());
-                            } else if (kvp.valuePath != null) {
-                                kvp.valuePath.SetValue(null, reqParams, 0);
-                                request.Headers.Add(kvp.key, kvp.valuePath.value);
-                            } else {
-                                request.Headers.Add(kvp.key, kvp.value);
-                            }
-                            Console.WriteLine($"Header Item: key: '{kvp.key}' value: '{(kvp.valuePath != null ? kvp.valuePath.value : kvp.value)}'");
-                        }
-                        
-                    }
-                    request.RequestUri = CreateRequestUri();
-                    request.Content = CreateRequestContent();
 
+            using(var client = new HttpClient()) {
+                using (var request = CreateRequestMessage(args)) {
                     try {
                         var response = await client.SendAsync(request);
 
                         if (!response.IsSuccessStatusCode) {
-                            Debugger.Break();
+                            var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
+                                                    notificationType: MpNotificationType.BadHttpRequest,
+                                                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
+                                                    msg: $"{response.ReasonPhrase}");
+                            if(userAction == MpNotificationUserActionType.Retry) {
+                                return new MpPluginResponseFormat() {
+                                    message = MpPluginResponseFormat.RETRY_MESSAGE
+                                };
+                            }
                         }
 
                         string responseStr = await response.Content.ReadAsStringAsync();
@@ -565,14 +553,59 @@ namespace MonkeyPaste {
                         Console.WriteLine("Error performing analysis w/ plugin: " + _httpTransactionFormat.name);
                         Console.WriteLine(ex);
                         return null;
-                    }                    
+                    }
                 }
             }
+        }
+
+        public string GetRequestUri(object args) {
+            var reqMsg = CreateRequestMessage(args);
+            if(reqMsg == null) {
+                return null;
+            }
+            return reqMsg.RequestUri.AbsoluteUri;
         }
 
         #endregion
 
         #region Private Methods
+
+        private HttpRequestMessage CreateRequestMessage(object args) {
+            reqParams = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
+            if (reqParams == null) {
+                Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
+                Console.WriteLine($"With args: {args}");
+                reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
+            }
+
+            using (var client = new HttpClient()) {
+                using (var request = new HttpRequestMessage()) {
+                    request.Method = RequestMethod;
+                    CreateHeaders(request);
+                    request.RequestUri = CreateRequestUri();
+                    request.Content = CreateRequestContent();
+                    return request;
+                }
+            }
+        }
+
+        private void CreateHeaders(HttpRequestMessage request) {
+            if (_httpTransactionFormat != null &&
+                _httpTransactionFormat.request != null &&
+                _httpTransactionFormat.request.header != null) {
+                foreach (var kvp in _httpTransactionFormat.request.header) {
+                    if (kvp.type == "guid") {
+                        request.Headers.Add(kvp.key, System.Guid.NewGuid().ToString());
+                    } else if (kvp.valuePath != null) {
+                        kvp.valuePath.SetValue(null, reqParams, 0);
+                        request.Headers.Add(kvp.key, kvp.valuePath.value);
+                    } else {
+                        request.Headers.Add(kvp.key, kvp.value);
+                    }
+                    Console.WriteLine($"Header Item: key: '{kvp.key}' value: '{(kvp.valuePath != null ? kvp.valuePath.value : kvp.value)}'");
+                }
+            }
+        }
 
         private Uri CreateRequestUri() {
             if (_httpTransactionFormat == null ||
@@ -793,6 +826,7 @@ namespace MonkeyPaste {
             }
             return a;
         }
+
         #endregion
     }
 }

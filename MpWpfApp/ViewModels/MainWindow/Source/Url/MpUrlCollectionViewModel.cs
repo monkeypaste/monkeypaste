@@ -10,6 +10,7 @@ using System.Windows.Input;
 using MonkeyPaste;
 using System.IO;
 using Microsoft.Office.Interop.Outlook;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpUrlCollectionViewModel : 
@@ -109,9 +110,9 @@ namespace MpWpfApp {
                 MpUrl url = null;
                 var uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
                 if (uvm == null) {
-                    var iconBmpSrc = MpHelpers.GetUrlFavicon(UrlPath);
-                    string title = await MpHelpers.GetUrlTitle(UrlPath);
-                    var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
+                    string iconBase64Str = await MpUrlHelpers.GetUrlFavIconAsync(UrlPath);
+                    string title = await MpUrlHelpers.GetUrlTitle(UrlPath);
+                    var icon = await MpIcon.Create(iconBase64Str);
                     url = await MpUrl.Create(UrlPath, title);
                     uvm = await CreateUrlViewModel(url);
                 }

@@ -51,27 +51,6 @@ namespace MpWpfApp {
             return rtb.Document.Blocks.Any(x => x is Table);
         }
 
-        public static Hyperlink CreateAccessibleHyperlink(string uri) {
-            uri = MonkeyPaste.MpHelpers.GetFullyFormattedUrl(uri);
-            if (Uri.IsWellFormedUriString(uri,UriKind.Absolute)) {
-                var h = new Hyperlink();
-                h.NavigateUri = new Uri(uri);
-                h.Inlines.Add(uri);
-                var click = (MouseButtonEventHandler)((s4, e4) => {
-                    if (h.NavigateUri != null) {
-                        OpenUrl(h.NavigateUri.ToString());
-                    }
-                });
-                h.IsEnabled = true;
-                h.MouseLeftButtonDown += click;
-
-                h.Unloaded += (s, e) => {
-                    h.MouseLeftButtonDown -= click;
-                };
-            }
-            return null;
-        }
-
         public static void ApplyBackgroundBrushToRangeList(ObservableCollection<ObservableCollection<TextRange>> rangeList, Brush bgBrush, CancellationToken ct) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;
@@ -1632,38 +1611,29 @@ namespace MpWpfApp {
         //    }
         //    return null;
         //}
-        public static string GetLocalIp4Address() {
-            return MonkeyPaste.MpHelpers.GetLocalIp4Address();
-            //string localIP;
-            //using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0)) {
-            //    socket.Connect("8.8.8.8", 65530);
-            //    IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
-            //    localIP = endPoint.Address.ToString();
-            //}
-            //return localIP;
-            //IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            //foreach (var ip in ipHostInfo.AddressList) { 
-            //    if(ip.IsIPv6LinkLocal || ip.IsIPv6SiteLocal || ip.IsIPv6Multicast || ip.IsIPv6Teredo) {
-            //        continue;
-            //    }
-            //    string a = ip.MapToIPv4().ToString();
-            //    MonkeyPaste.MpConsole.WriteLine(a);
-            //}
-            //IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];
-            //if (ipAddress != null) {
-            //    return ipAddress.MapToIPv4().ToString();
-            //}
-            //return "0.0.0.0";
-        }
-
-        public static string GetExternalIp4Address() {
-            return MonkeyPaste.MpHelpers.GetExternalIp4Address();
-            //return new System.Net.WebClient().DownloadString("https://api.ipify.org");
-        }
-
-        public static bool IsConnectedToNetwork() {
-            return MonkeyPaste.MpHelpers.IsConnectedToNetwork();            
-        }
+        //public static string GetLocalIp4Address() {
+        //    return MonkeyPaste.MpHelpers.GetLocalIp4Address();
+        //    //string localIP;
+        //    //using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0)) {
+        //    //    socket.Connect("8.8.8.8", 65530);
+        //    //    IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+        //    //    localIP = endPoint.Address.ToString();
+        //    //}
+        //    //return localIP;
+        //    //IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+        //    //foreach (var ip in ipHostInfo.AddressList) { 
+        //    //    if(ip.IsIPv6LinkLocal || ip.IsIPv6SiteLocal || ip.IsIPv6Multicast || ip.IsIPv6Teredo) {
+        //    //        continue;
+        //    //    }
+        //    //    string a = ip.MapToIPv4().ToString();
+        //    //    MonkeyPaste.MpConsole.WriteLine(a);
+        //    //}
+        //    //IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];
+        //    //if (ipAddress != null) {
+        //    //    return ipAddress.MapToIPv4().ToString();
+        //    //}
+        //    //return "0.0.0.0";
+        //}
 
         public static bool IsConnectedToInternet() {
             try {
@@ -1682,92 +1652,7 @@ namespace MpWpfApp {
                 return false;
             }
         }
-        public static async Task<string> GetUrlTitle(string url) {
-            string urlSource = await GetHttpSourceCode(url);
 
-            //sdf<title>poop</title>
-            //pre 3
-            //post 14
-            return GetXmlElementContent(urlSource, @"title");
-        }
-
-        public static string GetXmlElementContent(string xml, string element) {
-            if (string.IsNullOrEmpty(xml) || string.IsNullOrEmpty(element)) {
-                return string.Empty;
-            }
-            element = element.Replace(@"<", string.Empty).Replace(@"/>", string.Empty);
-            element = @"<" + element + @">";
-            var strl = xml.Split(new string[] { element }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            if(strl.Count > 1) {
-                element = element.Replace(@"<", @"</");
-                return strl[1].Substring(0, strl[1].IndexOf(element));
-            }
-            return string.Empty;
-            //int sIdx = xml.IndexOf(element);
-            //if (sIdx < 0) {
-            //    return string.Empty;
-            //}
-            //sIdx += element.Length;
-            //element = element.Replace(@"<", @"</");
-            //int eIdx = xml.IndexOf(element);
-            //if (eIdx < 0) {
-            //    return string.Empty;
-            //}
-            //return xml.Substring(sIdx, eIdx - sIdx);
-        }
-        
-        public static async Task<string> GetHttpSourceCode(string url) {
-            if(!IsValidUrl(url)) {
-                return string.Empty;
-            }
-
-            using (HttpClient client = new HttpClient()) {
-                using (HttpResponseMessage response = client.GetAsync(url).Result) {
-                    using (HttpContent content = response.Content) {
-                        return await content.ReadAsStringAsync();
-                    }
-                }
-            }
-        }        
-
-        public static bool IsValidUrl(string str) {
-            bool hasValidExtension = false;
-            string lstr = str.ToLower();
-            foreach (var ext in _domainExtensions) {
-                if (lstr.Contains(ext)) {
-                    hasValidExtension = true;
-                    break;
-                }
-            }
-            if (!hasValidExtension) {
-                return false;
-            }
-            return MpRegEx.IsMatch(MpSubTextTokenType.Uri,str);//Regex.Match(str, , RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture);            
-        }
-
-        public static BitmapSource GetUrlFavicon(String url, int resolution = 128) {
-            try {
-                string urlDomain = MonkeyPaste.MpHelpers.GetUrlDomain(url);
-                Uri favicon = new Uri(
-                    string.Format(
-                        @"https://www.google.com/s2/favicons?sz={0}&domain_url={1}",
-                        resolution,
-                        urlDomain)
-                    , UriKind.Absolute);
-                var img = new BitmapImage(favicon);
-
-                if(_defaultFavIcon == null) {
-                    _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
-                }
-                if((img as BitmapSource).IsEqual(_defaultFavIcon)) {
-                    return null;
-                }
-                return img;
-            } catch(Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: "+ex);
-                return null;
-            }
-        }
 
         public static BitmapSource ConvertUrlToQrCode(string url) {
             using (var qrGenerator = new QRCodeGenerator()) {

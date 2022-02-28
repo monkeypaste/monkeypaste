@@ -612,8 +612,8 @@ namespace MpWpfApp {
                                         break;
                                     case MpSubTextTokenType.Uri:
                                         try {
-                                            string urlText = MonkeyPaste.MpHelpers.GetFullyFormattedUrl(linkText);
-                                            if (MpHelpers.IsValidUrl(urlText) /*&&
+                                            string urlText = MonkeyPaste.MpUrlHelpers.GetFullyFormattedUrl(linkText);
+                                            if (MpUrlHelpers.IsValidUrl(urlText) /*&&
                                                    Uri.IsWellFormedUriString(urlText, UriKind.RelativeOrAbsolute)*/) {
                                                 hl.NavigateUri = new Uri(urlText);
                                             } else {

@@ -83,6 +83,13 @@ namespace MonkeyPaste {
 
 
         #region MpICopyItemSource Implementation
+
+        [Ignore]
+        public bool IsDll => false;
+
+        [Ignore]
+        public bool IsExe => false;
+
         [Ignore]
         public bool IsRejected => IsAppRejected;
 
@@ -105,7 +112,8 @@ namespace MonkeyPaste {
         public static async Task<MpApp> Create(
             string appPath = "", 
             string appName = "", 
-            MpIcon icon = null) {
+            MpIcon icon = null,
+            bool suppressWrite = false) {
             var dupApp = await MpDataModelProvider.GetAppByPath(appPath);
             if (dupApp != null) {
                 dupApp = await MpDb.GetItemAsync<MpApp>(dupApp.Id);
@@ -122,6 +130,15 @@ namespace MonkeyPaste {
                     PlatformType = MpPreferences.ThisDeviceType
                 };
                 await thisDevice.WriteToDatabaseAsync();
+            }
+
+            if(icon == null) {
+                string iconImgBase64 = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath);
+
+                icon = await MpIcon.Create(
+                    iconImgBase64: iconImgBase64,
+                    createBorder: true,
+                    suppressWrite: suppressWrite);
             }
             var newApp = new MpApp() {
                 AppGuid = System.Guid.NewGuid(),

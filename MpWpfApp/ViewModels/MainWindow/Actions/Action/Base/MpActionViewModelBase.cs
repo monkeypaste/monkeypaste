@@ -4,6 +4,7 @@ using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -635,6 +636,8 @@ namespace MpWpfApp {
             }
 
             avm.ParentActionViewModel = this;
+            OnActionComplete += avm.OnActionTriggered;
+
             await avm.InitializeAsync(a);
 
             return avm;
@@ -676,6 +679,7 @@ namespace MpWpfApp {
             OnActionComplete?.Invoke(this, arg);
         }
 
+        
         #endregion
 
         #region MpIMatchTrigger Implementation
@@ -706,6 +710,19 @@ namespace MpWpfApp {
             }
         }
 
+        protected void FinishPerformingAction(object arg) {
+            OnActionComplete?.Invoke(this, arg);
+        }
+
+        protected virtual MpActionOutput GetInput(object arg) {
+            MpActionOutput argInput = new MpActionOutput();
+            if (arg is MpCopyItem) {
+                argInput.CopyItem = arg as MpCopyItem;
+            } else if (arg is MpActionOutput) {
+                argInput = arg as MpActionOutput;
+            }
+            return argInput;
+        }
 
         protected virtual async Task<bool> Validate() {
             if(!IsRootAction && ParentActionViewModel == null) {
@@ -726,7 +743,9 @@ namespace MpWpfApp {
             return IsValid;
         }
 
-        protected virtual async Task Enable() { await Task.Delay(1); }
+        protected virtual async Task Enable() { 
+            await Task.Delay(1); 
+        }
 
         protected virtual async Task Disable() { await Task.Delay(1); }
 
@@ -746,6 +765,23 @@ namespace MpWpfApp {
         private async Task UpdateSortOrder() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
             await Task.WhenAll(Items.Where(x=>x.GetType() != typeof(MpEmptyActionViewModel)).Select(x => x.Action.WriteToDatabaseAsync()));
+        }
+
+        public string GetUniqueActionName(string prefix) {
+            int uniqueIdx = 1;
+            string testName = string.Format(
+                                        @"{0}{1}",
+                                        prefix.ToLower(),
+                                        uniqueIdx);
+
+            while (Parent.AllSelectedTriggerActions.Any(x => x.Label.ToLower() == testName)) {
+                uniqueIdx++;
+                testName = string.Format(
+                                        @"{0}{1}",
+                                        prefix.ToLower(),
+                                        uniqueIdx);
+            }
+            return prefix + uniqueIdx;
         }
 
         private void MpActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -832,22 +868,25 @@ namespace MpWpfApp {
                 }
                 
                 if (newIsEnabledState) {
+                    //if(Label == "Detect Language") {
+                    //    Debugger.Break();
+                    //}
                     await Validate();
                     if (!IsValid) {
                         IsEnabled = null;
                     } else {
                         await Enable();
-                        if(ParentActionViewModel != null) {
-                            ParentActionViewModel.OnActionComplete += OnActionTriggered;
-                        }
+                        //if(ParentActionViewModel != null) {
+                        //    ParentActionViewModel.OnActionComplete += OnActionTriggered;
+                        //}
                         IsEnabled = true;
                         LastIsEnabledState = true;
                     }
                 } else {
                     await Disable();
-                    if(ParentActionViewModel != null) {
-                        ParentActionViewModel.OnActionComplete -= OnActionTriggered;
-                    }
+                    //if(ParentActionViewModel != null) {
+                    //    ParentActionViewModel.OnActionComplete -= OnActionTriggered;
+                    //}
                     IsEnabled = false;
                     LastIsEnabledState = false;
                 }
@@ -882,6 +921,7 @@ namespace MpWpfApp {
                  MpActionType at = (MpActionType)args;
                  MpAction na = await MpAction.Create(
                                          actionType: at,
+                                         label: GetUniqueActionName(at.ToString()),
                                          parentId: ActionId,
                                          sortOrderIdx: Items.Count,
                                          location: Parent.FindOpenDesignerLocation(Location).ToMpPoint());

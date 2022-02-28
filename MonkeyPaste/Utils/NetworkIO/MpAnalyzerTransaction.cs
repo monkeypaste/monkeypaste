@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpAnalyzerTransaction {
+        public DateTime RequestTime { get; set; }
+        public DateTime? ResponseTime { get; set; }
+
+        public object CommandParameter { get; set; }
+
         public object Request { get; set; }
         public object Response { get; set; }
+
+        public object RequestContent { get; set; }
     }
 }

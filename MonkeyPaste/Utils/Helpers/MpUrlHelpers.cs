@@ -1,501 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using FFImageLoading.Work;
-using SkiaSharp;
-using Xamarin.Forms;
-using Xamarin.Essentials;
-using System.Threading.Tasks;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Numerics;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography.X509Certificates;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Prng;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.X509;
-using Org.BouncyCastle.Utilities;
-using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Asn1.Pkcs;
-using Org.BouncyCastle.Crypto.Operators;
-using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Pkcs;
-using Org.BouncyCastle.Asn1;
-using Org.BouncyCastle.OpenSsl;
-using Org.BouncyCastle.Crypto.Parameters;
-using System.Net.Sockets;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public static class MpHelpers {
-
-        private static Random _rand;
-        public static Random Rand { 
-            get {
-                if(_rand == null) {
-                    _rand = new Random((int)DateTime.Now.Ticks);
-                }
-                return _rand;
-            }
-        }
-
-        #region Documents
-
-        public static string Diff(string str1, string str2) {
-            if (str1 == null) {
-                return str2;
-            }
-            if (str2 == null) {
-                return str1;
-            }
-
-            List<string> set1 = str1.Split(' ').Distinct().ToList();
-            List<string> set2 = str2.Split(' ').Distinct().ToList();
-
-            var diff = set2.Count() > set1.Count() ? set2.Except(set1).ToList() : set1.Except(set2).ToList();
-
-            return string.Join("", diff);
-        }
-
-        public static string LoadTextResource(string resourcePath) {
-            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpCopyItem)).Assembly;
-            var stream = assembly.GetManifestResourceStream(resourcePath); 
-            using (var reader = new System.IO.StreamReader(stream)) {
-                var res = reader.ReadToEnd();
-                return res;
-            }
-        }
-        public static SKBitmap LoadBitmapResource(string resourcePath) {
-            // Ensure "this" is an object that is part of your implementation within your Xamarin forms project
-            var assembly = typeof(MpHelpers).GetTypeInfo().Assembly;
-            byte[] buffer = null;
-
-            using (System.IO.Stream s = assembly.GetManifestResourceStream(resourcePath)) {
-                if (s != null) {
-                    long length = s.Length;
-                    buffer = new byte[length];
-                    s.Read(buffer, 0, (int)length);
-                }
-            }
-
-            return new MpImageConverter().Convert(buffer,typeof(SKBitmap)) as SKBitmap;
-        }
-
-        
-        #endregion
-
-        #region System
-
-        public static int ParseEnumValue(Type enumType, string typeStr) {
-            for (int i = 0; i < Enum.GetValues(enumType).Length; i++) {
-                if (Enum.GetName(enumType, i).ToLower() == typeStr.ToLower()) {
-                    return i;
-                }
-            }
-            return 0;
-        }
-
-        #endregion
-
-        #region Visual
-
-        private static List<List<Brush>> _ContentColors = new List<List<Brush>> {
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(248, 160, 174)),
-                    new SolidColorBrush(Color.FromRgb(243, 69, 68)),
-                    new SolidColorBrush(Color.FromRgb(229, 116, 102)),
-                    new SolidColorBrush(Color.FromRgb(211, 159, 161)),
-                    new SolidColorBrush(Color.FromRgb(191, 53, 50))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(252, 168, 69)),
-                    new SolidColorBrush(Color.FromRgb(251, 108, 40)),
-                    new SolidColorBrush(Color.FromRgb(253, 170, 130)),
-                    new SolidColorBrush(Color.FromRgb(189, 141, 103)),
-                    new SolidColorBrush(Color.FromRgb(177, 86, 55))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(215, 157, 60)),
-                    new SolidColorBrush(Color.FromRgb(168, 123, 82)),
-                    new SolidColorBrush(Color.FromRgb(214, 182, 133)),
-                    new SolidColorBrush(Color.FromRgb(162, 144, 122)),
-                    new SolidColorBrush(Color.FromRgb(123, 85, 72))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(247, 245, 144)),
-                    new SolidColorBrush(Color.FromRgb(252, 240, 78)),
-                    new SolidColorBrush(Color.FromRgb(239, 254, 185)),
-                    new SolidColorBrush(Color.FromRgb(198, 193, 127)),
-                    new SolidColorBrush(Color.FromRgb(224, 200, 42))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(189, 254, 40)),
-                    new SolidColorBrush(Color.FromRgb(143, 254, 115)),
-                    new SolidColorBrush(Color.FromRgb(217, 231, 170)),
-                    new SolidColorBrush(Color.FromRgb(172, 183, 38)),
-                    new SolidColorBrush(Color.FromRgb(140, 157, 45))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(50, 255, 76)),
-                    new SolidColorBrush(Color.FromRgb(68, 199, 33)),
-                    new SolidColorBrush(Color.FromRgb(193, 214, 135)),
-                    new SolidColorBrush(Color.FromRgb(127, 182, 99)),
-                    new SolidColorBrush(Color.FromRgb(92, 170, 58))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(54, 255, 173)),
-                    new SolidColorBrush(Color.FromRgb(32, 195, 178)),
-                    new SolidColorBrush(Color.FromRgb(170, 206, 160)),
-                    new SolidColorBrush(Color.FromRgb(160, 201, 197)),
-                    new SolidColorBrush(Color.FromRgb(32, 159, 148))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(96, 255, 227)),
-                    new SolidColorBrush(Color.FromRgb(46, 238, 249)),
-                    new SolidColorBrush(Color.FromRgb(218, 253, 233)),
-                    new SolidColorBrush(Color.FromRgb(174, 193, 208)),
-                    new SolidColorBrush(Color.FromRgb(40, 103, 146))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(149, 204, 243)),
-                    new SolidColorBrush(Color.FromRgb(43, 167, 237)),
-                    new SolidColorBrush(Color.FromRgb(215, 244, 248)),
-                    new SolidColorBrush(Color.FromRgb(153, 178, 198)),
-                    new SolidColorBrush(Color.FromRgb(30, 51, 160))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(99, 141, 227)),
-                    new SolidColorBrush(Color.FromRgb(22, 127, 193)),
-                    new SolidColorBrush(Color.FromRgb(201, 207, 233)),
-                    new SolidColorBrush(Color.FromRgb(150, 163, 208)),
-                    new SolidColorBrush(Color.FromRgb(52, 89, 170))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(157, 176, 255)),
-                    new SolidColorBrush(Color.FromRgb(148, 127, 220)),
-                    new SolidColorBrush(Color.FromRgb(216, 203, 233)),
-                    new SolidColorBrush(Color.FromRgb(180, 168, 192)),
-                    new SolidColorBrush(Color.FromRgb(109, 90, 179))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(221, 126, 230)),
-                    new SolidColorBrush(Color.FromRgb(186, 141, 200)),
-                    new SolidColorBrush(Color.FromRgb(185, 169, 231)),
-                    new SolidColorBrush(Color.FromRgb(203, 178, 200)),
-                    new SolidColorBrush(Color.FromRgb(170, 90, 179))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(225, 103, 164)),
-                    new SolidColorBrush(Color.FromRgb(252, 74, 210)),
-                    new SolidColorBrush(Color.FromRgb(238, 233, 237)),
-                    new SolidColorBrush(Color.FromRgb(195, 132, 163)),
-                    new SolidColorBrush(Color.FromRgb(205, 60, 117))
-                },
-                new List<Brush> {
-                    new SolidColorBrush(Color.FromRgb(255, 255, 255)),
-                    new SolidColorBrush(Color.FromRgb(223, 223, 223)),
-                    new SolidColorBrush(Color.FromRgb(187, 187, 187)),
-                    new SolidColorBrush(Color.FromRgb(137, 137, 137)),
-                    new SolidColorBrush(Color.FromRgb(65, 65, 65))
-                }
-            };
-
-        public static Brush GetContentColor(int c, int r) {
-            return _ContentColors[c][r];
-        }
-        public static List<KeyValuePair<SKColor, int>> GetHistogram(SKBitmap bitmap) {
-            var countDictionary = new Dictionary<SKColor, int>();
-            for (int x = 0; x < bitmap.Width; x++) {
-                for (int y = 0; y < bitmap.Height; y++) {
-                    SKColor currentColor = bitmap.GetPixel(x, y);
-                    //if (currentColor.Alpha == 0) {
-                    //    continue;
-                    //}
-                    //If a record already exists for this color, set the count, otherwise just set it as 0
-                    int currentCount = countDictionary.ContainsKey(currentColor) ? countDictionary[currentColor] : 0;
-
-                    if (currentCount == 0) {
-                        //If this color doesnt already exists in the dictionary, add it
-                        countDictionary.Add(currentColor, 1);
-                    } else {
-                        //If it exists, increment the value and update it
-                        countDictionary[currentColor] = currentCount + 1;
-                    }
-                }
-            }
-            //order the list from most used to least used before returning
-            return countDictionary.OrderByDescending(o => o.Value).ToList();
-        }
-        public static List<string> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
-            //var sw = new Stopwatch();
-            //sw.Start();
-
-            var primaryIconColorList = new List<string>();
-            List<KeyValuePair<SKColor, int>> hist = GetHistogram(skbmp);
-            //foreach (var kvp in hist) {
-            //    //var c = Color.FromRgba(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
-            //    SKColor c = kvp.Key;
-            //    c = new SKColor(c.Red, c.Green, c.Blue, 255);
-            //    //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
-            //    if (primaryIconColorList.Count == listCount) {
-            //        break;
-            //    }
-
-            //    //between 0-255 where 0 is black 255 is white
-            //    var rgDiff = Math.Abs(c.Red - c.Green);
-            //    var rbDiff = Math.Abs(c.Red - c.Blue);
-            //    var gbDiff = Math.Abs(c.Green - c.Blue);
-            //    var totalDiff = rgDiff + rbDiff + gbDiff;
-
-            //    //0-255 0 is black
-            //    var grayScaleValue = c.ToGrayScale().Red; //0.2126 * c.R + 0.7152 * c.G + 0.0722 * c.B;
-            //    var relativeDist = 100;// primaryIconColorList.Count == 0 ? 100 : primaryIconColorList[primaryIconColorList.Count - 1].ToSkColor().ColorDistance(c);// ColorDistance(Color.FromHex(), c);
-            //    if (totalDiff > 50 &&
-            //        grayScaleValue > 50 &&
-            //        relativeDist > 15) {
-            //        primaryIconColorList.Add(c.ToString());
-            //    }
-            //}
-
-            //if only 1 color found within threshold make random list
-            for (int i = primaryIconColorList.Count; i < listCount; i++) {
-                primaryIconColorList.Add(GetRandomColor().ToHex());
-            }
-
-            foreach(var c in primaryIconColorList) {
-                Console.WriteLine(c);
-            }
-            //sw.Stop();
-            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
-            return primaryIconColorList;
-        }
-
-        public static double ColorDistance(SKColor e1, SKColor e2) {
-            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
-            long rmean = (long)((e1.Red + e2.Red) / 2);
-            long r = (long)(e1.Red - e2.Red);
-            long g = (long)(e1.Green - e2.Green);
-            long b = (long)(e1.Blue - e2.Blue);
-            double max = 764.83331517396653;
-            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
-            return d / max;
-        }
-
-        public static double ColorDistance(Color e1, Color e2) {
-            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
-            long rmean = ((long)(e1.R*255) + (long)(e2.R*255)) / 2;
-            long r = (long)(e1.R * 255) - (long)(e2.R * 255);
-            long g = (long)(e1.G * 255) - (long)(e2.G * 255);
-            long b = (long)(e1.B * 255) - (long)(e2.B * 255);
-            double max = 764.83331517396653;
-            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
-            return d / max;
-        }
-
-        public static bool IsBright(Color c, int brightThreshold = 150) {
-            double s = c.R < 1 || c.G < 1 || c.B < 1 ? 255 : 1;
-            int grayVal = (int)Math.Sqrt(
-                (c.R * s) * (c.R * s) * .299 +
-                (c.G * s) * (c.G * s) * .587 +
-                (c.B * s) * (c.B * s) * .114);
-            return grayVal > brightThreshold;
-        }
-
-        public static SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {
-            var c = solidColorBrush.Color;
-            solidColorBrush.Color = Color.FromRgba(c.R, c.G, c.B, (double)alpha);
-            return solidColorBrush;
-        }
-
-        public static SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, double correctionFactor) {
-            if (correctionFactor == 0.0f) {
-                return b;
-            }
-            double red = (double)b.Color.R;
-            double green = (double)b.Color.G;
-            double blue = (double)b.Color.B;
-
-            if (correctionFactor < 0) {
-                correctionFactor = 1 + correctionFactor;
-                red *= correctionFactor;
-                green *= correctionFactor;
-                blue *= correctionFactor;
-            } else {
-                red = (255 - red) * correctionFactor + red;
-                green = (255 - green) * correctionFactor + green;
-                blue = (255 - blue) * correctionFactor + blue;
-            }
-
-            return new SolidColorBrush(Color.FromRgba((byte)red, (byte)green, (byte)blue, b.Color.A));
-        }
-
-        public static Brush GetDarkerBrush(Brush b) {
-            return ChangeBrushBrightness((SolidColorBrush)b, -0.5);
-        }
-
-        public static Brush GetLighterBrush(Brush b) {
-            return ChangeBrushBrightness((SolidColorBrush)b, 0.5);
-        }
-
-        public static Color GetRandomColor(byte alpha = 255) {
-            //if (alpha == 255) {
-            //    return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
-            //}
-            //return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
-            int x = Rand.Next(0, _ContentColors.Count);
-            int y = Rand.Next(0, _ContentColors[0].Count-1);
-            return ((SolidColorBrush)GetContentColor(x, y)).Color;
-        }
-
-        public static Brush GetRandomBrushColor(byte alpha = 255) {
-            return (Brush)new SolidColorBrush() { Color = GetRandomColor(alpha) };
-        }
-        #endregion
-
-        #region Network
-
-        public static string GetIpForDomain(string domain) {
-            if(string.IsNullOrEmpty(domain)) {
-                return "0.0.0.0";
-            }
-            var al = Dns.GetHostAddresses(domain).ToList();
-            foreach(var a in al) {
-                if(a.AddressFamily == AddressFamily.InterNetwork) {
-                    return a.ToString();
-                }
-            }
-            return "0.0.0.0";
-        }
-        //if you are using local Hosting or on premises with self signed certficate,   
-        //in IOS add domain host address and Android use IP ADDRESS  
-        const string SERVICE_BASE_URL = "https://devenvexe.com"; //replace base address   
-        const string SERVICE_RELATIVE_URL = "/my/api/path";
-
-        public static async Task<string> GetDataAsync(string baseUrl, string relUrl) {
-            var uri = new Uri(relUrl, UriKind.Relative);
-            var request = new HttpRequestMessage {
-                Method = HttpMethod.Get,
-                RequestUri = uri
-            };
-
-            var client = GetHttpClient(baseUrl);
-
-            HttpResponseMessage response = null;
-
-            try {
-                response = await client.GetAsync(request.RequestUri, HttpCompletionOption.ResponseHeadersRead);
-            }
-            catch (Exception ex) {
-                return ex.InnerException.Message;
-            }
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            return content;
-        }
-
-        static HttpClient GetHttpClient(string baseUrl) {
-            var handler = new HttpClientHandler {
-                UseProxy = true,
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            };
-
-            var client = new HttpClient(handler) {
-                BaseAddress = new Uri(baseUrl)
-            };
-
-            client.DefaultRequestHeaders.Connection.Add("keep-alive");
-            client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-            client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
-
-            return client;
-        }
-        public static bool IsConnectedToInternet() {
-            var current = Connectivity.NetworkAccess;
-
-            if (current == NetworkAccess.Internet) {
-                return true;
-            }
-            return false;
-        }
-        public static bool IsConnectedToNetwork() {
-            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
-
-        }
-
-        public static bool IsMpServerAvailable() {
-            if (!IsConnectedToNetwork()) {
-                return false;
-            }
-            try {
-
-                using (var client = new WebClient()) {
-                    try {
-                        var stream = client.OpenRead(@"https://www.monkeypaste.com/");
-                        stream.Dispose();
-                        return true;
-                    }
-                    catch (System.AggregateException ex) {
-                        MpConsole.WriteTraceLine("Sync Server Unavailable", ex);
-                        return false;
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine("Sync Server Unavailable", ex);
-                        return false;
-                    }
-                }
-
-            }
-            catch (Exception e) {
-                MpConsole.WriteLine(e.ToString());
-                return false;
-            }
-        }
-
-        public static string GetLocalIp4Address() {
-            var ips = GetAllLocalIPv4(NetworkInterfaceType.Wireless80211);
-            if (ips.Length > 0) {
-                return ips[0];
-            }
-            ips = GetAllLocalIPv4(NetworkInterfaceType.Ethernet);
-            if (ips.Length > 0) {
-                return ips[0];
-            }
-            return "0.0.0.0";
-        }
-
-        public static string[] GetAllLocalIPv4() {
-            var ips = GetAllLocalIPv4(NetworkInterfaceType.Wireless80211).ToList();
-            ips.AddRange(GetAllLocalIPv4(NetworkInterfaceType.Ethernet));
-            return ips.ToArray();
-        }
-
-        private static string[] GetAllLocalIPv4(NetworkInterfaceType _type) {
-            List<string> ipAddrList = new List<string>();
-            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces()) {
-                if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up && !item.Description.ToLower().Contains("virtual")) {
-                    foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses) {
-                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork) {
-                            ipAddrList.Add(ip.Address.ToString());
-                        }
-                    }
-                }
-            }
-            return ipAddrList.ToArray();
-        }
-
-        public static string GetExternalIp4Address() {
-            return new System.Net.WebClient().DownloadString("https://api.ipify.org");
-        }
-
+    public static class MpUrlHelpers {
         public static string GetFullyFormattedUrl(string str) {
             //returns url so it has protocol prefix
             if (str.StartsWith(@"http://")) {
@@ -508,8 +19,8 @@ namespace MonkeyPaste {
             return @"http://" + str;
         }
 
-        public static async Task<string> GetUrlTitleAsync(string url) {
-            string urlSource = await GetHttpSourceCodeAsync(url);
+        public static async Task<string> GetUrlTitle(string url) {
+            string urlSource = await GetHttpSourceCode(url);
 
             //sdf<title>poop</title>
             //pre 3
@@ -517,16 +28,7 @@ namespace MonkeyPaste {
             return GetXmlElementContent(urlSource, @"title");
         }
 
-        public static string GetUrlTitle(string url) {
-            string urlSource = GetHttpSourceCode(url);
-
-            //sdf<title>poop</title>
-            //pre 3
-            //post 14
-            return GetXmlElementContent(urlSource, @"title");
-        }
-
-        public static async Task<string> GetHttpSourceCodeAsync(string url) {
+        public static async Task<string> GetHttpSourceCode(string url) {
             if (!IsValidUrl(url)) {
                 return string.Empty;
             }
@@ -534,21 +36,8 @@ namespace MonkeyPaste {
             using (HttpClient client = new HttpClient()) {
                 using (HttpResponseMessage response = await client.GetAsync(url)) {
                     using (HttpContent content = response.Content) {
-                        return await content.ReadAsStringAsync();
-                    }
-                }
-            }
-        }
-
-        public static string GetHttpSourceCode(string url) {
-            if (!IsValidUrl(url)) {
-                return string.Empty;
-            }
-
-            using (HttpClient client = new HttpClient()) {
-                using (HttpResponseMessage response = client.GetAsync(url).Result) {
-                    using (HttpContent content = response.Content) {
-                        return content.ReadAsStringAsync().Result;
+                        var result = await content.ReadAsStringAsync();
+                        return result;
                     }
                 }
             }
@@ -566,7 +55,7 @@ namespace MonkeyPaste {
             if (!hasValidExtension) {
                 return false;
             }
-            return MpRegEx.IsMatch(MpSubTextTokenType.Uri,lstr);
+            return MpRegEx.IsMatch(MpSubTextTokenType.Uri, lstr);
         }
 
         public static string GetXmlElementContent(string xml, string element) {
@@ -600,10 +89,10 @@ namespace MonkeyPaste {
                 url = GetFullyFormattedUrl(url);
                 string host = new Uri(url).Host;
                 var subDomainIdxList = host.IndexListOfAll(".");
-                for (int i = subDomainIdxList.Count-1; i > 0; i--) {
+                for (int i = subDomainIdxList.Count - 1; i > 0; i--) {
                     string subStr = host.Substring(subDomainIdxList[i]);
                     if (_domainExtensions.Contains(subStr)) {
-                        return host.Substring(subDomainIdxList[i - 1]+1);
+                        return host.Substring(subDomainIdxList[i - 1] + 1);
                     }
                 }
                 return host;
@@ -626,40 +115,21 @@ namespace MonkeyPaste {
                 //return url.Substring(domainStartIdx).Substring(preIdx, domainEndIdx - preIdx);
             }
             catch (Exception ex) {
-                MpConsole.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
+                MpConsole.WriteLine("MpUrlHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
             }
             return null;
         }
 
-        public static async Task<string> GetUrlFavicon(String url) {
+        public static async Task<string> GetUrlFavIconAsync(string url) {
             try {
                 string urlDomain = GetUrlDomain(url);
                 Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
-                //var img = new Image() {
-                //    Aspect = Aspect.AspectFit,
-                //    Source = Xamarin.Forms.ImageSource.FromUri(favicon),
-                //};
-                //if (img == null) {
-                //    return string.Empty;
-                //}
-                var bytes = await MpFileIo.ReadBytesFromUri(favicon.AbsoluteUri);
-                return Convert.ToBase64String(bytes); //new MpImageConverter().Convert(bytes, typeof(string)) as string;
-            }
-            catch (Exception ex) {
-                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);
-                return string.Empty;
-            }
-        }
-
-        public static async Task<string> GetUrlFaviconAsync(string url) {
-            try {
-                string urlDomain = GetUrlDomain(url);
-                Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
-                if(bytes == null) {
-                    return null;
+                var bytes = await MpFileIoHelpers.ReadBytesFromUriAsync(favicon.AbsoluteUri);
+                string base64FavIcon = bytes == null || bytes.Length == 0 ? MpBase64Images.UnknownFavIcon : Convert.ToBase64String(bytes);
+                if (base64FavIcon.Equals(MpBase64Images.UnknownFavIcon)) {
+                    base64FavIcon = MpBase64Images.AppIcon;
                 }
-                return Convert.ToBase64String(bytes); //new MpImageConverter().Convert(bytes, typeof(string)) as string;
+                return base64FavIcon;
             }
             catch (Exception ex) {
                 Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);
@@ -1589,9 +1059,5 @@ namespace MonkeyPaste {
             ".zuerich",
             ".zw"
         };
-        #endregion
-
-        #region Converters
-        #endregion
     }
 }

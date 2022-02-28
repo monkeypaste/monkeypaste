@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public static class MpFileIo {
+    public static class MpFileIoHelpers {
         public static double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f, precision);
         }

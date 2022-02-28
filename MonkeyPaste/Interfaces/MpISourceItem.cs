@@ -12,9 +12,12 @@ namespace MonkeyPaste {
         int RootId { get; }
 
         bool IsUrl { get; }
+        bool IsDll { get; }
+        bool IsExe { get; }
 
         bool IsRejected { get; }
         bool IsSubRejected { get; }
     }
 
+    public interface MpISourceTransaction : MpISourceItem { }
 }

@@ -57,6 +57,11 @@
             "isDefault": true
           },
           {
+            "label": "Python",
+            "value": "python",
+            "isDefault": true
+          },
+          {
             "label": "Ruby",
             "value": "ruby",
             "isDefault": true

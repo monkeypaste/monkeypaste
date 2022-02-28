@@ -64,19 +64,10 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpCopyItem ci = null;
-            if (arg is MpCopyItem) {
-                ci = arg as MpCopyItem;
-            } else if (arg is MpCompareOutput co) {
-                ci = co.CopyItem;
-            } else if (arg is MpAnalyzeOutput ao) {
-                ci = ao.CopyItem;
-            } else if (arg is MpClassifyOutput clo) {
-                ci = clo.CopyItem;
-            }
+            var actionInput = GetInput(arg);
 
             if(MacroActionType == MpMacroActionType.Tokenize) {
-                if(ci.ItemType == MpCopyItemType.Image) {
+                if(actionInput.CopyItem.ItemType == MpCopyItemType.Image) {
 
                 } else {
                     if(arg is MpCompareOutput co) {

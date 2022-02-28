@@ -100,6 +100,15 @@ namespace MpWpfApp {
 
         #region Model 
 
+        public string FullName {
+            get {
+                if(Preset == null || Parent == null) {
+                    return string.Empty;
+                }
+                return $"{Parent.Title}/{Label}";
+            }
+        }
+
         public bool IsDefault {
             get {
                 if(Preset == null) {

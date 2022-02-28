@@ -30,7 +30,7 @@ namespace MonkeyPaste {
 
         public string ImageBase64 { get; set; }
 
-        public static async Task<MpDbImage> Create(string base64Str) {
+        public static async Task<MpDbImage> Create(string base64Str, bool suppressWrite = false) {
             if(!base64Str.IsStringBase64()) {
                 MpConsole.WriteLine("Warning malformed base64 str, cannot create dbimage so returing default");
                 return MpPreferences.ThisAppIcon.IconImage;
@@ -46,7 +46,9 @@ namespace MonkeyPaste {
                 ImageBase64 = base64Str
             };
 
-            await i.WriteToDatabaseAsync();
+            if(!suppressWrite) {
+                await i.WriteToDatabaseAsync();
+            }
             return i;
         }
         public MpDbImage() { }

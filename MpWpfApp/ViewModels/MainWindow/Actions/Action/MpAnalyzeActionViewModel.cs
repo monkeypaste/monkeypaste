@@ -72,20 +72,11 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpCopyItem ci = null;
-            if(arg is MpCopyItem) {
-                ci = arg as MpCopyItem;
-            } else if(arg is MpCompareOutput co) {
-                ci = co.CopyItem;
-            } else if (arg is MpAnalyzeOutput ao) {
-                ci = ao.CopyItem;
-            } else if (arg is MpClassifyOutput clo) {
-                ci = clo.CopyItem;
-            }
+            var actionInput = GetInput(arg);
 
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
             
-            object[] args = new object[] { aipvm, ci };
+            object[] args = new object[] { aipvm, actionInput.CopyItem };
             if(aipvm != null && 
                aipvm.Parent != null &&
                aipvm.Parent.ExecuteAnalysisCommand.CanExecute(args)) {
@@ -97,16 +88,17 @@ namespace MpWpfApp {
 
                 MpCopyItem nci = null;
                 if (aipvm.Parent.LastResultContentItem != null &&
-                   (aipvm.Parent.LastResultContentItem.Id != ci.Id ||
+                   (aipvm.Parent.LastResultContentItem.Id != actionInput.CopyItem.Id ||
                    aipvm.Parent.LastResultContentItem.Id == 0)) {
                     nci = aipvm.Parent.LastResultContentItem;
                 }
-                await base.PerformAction(new MpAnalyzeOutput() {
-                    Previous = arg as MpActionOutput,
-                    CopyItem = ci,
-                    NewContentItem = nci,
-                    OutputData = aipvm.Parent.LastTransaction.Response
-                });
+                await base.PerformAction(
+                    new MpAnalyzeOutput() {
+                        Previous = arg as MpActionOutput,
+                        CopyItem = actionInput.CopyItem,
+                        NewContentItem = nci,
+                        OutputData = aipvm.Parent.LastTransaction.Response
+                    });
             }
         }
 
@@ -114,6 +106,11 @@ namespace MpWpfApp {
 
         #region Protected Methods
 
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if(e is MpAnalyticItemPreset aip && aip.Id == AnalyticItemPresetId) {
+                Task.Run(Validate);
+            }
+        }
 
         protected override async Task<bool> Validate() {
             await base.Validate();
@@ -126,6 +123,19 @@ namespace MpWpfApp {
                 ValidationText = $"Analyzer for Action '{RootTriggerActionViewModel.Label}/{Label}' not found";
                 await ShowValidationNotification();
             } else {
+                var pavm = ParentActionViewModel;
+                while(pavm != null) {
+                    if(pavm is MpCompareActionViewModelBase cavm) {
+                        if(cavm.IsItemTypeCompare) {
+                            if(!aipvm.Parent.IsContentTypeValid(cavm.ContentItemType)) {
+                                ValidationText = $"Parent Comparer '{pavm.Label}' filters only for '{cavm.ContentItemType.ToString()}' type content and analyzer '{aipvm.FullName}' will never execute because it does not support '{cavm.ContentItemType.ToString()}' type of input ";
+                                await ShowValidationNotification();
+                                return IsValid;
+                            }
+                        }
+                    }
+                    pavm = pavm.ParentActionViewModel;
+                }
                 ValidationText = string.Empty;
             }
             return IsValid;

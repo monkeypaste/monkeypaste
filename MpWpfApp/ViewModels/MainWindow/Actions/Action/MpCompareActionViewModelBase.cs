@@ -235,18 +235,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpActionOutput ao = arg as MpActionOutput;
-
-            MpCopyItem ci = null;
-            if (arg is MpCopyItem) {
-                ci = arg as MpCopyItem;
-            } else if (arg is MpCompareOutput co) {
-                ci = co.CopyItem;
-            } else if (arg is MpAnalyzeOutput ano) {
-                ci = ano.CopyItem;
-            } else if (arg is MpClassifyOutput clo) {
-                ci = clo.CopyItem;
-            }
+            MpActionOutput ao = GetInput(arg);
 
             object matchVal = null;
             if(ComparePropertyPathType == MpComparePropertyPathType.LastOutput) {
@@ -254,7 +243,7 @@ namespace MpWpfApp {
                     matchVal = ao.OutputData;
                 }                
             } else {
-                matchVal = ci.GetPropertyValue(PhysicalPropertyPath);
+                matchVal = ao.CopyItem.GetPropertyValue(PhysicalPropertyPath);
             }
             string compareStr = string.Empty;
             if (matchVal != null) {
@@ -264,8 +253,8 @@ namespace MpWpfApp {
             string matchStr = PerformMatch(compareStr);
             if (matchStr != null) {
                 await base.PerformAction(new MpCompareOutput() {
-                    Previous = arg as MpActionOutput,
-                    CopyItem = ci,
+                    Previous = ao,
+                    CopyItem = ao.CopyItem,
                     MatchValue = matchStr,
                     IsCaseSensitive = this.IsCaseSensitive
                 });

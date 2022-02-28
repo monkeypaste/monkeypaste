@@ -18,16 +18,18 @@ namespace MonkeyPaste {
         None = 0,
         InvalidPlugin,
         InvalidAction,
+        BadHttpRequest,
         DbError,
         LoadComplete
     }
 
     public enum MpNotificationExceptionSeverityType {
         None = 0,
-        Warning,
-        WarningWithOption,
-        ErrorWithOption,
-        ErrorAndShutdown
+        Warning, //confirm
+        WarningWithOption, //retry/ignore/quit
+        Error, //confirm
+        ErrorWithOption, //retry/ignore/quit
+        ErrorAndShutdown //confirm
     }
 
     public enum MpNotificationUserActionType {
@@ -199,6 +201,13 @@ namespace MonkeyPaste {
             if (!IsVisible) {
                 ShowBalloon();
             }
+
+            MpConsole.WriteLines(
+                $"Notification balloon set to:",
+                $"msg: '{msg}'",
+                $"type: '{notificationType.ToString()}'",
+                $"severity: '{exceptionType.ToString()}'",
+                $"result: '{LastNotificationResult.ToString()}'");
         }
 
 

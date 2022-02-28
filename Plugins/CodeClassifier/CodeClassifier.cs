@@ -75,7 +75,9 @@ namespace CodeClassifier {
 
                 _matchTrees.Add(new MatchTree(rootNode, languageName, totalPossibleScore));
 
-                _tokenFreqPerLanguage.Add(languageName, tokenFreq);
+                if(!_tokenFreqPerLanguage.ContainsKey(languageName)) {
+                    _tokenFreqPerLanguage.Add(languageName, tokenFreq);
+                }
             }
         }
 

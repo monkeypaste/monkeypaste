@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public static class MpSyncHelper {
+    public static class MpSyncHelpers {
 
         public static event EventHandler<object> OnSyncableChange;
 
@@ -20,11 +20,11 @@ namespace MonkeyPaste {
         }
 
         public static bool IsConnectedToNetwork() {
-            return MpHelpers.IsConnectedToNetwork();
+            return MpNetworkHelpers.IsConnectedToNetwork();
         }
 
         public static bool IsConnectedToInternet() {
-            return MpHelpers.IsConnectedToInternet();
+            return MpNetworkHelpers.IsConnectedToInternet();
         }
         public static int GetSyncPort() {
             return 44381;
@@ -36,21 +36,21 @@ namespace MonkeyPaste {
             if (!IsConnectedToNetwork()) {
                 return "0.0.0.0";
             }
-            return MpHelpers.GetLocalIp4Address();
+            return MpNetworkHelpers.GetLocalIp4Address();
         }
 
         public static string[] GetAllLocalIp4Addresses() {
             if (!IsConnectedToNetwork()) {
                 return new string[] { "0.0.0.0" };
             }
-            return MpHelpers.GetAllLocalIPv4();
+            return MpNetworkHelpers.GetAllLocalIPv4();
         }
 
         public static string GetExternalIp4Address() {
             if (!IsConnectedToInternet()) {
                 return "0.0.0.0";
             }
-            return MpHelpers.GetExternalIp4Address();
+            return MpNetworkHelpers.GetExternalIp4Address();
         }
 
         public static async Task<List<MpDbLog>> GetDbObjectLogs(string dboGuid, DateTime fromDtUtc) {

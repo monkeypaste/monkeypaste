@@ -143,9 +143,9 @@ namespace MpWpfApp {
             //    }                
             //}
 
-            var pail = MpPluginManager.Plugins.Where(x => x.Component is MpIAnalyzerPluginComponent);
+            var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIAnalyzerPluginComponent);
             foreach(var pai in pail) {
-                var paivm = await CreateAnalyticItemViewModel(pai);
+                var paivm = await CreateAnalyticItemViewModel(pai.Value);
                 Items.Add(paivm);
             }
             OnPropertyChanged(nameof(Items));

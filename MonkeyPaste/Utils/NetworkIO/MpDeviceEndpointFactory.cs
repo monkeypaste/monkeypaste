@@ -7,14 +7,14 @@ namespace MonkeyPaste {
     public class MpDeviceEndpointFactory {
         public static MpDeviceEndpoint CreateEndpoint() {
             var newEndpoint = new MpDeviceEndpoint() {
-                PublicIp4Address = MpSyncHelper.GetExternalIp4Address(),
-                PrivateIp4Addresses = new ObservableCollection<string>(MpSyncHelper.GetAllLocalIp4Addresses()),
-                DeviceGuid = MpSyncHelper.GetThisClientGuid(),
-                PublicPortNum = MpSyncHelper.GetSyncPort(),
-                PrivatePortNum = MpSyncHelper.GetSyncPort(),
+                PublicIp4Address = MpSyncHelpers.GetExternalIp4Address(),
+                PrivateIp4Addresses = new ObservableCollection<string>(MpSyncHelpers.GetAllLocalIp4Addresses()),
+                DeviceGuid = MpSyncHelpers.GetThisClientGuid(),
+                PublicPortNum = MpSyncHelpers.GetSyncPort(),
+                PrivatePortNum = MpSyncHelpers.GetSyncPort(),
                 AccessToken = MpStringExtensions.GetNewAccessToken()
             };
-            newEndpoint.PrimaryPrivateIp4AddressIdx = newEndpoint.PrivateIp4Addresses.IndexOf(MpSyncHelper.GetPrimaryLocalIp4Address());
+            newEndpoint.PrimaryPrivateIp4AddressIdx = newEndpoint.PrivateIp4Addresses.IndexOf(MpSyncHelpers.GetPrimaryLocalIp4Address());
             return newEndpoint;
         }
     }

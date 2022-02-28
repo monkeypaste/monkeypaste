@@ -77,28 +77,25 @@ namespace MonkeyPaste {
             }
         }
 
-        [Ignore]
-        public bool IsUrl => true;
-
         #endregion
 
 
         #region MpICopyItemSource Implementation
+
+        [Ignore]
+        public bool IsUrl => true;
+
         [Ignore]
         public bool IsRejected => IsDomainRejected;
 
         [Ignore]
         public bool IsSubRejected => IsUrlRejected;
 
-        //[Ignore]
-        //public MpIcon SourceIcon {
-        //    get {
-        //        if (Icon == null) {
-        //            return null;
-        //        }
-        //        return Icon;
-        //    }
-        //}
+        [Ignore]
+        public bool IsDll => false;
+
+        [Ignore]
+        public bool IsExe => false;
 
         [Ignore]
         public string SourcePath => UrlPath;
@@ -110,14 +107,21 @@ namespace MonkeyPaste {
         public int RootId => Id;
         #endregion
 
-        public static async Task<MpUrl> Create(string urlPath,string urlTitle) {
+        public static async Task<MpUrl> Create(
+            string urlPath = "",
+            string urlTitle = "",
+            string urlIconPath = "",
+            int urlIconId = 0,
+            bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetUrlByPath(urlPath);
             if(dupCheck != null) {
                 dupCheck = await MpDb.GetItemAsync<MpUrl>(dupCheck.Id);
                 return dupCheck;
             }
 
-            var domainStr = MpHelpers.GetUrlDomain(urlPath);
+            urlTitle = string.IsNullOrEmpty(urlTitle) ? await MpUrlHelpers.GetUrlTitle(urlPath) : urlTitle;
+
+            var domainStr = MpUrlHelpers.GetUrlDomain(urlPath);
             var newUrl = new MpUrl() {
                 UrlGuid = System.Guid.NewGuid(),
                 UrlPath = urlPath,
@@ -128,18 +132,33 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine("Ignoring mproperly formatted source url: " + urlPath);
                 return null;
             }
-            var favIconImg64 = await MpHelpers.GetUrlFaviconAsync(domainStr);
-            if (favIconImg64 == MpBase64Images.UnknownFavIcon || favIconImg64 == null) {
-                //url has no and result is google's default
-                favIconImg64 = MpBase64Images.QuestionMark;
+            MpIcon icon = null;
+            if(urlIconId > 0) {
+                icon = await MpDb.GetItemAsync<MpIcon>(urlIconId);
+            } else if(!string.IsNullOrEmpty(urlIconPath)) {
+                icon = await MpIcon.Create2(
+                    iconUrl: urlIconPath, 
+                    suppressWrite: suppressWrite);
             }
-            var icon = await MpIcon.Create(favIconImg64);
+            if(icon == null) {
+                string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(domainStr);
+                if (favIconImg64 == MpBase64Images.UnknownFavIcon || favIconImg64 == null) {
+                    //url has no and result is google's default
+                    favIconImg64 = MpBase64Images.QuestionMark;
+                }
+                icon = await MpIcon.Create(
+                    iconImgBase64: favIconImg64,
+                    suppressWrite: suppressWrite);
+            }
+            
             newUrl.IconId = icon.Id;
             if (newUrl.IconId == 0) {
                 newUrl.IconId = MpPreferences.ThisAppSource.PrimarySource.IconId;
             }
 
-            await newUrl.WriteToDatabaseAsync();
+            if(!suppressWrite) {
+                await newUrl.WriteToDatabaseAsync();
+            }
             
             return newUrl;
         }
@@ -231,5 +250,6 @@ namespace MonkeyPaste {
                 diffLookup);
             return diffLookup;
         }
+
     }
 }

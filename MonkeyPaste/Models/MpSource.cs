@@ -31,21 +31,38 @@ namespace MonkeyPaste {
             }
         }
 
+        [ForeignKey(typeof(MpCopyItemTransaction))]
+        [Column("fk_MpCopyItemTransactionId")]
+        public int CopyItemTransactionId { get; set; }
+
         [ForeignKey(typeof(MpUrl))]
         [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
-        public MpUrl Url { get; set; }
 
         [ForeignKey(typeof(MpApp))]
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 
+
+        #endregion
+
+        #region Fk Objects
+
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
         public MpApp App { get; set; }
 
+
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
+        public MpUrl Url { get; set; }
+
+
+        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        public MpCopyItemTransaction CopyItemTransaction { get; set; }
+
         #endregion
+
+        #region Properties
 
         [Ignore]
         public bool IsUrlPrimarySource => PrimarySource.IsUrl;
@@ -53,16 +70,21 @@ namespace MonkeyPaste {
         [Ignore]
         public MpISourceItem PrimarySource {
             get {
-                if (UrlId <= 0) {
-                    if (AppId <= 0) {
-                        return null;
-                    } else if (App != null) {
-                        return App;
+                if (CopyItemTransaction != null) {
+                    if (CopyItemTransaction.HttpTransaction != null) {
+                        return CopyItemTransaction.HttpTransaction;
                     }
-                } else if (Url != null) {
+                    if (CopyItemTransaction.CliTransaction != null) {
+                        return CopyItemTransaction.CliTransaction;
+                    }
+                    if (CopyItemTransaction.DllTransaction != null) {
+                        return CopyItemTransaction.DllTransaction;
+                    }
+                }
+                if(Url != null) {
                     return Url;
                 }
-                return null;
+                return App;;
             }
         }
 
@@ -77,7 +99,8 @@ namespace MonkeyPaste {
             }
         }
 
-        
+        #endregion
+
         #region Statics
 
         [Ignore]
@@ -102,6 +125,25 @@ namespace MonkeyPaste {
             };
 
             await source.WriteToDatabaseAsync();
+            return source;
+        }
+
+        public static async Task<MpSource> Create(
+            int copyItemTransactionId = 0, 
+            bool suppressWrite = false) {
+            if (copyItemTransactionId <= 0) {
+                throw new Exception("Source transaction must be populated");
+            }
+
+            var source = new MpSource() {
+                SourceGuid = System.Guid.NewGuid(),
+                AppId = MpPreferences.ThisAppSource.AppId,
+                CopyItemTransactionId = copyItemTransactionId
+            };
+
+            if(!suppressWrite) {
+                await source.WriteToDatabaseAsync();
+            }
             return source;
         }
         #endregion

@@ -14,7 +14,9 @@ using MonkeyPaste.Plugin;
 namespace MonkeyPaste {
     public static class MpPluginManager {
         #region Properties
-        public static ObservableCollection<MpPluginFormat> Plugins { get; set; } = new ObservableCollection<MpPluginFormat>();
+
+        public static Dictionary<string,MpPluginFormat> Plugins { get; set; } = new Dictionary<string,MpPluginFormat>();
+        
         #endregion
 
         #region Public Methods
@@ -36,11 +38,35 @@ namespace MonkeyPaste {
                 if (plugin == null) {
                     continue;
                 }
-                Plugins.Add(plugin);
+                Plugins.Add(manifestPath,plugin);
                 MpConsole.WriteLine($"Successfully loaded plugin: {plugin.title}");
             }
         }
 
+        public static async Task<MpPluginFormat> ReloadPlugin(MpPluginFormat plugin) {
+            if(plugin == null || string.IsNullOrEmpty(plugin.guid)) {
+                var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
+                    notificationType: MpNotificationType.InvalidPlugin,
+                    exceptionType: MpNotificationExceptionSeverityType.Error,
+                    msg: "Error reloading plugin or guid null: " + plugin.title);
+                return plugin;
+            }
+            var pkvp = Plugins.FirstOrDefault(x => x.Value.guid == plugin.guid);
+            if(string.IsNullOrEmpty(pkvp.Key)) {                
+                var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
+                    notificationType: MpNotificationType.InvalidPlugin,
+                    exceptionType: MpNotificationExceptionSeverityType.Error,
+                    msg: $"Error reloading plugin '{plugin.title}' with guid '{plugin.guid}', manifest.json found.");
+
+                if(userAction == MpNotificationUserActionType.Retry) {
+                    await Init();
+                    return await ReloadPlugin(plugin);
+                }
+                return plugin;
+            }
+            plugin = await LoadPlugin(pkvp.Key);
+            return plugin;
+        }
 
         #endregion
 
@@ -58,7 +84,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task<MpPluginFormat> LoadPlugin(string manifestPath) {
-            string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
+            string manifestStr = MpFileIoHelpers.ReadTextFromFile(manifestPath);
             if(string.IsNullOrEmpty(manifestStr)) {
                 var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
                     notificationType: MpNotificationType.InvalidPlugin,
@@ -77,9 +103,9 @@ namespace MonkeyPaste {
                 plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);                
             } catch(Exception ex) {                
                 var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
-                    notificationType: MpNotificationType.InvalidPlugin,
-                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                    msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}");
+                        notificationType: MpNotificationType.InvalidPlugin,
+                        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
+                        msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}");
 
                 if (userAction == MpNotificationUserActionType.Retry) {
                     var retryPlugin = await LoadPlugin(manifestPath);
@@ -92,9 +118,9 @@ namespace MonkeyPaste {
                     plugin.Component = GetPluginComponent(manifestPath, plugin);
                 } catch(Exception ex) {
                     var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
-                    notificationType: MpNotificationType.InvalidPlugin,
-                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                    msg: ex.Message);
+                            notificationType: MpNotificationType.InvalidPlugin,
+                            exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
+                            msg: ex.Message);
 
                     if (userAction == MpNotificationUserActionType.Retry) {
                         var retryPlugin = await LoadPlugin(manifestPath);
@@ -126,7 +152,7 @@ namespace MonkeyPaste {
                         }
                     }
                 }
-            } else if (plugin.ioType.isCommandLine) {
+            } else if (plugin.ioType.isCli) {
                 string exePath = Path.Combine(pluginDir, string.Format(@"{0}.exe", pluginName));
                 if (!File.Exists(exePath)) {
                     throw new MpPluginLoaderException($"Error, Plugin '{pluginName}' is flagged as a CLI type in '{manifestPath}' but does not have a matching '{pluginName}.exe' in its folder.");

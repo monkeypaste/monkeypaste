@@ -293,7 +293,7 @@ namespace MpWpfApp {
                 if (Directory.Exists(f)) {
                     continue;
                 }
-                var bmpSrc = MpFileIo.ReadBytesFromFile(f).ToBitmapSource();
+                var bmpSrc = MpFileIoHelpers.ReadBytesFromFile(f).ToBitmapSource();
                 var newSize = new Size(newWidth, newHeight);
 
                 if (bmpSrc.Width != bmpSrc.Height) {
@@ -305,7 +305,7 @@ namespace MpWpfApp {
                 }
                 var rbmpSrc = bmpSrc.Resize(newSize);
                 string targetPath = Path.Combine(targetDir, Path.GetFileName(f));
-                MpFileIo.WriteByteArrayToFile(targetPath, rbmpSrc.ToByteArray());
+                MpFileIoHelpers.WriteByteArrayToFile(targetPath, rbmpSrc.ToByteArray());
             }
         }
 

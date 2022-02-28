@@ -17,28 +17,13 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-
-        //public MpIconViewModel IconViewModel {
-        //    get {
-        //        if(App == null) {
-        //            return null;
-        //        }
-        //        return MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
-        //    }
-        //}
-
         #endregion
 
         #region MpISourceItemViewModel Implementation
 
-        //public MpIcon SourceIcon {
-        //    get {
-        //        if(IconViewModel == null) {
-        //            return null;
-        //        }
-        //        return IconViewModel.Icon;
-        //    }
-        //} 
+        public bool IsDll => false;
+
+        public bool IsExe => false;
 
         public string SourcePath {
             get {

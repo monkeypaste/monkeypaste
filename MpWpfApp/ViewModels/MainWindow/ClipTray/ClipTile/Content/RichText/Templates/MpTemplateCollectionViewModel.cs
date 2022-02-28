@@ -281,7 +281,7 @@ namespace MpWpfApp {
         public ICommand SelectNextTemplateCommand => new RelayCommand(
             () => {
                 //if (!SelectedTemplate.HasText) {
-                //    SelectedTemplate.TemplateText = " ";
+                //    SelectedTemplate.MatchData = " ";
                 //}
                 int nextIdx = Templates.IndexOf(SelectedTemplate) + 1;
                 if (nextIdx >= Templates.Count) {
@@ -293,7 +293,7 @@ namespace MpWpfApp {
         public ICommand SelectPreviousTemplateCommand => new RelayCommand(
             () => {
                 //if (!SelectedTemplate.HasText) {
-                //    SelectedTemplate.TemplateText = " ";
+                //    SelectedTemplate.MatchData = " ";
                 //}
                 int prevIdx = Templates.IndexOf(SelectedTemplate) - 1;
                 if (prevIdx < 0) {
@@ -308,7 +308,7 @@ namespace MpWpfApp {
                 MpConsole.WriteLine("Unmodified item rtf: ");
                 MpConsole.WriteLine(rtf);
                 foreach (var thlvm in Templates) {
-                    rtf = rtf.Replace(thlvm.TextToken.TemplateToken, thlvm.TemplateText);
+                    rtf = rtf.Replace(thlvm.TextToken.TemplateToken, thlvm.MatchData);
                 }
                 Parent.TemplateRichText = rtf;
                 MpConsole.WriteLine("Pastable rtf: ");

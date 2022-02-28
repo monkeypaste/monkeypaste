@@ -4,6 +4,8 @@ using System.Text;
 
 namespace MonkeyPaste.Plugin {    
     public class MpPluginResponseFormat {
+        public const string RETRY_MESSAGE = @"RETRY";
+
         public string message { get; set; }
 
         public MpPluginResponseNewContentFormat newContentItem { get; set; }

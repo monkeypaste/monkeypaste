@@ -66,7 +66,7 @@ namespace MpWpfApp {
                     string outputPath = string.Empty;
                     if (data.IsStringBase64()) {
                         outputPath = Path.Combine(directory, fileNameWithoutExtension, imageFormat);
-                        return MpFileIo.WriteByteArrayToFile(outputPath, data.ToByteArray(), isTemporary);
+                        return MpFileIoHelpers.WriteByteArrayToFile(outputPath, data.ToByteArray(), isTemporary);
                     }
                     try {
                         var fileListParts = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
@@ -80,7 +80,7 @@ namespace MpWpfApp {
                     }
                     outputPath = Path.Combine(directory, fileNameWithoutExtension, textFormat);
 
-                    return MpFileIo.WriteTextToFile(outputPath, data.ToRichText(), isTemporary);
+                    return MpFileIoHelpers.WriteTextToFile(outputPath, data.ToRichText(), isTemporary);
             }
 
             throw new Exception($"Cannot convert '{data}' to format '{format}'");
@@ -150,7 +150,7 @@ namespace MpWpfApp {
                             }
                             if (data.IsStringBase64()) {
                                 curOutputPath = Path.Combine(directory, fileName, imageFormat);
-                                curOutputPath = MpFileIo.WriteByteArrayToFile(curOutputPath, data.ToByteArray(), isTemporary);
+                                curOutputPath = MpFileIoHelpers.WriteByteArrayToFile(curOutputPath, data.ToByteArray(), isTemporary);
                             }
                             try {
                                 var fileListParts = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
@@ -163,7 +163,7 @@ namespace MpWpfApp {
                                 MpConsole.WriteTraceLine($"Warning, if data '{data}' is a file list this is an error ", ex);
                             }
                             curOutputPath = Path.Combine(directory, fileName, textFormat);
-                            curOutputPath = MpFileIo.WriteTextToFile(curOutputPath, data.ToRichText(), isTemporary);
+                            curOutputPath = MpFileIoHelpers.WriteTextToFile(curOutputPath, data.ToRichText(), isTemporary);
                         }
                         outputData += curOutputPath + Environment.NewLine;
                         break;                        

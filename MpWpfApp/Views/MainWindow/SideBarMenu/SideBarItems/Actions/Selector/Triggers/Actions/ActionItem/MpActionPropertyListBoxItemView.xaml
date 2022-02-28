@@ -299,10 +299,14 @@
 
                             <TextBlock Grid.Row="2"
                                        Grid.Column="0"
+                                       Visibility="{Binding IsItemTypeCompare,
+                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                        Style="{StaticResource ActionPropertyTextBlockStyle}"
                                        Text="Case Sensitive" />
                             <CheckBox Grid.Row="2"
                                       Grid.Column="1"
+                                      Visibility="{Binding IsItemTypeCompare,
+                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                       IsEnabled="{Binding IsCompareTypeRegex,
                                                           Converter={StaticResource BoolFlipConverter}}"
                                       MinWidth="100"

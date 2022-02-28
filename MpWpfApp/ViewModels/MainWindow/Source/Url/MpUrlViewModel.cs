@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
+using SQLite;
 
 namespace MpWpfApp {
     public class MpUrlViewModel : 
@@ -18,16 +19,6 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-
-        //public MpIconViewModel IconViewModel {
-        //    get {
-        //        if (Url == null) {
-        //            return null;
-        //        }
-        //        return MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
-        //    }
-        //}
-
         #endregion
 
 
@@ -37,11 +28,6 @@ namespace MpWpfApp {
 
         public bool IsHovering { get; set; }
 
-        //public bool IsNew {
-        //    get {
-        //        return Url != null && UrlId == 0;
-        //    }
-        //}
         #endregion
 
         #region Model
@@ -49,14 +35,9 @@ namespace MpWpfApp {
 
         #region MpISourceItemViewModel Implementation
 
-        //public MpIcon SourceIcon {
-        //    get {
-        //        if (IconViewModel == null) {
-        //            return null;
-        //        }
-        //        return IconViewModel.Icon;
-        //    }
-        //}
+        public bool IsDll => false;
+
+        public bool IsExe => false;
 
         public string SourcePath {
             get {

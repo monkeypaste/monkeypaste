@@ -67,7 +67,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Overrides
-
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpTag t && t.Id == TagId) {
+                Task.Run(Validate);
+            }
+        }
         protected override async Task<bool> Validate() {
             await base.Validate();
 
@@ -90,23 +94,14 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpCopyItem ci = null;
-            if (arg is MpCopyItem) {
-                ci = arg as MpCopyItem;
-            } else if (arg is MpCompareOutput co) {
-                ci = co.CopyItem;
-            } else if (arg is MpAnalyzeOutput ao) {
-                ci = ao.CopyItem;
-            } else if (arg is MpClassifyOutput clo) {
-                ci = clo.CopyItem;
-            }
+            var actionInput = GetInput(arg);
 
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            await ttvm.AddContentItem(ci.Id);
+            await ttvm.AddContentItem(actionInput.CopyItem.Id);
 
             await base.PerformAction(new MpClassifyOutput() {
                 Previous = arg as MpActionOutput,
-                CopyItem = ci,
+                CopyItem = actionInput.CopyItem,
                 TagId = TagId
             });
         }

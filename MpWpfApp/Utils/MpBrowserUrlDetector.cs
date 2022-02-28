@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpBrowserUrlDetector {
@@ -38,8 +39,8 @@ namespace MpWpfApp {
                            wbb.Y > cutoffHeight) {
                             return string.Empty;
                         }
-                        if(MpHelpers.IsValidUrl(word.text)) {
-                            return MonkeyPaste.MpHelpers.GetFullyFormattedUrl(word.text);
+                        if(MpUrlHelpers.IsValidUrl(word.text)) {
+                            return MonkeyPaste.MpUrlHelpers.GetFullyFormattedUrl(word.text);
                         }
                     }
                 }

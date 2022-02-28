@@ -51,6 +51,15 @@ namespace MonkeyPaste {
             }
         }
 
+        public static void WriteLines(params object[] lines) {
+            if(lines == null) {
+                return;
+            }
+            foreach(var l in lines) {
+                WriteLine(l);
+            }
+        }
+
         public static void WriteLine(object line, params object[] args) {
             line = line == null ? string.Empty : line;
             string str = line.ToString();

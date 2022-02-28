@@ -2,11 +2,12 @@
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpHttpTransaction : MpDbModelBase, MpISourceTransaction {
+    public class MpDllTransaction : MpDbModelBase, MpISourceTransaction {
         #region Protected variables 
 
         protected int iconId { get; set; } = 0;
@@ -16,11 +17,12 @@ namespace MonkeyPaste {
         #region Columns
 
         [PrimaryKey, AutoIncrement]
-        [Column("pk_MpHttpTransactionId")]
+        [Column("pk_MpDllTransactionId")]
         public override int Id { get; set; }
 
-        [Column("MpHttpTransactionGuid")]
+        [Column("MpDllTransactionGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
+
 
         [ForeignKey(typeof(MpAnalyticItemPreset))]
         [Column("fk_MpAnalyticItemPresetId")]
@@ -30,16 +32,13 @@ namespace MonkeyPaste {
         [Column("fk_MpUserDeviceId")]
         public int DeviceId { get; set; }
 
-        public string DestinationUrl { get; set; }
-        public string DestinationName { get; set; }
+        public string DllPath { get; set; }
+        public string DllName { get; set; }
 
-        public string SourceIp { get; set; }
+        public string Args { get; set; }
 
-        public int BytesSent { get; set; }
-        public int BytesReceived { get; set; }
+        public DateTime TransactionDateTime { get; set; }
 
-        public DateTime DateTimeSent { get; set; }
-        public DateTime? DateTimeReceived { get; set; }
 
         #endregion
 
@@ -51,7 +50,7 @@ namespace MonkeyPaste {
         #region Properties
 
         [Ignore]
-        public Guid HttpTransactionGuid {
+        public Guid DllTransactionGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
@@ -62,45 +61,33 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
-
         #endregion
 
-        public static async Task<MpHttpTransaction> Create(
+        public static async Task<MpDllTransaction> Create(
             int presetId = 0,
             int deviceId = 0,
-            string url = "",
-            string urlName = "",
-            string ip = "",
-            DateTime? timeSent = null,
-            DateTime? timeReceived = null,
-            int bytesSent = 0,
-            int bytesReceived = 0,
+            string dllPath = "",
+            string dllName = "",
+            string args = "",
+            DateTime? transDateTime = null,
             bool suppressWrite = false) {
-            if(string.IsNullOrEmpty(url)) {
-                MpConsole.WriteTraceLine("Http transaction must have destination url");
+            if(string.IsNullOrWhiteSpace(dllPath)) {
+                throw new Exception("Must specifiy path");
             }
-            if (string.IsNullOrEmpty(ip)) {
-                MpConsole.WriteTraceLine("Http transaction must have source ip");
-            }
-            if (deviceId <= 0) {
+            if(deviceId <= 0) {
                 var device = await MpDataModelProvider.GetUserDeviceByGuid(MpPreferences.ThisDeviceGuid);
-                if (device != null) {
+                if(device != null) {
                     deviceId = device.Id;
                 }
             }
 
-
-            var mr = new MpHttpTransaction() {
-                HttpTransactionGuid = System.Guid.NewGuid(),
+            var mr = new MpDllTransaction() {
+                DllTransactionGuid = System.Guid.NewGuid(),
                 PresetId = presetId,
-                DeviceId = deviceId,
-                SourceIp = ip,
-                DestinationUrl = url,
-                DestinationName = string.IsNullOrWhiteSpace(urlName) ? MpUrlHelpers.GetUrlDomain(url) : urlName,
-                DateTimeSent = timeSent.HasValue ? timeSent.Value : DateTime.Now,
-                DateTimeReceived = timeReceived.HasValue ? timeReceived.Value : null,
-                BytesSent = bytesSent,
-                BytesReceived = bytesReceived
+                DllPath = dllPath,
+                DllName = string.IsNullOrWhiteSpace(dllName) ? Path.GetFileNameWithoutExtension(dllPath) : dllName,
+                Args = args,
+                TransactionDateTime = !transDateTime.HasValue ? DateTime.Now : transDateTime.Value
             };
             if (presetId > 0) {
                 var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(presetId);
@@ -108,23 +95,22 @@ namespace MonkeyPaste {
                     mr.iconId = preset.IconId;
                 }
             }
-
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await mr.WriteToDatabaseAsync();
             }
             return mr;
         }
 
-        public MpHttpTransaction() { }
+        public MpDllTransaction() { }
 
         #region MpISourceItem Implementation
 
-        public int IconId => iconId;
-        public string SourcePath => DestinationUrl;
-        public string SourceName => DestinationName;
+        public int IconId => 0;
+        public string SourcePath => DllPath;
+        public string SourceName => DllName;
         public int RootId => Id;
-        public bool IsUrl => true;
-        public bool IsDll => false;
+        public bool IsUrl => false;
+        public bool IsDll => true;
         public bool IsExe => false;
         public bool IsRejected => false;
         public bool IsSubRejected => false;
