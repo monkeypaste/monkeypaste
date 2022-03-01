@@ -15,11 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpAnalyticItemSelectorView.xaml
+    /// Interaction logic for MpLoaderNotificationVIew.xaml
     /// </summary>
-    public partial class MpAnalyticItemPresetParameterListBoxView : MpUserControl<MpAnalyticItemPresetViewModel> {       
-
-        public MpAnalyticItemPresetParameterListBoxView() {
+    public partial class MpLoaderNotificationView : MpUserControl {
+        public MpLoaderNotificationView() {
             InitializeComponent();
         }
     }

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace MonkeyPaste {    
-    public abstract class MpViewModelBase : INotifyPropertyChanged {
+    public abstract class MpViewModelBase : INotifyPropertyChanged, MpIErrorHandler {
         
         //public static event EventHandler<bool> OnBusyChanged;
 
@@ -80,6 +80,14 @@ namespace MonkeyPaste {
                 MpConsole.WriteLine($"'{kvp.Key}': {kvp.Value}");
             }
         }
+
+        #region MpIErrorHandler Implementation
+
+        public void HandleError(Exception ex) {
+            MpConsole.WriteTraceLine(ex);
+        }
+
+        #endregion
 
         #region IDisposable Implementation
         // based on http://support.surroundtech.com/thread/memory-management-best-practices-in-wpf/
@@ -179,6 +187,7 @@ namespace MonkeyPaste {
             //    }
             //}, System.Windows.Threading.DispatcherPriority.Normal);
         }
+
 
 
         #endregion

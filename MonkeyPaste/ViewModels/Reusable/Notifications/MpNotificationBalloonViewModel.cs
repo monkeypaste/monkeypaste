@@ -6,39 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste;
-namespace MonkeyPaste {
-    public enum MpNotifierStateType {
-        None = 0,
-        Startup,
-        Warning
-    }
-
-    public enum MpNotificationType { 
-        None = 0,
-        InvalidPlugin,
-        InvalidAction,
-        BadHttpRequest,
-        DbError,
-        LoadComplete
-    }
-
-    public enum MpNotificationExceptionSeverityType {
-        None = 0,
-        Warning, //confirm
-        WarningWithOption, //retry/ignore/quit
-        Error, //confirm
-        ErrorWithOption, //retry/ignore/quit
-        ErrorAndShutdown //confirm
-    }
-
-    public enum MpNotificationUserActionType {
-        None = 0,
-        Ignore,
-        Retry,
-        Shutdown
-    }
-
+namespace MonkeyPaste {   
     public class MpNotificationBalloonViewModel : MpViewModelBase {
         #region Static Variables
         #endregion
@@ -50,7 +18,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         #region Properties
 
         #region MpISingletonViewModel Implementation
@@ -61,6 +28,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region View Models
+
+        //public ObservableCollection<Mp> PendingNotifications { get; set; } = new ObservableCollection<MpNotificationViewModel>();
+
         #endregion
 
         #region State
@@ -71,9 +41,6 @@ namespace MonkeyPaste {
 
         public bool IsWarningState => NotifierState == MpNotifierStateType.Warning;
 
-        public bool IsLoaded => PercentLoaded >= 1.0;
-
-        public double PercentLoaded { get; set; }
 
         public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
 
@@ -83,58 +50,12 @@ namespace MonkeyPaste {
 
         public MpNotificationExceptionSeverityType ExceptionType { get; set; } = MpNotificationExceptionSeverityType.None;
 
-        public bool ShowIgnoreButton {
-            get {
-                if(IsValid) {
-                    return false;
-                }
-                return ExceptionType != MpNotificationExceptionSeverityType.ErrorAndShutdown;
-            }
-        }
-
-        public bool ShowRetryButton {
-            get {
-                if (IsValid) {
-                    return false;
-                }
-                return ExceptionType != MpNotificationExceptionSeverityType.ErrorAndShutdown;
-            }
-        }
-
-        public bool ShowShutdownButton {
-            get {
-                if (IsValid) {
-                    return false;
-                }
-                return true;
-            }
-        }
+        
 
         public MpNotificationUserActionType LastNotificationResult { get; set; } = MpNotificationUserActionType.None;
         #endregion
 
         #region Appearance
-
-        public string NotificationTextForegroundColor {
-            get {
-                if(ExceptionType == MpNotificationExceptionSeverityType.Warning || 
-                    ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption) {
-                    return MpSystemColors.Yellow;
-                }
-                if(ExceptionType == MpNotificationExceptionSeverityType.ErrorAndShutdown ||
-                    ExceptionType == MpNotificationExceptionSeverityType.ErrorWithOption) {
-                    return MpSystemColors.Red;
-                }
-                if(ExceptionType != MpNotificationExceptionSeverityType.None) {
-                    return MpSystemColors.royalblue;
-                }
-                return MpSystemColors.Black;
-            }
-        }
-
-        public double ProgressTotalBarWidth { get; set; }
-
-        public double ProgressBarCurrentWidth => ProgressTotalBarWidth * PercentLoaded;
 
         #endregion
 
@@ -144,25 +65,28 @@ namespace MonkeyPaste {
 
         public string Info { get; set; }
 
-        public string LoadingLabel { get; set; }
 
-        public string PercentLabel {
-            get {
-                int percent = (int)(PercentLoaded * 100);
-                return $"{percent} %";
-            }
+        #endregion
+
+        #region Constructors
+
+        public MpNotificationBalloonViewModel() : base(null) {
+            PropertyChanged += MpStandardBalloonViewModel_PropertyChanged;
         }
 
         #endregion
 
         #region Public Methods
-        public MpNotificationBalloonViewModel() : base(null) {
-            PropertyChanged += MpStandardBalloonViewModel_PropertyChanged;
-        }
 
         public async Task Init() {
             await Task.Delay(1);
             NotifierState = MpNotifierStateType.Startup;
+        }
+
+        public async Task<MpNotificationViewModelBase> CreateNotificationViewModel(MpNotification n) {
+            var nvm = new MpNotificationViewModelBase(this);
+            await nvm.InitializeAsync(n);
+            return nvm;
         }
 
         public async Task Attach(MpINotificationBalloonView nbv) {
@@ -176,13 +100,40 @@ namespace MonkeyPaste {
             MpNotificationExceptionSeverityType exceptionType = MpNotificationExceptionSeverityType.None,
             MpNotificationUserActionType result = MpNotificationUserActionType.None,
             string msg = "",
-            double maxShowTimeMs = 100000) {
-            SetNotification(notificationType, exceptionType, result, msg);
+            double maxShowTimeMs = -1) {
 
-            DateTime startTime = DateTime.Now;
-            while (LastNotificationResult == MpNotificationUserActionType.None &&
-                   DateTime.Now - startTime <= TimeSpan.FromMilliseconds(maxShowTimeMs)) {
-                await Task.Delay(100);
+            var n = new MpNotification() {
+                NotificationType = notificationType,
+                SeverityType = exceptionType,
+                ResultType = result,
+                Title = notificationType.EnumToLabel(),
+                Body = msg,
+                MaxShowMs = maxShowTimeMs
+            };
+            var nvm = await CreateNotificationViewModel(n);
+
+            SetNotification(notificationType, exceptionType, result, msg);
+            
+            bool wasVisible = IsVisible;
+            if (!IsVisible) {
+                ShowBalloon();
+            }
+
+            if(maxShowTimeMs > 0) {
+                DateTime startTime = DateTime.Now;
+                while (LastNotificationResult == MpNotificationUserActionType.None &&
+                       DateTime.Now - startTime <= TimeSpan.FromMilliseconds(maxShowTimeMs)) {
+                    await Task.Delay(100);
+                }
+            } else {
+                while (LastNotificationResult == MpNotificationUserActionType.None) {
+                    await Task.Delay(100);
+                }
+            }
+
+            if(!wasVisible) {
+                //Only hide balloon if it wasn't visible before this notification
+                HideBalloon();
             }
             return LastNotificationResult;
         }
@@ -255,19 +206,19 @@ namespace MonkeyPaste {
         #endregion
 
         #region Commands
-        public ICommand IgnoreCommand => new MpRelayCommand(
+        public ICommand IgnoreCommand => new MpCommand(
             () => {
                 SetNotification(
                     result: MpNotificationUserActionType.Ignore);
             });
 
-        public ICommand RetryCommand => new MpRelayCommand(
+        public ICommand RetryCommand => new MpCommand(
             () => {
                 SetNotification(
                     result: MpNotificationUserActionType.Retry);
             });
 
-        public ICommand ShutdownCommand => new MpRelayCommand(
+        public ICommand ShutdownCommand => new MpCommand(
             () => {
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             });

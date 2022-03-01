@@ -85,10 +85,6 @@ namespace MpWpfApp {
             cv.Refresh();
             MpConsole.WriteTraceLine("Collection refreshed",null,callerName,callerFilePath,lineNum);
         }
-        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
-            foreach (T item in source)
-                action(item);
-        }
 
         public static bool IsEmpty<T>(this IList<T> source) {
             return source.Count == 0;

@@ -18,7 +18,13 @@ namespace MonkeyPaste {
 
         private static List<string> _resourceNames;
         #endregion
+
         #region Collections
+
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
+            foreach (T item in source)
+                action(item);
+        }
 
         public static bool AddOrReplace<TKey, TValue>(this Dictionary<TKey,TValue> d,TKey key, TValue value) {
             //returns true if kvp was added

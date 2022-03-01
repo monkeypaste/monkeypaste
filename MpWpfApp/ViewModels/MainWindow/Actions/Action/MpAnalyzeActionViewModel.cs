@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpAnalyzeOutput : MpActionOutput {
@@ -31,6 +32,12 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        #endregion
+
+        #region State
+
+        public bool IsShowingParameters { get; set; } = false;
 
         #endregion
 
@@ -113,6 +120,8 @@ namespace MpWpfApp {
         }
 
         protected override async Task<bool> Validate() {
+            IsBusy = true;
+
             await base.Validate();
             if (!IsValid) {
                 return IsValid;
@@ -140,6 +149,16 @@ namespace MpWpfApp {
             }
             return IsValid;
         }
+
+        #endregion
+
+        #region Commands
+
+
+        public ICommand ToggleShowParametersCommand => new MpCommand(
+            () => {
+                IsShowingParameters = !IsShowingParameters;
+            });
 
         #endregion
     }

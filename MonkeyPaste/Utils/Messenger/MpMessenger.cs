@@ -38,8 +38,7 @@ namespace MonkeyPaste {
         TagTileNotificationRemoved,
         Loaded, //has context (object)
         Busy,
-        NotBusy,
-        ActionViewportChanged
+        NotBusy
     }
 
     public static partial class MpMessenger {

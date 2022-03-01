@@ -112,6 +112,7 @@ namespace MpWpfApp {
             set {
                 if(_currentValue != value) {
                     _currentValue = value == null ? "0":value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CurrentValue));
                     OnPropertyChanged(nameof(SliderValue));
                 }
@@ -149,6 +150,8 @@ namespace MpWpfApp {
 
         public override async Task InitializeAsync(MpAnalyticItemParameterFormat aipf, MpAnalyticItemPresetParameterValue aipv) {
             IsBusy = true;
+
+            ParameterValue = aipv;
 
             Parameter = aipf;
 

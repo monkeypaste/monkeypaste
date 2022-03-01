@@ -39,6 +39,7 @@ namespace MpWpfApp {
 
         public bool IsResizing { get; set; }
         public bool CanResize { get; set; }
+
         #endregion
 
         #region Business Logic
@@ -363,7 +364,6 @@ namespace MpWpfApp {
               (args) => {
                  ComparePropertyPathType = (MpComparePropertyPathType)args;
               });
-
 
         #endregion
     }

@@ -57,6 +57,7 @@ namespace MpWpfApp {
 
 
         #endregion
+
         #region State
 
         public bool HasDescription => !string.IsNullOrEmpty(Description);
@@ -86,6 +87,7 @@ namespace MpWpfApp {
             set {
                 if(_currentValue != value) {
                     _currentValue = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CurrentValue));
                 }
             }
@@ -240,6 +242,8 @@ namespace MpWpfApp {
 
         public MpAnalyticItemParameterFormat Parameter { get; protected set; }
 
+        public MpAnalyticItemPresetParameterValue ParameterValue { get; set; }
+
         #endregion
 
         #endregion
@@ -285,7 +289,10 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
-                        Parent.OnPropertyChanged(nameof(Parent.HasAnyParameterValueChanged));
+                        Task.Run(async () => {
+                            await ParameterValue.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
                     }
                     break;
                 case nameof(ValidationMessage):

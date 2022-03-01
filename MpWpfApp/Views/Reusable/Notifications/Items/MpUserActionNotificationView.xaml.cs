@@ -13,13 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MpWpfApp {
+namespace MpWpfApp.Views.Reusable.Notifications.Items {
     /// <summary>
-    /// Interaction logic for MpAnalyticItemSelectorView.xaml
+    /// Interaction logic for MpUserActionNotificationView.xaml
     /// </summary>
-    public partial class MpAnalyticItemPresetParameterListBoxView : MpUserControl<MpAnalyticItemPresetViewModel> {       
-
-        public MpAnalyticItemPresetParameterListBoxView() {
+    public partial class MpUserActionNotificationView : UserControl {
+        public MpUserActionNotificationView() {
             InitializeComponent();
         }
     }

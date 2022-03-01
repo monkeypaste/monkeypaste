@@ -27,20 +27,5 @@ namespace MpWpfApp {
             var lb = sender as ListBox;
             lb.ScrollIntoView(MpActionCollectionViewModel.Instance.PrimaryAction);
         }
-
-        private void ActionPropertyListBox_Loaded(object sender, RoutedEventArgs e) {
-
-            MpMessenger.Register(
-                MpActionCollectionViewModel.Instance,
-                ReceivedActionCollectionViewModelMessage);
-        }
-
-        private void ReceivedActionCollectionViewModelMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.ActionViewportChanged:
-                    ActionPropertyListBox.Items.Refresh();
-                    break;
-            }
-        }
     }
 }

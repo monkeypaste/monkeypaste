@@ -140,7 +140,7 @@ namespace MonkeyPaste {
             if (plugin.ioType.isDll) {
                 string dllPath = Path.Combine(pluginDir, string.Format(@"{0}.dll", pluginName));
                 if (!File.Exists(dllPath)) {
-                    throw new MpPluginLoaderException($"Error, Plugin '{pluginName}' is flagged as dll type in '{manifestPath}' but does not have a matching '{pluginName}.dll' in its folder.");
+                    throw new MpUserNotifiedException($"Error, Plugin '{pluginName}' is flagged as dll type in '{manifestPath}' but does not have a matching '{pluginName}.dll' in its folder.");
                 }
                 Assembly pluginAssembly = Assembly.LoadFrom(dllPath);
                 for (int i = 0; i < pluginAssembly.GetTypes().Length; i++) {
@@ -155,13 +155,13 @@ namespace MonkeyPaste {
             } else if (plugin.ioType.isCli) {
                 string exePath = Path.Combine(pluginDir, string.Format(@"{0}.exe", pluginName));
                 if (!File.Exists(exePath)) {
-                    throw new MpPluginLoaderException($"Error, Plugin '{pluginName}' is flagged as a CLI type in '{manifestPath}' but does not have a matching '{pluginName}.exe' in its folder.");
+                    throw new MpUserNotifiedException($"Error, Plugin '{pluginName}' is flagged as a CLI type in '{manifestPath}' but does not have a matching '{pluginName}.exe' in its folder.");
                 }
                 return new MpCommandLinePlugin() { Endpoint = exePath };
             } else if (plugin.ioType.isHttp) {
                 return new MpHttpPlugin(plugin.analyzer.http);
             }
-            throw new MpPluginLoaderException(@"Unknown or undefined plugin type: " + JsonConvert.SerializeObject(plugin.ioType));
+            throw new MpUserNotifiedException(@"Unknown or undefined plugin type: " + JsonConvert.SerializeObject(plugin.ioType));
         }
         #endregion
     }

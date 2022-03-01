@@ -40,8 +40,7 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; } = false;
 
-        public int ValueIdx { get; set; } = 0;
-               
+        public int ValueIdx { get; set; } = 0;               
 
         #endregion
 
@@ -202,7 +201,6 @@ namespace MpWpfApp {
                         Parent.HasModelChanged = true;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
-                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.HasAnyParameterValueChanged));
                     break;
             }
             Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAllValid));

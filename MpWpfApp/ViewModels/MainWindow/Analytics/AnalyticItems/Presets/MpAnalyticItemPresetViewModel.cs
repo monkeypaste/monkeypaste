@@ -82,8 +82,6 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool HasAnyParameterValueChanged => Items.Any(x => x.HasModelChanged);
-
         public bool IsAllValid => Items.All(x => x.IsValid);
 
         public bool IsEditingParameters { get; set; }
@@ -302,7 +300,6 @@ namespace MpWpfApp {
 
             OnPropertyChanged(nameof(ShortcutViewModel));
             OnPropertyChanged(nameof(Items));
-            OnPropertyChanged(nameof(HasAnyParameterValueChanged));
             Items.ForEach(x => x.Validate());
             HasModelChanged = false;
 
@@ -457,7 +454,6 @@ namespace MpWpfApp {
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
-                    OnPropertyChanged(nameof(HasAnyParameterValueChanged));
                     OnPropertyChanged(nameof(HasModelChanged));
                     break;
                 //case nameof(IsEditingMatchers):
@@ -492,7 +488,6 @@ namespace MpWpfApp {
                     if (ppv != null) {
                         ppv.Value = pvm.CurrentValue;
                     }
-                    OnPropertyChanged(nameof(HasAnyParameterValueChanged));
                     break;
             }
         }
@@ -503,47 +498,47 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand CancelChangesCommand => new RelayCommand(
-            async () => {
-                var aip = await MpDb.GetItemAsync<MpAnalyticItemPreset>(AnalyticItemPresetId);
-                Preset = aip;
+        //public ICommand CancelChangesCommand => new RelayCommand(
+        //    async () => {
+        //        var aip = await MpDb.GetItemAsync<MpAnalyticItemPreset>(AnalyticItemPresetId);
+        //        Preset = aip;
 
-                Items.ForEach(x => x.CurrentValue = x.DefaultValue);
-                OnPropertyChanged(nameof(HasAnyParameterValueChanged));
-                Items.ForEach(x => x.HasModelChanged = false);
-                Items.Where(x => x is MpComboBoxParameterViewModel).Cast<MpComboBoxParameterViewModel>().ForEach(x => x.Items.ForEach(y => y.HasModelChanged = false));
-                HasModelChanged = false;
-                IsEditingParameters = false;
-            },
-            HasAnyParameterValueChanged);
+        //        Items.ForEach(x => x.CurrentValue = x.DefaultValue);
+        //        OnPropertyChanged(nameof(HasAnyParameterValueChanged));
+        //        Items.ForEach(x => x.HasModelChanged = false);
+        //        Items.Where(x => x is MpComboBoxParameterViewModel).Cast<MpComboBoxParameterViewModel>().ForEach(x => x.Items.ForEach(y => y.HasModelChanged = false));
+        //        HasModelChanged = false;
+        //        IsEditingParameters = false;
+        //    },
+        //    HasAnyParameterValueChanged);
 
-        public ICommand SaveChangesCommand => new RelayCommand(
-            async () => {
-                foreach (var paramVm in Items) {
-                    var presetValue = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == paramVm.ParamEnumId);
-                    if(presetValue == null) {
-                        presetValue = await MpAnalyticItemPresetParameterValue.Create(
-                            Preset, paramVm.ParamEnumId, paramVm.CurrentValue);
-                    } else {
-                        presetValue.Value = paramVm.CurrentValue;
-                        await presetValue.WriteToDatabaseAsync();
-                    }
-                    if(paramVm is MpComboBoxParameterViewModel cmbvm) {
-                        paramVm.Parameter.values.ForEach(x => x.isDefault = x.value == paramVm.CurrentValue);
-                    } else {
-                        var defParam = paramVm.Parameter.values.FirstOrDefault(x => x.isDefault);
-                        if(defParam != null) {
-                            defParam.value = paramVm.CurrentValue;
-                        } else if(paramVm.Parameter.values.Count > 0) {
-                            paramVm.Parameter.values[0].value = paramVm.CurrentValue;
-                        }
-                    }
-                }
+        //public ICommand SaveChangesCommand => new RelayCommand(
+        //    async () => {
+        //        foreach (var paramVm in Items) {
+        //            var presetValue = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == paramVm.ParamEnumId);
+        //            if(presetValue == null) {
+        //                presetValue = await MpAnalyticItemPresetParameterValue.Create(
+        //                    Preset, paramVm.ParamEnumId, paramVm.CurrentValue);
+        //            } else {
+        //                presetValue.Value = paramVm.CurrentValue;
+        //                await presetValue.WriteToDatabaseAsync();
+        //            }
+        //            if(paramVm is MpComboBoxParameterViewModel cmbvm) {
+        //                paramVm.Parameter.values.ForEach(x => x.isDefault = x.value == paramVm.CurrentValue);
+        //            } else {
+        //                var defParam = paramVm.Parameter.values.FirstOrDefault(x => x.isDefault);
+        //                if(defParam != null) {
+        //                    defParam.value = paramVm.CurrentValue;
+        //                } else if(paramVm.Parameter.values.Count > 0) {
+        //                    paramVm.Parameter.values[0].value = paramVm.CurrentValue;
+        //                }
+        //            }
+        //        }
 
-                Items.ForEach(x => x.HasModelChanged = false);
-                OnPropertyChanged(nameof(HasAnyParameterValueChanged));
-            },
-           HasAnyParameterValueChanged);
+        //        Items.ForEach(x => x.HasModelChanged = false);
+        //        OnPropertyChanged(nameof(HasAnyParameterValueChanged));
+        //    },
+        //   HasAnyParameterValueChanged);
 
         public ICommand ManagePresetCommand => new RelayCommand(
             () => {

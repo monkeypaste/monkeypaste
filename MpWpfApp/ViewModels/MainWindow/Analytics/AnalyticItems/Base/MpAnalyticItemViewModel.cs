@@ -436,9 +436,9 @@ namespace MpWpfApp {
                         }
                     }
                     MpAnalyzerPresetFormat apf = new MpAnalyzerPresetFormat() {
-                        description = "Auto-generated default preset",
+                        description = $"Auto-generated default preset for '{Title}'",
                         isDefault = true,
-                        label = "Default",
+                        label = $"{Title} - Default",
                         values = paramPresetValues
                     };
                     AnalyzerPluginFormat.presets.Add(apf);
@@ -640,7 +640,7 @@ namespace MpWpfApp {
                     } else if (PluginFormat.Component is MpHttpPlugin httpPlugin) {
                         urlPath = httpPlugin.GetRequestUri(trans.Request.ToString());
                     } else {
-                        throw new MpPluginLoaderException("Http Plugin Component does not exist");
+                        throw new MpUserNotifiedException("Http Plugin Component does not exist");
                     }
                     transType = MpCopyItemTransactionType.Http;
 
@@ -685,7 +685,7 @@ namespace MpWpfApp {
                                 transDateTime: trans.RequestTime,
                                 suppressWrite: suppressWrite);
                         } else {
-                            throw new MpPluginLoaderException($"Uknown ioType for plugin defined in '{manifestPath}'");
+                            throw new MpUserNotifiedException($"Uknown ioType for plugin defined in '{manifestPath}'");
                         }
                     }
                 } 
@@ -960,6 +960,7 @@ namespace MpWpfApp {
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedItem));
 
+                MpConsole.WriteTraceLine("Classify!");
                 string requestStr = CreateRequest(sourceCopyItem, out object requestContent);
                 var reqTime = DateTime.Now;
                 object responseData = await GetResponse(requestStr);

@@ -20,50 +20,6 @@
             BorderBrush="Black"
             Margin="0,5,10,0">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0"
-                       HorizontalAlignment="Stretch"
-                       Visibility="{Binding HasAnyParameterValueChanged,
-                                            Converter={StaticResource BoolToVisibilityConverter}}"
-                       LastChildFill="False">
-                <Button TabIndex="0"
-                        Width="50"
-                        DockPanel.Dock="Left"
-                        Command="{Binding CancelChangesCommand}">
-                    <StackPanel Orientation="Vertical">
-                        <Image Width="30"
-                               Height="30"
-                               VerticalAlignment="Top"
-                               Source="{Binding .,
-                                                Source={StaticResource DeleteIcon},
-                                                Converter={StaticResource StringResourceToImageSourceConverter}}" />
-                        <TextBlock VerticalAlignment="Top"
-                                   Visibility="Visible"
-                                   Text="Cancel" />
-                    </StackPanel>
-                </Button>
-                <Button x:Name="OkButton"
-                        TabIndex="1"
-                        Width="50"
-                        DockPanel.Dock="Right"
-                        Command="{Binding SaveChangesCommand}">
-                    <StackPanel Orientation="Vertical">
-                        <Image Width="30"
-                               Height="30"
-                               VerticalAlignment="Top"
-                               Source="{Binding .,
-                                                Source={StaticResource SaveIcon},
-                                                Converter={StaticResource StringResourceToImageSourceConverter}}" />
-                        <TextBlock VerticalAlignment="Top"
-                                   HorizontalAlignment="Center"
-                                   Visibility="Visible"
-                                   Text="Save" />
-                    </StackPanel>
-                </Button>
-            </DockPanel>
             <ListBox x:Name="ConfigurePresetListBox"
                      Grid.Row="1"
                      Background="Transparent"

@@ -276,7 +276,6 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentAddTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentTaggedTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpFileSystemTriggerViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpParentOutputTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpShortcutTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\MpActionCollectionViewModel.cs" />
     <Compile Include="Utils\MpWpfWrapper.cs" />
@@ -397,9 +396,6 @@
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Designer\DesignerItem\Selector\MpActionDesignerItemTemplateSelector.cs" />
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\Designer\MpActionDesignerView.xaml.cs">
       <DependentUpon>MpActionDesignerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\MpTriggerActionTreeView.xaml.cs">
-      <DependentUpon>MpTriggerActionTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml.cs">
       <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
@@ -546,7 +542,16 @@
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\ContextMenu\Selector\MpSelectorItemDataTemplateSelector.cs" />
-    <Compile Include="Views\Reusable\Loader\MpNotificationBalloonView.xaml.cs">
+    <Compile Include="Views\Reusable\Notifications\Items\MpLoaderNotificationView.xaml.cs">
+      <DependentUpon>MpLoaderNotificationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\Notifications\Items\MpStatusNotificationView.xaml.cs">
+      <DependentUpon>MpStatusNotificationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\Notifications\Items\MpUserActionNotificationView.xaml.cs">
+      <DependentUpon>MpUserActionNotificationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\Notifications\MpNotificationBalloonView.xaml.cs">
       <DependentUpon>MpNotificationBalloonView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml.cs">
@@ -816,10 +821,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Selector\Triggers\MpTriggerActionTreeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -852,7 +853,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Reusable\Loader\MpNotificationBalloonView.xaml">
+    <Page Include="Views\Reusable\Notifications\Items\MpLoaderNotificationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\Notifications\Items\MpStatusNotificationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\Notifications\Items\MpUserActionNotificationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\Notifications\MpNotificationBalloonView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

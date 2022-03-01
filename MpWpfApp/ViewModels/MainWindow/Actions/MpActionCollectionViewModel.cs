@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 
@@ -212,6 +213,8 @@ namespace MpWpfApp {
         public async Task Init() {
             IsBusy = true;
 
+            MpConsole.WriteLine("Action Collectoin Init!");
+
             Items.Clear();
             var tal = await MpDataModelProvider.GetAllTriggerActions();
 
@@ -220,11 +223,14 @@ namespace MpWpfApp {
                 Items.Add(tavm);
             }
 
+            while (AllActions.Any(x => x.IsBusy)) {
+                // wait for all action trees to initialize before enabling
+                await Task.Delay(100);
+            }
+
             await EnabledAll();
 
             OnPropertyChanged(nameof(Items));
-
-            NotifyViewportChanged();
 
             IsBusy = false;
         }
@@ -256,9 +262,6 @@ namespace MpWpfApp {
                 case MpTriggerType.Shortcut:
                     tavm = new MpShortcutTriggerViewModel(this);
                     break;
-                //case MpTriggerType.ParentOutput:
-                //    tavm = new MpParentOutputTriggerViewModel(this);
-                //    break;
             }
 
             await tavm.InitializeAsync(a);
@@ -267,11 +270,14 @@ namespace MpWpfApp {
         }
 
         public async Task EnabledAll() {
-            await Task.Delay(1);
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
 
             Items.ForEach(x => x.ToggleIsEnabledCommand.Execute(true));
+
+            while(AllActions.Any(x=>x.IsBusy)) {
+                await Task.Delay(100);
+            }
         }
 
         public async Task DisableAll() {
@@ -348,11 +354,10 @@ namespace MpWpfApp {
         //        ClearAreaAtPoint(avm.Location, avm);
         //    }
         //}
-
         public void NotifyViewportChanged() {
-            MpMessenger.Send(MpMessageType.ActionViewportChanged);
+            CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
+            CollectionViewSource.GetDefaultView(AllSelectedTriggerActions).Refresh();
         }
-
         #endregion
 
         public string GetUniqueTriggerName(string prefix) {
@@ -382,8 +387,6 @@ namespace MpWpfApp {
         #endregion
         #region Private Methods
 
-
-
         private async Task UpdateSortOrder() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
             await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
@@ -399,11 +402,9 @@ namespace MpWpfApp {
                         MpTagTrayViewModel.Instance.IsSidebarVisible = false;
 
                     }
-                    NotifyViewportChanged();
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(IsAnySelected));
-                    NotifyViewportChanged();
                     //OnPropertyChanged(nameof(AllSelectedTriggerActions));
                     break;
                 //case nameof(DesignerWidth):
@@ -490,7 +491,6 @@ namespace MpWpfApp {
                  OnPropertyChanged(nameof(Items));
 
                  OnPropertyChanged(nameof(IsAnySelected));
-                 NotifyViewportChanged();
 
                  IsBusy = false;
              });
@@ -513,8 +513,6 @@ namespace MpWpfApp {
                 await UpdateSortOrder();
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(SelectedItem));
-
-                NotifyViewportChanged();
 
                 IsBusy = false;
             });

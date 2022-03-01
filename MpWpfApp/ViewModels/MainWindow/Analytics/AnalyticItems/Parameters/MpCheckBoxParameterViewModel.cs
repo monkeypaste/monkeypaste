@@ -34,6 +34,7 @@ namespace MpWpfApp {
             IsBusy = true;
 
             Parameter = aipf;
+            ParameterValue = aipv;
 
             CurrentValue = _defaultValue = aipv.Value;
 

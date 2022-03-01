@@ -80,6 +80,7 @@ namespace MpWpfApp {
             IsBusy = true;
             
             Parameter = aip;
+            ParameterValue = aipv;
 
             Items.Clear();
 

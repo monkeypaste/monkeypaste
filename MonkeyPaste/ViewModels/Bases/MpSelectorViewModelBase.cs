@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste {
     public abstract class MpSelectorViewModelBase<P,C> : 

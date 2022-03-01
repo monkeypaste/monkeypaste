@@ -306,7 +306,7 @@
                             <CheckBox Grid.Row="2"
                                       Grid.Column="1"
                                       Visibility="{Binding IsItemTypeCompare,
-                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                           Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                       IsEnabled="{Binding IsCompareTypeRegex,
                                                           Converter={StaticResource BoolFlipConverter}}"
                                       MinWidth="100"
@@ -358,6 +358,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.3*" />
                                 <RowDefinition Height="0.3*" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
                             <Grid.ColumnDefinitions>
@@ -451,9 +452,7 @@
                                     Background="Transparent"
                                     Margin="5,0,0,0"
                                     BorderThickness="0"
-                                    Command="{Binding ManagePresetCommand,
-                                                      Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance}}"
-                                    CommandParameter="{Binding ActionObjId}"
+                                    Command="{Binding ToggleShowParametersCommand}"
                                     Style="{StaticResource SemiTransparentButton}">
                                 <Border CornerRadius="2"
                                         BorderThickness="2"
@@ -467,6 +466,12 @@
                                            Height="15" />
                                 </Border>
                             </Button>
+                            <Grid x:Name="PresetParametersGrid"
+                                  Visibility="{Binding IsShowingParameters,
+                                                       Converter={StaticResource BoolToVisibilityConverter},
+                                                       FallbackValue='Collapsed'}">
+                                <local:MpAnalyticItemPresetParameterListBoxView DataContext="{Binding SelectedPreset}" />
+                            </Grid>
                         </Grid>
                     </DataTemplate>
                     <!--  Classify  -->

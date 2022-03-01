@@ -262,7 +262,7 @@
                          Grid.Column="0"
                          Grid.ColumnSpan="3"
                          HorizontalAlignment="Left"
-                         Margin="20,5,0,0"
+                         Margin="10,5,10,0"
                          TextWrapping="Wrap"
                          FontSize="12"
                          FontWeight="SemiBold"

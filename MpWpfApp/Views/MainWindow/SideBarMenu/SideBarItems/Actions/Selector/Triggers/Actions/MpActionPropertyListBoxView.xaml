@@ -14,7 +14,6 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid>
         <ListBox x:Name="ActionPropertyListBox"
-                 Loaded="ActionPropertyListBox_Loaded"
                  SnapsToDevicePixels="True"
                  ItemsSource="{Binding AllSelectedTriggerActions}"
                  SelectionChanged="ActionPropertyListBox_SelectionChanged"

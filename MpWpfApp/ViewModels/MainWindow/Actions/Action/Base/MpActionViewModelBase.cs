@@ -31,8 +31,7 @@ namespace MpWpfApp {
         MpIUserIconViewModel,
         MpITreeItemViewModel<MpActionViewModelBase>,
         MpIBoxViewModel,
-        MpIMovableViewModel,
-        MpITriggerActionViewModel {
+        MpIMovableViewModel {
         #region Private Variables
 
         private Point _lastLocation;
@@ -610,11 +609,7 @@ namespace MpWpfApp {
             MpActionViewModelBase avm = null;
             switch (a.ActionType) {
                 case MpActionType.Trigger:
-                    if((MpTriggerType)a.ActionObjId != MpTriggerType.ParentOutput) {
-                        throw new Exception("Only parent output triggers can be children of a trigger or action");
-                    }
-                    avm = new MpParentOutputTriggerViewModel(Parent);
-                    break;
+                    throw new Exception("Trigger's should be created in the collection forest");
                 case MpActionType.Analyze:
                     avm = new MpAnalyzeActionViewModel(Parent);
                     break;
@@ -634,7 +629,9 @@ namespace MpWpfApp {
                     avm = new MpTransformActionViewModel(Parent);
                     break;
             }
-
+            if(ActionId == 596) {
+                MpConsole.WriteLine("Init'd classify");
+            }
             avm.ParentActionViewModel = this;
             OnActionComplete += avm.OnActionTriggered;
 
@@ -699,6 +696,8 @@ namespace MpWpfApp {
         #region Protected Methods
 
         protected async Task ShowValidationNotification() {
+            bool wasBusy = IsBusy;
+            IsBusy = true;
             var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
                     notificationType: MpNotificationType.InvalidAction,
                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
@@ -707,7 +706,10 @@ namespace MpWpfApp {
 
             if (userAction == MpNotificationUserActionType.Retry) {
                 await Validate();
+            } else if (userAction == MpNotificationUserActionType.Ignore) {
+                wasBusy = false;
             }
+            IsBusy = wasBusy;
         }
 
         protected void FinishPerformingAction(object arg) {
@@ -830,7 +832,7 @@ namespace MpWpfApp {
                         });
                     }
                     break;
-                case nameof(Items):                
+                case nameof(Items):
                     Parent.NotifyViewportChanged();
                     break;
                 case nameof(IsExpanded):
@@ -858,8 +860,11 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ToggleIsEnabledCommand => new MpRelayCommand<bool>(
+        public MpIAsyncCommand<object> ToggleIsEnabledCommand => new MpAsyncCommand<object>(
             async (parentToggledState) => {
+                bool wasBusy = IsBusy;
+                IsBusy = true;
+
                 bool newIsEnabledState = false;
                 if(parentToggledState != null) {
                     newIsEnabledState = (bool)parentToggledState;                    
@@ -868,32 +873,30 @@ namespace MpWpfApp {
                 }
                 
                 if (newIsEnabledState) {
-                    //if(Label == "Detect Language") {
-                    //    Debugger.Break();
-                    //}
                     await Validate();
                     if (!IsValid) {
                         IsEnabled = null;
                     } else {
                         await Enable();
-                        //if(ParentActionViewModel != null) {
-                        //    ParentActionViewModel.OnActionComplete += OnActionTriggered;
-                        //}
                         IsEnabled = true;
                         LastIsEnabledState = true;
                     }
                 } else {
                     await Disable();
-                    //if(ParentActionViewModel != null) {
-                    //    ParentActionViewModel.OnActionComplete -= OnActionTriggered;
-                    //}
                     IsEnabled = false;
                     LastIsEnabledState = false;
                 }
                 if(IsEnabled.HasValue) {
                     Children.ForEach(x => x.ToggleIsEnabledCommand.Execute(IsEnabled.Value));
                 }
+
+                while(Children.Any(x=>x.IsBusy)) {
+                    await Task.Delay(100);
+                }
+                
+                IsBusy = false;
             });
+
 
         public ICommand ShowActionSelectorMenuCommand => new RelayCommand<object>(
              (args) => {
@@ -940,8 +943,6 @@ namespace MpWpfApp {
                  Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
 
                  IsExpanded = true;
-
-                 Parent.NotifyViewportChanged();
 
                  navm.OnPropertyChanged(nameof(navm.X));
                  navm.OnPropertyChanged(nameof(navm.Y));

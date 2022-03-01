@@ -24,10 +24,13 @@ namespace MonkeyPaste {
         }
 
         public async Task Register() {
+            if (ItemType.ToString().ToLower().Contains("actioncollection")) {
+                Debugger.Break();
+            }
             var sw = Stopwatch.StartNew();
             object itemObj = null;
             object[] args = ItemArg == null ? null : new[] { ItemArg };
-            MethodInfo initMethodInfo = null;
+            MethodInfo initMethodInfo;
             PropertyInfo propertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
 
             if(propertyInfo == null) {
