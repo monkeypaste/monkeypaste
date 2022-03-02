@@ -21,6 +21,13 @@ namespace MonkeyPaste {
 
         #region Collections
 
+        public static T PeekOrDefault<T>(this Stack<T> stack) {
+            if(stack.Count == 0) {
+                return default(T);
+            }
+            return stack.Peek();
+        }
+
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
             foreach (T item in source)
                 action(item);

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Xml.Schema;
 using CodeClassifier.StringTokenizer;
+using MonkeyPaste.Plugin;
 
 namespace CodeClassifier {
     //from https://github.com/bertyhell/CodeClassifier

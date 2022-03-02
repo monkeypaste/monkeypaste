@@ -835,6 +835,19 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region MpNotification
+
+        public static async Task<MpNotification> GetNotificationByDialogType(MpNotificationDialogType dialogType) {
+            string query = string.Format(@"select * from MpNotification where e_MpNotificationDialogTypeId=?");
+            var result = await MpDb.QueryAsync<MpNotification>(query, (int)dialogType);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        #endregion
+
         #endregion
 
         private static string GetFetchQuery(int startIndex, int count, bool queryForTotalCount = false, int forceTagId = -1, bool ignoreSearchStr = false, int forceCheckCopyItemId = -1) {

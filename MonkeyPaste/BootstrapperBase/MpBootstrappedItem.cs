@@ -24,9 +24,6 @@ namespace MonkeyPaste {
         }
 
         public async Task Register() {
-            if (ItemType.ToString().ToLower().Contains("actioncollection")) {
-                Debugger.Break();
-            }
             var sw = Stopwatch.StartNew();
             object itemObj = null;
             object[] args = ItemArg == null ? null : new[] { ItemArg };

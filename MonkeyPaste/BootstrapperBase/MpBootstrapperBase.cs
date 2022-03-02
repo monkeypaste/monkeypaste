@@ -27,8 +27,25 @@ namespace MonkeyPaste {
 
         protected void ReportItemLoading(MpBootstrappedItem item, int index) {
             MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
-            MpNotificationBalloonViewModel.Instance.Info = $"Loading {item.Label}";
-            MpNotificationBalloonViewModel.Instance.PercentLoaded = (double)((double)(index + 1) / (double)_items.Count);
+            
+            var lnvm = MpNotificationBalloonViewModel.Instance.CurrentNotificationViewModel as MpLoaderNotificationViewModel;
+            lnvm.PercentLoaded = (double)((double)(index + 1) / (double)_items.Count);
+
+            string viewLabel = string.Empty;
+            if(!string.IsNullOrWhiteSpace(item.Label)) {
+                viewLabel = item.Label;
+            }
+
+            lnvm.Body = viewLabel;
+
+            int percent = (int)(lnvm.PercentLoaded * 100);
+            lnvm.Detail = $"{percent} %";
+
+            int dotCount = index % 4;
+            lnvm.Title = "LOADING";
+            for (int i = 0; i < dotCount; i++) {
+                lnvm.Title += ".";
+            }
         }
     }
 }

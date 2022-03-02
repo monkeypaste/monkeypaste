@@ -13,7 +13,6 @@ namespace CodeClassifier {
     public class Plugin : MpIAnalyzerPluginComponent {
         public async Task<object> AnalyzeAsync(object args) {
             await Task.Delay(1);
-            Console.WriteLine("Classify!");
             MpPluginResponseFormat response = null;
 
             var reqParts = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());

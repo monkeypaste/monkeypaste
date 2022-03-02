@@ -15,7 +15,7 @@
                      Width="350"
                      d:DataContext="{d:DesignInstance Type=pcl:MpNotificationBalloonViewModel,
                                                       IsDesignTimeCreatable=False}">
-  
+
     <local:MpUserControl.Resources>
         <Storyboard x:Key="FadeIn">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
@@ -115,6 +115,13 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
+        <DataTemplate x:Key="UserActionNotificationTemplate">
+            <local:MpUserActionNotificationView DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="LoaderNotificationTemplate">
+            <local:MpLoaderNotificationView DataContext="{Binding}" />
+        </DataTemplate>
+        <local:MpNotificationTemplateSelector x:Key="NotificationTemplateSelector" />
     </local:MpUserControl.Resources>
     <local:MpUserControl.Triggers>
         <EventTrigger RoutedEvent="tb:TaskbarIcon.BalloonShowing">
@@ -141,7 +148,6 @@
                              x:Name="FadeOut_BeginStoryboard" />
         </EventTrigger>
     </local:MpUserControl.Triggers>
-
     <Border HorizontalAlignment="Stretch"
             BorderThickness="7"
             BorderBrush="WhiteSmoke"
@@ -153,22 +159,38 @@
                 <ColumnDefinition Width="0.35*" />
                 <ColumnDefinition Width="0.75*" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.3*" />
-                <RowDefinition Height="0.4*" />
-                <RowDefinition Height="0.4*" />
-                <RowDefinition Height="0.4*" />
-            </Grid.RowDefinitions>
             <Image Grid.Row="0"
                    Grid.Column="0"
                    Grid.RowSpan="3"
                    Width="72"
                    Height="72"
-                   Source="{Binding .,
-                                    Source={StaticResource AppIcon},
-                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
+                   Source="{Binding CurrentNotificationViewModel.IconImageBase64,
+                                    Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                    Stretch="Fill"
-                   Margin="10,0,0,0" />
+                   VerticalAlignment="Top"
+                   Margin="10,5,0,0" />
+            <local:MpOneWayCheckBox Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    VerticalContentAlignment="Center"
+                                    Margin="7,0,0,5"
+                                    IsEnabled="{Binding CurrentNotificationViewModel.CanChooseNotShowAgain}"
+                                    IsChecked="{Binding CurrentNotificationViewModel.DoNotShowAgain,
+                                                        Mode=TwoWay,
+                                                        UpdateSourceTrigger=PropertyChanged,
+                                                        NotifyOnSourceUpdated=True,
+                                                        NotifyOnTargetUpdated=True}">
+                <local:MpOneWayCheckBox.Content>
+                    <TextBlock MaxWidth="100"
+                               Foreground="White"
+                               FontSize="9"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               TextWrapping="Wrap"
+                               Text="Do Not Show Again" />
+                </local:MpOneWayCheckBox.Content>
+            </local:MpOneWayCheckBox>
             <Button x:Name="CloseButton"
                     Grid.Column="1"
                     Grid.Row="0"
@@ -180,132 +202,35 @@
                     Grid.RowSpan="2">
                 <Image Width="15"
                        Height="15"
-                       Source="/Resources/Images/Close.png"
                        Stretch="Fill"
                        ToolTip="Close"
-                       x:Name="imgClose" />
+                       x:Name="imgClose">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Source"
+                                            Value="{Binding .,
+                                                            Converter={StaticResource StringResourceToImageSourceConverter},
+                                                            ConverterParameter={StaticResource CloseOverIcon}}" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver"
+                                         Value="False">
+                                    <Setter Property="Source"
+                                            Value="{Binding .,
+                                                            Converter={StaticResource StringResourceToImageSourceConverter},
+                                                            ConverterParameter={StaticResource CloseIcon}}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
             </Button>
-            <TextBlock Grid.Row="0"
-                       Grid.Column="1"
-                       Grid.RowSpan="2"
-                       Margin="10,0"
-                       FontSize="16"
-                       Foreground="White"
-                       FontWeight="SemiBold"
-                       Text="{Binding LoadingLabel}" />
-            <Border x:Name="ProgressBarContainer"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    local:MpSizeObserverExtension.IsEnabled="True"
-                    local:MpSizeObserver.ObservedWidth="{Binding ProgressTotalBarWidth,
-                                                                 Mode=OneWayToSource}"
-                    BorderThickness="1"
-                    BorderBrush="White"
-                    Background="Transparent"
-                    Margin="5,20"
-                    Padding="0">
-                <Grid HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch">
-                    <Rectangle x:Name="ProgressBar"
-                               Width="{Binding ProgressBarCurrentWidth,
-                                               NotifyOnSourceUpdated=True}"
-                               HorizontalAlignment="Left"
-                               Fill="White"
-                               VerticalAlignment="Stretch" />
-                    <TextBlock HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="Black"
-                               Text="{Binding PercentLabel,
-                                              NotifyOnSourceUpdated=True}" />
-                </Grid>
-            </Border>
-            <TextBlock x:Name="ProgressInfoBlock"
-                       Grid.Row="1"
-                       Grid.Column="1"
-                       Visibility="{Binding IsLoaded,
-                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                       Margin="0,0,7,0"
-                       VerticalAlignment="Bottom"
-                       HorizontalAlignment="Right"
-                       FontSize="8"
-                       Foreground="White"
-                       FontFamily="Courier"
-                       Text="{Binding Info,
-                                      NotifyOnSourceUpdated=True}" />
-            <TextBlock Grid.Row="2"
-                       Grid.Column="1"
-                       Visibility="{Binding IsLoaded,
-                                            Converter={StaticResource BoolToVisibilityConverter}}"
-                       HorizontalAlignment="Left"
-                       Margin="20,5,0,0"
-                       MaxWidth="200"
-                       TextWrapping="WrapWithOverflow"
-                       FontSize="12"
-                       Foreground="White"
-                       Text="{Binding PostLoadedMessage}" />
-            <Grid Grid.Row="3"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="3"
-                  Visibility="{Binding IsValid,
-                                       Converter={StaticResource BoolToVisibilityFlipConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0.3*" />
-                    <RowDefinition Height="0.7*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*" />
-                    <ColumnDefinition Width="0.3*" />
-                    <ColumnDefinition Width="0.3*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Row="0"
-                         Grid.Column="0"
-                         Grid.ColumnSpan="3"
-                         HorizontalAlignment="Left"
-                         Margin="10,5,10,0"
-                         TextWrapping="Wrap"
-                         FontSize="12"
-                         FontWeight="SemiBold"
-                         Background="Transparent"
-                         Focusable="True"
-                         Foreground="{Binding NotificationTextForegroundColor,
-                                              Converter={StaticResource StringHexToBrushConverter}}"
-                         Text="{Binding ValidationMessage}" />
-                <Button Grid.Row="1"
-                        Grid.Column="0"
-                        TabIndex="0"
-                        Visibility="{Binding ShowIgnoreButton,
-                                             Converter={StaticResource BoolToVisibilityConverter}}"
-                        Margin="5"
-                        Command="{Binding IgnoreCommand}">
-                    <TextBlock FontWeight="SemiBold"
-                               Text="IGNORE"
-                               Padding="10,5" />
-                </Button>
-                <Button Grid.Row="1"
-                        Grid.Column="1"
-                        TabIndex="1"
-                        Visibility="{Binding ShowRetryButton,
-                                             Converter={StaticResource BoolToVisibilityConverter}}"
-                        Margin="5"
-                        Command="{Binding RetryCommand}">
-                    <TextBlock FontWeight="SemiBold"
-                               Text="RETRY"
-                               Padding="10,5" />
-                </Button>
-                <Button Grid.Row="1"
-                        Grid.Column="2"
-                        TabIndex="2"
-                        Visibility="{Binding ShowShutdownButton,
-                                             Converter={StaticResource BoolToVisibilityConverter}}"
-                        Margin="5"
-                        Command="{Binding ShutdownCommand}">
-                    <TextBlock FontWeight="SemiBold"
-                               Text="EXIT"
-                               Padding="10,5" />
-                </Button>
-
-            </Grid>
+            <ContentControl Grid.Column="1"
+                            Grid.RowSpan="4"
+                            Content="{Binding CurrentNotificationViewModel}"
+                            ContentTemplateSelector="{StaticResource NotificationTemplateSelector}" />
         </Grid>
     </Border>
 

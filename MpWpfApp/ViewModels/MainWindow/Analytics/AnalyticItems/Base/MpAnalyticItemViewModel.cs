@@ -17,6 +17,22 @@ using System.Diagnostics;
 using System.IO;
 
 namespace MpWpfApp {
+    [Flags]
+    public enum MpAnalyzerInputFormatFlags {
+        None = 0,
+        Text = 1,
+        Image = 2,
+        File = 4
+    }
+
+    [Flags]
+    public enum MpAnalyzerOutputFormatFlags {
+        None = 0,
+        Text = 1,
+        Image = 2,
+        BoundingBox = 4,
+        File = 8
+    }
     public class MpAnalyticItemViewModel : 
         MpSelectorViewModelBase<MpAnalyticItemCollectionViewModel,MpAnalyticItemPresetViewModel>, 
         MpISelectableViewModel,
@@ -935,7 +951,7 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ExecuteAnalysisCommand => new RelayCommand<object>(
+        public MpIAsyncCommand<object> ExecuteAnalysisCommand => new MpAsyncCommand<object>(
             async (args) => {
                 bool suppressCreateItem = false;
 
@@ -960,7 +976,6 @@ namespace MpWpfApp {
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedItem));
 
-                MpConsole.WriteTraceLine("Classify!");
                 string requestStr = CreateRequest(sourceCopyItem, out object requestContent);
                 var reqTime = DateTime.Now;
                 object responseData = await GetResponse(requestStr);
@@ -985,6 +1000,10 @@ namespace MpWpfApp {
         protected virtual Task<MpAnalyzerTransaction> ExecuteAnalysis(object obj) { return null; }
 
         public virtual bool CanExecuteAnalysis(object args) {
+            if(IsBusy) {
+                return false;
+            }
+
             MpAnalyticItemPresetViewModel spvm = null;
             MpCopyItem sci = null;
             if(args == null) {

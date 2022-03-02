@@ -41,7 +41,7 @@ namespace MpProcessHelper {
 
         #region Public Methods
 
-        public static void Init(string fallbackProcessPath, string[] knownAppPaths, MpIconBuilderBase iconBuilder) {
+        public static void Init(string fallbackProcessPath, string[] knownAppPaths, MpIIconBuilder iconBuilder) {
             Task.Run(async () => {
                 fallback = fallbackProcessPath;
                 _knownAppPaths = new ObservableCollection<string>(knownAppPaths);

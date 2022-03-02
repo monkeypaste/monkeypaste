@@ -34,6 +34,8 @@ namespace MpWpfApp {
         MpIMovableViewModel {
         #region Private Variables
 
+        private double _maxDeltaLocation = 10;
+
         private Point _lastLocation;
         
 
@@ -629,9 +631,6 @@ namespace MpWpfApp {
                     avm = new MpTransformActionViewModel(Parent);
                     break;
             }
-            if(ActionId == 596) {
-                MpConsole.WriteLine("Init'd classify");
-            }
             avm.ParentActionViewModel = this;
             OnActionComplete += avm.OnActionTriggered;
 
@@ -699,14 +698,14 @@ namespace MpWpfApp {
             bool wasBusy = IsBusy;
             IsBusy = true;
             var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
-                    notificationType: MpNotificationType.InvalidAction,
+                    notificationType: MpNotificationDialogType.InvalidAction,
                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                     msg: ValidationText);
 
 
-            if (userAction == MpNotificationUserActionType.Retry) {
+            if (userAction == MpDialogResultType.Retry) {
                 await Validate();
-            } else if (userAction == MpNotificationUserActionType.Ignore) {
+            } else if (userAction == MpDialogResultType.Ignore) {
                 wasBusy = false;
             }
             IsBusy = wasBusy;
@@ -807,18 +806,6 @@ namespace MpWpfApp {
                     this.FindAllChildren().ForEach(x => x.OnPropertyChanged(nameof(IsPropertyListItemVisible)));
                     OnPropertyChanged(nameof(BorderBrushHexColor));
                     break;
-                case nameof(IsEnabled):
-                    if(!IsEnabled.HasValue) {
-                        break;
-                    }
-                    Task.Run(async () => {
-                        if (IsEnabled.HasValue && IsEnabled.Value) {
-                            await Enable();
-                        } else {
-                            await Disable();
-                        }
-                    });
-                    break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         HasModelChanged = false;
@@ -845,11 +832,17 @@ namespace MpWpfApp {
                 case nameof(Location):
                 case nameof(X):
                 case nameof(Y):
-                    
-                    if(AddChildEmptyActionViewModel == null) {
-                        break;
+                    if(!IsBusy) {
+                        if (_lastLocation.Distance(Location) > _maxDeltaLocation) {
+                            var delta = Location - _lastLocation;
+                            delta.Normalize();
+                            Location = _lastLocation + (delta * _maxDeltaLocation);
+                        }
                     }
 
+                    if (AddChildEmptyActionViewModel == null) {
+                        break;
+                    }
                     AddChildEmptyActionViewModel.Location = DefaultEmptyActionLocation;
 
                     _lastLocation = Location;

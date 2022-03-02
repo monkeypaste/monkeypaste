@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {    
     public abstract class MpViewModelBase : INotifyPropertyChanged, MpIErrorHandler {
@@ -121,12 +122,12 @@ namespace MonkeyPaste {
 
         #region Protected Methods
 
-
+        protected void WriteModel(MpDbModelBase dbo) {
+            WriteModelHelper(dbo).FireAndForgetSafeAsync(this);
+        }
         #region Db Events
 
-        protected virtual void Instance_SyncDelete(object sender, MpDbSyncEventArgs e) {
-
-        }
+        protected virtual void Instance_SyncDelete(object sender, MpDbSyncEventArgs e) { }
 
         protected virtual void Instance_SyncUpdate(object sender, MpDbSyncEventArgs e) { }
 
@@ -143,6 +144,11 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private methods
+
+        private async Task WriteModelHelper(MpDbModelBase dbo) {
+            await dbo.WriteToDatabaseAsync();
+            HasModelChanged = false;
+        }
 
         #endregion
 

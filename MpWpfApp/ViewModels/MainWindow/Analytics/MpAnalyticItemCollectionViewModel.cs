@@ -12,7 +12,6 @@ using System.Windows.Media;
 using FFImageLoading.Helpers.Exif;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
-using Xamarin.Forms.Internals;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {

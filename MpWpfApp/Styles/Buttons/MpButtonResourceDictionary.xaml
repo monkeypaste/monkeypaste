@@ -349,7 +349,8 @@
                      TargetType="{x:Type ToggleButton}">
         <Border x:Name="AMTB_OuterBorder"
                 BorderThickness="1"
-                CornerRadius="2">
+                Margin="0,0,2,0"
+                CornerRadius="5">
             <Border x:Name="AMTB_InnerBorder"
                     BorderThickness="1"
                     CornerRadius="2">

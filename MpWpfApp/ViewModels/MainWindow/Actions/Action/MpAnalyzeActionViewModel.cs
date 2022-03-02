@@ -75,7 +75,11 @@ namespace MpWpfApp {
         #region Public Overrides
 
         public override async Task PerformAction(object arg) {
-            if(!CanPerformAction(arg)) {
+
+            if (ActionId == 597) {
+                MpConsole.WriteLine("Classifier Perform Action Called");
+            }
+            if (!CanPerformAction(arg)) {
                 return;
             }
 

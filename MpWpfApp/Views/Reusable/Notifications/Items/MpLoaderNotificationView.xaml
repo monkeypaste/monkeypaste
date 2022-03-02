@@ -5,11 +5,69 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
                      xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                     x:TypeArguments="pcl:MpNotificationViewModel"
+                     x:TypeArguments="pcl:MpLoaderNotificationViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type={x:Type pcl:MpLoaderNotificationViewModel},
                                                       IsDesignTimeCreatable=False}">
-    <Grid />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.7*" />
+            <RowDefinition Height="0.3*" />
+            <RowDefinition Height="0.1*" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Margin="10,0,0,1"
+                   FontSize="16"
+                   VerticalAlignment="Bottom"
+                   HorizontalAlignment="Left"
+                   Foreground="White"
+                   FontWeight="SemiBold"
+                   Text="{Binding Title}" />
+        <Border Grid.Row="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom"
+                BorderThickness="0"
+                Margin="5,0,5,0"
+                Background="White"
+                Height="1" />
+
+        <Border x:Name="ProgressBarContainer"
+                Grid.Row="1"
+                local:MpSizeObserverExtension.IsEnabled="True"
+                local:MpSizeObserver.ObservedWidth="{Binding ProgressTotalBarWidth,
+                                                             Mode=OneWayToSource}"
+                BorderThickness="1"
+                BorderBrush="White"
+                Background="Transparent"
+                Margin="5,20"
+                Padding="0">
+            <Grid HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+                <Rectangle x:Name="ProgressBar"
+                           Width="{Binding ProgressBarCurrentWidth,
+                                           NotifyOnSourceUpdated=True}"
+                           HorizontalAlignment="Left"
+                           Fill="White"
+                           VerticalAlignment="Stretch" />
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontFamily="Courier"
+                           Foreground="Black"
+                           Text="{Binding Detail,
+                                          NotifyOnSourceUpdated=True}" />
+            </Grid>
+        </Border>
+        <TextBlock x:Name="ProgressInfoBlock"
+                   Grid.Row="2"
+                   Margin="0,0,7,0"
+                   VerticalAlignment="Bottom"
+                   HorizontalAlignment="Right"
+                   FontSize="10"
+                   Foreground="Cyan"
+                   FontFamily="Courier"
+                   Text="{Binding Body,
+                                  NotifyOnSourceUpdated=True}" />
+    </Grid>
 </local:MpUserControl>

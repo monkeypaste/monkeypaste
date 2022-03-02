@@ -355,6 +355,9 @@ namespace MpWpfApp {
         }
 
         public void RegisterTrigger(MpActionViewModelBase mvm) {
+            if(mvm.ActionId == 597) {
+                Debugger.Break();
+            }
             Parent.OnAnalysisCompleted += mvm.OnActionTriggered;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} Registered {mvm.Label} matcher");
         }

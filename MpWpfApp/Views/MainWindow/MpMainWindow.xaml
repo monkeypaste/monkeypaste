@@ -206,6 +206,7 @@
                                                                Source={x:Static local:MpClipTrayViewModel.Instance}}"
                                               DataContext="{x:Static local:MpSidebarViewModel.Instance}"
                                               HorizontalAlignment="Stretch"
+                                              
                                               Background="{Binding .,
                                                                    Converter={StaticResource StringToThemeBrushConverter},
                                                                    ConverterParameter=Tag_Tree_Background_Color}" />
@@ -216,7 +217,7 @@
                               Grid.Column="0"
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch"
-                              Width="5"
+                              Width="2"
                               local:MpHoverableExtension.IsEnabled="True"
                               local:MpHoverableExtension.HoverCursor="ResizeWE"
                               IsEnabled="{Binding IsAnySidebarOpen}"

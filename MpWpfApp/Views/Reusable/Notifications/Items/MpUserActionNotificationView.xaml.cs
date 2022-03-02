@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,11 +14,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MpWpfApp.Views.Reusable.Notifications.Items {
+namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpUserActionNotificationView.xaml
     /// </summary>
-    public partial class MpUserActionNotificationView : UserControl {
+    public partial class MpUserActionNotificationView : MpUserControl<MpUserActionNotificationViewModel> {
         public MpUserActionNotificationView() {
             InitializeComponent();
         }

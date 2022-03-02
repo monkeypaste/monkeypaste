@@ -525,10 +525,10 @@ namespace MonkeyPaste {
 
                         if (!response.IsSuccessStatusCode) {
                             var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
-                                                    notificationType: MpNotificationType.BadHttpRequest,
+                                                    notificationType: MpNotificationDialogType.BadHttpRequest,
                                                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                                                     msg: $"{response.ReasonPhrase}");
-                            if(userAction == MpNotificationUserActionType.Retry) {
+                            if(userAction == MpDialogResultType.Retry) {
                                 return new MpPluginResponseFormat() {
                                     message = MpPluginResponseFormat.RETRY_MESSAGE
                                 };

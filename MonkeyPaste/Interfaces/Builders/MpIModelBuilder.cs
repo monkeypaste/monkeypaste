@@ -21,7 +21,7 @@ namespace MonkeyPaste {
 
 
     public interface MpIProcessIconBuilder {
-        MpIconBuilderBase IconBuilder { get; set; }
+        MpIIconBuilder IconBuilder { get; set; }
         string GetBase64BitmapFromFolderPath(string filepath);
         string GetBase64BitmapFromFilePath(string filepath);
     }

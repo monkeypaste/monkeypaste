@@ -11,11 +11,12 @@ namespace MpWpfApp {
         public MpIDbInfo DbInfo { get; }
         public MpIPreferenceIO PreferenceIO { get; }
         public MpIQueryInfo QueryInfo { get; }
-        public MpIconBuilderBase IconBuilder { get; }
+        public MpIIconBuilder IconBuilder { get; }
         public MpICustomColorChooserMenu CustomColorChooserMenu { get; }
         public MpIKeyboardInteractionService KeyboardInteractionService { get; }
         public MpIGlobalTouch GlobalTouch { get; }
         public MpIUiLocationFetcher LocationFetcher { get; }
+        public MpINativeResource NativeResource { get; }
 
         public MpWpfWrapper() {
             Cursor = new MpWpfCursor();
@@ -24,6 +25,9 @@ namespace MpWpfApp {
             QueryInfo = new MpWpfQueryInfo();
             IconBuilder = new MpWpfIconBuilder();
             CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
+            NativeResource = new MpWpfResourceFetcher();
         }
+
+        
     }
 }

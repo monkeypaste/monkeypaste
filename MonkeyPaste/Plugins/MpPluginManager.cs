@@ -46,7 +46,7 @@ namespace MonkeyPaste {
         public static async Task<MpPluginFormat> ReloadPlugin(MpPluginFormat plugin) {
             if(plugin == null || string.IsNullOrEmpty(plugin.guid)) {
                 var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
-                    notificationType: MpNotificationType.InvalidPlugin,
+                    notificationType: MpNotificationDialogType.InvalidPlugin,
                     exceptionType: MpNotificationExceptionSeverityType.Error,
                     msg: "Error reloading plugin or guid null: " + plugin.title);
                 return plugin;
@@ -54,11 +54,11 @@ namespace MonkeyPaste {
             var pkvp = Plugins.FirstOrDefault(x => x.Value.guid == plugin.guid);
             if(string.IsNullOrEmpty(pkvp.Key)) {                
                 var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
-                    notificationType: MpNotificationType.InvalidPlugin,
+                    notificationType: MpNotificationDialogType.InvalidPlugin,
                     exceptionType: MpNotificationExceptionSeverityType.Error,
                     msg: $"Error reloading plugin '{plugin.title}' with guid '{plugin.guid}', manifest.json found.");
 
-                if(userAction == MpNotificationUserActionType.Retry) {
+                if(userAction == MpDialogResultType.Retry) {
                     await Init();
                     return await ReloadPlugin(plugin);
                 }
@@ -87,12 +87,12 @@ namespace MonkeyPaste {
             string manifestStr = MpFileIoHelpers.ReadTextFromFile(manifestPath);
             if(string.IsNullOrEmpty(manifestStr)) {
                 var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
-                    notificationType: MpNotificationType.InvalidPlugin,
+                    notificationType: MpNotificationDialogType.InvalidPlugin,
                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                     msg: $"Plugin manifest not found in '{manifestPath}'");
 
                 
-                if(userAction == MpNotificationUserActionType.Retry) {
+                if(userAction == MpDialogResultType.Retry) {
                     var retryPlugin = await LoadPlugin(manifestPath);
                     return retryPlugin;
                 }
@@ -103,11 +103,11 @@ namespace MonkeyPaste {
                 plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);                
             } catch(Exception ex) {                
                 var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
-                        notificationType: MpNotificationType.InvalidPlugin,
+                        notificationType: MpNotificationDialogType.InvalidPlugin,
                         exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                         msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}");
 
-                if (userAction == MpNotificationUserActionType.Retry) {
+                if (userAction == MpDialogResultType.Retry) {
                     var retryPlugin = await LoadPlugin(manifestPath);
                     return retryPlugin;
                 }
@@ -118,11 +118,11 @@ namespace MonkeyPaste {
                     plugin.Component = GetPluginComponent(manifestPath, plugin);
                 } catch(Exception ex) {
                     var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
-                            notificationType: MpNotificationType.InvalidPlugin,
+                            notificationType: MpNotificationDialogType.InvalidPlugin,
                             exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                             msg: ex.Message);
 
-                    if (userAction == MpNotificationUserActionType.Retry) {
+                    if (userAction == MpDialogResultType.Retry) {
                         var retryPlugin = await LoadPlugin(manifestPath);
                         return retryPlugin;
                     }

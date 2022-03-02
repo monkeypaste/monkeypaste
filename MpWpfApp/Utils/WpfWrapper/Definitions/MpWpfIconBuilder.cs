@@ -8,7 +8,7 @@ using static MpWpfApp.MpWpfImagingHelper;
 using static MpWpfApp.MpWpfColorHelpers;
 
 namespace MpWpfApp {
-    public class MpWpfIconBuilder : MpIconBuilderBase {
+    public class MpWpfIconBuilder : MpIIconBuilder {
 
         public BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
             var borderBmpSrc = TintBitmapSource(img, bgColor, true);
@@ -16,11 +16,11 @@ namespace MpWpfApp {
             return ScaleBitmapSource(borderBmpSrc, new Size(scale, scale));
         }
 
-        public override string CreateBorder(string iconBase64, double scale, string hexColor) {
+        public string CreateBorder(string iconBase64, double scale, string hexColor) {
             return CreateBorder(iconBase64.ToBitmapSource(), scale, hexColor.ToWinMediaColor()).ToBase64String();
         }
 
-        public override List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5) {
+        public List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5) {
             //var sw = new Stopwatch();
             //sw.Start();
             var bmpSource = iconBase64.ToBitmapSource();
@@ -56,7 +56,7 @@ namespace MpWpfApp {
             return primaryIconColorList;
         }
 
-        public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+        public string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             var bmpSrc = MpShellEx.GetBitmapFromPath(appPath,iconSize);
             if(bmpSrc == null) {
                 return MpBase64Images.QuestionMark;

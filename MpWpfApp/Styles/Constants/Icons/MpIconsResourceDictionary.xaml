@@ -257,5 +257,14 @@
     <s:String x:Key="IndentIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/indent.png
     </s:String>
+    <s:String x:Key="CloseIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/close2.png
+    </s:String>
+    <s:String x:Key="CloseOverIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/close1.png
+    </s:String>
+    <s:String x:Key="ErrorIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/delete2.png
+    </s:String>
     <!--  Icon/Image Source Paths End  -->
 </ResourceDictionary>

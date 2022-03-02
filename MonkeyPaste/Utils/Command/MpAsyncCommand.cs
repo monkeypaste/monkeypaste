@@ -5,6 +5,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste {
     public class MpAsyncCommand<T> : MpIAsyncCommand<T> {
+        //from https://johnthiriet.com/mvvm-going-async-with-async-command/
         public event EventHandler CanExecuteChanged;
 
         private bool _isExecuting;

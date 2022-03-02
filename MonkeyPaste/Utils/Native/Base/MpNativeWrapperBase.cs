@@ -9,11 +9,12 @@ namespace MonkeyPaste {
         MpIDbInfo DbInfo { get; }
         MpIPreferenceIO PreferenceIO { get; }
         MpIQueryInfo QueryInfo { get; }
-        MpIconBuilderBase IconBuilder { get; }
+        MpIIconBuilder IconBuilder { get; }
         MpICustomColorChooserMenu CustomColorChooserMenu { get; }
         MpIKeyboardInteractionService KeyboardInteractionService { get; }
         MpIGlobalTouch GlobalTouch { get; }
         MpIUiLocationFetcher LocationFetcher { get; }
+        MpINativeResource NativeResource { get; }
     }
 
 

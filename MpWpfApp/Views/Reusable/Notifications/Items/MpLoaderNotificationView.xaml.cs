@@ -12,12 +12,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpLoaderNotificationVIew.xaml
     /// </summary>
-    public partial class MpLoaderNotificationView : MpUserControl {
+    public partial class MpLoaderNotificationView : MpUserControl<MpLoaderNotificationViewModel> {
         public MpLoaderNotificationView() {
             InitializeComponent();
         }

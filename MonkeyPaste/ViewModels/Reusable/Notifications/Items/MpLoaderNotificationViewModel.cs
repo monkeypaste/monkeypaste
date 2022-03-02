@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpLoaderNotificationViewModel : MpNotificationViewModelBase {
+        #region Private Variables
+        private int _updateCount = 0;
+        #endregion
+
         #region Properties
 
         #region Appearance
@@ -13,30 +17,24 @@ namespace MonkeyPaste {
 
         public double ProgressBarCurrentWidth => ProgressTotalBarWidth * PercentLoaded;
 
-        public string LoadingLabel { get; set; }
-
-        public string PercentLabel {
-            get {
-                int percent = (int)(PercentLoaded * 100);
-                return $"{percent} %";
-            }
-        }
-
         #endregion
 
         #region State
-
+        
         public bool IsLoaded => PercentLoaded >= 1.0;
 
-        public double PercentLoaded { get; set; }
+        public double PercentLoaded { get; set; } = 0.0;
 
         #endregion
 
         #region Model
 
+        public override string IconImageBase64 => MpBase64Images.AppIcon;
+
         #endregion
 
         #endregion
+
         #region Constructors
 
         public MpLoaderNotificationViewModel() : base(null) { }
@@ -46,6 +44,24 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpLoaderNotificationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(PercentLoaded):
+                    if (PercentLoaded > 1.0) {
+                        PercentLoaded = 1.0;
+                    }
+
+                    OnPropertyChanged(nameof(ProgressBarCurrentWidth));
+                    OnPropertyChanged(nameof(Detail));
+                    OnPropertyChanged(nameof(IsLoaded));
+                    break;
+            }
+        }
 
         #endregion
     }

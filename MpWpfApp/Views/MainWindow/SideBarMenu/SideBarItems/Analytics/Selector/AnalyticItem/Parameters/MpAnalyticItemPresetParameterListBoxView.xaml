@@ -14,8 +14,6 @@
                                                       IsDesignTimeCreatable=False}">
     <Border HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Height="{Binding ClipTrayHeight,
-                             Source={x:Static local:MpClipTrayViewModel.Instance}}"
             BorderThickness="0"
             BorderBrush="Black"
             Margin="0,5,10,0">

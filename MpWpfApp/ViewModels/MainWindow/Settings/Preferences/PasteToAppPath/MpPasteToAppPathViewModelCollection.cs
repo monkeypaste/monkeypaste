@@ -13,7 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
-using Xamarin.Forms.Internals;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;

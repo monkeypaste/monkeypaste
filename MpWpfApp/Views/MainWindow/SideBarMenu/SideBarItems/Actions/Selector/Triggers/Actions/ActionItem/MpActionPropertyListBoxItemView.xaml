@@ -449,8 +449,8 @@
                             <Button ToolTip="Settings"
                                     Grid.Row="1"
                                     Grid.Column="1"
+                                    HorizontalAlignment="Left"
                                     Background="Transparent"
-                                    Margin="5,0,0,0"
                                     BorderThickness="0"
                                     Command="{Binding ToggleShowParametersCommand}"
                                     Style="{StaticResource SemiTransparentButton}">
@@ -467,6 +467,8 @@
                                 </Border>
                             </Button>
                             <Grid x:Name="PresetParametersGrid"
+                                  Grid.Row="2"
+                                  Grid.ColumnSpan="2"
                                   Visibility="{Binding IsShowingParameters,
                                                        Converter={StaticResource BoolToVisibilityConverter},
                                                        FallbackValue='Collapsed'}">

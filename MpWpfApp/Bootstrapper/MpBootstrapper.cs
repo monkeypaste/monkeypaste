@@ -60,13 +60,11 @@ namespace MpWpfApp {
         }
 
         public static async Task Init() {
-
             await MpNotificationBalloonViewModel.Instance.Init();
 
             var nbv = new MpNotificationBalloonView();
             await MpNotificationBalloonViewModel.Instance.Attach(nbv);
             nbv.DataContext = MpNotificationBalloonViewModel.Instance;
-
 
             MpNotificationBalloonViewModel.Instance.ShowBalloon();
 
@@ -75,7 +73,6 @@ namespace MpWpfApp {
             await bootstrapper.Initialize();
 
             MpNotificationBalloonViewModel.Instance.HideBalloon();
-            MpNotificationBalloonViewModel.Instance.NotifierState = MpNotifierStateType.None;
         }
 
         public override async Task Initialize() {
