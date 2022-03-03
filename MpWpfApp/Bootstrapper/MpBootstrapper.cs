@@ -60,19 +60,24 @@ namespace MpWpfApp {
         }
 
         public static async Task Init() {
+
+            //var tw = new MpToastWindow();
+            //tw.Show();
+            //await Task.Delay(100000);
+
             await MpNotificationBalloonViewModel.Instance.Init();
 
-            var nbv = new MpNotificationBalloonView();
-            await MpNotificationBalloonViewModel.Instance.Attach(nbv);
+            var nbv = new MpToastWindow();
+            await MpNotificationBalloonViewModel.Instance.Attach(nbv.NotificationBalloon);
             nbv.DataContext = MpNotificationBalloonViewModel.Instance;
 
-            MpNotificationBalloonViewModel.Instance.ShowBalloon();
+            MpNotificationBalloonViewModel.Instance.BeginLoader();
 
             var bootstrapper = new MpBootstrapper(new MpWpfWrapper());
 
             await bootstrapper.Initialize();
 
-            MpNotificationBalloonViewModel.Instance.HideBalloon();
+            MpNotificationBalloonViewModel.Instance.FinishLoading();
         }
 
         public override async Task Initialize() {
@@ -86,6 +91,7 @@ namespace MpWpfApp {
                 MpPreferences.FallbackProcessPath,
                 MpAppCollectionViewModel.Instance.Items.Select(x => x.AppPath).ToArray(),
                 new MpWpfIconBuilder());
+
         }
     }
 }

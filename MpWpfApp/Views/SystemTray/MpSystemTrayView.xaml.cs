@@ -20,8 +20,27 @@ namespace MpWpfApp {
     /// Interaction logic for MpSystemTrayVIew.xaml
     /// </summary>
     public partial class MpSystemTrayView : MpUserControl<MpSystemTrayViewModel> {
+        private MpNotifyIcon extendedNotifyIcon; // global class scope for the icon as it needs to exist foer the lifetime of the window
+
         public MpSystemTrayView() {
+            // Create a manager (ExtendedNotifyIcon) for handling interaction with the notification icon and wire up events. 
+            extendedNotifyIcon = new MpNotifyIcon();
+            extendedNotifyIcon.MouseClick += ExtendedNotifyIcon_MouseClick1;
+            extendedNotifyIcon.targetNotifyIcon.Text = "Monkey Paste";
+
+
+            System.IO.Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/MpWpfApp;component/Resources/Icons/monkey (2).ico")).Stream;
+            extendedNotifyIcon.targetNotifyIcon.Icon = new System.Drawing.Icon(iconStream);
+
             InitializeComponent();
+        }
+
+        private void ExtendedNotifyIcon_MouseClick1(object sender, bool e) {
+            if(!e) {
+                //left mouse click
+
+                MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+            }
         }
 
         private void SystemTrayTaskbarIcon_MouseEnter(object sender, MouseEventArgs e) {
@@ -29,14 +48,6 @@ namespace MpWpfApp {
             BindingContext.OnPropertyChanged(nameof(BindingContext.AccountStatus));
             //BindingContext.OnPropertyChanged(nameof(BindingContext.TotalItemCount));
             BindingContext.OnPropertyChanged(nameof(BindingContext.DbSizeInMbs));
-        }
-
-        private void SystemTrayTaskbarIcon_TrayLeftMouseUp(object sender, RoutedEventArgs e) {
-            MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-        }
-
-        private void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
-            //SystemTrayTaskbarIcon.IconSource = new ImageSource(new Uri(Application.Current.Resources["AppIcon"] as string));
         }
     }
 }

@@ -131,7 +131,7 @@ namespace MonkeyPaste {
         public static async Task<MpSource> Create(
             int copyItemTransactionId = 0, 
             bool suppressWrite = false) {
-            if (copyItemTransactionId <= 0) {
+            if (copyItemTransactionId <= 0 && !suppressWrite) {
                 throw new Exception("Source transaction must be populated");
             }
 

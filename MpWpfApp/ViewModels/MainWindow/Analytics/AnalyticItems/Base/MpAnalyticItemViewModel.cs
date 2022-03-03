@@ -669,7 +669,7 @@ namespace MpWpfApp {
                         timeReceived: trans.ResponseTime,
                         bytesSent: trans.Request.ToString().ToByteArray().Length,
                         bytesReceived: JsonConvert.SerializeObject(prf).ToByteArray().Length,
-                        suppressWrite: suppressWrite);
+                        suppressWrite: false);
 
                 } else {
                     var pf = MpPluginManager.Plugins.FirstOrDefault(x => x.Value.guid == PluginFormat.guid);
@@ -689,7 +689,7 @@ namespace MpWpfApp {
                                 workingDirectory: pluginDir,
                                 args: trans.Request.ToString(),
                                 transDateTime: trans.RequestTime,
-                                suppressWrite: suppressWrite);
+                                suppressWrite: false);
                         } else if(PluginFormat.ioType.isDll) {
                             transType = MpCopyItemTransactionType.Dll;
 
@@ -699,7 +699,7 @@ namespace MpWpfApp {
                                 dllName: SelectedItem.FullName,
                                 args: trans.Request.ToString(),
                                 transDateTime: trans.RequestTime,
-                                suppressWrite: suppressWrite);
+                                suppressWrite: false);
                         } else {
                             throw new MpUserNotifiedException($"Uknown ioType for plugin defined in '{manifestPath}'");
                         }
@@ -825,7 +825,9 @@ namespace MpWpfApp {
             
         }
 
-        private async Task CreateAnnotation(MpPluginResponseAnnotationFormat a, int copyItemId, object reqContent, int transSourceId, bool suppressWrite = false) {
+        private async Task CreateAnnotation(
+            MpPluginResponseAnnotationFormat a, 
+            int copyItemId, object reqContent, int transSourceId, bool suppressWrite = false) {
             if (a == null) {
                 return;
             }
@@ -860,7 +862,7 @@ namespace MpWpfApp {
                 var ta = await MpTextAnnotation.Create(
                         copyItemId: copyItemId,
                         sourceId: transSourceId,
-                        matchValue: reqContent.ToString().Substring(sIdx,eIdx-sIdx),
+                        matchValue: reqContent.ToString().Substring(sIdx,eIdx-sIdx - 1),
                         label: a.label == null ? string.Empty : a.label.value,
                         description: a.description == null ? string.Empty : a.description.value,
                         score: score,
@@ -924,7 +926,7 @@ namespace MpWpfApp {
                         };
                     }
                     if (outRequestContent == null) {
-                        outRequestContent = paramFormat.values;
+                        outRequestContent = data;
                     } else {
                         // TODO deal w/ multiple hiddens somehow or not need to look at all the manifests
                         Debugger.Break();

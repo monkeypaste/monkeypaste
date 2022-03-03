@@ -28,6 +28,13 @@ namespace MonkeyPaste {
             return stack.Peek();
         }
 
+        public static T PeekOrDefault<T>(this Queue<T> queue) {
+            if (queue.Count == 0) {
+                return default(T);
+            }
+            return queue.Peek();
+        }
+
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
             foreach (T item in source)
                 action(item);

@@ -54,9 +54,9 @@
         <Button Grid.Row="2"
                 Grid.Column="0"
                 TabIndex="0"
+                Style="{StaticResource BouncyButton}"
                 Visibility="{Binding ShowIgnoreButton,
                                      Converter={StaticResource BoolToVisibilityConverter}}"
-                Margin="5"
                 Command="{Binding IgnoreCommand}">
             <TextBlock FontWeight="SemiBold"
                        Text="IGNORE"

@@ -110,6 +110,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
+    <Compile Include="AttachedProperties\MpGradientBackgroundExtension.cs" />
     <Compile Include="AttachedProperties\MpIsFocusedExtension.cs" />
     <Compile Include="AttachedProperties\MpPopupMenuExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Behaviors\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpBootstrapper.cs" />
     <Compile Include="Controls\MpAutoScaleTextBlock.cs" />
+    <Compile Include="Controls\MpSlickToggleButton.cs" />
     <Compile Include="Controls\MpDesignerCanvas.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
@@ -251,11 +253,11 @@
     <Compile Include="Utils\Builders\MpWpfPasteObjectBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
     <Compile Include="Utils\Documents\MpHyperlinkHelper.cs" />
-    <Compile Include="Utils\Extensions\Graphics\Color\MpColorExtensions.cs" />
-    <Compile Include="Utils\Extensions\Graphics\Color\MpWpfColorHelpers.cs" />
+    <Compile Include="Utils\Extensions\MpWpfColorExtensions.cs" />
+    <Compile Include="Utils\Graphics\Color\MpWpfColorHelpers.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCustomColorChooserMenu.cs" />
-    <Compile Include="Utils\Extensions\Graphics\Imaging\MpWpfImageExtensions.cs" />
-    <Compile Include="Utils\Extensions\Graphics\Imaging\MpWpfImagingHelper.cs" />
+    <Compile Include="Utils\Extensions\MpWpfImageExtensions.cs" />
+    <Compile Include="Utils\Graphics\Imaging\MpWpfImagingHelper.cs" />
     <Compile Include="Utils\Extensions\MpWpfRichDocumentExtensions.cs" />
     <Compile Include="Utils\MpContentColors.cs" />
     <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
@@ -569,8 +571,15 @@
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\Notifications\Selector\MpNotificationTemplateSelector.cs" />
+    <Compile Include="Views\Reusable\Notifications\ToastWindow\MpNotifyIcon.cs" />
+    <Compile Include="Views\Reusable\Notifications\ToastWindow\MpToastWindow.xaml.cs">
+      <DependentUpon>MpToastWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Reusable\Reports\MpAnalysisReportView.xaml.cs">
       <DependentUpon>MpAnalysisReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\Shapes\MpHorizontalSeparator.xaml.cs">
+      <DependentUpon>MpHorizontalSeparator.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
@@ -884,7 +893,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Reusable\Notifications\ToastWindow\MpToastWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Reusable\Reports\MpAnalysisReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\Shapes\MpHorizontalSeparator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1321,6 +1338,8 @@
     <Resource Include="Resources\Images\indent.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\Pinned.png" />
+    <Resource Include="Resources\Images\Un-Pinned.png" />
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />
     <Resource Include="Utils\RESTful\RestExample1.xml" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />

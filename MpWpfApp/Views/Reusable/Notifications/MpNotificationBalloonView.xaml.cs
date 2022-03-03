@@ -21,16 +21,14 @@ namespace MpWpfApp {
     public partial class MpNotificationBalloonView : 
         MpUserControl<MpNotificationBalloonViewModel>, MpINotificationBalloonView {
 
-        private static TaskbarIcon _tbi = null;
+        //private static MpToastWindow _tbi = null;
 
         private bool isClosing = false;
 
 
         public void ShowBalloon() {
-            _tbi.ShowCustomBalloon(
-                this,
-                System.Windows.Controls.Primitives.PopupAnimation.Slide,
-                null);
+            var tw = this.GetVisualAncestor<Window>();
+            tw.Show();
         }
 
         public void HideBalloon() {
@@ -40,68 +38,16 @@ namespace MpWpfApp {
 
         public MpNotificationBalloonView() {
             InitializeComponent();
-            TaskbarIcon.AddBalloonClosingHandler(this, OnBalloonClosing);
-            _tbi = new TaskbarIcon();
         }
 
-        
-
         public void CloseBalloon() {
-            TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
-            if(taskbarIcon == null) {
-                return;
-            }
-
             Storyboard sb = this.FindResource("FadeOut") as Storyboard;
             Storyboard.SetTarget(sb, this);
             sb.Begin();
-
-            //taskbarIcon.CloseBalloon();
         }
-        /// <summary>
-        /// By subscribing to the <see cref="TaskbarIcon.BalloonClosingEvent"/>
-        /// and setting the "Handled" property to true, we suppress the popup
-        /// from being closed in order to display the custom fade-out animation.
-        /// </summary>
-        private void OnBalloonClosing(object sender, RoutedEventArgs e) {
-            e.Handled = true; //suppresses the popup from being closed immediately
-            isClosing = true;
-        }
-
-
-        /// <summary>
-        /// Resolves the <see cref="TaskbarIcon"/> that displayed
-        /// the balloon and requests a close action.
-        /// </summary>
-        private void imgClose_MouseDown(object sender, MouseButtonEventArgs e) {
-            //the tray icon assigned this attached property to simplify access
-            TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
-            taskbarIcon.CloseBalloon();
-        }
-
-        /// <summary>
-        /// If the users hovers over the balloon, we don't close it.
-        /// </summary>
-        private void grid_MouseEnter(object sender, MouseEventArgs e) {
-            //if we're already running the fade-out animation, do not interrupt anymore
-            //(makes things too complicated for the sample)
-            if (isClosing) {
-                return;
-            }
-
-            //the tray icon assigned this attached property to simplify access
-            TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
-            taskbarIcon.ResetBalloonCloseTimer();
-        }
-
-        /// <summary>
-        /// Closes the popup once the fade-out animation completed.
-        /// The animation was triggered in XAML through the attached
-        /// BalloonClosing event.
-        /// </summary>
         private void OnFadeOutCompleted(object sender, EventArgs e) {
-            Popup pp = (Popup)Parent;
-            pp.IsOpen = false;
+            var tw = this.GetVisualAncestor<Window>();
+            tw.Hide();
             BindingContext.IsVisible = false;
         }
 
@@ -112,8 +58,7 @@ namespace MpWpfApp {
         }
 
         private void PropertiesButton_Click(object sender, RoutedEventArgs e) {
-            TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
-            taskbarIcon.CloseBalloon();
+            CloseBalloon();
             MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand.Execute(1);
         }
 
@@ -129,5 +74,9 @@ namespace MpWpfApp {
             mwvm.ShowWindowCommand.Execute(null);
         }
 
+        private void ContentControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            var cc = sender as ContentControl;
+            
+        }
     }
 }

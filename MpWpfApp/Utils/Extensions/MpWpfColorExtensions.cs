@@ -7,7 +7,7 @@ using System.Windows.Media;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public static class MpColorExtensions {
+    public static class MpWpfColorExtensions {
         public static Brush ToSolidColorBrush(this string hex, double opacity = 1.0) {
             if (!hex.IsStringHexColor()) {
                 return Brushes.Transparent;

@@ -70,6 +70,8 @@ namespace MonkeyPaste {
         public ICommand IgnoreCommand => new MpCommand(
             () => {
                 DialogResult = MpDialogResultType.Ignore;
+
+                
             });
 
         public ICommand RetryCommand => new MpCommand(

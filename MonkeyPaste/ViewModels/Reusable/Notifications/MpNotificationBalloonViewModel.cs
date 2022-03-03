@@ -13,7 +13,7 @@ namespace MonkeyPaste {
 
         #region Private Variables
 
-        private Stack<MpNotificationViewModelBase> _notificationStack = new Stack<MpNotificationViewModelBase>();
+        private Queue<MpNotificationViewModelBase> _notificationQueue = new Queue<MpNotificationViewModelBase>();
 
         private MpINotificationBalloonView _nbv;
 
@@ -31,13 +31,7 @@ namespace MonkeyPaste {
         #region View Models
 
         public MpNotificationViewModelBase CurrentNotificationViewModel {
-            get => _notificationStack.PeekOrDefault();
-            set {
-                if(CurrentNotificationViewModel != value) {
-                    _notificationStack.Push(value);
-                    OnPropertyChanged(nameof(CurrentNotificationViewModel));
-                }
-            }
+            get => _notificationQueue.PeekOrDefault();
         }
 
         #endregion
@@ -72,11 +66,11 @@ namespace MonkeyPaste {
         public async Task Attach(MpINotificationBalloonView nbv) {
             await Task.Delay(1);
             _nbv = nbv;
-            CurrentNotificationViewModel = await CreateLoaderViewModel();
-            //_nbv.SetDataContext(this);
+            var lvm = await CreateLoaderViewModel();
+            _notificationQueue.Enqueue(lvm);
         }
 
-        public async Task<MpDialogResultType> ShowUserActions(
+        public async Task<MpDialogResultType> ShowUserAction(
             MpNotificationDialogType notificationType = MpNotificationDialogType.None,
             MpNotificationExceptionSeverityType exceptionType = MpNotificationExceptionSeverityType.None,
             string title = "",
@@ -86,11 +80,12 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(title)) {
                 if (exceptionType == MpNotificationExceptionSeverityType.Warning ||
                     exceptionType == MpNotificationExceptionSeverityType.WarningWithOption) {
-                    title = "Warning";
+                    title = "Warning: ";
                 } else {
-                    title = "Error";
+                    title = "Error: ";
                 }
             }
+            title += notificationType.EnumToLabel();
 
             var n = new MpNotification() {
                 NotifierType = MpNotifierType.Dialog,
@@ -100,8 +95,8 @@ namespace MonkeyPaste {
                 Body = msg,
                 MaxShowMs = maxShowTimeMs
             };
-            CurrentNotificationViewModel = await CreateNotificationViewModel(n);
-            var unvm = CurrentNotificationViewModel as MpUserActionNotificationViewModel;
+            var unvm = await CreateUserActionViewModel(n);
+            _notificationQueue.Enqueue(unvm);
 
             bool wasVisible = IsVisible;
             if(!IsVisible) {
@@ -126,13 +121,26 @@ namespace MonkeyPaste {
                 }
             }
 
-            if(!wasVisible) {
-                HideBalloon();
-            }
-            _notificationStack.Pop();
+            _notificationQueue.Dequeue();
             OnPropertyChanged(nameof(CurrentNotificationViewModel));
 
+            if (!wasVisible || CurrentNotificationViewModel == null) {
+                HideBalloon();
+            }
+
             return unvm.DialogResult;
+        }
+        public void BeginLoader() {
+            _nbv.ShowBalloon();
+            IsVisible = true;
+        }
+
+        public void FinishLoading() {
+            _notificationQueue.Dequeue();
+            OnPropertyChanged(nameof(CurrentNotificationViewModel));
+            if(CurrentNotificationViewModel == null) {
+                HideBalloon();
+            }
         }
 
         public void ShowBalloon() {
@@ -161,6 +169,11 @@ namespace MonkeyPaste {
             };
             var lvm = await CreateNotificationViewModel(ln);
             return lvm as MpLoaderNotificationViewModel;
+        }
+
+        private async Task<MpUserActionNotificationViewModel> CreateUserActionViewModel(MpNotification n) {
+            var lvm = await CreateNotificationViewModel(n);
+            return lvm as MpUserActionNotificationViewModel;
         }
 
         private async Task<MpNotificationViewModelBase> CreateNotificationViewModel(MpNotification n) {

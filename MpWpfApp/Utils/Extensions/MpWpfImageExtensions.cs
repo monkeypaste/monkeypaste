@@ -1,12 +1,12 @@
 ﻿using MonkeyPaste;
 using System;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Resources;
 
 namespace MpWpfApp {
     public static class MpWpfImageExtensions {
@@ -82,7 +82,7 @@ namespace MpWpfApp {
 
         public static BitmapSource ToBitmapSource(this System.Drawing.Bitmap bitmap) {
             var bitmapData = bitmap.LockBits(
-                new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+                new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, bitmap.PixelFormat);
 
             var bitmapSource = BitmapSource.Create(
                 bitmapData.Width,
@@ -152,6 +152,24 @@ namespace MpWpfApp {
                     };
                 }
             }
+        }
+
+        public static System.Drawing.Icon ToIcon(this ImageSource imageSource) {
+            if (imageSource == null) {
+                return null;
+            }
+
+            Uri uri = new Uri(imageSource.ToString());
+            StreamResourceInfo streamInfo = Application.GetResourceStream(uri);
+
+            if (streamInfo == null) {
+                throw new ArgumentException(
+                    string.Format(
+                        @"The supplied image source '{0}' could not be resolved.",
+                        imageSource));
+            }
+
+            return new System.Drawing.Icon(streamInfo.Stream);
         }
 
         public static System.Drawing.Icon ToIcon(this System.Drawing.Bitmap bmp) {

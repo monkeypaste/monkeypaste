@@ -153,8 +153,7 @@
             BorderBrush="WhiteSmoke"
             Background="MediumPurple">
         <Grid x:Name="grid"
-              MouseLeftButtonUp="grid_MouseLeftButtonUp"
-              MouseEnter="grid_MouseEnter">
+              MouseLeftButtonUp="grid_MouseLeftButtonUp">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.35*" />
                 <ColumnDefinition Width="0.75*" />
@@ -229,7 +228,9 @@
             </Button>
             <ContentControl Grid.Column="1"
                             Grid.RowSpan="4"
-                            Content="{Binding CurrentNotificationViewModel}"
+                            DataContext="{Binding CurrentNotificationViewModel}"
+                            DataContextChanged="ContentControl_DataContextChanged"
+                            Content="{Binding}"
                             ContentTemplateSelector="{StaticResource NotificationTemplateSelector}" />
         </Grid>
     </Border>

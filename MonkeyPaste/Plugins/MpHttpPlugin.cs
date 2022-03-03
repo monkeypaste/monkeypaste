@@ -524,7 +524,7 @@ namespace MonkeyPaste {
                         var response = await client.SendAsync(request);
 
                         if (!response.IsSuccessStatusCode) {
-                            var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
+                            var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserAction(
                                                     notificationType: MpNotificationDialogType.BadHttpRequest,
                                                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                                                     msg: $"{response.ReasonPhrase}");

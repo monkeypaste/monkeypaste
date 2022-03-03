@@ -662,8 +662,7 @@ namespace MpWpfApp {
                 OnActionComplete?.Invoke(this, args);
                 return;
             }
-            //OnAction?.Invoke(this, ci);
-            Task.Run(()=>PerformAction(args));
+            PerformAction(args).FireAndForgetSafeAsync(this);
         }
 
 
@@ -697,7 +696,7 @@ namespace MpWpfApp {
         protected async Task ShowValidationNotification() {
             bool wasBusy = IsBusy;
             IsBusy = true;
-            var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserActions(
+            var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserAction(
                     notificationType: MpNotificationDialogType.InvalidAction,
                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                     msg: ValidationText);
@@ -816,6 +815,7 @@ namespace MpWpfApp {
 
                         Task.Run(async () => {
                             await Action.WriteToDatabaseAsync();
+                            HasModelChanged = false;
                         });
                     }
                     break;
@@ -832,13 +832,13 @@ namespace MpWpfApp {
                 case nameof(Location):
                 case nameof(X):
                 case nameof(Y):
-                    if(!IsBusy) {
-                        if (_lastLocation.Distance(Location) > _maxDeltaLocation) {
-                            var delta = Location - _lastLocation;
-                            delta.Normalize();
-                            Location = _lastLocation + (delta * _maxDeltaLocation);
-                        }
-                    }
+                    //if(!IsBusy) {
+                    //    if (_lastLocation.Distance(Location) > _maxDeltaLocation) {
+                    //        var delta = Location - _lastLocation;
+                    //        delta.Normalize();
+                    //        _lastLocation = Location = _lastLocation + (delta * _maxDeltaLocation);
+                    //    }
+                    //}
 
                     if (AddChildEmptyActionViewModel == null) {
                         break;
@@ -883,9 +883,9 @@ namespace MpWpfApp {
                     Children.ForEach(x => x.ToggleIsEnabledCommand.Execute(IsEnabled.Value));
                 }
 
-                while(Children.Any(x=>x.IsBusy)) {
-                    await Task.Delay(100);
-                }
+                //while(Children.Any(x=>x.IsBusy)) {
+                //    await Task.Delay(100);
+                //}
                 
                 IsBusy = false;
             });

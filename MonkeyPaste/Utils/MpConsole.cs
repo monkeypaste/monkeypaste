@@ -122,6 +122,6 @@ namespace MonkeyPaste {
             }
             line = $"[{DateTime.Now.ToString()}] {line}";
             File.AppendAllLines(LogFilePath, new List<string> { line.ToString() });
-        }
+        }                                                                                       
     }
 }

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using MonkeyPaste;
 
@@ -73,11 +72,9 @@ namespace MpWpfApp {
                     }
 
                     if ((bool)e.NewValue == true) {
-                        fe.Loaded += Fe_Loaded;
                         fe.Unloaded += Fe_Unloaded;
-                        if (fe.IsLoaded) {
-                            fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
-                        } else {
+                        fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
+                        if (!fe.IsLoaded) {
                             fe.Loaded += Fe_Loaded;
                         }
                         if(fe.GetType().IsSubclassOf(typeof(TextBoxBase))) {

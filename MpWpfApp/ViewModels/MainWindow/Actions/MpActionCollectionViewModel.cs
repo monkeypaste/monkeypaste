@@ -275,9 +275,9 @@ namespace MpWpfApp {
 
             Items.ForEach(x => x.ToggleIsEnabledCommand.Execute(true));
 
-            while(AllActions.Any(x=>x.IsBusy)) {
-                await Task.Delay(100);
-            }
+            //while(AllActions.Any(x=>x.IsBusy)) {
+            //    await Task.Delay(100);
+            //}
         }
 
         public async Task DisableAll() {
