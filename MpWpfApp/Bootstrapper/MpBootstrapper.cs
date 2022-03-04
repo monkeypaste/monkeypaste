@@ -60,24 +60,26 @@ namespace MpWpfApp {
         }
 
         public static async Task Init() {
+            List<int> doNotShowNotifications = null;
+            if(!string.IsNullOrWhiteSpace(Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr)) {
+                doNotShowNotifications = Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr
+                    .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => Convert.ToInt32(x)).ToList();
+            }
 
-            //var tw = new MpToastWindow();
-            //tw.Show();
-            //await Task.Delay(100000);
+            await MpNotificationCollectionViewModel.Instance.Init(doNotShowNotifications);
 
-            await MpNotificationBalloonViewModel.Instance.Init();
+            var nbv = new MpNotificationWindow();
+            await MpNotificationCollectionViewModel.Instance.RegisterWithWindow(nbv.NotificationBalloon);
+            nbv.DataContext = MpNotificationCollectionViewModel.Instance;
 
-            var nbv = new MpToastWindow();
-            await MpNotificationBalloonViewModel.Instance.Attach(nbv.NotificationBalloon);
-            nbv.DataContext = MpNotificationBalloonViewModel.Instance;
-
-            MpNotificationBalloonViewModel.Instance.BeginLoader();
+            MpNotificationCollectionViewModel.Instance.BeginLoader();
 
             var bootstrapper = new MpBootstrapper(new MpWpfWrapper());
 
             await bootstrapper.Initialize();
 
-            MpNotificationBalloonViewModel.Instance.FinishLoading();
+            MpNotificationCollectionViewModel.Instance.FinishLoading();
         }
 
         public override async Task Initialize() {
@@ -85,7 +87,6 @@ namespace MpWpfApp {
                 ReportItemLoading(_items[i], i);
                 await _items[i].Register();
             }
-
 
             MpProcessHelper.MpProcessManager.Init(
                 MpPreferences.FallbackProcessPath,

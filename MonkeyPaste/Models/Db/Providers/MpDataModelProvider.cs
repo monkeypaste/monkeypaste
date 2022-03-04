@@ -519,7 +519,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpTextAnnotation> GetTextAnnotationByData(int ciid, int sid, string label, string matchValue, string description) {
-            string query = @"select * from MpTextAnnotation where fk_MpCopyItemId=? and fk_SourceId=? and Label=? and MatchValue=? and Description=?";
+            string query = @"select * from MpTextAnnotation where fk_MpCopyItemId=? and fk_MpSourceId=? and Label=? and MatchValue=? and Description=?";
             var result = await MpDb.QueryAsync<MpTextAnnotation>(query, ciid, sid,label,matchValue, description);
             if (result == null || result.Count == 0) {
                 return null;
@@ -529,17 +529,17 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region MpDetectedImageObject
+        #region MpImageAnnotation
 
-        public static async Task<List<MpDetectedImageObject>> GetDetectedImageObjects(int ciid) {
-            string query = string.Format(@"select * from MpDetectedImageObject where fk_MpCopyItemId=?");
-            var result = await MpDb.QueryAsync<MpDetectedImageObject>(query,ciid);
+        public static async Task<List<MpImageAnnotation>> GetImageAnnotationsByCopyItemId(int ciid) {
+            string query = string.Format(@"select * from MpImageAnnotation where fk_MpCopyItemId=?");
+            var result = await MpDb.QueryAsync<MpImageAnnotation>(query,ciid);
             return result;
         }
 
-        public static async Task<MpDetectedImageObject> GetDetectedImageObjectByData(int ciid,double x,double y,double w,double h,double s,string label,string description,string c) {
-            string query = string.Format(@"select * from MpDetectedImageObject where fk_MpCopyItemId=? and X=? and Y=? and Width=? and Height=? and Score=? and Label=? and Description=? and HexColor=?");
-            var result = await MpDb.QueryAsync<MpDetectedImageObject>(query, ciid,x,y,w,h,s,label,description,c);
+        public static async Task<MpImageAnnotation> GetImageAnnotationByData(int ciid,double x,double y,double w,double h,double s,string label,string description,string c) {
+            string query = string.Format(@"select * from MpImageAnnotation where fk_MpCopyItemId=? and X=? and Y=? and Width=? and Height=? and Score=? and Label=? and Description=? and HexColor=?");
+            var result = await MpDb.QueryAsync<MpImageAnnotation>(query, ciid,x,y,w,h,s,label,description,c);
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -832,19 +832,6 @@ namespace MonkeyPaste {
         }
 
         #endregion
-
-        #endregion
-
-        #region MpNotification
-
-        public static async Task<MpNotification> GetNotificationByDialogType(MpNotificationDialogType dialogType) {
-            string query = string.Format(@"select * from MpNotification where e_MpNotificationDialogTypeId=?");
-            var result = await MpDb.QueryAsync<MpNotification>(query, (int)dialogType);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
 
         #endregion
 

@@ -441,7 +441,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpCopyItemTransaction>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
-            await _connectionAsync.CreateTableAsync<MpDetectedImageObject>();
+            await _connectionAsync.CreateTableAsync<MpImageAnnotation>();
             await _connectionAsync.CreateTableAsync<MpDllTransaction>();
             await _connectionAsync.CreateTableAsync<MpHttpTransaction>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
@@ -1098,9 +1098,9 @@ namespace MonkeyPaste {
                     ,('97e29b06-0ec4-4c55-a393-8442d7695038','Toggle Is App Paused',2,'Control+Shift+P','Control+Shift+P')
                     ,('ee74dd92-d18b-46cf-91b7-3946ab55427c','Copy Selection',1,'Control+C','Control+C');
                     
-                    CREATE TABLE MpDetectedImageObject (
-                      pk_MpDetectedImageObjectId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpDetectedImageObjectGuid text not null
+                    CREATE TABLE MpImageAnnotation (
+                      pk_MpImageAnnotationId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpImageAnnotationGuid text not null
                     , fk_MpCopyItemId integer NOT NULL
                     , Confidence real NOT NULL
                     , X real NOT NULL

@@ -23,9 +23,16 @@ namespace MonkeyPaste {
     }
 
     public static class MpITreeItemViewModelExtensions {
+        public static IList<T> ToList<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase {
+            var activml = new List<T>() { tivm as T };
+
+            activml.AddRange(tivm.FindAllChildren());
+            return activml;
+        }
+
         public static IEnumerable<T> FindAllChildren<T>(this MpITreeItemViewModel<T> tivm) where T:MpViewModelBase {
             var activml = new List<T>();
-            foreach(MpITreeItemViewModel<T> c in tivm.Children.ToList()) {
+            foreach(MpITreeItemViewModel<T> c in tivm.Children) {
                 activml.Add(c as T);
                 activml.AddRange(c.FindAllChildren());
             }

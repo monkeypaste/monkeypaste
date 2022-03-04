@@ -29,7 +29,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpDetectedImageObjectCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; } = new MpDetectedImageObjectCollectionViewModel();
+        public MpImageAnnotationCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; } = new MpImageAnnotationCollectionViewModel();
 
         #endregion
 

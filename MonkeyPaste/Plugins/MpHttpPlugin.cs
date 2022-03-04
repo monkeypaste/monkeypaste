@@ -524,8 +524,8 @@ namespace MonkeyPaste {
                         var response = await client.SendAsync(request);
 
                         if (!response.IsSuccessStatusCode) {
-                            var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserAction(
-                                                    notificationType: MpNotificationDialogType.BadHttpRequest,
+                            var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
+                                                    dialogType: MpNotificationDialogType.BadHttpRequest,
                                                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                                                     msg: $"{response.ReasonPhrase}");
                             if(userAction == MpDialogResultType.Retry) {
@@ -577,16 +577,12 @@ namespace MonkeyPaste {
                 Console.WriteLine($"With args: {args}");
                 reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
             }
-
-            using (var client = new HttpClient()) {
-                using (var request = new HttpRequestMessage()) {
-                    request.Method = RequestMethod;
-                    CreateHeaders(request);
-                    request.RequestUri = CreateRequestUri();
-                    request.Content = CreateRequestContent();
-                    return request;
-                }
-            }
+            var request = new HttpRequestMessage();
+            request.Method = RequestMethod;
+            CreateHeaders(request);
+            request.RequestUri = CreateRequestUri();
+            request.Content = CreateRequestContent();
+            return request;
         }
 
         private void CreateHeaders(HttpRequestMessage request) {
@@ -753,10 +749,12 @@ namespace MonkeyPaste {
             }
 
             prncf = CreateElement(prncf, jo, 0) as MpPluginResponseNewContentFormat;
-            if (prncf.content != null) {
-                prncf.content.SetValue(jo, reqParams);
+            if(prncf != null) {
+                if (prncf.content != null) {
+                    prncf.content.SetValue(jo, reqParams);
+                }
+                prncf.annotations = CreateAnnotations(prncf.annotations, jo, 0);
             }
-            prncf.annotations = CreateAnnotations(prncf.annotations, jo, 0);
             return prncf;
         }
 
@@ -766,63 +764,70 @@ namespace MonkeyPaste {
             }
 
             for (int i = 0; i < al.Count; i++) {
-                al[i] = CreateAnnotation(al[i], jo, i);
+                var a = CreateAnnotation(al[i], jo, i);
+                if(a != null) {
+                    al[i] = a;
+                }
             }
             return al;
         }
 
         private MpPluginResponseAnnotationFormat CreateAnnotation(MpPluginResponseAnnotationFormat a, JObject jo, int idx = 0) {
             a = CreateElement(a, jo, idx) as MpPluginResponseAnnotationFormat;
-            try {
-                if (a.box != null) {
-                    a.box.x.SetValue(jo, reqParams, idx);
-                    a.box.y.SetValue(jo, reqParams, idx);
-                    a.box.width.SetValue(jo, reqParams, idx);
-                    a.box.height.SetValue(jo, reqParams, idx);
+            if(a != null) {
+                try {
+                    if (a.box != null) {
+                        a.box.x.SetValue(jo, reqParams, idx);
+                        a.box.y.SetValue(jo, reqParams, idx);
+                        a.box.width.SetValue(jo, reqParams, idx);
+                        a.box.height.SetValue(jo, reqParams, idx);
+                    }
+
                 }
-                
-            }
-            catch (MpJsonPathPropertyException jppex) {
-                Console.WriteLine(jppex);
-                return null;
+                catch (MpJsonPathPropertyException jppex) {
+                    Console.WriteLine(jppex);
+                    return null;
+                }
             }
             return a;
         }
 
         private MpPluginResponseItemBaseFormat CreateElement(MpPluginResponseItemBaseFormat a,JObject jo, int idx = 0) {
-            try {
-                if (a.label != null) {
-                    a.label.SetValue(jo, reqParams, idx);
-                    a.label = a.label.omitIfPathNotFound && a.label.value == null ? null : a.label;
-                }
-                if (a.score != null) {
-                    a.score.SetValue(jo, reqParams, idx);
-                    a.score = a.score.omitIfPathNotFound && a.score.value == null ? null : a.score;
-                }
-                a.children = CreateAnnotations(a.children, jo, 0);
+            if(a != null) {
+                try {
+                    if (a.label != null) {
+                        a.label.SetValue(jo, reqParams, idx);
+                        a.label = a.label.omitIfPathNotFound && a.label.value == null ? null : a.label;
+                    }
+                    if (a.score != null) {
+                        a.score.SetValue(jo, reqParams, idx);
+                        a.score = a.score.omitIfPathNotFound && a.score.value == null ? null : a.score;
+                    }
+                    a.children = CreateAnnotations(a.children, jo, 0);
 
-                if (a.dynamicChildren != null && a.dynamicChildren.Count > 0) {
-                    for (int i = 0; i < a.dynamicChildren.Count; i++) {
-                        int curDynamicChildIdx = 0;
-                        while (true) {
-                            var newChild = JsonConvert.DeserializeObject<MpPluginResponseAnnotationFormat>(
-                                        JsonConvert.SerializeObject(a.dynamicChildren[i]));
-                            newChild = CreateAnnotation(newChild, jo, curDynamicChildIdx);
-                            if (newChild == null) {
-                                break;
+                    if (a.dynamicChildren != null && a.dynamicChildren.Count > 0) {
+                        for (int i = 0; i < a.dynamicChildren.Count; i++) {
+                            int curDynamicChildIdx = 0;
+                            while (true) {
+                                var newChild = JsonConvert.DeserializeObject<MpPluginResponseAnnotationFormat>(
+                                            JsonConvert.SerializeObject(a.dynamicChildren[i]));
+                                newChild = CreateAnnotation(newChild, jo, curDynamicChildIdx);
+                                if (newChild == null) {
+                                    break;
+                                }
+                                if (a.children == null) {
+                                    a.children = new List<MpPluginResponseAnnotationFormat>();
+                                }
+                                a.children.Add(newChild);
+                                curDynamicChildIdx++;
                             }
-                            if (a.children == null) {
-                                a.children = new List<MpPluginResponseAnnotationFormat>();
-                            }
-                            a.children.Add(newChild);
-                            curDynamicChildIdx++;
                         }
                     }
                 }
-            }
-            catch (MpJsonPathPropertyException jppex) {
-                Console.WriteLine(jppex);
-                return null;
+                catch (MpJsonPathPropertyException jppex) {
+                    Console.WriteLine(jppex);
+                    return null;
+                }
             }
             return a;
         }

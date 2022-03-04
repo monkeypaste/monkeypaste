@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpLoaderNotificationViewModel : MpNotificationViewModelBase {
         #region Private Variables
-        private int _updateCount = 0;
         #endregion
 
         #region Properties
@@ -29,8 +28,6 @@ namespace MonkeyPaste {
 
         #region Model
 
-        public override string IconImageBase64 => MpBase64Images.AppIcon;
-
         #endregion
 
         #endregion
@@ -39,7 +36,7 @@ namespace MonkeyPaste {
 
         public MpLoaderNotificationViewModel() : base(null) { }
 
-        public MpLoaderNotificationViewModel(MpNotificationBalloonViewModel parent) : base(parent) { }
+        public MpLoaderNotificationViewModel(MpNotificationCollectionViewModel parent) : base(parent) { }
 
         #endregion
 

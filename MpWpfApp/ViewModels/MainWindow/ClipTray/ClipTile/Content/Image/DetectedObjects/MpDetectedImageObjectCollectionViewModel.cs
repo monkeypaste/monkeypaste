@@ -13,8 +13,8 @@ using MonkeyPaste;
 using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
-    public class MpDetectedImageObjectCollectionViewModel : 
-        MpSelectorViewModelBase<MpContentItemViewModel,MpDetectedImageObjectViewModel> {
+    public class MpImageAnnotationCollectionViewModel : 
+        MpSelectorViewModelBase<MpContentItemViewModel,MpImageAnnotationViewModel> {
         #region Private Variables
         private bool _isEnabled = false;
         #endregion
@@ -27,9 +27,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpDetectedImageObjectCollectionViewModel() : base(null) {
+        public MpImageAnnotationCollectionViewModel() : base(null) {
         }
-        public MpDetectedImageObjectCollectionViewModel(MpContentItemViewModel parent) : base(parent) {
+        public MpImageAnnotationCollectionViewModel(MpContentItemViewModel parent) : base(parent) {
            
         }
 
@@ -41,7 +41,7 @@ namespace MpWpfApp {
                 //not sure why this is getting called on non-images this shouldn't have to happen
                 return;
             }
-            var iiol = await MpDataModelProvider.GetDetectedImageObjects(ci.Id);
+            var iiol = await MpDataModelProvider.GetImageAnnotationsByCopyItemId(ci.Id);
             foreach (var dio in iiol) {
                 var diovm = await CreateDetectedImageObjectViewModel(dio);
                 Items.Add(diovm);
@@ -53,8 +53,8 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpDetectedImageObjectViewModel> CreateDetectedImageObjectViewModel(MpDetectedImageObject dio) {
-            var diovm = new MpDetectedImageObjectViewModel(this);
+        public async Task<MpImageAnnotationViewModel> CreateDetectedImageObjectViewModel(MpImageAnnotation dio) {
+            var diovm = new MpImageAnnotationViewModel(this);
             await diovm.InitializeAsync(dio);
             return diovm;
         }
@@ -100,8 +100,8 @@ namespace MpWpfApp {
         //        }
         //        //Mouse.Capture(vbGrid);
         //        var p = Mouse.GetPosition(itemsControl);
-        //        this.Add(new MpDetectedImageObjectViewModel(
-        //            new MpDetectedImageObject(0, ctvm.CopyItemId, 1, p.X, p.Y, 1, 1, "New Item"),
+        //        this.Add(new MpImageAnnotationViewModel(
+        //            new MpImageAnnotation(0, ctvm.CopyItemId, 1, p.X, p.Y, 1, 1, "New Item"),
         //            true));
         //        isCreatingNewItem = true;
         //    };

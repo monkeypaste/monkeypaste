@@ -19,7 +19,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpDetectedObjectItemView.xaml
     /// </summary>
-    public partial class MpDetectedObjectItemView : MpUserControl<MpDetectedImageObjectViewModel> {
+    public partial class MpDetectedObjectItemView : MpUserControl<MpImageAnnotationViewModel> {
         private static DispatcherTimer timer;
 
         public MpDetectedObjectItemView() {
@@ -38,7 +38,7 @@ namespace MpWpfApp {
         }
 
         private void Timer_Tick(object sender, EventArgs e) {
-            var bc = (sender as DispatcherTimer).Tag as MpDetectedImageObjectViewModel;
+            var bc = (sender as DispatcherTimer).Tag as MpImageAnnotationViewModel;
             if (bc.DisplayScore < bc.Score) {
                 bc.DisplayScore += 0.1;
             } else {

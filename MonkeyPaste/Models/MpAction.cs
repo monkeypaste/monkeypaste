@@ -27,7 +27,7 @@ namespace MonkeyPaste {
         LastPasteDateTime, //seperator
         CopyCount,
         PasteCount,
-        LastOutput
+        LastOutputJsonPath
     }
     public enum MpCompareType {
         None = 0,
@@ -95,6 +95,8 @@ namespace MonkeyPaste {
         public string Arg3 { get; set; } = string.Empty;
 
         public string Arg4 { get; set; } = string.Empty;
+
+        public string Arg5 { get; set; } = string.Empty;
 
         public double X { get; set; }
 

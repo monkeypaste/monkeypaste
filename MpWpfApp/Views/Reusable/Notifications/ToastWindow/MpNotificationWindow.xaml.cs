@@ -6,11 +6,11 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public partial class MpToastWindow : MpWindow<MpNotificationBalloonViewModel> {
-        private static MpToastWindow _instance;
-        public static MpToastWindow Instance => _instance;
+    public partial class MpNotificationWindow : Window {
+        private static MpNotificationWindow _instance;
+        public static MpNotificationWindow Instance => _instance;
         
-        public MpToastWindow() {
+        public MpNotificationWindow() {
             InitializeComponent();
 
             SetWindowToBottomRightOfScreen();
@@ -30,8 +30,16 @@ namespace MpWpfApp {
             this.Hide();
         }
 
-        private void uiMainNotifyWindow_Loaded(object sender, RoutedEventArgs e) {
+        private void NotificationWindow_Loaded(object sender, RoutedEventArgs e) {
             SetWindowToBottomRightOfScreen();
+        }
+
+        private void NotificationWindow_SizeChanged(object sender, SizeChangedEventArgs e) {
+            SetWindowToBottomRightOfScreen();
+        }
+
+        private void Storyboard_Completed(object sender, EventArgs e) {
+            Hide();
         }
     }
 }

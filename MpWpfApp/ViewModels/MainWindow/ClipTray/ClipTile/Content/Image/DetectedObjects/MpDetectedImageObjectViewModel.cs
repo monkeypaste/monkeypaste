@@ -7,8 +7,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpDetectedImageObjectViewModel : 
-        MpViewModelBase<MpDetectedImageObjectCollectionViewModel>,
+    public class MpImageAnnotationViewModel : 
+        MpViewModelBase<MpImageAnnotationCollectionViewModel>,
         MpIResizableViewModel,
         MpIMovableViewModel,
         MpISelectableViewModel,
@@ -222,7 +222,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpDetectedImageObject DetectedImageObject { get; set; }
+        public MpImageAnnotation DetectedImageObject { get; set; }
 
         #endregion
 
@@ -230,13 +230,13 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public MpDetectedImageObjectViewModel() : base(null) { }
+        public MpImageAnnotationViewModel() : base(null) { }
 
-        public MpDetectedImageObjectViewModel(MpDetectedImageObjectCollectionViewModel parent) : base(parent) {
-            PropertyChanged += MpDetectedImageObjectViewModel_PropertyChanged;
+        public MpImageAnnotationViewModel(MpImageAnnotationCollectionViewModel parent) : base(parent) {
+            PropertyChanged += MpImageAnnotationViewModel_PropertyChanged;
         }
 
-        private void MpDetectedImageObjectViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpImageAnnotationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(HasModelChanged):
                     if(HasModelChanged && !IsBusy) {
@@ -249,7 +249,7 @@ namespace MpWpfApp {
             }
         }
 
-        public async Task InitializeAsync(MpDetectedImageObject dio, bool isDrawing = false) {
+        public async Task InitializeAsync(MpImageAnnotation dio, bool isDrawing = false) {
             IsBusy = true;
 
             await Task.Delay(1);

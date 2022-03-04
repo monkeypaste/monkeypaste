@@ -11,6 +11,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using MonkeyPaste.Plugin;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MpWpfApp {
     public class MpCompareOutput : MpActionOutput {
@@ -108,11 +111,32 @@ namespace MpWpfApp {
 
         public bool IsItemTypeCompare => ComparePropertyPathType == MpComparePropertyPathType.ItemType;
 
+        public bool IsLastOutputCompare => ComparePropertyPathType == MpComparePropertyPathType.LastOutputJsonPath;
+
+        public bool IsContentPropertyCompare => !IsItemTypeCompare && !IsLastOutputCompare;
+
         public bool IsCompareTypeRegex => CompareType == MpCompareType.Regex;
 
         #endregion
 
         #region Model
+        //Arg4
+
+        public string CompareDataJsonPath {
+            get {
+                if (Action == null) {
+                    return string.Empty;
+                }
+                return Action.Arg4;
+            }
+            set {
+                if (CompareDataJsonPath != value) {
+                    Action.Arg4 = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CompareDataJsonPath));
+                }
+            }
+        }
 
         //Arg3
 
@@ -129,6 +153,7 @@ namespace MpWpfApp {
             set {
                 if(IsCaseSensitive != value && !IsCompareTypeRegex) {
                     Action.Arg3 = value ? "1" : "0";
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsCaseSensitive));
                 }
             }
@@ -240,9 +265,36 @@ namespace MpWpfApp {
             MpActionOutput ao = GetInput(arg);
 
             object matchVal = null;
-            if(ComparePropertyPathType == MpComparePropertyPathType.LastOutput) {
+            if(ComparePropertyPathType == MpComparePropertyPathType.LastOutputJsonPath) {
                 if(ao != null) {
-                    matchVal = ao.OutputData;
+                    if(ao.OutputData is MpPluginResponseFormat prf) {
+                        try {
+                            string prfStr = JsonConvert.SerializeObject(prf);
+                            JObject jo;
+                            if (prfStr.StartsWith("[")) {
+                                JArray a = JArray.Parse(prfStr);
+                                jo = a.Children<JObject>().First();
+                            } else {
+                                jo = JObject.Parse(prfStr);
+                            }
+
+                            var matchValPath = new MpJsonPathProperty() {
+                                valuePath = CompareDataJsonPath
+                            };
+                            matchValPath.SetValue(jo, null);
+                            matchVal = matchValPath.value;
+                        } catch(Exception ex) {
+                            MpConsole.WriteLine(@"Error parsing/querying json response:");
+                            MpConsole.WriteLine(ao.OutputData.ToString());
+                            MpConsole.WriteLine(@"For JSONPath: ");
+                            MpConsole.WriteLine(CompareData);
+                            MpConsole.WriteTraceLine(ex);
+                            matchVal = null;
+                        }
+                    } else {
+                        matchVal = ao.OutputData;
+                    }
+                    
                 }                
             } else {
                 matchVal = ao.CopyItem.GetPropertyValue(PhysicalPropertyPath);
@@ -307,6 +359,7 @@ namespace MpWpfApp {
             return null;
         }
 
+
         #endregion
 
         #region Private Methods
@@ -321,12 +374,14 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(IsCaseSensitive));
                     break;
                 case nameof(ComparePropertyPathType):
+                    
+                    //ResetArgs();
                     OnPropertyChanged(nameof(IsItemTypeCompare));
-                    if(IsItemTypeCompare) {
-                        //when CompareProperty is ItemType Arg2 (CompareData) maps to
-                        //MpCopyItemType enum value and must convert to int
-                        CompareData = string.Empty;
-                    }
+                    //if(IsItemTypeCompare) {
+                    //    //when CompareProperty is ItemType Arg2 (CompareData) maps to
+                    //    //MpCopyItemType enum value and must convert to int
+                    //    CompareData = string.Empty;
+                    //}
                     break;
             }
         }

@@ -1,6 +1,6 @@
 ﻿namespace MonkeyPaste {
     public interface MpINotificationBalloonView : MpIUserControl {        
-        void ShowBalloon();
-        void HideBalloon();
+        void ShowWindow();
+        void HideWindow();
     }
 }

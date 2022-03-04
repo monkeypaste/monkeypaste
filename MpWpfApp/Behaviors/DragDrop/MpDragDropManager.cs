@@ -29,8 +29,8 @@ namespace MpWpfApp {
 
                 dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().ClipTrayDropBehavior);
 
-                var adivl = Application.Current.MainWindow.GetVisualDescendents<MpActionDesignerItemView>();
-                dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsDropEnabled).ToList());
+                //var adivl = Application.Current.MainWindow.GetVisualDescendents<MpActionDesignerItemView>();
+                //dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
                 dtl.Add((Application.Current.MainWindow as MpMainWindow).ExternalDropBehavior);
 
@@ -94,6 +94,10 @@ namespace MpWpfApp {
         #region public static Methods
 
         public static void StartDragCheck(Point mainWindowMouseDownPosition) {
+            if(MpMoveBehavior.IsAnyMoving) {
+                return;
+            }
+
             IsCheckingForDrag = true;
 
             _mouseStartPosition = mainWindowMouseDownPosition;

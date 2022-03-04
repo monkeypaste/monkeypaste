@@ -51,8 +51,6 @@ namespace MonkeyPaste {
                 initMethodInfo.Invoke(itemObj, args);
             }
 
-            
-
             sw.Stop();
             MpConsole.WriteLine($"{ItemType} loaded in {sw.ElapsedMilliseconds} ms");
 

@@ -126,6 +126,13 @@
                                                    DataContext="{Binding}" />
             </Grid>
         </Border>
+        <GridSplitter Background="Pink"
+                      Grid.Column="0"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Stretch"
+                      Width="2"
+                      local:MpHoverableExtension.IsEnabled="True"
+                      local:MpHoverableExtension.HoverCursor="ResizeWE" />
         <Grid x:Name="ActionDesignerGrid"
               Grid.Column="1"
               local:MpSizeObserverExtension.IsEnabled="True"

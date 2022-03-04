@@ -1350,9 +1350,9 @@ namespace MpWpfApp {
             //MpNotificationBalloonView.Instance.BindingContext.PostLoadedMessage =
             //    $"Successfully loaded w/ {totalItems} items";
 
-            while(MpNotificationBalloonViewModel.Instance.IsVisible) {
-                await Task.Delay(100);
-            }
+            //while(MpSoundPlayerCollectionViewModel.Instance.IsVisible) {
+            //    await Task.Delay(100);
+            //}
             MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
             MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
 

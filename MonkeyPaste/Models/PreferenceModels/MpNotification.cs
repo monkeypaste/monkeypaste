@@ -6,29 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public enum MpNotifierType {
-        None = 0,
-        Startup,
-        Dialog
-    }
-
-    public enum MpNotificationDialogType {
-        None = 0,
-        InvalidPlugin,
-        InvalidAction,
-        BadHttpRequest,
-        DbError,
-        LoadComplete
-    }
-
-    public enum MpNotificationExceptionSeverityType {
-        None = 0,
-        Warning, //confirm
-        WarningWithOption, //retry/ignore/quit
-        Error, //confirm
-        ErrorWithOption, //retry/ignore/quit
-        ErrorAndShutdown //confirm
-    }
+    
         
     public class MpNotification : MpDbModelBase {
 

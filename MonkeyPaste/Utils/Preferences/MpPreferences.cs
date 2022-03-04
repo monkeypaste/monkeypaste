@@ -330,6 +330,17 @@ namespace MonkeyPaste {
         public static MpIcon ThisAppIcon { get; set; }
 
         public static MpUserDevice ThisUserDevice { get; set; }
+        
+        public static string DoNotShowAgainNotificationIdCsvStr {
+            // NOTE this is stored as a property because the loader window
+            // is used before bootstrapping the database occurs
+            get {
+                return Default.Get(nameof(DoNotShowAgainNotificationIdCsvStr), string.Empty);
+            }
+            set {
+                Default.Set(nameof(DoNotShowAgainNotificationIdCsvStr), value);
+            }
+        }
 
         public static string AppStorageFilePath {
             get {

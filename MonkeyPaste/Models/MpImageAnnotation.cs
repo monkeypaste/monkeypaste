@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
-    public class MpDetectedImageObject : MpDbModelBase {
+    public class MpImageAnnotation : MpDbModelBase, MpIImageRange, MpIAnnotation {
         #region Columns
 
-        [Column("pk_MpDetectedImageObjectId")]
+        [Column("pk_MpImageAnnotationId")]
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; } = 0;
 
-        [Column("MpDetectedImageObjectGuid")]
+        [Column("MpImageAnnotationGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Column("fk_MpCopyItemId")]
@@ -54,7 +54,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpDetectedImageObject> Create(
+        public static async Task<MpImageAnnotation> Create(
             int cid = 0, 
             double c = 0, 
             double x = 0, 
@@ -63,14 +63,15 @@ namespace MonkeyPaste {
             double h = 0, 
             string label = "",
             string description = "",
-            string hexColor = "") {
-            var dupCheck = await MpDataModelProvider.GetDetectedImageObjectByData(cid, x, y, w, h, c, label, description,hexColor);
+            string hexColor = "",
+            bool suppressWrite = false) {
+            var dupCheck = await MpDataModelProvider.GetImageAnnotationByData(cid, x, y, w, h, c, label, description,hexColor);
             if(dupCheck != null) {
                 MpConsole.WriteTraceLine($"Duplicate detected image object detected ignoring create");
                 return dupCheck;
             }
 
-            var ndio = new MpDetectedImageObject() {
+            var ndio = new MpImageAnnotation() {
                 DetectedImageObjectGuid = System.Guid.NewGuid(),
                 CopyItemId = cid,
                 Score = c,
@@ -83,10 +84,13 @@ namespace MonkeyPaste {
                 HexColor = string.IsNullOrEmpty(hexColor) ? MpSystemColors.LightGray : hexColor
             };
 
-            await ndio.WriteToDatabaseAsync();
+            if(!suppressWrite) {
+                await ndio.WriteToDatabaseAsync();
+            }
+            
             return ndio;
         }
 
-        public MpDetectedImageObject() { }
+        public MpImageAnnotation() { }
     }
 }

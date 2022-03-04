@@ -7,114 +7,16 @@
                      xmlns:tb="http://www.hardcodet.net/taskbar"
                      xmlns:local="clr-namespace:MpWpfApp"
                      xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                     x:TypeArguments="pcl:MpNotificationBalloonViewModel"
+                     x:TypeArguments="pcl:MpNotificationCollectionViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="100"
                      d:DesignWidth="800"
                      MinHeight="125"
                      Width="350"
-                     d:DataContext="{d:DesignInstance Type=pcl:MpNotificationBalloonViewModel,
+                     d:DataContext="{d:DesignInstance Type=pcl:MpNotificationCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
 
     <local:MpUserControl.Resources>
-        <Storyboard x:Key="FadeIn">
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                           Storyboard.TargetName="grid"
-                                           Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00"
-                                      Value="0" />
-                <SplineDoubleKeyFrame KeyTime="00:00:01"
-                                      Value="0.95" />
-                <SplineDoubleKeyFrame KeyTime="00:00:03"
-                                      Value="0.95" />
-                <!--				<SplineDoubleKeyFrame KeyTime="00:00:05" Value="0"/>-->
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="HighlightCloseButton">
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                           Storyboard.TargetName="imgClose"
-                                           Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00"
-                                      Value="0.4" />
-                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000"
-                                      Value="1" />
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="FadeCloseButton">
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                           Storyboard.TargetName="imgClose"
-                                           Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00"
-                                      Value="1" />
-                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000"
-                                      Value="0.4" />
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="FadeBack">
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                           Storyboard.TargetName="grid"
-                                           Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00"
-                                      Value="1" />
-                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000"
-                                      Value="1" />
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="FadeOut"
-                    Completed="OnFadeOutCompleted">
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                           Storyboard.TargetName="grid"
-                                           Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00"
-                                      Value="1" />
-                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000"
-                                      Value="0.2" />
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <ControlTemplate x:Key="ButtonControlTemplate"
-                         TargetType="{x:Type Button}">
-            <Border x:Name="OuterBorder"
-                    BorderBrush="Transparent"
-                    BorderThickness="1"
-                    CornerRadius="2">
-                <Border x:Name="InnerBorder"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        BorderThickness="1"
-                        CornerRadius="2">
-                    <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      RecognizesAccessKey="True"
-                                      Margin="{TemplateBinding Padding}" />
-                </Border>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver"
-                         Value="True">
-                    <Setter TargetName="OuterBorder"
-                            Property="BorderBrush"
-                            Value="#FF7CA0CC" />
-                    <Setter TargetName="InnerBorder"
-                            Property="BorderBrush"
-                            Value="#FFE4EFFD" />
-                    <Setter TargetName="InnerBorder"
-                            Property="Background"
-                            Value="#FFDAE7F5" />
-                </Trigger>
-                <Trigger Property="IsPressed"
-                         Value="True">
-                    <Setter TargetName="OuterBorder"
-                            Property="BorderBrush"
-                            Value="#FF2E4E76" />
-                    <Setter TargetName="InnerBorder"
-                            Property="BorderBrush"
-                            Value="#FF116EE4" />
-                    <Setter TargetName="InnerBorder"
-                            Property="Background"
-                            Value="#FF3272B8" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
         <DataTemplate x:Key="UserActionNotificationTemplate">
             <local:MpUserActionNotificationView DataContext="{Binding}" />
         </DataTemplate>
@@ -123,31 +25,6 @@
         </DataTemplate>
         <local:MpNotificationTemplateSelector x:Key="NotificationTemplateSelector" />
     </local:MpUserControl.Resources>
-    <local:MpUserControl.Triggers>
-        <EventTrigger RoutedEvent="tb:TaskbarIcon.BalloonShowing">
-            <BeginStoryboard Storyboard="{StaticResource FadeIn}"
-                             x:Name="FadeIn_BeginStoryboard" />
-        </EventTrigger>
-        <EventTrigger RoutedEvent="Mouse.MouseEnter"
-                      SourceName="imgClose">
-            <BeginStoryboard Storyboard="{StaticResource HighlightCloseButton}"
-                             x:Name="HighlightCloseButton_BeginStoryboard" />
-        </EventTrigger>
-        <EventTrigger RoutedEvent="Mouse.MouseLeave"
-                      SourceName="imgClose">
-            <BeginStoryboard Storyboard="{StaticResource FadeCloseButton}"
-                             x:Name="FadeCloseButton_BeginStoryboard" />
-        </EventTrigger>
-        <EventTrigger RoutedEvent="Mouse.MouseEnter">
-            <StopStoryboard BeginStoryboardName="FadeIn_BeginStoryboard" />
-            <BeginStoryboard x:Name="FadeBack_BeginStoryboard1"
-                             Storyboard="{StaticResource FadeBack}" />
-        </EventTrigger>
-        <EventTrigger RoutedEvent="tb:TaskbarIcon.BalloonClosing">
-            <BeginStoryboard Storyboard="{StaticResource FadeOut}"
-                             x:Name="FadeOut_BeginStoryboard" />
-        </EventTrigger>
-    </local:MpUserControl.Triggers>
     <Border HorizontalAlignment="Stretch"
             BorderThickness="7"
             BorderBrush="WhiteSmoke"
@@ -168,19 +45,17 @@
                    Stretch="Fill"
                    VerticalAlignment="Top"
                    Margin="10,5,0,0" />
-            <local:MpOneWayCheckBox Grid.Column="0"
-                                    Grid.ColumnSpan="2"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Bottom"
-                                    VerticalContentAlignment="Center"
-                                    Margin="7,0,0,5"
-                                    IsEnabled="{Binding CurrentNotificationViewModel.CanChooseNotShowAgain}"
-                                    IsChecked="{Binding CurrentNotificationViewModel.DoNotShowAgain,
-                                                        Mode=TwoWay,
-                                                        UpdateSourceTrigger=PropertyChanged,
-                                                        NotifyOnSourceUpdated=True,
-                                                        NotifyOnTargetUpdated=True}">
-                <local:MpOneWayCheckBox.Content>
+            <CheckBox Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Bottom"
+                      VerticalContentAlignment="Center"
+                      Margin="7,0,0,5"
+                      Visibility="{Binding CurrentNotificationViewModel.CanChooseNotShowAgain,
+                                           Converter={StaticResource BoolToVisibilityConverter}}"
+                      IsChecked="{Binding CurrentNotificationViewModel.DoNotShowAgain,
+                                          Mode=TwoWay}">
+                <CheckBox.Content>
                     <TextBlock MaxWidth="100"
                                Foreground="White"
                                FontSize="9"
@@ -188,42 +63,27 @@
                                HorizontalAlignment="Right"
                                TextWrapping="Wrap"
                                Text="Do Not Show Again" />
-                </local:MpOneWayCheckBox.Content>
-            </local:MpOneWayCheckBox>
+                </CheckBox.Content>
+            </CheckBox>
             <Button x:Name="CloseButton"
                     Grid.Column="1"
                     Grid.Row="0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
+                    Margin="5"
+                    Background="Transparent"
+                    Style="{StaticResource SemiTransparentButton}"
                     Click="CloseButton_Click"
-                    Template="{StaticResource ButtonControlTemplate}"
-                    Height="23"
-                    Grid.RowSpan="2">
+                    BorderThickness="0">
                 <Image Width="15"
                        Height="15"
                        Stretch="Fill"
-                       ToolTip="Close"
-                       x:Name="imgClose">
-                    <Image.Style>
-                        <Style TargetType="Image">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver"
-                                         Value="True">
-                                    <Setter Property="Source"
-                                            Value="{Binding .,
-                                                            Converter={StaticResource StringResourceToImageSourceConverter},
-                                                            ConverterParameter={StaticResource CloseOverIcon}}" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver"
-                                         Value="False">
-                                    <Setter Property="Source"
-                                            Value="{Binding .,
-                                                            Converter={StaticResource StringResourceToImageSourceConverter},
-                                                            ConverterParameter={StaticResource CloseIcon}}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Image.Style>
+                       local:MpHoverableExtension.IsEnabled="True"
+                       local:MpHoverableExtension.HoverImageSource="/Resources/Images/close1.png"
+                       Source="/Resources/Images/close2.png">
+                    <Image.Effect>
+                        <local:MpInvertEffect />
+                    </Image.Effect>
                 </Image>
             </Button>
             <ContentControl Grid.Column="1"

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Compile Remove="Models\Db\SQLite\**" />
+    <Compile Remove="Models\PreferenceModels\**" />
     <Compile Remove="Repositories\**" />
     <Compile Remove="Resources\Html\Editor\TestData\**" />
     <Compile Remove="Resources\Html\temp\**" />
@@ -27,6 +28,7 @@
     <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Popups\**" />
     <EmbeddedResource Remove="Models\Db\SQLite\**" />
+    <EmbeddedResource Remove="Models\PreferenceModels\**" />
     <EmbeddedResource Remove="Repositories\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
     <EmbeddedResource Remove="Resources\Html\temp\**" />
@@ -37,6 +39,7 @@
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Title\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Popups\**" />
     <None Remove="Models\Db\SQLite\**" />
+    <None Remove="Models\PreferenceModels\**" />
     <None Remove="Repositories\**" />
     <None Remove="Resources\Html\Editor\TestData\**" />
     <None Remove="Resources\Html\temp\**" />

@@ -39,7 +39,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpDetectedImageObjectCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
+        public MpImageAnnotationCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
 
         public MpClipTileTitleSwirlViewModel TitleSwirlViewModel { get; set; }
 
@@ -639,7 +639,7 @@ namespace MpWpfApp {
             CycleDetailCommand.Execute(null);
 
             if(CopyItemType == MpCopyItemType.Image) {
-                DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(this);
+                DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
                 await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
                 OnPropertyChanged(nameof(HasDetectedObjects));
             }
@@ -844,11 +844,11 @@ namespace MpWpfApp {
                 if(sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if(e is MpDetectedImageObject dio) {
+            } else if(e is MpImageAnnotation dio) {
                 if(dio.CopyItemId == CopyItemId) {
                     MpHelpers.RunOnMainThread(async () => {
                         if(DetectedImageObjectCollectionViewModel == null) {
-                            DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(this);
+                            DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
                         }
                         await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
                         OnPropertyChanged(nameof(HasDetectedObjects));

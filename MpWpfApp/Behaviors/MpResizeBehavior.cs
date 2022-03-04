@@ -433,7 +433,7 @@ namespace MpWpfApp {
             Vector delta =  mwmp - _lastMousePosition;
             _lastMousePosition = mwmp;
 
-            if (AssociatedObject.DataContext is MpClipTileViewModel || AssociatedObject.DataContext is MpDetectedImageObjectViewModel) {
+            if (AssociatedObject.DataContext is MpClipTileViewModel || AssociatedObject.DataContext is MpImageAnnotationViewModel) {
                 //Debugger.Break();
             }
             if (IsResizing) {

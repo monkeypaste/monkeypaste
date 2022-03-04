@@ -19,46 +19,19 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public partial class MpNotificationBalloonView : 
-        MpUserControl<MpNotificationBalloonViewModel>, MpINotificationBalloonView {
-
-        //private static MpToastWindow _tbi = null;
-
-        private bool isClosing = false;
-
-
-        public void ShowBalloon() {
-            var tw = this.GetVisualAncestor<Window>();
-            tw.Show();
-        }
-
-        public void HideBalloon() {
-            CloseBalloon();
-        }
+        MpUserControl<MpNotificationCollectionViewModel>, MpINotificationBalloonView {
 
 
         public MpNotificationBalloonView() {
             InitializeComponent();
         }
 
-        public void CloseBalloon() {
-            Storyboard sb = this.FindResource("FadeOut") as Storyboard;
-            Storyboard.SetTarget(sb, this);
-            sb.Begin();
-        }
-        private void OnFadeOutCompleted(object sender, EventArgs e) {
-            var tw = this.GetVisualAncestor<Window>();
-            tw.Hide();
-            BindingContext.IsVisible = false;
-        }
-
         private void CloseButton_Click(object sender, RoutedEventArgs e) {
-            //the tray icon assigned this attached property to simplify access
-            TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
-            taskbarIcon.CloseBalloon();
+            HideWindow();
         }
 
         private void PropertiesButton_Click(object sender, RoutedEventArgs e) {
-            CloseBalloon();
+            HideWindow();
             MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand.Execute(1);
         }
 
@@ -77,6 +50,18 @@ namespace MpWpfApp {
         private void ContentControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             var cc = sender as ContentControl;
             
+        }
+
+
+        public void ShowWindow() {
+            var tw = this.GetVisualAncestor<Window>();
+            tw.Show();
+        }
+
+        public void HideWindow() {
+            if (BindingContext != null) {
+                BindingContext.IsVisible = false;
+            }
         }
     }
 }

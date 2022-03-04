@@ -1,0 +1,77 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MpWpfApp"
+        xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        x:Class="MpWpfApp.MpNotificationWindow"
+        x:Name="NotificationWindow"
+        Title=""
+        MinHeight="125"
+        Width="350"
+        Opacity="0"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        Visibility="Visible"
+        Topmost="True"
+        BorderThickness="1"
+        mc:Ignorable="d"
+        SizeChanged="NotificationWindow_SizeChanged"
+        SizeToContent="WidthAndHeight"
+        Loaded="NotificationWindow_Loaded"
+        d:DataContext="{d:DesignInstance Type=pcl:MpNotificationCollectionViewModel,
+                                         IsDesignTimeCreatable=False}">
+    <Window.Resources>
+        <Storyboard x:Key="FadeIn">
+            <DoubleAnimation BeginTime="0:0:0"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.00"
+                             To="1.00"
+                             AutoReverse="False"
+                             Duration="0:0:1" />
+        </Storyboard>
+        <Storyboard x:Key="FadeOut"
+                    Completed="Storyboard_Completed">
+            <DoubleAnimation BeginTime="0:0:0"
+                             Storyboard.TargetProperty="Opacity"
+                             From="1.00"
+                             To="0.00"
+                             AutoReverse="False"
+                             Duration="0:0:1" />
+        </Storyboard>
+        <!--<Storyboard x:Key="SlideIn">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                             Storyboard.TargetName=""
+                              From="{StaticResource SlideOffSet}" To="0" 
+                              Duration="0:0:0.3" />
+        </Storyboard>-->
+    </Window.Resources>
+    <!--<Window.RenderTransform>
+        <TranslateTransform x:Name="WindowTranslateTransform" />
+    </Window.RenderTransform>-->
+    <Window.Style>
+        <Style TargetType="Window">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVisible}"
+                             Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeIn}"/>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsVisible}"
+                             Value="False">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeOut}"/>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>        
+    </Window.Style>
+    <Grid>
+        <local:MpNotificationBalloonView x:Name="NotificationBalloon"
+                                         DataContext="{Binding}" />
+    </Grid>
+</Window>

@@ -9,10 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpAnalyzeOutput : MpActionOutput {
-        public MpCopyItem NewContentItem { get; set; }
-    }
-
     public class MpAnalyzeActionViewModel : MpActionViewModelBase {
         #region Properties
 
@@ -96,17 +92,10 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
 
-                MpCopyItem nci = null;
-                if (aipvm.Parent.LastResultContentItem != null &&
-                   (aipvm.Parent.LastResultContentItem.Id != actionInput.CopyItem.Id ||
-                   aipvm.Parent.LastResultContentItem.Id == 0)) {
-                    nci = aipvm.Parent.LastResultContentItem;
-                }
                 await base.PerformAction(
-                    new MpAnalyzeOutput() {
+                    new MpActionOutput() {
                         Previous = arg as MpActionOutput,
                         CopyItem = actionInput.CopyItem,
-                        NewContentItem = nci,
                         OutputData = aipvm.Parent.LastTransaction.Response
                     });
             }

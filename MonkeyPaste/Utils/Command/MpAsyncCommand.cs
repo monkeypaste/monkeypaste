@@ -60,6 +60,9 @@ namespace MonkeyPaste {
 
         #region Explicit implementations
         bool ICommand.CanExecute(object parameter) {
+            if(parameter == null) {
+                return CanExecute(default(T));
+            }
             return CanExecute((T)parameter);
         }
 

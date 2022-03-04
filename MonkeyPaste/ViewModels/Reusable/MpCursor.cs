@@ -38,6 +38,10 @@ namespace MonkeyPaste {
         #region public static Methods
 
         public static void SetCursor(object sender, MpCursorType cursor) {
+            if(MpNotificationCollectionViewModel.Instance.IsInitialLoad) {
+                return;
+            }
+
             CurrentCursor = cursor;
             _cursor.SetCursor(CurrentCursor);
 

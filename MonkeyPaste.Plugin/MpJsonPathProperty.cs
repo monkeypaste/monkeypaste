@@ -33,6 +33,10 @@ namespace MonkeyPaste.Plugin {
             this.value = value;
         }
 
+        public MpJsonPathProperty(string value,string valuePath) : this(value) {
+            this.valuePath = valuePath;
+        }
+
         public virtual void SetValue(string text) {
             value = text;
         }

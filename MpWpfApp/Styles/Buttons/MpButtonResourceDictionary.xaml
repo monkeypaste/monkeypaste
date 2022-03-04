@@ -4,6 +4,48 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:s="clr-namespace:System;assembly=mscorlib"
                     xmlns:local="clr-namespace:MpWpfApp">
+    <Style TargetType="{x:Type Button}"
+           x:Key="ImageSourceExtensionButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <ContentPresenter Name="content"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <Border>
+                            <!--  Default image  -->
+                            <Image Name="image"
+                                   Source="{TemplateBinding local:MpImageSourceExtension.DefaultImage}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <!--  Hover image  -->
+                            <Setter TargetName="image"
+                                    Property="Source"
+                                    Value="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                                   AncestorType=Button},
+                                                    Path=(local:MpImageSourceExtension.HoverImage)}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="False">
+                            <!--  Disabled image  -->
+                            <Setter TargetName="image"
+                                    Property="Source"
+                                    Value="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                                   AncestorType=Button},
+                                                    Path=(local:MpImageSourceExtension.DisabledImage)}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <ControlTemplate x:Key="BouncyButtonTemplate"
                      TargetType="{x:Type Button}">
         <ControlTemplate.Resources>
@@ -28,7 +70,7 @@
                     CornerRadius="4,4,4,4"
                     Margin="0,0,0,0"
                     Opacity="0.05"
-                    BorderThickness="3"                    
+                    BorderThickness="3"
                     local:MpGradientBackgroundExtension.IsEnabled="True"
                     local:MpGradientBackgroundExtension.Angle="45"
                     local:MpGradientBackgroundExtension.DefaultBackgroundBrush="{TemplateBinding Background}">
@@ -102,7 +144,7 @@
         <Setter Property="Template"
                 Value="{StaticResource BouncyButtonTemplate}" />
     </Style>
-    
+
     <ControlTemplate x:Key="SlickToggleButtonTemplate"
                      TargetType="{x:Type local:MpSlickToggleButton}">
         <Grid>

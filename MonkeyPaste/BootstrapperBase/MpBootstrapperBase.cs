@@ -27,8 +27,11 @@ namespace MonkeyPaste {
 
         protected void ReportItemLoading(MpBootstrappedItem item, int index) {
             MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
-            
-            var lnvm = MpNotificationBalloonViewModel.Instance.CurrentNotificationViewModel as MpLoaderNotificationViewModel;
+            if(!MpNotificationCollectionViewModel.Instance.IsVisible) {
+                return;
+            }
+
+            var lnvm = MpNotificationCollectionViewModel.Instance.CurrentNotificationViewModel as MpLoaderNotificationViewModel;
             lnvm.PercentLoaded = (double)((double)(index + 1) / (double)_items.Count);
 
             string viewLabel = string.Empty;

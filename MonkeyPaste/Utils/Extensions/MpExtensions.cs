@@ -35,6 +35,13 @@ namespace MonkeyPaste {
             return queue.Peek();
         }
 
+        public static T DequeueOrDefault<T>(this Queue<T> queue) {
+            if (queue.Count == 0) {
+                return default(T);
+            }
+            return queue.Dequeue();
+        }
+
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
             foreach (T item in source)
                 action(item);

@@ -109,6 +109,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\MpImageSourceExtension.cs" />
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpGradientBackgroundExtension.cs" />
     <Compile Include="AttachedProperties\MpIsFocusedExtension.cs" />
@@ -446,7 +447,7 @@
     <Compile Include="ViewModels\MainWindow\Settings\Help\MpHelpViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\MpSettingsWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpStandardBalloonViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpNotificationCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundNotificationViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerGroupCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerViewModel.cs" />
@@ -572,8 +573,8 @@
     </Compile>
     <Compile Include="Views\Reusable\Notifications\Selector\MpNotificationTemplateSelector.cs" />
     <Compile Include="Views\Reusable\Notifications\ToastWindow\MpNotifyIcon.cs" />
-    <Compile Include="Views\Reusable\Notifications\ToastWindow\MpToastWindow.xaml.cs">
-      <DependentUpon>MpToastWindow.xaml</DependentUpon>
+    <Compile Include="Views\Reusable\Notifications\ToastWindow\MpNotificationWindow.xaml.cs">
+      <DependentUpon>MpNotificationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\Reports\MpAnalysisReportView.xaml.cs">
       <DependentUpon>MpAnalysisReportView.xaml</DependentUpon>
@@ -893,7 +894,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Reusable\Notifications\ToastWindow\MpToastWindow.xaml">
+    <Page Include="Views\Reusable\Notifications\ToastWindow\MpNotificationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

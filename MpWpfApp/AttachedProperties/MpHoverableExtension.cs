@@ -65,6 +65,44 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region HoverImageSource DependencyProperty
+
+        public static ImageSource GetHoverImageSource(DependencyObject obj) {
+            return (ImageSource)obj.GetValue(HoverImageSourceProperty);
+        }
+
+        public static void SetHoverImageSource(DependencyObject obj, ImageSource value) {
+            obj.SetValue(HoverImageSourceProperty, value);
+        }
+
+        public static readonly DependencyProperty HoverImageSourceProperty =
+            DependencyProperty.Register(
+                "HoverImageSource",
+                typeof(ImageSource),
+                typeof(MpHoverableExtension),
+                new PropertyMetadata(null));
+
+        #endregion
+
+        #region DefaultImageSource DependencyProperty
+
+        public static ImageSource GetDefaultImageSource(DependencyObject obj) {
+            return (ImageSource)obj.GetValue(DefaultImageSourceProperty);
+        }
+
+        public static void SetDefaultImageSource(DependencyObject obj, ImageSource value) {
+            obj.SetValue(DefaultImageSourceProperty, value);
+        }
+
+        public static readonly DependencyProperty DefaultImageSourceProperty =
+            DependencyProperty.Register(
+                "DefaultImageSource",
+                typeof(ImageSource),
+                typeof(MpHoverableExtension),
+                new PropertyMetadata(null));
+
+        #endregion
+
         #region IsEnabled DependencyProperty
 
         public static bool GetIsEnabled(DependencyObject obj) {
@@ -111,16 +149,30 @@ namespace MpWpfApp {
             if (hoverCursor.HasValue) {
                 MpCursor.SetCursor(fe.DataContext, hoverCursor.Value);
             }
+
+            ImageSource hoverImageSource = GetHoverImageSource(fe);
+            if(hoverImageSource != null && fe is Image i) {
+                if(GetDefaultImageSource(fe) == null) {
+                    SetDefaultImageSource(fe, i.Source);
+                }
+
+                i.Source = hoverImageSource;
+            }
         }
 
         private static void Fe_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
             var fe = sender as FrameworkElement; 
 
             SetIsHovering(fe, false);
-            MpCursorType? hoverCursor = GetHoverCursor(fe);
 
+            MpCursorType? hoverCursor = GetHoverCursor(fe);
             if (hoverCursor.HasValue) {
                 MpCursor.UnsetCursor(fe.DataContext);
+            }
+
+            ImageSource defaultImageSource = GetDefaultImageSource(fe);
+            if (GetHoverImageSource(fe) != null && defaultImageSource != null && fe is Image i) {
+                i.Source = defaultImageSource;
             }
         }
     }

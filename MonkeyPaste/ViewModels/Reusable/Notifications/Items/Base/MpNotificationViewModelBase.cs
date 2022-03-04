@@ -5,7 +5,33 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
-    public abstract class MpNotificationViewModelBase : MpViewModelBase<MpNotificationBalloonViewModel> {
+    //public enum MpNotifierType {
+    //    None = 0,
+    //    Startup,
+    //    Dialog
+    //}
+
+    public enum MpNotificationDialogType {
+        None = 0,
+        StartupLoader,
+        Loader,
+        InvalidPlugin,
+        InvalidAction,
+        BadHttpRequest,
+        DbError,
+        LoadComplete,
+        Help
+    }
+
+    public enum MpNotificationExceptionSeverityType {
+        None = 0,
+        Warning, //confirm
+        WarningWithOption, //retry/ignore/quit
+        Error, //confirm
+        ErrorWithOption, //retry/ignore/quit
+        ErrorAndShutdown //confirm
+    }
+    public abstract class MpNotificationViewModelBase : MpViewModelBase<MpNotificationCollectionViewModel> {
         #region Properties
 
         #region Appearance
@@ -35,101 +61,52 @@ namespace MonkeyPaste {
 
         public virtual bool CanChooseNotShowAgain => true;
 
+        public bool IsErrorNotification {
+            get {
+                return ExceptionType == MpNotificationExceptionSeverityType.Error ||
+                    ExceptionType == MpNotificationExceptionSeverityType.ErrorAndShutdown ||
+                    ExceptionType == MpNotificationExceptionSeverityType.ErrorWithOption;
+            }
+        }
+
+        public bool IsWarningNotification {
+            get {
+                return ExceptionType == MpNotificationExceptionSeverityType.Warning ||
+                    ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption;
+            }
+        }
+
+        public bool IsStartupNotification => DialogType == MpNotificationDialogType.StartupLoader;
+
+        public bool IsLoaderNotification => DialogType == MpNotificationDialogType.Loader;
+
         #endregion
 
         #region Model
 
-        public abstract string IconImageBase64 { get; }
+        public bool DoNotShowAgain { get; set; } = false;
 
-        public virtual string Title {
+        public string IconImageBase64 { 
             get {
-                if(Notification == null) {
-                    return string.Empty;
+                if(IsErrorNotification) {
+                    return MpBase64Images.Error;
                 }
-                return Notification.Title;
-            }
-            set {
-                if(Title != value) {
-                    Notification.Title = value;
-                    OnPropertyChanged(nameof(Title));
+                if (IsWarningNotification) {
+                    return MpBase64Images.Warning;
                 }
+                return MpBase64Images.AppIcon;
             }
         }
 
-        public virtual string Body {
-            get {
-                if (Notification == null) {
-                    return string.Empty;
-                }
-                return Notification.Body;
-            }
-            set {
-                if(Body != value) {
-                    Notification.Body = value;
-                    OnPropertyChanged(nameof(Body));
-                }
-            }
-        }
+        public virtual string Title { get; set; }
 
-        public virtual string Detail {
-            get {
-                if (Notification == null) {
-                    return string.Empty;
-                }
-                return Notification.Detail;
-            }
-            set {
-                if (Detail != value) {
-                    Notification.Detail = value;
-                    OnPropertyChanged(nameof(Detail));
-                }
-            }
-        }
+        public virtual string Body { get; set; }
 
-        public MpNotifierType NotifierType {
-            get {
-                if(Notification == null) {
-                    return MpNotifierType.None;
-                }
-                return Notification.NotifierType;
-            }
-        }
+        public virtual string Detail { get; set; }
 
-        public MpNotificationDialogType DialogType {
-            get {
-                if(Notification == null) {
-                    return MpNotificationDialogType.None;
-                }
-                return Notification.DialogType;
-            }
-        }
+        public MpNotificationDialogType DialogType { get; set; }
 
-        public MpNotificationExceptionSeverityType ExceptionType {
-            get {
-                if(Notification == null) {
-                    return MpNotificationExceptionSeverityType.None;
-                }
-                return Notification.SeverityType;
-            }
-        }
-
-        public bool DoNotShowAgain {
-            get {
-                if(Notification == null) {
-                    return false;
-                }
-                return Notification.DoNotShowAgain;
-            }
-            set {
-                if(DoNotShowAgain != value) {
-                    Notification.DoNotShowAgain = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(DoNotShowAgain));
-                }
-            }
-        }
-
-        public MpNotification Notification { get; set; }
+        public MpNotificationExceptionSeverityType ExceptionType { get; set; }
 
         #endregion
 
@@ -139,32 +116,23 @@ namespace MonkeyPaste {
 
         public MpNotificationViewModelBase() : base(null) { }
 
-        public MpNotificationViewModelBase(MpNotificationBalloonViewModel parent) : base(parent) {
+        public MpNotificationViewModelBase(MpNotificationCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpNotificationViewModelBase_PropertyChanged;
         }
+
+
 
         #endregion
 
         #region Public Methods
-
-        public async Task InitializeAsync(MpNotification notification) {
-            //IsBusy = true;
-
-            await Task.Delay(1);
-            Notification = notification;
-
-            //IsBusy = false;
-        }
-
         #endregion
 
         #region Private Methods
-
         private void MpNotificationViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(HasModelChanged):
-                    if(HasModelChanged) {
-                        WriteModel(Notification);
+                case nameof(DoNotShowAgain):
+                    if(DoNotShowAgain) {
+                        Parent.DoNotShowAgainCommand.Execute((int)DialogType);
                     }
                     break;
             }

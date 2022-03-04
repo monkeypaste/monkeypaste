@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpDllTransaction : MpDbModelBase, MpISourceTransaction {
         #region Protected variables 
-
+        //uses manifest iconUrl for MpISourceItem interface
         protected int iconId { get; set; } = 0;
 
         #endregion

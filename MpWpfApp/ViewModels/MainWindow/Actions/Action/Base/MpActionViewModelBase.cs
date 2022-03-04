@@ -426,6 +426,21 @@ namespace MpWpfApp {
             }
         }
 
+        public string Arg5 {
+            get {
+                if (Action == null) {
+                    return string.Empty;
+                }
+                return Action.Arg5;
+            }
+            set {
+                if (Arg5 != value) {
+                    Action.Arg5 = value; // NOTE no HasModelChanged for abstract fields
+                    OnPropertyChanged(nameof(Arg5));
+                }
+            }
+        }
+
         public bool IsReadOnly {
             get {
                 if (Action == null) {
@@ -670,6 +685,8 @@ namespace MpWpfApp {
             if (!CanPerformAction(arg)) {
                 return;
             }
+
+            MpConsole.WriteLine($"Action({ActionId}) '{Label}' Performed");
             await Task.Delay(1);
             OnActionComplete?.Invoke(this, arg);
         }
@@ -696,8 +713,8 @@ namespace MpWpfApp {
         protected async Task ShowValidationNotification() {
             bool wasBusy = IsBusy;
             IsBusy = true;
-            var userAction = await MpNotificationBalloonViewModel.Instance.ShowUserAction(
-                    notificationType: MpNotificationDialogType.InvalidAction,
+            var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
+                    dialogType: MpNotificationDialogType.InvalidAction,
                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                     msg: ValidationText);
 
@@ -758,6 +775,11 @@ namespace MpWpfApp {
             return true;
         }
 
+
+        protected void ResetArgs() {
+            Arg1 = Arg2 = Arg3 = Arg4 = Arg5 = string.Empty;
+        }
+
         #endregion
 
         #region Private Methods
@@ -806,7 +828,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(BorderBrushHexColor));
                     break;
                 case nameof(HasModelChanged):
-                    if(HasModelChanged) {
+                    if(HasModelChanged && IsValid) {
                         HasModelChanged = false;
 
                         if(this is MpEmptyActionViewModel) {

@@ -11,7 +11,7 @@ using SQLiteNetExtensions.Extensions.TextBlob;
 using System.Text;
 
 namespace MonkeyPaste {
-    public class MpTextAnnotation : MpDbModelBase {
+    public class MpTextAnnotation : MpDbModelBase, MpIAnnotation {
 
         #region Columns
         [PrimaryKey, AutoIncrement]

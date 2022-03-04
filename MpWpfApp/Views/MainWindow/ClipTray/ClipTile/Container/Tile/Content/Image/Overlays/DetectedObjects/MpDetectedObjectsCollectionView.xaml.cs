@@ -17,7 +17,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpDetectedObjectsCollectionView.xaml
     /// </summary>
-    public partial class MpDetectedObjectsCollectionView : MpUserControl<MpDetectedImageObjectCollectionViewModel> {
+    public partial class MpDetectedObjectsCollectionView : MpUserControl<MpImageAnnotationCollectionViewModel> {
         public MpDetectedObjectsCollectionView() {
             InitializeComponent();
         }

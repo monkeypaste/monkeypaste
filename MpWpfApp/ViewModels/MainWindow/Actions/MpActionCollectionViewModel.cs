@@ -76,15 +76,15 @@ namespace MpWpfApp {
                 if (PrimaryAction == null) {
                     return null;
                 }
-                if(PrimaryAction is MpTriggerActionViewModelBase) {
+                if (PrimaryAction is MpTriggerActionViewModelBase) {
                     return PrimaryAction as MpTriggerActionViewModelBase;
                 }
                 return PrimaryAction.FindRootParent() as MpTriggerActionViewModelBase;
             }
             set {
-                if(SelectedItem != value) {
+                if (SelectedItem != value) {
                     AllSelectedTriggerActions.ForEach(x => x.IsSelected = false);
-                    if(value != null) {
+                    if (value != null) {
                         value.IsSelected = true;
                     }
                     OnPropertyChanged(nameof(SelectedItem));
@@ -102,7 +102,7 @@ namespace MpWpfApp {
                     return new List<MpActionViewModelBase>();
                 }
                 var avml = new List<MpActionViewModelBase>();
-                foreach(var tavm in Items.ToList()) {
+                foreach (var tavm in Items.ToList()) {
                     avml.Add(tavm);
                     avml.AddRange(tavm.FindAllChildren());
                 }
@@ -112,7 +112,7 @@ namespace MpWpfApp {
 
         public IList<MpActionViewModelBase> AllSelectedTriggerActions {
             get {
-                if(SelectedItem == null) {
+                if (SelectedItem == null) {
                     return new List<MpActionViewModelBase>();
                 }
                 var avml = SelectedItem.FindAllChildren().ToList();
@@ -121,11 +121,10 @@ namespace MpWpfApp {
             }
         }
 
-        public IList<MpActionViewModelBase> SelectedActions => 
+        public IList<MpActionViewModelBase> SelectedActions =>
             AllActions.Where(x => x.IsSelected).OrderByDescending(x => x.LastSelectedDateTime).ToList();
 
         public MpActionViewModelBase PrimaryAction => SelectedActions.Count == 0 ? null : SelectedActions[0];
-
 
         #endregion
 

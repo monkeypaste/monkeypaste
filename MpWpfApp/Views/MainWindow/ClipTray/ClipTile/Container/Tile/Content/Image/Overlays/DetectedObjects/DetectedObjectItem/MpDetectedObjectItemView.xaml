@@ -5,11 +5,11 @@
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpDetectedImageObjectViewModel"
+                     x:TypeArguments="local:MpImageAnnotationViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="100"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpDetectedImageObjectViewModel,
+                     d:DataContext="{d:DesignInstance Type=local:MpImageAnnotationViewModel,
                                                       IsDesignTimeCreatable=False}">
     <local:MpUserControl.Resources>
         <Style TargetType="ToolTip">
@@ -55,13 +55,16 @@
                                                   StrokeThickness="{Binding BackgroundCircle.Thickness}">
                                                 <Path.Data>
                                                     <PathGeometry>
-                                                        <PathFigure StartPoint="{Binding BackgroundCircle.StartPosition}">
+                                                        <PathFigure StartPoint="{Binding BackgroundCircle.StartPosition,
+                                                                                         FallbackValue=0 0}">
                                                             <PathFigure.Segments>
                                                                 <ArcSegment RotationAngle="0"
                                                                             SweepDirection="Clockwise"
-                                                                            Size="{Binding BackgroundCircle.Radius}"
+                                                                            Size="{Binding BackgroundCircle.Radius,
+                                                                                           FallbackValue=12.5 12.5}"
                                                                             IsLargeArc="True"
-                                                                            Point="{Binding BackgroundCircle.EndPosition}" />
+                                                                            Point="{Binding BackgroundCircle.EndPosition,
+                                                                                            FallbackValue=0 0}" />
 
                                                             </PathFigure.Segments>
                                                         </PathFigure>
@@ -74,14 +77,17 @@
                                                   StrokeEndLineCap="Round">
                                                 <Path.Data>
                                                     <PathGeometry>
-                                                        <PathFigure StartPoint="{Binding BackgroundCircle.StartPosition}">
+                                                        <PathFigure StartPoint="{Binding BackgroundCircle.StartPosition,
+                                                                                         FallbackValue=0 0}">
                                                             <PathFigure.Segments>
                                                                 <ArcSegment RotationAngle="0"
                                                                             SweepDirection="Clockwise"
-                                                                            Size="{Binding ValueCircle.Radius}"
+                                                                            Size="{Binding ValueCircle.Radius,
+                                                                                           FallbackValue=12.5 12.5}"
                                                                             IsLargeArc="{Binding DisplayScore,
                                                                                                  Converter={StaticResource ScoreToIsLargeArcConverter}}"
-                                                                            Point="{Binding ValueCircle.EndPosition}" />
+                                                                            Point="{Binding ValueCircle.EndPosition,
+                                                                                            FallbackValue=0 0}" />
 
                                                             </PathFigure.Segments>
                                                         </PathFigure>

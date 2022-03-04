@@ -1528,5 +1528,17 @@ namespace MpWpfApp.Properties {
                 this["FallbackProcessPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DoNotShowAgainNotificationIdCsvStr {
+            get {
+                return ((string)(this["DoNotShowAgainNotificationIdCsvStr"]));
+            }
+            set {
+                this["DoNotShowAgainNotificationIdCsvStr"] = value;
+            }
+        }
     }
 }

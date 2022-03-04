@@ -32,22 +32,6 @@ namespace MonkeyPaste {
 
         #region Model
 
-        public override string IconImageBase64 {
-            get {
-                switch(ExceptionType) {
-                    case MpNotificationExceptionSeverityType.Error:
-                    case MpNotificationExceptionSeverityType.ErrorAndShutdown:
-                    case MpNotificationExceptionSeverityType.ErrorWithOption:
-                        return MpBase64Images.Error;
-                    case MpNotificationExceptionSeverityType.Warning:
-                    case MpNotificationExceptionSeverityType.WarningWithOption:
-                        return MpBase64Images.Warning;
-                    default:
-                        return MpBase64Images.AppIcon;
-                }
-            }
-        }
-
         #endregion
 
         #endregion
@@ -56,14 +40,13 @@ namespace MonkeyPaste {
 
         public MpUserActionNotificationViewModel() : base(null) { }
 
-        public MpUserActionNotificationViewModel(MpNotificationBalloonViewModel parent) : base(parent) { }
+        public MpUserActionNotificationViewModel(MpNotificationCollectionViewModel parent) : base(parent) { }
 
         #endregion
 
         #region Public Methods
 
         #endregion
-
 
         #region Commands
 
