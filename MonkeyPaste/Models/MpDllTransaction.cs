@@ -32,6 +32,8 @@ namespace MonkeyPaste {
         [Column("fk_MpUserDeviceId")]
         public int DeviceId { get; set; }
 
+        public string TransactionErrorMessage { get; set; }
+
         public string DllPath { get; set; }
         public string DllName { get; set; }
 
@@ -70,6 +72,7 @@ namespace MonkeyPaste {
             string dllName = "",
             string args = "",
             DateTime? transDateTime = null,
+            string errorMsg = null,
             bool suppressWrite = false) {
             if(string.IsNullOrWhiteSpace(dllPath)) {
                 throw new Exception("Must specifiy path");
@@ -87,7 +90,8 @@ namespace MonkeyPaste {
                 DllPath = dllPath,
                 DllName = string.IsNullOrWhiteSpace(dllName) ? Path.GetFileNameWithoutExtension(dllPath) : dllName,
                 Args = args,
-                TransactionDateTime = !transDateTime.HasValue ? DateTime.Now : transDateTime.Value
+                TransactionDateTime = !transDateTime.HasValue ? DateTime.Now : transDateTime.Value,
+                TransactionErrorMessage = errorMsg
             };
             if (presetId > 0) {
                 var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(presetId);
@@ -105,15 +109,25 @@ namespace MonkeyPaste {
 
         #region MpISourceItem Implementation
 
+        [Ignore]
         public int IconId => 0;
+        [Ignore]
         public string SourcePath => DllPath;
+        [Ignore]
         public string SourceName => DllName;
+        [Ignore]
         public int RootId => Id;
+        [Ignore]
         public bool IsUrl => false;
+        [Ignore]
         public bool IsDll => true;
+        [Ignore]
         public bool IsExe => false;
+        [Ignore]
         public bool IsRejected => false;
+        [Ignore]
         public bool IsSubRejected => false;
+
 
         #endregion
     }

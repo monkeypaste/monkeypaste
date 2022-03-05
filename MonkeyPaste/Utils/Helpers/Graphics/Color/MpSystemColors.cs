@@ -704,7 +704,6 @@ namespace MonkeyPaste {
             "yellowgreen"
         };
 
-        public static string name => "HEX";
         public static string aliceblue => "#FFF0F8FF";
         public static string antiquewhite => "#FFFAEBD7";
         public static string antiquewhite1 => "#FFFFEFDB";

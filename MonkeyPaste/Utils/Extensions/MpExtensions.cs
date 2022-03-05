@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -373,6 +374,16 @@ namespace MonkeyPaste {
         #endregion
 
         #region Data
+
+        public static int ByteCount(this object obj) {
+            if(obj == null) {
+                return 0;
+            }
+            RuntimeTypeHandle th = obj.GetType().TypeHandle;
+            //int size = *(*(int**)&th + 1);
+            int size = Marshal.ReadInt32(obj.GetType().TypeHandle.Value, 4);
+            return size;
+        }
 
         public static bool IsUnsetValue(this object obj) {
             return obj.ToString().Contains("DependencyProperty.UnsetValue");

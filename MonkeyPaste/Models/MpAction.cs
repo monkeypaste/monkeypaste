@@ -27,9 +27,9 @@ namespace MonkeyPaste {
         LastPasteDateTime, //seperator
         CopyCount,
         PasteCount,
-        LastOutputJsonPath
+        LastOutput
     }
-    public enum MpCompareType {
+    public enum MpComparisonOperatorType {
         None = 0,
         Contains,
         Exact,
@@ -88,15 +88,15 @@ namespace MonkeyPaste {
         [Column("fk_ActionObjId")]
         public int ActionObjId { get; set; } = 0;
 
-        public string Arg1 { get; set; } = string.Empty;
+        public string Arg1 { get; set; } = null;
 
-        public string Arg2 { get; set; } = string.Empty;
+        public string Arg2 { get; set; } = null;
 
-        public string Arg3 { get; set; } = string.Empty;
+        public string Arg3 { get; set; } = null;
 
-        public string Arg4 { get; set; } = string.Empty;
+        public string Arg4 { get; set; } = null;
 
-        public string Arg5 { get; set; } = string.Empty;
+        public string Arg5 { get; set; } = null;
 
         public double X { get; set; }
 

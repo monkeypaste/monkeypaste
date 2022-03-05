@@ -1,7 +1,7 @@
 {
   "parameters": [
     {
-      "label": "Confidence",
+      "text": "Confidence",
       "parameterControlType": "Slider",
       "parameterValueType": "Decimal",
       "enumId": 1,
@@ -24,7 +24,7 @@
       ]
     },
     {
-      "label": "Image File Path",
+      "text": "Image File Path",
       "parameterControlType": "Text",
       "parameterValueType": "PlainText",
       "enumId": 2,
@@ -34,7 +34,7 @@
       "isVisible": false
     },
     {
-      "label": "Image Base 64",
+      "text": "Image Base 64",
       "parameterControlType": "Text",
       "parameterValueType": "PlainText",
       "enumId": 3,

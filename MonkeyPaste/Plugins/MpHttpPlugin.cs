@@ -795,9 +795,9 @@ namespace MonkeyPaste {
         private MpPluginResponseItemBaseFormat CreateElement(MpPluginResponseItemBaseFormat a,JObject jo, int idx = 0) {
             if(a != null) {
                 try {
-                    if (a.label != null) {
-                        a.label.SetValue(jo, reqParams, idx);
-                        a.label = a.label.omitIfPathNotFound && a.label.value == null ? null : a.label;
+                    if (a.text != null) {
+                        a.text.SetValue(jo, reqParams, idx);
+                        a.text = a.text.omitIfPathNotFound && a.text.value == null ? null : a.text;
                     }
                     if (a.score != null) {
                         a.score.SetValue(jo, reqParams, idx);

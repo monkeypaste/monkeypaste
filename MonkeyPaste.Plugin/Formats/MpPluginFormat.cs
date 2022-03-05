@@ -13,7 +13,7 @@ namespace MonkeyPaste.Plugin {
         Composite
     }
 
-    public class MpPluginFormat  {
+    public class MpPluginFormat : MpJsonObject {
         public string title { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;
         public string version { get; set; } = string.Empty;
@@ -33,7 +33,7 @@ namespace MonkeyPaste.Plugin {
         
     }
 
-    public class MpPluginIoTypeFormat {
+    public class MpPluginIoTypeFormat : MpJsonObject {
         public bool isDll { get; set; } = false;
         public bool isCli { get; set; } = false;
         public bool isHttp { get; set; } = false;

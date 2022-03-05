@@ -50,7 +50,7 @@ namespace MpWpfApp {
         private TextElement CreateTextElement(HtmlNode n, TextElement[] cl) {
             var te = GetTextElement(n);
             foreach (var c in cl) {
-                te = AddChildToELement(te, c);
+                te = AddChildToElement(te, c);
             }
             return FormatTextElement(n.Attributes,te);
         }
@@ -195,7 +195,7 @@ namespace MpWpfApp {
             }
             return te;
         }
-        private TextElement AddChildToELement(TextElement te, TextElement cte) {
+        private TextElement AddChildToElement(TextElement te, TextElement cte) {
             if (te is List) {
                 (te as List).ListItems.Add(cte as ListItem);
             } else if (te is ListItem) {

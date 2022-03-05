@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -12,13 +13,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MonkeyPaste;
 
-namespace MpWpfApp.Views.Reusable.Reports {
+namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpAnalysisReportView.xaml
+    /// Interaction logic for MpTooltipInfoView.xaml
     /// </summary>
-    public partial class MpAnalysisReportView : UserControl {
-        public MpAnalysisReportView() {
+    public partial class MpTooltipInfoView : MpUserControl<MpITooltipInfoViewModel> {
+        public MpTooltipInfoView() {
             InitializeComponent();
         }
     }

@@ -19,5 +19,7 @@ namespace MonkeyPaste {
         bool IsSubRejected { get; }
     }
 
-    public interface MpISourceTransaction : MpISourceItem { }
+    public interface MpISourceTransaction : MpISourceItem {
+        string TransactionErrorMessage { get; set; }
+    }
 }

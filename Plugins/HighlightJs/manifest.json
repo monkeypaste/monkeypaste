@@ -17,7 +17,7 @@
     },
     "parameters": [
       {
-        "label": "Supported Languages",
+        "text": "Supported Languages",
         "parameterControlType": "ListBox",
         "parameterValueType": "Csv",
         "enumId": 1,
@@ -25,902 +25,902 @@
         "isMultiValue": true,
         "values": [
           {
-            "label": "1C",
+            "text": "1C",
             "value": "1c"
           },
           {
-            "label": "4D",
+            "text": "4D",
             "value": "4d"
           },
           {
-            "label": "ABAP",
+            "text": "ABAP",
             "value": "sap-abap, abap"
           },
           {
-            "label": "ABNF",
+            "text": "ABNF",
             "value": "abnf"
           },
           {
-            "label": "Access logs",
+            "text": "Access logs",
             "value": "accesslog"
           },
           {
-            "label": "Ada",
+            "text": "Ada",
             "value": "ada"
           },
           {
-            "label": "Arduino (C++ w/Arduino libs)",
+            "text": "Arduino (C++ w/Arduino libs)",
             "value": "arduino, ino"
           },
           {
-            "label": "ARM assembler",
+            "text": "ARM assembler",
             "value": "armasm, arm"
           },
           {
-            "label": "AVR assembler",
+            "text": "AVR assembler",
             "value": "avrasm"
           },
           {
-            "label": "ActionScript",
+            "text": "ActionScript",
             "value": "actionscript, as"
           },
           {
-            "label": "Alan IF",
+            "text": "Alan IF",
             "value": "alan, i"
           },
           {
-            "label": "Alan",
+            "text": "Alan",
             "value": "ln"
           },
           {
-            "label": "AngelScript",
+            "text": "AngelScript",
             "value": "angelscript, asc"
           },
           {
-            "label": "Apache",
+            "text": "Apache",
             "value": "apache, apacheconf"
           },
           {
-            "label": "AppleScript",
+            "text": "AppleScript",
             "value": "applescript, osascript"
           },
           {
-            "label": "Arcade",
+            "text": "Arcade",
             "value": "arcade"
           },
           {
-            "label": "AsciiDoc",
+            "text": "AsciiDoc",
             "value": "asciidoc, adoc"
           },
           {
-            "label": "AspectJ",
+            "text": "AspectJ",
             "value": "aspectj"
           },
           {
-            "label": "AutoHotkey",
+            "text": "AutoHotkey",
             "value": "autohotkey"
           },
           {
-            "label": "AutoIt",
+            "text": "AutoIt",
             "value": "autoit"
           },
           {
-            "label": "Awk",
+            "text": "Awk",
             "value": "awk, mawk, nawk, gawk"
           },
           {
-            "label": "Bash",
+            "text": "Bash",
             "value": "bash, sh, zsh",
             "isDefault": true
           },
           {
-            "label": "Basic",
+            "text": "Basic",
             "value": "basic"
           },
           {
-            "label": "BBCode",
+            "text": "BBCode",
             "value": "bbcode"
           },
           {
-            "label": "Blade (Laravel)",
+            "text": "Blade (Laravel)",
             "value": "blade"
           },
           {
-            "label": "BNF",
+            "text": "BNF",
             "value": "bnf"
           },
           {
-            "label": "Brainfuck",
+            "text": "Brainfuck",
             "value": "brainfuck, bf"
           },
           {
-            "label": "C#",
+            "text": "C#",
             "value": "csharp, cs",
             "isDefault": true
           },
           {
-            "label": "C",
+            "text": "C",
             "value": "c, h",
             "isDefault": true
           },
           {
-            "label": "C++",
+            "text": "C++",
             "value": "cpp, hpp, cc, hh, c++, h++, cxx, hxx",
             "isDefault": true
           },
           {
-            "label": "C/AL",
+            "text": "C/AL",
             "value": "cal"
           },
           {
-            "label": "Cache Object Script",
+            "text": "Cache Object Script",
             "value": "cos, cls"
           },
           {
-            "label": "CMake",
+            "text": "CMake",
             "value": "cmake, cmake.in"
           },
           {
-            "label": "Coq",
+            "text": "Coq",
             "value": "coq"
           },
           {
-            "label": "CSP",
+            "text": "CSP",
             "value": "csp"
           },
           {
-            "label": "CSS",
+            "text": "CSS",
             "value": "css",
             "isDefault": true
           },
           {
-            "label": "Cap’n Proto",
+            "text": "Cap’n Proto",
             "value": "capnproto, capnp"
           },
           {
-            "label": "Chaos",
+            "text": "Chaos",
             "value": "chaos, kaos"
           },
           {
-            "label": "Chapel",
+            "text": "Chapel",
             "value": "chapel, chpl"
           },
           {
-            "label": "Cisco CLI",
+            "text": "Cisco CLI",
             "value": "cisco"
           },
           {
-            "label": "Clojure",
+            "text": "Clojure",
             "value": "clojure, clj"
           },
           {
-            "label": "CoffeeScript",
+            "text": "CoffeeScript",
             "value": "coffeescript, coffee, cson, iced"
           },
           {
-            "label": "CpcdosC+",
+            "text": "CpcdosC+",
             "value": "cpc"
           },
           {
-            "label": "Crmsh",
+            "text": "Crmsh",
             "value": "crmsh, crm, pcmk"
           },
           {
-            "label": "Crystal",
+            "text": "Crystal",
             "value": "crystal, cr"
           },
           {
-            "label": "cURL",
+            "text": "cURL",
             "value": "curl"
           },
           {
-            "label": "Cypher (Neo4j)",
+            "text": "Cypher (Neo4j)",
             "value": "cypher"
           },
           {
-            "label": "D",
+            "text": "D",
             "value": "d"
           },
           {
-            "label": "Dafny",
+            "text": "Dafny",
             "value": "dafny"
           },
           {
-            "label": "Dart",
+            "text": "Dart",
             "value": "dart"
           },
           {
-            "label": "Delphi",
+            "text": "Delphi",
             "value": "dpr, dfm, pas, pascal"
           },
           {
-            "label": "Diff",
+            "text": "Diff",
             "value": "diff, patch",
             "isDefault": true
           },
           {
-            "label": "Django",
+            "text": "Django",
             "value": "django, jinja"
           },
           {
-            "label": "DNS Zone file",
+            "text": "DNS Zone file",
             "value": "dns, zone, bind"
           },
           {
-            "label": "Dockerfile",
+            "text": "Dockerfile",
             "value": "dockerfile, docker"
           },
           {
-            "label": "DOS",
+            "text": "DOS",
             "value": "dos, bat, cmd"
           },
           {
-            "label": "dsconfig",
+            "text": "dsconfig",
             "value": "dsconfig"
           },
           {
-            "label": "DTS (Device Tree)",
+            "text": "DTS (Device Tree)",
             "value": "dts"
           },
           {
-            "label": "Dust",
+            "text": "Dust",
             "value": "dust, dst"
           },
           {
-            "label": "Dylan",
+            "text": "Dylan",
             "value": "dylan"
           },
           {
-            "label": "EBNF",
+            "text": "EBNF",
             "value": "ebnf"
           },
           {
-            "label": "Elixir",
+            "text": "Elixir",
             "value": "elixir"
           },
           {
-            "label": "Elm",
+            "text": "Elm",
             "value": "elm"
           },
           {
-            "label": "Erlang",
+            "text": "Erlang",
             "value": "erlang, erl"
           },
           {
-            "label": "Excel",
+            "text": "Excel",
             "value": "excel, xls, xlsx"
           },
           {
-            "label": "Extempore",
+            "text": "Extempore",
             "value": "extempore, xtlang, xtm"
           },
           {
-            "label": "F#",
+            "text": "F#",
             "value": "fsharp, fs"
           },
           {
-            "label": "FIX",
+            "text": "FIX",
             "value": "fix"
           },
           {
-            "label": "Fortran",
+            "text": "Fortran",
             "value": "fortran, f90, f95"
           },
           {
-            "label": "G-Code",
+            "text": "G-Code",
             "value": "gcode, nc"
           },
           {
-            "label": "Gams",
+            "text": "Gams",
             "value": "gams, gms"
           },
           {
-            "label": "GAUSS",
+            "text": "GAUSS",
             "value": "gauss, gss"
           },
           {
-            "label": "GDScript",
+            "text": "GDScript",
             "value": "godot, gdscript"
           },
           {
-            "label": "Gherkin",
+            "text": "Gherkin",
             "value": "gherkin"
           },
           {
-            "label": "Glimmer and EmberJS",
+            "text": "Glimmer and EmberJS",
             "value": "hbs, glimmer, html.hbs, html.handlebars, htmlbars"
           },
           {
-            "label": "GN for Ninja",
+            "text": "GN for Ninja",
             "value": "gn, gni"
           },
           {
-            "label": "Go",
+            "text": "Go",
             "value": "go, golang",
             "isDefault": true
           },
           {
-            "label": "Grammatical Framework",
+            "text": "Grammatical Framework",
             "value": "gf"
           },
           {
-            "label": "Golo",
+            "text": "Golo",
             "value": "golo, gololang"
           },
           {
-            "label": "Gradle",
+            "text": "Gradle",
             "value": "gradle"
           },
           {
-            "label": "GraphQL",
+            "text": "GraphQL",
             "value": "graphql"
           },
           {
-            "label": "Groovy",
+            "text": "Groovy",
             "value": "groovy"
           },
           {
-            "label": "GSQL",
+            "text": "GSQL",
             "value": "gsql"
           },
           {
-            "label": "HTML, XML",
+            "text": "HTML, XML",
             "value": "xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, svg",
             "isDefault": true
           },
           {
-            "label": "HTTP",
+            "text": "HTTP",
             "value": "http, https"
           },
           {
-            "label": "Haml",
+            "text": "Haml",
             "value": "haml"
           },
           {
-            "label": "Handlebars",
+            "text": "Handlebars",
             "value": "handlebars, hbs, html.hbs, html.handlebars"
           },
           {
-            "label": "Haskell",
+            "text": "Haskell",
             "value": "haskell, hs"
           },
           {
-            "label": "Haxe",
+            "text": "Haxe",
             "value": "haxe, hx"
           },
           {
-            "label": "High-level shader language",
+            "text": "High-level shader language",
             "value": "hlsl"
           },
           {
-            "label": "Hy",
+            "text": "Hy",
             "value": "hy, hylang"
           },
           {
-            "label": "Ini, TOML",
+            "text": "Ini, TOML",
             "value": "ini, toml",
             "isDefault": true
           },
           {
-            "label": "Inform7",
+            "text": "Inform7",
             "value": "inform7, i7"
           },
           {
-            "label": "IRPF90",
+            "text": "IRPF90",
             "value": "irpf90"
           },
           {
-            "label": "JSON",
+            "text": "JSON",
             "value": "json",
             "isDefault": true
           },
           {
-            "label": "Java",
+            "text": "Java",
             "value": "java, jsp",
             "isDefault": true
           },
           {
-            "label": "JavaScript",
+            "text": "JavaScript",
             "value": "javascript, js, jsx",
             "isDefault": true
           },
           {
-            "label": "Jolie",
+            "text": "Jolie",
             "value": "jolie, iol, ol"
           },
           {
-            "label": "Julia",
+            "text": "Julia",
             "value": "julia, julia-repl"
           },
           {
-            "label": "Kotlin",
+            "text": "Kotlin",
             "value": "kotlin, kt",
             "isDefault": true
           },
           {
-            "label": "LaTeX",
+            "text": "LaTeX",
             "value": "tex"
           },
           {
-            "label": "Leaf",
+            "text": "Leaf",
             "value": "leaf"
           },
           {
-            "label": "Lean",
+            "text": "Lean",
             "value": "lean"
           },
           {
-            "label": "Lasso",
+            "text": "Lasso",
             "value": "lasso, ls, lassoscript"
           },
           {
-            "label": "Less",
+            "text": "Less",
             "value": "less",
             "isDefault": true
           },
           {
-            "label": "LDIF",
+            "text": "LDIF",
             "value": "ldif"
           },
           {
-            "label": "Lisp",
+            "text": "Lisp",
             "value": "lisp"
           },
           {
-            "label": "LiveCode Server",
+            "text": "LiveCode Server",
             "value": "livecodeserver"
           },
           {
-            "label": "LiveScript",
+            "text": "LiveScript",
             "value": "livescript, ls"
           },
           {
-            "label": "Lua",
+            "text": "Lua",
             "value": "lua",
             "isDefault": true
           },
           {
-            "label": "Makefile",
+            "text": "Makefile",
             "value": "makefile, mk, mak, make",
             "isDefault": true
           },
           {
-            "label": "Markdown",
+            "text": "Markdown",
             "value": "markdown, md, mkdown, mkd",
             "isDefault": true
           },
           {
-            "label": "Mathematica",
+            "text": "Mathematica",
             "value": "mathematica, mma, wl"
           },
           {
-            "label": "Matlab",
+            "text": "Matlab",
             "value": "matlab"
           },
           {
-            "label": "Maxima",
+            "text": "Maxima",
             "value": "maxima"
           },
           {
-            "label": "Maya Embedded Language",
+            "text": "Maya Embedded Language",
             "value": "mel"
           },
           {
-            "label": "Mercury",
+            "text": "Mercury",
             "value": "mercury"
           },
           {
-            "label": "mIRC Scripting Language",
+            "text": "mIRC Scripting Language",
             "value": "mirc, mrc"
           },
           {
-            "label": "Mizar",
+            "text": "Mizar",
             "value": "mizar"
           },
           {
-            "label": "MKB",
+            "text": "MKB",
             "value": "mkb"
           },
           {
-            "label": "Mojolicious",
+            "text": "Mojolicious",
             "value": "mojolicious"
           },
           {
-            "label": "Monkey",
+            "text": "Monkey",
             "value": "monkey"
           },
           {
-            "label": "Moonscript",
+            "text": "Moonscript",
             "value": "moonscript, moon"
           },
           {
-            "label": "N1QL",
+            "text": "N1QL",
             "value": "n1ql"
           },
           {
-            "label": "NSIS",
+            "text": "NSIS",
             "value": "nsis"
           },
           {
-            "label": "Never",
+            "text": "Never",
             "value": "never"
           },
           {
-            "label": "Nginx",
+            "text": "Nginx",
             "value": "nginx, nginxconf"
           },
           {
-            "label": "Nim",
+            "text": "Nim",
             "value": "nim, nimrod"
           },
           {
-            "label": "Nix",
+            "text": "Nix",
             "value": "nix"
           },
           {
-            "label": "Object Constraint Language",
+            "text": "Object Constraint Language",
             "value": "ocl"
           },
           {
-            "label": "OCaml",
+            "text": "OCaml",
             "value": "ocaml, ml"
           },
           {
-            "label": "Objective C",
+            "text": "Objective C",
             "value": "objectivec, mm, objc, obj-c, obj-c++, objective-c++",
             "isDefault": true
           },
           {
-            "label": "OpenGL Shading Language",
+            "text": "OpenGL Shading Language",
             "value": "glsl"
           },
           {
-            "label": "OpenSCAD",
+            "text": "OpenSCAD",
             "value": "openscad, scad"
           },
           {
-            "label": "Oracle Rules Language",
+            "text": "Oracle Rules Language",
             "value": "ruleslanguage"
           },
           {
-            "label": "Oxygene",
+            "text": "Oxygene",
             "value": "oxygene"
           },
           {
-            "label": "PF",
+            "text": "PF",
             "value": "pf, pf.conf"
           },
           {
-            "label": "PHP",
+            "text": "PHP",
             "value": "php",
             "isDefault": true
           },
           {
-            "label": "Papyrus",
+            "text": "Papyrus",
             "value": "papyrus, psc"
           },
           {
-            "label": "Parser3",
+            "text": "Parser3",
             "value": "parser3"
           },
           {
-            "label": "Perl",
+            "text": "Perl",
             "value": "perl, pl, pm",
             "isDefault": true
           },
           {
-            "label": "Pine Script",
+            "text": "Pine Script",
             "value": "pine, pinescript"
           },
           {
-            "label": "Plaintext",
+            "text": "Plaintext",
             "value": "plaintext, txt, text",
             "isDefault": true
           },
           {
-            "label": "Pony",
+            "text": "Pony",
             "value": "pony"
           },
           {
-            "label": "PostgreSQL & PL/pgSQL",
+            "text": "PostgreSQL & PL/pgSQL",
             "value": "pgsql, postgres, postgresql"
           },
           {
-            "label": "PowerShell",
+            "text": "PowerShell",
             "value": "powershell, ps, ps1"
           },
           {
-            "label": "Processing",
+            "text": "Processing",
             "value": "processing"
           },
           {
-            "label": "Prolog",
+            "text": "Prolog",
             "value": "prolog"
           },
           {
-            "label": "Properties",
+            "text": "Properties",
             "value": "properties"
           },
           {
-            "label": "Protocol Buffers",
+            "text": "Protocol Buffers",
             "value": "protobuf"
           },
           {
-            "label": "Puppet",
+            "text": "Puppet",
             "value": "puppet, pp"
           },
           {
-            "label": "Python",
+            "text": "Python",
             "value": "python, py, gyp",
             "isDefault": true
           },
           {
-            "label": "Python profiler results",
+            "text": "Python profiler results",
             "value": "profile"
           },
           {
-            "label": "Python REPL",
+            "text": "Python REPL",
             "value": "python-repl, pycon",
             "isDefault": true
           },
           {
-            "label": "Q#",
+            "text": "Q#",
             "value": "qsharp"
           },
           {
-            "label": "Q",
+            "text": "Q",
             "value": "k, kdb"
           },
           {
-            "label": "QML",
+            "text": "QML",
             "value": "qml"
           },
           {
-            "label": "R",
+            "text": "R",
             "value": "r",
             "isDefault": true
           },
           {
-            "label": "Razor CSHTML",
+            "text": "Razor CSHTML",
             "value": "cshtml, razor, razor-cshtml"
           },
           {
-            "label": "ReasonML",
+            "text": "ReasonML",
             "value": "reasonml, re"
           },
           {
-            "label": "Rebol & Red",
+            "text": "Rebol & Red",
             "value": "redbol, rebol, red, red-system"
           },
           {
-            "label": "RenderMan RIB",
+            "text": "RenderMan RIB",
             "value": "rib"
           },
           {
-            "label": "RenderMan RSL",
+            "text": "RenderMan RSL",
             "value": "rsl"
           },
           {
-            "label": "RiScript",
+            "text": "RiScript",
             "value": "risc, riscript"
           },
           {
-            "label": "Roboconf",
+            "text": "Roboconf",
             "value": "graph, instances"
           },
           {
-            "label": "Robot Framework",
+            "text": "Robot Framework",
             "value": "robot, rf"
           },
           {
-            "label": "RPM spec files",
+            "text": "RPM spec files",
             "value": "rpm-specfile, rpm, spec, rpm-spec, specfile"
           },
           {
-            "label": "Ruby",
+            "text": "Ruby",
             "value": "ruby, rb, gemspec, podspec, thor, irb",
             "isDefault": true
           },
           {
-            "label": "Rust",
+            "text": "Rust",
             "value": "rust, rs",
             "isDefault": true
           },
           {
-            "label": "SAS",
+            "text": "SAS",
             "value": "SAS, sas"
           },
           {
-            "label": "SCSS",
+            "text": "SCSS",
             "value": "scss",
             "isDefault": true
           },
           {
-            "label": "SQL",
+            "text": "SQL",
             "value": "sql",
             "isDefault": true
           },
           {
-            "label": "STEP Part 21",
+            "text": "STEP Part 21",
             "value": "p21, step, stp"
           },
           {
-            "label": "Scala",
+            "text": "Scala",
             "value": "scala"
           },
           {
-            "label": "Scheme",
+            "text": "Scheme",
             "value": "scheme"
           },
           {
-            "label": "Scilab",
+            "text": "Scilab",
             "value": "scilab, sci"
           },
           {
-            "label": "Shape Expressions",
+            "text": "Shape Expressions",
             "value": "shexc"
           },
           {
-            "label": "Shell",
+            "text": "Shell",
             "value": "shell, console"
           },
           {
-            "label": "Smali",
+            "text": "Smali",
             "value": "smali"
           },
           {
-            "label": "Smalltalk",
+            "text": "Smalltalk",
             "value": "smalltalk, st"
           },
           {
-            "label": "SML",
+            "text": "SML",
             "value": "sml, ml"
           },
           {
-            "label": "Solidity",
+            "text": "Solidity",
             "value": "solidity, sol"
           },
           {
-            "label": "Splunk SPL",
+            "text": "Splunk SPL",
             "value": "spl"
           },
           {
-            "label": "Stan",
+            "text": "Stan",
             "value": "stan, stanfuncs"
           },
           {
-            "label": "Stata",
+            "text": "Stata",
             "value": "stata"
           },
           {
-            "label": "Structured Text",
+            "text": "Structured Text",
             "value": "iecst, scl, stl, structured-text"
           },
           {
-            "label": "Stylus",
+            "text": "Stylus",
             "value": "stylus, styl"
           },
           {
-            "label": "SubUnit",
+            "text": "SubUnit",
             "value": "subunit"
           },
           {
-            "label": "Supercollider",
+            "text": "Supercollider",
             "value": "supercollider, sc"
           },
           {
-            "label": "Svelte",
+            "text": "Svelte",
             "value": "svelte"
           },
           {
-            "label": "Swift",
+            "text": "Swift",
             "value": "swift",
             "isDefault": true
           },
           {
-            "label": "Tcl",
+            "text": "Tcl",
             "value": "tcl, tk"
           },
           {
-            "label": "Terraform (HCL)",
+            "text": "Terraform (HCL)",
             "value": "terraform, tf, hcl"
           },
           {
-            "label": "Test Anything Protocol",
+            "text": "Test Anything Protocol",
             "value": "tap"
           },
           {
-            "label": "Thrift",
+            "text": "Thrift",
             "value": "thrift"
           },
           {
-            "label": "TP",
+            "text": "TP",
             "value": "tp"
           },
           {
-            "label": "Transact-SQL",
+            "text": "Transact-SQL",
             "value": "tsql"
           },
           {
-            "label": "Twig",
+            "text": "Twig",
             "value": "twig, craftcms"
           },
           {
-            "label": "TypeScript",
+            "text": "TypeScript",
             "value": "typescript, ts",
             "isDefault": true
           },
           {
-            "label": "Unicorn Rails log",
+            "text": "Unicorn Rails log",
             "value": "unicorn-rails-log"
           },
           {
-            "label": "VB.Net",
+            "text": "VB.Net",
             "value": "vbnet, vb",
             "isDefault": true
           },
           {
-            "label": "VBA",
+            "text": "VBA",
             "value": "vba"
           },
           {
-            "label": "VBScript",
+            "text": "VBScript",
             "value": "vbscript, vbs"
           },
           {
-            "label": "VHDL",
+            "text": "VHDL",
             "value": "vhdl"
           },
           {
-            "label": "Vala",
+            "text": "Vala",
             "value": "vala"
           },
           {
-            "label": "Verilog",
+            "text": "Verilog",
             "value": "verilog, v"
           },
           {
-            "label": "Vim Script",
+            "text": "Vim Script",
             "value": "vim"
           },
           {
-            "label": "X#",
+            "text": "X#",
             "value": "xsharp, xs, prg"
           },
           {
-            "label": "X++",
+            "text": "X++",
             "value": "axapta, x++"
           },
           {
-            "label": "x86 Assembly",
+            "text": "x86 Assembly",
             "value": "x86asm"
           },
           {
-            "label": "XL",
+            "text": "XL",
             "value": "xl, tao"
           },
           {
-            "label": "XQuery",
+            "text": "XQuery",
             "value": "xquery, xpath, xq"
           },
           {
-            "label": "YAML",
+            "text": "YAML",
             "value": "yml, yaml",
             "isDefault": true
           },
           {
-            "label": "ZenScript",
+            "text": "ZenScript",
             "value": "zenscript, zs"
           },
           {
-            "label": "Zephir",
+            "text": "Zephir",
             "value": "zephir, zep"
           }
 
         ]
       },
       {
-        "label": "Source Content",
+        "text": "Source Content",
         "description": "The Snippet to deetect",
         "parameterControlType": "Hidden",
         "parameterValueType": "PlainText",

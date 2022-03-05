@@ -38,6 +38,8 @@ namespace MonkeyPaste {
         public int BytesSent { get; set; }
         public int BytesReceived { get; set; }
 
+        public string TransactionErrorMessage { get; set; }
+
         public DateTime DateTimeSent { get; set; }
         public DateTime? DateTimeReceived { get; set; }
 
@@ -74,7 +76,8 @@ namespace MonkeyPaste {
             DateTime? timeSent = null,
             DateTime? timeReceived = null,
             int bytesSent = 0,
-            int bytesReceived = 0,
+            int bytesReceived = 0, 
+            string errorMsg = null,
             bool suppressWrite = false) {
             if(string.IsNullOrEmpty(url)) {
                 MpConsole.WriteTraceLine("Http transaction must have destination url");
@@ -100,7 +103,8 @@ namespace MonkeyPaste {
                 DateTimeSent = timeSent.HasValue ? timeSent.Value : DateTime.Now,
                 DateTimeReceived = timeReceived.HasValue ? timeReceived.Value : null,
                 BytesSent = bytesSent,
-                BytesReceived = bytesReceived
+                BytesReceived = bytesReceived,
+                TransactionErrorMessage = errorMsg
             };
             if (presetId > 0) {
                 var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(presetId);
@@ -118,15 +122,23 @@ namespace MonkeyPaste {
         public MpHttpTransaction() { }
 
         #region MpISourceItem Implementation
-
+        [Ignore]
         public int IconId => iconId;
+        [Ignore]
         public string SourcePath => DestinationUrl;
+        [Ignore]
         public string SourceName => DestinationName;
+        [Ignore]
         public int RootId => Id;
+        [Ignore]
         public bool IsUrl => true;
+        [Ignore]
         public bool IsDll => false;
+        [Ignore]
         public bool IsExe => false;
+        [Ignore]
         public bool IsRejected => false;
+        [Ignore]
         public bool IsSubRejected => false;
 
         #endregion

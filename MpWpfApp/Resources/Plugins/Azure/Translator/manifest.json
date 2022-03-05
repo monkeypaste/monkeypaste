@@ -72,7 +72,7 @@
       "response": {
         "newContentItem": {
           "name": "TranslatedContent",
-          "label": {
+          "text": {
             "value": "Azure Translation of {0}",
             "valuePath": "@4"
           },
@@ -82,7 +82,7 @@
           "annotations": [
             {
               "name": "detectedLanguage",
-              "label": {
+              "text": {
                 "value": "Detected Language: {0}",
                 "valuePath": "$.['detectedLanguage'].language"
               },

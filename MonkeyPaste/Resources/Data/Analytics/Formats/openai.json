@@ -1,7 +1,7 @@
 {
   "parameters": [
     {
-      "label": "Engine",
+      "text": "Engine",
       "parameterControlType": "ComboBox",
       "parameterValueType": "PlainText",
       "enumId": 1,
@@ -10,29 +10,29 @@
       "isRequired": true,
       "values": [
         {
-          "label": "DaVinci",
+          "text": "DaVinci",
           "value": "DaVinci",
           "isDefault": true
         },
         {
-          "label": "Curie",
+          "text": "Curie",
           "value": "Curie",
           "isDefault": false
         },
         {
-          "label": "Babbage",
+          "text": "Babbage",
           "value": "Babbage",
           "isDefault": false
         },
         {
-          "label": "Ada",
+          "text": "Ada",
           "value": "Ada",
           "isDefault": false
         }
       ]
     },
     {
-      "label": "End Point",
+      "text": "End Point",
       "parameterControlType": "ComboBox",
       "parameterValueType": "PlainText",
       "enumId": 2,
@@ -41,34 +41,34 @@
       "isRequired": true,
       "values": [
         {
-          "label": "Completions",
+          "text": "Completions",
           "value": "Completions",
           "isDefault": true
         },
         {
-          "label": "Searches",
+          "text": "Searches",
           "value": "Searches",
           "isDefault": false
         },
         {
-          "label": "Classifications",
+          "text": "Classifications",
           "value": "Classifications",
           "isDefault": false
         },
         {
-          "label": "Answers",
+          "text": "Answers",
           "value": "Answers",
           "isDefault": false
         },
         {
-          "label": "Files",
+          "text": "Files",
           "value": "Files",
           "isDefault": false
         }
       ]
     },
     {
-      "label": "Temperature",
+      "text": "Temperature",
       "parameterControlType": "Slider",
       "parameterValueType": "Decimal",
       "enumId": 3,
@@ -91,7 +91,7 @@
       ]
     },
     {
-      "label": "Max Tokens",
+      "text": "Max Tokens",
       "parameterControlType": "Slider",
       "parameterValueType": "Integer",
       "enumId": 4,
@@ -114,7 +114,7 @@
       ]
     },
     {
-      "label": "Top P",
+      "text": "Top P",
       "parameterControlType": "Slider",
       "parameterValueType": "Decimal",
       "enumId": 5,
@@ -134,7 +134,7 @@
       ]
     },
     {
-      "label": "Frequency Penalty",
+      "text": "Frequency Penalty",
       "parameterControlType": "Slider",
       "parameterValueType": "Decimal",
       "enumId": 6,
@@ -154,7 +154,7 @@
       ]
     },
     {
-      "label": "Presence Penalty",
+      "text": "Presence Penalty",
       "parameterControlType": "Slider",
       "parameterValueType": "Decimal",
       "enumId": 7,

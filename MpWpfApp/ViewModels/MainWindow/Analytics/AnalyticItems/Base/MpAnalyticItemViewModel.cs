@@ -15,6 +15,8 @@ using System.Windows;
 using MonkeyPaste.Plugin;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using Azure.Core;
 
 namespace MpWpfApp {
     [Flags]
@@ -40,6 +42,9 @@ namespace MpWpfApp {
         MpITreeItemViewModel, 
         MpIMenuItemViewModel {
         #region Private Variables
+        
+        private const int _ANALYZE_TIMEOUT_MS = 10000;
+        private const int _PROCESS_TIMEOUT_MS = 5000;
 
         #endregion
 
@@ -639,8 +644,12 @@ namespace MpWpfApp {
         private async Task<MpCopyItem> ProcessTransaction(
             MpAnalyzerTransaction trans, 
             MpCopyItem sourceContent, 
-            bool suppressWrite = false) {                       
+            bool suppressWrite = false) {                    
             
+            if(trans.Response == null) {
+                trans.Response = new MpPluginResponseFormat();
+            }
+
             if(trans.Response is MpPluginResponseFormat prf) {                
                 if (prf.message == MpPluginResponseFormat.RETRY_MESSAGE) {
                     ExecuteAnalysisCommand.Execute(trans.CommandParameter);
@@ -667,8 +676,9 @@ namespace MpWpfApp {
                         ip: MpNetworkHelpers.GetExternalIp4Address(),
                         timeSent: trans.RequestTime,
                         timeReceived: trans.ResponseTime,
-                        bytesSent: trans.Request.ToString().ToByteArray().Length,
-                        bytesReceived: JsonConvert.SerializeObject(prf).ToByteArray().Length);
+                        bytesSent: trans.Request.ByteCount(),
+                        bytesReceived: trans.Response == null ? 0 : trans.Response.ByteCount(),
+                        errorMsg: trans.TransactionErrorMessage);
 
                 } else {
                     var pf = MpPluginManager.Plugins.FirstOrDefault(x => x.Value.guid == PluginFormat.guid);
@@ -687,16 +697,19 @@ namespace MpWpfApp {
                                 cliName: SelectedItem.FullName,
                                 workingDirectory: pluginDir,
                                 args: trans.Request.ToString(),
-                                transDateTime: trans.RequestTime);
+                                transDateTime: trans.RequestTime,
+                                errorMsg: trans.TransactionErrorMessage);
                         } else if(PluginFormat.ioType.isDll) {
                             transType = MpCopyItemTransactionType.Dll;
                             processPath = processPath.Replace(".exe", ".dll");
+
                             transModel = await MpDllTransaction.Create(
                                 presetId: SelectedItem.AnalyticItemPresetId,
                                 dllPath: processPath,
                                 dllName: SelectedItem.FullName,
                                 args: trans.Request.ToString(),
-                                transDateTime: trans.RequestTime);
+                                transDateTime: trans.RequestTime,
+                                errorMsg: trans.TransactionErrorMessage);
                         } else {
                             throw new MpUserNotifiedException($"Uknown ioType for plugin defined in '{manifestPath}'");
                         }
@@ -707,17 +720,21 @@ namespace MpWpfApp {
                     throw new Exception("Unknown error processing analyzer transaction");
                 }                
 
-                var cit = await MpCopyItemTransaction.Create(
-                    transType: transType, 
-                    transObjId: transModel.RootId, 
-                    copyItemId: sourceContent.Id);
+                if(string.IsNullOrEmpty(trans.TransactionErrorMessage)) {
+                    var cit = await MpCopyItemTransaction.Create(
+                    transType: transType,
+                    transObjId: transModel.RootId,
+                    copyItemId: sourceContent.Id,
+                    responseJson: JsonConvert.SerializeObject(trans.Response));
 
-                var source = await MpSource.Create(
-                    copyItemTransactionId: cit.Id);
+                    var source = await MpSource.Create(
+                        copyItemTransactionId: cit.Id);
 
-                var ci = await ApplyResponseToContent(trans,sourceContent,source.Id,suppressWrite);
+                    var ci = await ApplyResponseToContent(
+                        trans, sourceContent, source.Id, suppressWrite);
 
-                return ci;
+                    return ci;
+                }
             }
             return null;
         }
@@ -801,7 +818,7 @@ namespace MpWpfApp {
 
             var targetCopyItem = await MpCopyItem.Create(
                 source: source,
-                title: prf.newContentItem.label.value,
+                title: prf.newContentItem.content.value,
                 data:prf.newContentItem.content.value,
                 itemType: MpCopyItemType.Text,
                 suppressWrite: suppressWrite);
@@ -813,7 +830,7 @@ namespace MpWpfApp {
             if (trans == null || trans.Response == null) {
                 return;
             }
-            if(trans.Response is MpPluginResponseFormat prf) {
+            if(trans.Response is MpPluginResponseFormat prf && prf.annotations != null) {
 
                 await Task.WhenAll(prf.annotations.Select(x => ProcesseAnnotation(x, sourceCopyItem.Id, sourceCopyItem.ItemType, trans.RequestContent, transSourceId, suppressWrite)));
             }
@@ -837,10 +854,9 @@ namespace MpWpfApp {
                 }                
             }
 
-            string label = a.label == null ? string.Empty : a.label.value;
-            string description = a.description == null ? string.Empty : a.description.value;
+            string label = a.text == null ? string.Empty : a.text.value;
 
-            if(copyItemType == MpCopyItemType.Image) {
+            if(copyItemType == MpCopyItemType.Image && a.box != null) {
                 Size boxSize = new Size();
                 if(a.box == null) {
                     var bmpSrc = reqContent.ToString().ToBitmapSource();
@@ -858,7 +874,7 @@ namespace MpWpfApp {
                    h: boxSize.Height,
                    label: label,
                    c: score,
-                   hexColor: a.appearance == null || a.appearance.color == null ? null : a.appearance.color.value,
+                   hexColor: a.appearance == null || a.appearance.foregroundColor == null ? null : a.appearance.foregroundColor.value,
                    suppressWrite: suppressWrite);
             } else if(copyItemType == MpCopyItemType.Text) {
                 int sIdx = 0;
@@ -872,7 +888,6 @@ namespace MpWpfApp {
                         sourceId: transSourceId,
                         matchValue: reqContent.ToString().Substring(sIdx, eIdx - sIdx - 1),
                         label: label,
-                        description: description,
                         score: score,
                         suppressWrite: suppressWrite);
             }
@@ -926,10 +941,7 @@ namespace MpWpfApp {
                     }
                     if (outRequestContent == null) {
                         outRequestContent = value;
-                    } else {
-                        // TODO deal w/ multiple hiddens somehow or not need to look at all the manifests
-                        Debugger.Break();
-                    }
+                    } 
                     requestItem.value = value;
                 } else {
                     requestItem = new MpAnalyzerPluginRequestItemFormat() {
@@ -975,24 +987,96 @@ namespace MpWpfApp {
                     sourceCopyItem = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
                 }
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
-                OnPropertyChanged(nameof(SelectedItem));
-
-                string requestStr = CreateRequest(sourceCopyItem, out object requestContent);
-                var reqTime = DateTime.Now;
-                object responseData = await GetResponse(requestStr);
-                var respTime = DateTime.Now;
-
+                OnPropertyChanged(nameof(SelectedItem));                      
                 LastTransaction = new MpAnalyzerTransaction() {
-                    RequestTime = reqTime,
-                    ResponseTime = respTime,
-                    CommandParameter = args,
-                    Request = requestStr,
-                    Response = responseData,
-                    RequestContent = requestContent
+                    RequestTime = DateTime.Now,
+                    CommandParameter = args
                 };
 
-                LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem);                
-                
+                // CREATE REQUEST
+                try {
+                    LastTransaction.Request = CreateRequest(sourceCopyItem, out object requestContent);
+                    LastTransaction.RequestContent = requestContent;
+                }catch(Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                    LastTransaction.TransactionErrorMessage = ex.ToString();
+
+                    LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem)
+                                    .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
+
+                    var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
+                        dialogType: MpNotificationDialogType.InvalidRequest,
+                        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
+                        msg: ex.Message,
+                        maxShowTimeMs: 5000);
+                    if (userAction == MpDialogResultType.Retry) {
+                        ExecuteAnalysisCommand.Execute(args);
+                        return;
+                    } else if (userAction == MpDialogResultType.Ignore) {
+                        OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
+                        IsBusy = false;
+                        return;
+                    }
+                }
+
+                // GET RESPONSE
+                try {
+                    LastTransaction.Response = await GetResponse(LastTransaction.Request.ToString())
+                                .TimeoutAfter(TimeSpan.FromMilliseconds(_ANALYZE_TIMEOUT_MS));
+                    LastTransaction.ResponseTime = DateTime.Now;
+
+                } catch(TimeoutException te) {
+                    MpConsole.WriteTraceLine(te);
+                    LastTransaction.TransactionErrorMessage = te.ToString();
+
+                    LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem)
+                                    .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
+
+                    var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
+                        dialogType: MpNotificationDialogType.AnalyzerTimeout,
+                        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
+                        msg: targetAnalyzer.FullName + " failed to respond",
+                        maxShowTimeMs: 5000);
+                    if(userAction == MpDialogResultType.Retry) {
+                        ExecuteAnalysisCommand.Execute(args);
+                        return;
+                    } else if(userAction == MpDialogResultType.Ignore) {
+                        OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
+                        IsBusy = false;
+                        return;
+                    }
+                }
+
+                // PROCESS RESPONSE
+                try {
+                    LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem)
+                                    .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                    LastTransaction.TransactionErrorMessage = ex.ToString();
+
+                    try {
+
+                        LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem)
+                                        .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
+                    } catch(Exception ex2) {
+                        LastTransaction.TransactionErrorMessage += Environment.NewLine + ex2.ToString();
+
+                        var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
+                        dialogType: MpNotificationDialogType.InvalidResponse,
+                        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
+                        msg: ex.Message + Environment.NewLine + ex2.Message,
+                        maxShowTimeMs: 5000);
+                        if (userAction == MpDialogResultType.Retry) {
+                            ExecuteAnalysisCommand.Execute(args);
+                            return;
+                        } else if (userAction == MpDialogResultType.Ignore) {
+                            OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
+                            IsBusy = false;
+                            return;
+                        }
+                    }
+                }
                 OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
 
                 IsBusy = false;

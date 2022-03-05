@@ -64,24 +64,53 @@
         "annotations": [
           {
             "name": "Title",
-            "label": {
+            "text": {
+              "valuePath": "@5",
+              "value": "Vision Analysis of {0}"
+            },
+            "appearance": {
+              "font": {
+                "fontFamily": "Consolas",
+                "fontSize": "large",
+                "isBold": true,
+                "isUnderlined": true
+              }
+            }
+          },
+          {
+            "name": "Summary",
+            "text": {
               "valuePath": "$.['description']['captions'][0].text"
             },
             "score": {
               "valuePath": "$.['description']['captions'][0].confidence"
+            },
+            "appearance": {
+              "font": {
+                "fontFamily": "Consolas",
+                "fontSize": "medium",
+                "isItalic": true
+              }
             }
           },
           {
             "name": "objects",
+            "text": {
+              "value": "Objects"
+            },
+            "appearance": {
+              "isList": true,
+              "columnGroup": "detectionColumns"
+            },
             "dynamicChildren": [
               {
                 "name": "detectedObjectBox",
                 "appearance": {
-                  "color": {
+                  "foregroundColor": {
                     "value": "#FF00FF7F"
                   }
                 },
-                "label": {
+                "text": {
                   "valuePath": "$.['objects'][#].object"
                 },
                 "score": {
@@ -106,21 +135,30 @@
           },
           {
             "name": "tags",
+            "appearance": {
+              "isList": true,
+              "columnGroup": "detectionColumns"
+            },
             "dynamicChildren": [
               {
                 "name": "tagLabelAndScore",
-                "label": {
+                "text": {
                   "valuePath": "$.['tags'][#].name"
                 },
                 "score": {
                   "valuePath": "$.['tags'][#].confidence"
+                },
+                "appearance": {
+                  "foregroundColor": {
+                    "value": "#FF00FF00"
+                  }
                 }
               }
             ]
           },
           {
             "name": "categories",
-            "label": {
+            "text": {
               "valuePath": "$.['categories'][0].name"
             },
             "score": {
@@ -133,11 +171,11 @@
                   {
                     "name": "celebrityFace",
                     "appearance": {
-                      "color": {
+                      "foregroundColor": {
                         "value": "#FFFFB6C1"
                       }
                     },
-                    "label": {
+                    "text": {
                       "valuePath": "$.['categories'][0].detail.celebrities[#].name"
                     },
                     "score": {
@@ -167,7 +205,7 @@
             "children": [
               {
                 "name": "isAdultContent",
-                "label": {
+                "text": {
                   "value": "Is Adult Content: {0}",
                   "valuePath": "$.['adult'].isAdultContent"
                 },
@@ -177,7 +215,7 @@
               },
               {
                 "name": "isRacyContent",
-                "label": {
+                "text": {
                   "value": "Is Racy Content: {0}",
                   "valuePath": "$.['adult'].isRacyContent"
                 },
@@ -187,7 +225,7 @@
               },
               {
                 "name": "isGoryContent",
-                "label": {
+                "text": {
                   "value": "Is Gory Content: {0}",
                   "valuePath": "$.['adult'].isGoryContent"
                 },
@@ -199,46 +237,50 @@
           },
           {
             "name": "color",
-            "label": {
+            "text": {
               "value": "Color Analysis"
+            },
+            "appearance": {
+              "isList": true,
+              "columnGroup": "detectionColumns"
             },
             "children": [
               {
                 "name": "dominantColorForeground",
-                "label": {
+                "text": {
                   "valuePath": "$.['color'].dominantColorForeground"
                 },
                 "appearance": {
-                  "color": {
+                  "backgroundColor": {
                     "valuePath": "$.['color'].dominantColorForeground"
                   }
                 }
               },
               {
                 "name": "dominantColorBackground",
-                "label": {
+                "text": {
                   "valuePath": "$.['color'].dominantColorBackground"
                 },
                 "appearance": {
-                  "color": {
+                  "backgroundColor": {
                     "valuePath": "$.['color'].dominantColorBackground"
                   }
                 }
               },
               {
                 "name": "accentColor",
-                "label": {
+                "text": {
                   "valuePath": "$.['color'].dominantColorBackground"
                 },
                 "appearance": {
-                  "color": {
+                  "backgroundColor": {
                     "valuePath": "$.['color'].dominantColorBackground"
                   }
                 }
               },
               {
                 "name": "isBlackAndWhite",
-                "label": {
+                "text": {
                   "value": "Is Black & White? {0}",
                   "valuePath": "$.['color'].isBwImg"
                 }
@@ -367,6 +409,20 @@
         "values": [
           {
             "value": "ItemData"
+          }
+        ]
+      },
+      {
+        "label": "Source Title",
+        "description": "The title of the image",
+        "parameterControlType": "Hidden",
+        "parameterValueType": "PlainText",
+        "enumId": 5,
+        "isRequired": true,
+        "isVisible": false,
+        "values": [
+          {
+            "value": "Title"
           }
         ]
       }

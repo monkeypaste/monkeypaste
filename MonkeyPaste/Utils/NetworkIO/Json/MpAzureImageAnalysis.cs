@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     //request
-    public class MpAzureImageAnalysisRequest : MpJsonMessage {
+    public class MpAzureImageAnalysisRequest : MonkeyPaste.Plugin.MpJsonObject {
         [JsonProperty("defaultLanguageCode")]
         public string DefaultLanguageCode { get; set; }
 
@@ -19,7 +19,7 @@ namespace MonkeyPaste {
     }
 
     //response
-    public class MpAzureImageAnalysis : MpJsonMessage {
+    public class MpAzureImageAnalysis : MonkeyPaste.Plugin.MpJsonObject {
         public List<MpAzureImageCategory> categories { get; set; }
         public MpAzureImageColor color { get; set; }
         public MpAzureImageDescription description { get; set; }
@@ -27,26 +27,26 @@ namespace MonkeyPaste {
         public MpAzureImageMetaData metadata { get; set; }
     }
 
-    public class MpAzureImageCategory : MpJsonMessage {
+    public class MpAzureImageCategory : MonkeyPaste.Plugin.MpJsonObject {
         public string name { get; set; }
         public double score { get; set; }
     }
-    public class MpAzureImageColor : MpJsonMessage {
+    public class MpAzureImageColor : MonkeyPaste.Plugin.MpJsonObject {
         public string dominantColorForeground { get; set; }
         public string dominantColorBackground { get; set; }
         public List<string> dominantColors { get; set; }
         public string accentColor { get; set; }
         public bool isBwImg { get; set; }
     }
-    public class MpAzureImageDescription : MpJsonMessage {
+    public class MpAzureImageDescription : MonkeyPaste.Plugin.MpJsonObject {
         public List<string> tags { get; set; }
         public List<MpAzureImageCaptions> captions { get; set; }
     }
-    public class MpAzureImageCaptions : MpJsonMessage {
+    public class MpAzureImageCaptions : MonkeyPaste.Plugin.MpJsonObject {
         public string text { get; set; }
         public double confidence { get; set; }
     }
-    public class MpAzureImageMetaData : MpJsonMessage {
+    public class MpAzureImageMetaData : MonkeyPaste.Plugin.MpJsonObject {
         public int height { get; set; }
         public int width { get; set; }
         public string format { get; set; }

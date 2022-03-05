@@ -15,5 +15,7 @@ namespace MonkeyPaste {
         public object Response { get; set; }
 
         public object RequestContent { get; set; }
+
+        public string TransactionErrorMessage { get; set; }
     }
 }

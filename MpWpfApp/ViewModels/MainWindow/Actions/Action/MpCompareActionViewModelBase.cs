@@ -21,7 +21,7 @@ namespace MpWpfApp {
         public bool IsCaseSensitive { get; set; }
     }
 
-    public class MpCompareActionViewModelBase : MpActionViewModelBase, MpIResizableViewModel {
+    public class MpCompareActionViewModelBase : MpActionViewModelBase {
         #region Private Variables
         #endregion
 
@@ -36,13 +36,6 @@ namespace MpWpfApp {
         public double CompareDataTextBoxWidth { get; set; } = 200;
 
         public double CompareDataTextBoxHeight { get; set; } = 30;
-
-        #endregion
-
-        #region State
-
-        public bool IsResizing { get; set; }
-        public bool CanResize { get; set; }
 
         #endregion
 
@@ -109,13 +102,18 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsJsonQuery {
+            get => CompareDataJsonPath != null;
+            set => CompareDataJsonPath = value ? string.Empty : null;
+        }
+
         public bool IsItemTypeCompare => ComparePropertyPathType == MpComparePropertyPathType.ItemType;
 
-        public bool IsLastOutputCompare => ComparePropertyPathType == MpComparePropertyPathType.LastOutputJsonPath;
+        public bool IsLastOutputCompare => ComparePropertyPathType == MpComparePropertyPathType.LastOutput;
 
         public bool IsContentPropertyCompare => !IsItemTypeCompare && !IsLastOutputCompare;
 
-        public bool IsCompareTypeRegex => CompareType == MpCompareType.Regex;
+        public bool IsCompareTypeRegex => ComparisonOperatorType == MpComparisonOperatorType.Regex;
 
         #endregion
 
@@ -125,13 +123,13 @@ namespace MpWpfApp {
         public string CompareDataJsonPath {
             get {
                 if (Action == null) {
-                    return string.Empty;
+                    return null;
                 }
-                return Action.Arg4;
+                return Arg4;
             }
             set {
                 if (CompareDataJsonPath != value) {
-                    Action.Arg4 = value;
+                    Arg4 = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CompareDataJsonPath));
                 }
@@ -148,11 +146,11 @@ namespace MpWpfApp {
                 if(IsCompareTypeRegex) {
                     return false;
                 }
-                return Action.Arg3 == "1";
+                return Arg3 == "1";
             }
             set {
                 if(IsCaseSensitive != value && !IsCompareTypeRegex) {
-                    Action.Arg3 = value ? "1" : "0";
+                    Arg3 = value ? "1" : "0";
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsCaseSensitive));
                 }
@@ -169,14 +167,14 @@ namespace MpWpfApp {
                 if (ComparePropertyPathType != MpComparePropertyPathType.ItemType) {
                     return 0;
                 }
-                if (string.IsNullOrWhiteSpace(Action.Arg2)) {
+                if (string.IsNullOrWhiteSpace(Arg2)) {
                     return MpCopyItemType.None;
                 }
-                return (MpCopyItemType)Convert.ToInt32(Action.Arg2);
+                return (MpCopyItemType)Convert.ToInt32(Arg2);
             }
             set {
                 if (ContentItemType != value) {
-                    Action.Arg2 = ((int)value).ToString();
+                    Arg2 = ((int)value).ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ContentItemType));
                 }
@@ -191,11 +189,11 @@ namespace MpWpfApp {
                 if(IsItemTypeCompare) {
                     return ContentItemType.ToString();
                 }
-                return Action.Arg2;
+                return Arg2;
             }
             set {
                 if (CompareData != value) {
-                    Action.Arg2 = value;
+                    Arg2 = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CompareData));
                 }
@@ -209,36 +207,36 @@ namespace MpWpfApp {
                 if (Action == null) {
                     return MpComparePropertyPathType.None;
                 }
-                if (string.IsNullOrWhiteSpace(Action.Arg1)) {
+                if (string.IsNullOrWhiteSpace(Arg1)) {
                     return MpComparePropertyPathType.None;
                 }
 
-                return (MpComparePropertyPathType)Convert.ToInt32(Action.Arg1);
+                return (MpComparePropertyPathType)Convert.ToInt32(Arg1);
             }
             set {
                 if (ComparePropertyPathType != value) {
-                    Action.Arg1 = ((int)value).ToString();
+                    Arg1 = ((int)value).ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ComparePropertyPathType));
                 }
             }
         }
 
-        public MpCompareType CompareType {
+        public MpComparisonOperatorType ComparisonOperatorType {
             get {
                 if (Action == null) {
-                    return MpCompareType.None;
+                    return MpComparisonOperatorType.None;
                 }
-                if((MpCompareType)ActionObjId == MpCompareType.None) {
-                    Action.ActionObjId = (int)MpCompareType.Contains;
+                if((MpComparisonOperatorType)ActionObjId == MpComparisonOperatorType.None) {
+                    Action.ActionObjId = (int)MpComparisonOperatorType.Contains;
                 }
-                return (MpCompareType)Action.ActionObjId;
+                return (MpComparisonOperatorType)Action.ActionObjId;
             }
             set {
-                if (CompareType != value) {
+                if (ComparisonOperatorType != value) {
                     Action.ActionObjId = (int)value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(CompareType));
+                    OnPropertyChanged(nameof(ComparisonOperatorType));
                 }
             }
         }
@@ -265,9 +263,9 @@ namespace MpWpfApp {
             MpActionOutput ao = GetInput(arg);
 
             object matchVal = null;
-            if(ComparePropertyPathType == MpComparePropertyPathType.LastOutputJsonPath) {
+            if(ComparePropertyPathType == MpComparePropertyPathType.LastOutput) {
                 if(ao != null) {
-                    if(ao.OutputData is MpPluginResponseFormat prf) {
+                    if(ao.OutputData is MpPluginResponseFormat prf && IsJsonQuery) {
                         try {
                             string prfStr = JsonConvert.SerializeObject(prf);
                             JObject jo;
@@ -321,32 +319,38 @@ namespace MpWpfApp {
 
         protected virtual string PerformMatch(string compareStr) {
             bool isCaseSensitive = IsCaseSensitive;
+            string compareData = CompareData;
+            if(compareData == null) {
+                compareData = string.Empty;
+            }
+            compareData = isCaseSensitive ? compareData : compareData.ToLower();
 
-            string compareData = isCaseSensitive ? CompareData : CompareData.ToLower();
             string unmodifiedCompareStr = compareStr;
+            compareStr = compareStr == null ? string.Empty : compareStr;
             compareStr = isCaseSensitive ? compareStr : compareStr.ToLower();
-            switch (CompareType) {
-                case MpCompareType.Contains:
+
+            switch (ComparisonOperatorType) {
+                case MpComparisonOperatorType.Contains:
                     if (compareStr.Contains(compareData)) {
                         return unmodifiedCompareStr;
                     }
                     break;
-                case MpCompareType.Exact:
+                case MpComparisonOperatorType.Exact:
                     if (compareStr.Equals(compareData)) {
                         return unmodifiedCompareStr;
                     }
                     break;
-                case MpCompareType.BeginsWith:
+                case MpComparisonOperatorType.BeginsWith:
                     if (compareStr.StartsWith(compareData)) {
                         return unmodifiedCompareStr;
                     }
                     break;
-                case MpCompareType.EndsWith:
+                case MpComparisonOperatorType.EndsWith:
                     if (compareStr.EndsWith(compareData)) {
                         return unmodifiedCompareStr;
                     }
                     break;
-                case MpCompareType.Regex:
+                case MpComparisonOperatorType.Regex:
                     var regEx = new Regex(compareData, 
                                             RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
                     var m = regEx.Match(compareStr);
@@ -374,14 +378,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(IsCaseSensitive));
                     break;
                 case nameof(ComparePropertyPathType):
-                    
-                    //ResetArgs();
-                    OnPropertyChanged(nameof(IsItemTypeCompare));
-                    //if(IsItemTypeCompare) {
-                    //    //when CompareProperty is ItemType Arg2 (CompareData) maps to
-                    //    //MpCopyItemType enum value and must convert to int
-                    //    CompareData = string.Empty;
-                    //}
+                    ResetArgs(2, 3, 4, 5);
                     break;
             }
         }
@@ -413,7 +410,7 @@ namespace MpWpfApp {
 
         public ICommand ChangeCompareTypeCommand => new RelayCommand<object>(
              (args) => {
-                 CompareType = (MpCompareType)args;
+                 ComparisonOperatorType = (MpComparisonOperatorType)args;
              });
 
         public ICommand ChangeComparePropertyPathCommand => new RelayCommand<object>(

@@ -98,7 +98,7 @@ namespace MonkeyPaste {
                 }
                 return null;
             }
-            MpPluginFormat plugin = null;
+            MpPluginFormat plugin;
             try {
                 plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);                
             } catch(Exception ex) {                

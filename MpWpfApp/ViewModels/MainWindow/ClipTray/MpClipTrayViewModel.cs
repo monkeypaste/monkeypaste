@@ -1347,7 +1347,7 @@ namespace MpWpfApp {
 
             int totalItems =  MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
 
-            //MpNotificationBalloonView.Instance.BindingContext.PostLoadedMessage =
+            //MpNotificationCollectionView.Instance.BindingContext.PostLoadedMessage =
             //    $"Successfully loaded w/ {totalItems} items";
 
             //while(MpSoundPlayerCollectionViewModel.Instance.IsVisible) {
@@ -1358,7 +1358,7 @@ namespace MpWpfApp {
 
             await Task.Delay(3000);
 
-            //MpNotificationBalloonView.Instance.CloseBalloon();
+            //MpNotificationCollectionView.Instance.CloseBalloon();
         }
 
 

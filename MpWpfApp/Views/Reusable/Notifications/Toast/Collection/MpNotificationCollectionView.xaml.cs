@@ -18,11 +18,11 @@ using Hardcodet.Wpf.TaskbarNotification;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public partial class MpNotificationBalloonView : 
+    public partial class MpNotificationCollectionView : 
         MpUserControl<MpNotificationCollectionViewModel>, MpINotificationBalloonView {
 
 
-        public MpNotificationBalloonView() {
+        public MpNotificationCollectionView() {
             InitializeComponent();
         }
 
@@ -60,6 +60,8 @@ namespace MpWpfApp {
 
         public void HideWindow() {
             if (BindingContext != null) {
+                BindingContext.NotificationQueue.Clear();
+                BindingContext.OnPropertyChanged(nameof(BindingContext.CurrentNotificationViewModel));
                 BindingContext.IsVisible = false;
             }
         }

@@ -41,7 +41,7 @@ namespace CodeClassifier {
                         response = new MpPluginResponseFormat() {
                             annotations = new List<MpPluginResponseAnnotationFormat>() {
                                 new MpPluginResponseAnnotationFormat() {
-                                    label = new MpJsonPathProperty(result.Key),
+                                    text = new MpJsonPathProperty(result.Key),
                                     score = new MpJsonPathProperty<double>(result.Value),
                                     range = new MpAnalyzerPluginTextTokenResponseValueFormat() {
                                         rangeStart = new MpJsonPathProperty<int>(0),

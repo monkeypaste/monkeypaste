@@ -48,8 +48,7 @@ namespace Yolo_Dll {
                     if (score >= confidence) {
                         var boxAnnotation = new MpPluginResponseAnnotationFormat() {
                             score = new MpJsonPathProperty<double>((double)item.Score),
-                            label = new MpJsonPathProperty(item.Label.Name),
-                            description = new MpJsonPathProperty(item.Label.Kind.ToString()),
+                            text = new MpJsonPathProperty(item.Label.Name),
                             box = new MpAnalyzerPluginImageTokenResponseValueFormat(
                                             (double)item.Rectangle.X,
                                             (double)item.Rectangle.Y,

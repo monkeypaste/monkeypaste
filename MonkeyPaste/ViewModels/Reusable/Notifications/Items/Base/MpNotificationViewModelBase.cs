@@ -18,6 +18,9 @@ namespace MonkeyPaste {
         InvalidPlugin,
         InvalidAction,
         BadHttpRequest,
+        AnalyzerTimeout,
+        InvalidRequest,
+        InvalidResponse,
         DbError,
         LoadComplete,
         Help

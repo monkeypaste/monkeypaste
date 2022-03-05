@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste.Plugin {
-    public class MpHttpTransactionFormat {
+    public class MpHttpTransactionFormat : MpJsonObject {
         public string name { get; set; }
 
         public MpHttpRequestFormat request { get; set; }
@@ -13,7 +13,7 @@ namespace MonkeyPaste.Plugin {
 
     #region Request
 
-    public class MpHttpRequestFormat {        
+    public class MpHttpRequestFormat : MpJsonObject {
         public string method { get; set; }
 
         public List<MpHttpHeaderItemFormat> header { get; set; } = new List<MpHttpHeaderItemFormat>();
@@ -25,7 +25,7 @@ namespace MonkeyPaste.Plugin {
         public string description { get; set; }
     }
 
-    public class MpHttpHeaderItemFormat {
+    public class MpHttpHeaderItemFormat : MpJsonObject {
         public string key { get; set; }
         public string value { get; set; }
         public MpJsonPathProperty valuePath { get; set; }
@@ -33,14 +33,14 @@ namespace MonkeyPaste.Plugin {
         public string type { get; set; }
     }
 
-    public class MpHttpBodyFormat {
+    public class MpHttpBodyFormat : MpJsonObject {
         public string mode { get; set; }
         public string raw { get; set; }
         public string encoding { get; set; } = "UTF8";
         public string mediaType { get; set; }
     }
 
-    public class MpHttpUrlFormat {
+    public class MpHttpUrlFormat : MpJsonObject {
         public string raw { get; set; }
         public string protocol { get; set; }
 
@@ -55,7 +55,7 @@ namespace MonkeyPaste.Plugin {
         public List<MpHttpQueryArgument> query { get; set; }
     }
 
-    public class MpHttpQueryArgument {
+    public class MpHttpQueryArgument : MpJsonObject {
         public string key { get; set; }
         public string value { get; set; }
         public bool isEnumId { get; set; }

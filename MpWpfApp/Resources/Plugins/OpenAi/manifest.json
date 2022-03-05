@@ -60,7 +60,7 @@
       "response": {
         "newContentItem": {
           "name": "OpenAiAnalysisResponse",
-          "label": {
+          "text": {
             "value": "Analysis for {0}",
             "valuePath": "@9"
           },

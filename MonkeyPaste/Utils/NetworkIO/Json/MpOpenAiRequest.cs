@@ -18,7 +18,7 @@ namespace MonkeyPaste {
         "finish_reason": "length"
     }]
      */
-    public class MpOpenAiResponse : MpJsonMessage {
+    public class MpOpenAiResponse : MonkeyPaste.Plugin.MpJsonObject {
         public string id { get; set; }
 
         public long created { get; set; }
@@ -28,7 +28,7 @@ namespace MonkeyPaste {
         public List<MpOpenAiChoice> choices { get; set; }
     }
 
-    public class MpOpenAiChoice : MpJsonMessage {
+    public class MpOpenAiChoice : MonkeyPaste.Plugin.MpJsonObject {
         public string text { get; set; }
 
         public int index { get; set; }
@@ -38,7 +38,7 @@ namespace MonkeyPaste {
         public string finish_reason { get; set; }
     }
 
-    public class MpOpenAiRequest : MpJsonMessage {
+    public class MpOpenAiRequest : MonkeyPaste.Plugin.MpJsonObject {
         //[JsonProperty("engine")]
         //public string Engine { get; set; }
         [JsonProperty("prompt", Order = 0)]

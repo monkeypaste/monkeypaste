@@ -9,7 +9,6 @@
         Title=""
         MinHeight="125"
         Width="350"
-        Opacity="0"
         ShowInTaskbar="False"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -24,34 +23,25 @@
         Loaded="NotificationWindow_Loaded"
         d:DataContext="{d:DesignInstance Type=pcl:MpNotificationCollectionViewModel,
                                          IsDesignTimeCreatable=False}">
-    <Window.Resources>
+    <!--<Window.Resources>
         <Storyboard x:Key="FadeIn">
-            <DoubleAnimation BeginTime="0:0:0"
+            <DoubleAnimation BeginTime="0:0:1"
                              Storyboard.TargetProperty="Opacity"
                              From="0.00"
                              To="1.00"
                              AutoReverse="False"
-                             Duration="0:0:1" />
+                             Duration="0:0:3" />
         </Storyboard>
         <Storyboard x:Key="FadeOut"
                     Completed="Storyboard_Completed">
-            <DoubleAnimation BeginTime="0:0:0"
+            <DoubleAnimation BeginTime="0:0:1"
                              Storyboard.TargetProperty="Opacity"
                              From="1.00"
                              To="0.00"
                              AutoReverse="False"
-                             Duration="0:0:1" />
+                             Duration="0:0:3" />
         </Storyboard>
-        <!--<Storyboard x:Key="SlideIn">
-            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
-                             Storyboard.TargetName=""
-                              From="{StaticResource SlideOffSet}" To="0" 
-                              Duration="0:0:0.3" />
-        </Storyboard>-->
     </Window.Resources>
-    <!--<Window.RenderTransform>
-        <TranslateTransform x:Name="WindowTranslateTransform" />
-    </Window.RenderTransform>-->
     <Window.Style>
         <Style TargetType="Window">
             <Style.Triggers>
@@ -69,9 +59,10 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>        
-    </Window.Style>
+    </Window.Style>-->
     <Grid>
-        <local:MpNotificationBalloonView x:Name="NotificationBalloon"
+        
+        <local:MpNotificationCollectionView x:Name="NotificationBalloon"
                                          DataContext="{Binding}" />
     </Grid>
 </Window>

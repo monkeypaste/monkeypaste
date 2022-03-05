@@ -13,7 +13,8 @@ namespace MpWpfApp {
     public abstract class MpAnalyticItemParameterViewModel : 
         MpViewModelBase<MpAnalyticItemPresetViewModel>,
         MpISelectableViewModel,
-        MpIHoverableViewModel {
+        MpIHoverableViewModel,
+        MpITooltipInfoViewModel {
         #region Private Variables
 
         #endregion
@@ -67,6 +68,12 @@ namespace MpWpfApp {
         public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
 
         public bool IsSelected { get; set; } = false;
+
+        #endregion
+
+        #region MpITooltipInfoViewModel Implementation
+
+        public object Tooltip => Description;
 
         #endregion
 

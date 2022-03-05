@@ -1,7 +1,7 @@
 {
   "parameters": [
     {
-      "label": "Language",
+      "text": "Language",
       "parameterControlType": "ComboBox",
       "parameterValueType": "PlainText",
       "enumId": 1,
@@ -12,34 +12,34 @@
       "isVisible": false,
       "values": [
         {
-          "label": "English",
+          "text": "English",
           "value": "en",
           "isDefault": true
         },
         {
-          "label": "Spanish",
+          "text": "Spanish",
           "value": "es",
           "isDefault": false
         },
         {
-          "label": "Japanese",
+          "text": "Japanese",
           "value": "ja",
           "isDefault": false
         },
         {
-          "label": "Portuguese",
+          "text": "Portuguese",
           "value": "pt",
           "isDefault": false
         },
         {
-          "label": "Simplified Chinese",
+          "text": "Simplified Chinese",
           "value": "zh",
           "isDefault": false
         }
       ]
     },
     {
-      "label": "Visual Features",
+      "text": "Visual Features",
       "parameterControlType": "ComboBox",
       "parameterValueType": "PlainText",
       "enumId": 2,
@@ -50,49 +50,49 @@
       "isMultiValue": true,
       "values": [
         {
-          "label": "Adult",
+          "text": "Adult",
           "value": "adult",
           "isDefault": false
         },
         {
-          "label": "Brands",
+          "text": "Brands",
           "value": "brands",
           "isDefault": false
         },
         {
-          "label": "Categories",
+          "text": "Categories",
           "value": "categories",
           "isDefault": true
         },
         {
-          "label": "Color Scheme",
+          "text": "Color Scheme",
           "value": "color",
           "isDefault": true
         },
         {
-          "label": "Description",
+          "text": "Description",
           "value": "description",
           "isDefault": true
         },
         {
-          "label": "Faces",
+          "text": "Faces",
           "value": "faces",
           "isDefault": true
         },
         {
-          "label": "Objects",
+          "text": "Objects",
           "value": "objects",
           "isDefault": true
         },
         {
-          "label": "Tags",
+          "text": "Tags",
           "value": "tags",
           "isDefault": true
         }
       ]
     },
     {
-      "label": "Details",
+      "text": "Details",
       "parameterControlType": "ComboBox",
       "parameterValueType": "PlainText",
       "enumId": 3,
@@ -103,12 +103,12 @@
       "isMultiValue": true,
       "values": [
         {
-          "label": "Celebrities",
+          "text": "Celebrities",
           "value": "celebrities",
           "isDefault": true
         },
         {
-          "label": "Landmarks",
+          "text": "Landmarks",
           "value": "landmarks",
           "isDefault": true
         }

@@ -99,7 +99,7 @@ namespace Yolo_Cmd {
 
                     if (score >= confidence) {
                         var boxAnnotation = new MpPluginResponseAnnotationFormat() {
-                            label = new MpJsonPathProperty(item.Label.Name),
+                            text = new MpJsonPathProperty(item.Label.Name),
                             score = new MpJsonPathProperty<double>(item.Score),
                             box = new MpAnalyzerPluginImageTokenResponseValueFormat(
                                     item.Rectangle.X,

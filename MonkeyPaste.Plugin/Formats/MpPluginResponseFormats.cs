@@ -3,46 +3,46 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste.Plugin {    
-    public class MpPluginResponseFormat {
+    public class MpPluginResponseFormat : MpJsonObject {
         public const string RETRY_MESSAGE = @"RETRY";
 
-        public string message { get; set; }
+        public string message { get; set; } = string.Empty;
 
         public MpPluginResponseNewContentFormat newContentItem { get; set; }
-        public List<MpPluginResponseAnnotationFormat> annotations { get; set; }
+        public List<MpPluginResponseAnnotationFormat> annotations { get; set; } = new List<MpPluginResponseAnnotationFormat>();
     }
 
-    public class MpPluginResponseItemBaseFormat {
-        public string name { get; set; }
+    public class MpPluginResponseItemBaseFormat : MpJsonObject {
+        public string name { get; set; } = string.Empty;
 
-        public MpJsonPathProperty label { get; set; }
-        public MpJsonPathProperty description { get; set; }
+        public MpJsonPathProperty text { get; set; } = new MpJsonPathProperty(string.Empty);
 
         public MpPluginResponseAppearanceFormat appearance { get; set; } = new MpPluginResponseAppearanceFormat();
 
-        public MpJsonPathProperty<double> score { get; set; }
+        public MpJsonPathProperty<double> score { get; set; } = new MpJsonPathProperty<double>();
+
         public double minScore { get; set; } = 0;
         public double maxScore { get; set; } = 1;
 
-        public List<MpPluginResponseAnnotationFormat> children { get; set; }
-        public List<MpPluginResponseAnnotationFormat> dynamicChildren { get; set; }
+        public List<MpPluginResponseAnnotationFormat> children { get; set; } = new List<MpPluginResponseAnnotationFormat>();
+        public List<MpPluginResponseAnnotationFormat> dynamicChildren { get; set; } = new List<MpPluginResponseAnnotationFormat>();
 
         public MpPluginResponseItemBaseFormat() { }
 
-        public MpPluginResponseItemBaseFormat(string label) : this(label, 1) { }
+        public MpPluginResponseItemBaseFormat(string content) : this(content, 1) { }
         public MpPluginResponseItemBaseFormat(double score) : this(string.Empty, score) { }
         public MpPluginResponseItemBaseFormat(string label, double score) {
-            this.label = new MpJsonPathProperty(label);
+            this.text = new MpJsonPathProperty(label);
             this.score = new MpJsonPathProperty<double>(score);
         }
     }
 
     public class MpPluginResponseNewContentFormat : MpPluginResponseItemBaseFormat {
-        public MpJsonPathProperty content { get; set; }
+        public MpJsonPathProperty content { get; set; } = new MpJsonPathProperty(string.Empty);
 
         public bool isRequestChild { get; set; } = true;
 
-        public List<MpPluginResponseAnnotationFormat> annotations { get; set; }
+        public List<MpPluginResponseAnnotationFormat> annotations { get; set; } = new List<MpPluginResponseAnnotationFormat>();
     }
 
     public class MpPluginResponseAnnotationFormat : MpPluginResponseItemBaseFormat {
@@ -51,11 +51,11 @@ namespace MonkeyPaste.Plugin {
         public MpAnalyzerPluginTextTokenResponseValueFormat range { get; set; }
     }
 
-    public class MpAnalyzerPluginImageTokenResponseValueFormat {
-        public MpJsonPathProperty<double> x { get; set; } 
-        public MpJsonPathProperty<double> y { get; set; } 
-        public MpJsonPathProperty<double> width { get; set; } 
-        public MpJsonPathProperty<double> height { get; set; }
+    public class MpAnalyzerPluginImageTokenResponseValueFormat : MpJsonObject {
+        public MpJsonPathProperty<double> x { get; set; } = new MpJsonPathProperty<double>(0);
+        public MpJsonPathProperty<double> y { get; set; } = new MpJsonPathProperty<double>(0);
+        public MpJsonPathProperty<double> width { get; set; } = new MpJsonPathProperty<double>(0);
+        public MpJsonPathProperty<double> height { get; set; } = new MpJsonPathProperty<double>(0);
 
 
         public MpAnalyzerPluginImageTokenResponseValueFormat() { }
@@ -74,7 +74,7 @@ namespace MonkeyPaste.Plugin {
         }
     }
 
-    public class MpAnalyzerPluginTextTokenResponseValueFormat {
+    public class MpAnalyzerPluginTextTokenResponseValueFormat : MpJsonObject {
         public MpJsonPathProperty<int> rangeStart { get; set; }
         public MpJsonPathProperty<int> rangeEnd { get; set; }
 
@@ -85,18 +85,36 @@ namespace MonkeyPaste.Plugin {
         }
     }
 
-    
+    public class MpPluginResponseAppearanceFormat : MpJsonObject {
+        public MpJsonPathProperty foregroundColor { get; set; } = new MpJsonPathProperty("#FF000000");
+        public MpJsonPathProperty backgroundColor { get; set; } = new MpJsonPathProperty("#FFFFFFFF");
 
-    public class MpPluginResponseAppearanceFormat {
-        public MpJsonPathProperty color { get; set; } = new MpJsonPathProperty("#FFD3D3D3");
+        public MpPluginResponseFontAppearanceFormat font { get; set; } = new MpPluginResponseFontAppearanceFormat();
 
-        public MpPluginResponseFontAppearanceFormat font { get; set; }
+        public bool isList { get; set; }
+        public bool isNumberedList { get; set; }
+
+        public bool isBarChart { get; set; }
+        public bool isBarChartItem { get; set; }
+
+        public bool isPieChart { get; set; }
+        public bool isPieChartItem { get; set; }
+
+        public bool isScatterChart { get; set; }
+        public bool isScatterChartItem { get; set; }
+
+        public string columnGroup { get; set; }
     }
 
-    public class MpPluginResponseFontAppearanceFormat {
+    public class MpPluginResponseFontAppearanceFormat : MpJsonObject {
+        public string fontFamily { get; set; } = "Consolas";
+        public string fontSize { get; set; } = "medium"; //xx-small,x-small,small,medium,large,x-large,xx-large,xxx-large
+        
+
         public bool isBold { get; set; }
         public bool isItalic { get; set; }
-
-        public string size { get; set; } = "medium"; //xx-small,x-small,small,medium,large,x-large,xx-large,xxx-large
+        public bool isUnderlined { get; set; }
+        public bool isStrikethough { get; set; }        
     }
+
 }

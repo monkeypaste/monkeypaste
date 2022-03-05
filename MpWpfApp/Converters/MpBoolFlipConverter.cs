@@ -16,24 +16,4 @@ namespace MpWpfApp {
             return (Visibility)value == Visibility.Visible ? true : false;
         }
     }
-
-    public class MpIsObjectNullConverter : IValueConverter {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return value == null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return null;
-        }
-    }
-
-    public class MpIsObjectNullFlipConverter : IValueConverter {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return value != null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return null;
-        }
-    }
 }

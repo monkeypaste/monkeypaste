@@ -11,14 +11,9 @@ namespace MonkeyPaste {
         #region Static Variables
         #endregion
 
-        #region Private Variables
-
-        private Queue<MpNotificationViewModelBase> _notificationQueue = new Queue<MpNotificationViewModelBase>();
+        #region Private Variables        
 
         private MpINotificationBalloonView _nbv;
-
-        
-
 
         #endregion
 
@@ -33,7 +28,9 @@ namespace MonkeyPaste {
 
         #region View Models
 
-        public MpNotificationViewModelBase CurrentNotificationViewModel => _notificationQueue.PeekOrDefault();
+        public ObservableCollection<MpNotificationViewModelBase> NotificationQueue { get; private set; } = new ObservableCollection<MpNotificationViewModelBase>();
+
+        public MpNotificationViewModelBase CurrentNotificationViewModel => NotificationQueue.FirstOrDefault();
 
         #endregion
 
@@ -87,7 +84,8 @@ namespace MonkeyPaste {
                 DialogType = MpNotificationDialogType.StartupLoader,
                 PercentLoaded = 0.0
             };
-            _notificationQueue.Enqueue(lvm);
+            NotificationQueue.Add(lvm);
+            OnPropertyChanged(nameof(CurrentNotificationViewModel));
         }
 
         public async Task<MpDialogResultType> ShowUserAction(
@@ -117,7 +115,8 @@ namespace MonkeyPaste {
                 Body = msg
             };
 
-            _notificationQueue.Enqueue(unvm);
+            NotificationQueue.Add(unvm);
+            OnPropertyChanged(nameof(CurrentNotificationViewModel));
 
             if(!IsVisible) {
                 ShowBalloon();
@@ -162,18 +161,10 @@ namespace MonkeyPaste {
         }
 
         public void ShowBalloon() {
-            //if (IsVisible) {
-            //    return;
-            //}
-            //_nbv.ShowWindow();
             IsVisible = true;
         }
 
         public void HideBalloon() {
-            //if (!IsVisible) {
-            //    return;
-            //}
-            //_nbv.HideWindow();
             IsVisible = false;
         }
         #endregion
@@ -216,13 +207,15 @@ namespace MonkeyPaste {
             });
 
         public ICommand ShiftToNextNotificationCommand => new MpCommand(
-             () => {
-                 _notificationQueue.DequeueOrDefault();
-                 OnPropertyChanged(nameof(CurrentNotificationViewModel));
-                
-                 if (CurrentNotificationViewModel == null) {
+             () => {                
+                 if (CurrentNotificationViewModel == null || NotificationQueue.Count == 1) {
                     HideBalloon();
-                }
+                 } else {
+                     NotificationQueue.RemoveAt(0);
+                     OnPropertyChanged(nameof(CurrentNotificationViewModel));
+                 }
+
+                 
              });
         #endregion
     }

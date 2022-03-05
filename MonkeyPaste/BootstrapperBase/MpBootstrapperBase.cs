@@ -32,6 +32,10 @@ namespace MonkeyPaste {
             }
 
             var lnvm = MpNotificationCollectionViewModel.Instance.CurrentNotificationViewModel as MpLoaderNotificationViewModel;
+            if(lnvm == null) {
+                // NOTE this occurs when warnings exist and loader is finished
+                return;
+            }
             lnvm.PercentLoaded = (double)((double)(index + 1) / (double)_items.Count);
 
             string viewLabel = string.Empty;

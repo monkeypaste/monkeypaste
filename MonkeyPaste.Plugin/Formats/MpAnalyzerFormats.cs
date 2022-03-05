@@ -31,12 +31,12 @@ namespace MonkeyPaste.Plugin {
         Csv
     }
 
-    public class MpAnalyzerPluginRequestItemFormat {
+    public class MpAnalyzerPluginRequestItemFormat : MpJsonObject {
         public int enumId { get; set; } = 0;
         public string value { get; set; } = string.Empty;
     }
 
-    public class MpAnalyzerPluginFormat {
+    public class MpAnalyzerPluginFormat : MpJsonObject {
         public MpHttpTransactionFormat http { get; set; }
 
         public MpAnalyzerPluginInputFormat inputType { get; set; } = null;
@@ -46,13 +46,13 @@ namespace MonkeyPaste.Plugin {
         public List<MpAnalyzerPresetFormat> presets { get; set; } = null;
     }
 
-    public class MpAnalyzerPluginInputFormat {
+    public class MpAnalyzerPluginInputFormat : MpJsonObject {
         public bool text { get; set; } = false;
         public bool image { get; set; } = false;
         public bool file { get; set; } = false;
     }
 
-    public class MpAnalyzerPluginOutputFormat {
+    public class MpAnalyzerPluginOutputFormat : MpJsonObject {
         public bool text { get; set; } = false;
         public bool image { get; set; } = false;
         public bool imageToken { get; set; } = false;
@@ -61,7 +61,7 @@ namespace MonkeyPaste.Plugin {
         public bool actionInput { get; set; } = false;
     }
 
-    public class MpAnalyticItemParameterFormat {
+    public class MpAnalyticItemParameterFormat : MpJsonObject {
         public string label { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;
 
@@ -84,7 +84,7 @@ namespace MonkeyPaste.Plugin {
         public MpHttpTransactionFormat deferredValueTransaction { get; set; }
     }
 
-    public class MpAnalyticItemParameterValue {
+    public class MpAnalyticItemParameterValue : MpJsonObject {
         public string value { get; set; } = string.Empty;
         public string label { get; set; } = string.Empty;
         public bool isDefault { get; set; } = false;
@@ -92,18 +92,18 @@ namespace MonkeyPaste.Plugin {
         public bool isMaximum { get; set; } = false;
     }
 
-    public class MpComboBoxControlFormat {
+    public class MpComboBoxControlFormat : MpJsonObject {
         public string displayPath { get; set; }
         public string valuePath { get; set; }
     }
 
-    public class MpSliderControlFormat {
+    public class MpSliderControlFormat : MpJsonObject {
         public string minimum { get; set; }
         public string maximum { get; set; }
         public string tickFrequency { get; set; }
     }
 
-    public class MpAnalyzerPresetFormat {
+    public class MpAnalyzerPresetFormat : MpJsonObject {
         public string guid { get; set; }
 
         public bool isDefault { get; set; } = false;
@@ -114,7 +114,7 @@ namespace MonkeyPaste.Plugin {
         public List<MpAnalyzerPresetValueFormat> values { get; set; } = new List<MpAnalyzerPresetValueFormat>();
     }
 
-    public class MpAnalyzerPresetValueFormat {
+    public class MpAnalyzerPresetValueFormat : MpJsonObject {
         public int enumId { get; set; } = 0;
 
         //public string label { get; set; } = string.Empty;

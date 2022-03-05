@@ -8,7 +8,6 @@ using System.Windows.Markup;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-
     public class MpDocumentRtfExtension : DependencyObject {
         public static string GetDocumentRtf(DependencyObject obj) {
             return (string)obj.GetValue(DocumentRtfProperty);
@@ -29,13 +28,25 @@ namespace MpWpfApp {
                     } else {
                         rtf = (string)e.NewValue;
                     }
-                    var rtb = (RichTextBox)obj;
+                    var fe = (FrameworkElement)obj;
                     var fd = ((string)e.NewValue).ToFlowDocument(out Size docSize);
 
-                    (rtb.DataContext as MpContentItemViewModel).UnformattedContentSize = docSize;
 
-                    rtb.Document = fd;
-                    rtb.FitDocToRtb();
+                    if(fe is RichTextBox rtb) {
+                        if(fe.DataContext is MpContentItemViewModel civm) {
+                            civm.UnformattedContentSize = docSize;
+                        }                        
+                        rtb.Document = fd;
+                        rtb.FitDocToRtb();
+                    } else if(fe is FlowDocumentPageViewer fdr) {
+                        fdr.Document = fd; 
+                        fdr.UpdateLayout();
+                    } else if (fe is FlowDocumentScrollViewer fdsv) {
+                        fdsv.Document = fd;
+                        fdsv.UpdateLayout();
+                    }
+
+
                 }
             });
     }

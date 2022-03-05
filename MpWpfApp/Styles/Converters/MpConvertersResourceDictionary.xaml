@@ -74,6 +74,8 @@
     <local:MpScoreLimiterConverter x:Key="ScoreLimiterConverter" />
     <local:MpBoolToSelectionModeConverter x:Key="BoolToSelectionModeConverter" />
     <local:MpSliderValueWidthConverter x:Key="SliderValueWidthConverter" />
-
+    <local:MpIsNotNullToVisibilityConverter x:Key="IsNotNullToVisibilityConverter" />
+    <local:MpIsNotNullToVisibilityFlipConverter x:Key="IsNotNullToVisibilityFlipConverter" />
+    <local:MpCopyItemIdToReportCollectionConverter x:Key="CopyItemIdToReportCollectionConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

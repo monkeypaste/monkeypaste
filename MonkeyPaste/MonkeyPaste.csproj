@@ -266,6 +266,7 @@
 
   <ItemGroup>
     <Folder Include="Utils\DragDrop\" />
+    <Folder Include="Utils\NetworkIO\Json\Base\" />
     <Folder Include="Utils\Styling\" />
     <Folder Include="ViewModels\Reusable\Theme\" />
   </ItemGroup>

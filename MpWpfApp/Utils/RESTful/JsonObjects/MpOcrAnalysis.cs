@@ -7,7 +7,7 @@ using Windows.Media.Ocr;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpOcrAnalysis : MpJsonMessage {
+    public class MpOcrAnalysis : MonkeyPaste.Plugin.MpJsonObject {
         public string language { get; set; }
         public double textAngle { get; set; }
         public string orientation { get; set; }

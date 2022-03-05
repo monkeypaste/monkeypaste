@@ -1,7 +1,7 @@
 {
   "parameters": [
     {
-      "label": "From Language",
+      "text": "From Language",
       "parameterControlType": "ComboBox",
       "parameterValueType": "PlainText",
       "enumId": 1,
@@ -11,14 +11,14 @@
       "isValueDeferred": true,
       "values": [
         {
-          "label": "Auto-Detect",
+          "text": "Auto-Detect",
           "value": "",
           "isDefault": true
         }
       ]
     },
     {
-      "label": "To Language",
+      "text": "To Language",
       "parameterControlType": "ComboBox",
       "parameterValueType": "PlainText",
       "enumId": 2,

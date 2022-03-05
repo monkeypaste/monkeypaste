@@ -288,20 +288,8 @@ namespace MpWpfApp {
 
         public bool IsAnyChildSelected => this.FindAllChildren().Any(x => x.IsSelected);
 
-        public bool IsPropertyListItemVisible {
-            get {
-                if(Parent == null || this is MpEmptyActionViewModel) {
-                    return false;
-                }
-                if(IsRootAction) {
-                    return true;
-                }
-                if(IsSelected || ParentActionViewModel.IsExpanded || IsExpanded || ParentActionViewModel.IsSelected) {
-                    return true;
-                }
-                return false;
-            }
-        }
+        public bool IsPropertyListItemVisible => !(Parent == null || this is MpEmptyActionViewModel);
+
         public Point DefaultEmptyActionLocation => new Point(X, Y - (Height * 2));
 
         #endregion
@@ -414,7 +402,7 @@ namespace MpWpfApp {
         public string Arg4 {
             get {
                 if (Action == null) {
-                    return string.Empty;
+                    return null;
                 }
                 return Action.Arg4;
             }
@@ -677,7 +665,7 @@ namespace MpWpfApp {
                 OnActionComplete?.Invoke(this, args);
                 return;
             }
-            PerformAction(args).FireAndForgetSafeAsync(this);
+            Task.Run(()=>PerformAction(args).FireAndForgetSafeAsync(this));
         }
 
 
@@ -776,8 +764,27 @@ namespace MpWpfApp {
         }
 
 
-        protected void ResetArgs() {
-            Arg1 = Arg2 = Arg3 = Arg4 = Arg5 = string.Empty;
+        protected void ResetArgs(params object[] argNums) {
+            if(argNums == null) {
+                Arg1 = Arg2 = Arg3 = Arg4 = Arg5 = null;
+                return;
+            }
+            var argNumVals = argNums.Cast<int>().ToArray();
+            if(argNumVals.Contains(1)) {
+                Arg1 = null;
+            }
+            if (argNumVals.Contains(2)) {
+                Arg2 = null;
+            }
+            if (argNumVals.Contains(3)) {
+                Arg3 = null;
+            }
+            if (argNumVals.Contains(4)) {
+                Arg4 = null;
+            }
+            if (argNumVals.Contains(5)) {
+                Arg5 = null;
+            }
         }
 
         #endregion
@@ -815,7 +822,10 @@ namespace MpWpfApp {
                             Children.Where(x => x is MpEmptyActionViewModel).ForEach(x => (x as MpEmptyActionViewModel).OnPropertyChanged("IsVisible"));
                         }
 
-                        IsExpanded = true;
+                        if(!IsEmptyAction) {
+                            Parent.AllSelectedTriggerActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
+                        }
+                        
                     }
                     if(this is MpTriggerActionViewModelBase && Parent.SelectedItem != this) {
                         Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
@@ -843,13 +853,6 @@ namespace MpWpfApp {
                     break;
                 case nameof(Items):
                     Parent.NotifyViewportChanged();
-                    break;
-                case nameof(IsExpanded):
-                    if(IsExpanded && !IsSelected) {
-                        IsSelected = true;
-                    }
-                    OnPropertyChanged(nameof(IsPropertyListItemVisible));
-                    this.FindAllChildren().ForEach(x => x.OnPropertyChanged(nameof(IsPropertyListItemVisible)));
                     break;
                 case nameof(Location):
                 case nameof(X):

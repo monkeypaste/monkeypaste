@@ -7,8 +7,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste {
-    public abstract class MpJsonMessage {
+namespace MonkeyPaste.Plugin {
+    public abstract class MpJsonObject {
         public string Serialize() {
             return JsonConvert.SerializeObject(this);
         }

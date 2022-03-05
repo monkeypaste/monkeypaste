@@ -7,12 +7,12 @@ using Newtonsoft.Json;
 using MonkeyPaste;
 
 namespace MonkeyPaste {
-    public class MpYoloResponse : MpJsonMessage {
+    public class MpYoloResponse : MonkeyPaste.Plugin.MpJsonObject {
         [JsonProperty("detectedObjects")]
         public List<MpYoloBox> DetectedObjects { get; set; } = new List<MpYoloBox>();
     }
 
-    public class MpYoloBox : MpJsonMessage {
+    public class MpYoloBox : MonkeyPaste.Plugin.MpJsonObject {
         [JsonProperty("score")]
         public double Score { get; set; } = 0;
 

@@ -5,7 +5,7 @@ namespace MonkeyPaste {
     // from https://docs.microsoft.com/en-us/azure/cognitive-services/translator/reference/v3-0-translate#response-body
 
     //get languages
-    public class MpAzureTranslatorLanguageFormat : MpJsonMessage {
+    public class MpAzureTranslatorLanguageFormat : MonkeyPaste.Plugin.MpJsonObject {
         [JsonProperty("name")]
         public string LanguageName { get; set; } = string.Empty;
 
@@ -16,13 +16,13 @@ namespace MonkeyPaste {
         public string Directionality { get; set; } = string.Empty;
     }
 
-    public class MpAzureTranslatableLanguagesRequestFormat : MpJsonMessage {
+    public class MpAzureTranslatableLanguagesRequestFormat : MonkeyPaste.Plugin.MpJsonObject {
         [JsonProperty("translation")]
         public Dictionary<string, MpAzureTranslatorLanguageFormat> Translation { get; set; } = new Dictionary<string, MpAzureTranslatorLanguageFormat>();
 
     }
 
-    public class MpAzureTranslateRequestFormat : MpJsonMessage {
+    public class MpAzureTranslateRequestFormat : MonkeyPaste.Plugin.MpJsonObject {
         [JsonProperty("from")]
         public string FromCode { get; set; } = string.Empty;
 
@@ -31,7 +31,7 @@ namespace MonkeyPaste {
     }
     // translate
 
-    public class MpAzureTranslation : MpJsonMessage {
+    public class MpAzureTranslation : MonkeyPaste.Plugin.MpJsonObject {
         [JsonProperty("to")]
         public string To { get; set; } = string.Empty;
 
@@ -39,7 +39,7 @@ namespace MonkeyPaste {
         public string Text { get; set; } = string.Empty;
     }
 
-    public class MpAzureDetectedLanguageFormat : MpJsonMessage {
+    public class MpAzureDetectedLanguageFormat : MonkeyPaste.Plugin.MpJsonObject {
         [JsonProperty("language")]
         public string Language { get; set; } = string.Empty;
 
@@ -47,7 +47,7 @@ namespace MonkeyPaste {
         public double Score { get; set; } = 0;
     }
 
-    public class MpAzureTranslateResultFormat : MpJsonMessage  {
+    public class MpAzureTranslateResultFormat : MonkeyPaste.Plugin.MpJsonObject  {
         [JsonProperty("translations")]
         public List<MpAzureTranslation> Translations { get; set; }
 

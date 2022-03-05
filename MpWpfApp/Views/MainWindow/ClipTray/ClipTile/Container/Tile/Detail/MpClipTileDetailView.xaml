@@ -46,7 +46,7 @@
                        MouseEnter="ClipTileDetailTextBlock_MouseEnter"
                        MouseLeave="ClipTileDetailTextBlock_MouseLeave"
                        Text="{Binding DetailText}" />
-            <Button x:Name="ClipTileToggleEditButton"
+            <!--<Button x:Name="ClipTileToggleEditButton"
                     Grid.Column="2"
                     Width="16"
                     Height="16"
@@ -58,7 +58,13 @@
                                          Converter={StaticResource BoolToVisibilityConverter}}"
                     Style="{StaticResource RoundedButton}">
                 <Image Source="/Resources/Images/edit.png" />
-            </Button>
+            </Button>-->
+            <local:MpContentReportView Grid.Column="2"
+                                     HorizontalAlignment="Right"
+                                     DataContext="{Binding CopyItemId,
+                                                           Converter={StaticResource CopyItemIdToReportCollectionConverter},
+                                                           IsAsync=True}"/>
+
         </Grid>
     </Border>
 </local:MpUserControl>

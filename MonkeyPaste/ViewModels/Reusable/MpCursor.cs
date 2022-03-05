@@ -49,7 +49,7 @@ namespace MonkeyPaste {
             if(sender is MpDbModelBase dbo) {
                 logStr = $"Guid: '{dbo.Guid}' " + logStr;
             }
-            MpConsole.WriteLogLine(logStr);
+            //MpConsole.WriteLogLine(logStr);
         }
 
         public static void UnsetCursor(object sender) {

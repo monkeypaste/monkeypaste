@@ -118,6 +118,10 @@
                                 Value="3" />
                         <Setter Property="VerticalAlignment"
                                 Value="Center" />
+                        <Setter Property="MaxWidth"
+                                Value="300" />
+                        <Setter Property="HorizontalAlignment"
+                                Value="Left" />
                         <Setter Property="Background">
                             <Setter.Value>
                                 <LinearGradientBrush EndPoint="0,1">
@@ -218,6 +222,7 @@
                                 <RowDefinition Height="0.3*" />
                                 <RowDefinition Height="0.3*" />
                                 <RowDefinition Height="0.3*" />
+                                <RowDefinition Height="0.3*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
@@ -270,7 +275,7 @@
                                                                 ConverterParameter=MonkeyPaste.MpCopyItemType}" />
                             </Border>
 
-                            <!--  Compare Type  -->
+                            <!--  Comparison Operator Type  -->
                             <TextBlock Grid.Row="1"
                                        Grid.Column="0"
                                        Visibility="{Binding IsItemTypeCompare,
@@ -285,13 +290,13 @@
                                 <Border Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
                                     <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
                                               ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
-                                              SelectedIndex="{Binding CompareType,
+                                              SelectedIndex="{Binding ComparisonOperatorType,
                                                                       Converter={StaticResource EnumToIntConverter},
-                                                                      ConverterParameter=MonkeyPaste.MpCompareType,
+                                                                      ConverterParameter=MonkeyPaste.MpComparisonOperatorType,
                                                                       Mode=TwoWay}"
                                               ItemsSource="{Binding .,
                                                                     Converter={StaticResource EnumToItemSourceLabelsConverter},
-                                                                    ConverterParameter=MonkeyPaste.MpCompareType}" />
+                                                                    ConverterParameter=MonkeyPaste.MpComparisonOperatorType}" />
                                 </Border>
 
                                 <CheckBox Visibility="{Binding IsItemTypeCompare,
@@ -308,31 +313,48 @@
                                                               NotifyOnSourceUpdated=True,
                                                               NotifyOnTargetUpdated=True}" />
                             </StackPanel>
-                            
-                            <!--  Secondary Compare Info (Case Sensitive or Last Output JsonPath  -->
+
+                            <!--  is last output compare json path checkbox  -->
                             <TextBlock Grid.Row="2"
                                        Grid.Column="0"
                                        Visibility="{Binding IsLastOutputCompare,
                                                             Converter={StaticResource BoolToVisibilityConverter}}"
                                        Style="{StaticResource ActionPropertyTextBlockStyle}"
-                                       Text="Json Path" />
-                            <Border Grid.Row="2"
+                                       Text="Query Output?" />
+                            <CheckBox Grid.Row="2"
+                                      Grid.Column="1"
+                                      Visibility="{Binding IsLastOutputCompare,
+                                                           Converter={StaticResource BoolToVisibilityConverter}}"
+                                      MinWidth="100"
+                                      Margin="5,10"
+                                      IsChecked="{Binding IsJsonQuery,
+                                                          Mode=TwoWay,
+                                                          UpdateSourceTrigger=PropertyChanged,
+                                                          NotifyOnSourceUpdated=True,
+                                                          NotifyOnTargetUpdated=True}" />
+
+                            <!--  json path query textbox  -->
+                            <TextBlock Grid.Row="3"
+                                       Grid.Column="0"
+                                       Visibility="{Binding IsJsonQuery,
+                                                            Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       Text="JSON Path" />
+                            <Border Grid.Row="3"
                                     Grid.Column="1"
                                     BorderThickness="0"
                                     Background="White"
-                                    Visibility="{Binding IsLastOutputCompare,
+                                    Visibility="{Binding IsJsonQuery,
                                                          Converter={StaticResource BoolToVisibilityConverter}}"
                                     Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
                                 <TextBox x:Name="CompareDataJsonPathTextBox"
-                                         Visibility="{Binding IsLastOutputCompare,
-                                                              Converter={StaticResource BoolToVisibilityConverter}}"
                                          HorizontalAlignment="Stretch"
                                          HorizontalScrollBarVisibility="Visible"
                                          VerticalScrollBarVisibility="Auto"
                                          BorderThickness="0"
                                          Padding="5"
                                          MinHeight="20"
-                                         MinWidth="50"
+                                         MinWidth="180"
                                          FontSize="14"
                                          TextWrapping="Wrap"
                                          AcceptsReturn="True"
@@ -349,7 +371,7 @@
 
 
                             <!--  Compare Data  -->
-                            <TextBlock Grid.Row="3"
+                            <TextBlock Grid.Row="4"
                                        Grid.Column="0"
                                        Visibility="{Binding IsItemTypeCompare,
                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
@@ -359,7 +381,7 @@
                                        Text="Data" />
 
                             <TextBox x:Name="CompareDataTextBox"
-                                     Grid.Row="4"
+                                     Grid.Row="5"
                                      Grid.Column="0"
                                      Grid.ColumnSpan="3"
                                      Visibility="{Binding IsItemTypeCompare,

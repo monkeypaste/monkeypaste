@@ -183,6 +183,7 @@
     <Compile Include="Converters\MpBase64StringToIconConverter.cs" />
     <Compile Include="Converters\MpBase64ToImageBrushConverter.cs" />
     <Compile Include="Converters\MpBoolToSelectionModeConverter.cs" />
+    <Compile Include="Converters\MpCopyItemIdToReportCollectionConverter.cs" />
     <Compile Include="Converters\MpDiameterToStartPointConverter.cs" />
     <Compile Include="Converters\MpCollectionToGroupedCollectionConverter.cs" />
     <Compile Include="Converters\MpDoubleToThicknessIndentLevelConverter.cs" />
@@ -204,6 +205,10 @@
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpEnumToItemSourceLabelsConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
+    <Compile Include="Converters\MpIsNotNullToVisibilityConverter.cs" />
+    <Compile Include="Converters\MpIsNotNullToVisibilityFlipConverter.cs" />
+    <Compile Include="Converters\MpIsObjectNullConverter.cs" />
+    <Compile Include="Converters\MpIsObjectNullFlipConverter.cs" />
     <Compile Include="Converters\MpObjectToImageSourceOrIconConverter.cs" />
     <Compile Include="Converters\MpItemToItemsSourceConverter.cs" />
     <Compile Include="Converters\MpMultiSelectHoverableToBrushConverter.cs" />
@@ -300,6 +305,8 @@
     <Compile Include="ViewModels\MainWindow\Analytics\MpAnalyticItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Values\MpComboBoxParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\Reports\MpAnalysisReportCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\Reports\Items\MpAnalysisReportViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />
@@ -358,7 +365,6 @@
     <Compile Include="ViewModels\MainWindow\Source\MpSourceViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\MpSystemColors.cs" />
     <Compile Include="ViewModels\Reusable\MpThemeColors.cs" />
     <Compile Include="Views\Base\MpContextMenu.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
@@ -547,17 +553,17 @@
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\ContextMenu\Selector\MpSelectorItemDataTemplateSelector.cs" />
-    <Compile Include="Views\Reusable\Notifications\Items\MpLoaderNotificationView.xaml.cs">
+    <Compile Include="Views\Reusable\Notifications\Toast\Collection\Items\MpLoaderNotificationView.xaml.cs">
       <DependentUpon>MpLoaderNotificationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\Notifications\Items\MpStatusNotificationView.xaml.cs">
+    <Compile Include="Views\Reusable\Notifications\Toast\Collection\Items\MpStatusNotificationView.xaml.cs">
       <DependentUpon>MpStatusNotificationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\Notifications\Items\MpUserActionNotificationView.xaml.cs">
+    <Compile Include="Views\Reusable\Notifications\Toast\Collection\Items\MpUserActionNotificationView.xaml.cs">
       <DependentUpon>MpUserActionNotificationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\Notifications\MpNotificationBalloonView.xaml.cs">
-      <DependentUpon>MpNotificationBalloonView.xaml</DependentUpon>
+    <Compile Include="Views\Reusable\Notifications\Toast\Collection\MpNotificationCollectionView.xaml.cs">
+      <DependentUpon>MpNotificationCollectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml.cs">
       <DependentUpon>MpTextBoxMessageBox.xaml</DependentUpon>
@@ -571,13 +577,17 @@
     <Compile Include="Views\Reusable\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\Notifications\Selector\MpNotificationTemplateSelector.cs" />
-    <Compile Include="Views\Reusable\Notifications\ToastWindow\MpNotifyIcon.cs" />
-    <Compile Include="Views\Reusable\Notifications\ToastWindow\MpNotificationWindow.xaml.cs">
+    <Compile Include="Views\Reusable\Notifications\Toast\Collection\Items\Selector\MpNotificationTemplateSelector.cs" />
+    <Compile Include="Utils\System\MpNotifyIcon.cs" />
+    <Compile Include="Views\Reusable\Notifications\Toast\MpNotificationWindow.xaml.cs">
       <DependentUpon>MpNotificationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\Reports\MpAnalysisReportView.xaml.cs">
-      <DependentUpon>MpAnalysisReportView.xaml</DependentUpon>
+    <Compile Include="Views\Reusable\Notifications\ContentReport\MpContentReportView.xaml.cs">
+      <DependentUpon>MpContentReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\Notifications\ContentReport\Selector\MpTooltipContentViewTemplateSelector.cs" />
+    <Compile Include="Views\Reusable\Notifications\Tooltip\MpTooltipInfoView.xaml.cs">
+      <DependentUpon>MpTooltipInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\Shapes\MpHorizontalSeparator.xaml.cs">
       <DependentUpon>MpHorizontalSeparator.xaml</DependentUpon>
@@ -866,19 +876,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Reusable\Notifications\Items\MpLoaderNotificationView.xaml">
+    <Page Include="Views\Reusable\Notifications\Toast\Collection\Items\MpLoaderNotificationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Reusable\Notifications\Items\MpStatusNotificationView.xaml">
+    <Page Include="Views\Reusable\Notifications\Toast\Collection\Items\MpStatusNotificationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Reusable\Notifications\Items\MpUserActionNotificationView.xaml">
+    <Page Include="Views\Reusable\Notifications\Toast\Collection\Items\MpUserActionNotificationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Reusable\Notifications\MpNotificationBalloonView.xaml">
+    <Page Include="Views\Reusable\Notifications\Toast\Collection\MpNotificationCollectionView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -894,11 +904,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Reusable\Notifications\ToastWindow\MpNotificationWindow.xaml">
+    <Page Include="Views\Reusable\Notifications\Toast\MpNotificationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Reusable\Reports\MpAnalysisReportView.xaml">
+    <Page Include="Views\Reusable\Notifications\ContentReport\MpContentReportView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Reusable\Notifications\Tooltip\MpTooltipInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2746,6 +2760,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"</PostBuildEvent>
+    <PostBuildEvent>xcopy /u /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpEmptyActionViewModel : MpActionViewModelBase {

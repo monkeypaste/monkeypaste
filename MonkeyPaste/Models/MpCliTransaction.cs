@@ -36,6 +36,8 @@ namespace MonkeyPaste {
         public string WorkingDirectory { get; set; }
         public string Args { get; set; }
 
+        public string TransactionErrorMessage { get; set; }
+
         [Column("IsAdmin")]
         public int Admin { get; set; }
 
@@ -98,6 +100,7 @@ namespace MonkeyPaste {
             bool isAdmin = false,
             bool isSilent = false,
             DateTime? transDateTime = null,
+            string errorMsg = null,
             bool suppressWrite = false) {
             if (string.IsNullOrWhiteSpace(cliPath)) {
                 throw new Exception("Must specifiy path");
@@ -119,7 +122,8 @@ namespace MonkeyPaste {
                 Args = args,
                 IsAdmin = isAdmin,
                 IsSilent = isSilent,
-                TransactionDateTime = !transDateTime.HasValue ? DateTime.Now : transDateTime.Value
+                TransactionDateTime = !transDateTime.HasValue ? DateTime.Now : transDateTime.Value,
+                TransactionErrorMessage = errorMsg
             };
             
             if(presetId > 0) {
@@ -138,16 +142,26 @@ namespace MonkeyPaste {
 
 
         #region MpISourceItem Implementation
-
+        [Ignore]
         public int IconId => iconId;
+        [Ignore]
         public string SourcePath => CliPath;
+        [Ignore]
         public string SourceName => CliName;
+        [Ignore]
         public int RootId => Id;
+        [Ignore]
         public bool IsUrl => false;
+        [Ignore]
         public bool IsDll => false;
+        [Ignore]
         public bool IsExe => true;
+        [Ignore]
         public bool IsRejected => false;
+        [Ignore]
         public bool IsSubRejected => false;
+
+        
 
         #endregion
     }

@@ -35,6 +35,8 @@ namespace MonkeyPaste {
         [Column("e_MpCopyItemTransactionTypeId")]
         public int CopyItemTransactionTypeId { get; set; } = 0;
 
+        public string ResponseJson { get; set; }
+
         #endregion
 
         #region Properties 
@@ -73,6 +75,7 @@ namespace MonkeyPaste {
             MpCopyItemTransactionType transType = MpCopyItemTransactionType.None,
             int transObjId = 0,
             int copyItemId = 0,
+            string responseJson = "",
             bool suppressWrite = false) {
 
             var ndio = new MpCopyItemTransaction() {
@@ -80,6 +83,7 @@ namespace MonkeyPaste {
                 CopyItemTransactionType = transType,
                 CopyItemTransactionObjId = transObjId,
                 CopyItemId = copyItemId,
+                ResponseJson = responseJson
             };
 
             if(!suppressWrite) {
