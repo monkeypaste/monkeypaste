@@ -210,12 +210,10 @@ namespace MonkeyPaste {
              () => {                
                  if (CurrentNotificationViewModel == null || NotificationQueue.Count == 1) {
                     HideBalloon();
-                 } else {
-                     NotificationQueue.RemoveAt(0);
-                     OnPropertyChanged(nameof(CurrentNotificationViewModel));
                  }
 
-                 
+                 NotificationQueue.RemoveAt(0);
+                 OnPropertyChanged(nameof(CurrentNotificationViewModel));
              });
         #endregion
     }

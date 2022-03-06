@@ -11,6 +11,10 @@ using System.Windows.Data;
 using System.Windows.Input;
 
 namespace MpWpfApp {
+    public class MpTriggerInput : MpActionOutput {
+        public override object OutputData => CopyItem;        
+    }
+
     public class MpTriggerActionViewModelBase : 
         MpActionViewModelBase,
         MpIResizableViewModel,
@@ -92,6 +96,10 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsContentAddTrigger => TriggerType == MpTriggerType.ContentAdded;
+
+        public bool IsFileSystemTrigger => TriggerType == MpTriggerType.FileSystemChange;
 
         #endregion
 

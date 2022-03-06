@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpClassifyOutput : MpActionOutput {
-        public int TagId { get; set; }
+        public override object OutputData => TagId;
+        public int TagId { get; set; }        
     }
 
     public class MpClassifyActionViewModel : MpActionViewModelBase {
@@ -105,6 +106,7 @@ namespace MpWpfApp {
                 TagId = TagId
             });
         }
+
         #endregion
     }
 }

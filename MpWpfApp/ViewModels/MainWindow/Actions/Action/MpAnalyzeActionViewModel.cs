@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
+    public class MpAnalyzeOutput : MpActionOutput {
+        public override object OutputData => TransactionResult;
+        public object TransactionResult { get; set; }       
+    }
     public class MpAnalyzeActionViewModel : MpActionViewModelBase {
         #region Properties
 
@@ -24,6 +28,9 @@ namespace MpWpfApp {
             set {
                 if(SelectedPreset != value) {
                     AnalyticItemPresetId = value.AnalyticItemPresetId;
+                    // NOTE dont understand why but HasModelChanged property change not firing from this
+                    // so forcing db write for now..
+                    Task.Run(async () => { await Action.WriteToDatabaseAsync(); });
                     OnPropertyChanged(nameof(SelectedPreset));
                 }
             }
@@ -71,9 +78,6 @@ namespace MpWpfApp {
         #region Public Overrides
 
         public override async Task PerformAction(object arg) {
-            if (ActionId == 597) {
-                MpConsole.WriteLine("Classifier Perform Action Called");
-            }
             if (!CanPerformAction(arg)) {
                 return;
             }
@@ -93,10 +97,10 @@ namespace MpWpfApp {
                 }
 
                 await base.PerformAction(
-                    new MpActionOutput() {
+                    new MpAnalyzeOutput() {
                         Previous = arg as MpActionOutput,
                         CopyItem = actionInput.CopyItem,
-                        OutputData = aipvm.Parent.LastTransaction.Response
+                        TransactionResult = aipvm.Parent.LastTransaction.Response
                     });
             }
         }
@@ -112,8 +116,6 @@ namespace MpWpfApp {
         }
 
         protected override async Task<bool> Validate() {
-            IsBusy = true;
-
             await base.Validate();
             if (!IsValid) {
                 return IsValid;

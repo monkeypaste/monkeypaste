@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Constants/MpConstantsResourceDictionary.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Constants/Icons/MpIconsResourceDictionary.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Converters/MpConvertersResourceDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/ListBoxes/MpActionPropertiesListBoxItemResourceDictionary.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Menus/MpContextMenuItemResourceDictionary.xaml" />-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Menus/MpSelectorItemResourceDictionary.xaml" />-->
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Designer/MpDesignerResourceDictionary.xaml" />

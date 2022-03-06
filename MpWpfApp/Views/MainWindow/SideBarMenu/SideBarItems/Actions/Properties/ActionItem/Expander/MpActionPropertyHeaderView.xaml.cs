@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,19 +15,11 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpMatcherCollectionView.xaml
+    /// Interaction logic for MpActionPropertyExpanderView.xaml
     /// </summary>
-    public partial class MpTriggerActionTreeView : MpUserControl<MpActionCollectionViewModel> {
-        private static bool test = false;
-        public MpTriggerActionTreeView() {
+    public partial class MpActionPropertyHeaderView : MpUserControl<MpActionViewModelBase> {
+        public MpActionPropertyHeaderView() {
             InitializeComponent();
-        }
-
-        private void CompareDataTextBox_Loaded(object sender, RoutedEventArgs e) {
-            if(test) {
-                return;
-            }
-            test = true;
         }
     }
 }

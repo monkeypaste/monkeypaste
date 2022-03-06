@@ -180,7 +180,8 @@
                 local:MpHoverableExtension.IsHovering="{Binding IsHovering,
                                                                 Mode=TwoWay}"
                 Style="{StaticResource SemiTransparentButton}"
-                Command="{Binding AddTriggerCommand}">
+                Command="{Binding ShowTriggerSelectorMenuCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
             <StackPanel Orientation="Vertical">
                 <Grid>
                     <Ellipse Stroke="{Binding AddNewButtonBorderBrushHexColor}"

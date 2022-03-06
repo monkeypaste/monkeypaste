@@ -379,13 +379,7 @@ namespace MpWpfApp {
                     tagId = (int)args;
                 }
 
-                //if (MpDataModelProvider.QueryInfo.TagId == tagId) {
-                //    return;
-                //}
-
-                foreach (var ttvm in Items) {
-                    ttvm.IsSelected = ttvm.TagId == tagId;
-                }
+                Items.ForEach(x => x.IsSelected = x.TagId == tagId);
 
                 if(MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
                     MpClipTileSortViewModel.Instance.ResetToDefault();

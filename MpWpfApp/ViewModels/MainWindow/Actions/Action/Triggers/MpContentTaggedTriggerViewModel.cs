@@ -1,10 +1,30 @@
-﻿using System.Linq;
+﻿using MonkeyPaste;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MpWpfApp {
     public class MpContentTaggedTriggerViewModel : MpTriggerActionViewModelBase {
         #region Properties
+
+        #region View Models
+
+        public MpTagTileViewModel SelectedTag {
+            get {
+                if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    return null;
+                }
+                return MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+            }
+            set {
+                if (SelectedTag != value) {
+                    TagId = value.TagId;
+                    OnPropertyChanged(nameof(SelectedTag));
+                }
+            }
+        }
+
+        #endregion
 
         #region Model
 
@@ -36,13 +56,33 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Methods
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpTag t && t.Id == TagId) {
+                Task.Run(Validate);
+            }
+        }
+        protected override async Task<bool> Validate() {
+            await base.Validate();
+
+            if (!IsValid) {
+                return IsValid;
+            }
+
+            var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+            if (ttvm == null) {
+                ValidationText = $"Tag for Classifier '{RootTriggerActionViewModel.Label}/{Label}' not found";
+                await ShowValidationNotification();
+            } else {
+                ValidationText = string.Empty;
+            }
+            return IsValid;
+        }
 
         protected override async Task Enable() {
             await base.Enable();
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm != null) {
                 ttvm.RegisterTrigger(this);
-                IsEnabled = true;
             }
         }
 

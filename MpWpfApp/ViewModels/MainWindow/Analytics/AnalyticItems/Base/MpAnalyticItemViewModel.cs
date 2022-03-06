@@ -786,9 +786,11 @@ namespace MpWpfApp {
 
                 var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sourceCopyItem.Id);
                 if (scivm != null) {
-                    //analysis content is  linked with visible item in tray
-                    await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    await MpHelpers.RunOnMainThreadAsync(async () => {
+                        //analysis content is  linked with visible item in tray
+                        await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
+                        MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    });
                 }
             }
 

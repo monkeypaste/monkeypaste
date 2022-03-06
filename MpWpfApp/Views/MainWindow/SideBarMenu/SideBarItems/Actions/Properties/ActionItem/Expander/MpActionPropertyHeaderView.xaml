@@ -1,0 +1,84 @@
+﻿<local:MpUserControl x:Class="MpWpfApp.MpActionPropertyHeaderView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                     x:TypeArguments="local:MpActionViewModelBase"
+                     mc:Ignorable="d"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800"
+                     d:DataContext="{d:DesignInstance Type=local:MpActionViewModelBase,
+                                                      IsDesignTimeCreatable=False}">
+
+    <StackPanel Orientation="Horizontal">
+        <local:MpOneWayToggleButton x:Name="ToggleEnableButton"
+                                    Grid.Row="0"
+                                    Grid.Column="3"
+                                    DockPanel.Dock="Right"
+                                    HorizontalAlignment="Right"
+                                    HorizontalContentAlignment="Right"
+                                    ToolTip="{Binding EnableToggleButtonTooltip}"
+                                    BorderThickness="0"
+                                    Margin="3,0"
+                                    Background="Transparent"
+                                    IsThreeState="True"
+                                    Command="{Binding ToggleIsEnabledCommand}"
+                                    CommandParameter="{Binding LastIsEnabledState,
+                                                               Converter={StaticResource BoolFlipConverter}}"
+                                    Template="{StaticResource FlatToggleButtonControlTemplate}">
+            <Grid HorizontalAlignment="Right">
+                <Ellipse Width="20"
+                         Height="20"
+                         Visibility="{Binding IsValid,
+                                              Converter={StaticResource BoolToVisibilityConverter}}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Stroke="White"
+                         Fill="{Binding EnableToggleButtonShapeHexColor,
+                                        Converter={StaticResource StringHexToWinMediaColorConverter}}" />
+                <Image Width="20"
+                       Height="20"
+                       Visibility="{Binding IsValid,
+                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Source="{Binding Source={x:Static pcl:MpBase64Images.Warning},
+                                        Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+            </Grid>
+        </local:MpOneWayToggleButton>
+        <Image Margin="5,0,0,0"
+               Source="{Binding IconResourceKeyStr,
+                                Converter={StaticResource StringResourceToImageSourceConverter}}"
+               Width="20" />
+        <TextBox Grid.Row="1"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="2"
+                 DockPanel.Dock="Left"
+                 Foreground="Black"
+                 Background="{Binding LabelBackgroundBrushHexColor,
+                                      Converter={StaticResource StringHexToBrushConverter}}"
+                 BorderThickness="1"
+                 BorderBrush="{Binding LabelBorderBrushHexColor,
+                                       Converter={StaticResource StringHexToBrushConverter}}"
+                 Margin="5,5,15,5"
+                 Padding="3"
+                 VerticalAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 FontSize="14"
+                 FontWeight="SemiBold"
+                 local:MpHoverableExtension.IsEnabled="True"
+                 local:MpHoverableExtension.IsHovering="{Binding IsHoveringOverLabel,
+                                                                 Mode=TwoWay}"
+                 local:MpHoverableExtension.HoverCursor="IBeam"
+                 local:MpIsFocusedExtension.IsEnabled="True"
+                 local:MpIsFocusedExtension.IsFocused="{Binding IsLabelFocused,
+                                                                Mode=TwoWay}"
+                 Text="{Binding Label,
+                                Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged,
+                                NotifyOnTargetUpdated=True,
+                                NotifyOnSourceUpdated=True}" />
+    </StackPanel>
+</local:MpUserControl>

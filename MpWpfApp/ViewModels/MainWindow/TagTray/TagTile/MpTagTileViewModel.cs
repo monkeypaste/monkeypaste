@@ -733,7 +733,8 @@ namespace MpWpfApp {
 
                  Parent.SelectedTagTile.SelectedItem = ttvm;
 
-                 OnPropertyChanged(nameof(Parent.SelectedTagTile.Items));
+                 Parent.SelectedTagTile.OnPropertyChanged(nameof(Parent.SelectedTagTile.Items));
+                 Parent.OnPropertyChanged(nameof(Parent.Items));
              });
 
         public ICommand DeleteChildTagCommand => new RelayCommand<object>(

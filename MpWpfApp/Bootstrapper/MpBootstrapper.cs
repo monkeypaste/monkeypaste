@@ -22,7 +22,7 @@ namespace MpWpfApp {
                     new MpBootstrappedItem(typeof(MpThemeColors)),
 
                     new MpBootstrappedItem(typeof(MpMeasurements)),
-                    new MpBootstrappedItem(typeof(MpFileSystemWatcherViewModel)),
+                    new MpBootstrappedItem(typeof(MpFileSystemWatcher)),
 
                     new MpBootstrappedItem(typeof(MpIconCollectionViewModel)),
                     new MpBootstrappedItem(typeof(MpAppCollectionViewModel)),
@@ -60,6 +60,9 @@ namespace MpWpfApp {
         }
 
         public static async Task Init() {
+            Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr = string.Empty;
+            Properties.Settings.Default.Save();
+
             List<int> doNotShowNotifications = null;
             if(!string.IsNullOrWhiteSpace(Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr)) {
                 doNotShowNotifications = Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr
@@ -96,7 +99,3 @@ namespace MpWpfApp {
         }
     }
 }
-
-
-
-            

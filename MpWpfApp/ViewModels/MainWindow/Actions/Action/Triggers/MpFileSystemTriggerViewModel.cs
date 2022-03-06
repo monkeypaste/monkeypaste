@@ -1,27 +1,57 @@
-﻿using FFImageLoading.Helpers.Exif;
+﻿using Microsoft.Win32;
 using MonkeyPaste;
+using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MpWpfApp {
     public class MpFileSystemTriggerViewModel : MpTriggerActionViewModelBase, MpIFileSystemEventHandler {
         #region Properties
 
+        #region State
+
+        public bool IsValidFileSystemPath {
+            get {
+                if(string.IsNullOrWhiteSpace(FileSystemPath)) {
+                    return false;
+                }
+                return File.Exists(FileSystemPath) || Directory.Exists(FileSystemPath);
+            }
+        }
+
+        #endregion
+
         #region Model
 
         public string FileSystemPath {
             get {
-                if (Action == null) {
+                if (Arg1 == null) {
                     return null;
                 }
-                return Action.Arg1;
+                return Arg1;
             }
             set {
                 if (FileSystemPath != value) {
-                    Action.Arg1 = value;
+                    Arg1 = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(FileSystemPath));
+                }
+            }
+        }
+
+        public bool IncludeSubdirectories {
+            get {
+                if (Arg2 == null) {
+                    return false;
+                }
+                return Arg2 == "1";
+            }
+            set {
+                if (IncludeSubdirectories != value) {
+                    Arg2 = value ? "1":"0";
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IncludeSubdirectories));
                 }
             }
         }
@@ -33,28 +63,48 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpFileSystemTriggerViewModel(MpActionCollectionViewModel parent) : base(parent) {
-
+            PropertyChanged += MpFileSystemTriggerViewModel_PropertyChanged;
         }
 
+        #endregion
+
+        #region Public Overrides
         #endregion
 
         #region Protected Methods
 
         protected override async Task Enable() {
             await base.Enable();
-            MpFileSystemWatcherViewModel.Instance.RegisterTrigger(this);
+            MpFileSystemWatcher.Instance.RegisterTrigger(this);
         }
 
         protected override async Task Disable() {
             await base.Disable();
-            MpFileSystemWatcherViewModel.Instance.UnregisterTrigger(this);
+            MpFileSystemWatcher.Instance.UnregisterTrigger(this);
         }
 
+        protected override async Task<bool> Validate() {
+            await base.Validate();
+            if (!IsValid) {
+                return IsValid;
+            }
+
+            if (string.IsNullOrEmpty(FileSystemPath)) {
+                ValidationText = $"No file system path specified for trigger action '{FullName}'";
+                await ShowValidationNotification();
+            } else if(!IsValidFileSystemPath) {
+                ValidationText = $"File system path '{FileSystemPath}' not found for trigger action '{FullName}'";
+                await ShowValidationNotification();
+            } else {
+                ValidationText = string.Empty;
+            }
+            return IsValid;
+        }
         #endregion
 
         #region MpIFileSystemWatcher Implementation
 
-        void MpIFileSystemEventHandler.OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
+        public void OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
             MpHelpers.RunOnMainThread(async () => {
                 MpCopyItem ci = null;
                 switch (e.ChangeType) {
@@ -74,6 +124,17 @@ namespace MpWpfApp {
                         ci.ItemData = re.FullPath;
                         await ci.WriteToDatabaseAsync();
                         break;
+                    case WatcherChangeTypes.Deleted:
+                        ci = await MpDataModelProvider.GetCopyItemByData(e.FullPath);
+                        if(ci == null) {
+                            return;
+                        }
+                        bool isVisible = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id) != null;
+                        await ci.DeleteFromDatabaseAsync();
+                        if(isVisible) {
+                            MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                        }
+                        break;
                 }
 
                 if (ci != null) {
@@ -81,6 +142,55 @@ namespace MpWpfApp {
                 }
             });
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpFileSystemTriggerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IncludeSubdirectories):
+                case nameof(FileSystemPath):
+                    if(IsBusy) {
+                        return;
+                    }
+                    if(IsEnabled.HasValue && IsEnabled.Value) {
+                        ReEnable().FireAndForgetSafeAsync(this);
+                    }
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region Commands
+
+        public MpIAsyncCommand SelectFileSystemPathCommand => new MpAsyncCommand(
+            async () => {
+                string initDir = FileSystemPath;
+                if(string.IsNullOrEmpty(initDir)) {
+                    initDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                } else if(File.Exists(initDir)) {
+                    initDir = Path.GetDirectoryName(initDir);
+                }
+                //var openFileDialog = new OpenFileDialog() {
+                //    Title = "Select file or folder to sync",
+                //    InitialDirectory = initDir
+                //};
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+                //bool? openResult = openFileDialog.ShowDialog();
+                var dlg = new MpFolderPicker() {
+                    InputPath = initDir,
+                    Title = "Select folder"
+                };
+                bool result = dlg.ShowDialog() == true;
+
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+                if (result) {
+                    FileSystemPath = dlg.ResultPath;
+                    await ReEnable();
+                }
+            });
 
         #endregion
     }

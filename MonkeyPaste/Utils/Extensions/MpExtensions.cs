@@ -150,9 +150,10 @@ namespace MonkeyPaste {
         #region Enums
 
         public static string[] EnumToLabels(this Type e,  string noneText = "", bool hideFirst = false) {
-            if(!e.IsEnum) {
-                throw new Exception($"{e.ToString()} is not enum type");
+            if(e == null || !e.IsEnum) {
+                return new string[] { };
             }
+
             var names = Enum.GetNames(e);
             for (int i = hideFirst ? 1:0; i < names.Length; i++) {
                 names[i] = names[i].ToLabel(noneText);

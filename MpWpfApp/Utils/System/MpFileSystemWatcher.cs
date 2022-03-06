@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public interface MpIFileSystemEventHandler {
+        bool IncludeSubdirectories { get; }
         void OnFileSystemItemChanged(object sender, FileSystemEventArgs e);
     }
 
-    public class MpFileSystemWatcherViewModel : 
-        MpISingletonViewModel<MpFileSystemWatcherViewModel>, 
+    public class MpFileSystemWatcher : 
+        MpISingletonViewModel<MpFileSystemWatcher>, 
         IDisposable, 
         MpITriggerActionViewModel {
         #region Private Variables
@@ -67,11 +68,11 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        private static MpFileSystemWatcherViewModel _instance;
-        public static MpFileSystemWatcherViewModel Instance => _instance ?? (_instance = new MpFileSystemWatcherViewModel());
+        private static MpFileSystemWatcher _instance;
+        public static MpFileSystemWatcher Instance => _instance ?? (_instance = new MpFileSystemWatcher());
 
 
-        public MpFileSystemWatcherViewModel() {
+        public MpFileSystemWatcher() {
             
         }
 
@@ -84,6 +85,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+
         public void AddWatcher(string path, MpIFileSystemEventHandler handler = null) {
             if(!File.Exists(path) && !Directory.Exists(path)) {
                 throw new FileNotFoundException(path);
@@ -123,7 +125,7 @@ namespace MpWpfApp {
 
             if(Directory.Exists(path)) {
                 watcher.Filter = "*";
-                watcher.IncludeSubdirectories = true;
+                watcher.IncludeSubdirectories = watcher.IncludeSubdirectories;
                 watcher.EnableRaisingEvents = true;
             }
         }
@@ -201,7 +203,7 @@ namespace MpWpfApp {
             }
         }
 
-        ~MpFileSystemWatcherViewModel() {
+        ~MpFileSystemWatcher() {
             Dispose(false);
         }
 

@@ -17,8 +17,8 @@ using Newtonsoft.Json.Linq;
 
 namespace MpWpfApp {
     public class MpCompareOutput : MpActionOutput {
+        public override object OutputData => MatchValue;
         public string MatchValue { get; set; }
-        public bool IsCaseSensitive { get; set; }
     }
 
     public class MpCompareActionViewModelBase : MpActionViewModelBase {
@@ -307,8 +307,7 @@ namespace MpWpfApp {
                 await base.PerformAction(new MpCompareOutput() {
                     Previous = ao,
                     CopyItem = ao.CopyItem,
-                    MatchValue = matchStr,
-                    IsCaseSensitive = this.IsCaseSensitive
+                    MatchValue = matchStr
                 });
             }
         }

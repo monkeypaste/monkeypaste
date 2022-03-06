@@ -17,29 +17,30 @@
         Visibility="Visible"
         Topmost="True"
         BorderThickness="1"
+        Opacity="0"
         mc:Ignorable="d"
         SizeChanged="NotificationWindow_SizeChanged"
         SizeToContent="WidthAndHeight"
         Loaded="NotificationWindow_Loaded"
         d:DataContext="{d:DesignInstance Type=pcl:MpNotificationCollectionViewModel,
                                          IsDesignTimeCreatable=False}">
-    <!--<Window.Resources>
+    <Window.Resources>
         <Storyboard x:Key="FadeIn">
-            <DoubleAnimation BeginTime="0:0:1"
+            <DoubleAnimation BeginTime="0:0:0"
                              Storyboard.TargetProperty="Opacity"
                              From="0.00"
                              To="1.00"
                              AutoReverse="False"
-                             Duration="0:0:3" />
+                             Duration="0:0:0.5" />
         </Storyboard>
         <Storyboard x:Key="FadeOut"
                     Completed="Storyboard_Completed">
-            <DoubleAnimation BeginTime="0:0:1"
+            <DoubleAnimation BeginTime="0:0:0"
                              Storyboard.TargetProperty="Opacity"
                              From="1.00"
                              To="0.00"
                              AutoReverse="False"
-                             Duration="0:0:3" />
+                             Duration="0:0:0.5" />
         </Storyboard>
     </Window.Resources>
     <Window.Style>
@@ -59,7 +60,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>        
-    </Window.Style>-->
+    </Window.Style>
     <Grid>
         
         <local:MpNotificationCollectionView x:Name="NotificationBalloon"

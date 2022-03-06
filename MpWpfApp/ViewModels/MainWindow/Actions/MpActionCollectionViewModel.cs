@@ -456,7 +456,7 @@ namespace MpWpfApp {
 
             });
 
-        public ICommand ShowActionSelectorMenuCommand => new RelayCommand<object>(
+        public ICommand ShowTriggerSelectorMenuCommand => new RelayCommand<object>(
              (args) => {
                  var fe = args as FrameworkElement;
                  var cm = new MpContextMenuView();
@@ -474,7 +474,7 @@ namespace MpWpfApp {
                  MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
                  
                  MpAction na = await MpAction.Create(
-                         label: GetUniqueTriggerName("Trigger"),
+                         label: GetUniqueTriggerName(tt.ToString()),
                          actionType: MpActionType.Trigger,
                          actionObjId: (int)tt,
                          sortOrderIdx: Items.Count,
@@ -490,6 +490,13 @@ namespace MpWpfApp {
                  OnPropertyChanged(nameof(Items));
 
                  OnPropertyChanged(nameof(IsAnySelected));
+
+                 while(IsBusy) { await Task.Delay(100); }
+
+                 if(SelectedItem != navm) {
+                     SelectedItem = navm;
+                 }
+                 SelectedItem.ToggleIsEnabledCommand.Execute(null);
 
                  IsBusy = false;
              });

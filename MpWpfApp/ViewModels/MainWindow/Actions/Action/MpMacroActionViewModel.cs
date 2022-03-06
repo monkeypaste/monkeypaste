@@ -74,8 +74,8 @@ namespace MpWpfApp {
                         var fd = co.CopyItem.ItemData.ToFlowDocument();
                         var matchRanges = await MpHelpers.FindStringRangesFromPositionAsync(
                              position: fd.ContentStart,
-                             matchStr: co.MatchValue,
-                             isCaseSensitive: co.IsCaseSensitive,
+                             matchStr: co.MatchValue, 
+                             isCaseSensitive: (ParentActionViewModel as MpCompareActionViewModelBase).IsCaseSensitive,
                              ct: MpActionCollectionViewModel.CTS.Token);
 
                         foreach(var matchRange in matchRanges) {

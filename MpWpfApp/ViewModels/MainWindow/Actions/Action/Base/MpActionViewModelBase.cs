@@ -18,10 +18,10 @@ namespace MpWpfApp {
         void UnregisterTrigger(MpActionViewModelBase mvm);
     }
 
-    public class MpActionOutput {
+    public abstract class MpActionOutput {
         public MpCopyItem CopyItem { get; set; }
         public MpActionOutput Previous { get; set; }
-        public object OutputData { get; set; }
+        public abstract object OutputData { get; }
     }
 
     public abstract class MpActionViewModelBase :
@@ -242,13 +242,44 @@ namespace MpWpfApp {
             }
         }
 
+        public string FullName {
+            get {
+                if(Action == null) {
+                    return null;
+                }
+                if(ParentActionViewModel == null) {
+                    return Label;
+                }
+
+                return $"{ParentActionViewModel.Label}/{Label}";
+            }
+        }
+
+        public string EnableToggleButtonShapeHexColor {
+            get {
+                if(!IsEnabled.HasValue) {
+                    return MpSystemColors.Yellow;
+                }
+                return IsEnabled.Value ? MpSystemColors.forestgreen : MpSystemColors.salmon;
+            }
+        }
+
+        public string EnableToggleButtonTooltip {
+            get {
+                if (!IsEnabled.HasValue) {
+                    return ValidationText;
+                }
+                return IsEnabled.Value ? "Click To Disable" : "Click To Enable";
+            }
+        }
+
         #endregion
 
         #region State
 
         public bool IsLabelVisible {
             get {
-                if(Parent == null) {
+                if(Parent == null || Parent.PrimaryAction == null) {
                     return false;
                 }
                 return Parent.PrimaryAction.ActionId == ActionId && !IsEmptyAction;
@@ -264,7 +295,6 @@ namespace MpWpfApp {
         public bool LastIsEnabledState { get; set; } = false;
        
         public bool? IsEnabled { get; set; } = false;
-
 
         public bool IsEditingDetails { get; set; }
 
@@ -291,6 +321,8 @@ namespace MpWpfApp {
         public bool IsPropertyListItemVisible => !(Parent == null || this is MpEmptyActionViewModel);
 
         public Point DefaultEmptyActionLocation => new Point(X, Y - (Height * 2));
+
+        public bool IsPerformingActionFromCommand { get; set; } = false;
 
         #endregion
 
@@ -720,13 +752,15 @@ namespace MpWpfApp {
         }
 
         protected virtual MpActionOutput GetInput(object arg) {
-            MpActionOutput argInput = new MpActionOutput();
-            if (arg is MpCopyItem) {
-                argInput.CopyItem = arg as MpCopyItem;
-            } else if (arg is MpActionOutput) {
-                argInput = arg as MpActionOutput;
+            if (arg is MpCopyItem ci) {
+                // NOTE this should only happen for triggers
+                return new MpTriggerInput() {
+                    CopyItem = ci
+                };                
+            } else if (arg is MpActionOutput ao) {
+                return ao;
             }
-            return argInput;
+            throw new Exception("Unknown action input: " + arg.ToString());
         }
 
         protected virtual async Task<bool> Validate() {
@@ -787,6 +821,16 @@ namespace MpWpfApp {
             }
         }
 
+        protected async Task ReEnable() {
+            if (IsEnabled.HasValue && IsEnabled.Value) {
+                //if is enabled disable
+                ToggleIsEnabledCommand.Execute(null);
+                while (IsBusy) { await Task.Delay(100); }
+            }
+            ToggleIsEnabledCommand.Execute(null);
+
+            while (IsBusy) { await Task.Delay(100); }
+        }
         #endregion
 
         #region Private Methods
@@ -838,12 +882,12 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(BorderBrushHexColor));
                     break;
                 case nameof(HasModelChanged):
-                    if(HasModelChanged && IsValid) {
+                    if (this is MpEmptyActionViewModel) {
+                        return;
+                    }
+                    if (HasModelChanged && IsValid) {
                         HasModelChanged = false;
 
-                        if(this is MpEmptyActionViewModel) {
-                            return;
-                        }
 
                         Task.Run(async () => {
                             await Action.WriteToDatabaseAsync();
@@ -914,7 +958,6 @@ namespace MpWpfApp {
                 
                 IsBusy = false;
             });
-
 
         public ICommand ShowActionSelectorMenuCommand => new RelayCommand<object>(
              (args) => {
@@ -1007,7 +1050,17 @@ namespace MpWpfApp {
                 ParentActionViewModel.DeleteChildActionCommand.Execute(this);
             });
 
-
+        public MpIAsyncCommand PerformActionOnSelectedContentCommand => new MpAsyncCommand(
+            async() => {
+                var cil = MpClipTrayViewModel.Instance.SelectedModels;
+                if(cil == null || cil.Count == 0) {
+                    return;
+                }
+                IsPerformingActionFromCommand = true;
+                var ao = GetInput(cil[0]);
+                await PerformAction(ao);
+                IsPerformingActionFromCommand = false;
+            });
         #endregion
     }
 }

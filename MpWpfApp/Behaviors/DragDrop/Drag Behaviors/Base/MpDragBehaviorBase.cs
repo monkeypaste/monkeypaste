@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MpWpfAppe {
+namespace MpWpfApp {
     public abstract class MpDragBehaviorBase<T> : MpBehavior<T> where T : FrameworkElement {
         public abstract bool CanDrag();
 

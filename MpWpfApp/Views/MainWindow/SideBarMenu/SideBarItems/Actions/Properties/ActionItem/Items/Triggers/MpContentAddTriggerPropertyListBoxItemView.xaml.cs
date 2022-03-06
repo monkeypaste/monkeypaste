@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xamarin.Essentials;
 
 namespace MpWpfApp {
-    /// <summary>
-    /// Interaction logic for MpActionComboBoxItem.xaml
-    /// </summary>
-    public partial class MpActionComboBoxItem : MpUserControl<MpActionViewModelBase> {
-        public MpActionComboBoxItem() {
+/// <summary>
+/// Interaction logic for MpFileSystemTriggerPropertyListBoxItemView.xaml
+/// </summary>
+    public partial class MpContentAddTriggerPropertyListBoxItemView : MpUserControl<MpContentAddTriggerViewModel> {
+        public MpContentAddTriggerPropertyListBoxItemView() {
             InitializeComponent();
         }
     }

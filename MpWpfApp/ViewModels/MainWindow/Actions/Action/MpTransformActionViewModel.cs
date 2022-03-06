@@ -81,7 +81,7 @@ namespace MpWpfApp {
                 var matchRanges = await MpHelpers.FindStringRangesFromPositionAsync(
                      position: fd.ContentStart,
                      matchStr: co.MatchValue,
-                     isCaseSensitive: co.IsCaseSensitive,
+                     isCaseSensitive: (ParentActionViewModel as MpCompareActionViewModelBase).IsCaseSensitive,
                      ct: MpActionCollectionViewModel.CTS.Token);
 
                 foreach (var matchRange in matchRanges) {

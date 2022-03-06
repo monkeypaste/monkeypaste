@@ -1,0 +1,147 @@
+﻿<local:MpUserControl x:Class="MpWpfApp.MpActionPropertyListBoxItemView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpActionViewModelBase"
+                     mc:Ignorable="d"
+                     d:DataContext="{d:DesignInstance Type=local:MpActionViewModelBase,
+                                                      IsDesignTimeCreatable=False}">
+    <Expander x:Name="ActionExpander"
+              Padding="5,0"
+              Background="{Binding ActionType,
+                                   Converter={StaticResource ActionTypeToBrushConverter}}"
+              IsExpanded="{Binding IsExpanded,
+                                   Mode=TwoWay}">
+        <Expander.Header>
+            <local:MpActionPropertyHeaderView DataContext="{Binding}" />
+        </Expander.Header>
+        <Grid>
+            <Border Grid.Row="2"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    CornerRadius="0"
+                    Background="Transparent"
+                    Margin="0,0,0,5">
+                <Border.Resources>
+                    <!--  Trigger  -->
+                    <!--<DataTemplate x:Key="TriggerPropertiesTemplate"
+                                  DataType="{x:Type local:MpTriggerActionViewModelBase}">
+                        <Grid VerticalAlignment="Stretch"
+                              Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.5*" />
+                                <RowDefinition Height="0.5*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.2*" />
+                                <ColumnDefinition Width="0.6*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Style="{StaticResource ActionPropertyTextBlockStyle}"
+                                       Text="Trigger" />
+                            <Border Grid.Row="0"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+                                <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
+                                          ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
+                                          SelectedIndex="{Binding TriggerType,
+                                                                  Converter={StaticResource EnumToIntConverter},
+                                                                  ConverterParameter=MonkeyPaste.MpTriggerType,
+                                                                  Mode=TwoWay}"
+                                          ItemsSource="{Binding .,
+                                                                Converter={StaticResource EnumToItemSourceLabelsConverter},
+                                                                ConverterParameter=MonkeyPaste.MpTriggerType}" />
+                            </Border>
+                        </Grid>
+                    </DataTemplate>-->
+                    <!--  Action Container  -->
+                    <!--<DataTemplate x:Key="EmptyPropertiesTemplate"
+                                  DataType="{x:Type local:MpActionViewModelBase}">
+                        <DockPanel x:Name="ActionPropertiesContainer"
+                                   LastChildFill="True">
+                            <ComboBox DockPanel.Dock="Top"
+                                      VerticalContentAlignment="Center"
+                                      Margin="0,5"
+                                      IsSynchronizedWithCurrentItem="False"
+                                      SelectionChanged="ComboBox_SelectionChanged"
+                                      SelectedIndex="{Binding ActionType,
+                                                              Converter={StaticResource EnumToIntConverter},
+                                                              Mode=OneWay}"
+                                      ItemsSource="{Binding MenuItemViewModel.SubItems}"
+                                      ItemTemplateSelector="{StaticResource SelectorItemDataTemplateSelector}">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style TargetType="ComboBoxItem">
+                                        <Setter Property="HorizontalAlignment"
+                                                Value="Stretch" />
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                            </ComboBox>
+                            <ContentControl x:Name="NonTriggerActionPropertyContentControl"
+                                            ContentTemplateSelector="{StaticResource ActionTemplateSelector}"
+                                            Content="{Binding}" />
+                        </DockPanel>
+                    </DataTemplate>-->
+                    <!--  Content Add  -->
+                    <DataTemplate x:Key="ContentAddPropertiesTemplate"
+                                  DataType="{x:Type local:MpContentAddTriggerViewModel}">
+                        <local:MpContentAddTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                    </DataTemplate>
+
+                    <!--  Content Tagged  -->
+                    <DataTemplate x:Key="ContentTaggedPropertiesTemplate"
+                                  DataType="{x:Type local:MpContentTaggedTriggerViewModel}">
+                        <local:MpContentTaggedTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                    </DataTemplate>
+
+                    <!--  File System Changed  -->
+                    <DataTemplate x:Key="FileSystemPropertiesTemplate"
+                                  DataType="{x:Type local:MpFileSystemTriggerViewModel}">
+                        <local:MpFileSystemTriggerPropertyListBoxItemView DataContext="{Binding}" />
+                    </DataTemplate>
+
+                    <!--  Compare  -->
+                    <DataTemplate x:Key="ComparePropertiesTemplate"
+                                  DataType="{x:Type local:MpCompareActionViewModelBase}">
+                        <local:MpCompareActionPropertyListBoxItemView DataContext="{Binding}" />
+                    </DataTemplate>
+                    <!--  Analyze  -->
+                    <DataTemplate x:Key="AnalyzePropertiesTemplate"
+                                  DataType="{x:Type local:MpAnalyzeActionViewModel}">
+                        <local:MpAnalyzeActionPropertyListBoxItemView DataContext="{Binding}" />
+                    </DataTemplate>
+                    <!--  Classify  -->
+                    <DataTemplate x:Key="ClassifyPropertiesTemplate"
+                                  DataType="{x:Type local:MpClassifyActionViewModel}">
+                        <local:MpClassifyActionPropertyListBoxItemView DataContext="{Binding}" />
+                    </DataTemplate>
+                    <local:MpActionItemPropertiesTemplateSelector x:Key="ActionTemplateSelector"/>
+                </Border.Resources>
+                <DockPanel LastChildFill="True">
+                    <Button DockPanel.Dock="Bottom"
+                            Margin="5"
+                            MinHeight="25"
+                            HorizontalAlignment="Stretch"
+                            Background="Crimson"
+                            Foreground="Cornsilk"
+                            Style="{StaticResource RoundedButton}"
+                            Command="{Binding DeleteThisActionCommand}"
+                            CommandParameter="{Binding}"
+                            Content="Delete" />
+                    <ContentControl x:Name="RootActionPropertyContentControl"
+                                    Content="{Binding}"
+                                    ContentTemplateSelector="{StaticResource ActionTemplateSelector}" />
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Expander>
+</local:MpUserControl>

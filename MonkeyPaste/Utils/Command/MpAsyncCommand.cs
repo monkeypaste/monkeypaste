@@ -14,6 +14,11 @@ namespace MonkeyPaste {
         private readonly MpIErrorHandler _errorHandler;
 
         public MpAsyncCommand(
+            Func<T, Task> execute,
+            Func<T, bool> canExecute = null,
+            MpIErrorHandler errorHandler = null) : this(execute,canExecute,errorHandler, null) { }
+
+            public MpAsyncCommand(
             Func<T, Task> execute, 
             Func<T, bool> canExecute = null, 
             MpIErrorHandler errorHandler = null,
@@ -79,6 +84,10 @@ namespace MonkeyPaste {
         private readonly Func<Task> _execute;
         private readonly Func<bool> _canExecute;
         private readonly MpIErrorHandler _errorHandler;
+        public MpAsyncCommand(
+            Func<Task> execute,
+            Func<bool> canExecute = null,
+            MpIErrorHandler errorHandler = null) : this(execute,canExecute,errorHandler,null) { }
 
         public MpAsyncCommand(
             Func<Task> execute,

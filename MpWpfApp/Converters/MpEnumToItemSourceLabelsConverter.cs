@@ -13,8 +13,8 @@ namespace MpWpfApp {
 
             string enumTypeName = parameter.ToString();
             string noneLabel = "";
-            if(enumTypeName.Contains(",")) {
-                var paramParts = enumTypeName.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            if(enumTypeName.Contains("|")) {
+                var paramParts = enumTypeName.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 enumTypeName = paramParts[0];
                 noneLabel = paramParts[1];
             }
