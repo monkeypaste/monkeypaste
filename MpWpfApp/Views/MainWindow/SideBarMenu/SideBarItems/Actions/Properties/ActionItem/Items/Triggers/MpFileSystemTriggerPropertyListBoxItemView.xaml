@@ -57,7 +57,9 @@
                    Grid.Column="0"
                    Style="{StaticResource ActionPropertyTextBlockStyle}"
                    Text="Include Subdirectories" />
-        <CheckBox MinWidth="100"
+        <CheckBox Grid.Row="1"
+                  Grid.Column="1"
+                  MinWidth="100"
                   Margin="5,10"
                   IsChecked="{Binding IncludeSubdirectories,
                                       Mode=TwoWay,

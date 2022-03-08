@@ -35,7 +35,8 @@
                             Value="{x:Null}" />
                     <Setter Property="Margin"
                             Value="{Binding ActionId,
-                                            Converter={StaticResource ActionIdToThicknessConverter}}" />
+                                            Converter={StaticResource ActionIdToThicknessConverter},
+                                            FallbackValue=0 0 0 0}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">

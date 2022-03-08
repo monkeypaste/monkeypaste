@@ -1,0 +1,51 @@
+﻿<local:MpUserControl x:Class="MpWpfApp.MpContentSelectorParameterView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                     x:TypeArguments="local:MpContentParameterViewModel"
+                     mc:Ignorable="d"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800"
+                     d:DataContext="{d:DesignInstance Type=local:MpContentParameterViewModel,
+                                                      IsDesignTimeCreatable=False}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.7*" />
+            <ColumnDefinition Width="30" />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0"
+                BorderThickness="0"
+                Background="White"
+                CornerRadius="3" Padding="5"
+                Margin="3">
+            <TextBox Padding="3" BorderThickness="0"
+                 MinWidth="100"
+                 local:MpIsFocusedExtension.IsEnabled="True"
+                 local:MpTextSelectionRangeExtension.IsEnabled="True"
+                 local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
+                 Text="{Binding CurrentValue,
+                                Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged,
+                                NotifyOnSourceUpdated=True,
+                                NotifyOnTargetUpdated=True}" />
+        </Border>
+        <Button Grid.Column="1"
+                BorderThickness="0"
+                Background="Beige"
+                Margin="5"
+                Style="{StaticResource RoundedButton}"
+                Command="{Binding ShowContentPathSelectorMenuCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+            <Image Source="{Binding .,
+                                    Converter={StaticResource StringResourceToImageSourceConverter},
+                                    Source={StaticResource FilterIcon}}"
+                   Stretch="Uniform"
+                   Width="10"
+                   Height="10" />
+        </Button>
+
+    </Grid>
+</local:MpUserControl>

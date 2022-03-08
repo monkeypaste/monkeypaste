@@ -28,7 +28,7 @@ namespace MpWpfApp {
     public class MpClipTrayViewModel : 
         MpViewModelBase, 
         MpISingletonViewModel<MpClipTrayViewModel>, 
-        MpITriggerActionViewModel, 
+        MpIActionComponent, 
         MpIMenuItemViewModel {
         #region Private Variables      
 
@@ -598,12 +598,12 @@ namespace MpWpfApp {
 
         #region MpIMatchTrigger Implementation
 
-        public void RegisterTrigger(MpActionViewModelBase mvm) {
+        public void Register(MpActionViewModelBase mvm) {
             OnCopyItemItemAdd += mvm.OnActionTriggered;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterTrigger(MpActionViewModelBase mvm) {
+        public void Unregister(MpActionViewModelBase mvm) {
             OnCopyItemItemAdd -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
         }

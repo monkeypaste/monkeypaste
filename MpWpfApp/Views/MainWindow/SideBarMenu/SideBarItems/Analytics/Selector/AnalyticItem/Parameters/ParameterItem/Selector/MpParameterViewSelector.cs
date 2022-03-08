@@ -23,7 +23,10 @@ namespace MpWpfApp {
             if(aipvm == null) {
                 return null;
             }
-            string keyStr = aipvm.ControlType.ToString() + "Parameter";
+            string keyStr = aipvm.ControlType.ToString() + "ParameterTemplate";
+            if(keyStr == "HiddenParameterTemplate") {
+                keyStr = "ContentSelectorParameterTemplate";
+            }
 
             var g = (container as FrameworkElement).GetVisualAncestor<Grid>();
             if(g == null || !g.Resources.Contains(keyStr)) {

@@ -43,7 +43,6 @@ namespace MpWpfApp {
         private double _startMainWindowTop;
         private double _endMainWindowTop;
 
-        private List<string> _tempFilePathList { get; set; } = new List<string>();
         #endregion
 
         #region Public Variables
@@ -204,13 +203,6 @@ namespace MpWpfApp {
                     break;
             }
         }
-
-        public void AddTempFile(string fp) {
-            if(_tempFilePathList.Contains(fp.ToLower())) {
-                return;
-            }
-            _tempFilePathList.Add(fp.ToLower());
-        }
         #endregion
 
         #region Private Methods
@@ -251,17 +243,7 @@ namespace MpWpfApp {
         public override void Dispose() {
             // MonkeyPaste.MpSyncManager.Dispose();
             base.Dispose();
-            foreach (string tfp in _tempFilePathList) {
-                if(File.Exists(tfp)) {
-                    try {
-                        File.Delete(tfp);
-                    }
-                    catch(Exception ex) {
-                        MonkeyPaste.MpConsole.WriteLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:");
-                        MonkeyPaste.MpConsole.WriteLine(ex);
-                    }
-                }
-            }
+            MpTempFileManager.Shutdown();            
         }
         #endregion
 

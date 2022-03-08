@@ -31,8 +31,8 @@
                          local:MpHoverableExtension.HoverCursor="ResizeAll"
                          Stroke="{Binding BorderBrushHexColor,
                                           Converter={StaticResource StringHexToBrushConverter}}"
-                         Fill="{Binding ActionType,
-                                        Converter={StaticResource ActionTypeToBrushConverter}}" />
+                         Fill="{Binding ActionBackgroundHexColor,
+                                        Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        IsHitTestVisible="False"
@@ -62,8 +62,8 @@
                          local:MpHoverableExtension.HoverCursor="ResizeAll"
                          Stroke="{Binding BorderBrushHexColor,
                                           Converter={StaticResource StringHexToBrushConverter}}"
-                         Fill="{Binding ActionType,
-                                        Converter={StaticResource ActionTypeToBrushConverter}}" />
+                         Fill="{Binding ActionBackgroundHexColor,
+                                        Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        IsHitTestVisible="False"
@@ -94,8 +94,8 @@
                            local:MpHoverableExtension.HoverCursor="ResizeAll"
                            Stroke="{Binding BorderBrushHexColor,
                                             Converter={StaticResource StringHexToBrushConverter}}"
-                           Fill="{Binding ActionType,
-                                          Converter={StaticResource ActionTypeToBrushConverter}}" />
+                           Fill="{Binding ActionBackgroundHexColor,
+                                        Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        Stretch="UniformToFill"
@@ -125,8 +125,8 @@
                          local:MpHoverableExtension.HoverCursor="ResizeAll"
                          Stroke="{Binding BorderBrushHexColor,
                                           Converter={StaticResource StringHexToBrushConverter}}"
-                         Fill="{Binding ActionType,
-                                        Converter={StaticResource ActionTypeToBrushConverter}}" />
+                         Fill="{Binding ActionBackgroundHexColor,
+                                        Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        IsHitTestVisible="False"
@@ -158,12 +158,44 @@
                            local:MpHoverableExtension.HoverCursor="ResizeAll"
                            Stroke="{Binding BorderBrushHexColor,
                                             Converter={StaticResource StringHexToBrushConverter}}"
-                           Fill="{Binding ActionType,
-                                          Converter={StaticResource ActionTypeToBrushConverter}}" />
+                           Fill="{Binding ActionBackgroundHexColor,
+                                        Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        IsHitTestVisible="False"
                        Stretch="UniformToFill"
+                       Source="{Binding IconResourceKeyStr,
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+
+        <!--  File Writer Box  -->
+
+        <DataTemplate x:Key="FileWriterDesignerTemplate"
+                      DataType="local:MpActionViewModelBase">
+            <Grid>
+                <Rectangle Width="{Binding Width}"
+                           Height="{Binding Height}"
+                           RadiusX="10"
+                           RadiusY="10"
+                           StrokeThickness="2.5"
+                           local:MpHoverableExtension.IsEnabled="True"
+                           local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                           Mode=TwoWay,
+                                                                           UpdateSourceTrigger=PropertyChanged,
+                                                                           NotifyOnSourceUpdated=True,
+                                                                           NotifyOnTargetUpdated=True}"
+                           local:MpHoverableExtension.HoverCursor="ResizeAll"
+                           Stroke="{Binding BorderBrushHexColor,
+                                            Converter={StaticResource StringHexToBrushConverter}}"
+                           Fill="{Binding ActionBackgroundHexColor,
+                                        Converter={StaticResource StringHexToBrushConverter}}" />
+                <Image Width="20"
+                       Height="20"
+                       Stretch="UniformToFill"
+                       IsHitTestVisible="False"
                        Source="{Binding IconResourceKeyStr,
                                         Converter={StaticResource StringResourceToImageSourceConverter}}"
                        HorizontalAlignment="Center"

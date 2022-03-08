@@ -125,7 +125,10 @@ namespace MpWpfApp {
             if (string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
                 //for temporary files add to mwvm list for shutdown cleanup
                 foreach (var fp in fileList) {
-                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(fp);
+                    if(!fp.IsFileOrDirectory()) {
+                        continue;
+                    }
+                    MpTempFileManager.AddTempFilePath(fp);
                 }
             }
             // add temp files to 

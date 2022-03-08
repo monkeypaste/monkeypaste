@@ -22,7 +22,7 @@ namespace MpWpfApp {
         object CommandParameter { get; }
     }
 
-    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, MpITriggerActionViewModel {
+    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, MpIActionComponent {
         #region Properties        
 
         #region View Models
@@ -466,14 +466,14 @@ namespace MpWpfApp {
             }
         }
 
-        public void RegisterTrigger(MpActionViewModelBase mvm) {
+        public void Register(MpActionViewModelBase mvm) {
             //by design this only can occur for shortcuts with a selected item as its context
 
             OnShortcutExecuted += mvm.OnActionTriggered;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterTrigger(MpActionViewModelBase mvm) {
+        public void Unregister(MpActionViewModelBase mvm) {
             OnShortcutExecuted -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
         }

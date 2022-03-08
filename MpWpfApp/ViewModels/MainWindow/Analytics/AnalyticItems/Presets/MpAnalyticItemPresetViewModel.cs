@@ -23,7 +23,7 @@ namespace MpWpfApp {
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel,
-        MpITriggerActionViewModel, 
+        MpIActionComponent, 
         MpISidebarItemViewModel,
         MpIUserIconViewModel,
         MpIShortcutCommand, 
@@ -354,7 +354,7 @@ namespace MpWpfApp {
             return caipvm;
         }
 
-        public void RegisterTrigger(MpActionViewModelBase mvm) {
+        public void Register(MpActionViewModelBase mvm) {
             if(mvm.ActionId == 597) {
                 Debugger.Break();
             }
@@ -363,7 +363,7 @@ namespace MpWpfApp {
         }
 
 
-        public void UnregisterTrigger(MpActionViewModelBase mvm) {
+        public void Unregister(MpActionViewModelBase mvm) {
             Parent.OnAnalysisCompleted -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
         }

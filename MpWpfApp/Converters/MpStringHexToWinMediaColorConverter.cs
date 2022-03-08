@@ -10,7 +10,8 @@ namespace MpWpfApp {
             if (value.GetType() != typeof(string) || !value.ToString().IsStringHexColor()) {
                 return Colors.Transparent;
             }
-            return value.ToString().ToWinMediaColor();
+            var outColor = value.ToString().ToWinMediaColor();
+            return outColor;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

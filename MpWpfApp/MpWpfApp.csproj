@@ -109,6 +109,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\MpTextSelectionRangeExtension.cs" />
     <Compile Include="AttachedProperties\MpImageSourceExtension.cs" />
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpGradientBackgroundExtension.cs" />
@@ -155,7 +156,7 @@
     <Compile Include="Behaviors\MpTagTileNotificationBehavior.cs" />
     <Compile Include="Behaviors\MpMoveBehavior.cs" />
     <Compile Include="Behaviors\MpResizeBehavior.cs" />
-    <Compile Include="Bootstrapper\MpBootstrapper.cs" />
+    <Compile Include="Bootstrapper\MpWpfBootstrapperViewModel.cs" />
     <Compile Include="Controls\MpAutoScaleTextBlock.cs" />
     <Compile Include="Controls\MpSlickToggleButton.cs" />
     <Compile Include="Controls\MpDesignerCanvas.cs" />
@@ -176,7 +177,6 @@
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
     <Compile Include="Converters\MpActionIdToThicknessConverter.cs" />
-    <Compile Include="Converters\MpActionTypeToBrushConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemGuidToIconSourceConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemGuidToTitleConverter.cs" />
     <Compile Include="Converters\MpBackgroundBrushToForegroundBrushConverter.cs" />
@@ -186,6 +186,8 @@
     <Compile Include="Converters\MpCopyItemIdToReportCollectionConverter.cs" />
     <Compile Include="Converters\MpDiameterToStartPointConverter.cs" />
     <Compile Include="Converters\MpCollectionToGroupedCollectionConverter.cs" />
+    <Compile Include="Converters\MpDoesFileOrDirectoryExistToVisibilityConverter.cs" />
+    <Compile Include="Converters\MpDoesFileOrDirectoryExistToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpDoubleToThicknessIndentLevelConverter.cs" />
     <Compile Include="Converters\MpDoubleWithDeltaConverter.cs" />
     <Compile Include="Converters\MpDoubleWithDeltaMultiConverter.cs" />
@@ -205,6 +207,7 @@
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpEnumToItemSourceLabelsConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
+    <Compile Include="Converters\MpIsHexColorBrightToBlackOrWhiteBrushConverter.cs" />
     <Compile Include="Converters\MpIsNotNullToVisibilityConverter.cs" />
     <Compile Include="Converters\MpIsNotNullToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpIsObjectNullConverter.cs" />
@@ -234,6 +237,7 @@
     <Compile Include="Converters\MpSourceIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringHexToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringHexToWinMediaColorConverter.cs" />
+    <Compile Include="Converters\MpStringResourceToImageBrushConverter.cs" />
     <Compile Include="Converters\MpStringToDateTimeConverter.cs" />
     <Compile Include="Converters\MpStringToSizeConverter.cs" />
     <Compile Include="Converters\MpStringToThemeBrushConverter.cs" />
@@ -241,7 +245,7 @@
     <Compile Include="Converters\MpTagIdToTagNameConverter.cs" />
     <Compile Include="Converters\MpTagIdToThicknessNameConverter.cs" />
     <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
-    <Compile Include="Converters\MpStringToImageConverter.cs" />
+    <Compile Include="Converters\MpStringResourceToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringResourceToIconConverter.cs" />
     <Compile Include="Converters\MpStringHexToBrushConverter.cs" />
     <Compile Include="Properties\DefaultUiStrings.Designer.cs">
@@ -276,7 +280,7 @@
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcher.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfResourceFetcher.cs" />
-    <Compile Include="ViewModels\MainWindow\Actions\Action\MpTransformActionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\MpFileWriterActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpMacroActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpAnalyzeActionViewModel.cs" />
@@ -400,6 +404,9 @@
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\Classify\MpClassifyActionPropertyListBoxItemView.xaml.cs">
       <DependentUpon>MpClassifyActionPropertyListBoxItemView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\FileWriter\MpFileWriterActionPropertyListBoxItemView.xaml.cs">
+      <DependentUpon>MpFileWriterActionPropertyListBoxItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\Triggers\MpContentTaggedTriggerPropertyListBoxItemView.xaml.cs">
       <DependentUpon>MpContentTaggedTriggerPropertyListBoxItemView.xaml</DependentUpon>
     </Compile>
@@ -431,6 +438,24 @@
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml.cs">
       <DependentUpon>MpAnalyticItemPresetParameterListBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\CheckBox\MpCheckBoxParameterView.xaml.cs">
+      <DependentUpon>MpCheckBoxParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ComboBox\MpComboBoxParameterView.xaml.cs">
+      <DependentUpon>MpComboBoxParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ContentSelector\MpContentSelectorParameterView.xaml.cs">
+      <DependentUpon>MpContentSelectorParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpListBoxParameterView.xaml.cs">
+      <DependentUpon>MpListBoxParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\Slider\MpSliderParameterView.xaml.cs">
+      <DependentUpon>MpSliderParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\TextBox\MpTextBoxParameterView.xaml.cs">
+      <DependentUpon>MpTextBoxParameterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\MpAnalyticItemParameterView.xaml.cs">
       <DependentUpon>MpAnalyticItemParameterView.xaml</DependentUpon>
@@ -858,6 +883,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\FileWriter\MpFileWriterActionPropertyListBoxItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\Triggers\MpContentTaggedTriggerPropertyListBoxItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -895,6 +924,30 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\MpAnalyticItemPresetParameterListBoxView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\CheckBox\MpCheckBoxParameterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ComboBox\MpComboBoxParameterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ContentSelector\MpContentSelectorParameterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpListBoxParameterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\Slider\MpSliderParameterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\TextBox\MpTextBoxParameterView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1401,6 +1454,9 @@
     </Resource>
     <Resource Include="Resources\Images\Pinned.png" />
     <Resource Include="Resources\Images\Un-Pinned.png" />
+    <Resource Include="Resources\Images\filter.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />
     <Resource Include="Utils\RESTful\RestExample1.xml" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />

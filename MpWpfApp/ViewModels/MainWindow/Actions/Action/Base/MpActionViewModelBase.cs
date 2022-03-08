@@ -13,9 +13,9 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public interface MpITriggerActionViewModel {
-        void RegisterTrigger(MpActionViewModelBase mvm);
-        void UnregisterTrigger(MpActionViewModelBase mvm);
+    public interface MpIActionComponent {
+        void Register(MpActionViewModelBase mvm);
+        void Unregister(MpActionViewModelBase mvm);
     }
 
     public abstract class MpActionOutput {
@@ -184,6 +184,15 @@ namespace MpWpfApp {
             }
         }
 
+        public string LabelForegroundBrushHexColor {
+            get {
+                if (IsLabelFocused) {
+                    return MpSystemColors.Black;
+                }
+                return MpColorHelpers.IsBright(ActionBackgroundHexColor) ? MpSystemColors.black : MpSystemColors.white;
+            }
+        }
+
         public string LabelBackgroundBrushHexColor {
             get {
                 if (IsLabelFocused) {
@@ -231,7 +240,7 @@ namespace MpWpfApp {
                     case MpActionType.Timer:
                         resourceKey = "AlarmClockIcon";
                         break;
-                    case MpActionType.Transform:
+                    case MpActionType.FileWriter:
                         resourceKey = "WandIcon";
                         break;
                     case MpActionType.None:
@@ -260,7 +269,7 @@ namespace MpWpfApp {
                 if(!IsEnabled.HasValue) {
                     return MpSystemColors.Yellow;
                 }
-                return IsEnabled.Value ? MpSystemColors.forestgreen : MpSystemColors.salmon;
+                return IsEnabled.Value ? MpSystemColors.limegreen : MpSystemColors.Red;
             }
         }
 
@@ -270,6 +279,28 @@ namespace MpWpfApp {
                     return ValidationText;
                 }
                 return IsEnabled.Value ? "Click To Disable" : "Click To Enable";
+            }
+        }
+
+        public string ActionBackgroundHexColor {
+            get {
+                switch (ActionType) {
+                    case MpActionType.Trigger:
+                        return MpSystemColors.maroon;
+                    case MpActionType.Analyze:
+                        return MpSystemColors.magenta;
+                    case MpActionType.Classify:
+                        return MpSystemColors.tomato1;
+                    case MpActionType.Compare:
+                        return MpSystemColors.cyan1;
+                    case MpActionType.Macro:
+                        return MpSystemColors.lightsalmon1;
+                    case MpActionType.Timer:
+                        return MpSystemColors.cornflowerblue;
+                    case MpActionType.FileWriter:
+                        return MpSystemColors.palegoldenrod;
+                }
+                return MpSystemColors.White;
             }
         }
 
@@ -476,6 +507,22 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsEnabledDb {
+            get {
+                if (Action == null) {
+                    return false;
+                }
+                return Action.IsEnabled;
+            }
+            set {
+                if (IsEnabledDb != value) {
+                    Action.IsEnabled = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IsEnabledDb));
+                }
+            }
+        }
+
         public int ActionObjId {
             get {
                 if (Action == null) {
@@ -662,8 +709,8 @@ namespace MpWpfApp {
                 case MpActionType.Timer:
                     avm = new MpTimerActionViewModel(Parent);
                     break;
-                case MpActionType.Transform:
-                    avm = new MpTransformActionViewModel(Parent);
+                case MpActionType.FileWriter:
+                    avm = new MpFileWriterActionViewModel(Parent);
                     break;
             }
             avm.ParentActionViewModel = this;
@@ -915,6 +962,13 @@ namespace MpWpfApp {
                     AddChildEmptyActionViewModel.Location = DefaultEmptyActionLocation;
 
                     _lastLocation = Location;
+                    break;
+                case nameof(IsEnabled):
+                    if(!IsEnabled.HasValue) {
+                        return;
+                    }
+                    IsEnabledDb = IsEnabled.Value;
+                    OnPropertyChanged(nameof(EnableToggleButtonShapeHexColor));
                     break;
             }
         }

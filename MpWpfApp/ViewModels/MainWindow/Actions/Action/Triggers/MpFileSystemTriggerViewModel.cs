@@ -16,7 +16,7 @@ namespace MpWpfApp {
                 if(string.IsNullOrWhiteSpace(FileSystemPath)) {
                     return false;
                 }
-                return File.Exists(FileSystemPath) || Directory.Exists(FileSystemPath);
+                return FileSystemPath.IsFileOrDirectory();
             }
         }
 
@@ -75,12 +75,12 @@ namespace MpWpfApp {
 
         protected override async Task Enable() {
             await base.Enable();
-            MpFileSystemWatcher.Instance.RegisterTrigger(this);
+            MpFileSystemWatcher.Instance.Register(this);
         }
 
         protected override async Task Disable() {
             await base.Disable();
-            MpFileSystemWatcher.Instance.UnregisterTrigger(this);
+            MpFileSystemWatcher.Instance.Unregister(this);
         }
 
         protected override async Task<bool> Validate() {
@@ -173,12 +173,7 @@ namespace MpWpfApp {
                 } else if(File.Exists(initDir)) {
                     initDir = Path.GetDirectoryName(initDir);
                 }
-                //var openFileDialog = new OpenFileDialog() {
-                //    Title = "Select file or folder to sync",
-                //    InitialDirectory = initDir
-                //};
                 MpMainWindowViewModel.Instance.IsShowingDialog = true;
-                //bool? openResult = openFileDialog.ShowDialog();
                 var dlg = new MpFolderPicker() {
                     InputPath = initDir,
                     Title = "Select folder"

@@ -82,7 +82,7 @@ namespace MpWpfApp {
             await base.Enable();
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm != null) {
-                ttvm.RegisterTrigger(this);
+                ttvm.Register(this);
             }
         }
 
@@ -90,7 +90,7 @@ namespace MpWpfApp {
             await base.Disable();
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             if (ttvm != null) {
-                ttvm.UnregisterTrigger(this);
+                ttvm.Unregister(this);
             }
         }
         #endregion

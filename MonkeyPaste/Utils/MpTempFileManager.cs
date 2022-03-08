@@ -43,11 +43,29 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"With Exception: " + ex);
             }
         }
+
+        public static void Shutdown() {
+            foreach (string tfp in _tempFileList) {
+                if (File.Exists(tfp)) {
+                    try {
+                        File.Delete(tfp);
+                    }
+                    catch (Exception ex) {
+                        MonkeyPaste.MpConsole.WriteLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:");
+                        MonkeyPaste.MpConsole.WriteLine(ex);
+                    }
+                }
+            }
+        }
         public static void AddTempFilePath(string filePathToAppend) {
             if(_isLoaded) {
                 Init();
             }
-            MpFileIoHelpers.AppendTextToFile(TempFilePath, filePathToAppend);
+            if(!_tempFileList.Contains(filePathToAppend)) {
+                _tempFileList.Add(filePathToAppend);
+                MpFileIoHelpers.AppendTextToFile(TempFilePath, filePathToAppend);
+            }
+            
         }
     }
 }

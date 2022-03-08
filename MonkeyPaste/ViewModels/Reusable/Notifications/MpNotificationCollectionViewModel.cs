@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Asn1.X509;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -36,8 +37,6 @@ namespace MonkeyPaste {
 
         #region State
 
-        public bool IsInitialLoad { get; private set; } = false;
-
         public bool IsVisible { get; set; } = false;
 
         #endregion
@@ -74,18 +73,12 @@ namespace MonkeyPaste {
             if(doNotShowNotifications != null) {
                 DoNotShowNotificationIds = doNotShowNotifications;
             }
+            IsVisible = true;
         }
 
         public async Task RegisterWithWindow(MpINotificationBalloonView nbv) {
             await Task.Delay(1);
             _nbv = nbv;
-
-            var lvm = new MpLoaderNotificationViewModel(this) {
-                DialogType = MpNotificationDialogType.StartupLoader,
-                PercentLoaded = 0.0
-            };
-            NotificationQueue.Add(lvm);
-            OnPropertyChanged(nameof(CurrentNotificationViewModel));
         }
 
         public async Task<MpDialogResultType> ShowUserAction(
@@ -95,6 +88,7 @@ namespace MonkeyPaste {
             string msg = "",
             double maxShowTimeMs = -1) {
             if(DoNotShowNotificationIds.Contains((int)dialogType)) {
+                MpConsole.WriteTraceLine($"Notification: {dialogType.ToString()} marked as hidden");
                 return MpDialogResultType.Ignore;
             }
 
@@ -145,18 +139,21 @@ namespace MonkeyPaste {
             return unvm.DialogResult;
         }
 
-
-        public void BeginLoader() {
-            IsInitialLoad = true;
-            if (DoNotShowNotificationIds.Contains((int)MpNotificationDialogType.StartupLoader)) {
+        public async Task BeginLoader(MpIProgressLoader loader) {
+            if (DoNotShowNotificationIds.Contains((int)loader.DialogType)) {
+                MpConsole.WriteTraceLine($"Notification: {loader.DialogType.ToString()} marked as hidden");
                 return;
             }
+
+            var lvm = await CreateLoaderViewModel(loader); 
+            NotificationQueue.Add(lvm);
+
+            OnPropertyChanged(nameof(CurrentNotificationViewModel));
 
             ShowBalloon();
         }
 
         public void FinishLoading() {
-            IsInitialLoad = false;
             ShiftToNextNotificationCommand.Execute(null);
         }
 
@@ -171,6 +168,12 @@ namespace MonkeyPaste {
 
         #region Private Methods
 
+        private async Task<MpLoaderNotificationViewModel> CreateLoaderViewModel(MpIProgressLoader loader) {
+            var lvm = new MpLoaderNotificationViewModel(this);
+            await lvm.InitializeAsync(loader);
+            return lvm;
+        }
+
         private void MpStandardBalloonViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             
         }
@@ -181,13 +184,9 @@ namespace MonkeyPaste {
 
         public MpIAsyncCommand ResetAllNotificationsCommand => new MpAsyncCommand(
             async () => {
-                while (IsInitialLoad) {
-                    //wait for dependencies to load
-                    await Task.Delay(100);
-                }
                 MpPreferences.DoNotShowAgainNotificationIdCsvStr = string.Empty;
 
-            });
+            }, () => MpBootstrapperViewModelBase.IsLoaded);
 
         public MpIAsyncCommand<int> DoNotShowAgainCommand => new MpAsyncCommand<int>(
             async (notificationId) => {
@@ -196,7 +195,7 @@ namespace MonkeyPaste {
                 }
                 ShiftToNextNotificationCommand.Execute(null);
 
-                while(IsInitialLoad) {
+                while(!MpBootstrapperViewModelBase.IsLoaded) {
                     //wait for dependencies to load
                     await Task.Delay(100);
                 }

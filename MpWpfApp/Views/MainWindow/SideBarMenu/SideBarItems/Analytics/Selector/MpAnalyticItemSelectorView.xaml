@@ -11,8 +11,13 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <StackPanel Orientation="Horizontal">
-        <StackPanel Orientation="Vertical">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" 
+                    Orientation="Vertical">
             <Border CornerRadius="3"
                     BorderThickness="1"
                     BorderBrush="Black"
@@ -44,15 +49,12 @@
             <local:MpAnalyticItemPresetDataGridView DataContext="{Binding SelectedItem}" />
         </StackPanel>
         <Grid x:Name="PresetParametersGrid"
+              Grid.Column="1" 
               Visibility="{Binding IsAnyEditingParameters,
                                    Converter={StaticResource BoolToVisibilityConverter},
                                    FallbackValue='Collapsed'}">
-            <local:MpAnalyticItemPresetParameterListBoxView Width="{Binding SidebarWidth,
-                                                                            Mode=TwoWay,
-                                                                            UpdateSourceTrigger=PropertyChanged,
-                                                                            NotifyOnSourceUpdated=True,
-                                                                            NotifyOnTargetUpdated=True}"
+            <local:MpAnalyticItemPresetParameterListBoxView HorizontalAlignment="Stretch"
                                                             DataContext="{Binding SelectedPresetViewModel}" />
         </Grid>
-    </StackPanel>
+    </Grid>
 </local:MpUserControl>

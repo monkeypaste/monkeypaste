@@ -77,7 +77,7 @@ namespace MpWpfApp {
             }
 
             var cil = dragData as List<MpCopyItem>;
-            return cil != null && cil.Count == 1;
+            return cil != null && cil.Count >= 1;
         }
 
         public override async Task Drop(bool isCopy, object dragData) {

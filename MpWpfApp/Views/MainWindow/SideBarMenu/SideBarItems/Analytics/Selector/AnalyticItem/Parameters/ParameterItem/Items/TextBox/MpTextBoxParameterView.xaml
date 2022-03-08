@@ -1,0 +1,18 @@
+﻿<local:MpUserControl x:Class="MpWpfApp.MpTextBoxParameterView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                     x:TypeArguments="local:MpTextBoxParameterViewModel"
+                     mc:Ignorable="d"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800"
+                     d:DataContext="{d:DesignInstance Type=local:MpTextBoxParameterViewModel,
+                                                      IsDesignTimeCreatable=False}">
+    <TextBox Text="{Binding CurrentValue,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged,
+                            NotifyOnTargetUpdated=True}" />
+</local:MpUserControl>

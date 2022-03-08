@@ -21,9 +21,6 @@ namespace MpWpfApp {
                 return null;
             }
 
-            //if (fe.Name == "RootActionPropertyContentControl" && aivm.ActionType != MpActionType.Trigger) {
-            //    return EmptyPropertiesTemplate;
-            //}
             string resourceKeyStr = "PropertiesTemplate";
 
             switch (aivm.ActionType) {
@@ -50,6 +47,9 @@ namespace MpWpfApp {
                     break;
                 case MpActionType.Classify:
                     resourceKeyStr = "Classify" + resourceKeyStr;
+                    break;
+                case MpActionType.FileWriter:
+                    resourceKeyStr = "FileWriter" + resourceKeyStr;
                     break;
             }
 

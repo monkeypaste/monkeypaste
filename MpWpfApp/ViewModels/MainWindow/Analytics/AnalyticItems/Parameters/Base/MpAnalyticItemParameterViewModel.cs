@@ -84,6 +84,9 @@ namespace MpWpfApp {
                 if (Parameter == null) {
                     return false;
                 }
+                if(this is MpContentParameterViewModel) {
+                    return true;
+                }
                 return Parameter.isVisible;
             }
         }

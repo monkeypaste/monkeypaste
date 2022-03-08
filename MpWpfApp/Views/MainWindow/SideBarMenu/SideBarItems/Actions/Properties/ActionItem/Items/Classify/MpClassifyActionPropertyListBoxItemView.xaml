@@ -44,13 +44,13 @@
                         <StackPanel Margin="3"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Stretch">
-                            <Frame BorderThickness="0.7"
-                                   BorderBrush="LightGray"
+                            <Border BorderThickness="0.7" CornerRadius="5"
+                                   BorderBrush="LightGray" 
                                    Background="{Binding TagHexColor,
                                                         Converter={StaticResource StringHexToBrushConverter}}"
                                    Width="15"
                                    Height="15">
-                                <Frame.Margin>
+                                <Border.Margin>
                                     <MultiBinding Converter="{StaticResource TagIdToThicknessNameConverter}">
                                         <Binding Path="DataContext.TagId"
                                                  RelativeSource="{RelativeSource Mode=FindAncestor,
@@ -63,8 +63,8 @@
                                             </Binding.Source>
                                         </Binding>
                                     </MultiBinding>
-                                </Frame.Margin>
-                            </Frame>
+                                </Border.Margin>
+                            </Border>
                             <TextBlock Margin="10,0,0,0"
                                        FontSize="16"
                                        Text="{Binding TagName}" />

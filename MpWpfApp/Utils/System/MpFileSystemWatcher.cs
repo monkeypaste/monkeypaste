@@ -18,7 +18,7 @@ namespace MpWpfApp {
     public class MpFileSystemWatcher : 
         MpISingletonViewModel<MpFileSystemWatcher>, 
         IDisposable, 
-        MpITriggerActionViewModel {
+        MpIActionComponent {
         #region Private Variables
 
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
@@ -45,13 +45,13 @@ namespace MpWpfApp {
 
         #endregion
 
-        public void RegisterTrigger(MpActionViewModelBase mvm) {
+        public void Register(MpActionViewModelBase mvm) {
             var fstvm = mvm as MpFileSystemTriggerViewModel;
             AddWatcher(fstvm.FileSystemPath, fstvm);
             MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterTrigger(MpActionViewModelBase mvm) {
+        public void Unregister(MpActionViewModelBase mvm) {
             var fstvm = mvm as MpFileSystemTriggerViewModel;
             RemoveWatcher(fstvm.FileSystemPath);
             MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Label} matcher");

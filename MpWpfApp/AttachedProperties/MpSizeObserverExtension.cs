@@ -12,14 +12,14 @@ namespace MpWpfApp {
             typeof(double),
             typeof(MpSizeObserverExtension));
 
-        public static double GetObservedWidth(FrameworkElement frameworkElement) {
-            //frameworkElement.AssertNotNull("frameworkElement");
-            return (double)frameworkElement.GetValue(ObservedWidthProperty);
+        public static double GetObservedWidth(FrameworkElement fe) {
+            //fe.AssertNotNull("fe");
+            return (double)fe.GetValue(ObservedWidthProperty);
         }
 
-        public static void SetObservedWidth(FrameworkElement frameworkElement, double observedWidth) {
-            //frameworkElement.AssertNotNull("frameworkElement");
-            frameworkElement.SetValue(ObservedWidthProperty, observedWidth);
+        public static void SetObservedWidth(FrameworkElement fe, double observedWidth) {
+            //fe.AssertNotNull("fe");
+            fe.SetValue(ObservedWidthProperty, observedWidth);
         }
 
         #endregion
@@ -31,14 +31,14 @@ namespace MpWpfApp {
             typeof(double),
             typeof(MpSizeObserverExtension));
 
-        public static double GetObservedHeight(FrameworkElement frameworkElement) {
-            //frameworkElement.AssertNotNull("frameworkElement");
-            return (double)frameworkElement.GetValue(ObservedHeightProperty);
+        public static double GetObservedHeight(FrameworkElement fe) {
+            //fe.AssertNotNull("fe");
+            return (double)fe.GetValue(ObservedHeightProperty);
         }
 
-        public static void SetObservedHeight(FrameworkElement frameworkElement, double observedHeight) {
-            //frameworkElement.AssertNotNull("frameworkElement");
-            frameworkElement.SetValue(ObservedHeightProperty, observedHeight);
+        public static void SetObservedHeight(FrameworkElement fe, double observedHeight) {
+            //fe.AssertNotNull("fe");
+            fe.SetValue(ObservedHeightProperty, observedHeight);
         }
 
         #endregion
@@ -51,36 +51,49 @@ namespace MpWpfApp {
             typeof(MpSizeObserverExtension),
             new FrameworkPropertyMetadata(OnIsEnabledChanged));
 
-        public static bool GetIsEnabled(FrameworkElement frameworkElement) {
-            //frameworkElement.AssertNotNull("frameworkElement");
-            return (bool)frameworkElement.GetValue(IsEnabledProperty);
+        public static bool GetIsEnabled(FrameworkElement fe) {
+            //fe.AssertNotNull("fe");
+            return (bool)fe.GetValue(IsEnabledProperty);
         }
 
-        public static void SetIsEnabled(FrameworkElement frameworkElement, bool observe) {
-            //frameworkElement.AssertNotNull("frameworkElement");
-            frameworkElement.SetValue(IsEnabledProperty, observe);
+        public static void SetIsEnabled(FrameworkElement fe, bool observe) {
+            //fe.AssertNotNull("fe");
+            fe.SetValue(IsEnabledProperty, observe);
         }
 
 
-        private static void OnIsEnabledChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e) {
-            var frameworkElement = (FrameworkElement)dependencyObject;
-
-            if ((bool)e.NewValue) {
-                frameworkElement.SizeChanged += OnFrameworkElementSizeChanged;
-                UpdateObservedSizesForFrameworkElement(frameworkElement);
+        private static void OnIsEnabledChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e) {
+            var fe = (FrameworkElement)dpo;
+            
+            if ((bool)e.NewValue) {                
+                fe.SizeChanged += OnFrameworkElementSizeChanged;
+                if (!fe.IsLoaded) {
+                    fe.Loaded += Fe_Loaded;
+                } else {
+                    UpdateObservedSizesForFrameworkElement(fe);
+                }                
             } else {
-                frameworkElement.SizeChanged -= OnFrameworkElementSizeChanged;
+                fe.SizeChanged -= OnFrameworkElementSizeChanged;
+                fe.Loaded -= Fe_Loaded;
             }
+        }
+
+        private static void Fe_Loaded(object sender, RoutedEventArgs e) {
+            var fe = (FrameworkElement)sender;
+            if(fe == null) {
+                return;
+            }
+            UpdateObservedSizesForFrameworkElement(fe);
         }
 
         private static void OnFrameworkElementSizeChanged(object sender, SizeChangedEventArgs e) {
             UpdateObservedSizesForFrameworkElement((FrameworkElement)sender);
         }
 
-        private static void UpdateObservedSizesForFrameworkElement(FrameworkElement frameworkElement) {
+        private static void UpdateObservedSizesForFrameworkElement(FrameworkElement fe) {
             // WPF 4.0 onwards
-            frameworkElement.SetCurrentValue(ObservedWidthProperty, frameworkElement.ActualWidth);
-            frameworkElement.SetCurrentValue(ObservedHeightProperty, frameworkElement.ActualHeight);
+            fe.SetCurrentValue(ObservedWidthProperty, fe.ActualWidth);
+            fe.SetCurrentValue(ObservedHeightProperty, fe.ActualHeight);
         }
 
         #endregion

@@ -91,7 +91,7 @@ namespace MpWpfApp {
             await base.Enable();
             var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
-                scvm.RegisterTrigger(this);
+                scvm.Register(this);
             }
         }
 
@@ -99,7 +99,7 @@ namespace MpWpfApp {
             await base.Disable();
             var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
-                scvm.UnregisterTrigger(this);
+                scvm.Unregister(this);
             }
         }
 

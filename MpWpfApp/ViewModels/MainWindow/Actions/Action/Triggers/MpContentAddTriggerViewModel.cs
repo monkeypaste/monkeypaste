@@ -44,7 +44,7 @@ namespace MpWpfApp {
                 return;
             }
             await base.Enable();
-            MpClipTrayViewModel.Instance.RegisterTrigger(this);
+            MpClipTrayViewModel.Instance.Register(this);
         }
 
         protected override async Task Disable() {
@@ -52,7 +52,7 @@ namespace MpWpfApp {
                 return;
             }
             await base.Disable();
-            MpClipTrayViewModel.Instance.UnregisterTrigger(this);
+            MpClipTrayViewModel.Instance.Unregister(this);
         }
 
         protected override bool CanPerformAction(object arg) {

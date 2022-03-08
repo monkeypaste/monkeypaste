@@ -28,16 +28,16 @@
                                     CommandParameter="{Binding LastIsEnabledState,
                                                                Converter={StaticResource BoolFlipConverter}}"
                                     Template="{StaticResource FlatToggleButtonControlTemplate}">
-            <Grid HorizontalAlignment="Right">
+            <Grid>
                 <Ellipse Width="20"
                          Height="20"
                          Visibility="{Binding IsValid,
                                               Converter={StaticResource BoolToVisibilityConverter}}"
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"
-                         Stroke="White"
+                         Stroke="White" 
                          Fill="{Binding EnableToggleButtonShapeHexColor,
-                                        Converter={StaticResource StringHexToWinMediaColorConverter}}" />
+                                        Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        Visibility="{Binding IsValid,
@@ -56,7 +56,8 @@
                  Grid.Column="1"
                  Grid.ColumnSpan="2"
                  DockPanel.Dock="Left"
-                 Foreground="Black"
+                 Foreground="{Binding LabelForegroundBrushHexColor,
+                                      Converter={StaticResource StringHexToBrushConverter}}"
                  Background="{Binding LabelBackgroundBrushHexColor,
                                       Converter={StaticResource StringHexToBrushConverter}}"
                  BorderThickness="1"

@@ -11,7 +11,8 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type={x:Type pcl:MpLoaderNotificationViewModel},
                                                       IsDesignTimeCreatable=False}">
-    <Grid>
+    <Grid Loaded="Grid_Loaded"
+          Unloaded="Grid_Unloaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*" />
             <RowDefinition Height="0.3*" />
@@ -24,7 +25,7 @@
                    HorizontalAlignment="Left"
                    Foreground="White"
                    FontWeight="SemiBold"
-                   Text="{Binding Title}" />
+                   Text="{Binding ProgressLoader.Title}" />
         <Border Grid.Row="0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom"
@@ -57,7 +58,7 @@
                            VerticalAlignment="Center"
                            FontFamily="Courier"
                            Foreground="Black"
-                           Text="{Binding Detail,
+                           Text="{Binding ProgressLoader.Detail,
                                           NotifyOnSourceUpdated=True}" />
             </Grid>
         </Border>
@@ -69,7 +70,7 @@
                    FontSize="10"
                    Foreground="Cyan"
                    FontFamily="Courier"
-                   Text="{Binding Body,
+                   Text="{Binding ProgressLoader.Body,
                                   NotifyOnSourceUpdated=True}" />
     </Grid>
 </local:MpUserControl>

@@ -20,7 +20,7 @@ namespace MpWpfApp {
         MpIShortcutCommand, 
         MpIHasNotification,
         MpIUserColorViewModel,
-        MpITriggerActionViewModel,
+        MpIActionComponent,
         MpIMenuItemViewModel{
 
         #region Private Variables
@@ -129,12 +129,12 @@ namespace MpWpfApp {
 
         #region MpITriggerActionViewModel Implementation
 
-        public void RegisterTrigger(MpActionViewModelBase mvm) {
+        public void Register(MpActionViewModelBase mvm) {
             OnCopyItemLinked += mvm.OnActionTriggered;
             MpConsole.WriteLine($"TagTile {TagName} Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterTrigger(MpActionViewModelBase mvm) {
+        public void Unregister(MpActionViewModelBase mvm) {
             OnCopyItemLinked -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from {TagName} TagAdd");
         }
@@ -500,6 +500,10 @@ namespace MpWpfApp {
         }
 
         public async Task AddContentItem(int ciid) {
+            if(ciid == 0) {
+                MpConsole.WriteTraceLine("Cannot add CopyItemId 0 to Tag: " + TagName + " Id: " + TagId);
+                return;
+            }
             if(!MpDataModelProvider.IsTagLinkedWithCopyItem(TagId,ciid)) {
                 var ncit = await MpCopyItemTag.Create(TagId, ciid);
                 await ncit.WriteToDatabaseAsync();
@@ -510,6 +514,10 @@ namespace MpWpfApp {
         }
 
         public async Task RemoveContentItem(int ciid) {
+            if (ciid == 0) {
+                MpConsole.WriteTraceLine("Cannot remove CopyItemId 0 to Tag: " + TagName + " Id: " + TagId);
+                return;
+            }
             var cit = await MpDataModelProvider.GetCopyItemTagForTagAsync(ciid, TagId);
             if(cit == null) {
                 MpConsole.WriteLine($"Tag {TagName} doesn't contain a link with CopyItem Id {ciid} so cannot remove");

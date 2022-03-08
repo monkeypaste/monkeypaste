@@ -10,9 +10,9 @@ using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows;
 
 namespace MpWpfApp {
-    public class MpBootstrapper : MpBootstrapperBase {
+    public class MpWpfBootstrapperViewModel : MpBootstrapperViewModelBase {
 
-        public MpBootstrapper(MpINativeInterfaceWrapper niw) : base(niw) {
+        public MpWpfBootstrapperViewModel(MpINativeInterfaceWrapper niw) : base(niw) {
             if(_items == null) {
                 _items = new List<MpBootstrappedItem>();
             } 
@@ -59,9 +59,11 @@ namespace MpWpfApp {
                 });
         }
 
-        public static async Task Init() {
+        public override async Task Init() {
+            // NOTE Remove this later start
             Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr = string.Empty;
             Properties.Settings.Default.Save();
+            // NOTE Remove this later finish
 
             List<int> doNotShowNotifications = null;
             if(!string.IsNullOrWhiteSpace(Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr)) {
@@ -76,20 +78,16 @@ namespace MpWpfApp {
             await MpNotificationCollectionViewModel.Instance.RegisterWithWindow(nbv.NotificationBalloon);
             nbv.DataContext = MpNotificationCollectionViewModel.Instance;
 
-            MpNotificationCollectionViewModel.Instance.BeginLoader();
+            await MpNotificationCollectionViewModel.Instance.BeginLoader(this);
 
-            var bootstrapper = new MpBootstrapper(new MpWpfWrapper());
-
-            await bootstrapper.Initialize();
-
-            MpNotificationCollectionViewModel.Instance.FinishLoading();
-        }
-
-        public override async Task Initialize() {
             for (int i = 0; i < _items.Count; i++) {
                 ReportItemLoading(_items[i], i);
                 await _items[i].Register();
             }
+
+            MpNotificationCollectionViewModel.Instance.FinishLoading();
+
+            IsLoaded = true;
 
             MpProcessHelper.MpProcessManager.Init(
                 MpPreferences.FallbackProcessPath,

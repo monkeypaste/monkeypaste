@@ -58,7 +58,6 @@
     <local:MpDoubleWithDeltaConverter x:Key="DoubleWithDeltaConverter" />
     <local:MpDoubleWithDeltaMultiConverter x:Key="DoubleWithDeltaMultiConverter" />
     <local:MpDoubleToThicknessIndentLevelConverter x:Key="DoubleToThicknessIndentLevelConverter" />
-    <local:MpActionTypeToBrushConverter x:Key="ActionTypeToBrushConverter" />
     <local:MpMultiSelectHoverableToBrushConverter x:Key="MultiSelectHoverableToBrushConverter" />
     <local:MpStringHexToImageSourceConverter x:Key="StringHexToImageSourceConverter" />
     <local:MpObjectToImageSourceOrIconConverter x:Key="ObjectToImageSourceOrIconConverter" />
@@ -77,5 +76,9 @@
     <local:MpIsNotNullToVisibilityConverter x:Key="IsNotNullToVisibilityConverter" />
     <local:MpIsNotNullToVisibilityFlipConverter x:Key="IsNotNullToVisibilityFlipConverter" />
     <local:MpCopyItemIdToReportCollectionConverter x:Key="CopyItemIdToReportCollectionConverter" />
+    <local:MpStringResourceToImageBrushConverter x:Key="StringResourceToImageBrushConverter" />
+    <local:MpDoesFileOrDirectoryExistToVisibilityConverter x:Key="DoesFileOrDirectoryExistToVisibilityConverter" />
+    <local:MpDoesFileOrDirectoryExistToVisibilityFlipConverter x:Key="DoesFileOrDirectoryExistToVisibilityFlipConverter" />
+    <local:MpIsHexColorBrightToBlackOrWhiteBrushConverter x:Key="IsHexColorBrightToBlackOrWhiteBrushConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

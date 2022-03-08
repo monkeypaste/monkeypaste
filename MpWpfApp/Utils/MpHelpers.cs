@@ -600,7 +600,7 @@ namespace MpWpfApp {
                 of.Write(text);
                 of.Close();
                 if (isTemporary) {
-                    MpMainWindowViewModel.Instance.AddTempFile(filePath);
+                    MpTempFileManager.AddTempFilePath(filePath);
                 }
                 return filePath;
             }
@@ -616,7 +616,7 @@ namespace MpWpfApp {
             }
 
             if (isTemporary) {
-                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(filePath);
+                MpTempFileManager.AddTempFilePath(filePath);
             }
             return filePath;
         }
@@ -637,7 +637,7 @@ namespace MpWpfApp {
             //    }
             //}
             if (isTemporary) {
-                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(filePath);
+                MpTempFileManager.AddTempFilePath(filePath);
             }
             return filePath;
             //using (var stream = File.OpenRead(filePath)) {

@@ -60,7 +60,7 @@ namespace MonkeyPaste {
 
         #region State
 
-        public bool IsVisible { get; set; } = false;
+        //public bool IsVisible { get; set; } = false;
 
         public virtual bool CanChooseNotShowAgain => true;
 
@@ -107,7 +107,7 @@ namespace MonkeyPaste {
 
         public virtual string Detail { get; set; }
 
-        public MpNotificationDialogType DialogType { get; set; }
+        public virtual MpNotificationDialogType DialogType { get; set; }
 
         public MpNotificationExceptionSeverityType ExceptionType { get; set; }
 

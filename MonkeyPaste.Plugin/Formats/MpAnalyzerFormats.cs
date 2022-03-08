@@ -14,6 +14,7 @@ namespace MonkeyPaste.Plugin {
         ListBox,
         CheckBox,
         Slider,
+        ContentSelector,
         Hidden
     }
 

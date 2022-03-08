@@ -12,55 +12,49 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemPresetViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <Border HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            BorderThickness="0"
-            BorderBrush="Black"
-            Margin="0,5,10,0">
-        <Grid>
-            <ListBox x:Name="ConfigurePresetListBox"
-                     Grid.Row="1"
-                     Background="Transparent"
-                     Margin="5,10"
-                     ItemsSource="{Binding Items}"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Top"
-                     MinWidth="200"
-                     MaxWidth="300"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     BorderThickness="0">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True"
-                                   Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="IsSelected"
-                                Value="{Binding IsSelected,
-                                                Mode=TwoWay,
-                                                NotifyOnTargetUpdated=True,
-                                                NotifyOnSourceUpdated=True,
-                                                UpdateSourceTrigger=PropertyChanged}" />
-                        <Setter Property="FocusVisualStyle"
-                                Value="{x:Null}" />
-                        <Setter Property="HorizontalContentAlignment"
-                                Value="Stretch" />
-                        <Setter Property="VerticalContentAlignment"
-                                Value="Top" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <local:MpAnalyticItemParameterView Visibility="{Binding IsVisible,
-                                                                                Converter={StaticResource BoolToVisibilityConverter}}"
-                                                           IsEnabled="{Binding IsReadOnly,
-                                                                               Converter={StaticResource BoolFlipConverter}}"
-                                                           DataContext="{Binding}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Grid>
-    </Border>
+
+    <ListBox x:Name="ConfigurePresetListBox"
+             Grid.Row="1"
+             Background="Transparent"
+             Margin="5,10"
+             ItemsSource="{Binding Items}"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Stretch"
+             HorizontalContentAlignment="Stretch"
+             ScrollViewer.VerticalScrollBarVisibility="Auto"
+             BorderThickness="0">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel IsItemsHost="True"
+                           Orientation="Vertical" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemContainerStyle>
+            <Style TargetType="{x:Type ListBoxItem}">
+                <Setter Property="IsSelected"
+                        Value="{Binding IsSelected,
+                                        Mode=TwoWay,
+                                        NotifyOnTargetUpdated=True,
+                                        NotifyOnSourceUpdated=True,
+                                        UpdateSourceTrigger=PropertyChanged}" />
+                <Setter Property="FocusVisualStyle"
+                        Value="{x:Null}" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Stretch" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Stretch" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
+            </Style>
+        </ListBox.ItemContainerStyle>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <local:MpAnalyticItemParameterView Visibility="{Binding IsVisible,
+                                                                        Converter={StaticResource BoolToVisibilityConverter}}"
+                                                   IsEnabled="{Binding IsReadOnly,
+                                                                       Converter={StaticResource BoolFlipConverter}}"
+                                                   DataContext="{Binding}" />
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
 </local:MpUserControl>

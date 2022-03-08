@@ -272,7 +272,7 @@ namespace MpWpfApp {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
 
-            Items.ForEach(x => x.ToggleIsEnabledCommand.Execute(true));
+            Items.Where(x=>x.IsEnabledDb).ForEach(x => x.ToggleIsEnabledCommand.Execute(true));
 
             //while(AllActions.Any(x=>x.IsBusy)) {
             //    await Task.Delay(100);

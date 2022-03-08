@@ -14,19 +14,33 @@ namespace MonkeyPaste {
 
         public double ProgressTotalBarWidth { get; set; }
 
-        public double ProgressBarCurrentWidth => ProgressTotalBarWidth * PercentLoaded;
+        public double ProgressBarCurrentWidth {
+            get {
+                if(ProgressLoader == null) {
+                    return 0;
+                }
+                return ProgressTotalBarWidth * ProgressLoader.PercentLoaded;
+            }
+        }
 
         #endregion
 
         #region State
-        
-        public bool IsLoaded => PercentLoaded >= 1.0;
-
-        public double PercentLoaded { get; set; } = 0.0;
 
         #endregion
 
         #region Model
+
+        public override MpNotificationDialogType DialogType {
+            get {
+                if(ProgressLoader == null) {
+                    return MpNotificationDialogType.None;
+                }
+                return ProgressLoader.DialogType;
+            }
+        }
+
+        public MpIProgressLoader ProgressLoader { get; set; }
 
         #endregion
 
@@ -42,23 +56,16 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
+        public async Task InitializeAsync(MpIProgressLoader progressLoader) {
+            IsBusy = true;
+            await Task.Delay(1);
+            ProgressLoader = progressLoader;
+            IsBusy = false;
+        }
+ 
         #endregion
 
         #region Private Methods
-
-        private void MpLoaderNotificationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(PercentLoaded):
-                    if (PercentLoaded > 1.0) {
-                        PercentLoaded = 1.0;
-                    }
-
-                    OnPropertyChanged(nameof(ProgressBarCurrentWidth));
-                    OnPropertyChanged(nameof(Detail));
-                    OnPropertyChanged(nameof(IsLoaded));
-                    break;
-            }
-        }
 
         #endregion
     }

@@ -123,7 +123,7 @@ namespace MpWpfApp {
 
             var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
             if (aipvm == null) {
-                ValidationText = $"Analyzer for Action '{RootTriggerActionViewModel.Label}/{Label}' not found";
+                ValidationText = $"Analyzer for Action '{FullName}' not found";
                 await ShowValidationNotification();
             } else {
                 var pavm = ParentActionViewModel;

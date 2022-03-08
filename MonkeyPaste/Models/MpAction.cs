@@ -59,7 +59,7 @@ namespace MonkeyPaste {
         Trigger,    //TriggerTypeEnumId 
         Macro,
         Timer,
-        Transform
+        FileWriter
     }
 
     public class MpAction : MpDbModelBase {
@@ -108,6 +108,9 @@ namespace MonkeyPaste {
 
         public int ReadOnly { get; set; } = 0;
 
+        [Column("b_IsEnabled")]
+        public int IsEnabledValue { get; set; }
+
         #endregion
 
         #region Fk Objects
@@ -134,6 +137,12 @@ namespace MonkeyPaste {
         public override bool IsReadOnly {
             get => ReadOnly == 1;
             set => ReadOnly = value ? 1 : 0;
+        }
+
+        [Ignore]
+        public bool IsEnabled {
+            get => IsEnabledValue == 1;
+            set => IsEnabledValue = value ? 1 : 0;
         }
 
 
