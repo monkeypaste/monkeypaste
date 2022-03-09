@@ -27,21 +27,9 @@ namespace MpWpfApp {
 
         #region Properties
 
-        #region View Models
+        #region Statics
 
-        #endregion
-
-        #region Appearance
-
-        public double CompareDataTextBoxWidth { get; set; } = 200;
-
-        public double CompareDataTextBoxHeight { get; set; } = 30;
-
-        #endregion
-
-        #region Business Logic
-
-        public string[] PhysicalComparePropertyPaths {
+        public static string[] PhysicalComparePropertyPaths {
             get {
                 var paths = new List<string>();
                 for (int i = 0; i < Enum.GetNames(typeof(MpComparePropertyPathType)).Length; i++) {
@@ -67,13 +55,30 @@ namespace MpWpfApp {
                             path = string.Format(@"Source.App.{0}", cppt.ToString());
                             break;
                         default:
-                            continue;
+                            break;
                     }
                     paths.Add(path);
                 }
                 return paths.ToArray();
             }
         }
+
+        #endregion
+
+        #region View Models
+
+        #endregion
+
+        #region Appearance
+
+        public double CompareDataTextBoxWidth { get; set; } = 200;
+
+        public double CompareDataTextBoxHeight { get; set; } = 30;
+
+        #endregion
+
+        #region Business Logic
+
 
         public string PhysicalPropertyPath {
             get {

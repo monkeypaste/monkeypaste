@@ -402,13 +402,14 @@
         "label": "Source Content",
         "description": "The image to describe",
         "parameterControlType": "Hidden",
-        "parameterValueType": "Base64Text",
+        "parameterValueType": "PlainText",
+        "isContentQuery": true,
         "enumId": 4,
         "isRequired": true,
         "isVisible": false,
         "values": [
           {
-            "value": "ItemData"
+            "value": "{ItemData}"
           }
         ]
       },
@@ -417,12 +418,13 @@
         "description": "The title of the image",
         "parameterControlType": "Hidden",
         "parameterValueType": "PlainText",
+        "isContentQuery": true,
         "enumId": 5,
         "isRequired": true,
         "isVisible": false,
         "values": [
           {
-            "value": "Title"
+            "value": "{Title}"
           }
         ]
       }

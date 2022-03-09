@@ -1,5 +1,4 @@
-﻿using MonkeyPaste;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,8 +17,8 @@ namespace MpProcessHelper {
 
         //private static MpIconBuilder _ib;
 
-        private static string fallback;
-        private static ObservableCollection<string> _knownAppPaths;
+        private static string _FallbackProcessPath = @"C:\WINDOWS\Explorer.EXE";
+
         #endregion
 
         #region Properties
@@ -32,46 +31,31 @@ namespace MpProcessHelper {
 
         public static string LastTitle { get; set; }
                 
-
         public static IntPtr LastHandle { get; private set; }
 
         public static string LastProcessPath => GetProcessPath(LastHandle);
 
         #endregion
 
+        #region Events
+
+        public static event EventHandler<string> OnAppActivated;
+
+        #endregion
+
         #region Public Methods
 
-        public static void Init(string fallbackProcessPath, string[] knownAppPaths, MpIIconBuilder iconBuilder) {
-            Task.Run(async () => {
-                fallback = fallbackProcessPath;
-                _knownAppPaths = new ObservableCollection<string>(knownAppPaths);
+        public static void Init() {
+            LastHandle = IntPtr.Zero;
+            RefreshHandleStack();
 
-                LastHandle = IntPtr.Zero;
-                RefreshHandleStack();
-
-                //this loop is needed at app start so new/unknown apps are stored in db
-                var handleLookup = CurrentProcessWindowHandleStackDictionary.ToArray();
-                foreach (var kvp in CurrentProcessWindowHandleStackDictionary) {
-                    if (!_knownAppPaths.Contains(kvp.Key)) {
-                        //var iconBmpSrc = MpHelpers.GetIconImage(kvp.Key);
-                        //var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                        //string appName = MpHelpers.GetProcessApplicationName(kvp.Value[0]);
-                        //var app = await MpApp.Create(kvp.Key, appName, icon);
-                        _knownAppPaths.Add(kvp.Key);
-
-                        // this will notify main application of new app found
-                        await MpAppBuilder.Build(kvp.Value[0]);
-                    }
-                }
-
-                if (_timer == null) {
-                    _timer = new System.Timers.Timer(500);
-                    _timer.Elapsed += Timer_Elapsed;
-                } else {
-                    _timer.Stop();
-                }
-                _timer.Start();
-            });
+            if (_timer == null) {
+                _timer = new System.Timers.Timer(500);
+                _timer.Elapsed += Timer_Elapsed;
+            } else {
+                _timer.Stop();
+            }
+            _timer.Start();
         }
 
         public static void Stop() {
@@ -131,7 +115,7 @@ namespace MpProcessHelper {
                 //if app is started using "Run as" is if you get "Access Denied" error. 
                 //That means that running app has rights that your app does not have. 
                 //in this case ADMIN rights
-                MonkeyPaste.MpConsole.WriteLine("IsProcessAdmin error: " + ex.ToString());
+                Console.WriteLine("IsProcessAdmin error: " + ex.ToString());
                 return true;
             }
         }
@@ -156,7 +140,8 @@ namespace MpProcessHelper {
             return winType;
         }
 
-        public static string GetProcessPath(IntPtr hwnd, string fallback = @"C:\WINDOWS\Explorer.EXE") {
+        public static string GetProcessPath(IntPtr hwnd, string fallback = "") {
+            fallback = string.IsNullOrEmpty(fallback) ? _FallbackProcessPath : fallback;
             try {
                 if (hwnd == null || hwnd == IntPtr.Zero) {
                     return fallback; //fallback;
@@ -177,36 +162,12 @@ namespace MpProcessHelper {
                 }
             }
             catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
+                Console.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
                 //return GetExecutablePathAboveVista(hwnd);
                 return fallback; //fallback;
             }
         }
 
-        public static string GetProcessPath(IntPtr hwnd) {
-            try {
-                if (hwnd == null || hwnd == IntPtr.Zero) {
-                    return fallback;
-                }
-
-                WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
-                using (Process proc = Process.GetProcessById((int)pid)) {
-                    if (proc.ProcessName == @"csrss") {
-                        //occurs with messageboxes and dialogs
-                        return fallback;
-                    }
-                    if (proc.MainWindowHandle == IntPtr.Zero) {
-                        return fallback;
-                    }
-                    return proc.MainModule.FileName.ToString();
-                }
-            }
-            catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine("GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
-                //return GetExecutablePathAboveVista(hwnd);
-                return fallback;
-            }
-        }
 
         public static string GetMainModuleFilepath(int processId) {
             string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
@@ -270,19 +231,10 @@ namespace MpProcessHelper {
             UpdateHandleStack(LastHandle);
 
             string processName = GetProcessPath(LastHandle);
-            if (!_knownAppPaths.Contains(processName)) {
-                //var iconBmpSrc = _iconLoader.GetIconImage(processName);
-                //var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                //var app = await MpApp.Create(processName, MpHelpers.GetProcessApplicationName(LastHandle), icon);
-                _knownAppPaths.Add(processName);
-                // this will notify main application of new app found
-                Task.Run(async () => {
-                    await MpAppBuilder.Build(LastHandle);
-                });
-            }
 
             if (hasChanged) {
-                MonkeyPaste.MpConsole.WriteLine(string.Format(@"Last Window: {0} ({1})", GetProcessMainWindowTitle(LastHandle), LastHandle));
+                Console.WriteLine(string.Format(@"Last Window: {0} ({1})", GetProcessMainWindowTitle(LastHandle), LastHandle));
+                OnAppActivated?.Invoke(nameof(MpProcessManager), processName.ToLower());
             }
         }
 
@@ -394,7 +346,7 @@ namespace MpProcessHelper {
                     }
                     catch (Exception ex) {
                         //intermittenly fgHandle is still in dictionary so hopefully this swallows exception
-                        MonkeyPaste.MpConsole.WriteTraceLine($"FgHandle: {fgHandle} already exists...ignoring", ex);
+                        Console.WriteLine($"FgHandle: {fgHandle} already exists...ignoring " + ex);
                     }
                     //MonkeyPaste.MpConsole.WriteLine(@"Last Window State for " + processName + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
                 }

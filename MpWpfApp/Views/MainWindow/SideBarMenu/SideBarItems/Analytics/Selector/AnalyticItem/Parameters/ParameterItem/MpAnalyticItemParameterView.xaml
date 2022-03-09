@@ -77,6 +77,13 @@
                                                       DataContext="{Binding}" />
             </DataTemplate>
 
+            <!--  File or Directory Chooser Parameter  -->
+
+            <DataTemplate x:Key="FileChooserParameterTemplate"
+                          DataType="local:MpFileChooserParameterViewModel">
+                <local:MpFileChooserParameterView DataContext="{Binding}" />
+            </DataTemplate>
+
             <local:MpParameterViewSelector x:Key="ParameterViewSelector" />
         </Grid.Resources>
         <Grid.ColumnDefinitions>

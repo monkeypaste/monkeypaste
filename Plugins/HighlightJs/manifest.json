@@ -916,20 +916,20 @@
             "text": "Zephir",
             "value": "zephir, zep"
           }
-
         ]
       },
       {
         "text": "Source Content",
-        "description": "The Snippet to deetect",
+        "description": "The Snippet to detect",
         "parameterControlType": "Hidden",
         "parameterValueType": "PlainText",
+        "isContentQuery": true,
         "enumId": 2,
         "isRequired": true,
         "isVisible": false,
         "values": [
           {
-            "value": "ItemData"
+            "value": "{ItemData}"
           }
         ]
       }

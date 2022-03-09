@@ -966,12 +966,13 @@
         "description": "The text to translate",
         "parameterControlType": "Hidden",
         "parameterValueType": "PlainText",
+        "isContentQuery": true,
         "enumId": 3,
         "isRequired": false,
         "isVisible": false,
         "values": [
           {
-            "value": "ItemData"
+            "value": "{ItemData}"
           }
         ]
       },
@@ -980,12 +981,13 @@
         "description": "The title of the content",
         "parameterControlType": "Hidden",
         "parameterValueType": "PlainText",
+        "isContentQuery": true,
         "enumId": 4,
         "isRequired": false,
         "isVisible": false,
         "values": [
           {
-            "value": "Title"
+            "value": "{Title}"
           }
         ]
       }

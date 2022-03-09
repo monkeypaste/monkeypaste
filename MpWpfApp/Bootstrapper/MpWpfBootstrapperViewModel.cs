@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows;
+using MpProcessHelper;
 
 namespace MpWpfApp {
     public class MpWpfBootstrapperViewModel : MpBootstrapperViewModelBase {
@@ -19,6 +20,9 @@ namespace MpWpfApp {
 
             _items.AddRange(
                 new List<MpBootstrappedItem>() {
+                    new MpBootstrappedItem(typeof(MpProcessManager)),
+                    new MpBootstrappedItem(typeof(MpProcessAutomation)),
+
                     new MpBootstrappedItem(typeof(MpThemeColors)),
 
                     new MpBootstrappedItem(typeof(MpMeasurements)),
@@ -88,12 +92,22 @@ namespace MpWpfApp {
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 
             IsLoaded = true;
+                       
 
-            MpProcessHelper.MpProcessManager.Init(
-                MpPreferences.FallbackProcessPath,
-                MpAppCollectionViewModel.Instance.Items.Select(x => x.AppPath).ToArray(),
-                new MpWpfIconBuilder());
+            //MpProcessHelper.MpProcessAutomation.StartProcess(
+            //    processPath: @"C:\Users\tkefauver\Desktop\test.bat",
+            //    args: "",
+            //    asAdministrator: true,
+            //    isSilent: false,
+            //    useShellExecute: false,
+            //    workingDirectory: @"C:\Users\tkefauver\Desktop\DS4Windows\",
+            //    showError: true,
+            //    windowState: MpProcessHelper.WinApi.ShowWindowCommands.Normal,
+            //    out string stdOut,
+            //    out string stdErr);
 
+            //MpConsole.WriteLine("Output: " + stdOut);
+            //MpConsole.WriteLine("Errors: " + stdErr);
         }
     }
 }

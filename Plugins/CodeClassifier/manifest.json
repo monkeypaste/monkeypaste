@@ -97,12 +97,13 @@
         "description": "The Snippet to detect",
         "parameterControlType": "Hidden",
         "parameterValueType": "PlainText",
+        "isContentQuery": true,
         "enumId": 3,
         "isRequired": false,
         "isVisible": false,
         "values": [
           {
-            "value": "ItemData"
+            "value": "{ItemData}"
           }
         ]
       },

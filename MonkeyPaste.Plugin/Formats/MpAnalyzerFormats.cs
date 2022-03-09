@@ -15,6 +15,8 @@ namespace MonkeyPaste.Plugin {
         CheckBox,
         Slider,
         ContentSelector,
+        FileChooser,
+        DirectoryChooser,
         Hidden
     }
 
@@ -28,8 +30,8 @@ namespace MonkeyPaste.Plugin {
         Html,
         Image,
         Base64Text,
-        FilePath,
-        Csv
+        FileSystemPath,
+        Csv,
     }
 
     public class MpAnalyzerPluginRequestItemFormat : MpJsonObject {
@@ -59,7 +61,6 @@ namespace MonkeyPaste.Plugin {
         public bool imageToken { get; set; } = false;
         public bool textToken { get; set; } = false;
         public bool file { get; set; } = false;
-        public bool actionInput { get; set; } = false;
     }
 
     public class MpAnalyticItemParameterFormat : MpJsonObject {
@@ -71,6 +72,7 @@ namespace MonkeyPaste.Plugin {
         public MpAnalyticItemParameterValueUnitType parameterValueType { get; set; } = MpAnalyticItemParameterValueUnitType.None;
 
         public int enumId { get; set; } = 0;
+        public bool isContentQuery { get; set; } = false;
         public bool isReadOnly { get; set; } = false;
         public bool isRequired { get; set; } = false;
         public bool isMultiValue { get; set; } = false;

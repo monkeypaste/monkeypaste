@@ -17,6 +17,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using Azure.Core;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 
 namespace MpWpfApp {
     [Flags]
@@ -444,8 +448,10 @@ namespace MpWpfApp {
                                     var defParamVal = param.values.FirstOrDefault(x => x.isDefault);
                                     if (defParamVal == null && param.values.Count > 0) {
                                         defVal = param.values[0].value;
-                                    } else {
+                                    } else if(defParamVal != null) {
                                         defVal = defParamVal.value;
+                                    } else {
+                                        defVal = string.Empty;
                                     }
                                 }
                             }
@@ -928,29 +934,57 @@ namespace MpWpfApp {
                 }
 
                 requestItem.enumId = kvp.Key;
-                if (paramFormat.parameterControlType == MpAnalyticItemParameterControlType.Hidden) {
-                    string data = ci.GetPropertyValue(paramFormat.values[0].value) as string;
-                    string value = string.Empty;
-                    // TODO (maybe)need to implement a request format so other properties can be passed
-                    if (paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.FilePath) {
-                        value = MpFileIoHelpers.WriteByteArrayToFile(Path.GetTempFileName(), data.ToByteArray(), true);
-                    } else if(paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.PlainText) {
-                        value = data.ToPlainText();
-                    } else if (paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.Base64Text) {
-                        value = data.ToByteArray().ToBase64String();
-                    } else {
-                        value = data.ToString();
+
+                if(paramFormat.isContentQuery) {
+                    string queryResult = kvp.Value.CurrentValue;
+
+                    for (int i = 1; i < Enum.GetNames(typeof(MpComparePropertyPathType)).Length; i++) {
+                        // example content query: '{Title} is a story about {ItemData}'
+                        var ppt = (MpComparePropertyPathType)i;
+                        string pptPathEnumName = ppt.ToString();
+                        string pptToken = "{" + pptPathEnumName + "}";
+                        
+                        if(kvp.Value.CurrentValue.Contains(pptToken)) {
+                            string physicalPropertyPath = MpCompareActionViewModelBase.PhysicalComparePropertyPaths[i];
+                            string contentValue = ci.GetPropertyValue(physicalPropertyPath) as string;
+                            string pptTokenBackup = "{@" + ppt.ToString() + "@}";
+                            if (kvp.Value.CurrentValue.Contains(pptTokenBackup)) {
+                                //this content query token has conflicts so use the backup
+                                // example content query needing backup: '{Title} is {Title} but {@Title@} is content'
+                                pptToken = pptTokenBackup;
+                            }
+                            queryResult = queryResult.Replace(pptToken, contentValue);
+                        }
                     }
-                    if (outRequestContent == null) {
-                        outRequestContent = value;
-                    } 
-                    requestItem.value = value;
+                    requestItem.value = queryResult;
                 } else {
-                    requestItem = new MpAnalyzerPluginRequestItemFormat() {
-                        enumId = kvp.Key,
-                        value = kvp.Value.CurrentValue
-                    };
+                    requestItem.value = kvp.Value.CurrentValue;
                 }
+
+                switch (paramFormat.parameterValueType) {
+                    case MpAnalyticItemParameterValueUnitType.Base64Text:
+                        requestItem.value = requestItem.value.ToByteArray().ToBase64String();
+                        break;
+                    case MpAnalyticItemParameterValueUnitType.FileSystemPath:
+                        var fl = MpCopyItemMerger.Instance.GetFileList(ci);
+                        if(paramFormat.isContentQuery) {
+                            fl.Clear();
+                            fl.Add(MpFileIoHelpers.WriteByteArrayToFile(Path.GetTempFileName(), requestItem.value.ToByteArray()));
+                        }
+                        if (fl.Count > 1) {
+                            requestItem.value = string.Join(Environment.NewLine, fl);
+                        } else if (fl.Count > 0) {
+                            requestItem.value = fl[0];
+                        }
+                        break;
+                    case MpAnalyticItemParameterValueUnitType.PlainText:
+                        requestItem.value = requestItem.value.ToPlainText();
+                        break;
+                    default:
+                        requestItem.value = requestItem.value.ToPlainText();
+                        break;
+                }
+                
                 requestItems.Add(requestItem);
             }
             requestContent = outRequestContent;

@@ -321,7 +321,11 @@ namespace MpWpfApp {
                     naipvm = new MpComboBoxParameterViewModel(this);
                     break;
                 case MpAnalyticItemParameterControlType.TextBox:
-                    naipvm = new MpTextBoxParameterViewModel(this);
+                    if(aipf.isContentQuery) {
+                        naipvm = new MpContentParameterViewModel(this);
+                    } else {
+                        naipvm = new MpTextBoxParameterViewModel(this);
+                    }
                     break;
                 case MpAnalyticItemParameterControlType.CheckBox:
                     naipvm = new MpCheckBoxParameterViewModel(this);
@@ -331,6 +335,10 @@ namespace MpWpfApp {
                     break;
                 case MpAnalyticItemParameterControlType.Hidden:
                     naipvm = new MpContentParameterViewModel(this);
+                    break;
+                case MpAnalyticItemParameterControlType.DirectoryChooser:
+                case MpAnalyticItemParameterControlType.FileChooser:
+                    naipvm = new MpFileChooserParameterViewModel(this);
                     break;
                 default:
                     throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterControlType), aipf.parameterControlType));

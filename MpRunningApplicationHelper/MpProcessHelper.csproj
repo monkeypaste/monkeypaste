@@ -83,9 +83,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MpAppBuilder.cs" />
     <Compile Include="MpProcessAutomation.cs" />
-    <Compile Include="MpProcessIconBuilder.cs" />
     <Compile Include="MpProcessManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WinApi.cs" />
@@ -93,12 +91,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
-      <Project>{effa9e68-c567-4f5a-ae60-0ba2937cf5fa}</Project>
-      <Name>MonkeyPaste</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

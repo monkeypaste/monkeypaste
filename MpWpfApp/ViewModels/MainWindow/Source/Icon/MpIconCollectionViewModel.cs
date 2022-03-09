@@ -126,7 +126,7 @@ namespace MpWpfApp {
 
                     uivm.SetIconCommand.Execute(icon);
                 }
-                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+                MpMainWindowViewModel.Instance.IsShowingDialog = false;
             });
 
         public ICommand ChangeIconCommand => new RelayCommand<object>(

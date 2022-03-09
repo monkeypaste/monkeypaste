@@ -1,0 +1,154 @@
+{
+  "title": "Process Automator",
+  "description": "Runs a local application w/ configurable command-line arguments that can be static or by content properties.",
+  "version": "1.0",
+  "credits": "Somebody",
+  "guid": "700cab70-96e8-4cf3-9f49-def66c35b623",
+  "iconUrl": "https://findicons.com/files/icons/127/sleek_xp_software/300/command_prompt.png",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "text": true,
+      "image": true,
+      "file": true
+    },
+    "outputType": {
+      "text": true,
+      "image": true,
+      "file": true
+    },
+    "parameters": [
+      {
+        "label": "Process Path",
+        "description": "The process can be a standard application or batch script",
+        "parameterControlType": "FileChooser",
+        "parameterValueType": "PlainText",
+        "enumId": 1,
+        "sortOrderIdx": 0,
+        "isReadOnly": false,
+        "isRequired": true
+      },
+      {
+        "label": "Arguments",
+        "description": "Execute arguments for the process. Content Paths will be pre-processed into selected (or action input) values. If there are any conflicts to property path then pad the conflicting path with '@' symbols ie. '{@ItemData@}'",
+        "parameterControlType": "TextBox",
+        "parameterValueType": "PlainText",
+        "isContentQuery": true,
+        "enumId": 2,
+        "sortOrderIdx": 1,
+        "isRequired": false,
+        "values": [
+          {
+            "value": "{ItemData}",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Run as Administrator",
+        "description": "This will only be evaluated if this application is run as administrator",
+        "parameterControlType": "CheckBox",
+        "parameterValueType": "Bool",
+        "enumId": 3,
+        "sortOrderIdx": 2,
+        "isRequired": false,
+        "values": [
+          {
+            "value": "false",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Silent",
+        "description": "Process will not appear in taskbar",
+        "parameterControlType": "CheckBox",
+        "parameterValueType": "Bool",
+        "enumId": 4,
+        "sortOrderIdx": 3,
+        "isRequired": false,
+        "values": [
+          {
+            "value": "false",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Shell Execute",
+        "description": "Mark this as true if process must use operating system shell. However if process needs a different working directory than it's executable leave this unchecked.'",
+        "parameterControlType": "CheckBox",
+        "parameterValueType": "Bool",
+        "enumId": 5,
+        "sortOrderIdx": 4,
+        "isRequired": false,
+        "values": [
+          {
+            "value": "false",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Working Directory",
+        "description": "When left empty the process will execute in its directory on the file system",
+        "parameterControlType": "DirectoryChooser",
+        "parameterValueType": "PlainText",
+        "enumId": 6,
+        "sortOrderIdx": 5,
+        "isRequired": false,
+        "values": [
+          {
+            "value": "",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Window Type",
+        "description": "When 'Silent' is checked, window type is ignored",
+        "parameterControlType": "ListBox",
+        "parameterValueType": "PlainText",
+        "enumId": 7,
+        "isRequired": true,
+        "isMultiValue": false,
+        "values": [
+          {
+            "label": "Hidden",
+            "value": "Hide"
+          },
+          {
+            "label": "Normal",
+            "value": "Normal",
+            "isDefault": true
+          },
+          {
+            "label": "Minimized",
+            "value": "Minimized"
+          },
+          {
+            "label": "Maximized",
+            "value": "Maximized"
+          }
+        ]
+      },
+      {
+        "label": "Suppress Errors",
+        "description": "Show or hide startup errors",
+        "parameterControlType": "CheckBox",
+        "parameterValueType": "Bool",
+        "enumId": 8,
+        "sortOrderIdx": 6,
+        "isRequired": false,
+        "values": [
+          {
+            "value": "false",
+            "isDefault": true
+          }
+        ]
+      }
+    ]
+  }
+}

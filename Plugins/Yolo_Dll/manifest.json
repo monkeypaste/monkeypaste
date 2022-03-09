@@ -44,14 +44,15 @@
         "label": "Source Content",
         "description": "The base64-encoded image to analyze",
         "parameterControlType": "Hidden",
-        "parameterValueType": "Base64Text",
+        "parameterValueType": "PlainText",
+        "isContentQuery": true,
         "enumId": 2,
         "sortOrderIdx": 1,
         "isRequired": true,
         "isVisible": false,
         "values": [
           {
-            "value": "ItemData"
+            "value": "{ItemData}"
           }
         ]
       }

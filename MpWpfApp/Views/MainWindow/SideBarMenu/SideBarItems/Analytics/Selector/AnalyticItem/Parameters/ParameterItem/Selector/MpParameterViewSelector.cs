@@ -24,8 +24,13 @@ namespace MpWpfApp {
                 return null;
             }
             string keyStr = aipvm.ControlType.ToString() + "ParameterTemplate";
-            if(keyStr == "HiddenParameterTemplate") {
+            if(keyStr == "TextBoxParameterTemplate" && aipvm.Parameter.isContentQuery) {
                 keyStr = "ContentSelectorParameterTemplate";
+            }
+
+            if(aipvm.ControlType == MpAnalyticItemParameterControlType.FileChooser ||
+               aipvm.ControlType == MpAnalyticItemParameterControlType.DirectoryChooser) {
+                keyStr = "FileChooserParameterTemplate";
             }
 
             var g = (container as FrameworkElement).GetVisualAncestor<Grid>();
