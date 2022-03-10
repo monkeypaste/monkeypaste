@@ -22,8 +22,6 @@
         "parameterControlType": "Slider",
         "parameterValueType": "Decimal",
         "enumId": 1,
-        "sortOrderIdx": 0,
-        "isReadOnly": false,
         "isRequired": true,
         "values": [
           {
@@ -43,11 +41,9 @@
       {
         "label": "Source Content",
         "description": "The base64-encoded image to analyze",
-        "parameterControlType": "Hidden",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "TextBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 2,
-        "sortOrderIdx": 1,
         "isRequired": true,
         "isVisible": false,
         "values": [

@@ -19,10 +19,11 @@
       {
         "text": "Supported Languages",
         "parameterControlType": "ListBox",
-        "parameterValueType": "Csv",
+        "parameterValueType": "PlainText",
         "enumId": 1,
+        "isReadOnly": true,
         "isRequired": true,
-        "isMultiValue": true,
+        "isMultiSelect": true,
         "values": [
           {
             "text": "1C",
@@ -921,9 +922,8 @@
       {
         "text": "Source Content",
         "description": "The Snippet to detect",
-        "parameterControlType": "Hidden",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "TextBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 2,
         "isRequired": true,
         "isVisible": false,

@@ -331,10 +331,11 @@
       {
         "label": "Visual Features",
         "parameterControlType": "ListBox",
-        "parameterValueType": "Csv",
+        "parameterValueType": "PlainText",
         "enumId": 2,
         "isRequired": false,
-        "isMultiValue": true,
+        "isReadOnly": true,
+        "isMultiSelect": true,
         "values": [
           {
             "label": "Adult",
@@ -381,10 +382,10 @@
       {
         "label": "Details",
         "parameterControlType": "ListBox",
-        "parameterValueType": "Csv",
+        "parameterValueType": "PlainText",
         "enumId": 3,
-        "isReadOnly": false,
-        "isMultiValue": true,
+        "isReadOnly": true,
+        "isMultiSelect": true,
         "values": [
           {
             "label": "Celebrities",
@@ -401,9 +402,8 @@
       {
         "label": "Source Content",
         "description": "The image to describe",
-        "parameterControlType": "Hidden",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "TextBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 4,
         "isRequired": true,
         "isVisible": false,
@@ -416,9 +416,8 @@
       {
         "label": "Source Title",
         "description": "The title of the image",
-        "parameterControlType": "Hidden",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "TextBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 5,
         "isRequired": true,
         "isVisible": false,

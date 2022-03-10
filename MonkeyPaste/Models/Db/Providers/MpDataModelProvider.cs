@@ -726,6 +726,7 @@ namespace MonkeyPaste {
             return result;
         }
 
+
         public static async Task<MpAnalyticItemPresetParameterValue> GetAnalyticItemPresetValue(int presetid, int paramEnumId) {
             string query = $"select * from MpAnalyticItemPresetParameterValue where fk_MpAnalyticItemPresetId=? and ParameterEnumId=?";
             var result = await MpDb.QueryAsync<MpAnalyticItemPresetParameterValue>(query, presetid, paramEnumId);
@@ -734,7 +735,6 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
-
 
         #endregion MpAnalyticItem
 

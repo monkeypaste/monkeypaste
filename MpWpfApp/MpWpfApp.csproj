@@ -259,6 +259,7 @@
       <DependentUpon>UserUiStrings.settings</DependentUpon>
     </Compile>
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
+    <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfIconBuilder.cs" />
     <Compile Include="Utils\Builders\MpWpfPasteObjectBuilder.cs" />
@@ -302,14 +303,12 @@
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpFileChooserParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpListBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpContentParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\MpAnalyticItemCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Values\MpComboBoxParameterValueViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Values\MpEnumerableParameterValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\Reports\MpAnalysisReportCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\Reports\Items\MpAnalysisReportViewModel.cs" />
@@ -445,9 +444,6 @@
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ComboBox\MpComboBoxParameterView.xaml.cs">
       <DependentUpon>MpComboBoxParameterView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ContentSelector\MpContentSelectorParameterView.xaml.cs">
-      <DependentUpon>MpContentSelectorParameterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\FileChooser\MpFileChooserParameterView.xaml.cs">
       <DependentUpon>MpFileChooserParameterView.xaml</DependentUpon>
@@ -600,6 +596,9 @@
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\ContextMenu\Selector\MpSelectorItemDataTemplateSelector.cs" />
+    <Compile Include="Views\Reusable\MpContentQueryTextBoxView.xaml.cs">
+      <DependentUpon>MpContentQueryTextBoxView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Reusable\Notifications\Toast\Collection\Items\MpLoaderNotificationView.xaml.cs">
       <DependentUpon>MpLoaderNotificationView.xaml</DependentUpon>
     </Compile>
@@ -939,10 +938,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ContentSelector\MpContentSelectorParameterView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\FileChooser\MpFileChooserParameterView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -980,6 +975,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Reusable\MpContentQueryTextBoxView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

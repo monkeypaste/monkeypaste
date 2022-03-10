@@ -58,7 +58,6 @@ namespace MpWpfApp {
 
         public MpAnalyticItemPresetViewModel DefaultPresetViewModel => Items.FirstOrDefault(x => x.IsDefault);
 
-
         public MpMenuItemViewModel MenuItemViewModel {
             get { 
                 var subItems = Items.Select(x => x.MenuItemViewModel).ToList();
@@ -326,20 +325,9 @@ namespace MpWpfApp {
             }
         }
 
-        //public string ParameterFormatResourcePath {
-        //    get {
-        //        if (AnalyticItem == null) {
-        //            return string.Empty;
-        //        }
-        //        return AnalyticItem.ParameterFormatResourcePath;
-        //    }
-        //}
-
         public string AnalyzerPluginGuid => PluginFormat == null ? string.Empty : PluginFormat.guid;
 
         public MpBillableItem BillableItem { get; set; }
-
-        //public MpAnalyticItem AnalyticItem { get; private set; }
 
         #region Plugin
 
@@ -350,11 +338,6 @@ namespace MpWpfApp {
         public MpIAnalyzerPluginComponent AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.Component as MpIAnalyzerPluginComponent;
         
         #endregion
-
-        #endregion
-
-        #region Http
-        //public abstract MpHttpResponseBase ResponseObj { get; }
 
         #endregion
 
@@ -436,23 +419,9 @@ namespace MpWpfApp {
                             string defVal = string.Empty;
                             
                             if(param.values != null) {
-                                if(param.isMultiValue) {
-                                    var defParamMultiVal = param.values.Where(x => x.isDefault).ToList();
-                                    if ((defParamMultiVal == null || defParamMultiVal.Count == 0) && 
-                                        param.values.Count > 0) {
-                                        defVal = param.values[0].value;
-                                    } else {
-                                        defVal = string.Join(",",defParamMultiVal.Select(x=>x.value));
-                                    }
-                                } else {
-                                    var defParamVal = param.values.FirstOrDefault(x => x.isDefault);
-                                    if (defParamVal == null && param.values.Count > 0) {
-                                        defVal = param.values[0].value;
-                                    } else if(defParamVal != null) {
-                                        defVal = defParamVal.value;
-                                    } else {
-                                        defVal = string.Empty;
-                                    }
+                                defVal = string.Join(",", param.values.Where(x => x.isDefault).Select(x => x.value).ToList());
+                                if(string.IsNullOrEmpty(defVal) && param.values.Count > 0) {
+                                    defVal = param.values[0].value;
                                 }
                             }
                             var presetVal = new MpAnalyzerPresetValueFormat() {
@@ -512,6 +481,8 @@ namespace MpWpfApp {
             await naipvm.InitializeAsync(aip);
             return naipvm;
         }
+
+        
 
         public string GetUniquePresetName() {
             int uniqueIdx = 1;
@@ -612,22 +583,17 @@ namespace MpWpfApp {
 
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(IsExpanded):
-                    if(IsExpanded) {
-                        //MpHelpers.RunOnMainThread(async () => {
-                        //    await LoadChildren();
-                        //});
-                    }
-                    break;
                 case nameof(IsSelected):
-                    //if (IsSelected) {
-                    //    if(SelectedItem == null && Items.Count > 0) {
-                    //        SelectedItem = Items[0];
-                    //    }
-                    //} else {
-                    //    Items.ForEach(x => x.IsSelected = false);
-                    //}
-                    SelectedItem = DefaultPresetViewModel;
+                    if(IsSelected) {
+                        if(SelectedItem == null) {
+                            SelectedItem = DefaultPresetViewModel;
+                        }
+                        Items.ForEach(x => x.IsEditingParameters = false);
+                        SelectedItem.IsEditingParameters = true;
+                    } else {
+                        Items.ForEach(x => x.IsEditingParameters = false);
+                    }
+                    
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     OnPropertyChanged(nameof(ItemBackgroundBrush));
@@ -847,7 +813,11 @@ namespace MpWpfApp {
 
         private async Task ProcesseAnnotation(
             MpPluginResponseAnnotationFormat a, 
-            int copyItemId, MpCopyItemType copyItemType, object reqContent, int transSourceId, bool suppressWrite = false) {
+            int copyItemId, 
+            MpCopyItemType copyItemType, 
+            object reqContent, 
+            int transSourceId, 
+            bool suppressWrite = false) {
             if (a == null) {
                 return;
             }
@@ -884,12 +854,18 @@ namespace MpWpfApp {
                    c: score,
                    hexColor: a.appearance == null || a.appearance.foregroundColor == null ? null : a.appearance.foregroundColor.value,
                    suppressWrite: suppressWrite);
-            } else if(copyItemType == MpCopyItemType.Text) {
+            } else if(copyItemType == MpCopyItemType.Text) {                
                 int sIdx = 0;
                 int eIdx = reqContent.ToString().Length;
-                if (a.range != null) {
-                    sIdx = a.range.rangeStart.value;
-                    eIdx = a.range.rangeEnd.value;
+
+                if (a.range != null &&
+                    a.range.rangeStart.value >= 0 && 
+                    a.range.rangeStart.value < reqContent.ToString().Length &&
+                    a.range.rangeStart.value + a.range.rangeLength.value >= 0 && 
+                    a.range.rangeStart.value + a.range.rangeLength.value < reqContent.ToString().Length) {
+                    // NOTE these range checks are more to cover up issue w/ reqContent not always having data...
+                    sIdx = a.range.rangeStart.value; 
+                    eIdx = a.range.rangeLength.value;
                 }
                 var ta = await MpTextAnnotation.Create(
                         copyItemId: copyItemId,
@@ -921,7 +897,7 @@ namespace MpWpfApp {
         }
 
         private string CreateRequest(MpCopyItem ci, out object requestContent) {
-            object outRequestContent = null;
+            object outRequestContent = string.Empty;
 
             var requestItems = new List<MpAnalyzerPluginRequestItemFormat>();
 
@@ -934,61 +910,62 @@ namespace MpWpfApp {
                 }
 
                 requestItem.enumId = kvp.Key;
+                requestItem.value = GetParameterRequestValue(
+                    paramFormat.parameterValueType,
+                    paramFormat.isMultiSelect,
+                    kvp.Value.CurrentValue,
+                    ci);
 
-                if(paramFormat.isContentQuery) {
-                    string queryResult = kvp.Value.CurrentValue;
-
-                    for (int i = 1; i < Enum.GetNames(typeof(MpComparePropertyPathType)).Length; i++) {
-                        // example content query: '{Title} is a story about {ItemData}'
-                        var ppt = (MpComparePropertyPathType)i;
-                        string pptPathEnumName = ppt.ToString();
-                        string pptToken = "{" + pptPathEnumName + "}";
-                        
-                        if(kvp.Value.CurrentValue.Contains(pptToken)) {
-                            string physicalPropertyPath = MpCompareActionViewModelBase.PhysicalComparePropertyPaths[i];
-                            string contentValue = ci.GetPropertyValue(physicalPropertyPath) as string;
-                            string pptTokenBackup = "{@" + ppt.ToString() + "@}";
-                            if (kvp.Value.CurrentValue.Contains(pptTokenBackup)) {
-                                //this content query token has conflicts so use the backup
-                                // example content query needing backup: '{Title} is {Title} but {@Title@} is content'
-                                pptToken = pptTokenBackup;
-                            }
-                            queryResult = queryResult.Replace(pptToken, contentValue);
-                        }
-                    }
-                    requestItem.value = queryResult;
-                } else {
-                    requestItem.value = kvp.Value.CurrentValue;
-                }
-
-                switch (paramFormat.parameterValueType) {
-                    case MpAnalyticItemParameterValueUnitType.Base64Text:
-                        requestItem.value = requestItem.value.ToByteArray().ToBase64String();
-                        break;
-                    case MpAnalyticItemParameterValueUnitType.FileSystemPath:
-                        var fl = MpCopyItemMerger.Instance.GetFileList(ci);
-                        if(paramFormat.isContentQuery) {
-                            fl.Clear();
-                            fl.Add(MpFileIoHelpers.WriteByteArrayToFile(Path.GetTempFileName(), requestItem.value.ToByteArray()));
-                        }
-                        if (fl.Count > 1) {
-                            requestItem.value = string.Join(Environment.NewLine, fl);
-                        } else if (fl.Count > 0) {
-                            requestItem.value = fl[0];
-                        }
-                        break;
-                    case MpAnalyticItemParameterValueUnitType.PlainText:
-                        requestItem.value = requestItem.value.ToPlainText();
-                        break;
-                    default:
-                        requestItem.value = requestItem.value.ToPlainText();
-                        break;
+                if(string.IsNullOrEmpty(outRequestContent.ToString()) && 
+                   paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.ContentQuery) {
+                    outRequestContent = requestItem.value;
                 }
                 
                 requestItems.Add(requestItem);
             }
             requestContent = outRequestContent;
             return JsonConvert.SerializeObject(requestItems);
+        }
+
+        private string GetParameterRequestValue(MpAnalyticItemParameterValueUnitType valueType, bool isMultiSelect, string curVal, MpCopyItem ci) {
+            switch (valueType) {
+                case MpAnalyticItemParameterValueUnitType.ContentQuery:
+                    curVal = GetParameterQueryResult(isMultiSelect, curVal, ci);
+                    break;
+                case MpAnalyticItemParameterValueUnitType.Base64Text:
+                    curVal = curVal.ToByteArray().ToBase64String();
+                    break;
+                case MpAnalyticItemParameterValueUnitType.FileSystemPath:
+                    curVal = curVal.ToFile();
+                    break;
+                default:
+                    curVal = curVal.ToPlainText();
+                    break;
+            }
+            return curVal;
+        }
+
+        private string GetParameterQueryResult(bool isMultiSelect, string curVal, MpCopyItem ci) {
+            for (int i = 1; i < Enum.GetNames(typeof(MpComparePropertyPathType)).Length; i++) {
+                // example content query: '{Title} is a story about {ItemData}'
+                var ppt = (MpComparePropertyPathType)i;
+                string pptPathEnumName = ppt.ToString();
+                string pptToken = "{" + pptPathEnumName + "}";
+
+                if (curVal.Contains(pptToken)) {
+                    string physicalPropertyPath = MpCompareActionViewModelBase.PhysicalComparePropertyPaths[i];
+                    string contentValue = ci.GetPropertyValue(physicalPropertyPath) as string;
+                    contentValue = GetParameterRequestValue(MpAnalyticItemParameterValueUnitType.PlainText, false, contentValue, ci);
+                    string pptTokenBackup = "{@" + ppt.ToString() + "@}";
+                    if (curVal.Contains(pptTokenBackup)) {
+                        //this content query token has conflicts so use the backup
+                        // example content query needing backup: '{Title} is {Title} but {@Title@} is content'
+                        pptToken = pptTokenBackup;
+                    }
+                    curVal = curVal.Replace(pptToken, contentValue);
+                }
+            }
+            return curVal;
         }
 
         private async Task<object> GetResponse(string requestStr) {
@@ -1002,8 +979,6 @@ namespace MpWpfApp {
 
         public MpIAsyncCommand<object> ExecuteAnalysisCommand => new MpAsyncCommand<object>(
             async (args) => {
-                //bool suppressCreateItem = false;
-
                 IsBusy = true;
 
                 MpCopyItem sourceCopyItem = null;
@@ -1160,6 +1135,8 @@ namespace MpWpfApp {
             async () => {
                 MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
                         analyzerPluginGuid: AnalyzerPluginGuid,
+                        iconId: IconId,
+                        parameters: AnalyzerPluginFormat.parameters,
                         label: GetUniquePresetName());
 
 

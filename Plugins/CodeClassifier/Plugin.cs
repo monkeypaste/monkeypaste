@@ -45,7 +45,7 @@ namespace CodeClassifier {
                                     score = new MpJsonPathProperty<double>(result.Value),
                                     range = new MpAnalyzerPluginTextTokenResponseValueFormat() {
                                         rangeStart = new MpJsonPathProperty<int>(0),
-                                        rangeEnd = new MpJsonPathProperty<int>(code.Length)
+                                        rangeLength = new MpJsonPathProperty<int>(code.Length)
                                     }
                                 }
                             }};

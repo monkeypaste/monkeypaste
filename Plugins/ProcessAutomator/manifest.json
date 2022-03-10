@@ -26,22 +26,20 @@
         "parameterControlType": "FileChooser",
         "parameterValueType": "PlainText",
         "enumId": 1,
-        "sortOrderIdx": 0,
-        "isReadOnly": false,
         "isRequired": true
       },
       {
         "label": "Arguments",
         "description": "Execute arguments for the process. Content Paths will be pre-processed into selected (or action input) values. If there are any conflicts to property path then pad the conflicting path with '@' symbols ie. '{@ItemData@}'",
-        "parameterControlType": "TextBox",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "ListBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 2,
-        "sortOrderIdx": 1,
-        "isRequired": false,
+        "isReadOnly": false,
+        "isMultiSelect": true,
+        "canAddValues": true,
         "values": [
           {
-            "value": "{ItemData}",
+            "value": "",
             "isDefault": true
           }
         ]
@@ -52,8 +50,6 @@
         "parameterControlType": "CheckBox",
         "parameterValueType": "Bool",
         "enumId": 3,
-        "sortOrderIdx": 2,
-        "isRequired": false,
         "values": [
           {
             "value": "false",
@@ -67,8 +63,6 @@
         "parameterControlType": "CheckBox",
         "parameterValueType": "Bool",
         "enumId": 4,
-        "sortOrderIdx": 3,
-        "isRequired": false,
         "values": [
           {
             "value": "false",
@@ -82,8 +76,6 @@
         "parameterControlType": "CheckBox",
         "parameterValueType": "Bool",
         "enumId": 5,
-        "sortOrderIdx": 4,
-        "isRequired": false,
         "values": [
           {
             "value": "false",
@@ -97,8 +89,6 @@
         "parameterControlType": "DirectoryChooser",
         "parameterValueType": "PlainText",
         "enumId": 6,
-        "sortOrderIdx": 5,
-        "isRequired": false,
         "values": [
           {
             "value": "",
@@ -112,8 +102,8 @@
         "parameterControlType": "ListBox",
         "parameterValueType": "PlainText",
         "enumId": 7,
+        "isReadOnly": true,
         "isRequired": true,
-        "isMultiValue": false,
         "values": [
           {
             "label": "Hidden",
@@ -140,8 +130,6 @@
         "parameterControlType": "CheckBox",
         "parameterValueType": "Bool",
         "enumId": 8,
-        "sortOrderIdx": 6,
-        "isRequired": false,
         "values": [
           {
             "value": "false",

@@ -51,8 +51,6 @@
             <DataTemplate>
                 <local:MpAnalyticItemParameterView Visibility="{Binding IsVisible,
                                                                         Converter={StaticResource BoolToVisibilityConverter}}"
-                                                   IsEnabled="{Binding IsReadOnly,
-                                                                       Converter={StaticResource BoolFlipConverter}}"
                                                    DataContext="{Binding}" />
             </DataTemplate>
         </ListBox.ItemTemplate>

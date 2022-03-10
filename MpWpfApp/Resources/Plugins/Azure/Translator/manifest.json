@@ -964,9 +964,8 @@
       {
         "label": "Source Content",
         "description": "The text to translate",
-        "parameterControlType": "Hidden",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "TextBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 3,
         "isRequired": false,
         "isVisible": false,
@@ -979,9 +978,8 @@
       {
         "label": "Source Title",
         "description": "The title of the content",
-        "parameterControlType": "Hidden",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "TextBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 4,
         "isRequired": false,
         "isVisible": false,

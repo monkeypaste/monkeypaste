@@ -14,10 +14,8 @@ namespace MonkeyPaste.Plugin {
         ListBox,
         CheckBox,
         Slider,
-        ContentSelector,
         FileChooser,
-        DirectoryChooser,
-        Hidden
+        DirectoryChooser
     }
 
     public enum MpAnalyticItemParameterValueUnitType {
@@ -31,7 +29,7 @@ namespace MonkeyPaste.Plugin {
         Image,
         Base64Text,
         FileSystemPath,
-        Csv,
+        ContentQuery
     }
 
     public class MpAnalyzerPluginRequestItemFormat : MpJsonObject {
@@ -72,14 +70,20 @@ namespace MonkeyPaste.Plugin {
         public MpAnalyticItemParameterValueUnitType parameterValueType { get; set; } = MpAnalyticItemParameterValueUnitType.None;
 
         public int enumId { get; set; } = 0;
-        public bool isContentQuery { get; set; } = false;
+
         public bool isReadOnly { get; set; } = false;
         public bool isRequired { get; set; } = false;
-        public bool isMultiValue { get; set; } = false;
+
+        public bool isMultiSelect { get; set; } = false;
+        public bool isSingleSelect { get; set; } = false;
+
+        public bool canAddValues { get; set; } = false;
+
         public string formatInfo { get; set; } = string.Empty; // may be used for additional validation
-        public int precision { get; set; } = 7;
+        public int precision { get; set; } = 2;
 
         public bool isValueDeferred { get; set; } = false; // TODO isValueDeferred is a placeholder and should be a seperate nullable json object for pulling values from http
+        
         public bool isVisible { get; set; } = true;
 
         public List<MpAnalyticItemParameterValue> values { get; set; } = new List<MpAnalyticItemParameterValue>();

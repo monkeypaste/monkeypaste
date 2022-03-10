@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,9 +18,8 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpListBoxParameterView.xaml
     /// </summary>
-    public partial class MpContentSelectorParameterView : MpUserControl<MpContentParameterViewModel> {
-        
-        public MpContentSelectorParameterView() {
+    public partial class MpContentQueryTextBoxView : MpUserControl<MpIContentQueryTextBoxViewModel> {
+        public MpContentQueryTextBoxView() {
             InitializeComponent();
         }
     }

@@ -2,16 +2,114 @@
 using MonkeyPaste;
 using MonkeyPaste.Plugin;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpComboBoxParameterValueViewModel : MpViewModelBase<MpAnalyticItemParameterViewModel>  {
+    public class MpEnumerableParameterValueViewModel : 
+        MpViewModelBase<MpAnalyticItemParameterViewModel>,
+        MpIMenuItemViewModel,
+        MpITextSelectionRangeViewModel,
+        MpIContentQueryTextBoxViewModel {
         #region Private Variables
 
         #endregion
 
         #region Properties
+
+        #region MpITextSelectionRangeViewModel Implementation
+
+        public int SelectionStart { get; set; } = 0;
+        public int SelectionLength { get; set; } = 0;
+
+        #endregion
+
+        #region MpIMenuItemViewModel Implementation
+
+        public MpMenuItemViewModel MenuItemViewModel {
+            get {
+                var tmivml = new List<MpMenuItemViewModel>();
+                var propertyPathLabels = typeof(MpComparePropertyPathType).EnumToLabels();
+                for (int i = 0; i < propertyPathLabels.Length; i++) {
+                    var ppt = (MpComparePropertyPathType)i;
+                    var mivm = new MpMenuItemViewModel() {
+                        Header = propertyPathLabels[i],
+                        Command = AddContentPropertyPathCommand,
+                        CommandParameter = ppt
+                    };
+                    if (ppt == MpComparePropertyPathType.None || (ppt == MpComparePropertyPathType.LastOutput && !IsActionParameter)) {
+                        mivm.IsVisible = false;
+                    }
+                    tmivml.Add(mivm);
+                }
+                return new MpMenuItemViewModel() {
+                    SubItems = tmivml
+                };
+            }
+        }
+
+        #endregion
+
+        #region MpIContentQueryTextBoxViewModel Implementation
+
+        public bool IsActionParameter { get; set; } = false;
+
+        public string ContentQuery {
+            get => Value;
+            set => Value = value;
+        }
+
+        public ICommand ShowContentPathSelectorMenuCommand => new MpCommand<object>(
+             (args) => {
+                 var fe = args as FrameworkElement;
+
+                 IsActionParameter = fe.GetVisualAncestor<MpTriggerActionChooserView>() != null;
+
+                 var cm = new MpContextMenuView();
+                 cm.DataContext = MenuItemViewModel;
+                 fe.ContextMenu = cm;
+                 fe.ContextMenu.PlacementTarget = fe;
+                 fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
+                 fe.ContextMenu.IsOpen = true;
+                 fe.ContextMenu.Closed += ContextMenu_Closed;
+             });
+
+        private void ContextMenu_Closed(object sender, RoutedEventArgs e) {
+            var cm = sender as ContextMenu;
+            IsActionParameter = false;
+            cm.Closed -= ContextMenu_Closed;
+        }
+
+        public ICommand AddContentPropertyPathCommand => new MpCommand<object>(
+            (args) => {
+                if (args == null) {
+                    return;
+                }
+                var cppt = (MpComparePropertyPathType)args;
+                if (cppt == MpComparePropertyPathType.None) {
+                    return;
+                }
+
+                string pathStr = string.Format(@"{{{0}}}", cppt.ToString());
+                Value = Value.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
+            });
+
+
+
+        public ICommand ClearQueryCommand {
+            get {
+                if(Parent is MpListBoxParameterViewModel lbpvm) {
+                    return lbpvm.RemoveValueCommand;
+                }
+                return null;
+            }
+        }
+
+        #endregion
 
         #region Appearance
 
@@ -45,6 +143,15 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+        
+        public bool IsReadOnly {
+            get {
+                if(Parent == null) {
+                    return false;
+                }
+                return Parent.IsReadOnly;
+            }
+        }
 
         public bool IsDefault {
             get {
@@ -106,9 +213,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpComboBoxParameterValueViewModel() : base(null) { }
+        public MpEnumerableParameterValueViewModel() : base(null) { }
 
-        public MpComboBoxParameterValueViewModel(MpAnalyticItemParameterViewModel parent) : base(parent) {
+        public MpEnumerableParameterValueViewModel(MpAnalyticItemParameterViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
         }
 
@@ -124,6 +231,8 @@ namespace MpWpfApp {
             ValueIdx = idx;
             AnalyticItemParameterValue = valueSeed;
 
+            OnPropertyChanged(nameof(IsReadOnly));
+
             IsBusy = false;
         }
 
@@ -133,7 +242,7 @@ namespace MpWpfApp {
 
         #region Equals Override
 
-        public bool Equals(MpComboBoxParameterValueViewModel other) {
+        public bool Equals(MpEnumerableParameterValueViewModel other) {
             if (other == null)
                 return false;
 
@@ -147,7 +256,7 @@ namespace MpWpfApp {
             if (obj == null)
                 return false;
 
-            MpComboBoxParameterValueViewModel personObj = obj as MpComboBoxParameterValueViewModel;
+            MpEnumerableParameterValueViewModel personObj = obj as MpEnumerableParameterValueViewModel;
             if (personObj == null)
                 return false;
             else
@@ -158,14 +267,14 @@ namespace MpWpfApp {
             return this.Value.GetHashCode();
         }
 
-        public static bool operator ==(MpComboBoxParameterValueViewModel person1, MpComboBoxParameterValueViewModel person2) {
+        public static bool operator ==(MpEnumerableParameterValueViewModel person1, MpEnumerableParameterValueViewModel person2) {
             if (((object)person1) == null || ((object)person2) == null)
                 return Object.Equals(person1, person2);
 
             return person1.Equals(person2);
         }
 
-        public static bool operator !=(MpComboBoxParameterValueViewModel person1, MpComboBoxParameterValueViewModel person2) {
+        public static bool operator !=(MpEnumerableParameterValueViewModel person1, MpEnumerableParameterValueViewModel person2) {
             if (((object)person1) == null || ((object)person2) == null)
                 return !Object.Equals(person1, person2);
 
@@ -206,6 +315,7 @@ namespace MpWpfApp {
             Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAllValid));
             //(Parent.Parent.ExecuteAnalysisCommand as RelayCommand).RaiseCanExecuteChanged();
         }
+
         #endregion
     }
 }

@@ -19,6 +19,7 @@
     <Compile Remove="Models\Db\SQLite\**" />
     <Compile Remove="Models\PreferenceModels\**" />
     <Compile Remove="Repositories\**" />
+    <Compile Remove="Resources\Data\**" />
     <Compile Remove="Resources\Html\Editor\TestData\**" />
     <Compile Remove="Resources\Html\temp\**" />
     <Compile Remove="Services\**" />
@@ -30,6 +31,7 @@
     <EmbeddedResource Remove="Models\Db\SQLite\**" />
     <EmbeddedResource Remove="Models\PreferenceModels\**" />
     <EmbeddedResource Remove="Repositories\**" />
+    <EmbeddedResource Remove="Resources\Data\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
     <EmbeddedResource Remove="Resources\Html\temp\**" />
     <EmbeddedResource Remove="Services\**" />
@@ -41,6 +43,7 @@
     <None Remove="Models\Db\SQLite\**" />
     <None Remove="Models\PreferenceModels\**" />
     <None Remove="Repositories\**" />
+    <None Remove="Resources\Data\**" />
     <None Remove="Resources\Html\Editor\TestData\**" />
     <None Remove="Resources\Html\temp\**" />
     <None Remove="Services\**" />
@@ -68,8 +71,6 @@
     <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
     <Compile Remove="Views\Shell\MpMainShell.xaml.cs" />
     <None Remove=".DS_Store" />
-    <None Remove="Resources\Data\Analytics\Formats\azurevision.json" />
-    <None Remove="Resources\Data\db.create" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Html\Editor\Editor2.html" />
     <None Remove="Resources\Html\Editor\Editor2.js" />
@@ -94,18 +95,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Data\Analytics\Formats\Azure\azurevision.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Data\Analytics\Formats\Azure\azuretranslator.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Data\Analytics\Formats\openai.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Data\Analytics\Formats\yolo.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />
     <EmbeddedResource Include="Resources\Html\Editor\Editor2.html" />
     <EmbeddedResource Include="Resources\Icons\monkey.png" />

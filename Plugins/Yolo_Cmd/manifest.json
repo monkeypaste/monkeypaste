@@ -22,8 +22,6 @@
         "parameterControlType": "Slider",
         "parameterValueType": "Decimal",
         "enumId": 1,
-        "sortOrderIdx": 0,
-        "isReadOnly": false,
         "isRequired": true,
         "values": [
           {
@@ -47,7 +45,6 @@
         "parameterValueType": "FileSystemPath",
         "isContentQuery": true,
         "enumId": 2,
-        "sortOrderIdx": 1,
         "isRequired": true,
         "isVisible": false,
         "values": [

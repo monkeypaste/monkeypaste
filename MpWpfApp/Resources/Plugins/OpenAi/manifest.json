@@ -235,9 +235,8 @@
       {
         "label": "Source Content",
         "description": "The text to translate",
-        "parameterControlType": "Hidden",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "TextBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 8,
         "isVisible": false,
         "values": [
@@ -249,9 +248,8 @@
       {
         "label": "Source Title",
         "description": "The title of the content",
-        "parameterControlType": "Hidden",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "TextBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 9,
         "isVisible": false,
         "values": [
@@ -262,7 +260,7 @@
       },
       {
         "label": "OpenAi Api Token",
-        "parameterControlType": "Hidden",
+        "parameterControlType": "TextBox",
         "parameterValueType": "PlainText",
         "enumId": 10,
         "isVisible": false,

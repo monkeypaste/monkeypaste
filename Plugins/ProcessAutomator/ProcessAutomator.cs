@@ -39,6 +39,10 @@ namespace ProcessAutomator
                 out string stdOut,
                 out string stdErr);
             await Task.Delay(1);
+
+            var response = new MpPluginResponseFormat() {
+                
+            };
             return null;
         }
     }

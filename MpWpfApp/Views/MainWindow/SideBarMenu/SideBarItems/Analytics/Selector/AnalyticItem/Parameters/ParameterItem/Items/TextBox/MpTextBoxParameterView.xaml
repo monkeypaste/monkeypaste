@@ -11,8 +11,44 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpTextBoxParameterViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <TextBox Text="{Binding CurrentValue,
-                            Mode=TwoWay,
-                            UpdateSourceTrigger=PropertyChanged,
-                            NotifyOnTargetUpdated=True}" />
+    <Border BorderThickness="0"
+            Background="White"
+            CornerRadius="3"
+            Padding="5"
+            Margin="3">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.7*" />
+                <ColumnDefinition Width="30" />
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0"
+                     Padding="3"
+                     BorderThickness="0"
+                     MinWidth="100"
+                     local:MpIsFocusedExtension.IsEnabled="True"
+                     local:MpTextSelectionRangeExtension.IsEnabled="True"
+                     local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
+                     Text="{Binding CurrentValue,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged,
+                                    NotifyOnSourceUpdated=True,
+                                    NotifyOnTargetUpdated=True}" />
+
+            <Button Grid.Column="1"
+                    BorderThickness="0"
+                    Background="Beige"
+                    Margin="5"
+                    Style="{StaticResource RoundedButton}"
+                    Command="{Binding ShowContentPathSelectorMenuCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                <Image Source="{Binding .,
+                                        Converter={StaticResource StringResourceToImageSourceConverter},
+                                        Source={StaticResource FilterIcon}}"
+                       Stretch="Uniform"
+                       Width="10"
+                       Height="10" />
+            </Button>
+
+        </Grid>
+    </Border>
 </local:MpUserControl>

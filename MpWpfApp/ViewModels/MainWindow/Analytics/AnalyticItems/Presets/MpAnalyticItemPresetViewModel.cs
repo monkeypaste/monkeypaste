@@ -221,6 +221,8 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItemPreset Preset { get; protected set; }
+
+        
         #endregion
 
         #region MpIShortcutCommand Implementation
@@ -269,32 +271,12 @@ namespace MpWpfApp {
 
             Preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
-            if(Preset == null) {
-                // Probably modified a manifest file
-                Debugger.Break();
-            }
-
             foreach (var paramVal in Preset.PresetParameterValues) {
                 // loop through each preset value and find matching parameter
                 var paramFormat = Parent.AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.enumId == paramVal.ParameterEnumId);
-                //if(param == null) {
-                //    throw new Exception($"Error no parameter matching enumId: {paramVal.ParameterEnumId}");
-                //}
-                //paramFormat.values.ForEach(x => x.isDefault = false);
-
-                //if (paramFormat.values.Any(x => x.value == paramVal.Value)) {
-                //    //if parameter has a default value it needs to be swapped with preset value
-                //    paramFormat.values.FirstOrDefault(x => x.isDefault).value = paramVal.Value;
-                //} else if(paramFormat.values.Count == 0) {
-                //    paramFormat.values.Add(
-                //        new MpAnalyticItemParameterValue() {
-                //            value = paramVal.Value,
-                //            isDefault = true
-                //        });
-                //} else {
-
-                //}
+                                
                 var naipvm = await CreateParameterViewModel(paramFormat,paramVal);
+
                 Items.Add(naipvm);
             }
 
@@ -305,8 +287,6 @@ namespace MpWpfApp {
 
             IsBusy = false;
         }
-
-
 
         public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(
             MpAnalyticItemParameterFormat aipf,
@@ -321,20 +301,13 @@ namespace MpWpfApp {
                     naipvm = new MpComboBoxParameterViewModel(this);
                     break;
                 case MpAnalyticItemParameterControlType.TextBox:
-                    if(aipf.isContentQuery) {
-                        naipvm = new MpContentParameterViewModel(this);
-                    } else {
-                        naipvm = new MpTextBoxParameterViewModel(this);
-                    }
+                    naipvm = new MpTextBoxParameterViewModel(this);
                     break;
                 case MpAnalyticItemParameterControlType.CheckBox:
                     naipvm = new MpCheckBoxParameterViewModel(this);
                     break;
                 case MpAnalyticItemParameterControlType.Slider:
                     naipvm = new MpSliderParameterViewModel(this);
-                    break;
-                case MpAnalyticItemParameterControlType.Hidden:
-                    naipvm = new MpContentParameterViewModel(this);
                     break;
                 case MpAnalyticItemParameterControlType.DirectoryChooser:
                 case MpAnalyticItemParameterControlType.FileChooser:
@@ -343,8 +316,6 @@ namespace MpWpfApp {
                 default:
                     throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterControlType), aipf.parameterControlType));
             }
-
-            naipvm.PropertyChanged += ParameterViewModels_PropertyChanged;
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 
             if (aipf.isValueDeferred) {
@@ -399,6 +370,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Methods
+
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
             var aipvm = sender as MpAnalyticItemParameterViewModel;
             if (aipvm.IsRequired && string.IsNullOrEmpty(aipvm.CurrentValue)) {
@@ -443,15 +415,6 @@ namespace MpWpfApp {
         private void MpPresetParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
-                    //if(Parent.Parent.IsSidebarVisible) {
-                    //    if (IsSelected) {
-                    //        Parent.Items.ForEach(x => x.IsEditingParameters = x.AnalyticItemPresetId == AnalyticItemPresetId);
-                    //    } else {
-                    //        IsEditingParameters = false;
-                    //    }
-                    //}
-
-                    
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
@@ -467,15 +430,6 @@ namespace MpWpfApp {
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
                     OnPropertyChanged(nameof(HasModelChanged));
                     break;
-                //case nameof(IsEditingMatchers):
-                //    if (IsEditingMatchers) {
-                //        Parent.Items.ForEach(x => x.IsEditingParameters = false);
-                //        Parent.Items.Where(x => x != this).ForEach(x => x.IsEditingMatchers = false);
-                //        ManageMatchersCommand.Execute(null);
-                //    }
-                //    OnPropertyChanged(nameof(MatcherViewModels));
-                //    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingMatchers));
-                //    break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         Task.Run(async () => { 
@@ -486,70 +440,9 @@ namespace MpWpfApp {
                     break;
             } 
         }
-
-
-        private void ParameterViewModels_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            var pvm = sender as MpAnalyticItemParameterViewModel;
-            switch (e.PropertyName) {
-                case nameof(pvm.CurrentValue):
-                    if (!IsSelected) {
-                        return;
-                    }
-                    MpAnalyticItemPresetParameterValue ppv = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == pvm.ParamEnumId);
-                    if (ppv != null) {
-                        ppv.Value = pvm.CurrentValue;
-                    }
-                    break;
-            }
-        }
-
-        
-
         #endregion
 
         #region Commands
-
-        //public ICommand CancelChangesCommand => new RelayCommand(
-        //    async () => {
-        //        var aip = await MpDb.GetItemAsync<MpAnalyticItemPreset>(AnalyticItemPresetId);
-        //        Preset = aip;
-
-        //        Items.ForEach(x => x.CurrentValue = x.DefaultValue);
-        //        OnPropertyChanged(nameof(HasAnyParameterValueChanged));
-        //        Items.ForEach(x => x.HasModelChanged = false);
-        //        Items.Where(x => x is MpComboBoxParameterViewModel).Cast<MpComboBoxParameterViewModel>().ForEach(x => x.Items.ForEach(y => y.HasModelChanged = false));
-        //        HasModelChanged = false;
-        //        IsEditingParameters = false;
-        //    },
-        //    HasAnyParameterValueChanged);
-
-        //public ICommand SaveChangesCommand => new RelayCommand(
-        //    async () => {
-        //        foreach (var paramVm in Items) {
-        //            var presetValue = Preset.PresetParameterValues.FirstOrDefault(x => x.ParameterEnumId == paramVm.ParamEnumId);
-        //            if(presetValue == null) {
-        //                presetValue = await MpAnalyticItemPresetParameterValue.Create(
-        //                    Preset, paramVm.ParamEnumId, paramVm.CurrentValue);
-        //            } else {
-        //                presetValue.Value = paramVm.CurrentValue;
-        //                await presetValue.WriteToDatabaseAsync();
-        //            }
-        //            if(paramVm is MpComboBoxParameterViewModel cmbvm) {
-        //                paramVm.Parameter.values.ForEach(x => x.isDefault = x.value == paramVm.CurrentValue);
-        //            } else {
-        //                var defParam = paramVm.Parameter.values.FirstOrDefault(x => x.isDefault);
-        //                if(defParam != null) {
-        //                    defParam.value = paramVm.CurrentValue;
-        //                } else if(paramVm.Parameter.values.Count > 0) {
-        //                    paramVm.Parameter.values[0].value = paramVm.CurrentValue;
-        //                }
-        //            }
-        //        }
-
-        //        Items.ForEach(x => x.HasModelChanged = false);
-        //        OnPropertyChanged(nameof(HasAnyParameterValueChanged));
-        //    },
-        //   HasAnyParameterValueChanged);
 
         public ICommand ManagePresetCommand => new RelayCommand(
             () => {
@@ -557,14 +450,6 @@ namespace MpWpfApp {
                 Parent.Items.ForEach(x => x.IsEditingParameters = x == this);
                 Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
             }, !IsEditingParameters && !Parent.IsAnyEditingParameters);
-
-
-        //public ICommand ExecutePresetCommand => new RelayCommand(
-        //    () => {
-        //        Parent.Items.ForEach(x => x.IsSelected = x == this);
-        //        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
-        //        Parent.ExecuteAnalysisCommand.Execute(null);
-        //    }, ()=>Parent.CanExecuteAnalysis(this));
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {

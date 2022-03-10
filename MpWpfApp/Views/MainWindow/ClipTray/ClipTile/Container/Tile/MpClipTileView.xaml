@@ -35,15 +35,6 @@
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         ToolTipService.ShowDuration="1000"
                         CornerRadius="10">
-        <!--<local:MpClipBorder.Effect>
-            <DropShadowEffect x:Name="DropShadow"
-
-                              RenderingBias="Quality"
-                              Color="Black"
-                              Direction="315"
-                              Opacity="0.3"
-                              BlurRadius="5" />
-        </local:MpClipBorder.Effect>-->
         <local:MpClipBorder.Resources>
             <DropShadowEffect x:Key="DropShadow"
                               RenderingBias="Quality"
@@ -126,7 +117,8 @@
                                                 Visibility="{Binding IsAnyBusy,
                                                                      Converter={StaticResource BoolToVisibilityConverter}}" />
             <!--  Trial Expired  -->
-            <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired,
+                                                                                     Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>
     </local:MpClipBorder>
 </local:MpUserControl>

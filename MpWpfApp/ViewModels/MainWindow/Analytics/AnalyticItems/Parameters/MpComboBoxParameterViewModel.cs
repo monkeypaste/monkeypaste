@@ -17,10 +17,10 @@ namespace MpWpfApp {
         #region View Models
         //public MpAnalyticItemParameterValueViewModel DefaultValueViewModel { get; set; }
 
-        public virtual ObservableCollection<MpComboBoxParameterValueViewModel> Items { get; set; } = new ObservableCollection<MpComboBoxParameterValueViewModel>();
+        public virtual ObservableCollection<MpEnumerableParameterValueViewModel> Items { get; set; } = new ObservableCollection<MpEnumerableParameterValueViewModel>();
 
 
-        public virtual MpComboBoxParameterValueViewModel SelectedItem {
+        public virtual MpEnumerableParameterValueViewModel SelectedItem {
             get => Items.FirstOrDefault(x => x.IsSelected);
             set {
                 if (value != SelectedItem) {
@@ -102,10 +102,10 @@ namespace MpWpfApp {
         }
 
 
-        public async Task<MpComboBoxParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(
+        public async Task<MpEnumerableParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(
             int idx,
             MpAnalyticItemParameterValue valueSeed) {
-            var naipvvm = new MpComboBoxParameterValueViewModel(this);
+            var naipvvm = new MpEnumerableParameterValueViewModel(this);
             naipvvm.PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
             await naipvvm.InitializeAsync(idx, valueSeed);
             return naipvvm;

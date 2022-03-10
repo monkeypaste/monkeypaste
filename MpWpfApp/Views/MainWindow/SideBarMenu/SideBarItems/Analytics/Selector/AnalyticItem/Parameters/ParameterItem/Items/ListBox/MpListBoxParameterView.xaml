@@ -16,55 +16,91 @@
             ToolTipService.InitialShowDelay="2"
             ToolTip="{Binding ParameterTooltipText}"
             BorderBrush="{Binding ParameterBorderBrush}">
-        <ListBox x:Name="MultiSelectComboBox"
-                 Background="Transparent"
-                 HorizontalAlignment="Stretch"
-                 HorizontalContentAlignment="Stretch"
-                 ItemsSource="{Binding Items}"
-                 SelectionMode="{Binding IsMultiValue,
-                                         Converter={StaticResource BoolToSelectionModeConverter}}"
-                 Margin="10,0"
-                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                 MaxWidth="{Binding ActualWidth,
-                                    RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
-                 MinWidth="80">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected,
-                                            Mode=TwoWay,
-                                            NotifyOnTargetUpdated=True,
-                                            NotifyOnSourceUpdated=True,
-                                            UpdateSourceTrigger=PropertyChanged}" />
-                    <Setter Property="HorizontalContentAlignment"
-                            Value="Left" />
-                    <Setter Property="VerticalAlignment"
-                            Value="Stretch" />
-                    <Setter Property="VerticalContentAlignment"
-                            Value="Stretch" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                <ContentPresenter />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderThickness="1"
-                            Background="Transparent"
-                            BorderBrush="{Binding BorderBrush}">
-                        <TextBlock Background="{Binding BackgroundBrush}"
-                                   Foreground="OldLace"
-                                   local:MpHoverableExtension.IsEnabled="True"
-                                   local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                                                   Mode=TwoWay}"
-                                   Text="{Binding Label}" />
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="0.2*" />
+            </Grid.RowDefinitions>
+            <ListBox x:Name="MultiSelectComboBox"
+                     Grid.Row="0"
+                     Background="Transparent"
+                     HorizontalAlignment="Stretch"
+                     HorizontalContentAlignment="Stretch"
+                     ItemsSource="{Binding Items}"
+                     SelectionMode="{Binding IsMultiSelect,
+                                             Converter={StaticResource BoolToSelectionModeConverter}}"
+                     Margin="10,0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     MaxWidth="{Binding ActualWidth,
+                                        RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
+                     MinWidth="80">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                NotifyOnTargetUpdated=True,
+                                                NotifyOnSourceUpdated=True,
+                                                UpdateSourceTrigger=PropertyChanged}" />
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Left" />
+                        <Setter Property="VerticalAlignment"
+                                Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Stretch" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Border BorderThickness="1"
+                                    Background="Transparent"
+                                    Visibility="{Binding IsReadOnly,
+                                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                                    BorderBrush="{Binding BorderBrush}">
+                                <TextBlock Background="{Binding BackgroundBrush}"
+                                           Foreground="OldLace"
+                                           local:MpHoverableExtension.IsEnabled="True"
+                                           local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                                           Mode=TwoWay}"
+                                           Text="{Binding Label}" />
+                            </Border>
+                            <local:MpContentQueryTextBoxView Background="Transparent"
+                                                             DataContext="{Binding}"
+                                                             Visibility="{Binding IsReadOnly,
+                                                                                  Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                             BorderBrush="{Binding BorderBrush}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Grid.Row="1" 
+                    Width="75"
+                    BorderThickness="0"
+                    Background="Beige"
+                    Visibility="{Binding CanAddValues, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Style="{StaticResource RoundedButton}"
+                    Margin="10,5,10,0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding AddValueCommand}">
+                <DockPanel>
+                    <Image Source="{Binding .,
+                                            Converter={StaticResource StringResourceToImageSourceConverter},
+                                            Source={StaticResource AddIcon}}"
+                           DockPanel.Dock="Left"
+                           Width="15"
+                           Height="15" />
+                    <Label DockPanel.Dock="Right"
+                           Content="Add" />
+                </DockPanel>
+            </Button>
+        </Grid>
     </Border>
 </local:MpUserControl>

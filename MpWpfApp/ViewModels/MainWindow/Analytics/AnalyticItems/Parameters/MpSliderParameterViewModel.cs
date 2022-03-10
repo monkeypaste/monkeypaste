@@ -40,7 +40,7 @@ namespace MpWpfApp {
                     case MpAnalyticItemParameterValueUnitType.Integer:
                         return IntValue;
                     case MpAnalyticItemParameterValueUnitType.Decimal:
-                        return Math.Round(DoubleValue, 2);
+                        return Math.Round(DoubleValue, Parameter.precision);
                     default:
                         return DoubleValue;
                 }
@@ -86,7 +86,7 @@ namespace MpWpfApp {
                         MpConsole.WriteTraceLine($"Minimum val: {maxCond.value} could not conver to int, exception: {ex}");
                     }
                 }
-                return 0;
+                return double.MaxValue;
             }
         }
 
@@ -94,30 +94,30 @@ namespace MpWpfApp {
 
         #region Model
 
-        public override string CurrentValue { 
-            get {
-                if (_currentValue == null || Parameter == null) {
-                    return "0";
-                }
+        //public override string CurrentValue { 
+        //    get {
+        //        if (_currentValue == null || Parameter == null) {
+        //            return "0";
+        //        }
 
-                switch (Parameter.parameterValueType) {
-                    case MpAnalyticItemParameterValueUnitType.Integer:
-                        return IntValue.ToString();
-                    case MpAnalyticItemParameterValueUnitType.Decimal:
-                        return Math.Round(DoubleValue, 2).ToString();
-                    default:
-                        return DoubleValue.ToString();
-                }
-            }
-            set {
-                if(_currentValue != value) {
-                    _currentValue = value == null ? "0":value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(CurrentValue));
-                    OnPropertyChanged(nameof(SliderValue));
-                }
-            }
-        }
+        //        switch (Parameter.parameterValueType) {
+        //            case MpAnalyticItemParameterValueUnitType.Integer:
+        //                return IntValue.ToString();
+        //            case MpAnalyticItemParameterValueUnitType.Decimal:
+        //                return Math.Round(DoubleValue, 2).ToString();
+        //            default:
+        //                return DoubleValue.ToString();
+        //        }
+        //    }
+        //    set {
+        //        if(_currentValue != value) {
+        //            _currentValue = value == null ? "0":value;
+        //            HasModelChanged = true;
+        //            OnPropertyChanged(nameof(CurrentValue));
+        //            OnPropertyChanged(nameof(SliderValue));
+        //        }
+        //    }
+        //}
 
         public override string DefaultValue => _defaultValue;
 
@@ -160,7 +160,6 @@ namespace MpWpfApp {
                 _defaultValue = Parameter.values.FirstOrDefault(x => x.isDefault).value = CurrentValue;
             } else {
                 _defaultValue = CurrentValue;
-
             }
 
             

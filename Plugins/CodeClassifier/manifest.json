@@ -21,10 +21,11 @@
         "label": "Language",
         "description": "To add a language, open manifest.json of this plug-in and add it to the language parameter. Then restart and train with a few examples.",
         "parameterControlType": "ListBox",
-        "parameterValueType": "Csv",
+        "parameterValueType": "PlainText",
         "enumId": 1,
+        "isReadOnly": true,
         "isRequired": true,
-        "isMultiValue": true,
+        "isMultiSelect": true,
         "values": [
           {
             "label": "C#",
@@ -74,9 +75,6 @@
         "parameterControlType": "Slider",
         "parameterValueType": "Decimal",
         "enumId": 2,
-        "sortOrderIdx": 0,
-        "isReadOnly": false,
-        "isRequired": false,
         "values": [
           {
             "value": "0",
@@ -95,11 +93,9 @@
       {
         "label": "Content for Detection",
         "description": "The Snippet to detect",
-        "parameterControlType": "Hidden",
-        "parameterValueType": "PlainText",
-        "isContentQuery": true,
+        "parameterControlType": "TextBox",
+        "parameterValueType": "ContentQuery",
         "enumId": 3,
-        "isRequired": false,
         "isVisible": false,
         "values": [
           {
@@ -113,7 +109,6 @@
         "parameterControlType": "CheckBox",
         "parameterValueType": "Bool",
         "enumId": 4,
-        "isRequired": false,
         "isVisible": true,
         "values": [
           {

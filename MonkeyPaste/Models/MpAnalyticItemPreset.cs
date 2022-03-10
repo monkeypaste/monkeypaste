@@ -45,23 +45,14 @@ namespace MonkeyPaste {
 
         public DateTime ManifestLastModifiedDateTime { get; set; } = DateTime.MinValue;
 
-
         public int Pinned { get; set; } = 0;
         #endregion
 
         #region Fk Models
 
-        //[ManyToOne]
-        //public MpAnalyticItem AnalyticItem { get; set; }
-
-        //[OneToOne]
-        //public MpIcon Icon { get; set; }
-
-        //[OneToOne]
-        //public MpShortcut Shortcut { get; set; }
-
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<MpAnalyticItemPresetParameterValue> PresetParameterValues { get; set; } = new List<MpAnalyticItemPresetParameterValue>();
+
         #endregion
 
         #region Properties

@@ -76,12 +76,12 @@ namespace MonkeyPaste.Plugin {
 
     public class MpAnalyzerPluginTextTokenResponseValueFormat : MpJsonObject {
         public MpJsonPathProperty<int> rangeStart { get; set; }
-        public MpJsonPathProperty<int> rangeEnd { get; set; }
+        public MpJsonPathProperty<int> rangeLength { get; set; }
 
         public MpAnalyzerPluginTextTokenResponseValueFormat() { }
         public MpAnalyzerPluginTextTokenResponseValueFormat(int start,int end) {
             rangeStart = new MpJsonPathProperty<int>(start);
-            rangeEnd = new MpJsonPathProperty<int>(end);
+            rangeLength = new MpJsonPathProperty<int>(end);
         }
     }
 

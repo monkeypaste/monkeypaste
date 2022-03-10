@@ -11,22 +11,52 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpFileChooserParameterViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <Border Grid.Row="0"
-            Grid.Column="1"
-            HorizontalAlignment="Stretch"
+    <Border MaxWidth="150"
+            MinWidth="100"
+            HorizontalAlignment="Center"
+            Padding="10,3"
+            ToolTip="{Binding CurrentValue}"
             Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
         <Button Command="{Binding SelectFileSystemPathCommand}"
                 Background="Transparent"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch"
-                MaxWidth="200"
                 BorderThickness="0"
                 Style="{StaticResource SemiTransparentButton}">
-            <Grid>
-                <TextBlock Text="{Binding CurrentValue}"
+            <StackPanel>
+                <TextBlock Text="Select.."
+                           Visibility="{Binding CurrentValue,
+                                                Converter={StaticResource IsNotNullToVisibilityFlipConverter}}" />
+                <TextBlock local:MpHoverableExtension.IsEnabled="True"
+                           local:MpHoverableExtension.HoverCursor="Hand"                           
+                           Visibility="{Binding CurrentValue,
+                                                Converter={StaticResource IsNotNullToVisibilityConverter}}"
+                           Text="{Binding CurrentValue,
+                                          Converter={StaticResource AbsoluteToRelativePathStringConverter}}"
                            TextAlignment="Right"
-                           VerticalAlignment="Center" />
-            </Grid>
+                           VerticalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Foreground"
+                                            Value="Crimson" />
+                                    <Setter Property="FontWeight"
+                                            Value="Normal" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver"
+                                         Value="False">
+                                    <Setter Property="Foreground"
+                                            Value="Black" />
+                                    <Setter Property="FontWeight"
+                                            Value="Normal" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
         </Button>
     </Border>
 </local:MpUserControl>

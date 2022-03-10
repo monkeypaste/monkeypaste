@@ -17,6 +17,10 @@ namespace MonkeyPaste {
         [Column("fk_MpAnalyticItemPresetId")]
         public int AnalyticItemPresetId { get; set; }
 
+        //[ForeignKey(typeof(MpAnalyticItemPresetParameterValue))]
+        //[Column("fk_ParentAnalyticItemPresetParameterValueId")]
+        //public int ParentAnalyticItemPresetParameterValueId { get; set; } = 0;
+
         public int ParameterEnumId { get; set; }
 
         public string Value { get; set; } = string.Empty;
@@ -25,8 +29,8 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [ManyToOne(CascadeOperations = CascadeOperation.All)]
-        public MpAnalyticItemPreset AnalyticItemPreset { get; set; }
+        //[ManyToOne(CascadeOperations = CascadeOperation.All)]
+        //public MpAnalyticItemPreset AnalyticItemPreset { get; set; }
 
         #endregion
 
@@ -68,7 +72,7 @@ namespace MonkeyPaste {
 
             var newAnalyticItemPresetParameterValue = new MpAnalyticItemPresetParameterValue() {
                 AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
-                AnalyticItemPreset = preset,
+                //AnalyticItemPreset = preset,
                 AnalyticItemPresetId = preset.Id,
                 ParameterEnumId = paramEnumId,
                 Value = value

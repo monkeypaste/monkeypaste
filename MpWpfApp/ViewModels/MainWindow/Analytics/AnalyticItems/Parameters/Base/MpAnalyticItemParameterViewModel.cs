@@ -55,8 +55,6 @@ namespace MpWpfApp {
             }
         }
 
-
-
         #endregion
 
         #region State
@@ -88,12 +86,17 @@ namespace MpWpfApp {
             }
         }
 
-        protected virtual string _currentValue { get; set; }
+        //protected virtual string _currentValue { get; set; }
         public virtual string CurrentValue {
-            get => _currentValue;
+            get {
+                if(ParameterValue == null) {
+                    return string.Empty;
+                }
+                return ParameterValue.Value;
+            }
             set {
-                if(_currentValue != value) {
-                    _currentValue = value;
+                if(CurrentValue != value) {
+                    ParameterValue.Value = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CurrentValue));
                 }
@@ -111,11 +114,11 @@ namespace MpWpfApp {
 
         public double DoubleValue {
             get {
-                if (string.IsNullOrWhiteSpace(_currentValue)) {
+                if (string.IsNullOrWhiteSpace(CurrentValue)) {
                     return 0;
                 }
                 try {
-                    return Convert.ToDouble(_currentValue);
+                    return Convert.ToDouble(CurrentValue);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine(ex);
@@ -124,16 +127,16 @@ namespace MpWpfApp {
             }
             set {
                 if (DoubleValue != value) {
-                    _currentValue = value.ToString();
+                    CurrentValue = value.ToString();
                     OnPropertyChanged(nameof(DoubleValue));
-                    OnPropertyChanged(nameof(_currentValue));
+                    OnPropertyChanged(nameof(CurrentValue));
                 }
             }
         }
 
         public int IntValue {
             get {
-                if (string.IsNullOrWhiteSpace(_currentValue)) {
+                if (string.IsNullOrWhiteSpace(CurrentValue)) {
                     return 0;
                 }
                 try {
@@ -146,28 +149,28 @@ namespace MpWpfApp {
             }
             set {
                 if (IntValue != value) {
-                    _currentValue = value.ToString();
+                    CurrentValue = value.ToString();
                     OnPropertyChanged(nameof(IntValue));
-                    OnPropertyChanged(nameof(_currentValue));
+                    OnPropertyChanged(nameof(CurrentValue));
                 }
             }
         }
 
         public bool BoolValue {
             get {
-                if (string.IsNullOrWhiteSpace(_currentValue)) {
+                if (string.IsNullOrWhiteSpace(CurrentValue)) {
                     return false;
                 }
-                if (_currentValue.ToLower() != "false" && _currentValue.ToLower() != "true") {
-                    throw new Exception("Cannot convert value " + _currentValue + " to boolean");
+                if (CurrentValue.ToLower() != "false" && CurrentValue.ToLower() != "true") {
+                    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
                 }
-                return _currentValue.ToLower() == "true";
+                return CurrentValue.ToLower() == "true";
             }
             set {
                 if (BoolValue != value) {
-                    _currentValue = value ? "True" : "False";
+                    CurrentValue = value ? "True" : "False";
                     OnPropertyChanged(nameof(BoolValue));
-                    OnPropertyChanged(nameof(_currentValue));
+                    OnPropertyChanged(nameof(CurrentValue));
                 }
             }
         }
@@ -244,6 +247,15 @@ namespace MpWpfApp {
                     return string.Empty;
                 }
                 return Parameter.description;
+            }
+        }
+
+        public int ParameterValueId {
+            get {
+                if(ParameterValue == null) {
+                    return 0;
+                }
+                return ParameterValue.Id;
             }
         }
 

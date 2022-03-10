@@ -5,7 +5,6 @@
       "parameterControlType": "ComboBox",
       "parameterValueType": "PlainText",
       "enumId": 1,
-      "sortOrderIdx": 0,
       "isReadOnly": false,
       "isRequired": false,
       "isValueDeferred": true,
@@ -22,7 +21,6 @@
       "parameterControlType": "ComboBox",
       "parameterValueType": "PlainText",
       "enumId": 2,
-      "sortOrderIdx": 1,
       "isReadOnly": false,
       "isRequired": true,
       "isValueDeferred": true

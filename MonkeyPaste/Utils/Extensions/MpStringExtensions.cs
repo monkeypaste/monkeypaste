@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public static class MpStringExtensions {
@@ -65,6 +66,15 @@ namespace MonkeyPaste {
 
             var bytes = Convert.FromBase64String(str);
             return bytes;
+        }
+
+        public static string ToFile(this string str) {
+            if(str.IsFileOrDirectory()) {
+                return str;
+            } else if(str.IsStringBase64()) {
+                return MpFileIoHelpers.WriteByteArrayToFile(Path.GetTempFileName(), str.ToByteArray());
+            }
+            return MpFileIoHelpers.WriteTextToFile(Path.GetTempFileName(), str);
         }
         public static string[] ToArray(this StringCollection sc) {
             if (sc == null || sc.Count == 0) {

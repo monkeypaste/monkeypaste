@@ -69,14 +69,6 @@
                                              DataContext="{Binding}" />
             </DataTemplate>
 
-            <!--  Content Selector Parameter  -->
-
-            <DataTemplate x:Key="ContentSelectorParameterTemplate"
-                          DataType="local:MpContentParameterViewModel">
-                <local:MpContentSelectorParameterView Margin="10,0"
-                                                      DataContext="{Binding}" />
-            </DataTemplate>
-
             <!--  File or Directory Chooser Parameter  -->
 
             <DataTemplate x:Key="FileChooserParameterTemplate"
@@ -94,8 +86,11 @@
                    LastChildFill="False"
                    DockPanel.Dock="Left">
             <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
+                       TextWrapping="Wrap"
+                       MaxWidth="110"
                        Text="{Binding Label}" />
-            <local:MpTooltipInfoView DataContext="{Binding}" />
+            <local:MpTooltipInfoView DockPanel.Dock="Right" 
+                                     DataContext="{Binding}" />
         </DockPanel>
         <ContentControl Grid.Column="1"
                         Content="{Binding}"
