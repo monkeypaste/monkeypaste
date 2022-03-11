@@ -3,6 +3,8 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public static class MpImageSourceExtension {
+        #region DefaultImage Property
+
         public static ImageSource GetDefaultImage(DependencyObject obj) {
             return (ImageSource)obj.GetValue(DefaultImageProperty);
         }
@@ -17,6 +19,9 @@ namespace MpWpfApp {
             typeof(MpImageSourceExtension),
             new UIPropertyMetadata(null));
 
+        #endregion
+
+        #region HoverImage Property
         public static ImageSource GetHoverImage(DependencyObject obj) {
             return (ImageSource)obj.GetValue(HoverImageProperty);
         }
@@ -31,6 +36,10 @@ namespace MpWpfApp {
             typeof(MpImageSourceExtension),
             new UIPropertyMetadata(null));
 
+        #endregion
+
+        #region DisabledImage Property
+
         public static ImageSource GetDisabledImage(DependencyObject obj) {
             return (ImageSource)obj.GetValue(DisabledImageProperty);
         }
@@ -44,5 +53,10 @@ namespace MpWpfApp {
             typeof(ImageSource),
             typeof(MpImageSourceExtension),
             new UIPropertyMetadata(null));
+
+        #endregion
+
+
+
     }
 }

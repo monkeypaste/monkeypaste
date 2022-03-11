@@ -9,15 +9,15 @@ namespace MpWpfApp {
     public static class MpRichTextToImageConverter {
         private static RichTextBoxDrawer rtfDrawer;
         public static void DrawRtfText(this Graphics graphics, string rtf, RectangleF layoutArea, float xFactor) {
-            if (MpRichTextToImageConverter.rtfDrawer == null) {
-                MpRichTextToImageConverter.rtfDrawer = new RichTextBoxDrawer();
+            if (rtfDrawer == null) {
+                rtfDrawer = new RichTextBoxDrawer();
             }
             if (rtf.IsStringRichText()) {
-                MpRichTextToImageConverter.rtfDrawer.Rtf = rtf;
+                rtfDrawer.Rtf = rtf;
             } else {
-                MpRichTextToImageConverter.rtfDrawer.Rtf = rtf.ToPlainText();
+                rtfDrawer.Rtf = rtf.ToPlainText();
             }
-            MpRichTextToImageConverter.rtfDrawer.Draw(graphics, layoutArea, xFactor);
+            rtfDrawer.Draw(graphics, layoutArea, xFactor);
             //graphics.Dispose();
         }
 

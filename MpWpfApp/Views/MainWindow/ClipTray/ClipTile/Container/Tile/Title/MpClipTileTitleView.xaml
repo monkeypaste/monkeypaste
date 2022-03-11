@@ -107,6 +107,7 @@
 
         <Canvas x:Name="ClipTileTitleTextGrid"
                 DataContext="{Binding}"
+                ClipToBounds="True"
                 Grid.Column="0"
                 IsHitTestVisible="{Binding HasScrollVelocity,
                                            Source={x:Static local:MpClipTrayViewModel.Instance},
@@ -115,24 +116,17 @@
                 MouseLeave="ClipTileTitleTextGrid_MouseLeave"
                 PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
                 Margin="10,3,30,25"
-                MaxWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMaxWidth}"
-                MinWidth="{local:MpMeasurementsBinding ClipTileTitleTextGridMinWidth}"
+                Width="{Binding ClipTileTitleTextGridMaxWidth, Source={x:Static local:MpMeasurements.Instance}}"
                 HorizontalAlignment="Left">
             <!--  Clip Title TextBlock  -->
 
-            <!--<local:MpAutoScaleTextBlock Text="{Binding Path=Text,
-                                                       ElementName=ClipTileTitleTextBox}"
-                                        Foreground="White"
-                                        Visibility="{Binding IsEditingTitle,
-                                                             Converter={StaticResource BoolToVisibilityFlipConverter}}" />-->
             <TextBlock x:Name="ClipTileTitleTextBlock"
                        Text="{Binding Path=Text,
                                       ElementName=ClipTileTitleTextBox}"
                        FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,
                                                               Mode=OneWay}"
                        Foreground="White"
-                       Visibility="{Binding IsEditingTitle,
-                                            Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                       Visibility="Hidden">
                 <TextBlock.Effect>
                     <DropShadowEffect ShadowDepth="0.5"
                                       Direction="300"
@@ -141,6 +135,14 @@
                                       BlurRadius="0.1" />
                 </TextBlock.Effect>
             </TextBlock>
+            
+            <Image x:Name="ClipTileTitleMarqueeImage"
+                   
+                   local:MpMarqueeExtension.IsEnabled="True"
+                   local:MpMarqueeExtension.DropShadowOffset="1 1"
+                   local:MpMarqueeExtension.TextBox="{Binding ElementName=ClipTileTitleTextBox}"
+                   Visibility="{Binding IsEditingTitle,
+                                        Converter={StaticResource BoolToVisibilityFlipConverter}}" />
             <!--  Clip Title TextBox  -->
             <TextBox x:Name="ClipTileTitleTextBox"
                      IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
@@ -153,7 +155,8 @@
                                                             Mode=OneWay}"
                      IsReadOnly="False"
                      Visibility="{Binding IsEditingTitle,
-                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                                          Converter={StaticResource BoolToVisibilityConverter},
+                                          ConverterParameter={StaticResource Hide}}"
                      Text="{Binding CopyItemTitle,
                                     Mode=TwoWay,
                                     NotifyOnTargetUpdated=True,

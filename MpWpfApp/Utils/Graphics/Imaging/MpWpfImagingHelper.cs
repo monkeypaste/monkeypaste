@@ -174,9 +174,7 @@ namespace MpWpfApp {
                 }
             }
             renderTargetBitmap.Render(drawingVisual);
-
-
-
+            
             return ConvertRenderTargetBitmapToBitmapSource(renderTargetBitmap);
         }
 
@@ -209,7 +207,7 @@ namespace MpWpfApp {
         public static BitmapSource ConvertRenderTargetBitmapToBitmapSource(RenderTargetBitmap rtb) {
             var bitmapImage = new BitmapImage();
             var bitmapEncoder = new PngBitmapEncoder();
-            bitmapEncoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(rtb));
+            bitmapEncoder.Frames.Add(BitmapFrame.Create(rtb));
             using (var stream = new MemoryStream()) {
                 bitmapEncoder.Save(stream);
                 stream.Seek(0, SeekOrigin.Begin);
@@ -387,7 +385,7 @@ namespace MpWpfApp {
             return result;
         }
 
-        private static void PutPixels(WriteableBitmap bitmap, PixelColor[,] pixels, int x, int y) {
+        public static void PutPixels(WriteableBitmap bitmap, PixelColor[,] pixels, int x, int y) {
             int width = pixels.GetLength(0);
             int height = pixels.GetLength(1);
             bitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * 4, x, y);

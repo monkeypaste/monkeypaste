@@ -31,6 +31,37 @@ namespace MonkeyPaste {
             return -1;
         }
 
+        public static string GetUniqueFileOrDirectoryName(string dir, string fileOrDirectoryName) {
+            //only support Image and RichText fileTypes
+            string fp = string.IsNullOrEmpty(dir) ? Path.GetTempPath() : dir;
+            string fn = string.IsNullOrEmpty(fileOrDirectoryName) ? Path.GetRandomFileName() : fileOrDirectoryName;
+            if (string.IsNullOrEmpty(fn)) {
+                fn = Path.GetRandomFileName();
+            }
+            if (!Directory.Exists(dir)) {
+                MpConsole.WriteLine($"Directory '{dir}' does not exist, creating..");
+                dir = dir.RemoveSpecialCharacters();
+                Directory.CreateDirectory(dir);               
+            }
+
+            string fe = string.Empty;
+            if(fileOrDirectoryName.Contains(".")) {
+                //is file name                
+                fe = Path.GetExtension(fn);
+                fn = Path.GetFileNameWithoutExtension(fileOrDirectoryName);
+            }            
+
+            int count = 1;
+
+            string newFullPath = Path.Combine(dir, fn + fe);
+
+            while (File.Exists(newFullPath) || Directory.Exists(newFullPath)) {
+                newFullPath = Path.Combine(dir, fn + count + fe);
+                count++;
+            }
+            return newFullPath;
+        }
+
         public static void AppendTextToFile(string path, string textToAppend) {
             try {
                 if (!File.Exists(path)) {

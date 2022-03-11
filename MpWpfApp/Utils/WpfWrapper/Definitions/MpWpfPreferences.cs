@@ -12,7 +12,7 @@ namespace MpWpfApp {
             if (Properties.Settings.Default.DoFindBrowserUrlForCopy) {
                 Properties.Settings.Default.UserDefaultBrowserProcessPath = GetDefaultBrowserPath();
             }
-            Properties.Settings.Default.UserCultureInfoName = CultureInfo.CurrentCulture.Name;
+           Properties.Settings.Default.UserCultureInfoName = CultureInfo.CurrentCulture.Name;
         }
         #endregion
 

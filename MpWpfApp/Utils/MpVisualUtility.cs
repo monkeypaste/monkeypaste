@@ -54,7 +54,7 @@ namespace MpWpfApp {
         }
     }
 
-    internal class DeviceHelper {
+    public class DeviceHelper {
         public static Int32 PixelsPerInch(Orientation orientation) {
             Int32 capIndex = (orientation == Orientation.Horizontal) ? 0x58 : 90;
             using (DCSafeHandle handle = UnsafeNativeMethods.CreateDC("DISPLAY")) {
