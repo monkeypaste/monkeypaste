@@ -163,32 +163,20 @@ namespace MpWpfApp {
             if(!IsMoving) {
                 CanMove = false;
             }
+            MpCursor.UnsetCursor(AssociatedObject.DataContext);
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            if (Mouse.LeftButton == MouseButtonState.Released ||
-                MpDragDropManager.IsDragAndDrop) {
-                IsMoving = false;
-                return;
-            }            
-
-            if(IsAnyMoving && !IsMoving) {
+            if(!IsMoving) {
                 return;
             }
 
+            MpCursor.SetCursor(AssociatedObject.DataContext, MpCursorType.ResizeAll);
             var mwmp = e.GetPosition(Application.Current.MainWindow);
 
             Vector delta = mwmp - _lastMousePosition;
             _lastMousePosition = mwmp;
 
-            if (!IsMoving) {
-                if(mwmp.Distance(_mouseDownPosition) > 5) {
-                    IsMoving = AssociatedObject.CaptureMouse();                    
-                }
-                if(!IsMoving) {
-                    return;
-                }
-            }
             Move(delta.X, delta.Y);
         }
 
@@ -197,17 +185,22 @@ namespace MpWpfApp {
             if (AssociatedObject.DataContext is MpISelectableViewModel svm) {
                 svm.IsSelected = true;
             }
+            IsMoving = AssociatedObject.CaptureMouse();
             e.Handled = true;
         }
 
         private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            FinishMove();
+        }
+
+        private void FinishMove() {
             AssociatedObject.ReleaseMouseCapture();
 
             if (IsMoving) {
                 IsMoving = false;
                 (AssociatedObject.DataContext as MpActionViewModelBase).HasModelChanged = true;
             }
-            if ((e.GetPosition(Application.Current.MainWindow) - _mouseDownPosition).Length < 5) {
+            if ((_lastMousePosition - _mouseDownPosition).Length < 5) {
                 Command?.Execute(CommandParameter);
             }
         }

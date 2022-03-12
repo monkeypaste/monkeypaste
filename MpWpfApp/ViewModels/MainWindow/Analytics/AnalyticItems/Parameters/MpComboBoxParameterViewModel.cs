@@ -98,6 +98,10 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(CurrentValue));
             OnPropertyChanged(nameof(DefaultValue));
 
+            while (Items.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+
             IsBusy = false;
         }
 

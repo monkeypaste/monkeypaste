@@ -22,7 +22,7 @@
                             ShowGrid="{Binding IsAnySelected}"
                             OriginThickness="1.5"
                             GridLineThickness="0.5"
-                            GridLineSpacing="30"
+                            GridLineSpacing="50"
                             OriginBrush="Chartreuse"
                             GridLineBrush="Chartreuse">
             <ListBox x:Name="ActionDesignerListBox"

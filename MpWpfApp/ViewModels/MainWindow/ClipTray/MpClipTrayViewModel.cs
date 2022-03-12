@@ -2054,8 +2054,14 @@ namespace MpWpfApp {
             });
 
         public ICommand ChangeSelectedClipsColorCommand => new RelayCommand<object>(
-             (hexStr) => {
-                PrimaryItem.PrimaryItem.SetColorCommand.Execute(hexStr.ToString());
+             (hexStrOrBrush) => {
+                 string hexStr = string.Empty;
+                 if(hexStrOrBrush is Brush b) {
+                     hexStr = b.ToHex();
+                 } else if(hexStrOrBrush is string) {
+                     hexStr = (string)hexStrOrBrush;
+                 }
+                PrimaryItem.PrimaryItem.ChangeColorCommand.Execute(hexStr.ToString());
             });
 
         public ICommand CopySelectedClipsCommand => new RelayCommand(
@@ -2188,7 +2194,7 @@ namespace MpWpfApp {
                 }
 
 
-                await civm.UpdateColorPallete();
+                await civm.TitleSwirlViewModel.InitializeAsync();
                 await MpTagTrayViewModel.Instance.UpdateTagAssociation();
             },
             (tagToLink) => {

@@ -159,6 +159,9 @@ namespace MpWpfApp {
 
             OnPropertyChanged(nameof(SelectedItems));
 
+            while (Items.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
 
             IsBusy = false;
 
@@ -192,6 +195,7 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(Items));
                 OnPropertyChanged(nameof(SelectedItems));
                 OnPropertyChanged(nameof(SelectedItem));
+                OnPropertyChanged(nameof(CurrentValue));
                 HasModelChanged = true;
 
                 IsBusy = false;

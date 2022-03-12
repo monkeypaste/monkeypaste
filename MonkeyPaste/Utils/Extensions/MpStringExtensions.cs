@@ -23,9 +23,7 @@ namespace MonkeyPaste {
 
         public static string Escape(this string badString) {
             return badString.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace(">", "&gt;").Replace("<", "&lt;");
-
         }
-
 
         public static bool IsFile(this string str) {
             return File.Exists(str);
@@ -144,18 +142,6 @@ namespace MonkeyPaste {
                 return false;
             }
             return true;
-
-            //try {
-            //    // If no exception is caught, then it is possibly a base64 encoded string
-            //    byte[] data = Convert.FromBase64String(str);
-            //    // The part that checks if the string was properly padded to the
-            //    // correct length was borrowed from d@anish's solution
-            //    return (str.Replace(" ", "").Length % 4 == 0);
-            //}
-            //catch {
-            //    // If exception is caught, then it is not a base64 encoded string
-            //    return false;
-            //}
         }
 
         public static bool IsStringQuillText(this string str) {

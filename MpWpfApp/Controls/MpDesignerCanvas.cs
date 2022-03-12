@@ -35,19 +35,6 @@ namespace MpWpfApp {
 
         public double TailWidth { get; set; } = 5;
 
-        #region Bg Grid
-
-        public Brush GridLineBrush { get; set; } = Brushes.LightBlue;
-        public double GridLineThickness { get; set; } = 1;
-
-        public Brush OriginBrush { get; set; } = Brushes.Cyan;
-        public double OriginThickness { get; set; } = 3;
-
-        public int GridLineSpacing { get; set; } = 35;
-
-        #endregion
-
-
         #region Voronoi
 
         public double MinDist { get; set; } = 1;

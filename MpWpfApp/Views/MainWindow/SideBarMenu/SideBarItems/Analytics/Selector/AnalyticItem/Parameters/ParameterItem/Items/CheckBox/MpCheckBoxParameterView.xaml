@@ -13,6 +13,7 @@
                                                       IsDesignTimeCreatable=False}">
     <CheckBox Margin="10,0"
               HorizontalAlignment="Center"
+              VerticalAlignment="Center"
               IsChecked="{Binding BoolValue,
                                   Mode=TwoWay,
                                   UpdateSourceTrigger=PropertyChanged,

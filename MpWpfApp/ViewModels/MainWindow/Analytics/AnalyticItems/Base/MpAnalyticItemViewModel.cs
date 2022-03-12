@@ -68,7 +68,7 @@ namespace MpWpfApp {
                     new MpMenuItemViewModel() {
                         IconResourceKey = Application.Current.Resources["CogIcon"] as string,
                         Header = $"Manage '{Title}'",
-                        Command = Parent.ManageItemCommand,
+                        Command = ManageAnalyticItemCommand,
                         CommandParameter = AnalyzerPluginGuid
                     });
                 return new MpMenuItemViewModel() {
@@ -114,13 +114,39 @@ namespace MpWpfApp {
                 return Brushes.White;
             }
         }
+
+        public string CannotExecuteTooltip {
+            get {
+                if(CanAnalyzerExecute) {
+                    return string.Empty;
+                }
+
+                string outStr = string.Empty;
+                if(SelectedItem != null) {
+                    outStr = SelectedItem.FullName + " only accepts input of type(s): ";
+                }
+
+                if(InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.File)) {
+                    outStr += "Files,";
+                }
+                if (InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.Image)) {
+                    outStr += "Image,";
+                }
+                if (InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.Text)) {
+                    outStr += "Text,";
+                }
+
+                return outStr.Substring(0, outStr.Length - 1);
+            }
+        }
+
         #endregion
 
         #region State
 
         public virtual bool IsLoaded => Items.Count > 0 && Items[0].Items.Count > 0;
 
-        public bool IsAnyEditingParameters => Items.Any(x => x.IsEditingParameters);
+        //public bool IsAnyEditingParameters => Items.Any(x => x.IsEditingParameters);
 
         public bool IsHovering { get; set; } = false;
 
@@ -131,6 +157,10 @@ namespace MpWpfApp {
         public MpAnalyzerTransaction LastTransaction { get; private set; } = null;
 
         public MpCopyItem LastResultContentItem { get; set; } = null;
+
+        public bool CanAnalyzerExecute => CanExecuteAnalysis(null);
+
+
         #endregion
 
         #region Models
@@ -384,7 +414,6 @@ namespace MpWpfApp {
                     createBorder: false);
                 IconId = icon.Id;
             }
-
             
             var presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
             
@@ -409,50 +438,53 @@ namespace MpWpfApp {
 
             if (isNew) {
                 //for new plugins create default presets
-                if(AnalyzerPluginFormat.presets == null || AnalyzerPluginFormat.presets.Count == 0) {
+                if (AnalyzerPluginFormat.presets == null || AnalyzerPluginFormat.presets.Count == 0) {
                     AnalyzerPluginFormat.presets = new List<MpAnalyzerPresetFormat>();
 
-                    var paramPresetValues = new List<MpAnalyzerPresetValueFormat>();
-                    //derive default preset & preset values from parameter formats
-                    if (AnalyzerPluginFormat.parameters != null) {
-                        foreach (var param in AnalyzerPluginFormat.parameters) {
-                            string defVal = string.Empty;
-                            
-                            if(param.values != null) {
-                                defVal = string.Join(",", param.values.Where(x => x.isDefault).Select(x => x.value).ToList());
-                                if(string.IsNullOrEmpty(defVal) && param.values.Count > 0) {
-                                    defVal = param.values[0].value;
-                                }
-                            }
-                            var presetVal = new MpAnalyzerPresetValueFormat() {
-                                enumId = param.enumId,
-                                value = defVal
-                            };
-                            paramPresetValues.Add(presetVal);
-                        }
-                    }
-                    MpAnalyzerPresetFormat apf = new MpAnalyzerPresetFormat() {
-                        description = $"Auto-generated default preset for '{Title}'",
-                        isDefault = true,
-                        label = $"{Title} - Default",
-                        values = paramPresetValues
-                    };
-                    AnalyzerPluginFormat.presets.Add(apf);
-                } 
-                foreach (var preset in AnalyzerPluginFormat.presets) {
-                    var aip = await MpAnalyticItemPreset.Create(
-                        analyzerPluginGuid: PluginFormat.guid,
-                        isDefault: preset.isDefault,
-                        label: preset.label,
-                        iconId: IconId,
-                        sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(preset),
-                        description: preset.description,
-                        parameters: AnalyzerPluginFormat.parameters,
-                        values: preset.values,
-                        manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
+                    //var paramPresetValues = new List<MpAnalyzerPresetValueFormat>();
+                    ////derive default preset & preset values from parameter formats
+                    //if (AnalyzerPluginFormat.parameters != null) {
+                    //    foreach (var param in AnalyzerPluginFormat.parameters) {
+                    //        string defVal = string.Empty;
 
-                    presets.Add(aip);
+                    //        if (param.values != null) {
+                    //            defVal = string.Join(",", param.values.Where(x => x.isDefault).Select(x => x.value).ToList());
+                    //            if (string.IsNullOrEmpty(defVal) && param.values.Count > 0) {
+                    //                defVal = param.values[0].value;
+                    //            }
+                    //        }
+                    //        var presetVal = new MpAnalyzerPresetValueFormat() {
+                    //            enumId = param.enumId,
+                    //            value = defVal
+                    //        };
+                    //        paramPresetValues.Add(presetVal);
+                    //    }
+                    //}
+                    //MpAnalyzerPresetFormat apf = new MpAnalyzerPresetFormat() {
+                    //    description = $"Auto-generated default preset for '{Title}'",
+                    //    isDefault = true,
+                    //    label = $"{Title} - Default",
+                    //    values = paramPresetValues
+                    //};
+                    var defualtPreset = await CreateDefaultPresetModel();
+                    presets.Add(defualtPreset);
+                } else {
+                    foreach (var preset in AnalyzerPluginFormat.presets) {
+                        var aip = await MpAnalyticItemPreset.Create(
+                            analyzerPluginGuid: PluginFormat.guid,
+                            isDefault: preset.isDefault,
+                            label: preset.label,
+                            iconId: IconId,
+                            sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(preset),
+                            description: preset.description,
+                            parameters: AnalyzerPluginFormat.parameters,
+                            values: preset.values,
+                            manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
+
+                        presets.Add(aip);
+                    }
                 }
+                
             } 
 
             if (presets.All(x => x.IsDefault == false)) {
@@ -469,9 +501,14 @@ namespace MpWpfApp {
             var defPreset = Items.FirstOrDefault(x => x.IsDefault);
             MpAssert.Assert(defPreset, $"Error no default preset for anayltic item {Title}");
 
-
             OnPropertyChanged(nameof(IconId));
             OnPropertyChanged(nameof(Items));
+
+            while (Items.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+
+            MpMessenger.Register(MpClipTrayViewModel.Instance, ReceivedClipTrayMessage);
 
             IsBusy = false;
         }
@@ -577,6 +614,53 @@ namespace MpWpfApp {
 
         #region Private Methods
 
+        private async Task<MpAnalyticItemPreset> CreateDefaultPresetModel(int existingDefaultPresetId = 0) {
+            if(AnalyzerPluginFormat.parameters == null) {
+                throw new Exception($"Parameters for '{Title}' not found");
+            }
+            var paramPresetValues = new List<MpAnalyzerPresetValueFormat>();
+            //derive default preset & preset values from parameter formats
+            if (AnalyzerPluginFormat.parameters != null) {
+                foreach (var param in AnalyzerPluginFormat.parameters) {
+                    string defVal = string.Empty;
+
+                    if (param.values != null) {
+                        defVal = string.Join(",", param.values.Where(x => x.isDefault).Select(x => x.value).ToList());
+                        if (string.IsNullOrEmpty(defVal) && param.values.Count > 0) {
+                            defVal = param.values[0].value;
+                        }
+                    }
+                    var presetVal = new MpAnalyzerPresetValueFormat() {
+                        enumId = param.enumId,
+                        value = defVal
+                    };
+                    paramPresetValues.Add(presetVal);
+                }
+            }
+
+            var aip = await MpAnalyticItemPreset.Create(
+                                analyzerPluginGuid: PluginFormat.guid,
+                                isDefault: true,
+                                label: $"{Title} - Default",
+                                iconId: IconId,
+                                sortOrderIdx: existingDefaultPresetId == 0 ? 0 : Items.FirstOrDefault(x=>x.IsDefault).SortOrderIdx,
+                                description: $"Auto-generated default preset for '{Title}'",
+                                parameters: AnalyzerPluginFormat.parameters,
+                                values: paramPresetValues,
+                                manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime,
+                                existingDefaultPresetId: existingDefaultPresetId);
+            return aip;
+        }
+
+        private void ReceivedClipTrayMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.TraySelectionChanged:
+                    OnPropertyChanged(nameof(CanAnalyzerExecute));
+                    OnPropertyChanged(nameof(CannotExecuteTooltip));
+                    break;
+            }
+        }
+
         private async void PresetViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             await UpdatePresetSortOrder();
         }
@@ -586,13 +670,14 @@ namespace MpWpfApp {
                 case nameof(IsSelected):
                     if(IsSelected) {
                         if(SelectedItem == null) {
-                            SelectedItem = DefaultPresetViewModel;
+                            SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                         }
-                        Items.ForEach(x => x.IsEditingParameters = false);
-                        SelectedItem.IsEditingParameters = true;
-                    } else {
-                        Items.ForEach(x => x.IsEditingParameters = false);
-                    }
+                        //Items.ForEach(x => x.IsEditingParameters = false);
+                        //SelectedItem.IsEditingParameters = true;
+                    } 
+                    //else {
+                    //    Items.ForEach(x => x.IsEditingParameters = false);
+                    //}
                     
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
@@ -607,9 +692,9 @@ namespace MpWpfApp {
                 case nameof(SelectedItem):
                     Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
                     break;
-                case nameof(IsAnyEditingParameters):
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
-                    break;
+                //case nameof(IsAnyEditingParameters):
+                //    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
+                //    break;
             }
         }
 
@@ -1133,6 +1218,8 @@ namespace MpWpfApp {
 
         public ICommand CreateNewPresetCommand => new RelayCommand(
             async () => {
+                IsBusy = true;
+
                 MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
                         analyzerPluginGuid: AnalyzerPluginGuid,
                         iconId: IconId,
@@ -1145,6 +1232,8 @@ namespace MpWpfApp {
                 Items.ForEach(x => x.IsSelected = x == npvm);
 
                 OnPropertyChanged(nameof(Items));
+
+                IsBusy = false;
             });
 
         public ICommand SelectPresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
@@ -1152,22 +1241,25 @@ namespace MpWpfApp {
                 //if(!IsLoaded) {
                 //    await LoadChildren();
                 //}
-                Items.ForEach(x => x.IsSelected = false);
-                selectedPresetVm.IsSelected = true;
+                if(!IsSelected) {
+                     Parent.SelectedItem = this;
+                 }
+                 SelectedItem = selectedPresetVm;
             });
 
         public ICommand ManageAnalyticItemCommand => new RelayCommand(
              () => {
                  if (!IsSelected) {
-                     Parent.Items.ForEach(x => x.IsSelected = x.AnalyzerPluginGuid == AnalyzerPluginGuid);
+                     Parent.SelectedItem = this;
                  }
                  if (SelectedItem == null && Items.Count > 0) {
-                     Items.ForEach(x => x.IsSelected = x == Items[0]);
+                     SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                  }
                  if(!Parent.IsSidebarVisible) {
                      Parent.IsSidebarVisible = true;
                  }
                  OnPropertyChanged(nameof(SelectedItem));
+
              });
 
         public ICommand DeletePresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
@@ -1175,13 +1267,34 @@ namespace MpWpfApp {
                 if(presetVm.IsDefault) {
                     return;
                 }
+                IsBusy = true;
+
                 foreach(var presetVal in presetVm.Preset.PresetParameterValues) {
                     await presetVal.DeleteFromDatabaseAsync();
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
-            },
-            (presetVm) => presetVm != null && 
-            presetVm is MpAnalyticItemPresetViewModel aipsvm);
+
+                IsBusy = false;
+            });
+
+        public MpIAsyncCommand ResetDefaultPresetCommand => new MpAsyncCommand(
+            async () => {
+                IsBusy = true;
+
+                var defvm = Items.FirstOrDefault(x => x.IsDefault);
+                if(defvm == null) {
+                    throw new Exception("Analyzer is supposed to have a default preset");
+                }
+
+                var defaultPresetModel = await CreateDefaultPresetModel(defvm.AnalyticItemPresetId);
+
+                await defvm.InitializeAsync(defaultPresetModel);
+
+                Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == defvm.AnalyticItemPresetId);
+                OnPropertyChanged(nameof(SelectedItem));
+
+                IsBusy = false;
+            });
 
         public ICommand ShiftPresetCommand => new RelayCommand<object>(
             // [0] = shift dir [1] = presetvm
@@ -1215,6 +1328,23 @@ namespace MpWpfApp {
                 return false;
             });
 
+
+            public MpIAsyncCommand<object> DuplicatePresetCommand => new MpAsyncCommand<object>(
+                async (args) => {
+                    IsBusy = true;
+
+                    var aipvm = args as MpAnalyticItemPresetViewModel;
+                    if(aipvm == null) {
+                        throw new Exception("DuplicatedPresetCommand must have preset as argument");
+                    }
+                    var dp = await aipvm.Preset.CloneDbModel();
+                    var dpvm = await CreatePresetViewModel(dp);
+                    Items.Add(dpvm);
+                    Items.ForEach(x => x.IsSelected = x == dpvm);
+                    OnPropertyChanged(nameof(Items));
+
+                    IsBusy = false;
+                });
         #endregion
     }
 }

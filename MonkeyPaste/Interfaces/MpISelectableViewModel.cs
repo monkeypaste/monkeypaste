@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public interface MpISelectableViewModel {
+    public interface MpISelectableViewModel : MpIViewModel {
         bool IsSelected { get; set; }
     }
 
-    public interface MpISelectorViewModel<T> where T : MpViewModelBase {
+    public interface MpISelectorViewModel<T> : MpIViewModel where T : MpViewModelBase {
         T SelectedItem { get; set; }
         ObservableCollection<T> Items { get; set; }
     }

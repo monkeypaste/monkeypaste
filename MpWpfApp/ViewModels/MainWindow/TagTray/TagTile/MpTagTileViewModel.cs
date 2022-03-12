@@ -37,12 +37,10 @@ namespace MpWpfApp {
 
         #region MpIUserColorViewModel Implementation
 
-
-        public string GetColor() {
-            return TagHexColor;
+        public string UserHexColor {
+            get => TagHexColor;
+            set => TagHexColor = value;
         }
-
-        public ICommand SetColorCommand => ChangeColorCommand;
 
         #endregion
 
@@ -260,7 +258,7 @@ namespace MpWpfApp {
                     return Brushes.Red;
                 }
                 if (IsAssociated) {
-                    return TagHexColor.ToSolidColorBrush();
+                    return TagHexColor.ToBrush();
                 }
                 return Brushes.Transparent;
             }
@@ -280,7 +278,7 @@ namespace MpWpfApp {
 
         public Brush TagCountTextColor {
             get {
-                return MpWpfColorHelpers.IsBright((TagHexColor.ToSolidColorBrush() as SolidColorBrush).Color) ? Brushes.Black : Brushes.White; ;
+                return MpWpfColorHelpers.IsBright((TagHexColor.ToBrush() as SolidColorBrush).Color) ? Brushes.Black : Brushes.White; ;
             }
         }
 
@@ -496,6 +494,14 @@ namespace MpWpfApp {
                         HasModelChanged = false;
                     });
                     break;
+                case nameof(TagHexColor):
+                    MpHelpers.RunOnMainThread(async () => {
+                        while (HasModelChanged) {
+                            await Task.Delay(100);
+                        }
+                        await Task.WhenAll(MpClipTrayViewModel.Instance.Items.SelectMany(x => x.ItemViewModels).Select(x => x.TitleSwirlViewModel.InitializeAsync()));
+                    });
+                    break;
             }
         }
 
@@ -703,7 +709,7 @@ namespace MpWpfApp {
         public ICommand ChangeColorCommand => new RelayCommand<object>(
             async (args) => {
                 TagHexColor = args.ToString();
-                await Task.WhenAll(MpClipTrayViewModel.Instance.Items.SelectMany(x => x.ItemViewModels).Select(x => x.UpdateColorPallete()));
+               
             });
 
         public ICommand CancelRenameTagCommand => new RelayCommand(

@@ -13,7 +13,7 @@ namespace MpWpfApp {
         public ICommand SelectCustomColorCommand => new RelayCommand<object>(
             (args) => {
                 var ucvm = args as MpIUserColorViewModel;
-                string selectedColor = ucvm.GetColor();
+                string selectedColor = ucvm.UserHexColor;
                 ShowCustomColorMenu(selectedColor, ucvm);
             });
 
@@ -35,7 +35,7 @@ namespace MpWpfApp {
                 MpPreferences.UserCustomColorIdxArray = string.Join(",", cd.CustomColors);
 
                 if (ucvm != null) {
-                    ucvm.SetColorCommand.Execute(cd.Color.ToHex());
+                    ucvm.UserHexColor = cd.Color.ToHex();
                 }
 
                 return cd.Color.ToSolidColorBrush().ToHex();

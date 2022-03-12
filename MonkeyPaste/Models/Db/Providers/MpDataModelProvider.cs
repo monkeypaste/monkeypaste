@@ -271,6 +271,36 @@ namespace MonkeyPaste {
 
         #region Select queries
 
+        #region Base Select Queries
+
+        public static T SelectModel<T>(string query, params object[] args) where T : new() {
+            var result = SelectModels<T>(query, args);
+            if (result == null || result.Count == 0) {
+                return default(T);
+            }
+            return result[0];
+        }
+
+        public static List<T> SelectModels<T>(string query, params object[] args) where T : new() {
+            var result = MpDb.Query<T>(query, args);
+            return result;
+        }
+
+        public static async Task<T> SelectModelAsync<T>(string query, params object[] args) where T : new() {
+            var result = await SelectModelsAsync<T>(query, args);
+            if (result == null || result.Count == 0) {
+                return default(T);
+            }
+            return result[0];
+        }
+
+        public static async Task<List<T>> SelectModelsAsync<T>(string query, params object[] args) where T : new() {
+            var result = await MpDb.QueryAsync<T>(query, args);
+            return result;
+        }
+
+        #endregion
+
         #region MpUserDevice
 
         public static async Task<MpUserDevice> GetUserDeviceByGuid(string guid) {
@@ -303,10 +333,13 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
-
         #endregion
 
         #region MpIcon
+
+        public static MpIcon GetIconById(int iconId) {
+            return SelectModel<MpIcon>("select * from MpIcon where pk_MpIconId=?", iconId);
+        }
 
         public static async Task<MpIcon> GetIconByImageStr(string text64) {
             string query = $"select pk_MpDbImageId from MpDbImage where ImageBase64=?";

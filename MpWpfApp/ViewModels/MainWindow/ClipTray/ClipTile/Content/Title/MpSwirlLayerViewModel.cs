@@ -15,24 +15,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Brushes
-        ///private Brush _layerBrush = Brushes.Yellow;
         public Brush LayerBrush { get; set; }
-        //    get {
-        //        if(Parent == null) {
-        //            return _layerBrush;
-        //        }
-        //        if(Parent.Parent.IsHovering && !Parent.Parent.Parent.IsExpanded) {
-        //            return new SolidColorBrush(Parent.Parent.ColorPallete[LayerId].ToWinMediaColor());
-        //        }
-        //        return _layerBrush;
-        //    }
-        //    set {
-        //        if(_layerBrush != value) {
-        //            _layerBrush = value;
-        //            OnPropertyChanged(nameof(LayerBrush));
-        //        }
-        //    }
-        //}
+
         #endregion
 
         #region Appearance

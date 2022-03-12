@@ -147,7 +147,7 @@ namespace MonkeyPaste {
         public static MpMenuItemViewModel GetColorPalleteMenuItemViewModel(MpIUserColorViewModel ucvm) {
             bool isAnySelected = false;
             var colors = new List<MpMenuItemViewModel>();
-            string selectedHexStr = ucvm.GetColor();
+            string selectedHexStr = ucvm.UserHexColor == null ? string.Empty:ucvm.UserHexColor;
             for (int i = 0; i < MpSystemColors.ContentColors.Count; i++) {
                 string cc = MpSystemColors.ContentColors[i].ToUpper();
                 bool isCustom = i == MpSystemColors.ContentColors.Count - 1;
@@ -155,8 +155,8 @@ namespace MonkeyPaste {
                 if (isSelected) {
                     isAnySelected = true;
                 }
-                ICommand command = null;
-                object commandArg = null;
+                ICommand command;
+                object commandArg;
                 string header = cc;
                 if (isCustom) {
                     if (!isAnySelected) {
@@ -167,8 +167,8 @@ namespace MonkeyPaste {
                     command = MpNativeWrapper.Services.CustomColorChooserMenu.SelectCustomColorCommand;
                     commandArg = ucvm;
                 } else {
-                    command = ucvm.SetColorCommand;
-                    commandArg = cc;
+                    command = SetColorCommand;
+                    commandArg = new object[] { ucvm, cc };
                 }
                 colors.Add(new MpMenuItemViewModel() {
                     IsSelected = isSelected,
@@ -189,81 +189,30 @@ namespace MonkeyPaste {
             PropertyChanged += MpContextMenuItemViewModel_PropertyChanged;
             //IsSeparator = true;
         }
-        
-        //public MpMenuItemViewModel(
-        //    string header, 
-        //    ICommand command,
-        //    object commandParameter,
-        //    bool? isChecked,
-        //    string iconSource = "",
-        //    ObservableCollection<MpMenuItemViewModel> subItems = null,
-        //    string inputGestureText = "",
-        //    Brush bgBrush = null,
-        //    BitmapSource bmpSrc = null) : this() {
-        //    IsSeparator = false;
-
-        //    Header = header;
-        //    Command = command;
-        //    CommandParameter = commandParameter;
-        //    IsChecked = isChecked;
-        //    if(bmpSrc == null) {
-        //        IconSource = iconSource;
-        //    } else {
-        //        Icon = new Image();
-        //        Icon.Source = bmpSrc;
-        //        Icon.Stretch = Stretch.Fill;
-        //    }
-            
-        //    SubItems = subItems ?? new ObservableCollection<MpMenuItemViewModel>();
-        //    InputGestureText = inputGestureText;
-        //    IconBackgroundBrush = bgBrush == null ? Brushes.Transparent : bgBrush;
-        //}
-
-        
+               
         #endregion
 
         #region Private Methods
 
         private void MpContextMenuItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                //case nameof(IconSource):
-                //    if (!string.IsNullOrEmpty(IconSource)) {
-                //        var icon = new Image();
-                //        if (!IconSource.IsBase64String()) {
-                //            icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
-
-                //        } else {
-                //            icon.Source = IconSource.ToBitmapSource();
-                //            //icon.Height = icon.Width = 20;
-                //        }
-                //        Icon = icon;
-                //        Icon.Stretch = Stretch.Fill;
-                //    }
-                //    break;
-                //case nameof(IconBackgroundBrush):
-                //    if (IconBackgroundBrush != null) {
-                //        var bgBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
-                //        bgBmp = MpWpfImagingHelper.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
-                //        var borderBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/textureborder.png"));
-                //        if (!MpWpfColorHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                //            borderBmp = MpWpfImagingHelper.TintBitmapSource(borderBmp, Colors.White, false);
-                //        }
-                //        var icon = new Image();
-                //        icon.Source = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
-                //        if (!IsChecked.HasValue || IsChecked.Value) {
-                //            string checkPath = !IsChecked.HasValue ? @"/Images/check_partial.png" : @"/Images/check.png";
-                //            var checkBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + checkPath));
-                //            if (!MpWpfColorHelpers.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
-                //                checkBmp = MpWpfImagingHelper.TintBitmapSource(checkBmp, Colors.White, false);
-                //            }
-                //            icon.Source = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
-                //        }
-                //        Icon = icon;
-                //    }
-                //    break;
             }
         }
 
+        #endregion
+
+        #region Commands
+
+        public static ICommand SetColorCommand => new MpCommand<object>(
+            (args) => {
+                if(args == null) {
+                    throw new Exception("Args must be color and color interface");
+                }
+                var argParts = args as object[];
+                MpIUserColorViewModel ucvm = argParts[0] as MpIUserColorViewModel;
+                string hexColor = argParts[1] as string;
+                ucvm.UserHexColor = hexColor;
+            });
 
         #endregion
     }

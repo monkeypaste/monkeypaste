@@ -105,19 +105,16 @@ namespace MpWpfApp {
             return al;
         }
 
-        private void MpProcessManager_OnAppActivated(object sender, string e) {
+        private void MpProcessManager_OnAppActivated(object sender, MpProcessActivatedEventArgs e) {
             // if app is unknown add it
             // TODO device logic
-            bool isUnknown = Items.FirstOrDefault(x => x.AppPath.ToLower() == e) == null;
+            bool isUnknown = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower()) == null;
 
             if(isUnknown) {
                 MpHelpers.RunOnMainThread(async () => {
-                    var handle = MpProcessManager.CurrentProcessWindowHandleStackDictionary[e][0];
-                    string appName = MpProcessManager.GetProcessApplicationName(handle);
-
-                    var iconStr = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(e);
+                    var iconStr = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
                     var icon = await MpIcon.Create(iconStr);
-                    var app = await MpApp.Create(e, appName, icon);
+                    var app = await MpApp.Create(e.ProcessPath, e.ApplicationName, icon);
 
                     var avm = await CreateAppViewModel(app);
                     Items.Add(avm);

@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -17,203 +18,162 @@ namespace MpWpfApp {
     
     public class MpMarqueeExtension : DependencyObject {
         internal class MpMarqueeTextImage {
-            private Image _imageControl;
+            private bool _isReseting = false;
 
-            private PixelColor[,] _wrapPixels;
+            private Canvas _canvas;
+            private Image _img1, _img2;
+
+            private double _imgWidth;
+            private double _maxRenderWidth;
 
             private double _maxPauseTimeMs;
             private DateTime _pauseStartDateTime;
 
-            private WriteableBitmap _wrapBitmap;
-
             private double _maxVelocity = double.MaxValue;
-
-            private int _maxTextOffsetX => _textBitmap == null ? 0 : _textBitmap.PixelWidth;
-
-            private double _accumOffset = 0;
-            private int _columnOffsetIdx = 0;
 
             private DispatcherTimer _timer;
 
-            private BitmapSource _textBitmap;
+            internal MpMarqueeTextImage(
+                Canvas canvas, 
+                BitmapSource textBmpSrc, 
+                double maxRenderWidth,
+                double padWidth,
+                double maxVelocity, double pauseTimeMs) {
+                _canvas = canvas;
 
-            private int _renderPixelWidth;
-            
-            internal WriteableBitmap RenderBitmap { get; set; }
+                _imgWidth = textBmpSrc.Width;
+                _maxRenderWidth = maxRenderWidth;
 
-
-            internal MpMarqueeTextImage(Image imageControl, BitmapSource textBmpSrc, int renderPixelWidth, double maxVelocity, double pauseTimeMs) {
-                _imageControl = imageControl;
-
-                _renderPixelWidth = renderPixelWidth;
+                _maxPauseTimeMs = pauseTimeMs;
                 _maxVelocity = maxVelocity;
-                _textBitmap = textBmpSrc;
+
+                _img1 = new Image() {
+                    Source = textBmpSrc,
+                    Width = _imgWidth,
+                    Height = textBmpSrc.Height
+                };
+
+                _img2 = new Image() {
+                    Source = textBmpSrc,
+                    Width = _imgWidth,
+                    Height = textBmpSrc.Height
+                };
+
+                _canvas.Children.Clear();
+                _canvas.Children.Add(_img1);
+                if(_imgWidth - padWidth > maxRenderWidth) {
+                    _canvas.Children.Add(_img2); 
+                    _canvas.Width = _imgWidth * 2;
+                } else {
+                    _canvas.Width = _imgWidth;
+                }
 
                 Reset();
-
-                _timer = new DispatcherTimer();
-                _timer.Interval = TimeSpan.FromMilliseconds(20);
-                _timer.Tick += Timer_Tick;
-            }
-
-            
-
-            private void UpdateRenderBitmap() {
-                BitmapSource renderBmpSrc;
-                if (_renderPixelWidth < _wrapBitmap.PixelWidth) {
-                    renderBmpSrc = new CroppedBitmap(
-                    _wrapBitmap,
-                    new Int32Rect(0, 0, _renderPixelWidth, _wrapBitmap.PixelHeight));
-                } else {
-                    renderBmpSrc = _wrapBitmap;
-                }
-                RenderBitmap = new WriteableBitmap(renderBmpSrc);
-
-                //string fp_render = MpFileIoHelpers.GetUniqueFileOrDirectoryName(
-                //    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "marqueeTest"),
-                //    "render.png");
-
-                //MpFileIoHelpers.WriteByteArrayToFile(
-                //    fp_render,
-                //    RenderBitmap.ToByteArray());
-
-                //string fp_wrap = MpFileIoHelpers.GetUniqueFileOrDirectoryName(
-                //    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "marqueeTest"),
-                //    "wrap.png");
-
-                //MpFileIoHelpers.WriteByteArrayToFile(
-                //    fp_wrap,
-                //    _wrapBitmap.ToByteArray());
-
-                _imageControl.Source = RenderBitmap;
-                _imageControl.Width = RenderBitmap.Width;
-                _imageControl.Height = RenderBitmap.Height;
-                _imageControl.InvalidateVisual();
             }
 
             internal void Reset() {
-                _accumOffset = 0;
-
-                if(_timer != null) {
-                    _timer.Stop();
+                if(_timer == null) {
+                    InitTimer();
                 }
+                //_timer.Stop();
 
-                if (_textBitmap != null && _textBitmap.PixelWidth > 0 && _textBitmap.PixelHeight > 0) {
-                    _wrapPixels = MpWpfImagingHelper.GetPixels(_textBitmap);
-                    _wrapBitmap = new WriteableBitmap(_textBitmap);
-
-                    UpdateRenderBitmap();
-                }
+                
+                _isReseting = true;
+                _canvas.InvalidateVisual();
             }
 
             internal void Start() {
+                if (_timer == null) {
+                    InitTimer();
+                }
+                _isReseting = false;
                 _pauseStartDateTime = DateTime.Now;
                 _timer.Start();
             }
 
-            internal void Stop() {
+            private void Stop() {
+                if (_timer == null) {
+                    InitTimer();
+                }
                 _timer.Stop();
+
+                Canvas.SetLeft(_img1, 0);
+                Canvas.SetLeft(_img2, _imgWidth);
+                _isReseting = false;
+            }
+
+            internal void Unload() {
+                _timer.Tick -= Timer_Tick;
+            }
+
+            private void InitTimer() {
+                _timer = new DispatcherTimer(DispatcherPriority.Normal);
+                _timer.Interval = TimeSpan.FromMilliseconds(20);
+                _timer.Tick += Timer_Tick;
             }
 
             private void Timer_Tick(object sender, EventArgs e) {
-                if (DateTime.Now - _pauseStartDateTime < TimeSpan.FromMilliseconds(_maxPauseTimeMs)) {
-                    return;
-                }
-
-                double velMultiplier = Mouse.GetPosition(_imageControl).X / _imageControl.RenderSize.Width;
-                velMultiplier = Math.Min(1.0, Math.Max(0.0, velMultiplier));
-
-                //_accumOffset += (_maxVelocity * velMultiplier);
-                //if((int)_accumOffset > _columnOffsetIdx) {
-                //    _columnOffsetIdx = (int)_accumOffset;
-                //    if(_columnOffsetIdx >= _maxTextOffsetX) {
-                //        _accumOffset = 0;
-                //        _columnOffsetIdx = 0;
-                //    }
-                //    int offsetCount = (int)(_maxVelocity * velMultiplier);
-                //    for (int i = 0; i < offsetCount; i++) {
-                //        OffsetWrapBitmap();
-                //    }
-
-                //    _pauseStartDateTime = DateTime.Now;
+                //if (DateTime.Now - _pauseStartDateTime < TimeSpan.FromMilliseconds(_maxPauseTimeMs) && _maxPauseTimeMs > 0) {
+                //    return;
                 //}
-
-                for (int i = 0; i < 3; i++) {
-                    OffsetWrapBitmap();
-                }
-                UpdateRenderBitmap();
-            }
-
-            private void OffsetWrapBitmap() {
-                if(_wrapBitmap == null) {
+                if(_canvas.Children.Count < 2) {
                     return;
                 }
-                PixelColor[] firstColumn = new PixelColor[_wrapBitmap.PixelHeight];
-                PixelColor[,] pixel = new PixelColor[1, 1];
-                _wrapBitmap.Cop
-                for (int c = 0; c < _wrapBitmap.PixelWidth; c++) {
-                    //PixelColor[] nextColumn = new PixelColor[_wrapBitmap.PixelHeight];
-                    for (int r = 0; r < _wrapBitmap.PixelHeight; r++) {
-                        if(c == 0) {
-                            firstColumn[r] = _wrapPixels[c, r];
-                        }
-                        //int offset = _columnOffsetIdx + c;
-                        //if(offset >= _wrapBitmap.PixelWidth) {
-                        //    offset = MpMathHelpers.WrapValue(offset, 0, _wrapBitmap.PixelWidth - 1);
-                        //}
-                        
-                        _wrapPixels[c, r] = c == _wrapBitmap.PixelWidth - 1 ?
-                            firstColumn[r] : _wrapPixels[c + 1, r];
 
-                        pixel[0,0] = _wrapPixels[c, r];
-                        MpWpfImagingHelper.PutPixels(_wrapBitmap, pixel, c, r);
+                double velMultiplier = Mouse.GetPosition(_canvas).X / _canvas.RenderSize.Width;
+                velMultiplier = _isReseting ? 1.0 : Math.Min(1.0, Math.Max(0.1, velMultiplier));
+                
+                double deltaX = _maxVelocity * velMultiplier;
+
+                double left1 = Canvas.GetLeft(_img1).HasValue() ? Canvas.GetLeft(_img1) : 0;
+                double right1 = left1 + _imgWidth;
+
+                double left2 = Canvas.GetLeft(_img2).HasValue() ? Canvas.GetLeft(_img2) : _imgWidth;
+                double right2 = left2 + _imgWidth;
+
+                if(_isReseting) {
+                    if(Math.Abs(left1) < Math.Abs(left2)) {
+                        if(left1 < 0) {
+                            deltaX *= -1;
+                        }
+                    } else {
+                        if(left2 < 0) {
+                            deltaX *= -1;
+                        }
                     }
                 }
-                //UpdateRenderBitmap();
-            }
 
-            public void ShiftBitmap() {
-                double Width = _wrapBitmap.Width;
-                double Height = _wrapBitmap.Height;
-                int BytesPerPixel = _wrapBitmap.Format.BitsPerPixel / 8;
-                byte[] buffer = new byte[(int)(Width * Height * BytesPerPixel)]; //new byte[(int)(Width * Height * 4)];
-                try {
-                    unsafe {
+                double nLeft1 = left1 + deltaX;
+                double nRight1 = right1 + deltaX;
+                double nLeft2 = left2 + deltaX;
+                double nRight2 = right2 + deltaX;
 
-                        _wrapBitmap.Lock();
-                        int pBackBuffer = (int)_wrapBitmap.BackBuffer;
-                        int pBackBuffer2 = (int)_wrapBitmap.BackBuffer;
-                        for (int w = (int)Width - 1; w > 2; --w) {
-                            pBackBuffer = (int)_wrapBitmap.BackBuffer + (w * BytesPerPixel);
-                            pBackBuffer2 = (int)_wrapBitmap.BackBuffer + ((w - 1) * BytesPerPixel);
-                            for (int h = 0; h < (int)Height - 2; ++h) {
-                                pBackBuffer += _wrapBitmap.BackBufferStride;
-                                pBackBuffer2 += _wrapBitmap.BackBufferStride;
-                                *((int*)pBackBuffer) = *((int*)pBackBuffer2);
-                            }
-                        }
-                        _wrapBitmap.Unlock();
+                if(!_isReseting) {
+                    if (nLeft1 < nLeft2 && nLeft2 < 0) {
+                        nLeft1 = nRight2;
+                    } else if (nLeft2 < nLeft1 && nLeft1 < 0) {
+                        nLeft2 = nRight1;
                     }
-
-                    _wrapBitmap.CopyPixels(new Int32Rect(0, 0, (int)(Width - 1), (int)Height), buffer,
-                                     _wrapBitmap.BackBufferStride - BytesPerPixel, 0);
-
-                    _wrapBitmap.Lock();
-                    _wrapBitmap.WritePixels(new Int32Rect(1, 0, (int)Width - 1, (int)Height), buffer,
-                                     _wrapBitmap.BackBufferStride - BytesPerPixel, 1, 0);
-
-                    _wrapBitmap.AddDirtyRect(new Int32Rect(0, 0, (int)Width, (int)Height));
-                    _wrapBitmap.Unlock();
                 }
-                catch (Exception ex) {
-                    MessageBox.Show(ex.Message);
+
+                Canvas.SetLeft(_img1, nLeft1);
+                Canvas.SetLeft(_img2, nLeft2);
+
+                if (_isReseting) {
+                    if (Math.Abs(nLeft1) < deltaX || Math.Abs(nLeft2) < deltaX) {
+                        Stop();
+                    }
                 }
+
+                _canvas.InvalidateVisual();
             }
         }
 
 
         private static Dictionary<DependencyObject, MpMarqueeTextImage> _TextImageLookup = new Dictionary<DependencyObject, MpMarqueeTextImage>();
-        
+
+        #region Properties
+
         #region TextBox Property
 
         public static TextBox GetTextBox(DependencyObject obj) {
@@ -255,7 +215,7 @@ namespace MpWpfApp {
         public static double GetTailPadding(DependencyObject obj) {
             return (double)obj.GetValue(TailPaddingProperty);
         }
-        public static void SetTailPadding(DependencyObject obj, Point value) {
+        public static void SetTailPadding(DependencyObject obj, double value) {
             obj.SetValue(TailPaddingProperty, value);
         }
 
@@ -273,7 +233,7 @@ namespace MpWpfApp {
         public static double GetMaxVelocity(DependencyObject obj) {
             return (double)obj.GetValue(MaxVelocityProperty);
         }
-        public static void SetMaxVelocity(DependencyObject obj, Point value) {
+        public static void SetMaxVelocity(DependencyObject obj, double value) {
             obj.SetValue(MaxVelocityProperty, value);
         }
 
@@ -282,7 +242,7 @@ namespace MpWpfApp {
             "MaxVelocity",
             typeof(double),
             typeof(MpMarqueeExtension),
-            new PropertyMetadata(3.0));
+            new FrameworkPropertyMetadata(-20.0));
 
         #endregion
 
@@ -291,7 +251,7 @@ namespace MpWpfApp {
         public static double GetLoopDelayMs(DependencyObject obj) {
             return (double)obj.GetValue(LoopDelayMsProperty);
         }
-        public static void SetLoopDelayMs(DependencyObject obj, Point value) {
+        public static void SetLoopDelayMs(DependencyObject obj, double value) {
             obj.SetValue(LoopDelayMsProperty, value);
         }
 
@@ -300,11 +260,27 @@ namespace MpWpfApp {
             "LoopDelayMs",
             typeof(double),
             typeof(MpMarqueeExtension),
-            new PropertyMetadata(1000.0));
+            new PropertyMetadata(0.0));
 
         #endregion
 
+        #region MaxRenderWidth Property
 
+        public static double GetMaxRenderWidth(DependencyObject obj) {
+            return (double)obj.GetValue(MaxRenderWidthProperty);
+        }
+        public static void SetMaxRenderWidth(DependencyObject obj, double value) {
+            obj.SetValue(MaxRenderWidthProperty, value);
+        }
+
+        public static readonly DependencyProperty MaxRenderWidthProperty =
+            DependencyProperty.RegisterAttached(
+            "MaxRenderWidth",
+            typeof(double),
+            typeof(MpMarqueeExtension),
+            new PropertyMetadata(0.0));
+
+        #endregion
 
         #region IsEnabled Property
 
@@ -322,7 +298,7 @@ namespace MpWpfApp {
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback =  (obj, e) => {
                     if (e.NewValue is bool isEnabled) {
-                        var img = obj as Image;
+                        var img = obj as Canvas;
                         if (img == null) {
                             if (obj == null) {
                                 return;
@@ -333,14 +309,13 @@ namespace MpWpfApp {
                             if (img.IsLoaded) {
                                 Init(img);
                             } else {
-                                img.Loaded += Img_Loaded;
+                                img.Loaded += Canvas_Loaded;
                             }
-                            img.IsVisibleChanged += Img_IsVisibleChanged;
-                            img.MouseEnter += Img_MouseEnter;
-                            img.MouseLeave += Img_MouseLeave;
-                            img.Unloaded += Img_Unloaded;
+                            img.MouseEnter += Canvas_MouseEnter;
+                            img.MouseLeave += Canvas_MouseLeave;
+                            img.Unloaded += Canvas_Unloaded;
                         } else {
-                            Img_Unloaded(img, null);
+                            Canvas_Unloaded(img, null);
                         }
                     }
                 }
@@ -349,62 +324,80 @@ namespace MpWpfApp {
 
         #endregion
 
+        #endregion
+
         #region Event Handlers
 
-        private static void Img_Unloaded(object sender, RoutedEventArgs e) {
-            var img = sender as Image;
-            if(img == null) {
+        private static void Canvas_Unloaded(object sender, RoutedEventArgs e) {
+            var canvas = sender as Canvas;
+            if(canvas == null) {
                 return;
             }
-            if(_TextImageLookup.ContainsKey(img)) {
-                _TextImageLookup.Remove(img);
+            if(_TextImageLookup.ContainsKey(canvas)) {
+                _TextImageLookup[canvas].Unload();
+                _TextImageLookup.Remove(canvas);
             }
 
-            img.Loaded -= Img_Loaded;
-            img.Unloaded -= Img_Unloaded;
+            canvas.Loaded -= Canvas_Loaded;
+            canvas.Unloaded -= Canvas_Unloaded;
         }
 
-        private static void Img_Loaded(object sender, RoutedEventArgs e) {
-            var img = sender as Image;
-            if(img == null) {
-                return;
-            }
-            Init(img);
+        private static void Canvas_Loaded(object sender, RoutedEventArgs e) {
+            var canvas = sender as Canvas;
+            Init(canvas);
         }
 
-        private static void Img_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            var img = sender as Image;
-            if(img == null) {
-                return;
-            }
-            Init(img);
+        private static void Canvas_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
+            var canvas = sender as Canvas;
+            Reset(canvas);
         }
 
-
-        private static void Img_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
-            var img = sender as Image;
-            if (img == null || !_TextImageLookup.ContainsKey(img)) {
+        private static void Canvas_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
+            var canvas = sender as Canvas;
+            if (canvas == null) {
                 return;
             }
-            _TextImageLookup[img].Stop();
+            if(!_TextImageLookup.ContainsKey(canvas)) {
+                Init(canvas);
+            }
+            _TextImageLookup[canvas].Start();
         }
 
-        private static void Img_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
-            var img = sender as Image;
-            if (img == null || !_TextImageLookup.ContainsKey(img)) {
+        private static void Tb_LostFocus(object sender, RoutedEventArgs e) {
+            var tb = sender as TextBox;
+            if(tb == null) {
                 return;
             }
-            _TextImageLookup[img].Start();
+            var canvas = tb.Tag as Canvas;
+            Init(canvas);
+
+            if(canvas != null && 
+               new Rect(0,0,GetMaxRenderWidth(canvas),canvas.ActualHeight).Contains(Mouse.GetPosition(canvas))) {
+                _TextImageLookup[canvas].Start();
+            }
         }
 
         #endregion
 
-        private static void Init(Image img) {           
-            TextBox tb = GetTextBox(img);
+        public static void Reset(Canvas canvas) {
+            if (canvas == null || !_TextImageLookup.ContainsKey(canvas)) {
+                return;
+            }
+            _TextImageLookup[canvas].Reset();
+        }
+
+        public static void Init(Canvas canvas) {
+            if(canvas == null) {
+                return;
+            }
+            TextBox tb = GetTextBox(canvas);
 
             if(tb == null) {
                 return;
             }
+
+            tb.LostFocus -= Tb_LostFocus;
+            tb.LostFocus += Tb_LostFocus;
 
             var dpiInfo = VisualTreeHelper.GetDpi(Application.Current.MainWindow);
 
@@ -417,49 +410,37 @@ namespace MpWpfApp {
                 Brushes.White,
                 dpiInfo.PixelsPerDip);
 
-            int pad = (int)GetTailPadding(img);
+
+            int pad = (int)GetTailPadding(canvas);
 
             var rtb = new RenderTargetBitmap(
-                (int)Math.Max(1.0,ft.Width * dpiInfo.PixelsPerDip) + pad + (int)GetDropShadowOffset(img).X, 
-                (int)Math.Max(1.0,ft.Height * dpiInfo.PixelsPerDip) + (int)GetDropShadowOffset(img).Y,
+                (int)Math.Max(1.0,ft.Width * dpiInfo.PixelsPerDip) + pad + (int)GetDropShadowOffset(canvas).X, 
+                (int)Math.Max(1.0,ft.Height * dpiInfo.PixelsPerDip) + (int)GetDropShadowOffset(canvas).Y,
                 dpiInfo.PixelsPerInchX, dpiInfo.PixelsPerInchY, PixelFormats.Pbgra32);
 
             var dv = new DrawingVisual();
             using (var dc = dv.RenderOpen()) {
                 ft.SetForegroundBrush(Brushes.Black);
-                dc.DrawText(ft, GetDropShadowOffset(img));
+                dc.DrawText(ft, GetDropShadowOffset(canvas));
                 ft.SetForegroundBrush(Brushes.White);
                 dc.DrawText(ft, new Point(0,0));
             }
 
             rtb.Render(dv);
-            var bmpSrc = MpWpfImagingHelper.ConvertRenderTargetBitmapToBitmapSource(rtb);
+            var textBmpSrc = MpWpfImagingHelper.ConvertRenderTargetBitmapToBitmapSource(rtb);
 
-            MpMarqueeTextImage mti = new MpMarqueeTextImage(img,bmpSrc, (int)MpMeasurements.Instance.ClipTileTitleTextGridMaxWidth, GetMaxVelocity(img), GetLoopDelayMs(img));
-            _TextImageLookup.AddOrReplace(img, mti);
+            textBmpSrc.Freeze();
 
-            //img.Source = bmpSrc;
-            //img.Width = rtb.Width;
-            //img.Height = rtb.Height;
+            MpMarqueeTextImage mti = new MpMarqueeTextImage(
+                canvas, 
+                textBmpSrc, 
+                GetMaxRenderWidth(canvas), 
+                GetTailPadding(canvas),
+                GetMaxVelocity(canvas), 
+                GetLoopDelayMs(canvas));
 
-            //string fp = MpFileIoHelpers.GetUniqueFileOrDirectoryName(
-            //    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "marqueeTest"),
-            //    "textBoxImageTest.png");
-
-            //string fp2 = MpFileIoHelpers.GetUniqueFileOrDirectoryName(
-            //    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "marqueeTest"),
-            //    "textBoxImageTest_otherSave.png");
-
-            //MpFileIoHelpers.WriteByteArrayToFile(
-            //    fp,
-            //    bmpSrc.ToByteArray());
-
-            //var encoder = new PngBitmapEncoder();
-            //encoder.Frames.Add(BitmapFrame.Create(rtb));
-
-            //using (var file = File.OpenWrite(fp2)) {
-            //    encoder.Save(file);
-            //}
+            _TextImageLookup.AddOrReplace(canvas, mti);
         }
+
     }
 }

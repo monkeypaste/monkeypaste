@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         LargeIcon48 = 0x2,
         ExtraLargeIcon = 0x4
     }
-    public class MpIcon : MpDbModelBase, MpISyncableDbObject {
+    public class MpIcon : MpDbModelBase, MpISyncableDbObject, MpIClonableDbModel<MpIcon> {
         #region Columns
         [PrimaryKey,AutoIncrement]
         [Column("pk_MpIconId")]
@@ -41,6 +41,10 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_IconBorderDbImageId")]
         public int IconBorderImageId { get; set; }
+
+        [Column("b_IsReadOnly")]
+        public int IsReadOnlyValue { get; set; }
+
         #endregion
 
         #region Fk Models
@@ -90,6 +94,12 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+        public bool IsReadOnly {
+            get => IsReadOnlyValue == 1;
+            set => IsReadOnlyValue = value ? 1 : 0;
+        }
+
         #endregion
 
         #region Statics
@@ -109,6 +119,7 @@ namespace MonkeyPaste {
                 suppressWrite: suppressWrite);
             return result;
         }
+
         public static async Task<MpIcon> Create(
             string iconImgBase64 = "",
             List<string> hexColors = null,
@@ -140,6 +151,40 @@ namespace MonkeyPaste {
             }
 
             return newIcon;
+        }
+
+        #endregion
+
+        #region MpIClonableDbModel Implementation
+
+        public async Task<MpIcon> CloneDbModel() {
+            var ci = new MpIcon() {
+                IconGuid = System.Guid.NewGuid(),
+                HexColors = this.HexColors,
+                IsReadOnly = this.IsReadOnly
+            };
+
+            if(IconImageId > 0) {
+                if(IconImage == null) {
+                    IconImage = await MpDb.GetItemAsync<MpDbImage>(IconImageId);
+                }
+                if(IconImage != null) {
+                    ci.IconImage = await IconImage.CloneDbModel();
+                    ci.IconImageId = ci.IconImage.Id;
+                }
+            }
+
+            if (IconBorderImageId > 0) {
+                if (IconBorderImage == null) {
+                    IconBorderImage = await MpDb.GetItemAsync<MpDbImage>(IconBorderImageId);
+                }
+                if (IconBorderImage != null) {
+                    ci.IconBorderImage = await IconBorderImage.CloneDbModel();
+                    ci.IconBorderImageId = ci.IconBorderImage.Id;
+                }
+            }
+            await ci.WriteToDatabaseAsync();
+            return ci;
         }
 
         #endregion

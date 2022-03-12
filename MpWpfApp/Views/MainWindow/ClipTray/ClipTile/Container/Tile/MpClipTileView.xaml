@@ -5,6 +5,7 @@
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                      x:TypeArguments="local:MpClipTileViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
@@ -113,9 +114,15 @@
             <!--  Overlays  -->
             <!--  Loading Spinner  -->
             <local:MpClipTileLoadingOverlayView x:Name="ClipTileBusyView"
-                                                Background="#FF3D3D3D"
                                                 Visibility="{Binding IsAnyBusy,
-                                                                     Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                                     Converter={StaticResource BoolToVisibilityConverter}}">
+                <local:MpClipTileLoadingOverlayView.Background>
+                    <SolidColorBrush Color="{Binding Source={x:Static pcl:MpSystemColors.LoadingSpinnerBackground},
+                                                     Converter={StaticResource StringHexToWinMediaColorConverter},
+                                                     Mode=OneWay}"
+                                     Opacity="0.7" />
+                </local:MpClipTileLoadingOverlayView.Background>
+            </local:MpClipTileLoadingOverlayView>
             <!--  Trial Expired  -->
             <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired,
                                                                                      Converter={StaticResource BoolToVisibilityConverter}}" />

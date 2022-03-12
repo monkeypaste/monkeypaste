@@ -12,10 +12,10 @@ namespace MpWpfApp {
                 return null;
             }
             if (!values[0].IsUnsetValue() && (bool)values[0]) {
-                return MpSystemColors.IsSelectedBorderColor.ToSolidColorBrush();
+                return MpSystemColors.IsSelectedBorderColor.ToBrush();
             }
             if (!values[1].IsUnsetValue() && (bool)values[1]) {
-                return MpSystemColors.IsHoveringBorderColor.ToSolidColorBrush();
+                return MpSystemColors.IsHoveringBorderColor.ToBrush();
             }
             return Brushes.Transparent;
         }

@@ -53,8 +53,9 @@ namespace MonkeyPaste {
 
         public int PasteCount { get; set; } = 0;
 
-        //[Column("HexColor")]
-        //public string ItemColor { get; set; } = string.Empty;
+        [Column("HexColor")]
+        public string ItemColor { get; set; } = string.Empty;
+
         #endregion
 
         #region Fk Models

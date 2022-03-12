@@ -5,7 +5,19 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {    
-    public abstract class MpViewModelBase : INotifyPropertyChanged, MpIErrorHandler {
+    public interface MpIViewModel {
+        bool IsBusy { get; set; }
+        bool HasModelChanged { get; set; }
+
+        void OnPropertyChanged(
+            [CallerMemberName] string propertyName = null, 
+            [CallerFilePath] string path = null, 
+            [CallerMemberName] string memName = null, 
+            [CallerLineNumber] int line = 0);
+
+        event PropertyChangedEventHandler PropertyChanged;
+    }
+    public abstract class MpViewModelBase : INotifyPropertyChanged, MpIErrorHandler, MpIViewModel {
         
         //public static event EventHandler<bool> OnBusyChanged;
 
@@ -25,12 +37,8 @@ namespace MonkeyPaste {
                 } else {
                     MpCursor.UnsetCursor(this);
                 }
-                //OnBusyChanged?.Invoke(this, _isBusy);
-                //MpCursorStack.NotifyAppBusy(_isBusy);
-                //MpMessenger.Send(MpMessageType.Busy);
             }
         }
-        public bool IsNotBusy => !IsBusy;
 
 
         public bool SupressPropertyChangedNotification { get; set; } = false;

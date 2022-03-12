@@ -8,6 +8,10 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public static class MpWpfColorExtensions {
+        public static Brush ToBrush(this string hex, double opacity = 1.0) {
+            return hex.ToSolidColorBrush(opacity);
+        }
+
         public static Brush ToSolidColorBrush(this string hex, double opacity = 1.0) {
             if (!hex.IsStringHexColor()) {
                 return Brushes.Transparent;
@@ -28,7 +32,7 @@ namespace MpWpfApp {
             if (!hex.IsStringHexColor()) {
                 return System.Drawing.Color.Transparent;
             }
-            var scb = hex.ToSolidColorBrush();
+            var scb = hex.ToBrush();
             return scb.ToWinFormsColor();
         }
 

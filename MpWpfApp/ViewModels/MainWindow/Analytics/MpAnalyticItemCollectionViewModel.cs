@@ -100,8 +100,7 @@ namespace MpWpfApp {
 
         public bool IsExpanded { get; set; }
 
-
-        public bool IsAnyEditingParameters => Items.Any(x => x.IsAnyEditingParameters);
+        //public bool IsAnyEditingParameters => Items.Any(x => x.IsAnyEditingParameters);
 
         #endregion
 
@@ -133,25 +132,31 @@ namespace MpWpfApp {
 
             Items.Clear();
 
-            //var ail = await MpDb.GetItemsAsync<MpAnalyticItem>();
-            //ail.Reverse();
-            //foreach (var ai in ail) {
-            //    if(Uri.IsWellFormedUriString(ai.EndPoint,UriKind.Absolute)) {
-            //        var aivm = await CreateAnalyticItemViewModel(ai);
-            //        Items.Add(aivm);
-            //    }                
-            //}
-
             var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIAnalyzerPluginComponent);
             foreach(var pai in pail) {
                 var paivm = await CreateAnalyticItemViewModel(pai.Value);
                 Items.Add(paivm);
             }
+
+            while(Items.Any(x=>x.IsBusy)) {
+                await Task.Delay(100);
+            }
+
             OnPropertyChanged(nameof(Items));
             
             if (Items.Count > 0) {
-                Items[0].IsSelected = true;
+                // select most recent preset
+                MpAnalyticItemPresetViewModel presetToSelect = Items
+                            .Aggregate((a, b) => a.Items.Max(x => x.LastSelectedDateTime) > b.Items.Max(x => x.LastSelectedDateTime) ? a : b)
+                            .Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+
+                if(presetToSelect != null) {
+                    presetToSelect.Parent.SelectedItem = presetToSelect;
+                    SelectedItem = presetToSelect.Parent;
+                }                
             }
+
+            OnPropertyChanged(nameof(SelectedItem));
 
             IsBusy = false;
         }
@@ -173,27 +178,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-
-        //private async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpAnalyticItem ai) {
-        //    MpAnalyticItemViewModel aivm = null; 
-        //    switch(ai.Title) {
-        //        case "Open Ai":
-        //            aivm = new MpOpenAiViewModel(this);
-        //            break;
-        //        case "Language Translator":
-        //            aivm = new MpTranslatorViewModel(this);
-        //            break;
-        //        case "Yolo":
-        //            aivm = new MpYoloViewModel(this);
-        //            break;
-        //        case "Azure Image Analysis":
-        //            aivm = new MpAzureImageAnalysisViewModel(this);
-        //            break;
-        //    }
-        //    await aivm.InitializeAsync(ai);
-        //    return aivm;
-        //}
-
+        
         private async Task<MpAnalyticItemViewModel> CreateAnalyticItemViewModel(MpPluginFormat plugin) {
             MpAnalyticItemViewModel aivm = new MpAnalyticItemViewModel(this);
 
@@ -214,20 +199,23 @@ namespace MpWpfApp {
                         MpTagTrayViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
-                    if(Items.Count > 0) {
-                        if (SelectedItem == null) {
-                            Items[0].IsSelected = true;
-                            SelectedItem.Items.ForEach(x => x.IsEditingParameters = false);
-                        }
-                        if (!SelectedItem.IsAnyEditingParameters) {
-                            SelectedItem.Items.ForEach(x => x.IsSelected = x == SelectedItem.Items[0]);
-                            //SelectedItem.Items.ForEach(x => x.IsEditing = x == SelectedItem.Items[0]);
-                        }
-                    }
+                    //if(Items.Count > 0) {
+                    //    if (SelectedItem == null) {
+                    //        Items[0].IsSelected = true;
+                    //        SelectedItem.Items.ForEach(x => x.IsEditingParameters = false);
+                    //    }
+                    //    if (!SelectedItem.IsAnyEditingParameters) {
+                    //        SelectedItem.Items.ForEach(x => x.IsSelected = x == SelectedItem.Items[0]);
+                    //        //SelectedItem.Items.ForEach(x => x.IsEditing = x == SelectedItem.Items[0]);
+                    //    }
+                    //}
                     OnPropertyChanged(nameof(SelectedItem));
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(Children));
+                    break;
+                case nameof(SelectedItem):
+
                     break;
             }
         }
@@ -235,27 +223,21 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ManageItemCommand => new RelayCommand<object>(
-            (itemGuid) => {
-                Items.ForEach(x => x.IsSelected = x.AnalyzerPluginGuid == itemGuid.ToString());
-                SelectedItem.ManageAnalyticItemCommand.Execute(null);
-            }, (itemId) => itemId != null);
+        //public ICommand ManagePresetCommand => new RelayCommand<object>(
+        //    (presetId) => {
+        //        var aipvm = AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == (int)presetId);
+        //        if(aipvm == null) {
+        //            return;
+        //        }
 
-        public ICommand ManagePresetCommand => new RelayCommand<object>(
-            (presetId) => {
-                var aipvm = AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == (int)presetId);
-                if(aipvm == null) {
-                    return;
-                }
+        //        aipvm.ManagePresetCommand.Execute(null);
+        //    }, (presetId) => presetId != null);
 
-                aipvm.ManagePresetCommand.Execute(null);
-            }, (presetId) => presetId != null);
-
-        public ICommand RegisterContentCommand => new RelayCommand<object>(
-            (args) => {
-                Content = args;
-            },
-            (args) => args != null);
+        //public ICommand RegisterContentCommand => new RelayCommand<object>(
+        //    (args) => {
+        //        Content = args;
+        //    },
+        //    (args) => args != null);
 
         #endregion
     }

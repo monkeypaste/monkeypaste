@@ -111,6 +111,8 @@ namespace MonkeyPaste {
         [Column("b_IsEnabled")]
         public int IsEnabledValue { get; set; }
 
+        public DateTime LastSelectedDateTime { get; set; }
+
         #endregion
 
         #region Fk Objects

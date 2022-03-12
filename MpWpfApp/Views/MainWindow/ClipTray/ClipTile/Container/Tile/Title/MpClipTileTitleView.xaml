@@ -17,6 +17,10 @@
         <local:MpSourceHighlightBehavior x:Name="SourceHighlightBehavior" />
     </i:Interaction.Behaviors>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.3*" />
+        </Grid.ColumnDefinitions>
         <Viewbox VerticalAlignment="Top"
                  HorizontalAlignment="Left"
                  Stretch="Fill"
@@ -105,7 +109,7 @@
             </Canvas>
         </Viewbox>
 
-        <Canvas x:Name="ClipTileTitleTextGrid"
+        <Canvas x:Name="ClipTileTitleTextCanvas"
                 DataContext="{Binding}"
                 ClipToBounds="True"
                 Grid.Column="0"
@@ -115,9 +119,8 @@
                 MouseEnter="ClipTileTitleTextGrid_MouseEnter"
                 MouseLeave="ClipTileTitleTextGrid_MouseLeave"
                 PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
-                Margin="10,3,30,25"
-                Width="{Binding ClipTileTitleTextGridMaxWidth, Source={x:Static local:MpMeasurements.Instance}}"
-                HorizontalAlignment="Left">
+                Margin="10,3,0,0"
+                HorizontalAlignment="Stretch">
             <!--  Clip Title TextBlock  -->
 
             <TextBlock x:Name="ClipTileTitleTextBlock"
@@ -135,25 +138,34 @@
                                       BlurRadius="0.1" />
                 </TextBlock.Effect>
             </TextBlock>
-            
-            <Image x:Name="ClipTileTitleMarqueeImage"
-                   
-                   local:MpMarqueeExtension.IsEnabled="True"
-                   local:MpMarqueeExtension.DropShadowOffset="1 1"
-                   local:MpMarqueeExtension.TextBox="{Binding ElementName=ClipTileTitleTextBox}"
-                   Visibility="{Binding IsEditingTitle,
-                                        Converter={StaticResource BoolToVisibilityFlipConverter}}" />
+
+            <Canvas x:Name="ClipTileTitleMarqueeCanvas"
+                    Height="{Binding ActualHeight,
+                                     ElementName=ClipTileTitleTextCanvas}"
+                    local:MpMarqueeExtension.IsEnabled="True"
+                    local:MpMarqueeExtension.LoopDelayMs="0"
+                    local:MpMarqueeExtension.DropShadowOffset="1 1"
+                    local:MpMarqueeExtension.MaxVelocity="-10"
+                    local:MpMarqueeExtension.TailPadding="30"
+                    local:MpMarqueeExtension.MaxRenderWidth="{Binding ActualWidth,
+                                                                      ElementName=ClipTileTitleTextCanvas}"
+                    local:MpMarqueeExtension.TextBox="{Binding ElementName=ClipTileTitleTextBox}"
+                    Visibility="{Binding IsEditingTitle,
+                                         Converter={StaticResource BoolToVisibilityFlipConverter}}" />
             <!--  Clip Title TextBox  -->
             <TextBox x:Name="ClipTileTitleTextBox"
                      IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
                      LostFocus="ClipTileTitleTextBox_LostFocus"
                      PreviewKeyDown="ClipTileTitleTextBox_PreviewKeyDown"
                      local:MpIsFocusedExtension.IsEnabled="True"
+                     MaxWidth="{Binding ActualWidth,
+                                        ElementName=ClipTileTitleTextCanvas}"
                      Background="{StaticResource ClipTileTitleTextBoxBackgroundBrush}"
                      Foreground="Black"
                      FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,
                                                             Mode=OneWay}"
                      IsReadOnly="False"
+                     Tag="{Binding ElementName=ClipTileTitleMarqueeCanvas}"
                      Visibility="{Binding IsEditingTitle,
                                           Converter={StaticResource BoolToVisibilityConverter},
                                           ConverterParameter={StaticResource Hide}}"

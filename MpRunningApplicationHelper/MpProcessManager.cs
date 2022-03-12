@@ -11,6 +11,12 @@ using System.Threading.Tasks;
 using System.Timers;
 
 namespace MpProcessHelper {
+    public class MpProcessActivatedEventArgs : EventArgs {
+        public string ProcessPath { get; set; }
+        public string ApplicationName { get; set; }
+        public IntPtr Handle { get; set; }
+    }
+
     public static class MpProcessManager {
         #region Private Variables
         private static System.Timers.Timer _timer;
@@ -39,7 +45,7 @@ namespace MpProcessHelper {
 
         #region Events
 
-        public static event EventHandler<string> OnAppActivated;
+        public static event EventHandler<MpProcessActivatedEventArgs> OnAppActivated;
 
         #endregion
 
@@ -67,11 +73,6 @@ namespace MpProcessHelper {
                 if (hWnd == null || hWnd == IntPtr.Zero) {
                     return "Unknown Application";
                 }
-                //uint processId;
-                //WinApi.GetWindowThreadProcessId(hWnd, out processId);
-                //using (Process proc = Process.GetProcessById((int)processId)) {
-                //    return proc.MainWindowTitle;
-                //}
                 int length = WinApi.GetWindowTextLength(hWnd);
                 if (length == 0) {
                     return string.Empty;
@@ -182,9 +183,8 @@ namespace MpProcessHelper {
             return null;
         }
 
-
-        public static string GetProcessApplicationName(IntPtr hWnd) {
-            string mwt = GetProcessMainWindowTitle(hWnd);
+        public static string GetProcessApplicationName(string windowTitle) {
+            string mwt = windowTitle;
             if (string.IsNullOrEmpty(mwt)) {
                 return mwt;
             }
@@ -196,6 +196,10 @@ namespace MpProcessHelper {
                 return mwta[0];
             }
             return mwta[mwta.Length - 1].Trim();
+        }
+
+        public static string GetProcessApplicationName(IntPtr hWnd) {
+            return GetProcessApplicationName(GetProcessMainWindowTitle(hWnd));
         }
 
         #endregion
@@ -230,11 +234,18 @@ namespace MpProcessHelper {
 
             UpdateHandleStack(LastHandle);
 
-            string processName = GetProcessPath(LastHandle);
+            string processPath = GetProcessPath(LastHandle);
 
             if (hasChanged) {
-                Console.WriteLine(string.Format(@"Last Window: {0} ({1})", GetProcessMainWindowTitle(LastHandle), LastHandle));
-                OnAppActivated?.Invoke(nameof(MpProcessManager), processName.ToLower());
+                Console.WriteLine(string.Format(@"Last Window: {0} ({1})", LastTitle, LastHandle));
+                
+                OnAppActivated?.Invoke(
+                    nameof(MpProcessManager), 
+                    new MpProcessActivatedEventArgs() {
+                        ProcessPath = processPath,
+                        ApplicationName = GetProcessApplicationName(LastTitle),
+                        Handle = LastHandle
+                    });
             }
         }
 

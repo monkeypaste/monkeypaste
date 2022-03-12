@@ -311,6 +311,9 @@ namespace MpWpfApp {
                         Task.Run(async () => {
                             await ParameterValue.WriteToDatabaseAsync();
                             HasModelChanged = false;
+                            if(this is MpComboBoxParameterViewModel cbpvm) {
+                                cbpvm.Items.ForEach(x => x.HasModelChanged = false);
+                            }
                         });
                     }
                     break;
@@ -320,6 +323,7 @@ namespace MpWpfApp {
                     }
                     OnPropertyChanged(nameof(IsValid));
                     break;
+
             }
             //Validate();
         }

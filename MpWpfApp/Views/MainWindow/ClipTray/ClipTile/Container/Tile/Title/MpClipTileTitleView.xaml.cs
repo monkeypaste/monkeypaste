@@ -83,14 +83,17 @@ namespace MpWpfApp {
             if (BindingContext == null) {
                 return;
             }
-            if (ClipTileTitleTextBox.Visibility == Visibility.Collapsed) {
-                //MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseClick -= ApplicationHook_MouseDown;
+            if (ClipTileTitleTextBox.Visibility == Visibility.Hidden) {
+                //MpMarqueeExtension.Init(ClipTileTitleMarqueeCanvas);
                 return;
             }
-            if(BindingContext != null) {
-                ClipTileTitleTextBox.Focus();
-                ClipTileTitleTextBox.SelectAll();
-            }
+
+
+            //MpMarqueeExtension.Reset(ClipTileTitleMarqueeCanvas);
+
+            ClipTileTitleTextBox.Focus();
+            ClipTileTitleTextBox.CaretIndex = 0;
+            ClipTileTitleTextBox.SelectAll();
         }
 
         private void ClipTileTitleTextBox_LostFocus(object sender, RoutedEventArgs e) {

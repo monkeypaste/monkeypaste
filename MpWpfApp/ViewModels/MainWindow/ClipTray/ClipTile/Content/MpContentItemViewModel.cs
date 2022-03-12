@@ -84,6 +84,15 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpIUserColorViewModel Implementation
+
+        public string UserHexColor {
+            get => CopyItemHexColor;
+            set => CopyItemHexColor = value;
+        }
+
+        #endregion
+
         #region Appearance
 
         public Brush DetailTextColor {
@@ -391,21 +400,7 @@ namespace MpWpfApp {
 
         #region Model
 
-        public string[] ColorPallete { get; set; }
 
-        public string RelativePalleteColor {
-            //since items will have the same source a lot this will choose relative to list order
-            get {
-                if(CopyItem == null) {
-                    return string.Empty;
-                }
-                int idx = ItemIdx;
-                if(Parent.Count >= ColorPallete.Length) {
-                    idx = Math.Min((int)((ColorPallete.Length / Parent.Count) * idx) - 1,ColorPallete.Length-1);
-                }
-                return ColorPallete[idx];
-            }
-        }
 
         public bool IsCompositeChild {
             get {
@@ -538,6 +533,10 @@ namespace MpWpfApp {
                 if(CopyItem == null) {
                     return 0;
                 }
+                if(CopyItem.IconId == 0) {
+                    // defer icon to primary source if not set by user
+                    return CopyItem.Source.PrimarySource.IconId;
+                }
                 return CopyItem.IconId;
             }
             set {
@@ -549,33 +548,33 @@ namespace MpWpfApp {
             }
         }
 
-        private string _copyItemHexColor = string.Empty;
         public string CopyItemHexColor {
             get {
-                if(string.IsNullOrEmpty(_copyItemHexColor)) {
-                    _copyItemHexColor = MpColorHelpers.GetRandomHexColor();
+                if(CopyItem == null || string.IsNullOrEmpty(CopyItem.ItemColor)) {
+                    return MpColorHelpers.GetRandomHexColor();
                 }
-                return _copyItemHexColor;
+                return CopyItem.ItemColor;
             }
             set {
                 if (CopyItemHexColor != value) {
-                    _copyItemHexColor = value;
+                    CopyItem.ItemColor = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CopyItemHexColor));
-                    Task.Run(async () => {
-                        MpIcon icon = null;
-                        if(IconId == 0) {
-                            icon = await MpIcon.Create(
-                                iconImgBase64: string.Empty,
-                                hexColors: new List<string> { CopyItemHexColor },
-                                createBorder: false);
-                            IconId = icon.Id;
-                            return;
-                        }
-                        icon = await MpDb.GetItemAsync<MpIcon>(IconId);
-                        icon.HexColor1 = CopyItemHexColor;
-                        await icon.WriteToDatabaseAsync();
+                    //Task.Run(async () => {
+                    //    MpIcon icon = null;
+                    //    if(IconId == 0) {
+                    //        icon = await MpIcon.Create(
+                    //            iconImgBase64: string.Empty,
+                    //            hexColors: new List<string> { CopyItemHexColor },
+                    //            createBorder: false);
+                    //        IconId = icon.Id;
+                    //        return;
+                    //    }
+                    //    icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+                    //    icon.HexColor1 = CopyItemHexColor;
+                    //    await icon.WriteToDatabaseAsync();
 
-                    });
+                    //});
                 }
             }
         }
@@ -624,16 +623,18 @@ namespace MpWpfApp {
             }
             CopyItem = ci;
 
-            if(IconId > 0) {
-                CopyItemHexColor = await MpDataModelProvider.GetIconHexColor(IconId);
-            }
+            //if(IconId > 0) {
+            //    CopyItemHexColor = await MpDataModelProvider.GetIconHexColor(IconId);
+            //}
 
             IsNewAndFirstLoad = !MpMainWindowViewModel.Instance.IsMainWindowLoading;
 
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
 
-            await UpdateColorPallete();
+            await TitleSwirlViewModel.InitializeAsync();
+
+            //await UpdateColorPallete();
             //AnalyticItemCollectionViewModel = new MpAnalyticItemCollectionViewModel(this);
 
             CycleDetailCommand.Execute(null);
@@ -800,28 +801,6 @@ namespace MpWpfApp {
         }
 
 
-        public async Task UpdateColorPallete() {
-            var icon = await MpDb.GetItemAsync<MpIcon>(CopyItem.Source.PrimarySource.IconId);
-
-            var pallete = new List<string>{
-                    icon.HexColor1,
-                    icon.HexColor3,
-                    icon.HexColor3,
-                    icon.HexColor4,
-                    icon.HexColor5
-                };
-
-            var tagColors = await MpDataModelProvider.GetTagColorsForCopyItem(CopyItemId);
-
-            pallete.InsertRange(0, tagColors);
-
-            if(!string.IsNullOrEmpty(CopyItemHexColor)) {
-                pallete.Insert(0,CopyItemHexColor);
-            }
-            ColorPallete = pallete.Take(5).ToArray();
-
-            await TitleSwirlViewModel.InitializeAsync();
-        }
 
         #region IDisposable
 
@@ -1005,6 +984,22 @@ namespace MpWpfApp {
                 case nameof(IsReadOnly):
                     OnPropertyChanged(nameof(EditorHeight));
                     break;
+                case nameof(HasModelChanged):
+                    if(HasModelChanged) {
+                        Task.Run(async () => {
+                            await CopyItem.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
+                    }
+                    break;
+                case nameof(CopyItemHexColor):
+                    if(TitleSwirlViewModel != null) {
+                        //is null on init when CopyItem is set
+                        MpHelpers.RunOnMainThread(async () => {
+                            await TitleSwirlViewModel.InitializeAsync();
+                        });
+                    }
+                    break;
             }
         }
 
@@ -1168,25 +1163,23 @@ namespace MpWpfApp {
             IsEditingTitle = !IsEditingTitle;
         }
 
-        public string GetColor() {
-            return CopyItemHexColor;
-        }
+        //public string GetColor() {
+        //    return CopyItemHexColor;
+        //}
 
-        public ICommand SetColorCommand => new RelayCommand<string>(
-            async (args) => {
-                CopyItemHexColor = args as string;
-                await CopyItem.WriteToDatabaseAsync();
+        //public ICommand SetColorCommand => new RelayCommand<string>(
+        //    async (args) => {
+        //        CopyItemHexColor = args as string;
+        //        await CopyItem.WriteToDatabaseAsync();
 
-                TitleSwirlViewModel.ForceBrush(CopyItemHexColor.ToSolidColorBrush());
+        //        TitleSwirlViewModel.ForceBrush(CopyItemHexColor.ToSolidColorBrush());
 
-                MpContextMenuView.Instance.CloseMenu();
-            });
+        //        MpContextMenuView.Instance.CloseMenu();
+        //    });
 
         public ICommand ChangeColorCommand => new RelayCommand<Brush>(
-            async (b) => {
+            (b) => {
                 CopyItemHexColor = b.ToHex();
-                TitleSwirlViewModel.ForceBrush(b);
-                await CopyItem.WriteToDatabaseAsync();
             });
 
         public ICommand BringToFrontCommand {

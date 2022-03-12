@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpDbImage : MpDbModelBase, MpISyncableDbObject {
+    public class MpDbImage : MpDbModelBase, MpISyncableDbObject, MpIClonableDbModel<MpDbImage> {
         [PrimaryKey,AutoIncrement]
         [Column("pk_MpDbImageId")]
         public override int Id { get; set; }
@@ -51,6 +51,20 @@ namespace MonkeyPaste {
             }
             return i;
         }
+
+        #region MpIClonableDbModel Implementation
+
+        public async Task<MpDbImage> CloneDbModel() {
+            var cdbi = new MpDbImage() {
+                DbImageGuid = System.Guid.NewGuid(),
+                ImageBase64 = this.ImageBase64
+            };
+            await cdbi.WriteToDatabaseAsync();
+            return cdbi;
+        }
+
+        #endregion
+
         public MpDbImage() { }
 
         public async Task<object> CreateFromLogs(string imgGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {            
@@ -122,5 +136,7 @@ namespace MonkeyPaste {
 
             return diffLookup;
         }
+
+        
     }
 }

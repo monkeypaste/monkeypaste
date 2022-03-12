@@ -8,6 +8,7 @@ using System.IO;
 using System.Collections.Specialized;
 using MonkeyPaste;
 using System.Security.Permissions;
+using System.Runtime.InteropServices;
 
 namespace MpClipboardHelper {
     public static partial class MpClipboardManager {
@@ -175,23 +176,29 @@ namespace MpClipboardHelper {
                         }
                     } 
                     if (MpDataObject.SupportedFormats.Contains(MpClipboardFormat.Rtf) && 
-                        ido.GetDataPresent(DataFormats.Rtf, autoConvert)) {                        string data = ido.GetData(DataFormats.Rtf, autoConvert) as string;
+                        ido.GetDataPresent(DataFormats.Rtf, autoConvert)) {                        
+                        string data = ido.GetData(DataFormats.Rtf, autoConvert) as string;
                         if (!string.IsNullOrEmpty(data)) {
                             ndo.DataFormatLookup.Add(MpClipboardFormat.Rtf, data);
                         }
                     } 
                     if (MpDataObject.SupportedFormats.Contains(MpClipboardFormat.Bitmap) && 
                         ido.GetDataPresent(DataFormats.Bitmap, autoConvert)) {
-                        using (Image img = Clipboard.GetImage()) {
-                            using (MemoryStream memoryStream = new MemoryStream()) {
-                                img.Save(memoryStream, ImageFormat.Bmp);
-                                byte[] imageBytes = memoryStream.ToArray();
-                                string data = Convert.ToBase64String(imageBytes);
-                                if (!string.IsNullOrEmpty(data)) {
-                                    ndo.DataFormatLookup.Add(MpClipboardFormat.Bitmap, data);
-                                }
+                        
+                        Image img = Clipboard.GetImage();
+                        if (img == null) {
+                            img = MpClipboardHelper.MpClipoardImageHelpers.GetClipboardImage(ido as DataObject);
+                        }
+                        using (MemoryStream memoryStream = new MemoryStream()) {
+                            
+                            img.Save(memoryStream, ImageFormat.Bmp);
+                            byte[] imageBytes = memoryStream.ToArray();
+                            string data = Convert.ToBase64String(imageBytes);
+                            if (!string.IsNullOrEmpty(data)) {
+                                ndo.DataFormatLookup.Add(MpClipboardFormat.Bitmap, data);
                             }
-                        }                        
+                        }
+                        img.Dispose();
                     } 
                     if (MpDataObject.SupportedFormats.Contains(MpClipboardFormat.FileDrop) && 
                         ido.GetDataPresent(DataFormats.FileDrop, autoConvert)) {
@@ -251,7 +258,7 @@ namespace MpClipboardHelper {
                 return false;
             }
 
-
+            
             #endregion
 
             #endregion

@@ -59,7 +59,7 @@ namespace MpWpfApp {
                     new MpBootstrappedItem(typeof(MpDragDropManager)),
 
                     new MpBootstrappedItem(typeof(MpClipboardHelper.MpClipboardManager)),
-                    new MpBootstrappedItem(typeof(MpMouseHook))
+                    //new MpBootstrappedItem(typeof(MpMouseHook))
                 });
         }
 

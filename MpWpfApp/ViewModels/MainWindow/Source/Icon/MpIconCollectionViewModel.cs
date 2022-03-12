@@ -15,14 +15,22 @@ using Microsoft.Win32;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-
-
-    public class MpIconCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpIconCollectionViewModel> {
+    public class MpIconCollectionViewModel : 
+        MpViewModelBase, 
+        MpISingletonViewModel<MpIconCollectionViewModel>,
+        MpIUserColorViewModel {
         #region Properties
 
         #region View Models
 
         public ObservableCollection<MpIconViewModel> IconViewModels { get; set; } = new ObservableCollection<MpIconViewModel>();
+        #endregion
+
+        #region MpIUserColorViewModel Implementation
+
+        //this is used to allow ChangeIconCommand to select a color and convert it to an icon 
+        public string UserHexColor { get; set; }
+
         #endregion
 
         #endregion
@@ -99,6 +107,9 @@ namespace MpWpfApp {
         public ICommand SelectImagePathCommand => new RelayCommand<object>(
             async (args) => {
                 var uivm = args as MpIUserIconViewModel;
+                if(uivm == null) {
+                    throw new Exception("SelectImagePathCommand require MpIUserIconViewModel argument");
+                }
 
                 var openFileDialog = new OpenFileDialog() {
                     Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
@@ -113,52 +124,83 @@ namespace MpWpfApp {
                     string imagePath = openFileDialog.FileName;
                     var bmpSrc = (BitmapSource)new BitmapImage(new Uri(imagePath));
 
-                    var icon = await uivm.GetIcon();
-                    if(icon == null) {
+                    MpIcon icon = null;
+                    if(uivm.IconId == 0) {
                         // likely means its current icon is a default reference to a parent
                         icon = await MpIcon.Create(
                             iconImgBase64: bmpSrc.ToBase64String(), 
                             createBorder: false);
+                        uivm.IconId = icon.Id;
                     } else {
                         icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
                         await icon.CreateOrUpdateBorder();
                     }
+                    uivm.OnPropertyChanged(nameof(uivm.IconId));
 
-                    uivm.SetIconCommand.Execute(icon);
+                    //uivm.SetIconCommand.Execute(icon);
                 }
                 MpMainWindowViewModel.Instance.IsShowingDialog = false;
             });
 
         public ICommand ChangeIconCommand => new RelayCommand<object>(
              (args) => {
-                FrameworkElement fe = args as FrameworkElement;
-                MpMenuItemViewModel mivm = new MpMenuItemViewModel();
+                 FrameworkElement fe = args as FrameworkElement;
+                 MpMenuItemViewModel mivm = new MpMenuItemViewModel();
 
-                if (fe.DataContext is MpIUserColorViewModel ucvm) {
-                    string hexColor = ucvm.GetColor();
+                 if(fe.DataContext is MpISelectableViewModel svm) {
+                     svm.IsSelected = true;
+                 }
+
+                 if (fe.DataContext is MpIUserColorViewModel ucvm) {
                      mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
                          MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(ucvm)
                      };
-                }
-
-                 if (fe.DataContext is MpIUserIconViewModel uivm) {
-                     if (mivm.SubItems == null) {
-                         mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>();
-                     } else {
-                         mivm.SubItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
-                     }
-                     mivm.SubItems.Add(
+                 } else if (fe.DataContext is MpIUserIconViewModel uivm) {
+                     mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
+                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
+                         new MpMenuItemViewModel() { IsSeparator = true },
                          new MpMenuItemViewModel() {
                              Header = "Choose Image...",
                              IconResourceKey = Application.Current.Resources["ImageIcon"] as string,
                              Command = SelectImagePathCommand,
                              CommandParameter = uivm
-                         });
+                         }
+                     };
                  }
 
                  MpContextMenuView.Instance.DataContext = mivm;
                  MpContextMenuView.Instance.PlacementTarget = fe;
                  MpContextMenuView.Instance.IsOpen = true;
+
+                 if(fe.DataContext is MpIUserIconViewModel) {
+                     var uivm = fe.DataContext as MpIUserIconViewModel;
+                     //wait for selection, if color then conver to icon
+                     MpHelpers.RunOnMainThread(async () => {
+                         while (MpContextMenuView.Instance.IsOpen) {
+                             await Task.Delay(100);
+                         }
+                         if (string.IsNullOrEmpty(UserHexColor)) {
+                             return;
+                         }
+
+                         var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+                         bmpSrc = MpWpfImagingHelper.TintBitmapSource(bmpSrc, UserHexColor.ToWinMediaColor());
+
+                         MpIcon icon = null;
+                         if (uivm.IconId == 0) {
+                             // likely means its current icon is a default reference to a parent
+                             icon = await MpIcon.Create(
+                                 iconImgBase64: bmpSrc.ToBase64String(),
+                                 createBorder: false);
+                             uivm.IconId = icon.Id;
+                         } else {
+                             icon = await MpDb.GetItemAsync<MpIcon>(uivm.IconId);
+                             icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
+                             await icon.CreateOrUpdateBorder(forceHexColor: UserHexColor);
+                         }
+                         uivm.OnPropertyChanged(nameof(uivm.IconId));
+                     });
+                 }
             },(args)=> {
                 if(args !=  null) {
                     object dc = args;
@@ -166,14 +208,16 @@ namespace MpWpfApp {
                         dc = fe.DataContext;
                     }
                     if(dc is MpIUserIconViewModel uivm) {
-                        return !uivm.IsReadOnly;
+                        var icon = MpDataModelProvider.GetIconById(uivm.IconId);
+                        return !icon.IsReadOnly;
                     }
                     if (dc is MpIUserColorViewModel ucvm) {
-                        return !ucvm.IsReadOnly;
+                        return true;
                     }
                 }
                 return false;
             });
+
 
         #endregion
     }

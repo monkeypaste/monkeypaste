@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -7,10 +8,26 @@ using Xamarin.Forms;
 namespace MonkeyPaste {
     public class MpColor {
         public byte[] Channels { get; set; }
-        public byte A => Channels[0];
-        public byte R => Channels[1];
-        public byte G => Channels[2];
-        public byte B => Channels[3];
+
+        public byte A {
+            get => Channels[0];
+            set => Channels[0] = value;
+        }
+
+        public byte R {
+            get => Channels[1];
+            set => Channels[1] = value;
+        }
+
+        public byte G {
+            get => Channels[2];
+            set => Channels[2] = value;
+        }
+
+        public byte B {
+            get => Channels[3];
+            set => Channels[3] = value;
+        }
 
         public MpColor(string hexStr) {
             Channels = MpColorHelpers.GetHexColorBytes(hexStr);
@@ -33,10 +50,23 @@ namespace MonkeyPaste {
         }
 
         public override string ToString() {
+            return ToHex();
+        }
+
+        public string ToReadableString() {
             return string.Format(@"A:{0} R:{1} G:{2} B:{3}", A, R, G, B);
         }
     }
+
     public static class MpColorHelpers {
+        public static int ColorDistance(this SKColor a, SKColor b) {
+            // from https://stackoverflow.com/a/3968341/105028
+
+            byte a_intensity = a.ToGrayScale().Red;
+            byte b_intensity = b.ToGrayScale().Red;
+            return (int)(((a_intensity - b_intensity) * 100) / 255);
+        }
+
         public static string ToHex(this byte[] bytes) {
             if(bytes == null) {
                 throw new Exception("Bytes are null");

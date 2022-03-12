@@ -51,6 +51,7 @@
     <Compile Include="MpClipboardManager.cs" />
     <Compile Include="MpClipboardTimer.cs" />
     <Compile Include="MpClipboardWatcher.cs" />
+    <Compile Include="MpClipoardImageHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WinApi.cs" />
   </ItemGroup>

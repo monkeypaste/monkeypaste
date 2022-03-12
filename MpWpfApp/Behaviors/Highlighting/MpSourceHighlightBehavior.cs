@@ -62,8 +62,8 @@ namespace MpWpfApp {
             string pink = Brushes.Pink.ToHex();
             string yellow = Brushes.Yellow.ToHex();
             string red = Brushes.Red.ToHex();
-            Brush fill = isSelected ? pink.ToSolidColorBrush(fillOpacity) : yellow.ToSolidColorBrush(fillOpacity);
-            Brush stroke = isSelected ? red.ToSolidColorBrush() : yellow.ToSolidColorBrush(); 
+            Brush fill = isSelected ? pink.ToBrush(fillOpacity) : yellow.ToBrush(fillOpacity);
+            Brush stroke = isSelected ? red.ToBrush() : yellow.ToBrush(); 
 
             AssociatedObject.SourceMatchEllipse.Fill = fill;
             AssociatedObject.SourceMatchEllipse.Stroke = stroke;

@@ -227,9 +227,22 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
-            await EnabledAll();
-
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
             OnPropertyChanged(nameof(Items));
+
+            await RestoreAllEnabled();
+
+            // select most recent action
+            MpActionViewModelBase actionToSelect = AllActions
+                            .Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+
+            if (actionToSelect != null) {
+                SelectedItem = actionToSelect.RootTriggerActionViewModel;
+                actionToSelect.IsSelected = true;
+                OnPropertyChanged(nameof(SelectedItem));
+                SelectedItem.OnPropertyChanged(nameof(SelectedActions));
+            }
 
             IsBusy = false;
         }
@@ -268,11 +281,16 @@ namespace MpWpfApp {
             return tavm;
         }
 
-        public async Task EnabledAll() {
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
-
-            Items.Where(x=>x.IsEnabledDb).ForEach(x => x.ToggleIsEnabledCommand.Execute(true));
+        public async Task RestoreAllEnabled() {
+            foreach(var avm in AllActions) {
+                // TODO this could be optimized by toggling enabled in parallel
+                if(avm.IsEnabledDb) {
+                    avm.ToggleIsEnabledCommand.Execute(true);
+                    while(avm.IsBusy) {
+                        await Task.Delay(100);
+                    }
+                }
+            }
 
             //while(AllActions.Any(x=>x.IsBusy)) {
             //    await Task.Delay(100);

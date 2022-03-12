@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -71,6 +72,9 @@ namespace MpWpfApp {
 
         #region Bg Grid Properties
 
+        public double MinScale { get; set; } = 0.1;
+        public double MaxScale { get; set; } = 3;
+
         public Brush GridLineBrush { get; set; } = Brushes.LightBlue;
         public double GridLineThickness { get; set; } = 1;
 
@@ -99,7 +103,7 @@ namespace MpWpfApp {
             this.child = element;
             if (child != null) {
                 this.PreviewMouseWheel += child_MouseWheel;
-                this.MouseLeftButtonDown += child_MouseLeftButtonDown;
+                this.MouseLeftButtonDown += child_PreviewMouseLeftButtonDown;
                 this.MouseLeftButtonUp += child_MouseLeftButtonUp;
                 this.MouseMove += child_MouseMove;
                 this.PreviewMouseRightButtonDown += child_PreviewMouseRightButtonDown;
@@ -164,7 +168,7 @@ namespace MpWpfApp {
                 var tt = GetTranslateTransform(child);
 
                 double zoom = e.Delta > 0 ? .2 : -.2;
-                if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4)) {
+                if (!(e.Delta > 0) && (st.ScaleX < MinScale || st.ScaleY < MinScale)) {
                     return;
                 }
                 Point relative = e.GetPosition(child);
@@ -184,7 +188,11 @@ namespace MpWpfApp {
                 st.ScaleX += zoomCorrected;
                 st.ScaleY += zoomCorrected;
 
-                if(DesignerItem != null) {
+
+                st.ScaleX = Math.Max(MinScale, st.ScaleX);
+                st.ScaleY = Math.Max(MinScale, st.ScaleY);
+
+                if (DesignerItem != null) {
                     DesignerItem.ScaleX = st.ScaleX;
                     DesignerItem.ScaleY = st.ScaleY;
                     if (DataContext is MpActionCollectionViewModel acvm) {
@@ -193,19 +201,27 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        private void child_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if (child != null) {
+        bool isMoving = false;
+        private void child_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if (child != null && !MpMoveBehavior.IsAnyMoving) {
                 var tt = GetTranslateTransform(child);
                 mp_start = e.GetPosition(this);
                 tt_origin = new Point(tt.X, tt.Y);
                 MpCursor.SetCursor(DataContext, MpCursorType.Hand);
-                child.CaptureMouse();
+                bool result = child.CaptureMouse();
+                if(!result) {
+                    var capturer = Mouse.Captured;
+                    Debugger.Break();
+                } else {
+                    isMoving = true;
+                    e.Handled = true;
+                }
             }
         }
 
         private void child_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             if (child != null) {
+                isMoving = false;
                 child.ReleaseMouseCapture();
                 MpCursor.UnsetCursor(DataContext);
                 if(DataContext is MpActionCollectionViewModel acvm) {
@@ -220,7 +236,7 @@ namespace MpWpfApp {
 
         private void child_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
             if (child != null) {
-                if (child.IsMouseCaptured) {
+                if (isMoving) {
                     var tt = GetTranslateTransform(child);
                     Vector v = mp_start - e.GetPosition(this);
                     tt.X = tt_origin.X - v.X;
@@ -230,7 +246,7 @@ namespace MpWpfApp {
                         DesignerItem.TranslateOffsetX = tt.X;
                         DesignerItem.TranslateOffsetY = tt.Y;
                     }
-                }
+                } 
             }
         }
 
@@ -249,8 +265,9 @@ namespace MpWpfApp {
         private void DrawGrid(DrawingContext dc) {
             Point offset = new Point(10, 10);
 
-            int HorizontalGridLineCount = (int)(RenderSize.Width / GridLineSpacing);
-            int VerticalGridLineCount = (int)(RenderSize.Height / GridLineSpacing);
+            var st = GetScaleTransform(child);
+            int HorizontalGridLineCount = (int)((RenderSize.Width / GridLineSpacing) * (1/st.ScaleX));
+            int VerticalGridLineCount = (int)((RenderSize.Height / GridLineSpacing) * (1/st.ScaleY));
 
             double xStep = RenderSize.Width / HorizontalGridLineCount;
             double yStep = RenderSize.Height / VerticalGridLineCount;

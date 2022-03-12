@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpAnalyticItemPreset : MpDbModelBase, ICloneable {
+    public class MpAnalyticItemPreset : MpDbModelBase, MpIClonableDbModel<MpAnalyticItemPreset> {
         #region Columns
         [Column("pk_MpAnalyticItemPresetId")]
         [PrimaryKey, AutoIncrement]
@@ -46,6 +46,9 @@ namespace MonkeyPaste {
         public DateTime ManifestLastModifiedDateTime { get; set; } = DateTime.MinValue;
 
         public int Pinned { get; set; } = 0;
+
+        public DateTime LastSelectedDateTime { get; set; }
+
         #endregion
 
         #region Fk Models
@@ -111,7 +114,8 @@ namespace MonkeyPaste {
             int sortOrderIdx = -1, 
             List<MpAnalyticItemParameterFormat> parameters = null,
             List<MpAnalyzerPresetValueFormat> values = null,
-            DateTime? manifestLastModifiedDateTime = null) {
+            DateTime? manifestLastModifiedDateTime = null,
+            int existingDefaultPresetId = 0) {
             
             if(iconId == 0) {
                 throw new Exception("needs icon");
@@ -124,6 +128,7 @@ namespace MonkeyPaste {
             }
 
             var newAnalyticItemPreset = new MpAnalyticItemPreset() {
+                Id = existingDefaultPresetId,   // only not 0 when reseting default preset
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
                 AnalyzerPluginGuid = analyzerPluginGuid,
                 Label = label,
@@ -164,16 +169,49 @@ namespace MonkeyPaste {
             return newAnalyticItemPreset;
         }
 
-        public MpAnalyticItemPreset() : base() { }
+        #region MpIClonableDbModel Implementation
 
-        public object Clone() {
+        public async Task<MpAnalyticItemPreset> CloneDbModel() {
+            // NOTE does not clone ShortcutId,IsDefault or IsQuickAction
+
             var caip = new MpAnalyticItemPreset() {
-                AnalyticItemPresetGuid = this.AnalyticItemPresetGuid,
-                Label = this.Label + " Clone",
+                AnalyticItemPresetGuid = System.Guid.NewGuid(),
+                AnalyzerPluginGuid = this.AnalyzerPluginGuid,
+                Label = this.Label + " - Copy",
                 Description = this.Description,
-                PresetParameterValues = this.PresetParameterValues.Select(x=>x.Clone() as MpAnalyticItemPresetParameterValue).ToList()
+                ManifestLastModifiedDateTime = this.ManifestLastModifiedDateTime,
+                PresetParameterValues = new List<MpAnalyticItemPresetParameterValue>()
             };
+
+            if(IconId > 0) {
+                var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+                var ci = await icon.CloneDbModel();
+                caip.IconId = ci.Id;
+            }
+
+            // NOTE writing to db before creating preset values because they rely on cloned preset pk
+            await caip.WriteToDatabaseAsync();
+
+            if(PresetParameterValues == null || PresetParameterValues.Count == 0) {
+                PresetParameterValues = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(Id);
+            }
+            foreach(var ppv in PresetParameterValues) {
+                var cppv = await ppv.CloneDbModel();
+                cppv.AnalyticItemPresetId = caip.Id;
+                await cppv.WriteToDatabaseAsync();
+
+                caip.PresetParameterValues.Add(cppv);
+            }
+
             return caip;
         }
+
+        #endregion
+
+        public MpAnalyticItemPreset() : base() { }
+
+
+
+        
     }
 }

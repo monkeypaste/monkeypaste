@@ -26,8 +26,9 @@ namespace MpWpfApp {
         MpIActionComponent, 
         MpISidebarItemViewModel,
         MpIUserIconViewModel,
+        //MpIUserColorViewModel,
         MpIShortcutCommand, 
-        MpITreeItemViewModel, ICloneable {
+        MpITreeItemViewModel {
         #region Properties
 
         #region View Models
@@ -84,7 +85,7 @@ namespace MpWpfApp {
 
         public bool IsAllValid => Items.All(x => x.IsValid);
 
-        public bool IsEditingParameters { get; set; }
+        //public bool IsEditingParameters { get; set; }
 
         public bool IsSelected { get; set; }
 
@@ -220,6 +221,22 @@ namespace MpWpfApp {
             }
         }
 
+        public DateTime LastSelectedDateTime {
+            get {
+                if(Preset == null) {
+                    return DateTime.MinValue;
+                }
+                return Preset.LastSelectedDateTime;
+            }
+            set {
+                if(LastSelectedDateTime != value) {
+                    Preset.LastSelectedDateTime = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(LastSelectedDateTime));
+                }
+            }
+        }
+
         public MpAnalyticItemPreset Preset { get; protected set; }
 
         
@@ -285,6 +302,10 @@ namespace MpWpfApp {
             Items.ForEach(x => x.Validate());
             HasModelChanged = false;
 
+            while (Items.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+
             IsBusy = false;
         }
 
@@ -327,12 +348,6 @@ namespace MpWpfApp {
             return naipvm;
         }
 
-        public object Clone() {
-            var caipvm = new MpAnalyticItemPresetViewModel(Parent);
-            caipvm.Preset = Preset.Clone() as MpAnalyticItemPreset;
-            return caipvm;
-        }
-
         public void Register(MpActionViewModelBase mvm) {
             if(mvm.ActionId == 597) {
                 Debugger.Break();
@@ -346,26 +361,6 @@ namespace MpWpfApp {
             Parent.OnAnalysisCompleted -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
         }
-
-        public async Task<MpIcon> GetIcon() {
-            if(Parent == null) {
-                return null;
-            }
-            if(Parent.IconId == IconId) {
-                // this ensures icon change will not propagate since its default reference
-                return null;
-            }
-            await Task.Delay(1);
-            var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
-            if(ivm == null) {
-                return null;
-            }
-            return ivm.Icon;
-        }
-        public ICommand SetIconCommand => new RelayCommand<object>(
-            (args) => {
-                IconId = (args as MpIcon).Id;
-            });
 
         #endregion
 
@@ -415,21 +410,24 @@ namespace MpWpfApp {
         private void MpPresetParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
+                    if(IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
+                    }
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedPresetViewModel));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
                     break;
-                case nameof(IsEditingParameters):
-                    if(IsEditingParameters) {
-                        Parent.Items.Where(x => x != this).ForEach(x => x.IsEditingParameters = false);
-                        ManagePresetCommand.Execute(null);
-                    }
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
-                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
-                    OnPropertyChanged(nameof(HasModelChanged));
-                    break;
+                //case nameof(IsEditingParameters):
+                //    if(IsEditingParameters) {
+                //        Parent.Items.Where(x => x != this).ForEach(x => x.IsEditingParameters = false);
+                //        ManagePresetCommand.Execute(null);
+                //    }
+                //    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
+                //    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
+                //    OnPropertyChanged(nameof(HasModelChanged));
+                //    break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         Task.Run(async () => { 
@@ -444,12 +442,12 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ManagePresetCommand => new RelayCommand(
-            () => {
-                Parent.Items.ForEach(x => x.IsSelected = x == this);
-                Parent.Items.ForEach(x => x.IsEditingParameters = x == this);
-                Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
-            }, !IsEditingParameters && !Parent.IsAnyEditingParameters);
+        //public ICommand ManagePresetCommand => new RelayCommand(
+        //    () => {
+        //        Parent.Items.ForEach(x => x.IsSelected = x == this);
+        //        Parent.Items.ForEach(x => x.IsEditingParameters = x == this);
+        //        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+        //    }, !IsEditingParameters && !Parent.IsAnyEditingParameters);
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             async () => {

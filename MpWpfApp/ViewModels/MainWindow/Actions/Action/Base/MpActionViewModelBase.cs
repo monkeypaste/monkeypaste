@@ -77,6 +77,7 @@ namespace MpWpfApp {
         public ObservableCollection<MpActionViewModelBase> Items { get; set; } = new ObservableCollection<MpActionViewModelBase>();
 
         public IList<MpActionViewModelBase> Children => Items;
+
         #endregion
 
         #region MpIUserIcon Implementation
@@ -103,9 +104,7 @@ namespace MpWpfApp {
         #endregion
 
         #region MpISelectableViewModel Implementation
-
-        public DateTime LastSelectedDateTime { get; set; }
-
+        
         public bool IsSelected { get; set; } = false;
 
         #endregion
@@ -612,6 +611,13 @@ namespace MpWpfApp {
                 }
                 return Action.IconId;
             }
+            set {
+                if(IconId != value) {
+                    Action.IconId = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IconId));
+                }
+            }
         }
 
 
@@ -637,6 +643,22 @@ namespace MpWpfApp {
                     return 0;
                 }
                 return Action.Id;
+            }
+        }
+
+        public DateTime LastSelectedDateTime {
+            get {
+                if (Action == null) {
+                    return DateTime.MinValue;
+                }
+                return Action.LastSelectedDateTime;
+            }
+            set {
+                if (LastSelectedDateTime != value) {
+                    Action.LastSelectedDateTime = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(LastSelectedDateTime));
+                }
             }
         }
 
@@ -683,6 +705,12 @@ namespace MpWpfApp {
                     var cavm = await CreateActionViewModel(ca);
                     Items.Add(cavm);
                 }
+            }
+
+            OnPropertyChanged(nameof(Items));
+
+            while (Items.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
             }
 
             IsBusy = false;
@@ -1002,9 +1030,9 @@ namespace MpWpfApp {
                     IsEnabled = false;
                     LastIsEnabledState = false;
                 }
-                if(IsEnabled.HasValue) {
-                    Children.ForEach(x => x.ToggleIsEnabledCommand.Execute(IsEnabled.Value));
-                }
+                //if(IsEnabled.HasValue) {
+                //    Children.ForEach(x => x.ToggleIsEnabledCommand.Execute(IsEnabled.Value));
+                //}
 
                 //while(Children.Any(x=>x.IsBusy)) {
                 //    await Task.Delay(100);

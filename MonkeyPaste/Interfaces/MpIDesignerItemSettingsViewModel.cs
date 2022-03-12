@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste {
-    public interface MpIDesignerItemSettingsViewModel {
+    public interface MpIDesignerItemSettingsViewModel : MpIViewModel {
         double ScaleX { get; set; }
         double ScaleY { get; set; }
 

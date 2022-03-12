@@ -13,10 +13,10 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" 
+        <StackPanel Grid.Column="0"
                     Orientation="Vertical">
             <Border CornerRadius="3"
                     BorderThickness="1"
@@ -24,10 +24,10 @@
                     Background="Transparent"
                     Margin="10,0">
                 <ComboBox x:Name="AnalyticItemChooserComboBox"
+                          MinWidth="60"
+                          MinHeight="40"
                           IsSynchronizedWithCurrentItem="True"
-                          SelectedItem="{Binding SelectedItem,
-                                                 Mode=TwoWay,
-                                                 UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding SelectedItem}"
                           ItemsSource="{Binding Items}">
                     <ComboBox.ItemContainerStyle>
                         <Style TargetType="ComboBoxItem">
@@ -49,7 +49,7 @@
             <local:MpAnalyticItemPresetDataGridView DataContext="{Binding SelectedItem}" />
         </StackPanel>
         <Grid x:Name="PresetParametersGrid"
-              Grid.Column="1" 
+              Grid.Column="1"
               Visibility="{Binding IsAnyEditingParameters,
                                    Converter={StaticResource BoolToVisibilityConverter},
                                    FallbackValue='Collapsed'}">

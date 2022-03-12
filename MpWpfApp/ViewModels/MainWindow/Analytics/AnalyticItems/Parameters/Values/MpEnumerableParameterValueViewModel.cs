@@ -138,12 +138,26 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; } = false;
 
-        public int ValueIdx { get; set; } = 0;               
+        public int ValueIdx { get; set; } = 0;
 
+        public override bool HasModelChanged {
+            get {
+                if(Parent == null) {
+                    return false;
+                }
+                return Parent.HasModelChanged;
+            }
+            set {
+                if(HasModelChanged != value) {
+                    Parent.HasModelChanged = value;
+                    OnPropertyChanged(nameof(HasModelChanged));
+                }
+            }
+        }
         #endregion
 
         #region Model
-        
+
         public bool IsReadOnly {
             get {
                 if(Parent == null) {
@@ -198,9 +212,8 @@ namespace MpWpfApp {
             }
             set {
                 if (Value != value) {
-                    //HasModelChanged = AnalyticItemParameterValue.value != value;
-                    HasModelChanged = true;
                     AnalyticItemParameterValue.value = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(Value));
                 }
             }
@@ -301,14 +314,17 @@ namespace MpWpfApp {
                     Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
                     HasModelChanged = true;
                     break;
-                case nameof(HasModelChanged):
-                    if (IsBusy || Parent.IsBusy) {
-                        //workaround for initializing where value falls back to parameter default and not preset value
-                        return;
-                    }
-                    if (HasModelChanged) {
-                        Parent.HasModelChanged = true;
-                    }
+                //case nameof(HasModelChanged):
+                //    if (IsBusy || Parent.IsBusy) {
+                //        //workaround for initializing where value falls back to parameter default and not preset value
+                //        return;
+                //    }
+                //    if (HasModelChanged) {
+                //        Parent.HasModelChanged = true;
+                //    }
+                //    Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
+                //    break;
+                case nameof(Value):
                     Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
                     break;
             }

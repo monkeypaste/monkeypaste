@@ -231,7 +231,7 @@ namespace MpWpfApp {
             string defaultFontName = "arial";
             FontFamily defaultFontFamily = null;
             FontFamily closestFontFamily = null;
-            string fontName = text;
+            string fontName = text.ToLower();
             foreach (var ff in Fonts.SystemFontFamilies) {
                 string ffName = ff.ToString().ToLower();
                 if (ffName.Contains(fontName)) {

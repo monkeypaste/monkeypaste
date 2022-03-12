@@ -23,16 +23,32 @@
                 </Style>
             </ResourceDictionary>
 
-            <Color x:Key="CompletedColor">#1C8859</Color>
-            <Color x:Key="ActiveColor">#D3D3D3</Color>
+            <Color x:Key="CompletedColor">
+                #1C8859
+            </Color>
+            <Color x:Key="ActiveColor">
+                #D3D3D3
+            </Color>
 
-            <Color x:Key="UnselectedColor">White</Color>
-            <Color x:Key="HoverColor">Yellow</Color>
-            <Color x:Key="SelectedColor">Orange</Color>
-            <Color x:Key="PrimarySelectedColor">Blue</Color>
+            <Color x:Key="UnselectedColor">
+                White
+            </Color>
+            <Color x:Key="HoverColor">
+                Yellow
+            </Color>
+            <Color x:Key="SelectedColor">
+                Orange
+            </Color>
+            <Color x:Key="PrimarySelectedColor">
+                Blue
+            </Color>
 
-            <ImageSource x:Key="AppIcon">/Resources/Icons/monkey.png</ImageSource>
-            <ImageSource x:Key="SearchIcon">/Resources/Icons/search.png</ImageSource>
+            <ImageSource x:Key="AppIcon">
+                /Resources/Icons/monkey.png
+            </ImageSource>
+            <ImageSource x:Key="SearchIcon">
+                /Resources/Icons/search.png
+            </ImageSource>
 
             <OnPlatform x:Key="FontAwesomeBrands"
                         x:TypeArguments="x:String">

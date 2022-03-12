@@ -4,7 +4,9 @@ using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpAnalyticItemPresetParameterValue : MpDbModelBase, ICloneable {
+    public class MpAnalyticItemPresetParameterValue : 
+        MpDbModelBase, 
+        MpIClonableDbModel<MpAnalyticItemPresetParameterValue> {
         #region Columns
         [Column("pk_MpAnalyticItemPresetParameterValueId")]
         [PrimaryKey, AutoIncrement]
@@ -83,14 +85,24 @@ namespace MonkeyPaste {
             return newAnalyticItemPresetParameterValue;
         }
 
-        public MpAnalyticItemPresetParameterValue() : base() { }
+        #region MpIClonableDbModel Implementation
 
-        public object Clone() {
-            return new MpAnalyticItemPresetParameterValue() {
+        public async Task<MpAnalyticItemPresetParameterValue> CloneDbModel() {
+            // NOTE if recreating preset must set PresetId after this method
+
+            var cppv = new MpAnalyticItemPresetParameterValue() {
+                AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
                 AnalyticItemPresetId = this.AnalyticItemPresetId,
                 ParameterEnumId = this.ParameterEnumId,
                 Value = this.Value
             };
+            await cppv.WriteToDatabaseAsync();
+            return cppv;
         }
+
+        #endregion
+
+        public MpAnalyticItemPresetParameterValue() : base() { }
+
     }
 }

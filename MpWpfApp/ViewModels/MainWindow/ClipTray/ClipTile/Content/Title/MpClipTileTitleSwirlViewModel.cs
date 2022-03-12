@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -85,7 +86,20 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Business Logic
+        #region State
+
+        public bool HasUserDefinedColor {
+            get {
+                if(Parent == null || Parent.CopyItem == null || string.IsNullOrEmpty(Parent.CopyItem.ItemColor)) {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        #endregion
+
+        #region Model
 
         #endregion
 
@@ -94,35 +108,46 @@ namespace MpWpfApp {
         #region Public Methods
         public MpClipTileTitleSwirlViewModel() : base(null) { }
 
-        public MpClipTileTitleSwirlViewModel(MpContentItemViewModel parent) : base(parent) { }
+        public MpClipTileTitleSwirlViewModel(MpContentItemViewModel parent) : base(parent) {
+        }
 
         public async Task InitializeAsync() {
             if(Parent.IsPlaceholder) {
                 return;
             }
-            await MpHelpers.RunOnMainThreadAsync(() => {
-                var cl = Parent.ColorPallete;
-                for (int i = 0; i < cl.Length; i++) {
-                    var scb = new SolidColorBrush(cl[i].ToWinMediaColor());
-                    if (i < Swirls.Count) {
-                        Swirls[i].LayerId = i;
-                        Swirls[i].LayerBrush = scb;
-                        Swirls[i].LayerOpacity = (double)MpHelpers.Rand.Next(40, 120) / 255;
-                    } else {
-                        Swirls.Add(
-                            new MpSwirlLayerViewModel(
-                                this,
-                                i,
-                                scb,
-                                (double)MpHelpers.Rand.Next(40, 120) / 255));
-                    }
+            var icon = await MpDb.GetItemAsync<MpIcon>(Parent.IconId);
+
+            var pallete = new List<string>{
+                    icon.HexColor1,
+                    icon.HexColor3,
+                    icon.HexColor3,
+                    icon.HexColor4,
+                    icon.HexColor5
+                };
+
+            var tagColors = await MpDataModelProvider.GetTagColorsForCopyItem(Parent.CopyItemId);
+
+            pallete.InsertRange(0, tagColors);
+
+            if (HasUserDefinedColor) {
+                pallete.Insert(0, Parent.CopyItemHexColor);
+            }
+            //ColorPallete = pallete.Take(5).ToArray();
+
+            for (int i = 0; i < 5; i++) {
+                var scb = new SolidColorBrush(pallete[i].ToWinMediaColor());
+                if (i < Swirls.Count) {
+                    Swirls[i].LayerId = i;
+                    Swirls[i].LayerBrush = scb;
+                    Swirls[i].LayerOpacity = (double)MpHelpers.Rand.Next(40, 120) / 255;
+                } else {
+                    Swirls.Add(
+                        new MpSwirlLayerViewModel(
+                            this,
+                            i,
+                            scb,
+                            (double)MpHelpers.Rand.Next(40, 120) / 255));
                 }
-            });
-        }
-        public void ForceBrush(Brush forcedBrush) {
-            foreach(var slvm in Swirls) {
-                slvm.LayerBrush = forcedBrush;
-                slvm.LayerOpacity = (double)MpHelpers.Rand.Next(40, 120) / 255;
             }
         }
 

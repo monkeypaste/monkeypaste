@@ -278,7 +278,6 @@ namespace MonkeyPaste {
             return str.ToLowerInvariant().Contains(compareStr.ToLowerInvariant());
         }
 
-
         public static async Task<string> CheckSum(this string str) {
             string result = await Task<string>.Run(() => {
                 using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
@@ -316,65 +315,14 @@ namespace MonkeyPaste {
             var density = locationFetcher.GetDensity(view);
             return new Point(p.X / density, p.Y / density);
         }
-
-        public static string GetHexString(this Xamarin.Forms.Color color) {
-            var red = (int)(color.R * 255);
-            var green = (int)(color.G * 255);
-            var blue = (int)(color.B * 255);
-            var alpha = (int)(color.A * 255);
-            var myHexString =  $"#{red:X2}{green:X2}{blue:X2}{alpha:X2}";
-            var hexString = color.ToHex(); 
-            return hexString;
-        }
-
-        public static SKColor ToGrayScale(this SKColor c) {
-            // from https://stackoverflow.com/a/3968341/105028
-            byte intensity = (byte)((double)c.Blue * 0.11 + (double)c.Green * 0.59 + (double)c.Red * 0.3);
-            return new SKColor(intensity, intensity, intensity);
-        }
-
-        public static int ColorDistance(this SKColor a, SKColor b) {
-            // from https://stackoverflow.com/a/3968341/105028
-
-            byte a_intensity = a.ToGrayScale().Red;
-            byte b_intensity = b.ToGrayScale().Red;
-            return (int)(((a_intensity - b_intensity) * 100) / 255);
-        }
-
-        public static SKColor ToSkColor(this string hexColor) {
-            return Color.FromHex(hexColor).ToSKColor();
-        }
-
-        public static SKColor ToSKColor(this Color c) {
-            return new SKColor((byte)(c.R * 255), (byte)(c.G * 255), (byte)(c.B * 255),(byte)(c.A * 255));
-        }
-
-        public static Color GetColor(this string hexString) {
-            //if(string.IsNullOrEmpty(str)) {
-            //    return Color.Red;
-            //}
-            //str = str.StartsWith(@"#") ? str.Substring(1, str.Length - 1) : str;
-
-            //double r = (double)((int)Convert.ToInt32(str.Substring(0, 2)) / 255);
-            //double g = (double)((int)Convert.ToByte(str.Substring(2, 2)) / 255);
-            //double b = (double)((int)Convert.ToByte(str.Substring(4, 2)) / 255);
-
-            //replace # occurences
-            if (hexString.IndexOf('#') != -1) {
-                hexString = hexString.Replace("#", "");
-            }
-
-
-            int r = int.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier);
-            int g = int.Parse(hexString.Substring(2, 2), NumberStyles.AllowHexSpecifier);
-            int b = int.Parse(hexString.Substring(4, 2), NumberStyles.AllowHexSpecifier);
-
-            //return Color.FromArgb(r, g, b);
-            return Color.FromRgba(r, g, b, 255);
-        }
+        
         #endregion
 
         #region Data
+
+        public static bool HasValue(this double value) {
+            return !Double.IsNaN(value) && !Double.IsInfinity(value);
+        }
 
         public static int ByteCount(this object obj) {
             if(obj == null) {

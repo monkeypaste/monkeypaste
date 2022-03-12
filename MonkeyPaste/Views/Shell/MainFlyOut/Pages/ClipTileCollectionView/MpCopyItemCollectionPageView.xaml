@@ -59,7 +59,8 @@
                             <ActivityIndicator IsVisible="{Binding IsBusy}" />
                             <Label HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"
-                                   IsVisible="{Binding IsNotBusy}"
+                                   IsVisible="{Binding IsBusy,
+                                                       Converter={StaticResource BoolNegateConverter}}"
                                    Text="{Binding EmptyCollectionLableText}"
                                    VerticalOptions="Center" />
                         </Grid>

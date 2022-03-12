@@ -41,15 +41,15 @@
                       IsReadOnly="False"
                       AutoGenerateColumns="False">
                 <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
-                                     Color="Transparent" />
+                    <!--<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                     Color="Transparent" />-->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                     Color="DarkGray" />
                 </DataGrid.Resources>
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Setter Property="IsSelected"
-                                Value="{Binding IsSelected,
-                                                Mode=TwoWay,
-                                                UpdateSourceTrigger=PropertyChanged}" />
+                                Value="{Binding IsSelected}" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
@@ -128,48 +128,62 @@
                     <DataGridTemplateColumn MinWidth="40">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ToggleButton Background="Transparent"
-                                              BorderThickness="0"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Stretch"
-                                              ToolTip="Configure"
-                                              Margin="0"
-                                              Template="{StaticResource LockToggleButtonControlTemplate}"
-                                              IsChecked="{Binding IsEditingParameters,
-                                                                  Mode=TwoWay,
-                                                                  NotifyOnTargetUpdated=True,
-                                                                  NotifyOnSourceUpdated=True,
-                                                                  UpdateSourceTrigger=PropertyChanged}">
-                                    <Image Width="20"
-                                           Height="20"
-                                           Source="{Binding .,
-                                                            Converter={StaticResource StringResourceToImageSourceConverter},
-                                                            Source={StaticResource SlidersIcon}}" />
-                                </ToggleButton>
+                                <Grid>
+                                    <Grid Visibility="{Binding Parent.IsBusy,
+                                                               Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                ToolTip="Analyze"
+                                                Visibility="{Binding Parent.CanAnalyzerExecute,
+                                                                     Converter={StaticResource BoolToVisibilityConverter}}"
+                                                Command="{Binding Parent.ExecuteAnalysisCommand}"
+                                                CommandParameter="{Binding}">
+                                            <Image Width="20"
+                                                   Height="20"
+                                                   Source="{Binding .,
+                                                                    Converter={StaticResource StringResourceToImageSourceConverter},
+                                                                    Source={StaticResource ExecuteIcon}}" />
+                                        </Button>
+                                        <Image Width="20"
+                                               Height="20"
+                                               ToolTip="{Binding Parent.CannotExecuteTooltip}"
+                                               ToolTipService.InitialShowDelay="0"
+                                               Visibility="{Binding Parent.CanAnalyzerExecute,
+                                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                               Source="{Binding .,
+                                                                Converter={StaticResource StringResourceToImageSourceConverter},
+                                                                Source={StaticResource QuestionMarkIcon}}" />
+                                    </Grid>
+                                    <local:MpSpinnerSwirl Width="20"
+                                                          Height="20"
+                                                          Visibility="{Binding Parent.IsBusy,
+                                                                               Converter={StaticResource BoolToVisibilityConverter}}" />
+                                </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+
                     <DataGridTemplateColumn MinWidth="40">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
                                     <Button Background="Transparent"
                                             BorderThickness="0"
-                                            ToolTip="Analyze"
+                                            ToolTip="Duplicate"
                                             Visibility="{Binding Parent.IsBusy,
                                                                  Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                            Command="{Binding Parent.ExecuteAnalysisCommand}"
+                                            Command="{Binding Parent.DuplicatePresetCommand}"
                                             CommandParameter="{Binding}">
                                         <Image Width="20"
                                                Height="20"
                                                Source="{Binding .,
                                                                 Converter={StaticResource StringResourceToImageSourceConverter},
-                                                                Source={StaticResource ExecuteIcon}}" />
+                                                                Source={StaticResource SheepIcon}}" />
                                     </Button>
-                                    <local:MpSpinnerPiston Width="20"
-                                                           Height="20"
-                                                           Visibility="{Binding Parent.IsBusy,
-                                                                                Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    <local:MpSpinnerSwirl Width="20"
+                                                          Height="20"
+                                                          Visibility="{Binding Parent.IsBusy,
+                                                                               Converter={StaticResource BoolToVisibilityConverter}}" />
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -177,19 +191,42 @@
                     <DataGridTemplateColumn MinWidth="40">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Background="Transparent"
-                                        BorderThickness="0"
-                                        ToolTip="Delete"
-                                        local:MpHoverableExtension.IsEnabled="True"
-                                        local:MpHoverableExtension.HoverCursor="{Binding DeleteCursor}"
-                                        Command="{Binding Parent.DeletePresetCommand}"
-                                        CommandParameter="{Binding}">
-                                    <Image Width="20"
-                                           Height="20"
-                                           Source="{Binding .,
-                                                            Converter={StaticResource StringResourceToImageSourceConverter},
-                                                            Source={StaticResource TrashCanIcon}}" />
-                                </Button>
+                                <Grid>
+                                    <Grid Visibility="{Binding Parent.IsBusy,
+                                                               Converter={StaticResource BoolToVisibilityFlipConverter}}">
+
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                ToolTip="Delete"
+                                                Visibility="{Binding IsDefault,
+                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                Command="{Binding Parent.DeletePresetCommand}"
+                                                CommandParameter="{Binding}">
+                                            <Image Width="20"
+                                                   Height="20"
+                                                   Source="{Binding .,
+                                                                    Converter={StaticResource StringResourceToImageSourceConverter},
+                                                                    Source={StaticResource TrashCanIcon}}" />
+                                        </Button>
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                ToolTip="Reset"
+                                                Visibility="{Binding IsDefault,
+                                                                     Converter={StaticResource BoolToVisibilityConverter}}"
+                                                Command="{Binding Parent.ResetDefaultPresetCommand}"
+                                                CommandParameter="{Binding}">
+                                            <Image Width="20"
+                                                   Height="20"
+                                                   Source="{Binding .,
+                                                                    Converter={StaticResource StringResourceToImageSourceConverter},
+                                                                    Source={StaticResource ResetIcon}}" />
+                                        </Button>
+                                    </Grid>
+                                    <local:MpSpinnerSwirl Width="20"
+                                                          Height="20"
+                                                          Visibility="{Binding Parent.IsBusy,
+                                                                               Converter={StaticResource BoolToVisibilityConverter}}" />
+                                </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

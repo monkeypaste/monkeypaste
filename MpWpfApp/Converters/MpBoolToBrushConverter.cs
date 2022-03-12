@@ -24,7 +24,7 @@ namespace MpWpfApp {
             }
 
 
-            return brushHex.ToSolidColorBrush();
+            return brushHex.ToBrush();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

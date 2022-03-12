@@ -269,5 +269,8 @@
     <s:String x:Key="FilterIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/filter.png
     </s:String>
+    <s:String x:Key="SheepIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/sheep.png
+    </s:String>
     <!--  Icon/Image Source Paths End  -->
 </ResourceDictionary>
