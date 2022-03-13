@@ -76,6 +76,9 @@
                                         Value="{Binding TrayX}" />
                                 <Setter Property="Canvas.Top"
                                         Value="0" />
+                                <Setter Property="Visibility"
+                                        Value="{Binding IsPlaceholder,
+                                                        Converter={StaticResource BoolToVisibilityFlipConverter}}" />
                                 <!--<Setter Property="Width"
                                         Value="{Binding TileBorderWidth}"/>
                                 <Setter Property="Height"

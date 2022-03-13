@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Xamarin.Forms;
+
 namespace MonkeyPaste {   
     public class MpNotificationCollectionViewModel : MpViewModelBase {
         #region Static Variables
@@ -87,56 +89,60 @@ namespace MonkeyPaste {
             string title = "",
             string msg = "",
             double maxShowTimeMs = -1) {
-            if(DoNotShowNotificationIds.Contains((int)dialogType)) {
-                MpConsole.WriteTraceLine($"Notification: {dialogType.ToString()} marked as hidden");
-                return MpDialogResultType.Ignore;
-            }
+            var userActionResult = await Device.InvokeOnMainThreadAsync(async () => {
+                if (DoNotShowNotificationIds.Contains((int)dialogType)) {
+                    MpConsole.WriteTraceLine($"Notification: {dialogType.ToString()} marked as hidden");
+                    return MpDialogResultType.Ignore;
+                }
 
-            if(string.IsNullOrEmpty(title)) {
-                if (exceptionType == MpNotificationExceptionSeverityType.Warning ||
-                    exceptionType == MpNotificationExceptionSeverityType.WarningWithOption) {
-                    title = "Warning: ";
+                if (string.IsNullOrEmpty(title)) {
+                    if (exceptionType == MpNotificationExceptionSeverityType.Warning ||
+                        exceptionType == MpNotificationExceptionSeverityType.WarningWithOption) {
+                        title = "Warning: ";
+                    } else {
+                        title = "Error: ";
+                    }
+                }
+                title += dialogType.EnumToLabel();
+
+                var unvm = new MpUserActionNotificationViewModel(this) {
+                    DialogType = dialogType,
+                    ExceptionType = exceptionType,
+                    Title = title,
+                    Body = msg
+                };
+
+                NotificationQueue.Add(unvm);
+                OnPropertyChanged(nameof(CurrentNotificationViewModel));
+
+                if (!IsVisible) {
+                    ShowBalloon();
+                }
+
+                MpConsole.WriteLines(
+                    $"Notification balloon set to:",
+                    $"msg: '{msg}'",
+                    $"type: '{dialogType.ToString()}'",
+                    $"severity: '{exceptionType.ToString()}'");
+
+                if (maxShowTimeMs > 0) {
+                    DateTime startTime = DateTime.Now;
+                    while (unvm.DialogResult == MpDialogResultType.None &&
+                            DateTime.Now - startTime <= TimeSpan.FromMilliseconds(maxShowTimeMs)) {
+                        await Task.Delay(100);
+                    }
                 } else {
-                    title = "Error: ";
+                    while (unvm.DialogResult == MpDialogResultType.None) {
+                        await Task.Delay(100);
+                    }
                 }
-            }
-            title += dialogType.EnumToLabel();
 
-            var unvm = new MpUserActionNotificationViewModel(this) {
-                DialogType = dialogType,
-                ExceptionType = exceptionType,
-                Title = title,
-                Body = msg
-            };
+                ShiftToNextNotificationCommand.Execute(null);
 
-            NotificationQueue.Add(unvm);
-            OnPropertyChanged(nameof(CurrentNotificationViewModel));
+                return unvm.DialogResult;
+            });
 
-            if(!IsVisible) {
-                ShowBalloon();
-            }
-
-            MpConsole.WriteLines(
-                $"Notification balloon set to:",
-                $"msg: '{msg}'",
-                $"type: '{dialogType.ToString()}'",
-                $"severity: '{exceptionType.ToString()}'");
-
-            if (maxShowTimeMs > 0) {
-                DateTime startTime = DateTime.Now;
-                while (unvm.DialogResult == MpDialogResultType.None &&
-                       DateTime.Now - startTime <= TimeSpan.FromMilliseconds(maxShowTimeMs)) {
-                    await Task.Delay(100);
-                }
-            } else {
-                while (unvm.DialogResult == MpDialogResultType.None) {
-                    await Task.Delay(100);
-                }
-            }
-
-            ShiftToNextNotificationCommand.Execute(null);
-
-            return unvm.DialogResult;
+            return userActionResult;
         }
 
         public async Task BeginLoader(MpIProgressLoader loader) {

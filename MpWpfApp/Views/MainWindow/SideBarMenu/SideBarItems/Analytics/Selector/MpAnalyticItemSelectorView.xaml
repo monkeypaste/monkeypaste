@@ -16,45 +16,47 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0"
-                    Orientation="Vertical">
-            <Border CornerRadius="3"
-                    BorderThickness="1"
-                    BorderBrush="Black"
-                    Background="Transparent"
-                    Margin="10,0">
-                <ComboBox x:Name="AnalyticItemChooserComboBox"
-                          MinWidth="60"
-                          MinHeight="40"
-                          IsSynchronizedWithCurrentItem="True"
-                          SelectedItem="{Binding SelectedItem}"
-                          ItemsSource="{Binding Items}">
-                    <ComboBox.ItemContainerStyle>
-                        <Style TargetType="ComboBoxItem">
-                            <Setter Property="IsSelected"
-                                    Value="{Binding IsSelected,
-                                                    Mode=TwoWay,
-                                                    UpdateSourceTrigger=PropertyChanged,
-                                                    NotifyOnTargetUpdated=True,
-                                                    NotifyOnSourceUpdated=True}" />
-                        </Style>
-                    </ComboBox.ItemContainerStyle>
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <local:MpAnalyticItemView DataContext="{Binding}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </Border>
-            <local:MpAnalyticItemPresetDataGridView DataContext="{Binding SelectedItem}" />
-        </StackPanel>
-        <Grid x:Name="PresetParametersGrid"
-              Grid.Column="1"
-              Visibility="{Binding IsAnyEditingParameters,
-                                   Converter={StaticResource BoolToVisibilityConverter},
-                                   FallbackValue='Collapsed'}">
-            <local:MpAnalyticItemPresetParameterListBoxView HorizontalAlignment="Stretch"
-                                                            DataContext="{Binding SelectedPresetViewModel}" />
-        </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0"
+                Grid.Column="0"
+                BorderThickness="0"
+                BorderBrush="Black"
+                Background="Transparent"
+                VerticalAlignment="Top"
+                Margin="10,0">
+            <ComboBox x:Name="AnalyticItemChooserComboBox"
+                      MinWidth="60"
+                      IsSynchronizedWithCurrentItem="True"
+                      SelectedItem="{Binding SelectedItem}"
+                      ItemsSource="{Binding Items}">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnTargetUpdated=True,
+                                                NotifyOnSourceUpdated=True}" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpAnalyticItemView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Border>
+        <local:MpAnalyticItemPresetDataGridView Grid.Row="1" 
+                                                Grid.Column="0" 
+                                                VerticalAlignment="Top"
+                                                DataContext="{Binding SelectedItem}" />
+        <local:MpAnalyticItemPresetParameterListBoxView Grid.Column="1"
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="2"
+                                                        HorizontalAlignment="Stretch"
+                                                        DataContext="{Binding SelectedPresetViewModel}" />
     </Grid>
 </local:MpUserControl>

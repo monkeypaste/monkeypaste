@@ -212,6 +212,7 @@ namespace MonkeyPaste {
                 MpIUserColorViewModel ucvm = argParts[0] as MpIUserColorViewModel;
                 string hexColor = argParts[1] as string;
                 ucvm.UserHexColor = hexColor;
+                MpNativeWrapper.Services.ContextMenuCloser.CloseMenu();
             });
 
         #endregion

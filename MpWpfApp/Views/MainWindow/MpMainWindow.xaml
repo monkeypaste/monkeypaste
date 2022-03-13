@@ -178,15 +178,19 @@
             </Grid>
 
             <!--  3rd row row for tray  -->
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2"
+                  Background="{Binding .,
+                                       Converter={StaticResource StringToThemeBrushConverter},
+                                       ConverterParameter=Tag_Tree_Background_Color}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{Binding Path=SearchCriteriaListBoxHeight,
                                                     Source={x:Static local:MpSearchBoxViewModel.Instance}}" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding TotalSidebarWidth,
-                                                      Source={x:Static local:MpSidebarViewModel.Instance}}" />
+                    <ColumnDefinition Width="{Binding AppStateButtonPanelWidth,
+                                                      Source={x:Static local:MpMeasurements.Instance}}" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
@@ -196,60 +200,59 @@
                                                    VerticalAlignment="Stretch"
                                                    VerticalContentAlignment="Stretch"
                                                    DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />
-                <!--  Side bar AppState Buttons  -->
 
-                <local:MpSidebarContainerView x:Name="SidebarMenuView"
-                                              Grid.Row="1"
-                                              Grid.Column="0"
-                                              VerticalAlignment="Stretch"
-                                              Height="{Binding ClipTrayHeight,
-                                                               Source={x:Static local:MpClipTrayViewModel.Instance}}"
-                                              DataContext="{x:Static local:MpSidebarViewModel.Instance}"
-                                              HorizontalAlignment="Stretch"
-                                              
-                                              Background="{Binding .,
-                                                                   Converter={StaticResource StringToThemeBrushConverter},
-                                                                   ConverterParameter=Tag_Tree_Background_Color}" />
+                <!--  Side bar AppState Buttons  -->
+                <local:MpSidebarView Grid.Row="1"
+                                     Grid.Column="0"
+                                     HorizontalAlignment="Stretch"
+                                     HorizontalContentAlignment="Left"
+                                     VerticalAlignment="Stretch"
+                                     VerticalContentAlignment="Stretch"
+                                     Margin="0,3"
+                                     DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
+
+                <local:MpTagTreeView x:Name="TagTreeView"
+                                     Grid.Row="1"
+                                     Grid.Column="1"
+                                     Visibility="{Binding IsSidebarVisible,
+                                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                                     DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
+                <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
+                                                  Grid.Row="1"
+                                                  Grid.Column="1"
+                                                  DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
+                                                  Visibility="{Binding IsSidebarVisible,
+                                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
+                <local:MpTriggerActionChooserView x:Name="ActionCollectionView"
+                                                  Grid.Row="1"
+                                                  Grid.Column="1"
+                                                  DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
+                                                  Visibility="{Binding IsSidebarVisible,
+                                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
                 <GridSplitter x:Name="SidebarGridSplitter"
-                              DataContext="{x:Static local:MpSidebarViewModel.Instance}"
-                              Background="Black"
                               Grid.Row="1"
-                              Grid.Column="0"
+                              Grid.Column="1"
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch"
-                              Width="2"
+                              Width="5"
                               local:MpHoverableExtension.IsEnabled="True"
                               local:MpHoverableExtension.HoverCursor="ResizeWE"
-                              IsEnabled="{Binding IsAnySidebarOpen}"
-                              DragStarted="SidebarGridSplitter_DragStarted">
-                    <i:Interaction.Behaviors>
-                        <local:MpResizeBehavior x:Name="SidebarResizeBehvior"
-                                                DoubleClickFrameworkElement="{Binding ElementName=SidebarGridSplitter}"
-                                                IsResizing="{Binding IsResizing,
-                                                                     Mode=TwoWay,
-                                                                     UpdateSourceTrigger=PropertyChanged,
-                                                                     NotifyOnSourceUpdated=True,
-                                                                     NotifyOnTargetUpdated=True}"
-                                                CanResize="{Binding CanResize,
-                                                                    Mode=TwoWay,
-                                                                    UpdateSourceTrigger=PropertyChanged,
-                                                                    NotifyOnSourceUpdated=True,
-                                                                    NotifyOnTargetUpdated=True}"
-                                                ResizableEdge1="Right"
-                                                BoundWidth="{Binding SidebarWidth,
-                                                                     Mode=TwoWay,
-                                                                     UpdateSourceTrigger=PropertyChanged,
-                                                                     NotifyOnSourceUpdated=True,
-                                                                     NotifyOnTargetUpdated=True}"
-                                                DefaultWidth="{Binding VisibleSidebar.DefaultWidth}"
-                                                MinWidth="{Binding MinSidebarWidth,
-                                                                   Source={x:Static local:MpMeasurements.Instance}}" />
-
-                    </i:Interaction.Behaviors>
+                              IsVisibleChanged="SidebarGridSplitter_IsVisibleChanged">
+                    <GridSplitter.Visibility>
+                        <MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}"
+                                      ConverterParameter="OR">
+                            <Binding Path="IsSidebarVisible"
+                                     Source="{x:Static local:MpTagTrayViewModel.Instance}" />
+                            <Binding Path="IsSidebarVisible"
+                                     Source="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}" />
+                            <Binding Path="IsSidebarVisible"
+                                     Source="{x:Static local:MpActionCollectionViewModel.Instance}" />
+                        </MultiBinding>
+                    </GridSplitter.Visibility>
                 </GridSplitter>
                 <local:MpClipTrayContainerView x:Name="ClipTrayView"
                                                Grid.Row="1"
-                                               Grid.Column="1"
+                                               Grid.Column="2"
                                                DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
             </Grid>
         </Grid>

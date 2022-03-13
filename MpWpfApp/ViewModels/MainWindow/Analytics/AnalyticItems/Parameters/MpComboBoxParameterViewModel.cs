@@ -108,7 +108,7 @@ namespace MpWpfApp {
 
         public async Task<MpEnumerableParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(
             int idx,
-            MpAnalyticItemParameterValue valueSeed) {
+            MpAnalyticItemParameterValueFormat valueSeed) {
             var naipvvm = new MpEnumerableParameterValueViewModel(this);
             naipvvm.PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
             await naipvvm.InitializeAsync(idx, valueSeed);

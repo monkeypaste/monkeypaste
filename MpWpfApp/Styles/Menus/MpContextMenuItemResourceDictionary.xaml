@@ -208,8 +208,7 @@
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel MaxWidth="240"
-                                       Orientation="Horizontal"
+                            <WrapPanel Orientation="Horizontal"
                                        IsItemsHost="True" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>

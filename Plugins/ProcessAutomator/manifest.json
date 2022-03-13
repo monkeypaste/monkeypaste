@@ -102,6 +102,7 @@
         "parameterControlType": "ListBox",
         "parameterValueType": "PlainText",
         "enumId": 7,
+        "isSingleSelect": true,
         "isReadOnly": true,
         "isRequired": true,
         "values": [

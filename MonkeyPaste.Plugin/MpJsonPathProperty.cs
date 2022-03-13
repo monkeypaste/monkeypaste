@@ -23,6 +23,32 @@ namespace MonkeyPaste.Plugin {
 
         public bool omitIfPathNotFound { get; set; } = true;
 
+        public static string Query(object jsonObj, string jsonQuery) {
+            string jsonStr = string.Empty;
+            if(jsonObj == null) {
+                return null;
+            }
+            if(jsonObj is string) {
+                jsonStr = jsonObj.ToString();
+            } else {
+                jsonStr = JsonConvert.SerializeObject(jsonObj);
+            }
+            JObject jo;
+            if (jsonStr.StartsWith("[")) {
+                JArray a = JArray.Parse(jsonStr);
+                jo = a.Children<JObject>().First();
+            } else {
+                jo = JObject.Parse(jsonStr);
+            }
+
+            var matchValPath = new MpJsonPathProperty() {
+                valuePath = jsonQuery
+            };
+            matchValPath.SetValue(jo, null);
+
+            return matchValPath.value;
+        }
+
         public MpJsonPathProperty() {
             if (_inputParamRegex == null) {
                 _inputParamRegex = new Regex(_inputParamRegexStr, RegexOptions.Compiled | RegexOptions.Multiline);

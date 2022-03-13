@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using System.Windows.Data;
 
 namespace MpWpfApp {
     [Flags]
@@ -47,8 +48,9 @@ namespace MpWpfApp {
         MpIMenuItemViewModel {
         #region Private Variables
         
-        private const int _ANALYZE_TIMEOUT_MS = 10000;
-        private const int _PROCESS_TIMEOUT_MS = 5000;
+        // TODO In Release Mode change these to smaller values
+        private const int _ANALYZE_TIMEOUT_MS = 1000000;
+        private const int _PROCESS_TIMEOUT_MS = 500000;
 
         #endregion
 
@@ -672,6 +674,7 @@ namespace MpWpfApp {
                         if(SelectedItem == null) {
                             SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                         }
+                        CollectionViewSource.GetDefaultView(SelectedItem.Items).Refresh();
                         //Items.ForEach(x => x.IsEditingParameters = false);
                         //SelectedItem.IsEditingParameters = true;
                     } 

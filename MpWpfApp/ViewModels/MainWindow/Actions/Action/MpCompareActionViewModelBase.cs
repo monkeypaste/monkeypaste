@@ -266,38 +266,39 @@ namespace MpWpfApp {
             }
 
             MpActionOutput ao = GetInput(arg);
-
             object matchVal = null;
             if(ComparePropertyPathType == MpComparePropertyPathType.LastOutput) {
                 if(ao != null) {
                     if(ao.OutputData is MpPluginResponseFormat prf && IsJsonQuery) {
                         try {
-                            string prfStr = JsonConvert.SerializeObject(prf);
-                            JObject jo;
-                            if (prfStr.StartsWith("[")) {
-                                JArray a = JArray.Parse(prfStr);
-                                jo = a.Children<JObject>().First();
-                            } else {
-                                jo = JObject.Parse(prfStr);
-                            }
+                            //string prfStr = JsonConvert.SerializeObject(prf);
+                            //JObject jo;
+                            //if (prfStr.StartsWith("[")) {
+                            //    JArray a = JArray.Parse(prfStr);
+                            //    jo = a.Children<JObject>().First();
+                            //} else {
+                            //    jo = JObject.Parse(prfStr);
+                            //}
 
-                            var matchValPath = new MpJsonPathProperty() {
-                                valuePath = CompareDataJsonPath
-                            };
-                            matchValPath.SetValue(jo, null);
-                            matchVal = matchValPath.value;
+                            //var matchValPath = new MpJsonPathProperty() {
+                            //    valuePath = CompareDataJsonPath
+                            //};
+                            //matchValPath.SetValue(jo, null);
+                            matchVal = MpJsonPathProperty.Query(prf, CompareDataJsonPath);
                         } catch(Exception ex) {
+                            matchVal = null;
                             MpConsole.WriteLine(@"Error parsing/querying json response:");
                             MpConsole.WriteLine(ao.OutputData.ToString());
                             MpConsole.WriteLine(@"For JSONPath: ");
                             MpConsole.WriteLine(CompareData);
                             MpConsole.WriteTraceLine(ex);
-                            matchVal = null;
+
+                            ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
+                            await ShowValidationNotification();
                         }
                     } else {
                         matchVal = ao.OutputData;
-                    }
-                    
+                    }                    
                 }                
             } else {
                 matchVal = ao.CopyItem.GetPropertyValue(PhysicalPropertyPath);

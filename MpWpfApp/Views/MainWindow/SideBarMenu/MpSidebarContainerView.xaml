@@ -16,39 +16,34 @@
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding AppStateButtonPanelWidth, Source={x:Static local:MpMeasurements.Instance}}" />
-            <ColumnDefinition Width="{Binding SidebarWidth}" />
+            <ColumnDefinition Width="{Binding AppStateButtonPanelWidth,
+                                              Source={x:Static local:MpMeasurements.Instance}}" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <local:MpSidebarView Grid.Column="0"
+                             Width="{Binding AppStateButtonPanelWidth,
+                                              Source={x:Static local:MpMeasurements.Instance}}"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Stretch"
                              VerticalContentAlignment="Stretch"
                              Margin="0,3"
                              DataContext="{Binding}" />
-
-        <Grid Grid.Column="1"
-              HorizontalAlignment="Stretch"
-              Visibility="{Binding IsAnySidebarOpen,
-                                   Converter={StaticResource BoolToVisibilityConverter}}">
-            <local:MpTagTreeView x:Name="TagTreeView"
-                                 MinWidth="{Binding DefaultTagTreePanelWidth,
-                                                    Source={x:Static local:MpMeasurements.Instance}}"
-                                 Visibility="{Binding IsSidebarVisible,
-                                                      Converter={StaticResource BoolToVisibilityConverter}}"
-                                 DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
-            <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
-                                              MinWidth="{Binding DefaultAnalyzerPresetPanelWidth,
-                                                                 Source={x:Static local:MpMeasurements.Instance}}"
-                                              DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
-                                              Visibility="{Binding IsSidebarVisible,
-                                                                   Converter={StaticResource BoolToVisibilityConverter}}" />
-            <local:MpTriggerActionChooserView x:Name="ActionCollectionView"
-                                              MinWidth="{Binding SidebarWidth}"
-                                              VerticalAlignment="Stretch"
-                                              DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
-                                              Visibility="{Binding IsSidebarVisible,
-                                                                   Converter={StaticResource BoolToVisibilityConverter}}" />
-        </Grid>
+        <local:MpTagTreeView x:Name="TagTreeView"
+                             Grid.Column="1"
+                             Visibility="{Binding IsSidebarVisible,
+                                                  Converter={StaticResource BoolToVisibilityConverter}}"
+                             DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
+        <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
+                                          Grid.Column="1"
+                                          DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
+                                          Visibility="{Binding IsSidebarVisible,
+                                                               Converter={StaticResource BoolToVisibilityConverter}}" />
+        <local:MpTriggerActionChooserView x:Name="ActionCollectionView"
+                                          Grid.Column="1"
+                                          VerticalAlignment="Stretch"
+                                          DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
+                                          Visibility="{Binding IsSidebarVisible,
+                                                               Converter={StaticResource BoolToVisibilityConverter}}" />
     </Grid>
 
 </local:MpUserControl>

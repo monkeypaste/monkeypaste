@@ -128,55 +128,6 @@ namespace MpWpfApp {
 
         #region Tool Tips
 
-        public string IsAutoAnalysisModeTooltip {
-            get {
-                string tt = @"Auto Analyze";
-                if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(25).KeyString;
-                }
-                return tt;
-            }
-        }
-
-        public string IsRighClickPasteModeTooltip {
-            get {
-                string tt = @"Right-Click Paste";
-                if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(5).KeyString;
-                }
-                return tt;
-            }
-        }
-
-        public string IsAutoCopyModeTooltip {
-            get {
-                string tt = @"Auto Copy Selection";
-                if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(4).KeyString;
-                }
-                return tt;
-            }
-        }
-
-        public string IsAppendModeTooltip {
-            get {
-                string tt = @"Append Copy";
-                if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(3).KeyString;
-                }
-                return tt;
-            }
-        }
-
-        public string IsAppendLineModeTooltip {
-            get {
-                string tt = @"Append Line Copy";
-                if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(25).KeyString;
-                }
-                return tt;
-            }
-        }
 
         public string IsAppPausedTooltip {
             get {

@@ -202,8 +202,6 @@ namespace MpWpfApp {
                 columns[c].Width = new GridLength(columnWidths[c]);
             }
         }
-
-
         static double GetDesiredWidth(TextRange textRange) {
             return new FormattedText(
                 textRange.Text,

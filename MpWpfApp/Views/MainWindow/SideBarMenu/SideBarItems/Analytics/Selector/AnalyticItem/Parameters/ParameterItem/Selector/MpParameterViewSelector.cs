@@ -28,6 +28,15 @@ namespace MpWpfApp {
             if(aipvm.ControlType == MpAnalyticItemParameterControlType.FileChooser ||
                aipvm.ControlType == MpAnalyticItemParameterControlType.DirectoryChooser) {
                 keyStr = "FileChooserParameterTemplate";
+            } else if(keyStr.ToLower().Contains("listbox")) {
+                keyStr = "ListBoxParameterTemplate";
+                if(aipvm.Parameter.isMultiSelect) {
+                    keyStr = "MultiSelect" + keyStr;
+                } else if(aipvm.Parameter.isSingleSelect || !aipvm.Parameter.canAddValues) {
+                    keyStr = "SingleSelect" + keyStr;
+                } else {
+                    keyStr = "Editable" + keyStr;
+                }
             }
 
             var g = (container as FrameworkElement).GetVisualAncestor<Grid>();

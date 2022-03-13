@@ -125,14 +125,12 @@ namespace MpWpfApp {
                     icon.HexColor5
                 };
 
-            var tagColors = await MpDataModelProvider.GetTagColorsForCopyItem(Parent.CopyItemId);
-
-            pallete.InsertRange(0, tagColors);
-
             if (HasUserDefinedColor) {
-                pallete.Insert(0, Parent.CopyItemHexColor);
+                pallete = Enumerable.Repeat(Parent.CopyItemHexColor, 5).ToList();
+            } else {
+                var tagColors = await MpDataModelProvider.GetTagColorsForCopyItem(Parent.CopyItemId);
+                pallete.InsertRange(0, tagColors);
             }
-            //ColorPallete = pallete.Take(5).ToArray();
 
             for (int i = 0; i < 5; i++) {
                 var scb = new SolidColorBrush(pallete[i].ToWinMediaColor());

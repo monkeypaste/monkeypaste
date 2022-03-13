@@ -12,91 +12,119 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemParameterViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <Grid x:Name="ParamGrid"
-          ShowGridLines="True"
-          Background="DarkViolet">
-        <Grid.Resources>
-            <Style x:Key="AnalyzerTextBlockStyle"
-                   TargetType="TextBlock">
-                <Setter Property="HorizontalAlignment"
-                        Value="Left" />
-                <Setter Property="VerticalAlignment"
-                        Value="Top" />
-                <Setter Property="FontSize"
-                        Value="13" />
-                <Setter Property="FontWeight"
-                        Value="SemiBold" />
-                <Setter Property="Foreground"
-                        Value="White" />
-                <Setter Property="Margin"
-                        Value="5,5,7,0" />
-                <Setter Property="DockPanel.Dock"
-                        Value="Left" />
+    <Border Background="Transparent"
+            BorderThickness="2">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsValid}"
+                                 Value="False">
+                        <Setter Property="BorderBrush"
+                                Value="Red" />
+                    </DataTrigger>
+                </Style.Triggers>
             </Style>
-            <!--  ListBox Parameter  -->
+        </Border.Style>
+        <Grid x:Name="ParamGrid"
+              ShowGridLines="True"
+              Background="DarkViolet">
+            <Grid.Resources>
+                <Style x:Key="AnalyzerTextBlockStyle"
+                       TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment"
+                            Value="Left" />
+                    <Setter Property="VerticalAlignment"
+                            Value="Top" />
+                    <Setter Property="FontSize"
+                            Value="13" />
+                    <Setter Property="FontWeight"
+                            Value="SemiBold" />
+                    <Setter Property="Foreground"
+                            Value="White" />
+                    <Setter Property="Margin"
+                            Value="5,5,7,0" />
+                    <Setter Property="DockPanel.Dock"
+                            Value="Left" />
+                </Style>
+                <!--  MultiSelect ListBox Parameter  -->
 
-            <DataTemplate x:Key="ListBoxParameterTemplate"
-                          DataType="local:MpListBoxParameterViewModel">
-                <local:MpListBoxParameterView DataContext="{Binding}" />
-            </DataTemplate>
+                <DataTemplate x:Key="MultiSelectListBoxParameterTemplate"
+                              DataType="local:MpMultiSelectListBoxParameterViewModel">
+                    <local:MpMultiSelectListBoxParameterView DataContext="{Binding}" />
+                </DataTemplate>
 
-            <!--  ComboBox Parameter  -->
+                <!--  Single Select ListBox Parameter  -->
 
-            <DataTemplate x:Key="ComboBoxParameterTemplate"
-                          DataType="local:MpComboBoxParameterViewModel">
-                <local:MpComboBoxParameterView DataContext="{Binding}" />
-            </DataTemplate>
+                <DataTemplate x:Key="SingleSelectListBoxParameterTemplate"
+                              DataType="local:MpSingleSelectListBoxParameterViewModel">
+                    <local:MpSingleSelectListBoxParameterView DataContext="{Binding}" />
+                </DataTemplate>
 
-            <!--  TextBox Parameter  -->
+                <!--  Editable ListBox Parameter  -->
 
-            <DataTemplate x:Key="TextBoxParameterTemplate"
-                          DataType="local:MpTextBoxParameterViewModel">
-                <local:MpTextBoxParameterView DataContext="{Binding}" />
-            </DataTemplate>
+                <DataTemplate x:Key="EditableListBoxParameterTemplate"
+                              DataType="local:MpEditableListBoxParameterViewModel">
+                    <local:MpEditableListBoxParameterView DataContext="{Binding}" />
+                </DataTemplate>
 
-            <!--  CheckBox Parameter  -->
+                <!--  ComboBox Parameter  -->
 
-            <DataTemplate x:Key="CheckBoxParameterTemplate"
-                          DataType="local:MpCheckBoxParameterViewModel">
-                <local:MpCheckBoxParameterView DataContext="{Binding}" />
-            </DataTemplate>
+                <DataTemplate x:Key="ComboBoxParameterTemplate"
+                              DataType="local:MpComboBoxParameterViewModel">
+                    <local:MpComboBoxParameterView DataContext="{Binding}" />
+                </DataTemplate>
 
-            <!--  Slider Parameter  -->
+                <!--  TextBox Parameter  -->
 
-            <DataTemplate x:Key="SliderParameterTemplate"
-                          DataType="local:MpSliderParameterViewModel">
-                <local:MpSliderParameterView Margin="10,0"
-                                             DataContext="{Binding}" />
-            </DataTemplate>
+                <DataTemplate x:Key="TextBoxParameterTemplate"
+                              DataType="local:MpTextBoxParameterViewModel">
+                    <local:MpTextBoxParameterView DataContext="{Binding}" />
+                </DataTemplate>
 
-            <!--  File or Directory Chooser Parameter  -->
+                <!--  CheckBox Parameter  -->
 
-            <DataTemplate x:Key="FileChooserParameterTemplate"
-                          DataType="local:MpFileChooserParameterViewModel">
-                <local:MpFileChooserParameterView DataContext="{Binding}" />
-            </DataTemplate>
+                <DataTemplate x:Key="CheckBoxParameterTemplate"
+                              DataType="local:MpCheckBoxParameterViewModel">
+                    <local:MpCheckBoxParameterView DataContext="{Binding}" />
+                </DataTemplate>
 
-            <local:MpParameterViewSelector x:Key="ParameterViewSelector" />
-        </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <DockPanel Grid.Column="0"
-                   LastChildFill="False"
-                   DockPanel.Dock="Left">
-            <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
-                       TextWrapping="Wrap"
-                       MaxWidth="110"
-                       Text="{Binding Label}" />
-            <local:MpTooltipInfoView DockPanel.Dock="Right" 
-                                     DataContext="{Binding}" />
-        </DockPanel>
-        <ContentControl Grid.Column="1"
-                        Content="{Binding}"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        Margin="5"
-                        ContentTemplateSelector="{StaticResource ParameterViewSelector}" />
-    </Grid>
+                <!--  Slider Parameter  -->
+
+                <DataTemplate x:Key="SliderParameterTemplate"
+                              DataType="local:MpSliderParameterViewModel">
+                    <local:MpSliderParameterView Margin="10,0"
+                                                 DataContext="{Binding}" />
+                </DataTemplate>
+
+                <!--  File or Directory Chooser Parameter  -->
+
+                <DataTemplate x:Key="FileChooserParameterTemplate"
+                              DataType="local:MpFileChooserParameterViewModel">
+                    <local:MpFileChooserParameterView DataContext="{Binding}" />
+                </DataTemplate>
+
+                <local:MpParameterViewSelector x:Key="ParameterViewSelector" />
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <DockPanel Grid.Column="0"
+                       LastChildFill="False"
+                       DockPanel.Dock="Left">
+                <TextBlock Style="{StaticResource AnalyzerTextBlockStyle}"
+                           TextWrapping="Wrap"
+                           MaxWidth="110"
+                           Text="{Binding Label}" />
+                <local:MpTooltipInfoView DockPanel.Dock="Right"
+                                         DataContext="{Binding}" />
+            </DockPanel>
+            <ContentControl Grid.Column="1"
+                            Content="{Binding}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            Margin="5"
+                            ContentTemplateSelector="{StaticResource ParameterViewSelector}" />
+        </Grid>
+    </Border>
 </local:MpUserControl>

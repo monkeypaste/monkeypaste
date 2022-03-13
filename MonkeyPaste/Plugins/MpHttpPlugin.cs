@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Web;
 using MonkeyPaste.Plugin;
+using Xamarin.Forms;
+
 namespace MonkeyPaste {
     public class MpHttpPlugin : MpIAnalyzerPluginComponent {
         #region Private Variables
@@ -522,7 +524,7 @@ namespace MonkeyPaste {
                 using (var request = CreateRequestMessage(args)) {
                     try {
                         var response = await client.SendAsync(request);
-
+                        
                         if (!response.IsSuccessStatusCode) {
                             var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
                                                     dialogType: MpNotificationDialogType.BadHttpRequest,

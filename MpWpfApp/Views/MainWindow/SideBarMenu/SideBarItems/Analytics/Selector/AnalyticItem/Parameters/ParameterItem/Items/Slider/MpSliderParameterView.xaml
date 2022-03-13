@@ -15,6 +15,7 @@
             BorderThickness="1"
             Background="Transparent"
             Focusable="True"
+            MinWidth="87"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             local:MpSizeObserverExtension.IsEnabled="True"

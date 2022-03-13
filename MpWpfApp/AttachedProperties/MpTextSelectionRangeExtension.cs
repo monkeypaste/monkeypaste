@@ -83,6 +83,9 @@ namespace MpWpfApp {
         private static void Tbb_SelectionChanged(object sender, RoutedEventArgs e) {
             if(sender is TextBox tb) {
                 var tsrvm = GetTextSelectionRange(tb);
+                if(tsrvm == null) {
+                    return;
+                }
                 tsrvm.SelectionStart = tb.SelectionStart;
                 tsrvm.SelectionLength = tb.SelectionLength;
                 //SetTextSelectionRange(tb, tsrvm);

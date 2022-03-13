@@ -15,6 +15,8 @@ namespace MonkeyPaste {
         MpIGlobalTouch GlobalTouch { get; }
         MpIUiLocationFetcher LocationFetcher { get; }
         MpINativeResource NativeResource { get; }
+        MpIContextMenuCloser ContextMenuCloser { get; }
+        MpIMainThreadMarshal MainThreadMarshal { get; }
     }
 
 

@@ -41,7 +41,6 @@ namespace MpWpfApp {
                     new MpBootstrappedItem(typeof(MpClipTileSortViewModel)),
                     new MpBootstrappedItem(typeof(MpSearchBoxViewModel)),
 
-                    new MpBootstrappedItem(typeof(MpSidebarViewModel)),
                     new MpBootstrappedItem(typeof(MpAnalyticItemCollectionViewModel)),
 
                     new MpBootstrappedItem(typeof(MpClipTrayViewModel)),

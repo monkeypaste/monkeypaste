@@ -104,29 +104,15 @@ namespace MpWpfApp {
             }
         }
 
-        private void Image_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
-            var mwvm = DataContext as MpMainWindowViewModel;
-            //mwvm.HideWindowCommand.Execute(null);
+        private void SidebarGridSplitter_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            var splitter = sender as GridSplitter;
+            var containerGrid = splitter.GetVisualAncestor<Grid>();
+
+            if (!(bool)e.NewValue) {                
+                containerGrid.ColumnDefinitions[1].Width = new GridLength(0);
+            } else {
+                containerGrid.ColumnDefinitions[1].Width = GridLength.Auto;
+            }
         }
-
-        private void SidebarGridSplitter_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
-            (sender as GridSplitter).CancelDrag();
-        }
-
-        //private void GridSplitter_MouseEnter(object sender, MouseEventArgs e) {
-        //    MpCursorStack.CurrentCursor = MpCursorType.ResizeWE;
-        //}
-
-        //private void GridSplitter_MouseLeave(object sender, MouseEventArgs e) {
-        //    MpCursorStack.CurrentCursor = MpCursorType.Default;
-        //}
-
-        //private void GridSplitter_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
-        //    MpResizeBehavior.IsAnyResizing = true;
-        //}
-
-        //private void GridSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
-        //    MpResizeBehavior.IsAnyResizing = false;
-        //}
     }
 }

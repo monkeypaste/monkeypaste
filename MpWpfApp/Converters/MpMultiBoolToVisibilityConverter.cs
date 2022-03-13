@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace MpWpfApp {
-
     public class MpMultiBoolToVisibilityConverter : IMultiValueConverter {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
             string op = "AND";
@@ -12,7 +11,7 @@ namespace MpWpfApp {
                 op = "OR";
             }
 
-            bool visible = true;
+            bool visible = op == "AND";
             foreach (object value in values) {
                 if (value is bool) {
                     switch (op) {
@@ -36,4 +35,5 @@ namespace MpWpfApp {
             throw new NotImplementedException();
         }
     }
+
 }

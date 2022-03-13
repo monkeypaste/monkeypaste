@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -297,14 +298,15 @@ namespace MpWpfApp {
                 Items.Add(naipvm);
             }
 
-            OnPropertyChanged(nameof(ShortcutViewModel));
-            OnPropertyChanged(nameof(Items));
-            Items.ForEach(x => x.Validate());
-            HasModelChanged = false;
 
             while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
+
+            OnPropertyChanged(nameof(ShortcutViewModel));
+            OnPropertyChanged(nameof(Items));
+            Items.ForEach(x => x.Validate());
+            HasModelChanged = false;
 
             IsBusy = false;
         }
@@ -316,7 +318,14 @@ namespace MpWpfApp {
 
             switch (aipf.parameterControlType) {
                 case MpAnalyticItemParameterControlType.ListBox:
-                    naipvm = new MpListBoxParameterViewModel(this);
+                    if (aipf.isMultiSelect) {
+                        naipvm = new MpMultiSelectListBoxParameterViewModel(this);
+                    } else if (aipf.isSingleSelect || !aipf.canAddValues) {
+                        naipvm = new MpSingleSelectListBoxParameterViewModel(this);
+                    } else {
+                        naipvm = new MpEditableListBoxParameterViewModel(this);
+                    }
+
                     break;
                 case MpAnalyticItemParameterControlType.ComboBox:
                     naipvm = new MpComboBoxParameterViewModel(this);
@@ -367,6 +376,7 @@ namespace MpWpfApp {
         #region Protected Methods
 
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
+
             var aipvm = sender as MpAnalyticItemParameterViewModel;
             if (aipvm.IsRequired && string.IsNullOrEmpty(aipvm.CurrentValue)) {
                 aipvm.ValidationMessage = $"{aipvm.Label} is required";
@@ -418,6 +428,7 @@ namespace MpWpfApp {
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedPresetViewModel));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
+                    CollectionViewSource.GetDefaultView(Items).Refresh();
                     break;
                 //case nameof(IsEditingParameters):
                 //    if(IsEditingParameters) {

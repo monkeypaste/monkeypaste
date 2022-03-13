@@ -400,6 +400,39 @@ namespace MpWpfApp {
         public Dictionary<int, double> PersistentUniqueWidthTileLookup { get; set; } = new Dictionary<int, double>();
         #endregion
 
+        #region Mouse Modes
+
+        public bool IsAnyMouseModeEnabled => IsAutoCopyMode || IsRightClickPasteMode;
+
+        public bool IsAppendMode { get; set; }
+
+        public bool IsAppendLineMode { get; set; }
+
+        public bool IsAnyAppendMode => IsAppendMode || IsAppendLineMode;
+
+        public bool IsAutoCopyMode { get; set; }
+
+        public bool IsRightClickPasteMode { get; set; }
+
+        public string MouseModeImageSourcePath {
+            get {
+                if (IsRightClickPasteMode && IsAutoCopyMode) {
+                    return Application.Current.Resources["BothClickIcon"] as string;
+                }
+                if (IsRightClickPasteMode) {
+                    return Application.Current.Resources["RightClickIcon"] as string;
+                }
+                if (IsAutoCopyMode) {
+                    return Application.Current.Resources["LeftClickIcon"] as string;
+                }
+                return Application.Current.Resources["NoneClickIcon"] as string;
+            }
+        }
+
+        #endregion
+
+        public bool IsAppPaused { get; set; } = false;
+
         public bool IsThumbDragging { get; set; } = false;
 
         public bool IsAnyTilePinned => PinnedItems.Count > 0;
@@ -798,7 +831,7 @@ namespace MpWpfApp {
         
 
         public void ClipboardChanged(object sender, MpDataObject mpdo) {
-            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+            if(MpMainWindowViewModel.Instance.IsMainWindowLoading || IsAppPaused) {
                 return;
             }
             MpHelpers.RunOnMainThread(async () => {
@@ -1421,7 +1454,7 @@ namespace MpWpfApp {
             bool isDup = newCopyItem.Id < 0;
             newCopyItem.Id = isDup ? -newCopyItem.Id : newCopyItem.Id;
 
-            if (MpSidebarViewModel.Instance.IsAppendMode) {
+            if (IsAppendMode) {
                 if(isDup) {
                     //when duplicate copied in append mode treat item as new and don't unlink original 
                     isDup = false;
@@ -1482,7 +1515,7 @@ namespace MpWpfApp {
 
                 MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
 
-                if (MpSidebarViewModel.Instance.IsAppendMode) {
+                if (IsAppendMode) {
                     AppendNewItemsCommand.Execute(null);
                 } else {
                     AddNewItemsCommand.Execute(null);
@@ -2371,6 +2404,37 @@ namespace MpWpfApp {
                 analyticItemVm.SelectPresetCommand.Execute(presetVm);
                 analyticItemVm.ExecuteAnalysisCommand.Execute(PrimaryItem.PrimaryItem);
             });
+
+        public ICommand ToggleIsAppPausedCommand => new RelayCommand(
+            () => {
+                IsAppPaused = !IsAppPaused;
+            });
+
+        public ICommand ToggleRightClickPasteCommand => new RelayCommand(
+            () => {
+                IsRightClickPasteMode = !IsRightClickPasteMode;
+            }, !IsAppPaused);
+
+        public ICommand ToggleAutoCopyModeCommand => new RelayCommand(
+            () => {
+                IsAutoCopyMode = !IsAutoCopyMode;
+            }, !IsAppPaused);
+
+        public ICommand ToggleAppendModeCommand => new RelayCommand(
+            () => {
+                IsAppendMode = !IsAppendMode;
+                if (IsAppendMode && IsAppendLineMode) {
+                    IsAppendLineMode = false;
+                }
+            }, !IsAppPaused);
+
+        public ICommand ToggleAppendLineModeCommand => new RelayCommand(
+            () => {
+                IsAppendLineMode = !IsAppendLineMode;
+                if (IsAppendLineMode && IsAppendMode) {
+                    IsAppendMode = false;
+                }
+            }, !IsAppPaused);
 
         #endregion
     }

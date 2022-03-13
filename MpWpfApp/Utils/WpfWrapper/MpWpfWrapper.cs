@@ -17,6 +17,8 @@ namespace MpWpfApp {
         public MpIGlobalTouch GlobalTouch { get; }
         public MpIUiLocationFetcher LocationFetcher { get; }
         public MpINativeResource NativeResource { get; }
+        public MpIContextMenuCloser ContextMenuCloser { get; }
+        public MpIMainThreadMarshal MainThreadMarshal { get; }
 
         public MpWpfWrapper() {
             Cursor = new MpWpfCursor();
@@ -26,6 +28,8 @@ namespace MpWpfApp {
             IconBuilder = new MpWpfIconBuilder();
             CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
             NativeResource = new MpWpfResourceFetcher();
+            ContextMenuCloser = new MpWpfContextMenuCloser();
+            MainThreadMarshal = new MpWpfMainThreadMarshal();
         }
 
         

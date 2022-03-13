@@ -312,6 +312,7 @@ namespace MpWpfApp {
                             await ParameterValue.WriteToDatabaseAsync();
                             HasModelChanged = false;
                             if(this is MpComboBoxParameterViewModel cbpvm) {
+                                cbpvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                                 cbpvm.Items.ForEach(x => x.HasModelChanged = false);
                             }
                         });
@@ -329,6 +330,9 @@ namespace MpWpfApp {
         }
 
         protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            if(!MpBootstrapperViewModelBase.IsLoaded) {
+                return;
+            }
             OnValidate?.Invoke(this, new EventArgs());
         }
         #endregion

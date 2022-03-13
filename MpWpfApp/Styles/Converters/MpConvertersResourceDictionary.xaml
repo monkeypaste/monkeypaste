@@ -80,5 +80,5 @@
     <local:MpDoesFileOrDirectoryExistToVisibilityConverter x:Key="DoesFileOrDirectoryExistToVisibilityConverter" />
     <local:MpDoesFileOrDirectoryExistToVisibilityFlipConverter x:Key="DoesFileOrDirectoryExistToVisibilityFlipConverter" />
     <local:MpIsHexColorBrightToBlackOrWhiteBrushConverter x:Key="IsHexColorBrightToBlackOrWhiteBrushConverter" />
-    <!--  Converter Declarations End  -->
+   <!--  Converter Declarations End  -->
 </ResourceDictionary>

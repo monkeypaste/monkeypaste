@@ -16,7 +16,8 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="350" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition MinWidth="500"
+                              Width="*" />
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0"
                 CornerRadius="3"
@@ -25,30 +26,6 @@
                 BorderThickness="1"
                 BorderBrush="Black"
                 Margin="10">
-            <i:Interaction.Behaviors>
-                <local:MpResizeBehavior x:Name="ActionTreeResizeBehvior"
-                                        IsResizing="{Binding IsResizing,
-                                                             Mode=TwoWay,
-                                                             UpdateSourceTrigger=PropertyChanged,
-                                                             NotifyOnSourceUpdated=True,
-                                                             NotifyOnTargetUpdated=True}"
-                                        CanResize="{Binding CanResize,
-                                                            Mode=TwoWay,
-                                                            UpdateSourceTrigger=PropertyChanged,
-                                                            NotifyOnSourceUpdated=True,
-                                                            NotifyOnTargetUpdated=True}"
-                                        ResizableEdge1="Right"
-                                        BoundWidth="{Binding SidebarWidth,
-                                                             Mode=TwoWay,
-                                                             UpdateSourceTrigger=PropertyChanged,
-                                                             NotifyOnSourceUpdated=True,
-                                                             NotifyOnTargetUpdated=True,
-                                                             Source={x:Static local:MpSidebarViewModel.Instance}}"
-                                        DefaultWidth="{Binding DefaultSidebarWidth}"
-                                        MinWidth="{Binding MinSidebarWidth,
-                                                           Source={x:Static local:MpMeasurements.Instance}}" />
-
-            </i:Interaction.Behaviors>
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
@@ -163,45 +140,20 @@
                                                    DataContext="{Binding}" />
             </Grid>
         </Border>
-        <GridSplitter Background="Pink"
+        <GridSplitter Background="White"
+                      Grid.Row="0"
                       Grid.Column="0"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Stretch"
-                      Width="2"
+                      Width="5"
                       local:MpHoverableExtension.IsEnabled="True"
                       local:MpHoverableExtension.HoverCursor="ResizeWE" />
-        <Grid x:Name="ActionDesignerGrid"
-              Grid.Column="1"
-              local:MpSizeObserverExtension.IsEnabled="True"
-              local:MpSizeObserverExtension.ObservedWidth="{Binding DesignerWidth,
-                                                                    Mode=OneWayToSource}"
-              local:MpSizeObserverExtension.ObservedHeight="{Binding DesignerHeight,
-                                                                     Mode=OneWayToSource}"
-              DataContext="{Binding}">
-            <i:Interaction.Behaviors>
-                <local:MpResizeBehavior x:Name="DesignerResizeBehvior"
-                                        IsResizing="{Binding IsResizing,
-                                                             Mode=TwoWay,
-                                                             UpdateSourceTrigger=PropertyChanged,
-                                                             NotifyOnSourceUpdated=True,
-                                                             NotifyOnTargetUpdated=True}"
-                                        CanResize="{Binding CanResize,
-                                                            Mode=TwoWay,
-                                                            UpdateSourceTrigger=PropertyChanged,
-                                                            NotifyOnSourceUpdated=True,
-                                                            NotifyOnTargetUpdated=True}"
-                                        ResizableEdge1="Right"
-                                        BoundWidth="{Binding SidebarWidth,
-                                                             Mode=TwoWay,
-                                                             UpdateSourceTrigger=PropertyChanged,
-                                                             NotifyOnSourceUpdated=True,
-                                                             NotifyOnTargetUpdated=True}"
-                                        DefaultWidth="{Binding DefaultSidebarWidth}"
-                                        MinWidth="{Binding MinSidebarWidth,
-                                                           Source={x:Static local:MpMeasurements.Instance}}" />
-
-            </i:Interaction.Behaviors>
-            <local:MpActionDesignerView DataContext="{Binding}" />
-        </Grid>
+        <local:MpActionDesignerView Grid.Column="1"
+                                    local:MpSizeObserverExtension.IsEnabled="True"
+                                    local:MpSizeObserverExtension.ObservedWidth="{Binding DesignerWidth,
+                                                                                          Mode=OneWayToSource}"
+                                    local:MpSizeObserverExtension.ObservedHeight="{Binding DesignerHeight,
+                                                                                           Mode=OneWayToSource}"
+                                    DataContext="{Binding}" />
     </Grid>
 </local:MpUserControl>

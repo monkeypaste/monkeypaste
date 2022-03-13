@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using FFImageLoading.Helpers.Exif;
@@ -191,54 +192,31 @@ namespace MpWpfApp {
                 case nameof(IsHovering):
                 case nameof(IsAnySelected):
                     break;
-                case nameof(IsSidebarVisible):
-                    MpSidebarViewModel.Instance.OnPropertyChanged(nameof(MpSidebarViewModel.Instance.IsAnySidebarOpen));
-                    
+                case nameof(IsSidebarVisible):                    
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
                     if (IsSidebarVisible) {
                         MpTagTrayViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
-                    //if(Items.Count > 0) {
-                    //    if (SelectedItem == null) {
-                    //        Items[0].IsSelected = true;
-                    //        SelectedItem.Items.ForEach(x => x.IsEditingParameters = false);
-                    //    }
-                    //    if (!SelectedItem.IsAnyEditingParameters) {
-                    //        SelectedItem.Items.ForEach(x => x.IsSelected = x == SelectedItem.Items[0]);
-                    //        //SelectedItem.Items.ForEach(x => x.IsEditing = x == SelectedItem.Items[0]);
-                    //    }
-                    //}
                     OnPropertyChanged(nameof(SelectedItem));
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(Children));
                     break;
+                case nameof(SelectedPresetViewModel):
+                    if(SelectedPresetViewModel == null) {
+                        return;
+                    }
+                    CollectionViewSource.GetDefaultView(SelectedPresetViewModel.Items).Refresh();
+                    break;
                 case nameof(SelectedItem):
-
+                    OnPropertyChanged(nameof(SelectedPresetViewModel));
                     break;
             }
         }
         #endregion
 
         #region Commands
-
-        //public ICommand ManagePresetCommand => new RelayCommand<object>(
-        //    (presetId) => {
-        //        var aipvm = AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == (int)presetId);
-        //        if(aipvm == null) {
-        //            return;
-        //        }
-
-        //        aipvm.ManagePresetCommand.Execute(null);
-        //    }, (presetId) => presetId != null);
-
-        //public ICommand RegisterContentCommand => new RelayCommand<object>(
-        //    (args) => {
-        //        Content = args;
-        //    },
-        //    (args) => args != null);
-
         #endregion
     }
 }

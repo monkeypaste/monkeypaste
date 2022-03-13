@@ -12,6 +12,39 @@ namespace MonkeyPaste {
     public static class MpStringExtensions {
         private static Random _Rand;
 
+        #region Csv
+        public static string ToCsv<T>(this IList<T> data) {
+            var properties = typeof(T).GetProperties();
+            var result = new StringBuilder();
+
+            foreach (var row in data) {
+                var values = properties.Select(p => p.GetValue(row, null))
+                                       .Select(v => StringToCSVCell(Convert.ToString(v)));
+                var line = string.Join(",", values);
+                result.AppendLine(line);
+            }
+
+            return result.ToString();
+        }
+
+        private static string StringToCSVCell(string str) {
+            bool mustQuote = (str.Contains(",") || str.Contains("\"") || str.Contains("\r") || str.Contains("\n"));
+            if (mustQuote) {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("\"");
+                foreach (char nextChar in str) {
+                    sb.Append(nextChar);
+                    if (nextChar == '"')
+                        sb.Append("\"");
+                }
+                sb.Append("\"");
+                return sb.ToString();
+            }
+
+            return str;
+        }
+
+        #endregion
         public static string RemoveSpecialCharacters(this string str) {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
         }

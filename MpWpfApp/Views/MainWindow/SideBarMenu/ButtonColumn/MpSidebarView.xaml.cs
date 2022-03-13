@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpSidebarView.xaml
     /// </summary>
-    public partial class MpSidebarView : MpUserControl<MpSidebarViewModel> {
+    public partial class MpSidebarView : MpUserControl<MpClipTrayViewModel> {
         public ToggleButton AppendModeToggleButton, MouseModeToggleButton;
 
         public MpSidebarView() {
@@ -28,7 +28,7 @@ namespace MpWpfApp {
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             var toggleButtonList = this.GetVisualDescendents<ToggleButton>();
             foreach (var tb in toggleButtonList) {
-                tb.MouseEnter += Tb_MouseEnter;
+                //tb.MouseEnter += Tb_MouseEnter;
             }
 
             BindingContext.PropertyChanged += BindingContext_PropertyChanged;
@@ -52,22 +52,21 @@ namespace MpWpfApp {
             }
         }
 
-        private void Tb_MouseEnter(object sender, MouseEventArgs e) {
-            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                return;
-            }
-            BindingContext.OnPropertyChanged(nameof(BindingContext.IsAppendModeTooltip));
-            BindingContext.OnPropertyChanged(nameof(BindingContext.IsAppPausedTooltip));
-            BindingContext.OnPropertyChanged(nameof(BindingContext.IsRighClickPasteModeTooltip));
-            BindingContext.OnPropertyChanged(nameof(BindingContext.IsAutoCopyModeTooltip));
-            BindingContext.OnPropertyChanged(nameof(BindingContext.IsAutoAnalysisModeTooltip));
-        }
+        //private void Tb_MouseEnter(object sender, MouseEventArgs e) {
+        //    if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+        //        return;
+        //    }
+        //    BindingContext.OnPropertyChanged(nameof(BindingContext.IsAppendModeTooltip));
+        //    BindingContext.OnPropertyChanged(nameof(BindingContext.IsAppPausedTooltip));
+        //    BindingContext.OnPropertyChanged(nameof(BindingContext.IsRighClickPasteModeTooltip));
+        //    BindingContext.OnPropertyChanged(nameof(BindingContext.IsAutoCopyModeTooltip));
+        //    BindingContext.OnPropertyChanged(nameof(BindingContext.IsAutoAnalysisModeTooltip));
+        //}
 
         private void ToggleButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             e.Handled = true;
 
             ToggleButton tb = sender as ToggleButton;
-
 
             Rect mouseModeRect = tb.Bounds(Application.Current.MainWindow);
 
@@ -85,7 +84,6 @@ namespace MpWpfApp {
                     popup.VerticalOffset = mouseModeRect.Top - popup.ActualHeight;
                 }
             }
-
         }
 
         private void AnalyzerToggleButton_Click(object sender, RoutedEventArgs e) {

@@ -32,6 +32,10 @@ namespace MonkeyPaste.Plugin {
         ContentQuery
     }
 
+    public class MpAnalyzerPluginRequestFormat : MpJsonObject {
+        public List<MpAnalyzerPluginRequestItemFormat> items { get; set; } = new List<MpAnalyzerPluginRequestItemFormat>();
+    }
+
     public class MpAnalyzerPluginRequestItemFormat : MpJsonObject {
         public int enumId { get; set; } = 0;
         public string value { get; set; } = string.Empty;
@@ -86,12 +90,12 @@ namespace MonkeyPaste.Plugin {
         
         public bool isVisible { get; set; } = true;
 
-        public List<MpAnalyticItemParameterValue> values { get; set; } = new List<MpAnalyticItemParameterValue>();
+        public List<MpAnalyticItemParameterValueFormat> values { get; set; } = new List<MpAnalyticItemParameterValueFormat>();
 
         public MpHttpTransactionFormat deferredValueTransaction { get; set; }
     }
 
-    public class MpAnalyticItemParameterValue : MpJsonObject {
+    public class MpAnalyticItemParameterValueFormat : MpJsonObject {
         public string value { get; set; } = string.Empty;
         public string label { get; set; } = string.Empty;
         public bool isDefault { get; set; } = false;

@@ -262,6 +262,7 @@
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfIconBuilder.cs" />
     <Compile Include="Utils\Builders\MpWpfPasteObjectBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
@@ -281,6 +282,7 @@
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCursor.cs" />
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcher.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfMainThreadMarshal.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfResourceFetcher.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpFileWriterActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
@@ -303,7 +305,9 @@
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpFileChooserParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpListBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpEditableListBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpSingleSelectListBoxParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpMultiSelectListBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
@@ -354,7 +358,6 @@
     <Compile Include="Utils\MpExtensions.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
-    <Compile Include="ViewModels\MainWindow\Sidebar\MpSidebarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
@@ -449,8 +452,14 @@
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\FileChooser\MpFileChooserParameterView.xaml.cs">
       <DependentUpon>MpFileChooserParameterView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpListBoxParameterView.xaml.cs">
-      <DependentUpon>MpListBoxParameterView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpEditableListBoxParameterView.xaml.cs">
+      <DependentUpon>MpEditableListBoxParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpSingleSelectListBoxParameterView.xaml.cs">
+      <DependentUpon>MpSingleSelectListBoxParameterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpMultiSelectListBoxParameterView.xaml.cs">
+      <DependentUpon>MpMultiSelectListBoxParameterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\Slider\MpSliderParameterView.xaml.cs">
       <DependentUpon>MpSliderParameterView.xaml</DependentUpon>
@@ -480,9 +489,6 @@
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml.cs">
       <DependentUpon>MpTagTrayView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\MpSidebarContainerView.xaml.cs">
-      <DependentUpon>MpSidebarContainerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\Selector\MpTagTileTemplateSelector.cs" />
     <Compile Include="ViewModels\Reusable\MessageBox\MpMessageBoxViewModel.cs" />
@@ -943,7 +949,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpListBoxParameterView.xaml">
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpEditableListBoxParameterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpSingleSelectListBoxParameterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\ListBox\MpMultiSelectListBoxParameterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -970,10 +984,6 @@
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\TagTree\MpTagTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\MpSidebarContainerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -1453,6 +1463,9 @@
     </PackageReference>
     <PackageReference Include="WPFSpark">
       <Version>1.4.0</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms.Platform.WPF">
+      <Version>5.0.0.2337</Version>
     </PackageReference>
     <PackageReference Include="Yolov5Net">
       <Version>1.0.9</Version>
@@ -2824,6 +2837,7 @@
   <ItemGroup>
     <Folder Include="Resources\Data\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
+    <Folder Include="ViewModels\MainWindow\Sidebar\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>

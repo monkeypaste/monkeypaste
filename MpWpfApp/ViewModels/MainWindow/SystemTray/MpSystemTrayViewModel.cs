@@ -50,7 +50,7 @@ namespace MpWpfApp {
                 if(MpMainWindowViewModel.Instance == null) {
                     return string.Empty;
                 }
-                return @"Monkey Paste [" + (MpSidebarViewModel.Instance.IsAppPaused ? "PAUSED" : "ACTIVE") + "]";
+                return @"Monkey Paste [" + (MpClipTrayViewModel.Instance.IsAppPaused ? "PAUSED" : "ACTIVE") + "]";
             }
         }
 
@@ -70,10 +70,10 @@ namespace MpWpfApp {
 
         public string PauseOrPlayIconSource {
             get {
-                if(MpMainWindowViewModel.Instance == null || MpSidebarViewModel.Instance == null) {
+                if(MpMainWindowViewModel.Instance == null || MpClipTrayViewModel.Instance == null) {
                     return string.Empty;
                 }
-                if(MpSidebarViewModel.Instance.IsAppPaused) {
+                if(MpClipTrayViewModel.Instance.IsAppPaused) {
                     return Application.Current.Resources["PlayIcon"] as string;
                 }
                 return Application.Current.Resources["PauseIcon"] as string;
@@ -82,10 +82,10 @@ namespace MpWpfApp {
 
         public string PauseOrPlayHeader {
             get {
-                if (MpMainWindowViewModel.Instance == null || MpSidebarViewModel.Instance == null) {
+                if (MpMainWindowViewModel.Instance == null || MpClipTrayViewModel.Instance == null) {
                     return string.Empty;
                 }
-                if (MpSidebarViewModel.Instance.IsAppPaused) {
+                if (MpClipTrayViewModel.Instance.IsAppPaused) {
                     return @"Resume";
                 }
                 return @"Pause";

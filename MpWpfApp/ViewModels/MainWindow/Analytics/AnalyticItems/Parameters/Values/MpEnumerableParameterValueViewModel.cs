@@ -98,11 +98,9 @@ namespace MpWpfApp {
                 Value = Value.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
             });
 
-
-
         public ICommand ClearQueryCommand {
             get {
-                if(Parent is MpListBoxParameterViewModel lbpvm) {
+                if(Parent is MpEditableListBoxParameterViewModel lbpvm) {
                     return lbpvm.RemoveValueCommand;
                 }
                 return null;
@@ -140,20 +138,20 @@ namespace MpWpfApp {
 
         public int ValueIdx { get; set; } = 0;
 
-        public override bool HasModelChanged {
-            get {
-                if(Parent == null) {
-                    return false;
-                }
-                return Parent.HasModelChanged;
-            }
-            set {
-                if(HasModelChanged != value) {
-                    Parent.HasModelChanged = value;
-                    OnPropertyChanged(nameof(HasModelChanged));
-                }
-            }
-        }
+        //public override bool HasModelChanged {
+        //    get {
+        //        if(Parent == null) {
+        //            return false;
+        //        }
+        //        return Parent.HasModelChanged;
+        //    }
+        //    set {
+        //        if(HasModelChanged != value) {
+        //            Parent.HasModelChanged = value;
+        //            OnPropertyChanged(nameof(HasModelChanged));
+        //        }
+        //    }
+        //}
         #endregion
 
         #region Model
@@ -169,57 +167,89 @@ namespace MpWpfApp {
 
         public bool IsDefault {
             get {
-                if(AnalyticItemParameterValue == null) {
+                if(ParameterValueFormat == null) {
                     return false;
                 }
-                return AnalyticItemParameterValue.isDefault;
+                return ParameterValueFormat.isDefault;
             }
         }
 
         public bool IsMaximum {
             get {
-                if (AnalyticItemParameterValue == null) {
+                if (ParameterValueFormat == null) {
                     return false;
                 }
-                return AnalyticItemParameterValue.isMaximum;
+                return ParameterValueFormat.isMaximum;
             }
         }
 
         public bool IsMinimum {
             get {
-                if (AnalyticItemParameterValue == null) {
+                if (ParameterValueFormat == null) {
                     return false;
                 }
-                return AnalyticItemParameterValue.isMinimum;
+                return ParameterValueFormat.isMinimum;
             }
         }
 
+
         public string Label {
             get {
-                if (AnalyticItemParameterValue == null) {
+                if (ParameterValueFormat == null) {
                     return string.Empty;
                 }
-                return AnalyticItemParameterValue.label;
+                return ParameterValueFormat.label;
             }
         }
 
         public string Value {
             get {
-                if (AnalyticItemParameterValue == null) {
+                if (Parent == null) {
                     return null;
                 }
-                return AnalyticItemParameterValue.value;
+                if(Parent is MpEditableListBoxParameterViewModel lbpvm) {
+                    var valParts = PresetValue.Value.Split(new string[] { "," }, StringSplitOptions.None);
+                    if (ValueIdx >= valParts.Length) {
+                        return string.Empty;
+                    }
+                    return valParts[ValueIdx];
+                }
+                return ParameterValueFormat.value;
             }
             set {
                 if (Value != value) {
-                    AnalyticItemParameterValue.value = value;
+                    if (Parent is MpEditableListBoxParameterViewModel lbpvm) {
+                        var valParts = PresetValue.Value.Split(new string[] { "," }, StringSplitOptions.None);
+                        if (valParts.Length >= ValueIdx) {
+                            int count = ValueIdx - valParts.Length;
+                            while (count >= 0) {
+                                PresetValue.Value += ",";
+                                count--;
+                            }
+                            valParts = PresetValue.Value.Split(new string[] { "," }, StringSplitOptions.None);
+                        }
+                        valParts[ValueIdx] = value;
+                        PresetValue.Value = string.Join(",", valParts);
+                    } else {
+                        ParameterValueFormat.value = value;
+                    }
+
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Value));
                 }
             }
         }
 
-        public MpAnalyticItemParameterValue AnalyticItemParameterValue { get; set; }
+        public MpAnalyticItemPresetParameterValue PresetValue { 
+            get {
+                if(Parent == null) {
+                    return null;
+                }
+                return Parent.ParameterValue;
+            }
+        }
+
+        public MpAnalyticItemParameterValueFormat ParameterValueFormat { get; set; }
         #endregion
 
         #endregion
@@ -236,13 +266,13 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(int idx, MpAnalyticItemParameterValue valueSeed) {
+        public async Task InitializeAsync(int idx, MpAnalyticItemParameterValueFormat valueSeed) {
             IsBusy = true;
 
             await Task.Delay(1);
 
             ValueIdx = idx;
-            AnalyticItemParameterValue = valueSeed;
+            ParameterValueFormat = valueSeed;
 
             OnPropertyChanged(nameof(IsReadOnly));
 
@@ -306,7 +336,7 @@ namespace MpWpfApp {
                     if(IsBusy || Parent.IsBusy) {
                         return;
                     } 
-                    if(Parent is MpListBoxParameterViewModel mscbpvm) {
+                    if(Parent is MpMultiSelectListBoxParameterViewModel mscbpvm) {
                         mscbpvm.OnPropertyChanged(nameof(mscbpvm.SelectedItems));
                     } else if(Parent is MpComboBoxParameterViewModel cbpvm) {
                         cbpvm.OnPropertyChanged(nameof(cbpvm.SelectedItem));
@@ -314,16 +344,14 @@ namespace MpWpfApp {
                     Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
                     HasModelChanged = true;
                     break;
-                //case nameof(HasModelChanged):
-                //    if (IsBusy || Parent.IsBusy) {
-                //        //workaround for initializing where value falls back to parameter default and not preset value
-                //        return;
-                //    }
-                //    if (HasModelChanged) {
-                //        Parent.HasModelChanged = true;
-                //    }
-                //    Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
-                //    break;
+                case nameof(HasModelChanged):
+                    if(HasModelChanged) {
+                        Task.Run(async () => {
+                            await PresetValue.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
+                    }
+                    break;
                 case nameof(Value):
                     Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
                     break;
