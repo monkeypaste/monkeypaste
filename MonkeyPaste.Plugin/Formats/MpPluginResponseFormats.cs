@@ -5,6 +5,7 @@ using System.Text;
 namespace MonkeyPaste.Plugin {    
     public class MpPluginResponseFormat : MpJsonObject {
         public const string RETRY_MESSAGE = @"RETRY";
+        public const string ERROR_MESSAGE = @"ERROR";
 
         public string message { get; set; } = string.Empty;
 
@@ -15,7 +16,9 @@ namespace MonkeyPaste.Plugin {
     public class MpPluginResponseItemBaseFormat : MpJsonObject {
         public string name { get; set; } = string.Empty;
 
-        public MpJsonPathProperty text { get; set; } = new MpJsonPathProperty(string.Empty);
+        public MpJsonPathProperty queryPath { get; set; } = new MpJsonPathProperty("$");
+
+        public MpJsonPathProperty label { get; set; } = new MpJsonPathProperty(string.Empty);
 
         public MpPluginResponseAppearanceFormat appearance { get; set; } = new MpPluginResponseAppearanceFormat();
 
@@ -32,7 +35,7 @@ namespace MonkeyPaste.Plugin {
         public MpPluginResponseItemBaseFormat(string content) : this(content, 1) { }
         public MpPluginResponseItemBaseFormat(double score) : this(string.Empty, score) { }
         public MpPluginResponseItemBaseFormat(string label, double score) {
-            this.text = new MpJsonPathProperty(label);
+            this.label = new MpJsonPathProperty(label);
             this.score = new MpJsonPathProperty<double>(score);
         }
     }

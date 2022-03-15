@@ -48,9 +48,6 @@ namespace MpWpfApp {
         MpIMenuItemViewModel {
         #region Private Variables
         
-        // TODO In Release Mode change these to smaller values
-        private const int _ANALYZE_TIMEOUT_MS = 1000000;
-        private const int _PROCESS_TIMEOUT_MS = 500000;
 
         #endregion
 
@@ -418,90 +415,23 @@ namespace MpWpfApp {
             }
             
             var presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
-            
-            bool isNew = presets == null || presets.Count == 0;
 
-            if (!isNew && presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime)) {
-                //if manifest has been modified
-                
-                // TODO maybe less forceably handle add/remove/update of presets when manifest changes
-
-                foreach (var preset in presets) {
-                    var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
-                    await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
-                }
-                await Task.WhenAll(presets.Select(x => x.DeleteFromDatabaseAsync()));
-                presets = new List<MpAnalyticItemPreset>();
-                AnalyzerPluginFormat.presets = new List<MpAnalyzerPresetFormat>();
+            bool isNew = presets.Count == 0;
+            bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
+            bool needsReset = isNew || isManifestModified;
+            if (needsReset) {
+                presets = await ResetPresets(presets);
                 isNew = true;
             }
 
+            presets.ForEach(x => x.AnalyzerFormat = AnalyzerPluginFormat);
+
             Items.Clear();
 
-            if (isNew) {
-                //for new plugins create default presets
-                if (AnalyzerPluginFormat.presets == null || AnalyzerPluginFormat.presets.Count == 0) {
-                    AnalyzerPluginFormat.presets = new List<MpAnalyzerPresetFormat>();
-
-                    //var paramPresetValues = new List<MpAnalyzerPresetValueFormat>();
-                    ////derive default preset & preset values from parameter formats
-                    //if (AnalyzerPluginFormat.parameters != null) {
-                    //    foreach (var param in AnalyzerPluginFormat.parameters) {
-                    //        string defVal = string.Empty;
-
-                    //        if (param.values != null) {
-                    //            defVal = string.Join(",", param.values.Where(x => x.isDefault).Select(x => x.value).ToList());
-                    //            if (string.IsNullOrEmpty(defVal) && param.values.Count > 0) {
-                    //                defVal = param.values[0].value;
-                    //            }
-                    //        }
-                    //        var presetVal = new MpAnalyzerPresetValueFormat() {
-                    //            enumId = param.enumId,
-                    //            value = defVal
-                    //        };
-                    //        paramPresetValues.Add(presetVal);
-                    //    }
-                    //}
-                    //MpAnalyzerPresetFormat apf = new MpAnalyzerPresetFormat() {
-                    //    description = $"Auto-generated default preset for '{Title}'",
-                    //    isDefault = true,
-                    //    label = $"{Title} - Default",
-                    //    values = paramPresetValues
-                    //};
-                    var defualtPreset = await CreateDefaultPresetModel();
-                    presets.Add(defualtPreset);
-                } else {
-                    foreach (var preset in AnalyzerPluginFormat.presets) {
-                        var aip = await MpAnalyticItemPreset.Create(
-                            analyzerPluginGuid: PluginFormat.guid,
-                            isDefault: preset.isDefault,
-                            label: preset.label,
-                            iconId: IconId,
-                            sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(preset),
-                            description: preset.description,
-                            parameters: AnalyzerPluginFormat.parameters,
-                            values: preset.values,
-                            manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
-
-                        presets.Add(aip);
-                    }
-                }
-                
-            } 
-
-            if (presets.All(x => x.IsDefault == false)) {
-                //this ensures at least one preset exists and not all can be deleted
-                presets[0].IsDefault = true;
-            }
-
-            foreach (var preset in presets) {
+            foreach (var preset in presets.OrderBy(x=>x.SortOrderIdx)) {
                 var naipvm = await CreatePresetViewModel(preset);
                 Items.Add(naipvm);
             }
-            Items.OrderBy(x => x.SortOrderIdx);
-
-            var defPreset = Items.FirstOrDefault(x => x.IsDefault);
-            MpAssert.Assert(defPreset, $"Error no default preset for anayltic item {Title}");
 
             OnPropertyChanged(nameof(IconId));
             OnPropertyChanged(nameof(Items));
@@ -592,7 +522,6 @@ namespace MpWpfApp {
                             Items.RemoveAt(presetIdx);
                             OnPropertyChanged(nameof(Items));
                             OnPropertyChanged(nameof(SelectedItem));
-                            //OnPropertyChanged(nameof(ContextMenuItems));
                             OnPropertyChanged(nameof(QuickActionPresetMenuItems));
                         }
                     }
@@ -620,37 +549,29 @@ namespace MpWpfApp {
             if(AnalyzerPluginFormat.parameters == null) {
                 throw new Exception($"Parameters for '{Title}' not found");
             }
-            var paramPresetValues = new List<MpAnalyzerPresetValueFormat>();
-            //derive default preset & preset values from parameter formats
-            if (AnalyzerPluginFormat.parameters != null) {
-                foreach (var param in AnalyzerPluginFormat.parameters) {
-                    string defVal = string.Empty;
-
-                    if (param.values != null) {
-                        defVal = string.Join(",", param.values.Where(x => x.isDefault).Select(x => x.value).ToList());
-                        if (string.IsNullOrEmpty(defVal) && param.values.Count > 0) {
-                            defVal = param.values[0].value;
-                        }
-                    }
-                    var presetVal = new MpAnalyzerPresetValueFormat() {
-                        enumId = param.enumId,
-                        value = defVal
-                    };
-                    paramPresetValues.Add(presetVal);
-                }
-            }
 
             var aip = await MpAnalyticItemPreset.Create(
                                 analyzerPluginGuid: PluginFormat.guid,
                                 isDefault: true,
                                 label: $"{Title} - Default",
                                 iconId: IconId,
-                                sortOrderIdx: existingDefaultPresetId == 0 ? 0 : Items.FirstOrDefault(x=>x.IsDefault).SortOrderIdx,
+                                sortOrderIdx: existingDefaultPresetId == 0 ? 0 : Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
                                 description: $"Auto-generated default preset for '{Title}'",
-                                parameters: AnalyzerPluginFormat.parameters,
-                                values: paramPresetValues,
+                                format: AnalyzerPluginFormat,
                                 manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime,
                                 existingDefaultPresetId: existingDefaultPresetId);
+
+            //var paramPresetValues = new List<MpAnalyzerPresetValueFormat>();
+            ////derive default preset & preset values from parameter formats
+            //if (AnalyzerPluginFormat.parameters != null) {
+            //    foreach (var param in AnalyzerPluginFormat.parameters) {
+            //        string defVal = string.Join(",", param.values.Where(x=>x.isDefault).Select(x=>x.value));
+            //        var presetVal = await MpAnalyticItemPresetParameterValue.Create(presetId: aip.Id, paramEnumId: param.paramId, value: defVal);
+
+            //        paramPresetValues.Add(presetVal);
+            //    }
+            //}
+
             return aip;
         }
 
@@ -677,11 +598,7 @@ namespace MpWpfApp {
                         CollectionViewSource.GetDefaultView(SelectedItem.Items).Refresh();
                         //Items.ForEach(x => x.IsEditingParameters = false);
                         //SelectedItem.IsEditingParameters = true;
-                    } 
-                    //else {
-                    //    Items.ForEach(x => x.IsEditingParameters = false);
-                    //}
-                    
+                    }                    
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     OnPropertyChanged(nameof(ItemBackgroundBrush));
@@ -695,277 +612,6 @@ namespace MpWpfApp {
                 case nameof(SelectedItem):
                     Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
                     break;
-                //case nameof(IsAnyEditingParameters):
-                //    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
-                //    break;
-            }
-        }
-
-        private async Task<MpCopyItem> ProcessTransaction(
-            MpAnalyzerTransaction trans, 
-            MpCopyItem sourceContent, 
-            bool suppressWrite = false) {                    
-            
-            if(trans.Response == null) {
-                trans.Response = new MpPluginResponseFormat();
-            }
-
-            if(trans.Response is MpPluginResponseFormat prf) {                
-                if (prf.message == MpPluginResponseFormat.RETRY_MESSAGE) {
-                    ExecuteAnalysisCommand.Execute(trans.CommandParameter);
-                    //return null to ignore and retry will loop or continue;
-                    return null;
-                }
-                MpCopyItemTransactionType transType = MpCopyItemTransactionType.None;
-                MpISourceTransaction transModel = null;
-                if (AnalyzerPluginFormat.http != null) {
-                    string urlPath;
-                    if (string.IsNullOrEmpty(trans.Request.ToString())) {
-                        urlPath = AnalyzerPluginFormat.http.request.url.raw;
-                    } else if (PluginFormat.Component is MpHttpPlugin httpPlugin) {
-                        urlPath = httpPlugin.GetRequestUri(trans.Request.ToString());
-                    } else {
-                        throw new MpUserNotifiedException("Http Plugin Component does not exist");
-                    }
-                    transType = MpCopyItemTransactionType.Http;
-
-                    transModel = await MpHttpTransaction.Create(
-                        presetId: SelectedItem.AnalyticItemPresetId,
-                        url: urlPath,
-                        urlName: SelectedItem.FullName,
-                        ip: MpNetworkHelpers.GetExternalIp4Address(),
-                        timeSent: trans.RequestTime,
-                        timeReceived: trans.ResponseTime,
-                        bytesSent: trans.Request.ByteCount(),
-                        bytesReceived: trans.Response == null ? 0 : trans.Response.ByteCount(),
-                        errorMsg: trans.TransactionErrorMessage);
-
-                } else {
-                    var pf = MpPluginManager.Plugins.FirstOrDefault(x => x.Value.guid == PluginFormat.guid);
-                    if (!string.IsNullOrWhiteSpace(pf.Key)) {
-                        string manifestPath = pf.Key;
-                        string pluginDir = Path.GetDirectoryName(manifestPath);
-                        string pluginName = Path.GetFileName(pluginDir);
-                        string processPath = Path.Combine(pluginDir, pluginName + ".exe");
-
-                        if(PluginFormat.ioType.isCli) {
-                            transType = MpCopyItemTransactionType.Cli;
-
-                            transModel = await MpCliTransaction.Create(
-                                presetId: SelectedItem.AnalyticItemPresetId,
-                                cliPath: pf.Value.ComponentPath,
-                                cliName: SelectedItem.FullName,
-                                workingDirectory: pluginDir,
-                                args: trans.Request.ToString(),
-                                transDateTime: trans.RequestTime,
-                                errorMsg: trans.TransactionErrorMessage);
-                        } else if(PluginFormat.ioType.isDll) {
-                            transType = MpCopyItemTransactionType.Dll;
-                            processPath = processPath.Replace(".exe", ".dll");
-
-                            transModel = await MpDllTransaction.Create(
-                                presetId: SelectedItem.AnalyticItemPresetId,
-                                dllPath: processPath,
-                                dllName: SelectedItem.FullName,
-                                args: trans.Request.ToString(),
-                                transDateTime: trans.RequestTime,
-                                errorMsg: trans.TransactionErrorMessage);
-                        } else {
-                            throw new MpUserNotifiedException($"Uknown ioType for plugin defined in '{manifestPath}'");
-                        }
-                    }
-                } 
-
-                if(transModel == null) {
-                    throw new Exception("Unknown error processing analyzer transaction");
-                }                
-
-                if(string.IsNullOrEmpty(trans.TransactionErrorMessage)) {
-                    var cit = await MpCopyItemTransaction.Create(
-                    transType: transType,
-                    transObjId: transModel.RootId,
-                    copyItemId: sourceContent.Id,
-                    responseJson: JsonConvert.SerializeObject(trans.Response));
-
-                    var source = await MpSource.Create(
-                        copyItemTransactionId: cit.Id);
-
-                    var ci = await ApplyResponseToContent(
-                        trans, sourceContent, source.Id, suppressWrite);
-
-                    return ci;
-                }
-            }
-            return null;
-        }
-
-        private async Task<MpCopyItem> ApplyResponseToContent(
-            MpAnalyzerTransaction trans,
-            MpCopyItem sourceCopyItem,
-            int transSourceId,
-            bool suppressWrite) {
-            MpCopyItem targetCopyItem = null;
-
-            if (trans.Response is MpPluginResponseFormat prf) {
-                targetCopyItem = await ProcessNewContentItem(prf, sourceCopyItem, transSourceId, suppressWrite);                
-            } else {
-                targetCopyItem = sourceCopyItem;
-            }
-            await ProcessAnnotations(trans, targetCopyItem, transSourceId, suppressWrite);
-
-            if (suppressWrite == false && targetCopyItem != null) {
-                //create is suppressed when its part of a match expression
-                if (sourceCopyItem.Id != targetCopyItem.Id) {
-                    var pci = await MpDb.GetItemAsync<MpCopyItem>(sourceCopyItem.Id);
-
-                    int parentSortOrderIdx = pci.CompositeSortOrderIdx;
-                    List<MpCopyItem> ppccil = null;
-
-                    if (pci.CompositeParentCopyItemId > 0) {
-                        //when this items parent is a composite child, adjust fk/sort so theres single parent
-                        var ppci = await MpDb.GetItemAsync<MpCopyItem>(pci.CompositeParentCopyItemId);
-                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
-                        ppccil.Insert(0, ppci);
-                    } else {
-                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.Id);
-                        ppccil.Insert(0, pci);
-                    }
-                    ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
-                    for (int i = 0; i < ppccil.Count; i++) {
-                        var cci = ppccil[i];
-                        if (cci.Id == sourceCopyItem.Id) {
-                            targetCopyItem.CompositeParentCopyItemId = sourceCopyItem.Id;
-                            targetCopyItem.CompositeSortOrderIdx = i + 1;
-                            await targetCopyItem.WriteToDatabaseAsync();
-                        } else if (i > parentSortOrderIdx) {
-                            ppccil[i].CompositeSortOrderIdx += 1;
-                            await ppccil[i].WriteToDatabaseAsync();
-                        }
-                    }
-                }
-
-                var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sourceCopyItem.Id);
-                if (scivm != null) {
-                    await MpHelpers.RunOnMainThreadAsync(async () => {
-                        //analysis content is  linked with visible item in tray
-                        await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
-                        MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                    });
-                }
-            }
-
-            if (targetCopyItem == null) {
-                //this should only occur during an action sequece
-                targetCopyItem = sourceCopyItem;
-            }
-
-            return targetCopyItem;
-        }
-
-        private async Task<MpCopyItem> ProcessNewContentItem(
-            MpPluginResponseFormat prf, 
-            MpCopyItem sourceCopyItem, 
-            int transSourceId, 
-            bool suppressWrite = false) {
-            if(prf == null || prf.newContentItem == null) {
-                return sourceCopyItem;
-            }
-            var app = MpPreferences.ThisAppSource.App;
-            string endpoint = AnalyzerPluginFormat.http != null ? AnalyzerPluginFormat.http.request.url.raw : null;
-            MpUrl url = null;
-            if (!string.IsNullOrEmpty(endpoint)) {
-                url = await MpUrlBuilder.Create(endpoint, $"{Title} Analysis");
-            }
-            var source = await MpSource.Create(app, url);
-
-            var targetCopyItem = await MpCopyItem.Create(
-                source: source,
-                title: prf.newContentItem.content.value,
-                data:prf.newContentItem.content.value,
-                itemType: MpCopyItemType.Text,
-                suppressWrite: suppressWrite);
-
-            return targetCopyItem;
-        }
-
-        private async Task ProcessAnnotations(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
-            if (trans == null || trans.Response == null) {
-                return;
-            }
-            if(trans.Response is MpPluginResponseFormat prf && prf.annotations != null) {
-
-                await Task.WhenAll(prf.annotations.Select(x => ProcesseAnnotation(x, sourceCopyItem.Id, sourceCopyItem.ItemType, trans.RequestContent, transSourceId, suppressWrite)));
-            }
-            
-        }
-
-        private async Task ProcesseAnnotation(
-            MpPluginResponseAnnotationFormat a, 
-            int copyItemId, 
-            MpCopyItemType copyItemType, 
-            object reqContent, 
-            int transSourceId, 
-            bool suppressWrite = false) {
-            if (a == null) {
-                return;
-            }
-
-            double score = 1;
-
-            if (a.score != null) {
-                score = a.score.value;
-                if(a.minScore != 0 || a.maxScore != 1) {
-                    //normalize scoring from 0-1
-                    score = (a.maxScore - a.minScore) / a.score.value;
-                }                
-            }
-
-            string label = a.text == null ? string.Empty : a.text.value;
-
-            if(copyItemType == MpCopyItemType.Image && a.box != null) {
-                Size boxSize = new Size();
-                if(a.box == null) {
-                    var bmpSrc = reqContent.ToString().ToBitmapSource();
-                    boxSize = new Size(bmpSrc.PixelWidth, bmpSrc.PixelHeight);
-                } else {
-                    boxSize.Width = a.box.width.value;
-                    boxSize.Height = a.box.height.value;
-                }
-
-                MpImageAnnotation contentBox = await MpImageAnnotation.Create(
-                   cid: copyItemId,
-                   x: a.box == null ? 0 : a.box.x.value,
-                   y: a.box == null ? 0 : a.box.y.value,
-                   w: boxSize.Width,
-                   h: boxSize.Height,
-                   label: label,
-                   c: score,
-                   hexColor: a.appearance == null || a.appearance.foregroundColor == null ? null : a.appearance.foregroundColor.value,
-                   suppressWrite: suppressWrite);
-            } else if(copyItemType == MpCopyItemType.Text) {                
-                int sIdx = 0;
-                int eIdx = reqContent.ToString().Length;
-
-                if (a.range != null &&
-                    a.range.rangeStart.value >= 0 && 
-                    a.range.rangeStart.value < reqContent.ToString().Length &&
-                    a.range.rangeStart.value + a.range.rangeLength.value >= 0 && 
-                    a.range.rangeStart.value + a.range.rangeLength.value < reqContent.ToString().Length) {
-                    // NOTE these range checks are more to cover up issue w/ reqContent not always having data...
-                    sIdx = a.range.rangeStart.value; 
-                    eIdx = a.range.rangeLength.value;
-                }
-                var ta = await MpTextAnnotation.Create(
-                        copyItemId: copyItemId,
-                        sourceId: transSourceId,
-                        matchValue: reqContent.ToString().Substring(sIdx, eIdx - sIdx - 1),
-                        label: label,
-                        score: score,
-                        suppressWrite: suppressWrite);
-            }
-            
-            if (a.children != null) {
-                await Task.WhenAll(a.children.Select(x => ProcesseAnnotation(x, copyItemId,copyItemType, reqContent,transSourceId, suppressWrite)));
             }
         }
 
@@ -984,81 +630,41 @@ namespace MpWpfApp {
             }
         }
 
-        private string CreateRequest(MpCopyItem ci, out object requestContent) {
-            object outRequestContent = string.Empty;
+        private async Task<List<MpAnalyticItemPreset>> ResetPresets(List<MpAnalyticItemPreset> presets = null) {
+            //if manifest has been modified
+            //(for now clear all presets and either load predefined presets or create from parameter default values)
 
-            var requestItems = new List<MpAnalyzerPluginRequestItemFormat>();
-
-            foreach (var kvp in SelectedItem.ParamLookup) {
-                MpAnalyzerPluginRequestItemFormat requestItem = new MpAnalyzerPluginRequestItemFormat();
-
-                var paramFormat = AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.enumId == kvp.Key);
-                if (paramFormat == null) {
-                    continue;
-                }
-
-                requestItem.enumId = kvp.Key;
-                requestItem.value = GetParameterRequestValue(
-                    paramFormat.parameterValueType,
-                    paramFormat.isMultiSelect,
-                    kvp.Value.CurrentValue,
-                    ci);
-
-                if(string.IsNullOrEmpty(outRequestContent.ToString()) && 
-                   paramFormat.parameterValueType == MpAnalyticItemParameterValueUnitType.ContentQuery) {
-                    outRequestContent = requestItem.value;
-                }
-                
-                requestItems.Add(requestItem);
+            // TODO maybe less forceably handle add/remove/update of presets when manifest changes
+            presets = presets == null ? await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid) : presets;
+            foreach (var preset in presets) {
+                var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
+                await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
             }
-            requestContent = outRequestContent;
-            return JsonConvert.SerializeObject(requestItems);
-        }
+            await Task.WhenAll(presets.Select(x => x.DeleteFromDatabaseAsync()));
 
-        private string GetParameterRequestValue(MpAnalyticItemParameterValueUnitType valueType, bool isMultiSelect, string curVal, MpCopyItem ci) {
-            switch (valueType) {
-                case MpAnalyticItemParameterValueUnitType.ContentQuery:
-                    curVal = GetParameterQueryResult(isMultiSelect, curVal, ci);
-                    break;
-                case MpAnalyticItemParameterValueUnitType.Base64Text:
-                    curVal = curVal.ToByteArray().ToBase64String();
-                    break;
-                case MpAnalyticItemParameterValueUnitType.FileSystemPath:
-                    curVal = curVal.ToFile();
-                    break;
-                default:
-                    curVal = curVal.ToPlainText();
-                    break;
-            }
-            return curVal;
-        }
-
-        private string GetParameterQueryResult(bool isMultiSelect, string curVal, MpCopyItem ci) {
-            for (int i = 1; i < Enum.GetNames(typeof(MpComparePropertyPathType)).Length; i++) {
-                // example content query: '{Title} is a story about {ItemData}'
-                var ppt = (MpComparePropertyPathType)i;
-                string pptPathEnumName = ppt.ToString();
-                string pptToken = "{" + pptPathEnumName + "}";
-
-                if (curVal.Contains(pptToken)) {
-                    string physicalPropertyPath = MpCompareActionViewModelBase.PhysicalComparePropertyPaths[i];
-                    string contentValue = ci.GetPropertyValue(physicalPropertyPath) as string;
-                    contentValue = GetParameterRequestValue(MpAnalyticItemParameterValueUnitType.PlainText, false, contentValue, ci);
-                    string pptTokenBackup = "{@" + ppt.ToString() + "@}";
-                    if (curVal.Contains(pptTokenBackup)) {
-                        //this content query token has conflicts so use the backup
-                        // example content query needing backup: '{Title} is {Title} but {@Title@} is content'
-                        pptToken = pptTokenBackup;
-                    }
-                    curVal = curVal.Replace(pptToken, contentValue);
+            presets.Clear();
+            if(AnalyzerPluginFormat.presets.IsNullOrEmpty()) {
+                //only generate default preset if no presets defined in manifest
+                var defualtPreset = await CreateDefaultPresetModel();
+                presets.Add(defualtPreset);
+            } else {
+                foreach (var preset in AnalyzerPluginFormat.presets) {
+                    var aip = await MpAnalyticItemPreset.Create(
+                        analyzerPluginGuid: PluginFormat.guid,
+                        isDefault: preset.isDefault,
+                        label: preset.label,
+                        iconId: IconId,
+                        sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(preset),
+                        description: preset.description,
+                        format: AnalyzerPluginFormat,
+                        manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
+                    presets.Add(aip);
+                }
+                if(presets.All(x=>x.IsDefault == false) && presets.Count > 0) {
+                    presets[0].IsDefault = true;
                 }
             }
-            return curVal;
-        }
-
-        private async Task<object> GetResponse(string requestStr) {
-            var result = await AnalyzerPluginComponent.AnalyzeAsync(requestStr);
-            return result;
+            return presets;
         }
 
         #endregion
@@ -1086,96 +692,27 @@ namespace MpWpfApp {
                     sourceCopyItem = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
                 }
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
-                OnPropertyChanged(nameof(SelectedItem));                      
-                LastTransaction = new MpAnalyzerTransaction() {
-                    RequestTime = DateTime.Now,
-                    CommandParameter = args
-                };
+                OnPropertyChanged(nameof(SelectedItem));
 
-                // CREATE REQUEST
-                try {
-                    LastTransaction.Request = CreateRequest(sourceCopyItem, out object requestContent);
-                    LastTransaction.RequestContent = requestContent;
-                }catch(Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
-                    LastTransaction.TransactionErrorMessage = ex.ToString();
+                object result = await MpPluginTransactor.PerformTransaction(
+                                           PluginFormat,
+                                           AnalyzerPluginComponent,
+                                           SelectedItem.ParamLookup
+                                               .ToDictionary(k => k.Key, v => v.Value.CurrentValue),
+                                           sourceCopyItem,
+                                           SelectedItem.Preset);
 
-                    LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem)
-                                    .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
-
-                    var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
-                        dialogType: MpNotificationDialogType.InvalidRequest,
-                        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                        msg: ex.Message,
-                        maxShowTimeMs: 5000);
-                    if (userAction == MpDialogResultType.Retry) {
-                        ExecuteAnalysisCommand.Execute(args);
-                        return;
-                    } else if (userAction == MpDialogResultType.Ignore) {
-                        OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
-                        IsBusy = false;
-                        return;
-                    }
+                if(result != null && result.ToString() == MpPluginResponseFormat.RETRY_MESSAGE) {
+                    ExecuteAnalysisCommand.Execute(args);
+                    return;
+                }
+                if(result != null && result.ToString() == MpPluginResponseFormat.ERROR_MESSAGE) {
+                    OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
+                    IsBusy = false;
+                    return;
                 }
 
-                // GET RESPONSE
-                try {
-                    LastTransaction.Response = await GetResponse(LastTransaction.Request.ToString())
-                                .TimeoutAfter(TimeSpan.FromMilliseconds(_ANALYZE_TIMEOUT_MS));
-                    LastTransaction.ResponseTime = DateTime.Now;
-
-                } catch(TimeoutException te) {
-                    MpConsole.WriteTraceLine(te);
-                    LastTransaction.TransactionErrorMessage = te.ToString();
-
-                    LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem)
-                                    .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
-
-                    var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
-                        dialogType: MpNotificationDialogType.AnalyzerTimeout,
-                        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                        msg: targetAnalyzer.FullName + " failed to respond",
-                        maxShowTimeMs: 5000);
-                    if(userAction == MpDialogResultType.Retry) {
-                        ExecuteAnalysisCommand.Execute(args);
-                        return;
-                    } else if(userAction == MpDialogResultType.Ignore) {
-                        OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
-                        IsBusy = false;
-                        return;
-                    }
-                }
-
-                // PROCESS RESPONSE
-                try {
-                    LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem)
-                                    .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
-                } catch(Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
-                    LastTransaction.TransactionErrorMessage = ex.ToString();
-
-                    try {
-
-                        LastResultContentItem = await ProcessTransaction(LastTransaction, sourceCopyItem)
-                                        .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
-                    } catch(Exception ex2) {
-                        LastTransaction.TransactionErrorMessage += Environment.NewLine + ex2.ToString();
-
-                        var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
-                        dialogType: MpNotificationDialogType.InvalidResponse,
-                        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                        msg: ex.Message + Environment.NewLine + ex2.Message,
-                        maxShowTimeMs: 5000);
-                        if (userAction == MpDialogResultType.Retry) {
-                            ExecuteAnalysisCommand.Execute(args);
-                            return;
-                        } else if (userAction == MpDialogResultType.Ignore) {
-                            OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
-                            IsBusy = false;
-                            return;
-                        }
-                    }
-                }
+                LastTransaction = result as MpAnalyzerTransaction;
                 OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
 
                 IsBusy = false;
@@ -1225,10 +762,9 @@ namespace MpWpfApp {
 
                 MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
                         analyzerPluginGuid: AnalyzerPluginGuid,
+                        format:AnalyzerPluginFormat,
                         iconId: IconId,
-                        parameters: AnalyzerPluginFormat.parameters,
                         label: GetUniquePresetName());
-
 
                 var npvm = await CreatePresetViewModel(newPreset);
                 Items.Add(npvm);
@@ -1272,8 +808,8 @@ namespace MpWpfApp {
                 }
                 IsBusy = true;
 
-                foreach(var presetVal in presetVm.Preset.PresetParameterValues) {
-                    await presetVal.DeleteFromDatabaseAsync();
+                foreach(var presetVal in presetVm.Items) {
+                    await presetVal.PresetValue.DeleteFromDatabaseAsync();
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
 

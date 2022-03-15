@@ -6,11 +6,11 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
                      xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                     x:TypeArguments="local:MpAnalyticItemParameterViewModel"
+                     x:TypeArguments="local:MpAnalyticItemParameterViewModelBase"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemParameterViewModel,
+                     d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemParameterViewModelBase,
                                                       IsDesignTimeCreatable=False}">
     <Border Background="Transparent"
             BorderThickness="2">
@@ -48,29 +48,29 @@
                 </Style>
                 <!--  MultiSelect ListBox Parameter  -->
 
-                <DataTemplate x:Key="MultiSelectListBoxParameterTemplate"
-                              DataType="local:MpMultiSelectListBoxParameterViewModel">
+                <DataTemplate x:Key="MultiSelectListParameterTemplate"
+                              DataType="local:MpEnumerableParameterViewModel">
                     <local:MpMultiSelectListBoxParameterView DataContext="{Binding}" />
                 </DataTemplate>
 
                 <!--  Single Select ListBox Parameter  -->
 
-                <DataTemplate x:Key="SingleSelectListBoxParameterTemplate"
-                              DataType="local:MpSingleSelectListBoxParameterViewModel">
+                <DataTemplate x:Key="ListParameterTemplate"
+                              DataType="local:MpEnumerableParameterViewModel">
                     <local:MpSingleSelectListBoxParameterView DataContext="{Binding}" />
                 </DataTemplate>
 
                 <!--  Editable ListBox Parameter  -->
 
-                <DataTemplate x:Key="EditableListBoxParameterTemplate"
-                              DataType="local:MpEditableListBoxParameterViewModel">
+                <DataTemplate x:Key="EditableListParameterTemplate"
+                              DataType="local:MpEnumerableParameterViewModel">
                     <local:MpEditableListBoxParameterView DataContext="{Binding}" />
                 </DataTemplate>
 
                 <!--  ComboBox Parameter  -->
 
                 <DataTemplate x:Key="ComboBoxParameterTemplate"
-                              DataType="local:MpComboBoxParameterViewModel">
+                              DataType="local:MpEnumerableParameterViewModel">
                     <local:MpComboBoxParameterView DataContext="{Binding}" />
                 </DataTemplate>
 

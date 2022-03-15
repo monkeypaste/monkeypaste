@@ -28,10 +28,10 @@ namespace Yolo_Dll {
         public async Task<object> AnalyzeAsync(object args) {
             await Task.Delay(1);
 
-            var reqParts = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
+            var reqParts = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString());
 
-            double confidence = Convert.ToDouble(reqParts.FirstOrDefault(x => x.enumId == 1).value);
-            var bytes = Convert.FromBase64String(reqParts.FirstOrDefault(x => x.enumId == 2).value);
+            double confidence = Convert.ToDouble(reqParts.items.FirstOrDefault(x => x.paramId == 1).value);
+            var bytes = Convert.FromBase64String(reqParts.items.FirstOrDefault(x => x.paramId == 2).value);
 
             Bitmap bmp;
             using (var ms = new MemoryStream(bytes)) {
@@ -48,7 +48,7 @@ namespace Yolo_Dll {
                     if (score >= confidence) {
                         var boxAnnotation = new MpPluginResponseAnnotationFormat() {
                             score = new MpJsonPathProperty<double>((double)item.Score),
-                            text = new MpJsonPathProperty(item.Label.Name),
+                            label = new MpJsonPathProperty(item.Label.Name),
                             box = new MpAnalyzerPluginImageTokenResponseValueFormat(
                                             (double)item.Rectangle.X,
                                             (double)item.Rectangle.Y,
@@ -60,10 +60,15 @@ namespace Yolo_Dll {
                 }
             }
 
-            var response = new MpPluginResponseAnnotationFormat() {
-                name = "Yolo_Dll Response",
-                children = boxList
+            var response = new MpPluginResponseFormat() {
+                annotations = new List<MpPluginResponseAnnotationFormat>() {
+                    new MpPluginResponseAnnotationFormat() {
+                        name = "Yolo_Dll Response",
+                        children = boxList
+                    }
+                }
             };
+
 
             return JsonConvert.SerializeObject(response);
         }

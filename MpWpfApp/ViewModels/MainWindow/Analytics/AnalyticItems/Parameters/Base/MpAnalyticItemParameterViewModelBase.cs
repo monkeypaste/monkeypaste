@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Cryptography;
@@ -6,11 +7,12 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using MonkeyPaste;
 using MonkeyPaste.Plugin;
+using Newtonsoft.Json;
 using SQLite;
 using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
-    public abstract class MpAnalyticItemParameterViewModel : 
+    public class MpAnalyticItemParameterViewModelBase : 
         MpViewModelBase<MpAnalyticItemPresetViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
@@ -48,8 +50,8 @@ namespace MpWpfApp {
                 if (!IsValid) {
                     return ValidationMessage;
                 }
-                if (Parameter != null && !string.IsNullOrEmpty(Parameter.description)) {
-                    return Parameter.description;
+                if (ParameterFormat != null && !string.IsNullOrEmpty(ParameterFormat.description)) {
+                    return ParameterFormat.description;
                 }
                 return null;
             }
@@ -77,38 +79,127 @@ namespace MpWpfApp {
 
         #region Model
 
+        #region Control Settings
+
         public bool IsVisible {
             get {
-                if (Parameter == null) {
+                if (ParameterFormat == null) {
                     return false;
                 }
-                return Parameter.isVisible;
+                return ParameterFormat.isVisible;
             }
         }
 
-        //protected virtual string _currentValue { get; set; }
+        public bool IsReadOnly {
+            get {
+                if (ParameterFormat == null) {
+                    return false;
+                }
+                return ParameterFormat.isReadOnly;
+            }
+        }
+
+        public bool IsRequired {
+            get {
+                if (ParameterFormat == null) {
+                    return false;
+                }
+                return ParameterFormat.isRequired;
+            }
+        }
+        //Text Box
+        public int MinLength {
+            get {
+                if (ParameterFormat == null) {
+                    return 0;
+                }
+                return ParameterFormat.minLength;
+            }
+        }
+
+        public int MaxLength {
+            get {
+                if (ParameterFormat == null) {
+                    return int.MaxValue;
+                }
+                return ParameterFormat.maxLength;
+            }
+        }
+
+
+        public string IllegalCharacters {
+            get {
+                if (ParameterFormat == null) {
+                    return null;
+                }
+                return ParameterFormat.illegalCharacters;
+            }
+        }
+        //Slider
+        public double Minimum {
+            get {
+                if (ParameterFormat == null) {
+                    return double.MinValue;
+                }
+                return ParameterFormat.minimum;
+            }
+        }
+
+        public double Maximum {
+            get {
+                if (ParameterFormat == null) {
+                    return double.MaxValue;
+                }
+                return ParameterFormat.maximum;
+            }
+        }
+
+        public int Precision {
+            get {
+                if (ParameterFormat == null) {
+                    return 2;
+                }
+                return ParameterFormat.precision;
+            }
+        }
+
+
+
+        public MpAnalyticItemParameterValueUnitType UnitType {
+            get {
+                if (ParameterFormat == null) {
+                    return MpAnalyticItemParameterValueUnitType.None;
+                }
+                return ParameterFormat.unitType;
+            }
+        }
+
+        public List<string> DefaultValues {
+            get {
+                if(ParameterFormat == null || ParameterFormat.values == null) {
+                    return new List<string>();
+                }
+                return ParameterFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList();
+            }
+        }
+
+
+        #endregion
+
         public virtual string CurrentValue {
             get {
-                if(ParameterValue == null) {
+                if(PresetValue == null) {
                     return string.Empty;
                 }
-                return ParameterValue.Value;
+
+                return PresetValue.Value.TrimEnd(System.Environment.NewLine.ToCharArray());
             }
             set {
                 if(CurrentValue != value) {
-                    ParameterValue.Value = value;
+                    PresetValue.Value = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CurrentValue));
                 }
-            }
-        }
-
-        public virtual string DefaultValue { 
-            get {
-                if (Parameter == null || Parameter.values.All(x=>x.isDefault == false)) {
-                    return string.Empty;
-                }
-                return Parameter.values.FirstOrDefault(x => x.isDefault).value;
             }
         }
 
@@ -177,91 +268,62 @@ namespace MpWpfApp {
 
         public int ParamEnumId {
             get {
-                if (Parameter == null) {
+                if (ParameterFormat == null) {
                     return 0;
                 }
-                return Parameter.enumId;
+                return ParameterFormat.paramId;
             }
-        }
-
-        public bool IsReadOnly {
-            get {
-                if (Parameter == null) {
-                    return false;
-                }
-                return Parameter.isReadOnly;
-            }
-        }
-
-        public bool IsRequired {
-            get {
-                if (Parameter == null) {
-                    return false;
-                }
-                return Parameter.isRequired;
-           }
         }
 
         public string Label {
             get {
-                if (Parameter == null) {
+                if (ParameterFormat == null) {
                     return string.Empty;
                 }
-                if(string.IsNullOrEmpty(Parameter.label)) {
-                    return Parameter.label;
+                if(string.IsNullOrEmpty(ParameterFormat.label)) {
+                    return ParameterFormat.label;
                 }
-                return Parameter.label;
-            }
-        }
-
-        public string FormatInfo {
-            get {
-                if (Parameter == null) {
-                    return string.Empty;
-                }
-                return Parameter.formatInfo;
+                return ParameterFormat.label;
             }
         }
 
         public MpAnalyticItemParameterControlType ControlType {
             get {
-                if(Parameter == null) {
+                if(ParameterFormat == null) {
                     return MpAnalyticItemParameterControlType.None;
                 }
-                return Parameter.parameterControlType;
-            }
-        }
-
-        public MpAnalyticItemParameterValueUnitType ValueType {
-            get {
-                if (Parameter == null) {
-                    return MpAnalyticItemParameterValueUnitType.None;
-                }
-                return Parameter.parameterValueType;
+                return ParameterFormat.controlType;
             }
         }
 
         public string Description {
             get {
-                if(Parameter == null) {
+                if(ParameterFormat == null) {
                     return string.Empty;
                 }
-                return Parameter.description;
+                return ParameterFormat.description;
             }
         }
 
         public int ParameterValueId {
             get {
-                if(ParameterValue == null) {
+                if(PresetValue == null) {
                     return 0;
                 }
-                return ParameterValue.Id;
+                return PresetValue.Id;
             }
         }
 
-        public MpAnalyticItemParameterFormat Parameter { get; protected set; }
+        public MpAnalyticItemParameterFormat ParameterFormat { 
+            get {
+                if(PresetValue == null) {
+                    return null;
+                }
+                return PresetValue.ParameterFormat;
+            }
+        }
 
-        public MpAnalyticItemPresetParameterValue ParameterValue { get; set; }
+        public MpAnalyticItemPresetParameterValue PresetValue { get; set; }
 
         #endregion
 
@@ -275,9 +337,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpAnalyticItemParameterViewModel() : base(null) { }
+        public MpAnalyticItemParameterViewModelBase() : base(null) { }
 
-        public MpAnalyticItemParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) {
+        public MpAnalyticItemParameterViewModelBase(MpAnalyticItemPresetViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterViewModel_PropertyChanged;
         }
 
@@ -285,13 +347,19 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public abstract Task InitializeAsync(MpAnalyticItemParameterFormat aip, MpAnalyticItemPresetParameterValue aipv);
-        
+        public virtual async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
+            bool wasBusy = IsBusy;
+            IsBusy = true;
 
-        public void ResetToDefault() {
-            CurrentValue = DefaultValue;
+            PresetValue = aipv;
+
+            OnPropertyChanged(nameof(CurrentValue));            
+
+            await Task.Delay(1);
+
+            IsBusy = wasBusy;
         }
-
+        
         public bool Validate() {
             OnValidate?.Invoke(this, new EventArgs());
             return IsValid;
@@ -309,12 +377,12 @@ namespace MpWpfApp {
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         Task.Run(async () => {
-                            await ParameterValue.WriteToDatabaseAsync();
+                            await PresetValue.WriteToDatabaseAsync();
                             HasModelChanged = false;
-                            if(this is MpComboBoxParameterViewModel cbpvm) {
-                                cbpvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
-                                cbpvm.Items.ForEach(x => x.HasModelChanged = false);
-                            }
+                            //if(this is MpComboBoxParameterViewModel cbpvm) {
+                            //    cbpvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+                            //    cbpvm.Items.ForEach(x => x.HasModelChanged = false);
+                            //}
                         });
                     }
                     break;

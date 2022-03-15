@@ -19,6 +19,7 @@ namespace MpWpfApp {
         public MpINativeResource NativeResource { get; }
         public MpIContextMenuCloser ContextMenuCloser { get; }
         public MpIMainThreadMarshal MainThreadMarshal { get; }
+        public MpIStringTools StringTools { get; }
 
         public MpWpfWrapper() {
             Cursor = new MpWpfCursor();
@@ -30,6 +31,7 @@ namespace MpWpfApp {
             NativeResource = new MpWpfResourceFetcher();
             ContextMenuCloser = new MpWpfContextMenuCloser();
             MainThreadMarshal = new MpWpfMainThreadMarshal();
+            StringTools = new MpWpfStringTools();
         }
 
         

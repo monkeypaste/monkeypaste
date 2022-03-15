@@ -18,12 +18,11 @@
     "parameters": [
       {
         "text": "Supported Languages",
-        "parameterControlType": "ListBox",
+        "controlType": "MultiSelectList",
         "parameterValueType": "PlainText",
-        "enumId": 1,
+        "paramId": 1,
         "isReadOnly": true,
         "isRequired": true,
-        "isMultiSelect": true,
         "values": [
           {
             "text": "1C",
@@ -35,7 +34,7 @@
           },
           {
             "text": "ABAP",
-            "value": "sap-abap, abap"
+            "value": "sap-abap,abap"
           },
           {
             "text": "ABNF",
@@ -51,11 +50,11 @@
           },
           {
             "text": "Arduino (C++ w/Arduino libs)",
-            "value": "arduino, ino"
+            "value": "arduino,ino"
           },
           {
             "text": "ARM assembler",
-            "value": "armasm, arm"
+            "value": "armasm,arm"
           },
           {
             "text": "AVR assembler",
@@ -63,11 +62,11 @@
           },
           {
             "text": "ActionScript",
-            "value": "actionscript, as"
+            "value": "actionscript,as"
           },
           {
             "text": "Alan IF",
-            "value": "alan, i"
+            "value": "alan,i"
           },
           {
             "text": "Alan",
@@ -75,15 +74,15 @@
           },
           {
             "text": "AngelScript",
-            "value": "angelscript, asc"
+            "value": "angelscript,asc"
           },
           {
             "text": "Apache",
-            "value": "apache, apacheconf"
+            "value": "apache,apacheconf"
           },
           {
             "text": "AppleScript",
-            "value": "applescript, osascript"
+            "value": "applescript,osascript"
           },
           {
             "text": "Arcade",
@@ -91,7 +90,7 @@
           },
           {
             "text": "AsciiDoc",
-            "value": "asciidoc, adoc"
+            "value": "asciidoc,adoc"
           },
           {
             "text": "AspectJ",
@@ -107,11 +106,11 @@
           },
           {
             "text": "Awk",
-            "value": "awk, mawk, nawk, gawk"
+            "value": "awk,mawk,nawk,gawk"
           },
           {
             "text": "Bash",
-            "value": "bash, sh, zsh",
+            "value": "bash,sh,zsh",
             "isDefault": true
           },
           {
@@ -132,21 +131,21 @@
           },
           {
             "text": "Brainfuck",
-            "value": "brainfuck, bf"
+            "value": "brainfuck,bf"
           },
           {
             "text": "C#",
-            "value": "csharp, cs",
+            "value": "csharp,cs",
             "isDefault": true
           },
           {
             "text": "C",
-            "value": "c, h",
+            "value": "c,h",
             "isDefault": true
           },
           {
             "text": "C++",
-            "value": "cpp, hpp, cc, hh, c++, h++, cxx, hxx",
+            "value": "cpp,hpp,cc,hh,c++,h++,cxx,hxx",
             "isDefault": true
           },
           {
@@ -155,11 +154,11 @@
           },
           {
             "text": "Cache Object Script",
-            "value": "cos, cls"
+            "value": "cos,cls"
           },
           {
             "text": "CMake",
-            "value": "cmake, cmake.in"
+            "value": "cmake,cmake.in"
           },
           {
             "text": "Coq",
@@ -176,15 +175,15 @@
           },
           {
             "text": "Cap’n Proto",
-            "value": "capnproto, capnp"
+            "value": "capnproto,capnp"
           },
           {
             "text": "Chaos",
-            "value": "chaos, kaos"
+            "value": "chaos,kaos"
           },
           {
             "text": "Chapel",
-            "value": "chapel, chpl"
+            "value": "chapel,chpl"
           },
           {
             "text": "Cisco CLI",
@@ -192,11 +191,11 @@
           },
           {
             "text": "Clojure",
-            "value": "clojure, clj"
+            "value": "clojure,clj"
           },
           {
             "text": "CoffeeScript",
-            "value": "coffeescript, coffee, cson, iced"
+            "value": "coffeescript,coffee,cson,iced"
           },
           {
             "text": "CpcdosC+",
@@ -204,11 +203,11 @@
           },
           {
             "text": "Crmsh",
-            "value": "crmsh, crm, pcmk"
+            "value": "crmsh,crm,pcmk"
           },
           {
             "text": "Crystal",
-            "value": "crystal, cr"
+            "value": "crystal,cr"
           },
           {
             "text": "cURL",
@@ -232,28 +231,28 @@
           },
           {
             "text": "Delphi",
-            "value": "dpr, dfm, pas, pascal"
+            "value": "dpr,dfm,pas,pascal"
           },
           {
             "text": "Diff",
-            "value": "diff, patch",
+            "value": "diff,patch",
             "isDefault": true
           },
           {
             "text": "Django",
-            "value": "django, jinja"
+            "value": "django,jinja"
           },
           {
             "text": "DNS Zone file",
-            "value": "dns, zone, bind"
+            "value": "dns,zone,bind"
           },
           {
             "text": "Dockerfile",
-            "value": "dockerfile, docker"
+            "value": "dockerfile,docker"
           },
           {
             "text": "DOS",
-            "value": "dos, bat, cmd"
+            "value": "dos,bat,cmd"
           },
           {
             "text": "dsconfig",
@@ -265,7 +264,7 @@
           },
           {
             "text": "Dust",
-            "value": "dust, dst"
+            "value": "dust,dst"
           },
           {
             "text": "Dylan",
@@ -285,19 +284,19 @@
           },
           {
             "text": "Erlang",
-            "value": "erlang, erl"
+            "value": "erlang,erl"
           },
           {
             "text": "Excel",
-            "value": "excel, xls, xlsx"
+            "value": "excel,xls,xlsx"
           },
           {
             "text": "Extempore",
-            "value": "extempore, xtlang, xtm"
+            "value": "extempore,xtlang,xtm"
           },
           {
             "text": "F#",
-            "value": "fsharp, fs"
+            "value": "fsharp,fs"
           },
           {
             "text": "FIX",
@@ -305,23 +304,23 @@
           },
           {
             "text": "Fortran",
-            "value": "fortran, f90, f95"
+            "value": "fortran,f90,f95"
           },
           {
             "text": "G-Code",
-            "value": "gcode, nc"
+            "value": "gcode,nc"
           },
           {
             "text": "Gams",
-            "value": "gams, gms"
+            "value": "gams,gms"
           },
           {
             "text": "GAUSS",
-            "value": "gauss, gss"
+            "value": "gauss,gss"
           },
           {
             "text": "GDScript",
-            "value": "godot, gdscript"
+            "value": "godot,gdscript"
           },
           {
             "text": "Gherkin",
@@ -329,15 +328,15 @@
           },
           {
             "text": "Glimmer and EmberJS",
-            "value": "hbs, glimmer, html.hbs, html.handlebars, htmlbars"
+            "value": "hbs,glimmer,html.hbs,html.handlebars,htmlbars"
           },
           {
             "text": "GN for Ninja",
-            "value": "gn, gni"
+            "value": "gn,gni"
           },
           {
             "text": "Go",
-            "value": "go, golang",
+            "value": "go,golang",
             "isDefault": true
           },
           {
@@ -346,7 +345,7 @@
           },
           {
             "text": "Golo",
-            "value": "golo, gololang"
+            "value": "golo,gololang"
           },
           {
             "text": "Gradle",
@@ -365,13 +364,13 @@
             "value": "gsql"
           },
           {
-            "text": "HTML, XML",
-            "value": "xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, svg",
+            "text": "HTML,XML",
+            "value": "xml,html,xhtml,rss,atom,xjb,xsd,xsl,plist,svg",
             "isDefault": true
           },
           {
             "text": "HTTP",
-            "value": "http, https"
+            "value": "http,https"
           },
           {
             "text": "Haml",
@@ -379,15 +378,15 @@
           },
           {
             "text": "Handlebars",
-            "value": "handlebars, hbs, html.hbs, html.handlebars"
+            "value": "handlebars,hbs,html.hbs,html.handlebars"
           },
           {
             "text": "Haskell",
-            "value": "haskell, hs"
+            "value": "haskell,hs"
           },
           {
             "text": "Haxe",
-            "value": "haxe, hx"
+            "value": "haxe,hx"
           },
           {
             "text": "High-level shader language",
@@ -395,16 +394,16 @@
           },
           {
             "text": "Hy",
-            "value": "hy, hylang"
+            "value": "hy,hylang"
           },
           {
-            "text": "Ini, TOML",
-            "value": "ini, toml",
+            "text": "Ini,TOML",
+            "value": "ini,toml",
             "isDefault": true
           },
           {
             "text": "Inform7",
-            "value": "inform7, i7"
+            "value": "inform7,i7"
           },
           {
             "text": "IRPF90",
@@ -417,25 +416,25 @@
           },
           {
             "text": "Java",
-            "value": "java, jsp",
+            "value": "java,jsp",
             "isDefault": true
           },
           {
             "text": "JavaScript",
-            "value": "javascript, js, jsx",
+            "value": "javascript,js,jsx",
             "isDefault": true
           },
           {
             "text": "Jolie",
-            "value": "jolie, iol, ol"
+            "value": "jolie,iol,ol"
           },
           {
             "text": "Julia",
-            "value": "julia, julia-repl"
+            "value": "julia,julia-repl"
           },
           {
             "text": "Kotlin",
-            "value": "kotlin, kt",
+            "value": "kotlin,kt",
             "isDefault": true
           },
           {
@@ -452,7 +451,7 @@
           },
           {
             "text": "Lasso",
-            "value": "lasso, ls, lassoscript"
+            "value": "lasso,ls,lassoscript"
           },
           {
             "text": "Less",
@@ -473,7 +472,7 @@
           },
           {
             "text": "LiveScript",
-            "value": "livescript, ls"
+            "value": "livescript,ls"
           },
           {
             "text": "Lua",
@@ -482,17 +481,17 @@
           },
           {
             "text": "Makefile",
-            "value": "makefile, mk, mak, make",
+            "value": "makefile,mk,mak,make",
             "isDefault": true
           },
           {
             "text": "Markdown",
-            "value": "markdown, md, mkdown, mkd",
+            "value": "markdown,md,mkdown,mkd",
             "isDefault": true
           },
           {
             "text": "Mathematica",
-            "value": "mathematica, mma, wl"
+            "value": "mathematica,mma,wl"
           },
           {
             "text": "Matlab",
@@ -512,7 +511,7 @@
           },
           {
             "text": "mIRC Scripting Language",
-            "value": "mirc, mrc"
+            "value": "mirc,mrc"
           },
           {
             "text": "Mizar",
@@ -532,7 +531,7 @@
           },
           {
             "text": "Moonscript",
-            "value": "moonscript, moon"
+            "value": "moonscript,moon"
           },
           {
             "text": "N1QL",
@@ -548,11 +547,11 @@
           },
           {
             "text": "Nginx",
-            "value": "nginx, nginxconf"
+            "value": "nginx,nginxconf"
           },
           {
             "text": "Nim",
-            "value": "nim, nimrod"
+            "value": "nim,nimrod"
           },
           {
             "text": "Nix",
@@ -564,11 +563,11 @@
           },
           {
             "text": "OCaml",
-            "value": "ocaml, ml"
+            "value": "ocaml,ml"
           },
           {
             "text": "Objective C",
-            "value": "objectivec, mm, objc, obj-c, obj-c++, objective-c++",
+            "value": "objectivec,mm,objc,obj-c,obj-c++,objective-c++",
             "isDefault": true
           },
           {
@@ -577,7 +576,7 @@
           },
           {
             "text": "OpenSCAD",
-            "value": "openscad, scad"
+            "value": "openscad,scad"
           },
           {
             "text": "Oracle Rules Language",
@@ -589,7 +588,7 @@
           },
           {
             "text": "PF",
-            "value": "pf, pf.conf"
+            "value": "pf,pf.conf"
           },
           {
             "text": "PHP",
@@ -598,7 +597,7 @@
           },
           {
             "text": "Papyrus",
-            "value": "papyrus, psc"
+            "value": "papyrus,psc"
           },
           {
             "text": "Parser3",
@@ -606,16 +605,16 @@
           },
           {
             "text": "Perl",
-            "value": "perl, pl, pm",
+            "value": "perl,pl,pm",
             "isDefault": true
           },
           {
             "text": "Pine Script",
-            "value": "pine, pinescript"
+            "value": "pine,pinescript"
           },
           {
             "text": "Plaintext",
-            "value": "plaintext, txt, text",
+            "value": "plaintext,txt,text",
             "isDefault": true
           },
           {
@@ -624,11 +623,11 @@
           },
           {
             "text": "PostgreSQL & PL/pgSQL",
-            "value": "pgsql, postgres, postgresql"
+            "value": "pgsql,postgres,postgresql"
           },
           {
             "text": "PowerShell",
-            "value": "powershell, ps, ps1"
+            "value": "powershell,ps,ps1"
           },
           {
             "text": "Processing",
@@ -648,11 +647,11 @@
           },
           {
             "text": "Puppet",
-            "value": "puppet, pp"
+            "value": "puppet,pp"
           },
           {
             "text": "Python",
-            "value": "python, py, gyp",
+            "value": "python,py,gyp",
             "isDefault": true
           },
           {
@@ -661,7 +660,7 @@
           },
           {
             "text": "Python REPL",
-            "value": "python-repl, pycon",
+            "value": "python-repl,pycon",
             "isDefault": true
           },
           {
@@ -670,7 +669,7 @@
           },
           {
             "text": "Q",
-            "value": "k, kdb"
+            "value": "k,kdb"
           },
           {
             "text": "QML",
@@ -683,15 +682,15 @@
           },
           {
             "text": "Razor CSHTML",
-            "value": "cshtml, razor, razor-cshtml"
+            "value": "cshtml,razor,razor-cshtml"
           },
           {
             "text": "ReasonML",
-            "value": "reasonml, re"
+            "value": "reasonml,re"
           },
           {
             "text": "Rebol & Red",
-            "value": "redbol, rebol, red, red-system"
+            "value": "redbol,rebol,red,red-system"
           },
           {
             "text": "RenderMan RIB",
@@ -703,33 +702,33 @@
           },
           {
             "text": "RiScript",
-            "value": "risc, riscript"
+            "value": "risc,riscript"
           },
           {
             "text": "Roboconf",
-            "value": "graph, instances"
+            "value": "graph,instances"
           },
           {
             "text": "Robot Framework",
-            "value": "robot, rf"
+            "value": "robot,rf"
           },
           {
             "text": "RPM spec files",
-            "value": "rpm-specfile, rpm, spec, rpm-spec, specfile"
+            "value": "rpm-specfile,rpm,spec,rpm-spec,specfile"
           },
           {
             "text": "Ruby",
-            "value": "ruby, rb, gemspec, podspec, thor, irb",
+            "value": "ruby,rb,gemspec,podspec,thor,irb",
             "isDefault": true
           },
           {
             "text": "Rust",
-            "value": "rust, rs",
+            "value": "rust,rs",
             "isDefault": true
           },
           {
             "text": "SAS",
-            "value": "SAS, sas"
+            "value": "SAS,sas"
           },
           {
             "text": "SCSS",
@@ -743,7 +742,7 @@
           },
           {
             "text": "STEP Part 21",
-            "value": "p21, step, stp"
+            "value": "p21,step,stp"
           },
           {
             "text": "Scala",
@@ -755,7 +754,7 @@
           },
           {
             "text": "Scilab",
-            "value": "scilab, sci"
+            "value": "scilab,sci"
           },
           {
             "text": "Shape Expressions",
@@ -763,7 +762,7 @@
           },
           {
             "text": "Shell",
-            "value": "shell, console"
+            "value": "shell,console"
           },
           {
             "text": "Smali",
@@ -771,15 +770,15 @@
           },
           {
             "text": "Smalltalk",
-            "value": "smalltalk, st"
+            "value": "smalltalk,st"
           },
           {
             "text": "SML",
-            "value": "sml, ml"
+            "value": "sml,ml"
           },
           {
             "text": "Solidity",
-            "value": "solidity, sol"
+            "value": "solidity,sol"
           },
           {
             "text": "Splunk SPL",
@@ -787,7 +786,7 @@
           },
           {
             "text": "Stan",
-            "value": "stan, stanfuncs"
+            "value": "stan,stanfuncs"
           },
           {
             "text": "Stata",
@@ -795,11 +794,11 @@
           },
           {
             "text": "Structured Text",
-            "value": "iecst, scl, stl, structured-text"
+            "value": "iecst,scl,stl,structured-text"
           },
           {
             "text": "Stylus",
-            "value": "stylus, styl"
+            "value": "stylus,styl"
           },
           {
             "text": "SubUnit",
@@ -807,7 +806,7 @@
           },
           {
             "text": "Supercollider",
-            "value": "supercollider, sc"
+            "value": "supercollider,sc"
           },
           {
             "text": "Svelte",
@@ -820,11 +819,11 @@
           },
           {
             "text": "Tcl",
-            "value": "tcl, tk"
+            "value": "tcl,tk"
           },
           {
             "text": "Terraform (HCL)",
-            "value": "terraform, tf, hcl"
+            "value": "terraform,tf,hcl"
           },
           {
             "text": "Test Anything Protocol",
@@ -844,11 +843,11 @@
           },
           {
             "text": "Twig",
-            "value": "twig, craftcms"
+            "value": "twig,craftcms"
           },
           {
             "text": "TypeScript",
-            "value": "typescript, ts",
+            "value": "typescript,ts",
             "isDefault": true
           },
           {
@@ -857,7 +856,7 @@
           },
           {
             "text": "VB.Net",
-            "value": "vbnet, vb",
+            "value": "vbnet,vb",
             "isDefault": true
           },
           {
@@ -866,7 +865,7 @@
           },
           {
             "text": "VBScript",
-            "value": "vbscript, vbs"
+            "value": "vbscript,vbs"
           },
           {
             "text": "VHDL",
@@ -878,7 +877,7 @@
           },
           {
             "text": "Verilog",
-            "value": "verilog, v"
+            "value": "verilog,v"
           },
           {
             "text": "Vim Script",
@@ -886,11 +885,11 @@
           },
           {
             "text": "X#",
-            "value": "xsharp, xs, prg"
+            "value": "xsharp,xs,prg"
           },
           {
             "text": "X++",
-            "value": "axapta, x++"
+            "value": "axapta,x++"
           },
           {
             "text": "x86 Assembly",
@@ -898,33 +897,33 @@
           },
           {
             "text": "XL",
-            "value": "xl, tao"
+            "value": "xl,tao"
           },
           {
             "text": "XQuery",
-            "value": "xquery, xpath, xq"
+            "value": "xquery,xpath,xq"
           },
           {
             "text": "YAML",
-            "value": "yml, yaml",
+            "value": "yml,yaml",
             "isDefault": true
           },
           {
             "text": "ZenScript",
-            "value": "zenscript, zs"
+            "value": "zenscript,zs"
           },
           {
             "text": "Zephir",
-            "value": "zephir, zep"
+            "value": "zephir,zep"
           }
         ]
       },
       {
         "text": "Source Content",
         "description": "The Snippet to detect",
-        "parameterControlType": "TextBox",
+        "controlType": "TextBox",
         "parameterValueType": "ContentQuery",
-        "enumId": 2,
+        "paramId": 2,
         "isRequired": true,
         "isVisible": false,
         "values": [

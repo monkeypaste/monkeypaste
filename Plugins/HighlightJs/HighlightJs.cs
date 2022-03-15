@@ -77,8 +77,8 @@ namespace HighlightJs {
             var reqParts = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(reqStr);
 
 
-            var languages = reqParts.FirstOrDefault(x => x.enumId == 1).value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            string code = reqParts.FirstOrDefault(x => x.enumId == 2).value;
+            var languages = reqParts.FirstOrDefault(x => x.paramId == 1).value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            string code = reqParts.FirstOrDefault(x => x.paramId == 2).value;
             code = string.Format(@"<pre><code>{0}</code></pre>", code);
 
             string curDir = Directory.GetCurrentDirectory();

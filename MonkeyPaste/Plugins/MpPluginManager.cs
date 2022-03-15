@@ -15,8 +15,8 @@ namespace MonkeyPaste {
     public static class MpPluginManager {
         #region Properties
 
-        public static Dictionary<string,MpPluginFormat> Plugins { get; set; } = new Dictionary<string,MpPluginFormat>();
-        
+        public static Dictionary<string, MpPluginFormat> Plugins { get; set; } = new Dictionary<string, MpPluginFormat>();
+
         #endregion
 
         #region Public Methods
@@ -33,18 +33,18 @@ namespace MonkeyPaste {
 
             var manifestPaths = FindManifestPaths(pluginRootFolderPath);
 
-            foreach(var manifestPath in manifestPaths) {
+            foreach (var manifestPath in manifestPaths) {
                 var plugin = await LoadPlugin(manifestPath);
                 if (plugin == null) {
                     continue;
                 }
-                Plugins.Add(manifestPath,plugin);
+                Plugins.Add(manifestPath, plugin);
                 MpConsole.WriteLine($"Successfully loaded plugin: {plugin.title}");
             }
         }
 
         public static async Task<MpPluginFormat> ReloadPlugin(MpPluginFormat plugin) {
-            if(plugin == null || string.IsNullOrEmpty(plugin.guid)) {
+            if (plugin == null || string.IsNullOrEmpty(plugin.guid)) {
                 var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
                     dialogType: MpNotificationDialogType.InvalidPlugin,
                     exceptionType: MpNotificationExceptionSeverityType.Error,
@@ -52,13 +52,13 @@ namespace MonkeyPaste {
                 return plugin;
             }
             var pkvp = Plugins.FirstOrDefault(x => x.Value.guid == plugin.guid);
-            if(string.IsNullOrEmpty(pkvp.Key)) {                
+            if (string.IsNullOrEmpty(pkvp.Key)) {
                 var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
                     dialogType: MpNotificationDialogType.InvalidPlugin,
                     exceptionType: MpNotificationExceptionSeverityType.Error,
                     msg: $"Error reloading plugin '{plugin.title}' with guid '{plugin.guid}', manifest.json found.");
 
-                if(userAction == MpDialogResultType.Retry) {
+                if (userAction == MpDialogResultType.Retry) {
                     await Init();
                     return await ReloadPlugin(plugin);
                 }
@@ -80,19 +80,19 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Error scanning plug-in directory: " + root);
                 MpConsole.WriteLine(ex);
                 return new List<string>();
-            }            
+            }
         }
 
         private static async Task<MpPluginFormat> LoadPlugin(string manifestPath) {
             string manifestStr = MpFileIoHelpers.ReadTextFromFile(manifestPath);
-            if(string.IsNullOrEmpty(manifestStr)) {
+            if (string.IsNullOrEmpty(manifestStr)) {
                 var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
                     dialogType: MpNotificationDialogType.InvalidPlugin,
                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                     msg: $"Plugin manifest not found in '{manifestPath}'");
 
-                
-                if(userAction == MpDialogResultType.Retry) {
+
+                if (userAction == MpDialogResultType.Retry) {
                     var retryPlugin = await LoadPlugin(manifestPath);
                     return retryPlugin;
                 }
@@ -100,8 +100,9 @@ namespace MonkeyPaste {
             }
             MpPluginFormat plugin;
             try {
-                plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);                
-            } catch(Exception ex) {                
+                plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);
+            }
+            catch (Exception ex) {
                 var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
                         dialogType: MpNotificationDialogType.InvalidPlugin,
                         exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
@@ -113,10 +114,11 @@ namespace MonkeyPaste {
                 }
                 return null;
             }
-            if(plugin != null) {
+            if (plugin != null) {
                 try {
                     plugin.Component = GetPluginComponent(manifestPath, plugin);
-                } catch(Exception ex) {
+                }
+                catch (Exception ex) {
                     var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
                             dialogType: MpNotificationDialogType.InvalidPlugin,
                             exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
@@ -128,7 +130,7 @@ namespace MonkeyPaste {
                     }
                     return null;
                 }
-                
+
             }
             return plugin;
         }
@@ -145,7 +147,7 @@ namespace MonkeyPaste {
                 Assembly pluginAssembly = Assembly.LoadFrom(dllPath);
                 for (int i = 0; i < pluginAssembly.GetTypes().Length; i++) {
                     var curType = pluginAssembly.GetTypes()[i];
-                    if (curType.GetInterface("MonkeyPaste.Plugin.MpIPlugin") != null) {
+                    if (curType.GetInterface("MonkeyPaste.Plugin."+nameof(MpIPluginComponentBase)) != null) {
                         var pluginObj = Activator.CreateInstance(curType);
                         if (pluginObj != null) {
                             return pluginObj;

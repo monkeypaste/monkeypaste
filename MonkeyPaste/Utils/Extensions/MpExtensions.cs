@@ -22,6 +22,18 @@ namespace MonkeyPaste {
 
         #region Collections
 
+        public static bool IsNullOrEmpty<T>(this IList<T> list) {
+            return list == null || list.Count == 0;
+        }
+
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> list) {
+            return list == null || list.Count() == 0;
+        }
+
+        public static bool IsNullOrEmpty<T>(this ICollection<T> list) {
+            return list == null || list.Count == 0;
+        }
+
         public static T PeekOrDefault<T>(this Stack<T> stack) {
             if(stack.Count == 0) {
                 return default(T);

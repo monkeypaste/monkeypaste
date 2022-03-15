@@ -173,7 +173,7 @@ namespace MpWpfApp {
         }
 
         private Span ConvertAnnotationItem(MpPluginResponseAnnotationFormat ta) {
-            if(ta.text == null) {
+            if(ta.label == null) {
                 return null;
             }
             var span = new Span();
@@ -196,11 +196,11 @@ namespace MpWpfApp {
             span.Foreground = ParseBrush(ta.appearance.foregroundColor.value);
             span.Background = ParseBrush(ta.appearance.backgroundColor.value);
 
-            span.Inlines.Add(new Run(ta.text.value));
+            span.Inlines.Add(new Run(ta.label.value));
 
-            if (MpUrlHelpers.IsValidUrl(ta.text.value)) {
+            if (MpUrlHelpers.IsValidUrl(ta.label.value)) {
                 var hl = new Hyperlink(span) {
-                    NavigateUri = new Uri(ta.text.value, UriKind.Absolute)
+                    NavigateUri = new Uri(ta.label.value, UriKind.Absolute)
                 };
                 return hl;
             }

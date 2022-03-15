@@ -23,88 +23,93 @@
       {
         "label": "Process Path",
         "description": "The process can be a standard application or batch script",
-        "parameterControlType": "FileChooser",
-        "parameterValueType": "PlainText",
-        "enumId": 1,
-        "isRequired": true
+        "controlType": "FileChooser",
+        "unitType": "FileSystemPath",
+        "isRequired": true,
+        "paramId": 1
+      },
+      {
+        "label": "Prefer running process?",
+        "description": "When checked, input will be passed to most recently activated processes or a new process is started (which is default).",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "values": [
+          {
+            "value": "false",
+            "isDefault": true
+          }
+        ],
+        "paramId": 9
       },
       {
         "label": "Arguments",
         "description": "Execute arguments for the process. Content Paths will be pre-processed into selected (or action input) values. If there are any conflicts to property path then pad the conflicting path with '@' symbols ie. '{@ItemData@}'",
-        "parameterControlType": "ListBox",
-        "parameterValueType": "ContentQuery",
-        "enumId": 2,
-        "isReadOnly": false,
-        "isMultiSelect": true,
-        "canAddValues": true,
+        "controlType": "EditableList",
+        "unitType": "ContentQuery",
         "values": [
           {
-            "value": "",
-            "isDefault": true
+            "value": "test1"
+          },
+          {
+            "value": "test2"
           }
-        ]
+        ],
+        "paramId": 2
       },
       {
         "label": "Run as Administrator",
         "description": "This will only be evaluated if this application is run as administrator",
-        "parameterControlType": "CheckBox",
-        "parameterValueType": "Bool",
-        "enumId": 3,
+        "controlType": "CheckBox",
+        "unitType": "Bool",
         "values": [
           {
             "value": "false",
             "isDefault": true
           }
-        ]
+        ],
+        "paramId": 3
       },
       {
         "label": "Silent",
         "description": "Process will not appear in taskbar",
-        "parameterControlType": "CheckBox",
-        "parameterValueType": "Bool",
-        "enumId": 4,
+        "controlType": "CheckBox",
+        "unitType": "Bool",
         "values": [
           {
             "value": "false",
             "isDefault": true
           }
-        ]
+        ],
+        "paramId": 4
       },
       {
         "label": "Shell Execute",
         "description": "Mark this as true if process must use operating system shell. However if process needs a different working directory than it's executable leave this unchecked.'",
-        "parameterControlType": "CheckBox",
-        "parameterValueType": "Bool",
-        "enumId": 5,
+        "controlType": "CheckBox",
+        "unitType": "Bool",
         "values": [
           {
             "value": "false",
             "isDefault": true
           }
-        ]
+        ],
+        "paramId": 5
       },
       {
         "label": "Working Directory",
         "description": "When left empty the process will execute in its directory on the file system",
-        "parameterControlType": "DirectoryChooser",
-        "parameterValueType": "PlainText",
-        "enumId": 6,
-        "values": [
-          {
-            "value": "",
-            "isDefault": true
-          }
-        ]
+        "controlType": "DirectoryChooser",
+        "unitType": "FileSystemPath",
+        "isRequired": false,
+        "paramId": 6
       },
       {
         "label": "Window Type",
         "description": "When 'Silent' is checked, window type is ignored",
-        "parameterControlType": "ListBox",
-        "parameterValueType": "PlainText",
-        "enumId": 7,
-        "isSingleSelect": true,
-        "isReadOnly": true,
+        "controlType": "List",
+        "unitType": "PlainText",
         "isRequired": true,
+        "paramId": 7,
         "values": [
           {
             "label": "Hidden",
@@ -128,15 +133,16 @@
       {
         "label": "Suppress Errors",
         "description": "Show or hide startup errors",
-        "parameterControlType": "CheckBox",
-        "parameterValueType": "Bool",
-        "enumId": 8,
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "isRequired": true,
         "values": [
           {
             "value": "false",
             "isDefault": true
           }
-        ]
+        ],
+        "paramId": 8
       }
     ]
   }

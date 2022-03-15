@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste;
 using MonkeyPaste.Plugin;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
     public class MpTextBoxParameterViewModel : 
-        MpAnalyticItemParameterViewModel,
+        MpAnalyticItemParameterViewModelBase,
         MpIMenuItemViewModel,
         MpITextSelectionRangeViewModel,
         MpIContentQueryTextBoxViewModel {
@@ -28,15 +29,15 @@ namespace MpWpfApp {
         public MpMenuItemViewModel MenuItemViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
-                var propertyPathLabels = typeof(MpComparePropertyPathType).EnumToLabels();
+                var propertyPathLabels = typeof(MpCopyItemPropertyPathType).EnumToLabels();
                 for (int i = 0; i < propertyPathLabels.Length; i++) {
-                    var ppt = (MpComparePropertyPathType)i;
+                    var ppt = (MpCopyItemPropertyPathType)i;
                     var mivm = new MpMenuItemViewModel() {
                         Header = propertyPathLabels[i],
                         Command = AddContentPropertyPathCommand,
                         CommandParameter = ppt
                     };
-                    if (ppt == MpComparePropertyPathType.None || (ppt == MpComparePropertyPathType.LastOutput && !IsActionParameter)) {
+                    if (ppt == MpCopyItemPropertyPathType.None || (ppt == MpCopyItemPropertyPathType.LastOutput && !IsActionParameter)) {
                         mivm.IsVisible = false;
                     }
                     tmivml.Add(mivm);
@@ -81,18 +82,7 @@ namespace MpWpfApp {
 
         #region Model
 
-        public bool IsContentQuery {
-            get {
-                if(Parameter == null) {
-                    return false;
-                }
-                return Parameter.parameterValueType == MpAnalyticItemParameterValueUnitType.ContentQuery;
-            }
-        }
-
-        public override string CurrentValue { get; set; }
-
-        public override string DefaultValue => _defaultValue;
+        public bool IsContentQuery => UnitType == MpAnalyticItemParameterValueUnitType.ContentQuery;
 
         #endregion
 
@@ -111,16 +101,10 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aipf, MpAnalyticItemPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
             IsBusy = true;
 
-            Parameter = aipf;
-            ParameterValue = aipv;
-
-            CurrentValue = _defaultValue = aipv.Value;
-
-            OnPropertyChanged(nameof(DefaultValue));
-            OnPropertyChanged(nameof(CurrentValue));
+            await base.InitializeAsync(aipv);
 
             OnValidate += MpTextBoxParameterViewModel_OnValidate;
             await Task.Delay(1);
@@ -135,49 +119,17 @@ namespace MpWpfApp {
             //if (Parameter == null || CurrentValue == null) {
             //    return false;
             //}
-
-            var minCond = Parameter.values.FirstOrDefault(x => x.isMinimum);
-            if (minCond != null) {
-                int minLength = 0;
-                try {
-                    minLength = Convert.ToInt32(minCond.value);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Minimum val: {minCond.value} could not conver to int, exception: {ex}");
-                }
-                if (CurrentValue.Length < minLength) {
-                    ValidationMessage = $"{Label} must be at least {minLength} characters";
-                } else {
-                    ValidationMessage = string.Empty;
-                }
+            if (CurrentValue.Length < MinLength) {
+                ValidationMessage = $"{Label} must be at least {MinLength} characters";
+            } else if (CurrentValue.Length > MaxLength) {
+                ValidationMessage = $"{Label} can only be {MaxLength} characters";
+            } else if (IllegalCharacters != null && CurrentValue
+                        .Split(new string[] { string.Empty },StringSplitOptions.None)
+                        .Any(x=> IllegalCharacters.Contains(x))) {
+                ValidationMessage = $"{Label} cannot contain {ParameterFormat.illegalCharacters} characters";
+            } else {
+                ValidationMessage = string.Empty;
             }
-            if(IsValid) {
-                var maxCond = Parameter.values.FirstOrDefault(x => x.isMaximum);
-                if (maxCond != null) {
-                    // TODO should cap all input string but especially here
-                    int maxLength = int.MaxValue;
-                    try {
-                        maxLength = Convert.ToInt32(maxCond.value);
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Maximum val: {minCond.value} could not conver to int, exception: {ex}");
-                    }
-                    if (CurrentValue.Length > maxLength) {
-                        ValidationMessage = $"{Label} can be no more than {maxLength} characters";
-                    } else {
-                        ValidationMessage = string.Empty;
-                    }
-                }
-            }
-
-            if(IsValid) {
-                if (!string.IsNullOrEmpty(FormatInfo)) {
-                    if (CurrentValue.IndexOfAny(FormatInfo.ToCharArray()) != -1) {
-                        ValidationMessage = $"{Label} cannot contain '{FormatInfo}' characters";
-                    }
-                }
-            }
-
             OnPropertyChanged(nameof(IsValid));
         }
 
@@ -235,8 +187,8 @@ namespace MpWpfApp {
                 if (args == null) {
                     return;
                 }
-                var cppt = (MpComparePropertyPathType)args;
-                if (cppt == MpComparePropertyPathType.None) {
+                var cppt = (MpCopyItemPropertyPathType)args;
+                if (cppt == MpCopyItemPropertyPathType.None) {
                     return;
                 }
 

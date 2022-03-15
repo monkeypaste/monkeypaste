@@ -17,6 +17,7 @@ namespace MonkeyPaste {
         MpINativeResource NativeResource { get; }
         MpIContextMenuCloser ContextMenuCloser { get; }
         MpIMainThreadMarshal MainThreadMarshal { get; }
+        MpIStringTools StringTools { get; }
     }
 
 

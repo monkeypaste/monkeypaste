@@ -1,8 +1,11 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
 using MonkeyPaste.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +14,7 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpEnumerableParameterValueViewModel : 
-        MpViewModelBase<MpAnalyticItemParameterViewModel>,
+        MpViewModelBase<MpEnumerableParameterViewModel>,
         MpIMenuItemViewModel,
         MpITextSelectionRangeViewModel,
         MpIContentQueryTextBoxViewModel {
@@ -33,15 +36,15 @@ namespace MpWpfApp {
         public MpMenuItemViewModel MenuItemViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
-                var propertyPathLabels = typeof(MpComparePropertyPathType).EnumToLabels();
+                var propertyPathLabels = typeof(MpCopyItemPropertyPathType).EnumToLabels();
                 for (int i = 0; i < propertyPathLabels.Length; i++) {
-                    var ppt = (MpComparePropertyPathType)i;
+                    var ppt = (MpCopyItemPropertyPathType)i;
                     var mivm = new MpMenuItemViewModel() {
                         Header = propertyPathLabels[i],
                         Command = AddContentPropertyPathCommand,
                         CommandParameter = ppt
                     };
-                    if (ppt == MpComparePropertyPathType.None || (ppt == MpComparePropertyPathType.LastOutput && !IsActionParameter)) {
+                    if (ppt == MpCopyItemPropertyPathType.None || (ppt == MpCopyItemPropertyPathType.LastOutput && !IsActionParameter)) {
                         mivm.IsVisible = false;
                     }
                     tmivml.Add(mivm);
@@ -89,8 +92,8 @@ namespace MpWpfApp {
                 if (args == null) {
                     return;
                 }
-                var cppt = (MpComparePropertyPathType)args;
-                if (cppt == MpComparePropertyPathType.None) {
+                var cppt = (MpCopyItemPropertyPathType)args;
+                if (cppt == MpCopyItemPropertyPathType.None) {
                     return;
                 }
 
@@ -100,10 +103,10 @@ namespace MpWpfApp {
 
         public ICommand ClearQueryCommand {
             get {
-                if(Parent is MpEditableListBoxParameterViewModel lbpvm) {
-                    return lbpvm.RemoveValueCommand;
+                if(Parent == null) {
+                    return null;
                 }
-                return null;
+                return Parent.RemoveValueCommand;
             }
         }
 
@@ -138,20 +141,6 @@ namespace MpWpfApp {
 
         public int ValueIdx { get; set; } = 0;
 
-        //public override bool HasModelChanged {
-        //    get {
-        //        if(Parent == null) {
-        //            return false;
-        //        }
-        //        return Parent.HasModelChanged;
-        //    }
-        //    set {
-        //        if(HasModelChanged != value) {
-        //            Parent.HasModelChanged = value;
-        //            OnPropertyChanged(nameof(HasModelChanged));
-        //        }
-        //    }
-        //}
         #endregion
 
         #region Model
@@ -161,95 +150,14 @@ namespace MpWpfApp {
                 if(Parent == null) {
                     return false;
                 }
-                return Parent.IsReadOnly;
+                return Parent.ParameterFormat.controlType != MpAnalyticItemParameterControlType.EditableList;
             }
         }
 
-        public bool IsDefault {
-            get {
-                if(ParameterValueFormat == null) {
-                    return false;
-                }
-                return ParameterValueFormat.isDefault;
-            }
-        }
+        public string Label { get; set; }
 
-        public bool IsMaximum {
-            get {
-                if (ParameterValueFormat == null) {
-                    return false;
-                }
-                return ParameterValueFormat.isMaximum;
-            }
-        }
+        public string Value { get; set; }
 
-        public bool IsMinimum {
-            get {
-                if (ParameterValueFormat == null) {
-                    return false;
-                }
-                return ParameterValueFormat.isMinimum;
-            }
-        }
-
-
-        public string Label {
-            get {
-                if (ParameterValueFormat == null) {
-                    return string.Empty;
-                }
-                return ParameterValueFormat.label;
-            }
-        }
-
-        public string Value {
-            get {
-                if (Parent == null) {
-                    return null;
-                }
-                if(Parent is MpEditableListBoxParameterViewModel lbpvm) {
-                    var valParts = PresetValue.Value.Split(new string[] { "," }, StringSplitOptions.None);
-                    if (ValueIdx >= valParts.Length) {
-                        return string.Empty;
-                    }
-                    return valParts[ValueIdx];
-                }
-                return ParameterValueFormat.value;
-            }
-            set {
-                if (Value != value) {
-                    if (Parent is MpEditableListBoxParameterViewModel lbpvm) {
-                        var valParts = PresetValue.Value.Split(new string[] { "," }, StringSplitOptions.None);
-                        if (valParts.Length >= ValueIdx) {
-                            int count = ValueIdx - valParts.Length;
-                            while (count >= 0) {
-                                PresetValue.Value += ",";
-                                count--;
-                            }
-                            valParts = PresetValue.Value.Split(new string[] { "," }, StringSplitOptions.None);
-                        }
-                        valParts[ValueIdx] = value;
-                        PresetValue.Value = string.Join(",", valParts);
-                    } else {
-                        ParameterValueFormat.value = value;
-                    }
-
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(Value));
-                }
-            }
-        }
-
-        public MpAnalyticItemPresetParameterValue PresetValue { 
-            get {
-                if(Parent == null) {
-                    return null;
-                }
-                return Parent.ParameterValue;
-            }
-        }
-
-        public MpAnalyticItemParameterValueFormat ParameterValueFormat { get; set; }
         #endregion
 
         #endregion
@@ -258,7 +166,7 @@ namespace MpWpfApp {
 
         public MpEnumerableParameterValueViewModel() : base(null) { }
 
-        public MpEnumerableParameterValueViewModel(MpAnalyticItemParameterViewModel parent) : base(parent) {
+        public MpEnumerableParameterValueViewModel(MpEnumerableParameterViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
         }
 
@@ -266,15 +174,15 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(int idx, MpAnalyticItemParameterValueFormat valueSeed) {
+        public async Task InitializeAsync(int idx, string label, string value, bool isSelected) {
             IsBusy = true;
 
             await Task.Delay(1);
 
             ValueIdx = idx;
-            ParameterValueFormat = valueSeed;
-
-            OnPropertyChanged(nameof(IsReadOnly));
+            Label = label;
+            Value = value;
+            IsSelected = isSelected;           
 
             IsBusy = false;
         }
@@ -283,48 +191,6 @@ namespace MpWpfApp {
             return Value;
         }
 
-        #region Equals Override
-
-        public bool Equals(MpEnumerableParameterValueViewModel other) {
-            if (other == null)
-                return false;
-
-            if (this.Value == other.Value)
-                return true;
-            else
-                return false;
-        }
-
-        public override bool Equals(Object obj) {
-            if (obj == null)
-                return false;
-
-            MpEnumerableParameterValueViewModel personObj = obj as MpEnumerableParameterValueViewModel;
-            if (personObj == null)
-                return false;
-            else
-                return Equals(personObj);
-        }
-
-        public override int GetHashCode() {
-            return this.Value.GetHashCode();
-        }
-
-        public static bool operator ==(MpEnumerableParameterValueViewModel person1, MpEnumerableParameterValueViewModel person2) {
-            if (((object)person1) == null || ((object)person2) == null)
-                return Object.Equals(person1, person2);
-
-            return person1.Equals(person2);
-        }
-
-        public static bool operator !=(MpEnumerableParameterValueViewModel person1, MpEnumerableParameterValueViewModel person2) {
-            if (((object)person1) == null || ((object)person2) == null)
-                return !Object.Equals(person1, person2);
-
-            return !(person1.Equals(person2));
-        }
-
-        #endregion
 
         #endregion
 
@@ -335,29 +201,18 @@ namespace MpWpfApp {
                 case nameof(IsSelected):
                     if(IsBusy || Parent.IsBusy) {
                         return;
-                    } 
-                    if(Parent is MpMultiSelectListBoxParameterViewModel mscbpvm) {
-                        mscbpvm.OnPropertyChanged(nameof(mscbpvm.SelectedItems));
-                    } else if(Parent is MpComboBoxParameterViewModel cbpvm) {
-                        cbpvm.OnPropertyChanged(nameof(cbpvm.SelectedItem));
                     }
+
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedItems));
                     Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
-                    HasModelChanged = true;
-                    break;
-                case nameof(HasModelChanged):
-                    if(HasModelChanged) {
-                        Task.Run(async () => {
-                            await PresetValue.WriteToDatabaseAsync();
-                            HasModelChanged = false;
-                        });
-                    }
+                    Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv();
                     break;
                 case nameof(Value):
-                    Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
+                    Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv();
+                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAllValid));
                     break;
             }
-            Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAllValid));
-            //(Parent.Parent.ExecuteAnalysisCommand as RelayCommand).RaiseCanExecuteChanged();
         }
 
         #endregion

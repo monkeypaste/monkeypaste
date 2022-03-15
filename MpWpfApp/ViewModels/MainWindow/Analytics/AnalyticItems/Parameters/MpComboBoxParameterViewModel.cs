@@ -7,7 +7,7 @@ using MonkeyPaste;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
-    public class MpComboBoxParameterViewModel : MpAnalyticItemParameterViewModel {
+    public class MpComboBoxParameterViewModel : MpAnalyticItemParameterViewModelBase {
         #region Private Variables
 
         #endregion
@@ -59,7 +59,7 @@ namespace MpWpfApp {
             }
         }
 
-        public override string DefaultValue => Items.FirstOrDefault(x => x.IsDefault)?.Value;
+        //public override string DefaultValue => Items.FirstOrDefault(x => x.IsDefault)?.Value;
 
 
         #endregion
@@ -76,15 +76,15 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aip, MpAnalyticItemPresetParameterValue aipv) { 
+        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) { 
             IsBusy = true;
             
-            Parameter = aip;
-            ParameterValue = aipv;
+            //Parameter = aip;
+            PresetValue = aipv;
 
             Items.Clear();
 
-            foreach (var paramVal in Parameter.values) {
+            foreach (var paramVal in ParameterFormat.values) {
                 var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, paramVal);
                 naipvvm.IsSelected = paramVal.value == aipv.Value;
                 Items.Add(naipvvm);

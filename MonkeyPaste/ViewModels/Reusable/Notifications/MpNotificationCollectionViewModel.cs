@@ -88,7 +88,9 @@ namespace MonkeyPaste {
             MpNotificationExceptionSeverityType exceptionType = MpNotificationExceptionSeverityType.None,
             string title = "",
             string msg = "",
-            double maxShowTimeMs = -1) {
+            double maxShowTimeMs = -1,
+            Action<object> retryAction = null,
+            object retryActionObj = null) {
             var userActionResult = await Device.InvokeOnMainThreadAsync(async () => {
                 if (DoNotShowNotificationIds.Contains((int)dialogType)) {
                     MpConsole.WriteTraceLine($"Notification: {dialogType.ToString()} marked as hidden");
@@ -112,7 +114,7 @@ namespace MonkeyPaste {
                     Body = msg
                 };
 
-                NotificationQueue.Add(unvm);
+                NotificationQueue.Insert(0,unvm);
                 OnPropertyChanged(nameof(CurrentNotificationViewModel));
 
                 if (!IsVisible) {
@@ -139,6 +141,10 @@ namespace MonkeyPaste {
 
                 ShiftToNextNotificationCommand.Execute(null);
 
+                if(unvm.DialogResult == MpDialogResultType.Retry &&
+                   retryAction != null) {
+                    retryAction.Invoke(retryActionObj);
+                }
                 return unvm.DialogResult;
             });
 

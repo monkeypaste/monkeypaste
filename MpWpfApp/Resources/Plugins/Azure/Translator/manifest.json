@@ -72,22 +72,21 @@
       "response": {
         "newContentItem": {
           "name": "TranslatedContent",
-          "text": {
-            "value": "Azure Translation of {0}",
-            "valuePath": "@4"
+          "label": {
+            "value": "Azure Translation",
           },
           "content": {
-            "valuePath": "$.['translations'][0].text"
+            "pathExpression": "$.['translations'][0].text"
           },
           "annotations": [
             {
               "name": "detectedLanguage",
-              "text": {
+              "label": {
                 "value": "Detected Language: {0}",
-                "valuePath": "$.['detectedLanguage'].language"
+                "pathExpression": "$.['detectedLanguage'].language"
               },
               "score": {
-                "valuePath": "$.['detectedLanguage'].score"
+                "pathExpression": "$.['detectedLanguage'].score"
               }
             }
           ]
@@ -97,11 +96,10 @@
     "parameters": [
       {
         "label": "From Language",
-        "parameterControlType": "ComboBox",
-        "parameterValueType": "PlainText",
-        "enumId": 1,
-        "isReadOnly": false,
-        "isRequired": false,
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 1,
         "values": [
           {
             "label": "Auto-Detect",
@@ -532,11 +530,9 @@
       },
       {
         "label": "To Language",
-        "parameterControlType": "ComboBox",
-        "parameterValueType": "PlainText",
-        "enumId": 2,
-        "isReadOnly": false,
-        "isRequired": true,
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "paramId": 2,
         "values": [
           {
             "label": "Afrikaans - Afrikaans",
@@ -964,28 +960,14 @@
       {
         "label": "Source Content",
         "description": "The text to translate",
-        "parameterControlType": "TextBox",
-        "parameterValueType": "ContentQuery",
-        "enumId": 3,
-        "isRequired": false,
+        "controlType": "TextBox",
+        "unitType": "ContentQuery",
+        "isRequired": true,
         "isVisible": false,
+        "paramId": 3,
         "values": [
           {
             "value": "{ItemData}"
-          }
-        ]
-      },
-      {
-        "label": "Source Title",
-        "description": "The title of the content",
-        "parameterControlType": "TextBox",
-        "parameterValueType": "ContentQuery",
-        "enumId": 4,
-        "isRequired": false,
-        "isVisible": false,
-        "values": [
-          {
-            "value": "{Title}"
           }
         ]
       }

@@ -17,7 +17,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpListBoxParameterView.xaml
     /// </summary>
-    public partial class MpSingleSelectListBoxParameterView : MpUserControl<MpSingleSelectListBoxParameterViewModel> {
+    public partial class MpSingleSelectListBoxParameterView : MpUserControl<MpEnumerableParameterViewModel> {
         public MpSingleSelectListBoxParameterView() {
             InitializeComponent();
         }

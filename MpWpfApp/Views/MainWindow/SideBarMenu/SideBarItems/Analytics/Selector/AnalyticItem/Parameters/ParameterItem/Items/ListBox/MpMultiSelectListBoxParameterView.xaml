@@ -5,11 +5,11 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
                      xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                     x:TypeArguments="local:MpMultiSelectListBoxParameterViewModel"
+                     x:TypeArguments="local:MpEnumerableParameterViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpMultiSelectListBoxParameterViewModel,
+                     d:DataContext="{d:DesignInstance Type=local:MpEnumerableParameterViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Border BorderThickness="0"
             CornerRadius="2"
@@ -46,10 +46,12 @@
                                 Value="Stretch" />
                         <Setter Property="VerticalContentAlignment"
                                 Value="Stretch" />
+                        <Setter Property="Foreground"
+                                Value="OldLace" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <ContentPresenter />
+                                        <ContentPresenter />
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>

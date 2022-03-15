@@ -477,8 +477,9 @@ namespace MonkeyPaste {
 		""format"": ""Bmp""
 	}
 }";
-        private List<MpAnalyzerPluginRequestItemFormat> reqParams;
-        private MpHttpTransactionFormat _httpTransactionFormat;        
+        private List<MpAnalyzerPluginRequestItemFormat> _reqParams;
+        private MpHttpTransactionFormat _httpTransactionFormat;
+        private JToken _rootResponseToken;
 
         private readonly string _paramRefRegEx = @"@[0-9]*";
         #endregion
@@ -513,11 +514,11 @@ namespace MonkeyPaste {
         public async Task<object> AnalyzeAsync(object args) {
             string unalteredHttpFormat = JsonConvert.SerializeObject(_httpTransactionFormat);
 
-            reqParams = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
-            if(reqParams == null) {
+            _reqParams = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString()).items;
+            if(_reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
                 Console.WriteLine($"With args: {args}");
-                reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
+                _reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
             }
 
             using(var client = new HttpClient()) {
@@ -573,11 +574,11 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private HttpRequestMessage CreateRequestMessage(object args) {
-            reqParams = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
-            if (reqParams == null) {
+            _reqParams = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
+            if (_reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
                 Console.WriteLine($"With args: {args}");
-                reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
+                _reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
             }
             var request = new HttpRequestMessage();
             request.Method = RequestMethod;
@@ -595,7 +596,7 @@ namespace MonkeyPaste {
                     if (kvp.type == "guid") {
                         request.Headers.Add(kvp.key, System.Guid.NewGuid().ToString());
                     } else if (kvp.valuePath != null) {
-                        kvp.valuePath.SetValue(null, reqParams, 0);
+                        kvp.valuePath.SetValue(null, _reqParams, 0);
                         request.Headers.Add(kvp.key, kvp.valuePath.value);
                     } else {
                         request.Headers.Add(kvp.key, kvp.value);
@@ -615,7 +616,7 @@ namespace MonkeyPaste {
             string uriStr = string.Format(@"{0}://", urlFormat.protocol);
             uriStr += string.Join(".", urlFormat.host) + "/";
             if(urlFormat.dynamicPath != null) {
-                urlFormat.dynamicPath.ForEach(x => x.SetValue(null, reqParams));
+                urlFormat.dynamicPath.ForEach(x => x.SetValue(null, _reqParams));
                 uriStr += string.Join("/", urlFormat.dynamicPath.Select(x => x.value)) + "?";
             } else {
                 uriStr += string.Join("/", urlFormat.path) + "?";
@@ -705,11 +706,11 @@ namespace MonkeyPaste {
 
         private string GetParamValue(string queryParamValueStr) {
             int enumId = GetParamId(queryParamValueStr);
-            var enumParam = reqParams.FirstOrDefault(x => x.enumId == enumId);
+            var enumParam = _reqParams.FirstOrDefault(x => x.paramId == enumId);
             if (enumParam == null) {
                 Console.WriteLine($"Error parsing dynamic query item, enumId: '{enumId}' does not exist");
                 Console.WriteLine($"In request with params: ");
-                Console.WriteLine(JsonConvert.SerializeObject(reqParams));
+                Console.WriteLine(JsonConvert.SerializeObject(_reqParams));
                 return null;
             }
             return enumParam.value;
@@ -732,41 +733,41 @@ namespace MonkeyPaste {
         private object CreateResponse(string responseStr) {
             var response = _httpTransactionFormat.response;
 
-            JObject jo;
             if (responseStr.StartsWith("[")) {
                 JArray a = JArray.Parse(responseStr);
-                jo = a.Children<JObject>().First();
+                _rootResponseToken = a.Children<JObject>().First();
             } else {
-                jo = JObject.Parse(responseStr);
+                _rootResponseToken = JObject.Parse(responseStr);
             }
 
-            response.newContentItem = CreateNewContent(_httpTransactionFormat.response.newContentItem, jo);
-            response.annotations = CreateAnnotations(_httpTransactionFormat.response.annotations,jo);
+            response.newContentItem = CreateNewContent(_httpTransactionFormat.response.newContentItem, _rootResponseToken.DeepClone());
+            response.annotations = CreateAnnotations(_httpTransactionFormat.response.annotations, _rootResponseToken.DeepClone());
             return response;
         }
 
-        private MpPluginResponseNewContentFormat CreateNewContent(MpPluginResponseNewContentFormat prncf, JObject jo) {
+        private MpPluginResponseNewContentFormat CreateNewContent(MpPluginResponseNewContentFormat prncf, JToken curToken) {
             if(prncf == null) {
                 return null;
             }
 
-            prncf = CreateElement(prncf, jo, 0) as MpPluginResponseNewContentFormat;
+            prncf = CreateElement(prncf, curToken, 0) as MpPluginResponseNewContentFormat;
             if(prncf != null) {
                 if (prncf.content != null) {
-                    prncf.content.SetValue(jo, reqParams);
+                    prncf.content.SetValue(curToken, _reqParams);
                 }
-                prncf.annotations = CreateAnnotations(prncf.annotations, jo, 0);
+                prncf.annotations = CreateAnnotations(prncf.annotations, curToken, 0);
             }
             return prncf;
         }
 
-        private List<MpPluginResponseAnnotationFormat> CreateAnnotations(List<MpPluginResponseAnnotationFormat> al, JObject jo, int idx = 0) {
+        private List<MpPluginResponseAnnotationFormat> CreateAnnotations(
+            List<MpPluginResponseAnnotationFormat> al, JToken curToken, int idx = 0) {
             if(al == null) {
                 return null;
             }
 
             for (int i = 0; i < al.Count; i++) {
-                var a = CreateAnnotation(al[i], jo, i);
+                var a = CreateAnnotation(al[i], curToken, i);
                 if(a != null) {
                     al[i] = a;
                 }
@@ -774,15 +775,15 @@ namespace MonkeyPaste {
             return al;
         }
 
-        private MpPluginResponseAnnotationFormat CreateAnnotation(MpPluginResponseAnnotationFormat a, JObject jo, int idx = 0) {
-            a = CreateElement(a, jo, idx) as MpPluginResponseAnnotationFormat;
+        private MpPluginResponseAnnotationFormat CreateAnnotation(MpPluginResponseAnnotationFormat a, JToken curToken, int idx = 0) {
+            a = CreateElement(a, curToken, idx) as MpPluginResponseAnnotationFormat;
             if(a != null) {
                 try {
                     if (a.box != null) {
-                        a.box.x.SetValue(jo, reqParams, idx);
-                        a.box.y.SetValue(jo, reqParams, idx);
-                        a.box.width.SetValue(jo, reqParams, idx);
-                        a.box.height.SetValue(jo, reqParams, idx);
+                        a.box.x.SetValue(curToken, _reqParams, idx);
+                        a.box.y.SetValue(curToken, _reqParams, idx);
+                        a.box.width.SetValue(curToken, _reqParams, idx);
+                        a.box.height.SetValue(curToken, _reqParams, idx);
                     }
 
                 }
@@ -794,18 +795,25 @@ namespace MonkeyPaste {
             return a;
         }
 
-        private MpPluginResponseItemBaseFormat CreateElement(MpPluginResponseItemBaseFormat a,JObject jo, int idx = 0) {
+        private MpPluginResponseItemBaseFormat CreateElement(
+            MpPluginResponseItemBaseFormat a, JToken curToken, int idx = 0) {
             if(a != null) {
                 try {
-                    if (a.text != null) {
-                        a.text.SetValue(jo, reqParams, idx);
-                        a.text = a.text.omitIfPathNotFound && a.text.value == null ? null : a.text;
+                    //if (a.queryPath != null) {
+                    //    if(a.queryPath.pathType == MpJsonPathType.Absolute) {
+                    //        curToken = _rootResponseToken.DeepClone();
+                    //    }
+                    //    curToken = curToken.SelectToken(a.queryPath.pathExpression);
+                    //}
+                    if (a.label != null) {
+                        a.label.SetValue(curToken, _reqParams, idx);
+                        a.label = a.label.omitIfPathNotFound && a.label.value == null ? null : a.label;
                     }
                     if (a.score != null) {
-                        a.score.SetValue(jo, reqParams, idx);
+                        a.score.SetValue(curToken, _reqParams, idx);
                         a.score = a.score.omitIfPathNotFound && a.score.value == null ? null : a.score;
                     }
-                    a.children = CreateAnnotations(a.children, jo, 0);
+                    a.children = CreateAnnotations(a.children, curToken, 0);
 
                     if (a.dynamicChildren != null && a.dynamicChildren.Count > 0) {
                         for (int i = 0; i < a.dynamicChildren.Count; i++) {
@@ -813,7 +821,7 @@ namespace MonkeyPaste {
                             while (true) {
                                 var newChild = JsonConvert.DeserializeObject<MpPluginResponseAnnotationFormat>(
                                             JsonConvert.SerializeObject(a.dynamicChildren[i]));
-                                newChild = CreateAnnotation(newChild, jo, curDynamicChildIdx);
+                                newChild = CreateAnnotation(newChild, curToken, curDynamicChildIdx);
                                 if (newChild == null) {
                                     break;
                                 }

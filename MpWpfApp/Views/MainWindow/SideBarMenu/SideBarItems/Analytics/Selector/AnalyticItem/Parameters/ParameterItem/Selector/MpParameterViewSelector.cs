@@ -19,7 +19,7 @@ namespace MpWpfApp {
                 return null;
             }
 
-            var aipvm = item as MpAnalyticItemParameterViewModel;
+            var aipvm = item as MpAnalyticItemParameterViewModelBase;
             if(aipvm == null) {
                 return null;
             }
@@ -28,16 +28,7 @@ namespace MpWpfApp {
             if(aipvm.ControlType == MpAnalyticItemParameterControlType.FileChooser ||
                aipvm.ControlType == MpAnalyticItemParameterControlType.DirectoryChooser) {
                 keyStr = "FileChooserParameterTemplate";
-            } else if(keyStr.ToLower().Contains("listbox")) {
-                keyStr = "ListBoxParameterTemplate";
-                if(aipvm.Parameter.isMultiSelect) {
-                    keyStr = "MultiSelect" + keyStr;
-                } else if(aipvm.Parameter.isSingleSelect || !aipvm.Parameter.canAddValues) {
-                    keyStr = "SingleSelect" + keyStr;
-                } else {
-                    keyStr = "Editable" + keyStr;
-                }
-            }
+            } 
 
             var g = (container as FrameworkElement).GetVisualAncestor<Grid>();
             if(g == null || !g.Resources.Contains(keyStr)) {

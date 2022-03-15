@@ -15,14 +15,14 @@ namespace CodeClassifier {
             await Task.Delay(1);
             MpPluginResponseFormat response = null;
 
-            var reqParts = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
+            var reqParts = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString()).items;
             //languages (SHOULD) always part of request
-            if (reqParts.Any(x => x.enumId == 1) &&
-               reqParts.Any(x => x.enumId == 3) &&
-               reqParts.Any(x => x.enumId == 4)) {
-                var languages = reqParts.FirstOrDefault(x => x.enumId == 1).value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                string code = reqParts.FirstOrDefault(x => x.enumId == 3).value;
-                bool isTraining = reqParts.FirstOrDefault(x => x.enumId == 4).value.ToLower() == "true";
+            if (reqParts.Any(x => x.paramId == 1) &&
+               reqParts.Any(x => x.paramId == 3) &&
+               reqParts.Any(x => x.paramId == 4)) {
+                var languages = reqParts.FirstOrDefault(x => x.paramId == 1).value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                string code = reqParts.FirstOrDefault(x => x.paramId == 3).value;
+                bool isTraining = reqParts.FirstOrDefault(x => x.paramId == 4).value.ToLower() == "true";
 
 
                 if (isTraining) {
@@ -31,9 +31,9 @@ namespace CodeClassifier {
                         message = isSuccess ? "Success" : "Training Failed"
                     };
 
-                } else if (reqParts.Any(x => x.enumId == 2)) {
+                } else if (reqParts.Any(x => x.paramId == 2)) {
                     //request is to classify snippet
-                    double minScore = Convert.ToDouble(reqParts.FirstOrDefault(x => x.enumId == 2).value);
+                    double minScore = Convert.ToDouble(reqParts.FirstOrDefault(x => x.paramId == 2).value);
 
                     var result = Classify(code, languages.ToList(),minScore);
 
@@ -41,7 +41,7 @@ namespace CodeClassifier {
                         response = new MpPluginResponseFormat() {
                             annotations = new List<MpPluginResponseAnnotationFormat>() {
                                 new MpPluginResponseAnnotationFormat() {
-                                    text = new MpJsonPathProperty(result.Key),
+                                    label = new MpJsonPathProperty(result.Key),
                                     score = new MpJsonPathProperty<double>(result.Value),
                                     range = new MpAnalyzerPluginTextTokenResponseValueFormat() {
                                         rangeStart = new MpJsonPathProperty<int>(0),

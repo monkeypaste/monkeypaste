@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSliderParameterViewModel : MpAnalyticItemParameterViewModel, MpISliderViewModel {
+    public class MpSliderParameterViewModel : MpAnalyticItemParameterViewModelBase, MpISliderViewModel {
         #region Private Variables
         private string _defaultValue;
         #endregion
@@ -21,26 +21,17 @@ namespace MpWpfApp {
 
         public double TotalWidth { get; set; }
 
-        public int Precision { 
-            get {
-                if(Parameter == null) {
-                    return 0;
-                }
-                return Parameter.precision;
-            }
-        }
-
         public double SliderValue {
             get {
-                if (CurrentValue == null || Parameter == null) {
+                if (CurrentValue == null || ParameterFormat == null) {
                     return 0;
                 }
 
-                switch (Parameter.parameterValueType) {
+                switch (UnitType) {
                     case MpAnalyticItemParameterValueUnitType.Integer:
                         return IntValue;
                     case MpAnalyticItemParameterValueUnitType.Decimal:
-                        return Math.Round(DoubleValue, Parameter.precision);
+                        return Math.Round(DoubleValue, Precision);
                     default:
                         return DoubleValue;
                 }
@@ -54,85 +45,12 @@ namespace MpWpfApp {
             }
         }
 
-        public double MinValue {
-            get {
-                if (Parameter == null) {
-                    return double.MinValue;
-                }
-                var minCond = Parameter.values.FirstOrDefault(x => x.isMinimum);
-                if (minCond != null) {
-                    try {
-                        return Convert.ToDouble(minCond.value);
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Minimum val: {minCond.value} could not conver to int, exception: {ex}");
-                    }
-                }
-                return double.MinValue;
-            }
-        }
-
-        public double MaxValue {
-            get {
-                if (Parameter == null) {
-                    return double.MaxValue;
-                }
-                var maxCond = Parameter.values.FirstOrDefault(x => x.isMaximum);
-                if (maxCond != null) {
-                    try {
-                        return Convert.ToDouble(maxCond.value);
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Minimum val: {maxCond.value} could not conver to int, exception: {ex}");
-                    }
-                }
-                return double.MaxValue;
-            }
-        }
+        public double MinValue => Minimum;
+        public double MaxValue => Maximum;        
 
         #endregion
 
         #region Model
-
-        //public override string CurrentValue { 
-        //    get {
-        //        if (_currentValue == null || Parameter == null) {
-        //            return "0";
-        //        }
-
-        //        switch (Parameter.parameterValueType) {
-        //            case MpAnalyticItemParameterValueUnitType.Integer:
-        //                return IntValue.ToString();
-        //            case MpAnalyticItemParameterValueUnitType.Decimal:
-        //                return Math.Round(DoubleValue, 2).ToString();
-        //            default:
-        //                return DoubleValue.ToString();
-        //        }
-        //    }
-        //    set {
-        //        if(_currentValue != value) {
-        //            _currentValue = value == null ? "0":value;
-        //            HasModelChanged = true;
-        //            OnPropertyChanged(nameof(CurrentValue));
-        //            OnPropertyChanged(nameof(SliderValue));
-        //        }
-        //    }
-        //}
-
-        public override string DefaultValue => _defaultValue;
-
-
-        public double TickFrequency {
-            get {
-                if(Parameter == null) {
-                    return 0.1;
-                }
-                if(string.IsNullOrEmpty(Parameter.formatInfo)) {
-                    return (MaxValue - MinValue) / 10;
-                }
-                return Convert.ToDouble(Parameter.formatInfo);
-            }
-        }
 
         #endregion        
 
@@ -148,31 +66,21 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aipf, MpAnalyticItemPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
             IsBusy = true;
 
-            ParameterValue = aipv;
+            await base.InitializeAsync(aipv);
 
-            Parameter = aipf;
-
-            CurrentValue = aipv.Value;
-            if (Parameter.values.Any(x => x.isDefault)) {
-                _defaultValue = Parameter.values.FirstOrDefault(x => x.isDefault).value = CurrentValue;
-            } else {
-                _defaultValue = CurrentValue;
-            }
-
-            
+            OnPropertyChanged(nameof(CurrentValue));            
             OnPropertyChanged(nameof(MinValue));
             OnPropertyChanged(nameof(MaxValue));
-            OnPropertyChanged(nameof(DefaultValue));
             OnPropertyChanged(nameof(SliderValue));
-            OnPropertyChanged(nameof(TickFrequency));
             
             await Task.Delay(1);
 
             IsBusy = false;
         }
+
 
         #endregion
     }

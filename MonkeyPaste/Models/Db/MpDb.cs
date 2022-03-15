@@ -477,6 +477,7 @@ namespace MonkeyPaste {
 	                                                    ItemData,
 	                                                    ItemDescription,
 	                                                    CopyDateTime,
+	                                                    (select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
 	                                                    CopyCount,
 	                                                    PasteCount,
 	                                                    CopyCount + PasteCount as UsageScore,
@@ -492,9 +493,13 @@ namespace MonkeyPaste {
 	                                                    MpApp.pk_MpAppId AS AppId,
 	                                                    MpUrl.pk_MpUrlId AS UrlId,
 	                                                    MpUrl.UrlPath,
-	                                                    MpUrl.UrlTitle
+	                                                    MpUrl.UrlDomainPath,
+	                                                    MpUrl.UrlTitle,
+	                                                    MpUserDevice.MachineName AS SourceDeviceName,
+	                                                    MpUserDevice.PlatformTypeId AS SourceDeviceType
                                                     FROM
 	                                                    MpCopyItem
+                                                    INNER JOIN MpUserDevice ON MpUserDevice.pk_MpUserDeviceId = AppId
                                                     INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
                                                     INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
                                                     LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");

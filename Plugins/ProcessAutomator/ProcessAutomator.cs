@@ -13,16 +13,16 @@ namespace ProcessAutomator
 {
     public class ProcessAutomator : MpIAnalyzerPluginComponent {
         public async Task<object> AnalyzeAsync(object args) {
-            var reqParts = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
+            var reqParts = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString());
 
-            string processPath = reqParts.FirstOrDefault(x => x.enumId == 1).value;
-            string processArgs = reqParts.FirstOrDefault(x => x.enumId == 2).value;
-            bool asAdmin = reqParts.FirstOrDefault(x => x.enumId == 3).value.ToLower() == "true";
-            bool isSilent = reqParts.FirstOrDefault(x => x.enumId == 4).value.ToLower() == "true";
-            bool useShellExecute = reqParts.FirstOrDefault(x => x.enumId == 5).value.ToLower() == "true";
-            string workingDir = reqParts.FirstOrDefault(x => x.enumId == 6).value;
-            WinApi.ShowWindowCommands windowState = (WinApi.ShowWindowCommands)Enum.Parse(typeof(WinApi.ShowWindowCommands), reqParts.FirstOrDefault(x => x.enumId == 7).value);
-            bool suppressErrors = reqParts.FirstOrDefault(x => x.enumId == 8).value.ToLower() == "true";
+            string processPath = reqParts.items.FirstOrDefault(x => x.paramId == 1).value;
+            string processArgs = reqParts.items.FirstOrDefault(x => x.paramId == 2).value;
+            bool asAdmin = reqParts.items.FirstOrDefault(x => x.paramId == 3).value.ToLower() == "true";
+            bool isSilent = reqParts.items.FirstOrDefault(x => x.paramId == 4).value.ToLower() == "true";
+            bool useShellExecute = reqParts.items.FirstOrDefault(x => x.paramId == 5).value.ToLower() == "true";
+            string workingDir = reqParts.items.FirstOrDefault(x => x.paramId == 6).value;
+            WinApi.ShowWindowCommands windowState = (WinApi.ShowWindowCommands)Enum.Parse(typeof(WinApi.ShowWindowCommands), reqParts.items.FirstOrDefault(x => x.paramId == 7).value);
+            bool suppressErrors = reqParts.items.FirstOrDefault(x => x.paramId == 8).value.ToLower() == "true";
             var mw = Application.Current.MainWindow;
             var mwh = new WindowInteropHelper(mw).Handle;
 

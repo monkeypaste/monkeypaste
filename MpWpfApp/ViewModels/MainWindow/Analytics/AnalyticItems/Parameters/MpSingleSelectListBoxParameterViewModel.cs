@@ -9,7 +9,7 @@ using MonkeyPaste;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
-    public class MpSingleSelectListBoxParameterViewModel : MpAnalyticItemParameterViewModel {
+    public class MpSingleSelectListBoxParameterViewModel : MpAnalyticItemParameterViewModelBase {
         #region Private Variables
 
         #endregion
@@ -70,24 +70,24 @@ namespace MpWpfApp {
             IsBusy = true;
 
             Parameter = aipf;
-            ParameterValue = aipv;
+            PresetValue = aipv;
 
             Items.Clear();
-            if (!string.IsNullOrEmpty(ParameterValue.Value)) {
-                Parameter.values.ForEach(x => x.isDefault = false);
+            if (!string.IsNullOrEmpty(PresetValue.Value)) {
+                ParameterFormat.values.ForEach(x => x.isDefault = false);
 
-                var presetValParts = ParameterValue.Value.Split(new string[] { "," }, StringSplitOptions.None).ToList();
+                var presetValParts = PresetValue.Value.Split(new string[] { "," }, StringSplitOptions.None).ToList();
                 for (int i = 0; i < presetValParts.Count; i++) {
                     string presetValStr = presetValParts[i];
-                    var paramVal = Parameter.values.FirstOrDefault(x => x.value == presetValStr);
+                    var paramVal = ParameterFormat.values.FirstOrDefault(x => x.value == presetValStr);
                     if (paramVal == null) {
                         paramVal = new MpAnalyticItemParameterValueFormat() {
                             isDefault = true,
                             label = presetValStr,
                             value = presetValStr
                         };
-                        if (i >= Parameter.values.Count) {
-                            Parameter.values.Add(paramVal);
+                        if (i >= ParameterFormat.values.Count) {
+                            ParameterFormat.values.Add(paramVal);
                         }
                     } else {
                         paramVal.isDefault = true;
@@ -95,7 +95,7 @@ namespace MpWpfApp {
                 }
             }
 
-            foreach (var paramVal in Parameter.values) {
+            foreach (var paramVal in ParameterFormat.values) {
                 var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, paramVal);
                 Items.Add(naipvvm);
             }

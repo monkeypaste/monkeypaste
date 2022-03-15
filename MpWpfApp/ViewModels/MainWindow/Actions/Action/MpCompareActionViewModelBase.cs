@@ -29,40 +29,6 @@ namespace MpWpfApp {
 
         #region Statics
 
-        public static string[] PhysicalComparePropertyPaths {
-            get {
-                var paths = new List<string>();
-                for (int i = 0; i < Enum.GetNames(typeof(MpComparePropertyPathType)).Length; i++) {
-                    string path = string.Empty;
-                    MpComparePropertyPathType cppt = (MpComparePropertyPathType)i;
-                    switch (cppt) {
-                        case MpComparePropertyPathType.ItemData:
-                        case MpComparePropertyPathType.ItemType:
-                        case MpComparePropertyPathType.ItemDescription:
-                        case MpComparePropertyPathType.Title:
-                        case MpComparePropertyPathType.CopyDateTime:
-                        case MpComparePropertyPathType.CopyCount:
-                        case MpComparePropertyPathType.PasteCount:
-                            path = cppt.ToString();
-                            break;
-                        case MpComparePropertyPathType.AppName:
-                        case MpComparePropertyPathType.AppPath:
-                            path = string.Format(@"Source.App.{0}", cppt.ToString());
-                            break;
-                        case MpComparePropertyPathType.UrlPath:
-                        case MpComparePropertyPathType.UrlTitle:
-                        case MpComparePropertyPathType.UrlDomain:
-                            path = string.Format(@"Source.App.{0}", cppt.ToString());
-                            break;
-                        default:
-                            break;
-                    }
-                    paths.Add(path);
-                }
-                return paths.ToArray();
-            }
-        }
-
         #endregion
 
         #region View Models
@@ -83,20 +49,20 @@ namespace MpWpfApp {
         public string PhysicalPropertyPath {
             get {
                 switch (ComparePropertyPathType) {
-                    case MpComparePropertyPathType.ItemData:
-                    case MpComparePropertyPathType.ItemType:
-                    case MpComparePropertyPathType.ItemDescription:
-                    case MpComparePropertyPathType.Title:
-                    case MpComparePropertyPathType.CopyDateTime:
-                    case MpComparePropertyPathType.CopyCount:
-                    case MpComparePropertyPathType.PasteCount:
+                    case MpCopyItemPropertyPathType.ItemData:
+                    case MpCopyItemPropertyPathType.ItemType:
+                    case MpCopyItemPropertyPathType.ItemDescription:
+                    case MpCopyItemPropertyPathType.Title:
+                    case MpCopyItemPropertyPathType.CopyDateTime:
+                    case MpCopyItemPropertyPathType.CopyCount:
+                    case MpCopyItemPropertyPathType.PasteCount:
                         return ComparePropertyPathType.ToString();
-                    case MpComparePropertyPathType.AppName:
-                    case MpComparePropertyPathType.AppPath:
+                    case MpCopyItemPropertyPathType.AppName:
+                    case MpCopyItemPropertyPathType.AppPath:
                         return string.Format(@"Source.App.{0}", ComparePropertyPathType.ToString());
-                    case MpComparePropertyPathType.UrlPath:
-                    case MpComparePropertyPathType.UrlTitle:
-                    case MpComparePropertyPathType.UrlDomain:
+                    case MpCopyItemPropertyPathType.UrlPath:
+                    case MpCopyItemPropertyPathType.UrlTitle:
+                    case MpCopyItemPropertyPathType.UrlDomainPath:
                         return string.Format(@"Source.App.{0}", ComparePropertyPathType.ToString());
                 }
                 return string.Empty;
@@ -112,9 +78,9 @@ namespace MpWpfApp {
             set => CompareDataJsonPath = value ? string.Empty : null;
         }
 
-        public bool IsItemTypeCompare => ComparePropertyPathType == MpComparePropertyPathType.ItemType;
+        public bool IsItemTypeCompare => ComparePropertyPathType == MpCopyItemPropertyPathType.ItemType;
 
-        public bool IsLastOutputCompare => ComparePropertyPathType == MpComparePropertyPathType.LastOutput;
+        public bool IsLastOutputCompare => ComparePropertyPathType == MpCopyItemPropertyPathType.LastOutput;
 
         public bool IsContentPropertyCompare => !IsItemTypeCompare && !IsLastOutputCompare;
 
@@ -169,7 +135,7 @@ namespace MpWpfApp {
                 if (Action == null) {
                     return 0;
                 }
-                if (ComparePropertyPathType != MpComparePropertyPathType.ItemType) {
+                if (ComparePropertyPathType != MpCopyItemPropertyPathType.ItemType) {
                     return 0;
                 }
                 if (string.IsNullOrWhiteSpace(Arg2)) {
@@ -207,16 +173,16 @@ namespace MpWpfApp {
 
         // Arg1
 
-        public MpComparePropertyPathType ComparePropertyPathType {
+        public MpCopyItemPropertyPathType ComparePropertyPathType {
             get {
                 if (Action == null) {
-                    return MpComparePropertyPathType.None;
+                    return MpCopyItemPropertyPathType.None;
                 }
                 if (string.IsNullOrWhiteSpace(Arg1)) {
-                    return MpComparePropertyPathType.None;
+                    return MpCopyItemPropertyPathType.None;
                 }
 
-                return (MpComparePropertyPathType)Convert.ToInt32(Arg1);
+                return (MpCopyItemPropertyPathType)Convert.ToInt32(Arg1);
             }
             set {
                 if (ComparePropertyPathType != value) {
@@ -267,7 +233,7 @@ namespace MpWpfApp {
 
             MpActionOutput ao = GetInput(arg);
             object matchVal = null;
-            if(ComparePropertyPathType == MpComparePropertyPathType.LastOutput) {
+            if(ComparePropertyPathType == MpCopyItemPropertyPathType.LastOutput) {
                 if(ao != null) {
                     if(ao.OutputData is MpPluginResponseFormat prf && IsJsonQuery) {
                         try {
@@ -420,7 +386,7 @@ namespace MpWpfApp {
 
         public ICommand ChangeComparePropertyPathCommand => new RelayCommand<object>(
               (args) => {
-                 ComparePropertyPathType = (MpComparePropertyPathType)args;
+                 ComparePropertyPathType = (MpCopyItemPropertyPathType)args;
               });
 
         #endregion

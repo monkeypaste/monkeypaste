@@ -38,11 +38,11 @@
                       ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
                       SelectedIndex="{Binding ComparePropertyPathType,
                                               Converter={StaticResource EnumToIntConverter},
-                                              ConverterParameter=MonkeyPaste.MpComparePropertyPathType,
+                                              ConverterParameter=MonkeyPaste.MpCopyItemPropertyPathType,
                                               Mode=TwoWay}"
                       ItemsSource="{Binding .,
                                             Converter={StaticResource EnumToItemSourceLabelsConverter},
-                                            ConverterParameter=MonkeyPaste.MpComparePropertyPathType}" />
+                                            ConverterParameter=MonkeyPaste.MpCopyItemPropertyPathType}" />
         </Border>
 
         <!--  START Item Type / Compare Type Row  -->

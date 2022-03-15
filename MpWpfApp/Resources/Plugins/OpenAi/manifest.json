@@ -22,9 +22,9 @@
         "header": [
           {
             "key": "Authorization",
-            "valuePath": {
+            "pathExpression": {
               "value": "Bearer {0}",
-              "valuePath": "@10"
+              "pathExpression": "@10"
             }
           }
         ],
@@ -44,10 +44,10 @@
               "value": "engines"
             },
             {
-              "valuePath": "@1"
+              "pathExpression": "@1"
             },
             {
-              "valuePath": "@2"
+              "pathExpression": "@2"
             }
           ]
         },
@@ -60,12 +60,11 @@
       "response": {
         "newContentItem": {
           "name": "OpenAiAnalysisResponse",
-          "text": {
-            "value": "Analysis for {0}",
-            "valuePath": "@9"
+          "label": {
+            "value": "OpenAi Analysis"
           },
           "content": {
-            "valuePath": "$.['choices'][0].text"
+            "pathExpression": "$.['choices'][0].text"
           }
         }
       }
@@ -74,10 +73,10 @@
       {
         "label": "Engine",
         "description": "The intelligence type used for analysis",
-        "parameterControlType": "ComboBox",
-        "parameterValueType": "PlainText",
-        "enumId": 1,
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
         "isRequired": true,
+        "paramId": 1,
         "values": [
           {
             "label": "DaVinci",
@@ -103,11 +102,11 @@
       },
       {
         "label": "End Point",
-        "parameterControlType": "ComboBox",
-        "parameterValueType": "PlainText",
-        "enumId": 2,
-        "isReadOnly": false,
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "paramId": 2,
         "isRequired": true,
+        "isVisible": false,
         "values": [
           {
             "label": "Completions",
@@ -138,19 +137,13 @@
       },
       {
         "label": "Temperature",
-        "parameterControlType": "Slider",
-        "parameterValueType": "Decimal",
-        "enumId": 3,
+        "controlType": "Slider",
+        "unitType": "Decimal",
         "isRequired": true,
+        "minimum": 0,
+        "maximum": 1,
+        "paramId": 3,
         "values": [
-          {
-            "value": "0",
-            "isMinimum": true
-          },
-          {
-            "value": "1",
-            "isMaximum": true
-          },
           {
             "value": "0.75",
             "isDefault": true
@@ -159,19 +152,13 @@
       },
       {
         "label": "Max Tokens",
-        "parameterControlType": "Slider",
-        "parameterValueType": "Integer",
-        "enumId": 4,
+        "controlType": "Slider",
+        "unitType": "Integer",
         "isRequired": true,
+        "minimum": 1,
+        "maximum": 2048,
+        "paramId": 4,
         "values": [
-          {
-            "value": "1",
-            "isMinimum": true
-          },
-          {
-            "value": "2048",
-            "isMaximum": true
-          },
           {
             "value": "64",
             "isDefault": true
@@ -180,65 +167,57 @@
       },
       {
         "label": "Top P",
-        "parameterControlType": "Slider",
-        "parameterValueType": "Decimal",
-        "enumId": 5,
+        "controlType": "Slider",
+        "unitType": "Decimal",
         "isRequired": true,
+        "minimum": 0,
+        "maximum": 1,
+        "paramId": 5,
         "values": [
           {
-            "value": "0",
-            "isMinimum": true
-          },
-          {
             "value": "1",
-            "isMaximum": true,
             "isDefault": true
           }
         ]
       },
       {
         "label": "Frequency Penalty",
-        "parameterControlType": "Slider",
-        "parameterValueType": "Decimal",
-        "enumId": 6,
+        "controlType": "Slider",
+        "unitType": "Decimal",
         "isRequired": true,
+        "minimum": 0,
+        "maximum": 2,
+        "paramId": 6,
         "values": [
           {
             "value": "0",
-            "isMinimum": true,
             "isDefault": true
-          },
-          {
-            "value": "2",
-            "isMaximum": true
           }
         ]
       },
       {
         "label": "Presence Penalty",
-        "parameterControlType": "Slider",
-        "parameterValueType": "Decimal",
-        "enumId": 7,
+        "controlType": "Slider",
+        "unitType": "Decimal",
         "isRequired": true,
+        "minimum": 0,
+        "maximum": 2,
+        "paramId": 7,
         "values": [
           {
             "value": "0",
-            "isMinimum": true,
             "isDefault": true
-          },
-          {
-            "value": "2",
-            "isMaximum": true
           }
         ]
       },
       {
         "label": "Source Content",
         "description": "The text to translate",
-        "parameterControlType": "TextBox",
-        "parameterValueType": "ContentQuery",
-        "enumId": 8,
+        "controlType": "TextBox",
+        "unitType": "ContentQuery",
+        "isRequired": true,
         "isVisible": false,
+        "paramId": 8,
         "values": [
           {
             "value": "{ItemData}"
@@ -246,23 +225,11 @@
         ]
       },
       {
-        "label": "Source Title",
-        "description": "The title of the content",
-        "parameterControlType": "TextBox",
-        "parameterValueType": "ContentQuery",
-        "enumId": 9,
-        "isVisible": false,
-        "values": [
-          {
-            "value": "{Title}"
-          }
-        ]
-      },
-      {
         "label": "OpenAi Api Token",
-        "parameterControlType": "TextBox",
-        "parameterValueType": "PlainText",
-        "enumId": 10,
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "paramId": 10,
+        "isRequired": true,
         "isVisible": false,
         "values": [
           {

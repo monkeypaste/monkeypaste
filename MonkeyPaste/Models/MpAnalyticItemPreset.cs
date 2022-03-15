@@ -53,8 +53,9 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<MpAnalyticItemPresetParameterValue> PresetParameterValues { get; set; } = new List<MpAnalyticItemPresetParameterValue>();
+        //[OneToMany(CascadeOperations = CascadeOperation.All)]
+        //[Ignore]
+        //public List<MpAnalyticItemPresetParameterValue> PresetParameterValues { get; set; } = new List<MpAnalyticItemPresetParameterValue>();
 
         #endregion
 
@@ -102,6 +103,10 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
+
+        [Ignore]
+        public MpAnalyzerPluginFormat AnalyzerFormat { get; set; }
+
         #endregion
 
         public static async Task<MpAnalyticItemPreset> Create(
@@ -112,19 +117,17 @@ namespace MonkeyPaste {
             bool isDefault = false, 
             bool isQuickAction = false, 
             int sortOrderIdx = -1, 
-            List<MpAnalyticItemParameterFormat> parameters = null,
-            List<MpAnalyzerPresetValueFormat> values = null,
             DateTime? manifestLastModifiedDateTime = null,
+            MpAnalyzerPluginFormat format = null,
             int existingDefaultPresetId = 0) {
-            
+            if(format == null) {
+                throw new Exception("must have format");
+            }
             if(iconId == 0) {
                 throw new Exception("needs icon");
             }
             if(string.IsNullOrEmpty(analyzerPluginGuid)) {
                 throw new Exception("needs analyzer id");
-            }
-            if(parameters == null || parameters.Count == 0) {
-                throw new Exception("needs parameters");
             }
 
             var newAnalyticItemPreset = new MpAnalyticItemPreset() {
@@ -139,33 +142,11 @@ namespace MonkeyPaste {
                 SortOrderIdx = sortOrderIdx,
                 ShortcutId = 0,
                 ManifestLastModifiedDateTime = manifestLastModifiedDateTime.HasValue ? manifestLastModifiedDateTime.Value : DateTime.Now};
+            
+            newAnalyticItemPreset.AnalyzerFormat = format;
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 
-            foreach(var param in parameters) {                
-                string defValue = string.Empty;
-                if(values != null && values.Count > 0) {
-                    var paramVal = values.FirstOrDefault(x => x.enumId == param.enumId);
-                    if(paramVal != null) {
-                        defValue = paramVal.value;
-                    }
-                } 
-                if (string.IsNullOrEmpty(defValue) && param.values != null && param.values.Count > 0) {
-                    if (param.values.Any(x => x.isDefault)) {
-                        defValue = string.Join(",", param.values.Where(x => x.isDefault).Select(x => x.value));
-                    } else {
-                        defValue = param.values[0].value;
-                    }
-                }
-
-
-                var paramPreset = await MpAnalyticItemPresetParameterValue.Create(
-                    newAnalyticItemPreset,
-                    param.enumId,
-                    defValue);
-
-                newAnalyticItemPreset.PresetParameterValues.Add(paramPreset);
-            }
             return newAnalyticItemPreset;
         }
 
@@ -180,7 +161,7 @@ namespace MonkeyPaste {
                 Label = this.Label + " - Copy",
                 Description = this.Description,
                 ManifestLastModifiedDateTime = this.ManifestLastModifiedDateTime,
-                PresetParameterValues = new List<MpAnalyticItemPresetParameterValue>()
+                AnalyzerFormat = this.AnalyzerFormat
             };
 
             if(IconId > 0) {
@@ -192,15 +173,13 @@ namespace MonkeyPaste {
             // NOTE writing to db before creating preset values because they rely on cloned preset pk
             await caip.WriteToDatabaseAsync();
 
-            if(PresetParameterValues == null || PresetParameterValues.Count == 0) {
-                PresetParameterValues = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(Id);
-            }
-            foreach(var ppv in PresetParameterValues) {
+            var presetValues = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(Id);
+            foreach(var ppv in presetValues) {
                 var cppv = await ppv.CloneDbModel();
                 cppv.AnalyticItemPresetId = caip.Id;
                 await cppv.WriteToDatabaseAsync();
 
-                caip.PresetParameterValues.Add(cppv);
+                //caip.PresetParameterValues.Add(cppv);
             }
 
             return caip;

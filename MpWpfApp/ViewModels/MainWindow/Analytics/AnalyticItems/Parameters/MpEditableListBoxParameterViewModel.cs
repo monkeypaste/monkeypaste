@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpEditableListBoxParameterViewModel : MpAnalyticItemParameterViewModel {
+    public class MpEditableListBoxParameterViewModel : MpEnumerableParameterViewModel {
         #region Private Variables
 
         #endregion
@@ -16,13 +16,6 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public ObservableCollection<MpEnumerableParameterValueViewModel> Items { get; set; } = new ObservableCollection<MpEnumerableParameterValueViewModel>();
-
-        public MpEnumerableParameterValueViewModel SelectedItem {
-            get => Items.FirstOrDefault(x => x.IsSelected);
-            set => Items.ForEach(x => x.IsSelected = x == value);
-        }
-
         #endregion
 
         #region State
@@ -30,11 +23,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
-
-        public override string CurrentValue => string.Join(",", Items.Select(x => x.Value));
-
-        public override string DefaultValue => Items.FirstOrDefault(x => x.IsDefault)?.Value;
-
         #endregion
 
         #endregion
@@ -55,25 +43,26 @@ namespace MpWpfApp {
             IsBusy = true;
 
             Parameter = aipf;
-            ParameterValue = aipv;
+            PresetValue = aipv;
 
             Items.CollectionChanged += Items_CollectionChanged;
             Items.Clear();
-            if (!string.IsNullOrEmpty(ParameterValue.Value)) {
-                Parameter.values.ForEach(x => x.isDefault = false);
+            if (!string.IsNullOrEmpty(PresetValue.Value)) {
+                //when preset value exists add it to parameter and mark the preset value as default
+                ParameterFormat.values.ForEach(x => x.isDefault = false);
 
-                var presetValParts = ParameterValue.Value.Split(new string[] { "," }, StringSplitOptions.None).ToList();
+                var presetValParts = PresetValue.Value.ToListFromCsv(); //ParameterValue.Value.Split(new string[] { "," }, StringSplitOptions.None).ToList();
                 for (int i = 0; i < presetValParts.Count; i++) {
                     string presetValStr = presetValParts[i];
-                    var paramVal = Parameter.values.FirstOrDefault(x => x.value == presetValStr);
+                    var paramVal = ParameterFormat.values.FirstOrDefault(x => x.value == presetValStr);
                     if (paramVal == null) {
                         paramVal = new MpAnalyticItemParameterValueFormat() {
                             isDefault = true,
                             label = presetValStr,
                             value = presetValStr
                         };
-                        if (i >= Parameter.values.Count) {
-                            Parameter.values.Add(paramVal);
+                        if (i >= ParameterFormat.values.Count) {
+                            ParameterFormat.values.Add(paramVal);
                         }
                     } else {
                         paramVal.isDefault = true;
@@ -81,7 +70,7 @@ namespace MpWpfApp {
                 }
             }
 
-            foreach (var paramVal in Parameter.values) {
+            foreach (var paramVal in ParameterFormat.values) {
                 var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, paramVal);
                 Items.Add(naipvvm);
             }
@@ -101,8 +90,6 @@ namespace MpWpfApp {
             }
 
             IsBusy = false;
-
-
         }
 
         public async Task<MpEnumerableParameterValueViewModel> CreateAnalyticItemParameterValueViewModel(
@@ -123,7 +110,10 @@ namespace MpWpfApp {
         private void MpListBoxParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(Items):
-                    CurrentValue = Items.ToCsv();
+                    OnPropertyChanged(nameof(CurrentValue));
+                    break;
+                case nameof(CurrentValue):
+                    HasModelChanged = true;
                     break;
             }
         }

@@ -7,8 +7,89 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
-    [Table("MpCopyItem")]
+    public enum MpCopyItemPropertyPathType {
+        None = 0,
+        ItemData,
+        ItemType,
+        ItemDescription,
+        Title, //seperator
+        AppPath,
+        AppName,
+        UrlPath,
+        UrlTitle,
+        UrlDomainPath, //seperator
+        CopyDateTime,
+        LastPasteDateTime, //seperator
+        CopyCount,
+        PasteCount,
+        SourceDeviceName,
+        SourceDeviceType,
+        LastOutput
+    }
+
     public class MpCopyItem : MpUserObject, MpISyncableDbObject {
+        #region Statics
+
+        public static string[] PhysicalComparePropertyPaths {
+            get {
+                var paths = new List<string>();
+                for (int i = 0; i < Enum.GetNames(typeof(MpCopyItemPropertyPathType)).Length; i++) {
+                    string path = string.Empty;
+                    MpCopyItemPropertyPathType cppt = (MpCopyItemPropertyPathType)i;
+                    switch (cppt) {
+                        case MpCopyItemPropertyPathType.ItemData:
+                        case MpCopyItemPropertyPathType.ItemType:
+                        case MpCopyItemPropertyPathType.ItemDescription:
+                        case MpCopyItemPropertyPathType.Title:
+                        case MpCopyItemPropertyPathType.CopyDateTime:
+                        case MpCopyItemPropertyPathType.CopyCount:
+                        case MpCopyItemPropertyPathType.PasteCount:
+                            path = cppt.ToString();
+                            break;
+                        case MpCopyItemPropertyPathType.AppName:
+                        case MpCopyItemPropertyPathType.AppPath:
+                            path = string.Format(@"Source.App.{0}", cppt.ToString());
+                            break;
+                        case MpCopyItemPropertyPathType.UrlPath:
+                        case MpCopyItemPropertyPathType.UrlTitle:
+                        case MpCopyItemPropertyPathType.UrlDomainPath:
+                            path = string.Format(@"Source.App.{0}", cppt.ToString());
+                            break;
+                        default:
+                            break;
+                    }
+                    paths.Add(path);
+                }
+                return paths.ToArray();
+            }
+        }
+
+        public static async Task<object> QueryProperty(MpCopyItem ci, MpCopyItemPropertyPathType queryPathType) {
+            if(ci == null) {
+                return null;
+            }
+            switch (queryPathType) {
+                case MpCopyItemPropertyPathType.None:
+                case MpCopyItemPropertyPathType.LastOutput:
+                    return null;
+                case MpCopyItemPropertyPathType.ItemData:
+                case MpCopyItemPropertyPathType.ItemType:
+                case MpCopyItemPropertyPathType.ItemDescription:
+                case MpCopyItemPropertyPathType.Title:
+                case MpCopyItemPropertyPathType.CopyDateTime:
+                case MpCopyItemPropertyPathType.CopyCount:
+                case MpCopyItemPropertyPathType.PasteCount:
+                    return ci.GetPropertyValue(queryPathType.ToString());
+                default:
+                    //UrlPath,UrlTitle,UrlDomainPath,AppPath,AppName,SourceDeviceName,SourceDeviceType
+                    var result = await MpDataModelProvider.GetSortableCopyItemViewProperty(ci.Id, queryPathType.ToString());
+                    return result;
+
+            }
+        }
+             
+        #endregion
+
         #region Column Definitions
 
         [PrimaryKey, AutoIncrement]

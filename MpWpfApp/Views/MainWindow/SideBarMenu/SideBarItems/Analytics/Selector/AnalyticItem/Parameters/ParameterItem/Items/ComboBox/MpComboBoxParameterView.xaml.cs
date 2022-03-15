@@ -17,7 +17,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpListBoxParameterView.xaml
     /// </summary>
-    public partial class MpComboBoxParameterView : MpUserControl<MpComboBoxParameterViewModel> {
+    public partial class MpComboBoxParameterView : MpUserControl<MpEnumerableParameterViewModel> {
         public MpComboBoxParameterView() {
             InitializeComponent();
         }

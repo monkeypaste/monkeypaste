@@ -14,12 +14,19 @@ namespace MonkeyPaste.Plugin {
         Eof, // <EOF> used to denoted contentEnd for text range annotation
     }
 
+    public enum MpJsonPathType {
+        Relative,
+        Absolute
+    }
+
     public class MpJsonPathProperty {
         private static readonly string _inputParamRegexStr = @"@[0-9]*";
         private static Regex _inputParamRegex;
 
         public string value { get; set; } = string.Empty;
-        public string valuePath { get; set; } = string.Empty;
+        public string pathExpression { get; set; } = string.Empty;
+
+        public MpJsonPathType pathType { get; set; } = MpJsonPathType.Absolute;
 
         public bool omitIfPathNotFound { get; set; } = true;
 
@@ -42,7 +49,7 @@ namespace MonkeyPaste.Plugin {
             }
 
             var matchValPath = new MpJsonPathProperty() {
-                valuePath = jsonQuery
+                pathExpression = jsonQuery
             };
             matchValPath.SetValue(jo, null);
 
@@ -60,36 +67,36 @@ namespace MonkeyPaste.Plugin {
         }
 
         public MpJsonPathProperty(string value,string valuePath) : this(value) {
-            this.valuePath = valuePath;
+            this.pathExpression = valuePath;
         }
 
         public virtual void SetValue(string text) {
             value = text;
         }
-        public virtual void SetValue(JObject jo, List<MpAnalyzerPluginRequestItemFormat> reqParams, int idx = 0) {
-            value = FindValuePathResult(jo, reqParams, idx);
+        public virtual void SetValue(JToken curToken, List<MpAnalyzerPluginRequestItemFormat> reqParams, int idx = 0) {
+            value = FindValuePathResult(curToken, reqParams, idx);
         }
 
-        protected string FindValuePathResult(JObject jo, List<MpAnalyzerPluginRequestItemFormat> reqParams, int idx = 0) {
+        protected string FindValuePathResult(JToken curToken, List<MpAnalyzerPluginRequestItemFormat> reqParams, int idx = 0) {
             string result = string.Empty;
-            if (valuePath.StartsWith("@")) {
-                result = GetParamValue(valuePath, reqParams);
-            } else if(!string.IsNullOrEmpty(valuePath)) {
+            if (pathExpression.StartsWith("@")) {
+                result = GetParamValue(pathExpression, reqParams);
+            } else if(!string.IsNullOrEmpty(pathExpression)) {
                 try {
-                    if(valuePath.Contains("[#]")) {
-                        string jsonPathValue = valuePath.Replace("[#]", "[*]");
-                        var dataTokens = jo.SelectTokens(jsonPathValue, false).ToList();
+                    if(pathExpression.Contains("[#]")) {
+                        string jsonPathValue = pathExpression.Replace("[#]", "[*]");
+                        var dataTokens = curToken.SelectTokens(jsonPathValue, false).ToList();
                         if(dataTokens == null || dataTokens.Count == 0) {
-                            throw new MpJsonPathPropertyException($"valuePath '{valuePath}' not found");
+                            throw new MpJsonPathPropertyException($"valuePath '{pathExpression}' not found");
                         }
                         if (idx >= dataTokens.Count) {
                             throw new MpJsonPathPropertyException($"Exceeded query count of {dataTokens.Count()} for idx {idx}");
                         }
                         result = dataTokens[idx].ToString();
                     } else {
-                        JToken dataToken = jo.SelectToken(valuePath, false);
+                        JToken dataToken = curToken.SelectToken(pathExpression, false);
                         if(dataToken == null) {
-                            throw new MpJsonPathPropertyException($"valuePath '{valuePath}' not found");
+                            throw new MpJsonPathPropertyException($"valuePath '{pathExpression}' not found");
                         }
                         result = dataToken.ToString();
                     }
@@ -109,7 +116,7 @@ namespace MonkeyPaste.Plugin {
             outputValue = string.IsNullOrWhiteSpace(outputValue) ? "{0}" : outputValue;
 
             if (!string.IsNullOrWhiteSpace(outputValue) && !string.IsNullOrWhiteSpace(result) && !outputValue.Contains("{0}")) {
-                throw new Exception($"if path exists, value must be formatted to subsititue it (value: '{outputValue}' path: '{valuePath}' pathResult: '{result}')");
+                throw new Exception($"if path exists, value must be formatted to subsititue it (value: '{outputValue}' path: '{pathExpression}' pathResult: '{result}')");
             }
             outputValue = outputValue.Replace("{0}", result);
             MatchCollection mc = _inputParamRegex.Matches(outputValue);
@@ -128,7 +135,7 @@ namespace MonkeyPaste.Plugin {
 
         private string GetParamValue(string queryParamValueStr, List<MpAnalyzerPluginRequestItemFormat> reqParams) {
             int enumId = GetParamId(queryParamValueStr);
-            var enumParam = reqParams.FirstOrDefault(x => x.enumId == enumId);
+            var enumParam = reqParams.FirstOrDefault(x => x.paramId == enumId);
             if (enumParam == null) {
                 Console.WriteLine($"Error parsing dynamic query item, enumId: '{enumId}' does not exist");
                 Console.WriteLine($"In request with params: ");
@@ -172,8 +179,8 @@ namespace MonkeyPaste.Plugin {
             value = val;
         }
 
-        public override void SetValue(JObject jo, List<MpAnalyzerPluginRequestItemFormat> reqParams, int idx = 0) {
-            string result = base.FindValuePathResult(jo, reqParams, idx);
+        public override void SetValue(JToken curToken, List<MpAnalyzerPluginRequestItemFormat> reqParams, int idx = 0) {
+            string result = base.FindValuePathResult(curToken, reqParams, idx);
             if (string.IsNullOrEmpty(result)) {
                 value = default;
                 return;

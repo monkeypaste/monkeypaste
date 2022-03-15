@@ -44,7 +44,6 @@ namespace MonkeyPaste {
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 
-
         #endregion
 
         #region Fk Objects

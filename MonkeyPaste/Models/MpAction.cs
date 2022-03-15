@@ -12,23 +12,6 @@ namespace MonkeyPaste {
         Command
     }
 
-    public enum MpComparePropertyPathType {
-        None = 0,
-        ItemData,
-        ItemType,
-        ItemDescription,
-        Title, //seperator
-        AppPath,
-        AppName,
-        UrlPath,
-        UrlTitle,
-        UrlDomain, //seperator
-        CopyDateTime,
-        LastPasteDateTime, //seperator
-        CopyCount,
-        PasteCount,
-        LastOutput
-    }
     public enum MpComparisonOperatorType {
         None = 0,
         Contains,
@@ -63,6 +46,7 @@ namespace MonkeyPaste {
     }
 
     public class MpAction : MpDbModelBase {
+
         #region Columns
 
         [PrimaryKey, AutoIncrement]

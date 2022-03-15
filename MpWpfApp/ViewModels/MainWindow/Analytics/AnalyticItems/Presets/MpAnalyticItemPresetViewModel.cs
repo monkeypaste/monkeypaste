@@ -20,7 +20,7 @@ using Windows.UI.Xaml.Controls.Maps;
 
 namespace MpWpfApp {
     public class MpAnalyticItemPresetViewModel : 
-        MpSelectorViewModelBase<MpAnalyticItemViewModel, MpAnalyticItemParameterViewModel>,
+        MpSelectorViewModelBase<MpAnalyticItemViewModel, MpAnalyticItemParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel,
@@ -34,9 +34,9 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public Dictionary<int, MpAnalyticItemParameterViewModel> ParamLookup {
+        public Dictionary<int, MpAnalyticItemParameterViewModelBase> ParamLookup {
             get {
-                var paraDict = new Dictionary<int, MpAnalyticItemParameterViewModel>();
+                var paraDict = new Dictionary<int, MpAnalyticItemParameterViewModelBase>();
                 foreach (var pvm in Items) {
                     paraDict.Add(pvm.ParamEnumId, pvm);
                 }
@@ -239,7 +239,6 @@ namespace MpWpfApp {
         }
 
         public MpAnalyticItemPreset Preset { get; protected set; }
-
         
         #endregion
 
@@ -287,14 +286,32 @@ namespace MpWpfApp {
 
             Items.Clear();
 
-            Preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
+            Preset = aip;//await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
-            foreach (var paramVal in Preset.PresetParameterValues) {
-                // loop through each preset value and find matching parameter
-                var paramFormat = Parent.AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.enumId == paramVal.ParameterEnumId);
-                                
-                var naipvm = await CreateParameterViewModel(paramFormat,paramVal);
+            var presetValues = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(AnalyticItemPresetId);
+            foreach(var paramFormat in Preset.AnalyzerFormat.parameters) {
+                if(!presetValues.Any(x=>x.ParamId == paramFormat.paramId)) {
+                    string paramVal = string.Empty;
+                    if(paramFormat.values != null && paramFormat.values.Count > 0) {
+                        if (paramFormat.values.Any(x => x.isDefault)) {
+                            paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
+                        } else {
+                            paramVal = paramFormat.values[0].value;
+                        }
+                    }
+                    var newPresetVal = await MpAnalyticItemPresetParameterValue.Create(
+                        presetId: Preset.Id, 
+                        paramEnumId: paramFormat.paramId, 
+                        value: paramVal,
+                        format: paramFormat);
 
+                    presetValues.Add(newPresetVal);
+                }
+            }
+            presetValues.ForEach(x => x.ParameterFormat = Preset.AnalyzerFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+
+            foreach (var paramVal in presetValues) {                                
+                var naipvm = await CreateParameterViewModel(paramVal);
                 Items.Add(naipvm);
             }
 
@@ -311,24 +328,15 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpAnalyticItemParameterViewModel> CreateParameterViewModel(
-            MpAnalyticItemParameterFormat aipf,
-            MpAnalyticItemPresetParameterValue aipv) {
-            MpAnalyticItemParameterViewModel naipvm = null;
+        public async Task<MpAnalyticItemParameterViewModelBase> CreateParameterViewModel(MpAnalyticItemPresetParameterValue aipv) {
+            MpAnalyticItemParameterViewModelBase naipvm = null;
 
-            switch (aipf.parameterControlType) {
-                case MpAnalyticItemParameterControlType.ListBox:
-                    if (aipf.isMultiSelect) {
-                        naipvm = new MpMultiSelectListBoxParameterViewModel(this);
-                    } else if (aipf.isSingleSelect || !aipf.canAddValues) {
-                        naipvm = new MpSingleSelectListBoxParameterViewModel(this);
-                    } else {
-                        naipvm = new MpEditableListBoxParameterViewModel(this);
-                    }
-
-                    break;
+            switch (aipv.ParameterFormat.controlType) {
+                case MpAnalyticItemParameterControlType.List:
+                case MpAnalyticItemParameterControlType.MultiSelectList:
+                case MpAnalyticItemParameterControlType.EditableList:
                 case MpAnalyticItemParameterControlType.ComboBox:
-                    naipvm = new MpComboBoxParameterViewModel(this);
+                    naipvm = new MpEnumerableParameterViewModel(this);
                     break;
                 case MpAnalyticItemParameterControlType.TextBox:
                     naipvm = new MpTextBoxParameterViewModel(this);
@@ -344,15 +352,12 @@ namespace MpWpfApp {
                     naipvm = new MpFileChooserParameterViewModel(this);
                     break;
                 default:
-                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterControlType), aipf.parameterControlType));
+                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterControlType), aipv.ParameterFormat.controlType));
             }
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 
-            if (aipf.isValueDeferred) {
-                aipf = await Parent.DeferredCreateParameterModel(aipf);
-            }
 
-            await naipvm.InitializeAsync(aipf,aipv);
+            await naipvm.InitializeAsync(aipv);
 
             return naipvm;
         }
@@ -376,9 +381,8 @@ namespace MpWpfApp {
         #region Protected Methods
 
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
-
-            var aipvm = sender as MpAnalyticItemParameterViewModel;
-            if (aipvm.IsRequired && string.IsNullOrEmpty(aipvm.CurrentValue)) {
+            var aipvm = sender as MpAnalyticItemParameterViewModelBase;
+            if (aipvm.IsRequired && aipvm.CurrentValue == null) {
                 aipvm.ValidationMessage = $"{aipvm.Label} is required";
             } else {
                 aipvm.ValidationMessage = string.Empty;
@@ -420,7 +424,7 @@ namespace MpWpfApp {
         private void MpPresetParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if(IsSelected && Parent.Parent.IsSidebarVisible) {
                         LastSelectedDateTime = DateTime.Now;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));

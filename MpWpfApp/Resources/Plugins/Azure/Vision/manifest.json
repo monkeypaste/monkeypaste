@@ -64,9 +64,8 @@
         "annotations": [
           {
             "name": "Title",
-            "text": {
-              "valuePath": "@5",
-              "value": "Vision Analysis of {0}"
+            "label": {
+              "value": "Azure Vision Analysis"
             },
             "appearance": {
               "font": {
@@ -79,11 +78,11 @@
           },
           {
             "name": "Summary",
-            "text": {
-              "valuePath": "$.['description']['captions'][0].text"
+            "label": {
+              "pathExpression": "$.['description']['captions'][0].text"
             },
             "score": {
-              "valuePath": "$.['description']['captions'][0].confidence"
+              "pathExpression": "$.['description']['captions'][0].confidence"
             },
             "appearance": {
               "font": {
@@ -95,7 +94,7 @@
           },
           {
             "name": "objects",
-            "text": {
+            "label": {
               "value": "Objects"
             },
             "appearance": {
@@ -110,24 +109,24 @@
                     "value": "#FF00FF7F"
                   }
                 },
-                "text": {
-                  "valuePath": "$.['objects'][#].object"
+                "label": {
+                  "pathExpression": "$.['objects'][#].object"
                 },
                 "score": {
-                  "valuePath": "$.['objects'][#].confidence"
+                  "pathExpression": "$.['objects'][#].confidence"
                 },
                 "box": {
                   "x": {
-                    "valuePath": "$.['objects'][#].rectangle.x"
+                    "pathExpression": "$.['objects'][#].rectangle.x"
                   },
                   "y": {
-                    "valuePath": "$.['objects'][#].rectangle.y"
+                    "pathExpression": "$.['objects'][#].rectangle.y"
                   },
                   "width": {
-                    "valuePath": "$.['objects'][#].rectangle.w"
+                    "pathExpression": "$.['objects'][#].rectangle.w"
                   },
                   "height": {
-                    "valuePath": "$.['objects'][#].rectangle.h"
+                    "pathExpression": "$.['objects'][#].rectangle.h"
                   }
                 }
               }
@@ -142,11 +141,11 @@
             "dynamicChildren": [
               {
                 "name": "tagLabelAndScore",
-                "text": {
-                  "valuePath": "$.['tags'][#].name"
+                "label": {
+                  "pathExpression": "$.['tags'][#].name"
                 },
                 "score": {
-                  "valuePath": "$.['tags'][#].confidence"
+                  "pathExpression": "$.['tags'][#].confidence"
                 },
                 "appearance": {
                   "foregroundColor": {
@@ -158,11 +157,11 @@
           },
           {
             "name": "categories",
-            "text": {
-              "valuePath": "$.['categories'][0].name"
+            "label": {
+              "pathExpression": "$.['categories'][0].name"
             },
             "score": {
-              "valuePath": "$.['categories'][0].score"
+              "pathExpression": "$.['categories'][0].score"
             },
             "children": [
               {
@@ -175,24 +174,24 @@
                         "value": "#FFFFB6C1"
                       }
                     },
-                    "text": {
-                      "valuePath": "$.['categories'][0].detail.celebrities[#].name"
+                    "label": {
+                      "pathExpression": "$.['categories'][0].detail.celebrities[#].name"
                     },
                     "score": {
-                      "valuePath": "$.['categories'][0].detail.celebrities[#].confidence"
+                      "pathExpression": "$.['categories'][0].detail.celebrities[#].confidence"
                     },
                     "box": {
                       "x": {
-                        "valuePath": "$.['categories'][0].detail.celebrities[#].faceRectangle.left"
+                        "pathExpression": "$.['categories'][0].detail.celebrities[#].faceRectangle.left"
                       },
                       "y": {
-                        "valuePath": "$.['categories'][0].detail.celebrities[#].faceRectangle.top"
+                        "pathExpression": "$.['categories'][0].detail.celebrities[#].faceRectangle.top"
                       },
                       "width": {
-                        "valuePath": "$.['categories'][0].detail.celebrities[#].faceRectangle.width"
+                        "pathExpression": "$.['categories'][0].detail.celebrities[#].faceRectangle.width"
                       },
                       "height": {
-                        "valuePath": "$.['categories'][0].detail.celebrities[#].faceRectangle.height"
+                        "pathExpression": "$.['categories'][0].detail.celebrities[#].faceRectangle.height"
                       }
                     }
                   }
@@ -205,39 +204,39 @@
             "children": [
               {
                 "name": "isAdultContent",
-                "text": {
+                "label": {
                   "value": "Is Adult Content: {0}",
-                  "valuePath": "$.['adult'].isAdultContent"
+                  "pathExpression": "$.['adult'].isAdultContent"
                 },
                 "score": {
-                  "valuePath": "$.['adult'].adultScore"
+                  "pathExpression": "$.['adult'].adultScore"
                 }
               },
               {
                 "name": "isRacyContent",
-                "text": {
+                "label": {
                   "value": "Is Racy Content: {0}",
-                  "valuePath": "$.['adult'].isRacyContent"
+                  "pathExpression": "$.['adult'].isRacyContent"
                 },
                 "score": {
-                  "valuePath": "$.['adult'].racyScore"
+                  "pathExpression": "$.['adult'].racyScore"
                 }
               },
               {
                 "name": "isGoryContent",
-                "text": {
+                "label": {
                   "value": "Is Gory Content: {0}",
-                  "valuePath": "$.['adult'].isGoryContent"
+                  "pathExpression": "$.['adult'].isGoryContent"
                 },
                 "score": {
-                  "valuePath": "$.['adult'].goreScore"
+                  "pathExpression": "$.['adult'].goreScore"
                 }
               }
             ]
           },
           {
             "name": "color",
-            "text": {
+            "label": {
               "value": "Color Analysis"
             },
             "appearance": {
@@ -247,42 +246,42 @@
             "children": [
               {
                 "name": "dominantColorForeground",
-                "text": {
-                  "valuePath": "$.['color'].dominantColorForeground"
+                "label": {
+                  "pathExpression": "$.['color'].dominantColorForeground"
                 },
                 "appearance": {
                   "backgroundColor": {
-                    "valuePath": "$.['color'].dominantColorForeground"
+                    "pathExpression": "$.['color'].dominantColorForeground"
                   }
                 }
               },
               {
                 "name": "dominantColorBackground",
-                "text": {
-                  "valuePath": "$.['color'].dominantColorBackground"
+                "label": {
+                  "pathExpression": "$.['color'].dominantColorBackground"
                 },
                 "appearance": {
                   "backgroundColor": {
-                    "valuePath": "$.['color'].dominantColorBackground"
+                    "pathExpression": "$.['color'].dominantColorBackground"
                   }
                 }
               },
               {
                 "name": "accentColor",
-                "text": {
-                  "valuePath": "$.['color'].dominantColorBackground"
+                "label": {
+                  "pathExpression": "$.['color'].dominantColorBackground"
                 },
                 "appearance": {
                   "backgroundColor": {
-                    "valuePath": "$.['color'].dominantColorBackground"
+                    "pathExpression": "$.['color'].dominantColorBackground"
                   }
                 }
               },
               {
                 "name": "isBlackAndWhite",
-                "text": {
+                "label": {
                   "value": "Is Black & White? {0}",
-                  "valuePath": "$.['color'].isBwImg"
+                  "pathExpression": "$.['color'].isBwImg"
                 }
               }
             ]
@@ -293,13 +292,10 @@
     "parameters": [
       {
         "label": "Language",
-        "parameterControlType": "ComboBox",
-        "parameterValueType": "PlainText",
-        "enumId": 1,
-        "isReadOnly": false,
-        "isRequired": false,
-        "isValueDeferred": false,
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
         "isVisible": false,
+        "paramId": 1,
         "values": [
           {
             "label": "English",
@@ -330,12 +326,9 @@
       },
       {
         "label": "Visual Features",
-        "parameterControlType": "ListBox",
-        "parameterValueType": "PlainText",
-        "enumId": 2,
-        "isRequired": false,
-        "isReadOnly": true,
-        "isMultiSelect": true,
+        "controlType": "MultiSelectList",
+        "unitType": "PlainText",
+        "paramId": 2,
         "values": [
           {
             "label": "Adult",
@@ -381,11 +374,9 @@
       },
       {
         "label": "Details",
-        "parameterControlType": "ListBox",
-        "parameterValueType": "PlainText",
-        "enumId": 3,
-        "isReadOnly": true,
-        "isMultiSelect": true,
+        "controlType": "MultiSelectList",
+        "unitType": "PlainText",
+        "paramId": 3,
         "values": [
           {
             "label": "Celebrities",
@@ -402,28 +393,14 @@
       {
         "label": "Source Content",
         "description": "The image to describe",
-        "parameterControlType": "TextBox",
-        "parameterValueType": "ContentQuery",
-        "enumId": 4,
+        "controlType": "TextBox",
+        "unitType": "ContentQuery",
         "isRequired": true,
         "isVisible": false,
+        "paramId": 4,
         "values": [
           {
             "value": "{ItemData}"
-          }
-        ]
-      },
-      {
-        "label": "Source Title",
-        "description": "The title of the image",
-        "parameterControlType": "TextBox",
-        "parameterValueType": "ContentQuery",
-        "enumId": 5,
-        "isRequired": true,
-        "isVisible": false,
-        "values": [
-          {
-            "value": "{Title}"
           }
         ]
       }

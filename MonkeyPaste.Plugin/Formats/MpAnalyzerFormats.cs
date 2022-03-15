@@ -11,7 +11,9 @@ namespace MonkeyPaste.Plugin {
         Button,
         TextBox,
         ComboBox,
-        ListBox,
+        List,
+        MultiSelectList,
+        EditableList,
         CheckBox,
         Slider,
         FileChooser,
@@ -37,7 +39,7 @@ namespace MonkeyPaste.Plugin {
     }
 
     public class MpAnalyzerPluginRequestItemFormat : MpJsonObject {
-        public int enumId { get; set; } = 0;
+        public int paramId { get; set; } = 0;
         public string value { get; set; } = string.Empty;
     }
 
@@ -60,58 +62,41 @@ namespace MonkeyPaste.Plugin {
     public class MpAnalyzerPluginOutputFormat : MpJsonObject {
         public bool text { get; set; } = false;
         public bool image { get; set; } = false;
+        public bool file { get; set; } = false;
         public bool imageToken { get; set; } = false;
         public bool textToken { get; set; } = false;
-        public bool file { get; set; } = false;
     }
 
     public class MpAnalyticItemParameterFormat : MpJsonObject {
+        public int paramId { get; set; } = 0;
+
         public string label { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;
 
-        public MpAnalyticItemParameterControlType parameterControlType { get; set; } = MpAnalyticItemParameterControlType.None;
+        public MpAnalyticItemParameterControlType controlType { get; set; } = MpAnalyticItemParameterControlType.None;
+        public MpAnalyticItemParameterValueUnitType unitType { get; set; } = MpAnalyticItemParameterValueUnitType.PlainText;
 
-        public MpAnalyticItemParameterValueUnitType parameterValueType { get; set; } = MpAnalyticItemParameterValueUnitType.None;
-
-        public int enumId { get; set; } = 0;
-
+        public bool isVisible { get; set; } = true;
         public bool isReadOnly { get; set; } = false;
         public bool isRequired { get; set; } = false;
 
-        public bool isMultiSelect { get; set; } = false;
-        public bool isSingleSelect { get; set; } = false;
+        //TextBox
+        public int maxLength { get; set; } = int.MaxValue;
+        public int minLength { get; set; } = 0;
+        public string illegalCharacters { get; set; } = null;
 
-        public bool canAddValues { get; set; } = false;
-
-        public string formatInfo { get; set; } = string.Empty; // may be used for additional validation
+        //Slider
+        public double minimum { get; set; } = double.MinValue;
+        public double maximum { get; set; } = double.MaxValue;
         public int precision { get; set; } = 2;
 
-        public bool isValueDeferred { get; set; } = false; // TODO isValueDeferred is a placeholder and should be a seperate nullable json object for pulling values from http
-        
-        public bool isVisible { get; set; } = true;
-
         public List<MpAnalyticItemParameterValueFormat> values { get; set; } = new List<MpAnalyticItemParameterValueFormat>();
-
-        public MpHttpTransactionFormat deferredValueTransaction { get; set; }
     }
 
     public class MpAnalyticItemParameterValueFormat : MpJsonObject {
         public string value { get; set; } = string.Empty;
         public string label { get; set; } = string.Empty;
         public bool isDefault { get; set; } = false;
-        public bool isMinimum { get; set; } = false;
-        public bool isMaximum { get; set; } = false;
-    }
-
-    public class MpComboBoxControlFormat : MpJsonObject {
-        public string displayPath { get; set; }
-        public string valuePath { get; set; }
-    }
-
-    public class MpSliderControlFormat : MpJsonObject {
-        public string minimum { get; set; }
-        public string maximum { get; set; }
-        public string tickFrequency { get; set; }
     }
 
     public class MpAnalyzerPresetFormat : MpJsonObject {
@@ -126,9 +111,7 @@ namespace MonkeyPaste.Plugin {
     }
 
     public class MpAnalyzerPresetValueFormat : MpJsonObject {
-        public int enumId { get; set; } = 0;
-
-        //public string label { get; set; } = string.Empty;
+        public int paramId { get; set; } = 0;
         public string value { get; set; } = string.Empty;
     }
 

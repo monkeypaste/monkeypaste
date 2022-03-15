@@ -5,20 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpCheckBoxParameterViewModel : MpAnalyticItemParameterViewModel {
+    public class MpCheckBoxParameterViewModel : MpAnalyticItemParameterViewModelBase {
         #region Private Variables
-
-        private string _defaultValue = "0";
 
         #endregion
 
         #region Properties
 
         #region Model
-
-        public override string CurrentValue { get; set; }
-
-        public override string DefaultValue => _defaultValue;
 
         #endregion
 
@@ -30,18 +24,10 @@ namespace MpWpfApp {
 
         public MpCheckBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aipf,MpAnalyticItemPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
             IsBusy = true;
 
-            Parameter = aipf;
-            ParameterValue = aipv;
-
-            CurrentValue = _defaultValue = aipv.Value;
-
-            OnPropertyChanged(nameof(DefaultValue));
-            OnPropertyChanged(nameof(BoolValue));
-
-            await Task.Delay(1);
+            await base.InitializeAsync(aipv);
 
             IsBusy = false;
         }

@@ -49,8 +49,8 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Border>
-        <local:MpAnalyticItemPresetDataGridView Grid.Row="1" 
-                                                Grid.Column="0" 
+        <local:MpAnalyticItemPresetDataGridView Grid.Row="1"
+                                                Grid.Column="0"
                                                 VerticalAlignment="Top"
                                                 DataContext="{Binding SelectedItem}" />
         <local:MpAnalyticItemPresetParameterListBoxView Grid.Column="1"

@@ -217,6 +217,7 @@
     <Compile Include="Converters\MpItemToItemsSourceConverter.cs" />
     <Compile Include="Converters\MpMultiSelectHoverableToBrushConverter.cs" />
     <Compile Include="Converters\MpObjectToTooltipConverter.cs" />
+    <Compile Include="Converters\MpParameterFormatToItemsSourceConverter.cs" />
     <Compile Include="Converters\MpShorcutIdToKeyStringConverter.cs" />
     <Compile Include="Converters\MpSliderValueWidthConverter.cs" />
     <Compile Include="Converters\MpStringHexToIconConverter.cs" />
@@ -284,6 +285,7 @@
     <Compile Include="Utils\System\MpFileSystemWatcher.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfMainThreadMarshal.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfResourceFetcher.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfStringTools.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpFileWriterActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpMacroActionViewModel.cs" />
@@ -303,18 +305,15 @@
     <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
     <Compile Include="Utils\RESTful\MpYoloTransaction.cs" />
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpEnumerableParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpFileChooserParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpCheckBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpEditableListBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpSingleSelectListBoxParameterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpMultiSelectListBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Presets\MpAnalyticItemPresetViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpComboBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpTextBoxParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpSliderParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\MpAnalyticItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Values\MpEnumerableParameterValueViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\Reports\MpAnalysisReportCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\Reports\Items\MpAnalysisReportViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectCollectionViewModel.cs" />
@@ -1370,6 +1369,9 @@
     </PackageReference>
     <PackageReference Include="Azure.AI.TextAnalytics">
       <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="CsvHelper">
+      <Version>27.2.1</Version>
     </PackageReference>
     <PackageReference Include="gong-wpf-dragdrop">
       <Version>3.0.0</Version>

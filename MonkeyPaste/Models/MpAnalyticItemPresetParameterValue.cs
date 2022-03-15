@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Plugin;
+using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Threading.Tasks;
@@ -19,20 +20,13 @@ namespace MonkeyPaste {
         [Column("fk_MpAnalyticItemPresetId")]
         public int AnalyticItemPresetId { get; set; }
 
-        //[ForeignKey(typeof(MpAnalyticItemPresetParameterValue))]
-        //[Column("fk_ParentAnalyticItemPresetParameterValueId")]
-        //public int ParentAnalyticItemPresetParameterValueId { get; set; } = 0;
-
-        public int ParameterEnumId { get; set; }
+        public int ParamId { get; set; }
 
         public string Value { get; set; } = string.Empty;
 
         #endregion
 
         #region Fk Models
-
-        //[ManyToOne(CascadeOperations = CascadeOperation.All)]
-        //public MpAnalyticItemPreset AnalyticItemPreset { get; set; }
 
         #endregion
 
@@ -51,32 +45,41 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+        public MpAnalyticItemParameterFormat ParameterFormat { get; set; }
+
         #endregion
 
         public static async Task<MpAnalyticItemPresetParameterValue> Create(
-            MpAnalyticItemPreset preset = null, 
+            int presetId = 0, 
             int paramEnumId = 0, 
-            string value = "") {
-            if (preset == null) {
+            string value = "",
+            MpAnalyticItemParameterFormat format = null) {
+            if (presetId == 0) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
-            var dupItem = await MpDataModelProvider.GetAnalyticItemPresetValue(preset.Id, paramEnumId);
+            if(format == null) {
+                throw new Exception("Must have format");
+            }
+
+            var dupItem = await MpDataModelProvider.GetAnalyticItemPresetValue(presetId, paramEnumId);
             if (dupItem != null) {
-                MpConsole.WriteLine($"Updating preset {preset.Label} for {paramEnumId}");
+                MpConsole.WriteLine($"Updating preset Id{presetId} for {paramEnumId}");
 
                 dupItem = await MpDb.GetItemAsync<MpAnalyticItemPresetParameterValue>(dupItem.Id);
-                dupItem.AnalyticItemPresetId = preset.Id;
-                dupItem.ParameterEnumId = paramEnumId;
+                dupItem.AnalyticItemPresetId = presetId;
+                dupItem.ParamId = paramEnumId;
                 dupItem.Value = value;
+                dupItem.ParameterFormat = format;
                 await dupItem.WriteToDatabaseAsync();
                 return dupItem;
             }
 
             var newAnalyticItemPresetParameterValue = new MpAnalyticItemPresetParameterValue() {
                 AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
-                //AnalyticItemPreset = preset,
-                AnalyticItemPresetId = preset.Id,
-                ParameterEnumId = paramEnumId,
+                ParameterFormat = format,
+                AnalyticItemPresetId = presetId,
+                ParamId = paramEnumId,
                 Value = value
             };
 
@@ -93,8 +96,9 @@ namespace MonkeyPaste {
             var cppv = new MpAnalyticItemPresetParameterValue() {
                 AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
                 AnalyticItemPresetId = this.AnalyticItemPresetId,
-                ParameterEnumId = this.ParameterEnumId,
-                Value = this.Value
+                ParamId = this.ParamId,
+                Value = this.Value,
+                ParameterFormat = this.ParameterFormat
             };
             await cppv.WriteToDatabaseAsync();
             return cppv;

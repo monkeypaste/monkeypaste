@@ -110,10 +110,8 @@ namespace MpWpfApp {
                 switch (e.ChangeType) {
                     case WatcherChangeTypes.Changed:
                     case WatcherChangeTypes.Created:
-                        var app = MpPreferences.ThisAppSource.App;
-                        var source = await MpSource.Create(app, null);
                         ci = await MpCopyItem.Create(
-                            source: source,
+                            source: MpPreferences.ThisAppSource,
                             itemType: MpCopyItemType.FileList,
                             data: e.FullPath,
                             suppressWrite: true);
@@ -121,6 +119,13 @@ namespace MpWpfApp {
                     case WatcherChangeTypes.Renamed:
                         RenamedEventArgs re = e as RenamedEventArgs;
                         ci = await MpDataModelProvider.GetCopyItemByData(re.OldFullPath);
+                        if(ci == null) {
+                            ci = await MpCopyItem.Create(
+                                source: MpPreferences.ThisAppSource,
+                                itemType: MpCopyItemType.FileList,
+                                data: e.FullPath,
+                                suppressWrite: true);
+                        }
                         ci.ItemData = re.FullPath;
                         await ci.WriteToDatabaseAsync();
                         break;

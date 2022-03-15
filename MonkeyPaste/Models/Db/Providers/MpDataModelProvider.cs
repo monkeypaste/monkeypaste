@@ -48,7 +48,6 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-
         public static void ResetQuery() {
             AllFetchedAndSortedCopyItemIds.Clear();
             _lastResult = new List<MpCopyItem>();
@@ -296,6 +295,16 @@ namespace MonkeyPaste {
 
         public static async Task<List<T>> SelectModelsAsync<T>(string query, params object[] args) where T : new() {
             var result = await MpDb.QueryAsync<T>(query, args);
+            return result;
+        }
+
+        #endregion
+
+        #region MpSortableCopyItem_View (PropertyPath Queries)
+
+        public static async Task<object> GetSortableCopyItemViewProperty(int ciid,string propertyName) {
+            string query = "select ? from MpSortableCopyItem_View where pk_MpCopyItemId=?";
+            var result = await MpDb.QueryScalarAsync<object>(query, propertyName, ciid);
             return result;
         }
 
@@ -761,7 +770,7 @@ namespace MonkeyPaste {
 
 
         public static async Task<MpAnalyticItemPresetParameterValue> GetAnalyticItemPresetValue(int presetid, int paramEnumId) {
-            string query = $"select * from MpAnalyticItemPresetParameterValue where fk_MpAnalyticItemPresetId=? and ParameterEnumId=?";
+            string query = $"select * from MpAnalyticItemPresetParameterValue where fk_MpAnalyticItemPresetId=? and ParamId=?";
             var result = await MpDb.QueryAsync<MpAnalyticItemPresetParameterValue>(query, presetid, paramEnumId);
             if (result == null || result.Count == 0) {
                 return null;

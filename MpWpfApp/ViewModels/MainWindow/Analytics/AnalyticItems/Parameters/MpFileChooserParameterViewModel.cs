@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpFileChooserParameterViewModel : MpAnalyticItemParameterViewModel {
+    public class MpFileChooserParameterViewModel : MpAnalyticItemParameterViewModelBase {
         #region Private Variables
 
         private string _defaultValue;
@@ -19,13 +19,12 @@ namespace MpWpfApp {
 
         public bool IsDirectoryChooser {
             get {
-                if(Parameter == null) {
+                if(ParameterFormat == null) {
                     return false;
                 }
-                return Parameter.parameterControlType == MpAnalyticItemParameterControlType.DirectoryChooser;
+                return ParameterFormat.controlType == MpAnalyticItemParameterControlType.DirectoryChooser;
             }
         }
-        public override string DefaultValue => _defaultValue;
 
         #endregion
 
@@ -37,18 +36,10 @@ namespace MpWpfApp {
 
         public MpFileChooserParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
 
-        public override async Task InitializeAsync(MpAnalyticItemParameterFormat aipf,MpAnalyticItemPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
             IsBusy = true;
 
-            Parameter = aipf;
-            ParameterValue = aipv;
-
-            CurrentValue = _defaultValue = aipv.Value;
-
-            OnPropertyChanged(nameof(DefaultValue));
-            OnPropertyChanged(nameof(BoolValue));
-
-            await Task.Delay(1);
+            await base.InitializeAsync(aipv);
 
             IsBusy = false;
         }
