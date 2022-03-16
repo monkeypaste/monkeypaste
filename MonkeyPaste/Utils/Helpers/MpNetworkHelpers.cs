@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using Xamarin.Essentials;
 using System.Linq;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public static class MpNetworkHelpers {

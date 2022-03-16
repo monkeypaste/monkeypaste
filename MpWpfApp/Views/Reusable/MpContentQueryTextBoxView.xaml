@@ -27,6 +27,7 @@
                      Padding="3"
                      BorderThickness="0"
                      MinWidth="100"
+                     IsInactiveSelectionHighlightEnabled="True"
                      local:MpIsFocusedExtension.IsEnabled="True"
                      local:MpTextSelectionRangeExtension.IsEnabled="True"
                      local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
@@ -34,7 +35,12 @@
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged,
                                     NotifyOnSourceUpdated=True,
-                                    NotifyOnTargetUpdated=True}" />
+                                    NotifyOnTargetUpdated=True}">
+                <TextBox.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                     Color="Blue" />
+                </TextBox.Resources>
+            </TextBox>
 
             <Button Grid.Column="1"
                     Command="{Binding ShowContentPathSelectorMenuCommand}"
@@ -74,7 +80,8 @@
             </Button>
             <Button Grid.Column="2"
                     Command="{Binding ClearQueryCommand}"
-                    CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}">
+                    CommandParameter="{Binding DataContext,
+                                               RelativeSource={RelativeSource Self}}">
                 <Button.Style>
                     <Style TargetType="Button"
                            BasedOn="{StaticResource RoundedButton}">

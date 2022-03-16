@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public static class MpFileIoHelpers {
@@ -118,7 +119,7 @@ namespace MonkeyPaste {
 
             }
             catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteTraceLine("error for resource path: " + resourcePath, ex);
+                MpConsole.WriteTraceLine("error for resource path: " + resourcePath, ex);
                 return string.Empty;
             }
         }

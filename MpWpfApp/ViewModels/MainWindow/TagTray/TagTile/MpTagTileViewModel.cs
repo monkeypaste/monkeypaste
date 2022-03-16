@@ -10,6 +10,7 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 using System.IO;
 using System.Collections.ObjectModel;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : 
@@ -678,7 +679,7 @@ namespace MpWpfApp {
                         cit.StartSync(e.SourceGuid);
                             var dupCheck = await MpDataModelProvider.GetCopyItemTagForTagAsync(cit.TagId, cit.CopyItemId);
                         if (dupCheck != null) {
-                            MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, copyItemTag was duplicate: " + cit.ToString());
+                            MpConsole.WriteTraceLine(@"Warning, copyItemTag was duplicate: " + cit.ToString());
                         }
                         await cit.WriteToDatabaseAsync();
                         cit.EndSync();

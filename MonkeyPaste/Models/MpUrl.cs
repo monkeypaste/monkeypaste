@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public class MpUrl : MpDbModelBase, MpISourceItem {

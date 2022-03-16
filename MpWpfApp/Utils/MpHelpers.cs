@@ -36,6 +36,7 @@ using MonkeyPaste;
 using GalaSoft.MvvmLight.CommandWpf;
 using static MpWpfApp.MpWpfStringExtensions;
 using static MpWpfApp.MpWpfRichDocumentExtensions;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public static class MpHelpers {
@@ -67,7 +68,7 @@ namespace MpWpfApp {
             foreach (var range in rangeList) {
                 if(ct.IsCancellationRequested) {
                     //throw new OperationCanceledException();
-                    MonkeyPaste.MpConsole.WriteLine("Bg highlighting canceled");
+                    MpConsole.WriteLine("Bg highlighting canceled");
                     return;
                 }
                 range.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
@@ -399,9 +400,9 @@ namespace MpWpfApp {
                 return Math.Round(Convert.ToDouble(moneyStr), 2);
             }
             catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine(
+                MpConsole.WriteLine(
                     "MpHelper exception cannot convert moneyStr '" + moneyStr + "' to a value, returning 0");
-                MonkeyPaste.MpConsole.WriteLine("Exception Details: " + ex);
+                MpConsole.WriteLine("Exception Details: " + ex);
                 return 0;
             }
         }
@@ -428,7 +429,7 @@ namespace MpWpfApp {
                 return result;
             }
             catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("MpHelpers Currency Conversion exception: " + ex.ToString());
+                MpConsole.WriteLine("MpHelpers Currency Conversion exception: " + ex.ToString());
                 return string.Empty;
             }
         }
@@ -480,7 +481,7 @@ namespace MpWpfApp {
                 }
             }
             catch(Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("MpHelpers.PassKeysListToWindow exception: " + ex);
+                MpConsole.WriteLine("MpHelpers.PassKeysListToWindow exception: " + ex);
             }
         }
 
@@ -606,7 +607,7 @@ namespace MpWpfApp {
                 }
             }
             catch(Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                MpConsole.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
                 return string.Empty;
             }
         }
@@ -933,8 +934,8 @@ namespace MpWpfApp {
                 var process = Process.GetCurrentProcess();
                 return process.MainModule.FileName;
             } catch(Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("Error getting this application process path: " + ex.ToString());
-                MonkeyPaste.MpConsole.WriteLine("Attempting queryfullprocessimagename...");
+                MpConsole.WriteLine("Error getting this application process path: " + ex.ToString());
+                MpConsole.WriteLine("Attempting queryfullprocessimagename...");
                 //return GetExecutablePathAboveVista(Process.GetCurrentProcess().Handle);
                 return GetApplicationProcessPath();
             }
@@ -1657,7 +1658,7 @@ namespace MpWpfApp {
         //    //        continue;
         //    //    }
         //    //    string a = ip.MapToIPv4().ToString();
-        //    //    MonkeyPaste.MpConsole.WriteLine(a);
+        //    //    MpConsole.WriteLine(a);
         //    //}
         //    //IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];
         //    //if (ipAddress != null) {
@@ -1679,7 +1680,7 @@ namespace MpWpfApp {
                 return isConnected;
             }
             catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine(e.ToString());
+                MpConsole.WriteLine(e.ToString());
                 return false;
             }
         }

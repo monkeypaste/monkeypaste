@@ -59,9 +59,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
-      <Project>{effa9e68-c567-4f5a-ae60-0ba2937cf5fa}</Project>
-      <Name>MonkeyPaste</Name>
+    <ProjectReference Include="..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj">
+      <Project>{faf48e9e-e646-44d0-be02-ad1a9e9dfcd8}</Project>
+      <Name>MonkeyPaste.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

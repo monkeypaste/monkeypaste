@@ -13,6 +13,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     
@@ -298,28 +299,26 @@ namespace MpWpfApp {
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback =  (obj, e) => {
                     if (e.NewValue is bool isEnabled) {
-                        var img = obj as Canvas;
-                        if (img == null) {
+                        var canvas = obj as Canvas;
+                        if (canvas == null) {
                             if (obj == null) {
                                 return;
                             }
                             throw new System.Exception("This extension must be attach to an image control");
                         }
                         if (isEnabled) {
-                            if (img.IsLoaded) {
-                                Init(img);
+                            if (canvas.IsLoaded) {
+                                Init(canvas);
                             } else {
-                                img.Loaded += Canvas_Loaded;
+                                canvas.Loaded += Canvas_Loaded;
                             }
-                            img.MouseEnter += Canvas_MouseEnter;
-                            img.MouseLeave += Canvas_MouseLeave;
-                            img.Unloaded += Canvas_Unloaded;
                         } else {
-                            Canvas_Unloaded(img, null);
+                            Canvas_Unloaded(canvas, null);
                         }
                     }
                 }
             });
+
 
 
         #endregion
@@ -377,6 +376,22 @@ namespace MpWpfApp {
             }
         }
 
+        private static void Canvas_SizeChanged(object sender, SizeChangedEventArgs e) {
+            var canvas = sender as Canvas;
+            if(canvas == null) {
+                return;
+            }
+            Init(canvas);
+        }
+
+
+        private static void Canvas_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            var canvas = sender as Canvas;
+            if (canvas == null) {
+                return;
+            }
+            Init(canvas);
+        }
         #endregion
 
         public static void Reset(Canvas canvas) {
@@ -390,6 +405,21 @@ namespace MpWpfApp {
             if(canvas == null) {
                 return;
             }
+            canvas.MouseEnter -= Canvas_MouseEnter;
+            canvas.MouseEnter += Canvas_MouseEnter;
+
+            canvas.MouseLeave -= Canvas_MouseLeave;
+            canvas.MouseLeave += Canvas_MouseLeave;
+
+            canvas.Unloaded -= Canvas_Unloaded;
+            canvas.Unloaded += Canvas_Unloaded;
+
+            canvas.SizeChanged -= Canvas_SizeChanged;
+            canvas.SizeChanged += Canvas_SizeChanged;
+
+            canvas.DataContextChanged -= Canvas_DataContextChanged;
+            canvas.DataContextChanged += Canvas_DataContextChanged;
+
             TextBox tb = GetTextBox(canvas);
 
             if(tb == null) {
@@ -441,6 +471,5 @@ namespace MpWpfApp {
 
             _TextImageLookup.AddOrReplace(canvas, mti);
         }
-
     }
 }

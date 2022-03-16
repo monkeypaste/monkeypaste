@@ -36,13 +36,15 @@ namespace MpWpfApp {
 
             qi.FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
             MpDataModelProvider.QueryInfos.Add(qi);
-           // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
+            // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
 
-            if (isFilterSortOrSearch) {
-                MpMessenger.Send<MpMessageType>(MpMessageType.QueryChanged);
-            } else {
-                MpMessenger.Send<MpMessageType>(MpMessageType.SubQueryChanged);
-            }
+            MpHelpers.RunOnMainThread(() => {
+                if (isFilterSortOrSearch) {
+                    MpMessenger.Send<MpMessageType>(MpMessageType.QueryChanged);
+                } else {
+                    MpMessenger.Send<MpMessageType>(MpMessageType.SubQueryChanged);
+                }
+            });
         }
 
         

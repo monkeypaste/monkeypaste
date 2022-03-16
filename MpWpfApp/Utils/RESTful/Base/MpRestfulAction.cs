@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Windows.Media.Protection.PlayReady;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public abstract class MpRestfulAction {

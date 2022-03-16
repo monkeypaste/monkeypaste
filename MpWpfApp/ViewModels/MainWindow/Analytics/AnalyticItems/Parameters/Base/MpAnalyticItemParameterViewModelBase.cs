@@ -163,12 +163,29 @@ namespace MpWpfApp {
             }
         }
 
-
-
         public MpAnalyticItemParameterValueUnitType UnitType {
             get {
                 if (ParameterFormat == null) {
                     return MpAnalyticItemParameterValueUnitType.None;
+                }
+                if(ParameterFormat.unitType == MpAnalyticItemParameterValueUnitType.None) {
+                    switch(ParameterFormat.controlType) {
+                        case MpAnalyticItemParameterControlType.CheckBox:
+                            return MpAnalyticItemParameterValueUnitType.Bool;
+                        case MpAnalyticItemParameterControlType.Slider:
+                            return MpAnalyticItemParameterValueUnitType.Decimal;
+                        case MpAnalyticItemParameterControlType.TextBox:
+                        case MpAnalyticItemParameterControlType.List:
+                        case MpAnalyticItemParameterControlType.ComboBox:
+                            return MpAnalyticItemParameterValueUnitType.PlainText;
+                        case MpAnalyticItemParameterControlType.MultiSelectList:
+                        case MpAnalyticItemParameterControlType.EditableList:
+                            return MpAnalyticItemParameterValueUnitType.DelimitedPlainText;
+                        case MpAnalyticItemParameterControlType.FileChooser:
+                        case MpAnalyticItemParameterControlType.DirectoryChooser:
+                            return MpAnalyticItemParameterValueUnitType.FileSystemPath;
+
+                    }
                 }
                 return ParameterFormat.unitType;
             }
@@ -192,7 +209,7 @@ namespace MpWpfApp {
                     return string.Empty;
                 }
 
-                return PresetValue.Value.TrimEnd(System.Environment.NewLine.ToCharArray());
+                return PresetValue.Value.TrimTrailingLineEndings();
             }
             set {
                 if(CurrentValue != value) {
@@ -252,10 +269,10 @@ namespace MpWpfApp {
                 if (string.IsNullOrWhiteSpace(CurrentValue)) {
                     return false;
                 }
-                if (CurrentValue.ToLower() != "false" && CurrentValue.ToLower() != "true") {
-                    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
-                }
-                return CurrentValue.ToLower() == "true";
+                //if (CurrentValue.ToLower() != "false" && CurrentValue.ToLower() != "true") {
+                //    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
+                //}
+                return CurrentValue.ToLower() == "true" || CurrentValue.ToLower() == "1";
             }
             set {
                 if (BoolValue != value) {

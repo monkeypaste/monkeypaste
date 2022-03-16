@@ -7,6 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Resources;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public static class MpWpfImageExtensions {
@@ -73,7 +74,7 @@ namespace MpWpfApp {
                     return bit;
                 }
                 catch (Exception ex) {
-                    MonkeyPaste.MpConsole.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
+                    MpConsole.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
                     return null;
                 }
 

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using MpProcessHelper;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpCopyItemBuilder : MpICopyItemBuilder {
@@ -64,7 +65,7 @@ namespace MpWpfApp {
                     itemData = iData[MpClipboardFormat.Text].ToRichText();
                     //itemData = itemData.ToQuillText();
                 } else {
-                    MonkeyPaste.MpConsole.WriteTraceLine("clipboard data is not known format");
+                    MpConsole.WriteTraceLine("clipboard data is not known format");
                     return null;
                 }
 

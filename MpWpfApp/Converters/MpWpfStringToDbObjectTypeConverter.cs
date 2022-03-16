@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Plugin;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -27,8 +28,8 @@ namespace MpWpfApp {
                 return asm.GetType(typeString);
             }
             catch(Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine(@"Unknown type: " + typeString);
-                MonkeyPaste.MpConsole.WriteLine(@"With exception: " + ex);
+                MpConsole.WriteLine(@"Unknown type: " + typeString);
+                MpConsole.WriteLine(@"With exception: " + ex);
             }
             return null;
         }

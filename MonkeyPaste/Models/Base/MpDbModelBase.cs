@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public abstract class MpDbModelBase : IComparer {

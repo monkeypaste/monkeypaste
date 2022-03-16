@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 namespace MpWpfApp {
     public class MpSoundNotificationViewModel : MpViewModelBase {
         #region Properties
@@ -48,7 +49,7 @@ namespace MpWpfApp {
             return (bool)_property;
         }
         private void PerformNotification() {
-            MonkeyPaste.MpConsole.WriteLine("Executed " + Enum.GetName(typeof(MpSoundNotificationType), NotificationType));
+            MpConsole.WriteLine("Executed " + Enum.GetName(typeof(MpSoundNotificationType), NotificationType));
         }
         #endregion
     }

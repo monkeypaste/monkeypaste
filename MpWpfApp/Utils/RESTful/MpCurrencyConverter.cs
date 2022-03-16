@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json.Linq;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public enum CurrencyType {
@@ -126,7 +127,7 @@ namespace MpWpfApp {
                 CurrencySymbols = CurrencySymbols.Substring(0, CurrencySymbols.Length - 2);
             }
             catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("Currency Converter error: " + ex);
+                MpConsole.WriteLine("Currency Converter error: " + ex);
             }
         }
 

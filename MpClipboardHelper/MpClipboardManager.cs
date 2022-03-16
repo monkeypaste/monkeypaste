@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Linq;
@@ -14,6 +14,7 @@ namespace MpClipboardHelper {
         private static MpDataObject _TempDataObject = null; // used when restoring clipboard
         public static bool IgnoreClipboardChangeEvent = false;
 
+        private static bool _resetClipboardAfterPaste = false;
         #endregion
 
         #region Events
@@ -24,10 +25,10 @@ namespace MpClipboardHelper {
 
         #region Public Methods
 
-        public static void Init() {
+        public static void Init(bool resetClipboardAfterPaste) {
             //MpClipboardWatcher.Start();
             //MpClipboardWatcher.OnClipboardChange += MpClipboardWatcher_OnClipboardChange;
-
+            _resetClipboardAfterPaste = resetClipboardAfterPaste;
             MpClipboardTimer.Start();
             MpClipboardTimer.ClipboardChanged += MpClipboardWatcher_OnClipboardChange;
         }

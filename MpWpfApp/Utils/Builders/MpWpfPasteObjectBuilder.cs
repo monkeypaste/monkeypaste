@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Collections.Specialized;
 using System.Windows;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpWpfPasteObjectBuilder : MpIPasteObjectBuilder {

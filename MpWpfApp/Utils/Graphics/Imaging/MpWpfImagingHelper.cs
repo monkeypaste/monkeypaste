@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     [StructLayout(LayoutKind.Sequential)]
@@ -426,7 +427,7 @@ namespace MpWpfApp {
             foreach (var kvp in hist) {
                 var c = Color.FromArgb(255, kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue);
 
-                //MonkeyPaste.MpConsole.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                //MpConsole.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
                 if (primaryIconColorList.Count == palleteSize) {
                     break;
                 }
@@ -449,7 +450,7 @@ namespace MpWpfApp {
                 primaryIconColorList.Add(MpWpfColorHelpers.ConvertColorToHex(MpWpfColorHelpers.GetRandomColor()));
             }
             //sw.Stop();
-            //MonkeyPaste.MpConsole.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            //MpConsole.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return primaryIconColorList;
         }
 

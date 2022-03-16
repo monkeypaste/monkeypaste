@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public enum MpExternalDropFileType {
@@ -101,7 +102,7 @@ namespace MpWpfApp {
                 }
             }
             catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
+                MpConsole.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
                 return false;
             }
         }
@@ -124,7 +125,7 @@ namespace MpWpfApp {
                 }
             }
             catch (Exception ex) {
-                MonkeyPaste.MpConsole.WriteLine("IsProcessLikeNotepad GetFileName exception: " + ex);
+                MpConsole.WriteLine("IsProcessLikeNotepad GetFileName exception: " + ex);
                 return false;
             }
         }

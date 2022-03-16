@@ -12,6 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Windows.System;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
 

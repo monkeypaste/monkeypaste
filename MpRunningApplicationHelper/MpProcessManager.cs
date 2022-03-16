@@ -9,6 +9,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Forms;
 
 namespace MpProcessHelper {
     public class MpProcessActivatedEventArgs : EventArgs {
@@ -169,6 +170,20 @@ namespace MpProcessHelper {
             }
         }
 
+        public static Process GetProcessByHandle(IntPtr handle) {
+            if(handle == null || handle == IntPtr.Zero) {
+                return null;
+            }
+            try {
+                WinApi.GetWindowThreadProcessId(handle, out uint pid);
+                return Process.GetProcessById((int)pid);
+            }
+            catch (Exception e) {
+                Console.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + handle.ToString() + ") : " + e.ToString());
+                //return GetExecutablePathAboveVista(hwnd);
+                return null; //fallback;
+            }
+        }
 
         public static string GetMainModuleFilepath(int processId) {
             string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
@@ -200,6 +215,30 @@ namespace MpProcessHelper {
 
         public static string GetProcessApplicationName(IntPtr hWnd) {
             return GetProcessApplicationName(GetProcessMainWindowTitle(hWnd));
+        }
+
+        public static IntPtr GetThisApplicationMainWindowHandle() {
+            string thisAppExe = System.Windows.Forms.Application.StartupPath;
+            if(!CurrentProcessWindowHandleStackDictionary.ContainsKey(thisAppExe) ||
+                CurrentProcessWindowHandleStackDictionary[thisAppExe].Count == 0) {
+                return IntPtr.Zero;
+            }
+            return CurrentProcessWindowHandleStackDictionary[thisAppExe][0];
+        }
+
+        public static IntPtr GetLastActiveInstance(string processPath) {
+            if(CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath) &&
+               CurrentProcessWindowHandleStackDictionary[processPath].Count > 0) {
+                return CurrentProcessWindowHandleStackDictionary[processPath][0];
+            }
+            return IntPtr.Zero;
+        }
+
+        public static bool IsHandleRunningProcess(IntPtr handle) {
+            if(handle == IntPtr.Zero) {
+                return false;
+            }
+            return CurrentProcessWindowHandleStackDictionary.Any(x => x.Value.Contains(handle));
         }
 
         #endregion
@@ -271,7 +310,7 @@ namespace MpProcessHelper {
                                 LastWindowStateHandleDictionary.TryRemove(handle, out _);
                             }
                             LastWindowStateHandleDictionary.TryAdd(handle, placement.showCmd);
-                            //MonkeyPaste.MpConsole.WriteLine(@"Last Window State for " + processStack.Key + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
+                            //MpConsole.WriteLine(@"Last Window State for " + processStack.Key + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
                         } else {
                             //if handle gone mark it to be removed from its handle stack
                             toRemoveHandleKeyValueList.Add(new KeyValuePair<string, IntPtr>(processStack.Key, handle));
@@ -287,14 +326,14 @@ namespace MpProcessHelper {
                     CurrentProcessWindowHandleStackDictionary.TryRemove(processToRemove, out _);
                     wasStackChanged = true;
 
-                    //MonkeyPaste.MpConsole.WriteLine(string.Format(@"Process: {0} REMOVED", processToRemove));
+                    //MpConsole.WriteLine(string.Format(@"Process: {0} REMOVED", processToRemove));
                 }
                 foreach (var handleToRemove in toRemoveHandleKeyValueList) {
                     if (CurrentProcessWindowHandleStackDictionary.ContainsKey(handleToRemove.Key)) {
                         //remove individual window handles that were flagged
                         CurrentProcessWindowHandleStackDictionary[handleToRemove.Key].Remove(handleToRemove.Value);
                         wasStackChanged = true;
-                        //MonkeyPaste.MpConsole.WriteLine(string.Format(@"Process: {0} Handle: {1} REMOVED", handleToRemove.Key, handleToRemove.Value));
+                        //MpConsole.WriteLine(string.Format(@"Process: {0} Handle: {1} REMOVED", handleToRemove.Key, handleToRemove.Value));
                     }
                     if (LastWindowStateHandleDictionary.ContainsKey(handleToRemove.Value)) {
                         LastWindowStateHandleDictionary.TryRemove(handleToRemove.Value, out _);
@@ -331,14 +370,14 @@ namespace MpProcessHelper {
                     CurrentProcessWindowHandleStackDictionary[processName].Insert(0, fgHandle);
                     wasStackChanged = true;
                     ActiveProcessPath = processName;
-                    //MonkeyPaste.MpConsole.WriteLine(string.Format(@"(Known) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
+                    //MpConsole.WriteLine(string.Format(@"(Known) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
                 } else {
                     //if its a new process create a new list with this handle as its element
                     CurrentProcessWindowHandleStackDictionary.TryAdd(processName, new List<IntPtr> { fgHandle });
                     wasStackChanged = true;
                     ActiveProcessPath = processName;
 
-                    //MonkeyPaste.MpConsole.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
+                    //MpConsole.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
                 }
                 //}
 
@@ -359,7 +398,7 @@ namespace MpProcessHelper {
                         //intermittenly fgHandle is still in dictionary so hopefully this swallows exception
                         Console.WriteLine($"FgHandle: {fgHandle} already exists...ignoring " + ex);
                     }
-                    //MonkeyPaste.MpConsole.WriteLine(@"Last Window State for " + processName + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
+                    //MpConsole.WriteLine(@"Last Window State for " + processName + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
                 }
             }
         }

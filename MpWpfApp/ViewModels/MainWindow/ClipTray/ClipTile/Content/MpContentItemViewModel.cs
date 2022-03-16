@@ -17,6 +17,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
 using PropertyChanged;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpContentItemViewModel : 
@@ -684,7 +685,7 @@ namespace MpWpfApp {
                     //    CopyItemUrlDomain = MpUrlDomain.Create(urlDomain,  urlDomainTitle);
                     //}
                 }
-                MonkeyPaste.MpConsole.WriteLine("Detected Browser Address: " + detectedUrl);
+                MpConsole.WriteLine("Detected Browser Address: " + detectedUrl);
             }
 
             if (ocrTask != null) {
@@ -948,6 +949,8 @@ namespace MpWpfApp {
                         Task.Run(async () => {
                             await CopyItem.WriteToDatabaseAsync();
                         });
+                    } else if(!IsSelected) {
+                        IsSelected = true;
                     }
                     break;
                 case nameof(IsBusy):

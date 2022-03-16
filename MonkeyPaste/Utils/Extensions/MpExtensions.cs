@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using static Xamarin.Forms.Internals.Profile;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public static class MpExtensions {
@@ -60,16 +61,6 @@ namespace MonkeyPaste {
                 action(item);
         }
 
-        public static bool AddOrReplace<TKey, TValue>(this Dictionary<TKey,TValue> d,TKey key, TValue value) {
-            //returns true if kvp was added
-            //returns false if kvp was replaced
-            if(d.ContainsKey(key)) {
-                d[key] = value;
-                return false;
-            }
-            d.Add(key, value);
-            return true;
-        }
 
         public static List<T> GetRange<T>(this ObservableCollection<T> collection, int startIdx, int count) {
             if (count == 0 && startIdx + count > 0) {

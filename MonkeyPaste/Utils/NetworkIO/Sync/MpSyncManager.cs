@@ -14,8 +14,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
 using System.Net.WebSockets;
-using Org.BouncyCastle.Utilities.Encoders;
-using System.Collections;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
 

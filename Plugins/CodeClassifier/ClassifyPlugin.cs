@@ -10,7 +10,7 @@ using MonkeyPaste.Plugin;
 using Newtonsoft.Json;
 
 namespace CodeClassifier {
-    public class Plugin : MpIAnalyzerPluginComponent {
+    public class ClassifyPlugin : MpIAnalyzerPluginComponent {
         public async Task<object> AnalyzeAsync(object args) {
             await Task.Delay(1);
             MpPluginResponseFormat response = null;
@@ -20,7 +20,7 @@ namespace CodeClassifier {
             if (reqParts.Any(x => x.paramId == 1) &&
                reqParts.Any(x => x.paramId == 3) &&
                reqParts.Any(x => x.paramId == 4)) {
-                var languages = reqParts.FirstOrDefault(x => x.paramId == 1).value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                List<string> languages = reqParts.FirstOrDefault(x => x.paramId == 1).value.ToListFromCsv();
                 string code = reqParts.FirstOrDefault(x => x.paramId == 3).value;
                 bool isTraining = reqParts.FirstOrDefault(x => x.paramId == 4).value.ToLower() == "true";
 

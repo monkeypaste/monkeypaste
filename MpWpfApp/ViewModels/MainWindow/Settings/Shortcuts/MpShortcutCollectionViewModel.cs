@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpShortcutCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpShortcutCollectionViewModel> {

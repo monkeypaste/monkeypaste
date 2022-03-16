@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public abstract class MpBootstrapperViewModelBase : MpViewModelBase, MpIProgressLoader {

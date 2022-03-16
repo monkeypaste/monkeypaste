@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Media.Ocr;
+using MonkeyPaste.Plugin;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -43,8 +44,8 @@ namespace MpWpfApp {
                 return string.Empty;
             }
             foreach(var region in regions) {
-                MonkeyPaste.MpConsole.WriteLine(@"Region#: " + regions.IndexOf(region) + " bb: "+region.boundingBox);
-                MonkeyPaste.MpConsole.WriteLine(@"{");
+                MpConsole.WriteLine(@"Region#: " + regions.IndexOf(region) + " bb: "+region.boundingBox);
+                MpConsole.WriteLine(@"{");
                 if(region.lines == null) {
                     continue;
                 }
@@ -52,15 +53,15 @@ namespace MpWpfApp {
                     if(line.words == null) {
                         continue;
                     }
-                    MonkeyPaste.MpConsole.WriteLine("\t Line#: " + region.lines.IndexOf(line) + " bb: " + line.boundingBox);
-                    MonkeyPaste.MpConsole.WriteLine("\t{");
+                    MpConsole.WriteLine("\t Line#: " + region.lines.IndexOf(line) + " bb: " + line.boundingBox);
+                    MpConsole.WriteLine("\t{");
                     foreach (var word in line.words) {
-                        MonkeyPaste.MpConsole.WriteLine("\t\t Word#: " + line.words.IndexOf(word) + " bb: " + word.boundingBox);
-                        MonkeyPaste.MpConsole.WriteLine("\t\t'" + word.text + "'");
+                        MpConsole.WriteLine("\t\t Word#: " + line.words.IndexOf(word) + " bb: " + word.boundingBox);
+                        MpConsole.WriteLine("\t\t'" + word.text + "'");
                     }
-                    MonkeyPaste.MpConsole.WriteLine("\t}");                   
+                    MpConsole.WriteLine("\t}");                   
                 }
-                MonkeyPaste.MpConsole.WriteLine(@"}");
+                MpConsole.WriteLine(@"}");
             }
             return base.ToString();
         }

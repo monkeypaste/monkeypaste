@@ -38,7 +38,12 @@ namespace MpWpfApp {
         }
 
         public virtual IList<MpEnumerableParameterValueViewModel> SelectedItems {
-            get => Items.Where(x => x.IsSelected).ToList();
+            get {
+                if(ParameterFormat.controlType == MpAnalyticItemParameterControlType.EditableList) {
+                    return Items;
+                }
+                return Items.Where(x => x.IsSelected).ToList();
+            }
             set //=> Items.ForEach(x => x.IsSelected = value.Contains(x));
                 {
                 if (SelectedItems != value) {

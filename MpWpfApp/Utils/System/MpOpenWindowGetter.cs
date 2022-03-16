@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 //using HWND = System.IntPtr;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public static class MpOpenWindowGetter {
@@ -41,7 +42,7 @@ namespace MpWpfApp {
                 }
                 catch (InvalidOperationException ex) {
                     // no graphical interface
-                    MonkeyPaste.MpConsole.WriteLine("OpenWindowGetter, ignoring non GUI window w/ error: " + ex.ToString());
+                    MpConsole.WriteLine("OpenWindowGetter, ignoring non GUI window w/ error: " + ex.ToString());
                 }
 
                 return true;

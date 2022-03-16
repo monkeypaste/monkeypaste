@@ -309,7 +309,7 @@ namespace MpWpfApp {
                 //        var ttvm = await CreateTagTileViewModel(t);
                 //        Items.Add(ttvm);
                 //    } else {
-                //        MonkeyPaste.MpConsole.WriteTraceLine(@"Warning, attempting to add existing tag: " + dupCheck.TagName + " ignoring and updating existing.");
+                //        MpConsole.WriteTraceLine(@"Warning, attempting to add existing tag: " + dupCheck.TagName + " ignoring and updating existing.");
                 //        dupCheck.Tag = t;
                 //    }
                 //    t.EndSync();

@@ -1,10 +1,10 @@
 {
-  "title": "Process Automator",
+  "title": "Process Automation",
   "description": "Runs a local application w/ configurable command-line arguments that can be static or by content properties.",
   "version": "1.0",
   "credits": "Somebody",
-  "guid": "700cab70-96e8-4cf3-9f49-def66c35b623",
-  "iconUrl": "https://findicons.com/files/icons/127/sleek_xp_software/300/command_prompt.png",
+  "guid": "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e",
+  "iconUrl": "https://img.icons8.com/external-flaticons-flat-flat-icons/344/external-command-line-computer-science-flaticons-flat-flat-icons.png",
   "ioType": {
     "isDll": true
   },
@@ -33,6 +33,7 @@
         "description": "When checked, input will be passed to most recently activated processes or a new process is started (which is default).",
         "controlType": "CheckBox",
         "unitType": "Bool",
+        "isVisible": false,
         "values": [
           {
             "value": "false",
@@ -46,14 +47,6 @@
         "description": "Execute arguments for the process. Content Paths will be pre-processed into selected (or action input) values. If there are any conflicts to property path then pad the conflicting path with '@' symbols ie. '{@ItemData@}'",
         "controlType": "EditableList",
         "unitType": "ContentQuery",
-        "values": [
-          {
-            "value": "test1"
-          },
-          {
-            "value": "test2"
-          }
-        ],
         "paramId": 2
       },
       {
@@ -102,7 +95,7 @@
         "unitType": "Bool",
         "values": [
           {
-            "value": "false",
+            "value": "true",
             "isDefault": true
           }
         ],

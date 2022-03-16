@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Plugin {
     public enum MpClipboardFormat {
         None = 0,
         Text,
@@ -51,30 +51,30 @@ namespace MonkeyPaste {
 
         #region Builders
 
-        public static MpDataObject Create(
-            IList<MpCopyItem> cil, 
-            MpIPasteObjectBuilder pasteBuilder,
-            string[] fileNameWithoutExtension = null,
-            string directory = "",
-            string textFormat = ".rtf",
-            string imageFormat = ".png",
-            bool isTemporary = false,
-            bool isCopy = false) {
-            var dobj = new MpDataObject();
-            foreach (var format in SupportedFormats) {
-                dobj.DataFormatLookup.Add(format,
-                    pasteBuilder.GetFormat(
-                    format: format,
-                    data: cil.Select(x=>x.ItemData).ToArray(),
-                    fileNameWithoutExtension: fileNameWithoutExtension == null ?
-                                                cil.Select(x => x.Title).ToArray() : fileNameWithoutExtension,
-                    directory: directory,
-                    textFormat: textFormat,
-                    imageFormat: imageFormat,
-                    isTemporary: isTemporary));
-            }
-            return dobj;
-        }
+        //public static MpDataObject Create(
+        //    IList<MpCopyItem> cil, 
+        //    MpIPasteObjectBuilder pasteBuilder,
+        //    string[] fileNameWithoutExtension = null,
+        //    string directory = "",
+        //    string textFormat = ".rtf",
+        //    string imageFormat = ".png",
+        //    bool isTemporary = false,
+        //    bool isCopy = false) {
+        //    var dobj = new MpDataObject();
+        //    foreach (var format in SupportedFormats) {
+        //        dobj.DataFormatLookup.Add(format,
+        //            pasteBuilder.GetFormat(
+        //            format: format,
+        //            data: cil.Select(x=>x.ItemData).ToArray(),
+        //            fileNameWithoutExtension: fileNameWithoutExtension == null ?
+        //                                        cil.Select(x => x.Title).ToArray() : fileNameWithoutExtension,
+        //            directory: directory,
+        //            textFormat: textFormat,
+        //            imageFormat: imageFormat,
+        //            isTemporary: isTemporary));
+        //    }
+        //    return dobj;
+        //}
 
         public static MpDataObject Parse(string jsonDict) {
             var dfl = JsonConvert.DeserializeObject<Dictionary<MpClipboardFormat, string>>(jsonDict);

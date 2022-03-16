@@ -11,8 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     /// <summary>
@@ -100,7 +99,7 @@ namespace MpWpfApp {
 
         private void AddButton_Click(object sender, RoutedEventArgs e) {
             if(Rtb == null || Rtb.DataContext == null) {
-                MonkeyPaste.MpConsole.WriteTraceLine("No rtb or rtb context");
+                MpConsole.WriteTraceLine("No rtb or rtb context");
                 return;
             }
             MpHelpers.RunOnMainThread(async () => {

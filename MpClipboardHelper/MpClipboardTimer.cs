@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using System.IO;
 using System.Collections.Specialized;
-using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System.Security.Permissions;
 using System.Runtime.InteropServices;
 
@@ -203,7 +203,7 @@ namespace MpClipboardHelper {
                     if (MpDataObject.SupportedFormats.Contains(MpClipboardFormat.FileDrop) && 
                         ido.GetDataPresent(DataFormats.FileDrop, autoConvert)) {
                         string[] sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
-                        if(sa.Length > 0) {
+                        if(sa != null && sa.Length > 0) {
                             string data = string.Join(Environment.NewLine, sa);
                             if (!string.IsNullOrEmpty(data)) {
                                 ndo.DataFormatLookup.Add(MpClipboardFormat.FileDrop, data);

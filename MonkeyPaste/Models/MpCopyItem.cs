@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public enum MpCopyItemPropertyPathType {
@@ -80,10 +81,13 @@ namespace MonkeyPaste {
                 case MpCopyItemPropertyPathType.CopyCount:
                 case MpCopyItemPropertyPathType.PasteCount:
                     return ci.GetPropertyValue(queryPathType.ToString());
+                case MpCopyItemPropertyPathType.SourceDeviceType:
+                    var deviceTypeInt = await MpDataModelProvider.GetSortableCopyItemViewProperty<int>(ci.Id, queryPathType.ToString());
+                    return (MpUserDeviceType)deviceTypeInt;
                 default:
                     //UrlPath,UrlTitle,UrlDomainPath,AppPath,AppName,SourceDeviceName,SourceDeviceType
-                    var result = await MpDataModelProvider.GetSortableCopyItemViewProperty(ci.Id, queryPathType.ToString());
-                    return result;
+                    var resultStr = await MpDataModelProvider.GetSortableCopyItemViewProperty<string>(ci.Id, queryPathType.ToString());
+                    return resultStr;
 
             }
         }

@@ -8,7 +8,6 @@ namespace MonkeyPaste.Plugin {
 
     public enum MpAnalyticItemParameterControlType {
         None = 0,
-        Button,
         TextBox,
         ComboBox,
         List,
@@ -31,7 +30,9 @@ namespace MonkeyPaste.Plugin {
         Image,
         Base64Text,
         FileSystemPath,
-        ContentQuery
+        ContentQuery,
+        DelimitedPlainText,
+        DelimitedContentQuery
     }
 
     public class MpAnalyzerPluginRequestFormat : MpJsonObject {

@@ -1,4 +1,5 @@
 ﻿using System;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public class MpSyncException : Exception {

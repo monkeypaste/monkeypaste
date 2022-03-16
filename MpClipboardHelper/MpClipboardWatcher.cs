@@ -6,7 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Collections.Specialized;
 using System.Runtime.Serialization.Formatters.Binary;
-using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System.Threading.Tasks;
 using static MpClipboardHelper.WinApi;
 
@@ -71,18 +71,19 @@ namespace MpClipboardHelper {
                 //to prevent cb listener thread from thinking there's a new item
                 IgnoreClipboardChangeEvent = true;
                 try {
-                    if (MpPreferences.ResetClipboardAfterMonkeyPaste) {
+                    if (_resetClipboardAfterPaste) {
                         _TempDataObject = _LastDataObject;
                     }
 
-                    Clipboard.SetDataObject(dataObject);
+                    var ido = ConvertToOleDataObject(dataObject);
+                    Clipboard.SetDataObject(ido);
                     SetForegroundWindow(handle);
                     SetActiveWindow(handle);
 
                     await Task.Delay(300);
                     System.Windows.Forms.SendKeys.SendWait("^v");
 
-                    if (MpPreferences.ResetClipboardAfterMonkeyPaste) {
+                    if (_resetClipboardAfterPaste) {
                         //from https://stackoverflow.com/a/52438404/105028
                         var clipboardThread = new Thread(new ThreadStart(ResetClipboard));
                         clipboardThread.SetApartmentState(ApartmentState.STA);
@@ -91,7 +92,7 @@ namespace MpClipboardHelper {
                     IgnoreClipboardChangeEvent = false;
                 }
                 catch (Exception e) {
-                    MonkeyPaste.MpConsole.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
+                    MpConsole.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
                 }
                 //Mouse.OverrideCursor = null;
             }
@@ -265,6 +266,13 @@ namespace MpClipboardHelper {
                         var sc = new StringCollection();
                         sc.AddRange(fl);
                         dobj.SetFileDropList(sc);
+                        break;
+                    case MpClipboardFormat.Rtf:
+                        dobj.SetData(DataFormats.Rtf, dataStr);
+                        break;
+                    case MpClipboardFormat.UnicodeText:
+                    case MpClipboardFormat.Text:
+                        dobj.SetData(DataFormats.Text, dataStr);
                         break;
                     default:
                         dobj.SetData(DataFormats.FileDrop, dataStr);

@@ -6,8 +6,7 @@ using SQLiteNetExtensions;
 using System.Threading.Tasks;
 using System.Linq;
 using SQLiteNetExtensions.Attributes;
-using Newtonsoft.Json;
-using FFImageLoading.Helpers.Exif;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     [Table("MpTag")]

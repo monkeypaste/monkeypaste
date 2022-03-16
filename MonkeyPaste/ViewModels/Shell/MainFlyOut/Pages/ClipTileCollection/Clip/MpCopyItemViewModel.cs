@@ -11,6 +11,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using System.Linq;
 using System.Collections.ObjectModel;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public class MpCopyItemViewModel : MpViewModelBase {

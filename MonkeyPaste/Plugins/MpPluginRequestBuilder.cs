@@ -46,6 +46,9 @@ namespace MonkeyPaste {
                     curVal = curVal.ToByteArray().ToBase64String();
                     break;
                 case MpAnalyticItemParameterValueUnitType.FileSystemPath:
+                    if (string.IsNullOrWhiteSpace(curVal)) {
+                        break;
+                    }
                     curVal = curVal.ToFile();
                     break;
                 default:

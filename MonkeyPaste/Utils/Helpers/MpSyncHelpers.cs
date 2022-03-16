@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public static class MpSyncHelpers {

@@ -13,7 +13,7 @@ using MouseKeyHook.Rx;
 using WindowsInput;
 using MonkeyPaste;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public interface MpIShortcutCommandViewModel<T> where T:struct,Enum {
@@ -147,7 +147,7 @@ namespace MpWpfApp {
                                         outStr += "{F" + val + "}";
                                     }
                                     catch(Exception ex) {
-                                        MonkeyPaste.MpConsole.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
+                                        MpConsole.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
                                         outStr += key.ToUpper();
                                         break;
                                     }
@@ -458,10 +458,10 @@ namespace MpWpfApp {
                     }
                 }
                 catch (Exception ex) {
-                    MonkeyPaste.MpConsole.WriteLine("Error creating shortcut: " + ex.ToString());
+                    MpConsole.WriteLine("Error creating shortcut: " + ex.ToString());
                     return;
                 }
-                //MonkeyPaste.MpConsole.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
+                //MpConsole.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
                 return;
             }
         }
@@ -507,7 +507,7 @@ namespace MpWpfApp {
         public void Unregister() {
             if(KeysObservable != null) {
                 KeysObservable.Dispose();
-                MonkeyPaste.MpConsole.WriteLine("Unregistering shortcut " + Shortcut.ToString() + " was successful");
+                MpConsole.WriteLine("Unregistering shortcut " + Shortcut.ToString() + " was successful");
             } else {
                 //either not previously registered or a sequence that won't be unregistered until app shutdown
             }

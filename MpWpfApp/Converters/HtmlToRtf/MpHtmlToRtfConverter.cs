@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using HtmlAgilityPack;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpHtmlToRtfConverter {
@@ -268,11 +269,11 @@ namespace MpWpfApp {
             }
 
             if (closestFontFamily != null) {
-                //MonkeyPaste.MpConsole.WriteLine("Could not find exact system font: " + fontName + " using "+closestFontFamily.ToString()+" instead");
+                //MpConsole.WriteLine("Could not find exact system font: " + fontName + " using "+closestFontFamily.ToString()+" instead");
                 MpRichTextFormatProperties.Instance.AddFont(closestFontFamily.ToString().ToLower());
                 return closestFontFamily;
             }
-            MonkeyPaste.MpConsole.WriteLine("Could not find system font: " + fontName);
+            MpConsole.WriteLine("Could not find system font: " + fontName);
             return defaultFontFamily;
         }
 

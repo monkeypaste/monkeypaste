@@ -4,10 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Linq;
 using System.Collections.Generic;
-using Windows.UI.Core;
-using System.Windows.Controls;
-using System.Threading.Tasks;
-using System.Diagnostics;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
 

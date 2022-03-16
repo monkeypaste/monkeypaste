@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpMinifyUrl : MpRestfulAction {
@@ -28,7 +29,7 @@ namespace MpWpfApp {
                         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bitlyToken);
                         using (var response = await client.SendAsync(request).ConfigureAwait(false)) {
                             if (!response.IsSuccessStatusCode) {
-                                MonkeyPaste.MpConsole.WriteLine("Minify error: " + response.Content.ToString());
+                                MpConsole.WriteLine("Minify error: " + response.Content.ToString());
                                 return string.Empty;
                             }
 
@@ -45,7 +46,7 @@ namespace MpWpfApp {
                         }
                     }
                     catch (Exception ex) {
-                        MonkeyPaste.MpConsole.WriteLine("Minify exception: " + ex.ToString());
+                        MpConsole.WriteLine("Minify exception: " + ex.ToString());
                         ShowError();
                         return string.Empty;
                     }

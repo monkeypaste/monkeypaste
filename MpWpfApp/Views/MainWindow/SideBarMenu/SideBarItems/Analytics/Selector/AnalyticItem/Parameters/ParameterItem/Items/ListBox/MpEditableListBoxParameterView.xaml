@@ -22,6 +22,7 @@
             </Grid.RowDefinitions>
             <ListBox x:Name="EditableList"
                      Grid.Row="0"
+                     Loaded="EditableList_Loaded"
                      Background="Transparent"
                      HorizontalAlignment="Stretch"
                      HorizontalContentAlignment="Stretch"

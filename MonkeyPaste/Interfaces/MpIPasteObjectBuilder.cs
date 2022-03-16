@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public interface MpIPasteObjectBuilder {

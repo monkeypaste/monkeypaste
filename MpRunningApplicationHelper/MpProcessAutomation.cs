@@ -10,8 +10,6 @@ namespace MpProcessHelper {
     public static class MpProcessAutomation {
         private static string _OriginalPath;
 
-        private static string _LastStandardOutput;
-
         private const int _MAX_ARG_LENGTH = 32698;
 
         public static void Init() {
@@ -35,7 +33,7 @@ namespace MpProcessHelper {
             string stdErr = string.Empty;
 
             if (args.Length > _MAX_ARG_LENGTH) {
-                MessageBox.Show(
+                var result = MessageBox.Show(
                     $"Cannot start '{processPath}' args must be less than or equal to {_MAX_ARG_LENGTH} characters and args is {args.Length}",
                     "Start Process Error",
                     MessageBoxButtons.OK,
@@ -201,7 +199,7 @@ namespace MpProcessHelper {
                         Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.System)).FullName);
                 }
                 processPath = processPath.Replace(@"\\", @"\").ToLower();
-                //MonkeyPaste.MpConsole.WriteLine(processPath);
+                //MpConsole.WriteLine(processPath);
 
                 //forceHandle is only passed when its a running application
                 IntPtr handle = forceHandle == null ? IntPtr.Zero : (IntPtr)forceHandle;
@@ -232,7 +230,7 @@ namespace MpProcessHelper {
                 return handle;
             }
             catch (Exception) {
-                //MonkeyPaste.MpConsole.WriteLine("MpRunningApplicationManager.SetActiveApplication error: " + ex.ToString());
+                //MpConsole.WriteLine("MpRunningApplicationManager.SetActiveApplication error: " + ex.ToString());
                 return IntPtr.Zero;
             }
         }

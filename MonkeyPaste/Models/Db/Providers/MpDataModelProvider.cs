@@ -5,8 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using static SQLite.SQLite3;
-using static System.Net.Mime.MediaTypeNames;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public static class MpDataModelProvider {
@@ -302,9 +301,9 @@ namespace MonkeyPaste {
 
         #region MpSortableCopyItem_View (PropertyPath Queries)
 
-        public static async Task<object> GetSortableCopyItemViewProperty(int ciid,string propertyName) {
+        public static async Task<T> GetSortableCopyItemViewProperty<T>(int ciid,string propertyName) {
             string query = "select ? from MpSortableCopyItem_View where pk_MpCopyItemId=?";
-            var result = await MpDb.QueryScalarAsync<object>(query, propertyName, ciid);
+            var result = await MpDb.QueryScalarAsync<T>(query, propertyName, ciid);
             return result;
         }
 

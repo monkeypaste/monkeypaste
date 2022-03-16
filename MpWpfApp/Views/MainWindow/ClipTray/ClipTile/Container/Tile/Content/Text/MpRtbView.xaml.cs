@@ -18,6 +18,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     /// <summary>
@@ -617,7 +618,7 @@ namespace MpWpfApp {
                                                    Uri.IsWellFormedUriString(urlText, UriKind.RelativeOrAbsolute)*/) {
                                                 hl.NavigateUri = new Uri(urlText);
                                             } else {
-                                                MonkeyPaste.MpConsole.WriteLine(@"Rejected Url: " + urlText + @" link text: " + linkText);
+                                                MpConsole.WriteLine(@"Rejected Url: " + urlText + @" link text: " + linkText);
                                                 var par = hl.Parent.FindParentOfType<Paragraph>();
                                                 var s = new Span();
                                                 s.Inlines.AddRange(hl.Inlines.ToArray());
@@ -626,7 +627,7 @@ namespace MpWpfApp {
                                             }
                                         }
                                         catch (Exception ex) {
-                                            MonkeyPaste.MpConsole.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring with exception: " + ex);
+                                            MpConsole.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring with exception: " + ex);
                                             var par = hl.Parent.FindParentOfType<Paragraph>();
                                             var s = new Span();
                                             s.Inlines.AddRange(hl.Inlines.ToArray());
@@ -705,7 +706,7 @@ namespace MpWpfApp {
                                             hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
                                         }
                                         catch (Exception ex) {
-                                            MonkeyPaste.MpConsole.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
+                                            MpConsole.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
                                         }
                                         break;
                                     case MpSubTextTokenType.HexColor:
@@ -766,7 +767,7 @@ namespace MpWpfApp {
                                         hl.Foreground = MpWpfColorHelpers.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
                                         break;
                                     default:
-                                        MonkeyPaste.MpConsole.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
+                                        MpConsole.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
                                         break;
                                 }
                             }

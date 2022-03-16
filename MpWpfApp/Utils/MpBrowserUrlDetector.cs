@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpBrowserUrlDetector {
@@ -68,7 +69,7 @@ namespace MpWpfApp {
                         parsedRect.Height = val;
                     }
                 } catch(Exception ex) {
-                    MonkeyPaste.MpConsole.WriteLine(@"Error parsing rect string: " + rectString + " with exception: " + ex);
+                    MpConsole.WriteLine(@"Error parsing rect string: " + rectString + " with exception: " + ex);
                 }
             }
             return parsedRect;

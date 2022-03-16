@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public static class MpDb {

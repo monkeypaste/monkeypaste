@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public static class MpWpfRichDocumentExtensions {
@@ -310,8 +311,8 @@ namespace MpWpfApp {
                     return flowDocument;
                 }
                 catch (Exception ex) {
-                    MonkeyPaste.MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
-                    MonkeyPaste.MpConsole.WriteLine("Exception Details: " + ex);
+                    MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
+                    MpConsole.WriteLine("Exception Details: " + ex);
                     return str.ToPlainText().ToFlowDocument();
                 }
             }        

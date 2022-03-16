@@ -29,6 +29,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 
+using MonkeyPaste.Plugin;
 namespace MpWpfApp {
     public static class MpExtensions {
         #region Input

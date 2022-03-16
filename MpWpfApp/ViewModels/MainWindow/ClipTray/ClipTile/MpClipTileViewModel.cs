@@ -27,7 +27,8 @@
     using GongSolutions.Wpf.DragDrop.Utilities;
     using Newtonsoft.Json;
     using MonkeyPaste;
-using System.Speech.Synthesis;
+    using MonkeyPaste.Plugin;
+    using System.Speech.Synthesis;
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 
@@ -1008,7 +1009,7 @@ using System.Speech.Synthesis;
                     }
                 }
                 sw.Stop();
-                MonkeyPaste.MpConsole.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
+                MpConsole.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
 
                 if (!IsReadOnly) {
                     IsReadOnly = true;

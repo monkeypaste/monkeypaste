@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpImageAnalyzer {
@@ -80,7 +81,7 @@ namespace MpWpfApp {
                 string contentString = await response.Content.ReadAsStringAsync();
 
                 // Display the JSON response.
-                //MonkeyPaste.MpConsole.WriteLine("\nResponse:\n\n{0}\n",
+                //MpConsole.WriteLine("\nResponse:\n\n{0}\n",
                 //    JToken.Parse(contentString).ToString());
 
                 //return contentString;                                
@@ -88,7 +89,7 @@ namespace MpWpfApp {
                 return result;
             }
             catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine("\n" + e.Message);
+                MpConsole.WriteLine("\n" + e.Message);
             }
 
             return null;

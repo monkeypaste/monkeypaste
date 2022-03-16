@@ -4,12 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using SQLiteNetExtensions.Attributes;
 using System.Threading.Tasks;
-using Xamarin.Forms;
-using FFImageLoading.Forms;
-using SkiaSharp;
-using System.Linq;
-using System.Collections.ObjectModel;
-using System.Data;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
 
@@ -269,7 +264,7 @@ namespace MonkeyPaste {
                         icon.HexColor5 = li.AffectedColumnValue;
                         break;
                     default:
-                        MonkeyPaste.MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                        MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
                         break;
                 }
             }

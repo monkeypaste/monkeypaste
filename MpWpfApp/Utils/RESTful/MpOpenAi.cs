@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.UI.WebControls;
 using System.Windows.Threading;
 using Microsoft.ML.OnnxRuntime;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpOpenAi : MpRestfulAction {

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using MonkeyPaste;
 using System.Windows.Threading;
 using System.Diagnostics;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public enum MpDropType {

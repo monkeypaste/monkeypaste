@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public interface MpIActionComponent {
@@ -203,6 +204,9 @@ namespace MpWpfApp {
 
         public string IconResourceKeyStr {
             get {
+                if(!IsValid) {
+                    return "WarningIcon";
+                }
                 string resourceKey = string.Empty;
                 switch (ActionType) {
                     case MpActionType.Trigger:

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public static class MpTempFileManager {
@@ -49,8 +50,8 @@ namespace MonkeyPaste {
                         File.Delete(tfp);
                     }
                     catch (Exception ex) {
-                        MonkeyPaste.MpConsole.WriteLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:");
-                        MonkeyPaste.MpConsole.WriteLine(ex);
+                        MpConsole.WriteLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:");
+                        MpConsole.WriteLine(ex);
                     }
                 }
             }

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public partial class MpMainWindow : Window {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public class MpPrivateEndpointDiscoveryHelper {

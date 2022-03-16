@@ -267,7 +267,8 @@ namespace MpWpfApp {
                     }                    
                 }                
             } else {
-                matchVal = ao.CopyItem.GetPropertyValue(PhysicalPropertyPath);
+                matchVal = await MpCopyItem.QueryProperty(ao.CopyItem, ComparePropertyPathType);
+                //matchVal = ao.CopyItem.GetPropertyValue(PhysicalPropertyPath);
             }
             string compareStr = string.Empty;
             if (matchVal != null) {

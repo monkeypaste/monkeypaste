@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Media.Ocr;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpImageOcr {
@@ -32,7 +33,7 @@ namespace MpWpfApp {
         public async Task<MpOcrAnalysis> OcrImage(byte[] byteData) {
             if(_isOcrLocal) {
                 var ocrResult = await OcrEngineFromByteArrayAsync(byteData);
-                MonkeyPaste.MpConsole.WriteLine(ocrResult.ToString());
+                MpConsole.WriteLine(ocrResult.ToString());
                 return ocrResult;
             }
             try {
@@ -72,13 +73,13 @@ namespace MpWpfApp {
                 string contentString = await response.Content.ReadAsStringAsync();
                               
                 // Display the JSON response.
-                MonkeyPaste.MpConsole.WriteLine("\nResponse:\n\n{0}\n",
+                MpConsole.WriteLine("\nResponse:\n\n{0}\n",
                     JToken.Parse(contentString).ToString());
 
                 return JsonConvert.DeserializeObject<MpOcrAnalysis>(contentString);
             }
             catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine("\n" + e.Message);
+                MpConsole.WriteLine("\n" + e.Message);
             }
             return null;
         }
@@ -106,7 +107,7 @@ namespace MpWpfApp {
 
                 return sb.ToString();
             } catch (Exception e) {
-                MonkeyPaste.MpConsole.WriteLine("\n" + e.Message);
+                MpConsole.WriteLine("\n" + e.Message);
             }
             return string.Empty;
         }
@@ -127,7 +128,7 @@ namespace MpWpfApp {
                 engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language(MpPreferences.DefaultCultureInfoName));
             }
             if(engine == null) {
-                MonkeyPaste.MpConsole.WriteLine(@"MpImageOcr.OcrEngineFromFileAsync error unable to create engine for language named: " + MpPreferences.UserCultureInfoName);
+                MpConsole.WriteLine(@"MpImageOcr.OcrEngineFromFileAsync error unable to create engine for language named: " + MpPreferences.UserCultureInfoName);
                 return null;
             }
             var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(imagePath);
@@ -136,7 +137,7 @@ namespace MpWpfApp {
                 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
                 OcrResult ocrResult = await engine.RecognizeAsync(softwareBitmap);
 
-                MonkeyPaste.MpConsole.WriteLine(ocrResult.Text);
+                MpConsole.WriteLine(ocrResult.Text);
 
                 if(isTemporaryFile) {
                     File.Delete(imagePath);

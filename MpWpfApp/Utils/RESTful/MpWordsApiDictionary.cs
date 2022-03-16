@@ -3,6 +3,7 @@ using System.Web;
 using System.IO;
 using System.Collections.Generic;
 using System.Net.Http;
+using MonkeyPaste.Plugin;
 using Newtonsoft.Json;
 
 namespace MpWpfApp {
@@ -31,7 +32,7 @@ namespace MpWpfApp {
                 var body = await response.Content.ReadAsStringAsync();
                 //var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(body);
                 //return result[0]["translations"][0]["text"];
-                MonkeyPaste.MpConsole.WriteLine(body);
+                MpConsole.WriteLine(body);
             }
         }
         #endregion

@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 using MonkeyPaste;
-using static QRCoder.PayloadGenerator;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     /// <summary>
@@ -96,7 +96,7 @@ namespace MpWpfApp {
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
-            MonkeyPaste.MpConsole.WriteLine(e);
+            MpConsole.WriteLine(e);
             //Debugger.Break();
         }
 
@@ -110,9 +110,9 @@ namespace MpWpfApp {
             }
 
             if (comException == null) {
-                MonkeyPaste.MpConsole.WriteLine("Mp Handled com exception with null value");
+                MpConsole.WriteLine("Mp Handled com exception with null value");
             } else {
-                MonkeyPaste.MpConsole.WriteLine("Mp Handled com exception: " + comException.ToString());
+                MpConsole.WriteLine("Mp Handled com exception: " + comException.ToString());
             }
         }
 

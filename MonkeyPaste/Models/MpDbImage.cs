@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public class MpDbImage : MpDbModelBase, MpISyncableDbObject, MpIClonableDbModel<MpDbImage> {

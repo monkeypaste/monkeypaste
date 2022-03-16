@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public enum MpUserDeviceType {

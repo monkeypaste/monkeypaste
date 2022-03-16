@@ -23,6 +23,7 @@ using System.Windows.Threading;
 using MonkeyPaste;
 using FFImageLoading.Helpers.Exif;
 using MpProcessHelper;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel : 
@@ -1686,6 +1687,11 @@ namespace MpWpfApp {
 
         public ICommand RequeryCommand => new RelayCommand<object>(
             async (offsetIdxArg) => {
+                if (!MpHelpers.IsOnMainThread()) {
+                    MpHelpers.RunOnMainThread(()=>RequeryCommand.Execute(offsetIdxArg));
+                    return;
+                }
+
                 var sw = new Stopwatch();
                 sw.Start();
                 bool isDragDropRequery = offsetIdxArg != null;

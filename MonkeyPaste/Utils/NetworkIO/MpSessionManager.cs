@@ -5,12 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
-using Xamarin.Forms.PlatformConfiguration;
-using Xamarin.Forms;
-using System.Collections.ObjectModel;
-using System.Runtime.ConstrainedExecution;
-using System.Net.WebSockets;
-using static Xamarin.Essentials.Permissions;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public class MpSessionManager {

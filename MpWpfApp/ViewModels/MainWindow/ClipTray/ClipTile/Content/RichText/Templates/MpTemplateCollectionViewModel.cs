@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Input;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpTemplateCollectionViewModel : MpViewModelBase<MpContentItemViewModel> {

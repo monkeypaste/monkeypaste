@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
+
 namespace MpWpfApp {
     public class MpPreferencesViewModel : MpViewModelBase<MpSettingsWindowViewModel> {
         #region Private Variables
@@ -240,8 +242,7 @@ namespace MpWpfApp {
                 foreach (SettingsProperty usp in Properties.UserUiStrings.Default.Properties) {
                     if (dsp.Name == usp.Name) {
                         usp.DefaultValue = await MpLanguageTranslator.TranslateAsync((string)dsp.DefaultValue, newLanguage,"");
-                        MonkeyPaste.MpConsole.WriteLine("Default: " + (string)dsp.DefaultValue + "New: " + (string)usp.DefaultValue);
-                    }
+                        MpConsole.WriteLine("Default: " + (string)dsp.DefaultValue + "New: " + (string)usp.DefaultValue);                    }
                 }
             }
             
@@ -250,7 +251,7 @@ namespace MpWpfApp {
 
         private void SetLoadOnLogin(bool loadOnLogin) {
             if(!MpHelpers.IsThisAppAdmin()) {
-                //MonkeyPaste.MonkeyPaste.MpConsole.WriteLine("Process not running as admin, cannot alter load on login");
+                //MonkeyPaste.MpConsole.WriteLine("Process not running as admin, cannot alter load on login");
                 return;
             }
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -263,7 +264,7 @@ namespace MpWpfApp {
             }
             MpPreferences.LoadOnLogin = loadOnLogin;
             
-            MonkeyPaste.MpConsole.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
+            MpConsole.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
         }
 
         
