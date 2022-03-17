@@ -74,14 +74,71 @@ namespace MonkeyPaste {
             return bytes;
         }
 
-        public static string ToFile(this string str) {
-            if(str.IsFileOrDirectory()) {
-                return str;
-            } else if(str.IsStringBase64()) {
-                return MpFileIoHelpers.WriteByteArrayToFile(Path.GetTempFileName(), str.ToByteArray());
+        public static string ToFile(this string str, string forceDir = "", string forceNamePrefix = "", string forceExt = "", bool overwrite = false) {
+            if(string.IsNullOrEmpty(forceExt)) {
+                if(str.IsStringRichText()) {
+                    forceExt = "rtf";
+                } else if(str.IsStringBase64()) {
+                    forceExt = "png";
+                } else if(str.IsStringCsv()) {
+                    forceExt = "csv";
+                } else if(!str.IsFileOrDirectory()) {
+                    forceExt = "txt";
+                }
+            }  else {
+                if (forceExt.ToLower().Contains("rtf")) {
+                    str = MpNativeWrapper.Services.StringTools.ToRichText(str);
+                } else if (forceExt.ToLower().Contains("txt")) {
+                    str = MpNativeWrapper.Services.StringTools.ToPlainText(str);
+                } else if (forceExt.ToLower().Contains("csv")) {
+                    str = MpNativeWrapper.Services.StringTools.ToCsv(str);
+                }
             }
-            return MpFileIoHelpers.WriteTextToFile(Path.GetTempFileName(), str);
+
+            string tfp;
+            if (str.IsFileOrDirectory()) {
+                tfp = str;
+            } else if (forceExt == "png" || 
+                       forceExt.ToLower().Contains("bmp") || 
+                       forceExt.ToLower().Contains("jpg") || 
+                       forceExt.ToLower().Contains("jpeg")) {
+                tfp = MpFileIoHelpers.WriteByteArrayToFile(Path.GetTempFileName(), str.ToByteArray());
+            } else {
+                tfp = MpFileIoHelpers.WriteTextToFile(Path.GetTempFileName(), str);
+            }
+            string ofp = tfp;
+
+            if(!string.IsNullOrEmpty(forceNamePrefix)) {
+                string tfnwe = Path.GetFileName(tfp);
+                string ofnwe = Path.GetFileNameWithoutExtension(tfp) + "." + Path.GetExtension(tfp);
+                ofp = ofp.Replace(tfnwe, ofnwe);
+            }
+
+            if(!string.IsNullOrEmpty(forceExt)) {
+                forceExt = forceExt.Contains(".") ? forceExt : "." + forceExt;
+                string tfe = Path.GetExtension(tfp);
+                ofp = ofp.Replace("." + tfe, forceExt);
+            }
+
+            if(!string.IsNullOrEmpty(forceDir)) {
+                if(!Directory.Exists(forceDir)) {
+                    throw new Exception("Directory not found: " + forceDir);
+                }
+                string tfd = Path.GetDirectoryName(tfp);
+                ofp = ofp.Replace(tfd, forceDir);
+            }
+            if(ofp.ToLower() != tfp.ToLower()) {
+                if(ofp.IsFileOrDirectory() && !overwrite) {
+                    ofp = MpFileIoHelpers.GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileNameWithoutExtension(ofp));
+                }
+                File.Copy(tfp, ofp,overwrite);
+                File.Delete(tfp);
+            }
+            return ofp;
         }
+
+       
+
         public static string[] ToArray(this StringCollection sc) {
             if (sc == null || sc.Count == 0) {
                 return new string[0];

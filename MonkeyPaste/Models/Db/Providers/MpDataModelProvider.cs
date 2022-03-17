@@ -12,6 +12,7 @@ namespace MonkeyPaste {
         #region Private Variables
         private static IList<MpCopyItem> _lastResult;
 
+        private static List<int> _manualQueryIds;
 
         #endregion
 
@@ -52,10 +53,28 @@ namespace MonkeyPaste {
             _lastResult = new List<MpCopyItem>();
         }
 
+        public static void SetManualQuery(List<int> copyItemIds) {
+            _manualQueryIds = copyItemIds;
+            QueryInfo.NotifyQueryChanged();
+        }
+
+        public static void UnsetManualQuery() {
+            _manualQueryIds = null;
+            QueryInfo.NotifyQueryChanged();
+        }
+
         #region MpQueryInfo Fetch Methods                
 
         public static async Task QueryForTotalCount() {
             AllFetchedAndSortedCopyItemIds.Clear();
+
+            if (_manualQueryIds != null) {
+                foreach(var copyItemId in _manualQueryIds) {
+                    AllFetchedAndSortedCopyItemIds.Add(copyItemId);
+                }
+                QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
+                return;
+            }
             MpLogicalFilterFlagType lastLogicFlag = MpLogicalFilterFlagType.None;
 
             for (int i = 0;i < QueryInfos.Count;i++) {
@@ -375,8 +394,8 @@ namespace MonkeyPaste {
         #region MpApp
 
         public static async Task<MpApp> GetAppByPath(string path) {
-            string query = $"select * from MpApp where SourcePath=?";
-            var result = await MpDb.QueryAsync<MpApp>(query, path);
+            string query = $"select * from MpApp where LOWER(SourcePath)=?";
+            var result = await MpDb.QueryAsync<MpApp>(query, path.ToLower());
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -384,8 +403,8 @@ namespace MonkeyPaste {
         }
 
         public static async Task<bool> IsAppRejectedAsync(string path) {
-            string query = $"select count(*) from MpApp where SourcePath=? and IsAppRejected=1";
-            var result = await MpDb.QueryScalarAsync<int>(query, path);
+            string query = $"select count(*) from MpApp where LOWER(SourcePath)=? and IsAppRejected=1";
+            var result = await MpDb.QueryScalarAsync<int>(query, path.ToLower());
             return result > 0;
         }
 
@@ -396,6 +415,18 @@ namespace MonkeyPaste {
         //}
 
         #endregion MpApp
+
+        #region MpAppInteropSetting 
+
+        public static async Task<List<MpAppInteropSetting>> GetInteropSettingsByAppId(int appId) {
+            string query = $"select * from MpAppInteropSetting where fk_MpAppId=?";
+            var result = await MpDb.QueryAsync<MpAppInteropSetting>(query,appId);
+            return result;
+        }
+
+
+
+        #endregion MpAppInteropSetting
 
         #region MpUrl
 

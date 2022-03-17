@@ -57,7 +57,9 @@ namespace MpWpfApp {
 
                     new MpBootstrappedItem(typeof(MpDragDropManager)),
 
-                    new MpBootstrappedItem(typeof(MpClipboardHelper.MpClipboardManager),Properties.Settings.Default.ResetClipboardAfterMonkeyPaste),
+                    new MpBootstrappedItem(typeof(MpClipboardHelper.MpClipboardManager),MpWpfPasteHelper.Instance),
+
+                    new MpBootstrappedItem(typeof(MpWpfPasteHelper))
                     //new MpBootstrappedItem(typeof(MpMouseHook))
                 });
         }

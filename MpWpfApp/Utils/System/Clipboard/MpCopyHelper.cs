@@ -10,7 +10,7 @@ using System.Windows.Threading;
 using System.Windows;
 
 namespace MpWpfApp {
-    public class MpCopyHelper {
+    public static class MpCopyHelper {
         
 
 

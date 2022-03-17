@@ -16,7 +16,7 @@ using MonkeyPaste.Plugin;
 namespace MpWpfApp {
     public class MpWpfPasteObjectBuilder : MpIPasteObjectBuilder {
         public string GetFormat(
-            MpClipboardFormat format, 
+            MpClipboardFormatType format, 
             string data, 
             string fileNameWithoutExtension = "", 
             string directory = "", 
@@ -26,21 +26,21 @@ namespace MpWpfApp {
             // NOTE directory only used for non- file content to give a reference for interop
                         
             switch (format) {
-                case MpClipboardFormat.Text:
-                case MpClipboardFormat.UnicodeText:
+                case MpClipboardFormatType.Text:
+                case MpClipboardFormatType.UnicodeText:
                     return data.ToPlainText();
-                case MpClipboardFormat.Rtf:
+                case MpClipboardFormatType.Rtf:
                     return data.ToRichText();
-                case MpClipboardFormat.Csv:
+                case MpClipboardFormatType.Csv:
                     return data.ToCsv();
-                case MpClipboardFormat.Html:
+                case MpClipboardFormatType.Html:
                     return data.ToQuillText();
-                case MpClipboardFormat.Bitmap:
+                case MpClipboardFormatType.Bitmap:
                     if(data.IsStringBase64()) {
                         return data;
                     }
                     return data.ToFlowDocument().ToBitmapSource().ToBase64String();
-                case MpClipboardFormat.FileDrop:
+                case MpClipboardFormatType.FileDrop:
                     // TODO this will be where syncing file items will occur so when file/folder does not exist
                     // this should request, receive and return the path
 
@@ -88,7 +88,7 @@ namespace MpWpfApp {
         }
 
         public string GetFormat(
-            MpClipboardFormat format,
+            MpClipboardFormatType format,
             string[] datas,
             string[] fileNameWithoutExtension = null,
             string directory = "",
@@ -103,20 +103,20 @@ namespace MpWpfApp {
                 string fileName = fileNameWithoutExtension == null || i >= fileNameWithoutExtension.Length ?
                                         "" : fileNameWithoutExtension[i];
                 switch (format) {
-                    case MpClipboardFormat.Text:
-                    case MpClipboardFormat.UnicodeText:
+                    case MpClipboardFormatType.Text:
+                    case MpClipboardFormatType.UnicodeText:
                         outputData += data.ToPlainText();
                         break;
-                    case MpClipboardFormat.Rtf:
+                    case MpClipboardFormatType.Rtf:
                         outputData = outputData.ToFlowDocument().Combine(data.ToRichText()).ToRichText();
                         break;
-                    case MpClipboardFormat.Csv:
+                    case MpClipboardFormatType.Csv:
                         outputData += data.ToCsv();
                         break;
-                    case MpClipboardFormat.Html:
+                    case MpClipboardFormatType.Html:
                         outputData = outputData.ToFlowDocument().Combine(data.ToRichText()).ToRichText().ToQuillText();
                         break;
-                    case MpClipboardFormat.Bitmap:
+                    case MpClipboardFormatType.Bitmap:
                         BitmapSource curBmpSrc = null;
                         if (data.IsStringBase64()) {
                             curBmpSrc = data.ToBitmapSource();
@@ -127,7 +127,7 @@ namespace MpWpfApp {
                         Size size = new Size(Math.Max(outputBmpSrc.Width, curBmpSrc.Width), Math.Max(outputBmpSrc.Height, curBmpSrc.Height));
                         outputData = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { outputBmpSrc, curBmpSrc }, size).ToBase64String();
                         break;
-                    case MpClipboardFormat.FileDrop:
+                    case MpClipboardFormatType.FileDrop:
                         // TODO this will be where syncing file items will occur so when file/folder does not exist
                         // this should request, receive and return the path
                         string curOutputPath = string.Empty;

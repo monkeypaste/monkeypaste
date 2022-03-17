@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MonkeyPaste.Plugin;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Security.Principal;
@@ -22,6 +24,9 @@ namespace MpProcessHelper {
         #region Private Variables
         private static System.Timers.Timer _timer;
 
+        public static IntPtr ThisAppHandle;
+
+        //private static string thisAppExe = Path.Combine(System.Windows.Forms.Application.StartupPath, "MpWpfApp.exe");
         //private static MpIconBuilder _ib;
 
         private static string _FallbackProcessPath = @"C:\WINDOWS\Explorer.EXE";
@@ -30,9 +35,9 @@ namespace MpProcessHelper {
 
         #region Properties
 
-        public static ConcurrentDictionary<string, List<IntPtr>> CurrentProcessWindowHandleStackDictionary { get; set; } = new ConcurrentDictionary<string, List<IntPtr>>();
+        public static ConcurrentDictionary<string, List<IntPtr>> CurrentProcessWindowHandleStackDictionary { get; private set; } = new ConcurrentDictionary<string, List<IntPtr>>();
 
-        public static ConcurrentDictionary<IntPtr, WinApi.ShowWindowCommands> LastWindowStateHandleDictionary = new ConcurrentDictionary<IntPtr, WinApi.ShowWindowCommands>();
+        public static ConcurrentDictionary<IntPtr, WinApi.ShowWindowCommands> CurrentWindowStateHandleDictionary { get; private set; } = new ConcurrentDictionary<IntPtr, WinApi.ShowWindowCommands>();
 
         public static string ActiveProcessPath { get; set; } = string.Empty;
 
@@ -53,6 +58,7 @@ namespace MpProcessHelper {
         #region Public Methods
 
         public static void Init() {
+
             LastHandle = IntPtr.Zero;
             RefreshHandleStack();
 
@@ -117,7 +123,7 @@ namespace MpProcessHelper {
                 //if app is started using "Run as" is if you get "Access Denied" error. 
                 //That means that running app has rights that your app does not have. 
                 //in this case ADMIN rights
-                Console.WriteLine("IsProcessAdmin error: " + ex.ToString());
+                MpConsole.WriteLine("IsProcessAdmin error: " + ex.ToString());
                 return true;
             }
         }
@@ -164,7 +170,7 @@ namespace MpProcessHelper {
                 }
             }
             catch (Exception e) {
-                Console.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
+                MpConsole.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + hwnd.ToString() + ") : " + e.ToString());
                 //return GetExecutablePathAboveVista(hwnd);
                 return fallback; //fallback;
             }
@@ -179,7 +185,7 @@ namespace MpProcessHelper {
                 return Process.GetProcessById((int)pid);
             }
             catch (Exception e) {
-                Console.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + handle.ToString() + ") : " + e.ToString());
+                MpConsole.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path (w/ Handle " + handle.ToString() + ") : " + e.ToString());
                 //return GetExecutablePathAboveVista(hwnd);
                 return null; //fallback;
             }
@@ -218,12 +224,12 @@ namespace MpProcessHelper {
         }
 
         public static IntPtr GetThisApplicationMainWindowHandle() {
-            string thisAppExe = System.Windows.Forms.Application.StartupPath;
-            if(!CurrentProcessWindowHandleStackDictionary.ContainsKey(thisAppExe) ||
-                CurrentProcessWindowHandleStackDictionary[thisAppExe].Count == 0) {
-                return IntPtr.Zero;
-            }
-            return CurrentProcessWindowHandleStackDictionary[thisAppExe][0];
+            return ThisAppHandle;
+            //if(!CurrentProcessWindowHandleStackDictionary.ContainsKey(thisAppExe) ||
+            //    CurrentProcessWindowHandleStackDictionary[thisAppExe].Count == 0) {
+            //    return IntPtr.Zero;
+            //} 
+            //return CurrentProcessWindowHandleStackDictionary[thisAppExe][0];
         }
 
         public static IntPtr GetLastActiveInstance(string processPath) {
@@ -264,7 +270,9 @@ namespace MpProcessHelper {
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e) {
             IntPtr currentHandle = WinApi.GetForegroundWindow();
-
+            if(currentHandle == ThisAppHandle) {
+                return;
+            }
             RefreshHandleStack();
             bool hasChanged = LastHandle != currentHandle;
 
@@ -276,7 +284,7 @@ namespace MpProcessHelper {
             string processPath = GetProcessPath(LastHandle);
 
             if (hasChanged) {
-                Console.WriteLine(string.Format(@"Last Window: {0} ({1})", LastTitle, LastHandle));
+                MpConsole.WriteLine(string.Format(@"Last Window: {0} ({1})", LastTitle, LastHandle));
                 
                 OnAppActivated?.Invoke(
                     nameof(MpProcessManager), 
@@ -306,10 +314,10 @@ namespace MpProcessHelper {
                             if (placement.showCmd == WinApi.ShowWindowCommands.Minimized || placement.showCmd == WinApi.ShowWindowCommands.Hide) {
                                 return;
                             }
-                            if (LastWindowStateHandleDictionary.ContainsKey(handle)) {
-                                LastWindowStateHandleDictionary.TryRemove(handle, out _);
+                            if (CurrentWindowStateHandleDictionary.ContainsKey(handle)) {
+                                CurrentWindowStateHandleDictionary.TryRemove(handle, out _);
                             }
-                            LastWindowStateHandleDictionary.TryAdd(handle, placement.showCmd);
+                            CurrentWindowStateHandleDictionary.TryAdd(handle, placement.showCmd);
                             //MpConsole.WriteLine(@"Last Window State for " + processStack.Key + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
                         } else {
                             //if handle gone mark it to be removed from its handle stack
@@ -335,8 +343,8 @@ namespace MpProcessHelper {
                         wasStackChanged = true;
                         //MpConsole.WriteLine(string.Format(@"Process: {0} Handle: {1} REMOVED", handleToRemove.Key, handleToRemove.Value));
                     }
-                    if (LastWindowStateHandleDictionary.ContainsKey(handleToRemove.Value)) {
-                        LastWindowStateHandleDictionary.TryRemove(handleToRemove.Value, out _);
+                    if (CurrentWindowStateHandleDictionary.ContainsKey(handleToRemove.Value)) {
+                        CurrentWindowStateHandleDictionary.TryRemove(handleToRemove.Value, out _);
                     }
                 }
                 if (wasStackChanged) {
@@ -388,15 +396,15 @@ namespace MpProcessHelper {
                     if (placement.showCmd == WinApi.ShowWindowCommands.Minimized || placement.showCmd == WinApi.ShowWindowCommands.Hide) {
                         return;
                     }
-                    if (LastWindowStateHandleDictionary.ContainsKey(fgHandle)) {
-                        LastWindowStateHandleDictionary.TryRemove(fgHandle, out _);
+                    if (CurrentWindowStateHandleDictionary.ContainsKey(fgHandle)) {
+                        CurrentWindowStateHandleDictionary.TryRemove(fgHandle, out _);
                     }
                     try {
-                        LastWindowStateHandleDictionary.TryAdd(fgHandle, placement.showCmd);
+                        CurrentWindowStateHandleDictionary.TryAdd(fgHandle, placement.showCmd);
                     }
                     catch (Exception ex) {
                         //intermittenly fgHandle is still in dictionary so hopefully this swallows exception
-                        Console.WriteLine($"FgHandle: {fgHandle} already exists...ignoring " + ex);
+                        MpConsole.WriteLine($"FgHandle: {fgHandle} already exists...ignoring " + ex);
                     }
                     //MpConsole.WriteLine(@"Last Window State for " + processName + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
                 }

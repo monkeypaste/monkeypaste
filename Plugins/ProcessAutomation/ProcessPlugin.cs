@@ -61,7 +61,7 @@ namespace ProcessAutomation {
                     _lastRanNonExeProcessLookup.Add(processPath, processHandle);
                 }
             } else {
-                MpProcessHelper.MpProcessAutomation.SetActiveProcess()
+                //MpProcessHelper.MpProcessAutomation.SetActiveProcess()
             }
             
             var response = new MpPluginResponseFormat() {

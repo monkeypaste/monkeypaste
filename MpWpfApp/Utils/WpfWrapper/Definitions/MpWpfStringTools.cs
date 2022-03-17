@@ -9,5 +9,9 @@ namespace MpWpfApp {
         public string ToRichText(string text) {
             return text.ToRichText();
         }
+
+        public string ToCsv(string text) {
+            return text.ToCsv();
+        }
     }
 }

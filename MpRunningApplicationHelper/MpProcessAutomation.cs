@@ -5,18 +5,33 @@ using System.Threading;
 using static MpProcessHelper.MpProcessManager;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Linq;
+using MonkeyPaste.Plugin;
+using System.Threading.Tasks;
 
 namespace MpProcessHelper {
     public static class MpProcessAutomation {
+        #region Private Variables
+
         private static string _OriginalPath;
 
         private const int _MAX_ARG_LENGTH = 32698;
+
+        #endregion
+
+        #region Properties
+
+        public static MpIExternalPasteHandler PasteService { get; set; }
+
+        #endregion
+
+        #region Public Methods
 
         public static void Init() {
             _OriginalPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
         }
 
-        public static IntPtr StartProcess(
+        public static MpProcessInfo StartProcess(
             string processPath,
             string args,
             bool asAdministrator,
@@ -26,9 +41,14 @@ namespace MpProcessHelper {
             bool showError,
             WinApi.ShowWindowCommands windowState,
             IntPtr mainWindowHandle,
-            out string standardOutput,
-            out string standardError) {
-            IntPtr outHandle = IntPtr.Zero;
+            bool waitForInputIdle,
+            bool createNoWindow,
+            string userName,
+            string password,
+            int waitForInputIdleTimeout = 30000) {
+
+            //IntPtr outHandle = IntPtr.Zero;
+
             string stdOut = string.Empty;
             string stdErr = string.Empty;
 
@@ -39,8 +59,7 @@ namespace MpProcessHelper {
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
-                standardOutput = standardError = string.Empty;
-                return outHandle;
+                return null;
             }
             try {
                 string processName = Path.GetFileName(processPath);
@@ -51,179 +70,154 @@ namespace MpProcessHelper {
                     AddDirectoryToPath(processDir);
                 }
 
-                using (Process p = new Process()) {
-                    p.StartInfo.UseShellExecute = useShellExecute;
-                    p.StartInfo.Verb = asAdministrator ? "runas" : string.Empty;
-                    p.StartInfo.ErrorDialog = showError;
-                    if(showError) {
-                        p.StartInfo.ErrorDialogParentHandle = mainWindowHandle;
-                    }
-                    if(!useShellExecute) {
-                        p.StartInfo.WorkingDirectory = string.IsNullOrEmpty(workingDirectory) ? processDir : workingDirectory;
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = useShellExecute;
+                p.StartInfo.Verb = asAdministrator ? "runas" : string.Empty;
+                p.StartInfo.ErrorDialog = showError;
+                if(showError) {
+                    p.StartInfo.ErrorDialogParentHandle = mainWindowHandle;
+                }
+                if(!useShellExecute) {
+                    p.StartInfo.WorkingDirectory = string.IsNullOrEmpty(workingDirectory) ? processDir : workingDirectory;
 
-                        if (!Path.GetExtension(processPath).ToLower().Contains("exe")) {
-                            if(p.StartInfo.WorkingDirectory != processDir) {
-                                args = "/c" + processPath + " " + args;
-                            } else {
-                                args = "/c " + processName + " " + args;
-                            }
-                            processName = "cmd.exe";                            
+                    if (!Path.GetExtension(processPath).ToLower().Contains("exe")) {
+                        if(p.StartInfo.WorkingDirectory != processDir) {
+                            args = "/c" + processPath + " " + args;
+                        } else {
+                            args = "/c " + processName + " " + args;
                         }
+                        processName = "cmd.exe";                            
+                    }
 
-                        p.StartInfo.CreateNoWindow = isSilent;
-                        if(!isSilent) {
-                            ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal;
-                            if(windowState == WinApi.ShowWindowCommands.Hide) {
-                                windowStyle = ProcessWindowStyle.Hidden;
-                            } else if (windowState == WinApi.ShowWindowCommands.Minimized) {
-                                windowStyle = ProcessWindowStyle.Minimized;
-                            } else if (windowState == WinApi.ShowWindowCommands.Maximized) {
-                                windowStyle = ProcessWindowStyle.Maximized;
-                            }
-                            p.StartInfo.WindowStyle = windowStyle;
+                    p.StartInfo.CreateNoWindow = isSilent;
+                    if(!isSilent) {
+                        ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal;
+                        if(windowState == WinApi.ShowWindowCommands.Hide) {
+                            windowStyle = ProcessWindowStyle.Hidden;
+                        } else if (windowState == WinApi.ShowWindowCommands.Minimized) {
+                            windowStyle = ProcessWindowStyle.Minimized;
+                        } else if (windowState == WinApi.ShowWindowCommands.Maximized) {
+                            windowStyle = ProcessWindowStyle.Maximized;
                         }
-                        p.StartInfo.RedirectStandardOutput = true;
-                        p.StartInfo.RedirectStandardError = true;
-                        p.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { stdErr += e.Data; });
-                    } else {
-                        p.StartInfo.WorkingDirectory = processDir;
+                        p.StartInfo.WindowStyle = windowStyle;
                     }
-                    p.StartInfo.FileName = processName;
-                    p.StartInfo.Arguments = args;
-                    p.Start();
-
-                    if(!useShellExecute) {
-                        // To avoid deadlocks, use an asynchronous read operation on at least one of the streams.  
-                        p.BeginErrorReadLine();
-                        stdOut = p.StandardOutput.ReadToEnd();
-                    }
-
-                    outHandle = p.Handle;
-                }
-
-                standardOutput = stdOut;
-                standardError = stdErr;
-                RestoreOriginalPath();
-                WinApi.ShowWindowAsync(outHandle, GetShowWindowValue(windowState));
-                return outHandle;
-            }
-            catch (Exception ex) {
-                Console.WriteLine("Start Process error (Admin to Normal mode): " + ex);
-                RestoreOriginalPath();
-                standardOutput = stdOut;
-                standardError = stdErr;
-                return outHandle;
-            }
-            // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
-        }
-
-        public static IntPtr StartProcessForPaste(
-            string args,
-            string processPath,
-            bool asAdministrator,
-            bool isSilent,
-            WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal) {
-            try {
-                IntPtr outHandle = IntPtr.Zero;
-                if (isSilent) {
-                    windowState = WinApi.ShowWindowCommands.Hide;
-                }
-                string processStartInfoInitStr = processPath;
-                string processDir = Path.GetDirectoryName(processPath);
-                string pathEnvVarStr = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
-
-                if (pathEnvVarStr.ToLower().Contains(processDir)) {
-                    processStartInfoInitStr = Path.GetFileName(processPath);
-                }
-                ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo(processStartInfoInitStr);
-                //Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; 
-                //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe
-                //where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
-                processInfo.FileName = processPath;
-                if (!string.IsNullOrEmpty(args)) {
-                    processInfo.Arguments = args;
-                }
-                processInfo.WindowStyle = isSilent ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
-                processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
-                processInfo.UseShellExecute = asAdministrator ? true : false;
-                processInfo.WorkingDirectory = Path.GetDirectoryName(processPath);
-
-                if (asAdministrator) {
-                    using (var process = Process.Start(processInfo)) {
-                        while (!process.WaitForInputIdle(100)) {
-                            Thread.Sleep(100);
-                            process.Refresh();
-                        }
-                        outHandle = process.Handle;
-                    }
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardError = true;
+                    p.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { stdErr += e.Data; });
                 } else {
-                    //using (var process = UACHelper.UACHelper.StartLimited(processInfo)) {
-                    using (var process = Process.Start(processPath)) {
-                        while (!process.WaitForInputIdle(100)) {
-                            Thread.Sleep(100);
-                            process.Refresh();
-                        }
-                        outHandle = process.Handle;
-                    }
+                    p.StartInfo.WorkingDirectory = processDir;
                 }
-                if (outHandle == IntPtr.Zero) {
-                    Console.WriteLine("Error starting process: " + processPath);
-                    return outHandle;
+                p.StartInfo.FileName = processName;
+                p.StartInfo.Arguments = args;
+                p.Start();
+
+
+                if (!useShellExecute) {
+                    // To avoid deadlocks, use an asynchronous read operation on at least one of the streams.  
+                    p.BeginErrorReadLine();
+                    stdOut = p.StandardOutput.ReadToEnd();
                 }
 
-                WinApi.ShowWindowAsync(outHandle, GetShowWindowValue(windowState));
-                return outHandle;
+                RestoreOriginalPath();
+                WinApi.ShowWindowAsync(p.Handle, GetShowWindowValue(windowState));
+
+                if(waitForInputIdle) {
+                    p.WaitForInputIdle(waitForInputIdleTimeout);
+                }
+
+
+                WinApi.SetForegroundWindow(p.Handle);
+                WinApi.SetActiveWindow(p.Handle);
+                p.Dispose();
+
+                return new MpProcessInfo() {
+                    Handle = p.Handle,
+                    StandardOutput = stdOut,
+                    StandardError = stdErr,
+                    ProcessPath = processPath
+                };
             }
             catch (Exception ex) {
-                Console.WriteLine("Start Process error (Admin to Normal mode): " + ex);
-                return IntPtr.Zero;
+                MpConsole.WriteLine("Start Process error (Admin to Normal mode): " + ex);
+                RestoreOriginalPath();
+
+                return new MpProcessInfo() {
+                    Handle = IntPtr.Zero,
+                    StandardOutput = stdOut,
+                    StandardError = stdErr,
+                    ProcessPath = processPath
+                };
             }
             // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
         }
 
         public static IntPtr SetActiveProcess(
-            string processPath,
-            bool isAdmin,
-            bool isSilent = false,
-            string args = "",
-            object forceHandle = null,
-            WinApi.ShowWindowCommands forceWindowState = WinApi.ShowWindowCommands.Maximized) {
+            MpProcessInfo pi,
+            int waitForInputIdleTimeout = 30000) {
             try {
-                if (string.IsNullOrEmpty(processPath)) {
-                    return IntPtr.Zero;
+                if (string.IsNullOrEmpty(pi.ProcessPath)) {
+                    if(pi.Handle == null  || ((IntPtr)pi.Handle) == IntPtr.Zero) {
+                        return IntPtr.Zero;
+                    }
+                    pi.ProcessPath = GetProcessPath((IntPtr)pi.Handle);
                 }
-                if (processPath[0] == '%') {
+
+                if (pi.ProcessPath.StartsWith("%")) {
                     //only occurs for hardcoded %windir%\cmd.exe
-                    processPath = string.Format(
+                    pi.ProcessPath = string.Format(
                         @"{0}\System32\cmd.exe",
                         Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.System)).FullName);
                 }
-                processPath = processPath.Replace(@"\\", @"\").ToLower();
-                //MpConsole.WriteLine(processPath);
+                pi.ProcessPath = pi.ProcessPath.Replace(@"\\", @"\").ToLower();
+                //MpConsole.WriteLine(pi.ProcessPath);
 
-                //forceHandle is only passed when its a running application
-                IntPtr handle = forceHandle == null ? IntPtr.Zero : (IntPtr)forceHandle;
-                if (handle != IntPtr.Zero || !CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath)) {
+                //pi.Handle is only passed when its a running application
+                IntPtr handle = pi.Handle == null ? IntPtr.Zero : (IntPtr)pi.Handle;
+                if (!IsHandleRunningProcess(handle)) {
                     //if process is not running anymore or needs to be started (custom pastetoapppath)
-                    handle = StartProcessForPaste(args, processPath, isAdmin, isSilent, forceWindowState);
-                } else {
+                    var npi = StartProcess(
+                        pi.ProcessPath, 
+                        pi.Arguments, pi.IsAdmin, pi.IsSilent,pi.UseShellExecute,pi.WorkingDirectory, true,
+                        pi.WindowState, 
+                        GetThisApplicationMainWindowHandle(), true,
+                        pi.CreateNoWindow, pi.UserName,pi.Password);
+
+                    handle = npi.Handle;
+                } else { 
                     //ensure the process has a handle matching isAdmin, if not it needs to be created
-                    var handleList = CurrentProcessWindowHandleStackDictionary[processPath];
+                    var handleList = CurrentProcessWindowHandleStackDictionary[pi.ProcessPath];
                     foreach (var h in handleList) {
-                        if (isAdmin == IsProcessAdmin(h)) {
+                        if (pi.IsAdmin == IsProcessAdmin(h)) {
                             handle = h;
-                            if (LastWindowStateHandleDictionary.ContainsKey(handle)) {
-                                forceWindowState = LastWindowStateHandleDictionary[handle];
+                            if (CurrentWindowStateHandleDictionary.ContainsKey(handle)) {
+                                pi.WindowState = CurrentWindowStateHandleDictionary[handle];
                             }
                             break;
                         }
                     }
                     if (handle == IntPtr.Zero) {
                         //no handle found matching admin rights
-                        handle = StartProcessForPaste(args, processPath, isAdmin, isSilent, forceWindowState);
+                        var npi = StartProcess(
+                        pi.ProcessPath,
+                        pi.Arguments, pi.IsAdmin, pi.IsSilent, pi.UseShellExecute, pi.WorkingDirectory, true,
+                        pi.WindowState,
+                        GetThisApplicationMainWindowHandle(), true,
+                        pi.CreateNoWindow, pi.UserName, pi.Password);
+                        handle = npi.Handle;
                     } else {
                         //show running window with last known window state
-                        WinApi.ShowWindowAsync(handle, GetShowWindowValue(forceWindowState));
+                        WinApi.ShowWindowAsync(handle, GetShowWindowValue(pi.WindowState));
+                        WinApi.SetForegroundWindow(handle);
+                        WinApi.SetActiveWindow(handle);
+
+                        //var p = GetProcessByHandle(handle);
+                        //if(p != null) {
+                        //    //p.WaitForInputIdle(waitForInputIdleTimeout);
+                        //}
+                        //uint result = WinApi.WaitForInputIdle(handle, waitForInputIdleTimeout);
+                        //if(result != 0) {
+                        //    throw new Exception("Process " + pi.ProcessPath + " never became available :(");
+                        //}
                     }
                 }
 
@@ -232,6 +226,29 @@ namespace MpProcessHelper {
             catch (Exception) {
                 //MpConsole.WriteLine("MpRunningApplicationManager.SetActiveApplication error: " + ex.ToString());
                 return IntPtr.Zero;
+            }
+        }
+
+        public static bool SetActiveProcess(IntPtr handle) {
+            if (CurrentProcessWindowHandleStackDictionary.All(x => !x.Value.Contains(handle))) {
+                return false;
+            }
+            try {
+                WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal;
+                if(CurrentWindowStateHandleDictionary.ContainsKey(handle)) {
+                    var currentState = CurrentWindowStateHandleDictionary[handle];
+                    if(currentState == WinApi.ShowWindowCommands.Maximized) {
+                        // NOTE (I'm assuming) the window must be visible to paste into so cannot be hidden/minimized
+                        windowState = currentState;
+                    }
+                }
+                WinApi.ShowWindowAsync(handle, GetShowWindowValue(windowState));
+
+                return true;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine("MpRunningApplicationManager.SetActiveApplication error: " + ex);
+                return false;
             }
         }
 
@@ -251,5 +268,7 @@ namespace MpProcessHelper {
             var scope = EnvironmentVariableTarget.Machine;
             Environment.SetEnvironmentVariable(name, _OriginalPath, scope);
         }
+
+        #endregion
     }
 }

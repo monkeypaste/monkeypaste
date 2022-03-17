@@ -82,7 +82,7 @@ namespace MpWpfApp {
             _autoScrollTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             _autoScrollTimer.Tick += _autoScrollTimer_Tick;
 
-            MpMainWindowViewModel.Instance.OnMainWindowHide += Instance_OnMainWindowHide;
+            MpMainWindowViewModel.Instance.OnMainWindowHidden += Instance_OnMainWindowHide;
 
             MpMessenger.Register<MpMessageType>(
                 MpClipTrayViewModel.Instance, 

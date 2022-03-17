@@ -30,10 +30,9 @@
       },
       {
         "label": "Prefer running process?",
-        "description": "When checked, input will be passed to most recently activated processes or a new process is started (which is default).",
+        "description": "When checked, arguments will be pasted (separated by new lines) to most recently activated processes or a new process is started (which is default). *This is intended to be used with paste arguments.",
         "controlType": "CheckBox",
         "unitType": "Bool",
-        "isVisible": false,
         "values": [
           {
             "value": "false",

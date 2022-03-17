@@ -7,14 +7,18 @@ using System.Xml.Linq;
 using System.Linq;
 
 namespace MpClipboardHelper {
-    public static partial class MpClipboardManager {
+    public static partial class MpClipboardManager  {
         #region Private Variables
 
-        private static MpDataObject _LastDataObject = null;
-        private static MpDataObject _TempDataObject = null; // used when restoring clipboard
-        public static bool IgnoreClipboardChangeEvent = false;
+        #endregion
 
-        private static bool _resetClipboardAfterPaste = false;
+        #region Properties
+
+        public static MpIClipboardMonitor MonitorService { get; private set; }
+
+        public static MpIClipboardInterop InteropService { get; private set; }
+
+        public static MpIExternalPasteHandler PasteService { get; private set; }
         #endregion
 
         #region Events
@@ -25,28 +29,29 @@ namespace MpClipboardHelper {
 
         #region Public Methods
 
-        public static void Init(bool resetClipboardAfterPaste) {
-            //MpClipboardWatcher.Start();
-            //MpClipboardWatcher.OnClipboardChange += MpClipboardWatcher_OnClipboardChange;
-            _resetClipboardAfterPaste = resetClipboardAfterPaste;
-            MpClipboardTimer.Start();
-            MpClipboardTimer.ClipboardChanged += MpClipboardWatcher_OnClipboardChange;
+        public static void Init(MpIExternalPasteHandler pasteHandler) {
+            // NOTE services are abstracted into interfaces because of bug in UCRTBASE.DLL
+            // and monitoring window messages (using MpClipboardWatcher) crashes application
+            // intermittently when copying rtf from Visual Studio BUT maybe it can be fixed
+            MonitorService = new MpClipboardTimer();
+            InteropService = (MpIClipboardInterop)MonitorService;
+            PasteService = pasteHandler;
         }
 
-        public static async Task PasteDataObject(MpDataObject mpdo, IntPtr handle, bool finishWithEnterKey = false) {
-            await MpClipboardWatcher.PasteDataObject(mpdo, handle);
-            if (finishWithEnterKey) {
-                System.Windows.Forms.SendKeys.SendWait("{ENTER}");
+        public static void Start() {
+            if(MonitorService == null || InteropService == null) {
+                throw new Exception("Must call init");
             }
-        }
+            MonitorService.OnClipboardChanged += MpClipboardWatcher_OnClipboardChange;
 
-        public static void SetDataObjectWrapper(MpDataObject mpdo) {
-            MpClipboardWatcher.SetDataObjectWrapper(mpdo);
+            MonitorService.StartMonitor();
         }
-
         public static void Stop() {
-            OnClipboardChange = null;
-            MpClipboardWatcher.Stop();
+            if(MonitorService == null) {
+                return;
+            }
+            MonitorService.OnClipboardChanged -= MpClipboardWatcher_OnClipboardChange;
+            MonitorService.StopMonitor();
         }
         #endregion
 

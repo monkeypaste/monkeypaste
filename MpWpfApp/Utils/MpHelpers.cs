@@ -547,55 +547,7 @@ namespace MpWpfApp {
             return ConvertBytesToMegabytes(total);
         }
 
-        public static string GetUniqueFileName(MpExternalDropFileType fileType,string baseName = "", string baseDir = "") {
-            //only support Image and RichText fileTypes
-            string fp = string.IsNullOrEmpty(baseDir) ? Path.GetTempPath() : baseDir;
-            string fn = string.IsNullOrEmpty(baseName) ? Path.GetRandomFileName() : RemoveSpecialCharacters(baseName.Trim());
-            if (string.IsNullOrEmpty(fn)) {
-                fn = Path.GetRandomFileName();
-            }
-            string fe = "." + Enum.GetName(typeof(MpExternalDropFileType), fileType).ToLower(); //fileType == MpCopyItemType.RichText ? ".txt" : ".png";
-
-            int count = 1;
-
-            string fileNameOnly = Path.GetFileNameWithoutExtension(fp + fn + fe);
-            string extension = Path.GetExtension(fp + fn + fe);
-            string path = Path.GetDirectoryName(fp + fn + fe);
-            string newFullPath = fp + fn + fe;
-
-            while (File.Exists(newFullPath)) {
-                string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
-                newFullPath = Path.Combine(path, tempFileName + extension);
-            }
-            return newFullPath;
-        }
-
-        public static string GetUniqueFileName(string dir, string fileName) {
-            //only support Image and RichText fileTypes
-            string fp = string.IsNullOrEmpty(dir) ? Path.GetTempPath() : dir;
-            string fn = string.IsNullOrEmpty(fileName) ? Path.GetRandomFileName() : RemoveSpecialCharacters(fileName.Trim());
-            if (string.IsNullOrEmpty(fn)) {
-                fn = Path.GetRandomFileName();
-            }
-            if(!Directory.Exists(dir)) {
-                throw new DirectoryNotFoundException(dir + "not found");
-            }
-
-            string fe = "." + Path.GetExtension(fn);
-            fn = fn.Replace(fe, string.Empty);
-            int count = 1;
-
-            string fileNameOnly = Path.GetFileNameWithoutExtension(fp + fn + fe);
-            string extension = Path.GetExtension(fp + fn + fe);
-            string path = Path.GetDirectoryName(fp + fn + fe);
-            string newFullPath = fp + fn + fe;
-
-            while (File.Exists(newFullPath)) {
-                string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
-                newFullPath = Path.Combine(path, tempFileName + extension);
-            }
-            return newFullPath;
-        }
+        
 
         public static string ReadTextFromFile(string filePath) {
             try {

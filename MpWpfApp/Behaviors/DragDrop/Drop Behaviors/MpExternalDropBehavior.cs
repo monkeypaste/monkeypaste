@@ -8,7 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MonkeyPaste.Plugin;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
+
     public enum MpExternalDropFileType {
         None = 0,
         Txt,
@@ -18,6 +19,9 @@ namespace MpWpfApp {
         Png,
         File
     }
+}
+
+namespace MpWpfApp {
 
     public class MpExternalDropBehavior : MpDropBehaviorBase<FrameworkElement> {
         #region Singleton Definition
@@ -70,7 +74,9 @@ namespace MpWpfApp {
         }
 
         public override async Task StartDrop() {
-            var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
+            //var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
+            var mpdo = await MpWpfPasteHelper.Instance.GetCopyItemDataObject(MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem, true, MpProcessHelper.MpProcessManager.LastHandle);
+            var ido = MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(mpdo);
             DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
         }
 
@@ -81,54 +87,11 @@ namespace MpWpfApp {
         public override void AutoScrollByMouse() {
             return;
         }
+                
 
-        public bool IsProcessNeedFileDrop(string processPath) {
-            if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
-                return false;
-            }
+        
 
-            try {
-                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
-                if (processName == null) {
-                    return false;
-                }
-                switch (processName) {
-                    case "explorer":
-                    case "mspaint":
-                    case "notepad":
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-            catch (Exception ex) {
-                MpConsole.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
-                return false;
-            }
-        }
-
-        public bool IsProcessLikeNotepad(string processPath) {
-            if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
-                return false;
-            }
-
-            try {
-                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
-                if (processName == null) {
-                    return false;
-                }
-                switch (processName) {
-                    case "notepad":
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-            catch (Exception ex) {
-                MpConsole.WriteLine("IsProcessLikeNotepad GetFileName exception: " + ex);
-                return false;
-            }
-        }
+        
     }
 
 }

@@ -389,6 +389,7 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
+
             MpConsole.WriteLine(@"Db file located: " + dbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPreferences.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
@@ -435,6 +436,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPreset>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPresetParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
+            await _connectionAsync.CreateTableAsync<MpAppInteropSetting>();
             await _connectionAsync.CreateTableAsync<MpBillableItem>();
             await _connectionAsync.CreateTableAsync<MpCliTransaction>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();

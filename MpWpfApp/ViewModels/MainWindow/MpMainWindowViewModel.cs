@@ -134,7 +134,7 @@ namespace MpWpfApp {
 
         #region Events
         public event EventHandler OnMainWindowShow;
-        public event EventHandler OnMainWindowHide;
+        public event EventHandler OnMainWindowHidden;
         #endregion
 
         #region Public Methods        
@@ -352,7 +352,7 @@ namespace MpWpfApp {
                     if(pasteDataObject == null) {
                         
                         
-                        pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false, true);
+                        //pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false, true);
                     }
                     //test = pasteDataObject.GetData(DataFormats.Text).ToString();
                     //MpConsole.WriteLine("Cb Text: " + test);
@@ -381,7 +381,7 @@ namespace MpWpfApp {
                             //MpClipTrayViewModel.Instance.ResetClipSelection();
                             mw.Visibility = Visibility.Collapsed;
                             if (pasteDataObject != null) {
-                                await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject);
+                                //await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject);
                             }// else if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
                             //    MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsExpanded).IsExpanded = false;
                             //}
@@ -396,12 +396,12 @@ namespace MpWpfApp {
                             IsMainWindowOpen = false;
                             IsMainWindowClosing = false;
 
-                            OnMainWindowHide?.Invoke(this, null);
+                            OnMainWindowHidden?.Invoke(this, null);
                         }
                     };
                     timer.Start();
                 } else if (pasteDataObject != null) {
-                    await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject, true);
+                    //await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject, true);
                 }
             },
             (args) => {

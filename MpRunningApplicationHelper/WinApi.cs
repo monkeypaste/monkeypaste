@@ -161,6 +161,9 @@ namespace MpProcessHelper {
         [DllImport("user32.dll")]
         public static extern bool SetActiveWindow(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        public static extern uint WaitForInputIdle(IntPtr hProcess, uint dwMilliseconds);
+
         [DllImport(@"User32.dll", EntryPoint = @"SendMessage", CharSet = CharSet.Auto)]
         public static extern int SendMessageRefRect(IntPtr hWnd, uint msg, int wParam, ref RECT rect);
 
@@ -287,8 +290,7 @@ namespace MpProcessHelper {
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetWindowPlacement(
-            IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
+        public static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
 
         [Serializable]
         [StructLayout(LayoutKind.Sequential)]

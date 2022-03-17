@@ -585,11 +585,11 @@ namespace MpWpfApp {
                                 RoutedEventHandler qrItemClick = (object o, RoutedEventArgs e) => {
                                     var hyperLink = (Hyperlink)((MenuItem)o).Tag;
                                     var bmpSrc = MpHelpers.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
-                                    MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(
+                                    MpClipboardHelper.MpClipboardManager.InteropService.SetDataObjectWrapper(
                                         new MpDataObject() {
-                                            DataFormatLookup = new Dictionary<MpClipboardFormat, string>() {
+                                            DataFormatLookup = new Dictionary<MpClipboardFormatType, string>() {
                                                 {
-                                                    MpClipboardFormat.Bitmap,
+                                                    MpClipboardFormatType.Bitmap,
                                                     bmpSrc.ToBase64String()
                                                 }
                                             }

@@ -187,7 +187,7 @@ namespace MpWpfApp {
 
 
                     MpMainWindowViewModel.Instance.OnMainWindowShow += Mwvm_OnMainWindowShow;
-                    MpMainWindowViewModel.Instance.OnMainWindowHide += Mwvm_OnMainWindowHide;
+                    MpMainWindowViewModel.Instance.OnMainWindowHidden += Mwvm_OnMainWindowHide;
 
                     //trigger global hooks since mainwindow init's hidden
                     Mwvm_OnMainWindowHide(this, new EventArgs());

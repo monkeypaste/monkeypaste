@@ -92,7 +92,107 @@ namespace MpWpfApp {
 
         private void MpDb_OnInitDefaultNativeData(object sender, EventArgs e) {
             //only occurs on initial load
-            //MpPreferences.MainWindowInitialHeight = MpMeasurements.Instance.MainWindowDefaultHeight;
+            Task.Run(async () => {
+                //MpPreferences.MainWindowInitialHeight = MpMeasurements.Instance.MainWindowDefaultHeight;
+                // TEMPORARY ONLY WPF (NOTE !! Use env variables to find windows/system32 folder NOT C:)
+                // NOTEPAD
+                var notepadApp = await MpApp.Create(
+                    guid: "9a0085ac-ea3c-4213-9276-08017d0e4ef2",
+                    appPath: @"c:\windows\system32\notepad.exe",
+                    appName: "Notepad",
+                    icon: null);
+
+                var notepadSetting1 = await MpAppInteropSetting.Create(
+                    appId: notepadApp.Id,
+                    format: MpClipboardFormatType.Bitmap,
+                    priority: -1);
+
+                var notepadSetting2 = await MpAppInteropSetting.Create(
+                    appId: notepadApp.Id,
+                    format: MpClipboardFormatType.Rtf,
+                    priority: -1);
+
+                var notepadSetting3 = await MpAppInteropSetting.Create(
+                    appId: notepadApp.Id,
+                    format: MpClipboardFormatType.Text,
+                    priority: -1);
+
+                var notepadSetting4 = await MpAppInteropSetting.Create(
+                   appId: notepadApp.Id,
+                   format: MpClipboardFormatType.Csv,
+                   priority: -1);
+
+                var notepadSetting5 = await MpAppInteropSetting.Create(
+                    appId: notepadApp.Id,
+                    format: MpClipboardFormatType.FileDrop,
+                    formatInfo: "txt",
+                    priority: int.MaxValue);
+
+                //EXPLORER
+                var explorerApp = await MpApp.Create(
+                    guid: "81c2f520-0568-4b7f-b704-9ca9f9e22c1a",
+                    appPath: @"c:\windows\explorer.exe",
+                    appName: "Explorer",
+                    icon: null);
+
+                var explorerSetting1 = await MpAppInteropSetting.Create(
+                    appId: explorerApp.Id,
+                    format: MpClipboardFormatType.Bitmap,
+                    priority: -1);
+
+                var explorerSetting2 = await MpAppInteropSetting.Create(
+                    appId: explorerApp.Id,
+                    format: MpClipboardFormatType.Rtf,
+                    priority: -1);
+
+                var explorerSetting3 = await MpAppInteropSetting.Create(
+                    appId: explorerApp.Id,
+                    format: MpClipboardFormatType.Text,
+                    priority: -1);
+
+                var explorerSetting4 = await MpAppInteropSetting.Create(
+                    appId: explorerApp.Id,
+                    format: MpClipboardFormatType.Csv,
+                    priority: -1);
+
+                var explorerSetting5 = await MpAppInteropSetting.Create(
+                    appId: explorerApp.Id,
+                    format: MpClipboardFormatType.FileDrop,
+                    priority: int.MaxValue);
+
+                //MSPAINT
+                var paintApp = await MpApp.Create(
+                    guid: "ad30c88e-372c-44e7-89df-124e8b874624",
+                    appPath: @"c:\windows\system32\mspaint.exe",
+                    appName: "Paint",
+                    icon: null);
+
+                var paintSetting1 = await MpAppInteropSetting.Create(
+                    appId: paintApp.Id,
+                    format: MpClipboardFormatType.Bitmap,
+                    priority: -1);
+
+                var paintSetting2 = await MpAppInteropSetting.Create(
+                    appId: paintApp.Id,
+                    format: MpClipboardFormatType.Rtf,
+                    priority: -1);
+
+                var paintSetting3 = await MpAppInteropSetting.Create(
+                    appId: paintApp.Id,
+                    format: MpClipboardFormatType.Text,
+                    priority: -1);
+
+                var paintSetting4 = await MpAppInteropSetting.Create(
+                   appId: paintApp.Id,
+                   format: MpClipboardFormatType.Csv,
+                   priority: -1);
+
+                var paintSetting5 = await MpAppInteropSetting.Create(
+                    appId: paintApp.Id,
+                    format: MpClipboardFormatType.FileDrop,
+                    formatInfo: "bmp",
+                    priority: int.MaxValue);
+            });            
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {

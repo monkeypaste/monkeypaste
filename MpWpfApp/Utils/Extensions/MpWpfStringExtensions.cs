@@ -82,7 +82,7 @@ namespace MpWpfApp {
         }
         public static bool IsStringRichTextTable(this string text) {
             if (!text.IsStringRichText()) {
-                return false;
+                return false; 
             }
             string rtfTableCheckToken = @"{\trowd";
             return text.IndexOf(rtfTableCheckToken) >= 0;
@@ -179,6 +179,7 @@ namespace MpWpfApp {
                 return string.Empty;
             }
             if (str.IsStringPlainText()) {
+                // NOTE plain text implies file or directory path
                 return str;
             }
             return str.ToFlowDocument().ToPlainText();

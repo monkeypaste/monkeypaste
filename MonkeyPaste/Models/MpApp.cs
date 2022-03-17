@@ -114,6 +114,7 @@ namespace MonkeyPaste {
             string appPath = "", 
             string appName = "", 
             MpIcon icon = null,
+            string guid = "",
             bool suppressWrite = false) {
             var dupApp = await MpDataModelProvider.GetAppByPath(appPath);
             if (dupApp != null) {
@@ -142,8 +143,8 @@ namespace MonkeyPaste {
                     suppressWrite: suppressWrite);
             }
             var newApp = new MpApp() {
-                AppGuid = System.Guid.NewGuid(),
-                AppPath = appPath,
+                AppGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
+                AppPath = appPath.ToLower(),
                 AppName = appName,
                 IconId = icon.Id,
                 UserDeviceId = thisDevice.Id,

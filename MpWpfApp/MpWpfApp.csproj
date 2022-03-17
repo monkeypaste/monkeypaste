@@ -278,7 +278,7 @@
     <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
-    <Compile Include="Utils\MpCsvReader.cs" />
+    <Compile Include="Utils\Documents\MpCsvReader.cs" />
     <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCursor.cs" />
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
@@ -331,7 +331,7 @@
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\Styling\MpMeasurements.cs" />
     <Compile Include="Utils\BindingExtensions\MpMeasurementsBindingExtension.cs" />
-    <Compile Include="Utils\System\Clipboard\MpPasteHelper.cs" />
+    <Compile Include="Utils\System\Clipboard\MpWpfPasteHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\System\Clipboard\MpCopyHelper.cs" />

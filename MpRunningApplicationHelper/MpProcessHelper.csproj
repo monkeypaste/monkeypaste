@@ -52,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MpProcessAutomation.cs" />
+    <Compile Include="MpProcessInfo.cs" />
     <Compile Include="MpProcessManager.cs" />
+    <Compile Include="MpWinFormsExternalPasteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WinApi.cs" />
   </ItemGroup>
@@ -72,6 +74,12 @@
     <PackageReference Include="UACHelper">
       <Version>1.3.0.5</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj">
+      <Project>{FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8}</Project>
+      <Name>MonkeyPaste.Plugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,6 +11,7 @@ using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public static class MpFileIoHelpers {
+
         public static double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f, precision);
         }
@@ -124,7 +125,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<byte[]> ReadBytesFromUriAsync(string url) {
+        public static async Task<byte[]> ReadBytesFromUriAsync(string url, int timeoutMs = 5000) {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
                 MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
                 return null;
@@ -132,7 +133,7 @@ namespace MonkeyPaste {
             using (var httpClient = new HttpClient()) {
                 try {
                     httpClient.DefaultRequestHeaders.Add("User-Agent", "C# App");
-                    byte[] bytes = await httpClient.GetByteArrayAsync(url);
+                    byte[] bytes = await httpClient.GetByteArrayAsync(url).TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
                     using (var fs = new FileStream("favicon.ico", FileMode.Create)) {                    
                         fs.Write(bytes, 0, bytes.Length);
                         return bytes;
