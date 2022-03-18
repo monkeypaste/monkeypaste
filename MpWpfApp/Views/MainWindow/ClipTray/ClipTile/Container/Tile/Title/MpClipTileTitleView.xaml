@@ -16,7 +16,9 @@
         <local:MpClipTileTitleHighlightBehavior x:Name="ClipTileTitleHighlightBehavior" />
         <local:MpSourceHighlightBehavior x:Name="SourceHighlightBehavior" />
     </i:Interaction.Behaviors>
-    <Grid>
+    <Grid x:Name="ClipTileTitleContainerGrid"
+          Loaded="ClipTileTitleContainerGrid_Loaded"
+          Unloaded="ClipTileTitleContainerGrid_Unloaded">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="0.3*" />
@@ -27,8 +29,6 @@
                  Width="{Binding Parent.TileBorderWidth}"
                  Height="{Binding ClipTileTitleHeight,
                                   Source={x:Static local:MpMeasurements.Instance}}"
-                 Loaded="ClipTileAppIconBorderImage_Loaded"
-                 Unloaded="Grid_Unloaded"
                  Grid.ColumnSpan="2">
             <Canvas x:Name="TitleSwirlCanvas"
                     Width="{Binding ClipTileDefaultMinSize,
@@ -126,10 +126,10 @@
             <TextBlock x:Name="ClipTileTitleTextBlock"
                        Text="{Binding Path=Text,
                                       ElementName=ClipTileTitleTextBox}"
+                       Visibility="Hidden"
                        FontSize="{local:MpMeasurementsBinding ClipTileTitleFontSize,
                                                               Mode=OneWay}"
-                       Foreground="White"
-                       Visibility="Hidden">
+                       Foreground="White">
                 <TextBlock.Effect>
                     <DropShadowEffect ShadowDepth="0.5"
                                       Direction="300"
@@ -147,12 +147,14 @@
                     local:MpMarqueeExtension.DropShadowOffset="1 1"
                     local:MpMarqueeExtension.MaxVelocity="-10"
                     local:MpMarqueeExtension.TailPadding="30"
+                    local:MpMarqueeExtension.Text="{Binding Path=Text,
+                                                            ElementName=ClipTileTitleTextBox}"
                     local:MpMarqueeExtension.MaxRenderWidth="{Binding ActualWidth,
                                                                       ElementName=ClipTileTitleTextCanvas}"
                     local:MpMarqueeExtension.TextBox="{Binding ElementName=ClipTileTitleTextBox}"
                     Visibility="{Binding IsEditingTitle,
                                          Converter={StaticResource BoolToVisibilityFlipConverter}}" />
-            <!--  Clip Title TextBox  -->
+
             <TextBox x:Name="ClipTileTitleTextBox"
                      IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
                      LostFocus="ClipTileTitleTextBox_LostFocus"
@@ -232,7 +234,6 @@
                 </Button.ContextMenu>
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"
-                           Loaded="ClipTileAppIconBorderImage_Loaded"
                            Source="{Binding SourceId,
                                             Converter={StaticResource SourceIdToImageSourceConverter},
                                             ConverterParameter='border'}"

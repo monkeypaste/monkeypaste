@@ -45,6 +45,18 @@ namespace MpWpfApp {
             //    PagingScrollViewer.RequestBringIntoView += ClipTray_RequestBringIntoView;
             //});
             PagingScrollViewer.RequestBringIntoView += ClipTray_RequestBringIntoView;
+
+            ClipTray.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
+        }
+
+        private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e) {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move) {
+                var lbi = ClipTray.GetListBoxItem(e.Position.Index);
+                if(lbi != null) {
+                    MpMarqueeExtension.SetIsEnabled(lbi.GetVisualDescendent<MpClipTileTitleView>().ClipTileTitleMarqueeCanvas, false);
+                    MpMarqueeExtension.SetIsEnabled(lbi.GetVisualDescendent<MpClipTileTitleView>().ClipTileTitleMarqueeCanvas, true);
+                }
+            }
         }
 
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {

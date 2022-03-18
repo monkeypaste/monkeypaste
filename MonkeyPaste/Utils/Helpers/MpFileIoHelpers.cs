@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste.Plugin;
+using System.Text.RegularExpressions;
 
 namespace MonkeyPaste {
     public static class MpFileIoHelpers {
@@ -32,6 +33,8 @@ namespace MonkeyPaste {
             }
             return -1;
         }
+
+        
 
         public static string GetUniqueFileOrDirectoryName(string dir, string fileOrDirectoryName) {
             //only support Image and RichText fileTypes

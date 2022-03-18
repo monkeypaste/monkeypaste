@@ -81,6 +81,8 @@ namespace MpWpfApp {
                 
                 _isReseting = true;
                 _canvas.InvalidateVisual();
+                _img1.InvalidateVisual();
+                _img2.InvalidateVisual();
             }
 
             internal void Start() {
@@ -265,6 +267,24 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Text Property
+
+        public static string GetText(DependencyObject obj) {
+            return (string)obj.GetValue(TextProperty);
+        }
+        public static void SetText(DependencyObject obj, string value) {
+            obj.SetValue(TextProperty, value);
+        }
+
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.RegisterAttached(
+            "Text",
+            typeof(string),
+            typeof(MpMarqueeExtension),
+            new PropertyMetadata(string.Empty));
+
+        #endregion
+
         #region MaxRenderWidth Property
 
         public static double GetMaxRenderWidth(DependencyObject obj) {
@@ -307,11 +327,10 @@ namespace MpWpfApp {
                             throw new System.Exception("This extension must be attach to an image control");
                         }
                         if (isEnabled) {
+                            canvas.Loaded += Canvas_Loaded;
                             if (canvas.IsLoaded) {
                                 Init(canvas);
-                            } else {
-                                canvas.Loaded += Canvas_Loaded;
-                            }
+                            } 
                         } else {
                             Canvas_Unloaded(canvas, null);
                         }
@@ -385,6 +404,15 @@ namespace MpWpfApp {
         }
 
 
+        private static void Tb_TextChanged(object sender, TextChangedEventArgs e) {
+            var canvas = sender as Canvas;
+            if (canvas == null) {
+                return;
+            }
+            Init(canvas);
+        }
+
+
         private static void Canvas_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             var canvas = sender as Canvas;
             if (canvas == null) {
@@ -422,17 +450,19 @@ namespace MpWpfApp {
 
             TextBox tb = GetTextBox(canvas);
 
-            if(tb == null) {
+            if(tb == null || tb.DataContext == null) {
                 return;
             }
 
+            string text = (tb.DataContext as MpContentItemViewModel).CopyItemTitle;
             tb.LostFocus -= Tb_LostFocus;
             tb.LostFocus += Tb_LostFocus;
-
+            tb.TextChanged -= Tb_TextChanged;
+            tb.TextChanged += Tb_TextChanged;
             var dpiInfo = VisualTreeHelper.GetDpi(Application.Current.MainWindow);
 
             var ft = new FormattedText(
-                string.IsNullOrEmpty(tb.Text) ? "Title is empty so what's up T?" : tb.Text, //bitmap must have w/h > 0
+                GetText(canvas), 
                 CultureInfo.CurrentCulture,
                 tb.FlowDirection,
                 new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight, tb.FontStretch, new FontFamily("Arial")),
@@ -459,7 +489,7 @@ namespace MpWpfApp {
             rtb.Render(dv);
             var textBmpSrc = MpWpfImagingHelper.ConvertRenderTargetBitmapToBitmapSource(rtb);
 
-            textBmpSrc.Freeze();
+            //textBmpSrc.Freeze();
 
             MpMarqueeTextImage mti = new MpMarqueeTextImage(
                 canvas, 
@@ -471,5 +501,6 @@ namespace MpWpfApp {
 
             _TextImageLookup.AddOrReplace(canvas, mti);
         }
+
     }
 }

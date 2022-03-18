@@ -10,6 +10,7 @@ using MonkeyPaste.Plugin;
 using System.Security.Permissions;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MpClipboardHelper {
     public class MpClipboardTimer : MpIClipboardInterop, MpIClipboardMonitor {
@@ -87,7 +88,7 @@ namespace MpClipboardHelper {
 
         private void CheckClipboardThread() {
             //setting last here will ensure item on cb isn't added when starting
-            _lastCbo = ConvertManagedFormats(Clipboard.GetDataObject());
+            _lastCbo = ConvertManagedFormats();
             while (true) {
                 while (_isStopped || IgnoreClipboardChangeEvent) {
                     Thread.Sleep(100);
@@ -95,7 +96,7 @@ namespace MpClipboardHelper {
                 Thread.Sleep(500);
 
                 //string test = GetOpenClipboardWindowText();
-                var cbo = ConvertManagedFormats(Clipboard.GetDataObject());
+                var cbo = ConvertManagedFormats();
                 if (HasChanged(cbo)) {
                     _lastCbo = cbo;
 
@@ -145,7 +146,7 @@ namespace MpClipboardHelper {
         }
 
 
-        private static MpDataObject ConvertManagedFormats(IDataObject ido, int retryCount = 5) {
+        private static MpDataObject ConvertManagedFormats(IDataObject ido = null, int retryCount = 5) {
             /*
             from: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.dataobject?view=windowsdesktop-6.0&viewFallbackFrom=net-5.0
             Special considerations may be necessary when using the metafile format with the Clipboard. 
@@ -160,20 +161,26 @@ namespace MpClipboardHelper {
             recognizing your data. To preserve your data format, add your data as a Byte array 
             to a MemoryStream and pass the MemoryStream to the SetData method.
             */
+            if(ido != null) {
+                Debugger.Break();
+            }
             var ndo = new MpDataObject();
             if (retryCount == 0) {
                 MpConsole.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
                 return ndo;
             }
             try {
-                if (ido == null) {
-                    ido = Clipboard.GetDataObject();
-                }
                 bool autoConvert = false;
                 foreach (MpClipboardFormatType supportedType in MpDataObject.SupportedFormats) {
                     string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
-                    if (ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
-                        continue;
+                    if(ido != null) {
+                        if (ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
+                            continue;
+                        }
+                    } else {
+                        if(Clipboard.GetData(nativeTypeName) == null) {
+                            continue;
+                        }
                     }
                     string data = null;
                     switch (supportedType) {
@@ -190,13 +197,22 @@ namespace MpClipboardHelper {
                             img.Dispose();
                             break;
                         case MpClipboardFormatType.FileDrop:
-                            string[] sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
+                            string[] sa = null;
+                            if(ido == null) {
+                                sa = Clipboard.GetData(nativeTypeName) as string[];
+                            } else {
+                                sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
+                            }
                             if (sa != null && sa.Length > 0) {
                                 data = string.Join(Environment.NewLine, sa);
                             }
                             break;
                         default:
-                            data = ido.GetData(nativeTypeName, autoConvert) as string;
+                            if(ido == null) {
+                                data = Clipboard.GetData(nativeTypeName) as string;
+                            } else {
+                                data = ido.GetData(nativeTypeName, autoConvert) as string;
+                            }
                             break;
                     }
                     if (!string.IsNullOrEmpty(data)) {

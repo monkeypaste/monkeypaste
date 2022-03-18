@@ -123,7 +123,7 @@ namespace MpWpfApp {
             }
 
             OnPropertyChanged(nameof(Items));
-            OnPropertyChanged(nameof(CurrentValue));
+            CurrentValue = SelectedItems.Select(x => x.Value).ToList().ToCsv();
 
 
             //Items.CollectionChanged += Items_CollectionChanged;

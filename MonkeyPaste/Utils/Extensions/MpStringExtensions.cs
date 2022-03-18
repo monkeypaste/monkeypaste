@@ -137,7 +137,26 @@ namespace MonkeyPaste {
             return ofp;
         }
 
-       
+        public static string ExpandEnvVars(this string text) {
+            string envTokenRegExStr = @"%\w*%{1}";
+            var mc = Regex.Matches(text, envTokenRegExStr);
+            foreach (Match m in mc) {
+                foreach (Group mg in m.Groups) {
+                    foreach (Capture c in mg.Captures) {
+                        string expEnvVarStr = Environment.ExpandEnvironmentVariables(c.Value);
+                        if (!string.IsNullOrEmpty(expEnvVarStr)) {
+                            text = text.Replace(c.Value, expEnvVarStr);
+                        }
+                    }
+                }
+            }
+            return text;
+        }
+
+        public static bool IsStringMayContainEnvVars(this string text) {
+            string envTokenRegExStr = @"%\w*%{1}";
+            return Regex.IsMatch(text, envTokenRegExStr);
+        }
 
         public static string[] ToArray(this StringCollection sc) {
             if (sc == null || sc.Count == 0) {

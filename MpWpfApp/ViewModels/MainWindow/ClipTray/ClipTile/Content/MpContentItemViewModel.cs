@@ -624,10 +624,6 @@ namespace MpWpfApp {
             }
             CopyItem = ci;
 
-            //if(IconId > 0) {
-            //    CopyItemHexColor = await MpDataModelProvider.GetIconHexColor(IconId);
-            //}
-
             IsNewAndFirstLoad = !MpMainWindowViewModel.Instance.IsMainWindowLoading;
 
             TemplateCollection = new MpTemplateCollectionViewModel(this);
@@ -635,10 +631,7 @@ namespace MpWpfApp {
 
             await TitleSwirlViewModel.InitializeAsync();
 
-            //await UpdateColorPallete();
-            //AnalyticItemCollectionViewModel = new MpAnalyticItemCollectionViewModel(this);
-
-            CycleDetailCommand.Execute(null);
+            DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
 
             if(CopyItemType == MpCopyItemType.Image) {
                 DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
@@ -654,50 +647,6 @@ namespace MpWpfApp {
             MpMessenger.Register(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
             IsBusy = false;
-        }
-
-        public async Task GatherAnalytics() {
-            var analyticTasks = new List<Task>();
-            Task<string> urlTask = null, ocrTask = null, cvTask = null;
-            //if (CopyItem.SsDbImage != null) {
-            //    urlTask = MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.SsDbImage.ImageBase64.ToBitmapSource());
-            //    analyticTasks.Add(urlTask);
-            //}
-
-            //if (CopyItem.ItemType == MpCopyItemType.Image) {
-            //    var itemBmpBytes = MpHelpers.ConvertBitmapSourceToByteArray(CopyItem.ItemData.ToBitmapSource());
-            //    ocrTask = MpImageOcr.Instance.OcrImageForText(itemBmpBytes);
-            //    analyticTasks.Add(ocrTask);
-            //    cvTask = MpImageAnalyzer.Instance.AnalyzeImage(itemBmpBytes);
-            //    analyticTasks.Add(cvTask);
-            //}
-
-            await Task.WhenAll(analyticTasks.ToArray());
-
-            if (urlTask != null) {
-                string detectedUrl = await urlTask;
-                if (!string.IsNullOrEmpty(detectedUrl)) {
-                    string urlTitle = await MpUrlHelpers.GetUrlTitle(detectedUrl);
-                    //CopyItemUrl = MpUrl.Create(detectedUrl, urlTitle);
-                    //if (CopyItemUrlDomain == null) {
-                    //    string urlDomain = MpUrlHelpers.GetUrlDomain(detectedUrl);
-                    //    string urlDomainTitle = await MpUrlHelpers.GetUrlTitle(urlDomain);
-                    //    CopyItemUrlDomain = MpUrlDomain.Create(urlDomain,  urlDomainTitle);
-                    //}
-                }
-                MpConsole.WriteLine("Detected Browser Address: " + detectedUrl);
-            }
-
-            if (ocrTask != null) {
-                CopyItem.ItemDescription = await ocrTask;
-            }
-
-            if (cvTask != null) {
-                CopyItem.ItemDescription = await cvTask;
-                //var imgAnalysis = JsonConvert.DeserializeObject<MpImageAnalysis>(cvContent);
-            }
-
-            //OnPropertyChanged(nameof(AppIcon));
         }
 
         #region UI Invokers
@@ -734,7 +683,6 @@ namespace MpWpfApp {
 
         #endregion
 
-
         public string GetDetailText(MpCopyItemDetailType detailType) {
             if (CopyItem == null) {
                 return string.Empty;
@@ -746,7 +694,7 @@ namespace MpWpfApp {
                 case MpCopyItemDetailType.DateTimeCreated:
                     // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
 
-                    info = "Copied " + CopyItem.CopyDateTime.ToReadableTimeSpan();
+                    info = "Copied " + CopyItemCreatedDateTime.ToReadableTimeSpan();
                     break;
                 //chars/lines
                 case MpCopyItemDetailType.DataSize:
@@ -795,13 +743,10 @@ namespace MpWpfApp {
                 //Parent.RequestUnexpand();
             }
         }
-
         
         public void MoveToArchive() {
             // TODO maybe add archiving
         }
-
-
 
         #region IDisposable
 
@@ -890,7 +835,7 @@ namespace MpWpfApp {
                 case MonkeyPaste.MpCopyItemType.Text:
                     lc = MpWpfStringExtensions.GetRowCount(CopyItem.ItemData.ToPlainText());
                     cc = CopyItem.ItemData.ToPlainText().Length;
-                    itemSize = CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                    itemSize = UnformattedContentSize;//CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
                     break;
             }
         }

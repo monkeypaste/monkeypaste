@@ -91,6 +91,22 @@ namespace MpWpfApp {
                     ReceivedClipTileViewModelMessage,
                     BindingContext);
 
+            this.ContentListBox.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+            this.ContentListBox.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
+        }
+
+        private void ItemContainerGenerator_ItemsChanged(object sender, ItemsChangedEventArgs e) {
+            
+        }
+
+        private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e) {
+            if(this.ContentListBox.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated) {
+                var cttv = this.GetVisualAncestor<MpClipTileView>().GetVisualDescendent<MpClipTileTitleView>();
+                if (cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
+                    MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                    MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                }
+            }
         }
 
         private void ContentListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
@@ -211,9 +227,10 @@ namespace MpWpfApp {
         public void UpdateUi() {
             UpdateAdorner();
             if(ContentListBox.Items.Count > 1) {
-                ContentListBox.Items.Refresh();
+                //ContentListBox.Items.Refresh();
+                CollectionViewSource.GetDefaultView(BindingContext.ItemViewModels).Refresh();
             }
-            this.UpdateLayout();
+            this.UpdateLayout();           
         }
 
         private void ContentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {

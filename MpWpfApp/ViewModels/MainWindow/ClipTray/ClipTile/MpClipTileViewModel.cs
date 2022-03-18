@@ -108,6 +108,15 @@
             }
         }
 
+        public MpContentItemViewModel LastSubSelectedItem {
+            get {
+                if (ItemViewModels == null || ItemViewModels.Count == 0) {
+                    return null;
+                }
+                return ItemViewModels.Aggregate((a, b) => a.LastSubSelectedDateTime > b.LastSubSelectedDateTime ? a : b);
+            }
+        }
+
         [MpDependsOnChild("IsHovering")]
         public MpContentItemViewModel HoverItem {
             get {
@@ -133,8 +142,7 @@
                     return HoverItem;
                 }
 
-                
-                return HeadItem;
+                return LastSubSelectedItem;
             }
         }
 
@@ -913,17 +921,6 @@
             RequestUiUpdate();
         }
 
-        public async Task ClearContent() {
-            await InitializeAsync(null);
-        } 
-
-        public void RefreshTile() {
-            if(HeadItem == null) {
-                return;
-            }
-            Task.Run(()=>InitializeAsync(HeadItem.CopyItem));
-        }
-
         #region View Event Invokers
 
         public void RequestListRefresh() {
@@ -951,16 +948,6 @@
         }
 
         #endregion
-
-        public async Task GatherAnalytics() {
-            var analyticsTask = new List<Task>();
-            Task itemTask = null;
-            foreach(var ivm in ItemViewModels) {
-                itemTask = ivm.GatherAnalytics();
-                analyticsTask.Add(itemTask);
-            }
-            await Task.WhenAll(analyticsTask.ToArray());
-        }
 
         public void ClearSelection(bool clearEditing = true) {
             IsSelected = false;

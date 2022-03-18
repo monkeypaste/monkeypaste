@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -160,7 +161,7 @@ namespace MonkeyPaste {
                 var ta = await MpTextAnnotation.Create(
                         copyItemId: copyItemId,
                         sourceId: transSourceId,
-                        matchValue: reqContent.ToString().Substring(sIdx, eIdx - sIdx - 1),
+                        matchValue: reqContent.ToString().Substring(sIdx, Math.Max(0, eIdx - sIdx - 1)),
                         label: label,
                         score: score,
                         suppressWrite: suppressWrite);

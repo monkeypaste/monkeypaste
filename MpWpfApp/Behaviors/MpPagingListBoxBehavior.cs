@@ -127,7 +127,7 @@ namespace MpWpfApp {
 
             double offsetX = 0;
             for (int i = 0; i < totalTileCount; i++) {
-                offsetX += MpMeasurements.Instance.ClipTileMargin * 3;
+                //offsetX += MpMeasurements.Instance.ClipTileMargin * 3;
                 int tileHeadId = headItemIds[i];
 
                 if (offsetX >= trackValue) {
@@ -136,7 +136,7 @@ namespace MpWpfApp {
 
                 if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
                     offsetX += uniqueWidthLookup[tileHeadId];
-                    offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
+                   // offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
                 } else {
                     offsetX += MpClipTileViewModel.DefaultBorderWidth;
                 }
@@ -239,7 +239,12 @@ namespace MpWpfApp {
                 //    MpClipTrayViewModel.Instance.JumpToQueryIdxCommand.Execute(dragTargetTileIdx);
                 //    return ;
                 //}
-                int targetTileIdx = FindJumpTileIdx(htrack.ValueFromPoint(htrack_mp));
+                double newTrackVal = (htrack_mp.X / htrack.RenderSize.Width) * htrack.Maximum;
+                newTrackVal += htrack.Thumb.RenderSize.Width / 2;
+                newTrackVal = Math.Min(Math.Max(htrack.Minimum, newTrackVal), htrack.Maximum);
+                //MpClipTrayViewModel.Instance.ScrollOffset = newTrackVal;
+                
+                int targetTileIdx = FindJumpTileIdx(newTrackVal);
 
                 MpClipTrayViewModel.Instance.JumpToQueryIdxCommand.Execute(targetTileIdx);
 

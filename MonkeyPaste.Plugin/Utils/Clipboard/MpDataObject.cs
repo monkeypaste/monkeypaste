@@ -13,8 +13,7 @@ namespace MonkeyPaste.Plugin {
         Rtf,
         Bitmap,
         FileDrop,
-        Csv,
-        UnicodeText
+        Csv
     }
 
     public interface MpIPasteObjectBuilder {
@@ -36,6 +35,7 @@ namespace MonkeyPaste.Plugin {
             string imageFormat = ".png",
             bool isTemporary = false,
             bool isCopy = false);
+
     }
     
     public interface MpIClipboardMonitor {
@@ -60,7 +60,7 @@ namespace MonkeyPaste.Plugin {
 
     public class MpDataObject  {
         #region Private Variables
-
+        private static MpIPasteObjectBuilder _pasteObjectBuilder;
         #endregion
 
         #region Properties
@@ -75,8 +75,7 @@ namespace MonkeyPaste.Plugin {
                         MpClipboardFormatType.Rtf,
                         MpClipboardFormatType.Bitmap,
                         MpClipboardFormatType.FileDrop,
-                        MpClipboardFormatType.Csv,
-                        MpClipboardFormatType.UnicodeText
+                        MpClipboardFormatType.Csv
                     };
                 }
                 return _supportedFormats;
@@ -90,12 +89,45 @@ namespace MonkeyPaste.Plugin {
 
         #endregion
 
+        #region Constructors
+
+        public static void Init(MpIPasteObjectBuilder pob) {
+            _pasteObjectBuilder = pob;
+        }
+        #endregion
+
         #region Builders
 
+        public static MpDataObject Create(
+            string data = "",
+            string fileNameWithoutExtension = null,
+            string directory = "",
+            string textFormat = ".rtf",
+            string imageFormat = ".png",
+            bool isTemporary = false,
+            bool isCopy = false,
+            List<MpClipboardFormatType> formats = null) {
+            formats = formats == null ? SupportedFormats.ToList() : formats;
+            var dobj = new MpDataObject();
+            foreach (var format in formats) {
+                dobj.DataFormatLookup.Add(format,
+                    _pasteObjectBuilder.GetFormat(
+                        format: format,
+                        data: data,
+                        fileNameWithoutExtension: fileNameWithoutExtension,
+                        directory: directory,
+                        textFormat: textFormat,
+                        imageFormat: imageFormat,
+                        isTemporary: isTemporary));
+            }
+            return dobj;
+        }
+
         //public static MpDataObject Create(
-        //    IList<MpCopyItem> cil, 
+        //    IList<string> datas,
+        //    IList<string> titles,
         //    MpIPasteObjectBuilder pasteBuilder,
-        //    string[] fileNameWithoutExtension = null,
+        //    string[] fileNamesWithoutExtension = null,
         //    string directory = "",
         //    string textFormat = ".rtf",
         //    string imageFormat = ".png",
@@ -106,9 +138,9 @@ namespace MonkeyPaste.Plugin {
         //        dobj.DataFormatLookup.Add(format,
         //            pasteBuilder.GetFormat(
         //            format: format,
-        //            data: cil.Select(x=>x.ItemData).ToArray(),
-        //            fileNameWithoutExtension: fileNameWithoutExtension == null ?
-        //                                        cil.Select(x => x.Title).ToArray() : fileNameWithoutExtension,
+        //            data: datas.ToArray(),
+        //            fileNameWithoutExtension: fileNamesWithoutExtension == null ?
+        //                                        titles.ToArray() : fileNamesWithoutExtension,
         //            directory: directory,
         //            textFormat: textFormat,
         //            imageFormat: imageFormat,

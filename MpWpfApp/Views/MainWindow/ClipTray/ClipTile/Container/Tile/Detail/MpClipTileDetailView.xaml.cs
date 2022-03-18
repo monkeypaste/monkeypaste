@@ -31,40 +31,41 @@ namespace MpWpfApp {
             if(BindingContext == null) {
                 return;
             }
-            BindingContext.CycleDetailCommand.Execute(null);                       
+            BindingContext.CycleDetailCommand.Execute(null);
+            ClipTileDetailTextBlock.ToolTip = Enum.GetName(typeof(MpCopyItemDetailType), BindingContext.CurDetailType);
 
-            if (BindingContext.CurDetailType == MpCopyItemDetailType.DateTimeCreated) {
-                ClipTileDetailTextBlock.ToolTip = BindingContext.CopyItemCreatedDateTime.ToString();
-            }
-            else if (BindingContext.CurDetailType == MpCopyItemDetailType.AppInfo || 
-                BindingContext.CurDetailType == MpCopyItemDetailType.UrlInfo) {
-                string linkText = BindingContext.DetailText;
-                string linkPath = BindingContext.DetailText;
-                string toolTip = string.Empty;
-                h = new Hyperlink();
-                if(BindingContext.CurDetailType == MpCopyItemDetailType.AppInfo) {
-                    if(File.Exists(BindingContext.DetailText)) {
-                        linkText = "Source Folder";
-                        linkPath = Path.GetDirectoryName(BindingContext.DetailText);
-                    }
-                    toolTip = BindingContext.CopyItem.Source.App.AppName;
-                } else {
-                    linkText = "Source Url";
-                    linkPath = BindingContext.DetailText;
-                    toolTip = BindingContext.CopyItem.Source.Url.UrlTitle;
-                }
-                h.Inlines.Add(linkText);
-                h.NavigateUri = new Uri(linkPath);
-                h.IsEnabled = true;
-                h.Click += H_Click;
-                ClipTileDetailTextBlock.Inlines.Clear();
-                ClipTileDetailTextBlock.Inlines.Add(h);
-                ClipTileDetailTextBlock.ToolTip = toolTip;
-            } else {
-                ClipTileDetailTextBlock.Inlines.Clear();
-                ClipTileDetailTextBlock.Inlines.Add(new Run(BindingContext.DetailText));
-                ClipTileDetailTextBlock.ToolTip = Enum.GetName(typeof(MpCopyItemDetailType),BindingContext.CurDetailType);
-            }
+            //if (BindingContext.CurDetailType == MpCopyItemDetailType.DateTimeCreated) {
+            //    ClipTileDetailTextBlock.ToolTip = BindingContext.CopyItemCreatedDateTime.ToString();
+            //}
+            //else if (BindingContext.CurDetailType == MpCopyItemDetailType.AppInfo || 
+            //    BindingContext.CurDetailType == MpCopyItemDetailType.UrlInfo) {
+            //    string linkText = BindingContext.DetailText;
+            //    string linkPath = BindingContext.DetailText;
+            //    string toolTip = string.Empty;
+            //    h = new Hyperlink();
+            //    if(BindingContext.CurDetailType == MpCopyItemDetailType.AppInfo) {
+            //        if(File.Exists(BindingContext.DetailText)) {
+            //            linkText = "Source Folder";
+            //            linkPath = Path.GetDirectoryName(BindingContext.DetailText);
+            //        }
+            //        toolTip = BindingContext.CopyItem.Source.App.AppName;
+            //    } else {
+            //        linkText = "Source Url";
+            //        linkPath = BindingContext.DetailText;
+            //        toolTip = BindingContext.CopyItem.Source.Url.UrlTitle;
+            //    }
+            //    h.Inlines.Add(linkText);
+            //    h.NavigateUri = new Uri(linkPath);
+            //    h.IsEnabled = true;
+            //    h.Click += H_Click;
+            //    ClipTileDetailTextBlock.Inlines.Clear();
+            //    ClipTileDetailTextBlock.Inlines.Add(h);
+            //    ClipTileDetailTextBlock.ToolTip = toolTip;
+            //} else {
+            //    ClipTileDetailTextBlock.Inlines.Clear();
+            //    ClipTileDetailTextBlock.Inlines.Add(new Run(BindingContext.DetailText));
+            //    ClipTileDetailTextBlock.ToolTip = Enum.GetName(typeof(MpCopyItemDetailType),BindingContext.CurDetailType);
+            //}
         }
 
         private void ClipTileDetailTextBlock_MouseEnter(object sender, MouseEventArgs e) {

@@ -14,18 +14,21 @@
     <Border x:Name="QueryItemGrid"
             BorderThickness="0"
             Background="White"
+            VerticalAlignment="Stretch"
             CornerRadius="3"
             Padding="1"
             Margin="3">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.7*" />
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0"
                      Padding="3"
                      BorderThickness="0"
+                     VerticalAlignment="Stretch"
                      MinWidth="100"
                      IsInactiveSelectionHighlightEnabled="True"
                      local:MpIsFocusedExtension.IsEnabled="True"
@@ -41,8 +44,40 @@
                                      Color="Blue" />
                 </TextBox.Resources>
             </TextBox>
+            <GridSplitter Grid.Column="1"
+                          HorizontalAlignment="Right"
+                          local:MpHoverableExtension.IsEnabled="True"
+                          local:MpHoverableExtension.HoverCursor="ResizeWE"
+                          Width="1"
+                          Background="DimGray">
+                <GridSplitter.Style>
+                    <Style TargetType="GridSplitter">
+                        <Setter Property="BorderBrush"
+                                Value="Black" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMouseOver,
+                                                           ElementName=QueryItemGrid}"
+                                         Value="True">
+                                <Setter Property="Visibility"
+                                        Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsMouseOver,
+                                                           ElementName=QueryItemGrid}"
+                                         Value="False">
+                                <Setter Property="Visibility"
+                                        Value="Hidden" />
+                            </DataTrigger>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Visibility"
+                                        Value="Visible" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </GridSplitter.Style>
+            </GridSplitter>
 
-            <Button Grid.Column="1"
+            <Button Grid.Column="2"
                     Command="{Binding ShowContentPathSelectorMenuCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                 <Button.Style>
@@ -78,7 +113,7 @@
                        Width="10"
                        Height="10" />
             </Button>
-            <Button Grid.Column="2"
+            <Button Grid.Column="3"
                     Command="{Binding ClearQueryCommand}"
                     CommandParameter="{Binding DataContext,
                                                RelativeSource={RelativeSource Self}}">

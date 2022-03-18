@@ -58,8 +58,16 @@ namespace MpProcessHelper {
         #region Public Methods
 
         public static void Init() {
-
             LastHandle = IntPtr.Zero;
+            var pkvp = GetOpenWindows();
+            foreach(var kvp in pkvp) {
+                if(CurrentProcessWindowHandleStackDictionary.ContainsKey(kvp.Key)) {
+                    CurrentProcessWindowHandleStackDictionary[kvp.Key].Add(kvp.Value);
+                } else {
+                    CurrentProcessWindowHandleStackDictionary.TryAdd(kvp.Key, new List<IntPtr> { kvp.Value });
+                }
+                CurrentWindowStateHandleDictionary.TryAdd(kvp.Value, WinApi.GetPlacement(kvp.Value).showCmd);
+            }
             RefreshHandleStack();
 
             if (_timer == null) {
@@ -166,7 +174,7 @@ namespace MpProcessHelper {
                     if (proc.MainWindowHandle == IntPtr.Zero) {
                         return fallback; //fallback;
                     }
-                    return proc.MainModule.FileName.ToString();
+                    return proc.MainModule.FileName.ToString().ToLower();
                 }
             }
             catch (Exception e) {
@@ -197,7 +205,7 @@ namespace MpProcessHelper {
                 using (var results = searcher.Get()) {
                     ManagementObject mo = results.Cast<ManagementObject>().FirstOrDefault();
                     if (mo != null) {
-                        return (string)mo["ExecutablePath"];
+                        return ((string)mo["ExecutablePath"]).ToLower();
                     }
                 }
             }
@@ -233,6 +241,10 @@ namespace MpProcessHelper {
         }
 
         public static IntPtr GetLastActiveInstance(string processPath) {
+            if(string.IsNullOrWhiteSpace(processPath)) {
+                return IntPtr.Zero;
+            }
+            processPath = processPath.ToLower();
             if(CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath) &&
                CurrentProcessWindowHandleStackDictionary[processPath].Count > 0) {
                 return CurrentProcessWindowHandleStackDictionary[processPath][0];
@@ -241,10 +253,14 @@ namespace MpProcessHelper {
         }
 
         public static bool IsHandleRunningProcess(IntPtr handle) {
-            if(handle == IntPtr.Zero) {
+            if(handle == null || handle == IntPtr.Zero) {
                 return false;
             }
             return CurrentProcessWindowHandleStackDictionary.Any(x => x.Value.Contains(handle));
+        }
+
+        public static bool IsProcessRunning(string processPath) {
+            return GetLastActiveInstance(processPath) != IntPtr.Zero;
         }
 
         #endregion
@@ -258,7 +274,7 @@ namespace MpProcessHelper {
                 try {
                     int size = buffer.Capacity;
                     if (WinApi.QueryFullProcessImageName(hprocess, 0, buffer, ref size)) {
-                        return buffer.ToString(0, size);
+                        return buffer.ToString(0, size).ToLower();
                     }
                 }
                 finally {
@@ -312,7 +328,8 @@ namespace MpProcessHelper {
 
                             var placement = WinApi.GetPlacement(handle);
                             if (placement.showCmd == WinApi.ShowWindowCommands.Minimized || placement.showCmd == WinApi.ShowWindowCommands.Hide) {
-                                return;
+                                //return;
+                                continue;
                             }
                             if (CurrentWindowStateHandleDictionary.ContainsKey(handle)) {
                                 CurrentWindowStateHandleDictionary.TryRemove(handle, out _);
@@ -414,10 +431,53 @@ namespace MpProcessHelper {
         private static string GetKnownProcessPath(IntPtr handle) {
             foreach (var kvp in CurrentProcessWindowHandleStackDictionary) {
                 if (kvp.Value.Contains(handle)) {
-                    return kvp.Key;
+                    return kvp.Key.ToLower();
                 }
             }
             return null;
+        }
+
+        private static IDictionary<string, IntPtr> GetOpenWindows() {
+            IntPtr shellWindow = WinApi.GetShellWindow();
+            Dictionary<string, IntPtr> windows = new Dictionary<string, IntPtr>();
+
+            WinApi.EnumWindows(delegate (IntPtr hWnd, int lParam) {
+                if (hWnd == shellWindow) {
+                    return true;
+                }
+                if (!WinApi.IsWindowVisible(hWnd)) {
+                    return true;
+                }
+
+                try {
+                    WinApi.GetWindowThreadProcessId(hWnd, out uint pid);
+                    var process = Process.GetProcessById((int)pid);
+                    if (process.MainWindowHandle == IntPtr.Zero) {
+                        return true;
+                    }
+
+                    int length = WinApi.GetWindowTextLength(hWnd);
+                    if (length == 0 || !WinApi.IsWindow(hWnd)) return true;
+
+                    //if(MpHelpers.IsThisAppAdmin()) {
+                    //    process.WaitForInputIdle(100);
+                    //}
+
+                    //StringBuilder builder = new StringBuilder(length);
+                    //WinApi.GetWindowText(hWnd, builder, length + 1);
+
+                    windows.AddOrReplace(GetProcessPath(hWnd), hWnd);
+                }
+                catch (InvalidOperationException ex) {
+                    // no graphical interface
+                    MpConsole.WriteLine("OpenWindowGetter, ignoring non GUI window w/ error: " + ex.ToString());
+                }
+
+                return true;
+
+            }, 0);
+
+            return windows;
         }
 
         #endregion

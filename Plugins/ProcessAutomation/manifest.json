@@ -26,7 +26,13 @@
         "controlType": "FileChooser",
         "unitType": "FileSystemPath",
         "isRequired": true,
-        "paramId": 1
+        "paramId": 1,
+        "values": [
+          {
+            "value": "%ComSpec%",
+            "isDefault": true
+          }
+        ]
       },
       {
         "label": "Prefer running process?",
@@ -101,6 +107,18 @@
         "paramId": 5
       },
       {
+        "label": "Create No Window",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "values": [
+          {
+            "value": "true",
+            "isDefault": false
+          }
+        ],
+        "paramId": 13
+      },
+      {
         "label": "Working Directory",
         "description": "When left empty the process will execute in its directory on the file system",
         "controlType": "DirectoryChooser",
@@ -134,6 +152,21 @@
             "value": "Maximized"
           }
         ]
+      },
+      {
+        "label": "Domain",
+        "controlType": "TextBox",
+        "paramId": 14
+      },
+      {
+        "label": "User Name",
+        "controlType": "TextBox",
+        "paramId": 11
+      },
+      {
+        "label": "Password",
+        "controlType": "PasswordBox",
+        "paramId": 12
       },
       {
         "label": "Suppress Errors",

@@ -71,6 +71,7 @@
     <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
     <Compile Remove="Views\Shell\MpMainShell.xaml.cs" />
     <None Remove=".DS_Store" />
+    <None Remove="Resources\Fonts\password.ttf" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Html\Editor\Editor2.html" />
     <None Remove="Resources\Html\Editor\Editor2.js" />
@@ -268,6 +269,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\password.ttf" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,7 +12,7 @@ using System.IO;
 using System.Threading;
 
 namespace MpWpfApp {
-    public class MpWpfPasteHelper : MpIExternalPasteHandler, MpIErrorHandler {
+    public class MpWpfPasteHelper : MpIExternalPasteHandler, MpIErrorHandler, MpIPasteObjectBuilder {
         private Queue<MpPasteItem> _pasteQueue = new Queue<MpPasteItem>();
         private static MpWpfPasteHelper _instance;
         public static MpWpfPasteHelper Instance => _instance ?? (_instance = new MpWpfPasteHelper());
@@ -36,6 +36,15 @@ namespace MpWpfApp {
             }).FireAndForgetSafeAsync(this);
         }
 
+
+        public string GetFormat(MpClipboardFormatType format, string data, string fileNameWithoutExtension = "", string directory = "", string textFormat = ".rtf", string imageFormat = ".png", bool isTemporary = false) {
+            return new MpWpfPasteObjectBuilder().GetFormat(format, data, fileNameWithoutExtension, directory, textFormat, imageFormat, isTemporary);
+        }
+
+        public string GetFormat(MpClipboardFormatType format, string[] data, string[] fileNameWithoutExtension = null, string directory = "", string textFormat = ".rtf", string imageFormat = ".png", bool isTemporary = false, bool isCopy = false) {
+            return new MpWpfPasteObjectBuilder().GetFormat(format, data, fileNameWithoutExtension, directory, textFormat, imageFormat, isTemporary, isCopy);
+        }
+
         public async Task PasteDataObject(MpDataObject mpdo, IntPtr handle, bool finishWithEnterKey = false) {
             var pi = new MpProcessInfo() {
                 Handle = handle
@@ -49,19 +58,19 @@ namespace MpWpfApp {
             }
             int pasteCount = _pasteQueue.Count;
             while(pasteCount > 0) {
-                var pi = _pasteQueue.Dequeue();
+                var pasteItem = _pasteQueue.Dequeue();
 
-                IntPtr result = MpProcessHelper.MpProcessAutomation.SetActiveProcess(pi.ProcessInfo);
+                var processInfo = MpProcessHelper.MpProcessAutomation.SetActiveProcess(pasteItem.ProcessInfo);
 
-                if(result != null && result != IntPtr.Zero) {
+                if(processInfo != null && processInfo.Handle != IntPtr.Zero) {
 
-                    var ido = (System.Windows.Forms.IDataObject)MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(pi.DataObject);
+                    var ido = (System.Windows.Forms.IDataObject)MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(pasteItem.DataObject);
 
                     System.Windows.Forms.Clipboard.SetDataObject(ido);
                     Thread.Sleep(100);
                     System.Windows.Forms.SendKeys.SendWait("^v");
                     Thread.Sleep(100);
-                    if (pi.FinishWithEnterKey) {
+                    if (pasteItem.FinishWithEnterKey) {
                         System.Windows.Forms.SendKeys.SendWait("{ENTER}");
                     }
                 }
@@ -96,6 +105,11 @@ namespace MpWpfApp {
             while(!_pasteQueue.IsNullOrEmpty()) {
                 await Task.Delay(100);
             }
+        }
+
+
+        public MpDataObject ConvertToDataObject(string format, object data) {
+            throw new NotImplementedException();
         }
 
         public async Task<MpDataObject> GetCopyItemDataObject(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {
@@ -293,5 +307,6 @@ namespace MpWpfApp {
             internal MpProcessInfo ProcessInfo { get; set; }
             internal bool FinishWithEnterKey { get; set; }
         }
+
     }
 }

@@ -102,5 +102,12 @@ namespace MpWpfApp {
             dropShadow.Direction = 360.0 - angle + 180;
         }
 
+        private void ClipTileClipBorder_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(!(bool)e.NewValue) {
+                return;
+            }
+
+            MpMarqueeExtension.Init(TileTitleView.ClipTileTitleMarqueeCanvas);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,14 +25,14 @@ namespace MpWpfApp {
         public MpClipTileTitleView() : base() {
             InitializeComponent();
         }
-
-        private void ClipTileAppIconBorderImage_Loaded(object sender, RoutedEventArgs e) {
+        private void ClipTileTitleContainerGrid_Loaded(object sender, RoutedEventArgs e) {
             ClipTileTitleHighlightBehavior.Attach(this);
             SourceHighlightBehavior.Attach(this);
             RenderOptions.SetBitmapScalingMode(ClipTileAppIconBorderImage, BitmapScalingMode.LowQuality);
         }
 
-        private void Grid_Unloaded(object sender, RoutedEventArgs e) {
+
+        private void ClipTileTitleContainerGrid_Unloaded(object sender, RoutedEventArgs e) {
             ClipTileTitleHighlightBehavior.Detach();
             SourceHighlightBehavior.Detach();
         }
@@ -235,5 +236,6 @@ namespace MpWpfApp {
         private void PinButton_MouseLeave(object sender, MouseEventArgs e) {
             BindingContext.Parent.IsOverPinButton = false;
         }
+
     }
 }

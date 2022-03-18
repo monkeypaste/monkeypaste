@@ -463,6 +463,9 @@
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\Slider\MpSliderParameterView.xaml.cs">
       <DependentUpon>MpSliderParameterView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\PasswordBox\MpPasswordBoxParameterView.xaml.cs">
+      <DependentUpon>MpPasswordBoxParameterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\TextBox\MpTextBoxParameterView.xaml.cs">
       <DependentUpon>MpTextBoxParameterView.xaml</DependentUpon>
     </Compile>
@@ -967,6 +970,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\PasswordBox\MpPasswordBoxParameterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\Parameters\ParameterItem\Items\TextBox\MpTextBoxParameterView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1155,6 +1162,7 @@
     <None Include="Resources\Assets\Weights\yolov5n.onnx" />
     <None Include="Resources\Assets\Weights\yolov5n6.onnx" />
     <None Include="Resources\Assets\Weights\yolov5s.onnx" />
+    <Resource Include="Resources\Fonts\password.ttf" />
     <None Include="Resources\Plugins\Azure\Translator\manifest.json" />
     <None Include="Resources\Plugins\Azure\Vision\manifest.json" />
     <None Include="Resources\Plugins\OpenAi\manifest.json" />

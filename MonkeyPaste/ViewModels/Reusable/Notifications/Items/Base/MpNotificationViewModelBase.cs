@@ -23,7 +23,8 @@ namespace MonkeyPaste {
         InvalidResponse,
         DbError,
         LoadComplete,
-        Help
+        Help,
+        AnalyzerUpdated
     }
 
     public enum MpNotificationExceptionSeverityType {
@@ -78,6 +79,9 @@ namespace MonkeyPaste {
                     ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption;
             }
         }
+
+        public bool HasUserOptions => ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption ||
+                                      ExceptionType == MpNotificationExceptionSeverityType.ErrorWithOption;
 
         public bool IsStartupNotification => DialogType == MpNotificationDialogType.StartupLoader;
 

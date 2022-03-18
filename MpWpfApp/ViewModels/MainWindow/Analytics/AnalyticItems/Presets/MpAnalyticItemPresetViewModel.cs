@@ -338,6 +338,7 @@ namespace MpWpfApp {
                 case MpAnalyticItemParameterControlType.ComboBox:
                     naipvm = new MpEnumerableParameterViewModel(this);
                     break;
+                case MpAnalyticItemParameterControlType.PasswordBox:
                 case MpAnalyticItemParameterControlType.TextBox:
                     naipvm = new MpTextBoxParameterViewModel(this);
                     break;
@@ -382,7 +383,7 @@ namespace MpWpfApp {
 
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
             var aipvm = sender as MpAnalyticItemParameterViewModelBase;
-            if (aipvm.IsRequired && aipvm.CurrentValue == null) {
+            if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
                 aipvm.ValidationMessage = $"{aipvm.Label} is required";
             } else {
                 aipvm.ValidationMessage = string.Empty;

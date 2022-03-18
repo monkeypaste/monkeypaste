@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows;
 using MpProcessHelper;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpWpfBootstrapperViewModel : MpBootstrapperViewModelBase {
@@ -16,7 +17,7 @@ namespace MpWpfApp {
         public MpWpfBootstrapperViewModel(MpINativeInterfaceWrapper niw) : base(niw) {
             if(_items == null) {
                 _items = new List<MpBootstrappedItem>();
-            } 
+            }
 
             _items.AddRange(
                 new List<MpBootstrappedItem>() {
@@ -59,7 +60,8 @@ namespace MpWpfApp {
 
                     new MpBootstrappedItem(typeof(MpClipboardHelper.MpClipboardManager),MpWpfPasteHelper.Instance),
 
-                    new MpBootstrappedItem(typeof(MpWpfPasteHelper))
+                    new MpBootstrappedItem(typeof(MpWpfPasteHelper)),
+                    new MpBootstrappedItem(typeof(MpDataObject), new MpWpfPasteObjectBuilder())
                     //new MpBootstrappedItem(typeof(MpMouseHook))
                 });
         }

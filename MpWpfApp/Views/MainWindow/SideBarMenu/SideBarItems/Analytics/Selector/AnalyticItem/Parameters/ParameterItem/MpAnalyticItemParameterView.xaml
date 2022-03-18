@@ -81,6 +81,13 @@
                     <local:MpTextBoxParameterView DataContext="{Binding}" />
                 </DataTemplate>
 
+                <!--  PasswordBox Parameter  -->
+
+                <DataTemplate x:Key="PasswordBoxParameterTemplate"
+                              DataType="local:MpTextBoxParameterViewModel">
+                    <local:MpPasswordBoxParameterView DataContext="{Binding}" />
+                </DataTemplate>
+
                 <!--  CheckBox Parameter  -->
 
                 <DataTemplate x:Key="CheckBoxParameterTemplate"

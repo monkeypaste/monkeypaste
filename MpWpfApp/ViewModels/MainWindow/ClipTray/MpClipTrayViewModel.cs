@@ -1176,11 +1176,11 @@ namespace MpWpfApp {
                 if (MpClipTrayViewModel.Instance.PinnedItems.Any(x => x.HeadItem?.CopyItemId == tileHeadId)) {
                     continue;
                 }
-                offsetX += MpMeasurements.Instance.ClipTileMargin * 2;
+                //offsetX += MpMeasurements.Instance.ClipTileMargin * 2;
 
                 if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
                     offsetX += uniqueWidthLookup[tileHeadId];
-                    offsetX -= MpMeasurements.Instance.ClipTileMargin;
+                    //offsetX -= MpMeasurements.Instance.ClipTileMargin;
                 } else {
                     offsetX += MpClipTileViewModel.DefaultBorderWidth;
                 }
@@ -2135,7 +2135,7 @@ namespace MpWpfApp {
                         pi.ProcessPath = ptapvm.AppPath;
                         pi.IsAdmin = ptapvm.IsAdmin;
                         pi.IsSilent = ptapvm.IsSilent;
-                        pi.Arguments = ptapvm.Args;
+                        pi.ArgumentList = new List<string>() { ptapvm.Args };
                         pi.WindowState = ptapvm.WindowState;
                     }
                 } else if (args != null && args is IntPtr handle && handle != IntPtr.Zero) {

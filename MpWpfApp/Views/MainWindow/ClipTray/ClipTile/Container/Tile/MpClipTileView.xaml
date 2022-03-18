@@ -25,6 +25,7 @@
                         IsHitTestVisible="{Binding HasScrollVelocity,
                                                    Source={x:Static local:MpClipTrayViewModel.Instance},
                                                    Converter={StaticResource BoolFlipConverter}}"
+                        IsVisibleChanged="ClipTileClipBorder_IsVisibleChanged"
                         Loaded="ClipTileClipBorder_Loaded"
                         Unloaded="ClipTileClipBorder_Unloaded"
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"

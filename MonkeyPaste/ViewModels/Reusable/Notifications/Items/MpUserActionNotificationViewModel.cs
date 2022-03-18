@@ -20,11 +20,11 @@ namespace MonkeyPaste {
 
         #region State
 
-        public bool ShowIgnoreButton => ExceptionType != MpNotificationExceptionSeverityType.ErrorAndShutdown;
+        public bool ShowIgnoreButton => HasUserOptions;
 
-        public bool ShowRetryButton => ExceptionType != MpNotificationExceptionSeverityType.ErrorAndShutdown;
+        public bool ShowRetryButton => HasUserOptions;
 
-        public bool ShowShutdownButton => ExceptionType != MpNotificationExceptionSeverityType.None;
+        public bool ShowShutdownButton => HasUserOptions;
 
         public MpDialogResultType DialogResult { get; private set; }
 

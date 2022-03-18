@@ -27,7 +27,6 @@ namespace MpWpfApp {
                         
             switch (format) {
                 case MpClipboardFormatType.Text:
-                case MpClipboardFormatType.UnicodeText:
                     return data.ToPlainText();
                 case MpClipboardFormatType.Rtf:
                     return data.ToRichText();
@@ -51,8 +50,7 @@ namespace MpWpfApp {
                     fileNameWithoutExtension = fileNameWithoutExtension != null ? fileNameWithoutExtension :
                                                                       Path.GetFileNameWithoutExtension(
                                                                           Path.GetTempFileName());
-                    directory = directory != null ? directory :
-                                            Path.GetTempPath();
+                    directory = string.IsNullOrEmpty(directory) ? Path.GetTempPath() : directory;
                     if (!directory.IsFileOrDirectory()) {
                         try {
                             Directory.CreateDirectory(directory);
@@ -81,7 +79,15 @@ namespace MpWpfApp {
                     }
                     outputPath = Path.Combine(directory, fileNameWithoutExtension, textFormat);
 
-                    return MpFileIoHelpers.WriteTextToFile(outputPath, data.ToRichText(), isTemporary);
+                    string outDataStr = data;
+                    if(textFormat.ToLower().Contains("txt")) {
+                        outDataStr = data.ToPlainText();
+                    }else if (textFormat.ToLower().Contains("csv")) {
+                        outDataStr = data.ToCsv();
+                    } else {
+                        outDataStr = data.ToRichText();
+                    }
+                    return MpFileIoHelpers.WriteTextToFile(outputPath, outDataStr, isTemporary);
             }
 
             throw new Exception($"Cannot convert '{data}' to format '{format}'");
@@ -104,7 +110,6 @@ namespace MpWpfApp {
                                         "" : fileNameWithoutExtension[i];
                 switch (format) {
                     case MpClipboardFormatType.Text:
-                    case MpClipboardFormatType.UnicodeText:
                         outputData += data.ToPlainText();
                         break;
                     case MpClipboardFormatType.Rtf:
@@ -172,5 +177,6 @@ namespace MpWpfApp {
             }
             return outputData;
         }
+
     }
 }

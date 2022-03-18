@@ -41,6 +41,10 @@ namespace MpWpfApp {
 
             await base.InitializeAsync(aipv);
 
+            if (CurrentValue.IsStringMayContainEnvVars()) {
+                CurrentValue = CurrentValue.ExpandEnvVars();
+            }
+
             IsBusy = false;
         }
 

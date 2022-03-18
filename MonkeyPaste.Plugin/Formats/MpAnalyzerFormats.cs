@@ -16,7 +16,8 @@ namespace MonkeyPaste.Plugin {
         CheckBox,
         Slider,
         FileChooser,
-        DirectoryChooser
+        DirectoryChooser,
+        PasswordBox
     }
 
     public enum MpAnalyticItemParameterValueUnitType {

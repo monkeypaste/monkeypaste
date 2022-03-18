@@ -174,6 +174,7 @@ namespace MpWpfApp {
                             return MpAnalyticItemParameterValueUnitType.Bool;
                         case MpAnalyticItemParameterControlType.Slider:
                             return MpAnalyticItemParameterValueUnitType.Decimal;
+                        case MpAnalyticItemParameterControlType.PasswordBox:
                         case MpAnalyticItemParameterControlType.TextBox:
                         case MpAnalyticItemParameterControlType.List:
                         case MpAnalyticItemParameterControlType.ComboBox:
