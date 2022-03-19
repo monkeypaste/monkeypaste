@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 
 namespace MpWpfApp {
-    public class MpTextViewTempalteSelector : DataTemplateSelector {
+    public class MpTextViewTemplateSelector : DataTemplateSelector {
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
             if (item == null || container == null) {

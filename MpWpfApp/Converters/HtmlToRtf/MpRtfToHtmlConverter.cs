@@ -14,35 +14,32 @@ using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace MpWpfApp {
-    public class MpRtfToHtmlConverter {
-        #region Singleton
-        private static readonly Lazy<MpRtfToHtmlConverter> _Lazy = new Lazy<MpRtfToHtmlConverter>(() => new MpRtfToHtmlConverter());
-        public static MpRtfToHtmlConverter Instance { get { return _Lazy.Value; } }
+    public static class MpRtfToHtmlConverter {
 
-        private MpRtfToHtmlConverter() { }
-        #endregion
-
-        #region Private Variables
-        private double _indentCharCount = 5;
+        #region private static Variables
+        private static double _indentCharCount = 5;
         #endregion
 
         #region Properties
 
         #endregion
 
-        public string ConvertRtfToHtml(string rtf) {
+        public static string ConvertRtfToHtml(string rtf) {
             if(rtf == null) {
                 return string.Empty;
             }
-            var fd = rtf.ToFlowDocument();
+            return ConvertFlowDocumentToHtml(rtf.ToFlowDocument());
+        }
+
+        public static string ConvertFlowDocumentToHtml(FlowDocument fd) {
             var sb = new StringBuilder();
-            foreach(Block b in fd.Blocks) {
+            foreach (Block b in fd.Blocks) {
                 sb.Append(ConvertTextElementToHtml(b));
             }
             return sb.ToString();
         }
 
-        private string ConvertTextElementToHtml(TextElement te) {
+        private static string ConvertTextElementToHtml(TextElement te) {
             string html = string.Empty;
             var cl = GetChildren(te);
             foreach (var cte in cl) {
@@ -51,7 +48,7 @@ namespace MpWpfApp {
             return ConvertTextElementToHtmlHelper(te,html);
         }
 
-        private string ConvertTextElementToHtmlHelper(TextElement te,string content) { 
+        private static string ConvertTextElementToHtmlHelper(TextElement te,string content) { 
             if (te is List) {
                 return WrapWithList(te as List, content);
             } else if (te is ListItem) {
@@ -88,11 +85,11 @@ namespace MpWpfApp {
                 throw new Exception(@"Unknown text element: " + te.ToString());
             }
         }
-        private string WrapWithList(List l, string content) {
+        private static string WrapWithList(List l, string content) {
             return WrapWithTag("ol", content);
         }
 
-        private string WrapWithListItem(ListItem li, string content) {
+        private static string WrapWithListItem(ListItem li, string content) {
             var l = li.FindParentOfType<List>();
             string listType = @"bullet";
             if(l.MarkerStyle == TextMarkerStyle.Decimal) {
@@ -104,7 +101,7 @@ namespace MpWpfApp {
                 content);
         }
 
-        private string WrapWithParagraph(Paragraph p,string content) {
+        private static string WrapWithParagraph(Paragraph p,string content) {
             if(p.Parent is ListItem) {
                 //rtf list items are parents of paragraphs but quills are the direct content
                 return content;
@@ -130,7 +127,7 @@ namespace MpWpfApp {
             return sb.ToString();
         }        
 
-        private string WrapWithSpan(Span s, string content) {
+        private static string WrapWithSpan(Span s, string content) {
             var sb = new StringBuilder(@"<span");
             if(s.Parent is Paragraph) {
                 sb.AppendFormat(@" {0}>",GetSpanAttributes(s as Span));
@@ -141,18 +138,18 @@ namespace MpWpfApp {
             return sb.ToString();
         }
 
-        private string WrapWithTag(string tag, string content) {
+        private static string WrapWithTag(string tag, string content) {
             return string.Format(@"<{0}>{1}</{0}>", tag, content);
         }
 
-        private string GetParagraphIndent(Paragraph p) {
+        private static string GetParagraphIndent(Paragraph p) {
             if (p.TextIndent > 0) {
                 int indentLevel = (int)(p.TextIndent / _indentCharCount);
                 return @" ql-indent-" + indentLevel; ;
             }
             return string.Empty;
         }
-        private string GetSpanAttributes(Span s) {
+        private static string GetSpanAttributes(Span s) {
             var sb = new StringBuilder();
             sb.AppendFormat(@"class='ql-font-{0}'", GetHtmlFont(s));
             sb.AppendFormat(GetFontSize(s));
@@ -168,24 +165,24 @@ namespace MpWpfApp {
             return sb.ToString();
         }
 
-        private string GetFontSize(Span s) {
+        private static string GetFontSize(Span s) {
             double fs = (double)s.FontSize;//new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
             MpRichTextFormatProperties.Instance.AddFontSize(fs);
             return string.Format(@" style='font-size: {0}px;", fs);
         }
 
-        private string GetHtmlColor(Color c) {
+        private static string GetHtmlColor(Color c) {
             MpRichTextFormatProperties.Instance.AddFontColor(c);
             return string.Format(@"rgb({0},{1},{2})", c.R, c.G, c.B);
         }
 
-        private string GetHtmlFont(Span s) {
+        private static string GetHtmlFont(Span s) {
             string ff = s.FontFamily.ToString().ToLower();
             MpRichTextFormatProperties.Instance.AddFont(ff);
             return ff.Replace(" ", "-");
         }
 
-        private List<TextElement> GetChildren(TextElement te) {
+        private static List<TextElement> GetChildren(TextElement te) {
             var cl = new List<TextElement>();
             if (te is List) {
                 foreach (var li in (te as List).ListItems) {
@@ -208,14 +205,14 @@ namespace MpWpfApp {
         }       
         
 
-        public void Test() {
-            MpHtmlToRtfConverter.Instance.Test();
+        public static void Test() {
+            MpHtmlToRtfConverter.Test();
 
             var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpRtfToHtmlConverter)).Assembly;
             var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample1.html");
             using (var reader = new System.IO.StreamReader(stream)) {
-                string rtf = MpHtmlToRtfConverter.Instance.ConvertHtmlToRtf(reader.ReadToEnd());
-                string html = MpRtfToHtmlConverter.Instance.ConvertRtfToHtml(rtf);
+                string rtf = MpHtmlToRtfConverter.ConvertHtmlToRtf(reader.ReadToEnd());
+                string html = MpRtfToHtmlConverter.ConvertRtfToHtml(rtf);
                 MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
             }
         }

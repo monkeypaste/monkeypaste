@@ -407,7 +407,7 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(PluginFormat.iconUrl)) {
                 IconId = MpPreferences.ThisAppIcon.Id;
             } else {
-                var bytes = await MpFileIoHelpers.ReadBytesFromUriAsync(PluginFormat.iconUrl);
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl);
                 var icon = await MpIcon.Create(
                     iconImgBase64: bytes.ToBase64String(),
                     createBorder: false);

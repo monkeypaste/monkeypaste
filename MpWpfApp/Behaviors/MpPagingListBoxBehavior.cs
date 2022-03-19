@@ -127,7 +127,7 @@ namespace MpWpfApp {
 
             double offsetX = 0;
             for (int i = 0; i < totalTileCount; i++) {
-                //offsetX += MpMeasurements.Instance.ClipTileMargin * 3;
+                offsetX += MpMeasurements.Instance.ClipTileMargin * 3;
                 int tileHeadId = headItemIds[i];
 
                 if (offsetX >= trackValue) {
@@ -136,7 +136,7 @@ namespace MpWpfApp {
 
                 if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
                     offsetX += uniqueWidthLookup[tileHeadId];
-                   // offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
+                    offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
                 } else {
                     offsetX += MpClipTileViewModel.DefaultBorderWidth;
                 }

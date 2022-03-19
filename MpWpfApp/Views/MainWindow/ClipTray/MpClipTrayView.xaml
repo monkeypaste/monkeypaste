@@ -26,6 +26,7 @@
                                                                       Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
                               VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Behaviors>
+                        <!--  old values:  Friction=0.85 WheelDampening=0.08  -->
                         <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
                                                        Friction="0.85"
                                                        WheelDampening="0.08"
@@ -33,14 +34,14 @@
                                                        LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
                     </i:Interaction.Behaviors>
                     <ListBox x:Name="ClipTray"
+                             ClipToBounds="True"
                              SnapsToDevicePixels="True"
                              Width="{Binding ClipTrayTotalWidth}"
                              SelectionChanged="ClipTray_SelectionChanged"
                              Visibility="{Binding IsTrayEmpty,
                                                   Converter={StaticResource BoolToVisibilityFlipConverter},
                                                   ConverterParameter={StaticResource Hide}}"
-                             ItemsSource="{Binding Items,
-                                                   IsAsync=True}"
+                             ItemsSource="{Binding Items}"
                              Background="Transparent"
                              Loaded="ClipTray_Loaded"
                              IsSynchronizedWithCurrentItem="True"
@@ -130,9 +131,7 @@
                        FontStyle="Oblique"
                        FontSize="34" />
         </Grid>
-        <Viewbox Visibility="{Binding IsRequery,
-                                      Converter={StaticResource BoolToVisibilityConverter},
-                                      ConverterParameter={StaticResource Hide}}">
+        <Viewbox Visibility="{Binding IsRequery, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource Hide}}">
             <local:MpSpinnerApple Margin="20"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Center" />

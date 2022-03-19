@@ -17,19 +17,19 @@
             Loaded="ContentListItemView_Loaded"
             Unloaded="Border_Unloaded"
             DataContextChanged="ContentListItemView_DataContextChanged"
-            IsHitTestVisible="{Binding HasScrollVelocity,
-                                       Source={x:Static local:MpClipTrayViewModel.Instance},
-                                       Converter={StaticResource BoolFlipConverter}}"
+            IsHitTestVisible="{Binding HasScrollVelocity, Source={x:Static local:MpClipTrayViewModel.Instance}, Converter={StaticResource BoolFlipConverter}}"
             PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
             PreviewMouseRightButtonDown="Border_PreviewMouseRightButtonDown"
             local:MpHoverableExtension.IsEnabled="True"
-            local:MpHoverableExtension.IsHovering="{Binding IsHovering,
-                                                            Mode=TwoWay}"
+            local:MpHoverableExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Border.Resources>
             <DataTemplate x:Key="RtbContentTemplate">
                 <local:MpRtbView DataContext="{Binding}" />
+            </DataTemplate>
+            <DataTemplate x:Key="QuillContentTemplate">
+                <local:MpQuillEditorView DataContext="{Binding}" />
             </DataTemplate>
             <DataTemplate x:Key="FlowDocumentScrollViewerContentTemplate">
                 <FlowDocumentScrollViewer Loaded="FlowDocumentScrollViewer_Loaded" />
@@ -62,8 +62,7 @@
         </Border.BorderBrush>
         <Grid>
             <ContentControl x:Name="ContentView"
-                            Content="{Binding .,
-                                              IsAsync=True}"
+                            Content="{Binding}"
                             ContentTemplateSelector="{StaticResource ContentViewSelector}" />
             <Border BorderThickness="0.75"
                     HorizontalAlignment="Stretch">

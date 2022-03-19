@@ -164,7 +164,7 @@ namespace MpWpfApp {
             if (text.IsStringQuillText()) {
                 return text;
             }
-            return MpRtfToHtmlConverter.Instance.ConvertRtfToHtml(text.ToRichText());
+            return MpRtfToHtmlConverter.ConvertRtfToHtml(text.ToRichText());
         }
 
         public static string ToCsv(this string str) {

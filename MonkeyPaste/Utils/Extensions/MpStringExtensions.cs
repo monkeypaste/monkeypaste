@@ -102,9 +102,9 @@ namespace MonkeyPaste {
                        forceExt.ToLower().Contains("bmp") || 
                        forceExt.ToLower().Contains("jpg") || 
                        forceExt.ToLower().Contains("jpeg")) {
-                tfp = MpFileIoHelpers.WriteByteArrayToFile(Path.GetTempFileName(), str.ToByteArray());
+                tfp = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), str.ToByteArray());
             } else {
-                tfp = MpFileIoHelpers.WriteTextToFile(Path.GetTempFileName(), str);
+                tfp = MpFileIo.WriteTextToFile(Path.GetTempFileName(), str);
             }
             string ofp = tfp;
 
@@ -129,7 +129,7 @@ namespace MonkeyPaste {
             }
             if(ofp.ToLower() != tfp.ToLower()) {
                 if(ofp.IsFileOrDirectory() && !overwrite) {
-                    ofp = MpFileIoHelpers.GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileNameWithoutExtension(ofp));
+                    ofp = MpFileIo.GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileNameWithoutExtension(ofp));
                 }
                 File.Copy(tfp, ofp,overwrite);
                 File.Delete(tfp);

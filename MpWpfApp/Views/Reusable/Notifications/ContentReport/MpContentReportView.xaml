@@ -1,62 +1,75 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpContentReportView"
-                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:local="clr-namespace:MpWpfApp"
-                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                     x:TypeArguments="local:MpAnalysisReportCollectionViewModel"
-                     Visibility="{Binding SelectedItem,
-                                          Converter={StaticResource IsNotNullToVisibilityConverter}}"
-                     mc:Ignorable="d"
-                     d:DesignHeight="450"
-                     d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpAnalysisReportCollectionViewModel,
-                                                      IsDesignTimeCreatable=False}">
+﻿<local:MpUserControl
+    x:Class="MpWpfApp.MpContentReportView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MpWpfApp"
+    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+    x:TypeArguments="local:MpAnalysisReportCollectionViewModel"
+    Visibility="{Binding SelectedItem,
+                         Converter={StaticResource IsNotNullToVisibilityConverter}}"
+    mc:Ignorable="d"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance Type=local:MpAnalysisReportCollectionViewModel,
+                                     IsDesignTimeCreatable=False}">
     <Grid>
-        <Border x:Name="TooltipInfoBorder"
-                Width="12"
-                Height="12"
-                Margin="1"
-                CornerRadius="9"
-                Background="RoyalBlue"
-                BorderThickness="1"
-                MouseEnter="TooltipInfoBorder_MouseEnter"
-                MouseLeave="TooltipInfoBorder_MouseLeave">
+        <Border
+            x:Name="TooltipInfoBorder"
+            Width="12"
+            Height="12"
+            Margin="1"
+            CornerRadius="9"
+            Background="RoyalBlue"
+            BorderThickness="1"
+            MouseEnter="TooltipInfoBorder_MouseEnter"
+            MouseLeave="TooltipInfoBorder_MouseLeave">
             <Border.Style>
                 <Style TargetType="Border">
                     <Style.Triggers>
-                        <Trigger Property="IsMouseOver"
-                                 Value="True">
-                            <Setter Property="BorderBrush"
-                                    Value="SkyBlue" />
+                        <Trigger
+                            Property="IsMouseOver"
+                            Value="True">
+                            <Setter
+                                Property="BorderBrush"
+                                Value="SkyBlue" />
                         </Trigger>
-                        <Trigger Property="IsMouseOver"
-                                 Value="False">
-                            <Setter Property="BorderBrush"
-                                    Value="White" />
+                        <Trigger
+                            Property="IsMouseOver"
+                            Value="False">
+                            <Setter
+                                Property="BorderBrush"
+                                Value="White" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-            <TextBlock FontSize="10"
-                       FontWeight="Bold"
-                       ClipToBounds="False"
-                       Foreground="White"
-                       Background="Transparent"
-                       Text="i"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center" />
+            <TextBlock
+                FontSize="10"
+                FontWeight="Bold"
+                ClipToBounds="False"
+                Foreground="White"
+                Background="Transparent"
+                Text="i"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
         </Border>
-        <Popup x:Name="tooltip"
-               PlacementTarget="{Binding ElementName=TooltipInfoBorder}"
-               MouseLeave="tooltip_MouseLeave" AllowsTransparency="True"
-               Placement="Right"
-               HorizontalOffset="3">
+        <Popup
+            x:Name="tooltip"
+            PlacementTarget="{Binding ElementName=TooltipInfoBorder}"
+            MouseLeave="tooltip_MouseLeave"
+            AllowsTransparency="True"
+            Placement="Right"
+            HorizontalOffset="3">
             <Grid Background="White">
-                <FlowDocumentScrollViewer VerticalScrollBarVisibility="Auto" Background="White"
-                                          HorizontalScrollBarVisibility="Auto" Margin="0" Padding="0"
-                                          local:MpDocumentRtfExtension.DocumentRtf="{Binding SelectedItem.ReportRtf}" />
+                <FlowDocumentScrollViewer
+                    VerticalScrollBarVisibility="Auto"
+                    Background="White"
+                    HorizontalScrollBarVisibility="Auto"
+                    Margin="0"
+                    Padding="0"
+                    local:MpDocumentRtfExtension.DocumentRtf="{Binding SelectedItem.ReportRtf}" />
                 <!--<local:MpSpinnerSwirl HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Width="30"

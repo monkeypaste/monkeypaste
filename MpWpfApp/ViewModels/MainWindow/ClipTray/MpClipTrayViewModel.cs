@@ -1168,19 +1168,19 @@ namespace MpWpfApp {
             queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount - 1));
 
             var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
-            var uniqueWidthLookup = MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup;
+            var uniqueWidthLookup = PersistentUniqueWidthTileLookup;
 
             double offsetX = 0;// MpMeasurements.Instance.ClipTileMargin;
             for (int i = 1; i <= queryOffsetIdx; i++) {
                 int tileHeadId = headItemIds[i - 1];
-                if (MpClipTrayViewModel.Instance.PinnedItems.Any(x => x.HeadItem?.CopyItemId == tileHeadId)) {
+                if (PinnedItems.Any(x => x.HeadItem?.CopyItemId == tileHeadId)) {
                     continue;
                 }
-                //offsetX += MpMeasurements.Instance.ClipTileMargin * 2;
+                offsetX += MpMeasurements.Instance.ClipTileMargin * 2;
 
                 if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
                     offsetX += uniqueWidthLookup[tileHeadId];
-                    //offsetX -= MpMeasurements.Instance.ClipTileMargin;
+                    offsetX -= MpMeasurements.Instance.ClipTileMargin;
                 } else {
                     offsetX += MpClipTileViewModel.DefaultBorderWidth;
                 }

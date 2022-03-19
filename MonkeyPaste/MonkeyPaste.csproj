@@ -97,7 +97,9 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />
-    <EmbeddedResource Include="Resources\Html\Editor\Editor2.html" />
+    <EmbeddedResource Include="Resources\Html\Editor\Editor2.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
     <EmbeddedResource Include="Resources\Images\test.png" />
   </ItemGroup>

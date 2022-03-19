@@ -36,6 +36,7 @@ namespace MpClipboardHelper {
             MonitorService = new MpClipboardTimer();
             InteropService = (MpIClipboardInterop)MonitorService;
             PasteService = pasteHandler;
+            Start();
         }
 
         public static void Start() {

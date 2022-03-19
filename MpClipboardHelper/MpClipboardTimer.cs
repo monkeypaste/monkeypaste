@@ -63,8 +63,8 @@ namespace MpClipboardHelper {
         #region Public Methods
 
         public void Start() {
-            UIPermission clipBoard = new UIPermission(PermissionState.Unrestricted);
-            clipBoard.Clipboard = UIPermissionClipboard.AllClipboard;
+            //UIPermission clipBoard = new UIPermission(PermissionState.Unrestricted);
+            //clipBoard.Clipboard = UIPermissionClipboard.AllClipboard;
 
             if (_workThread != null && _workThread.IsAlive) {
                 _isStopped = false;
@@ -114,7 +114,7 @@ namespace MpClipboardHelper {
             }
         }
 
-        private static IDataObject ConvertToOleDataObject(MpDataObject mpdo) {
+        private IDataObject ConvertToOleDataObject(MpDataObject mpdo) {
             DataObject dobj = new DataObject();
             foreach (var kvp in mpdo.DataFormatLookup) {
                 SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
@@ -122,7 +122,7 @@ namespace MpClipboardHelper {
             return dobj;
         }
 
-        private static void SetDataWrapper(ref DataObject dobj, MpClipboardFormatType format, string dataStr) {
+        private void SetDataWrapper(ref DataObject dobj, MpClipboardFormatType format, string dataStr) {
             string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(format);
             switch (format) {
                 case MpClipboardFormatType.Bitmap:
@@ -146,7 +146,7 @@ namespace MpClipboardHelper {
         }
 
 
-        private static MpDataObject ConvertManagedFormats(IDataObject ido = null, int retryCount = 5) {
+        private MpDataObject ConvertManagedFormats(IDataObject ido = null, int retryCount = 5) {
             /*
             from: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.dataobject?view=windowsdesktop-6.0&viewFallbackFrom=net-5.0
             Special considerations may be necessary when using the metafile format with the Clipboard. 
@@ -173,13 +173,21 @@ namespace MpClipboardHelper {
                 bool autoConvert = false;
                 foreach (MpClipboardFormatType supportedType in MpDataObject.SupportedFormats) {
                     string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
+                    while(IsClipboardOpen()) {
+                        Thread.Sleep(100);
+                    }
                     if(ido != null) {
                         if (ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
                             continue;
                         }
                     } else {
-                        if(Clipboard.GetData(nativeTypeName) == null) {
-                            continue;
+                        try {
+                            var curData = Clipboard.GetData(nativeTypeName);
+                            if(curData == null) {
+                                continue;
+                            }
+                        } catch(Exception ex) {
+                            MpConsole.WriteTraceLine("Clipboard timer error: " + ex);
                         }
                     }
                     string data = null;
@@ -260,7 +268,20 @@ namespace MpClipboardHelper {
             return false;
         }
 
+        private bool IsClipboardOpen() {
+            var hwnd = WinApi.GetOpenClipboardWindow();
+            return hwnd != IntPtr.Zero;
 
+            //if (hwnd == IntPtr.Zero) {
+            //    return "Unknown";
+            //}
+            //Debugger.Break();
+            //var int32Handle = hwnd.ToInt32();
+            //var len = GetWindowTextLength(int32Handle);
+            //var sb = new StringBuilder(len);
+            //GetWindowText(int32Handle, sb, len);
+            //return sb.ToString();
+        }
         #endregion
 
         #endregion

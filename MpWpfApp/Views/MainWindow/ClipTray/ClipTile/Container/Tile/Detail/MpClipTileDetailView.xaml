@@ -62,8 +62,7 @@
             <local:MpContentReportView Grid.Column="2"
                                      HorizontalAlignment="Right"
                                      DataContext="{Binding CopyItemId,
-                                                           Converter={StaticResource CopyItemIdToReportCollectionConverter},
-                                                           IsAsync=True}"/>
+                                                           Converter={StaticResource CopyItemIdToReportCollectionConverter}}"/>
 
         </Grid>
     </Border>

@@ -10,6 +10,10 @@ using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows;
 using MpProcessHelper;
 using MonkeyPaste.Plugin;
+using CefSharp.Wpf;
+using CefSharp;
+using System.IO;
+using CefSharp.SchemeHandler;
 
 namespace MpWpfApp {
     public class MpWpfBootstrapperViewModel : MpBootstrapperViewModelBase {
@@ -94,6 +98,7 @@ namespace MpWpfApp {
 
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 
+            InitCef();
             IsLoaded = true;
                        
 
@@ -111,6 +116,60 @@ namespace MpWpfApp {
 
             //MpConsole.WriteLine("Output: " + stdOut);
             //MpConsole.WriteLine("Errors: " + stdErr);
+        }
+
+        private static void InitCef() {
+            //var settings = new CefSettings();
+
+            //// Increase the log severity so CEF outputs detailed information, useful for debugging
+            //settings.LogSeverity = LogSeverity.Verbose;
+            //// By default CEF uses an in memory cache, to save cached data e.g. to persist cookies you need to specify a cache path
+            //// NOTE: The executing user must have sufficient privileges to write to this folder.
+            //settings.CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache");
+
+            //Cef.Initialize(settings);
+
+            //To support High DPI this must be before CefSharp.BrowserSubprocess.SelfHost.Main so the BrowserSubprocess is DPI Aware
+            Cef.EnableHighDPISupport();
+
+            var exitCode = CefSharp.BrowserSubprocess.SelfHost.Main(new string[] { });
+
+            if (exitCode >= 0) {
+                return;
+            }
+
+            var settings = new CefSettings() {
+                //By default CefSharp will use an in-memory cache, you need to specify a Cache Folder to persist data
+                //CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache"),
+                //BrowserSubprocessPath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName
+            };
+            settings.RegisterScheme(new CefCustomScheme {
+                SchemeName = "localfolder",
+                DomainName = "cefsharp",
+                SchemeHandlerFactory = new FolderSchemeHandlerFactory(
+            rootFolder: Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor"),
+            hostName: "cefsharp",
+            defaultPage: "Editor2.html" // will default to index.html
+        )
+            });
+            //Example of setting a command line argument
+            //Enables WebRTC
+            // - CEF Doesn't currently support permissions on a per browser basis see https://bitbucket.org/chromiumembedded/cef/issues/2582/allow-run-time-handling-of-media-access
+            // - CEF Doesn't currently support displaying a UI for media access permissions
+            //
+            //NOTE: WebRTC Device Id's aren't persisted as they are in Chrome see https://bitbucket.org/chromiumembedded/cef/issues/2064/persist-webrtc-deviceids-across-restart
+            //settings.CefCommandLineArgs.Add("enable-media-stream");
+            ////https://peter.sh/experiments/chromium-command-line-switches/#use-fake-ui-for-media-stream
+            //settings.CefCommandLineArgs.Add("use-fake-ui-for-media-stream");
+            ////For screen sharing add (see https://bitbucket.org/chromiumembedded/cef/issues/2582/allow-run-time-handling-of-media-access#comment-58677180)
+            //settings.CefCommandLineArgs.Add("enable-usermedia-screen-capturing");
+
+            //Don't perform a dependency check
+            //By default this example calls Cef.Initialzie in the CefSharp.MinimalExample.Wpf.App
+            //constructor for purposes of providing a self contained single file example we call it here.
+            //You could remove this code and use the CefSharp.MinimalExample.Wpf.App example if you 
+            //set BrowserSubprocessPath to an absolute path to your main application exe.
+            Cef.Initialize(settings, performDependencyCheck: false);
         }
     }
 }

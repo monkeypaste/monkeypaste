@@ -12,6 +12,7 @@
                      d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Grid Loaded="Grid_Loaded"
+          Panel.ZIndex="100"
           Background="{Binding .,
                                Converter={StaticResource StringToThemeBrushConverter},
                                ConverterParameter=App_Mode_Grid_Background_Color}">

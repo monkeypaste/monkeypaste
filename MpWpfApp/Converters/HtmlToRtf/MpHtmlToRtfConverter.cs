@@ -13,23 +13,16 @@ using HtmlAgilityPack;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
-    public class MpHtmlToRtfConverter {
-        #region Singleton
-        private static readonly Lazy<MpHtmlToRtfConverter> _Lazy = new Lazy<MpHtmlToRtfConverter>(() => new MpHtmlToRtfConverter());
-        public static MpHtmlToRtfConverter Instance { get { return _Lazy.Value; } }
-
-        private MpHtmlToRtfConverter() { }
-        #endregion
-
-        #region Private Variables
-        private double _indentCharCount = 5;
+    public static class MpHtmlToRtfConverter {
+        #region private static Variables
+        private static double _indentCharCount = 5;
         #endregion
 
         #region Properties
 
         #endregion
 
-        public string ConvertHtmlToRtf(string html) {
+        public static string ConvertHtmlToRtf(string html) {
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
             var fd = string.Empty.ToFlowDocument();
@@ -40,7 +33,7 @@ namespace MpWpfApp {
             return fd.ToRichText();
         }
         
-        private TextElement ConvertHtmlNode(HtmlNode n) {
+        private static TextElement ConvertHtmlNode(HtmlNode n) {
             var cel = new List<TextElement>();
             foreach (var c in n.ChildNodes) {
                 cel.Add(ConvertHtmlNode(c));
@@ -48,7 +41,7 @@ namespace MpWpfApp {
             return CreateTextElement(n, cel.ToArray());
         }
 
-        private TextElement CreateTextElement(HtmlNode n, TextElement[] cl) {
+        private static TextElement CreateTextElement(HtmlNode n, TextElement[] cl) {
             var te = GetTextElement(n);
             foreach (var c in cl) {
                 te = AddChildToElement(te, c);
@@ -56,7 +49,7 @@ namespace MpWpfApp {
             return FormatTextElement(n.Attributes,te);
         }
 
-        private TextElement GetTextElement(HtmlNode n) {
+        private static TextElement GetTextElement(HtmlNode n) {
             TextElement te = null;
             switch (n.Name) {
                 case "#text":
@@ -111,7 +104,7 @@ namespace MpWpfApp {
             return te;
         }
 
-        private TextElement FormatTextElement(HtmlAttributeCollection ac, TextElement te) {
+        private static TextElement FormatTextElement(HtmlAttributeCollection ac, TextElement te) {
             foreach (var a in ac) {
                 switch (a.Name) {
                     case "class":
@@ -147,11 +140,11 @@ namespace MpWpfApp {
             return te;
         }
 
-        private TextElement ApplyHrefFormatting(TextElement te, string hv) {
+        private static TextElement ApplyHrefFormatting(TextElement te, string hv) {
             (te as Hyperlink).NavigateUri = new Uri(hv);
             return te;
         }
-        private TextElement ApplyImgSrcFormatting(TextElement te, string sv) {
+        private static TextElement ApplyImgSrcFormatting(TextElement te, string sv) {
             var srcvl = sv.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             string imgStr = srcvl[1];//.Replace(@"\", string.Empty);
             int mod4 = imgStr.Length % 4;
@@ -167,7 +160,7 @@ namespace MpWpfApp {
             return te;
         }
 
-        private TextElement ApplyClassFormatting(TextElement te, string cv) {
+        private static TextElement ApplyClassFormatting(TextElement te, string cv) {
             if (cv.StartsWith("ql-font-")) {
                 te.FontFamily = GetFontFamily(cv);                
             } else if (cv.Contains("ql-align-left")) {
@@ -184,7 +177,7 @@ namespace MpWpfApp {
             return te;
         }
 
-        private TextElement ApplyStyleFormatting(TextElement te, string sv) {
+        private static TextElement ApplyStyleFormatting(TextElement te, string sv) {
             if (sv.StartsWith("color")) {
                 var itemColorBrush = ParseRgb(sv);
                 te.Foreground = itemColorBrush;
@@ -196,7 +189,7 @@ namespace MpWpfApp {
             }
             return te;
         }
-        private TextElement AddChildToElement(TextElement te, TextElement cte) {
+        private static TextElement AddChildToElement(TextElement te, TextElement cte) {
             if (te is List) {
                 (te as List).ListItems.Add(cte as ListItem);
             } else if (te is ListItem) {
@@ -214,7 +207,7 @@ namespace MpWpfApp {
             return te;
         }
 
-        public Brush ParseRgb(string text) {
+        public static Brush ParseRgb(string text) {
             Brush defaultBrush = Brushes.Black;
 
             int rgbOpenIdx = text.IndexOf("(");
@@ -236,7 +229,7 @@ namespace MpWpfApp {
             return new SolidColorBrush(color);
         }
 
-        public double GetFontSize(string styleValue) {
+        public static double GetFontSize(string styleValue) {
             //for some reason wpf will not accept px values and converts to 3/4 size (for 96DPI)
             //but giving pt will use the displays DIP
             string fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px","pt");
@@ -245,11 +238,11 @@ namespace MpWpfApp {
             return fs;
         }
 
-        public double GetIndentLevel(string classValue) {
+        public static double GetIndentLevel(string classValue) {
             return Convert.ToDouble(classValue.Replace("ql-indent-", string.Empty));
         }
 
-        private FontFamily GetFontFamily(string classValue) {
+        private static FontFamily GetFontFamily(string classValue) {
             string defaultFontName = "arial";
             FontFamily defaultFontFamily = null;
             FontFamily closestFontFamily = null;
@@ -277,7 +270,7 @@ namespace MpWpfApp {
             return defaultFontFamily;
         }
 
-        public void Test() {
+        public static void Test() {
             var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpHtmlToRtfConverter)).Assembly;
             var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample1.html");
             using (var reader = new System.IO.StreamReader(stream)) {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -174,6 +175,11 @@ namespace MpProcessHelper {
                     if (proc.MainWindowHandle == IntPtr.Zero) {
                         return fallback; //fallback;
                     }
+
+                    if(!Environment.Is64BitProcess && Is64Bit(proc)) {
+                        return fallback;
+                    }
+
                     return proc.MainModule.FileName.ToString().ToLower();
                 }
             }
@@ -261,6 +267,17 @@ namespace MpProcessHelper {
 
         public static bool IsProcessRunning(string processPath) {
             return GetLastActiveInstance(processPath) != IntPtr.Zero;
+        }
+
+        public static bool Is64Bit(Process process) {
+            if (!Environment.Is64BitOperatingSystem)
+                return false;
+            // if this method is not available in your version of .NET, use GetNativeSystemInfo via P/Invoke instead
+
+            bool isWow64;
+            if (!WinApi.IsWow64Process(process.Handle, out isWow64))
+                throw new Win32Exception();
+            return !isWow64;
         }
 
         #endregion

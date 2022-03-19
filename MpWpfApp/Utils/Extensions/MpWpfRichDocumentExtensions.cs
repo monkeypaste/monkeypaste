@@ -187,7 +187,7 @@ namespace MpWpfApp {
                 return str;
             }
             if(str.IsStringQuillText()) {
-                return MpHtmlToRtfConverter.Instance.ConvertHtmlToRtf(str);
+                return MpHtmlToRtfConverter.ConvertHtmlToRtf(str);
             }
             if(str.IsStringXaml()) {
                 using (var stringReader = new StringReader(str)) {

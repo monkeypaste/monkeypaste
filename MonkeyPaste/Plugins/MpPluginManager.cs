@@ -84,7 +84,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task<MpPluginFormat> LoadPlugin(string manifestPath) {
-            string manifestStr = MpFileIoHelpers.ReadTextFromFile(manifestPath);
+            string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
             if (string.IsNullOrEmpty(manifestStr)) {
                 var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
                     dialogType: MpNotificationDialogType.InvalidPlugin,

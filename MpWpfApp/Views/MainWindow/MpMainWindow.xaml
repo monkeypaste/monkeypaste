@@ -34,11 +34,7 @@
         </i:Interaction.Behaviors>
         <!--<AdornerDecorator>-->
         <Grid x:Name="MainWindowGrid"
-              Height="{Binding MainWindowHeight,
-                               Mode=TwoWay,
-                               UpdateSourceTrigger=PropertyChanged,
-                               NotifyOnSourceUpdated=True,
-                               NotifyOnTargetUpdated=True}"
+              Height="{Binding MainWindowHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
               Width="{Binding MainWindowWidth}"
               Canvas.Top="{Binding MainWindowTop}"
               Canvas.Left="0">
@@ -56,37 +52,20 @@
                   Grid.Row="0"
                   local:MpHoverableExtension.IsEnabled="True"
                   local:MpHoverableExtension.HoverCursor="ResizeNS"
-                  Background="{Binding .,
-                                       Converter={StaticResource StringToThemeBrushConverter},
-                                       ConverterParameter=Title_Menu_Background_Color}">
+                  Background="{Binding ., Converter={StaticResource StringToThemeBrushConverter}, ConverterParameter=Title_Menu_Background_Color}">
 
                 <i:Interaction.Behaviors>
                     <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
                                             AffectsContent="True"
                                             BoundElement="{Binding ElementName=MainWindowGrid}"
                                             DoubleClickFrameworkElement="{Binding ElementName=FrameGripButton}"
-                                            IsResizing="{Binding IsResizing,
-                                                                 Mode=TwoWay,
-                                                                 UpdateSourceTrigger=PropertyChanged,
-                                                                 NotifyOnSourceUpdated=True,
-                                                                 NotifyOnTargetUpdated=True}"
-                                            CanResize="{Binding CanResize,
-                                                                Mode=TwoWay,
-                                                                UpdateSourceTrigger=PropertyChanged,
-                                                                NotifyOnSourceUpdated=True,
-                                                                NotifyOnTargetUpdated=True}"
+                                            IsResizing="{Binding IsResizing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
+                                            CanResize="{Binding CanResize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
                                             ResizableEdge1="Top"
-                                            BoundHeight="{Binding MainWindowHeight,
-                                                                  Mode=TwoWay,
-                                                                  UpdateSourceTrigger=PropertyChanged,
-                                                                  NotifyOnSourceUpdated=True,
-                                                                  NotifyOnTargetUpdated=True}"
-                                            DefaultHeight="{Binding MainWindowDefaultHeight,
-                                                                    Source={x:Static local:MpMeasurements.Instance}}"
-                                            MinHeight="{Binding MainWindowMinHeight,
-                                                                Source={x:Static local:MpMeasurements.Instance}}"
-                                            MaxHeight="{Binding MainWindowMaxHeight,
-                                                                Source={x:Static local:MpMeasurements.Instance}}" />
+                                            BoundHeight="{Binding MainWindowHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
+                                            DefaultHeight="{Binding MainWindowDefaultHeight, Source={x:Static local:MpMeasurements.Instance}}"
+                                            MinHeight="{Binding MainWindowMinHeight, Source={x:Static local:MpMeasurements.Instance}}"
+                                            MaxHeight="{Binding MainWindowMaxHeight, Source={x:Static local:MpMeasurements.Instance}}" />
 
                 </i:Interaction.Behaviors>
                 <TextBlock DockPanel.Dock="Left"
@@ -116,9 +95,7 @@
 
             <!--  FilterMenu  -->
             <Grid Grid.Row="1"
-                  Background="{Binding .,
-                                       Converter={StaticResource StringToThemeBrushConverter},
-                                       ConverterParameter=Filter_Menu_Background_Color}">
+                  Background="{Binding ., Converter={StaticResource StringToThemeBrushConverter}, ConverterParameter=Filter_Menu_Background_Color}">
                 <!--<Grid.Background>
                     <SolidColorBrush Color="DarkViolet" Opacity="0.4"/>
                 </Grid.Background>-->
@@ -137,12 +114,9 @@
                             Margin="5,0,0,0"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
-                            Command="{Binding ShowSettingsWindowCommand,
-                                              Source={x:Static local:MpSystemTrayViewModel.Instance}}"
+                            Command="{Binding ShowSettingsWindowCommand, Source={x:Static local:MpSystemTrayViewModel.Instance}}"
                             Template="{StaticResource SearchButtonControlTemplate}">
-                        <Image Source="{Binding .,
-                                                Source={StaticResource CogIcon},
-                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
+                        <Image Source="{Binding ., Source={StaticResource CogIcon}, Converter={StaticResource StringResourceToImageSourceConverter}}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     </Button>
@@ -157,8 +131,7 @@
                                   Command="{Binding ToggleMainWindowLockCommand}"
                                   CommandParameter="{StaticResource True}"
                                   Template="{StaticResource LockToggleButtonControlTemplate}">
-                        <Image Source="{Binding Source={StaticResource LockIcon},
-                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
+                        <Image Source="{Binding Source={StaticResource LockIcon}, Converter={StaticResource StringResourceToImageSourceConverter}}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     </ToggleButton>
@@ -179,17 +152,13 @@
 
             <!--  3rd row row for tray  -->
             <Grid Grid.Row="2"
-                  Background="{Binding .,
-                                       Converter={StaticResource StringToThemeBrushConverter},
-                                       ConverterParameter=Tag_Tree_Background_Color}">
+                  Background="{Binding ., Converter={StaticResource StringToThemeBrushConverter}, ConverterParameter=Tag_Tree_Background_Color}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="{Binding Path=SearchCriteriaListBoxHeight,
-                                                    Source={x:Static local:MpSearchBoxViewModel.Instance}}" />
+                    <RowDefinition Height="{Binding Path=SearchCriteriaListBoxHeight, Source={x:Static local:MpSearchBoxViewModel.Instance}}" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding AppStateButtonPanelWidth,
-                                                      Source={x:Static local:MpMeasurements.Instance}}" />
+                    <ColumnDefinition Width="{Binding AppStateButtonPanelWidth, Source={x:Static local:MpMeasurements.Instance}}" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -214,21 +183,18 @@
                 <local:MpTagTreeView x:Name="TagTreeView"
                                      Grid.Row="1"
                                      Grid.Column="1"
-                                     Visibility="{Binding IsSidebarVisible,
-                                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                                     Visibility="{Binding IsSidebarVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                                      DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
                 <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
                                                   Grid.Row="1"
                                                   Grid.Column="1"
                                                   DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
-                                                  Visibility="{Binding IsSidebarVisible,
-                                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                  Visibility="{Binding IsSidebarVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
                 <local:MpTriggerActionChooserView x:Name="ActionCollectionView"
                                                   Grid.Row="1"
                                                   Grid.Column="1"
                                                   DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
-                                                  Visibility="{Binding IsSidebarVisible,
-                                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                  Visibility="{Binding IsSidebarVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
                 <GridSplitter x:Name="SidebarGridSplitter"
                               Grid.Row="1"
                               Grid.Column="1"

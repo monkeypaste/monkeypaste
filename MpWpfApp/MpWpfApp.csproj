@@ -48,7 +48,7 @@
     <DefineConstants>TRACE;DEBUG;TRACE_DATASOURCE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -262,6 +262,7 @@
     </Compile>
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
+    <Compile Include="Utils\Extensions\MpWebView2Extensions.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfIconBuilder.cs" />
@@ -383,7 +384,10 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\MpDetectedObjectsCollectionView.xaml.cs">
       <DependentUpon>MpDetectedObjectsCollectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Selector\MpTextViewTempalteSelector.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpQuillEditorView.xaml.cs">
+      <DependentUpon>MpQuillEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Selector\MpTextViewTemplateSelector.cs" />
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml.cs">
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
@@ -755,6 +759,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\MpDetectedObjectsCollectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpQuillEditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1379,11 +1387,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AirspaceFixer">
+      <Version>1.0.5</Version>
+    </PackageReference>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM">
       <Version>6.0.4</Version>
     </PackageReference>
     <PackageReference Include="Azure.AI.TextAnalytics">
       <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="CefSharp.Wpf">
+      <Version>99.2.120</Version>
     </PackageReference>
     <PackageReference Include="CsvHelper">
       <Version>27.2.1</Version>

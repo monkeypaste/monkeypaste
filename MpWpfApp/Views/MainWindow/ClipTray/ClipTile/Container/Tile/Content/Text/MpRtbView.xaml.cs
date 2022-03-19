@@ -159,6 +159,22 @@ namespace MpWpfApp {
             BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
             BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
 
+            if(BindingContext.Parent != null) {
+                MpMessenger.Unregister<MpMessageType>(
+                    BindingContext.Parent,
+                    ReceivedClipTileViewModelMessage,
+                    BindingContext.Parent);
+            }
+
+            var mw = Application.Current.MainWindow as MpMainWindow;
+            if(mw != null) {
+                if(mw.MainWindowResizeBehvior != null) {
+                    MpMessenger.Unregister<MpMessageType>(
+                            mw.MainWindowResizeBehvior,
+                            ReceivedMainWindowResizeBehviorMessage);
+                }
+            }
+            
             //BindingContext.Dispose();
         }
 

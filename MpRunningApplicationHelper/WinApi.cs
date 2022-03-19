@@ -551,6 +551,10 @@ namespace MpProcessHelper {
                 int flags,
                 ref IntPtr picon);
         };
+
+        [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWow64Process([In] IntPtr process, [Out] out bool wow64Process);
         #endregion
     }
 }

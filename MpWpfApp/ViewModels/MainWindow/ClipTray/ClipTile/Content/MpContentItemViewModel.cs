@@ -380,6 +380,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic
+
+        public Uri QuillEditorUri => new Uri(Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/Editor2.html"));
+
+        public string QuillEditorPath => Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/Editor2.html");
+
         public string TemplateRichText { get; set; }
 
         public string DetailText { get; set; }

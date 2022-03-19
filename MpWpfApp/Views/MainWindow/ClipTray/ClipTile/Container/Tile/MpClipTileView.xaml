@@ -16,8 +16,7 @@
         <local:MpHighlightSelectorBehavior x:Name="HighlightSelectorBehavior" />
     </i:Interaction.Behaviors>
     <local:MpClipBorder x:Name="ClipTileClipBorder"
-                        DataContext="{Binding .,
-                                              IsAsync=True}"
+                        DataContext="{Binding}"
                         Margin="{local:MpMeasurementsBinding ClipTileMargin}"
                         BorderThickness="{local:MpMeasurementsBinding ClipTileBorderThickness}"
                         Width="{Binding TileBorderWidth}"

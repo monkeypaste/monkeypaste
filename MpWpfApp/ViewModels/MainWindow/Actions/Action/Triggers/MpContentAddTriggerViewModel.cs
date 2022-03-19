@@ -6,7 +6,6 @@ using MonkeyPaste;
 namespace MpWpfApp {
     public class MpContentAddTriggerViewModel : 
         MpTriggerActionViewModelBase {
-
         #region Properties
 
         #region Model
@@ -30,6 +29,7 @@ namespace MpWpfApp {
         #endregion
 
         #endregion
+
         #region Constructors
 
         public MpContentAddTriggerViewModel(MpActionCollectionViewModel parent) : base(parent) {

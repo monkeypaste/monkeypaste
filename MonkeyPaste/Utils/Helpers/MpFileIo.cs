@@ -11,7 +11,7 @@ using MonkeyPaste.Plugin;
 using System.Text.RegularExpressions;
 
 namespace MonkeyPaste {
-    public static class MpFileIoHelpers {
+    public static class MpFileIo {
 
         public static double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f, precision);

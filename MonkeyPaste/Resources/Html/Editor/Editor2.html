@@ -404,6 +404,10 @@
         var htmlContent = '';//"[{\"templateId\":\"-1\",\"templateName\":\"Template #1\",\"templateColor\":\"#402A32\",\"docIdx\":[\"0\",\"3\",\"8\",\"35\"],\"templateText\":\"Template #1\"},{\"templateId\":\"-2\",\"templateName\":\"Template #2\",\"templateColor\":\"#D78484\",\"docIdx\":[\"2\",\"9\",\"32\"],\"templateText\":\"Template #2\"},{\"templateId\":\"-3\",\"templateName\":\"Template #3\",\"templateColor\":\"#165FA4\",\"docIdx\":\"4\",\"templateText\":\"Template #3\"},{\"templateId\":\"-4\",\"templateName\":\"Template #4\",\"templateColor\":\"#912505\",\"docIdx\":\"38\",\"templateText\":\"Template #4\"}]";
         ////////////////////////////////////////////////////////////////////////////////
 
+        function setWpfEnv() {
+            envName = 'wpf';
+        }
+
         function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillingTemplates) {
             if(fontFamilys == null) {
                 fontFamilys = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
@@ -416,19 +420,26 @@
             }
             loadQuill(fontFamilys, fontSizes, defaultFontIdx);
 
-            if(envName == '') {
-
-            } else {
-                hideToolbar();
-            }
-
             if(isFillingTemplates) {
                 showPasteTemplateToolbar();
+            }
+
+            setHtml(html);
+
+
+            if (envName == '') {
+                //for testing in browser
+            } else {
+                hideToolbar();
+                enableReadOnly();
+                //hideScrollbars();
+                disableScrolling();
             }
 
             isLoaded = true;
 
             //console.log('Quill init called');
+            return "GREAT!";
         }
 
         function registerTables() {
@@ -1439,7 +1450,6 @@
             hideTemplateToolbarContextMenu();
         }
 
-
         function showPasteTemplateToolbar() {
             isShowingPasteTemplateToolbar = true;
             var ptt = document.getElementById('pasteTemplateToolbar');
@@ -1666,6 +1676,7 @@
             var selection = quill.getSelection();
             return quill.getText(selection.index, selection.length);
         }
+
         function getHtml() {
             //document.getElementsByClassName
             //var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
@@ -1685,7 +1696,6 @@
             tempContainer.remove();
             return result;
         }
-
 
         function isEditorLoaded() {
             return isLoaded;
@@ -1751,6 +1761,48 @@
             $('.ql-editor').attr('contenteditable', true);
             $('.ql-editor').css('caret-color', 'black');
             showToolbar();
+        }
+
+        function hideScrollbars() {
+            //hides scrollbars without disabling scrolling (for use when scrolling to search match)
+            document.querySelector('body').style.overflow = 'scroll';
+            let isNew = false;
+            var style = document.getElementsByName('style');
+            //if (style == null) {
+            //    isNew = true;
+            //    style = document.createElement('style');
+            //}
+            
+            style.type = 'text/css';
+            style.innerHTML = '::-webkit-scrollbar{display:none}';
+            //if (isNew) {
+                document.getElementsByTagName('body')[0].appendChild(style);
+            //}
+        }
+
+        function showScrollbars() {
+            //hides scrollbars without disabling scrolling (for use when scrolling to search match)
+            document.querySelector('body').style.overflow = 'scroll';
+            let isNew = false;
+            var style = document.getElementsByName('style');
+            if (style == null) {
+                isNew = true;
+                style = document.createElement('style');
+            }
+
+            style.type = 'text/css';
+            style.innerHTML = '::-webkit-scrollbar{display: block; width: 10em; overflow: auto; height: 2em;}';
+            if (isNew) {
+                document.getElementsByTagName('body')[0].appendChild(style);
+            }
+        }
+
+        function disableScrolling() {
+            document.querySelector('body').style.overflow = 'hidden';
+        }
+
+        function enableScrolling() {
+            document.querySelector('body').style.overflow = 'scroll';
         }
 
         function getTextWithEmbedTokens() {
@@ -1850,8 +1902,6 @@
             return templateStr;
         }
 
-
-
         function getTemplatesJson() {
             var val = JSON.stringify(getTemplates());
             return val;
@@ -1942,8 +1992,7 @@
             }
         }
 
-
-        init(null, null, null, null, null);
+        //init(null, null, null, null, null);
     </script>
 
 </body>
