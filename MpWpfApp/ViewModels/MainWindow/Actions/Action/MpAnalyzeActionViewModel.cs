@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,12 @@ using System.Windows.Input;
 namespace MpWpfApp {
     public class MpAnalyzeOutput : MpActionOutput {
         public override object OutputData => TransactionResult;
-        public object TransactionResult { get; set; }       
+        public object TransactionResult { get; set; }
+        public override string ActionDescription {
+            get {
+                return $"Result of analysis of CopyItem({CopyItem.Id},{CopyItem.Title}) was: "+Environment.NewLine+TransactionResult.ToString();
+            }
+        }
     }
     public class MpAnalyzeActionViewModel : MpActionViewModelBase {
         #region Properties
@@ -96,13 +102,19 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
 
-                await base.PerformAction(
-                    new MpAnalyzeOutput() {
-                        Previous = arg as MpActionOutput,
-                        CopyItem = actionInput.CopyItem,
-                        TransactionResult = aipvm.Parent.LastTransaction.Response
-                    });
+                if(aipvm.Parent.LastTransaction != null && aipvm.Parent.LastTransaction.Response != null) {
+                    await base.PerformAction(
+                        new MpAnalyzeOutput() {
+                            Previous = arg as MpActionOutput,
+                            CopyItem = actionInput.CopyItem,
+                            TransactionResult = aipvm.Parent.LastTransaction.Response
+                        });
+                    return;
+                }
             }
+            MpConsole.WriteLine("");
+            MpConsole.WriteLine($"Action({ActionId}) '{Label}' Failed to complete");
+            MpConsole.WriteLine("");
         }
 
         #endregion

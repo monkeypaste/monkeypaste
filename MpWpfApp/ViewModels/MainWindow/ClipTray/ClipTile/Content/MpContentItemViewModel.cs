@@ -406,8 +406,6 @@ namespace MpWpfApp {
 
         #region Model
 
-
-
         public bool IsCompositeChild {
             get {
                 if (CopyItem == null || base.Parent == null) {
@@ -445,6 +443,7 @@ namespace MpWpfApp {
             set {
                 if (CopyItem != null && CopyItem.CompositeSortOrderIdx != value) {
                     CopyItem.CompositeSortOrderIdx = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CompositeSortOrderIdx));
                 }
             }
@@ -460,6 +459,7 @@ namespace MpWpfApp {
             set {
                 if (CopyItem != null && CopyItem.CompositeParentCopyItemId != value) {
                     CopyItem.CompositeParentCopyItemId = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CompositeParentCopyItemId));
                 }
             }
@@ -474,6 +474,7 @@ namespace MpWpfApp {
             set {
                 if(CopyItem != null && CopyItem.Title != value) {
                     CopyItem.Title = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CopyItemTitle));
                 }
             }
@@ -528,6 +529,7 @@ namespace MpWpfApp {
             set {
                 if (CopyItem != null && CopyItem.ItemData != value) {
                     CopyItem.ItemData = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(CopyItemData));
                     OnPropertyChanged(nameof(CurrentSize));
                 }
@@ -566,21 +568,6 @@ namespace MpWpfApp {
                     CopyItem.ItemColor = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CopyItemHexColor));
-                    //Task.Run(async () => {
-                    //    MpIcon icon = null;
-                    //    if(IconId == 0) {
-                    //        icon = await MpIcon.Create(
-                    //            iconImgBase64: string.Empty,
-                    //            hexColors: new List<string> { CopyItemHexColor },
-                    //            createBorder: false);
-                    //        IconId = icon.Id;
-                    //        return;
-                    //    }
-                    //    icon = await MpDb.GetItemAsync<MpIcon>(IconId);
-                    //    icon.HexColor1 = CopyItemHexColor;
-                    //    await icon.WriteToDatabaseAsync();
-
-                    //});
                 }
             }
         }
@@ -895,11 +882,14 @@ namespace MpWpfApp {
                     RequestUiUpdate();
                     break;
                 case nameof(IsEditingTitle):
-                    if(!IsEditingTitle) {
-                        Task.Run(async () => {
-                            await CopyItem.WriteToDatabaseAsync();
-                        });
-                    } else if(!IsSelected) {
+                    //if(!IsEditingTitle) {
+                    //    Task.Run(async () => {
+                    //        await CopyItem.WriteToDatabaseAsync();
+                    //    });
+                    //} else if(!IsSelected) {
+                    //    IsSelected = true;
+                    //}
+                    if(IsEditingTitle && !IsSelected) {
                         IsSelected = true;
                     }
                     break;

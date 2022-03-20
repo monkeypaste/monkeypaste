@@ -16,7 +16,14 @@ namespace MpWpfApp {
     public class MpFileWriterOutput : MpActionOutput {        
         public string OutputFilePath { get; set; }
         public override object OutputData => OutputFilePath;
+
+        public override string ActionDescription {
+            get {
+                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was written to file path: '{OutputFilePath}'";
+            }
+        }
     }
+
     public class MpFileWriterActionViewModel : MpActionViewModelBase, MpITooltipInfoViewModel {
         #region Properties
 

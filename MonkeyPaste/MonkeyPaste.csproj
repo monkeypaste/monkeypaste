@@ -73,7 +73,6 @@
     <None Remove=".DS_Store" />
     <None Remove="Resources\Fonts\password.ttf" />
     <None Remove="Resources\Html\Editor.html" />
-    <None Remove="Resources\Html\Editor\Editor2.html" />
     <None Remove="Resources\Html\Editor\Editor2.js" />
     <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
     <None Remove="Resources\Icons\monkey.png" />
@@ -96,10 +95,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />
-    <EmbeddedResource Include="Resources\Html\Editor\Editor2.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
     <EmbeddedResource Include="Resources\Images\test.png" />
   </ItemGroup>
@@ -206,6 +201,9 @@
     <None Include="Controls\MpPopupPage.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Resources\Html\Editor\Editor2.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Icons\search.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

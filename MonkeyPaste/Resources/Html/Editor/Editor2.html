@@ -4,16 +4,20 @@
 <head>
     <meta charset="utf-8" />
     <title>Yo this is a title</title>
-    <link href="https://cdn.quilljs.com/2.0.0-dev.4/quill.snow.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css" rel="stylesheet" />
-    <link href="https://unpkg.com/quill-better-table@1.2.7/dist/quill-better-table.css" rel="stylesheet" type="text/css" />
+    <link href="lib/Quill/node_modules/quill/dist//quill.snow.css" rel="stylesheet" />
+    <link href="lib/HighlightJs/styles/github.min.css" rel="stylesheet" />
+    <link href="lib/Quill-Better-Table/node_modules/quill-better-table/src/assets/quill-better-table.scss" rel="stylesheet" type="text/css" />
+    <script src="lib/HighlightJs/highlight.min.js"></script>
+    <script src="lib/HighlightJs/languages/xml.min.js"></script>
+    <!--<script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.min.js"></script>-->
+    <script src="lib/Quill/node_modules/quill/dist/quill.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/xml.min.js" charset="UTF-8"></script>
-    <script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.min.js"></script>
-    <script src="https://unpkg.com/quill-better-table@1.2.8/dist/quill-better-table.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/T-vK/DynamicQuillTools@master/DynamicQuillTools.js"></script>
+    <!--<script src="https://unpkg.com/quill-better-table@1.2.8/dist/quill-better-table.min.js"></script>-->
+    <script src="lib/Quill-Better-Table/node_modules/quill-better-table/dist/quill-better-table.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
+    <script src="lib/jquery/node_modules/jquery/dist/jquery.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/gh/T-vK/DynamicQuillTools@master/DynamicQuillTools.js"></script>-->
+    <script src="lib/DynamicQuillTools/DynamicQuillTools.js"></script>
 
     <style>
         body {
@@ -368,10 +372,9 @@
 
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Promise"
             crossorigin="anonymous"></script>
-    <script src="https://benwinding.github.io/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
+    <script src="https://unpkg.com/quill-html-edit-button@2.2.7/dist/quill.htmlEditButton.min.js"></script>
 
     <script type='text/javascript'>
-
         var curQuillDiv = $("#editor");
         var quill;
 
@@ -401,7 +404,7 @@
         var fontSizes = null;
         var defaultFontIdx = null;
         var indentSize = 5;
-        var htmlContent = '';//"[{\"templateId\":\"-1\",\"templateName\":\"Template #1\",\"templateColor\":\"#402A32\",\"docIdx\":[\"0\",\"3\",\"8\",\"35\"],\"templateText\":\"Template #1\"},{\"templateId\":\"-2\",\"templateName\":\"Template #2\",\"templateColor\":\"#D78484\",\"docIdx\":[\"2\",\"9\",\"32\"],\"templateText\":\"Template #2\"},{\"templateId\":\"-3\",\"templateName\":\"Template #3\",\"templateColor\":\"#165FA4\",\"docIdx\":\"4\",\"templateText\":\"Template #3\"},{\"templateId\":\"-4\",\"templateName\":\"Template #4\",\"templateColor\":\"#912505\",\"docIdx\":\"38\",\"templateText\":\"Template #4\"}]";
+        var htmlContent = '';//"[{\"templateId\":\"-1\",\"templateName\":\"Template #1\",\"templateColor\":\"#402A32\",\"docIdx\":[\"0\",\"3\",\"8\",\"35\"],\"templateText\":\"Template #1\"},{\"templateId\":\"-2\",\"templateName\":\"Template #2\",\"templateColor\":\"#D78484\",\"docIdx\":[\"2\",\"9\",\"32\"],\"templateText\":\"Template #2\"},{\"templateId\":\"-3\",\"templateName\":\"Template #3\",\"templateColor\":\"#165FA4\",\"docIdx\":\"4\",\"templateText\":\"Template #3\"},{\"templateId\":\"-4\",\"templateName\":\"Template #4\",\"templateColor\":\"#912505\",\"docIdx\":\"38\",\"templateText\":\"Template #4\"}]";        
         ////////////////////////////////////////////////////////////////////////////////
 
         function setWpfEnv() {
@@ -424,6 +427,10 @@
                 showPasteTemplateToolbar();
             }
 
+            if (html == null) {
+                html = '';
+            }
+
             setHtml(html);
 
 
@@ -433,7 +440,7 @@
                 hideToolbar();
                 enableReadOnly();
                 //hideScrollbars();
-                disableScrolling();
+                //disableScrolling();
             }
 
             isLoaded = true;
@@ -458,29 +465,34 @@
         function registerToolbar(fontFamilys, fontSizes, defaultFontIdx) {
             var fonts = registerFonts(fontFamilys);
 
-            var toolbarOptions = [
-                //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-                [{ 'size': fontSizes }],               // font sizes
-                [{ 'font': fonts.whitelist }],
-                ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
-                //['blockquote', 'code-block'],
+            var toolbar = {
+                container: [
+                    //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                    [{ 'size': fontSizes }],               // font sizes
+                    [{ 'font': fonts.whitelist }],
+                    ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
+                    //['blockquote', 'code-block'],
 
-                // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-                [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-                //[{ 'direction': 'rtl' }],                         // text direction
+                    // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+                    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+                    //[{ 'direction': 'rtl' }],                         // text direction
 
-                // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                ['link'],// 'image', 'video', 'formula'],
-                [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-                [{ 'align': [] }],
-                // ['clean'],                                         // remove formatting button
-                // ['templatebutton'],
-                [{ 'Table-Input': registerTables() }]
-            ];
+                    // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    ['link'],// 'image', 'video', 'formula'],
+                    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                    [{ 'align': [] }],
+                    // ['clean'],                                         // remove formatting button
+                    // ['templatebutton'],
+                    [{ 'Table-Input': registerTables() }]
+                ],
+                handlers: {
+                    'Table-Input': () => { return; }
+                }
+            };
 
-            return toolbarOptions;
+            return toolbar;
         }
 
         function registerFonts(fontFamilys, fontSizes, defaultFontIdx) {
@@ -599,11 +611,11 @@
                 placeholder: '',
                 theme: 'snow',
                 modules: {
+                    table: false,
                     toolbar: registerToolbar(fontFamilys, fontSizes, defaultFontIdx),
                     htmlEditButton: {
                         syntax: true,
                     },
-                    table: false,
                     'better-table': {
                         operationMenu: {
                             items: {
@@ -646,7 +658,7 @@
                     return function () {
                         var curRowIndex2 = Number(this.dataset.value.substring(9).split('_')[0]);
                         var curColIndex2 = Number(this.dataset.value.substring(9).split('_')[1]);
-                        if(curRowIndex2 <= curRowIndex1 && curColIndex2 <= curColIndex1) {
+                        if (curRowIndex2 <= curRowIndex1 && curColIndex2 <= curColIndex1) {
                             $(this).addClass("ql-picker-item-highlight");
                         }
                     };
@@ -655,7 +667,7 @@
                 $(this).parent().children().removeClass("ql-picker-item-highlight");
             });
 
-            // Add a custom Button to the Quill Editor's toolbar:
+            // Toolbar Template Button
             const templateToolbarButton = new QuillToolbarButton({
                 icon: '<img id="templateToolbarButton" style="height:20px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX/////wQf/vwD/24f/3Iz///3/vQD/ykL/yTj/yT3/0WH/0F7/0Fv/y0T/y0f/yTr/35T/wxT/8tP/6Lj/5az/7sj/9uX/46P/1G7/677/57P/2oL/xSj/8M//1nj//fb//O//4Zz/zVBsBjAmAAAEzklEQVR4nO2di3qiMBBGIUpa1168tFZ70933f8hl0KqVWCuZyfzhm/MAfJ7vhAmwCy0KwzAMwzAMwzAMwzAMwzAMWKq3QSzDyXymrXGe6ta7eLwvl8/aKmGqW1fy4Pz0SdsmAJ9g4zhaaAudwirYOIJl5Bas8QNtqWMEBLEURQRrRZiFKiRYK4KMGzHB0j1ouzXICdYR59p2haxg6d619YQF64gfPRcs3ae24KOsYOmmyoLCBUvtDSOBYOk176TEl2hjqHhdw1WwvuetOXcsN9ET5Cno/PJ1tvh4Gp9xdEM1QZ6C/m29O+Dmj4cyZCroV0fHfAkpahlyFfw+KEOKSoZcBU9//bh9WB1Dtn3w9MCbdkQVQ7Ztov3j71pH1jBk2+h9++n2UyuigiHfpZrftA7+AWDIeKnm162jL/QNOS+2Aw1n6oasF9uB83Cubch7uxS4qF4qz9JqxHq71L5/Xyvvh+z3g/40YjthUkOBG96TM7F9FiY1ZF6i25/vjhVXuvcWUv/4sl+o60/d+0OJglvF6XC2WS+eP53uPb7gUzV34TlNGkOxgpdJY5jiuaiqoWLBNIZJHvxqGuoKJjBUXaIpDDWHTBJD7YLihuoFxQ3VCwob6i9RacMbAEFJwwpCUNIQQ1DOEKSgoCHCkGkQMoQpKGUIsU3skDHEKShjiFRQxhCpoIQh0JBp4DcEE2Q3RCvIbwg1ZBp4DfEKMhtibRM7WA3vAQU5DRGXaMlqCFmQ0RC0IKMhqiCXYQW6REs2Q9iCXIa4BZkMgQvyGCIX5DCE3SZ2xBtiF4w3RC8YbwgvGGkIvNHviTPELxhpmEHBOMMcCkYZPmQh2H77q2cFS/dQ9bugu+laMIshE/Ntk1wEOxccB//POBzdC75lInjfVfC574LFNIuTMOIDSn+zSNh9yBRV3wsWrzkkjCgYeh8cj6iPmOWwSKMKBl4lhsPdd73YbsA/DeMKFsUEfZW6m6iCRTEAN4y4ksnDMLog+iqNLxh+XRqG2CHTgLxbcBSE3vFZChbBTzFhELnRH0A9EbkK1mirhGHYJvYEv/umDc+Q+eId70zkLFggbhi8BWsmYIqMQ+aLJZQie0EC6aG3GwkIFkX4W6EaMA8ZPEWBc/ALjIUqVpBAqChYkLhTV3QjwYKEdkXhgoRuRfGChGZF0SFzQG+iCm30bbQqJiqop5hgyBzQWKgJCxLpKyYtSKTeNJJsE99JWzF5QSJlRYWCRLqKiYfMgVQT1d0qCaaqqLRE0ym6R0XBFAtVWVC+ouoS3SK7aSgOmQOSFQEKEnIVIQoSUhVBChIyExWmICFREaggwa+ovg+ewr1Q4QS5K4It0S2cmwbUkDnAVxGyIMFVEbQgwVMRcMgc4JiowAWJ+IrQBYlYRfCCRNxCzUAwriL8Et3SfdPIoiDRtWImBYluFbMpSHSpmFFB4vqJmlVB4tqKmRUkrlPMriBxzULNUvCaihku0S2/3TQyLUj8rmK2BYnfVMy4IHG5YuaClydq9oKXKvZA8GfFXgj+tFB7Inj+hSLf+btqcEyCf7nXL7V/FyOz91ZGX660fxUvL+VxR+fdpDcrdM9q7Lx3jv7gtPv32j8/oprNJ8PB5HXWTz3DMAzDMAzDMAzDMAzDMHrEf9VjaGNa1FYRAAAAAElFTkSuQmCC"></img>'//`<svg viewBox="0 0 18 18"> <path class="ql-stroke" d="M5,3V9a4.012,4.012,0,0,0,4,4H9a4.012,4.012,0,0,0,4-4V3"></path></svg>`
             })
@@ -1754,13 +1766,20 @@
         function enableReadOnly() {
             $('.ql-editor').attr('contenteditable', false);
             $('.ql-editor').css('caret-color', 'transparent');
+
             hideToolbar();
+
+            //hideScrollbars();
+            disableScrolling();
         }
 
         function disableReadOnly() {
             $('.ql-editor').attr('contenteditable', true);
             $('.ql-editor').css('caret-color', 'black');
+
             showToolbar();
+
+            showScrollbars();
         }
 
         function hideScrollbars() {
@@ -1992,7 +2011,7 @@
             }
         }
 
-        //init(null, null, null, null, null);
+        //init('hello', null, null, null, null);
     </script>
 
 </body>

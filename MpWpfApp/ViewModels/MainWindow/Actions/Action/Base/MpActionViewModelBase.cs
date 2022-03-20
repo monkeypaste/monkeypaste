@@ -23,6 +23,7 @@ namespace MpWpfApp {
         public MpCopyItem CopyItem { get; set; }
         public MpActionOutput Previous { get; set; }
         public abstract object OutputData { get; }
+        public abstract string ActionDescription { get; }
     }
 
     public abstract class MpActionViewModelBase :
@@ -784,8 +785,12 @@ namespace MpWpfApp {
             if (!CanPerformAction(arg)) {
                 return;
             }
-
-            MpConsole.WriteLine($"Action({ActionId}) '{Label}' Performed");
+            if(arg is MpActionOutput ao) {
+                MpConsole.WriteLine("");
+                MpConsole.WriteLine($"Action({ActionId}) '{Label}' Completed Successfully");
+                MpConsole.WriteLine(ao.ActionDescription);
+                MpConsole.WriteLine("");
+            }
             await Task.Delay(1);
             OnActionComplete?.Invoke(this, arg);
         }

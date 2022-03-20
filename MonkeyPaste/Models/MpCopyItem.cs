@@ -124,6 +124,8 @@ namespace MonkeyPaste {
         [Indexed]
         public string ItemData { get; set; } = string.Empty;
 
+        public string ItemData_rtf { get; set; } = string.Empty;
+
         [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; }

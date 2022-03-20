@@ -13,7 +13,8 @@ using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpTriggerInput : MpActionOutput {
-        public override object OutputData => CopyItem;        
+        public override object OutputData => CopyItem;
+        public override string ActionDescription => "Trigger Activated...";
     }
 
     public class MpTriggerActionViewModelBase : 

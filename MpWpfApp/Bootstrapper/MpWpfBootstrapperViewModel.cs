@@ -76,6 +76,9 @@ namespace MpWpfApp {
             Properties.Settings.Default.Save();
             // NOTE Remove this later finish
 
+
+            InitCef();
+
             List<int> doNotShowNotifications = null;
             if(!string.IsNullOrWhiteSpace(Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr)) {
                 doNotShowNotifications = Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr
@@ -95,27 +98,11 @@ namespace MpWpfApp {
                 ReportItemLoading(_items[i], i);
                 await _items[i].Register();
             }
+                        
 
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 
-            InitCef();
             IsLoaded = true;
-                       
-
-            //MpProcessHelper.MpProcessAutomation.StartProcess(
-            //    processPath: @"C:\Users\tkefauver\Desktop\test.bat",
-            //    args: "",
-            //    asAdministrator: true,
-            //    isSilent: false,
-            //    useShellExecute: false,
-            //    workingDirectory: @"C:\Users\tkefauver\Desktop\DS4Windows\",
-            //    showError: true,
-            //    windowState: MpProcessHelper.WinApi.ShowWindowCommands.Normal,
-            //    out string stdOut,
-            //    out string stdErr);
-
-            //MpConsole.WriteLine("Output: " + stdOut);
-            //MpConsole.WriteLine("Errors: " + stdErr);
         }
 
         private static void InitCef() {
@@ -147,28 +134,11 @@ namespace MpWpfApp {
                 SchemeName = "localfolder",
                 DomainName = "cefsharp",
                 SchemeHandlerFactory = new FolderSchemeHandlerFactory(
-            rootFolder: Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor"),
-            hostName: "cefsharp",
-            defaultPage: "Editor2.html" // will default to index.html
-        )
+                    rootFolder: Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor"),
+                    hostName: "cefsharp",
+                    defaultPage: "Editor2.html" // will default to index.html
+                )
             });
-            //Example of setting a command line argument
-            //Enables WebRTC
-            // - CEF Doesn't currently support permissions on a per browser basis see https://bitbucket.org/chromiumembedded/cef/issues/2582/allow-run-time-handling-of-media-access
-            // - CEF Doesn't currently support displaying a UI for media access permissions
-            //
-            //NOTE: WebRTC Device Id's aren't persisted as they are in Chrome see https://bitbucket.org/chromiumembedded/cef/issues/2064/persist-webrtc-deviceids-across-restart
-            //settings.CefCommandLineArgs.Add("enable-media-stream");
-            ////https://peter.sh/experiments/chromium-command-line-switches/#use-fake-ui-for-media-stream
-            //settings.CefCommandLineArgs.Add("use-fake-ui-for-media-stream");
-            ////For screen sharing add (see https://bitbucket.org/chromiumembedded/cef/issues/2582/allow-run-time-handling-of-media-access#comment-58677180)
-            //settings.CefCommandLineArgs.Add("enable-usermedia-screen-capturing");
-
-            //Don't perform a dependency check
-            //By default this example calls Cef.Initialzie in the CefSharp.MinimalExample.Wpf.App
-            //constructor for purposes of providing a self contained single file example we call it here.
-            //You could remove this code and use the CefSharp.MinimalExample.Wpf.App example if you 
-            //set BrowserSubprocessPath to an absolute path to your main application exe.
             Cef.Initialize(settings, performDependencyCheck: false);
         }
     }

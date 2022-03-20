@@ -157,7 +157,7 @@ namespace MpWpfApp {
                 return csvStr;
             }
             //return new MpCsvReader(csvStr).FlowDocument.ToRichText();
-            return MpEasyCSV.GetFlowDocument(csvStr).ToRichText();
+            return MpCsvToRtfTableConverter.GetFlowDocument(csvStr).ToRichText();
         }
 
         public static string ToQuillText(this string text) {
@@ -171,7 +171,7 @@ namespace MpWpfApp {
             if (string.IsNullOrWhiteSpace(str)) {
                 return str == null ? string.Empty : str;
             }
-            return MpEasyCSV.GetCsv(str);
+            return MpCsvToRtfTableConverter.GetCsv(str);
         }
 
         public static string ToPlainText(this string str) {

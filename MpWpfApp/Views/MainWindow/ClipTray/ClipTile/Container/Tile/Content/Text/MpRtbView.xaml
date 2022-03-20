@@ -30,17 +30,23 @@
                      VerticalContentAlignment="Stretch"
                      local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData}"
                      AutoWordSelection="False"
-                     Background="{Binding ItemBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                     Foreground="{Binding ElementName=Rtb, Path=Background, Converter={StaticResource BackgroundBrushToForegroundBrushConverter}}"
+                     Background="{Binding ItemBackgroundHexColor,
+                                          Converter={StaticResource StringHexToBrushConverter}}"
+                     Foreground="{Binding ElementName=Rtb,
+                                          Path=Background,
+                                          Converter={StaticResource BackgroundBrushToForegroundBrushConverter}}"
                      BorderThickness="0"
-                     Focusable="{Binding IsReadOnly, Converter={StaticResource BoolFlipConverter}}"
+                     Focusable="{Binding IsReadOnly,
+                                         Converter={StaticResource BoolFlipConverter}}"
                      local:MpIsFocusedExtension.IsEnabled="True"
-                     local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused, Mode=TwoWay}"
+                     local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
+                                                                    Mode=TwoWay}"
                      GotFocus="Rtb_GotFocus"
                      IsDocumentEnabled="True"
                      IsEnabled="True"
                      IsInactiveSelectionHighlightEnabled="True"
-                     IsReadOnly="{Binding IsEditingContent, Converter={StaticResource BoolFlipConverter}}"
+                     IsReadOnly="{Binding IsEditingContent,
+                                          Converter={StaticResource BoolFlipConverter}}"
                      IsUndoEnabled="True"
                      Loaded="Rtb_Loaded"
                      PreviewKeyUp="Rtb_PreviewKeyUp"

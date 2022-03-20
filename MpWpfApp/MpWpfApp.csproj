@@ -109,6 +109,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\MpDocumentHtmlExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
     <Compile Include="AttachedProperties\MpTextSelectionRangeExtension.cs" />
     <Compile Include="AttachedProperties\MpImageSourceExtension.cs" />
@@ -279,7 +280,7 @@
     <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
-    <Compile Include="Utils\Documents\MpCsvReader.cs" />
+    <Compile Include="Converters\HtmlToRtf\MpCsvToRtfTableConverter.cs" />
     <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCursor.cs" />
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
@@ -2921,6 +2922,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /u /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"</PostBuildEvent>
+    <PostBuildEvent>xcopy /u /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"
+xcopy /u /y /f /S /I /E "$(ProjectDir)..\MonkeyPaste\Resources\Html" "$(TargetDir)Resources\Html"</PostBuildEvent>
   </PropertyGroup>
 </Project>

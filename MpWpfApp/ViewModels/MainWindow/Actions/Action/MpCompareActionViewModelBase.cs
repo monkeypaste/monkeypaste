@@ -19,6 +19,14 @@ namespace MpWpfApp {
     public class MpCompareOutput : MpActionOutput {
         public override object OutputData => MatchValue;
         public string MatchValue { get; set; }
+        public override string ActionDescription {
+            get {
+                if(string.IsNullOrEmpty(MatchValue)) {
+                    return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was NOT a match";
+                }
+                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was matched w/ Match Value: {MatchValue}";
+            }
+        }
     }
 
     public class MpCompareActionViewModelBase : MpActionViewModelBase {
@@ -254,7 +262,7 @@ namespace MpWpfApp {
                         } catch(Exception ex) {
                             matchVal = null;
                             MpConsole.WriteLine(@"Error parsing/querying json response:");
-                            MpConsole.WriteLine(ao.OutputData.ToString());
+                            MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
                             MpConsole.WriteLine(@"For JSONPath: ");
                             MpConsole.WriteLine(CompareData);
                             MpConsole.WriteTraceLine(ex);

@@ -31,7 +31,7 @@ namespace MonkeyPaste.Plugin {
         public bool omitIfPathNotFound { get; set; } = true;
 
         public static string Query(object jsonObj, string jsonQuery) {
-            string jsonStr = string.Empty;
+            string jsonStr;
             if(jsonObj == null) {
                 return null;
             }

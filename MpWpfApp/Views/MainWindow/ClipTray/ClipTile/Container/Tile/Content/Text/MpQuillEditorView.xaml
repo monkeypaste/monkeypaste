@@ -43,6 +43,7 @@
                             VerticalAlignment="Stretch"
                             DataContext="{Binding}"
                             Address="localfolder://cefsharp/"
-                            local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData}"
+                            local:MpDocumentHtmlExtension.DocumentRtf="{Binding CopyItemData}"
+                            local:MpDocumentHtmlExtension.IsReadOnly="{Binding IsReadOnly}"
                             LoadingStateChanged="Browser_LoadingStateChanged" />
 </local:MpContentUserControl>

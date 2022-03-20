@@ -53,17 +53,18 @@ namespace MpWpfApp {
                     itemType = MpCopyItemType.Text;
                     string csvStr = iData[MpClipboardFormatType.Csv];
                     itemData = csvStr.ToRichTextTable();
+                    itemData = itemData.ToQuillText();
                 } else if (iData.ContainsKey(MpClipboardFormatType.Rtf)) {
                     itemType = MpCopyItemType.Text;
                     itemData = iData[MpClipboardFormatType.Rtf].EscapeExtraOfficeRtfFormatting();
-                    //itemData = itemData.ToQuillText();
+                    itemData = itemData.ToQuillText();
                 } else if (iData.ContainsKey(MpClipboardFormatType.Bitmap)) {
                     itemType = MpCopyItemType.Image;
                     itemData = iData[MpClipboardFormatType.Bitmap];
                 } else if(iData.ContainsKey(MpClipboardFormatType.Text)) {                    
                     itemType = MpCopyItemType.Text;
                     itemData = iData[MpClipboardFormatType.Text].ToRichText();
-                    //itemData = itemData.ToQuillText();
+                    itemData = itemData.ToQuillText();
                 } else {
                     MpConsole.WriteTraceLine("clipboard data is not known format");
                     return null;

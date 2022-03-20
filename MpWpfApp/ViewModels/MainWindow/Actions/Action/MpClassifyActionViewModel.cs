@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace MpWpfApp {
     public class MpClassifyOutput : MpActionOutput {
         public override object OutputData => TagId;
-        public int TagId { get; set; }        
+        public int TagId { get; set; }
+        public override string ActionDescription => $"CopyItem({CopyItem.Id},{CopyItem.Title}) Classified to Tag({TagId})";
     }
 
     public class MpClassifyActionViewModel : MpActionViewModelBase {
