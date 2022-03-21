@@ -53,8 +53,11 @@ namespace MpWpfApp {
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move) {
                 var lbi = ClipTray.GetListBoxItem(e.Position.Index);
                 if(lbi != null) {
-                    MpMarqueeExtension.SetIsEnabled(lbi.GetVisualDescendent<MpClipTileTitleView>().ClipTileTitleMarqueeCanvas, false);
-                    MpMarqueeExtension.SetIsEnabled(lbi.GetVisualDescendent<MpClipTileTitleView>().ClipTileTitleMarqueeCanvas, true);
+                    var cttv = lbi.GetVisualDescendent<MpClipTileTitleView>();
+                    if(cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
+                        MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                        MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                    }
                 }
             }
         }

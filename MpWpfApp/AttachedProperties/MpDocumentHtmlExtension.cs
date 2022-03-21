@@ -35,25 +35,25 @@ namespace MpWpfApp {
             typeof(bool),
             typeof(MpDocumentHtmlExtension),
             new FrameworkPropertyMetadata() {
-                PropertyChangedCallback = (s, e) => {
+                PropertyChangedCallback = async (s, e) => {
                     if (e.NewValue == null) {
                         return;
                     }
                     var fe = s as FrameworkElement;
                     bool isReadOnly = (bool)e.NewValue;
-                    //if (fe is ChromiumWebBrowser cwb) {
-                    //    MpHelpers.RunOnMainThread(async () => {
-                    //        if (isReadOnly) {
-                    //            await cwb.EvaluateScriptAsync("enableReadOnly()");
-                    //        } else {
-                    //            await cwb.EvaluateScriptAsync("disableReadOnly()");
-                    //            if (cwb.DataContext is MpContentItemViewModel civm) {
-                    //                var response = await cwb.EvaluateScriptAsync("getHtml()");
-                    //                civm.CopyItemData = response.Result.ToString();
-                    //            }
-                    //        }
+                    if (fe is ChromiumWebBrowser cwb && cwb.CanExecuteJavascriptInMainFrame) {
+                       // MpHelpers.RunOnMainThread(async () => {
+                            if (isReadOnly) {
+                                await cwb.EvaluateScriptAsync("enableReadOnly()");
+                            } else {
+                                await cwb.EvaluateScriptAsync("disableReadOnly()");
+                                if (cwb.DataContext is MpContentItemViewModel civm) {
+                                    var response = await cwb.EvaluateScriptAsync("getHtml()");
+                                    civm.CopyItemData = response.Result.ToString();
+                                }
+                            }
                     //    });
-                    //}
+                    }
                 }
             });
 
