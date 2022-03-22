@@ -33,11 +33,19 @@
     </div>
 
     <div id="editTemplateToolbar" class="edit-template-toolbar">
-        <div id="edit-template-custom-select" class="edit-template-custom-select" style="min-width:160px;">
-            <select id="editTemplateTypeMenuSelector" >
+        <div class="edit-template-type-select-container">
+            <select id="editTemplateTypeMenuSelector">
                 <option class="templateTypeOption" value="constant">Constant</option>
                 <option class="templateTypeOption" value="static">Static</option>
                 <option class="templateTypeOption" value="dynamic">Dynamic</option>
+            </select>
+        </div>
+        <div id="editTemplateSubTypeSelectContainer" class="edit-template-sub-type-select-container">
+            <select id="editTemplateConstantSubTypeMenuSelector">
+                <option class="templateConstantSubTypeOption" value="datetime">Date/Time</option>
+                <option class="templateConstantSubTypeOption" value="signature">Signature</option>
+                <!-- Add defined 'Other' templates here -->
+                <option class="templateConstantSubTypeOption" value="other">Other...</option>
             </select>
         </div>
     </div>

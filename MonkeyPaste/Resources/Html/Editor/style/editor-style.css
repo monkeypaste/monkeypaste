@@ -205,6 +205,21 @@
     position: absolute;
 }
 
+.edit-template-type-select-container {
+    display: inline-block;
+    position: relative;
+    font-family: Arial;
+    min-width: 160px;
+}
+
+.edit-template-sub-type-select-container {
+    display: none;
+    position: relative;
+    font-family: Arial;
+    min-width: 160px;
+}
+
+
 /* Paste Template Toolbar */
 .paste-template-toolbar {
     display: none;
@@ -242,11 +257,6 @@
     bottom: 100%
 }
 
-.edit-template-custom-select {
-    display: inline-block;
-    position: relative;
-    font-family: Arial;
-}
 
     /*.edit-template-custom-select select {
         display: none;

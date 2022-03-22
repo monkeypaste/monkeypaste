@@ -261,6 +261,7 @@
 
   <ItemGroup>
     <Folder Include="Resources\Html\Editor\lib\Quill-Html-Edit-Button\" />
+    <Folder Include="Resources\Html\Editor\src\templates\" />
     <Folder Include="Utils\DragDrop\" />
     <Folder Include="Utils\NetworkIO\Json\Base\" />
     <Folder Include="Utils\Styling\" />

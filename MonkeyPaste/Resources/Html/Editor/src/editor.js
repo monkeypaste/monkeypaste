@@ -410,41 +410,40 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
                 console.log('User has highlighted', text);
             }
 
-        } else {
-            console.log('Cursor not in the editor');
-        }
-
-        let isTemplateSelected = false;
-        var tl = getTemplates();
-        tl.forEach(function (t) {
-            if (Array.isArray(t.docIdx)) {
-                t.docIdx.forEach(function (tDocIdx) {
-                    if (range.length == 0) {
-                        if (tDocIdx == range.index) {
+            let isTemplateSelected = false;
+            var tl = getTemplates();
+            tl.forEach(function (t) {
+                if (Array.isArray(t.docIdx)) {
+                    t.docIdx.forEach(function (tDocIdx) {
+                        if (range.length == 0) {
+                            if (tDocIdx == range.index) {
+                                isTemplateSelected = true;
+                                return;
+                            }
+                        } else if (parseInt(tDocIdx) >= range.index && parseInt(tDocIdx) <= range.index + range.length) {
                             isTemplateSelected = true;
                             return;
                         }
-                    } else if (parseInt(tDocIdx) >= range.index && parseInt(tDocIdx) <= range.index + range.length) {
+                    });
+                } else {
+                    if (range.length == 0) {
+                        if (parseInt(t.docIdx) == range.index) {
+                            isTemplateSelected = true;
+                            return;
+                        }
+                    } else if (parseInt(t.docIdx) >= range.index && parseInt(t.docIdx) <= range.index + range.length) {
                         isTemplateSelected = true;
                         return;
                     }
-                });
-            } else {
-                if (range.length == 0) {
-                    if (parseInt(t.docIdx) == range.index) {
-                        isTemplateSelected = true;
-                        return;
-                    }
-                } else if (parseInt(t.docIdx) >= range.index && parseInt(t.docIdx) <= range.index + range.length) {
-                    isTemplateSelected = true;
-                    return;
                 }
+            });
+            
+            if (!isTemplateSelected) {
+                selectedTemplateId = 0;
+                hideEditTemplateToolbar();
             }
-        });
-
-        if (!isTemplateSelected) {
-            selectedTemplateId = 0;
-            hideEditTemplateToolbar();
+        } else {
+            console.log('Cursor not in the editor');
         }
     });
 
@@ -474,6 +473,8 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
         }
     });
 }
+
+// begin templates
 
 function shiftTemplates(fromDocIdx, byVal) {
     var tl = getTemplates();
@@ -562,7 +563,6 @@ function createTemplate(templateObjOrId, idx, len) {
         range = { index: idx, length: len };
     }
 
-    var tl = getTemplates();
     var isNew = templateObj == null;
     var newTemplateObj = templateObj;
     if (isNew) {
@@ -597,6 +597,7 @@ function createTemplate(templateObjOrId, idx, len) {
     console.log(getTemplates());
 
     showEditTemplateToolbar();
+
     return range.index;
 }
 
@@ -632,6 +633,10 @@ function clearTemplateSelection() {
 function setTemplateType(templateId, templateTypeValue) {
     console.log('Template: ' + templateId + " selected type: " + templateTypeValue);
 
+    var t = getTemplateById(templateId);
+    t['templateType'] = templateTypeValue;
+    document.getElementById("editTemplateTypeMenuSelector").value = t["templateType"];
+
     var stl = document.getElementsByClassName("template_btn");
     for (var i = 0; i < stl.length; i++) {
         var te = stl[i];
@@ -641,6 +646,13 @@ function setTemplateType(templateId, templateTypeValue) {
             te.setAttribute('templateType', templateTypeValue);
             te.setAttribute('templateSubType', '');
         }
+    }
+
+    var t = getTemplateById(selectedTemplateId);
+    if (t['templateType'] == 'constant') {
+        document.getElementById('editTemplateSubTypeSelectContainer').style.display = 'inline-block';
+    } else {
+        document.getElementById('editTemplateSubTypeSelectContainer').style.display = 'none';
     }
 }
 
@@ -1151,7 +1163,6 @@ function hideAllContextMenus() {
 }
 
 function showEditTemplateToolbar() {
-
     clickCount = 0;
     isShowingEditTemplateToolbar = true;
     var ett = document.getElementById('editTemplateToolbar');
@@ -1162,9 +1173,10 @@ function showEditTemplateToolbar() {
 
     var t = getTemplateById(selectedTemplateId);
 
-    document.getElementById("editTemplateTypeMenuSelector").value = t["templateType"];
+    setTemplateType(selectedTemplateId, t["templateType"]);
 
     document.getElementById('editTemplateTypeMenuSelector').addEventListener('change', templateTypeChanged);
+    
     //document.getElementById('nextTemplateButton').addEventListener('click', function (e) {
     //    gotoNextTemplate();
     //});
@@ -1404,6 +1416,8 @@ function onTemplateOptionClick(e, target) {
     selectTemplate(s.options[s.selectedIndex].value, true);
     h.click();
 }
+
+// end templates
 
 function getFontName(font) {
     // Generate code-friendly font names
