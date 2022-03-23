@@ -98,7 +98,6 @@ namespace MpWpfApp {
                 ReportItemLoading(_items[i], i);
                 await _items[i].Register();
             }
-                        
 
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 

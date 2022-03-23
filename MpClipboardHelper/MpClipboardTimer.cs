@@ -63,8 +63,8 @@ namespace MpClipboardHelper {
         #region Public Methods
 
         public void Start() {
-            //UIPermission clipBoard = new UIPermission(PermissionState.Unrestricted);
-            //clipBoard.Clipboard = UIPermissionClipboard.AllClipboard;
+            UIPermission clipBoard = new UIPermission(PermissionState.Unrestricted);
+            clipBoard.Clipboard = UIPermissionClipboard.AllClipboard;
 
             if (_workThread != null && _workThread.IsAlive) {
                 _isStopped = false;
@@ -162,7 +162,8 @@ namespace MpClipboardHelper {
             to a MemoryStream and pass the MemoryStream to the SetData method.
             */
             if(ido != null) {
-                Debugger.Break();
+                ido = Clipboard.GetDataObject();
+                //Debugger.Break();
             }
             var ndo = new MpDataObject();
             if (retryCount == 0) {

@@ -1,4 +1,4 @@
-﻿body {
+body {
     margin: 0px;
     padding: 0px;
     font-family: Arial;
@@ -97,7 +97,7 @@
     transition: .4s;
     margin: 0 1px;
     cursor: pointer;
-    caret-color: transparent;
+    /*caret-color: transparent;*/
 }
 
     .template_btn:hover {
@@ -148,7 +148,6 @@
 /* Template Context Menu*/
 .cls-context-menu-link {
     display: inline-block;
-    padding: 20px;
     background: #ECECEC;
 }
 
@@ -174,7 +173,6 @@
         box-sizing: border-box;
         width: auto;
         display: block;
-        padding: 5px 10px;
         text-decoration: none;
         color: blue;
     }
@@ -190,7 +188,6 @@
 
     .cls-context-menu a {
         display: block;
-        padding: 5px 10px;
         text-decoration: none;
         color: blue;
     }
@@ -198,27 +195,63 @@
 /* Edit Template Toolbar */
 .edit-template-toolbar {
     display: none;
-    width: 98%;
+    flex-wrap:nowrap;
+    min-height: 35px;
+    width: 100%;
     background-color: lightyellow;
-    border: solid 1px yellow;
-    padding: 5px 10px;
-    position: absolute;
+    position: absolute;    
+    box-sizing: border-box;
 }
 
 .edit-template-type-select-container {
     display: inline-block;
+    margin: 12px;
     position: relative;
     font-family: Arial;
     min-width: 160px;
 }
 
-.edit-template-sub-type-select-container {
+.edit-template-type-option {
+    margin:5px;
+}
+
+.template-detail-text-input-container {
     display: none;
     position: relative;
     font-family: Arial;
     min-width: 160px;
 }
 
+.template-name-and-color-container {
+    display: inline-block;
+    float: right;
+    position: relative;
+    font-family: Arial;
+    min-width: 160px;
+}
+
+.template-color-box-container {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+
+.template-color-box {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    border: solid 3px black;
+}
+
+    .template-color-box:hover {
+        transition: .2s;
+        border: solid 3px dimgray;
+    }
+.template-name-text-input {
+    display: inline-block;
+    margin: 12px;
+}
 
 /* Paste Template Toolbar */
 .paste-template-toolbar {

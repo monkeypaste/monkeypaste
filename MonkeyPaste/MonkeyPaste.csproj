@@ -133,6 +133,9 @@
     <EmbeddedResource Update="Controls\MpPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\style\editor-style.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Styles\MpWpfConverters.xaml">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MpWpfConverters.Designer.cs</LastGenOutput>
@@ -261,7 +264,6 @@
 
   <ItemGroup>
     <Folder Include="Resources\Html\Editor\lib\Quill-Html-Edit-Button\" />
-    <Folder Include="Resources\Html\Editor\src\templates\" />
     <Folder Include="Utils\DragDrop\" />
     <Folder Include="Utils\NetworkIO\Json\Base\" />
     <Folder Include="Utils\Styling\" />

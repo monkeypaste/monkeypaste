@@ -14,13 +14,13 @@
     <script src="lib/Quill-Better-Table/node_modules/quill-better-table/dist/quill-better-table.min.js"></script>
     <script src="lib/jquery/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="lib/DynamicQuillTools/DynamicQuillTools.js"></script>
-    <script src="lib/Quill-Html-Edit-Button/node_modules/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>    
+    <script src="lib/Quill-Html-Edit-Button/node_modules/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
+
+    <script src="src/templates/template.js"></script>
 </head>
 <body>
     <div id='editor'>
     </div>
-
-    <div id="templateColorPaletteMenu" class="cls-context-menu"></div>
 
     <div id="templateToolbarMenu" class="cls-context-menu">
         <ul id="templateToolbarMenuList">
@@ -35,18 +35,23 @@
     <div id="editTemplateToolbar" class="edit-template-toolbar">
         <div class="edit-template-type-select-container">
             <select id="editTemplateTypeMenuSelector">
-                <option class="templateTypeOption" value="constant">Constant</option>
-                <option class="templateTypeOption" value="static">Static</option>
-                <option class="templateTypeOption" value="dynamic">Dynamic</option>
+                <option class="edit-template-type-option" value="datetime">DateTime</option>
+                <option class="edit-template-type-option" value="dynamic">Dynamic Text</option>
+                <option class="edit-template-type-option" value="static">Static Text</option>
+                <option class="edit-template-type-option" value="content">Content Property</option>
+                <option class="edit-template-type-option" value="analyzer">Analyzer Output</option>
+                <option class="edit-template-type-option" value="action">Action Output</option>
+                <option class="edit-template-type-option" value="contact">Contact Property</option>
             </select>
         </div>
-        <div id="editTemplateSubTypeSelectContainer" class="edit-template-sub-type-select-container">
-            <select id="editTemplateConstantSubTypeMenuSelector">
-                <option class="templateConstantSubTypeOption" value="datetime">Date/Time</option>
-                <option class="templateConstantSubTypeOption" value="signature">Signature</option>
-                <!-- Add defined 'Other' templates here -->
-                <option class="templateConstantSubTypeOption" value="other">Other...</option>
-            </select>
+        <div id="templateDetailTextInputContainer" class="template-detail-text-input-container">
+            <input id="templateDetailTextInput" type="text" placeholder="Enter Details" />
+        </div>
+        <div id="templateNameAndColorContainer" class="template-name-and-color-container">
+            <a id="templateColorBoxContainer" class="template-color-box-container" href="javascript:void(0);">
+                <div id="templateColorBox" class="template-color-box"></div>
+            </a>
+            <input id="templateNameTextInput" class="template-name-text-input" type="text" placeholder="Template Name" />
         </div>
     </div>
 
@@ -71,6 +76,9 @@
             <span>FINISH</span>
         </div>
     </div>
+
+
+    <div id="templateColorPaletteMenu" class="cls-context-menu"></div>
 
     <script src="src/editor.js"></script>
 </body>
