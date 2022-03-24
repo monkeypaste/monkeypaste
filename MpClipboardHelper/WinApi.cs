@@ -62,5 +62,34 @@ namespace MpClipboardHelper {
             public UInt16 bV5ProfileSize;
             public UInt16 bV5Reserved;
         }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool OpenClipboard(IntPtr hWndNewOwner);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool CloseClipboard();
+
+        [DllImport("user32.dll")]
+        public static extern bool EmptyClipboard();
+
+        [DllImport("kernel32.dll")]
+        public static extern UIntPtr GlobalSize(IntPtr hMem);
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr GlobalLock(IntPtr hMem);
+
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GlobalUnlock(IntPtr hMem);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetClipboardData(uint uFormat);
+
+        [DllImport("User32.dll", SetLastError = true)]
+        public static extern uint RegisterClipboardFormatA(string lpszFormat);
+
+        [DllImport(@"User32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsClipboardFormatAvailable(uint format);
     }
 }

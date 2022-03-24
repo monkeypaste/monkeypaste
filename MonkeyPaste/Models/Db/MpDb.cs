@@ -421,9 +421,14 @@ namespace MonkeyPaste {
         }
 
         private static void MatchRegex(sqlite3_context ctx, object user_data, sqlite3_value[] args) {
+            string input = SQLitePCL.raw.sqlite3_value_text(args[1]).utf8_to_string();
+            input = input == null ? string.Empty : input;
+            string pattern = SQLitePCL.raw.sqlite3_value_text(args[0]).utf8_to_string();
+            pattern = pattern == null ? string.Empty : pattern;
+
             bool isMatched = System.Text.RegularExpressions.Regex.IsMatch(
-                SQLitePCL.raw.sqlite3_value_text(args[1]).utf8_to_string(),
-                SQLitePCL.raw.sqlite3_value_text(args[0]).utf8_to_string(),
+                input,
+                pattern,
                 RegexOptions.IgnoreCase);
 
             if (isMatched)
@@ -502,7 +507,7 @@ namespace MonkeyPaste {
 	                                                    MpUserDevice.PlatformTypeId AS SourceDeviceType
                                                     FROM
 	                                                    MpCopyItem
-                                                    INNER JOIN MpUserDevice ON MpUserDevice.pk_MpUserDeviceId = AppId
+                                                    INNER JOIN MpUserDevice ON MpUserDevice.pk_MpUserDeviceId = MpApp.fk_MpUserDeviceId
                                                     INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
                                                     INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
                                                     LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");

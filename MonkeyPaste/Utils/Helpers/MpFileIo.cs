@@ -135,7 +135,7 @@ namespace MonkeyPaste {
             }
             using (var httpClient = new HttpClient()) {
                 try {
-                    httpClient.DefaultRequestHeaders.Add("User-Agent", "C# App");
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
                     byte[] bytes = await httpClient.GetByteArrayAsync(url).TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
                     using (var fs = new FileStream("favicon.ico", FileMode.Create)) {                    
                         fs.Write(bytes, 0, bytes.Length);

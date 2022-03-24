@@ -215,7 +215,11 @@ namespace MpWpfApp {
                 return defaultBrush;
             }
 
-            string rgbColors = text.Substring(rgbOpenIdx + 1).Replace(",", string.Empty).Replace(")", string.Empty).Replace(";",string.Empty);
+            string commaReplacement = string.Empty;
+            if(!text.Substring(rgbOpenIdx + 1).Contains(" ")) {
+                commaReplacement = " ";
+            }
+            string rgbColors = text.Substring(rgbOpenIdx + 1).Replace(",", commaReplacement).Replace(")", string.Empty).Replace(";",string.Empty);
             var rgbItemList = rgbColors.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             
             var color = new Color();
@@ -232,8 +236,15 @@ namespace MpWpfApp {
         public static double GetFontSize(string styleValue) {
             //for some reason wpf will not accept px values and converts to 3/4 size (for 96DPI)
             //but giving pt will use the displays DIP
-            string fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px","pt");
-            double fs = (double)new FontSizeConverter().ConvertFrom(fontSizeStr);
+            //string fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px","pt");
+            //double fs = (double)new FontSizeConverter().ConvertFrom(fontSizeStr);
+            string fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px", string.Empty);
+            double fs = 12;
+            try {
+                fs = (double)Convert.ToDouble(fontSizeStr);
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+            }
             MpRichTextFormatProperties.Instance.AddFontSize(fs);
             return fs;
         }

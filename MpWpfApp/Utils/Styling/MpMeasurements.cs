@@ -288,7 +288,8 @@ namespace MpWpfApp {
 
         public double ClipTileEditModeMinWidth {
             get {
-                return 700;
+                //return 900; // quill toolbar width
+                return 700; //rtb toolbar width
             }
         }
 
@@ -517,7 +518,8 @@ namespace MpWpfApp {
         #region Edit Content
         public double ClipTileEditToolbarHeight {
             get {
-                return 40;
+                //return 90; //quill toolbar height
+                return 40; //rtb toolbar height
             }
         }
 

@@ -17,14 +17,50 @@
             Loaded="ContentListItemView_Loaded"
             Unloaded="Border_Unloaded"
             DataContextChanged="ContentListItemView_DataContextChanged"
-            IsHitTestVisible="{Binding HasScrollVelocity, Source={x:Static local:MpClipTrayViewModel.Instance}, Converter={StaticResource BoolFlipConverter}}"
+            IsHitTestVisible="{Binding HasScrollVelocity,
+                                       Source={x:Static local:MpClipTrayViewModel.Instance},
+                                       Converter={StaticResource BoolFlipConverter}}"
             PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
             PreviewMouseRightButtonDown="Border_PreviewMouseRightButtonDown"
             local:MpHoverableExtension.IsEnabled="True"
-            local:MpHoverableExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+            local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                            Mode=TwoWay}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Border.Resources>
+            <Style x:Key="ItemContentControlStyle"
+                   TargetType="ContentControl">
+                <Style.Resources>
+                    <SolidColorBrush Color="Transparent"
+                                     x:Key="{x:Static SystemColors.HighlightBrushKey}" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                     Color="Transparent" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                     Color="Transparent" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                                     Color="Transparent" />
+                </Style.Resources>
+                <Setter Property="FocusVisualStyle"
+                        Value="{x:Null}" />
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ContentControl">
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="BorderBrush"
+                                            Value="Transparent" />
+                                    <Setter Property="Background"
+                                            Value="Transparent" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <DataTemplate x:Key="RtbContentTemplate">
                 <local:MpRtbView DataContext="{Binding}" />
             </DataTemplate>
@@ -63,6 +99,7 @@
         <Grid>
             <ContentControl x:Name="ContentView"
                             Content="{Binding}"
+                            Style="{StaticResource ItemContentControlStyle}"
                             ContentTemplateSelector="{StaticResource ContentViewSelector}" />
             <Border BorderThickness="0.75"
                     HorizontalAlignment="Stretch">

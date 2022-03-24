@@ -23,15 +23,20 @@
                VerticalAlignment="Stretch">
         <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                     DockPanel.Dock="Top"
-                                    Visibility="Collapsed"
+                                    Visibility="{Binding IsReadOnly,
+                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                     DataContext="{Binding PrimaryItem}" />
         <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                          DockPanel.Dock="Bottom"
-                                         Visibility="Collapsed"
+                                         Visibility="{Binding IsAnyEditingTemplate,
+                                                              Converter={StaticResource BoolToVisibilityConverter},
+                                                              TargetNullValue=Collapsed}"
                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />
         <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                           DockPanel.Dock="Bottom"
-                                          Visibility="Collapsed"
+                                          Visibility="{Binding Parent.IsPastingTemplate,
+                                                               Converter={StaticResource BoolToVisibilityConverter},
+                                                               TargetNullValue=Collapsed}"
                                           DataContext="{Binding PrimaryItem.TemplateCollection}" />
         <AdornerDecorator>
             <ListBox x:Name="ContentListBox"
@@ -84,6 +89,15 @@
                                 Value="Stretch" />
                         <Setter Property="VerticalContentAlignment"
                                 Value="Stretch" />
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>

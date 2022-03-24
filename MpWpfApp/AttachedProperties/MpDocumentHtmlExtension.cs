@@ -2,6 +2,7 @@
 using CefSharp.Wpf;
 using Microsoft.Web.WebView2.Wpf;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -42,17 +43,45 @@ namespace MpWpfApp {
                     var fe = s as FrameworkElement;
                     bool isReadOnly = (bool)e.NewValue;
                     if (fe is ChromiumWebBrowser cwb && cwb.CanExecuteJavascriptInMainFrame) {
-                       // MpHelpers.RunOnMainThread(async () => {
+                        if (cwb.DataContext is MpContentItemViewModel civm) {
                             if (isReadOnly) {
+                                MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is readonly");
                                 await cwb.EvaluateScriptAsync("enableReadOnly()");
+
+                                var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
+                                if (ctcv != null && civm.Parent != null) {
+                                    double nw = civm.Parent.ReadOnlyContentSize.Width;
+                                    double nh = civm.EditorHeight;
+                                    //if(nh == double.NaN) {
+                                    //    nh = 
+                                    //}
+                                    ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
+                                }
+
+                                var response = await cwb.EvaluateScriptAsync("getHtml()");
+                                string itemHtml = response.Result.ToString();
+                                civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(itemHtml);
                             } else {
+                                MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is editable");
                                 await cwb.EvaluateScriptAsync("disableReadOnly()");
-                                if (cwb.DataContext is MpContentItemViewModel civm) {
-                                    var response = await cwb.EvaluateScriptAsync("getHtml()");
-                                    civm.CopyItemData = response.Result.ToString();
+
+                                var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
+                                if (ctcv != null) {
+                                    double nw = MpMeasurements.Instance.ClipTileEditModeMinWidth;
+                                    double nh = civm.EditorHeight;
+                                    if (nh == double.NaN) {
+                                        nh = MpMeasurements.Instance.ClipTileEditToolbarHeight + civm.UnformattedContentSize.Height;
+                                    } else {
+                                        nh = civm.Parent.TileContentHeight;
+                                    }
+                                    //nh = 1000;
+                                    //cwb.Height = nh;
+                                    if (nw > ctcv.ActualWidth) {
+                                        ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
+                                    }
                                 }
                             }
-                    //    });
+                        }
                     }
                 }
             });
@@ -90,10 +119,10 @@ namespace MpWpfApp {
                         civm.UnformattedContentSize = docSize;
 
                         if (fe is ChromiumWebBrowser cwb) {
-                            cwb.FrameLoadEnd += async(sender, args) => {
+                            cwb.FrameLoadEnd += async (sender, args) => {
                                 if (args.Frame.IsMain) {
                                     await cwb.EvaluateScriptAsync("setWpfEnv()");
-                                    var initCmd = $"init({itemHtml})";
+                                    var initCmd = $"init({itemHtml},{JsonConvert.SerializeObject(civm.IsReadOnly)})";
                                     var result = await cwb.EvaluateScriptAsync(initCmd);
                                 }
                             };
@@ -103,5 +132,31 @@ namespace MpWpfApp {
             });
 
         #endregion
+
+        private static async Task HandleReadOnlyChange(DependencyObject dpo, bool isReadOnly) {
+            if (dpo is ChromiumWebBrowser cwb && cwb.CanExecuteJavascriptInMainFrame) {
+                if (cwb.DataContext is MpContentItemViewModel civm) {
+                    if (isReadOnly) {
+                        MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is readonly");
+                        await cwb.EvaluateScriptAsync("enableReadOnly()");
+
+                        var response = await cwb.EvaluateScriptAsync("getHtml()");
+                        string itemHtml = response.Result.ToString();
+                        civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(itemHtml);
+                    } else {
+                        MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is editable");
+                        await cwb.EvaluateScriptAsync("disableReadOnly()");
+
+                        var ctcv = dpo.GetVisualAncestor<MpClipTileContainerView>();
+                        if (ctcv != null) {
+                            double nw = MpMeasurements.Instance.ClipTileEditModeMinWidth;
+                            if (nw > ctcv.ActualWidth) {
+                                ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

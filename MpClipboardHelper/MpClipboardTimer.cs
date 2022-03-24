@@ -24,6 +24,8 @@ namespace MpClipboardHelper {
 
         #region Properties
 
+        public uint CF_HTML, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15;
+
         public bool IgnoreClipboardChangeEvent { get; set; } = false;
 
         #endregion
@@ -66,6 +68,10 @@ namespace MpClipboardHelper {
             UIPermission clipBoard = new UIPermission(PermissionState.Unrestricted);
             clipBoard.Clipboard = UIPermissionClipboard.AllClipboard;
 
+            CF_HTML = WinApi.RegisterClipboardFormatA("HTML Format");
+            CF_RTF = WinApi.RegisterClipboardFormatA("Rich Text Format");
+            CF_CSV = WinApi.RegisterClipboardFormatA(DataFormats.CommaSeparatedValue);
+
             if (_workThread != null && _workThread.IsAlive) {
                 _isStopped = false;
             } else {
@@ -87,6 +93,9 @@ namespace MpClipboardHelper {
         #region IDataObject Wrapper Helper methods
 
         private void CheckClipboardThread() {
+            while(MpClipboardManager.ThisAppHandle == null || MpClipboardManager.ThisAppHandle == IntPtr.Zero) {
+                Thread.Sleep(100);
+            }
             //setting last here will ensure item on cb isn't added when starting
             _lastCbo = ConvertManagedFormats();
             while (true) {
@@ -95,7 +104,6 @@ namespace MpClipboardHelper {
                 }
                 Thread.Sleep(500);
 
-                //string test = GetOpenClipboardWindowText();
                 var cbo = ConvertManagedFormats();
                 if (HasChanged(cbo)) {
                     _lastCbo = cbo;
@@ -145,6 +153,58 @@ namespace MpClipboardHelper {
             }
         }
 
+        private string GetClipboardData(string nativeFormatStr) {
+            uint format = GetWin32FormatId(nativeFormatStr);
+            if (format != 0) {
+                if(WinApi.IsClipboardFormatAvailable(format)) {
+                    WinApi.OpenClipboard(MpClipboardManager.ThisAppHandle);
+
+                    //Get pointer to clipboard data in the selected format
+                    IntPtr ClipboardDataPointer = WinApi.GetClipboardData(format);
+
+                    //Do a bunch of crap necessary to copy the data from the memory
+                    //the above pointer points at to a place we can access it.
+                    UIntPtr Length = WinApi.GlobalSize(ClipboardDataPointer);
+                    IntPtr gLock = WinApi.GlobalLock(ClipboardDataPointer);
+
+                    //Init a buffer which will contain the clipboard data
+                    byte[] Buffer = new byte[(int)Length];
+
+                    //Copy clipboard data to buffer
+                    Marshal.Copy(gLock, Buffer, 0, (int)Length);
+
+                    WinApi.GlobalUnlock(gLock); //unlock gLock
+
+                    WinApi.CloseClipboard();
+
+                    return System.Text.Encoding.UTF8.GetString(Buffer);
+                }
+            }
+
+            return null;
+        }
+
+        private uint GetWin32FormatId(string nativeFormatStr) {
+            if(nativeFormatStr == DataFormats.Text) {
+                return CF_TEXT;
+            }
+            if(nativeFormatStr == DataFormats.Bitmap) {
+                return CF_BITMAP;
+            }
+            if(nativeFormatStr == DataFormats.CommaSeparatedValue) {
+                return CF_CSV;
+            }
+            if(nativeFormatStr == DataFormats.FileDrop) {
+                return CF_HDROP;
+            }
+            if(nativeFormatStr == DataFormats.Html) {
+                return CF_HTML;
+            }
+            if(nativeFormatStr == DataFormats.Rtf) {
+                return CF_RTF;
+            }
+            return 0;
+        }
 
         private MpDataObject ConvertManagedFormats(IDataObject ido = null, int retryCount = 5) {
             /*
@@ -162,7 +222,7 @@ namespace MpClipboardHelper {
             to a MemoryStream and pass the MemoryStream to the SetData method.
             */
             if(ido != null) {
-                ido = Clipboard.GetDataObject();
+                //ido = Clipboard.GetDataObject();
                 //Debugger.Break();
             }
             var ndo = new MpDataObject();
@@ -183,7 +243,7 @@ namespace MpClipboardHelper {
                         }
                     } else {
                         try {
-                            var curData = Clipboard.GetData(nativeTypeName);
+                            var curData = GetClipboardData(nativeTypeName); //Clipboard.GetData(nativeTypeName);
                             if(curData == null) {
                                 continue;
                             }
@@ -218,7 +278,7 @@ namespace MpClipboardHelper {
                             break;
                         default:
                             if(ido == null) {
-                                data = Clipboard.GetData(nativeTypeName) as string;
+                                data = GetClipboardData(nativeTypeName);
                             } else {
                                 data = ido.GetData(nativeTypeName, autoConvert) as string;
                             }

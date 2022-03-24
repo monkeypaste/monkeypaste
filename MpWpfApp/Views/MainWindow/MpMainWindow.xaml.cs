@@ -25,6 +25,8 @@ namespace MpWpfApp {
         private void LoadMainWindow() {
             WindowInteropHelper wndHelper = new WindowInteropHelper((MpMainWindow)Application.Current.MainWindow);
             MpProcessHelper.MpProcessManager.ThisAppHandle = wndHelper.Handle;
+            MpClipboardHelper.MpClipboardManager.ThisAppHandle = wndHelper.Handle;
+
             int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
             exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);

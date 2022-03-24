@@ -370,17 +370,26 @@ namespace MpWpfApp {
             if (Math.Abs(dx + dy) < 0.1) {
                 return;
             }
-            if (ResizableEdges.HasFlag(MpRectEdgeFlags.Left) || ResizableEdges.HasFlag(MpRectEdgeFlags.Right)) {
-                double nw = BoundWidth + dx;
-                BoundWidth = Math.Min(Math.Max(nw, MinWidth), MaxWidth);
-            }
-            if (ResizableEdges.HasFlag(MpRectEdgeFlags.Top) || ResizableEdges.HasFlag(MpRectEdgeFlags.Bottom)) {
-                double nh = BoundHeight + dy;
-                BoundHeight = Math.Min(Math.Max(nh, MinHeight), MaxHeight);
-            }
+            double nw = BoundWidth + dx;
+            BoundWidth = Math.Min(Math.Max(nw, MinWidth), MaxWidth);
+
+            double nh = BoundHeight + dy;
+            BoundHeight = Math.Min(Math.Max(nh, MinHeight), MaxHeight);
+
+            //if (ResizableEdges.HasFlag(MpRectEdgeFlags.Left) || ResizableEdges.HasFlag(MpRectEdgeFlags.Right)) {
+            //    double nw = BoundWidth + dx;
+            //    BoundWidth = Math.Min(Math.Max(nw, MinWidth), MaxWidth);
+            //}
+            //if (ResizableEdges.HasFlag(MpRectEdgeFlags.Top) || ResizableEdges.HasFlag(MpRectEdgeFlags.Bottom)) {
+            //    double nh = BoundHeight + dy;
+            //    BoundHeight = Math.Min(Math.Max(nh, MinHeight), MaxHeight);
+            //}
 
             if(AffectsContent) {
                 MpMessenger.Send(MpMessageType.ResizingContent);
+                if(!IsResizing) {
+                    MpMessenger.Send(MpMessageType.ResizeContentCompleted);
+                }
             }
         }
 

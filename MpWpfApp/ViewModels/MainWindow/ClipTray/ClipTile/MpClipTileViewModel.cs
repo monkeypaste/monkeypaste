@@ -235,12 +235,10 @@
         }
 
         public double PasteTemplateToolbarHeight => MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
-               
-        
+                      
 
         public double TileTitleHeight => MpMeasurements.Instance.ClipTileTitleHeight;
-
-        
+                
         public double TileDetailHeight => MpMeasurements.Instance.ClipTileDetailHeight;
 
         public double LoadingSpinnerSize => MpMeasurements.Instance.ClipTileLoadingSpinnerSize;
@@ -299,20 +297,17 @@
             }
         }
 
-        public double ContainerHeight {
-            get {
-                return ContainerSize.Height;
-            }
-        }
-
         public Size EditableContentSize {
             get {
-                var ts = new Size(
-                MpMeasurements.Instance.ClipTileEditModeMinWidth,
-                0);
+                var ts = new Size(MpMeasurements.Instance.ClipTileEditModeMinWidth,0);
                 foreach (var ivm in ItemViewModels) {
                     var ivs = ivm.EditableContentSize;
                     ts.Width = Math.Max(ts.Width, ivs.Width);
+                    if(Parent.PersistentUniqueWidthTileLookup.ContainsKey(HeadItem.CopyItemId)) {
+                        if(Parent.PersistentUniqueWidthTileLookup[HeadItem.CopyItemId] > ts.Width) {
+                            ts.Width = Parent.PersistentUniqueWidthTileLookup[HeadItem.CopyItemId];
+                        }
+                    }
                     ts.Height += ivs.Height;
                 }
                 //ts.Height += MpMeasurements.Instance.ClipTileDetailHeight + MpMeasurements.Instance.ClipTileTitleHeight;

@@ -29,7 +29,7 @@ function setWpfEnv() {
     envName = 'wpf';
 }
 
-function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillingTemplates) {
+function init(html, isReadOnly, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillingTemplates) {
     if (fontFamilys == null) {
         fontFamilys = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
     }
@@ -55,8 +55,13 @@ function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillin
     if (envName == '') {
         //for testing in browser
     } else {
-        hideToolbar();
-        enableReadOnly();
+        if (isReadOnly == null || isReadOnly == true) {
+            hideToolbar();
+            enableReadOnly();
+        } else {
+            showToolbar();
+            disableReadOnly();
+        }
 
         //hideScrollbars();
         //disableScrolling();
@@ -472,9 +477,26 @@ function showToolbar() {
     moveEditorTop(tbh);
 }
 
+function getEditorWidth() {
+    var editorRect = document.getElementById('editor').getBoundingClientRect();
+    //var editorHeight = parseInt($('.ql-editor').wi());
+    return editorRect.width;
+}
+
 function getEditorHeight() {
-    var editorHeight = parseInt($('.ql-editor').outerHeight());
-    return editorHeight;
+    var editorRect = document.getElementById('editor').getBoundingClientRect();
+    //var editorHeight = parseInt($('.ql-editor').outerHeight());
+    return editorRect.height;
+}
+
+function getContentWidth() {
+    var bounds = quill.getBounds(0, quill.getLength());
+    return bounds.width;
+}
+
+function getContentHeight() {
+    var bounds = quill.getBounds(0, quill.getLength());
+    return bounds.height;
 }
 
 function getToolbarHeight() {
@@ -483,8 +505,15 @@ function getToolbarHeight() {
 }
 
 function getTemplateToolbarHeight() {
-    var templateToolbarHeight = parseInt($("#pasteTemplateToolbar").outerHeight());
-    return templateToolbarHeight;
+    if (!isShowingEditTemplateToolbar && !isShowingPasteTemplateToolbar) {
+        return 0;
+    }
+    if (isShowingEditTemplateToolbar) {
+        return parseInt($("#editTemplateToolbar").outerHeight());
+    } else if (isShowingPasteTemplateToolbar) {
+        return parseInt($("#pasteTemplateToolbar").outerHeight());
+    }
+    return 0;    
 }
 
 function getTotalHeight() {
@@ -511,6 +540,8 @@ function disableReadOnly() {
     $('.ql-editor').attr('contenteditable', true);
     $('.ql-editor').css('caret-color', 'black');
 
+    document.getElementById('editor').style.height = getContentHeight();
+
     showToolbar();
 
     showScrollbars();
@@ -535,19 +566,24 @@ function hideScrollbars() {
 
 function showScrollbars() {
     //hides scrollbars without disabling scrolling (for use when scrolling to search match)
-    document.querySelector('body').style.overflow = 'scroll';
-    let isNew = false;
-    var style = document.getElementsByName('style');
-    if (style == null) {
-        isNew = true;
-        style = document.createElement('style');
-    }
+    
+    document.querySelector('body').style.overflow = 'auto';
 
-    style.type = 'text/css';
-    style.innerHTML = '::-webkit-scrollbar{display: block; width: 10em; overflow: auto; height: 2em;}';
-    if (isNew) {
-        document.getElementsByTagName('body')[0].appendChild(style);
-    }
+    //if (window.innerHeight < )
+    //let isNew = false;
+    //var style = document.getElementsByName('style');
+    //if (style == null) {
+    //    isNew = true;
+    //    style = document.createElement('style');
+    //}
+
+    //style.type = 'text/css';
+    //var overflowStyle = 'auto';
+    //if (window)
+    //style.innerHTML = '::-webkit-scrollbar{display: block; width: 10em; overflow: auto; height: 2em;}';
+    //if (isNew) {
+    //    document.getElementsByTagName('body')[0].appendChild(style);
+    //}
 }
 
 function disableScrolling() {

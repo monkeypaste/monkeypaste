@@ -32,12 +32,12 @@ namespace MpWpfApp {
                     //} else {
                     //    keyStr = "FlowDocumentScrollViewer" + keyStr;
                     //}
-                    if(false) {//civm.CopyItemData.IsStringRichText()) {
-                        keyStr = "Rtb" + keyStr;
-                    } else {
-                        keyStr = "Quill" + keyStr;
-                    }
-                    
+                    //if(false) {//civm.CopyItemData.IsStringRichText()) {
+                    //    keyStr = "Rtb" + keyStr;
+                    //} else {
+                    //    keyStr = "Quill" + keyStr;
+                    //}
+                    keyStr = "Rtb" + keyStr;
                     break;
                 default:
                     keyStr = civm.CopyItemType.EnumToName() + keyStr;

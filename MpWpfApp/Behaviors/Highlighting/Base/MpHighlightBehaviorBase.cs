@@ -100,6 +100,9 @@ namespace MpWpfApp {
                 while (AssociatedObject == null) {
                     await Task.Delay(100);
                 }
+                if(!MpSearchBoxViewModel.Instance.HasText) {
+                    return;
+                }
                 if(_wasUnloaded) {
                     Reset();
                 }

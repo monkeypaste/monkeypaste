@@ -220,11 +220,13 @@ namespace MonkeyPaste {
 
         public ICommand ShiftToNextNotificationCommand => new MpCommand(
              () => {                
-                 if (CurrentNotificationViewModel == null || NotificationQueue.Count == 1) {
+                 if (CurrentNotificationViewModel == null || NotificationQueue.Count <= 1) {
                     HideBalloon();
                  }
 
-                 NotificationQueue.RemoveAt(0);
+                 if (NotificationQueue.Count >= 1) {
+                     NotificationQueue.RemoveAt(0);
+                 }
                  OnPropertyChanged(nameof(CurrentNotificationViewModel));
              });
         #endregion

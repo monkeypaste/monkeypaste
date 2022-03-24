@@ -14,6 +14,8 @@ namespace MpClipboardHelper {
 
         #region Properties
 
+        public static IntPtr ThisAppHandle { get; set; }
+
         public static MpIClipboardMonitor MonitorService { get; private set; }
 
         public static MpIClipboardInterop InteropService { get; private set; }

@@ -106,7 +106,7 @@ namespace MonkeyPaste.Plugin {
                     if(ex is MpJsonPathPropertyException jppe) {
                         throw jppe;
                     }
-                    Console.WriteLine("Error parsing resposne: " + ex);
+                    MpConsole.WriteLine("Error parsing resposne: " + ex);
                 }
             }
             if (string.IsNullOrWhiteSpace(result) && string.IsNullOrWhiteSpace(value)) {
@@ -137,9 +137,9 @@ namespace MonkeyPaste.Plugin {
             int enumId = GetParamId(queryParamValueStr);
             var enumParam = reqParams.FirstOrDefault(x => x.paramId == enumId);
             if (enumParam == null) {
-                Console.WriteLine($"Error parsing dynamic query item, enumId: '{enumId}' does not exist");
-                Console.WriteLine($"In request with params: ");
-                Console.WriteLine(JsonConvert.SerializeObject(reqParams));
+                MpConsole.WriteLine($"Error parsing dynamic query item, enumId: '{enumId}' does not exist");
+                MpConsole.WriteLine($"In request with params: ");
+                MpConsole.WriteLine(JsonConvert.SerializeObject(reqParams));
                 return null;
             }
             return enumParam.value;
@@ -195,8 +195,8 @@ namespace MonkeyPaste.Plugin {
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine($"Error converting '{result}' to type '{typeof(T)}'");
-                Console.WriteLine(ex);
+                MpConsole.WriteLine($"Error converting '{result}' to type '{typeof(T)}'");
+                MpConsole.WriteLine(ex);
 
                 value = default;
             }

@@ -196,9 +196,10 @@ namespace MpWpfApp {
                     return 0;
                 }
                 if(!IsReadOnly) {
-                    if(Parent.Count > 1) {
+                    if (Parent.Count > 1) {
                         return Double.NaN;
                     }
+                    //return Parent.TileContentHeight; //quil editor height
                     return Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
                 }
                 return ReadOnlyContentSize.Height;
@@ -211,7 +212,7 @@ namespace MpWpfApp {
                     return new Size();
                 }
                 //get contents actual size
-                var ds = CopyItemData.ToFlowDocument().GetDocumentSize();
+                var ds = UnformattedContentSize;//CopyItemData.ToFlowDocument().GetDocumentSize();
 
                 //if item's content is larger than expanded width make sure it gets that width (will show scroll bars)
                 double w = Math.Max(ds.Width, MpMeasurements.Instance.ClipTileContentMinMaxWidth);

@@ -95,5 +95,11 @@ namespace MpWpfApp {
                 IsDomContentLoaded = true;
             }
         }
+
+        private void QuillWebView_PreviewKeyUp(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Escape && BindingContext.IsEditingContent) {
+                BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
+            }
+        }
     }
 }

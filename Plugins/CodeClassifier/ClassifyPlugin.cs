@@ -49,6 +49,10 @@ namespace CodeClassifier {
                                     }
                                 }
                             }};
+                    } else {
+                        response = new MpPluginResponseFormat() {
+                            message = $"Detected language: {result.Key} did not meet minimum confidence: {minScore}, had score: {result.Value}"
+                        };
                     }
                 } else {
                     Console.WriteLine("Unsupported request: " + args.ToString());

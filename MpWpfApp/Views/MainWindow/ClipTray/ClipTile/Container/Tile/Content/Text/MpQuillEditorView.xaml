@@ -30,7 +30,7 @@
                       Source="{Binding QuillEditorUri}"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
                       local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData}" />-->
-    <wpf:ChromiumWebBrowser x:Name="QuillWebView"
+    <wpf:ChromiumWebBrowser x:Name="QuillWebView"                            
                             Loaded="EditorBrowser_Loaded"
                             Unloaded="QuillWebView_Unloaded"
                             DataContextChanged="QuillWebView_DataContextChanged"
@@ -43,7 +43,10 @@
                             VerticalAlignment="Stretch"
                             DataContext="{Binding}"
                             Address="localfolder://cefsharp/"
+                            PreviewKeyUp="QuillWebView_PreviewKeyUp"
                             local:MpIsFocusedExtension.IsEnabled="True"
+                            local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
+                                                                           Mode=TwoWay}"
                             local:MpDocumentHtmlExtension.DocumentRtf="{Binding CopyItemData}"
                             local:MpDocumentHtmlExtension.IsReadOnly="{Binding IsReadOnly}"
                             LoadingStateChanged="Browser_LoadingStateChanged" />

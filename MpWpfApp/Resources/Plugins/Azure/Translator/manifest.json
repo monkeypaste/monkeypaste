@@ -98,7 +98,6 @@
         "label": "From Language",
         "controlType": "ComboBox",
         "unitType": "PlainText",
-        "isRequired": true,
         "paramId": 1,
         "values": [
           {
@@ -533,6 +532,7 @@
         "controlType": "ComboBox",
         "unitType": "PlainText",
         "paramId": 2,
+        "isRequired": true,
         "values": [
           {
             "label": "Afrikaans - Afrikaans",
