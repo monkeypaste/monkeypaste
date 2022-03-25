@@ -16,7 +16,7 @@ using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
 
-    public class MpFilePathStringToIconConverter : IValueConverter {
+    public class MpFilePathStringToImageSourceConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             BitmapSource bmpSrc = null;
             int s = parameter != null ? System.Convert.ToInt32(parameter.ToString()) : 22;

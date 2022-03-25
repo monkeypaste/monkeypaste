@@ -159,7 +159,6 @@
     <Compile Include="Behaviors\MpMoveBehavior.cs" />
     <Compile Include="Behaviors\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpWpfBootstrapperViewModel.cs" />
-    <Compile Include="Controls\MpAutoScaleTextBlock.cs" />
     <Compile Include="Controls\MpSlickToggleButton.cs" />
     <Compile Include="Controls\MpDesignerCanvas.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
@@ -235,7 +234,7 @@
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpBase64StringToBitmapSourceConverter.cs" />
-    <Compile Include="Converters\MpFilePathStringToIconConverter.cs" />
+    <Compile Include="Converters\MpFilePathStringToImageSourceConverter.cs" />
     <Compile Include="Converters\MpSourceIdToImageSourceBorderConverter.cs" />
     <Compile Include="Converters\MpSourceIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringHexToImageSourceConverter.cs" />
@@ -286,6 +285,7 @@
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcher.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfMainThreadMarshal.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfOsInfo.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfResourceFetcher.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfStringTools.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpFileWriterActionViewModel.cs" />
@@ -318,8 +318,8 @@
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\Reports\MpAnalysisReportCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\Reports\Items\MpAnalysisReportViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpOutlookContactCollectionViewModel.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfDbInfo.cs" />
@@ -333,10 +333,9 @@
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\Styling\MpMeasurements.cs" />
     <Compile Include="Utils\BindingExtensions\MpMeasurementsBindingExtension.cs" />
-    <Compile Include="Utils\System\Clipboard\MpWpfPasteHelper.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfPasteHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
-    <Compile Include="Utils\System\Clipboard\MpCopyHelper.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
     <Compile Include="Utils\RESTful\Base\MpRestfulAction.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyConverter.cs" />
@@ -1516,6 +1515,7 @@
     <Resource Include="Resources\Images\sheep.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample5.html" />
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />
     <Resource Include="Utils\RESTful\RestExample1.xml" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />

@@ -20,6 +20,7 @@ namespace MpWpfApp {
         public MpIContextMenuCloser ContextMenuCloser { get; }
         public MpIMainThreadMarshal MainThreadMarshal { get; }
         public MpIStringTools StringTools { get; }
+        public MpIOsInfo OsInfo { get; }
 
         public MpWpfWrapper() {
             Cursor = new MpWpfCursor();
@@ -32,6 +33,7 @@ namespace MpWpfApp {
             ContextMenuCloser = new MpWpfContextMenuCloser();
             MainThreadMarshal = new MpWpfMainThreadMarshal();
             StringTools = new MpWpfStringTools();
+            OsInfo = new MpWpfOsInfo();
         }
 
         

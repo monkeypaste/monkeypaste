@@ -186,7 +186,7 @@ namespace MonkeyPaste {
         }
 
         public MpMenuItemViewModel() : base(null)  {
-            PropertyChanged += MpContextMenuItemViewModel_PropertyChanged;
+            //PropertyChanged += MpContextMenuItemViewModel_PropertyChanged;
             //IsSeparator = true;
         }
                
@@ -195,8 +195,8 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private void MpContextMenuItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-            }
+            //switch (e.PropertyName) {
+            //}
         }
 
         #endregion

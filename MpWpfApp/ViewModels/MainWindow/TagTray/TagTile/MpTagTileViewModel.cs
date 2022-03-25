@@ -34,8 +34,6 @@ namespace MpWpfApp {
         #region View Models
         #endregion
 
-
-
         #region MpIUserColorViewModel Implementation
 
         public string UserHexColor {
@@ -634,10 +632,17 @@ namespace MpWpfApp {
                 TagClipCount--;
                 Task.Run(async () => {
                     var ci = await MpDb.GetItemAsync<MpCopyItem>(cit.CopyItemId);
-                    OnCopyItemUnlinked?.Invoke(this, ci);
+                    if(ci != null) {
+                        OnCopyItemUnlinked?.Invoke(this, ci);
+                    }
                 });                
-            } else if (e is MpCopyItem ci && IsAllTag) {
-                TagClipCount--;
+            } else if (e is MpCopyItem ci && IsLinked(ci)) {
+                Task.Run(async () => {
+                    var ct = await MpDataModelProvider.GetCopyItemTagForTagAsync(ci.Id, TagId);
+                    if(ct != null) {
+                        await ct.DeleteFromDatabaseAsync();
+                    }
+                });
             }
         }
         #endregion

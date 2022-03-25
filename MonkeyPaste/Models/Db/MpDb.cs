@@ -383,8 +383,16 @@ namespace MonkeyPaste {
 
             MpPreferences.ThisUserDevice = await MpDataModelProvider.GetUserDeviceByGuid(MpPreferences.ThisDeviceGuid);
 
-            MpPreferences.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.ThisDeviceSourceId);
+            MpPreferences.ThisAppSourceId = 5;
+            MpPreferences.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.ThisAppSourceId);
             MpPreferences.ThisAppIcon = await GetItemAsync<MpIcon>(MpPreferences.ThisAppSource.App.IconId);
+
+            //TEMPORARY
+            MpPreferences.ThisOsFileManagerSourceId = 4;
+
+            MpPreferences.ThisOsFileManagerSource = await GetItemAsync<MpSource>(MpPreferences.ThisOsFileManagerSourceId);
+
+
             if(isNewDb) {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
@@ -906,15 +914,18 @@ namespace MonkeyPaste {
             //var i1 = await MpIcon.Create(MpBase64Images.ClipboardIcon,false, "954fc715-35f3-4171-b23f-b8379a40db96")
             #endregion
 
-
             #region Source
 
             var process = Process.GetCurrentProcess();
-            string appPath = process.MainModule.FileName;
-            string appName = MpPreferences.ApplicationName;
-            var app = await MpApp.Create(appPath, appName, sourceIcon);
-            var source = await MpSource.Create(app, null);
-            MpPreferences.ThisDeviceSourceId = source.Id;
+            string thisAppPath = process.MainModule.FileName;
+            string thisAppName = MpPreferences.ApplicationName;
+            var thisApp = await MpApp.Create(thisAppPath, thisAppName, sourceIcon);
+            var thisAppSource = await MpSource.Create(thisApp, null);
+            MpPreferences.ThisAppSourceId = thisAppSource.Id;
+
+            var osApp = await MpApp.Create(MpNativeWrapper.Services.OsInfo.OsFileManagerPath, MpNativeWrapper.Services.OsInfo.OsFileManagerName);
+            var osAppSource = await MpSource.Create(osApp, null);
+            MpPreferences.ThisOsFileManagerSourceId = osAppSource.Id;
 
             #endregion
 

@@ -48,8 +48,8 @@ namespace CodeClassifier {
                     continue;
                 }
                 string[] files = Directory.GetFiles(languageFolder);
-                TokenNode rootNode = null;
-                double totalPossibleScore = 0;
+                TokenNode rootNode;
+                double totalPossibleScore;
                 string languageName = Path.GetFileNameWithoutExtension(languageFolder) ?? "undefined";
 
                 Dictionary<string, double> tokenFreq = new Dictionary<string, double>();
@@ -65,12 +65,13 @@ namespace CodeClassifier {
                 rootNode = BuildMatchTree(tokens, out totalPossibleScore);
 
                 // Frequency algorithm
-                foreach (KeyValuePair<string, double> keyValuePair in BuildFrequencyTable(tokens)) {
+                var freqTable = BuildFrequencyTable(tokens);
+                foreach (var kvp in freqTable) {
                     // Sumize all frequencies for files of the same language
-                    if (!tokenFreq.ContainsKey(keyValuePair.Key)) {
-                        tokenFreq[keyValuePair.Key] = 0;
+                    if (!tokenFreq.ContainsKey(kvp.Key)) {
+                        tokenFreq[kvp.Key] = 0;
                     }
-                    tokenFreq[keyValuePair.Key] += keyValuePair.Value;
+                    tokenFreq[kvp.Key] += kvp.Value;
                 }
 
 

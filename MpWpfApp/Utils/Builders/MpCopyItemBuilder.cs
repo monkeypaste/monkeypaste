@@ -121,7 +121,7 @@ namespace MpWpfApp {
                         MpConsole.WriteTraceLine(@"Error parsing url from htmlData: " + htmlData, ex);
                     }
                 }
-                List<int> iconIdList = null;
+                //List<int> iconIdList = null;
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
                     itemData = itemData.ToPlainText();
@@ -135,14 +135,14 @@ namespace MpWpfApp {
                         }
                         return null;
                     }
-                } else if(itemType == MpCopyItemType.FileList) {
-                    iconIdList = new List<int>();
-                    var fl = itemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach(var f in fl) {
-                        var fi = await MpIcon.Create(iconImgBase64: MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(f));
-                        iconIdList.Add(fi.Id);
-                    }
-                }
+                } //else if(itemType == MpCopyItemType.FileList) {
+                    //iconIdList = new List<int>();
+                    //var fl = itemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    //foreach(var f in fl) {
+                    //    var fi = await MpIcon.Create(iconImgBase64: MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(f));
+                    //    iconIdList.Add(fi.Id);
+                    //}
+                //}
 
                 if (app == null) {
                     throw new Exception("Error creating copy item no source discovered");
@@ -154,8 +154,7 @@ namespace MpWpfApp {
                 var ci = await MpCopyItem.Create(
                     source: source,
                     data: itemData,
-                    itemType: itemType,
-                    iconIdList: iconIdList);
+                    itemType: itemType);
                 return ci;
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine(ex);

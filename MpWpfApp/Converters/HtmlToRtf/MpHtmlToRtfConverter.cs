@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Reflection;
@@ -28,7 +29,11 @@ namespace MpWpfApp {
             var fd = string.Empty.ToFlowDocument();
             fd.Blocks.Clear();
             foreach (var htmlBlockNode in htmlDoc.DocumentNode.ChildNodes) {
-                fd.Blocks.Add(ConvertHtmlNode(htmlBlockNode) as Block);
+                var docNode = htmlBlockNode;
+                if(docNode.Name == "div") {
+                    docNode = htmlBlockNode.FirstChild;
+                }
+                fd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
             }
             return fd.ToRichText();
         }
@@ -36,6 +41,9 @@ namespace MpWpfApp {
         private static TextElement ConvertHtmlNode(HtmlNode n) {
             var cel = new List<TextElement>();
             foreach (var c in n.ChildNodes) {
+                if(c.Name == "colgroup") {
+                    continue;
+                }
                 cel.Add(ConvertHtmlNode(c));
             }
             return CreateTextElement(n, cel.ToArray());
@@ -43,8 +51,19 @@ namespace MpWpfApp {
 
         private static TextElement CreateTextElement(HtmlNode n, TextElement[] cl) {
             var te = GetTextElement(n);
+            if(te == null) {
+                Debugger.Break();
+            }
             foreach (var c in cl) {
+                if(c == null) {
+                    continue;
+                }
                 te = AddChildToElement(te, c);
+            }
+            if(te is Table t) {
+                // since wpf TableColumns aren't TextElements need to post-process
+                // column width definitions
+                te = FinishTableFormatting(n, t);
             }
             return FormatTextElement(n.Attributes,te);
         }
@@ -97,7 +116,33 @@ namespace MpWpfApp {
                         }
                     }
                     break;
-                // add table types
+                case "td":
+                    te = new TableCell();
+                    break;
+                case "tr":
+                    te = new TableRow();
+                    break;
+                case "tbody":
+                    te = new TableRowGroup();
+                    break;
+                case "table":
+                    te = new Table();
+                    break;
+                //case "colgroup":
+                //    // colgroup and col nodes are ignored until the end of creating the table text element in 'FinishTableFormatting'
+                //    n = n.NextSibling;
+                //    te = new TableRowGroup();
+                //    break;
+
+                //case "div":
+                //    // should only occur for tables
+                //    if(n.HasClass("quill-better-table-wrapper")) {
+                //        n = n.FirstChild;
+                //        te = new Table();
+                //    } else {
+                //        throw new Exception("Unhanlded html doc element: " + n.ToString());
+                //    }
+                //    break;
                 default:
                     throw new Exception("Unhanlded html doc element: " + n.Name);
             }
@@ -134,9 +179,65 @@ namespace MpWpfApp {
                     case "data-row":
 
                         break;
-                }
-                
+                    case "rowspan":
+                        te = ApplyRowSpanFormatting(te, a.Value);
+                        break;
+                    case "colspan":
+                        te = ApplyColSpanFormatting(te, a.Value);
+                        break;
+                }                
             }
+            return te;
+        }
+
+        private static Table FinishTableFormatting(HtmlNode tn, Table t) {
+            if (tn.FirstChild.Name == "colgroup") {
+                var colDefList = tn.FirstChild.ChildNodes;
+                for (int i = 0; i < colDefList.Count; i++) {
+                    int columnsToAdd = -(i - t.Columns.Count - 1);
+                    if (columnsToAdd > 0) {
+                        while (columnsToAdd > 0) {
+                            t.Columns.Add(new TableColumn());
+                            columnsToAdd--;
+                        }
+                    }
+
+                    var colDef = colDefList[i];
+
+                    double colWidth = 50;
+                    try {
+                        colWidth = Convert.ToDouble(colDef.GetAttributeValue("width", colWidth.ToString()));
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine(ex);
+                    }
+                    t.Columns[i].Width = new GridLength(colWidth);
+                }
+            }
+            return t;
+        }
+        private static TextElement ApplyRowSpanFormatting(TextElement te, string hv) {
+            int rowSpanVal = 1;
+            try {
+                rowSpanVal = Convert.ToInt32(hv);
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+            }
+
+            (te as TableCell).RowSpan = rowSpanVal;
+            return te;
+        }
+
+        private static TextElement ApplyColSpanFormatting(TextElement te, string hv) {
+            int colSpanVal = 1;
+            try {
+                colSpanVal = Convert.ToInt32(hv);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+            }
+
+            (te as TableCell).ColumnSpan = colSpanVal;
             return te;
         }
 
@@ -144,6 +245,7 @@ namespace MpWpfApp {
             (te as Hyperlink).NavigateUri = new Uri(hv);
             return te;
         }
+
         private static TextElement ApplyImgSrcFormatting(TextElement te, string sv) {
             var srcvl = sv.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             string imgStr = srcvl[1];//.Replace(@"\", string.Empty);
@@ -190,10 +292,18 @@ namespace MpWpfApp {
             return te;
         }
         private static TextElement AddChildToElement(TextElement te, TextElement cte) {
-            if (te is List) {
+            if (te is Table t) {
+                t.RowGroups.Add(cte as TableRowGroup);
+            } else if (te is TableRowGroup trg) {
+                trg.Rows.Add(cte as TableRow);
+            } else if (te is TableRow tr) {
+                tr.Cells.Add(cte as TableCell);
+            } else if (te is TableCell tc) {
+                tc.Blocks.Add(cte as Block);
+            } else if (te is List) {
                 (te as List).ListItems.Add(cte as ListItem);
             } else if (te is ListItem) {
-                if((te as ListItem).Blocks.Count == 0) {
+                if ((te as ListItem).Blocks.Count == 0) {
                     //special case since wpf requires list items to be in a paragraph
                     //we must add them implicitly
                     (te as ListItem).Blocks.Add(new Paragraph());
@@ -201,7 +311,7 @@ namespace MpWpfApp {
                 ((te as ListItem).Blocks.FirstBlock as Paragraph).Inlines.Add(cte as Inline);
             } else if (te is Paragraph) {
                 (te as Paragraph).Inlines.Add(cte as Inline);
-            } else if(te is Span) {
+            } else if (te is Span) {
                 (te as Span).Inlines.Add(cte as Inline);
             }
             return te;
@@ -283,7 +393,7 @@ namespace MpWpfApp {
 
         public static void Test() {
             var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpHtmlToRtfConverter)).Assembly;
-            var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample1.html");
+            var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample5.html");
             using (var reader = new System.IO.StreamReader(stream)) {
                 var html = reader.ReadToEnd();
                 string rtf = ConvertHtmlToRtf(html);

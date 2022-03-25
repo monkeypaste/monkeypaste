@@ -19,9 +19,6 @@ using Xamarin.Essentials;
 
 namespace MpWpfApp {
     public class MpDocumentHtmlExtension : DependencyObject {
-        private static string _editorHtml;
-        private static bool _isCefLoaded = false;
-
         #region IsReadOnly
 
         public static bool GetIsReadOnly(DependencyObject obj) {

@@ -23,7 +23,7 @@
     <local:MpBrushToColorConverter x:Key="BrushToColorConverter" />
     <local:MpBoolToHAlignmentConverter x:Key="BoolToHAlignmentConverter" />
     <local:MpAbsoluteToRelativePathStringConverter x:Key="AbsoluteToRelativePathStringConverter" />
-    <local:MpFilePathStringToIconConverter x:Key="FilePathStringToIconConverter" />
+    <local:MpFilePathStringToImageSourceConverter x:Key="FilePathStringToImageSourceConverter" />
     <local:MpFilePathToFolderPathConverter x:Key="FilePathToFolderPathConverter" />
     <local:MpMultiBoolToVisibilityConverter x:Key="MultiBoolToVisibilityConverter" />
     <local:MpMultiBoolToVisibilityFlipConverter x:Key="MultiBoolToVisibilityFlipConverter" />

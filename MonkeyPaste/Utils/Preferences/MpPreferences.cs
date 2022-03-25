@@ -327,6 +327,8 @@ namespace MonkeyPaste {
 
         public static MpSource ThisAppSource { get; set; }
 
+        public static MpSource ThisOsFileManagerSource { get; set; }
+
         public static MpIcon ThisAppIcon { get; set; }
 
         public static MpUserDevice ThisUserDevice { get; set; }
@@ -386,12 +388,21 @@ namespace MonkeyPaste {
             }
         }
 
-        public static int ThisDeviceSourceId {
+        public static int ThisAppSourceId {
             get {
-                return Default.Get(nameof(ThisDeviceSourceId), 0);
+                return Default.Get(nameof(ThisAppSourceId), 0);
             }
             set {
-                Default.Set(nameof(ThisDeviceSourceId), value);
+                Default.Set(nameof(ThisAppSourceId), value);
+            }
+        }
+
+        public static int ThisOsFileManagerSourceId {
+            get {
+                return Default.Get(nameof(ThisOsFileManagerSourceId), 0);
+            }
+            set {
+                Default.Set(nameof(ThisOsFileManagerSourceId), value);
             }
         }
 

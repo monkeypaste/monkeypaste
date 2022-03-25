@@ -94,11 +94,11 @@ function registerToolbar(fontFamilys, fontSizes) {
             //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
             [{ 'size': fontSizes }],               // font sizes
             [{ 'font': fonts.whitelist }],
-            ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
             //['blockquote', 'code-block'],
 
             // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }, {'list': 'check'}],
             // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
             [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
             //[{ 'direction': 'rtl' }],                         // text direction
@@ -111,9 +111,9 @@ function registerToolbar(fontFamilys, fontSizes) {
             // ['templatebutton'],
             [{ 'Table-Input': registerTables() }]
         ],
-        handlers: {
-            'Table-Input': () => { return; }
-        }
+        //handlers: {
+        //    'Table-Input': () => { return; }
+        //}
     };
 
     return toolbar;
@@ -206,8 +206,11 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
             var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
             var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
             curQuillBetterTable.insertTable(curRowIndex, curColIndex);
-            // The following two lines have been added, thinking that it would fix the issue of keeping the icon in blue color.  However Quill keeps adding the classes back, so this fix doesn't work.
-            $(this).parent().parent().find(".ql-selected").removeClass("ql-selected"); $(this).parent().parent().find(".ql-active").removeClass("ql-active");
+            // The following two lines have been added, thinking that it would fix the issue 
+            // of keeping the icon in blue color.
+            // However Quill keeps adding the classes back, so this fix doesn't work.
+            $(this).parent().parent().find(".ql-selected").removeClass("ql-selected");
+            $(this).parent().parent().find(".ql-active").removeClass("ql-active");
         };
     })());
     curTableCellIconSpans.hover(function () {
@@ -228,9 +231,15 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
         $(this).parent().children().removeClass("ql-picker-item-highlight");
     });
 
+    //document.body.querySelector('#insert-table')
+    //    .onclick = () => {
+    //        let tableModule = quill.getModule('better-table')
+    //        tableModule.insertTable(3, 3)
+    //    }
+
     // Toolbar Template Button
     const templateToolbarButton = new QuillToolbarButton({
-        icon: '<img id="templateToolbarButton" style="height:20px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX/////wQf/vwD/24f/3Iz///3/vQD/ykL/yTj/yT3/0WH/0F7/0Fv/y0T/y0f/yTr/35T/wxT/8tP/6Lj/5az/7sj/9uX/46P/1G7/677/57P/2oL/xSj/8M//1nj//fb//O//4Zz/zVBsBjAmAAAEzklEQVR4nO2di3qiMBBGIUpa1168tFZ70933f8hl0KqVWCuZyfzhm/MAfJ7vhAmwCy0KwzAMwzAMwzAMwzAMwzAMWKq3QSzDyXymrXGe6ta7eLwvl8/aKmGqW1fy4Pz0SdsmAJ9g4zhaaAudwirYOIJl5Bas8QNtqWMEBLEURQRrRZiFKiRYK4KMGzHB0j1ouzXICdYR59p2haxg6d619YQF64gfPRcs3ae24KOsYOmmyoLCBUvtDSOBYOk176TEl2hjqHhdw1WwvuetOXcsN9ET5Cno/PJ1tvh4Gp9xdEM1QZ6C/m29O+Dmj4cyZCroV0fHfAkpahlyFfw+KEOKSoZcBU9//bh9WB1Dtn3w9MCbdkQVQ7Ztov3j71pH1jBk2+h9++n2UyuigiHfpZrftA7+AWDIeKnm162jL/QNOS+2Aw1n6oasF9uB83Cubch7uxS4qF4qz9JqxHq71L5/Xyvvh+z3g/40YjthUkOBG96TM7F9FiY1ZF6i25/vjhVXuvcWUv/4sl+o60/d+0OJglvF6XC2WS+eP53uPb7gUzV34TlNGkOxgpdJY5jiuaiqoWLBNIZJHvxqGuoKJjBUXaIpDDWHTBJD7YLihuoFxQ3VCwob6i9RacMbAEFJwwpCUNIQQ1DOEKSgoCHCkGkQMoQpKGUIsU3skDHEKShjiFRQxhCpoIQh0JBp4DcEE2Q3RCvIbwg1ZBp4DfEKMhtibRM7WA3vAQU5DRGXaMlqCFmQ0RC0IKMhqiCXYQW6REs2Q9iCXIa4BZkMgQvyGCIX5DCE3SZ2xBtiF4w3RC8YbwgvGGkIvNHviTPELxhpmEHBOMMcCkYZPmQh2H77q2cFS/dQ9bugu+laMIshE/Ntk1wEOxccB//POBzdC75lInjfVfC574LFNIuTMOIDSn+zSNh9yBRV3wsWrzkkjCgYeh8cj6iPmOWwSKMKBl4lhsPdd73YbsA/DeMKFsUEfZW6m6iCRTEAN4y4ksnDMLog+iqNLxh+XRqG2CHTgLxbcBSE3vFZChbBTzFhELnRH0A9EbkK1mirhGHYJvYEv/umDc+Q+eId70zkLFggbhi8BWsmYIqMQ+aLJZQie0EC6aG3GwkIFkX4W6EaMA8ZPEWBc/ALjIUqVpBAqChYkLhTV3QjwYKEdkXhgoRuRfGChGZF0SFzQG+iCm30bbQqJiqop5hgyBzQWKgJCxLpKyYtSKTeNJJsE99JWzF5QSJlRYWCRLqKiYfMgVQT1d0qCaaqqLRE0ym6R0XBFAtVWVC+ouoS3SK7aSgOmQOSFQEKEnIVIQoSUhVBChIyExWmICFREaggwa+ovg+ewr1Q4QS5K4It0S2cmwbUkDnAVxGyIMFVEbQgwVMRcMgc4JiowAWJ+IrQBYlYRfCCRNxCzUAwriL8Et3SfdPIoiDRtWImBYluFbMpSHSpmFFB4vqJmlVB4tqKmRUkrlPMriBxzULNUvCaihku0S2/3TQyLUj8rmK2BYnfVMy4IHG5YuaClydq9oKXKvZA8GfFXgj+tFB7Inj+hSLf+btqcEyCf7nXL7V/FyOz91ZGX660fxUvL+VxR+fdpDcrdM9q7Lx3jv7gtPv32j8/oprNJ8PB5HXWTz3DMAzDMAzDMAzDMAzDMHrEf9VjaGNa1FYRAAAAAElFTkSuQmCC"></img>'//`<svg viewBox="0 0 18 18"> <path class="ql-stroke" d="M5,3V9a4.012,4.012,0,0,0,4,4H9a4.012,4.012,0,0,0,4-4V3"></path></svg>`
+        icon: '<img id="templateToolbarButton" style="height:20px" src="data:image/png;base64,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"></img>'//`<svg viewBox="0 0 18 18"> <path class="ql-stroke" d="M5,3V9a4.012,4.012,0,0,0,4,4H9a4.012,4.012,0,0,0,4-4V3"></path></svg>`
     })
 
     templateToolbarButton.onClick = function (e) {

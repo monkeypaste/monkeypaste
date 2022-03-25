@@ -36,9 +36,7 @@ namespace MpWpfApp {
                MpClipTrayViewModel.Instance.IsLoadingMore) {
                 return;
             }
-            if(newCursor != MpCursorType.Default) {
-                newCursor = newCursor;
-            }
+
             if (Application.Current.Dispatcher.CheckAccess()) {
                 Cursor cursor = _cursorLookup[newCursor];
 

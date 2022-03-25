@@ -100,9 +100,10 @@ namespace MpWpfApp {
             AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
 
             if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
-                if (_allMovables.Contains(rvm)) {
+                var dupCheck = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
+                if (dupCheck != null) {
                     MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
-                    _allMovables.Remove(rvm);
+                    _allMovables.Remove(dupCheck);
                 }
                 _allMovables.Add(rvm);
             }
@@ -120,9 +121,9 @@ namespace MpWpfApp {
                 AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
 
                 if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
-                    if (_allMovables.Contains(rvm)) {
-                        MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
-                        _allMovables.Remove(rvm);
+                    var toRemove = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
+                    if (toRemove != null) {
+                        _allMovables.Remove(toRemove);
                     }
                 }
             }
@@ -147,7 +148,7 @@ namespace MpWpfApp {
         #region Private Methods
 
 
-        #region Manual Resize Event Handlers
+        #region Move Event Handlers
 
         private void AssociatedObject_MouseEnter(object sender, MouseEventArgs e) {
             if(!IsAnyMoving && !MpDragDropManager.IsDragAndDrop) {

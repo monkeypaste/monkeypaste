@@ -8,7 +8,7 @@ namespace MonkeyPaste {
         Task<object> Build(object[] args);
     }
     public interface MpIModelBuilder<T> : MpIModelBuilder where T:MpDbModelBase {
-        new Task<T> Build(object args);
+        Task<T> Build(object args);
     }
 
     public interface MpICopyItemBuilder {

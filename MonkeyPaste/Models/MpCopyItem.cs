@@ -219,7 +219,7 @@ namespace MonkeyPaste {
             MpCopyItemType itemType = MpCopyItemType.None,
             string title = "",
             string description = "",
-            List<int> iconIdList = null,
+            //List<int> iconIdList = null,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
             if (MpPreferences.IgnoreNewDuplicates && dupCheck != null) {
@@ -236,10 +236,16 @@ namespace MonkeyPaste {
                 MpCopyItem parentItem = null;
                 var pl = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < pl.Length; i++) {
+                    string iconBase64Str = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(pl[i]);
+
+                    var icon = await MpIcon.Create(iconBase64Str);
                     int iconId = 0;
-                    if(iconIdList != null && i < iconIdList.Count) {
-                        iconId = iconIdList[i];
+                    if(icon == null) {
+                        iconId = MpPreferences.ThisAppIcon.Id;
+                    } else {
+                        iconId = icon.Id;
                     }
+                    
                     var curItem = new MpCopyItem() {
                         CopyItemGuid = System.Guid.NewGuid(),
                         CopyDateTime = DateTime.Now,
@@ -274,7 +280,6 @@ namespace MonkeyPaste {
                 ItemDescription = description,
                 ItemData = data,
                 ItemType = itemType,
-                IconId = iconIdList != null && iconIdList.Count > 0 ? iconIdList[0]:0,
                 SourceId = source.Id,
                 Source = source,
                 CopyCount = 1

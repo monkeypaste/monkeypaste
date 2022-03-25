@@ -41,7 +41,6 @@ using MonkeyPaste.Plugin;
 namespace MpWpfApp {
     public static class MpHelpers {
         private static InputSimulator sim = new InputSimulator();
-        private static BitmapSource _defaultFavIcon = null;
 
         public static Random Rand { get; set; } = new Random((int)DateTime.Now.Ticks);
 

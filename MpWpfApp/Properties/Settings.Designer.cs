@@ -1406,12 +1406,12 @@ namespace MpWpfApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int ThisDeviceSourceId {
+        public int ThisAppSourceId {
             get {
-                return ((int)(this["ThisDeviceSourceId"]));
+                return ((int)(this["ThisAppSourceId"]));
             }
             set {
-                this["ThisDeviceSourceId"] = value;
+                this["ThisAppSourceId"] = value;
             }
         }
         
@@ -1538,6 +1538,18 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["DoNotShowAgainNotificationIdCsvStr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ThisOsFileManagerSourceId {
+            get {
+                return ((int)(this["ThisOsFileManagerSourceId"]));
+            }
+            set {
+                this["ThisOsFileManagerSourceId"] = value;
             }
         }
     }

@@ -90,7 +90,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public bool IsReadOnly {
+        public override bool IsReadOnly {
             get => IsReadOnlyValue == 1;
             set => IsReadOnlyValue = value ? 1 : 0;
         }
@@ -121,7 +121,7 @@ namespace MonkeyPaste {
             bool createBorder = true, 
             string guid = "",
             bool suppressWrite = false) {
-            MpIcon dupCheck = null;
+            MpIcon dupCheck;
             if(!string.IsNullOrEmpty(iconImgBase64)) {
                 dupCheck = await MpDataModelProvider.GetIconByImageStr(iconImgBase64);
                 if (dupCheck != null) {

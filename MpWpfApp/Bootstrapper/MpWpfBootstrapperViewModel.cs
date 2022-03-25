@@ -101,6 +101,8 @@ namespace MpWpfApp {
 
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 
+            MpHtmlToRtfConverter.Test();
+
             IsLoaded = true;
         }
 

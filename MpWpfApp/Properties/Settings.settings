@@ -388,7 +388,7 @@
     <Setting Name="SearchByDescription" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ThisDeviceSourceId" Type="System.Int32" Scope="User">
+    <Setting Name="ThisAppSourceId" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="RestfulOpenAiMaxCount" Type="System.Int32" Scope="User">
@@ -423,6 +423,9 @@
     </Setting>
     <Setting Name="DoNotShowAgainNotificationIdCsvStr" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ThisOsFileManagerSourceId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -68,6 +68,8 @@ namespace MpWpfApp {
 
         public bool CanMove { get; set; }
 
+        public int MovableId => ActionId;
+
         #endregion
 
         #region MpITreeItemViewModel Implementation

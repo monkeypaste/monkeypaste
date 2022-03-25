@@ -1634,42 +1634,28 @@ namespace MpWpfApp {
 
         public ICommand AddNewItemsCommand => new RelayCommand(
             async () => {
-                IsBusy = true;                
+                IsBusy = true;
 
-                if(MpDataModelProvider.QueryInfo.TagId == MpTag.AllTagId) {
-                    //instead of handling all unique cases manual insert new items in head of current query if which may not be 
-                    //accurate but allows to continue workflow
+                //if(MpDataModelProvider.QueryInfo.TagId == MpTag.AllTagId) {
+                //    //instead of handling all unique cases manual insert new items in head of current query if which may not be 
+                //    //accurate but allows to continue workflow
 
-                    MpClipTileSortViewModel.Instance.SetToManualSort();
-                }
-                
+                //    MpClipTileSortViewModel.Instance.SetToManualSort();
+                //}
 
-                foreach (var nci in _newModels) {
-                    int idx = HeadQueryIdx < 0 ? 0 : HeadQueryIdx; // check is for empty tag
 
-                    MpClipTileViewModel nctvm = await CreateClipTileViewModel(nci, idx);
-                    MpDataModelProvider.InsertQueryItem(nctvm.HeadItem.CopyItemId, idx);
-                    OnPropertyChanged(nameof(TotalTilesInQuery));
+                //foreach (var nci in _newModels) {
+                //    int idx = HeadQueryIdx < 0 ? 0 : HeadQueryIdx; // check is for empty tag
 
-                    Items.ForEach(x => x.QueryOffsetIdx++);
-                    Items.Insert(0, nctvm);
-                    //var civm = GetContentItemViewModelById(nci.Id);
-                    //if (civm != null && civm.Parent != null && civm.Parent.QueryOffsetIdx > HeadQueryIdx) {
-                    //    //when duplicate detected and is already on tray (like on reload and last item is in list)
-                    //    nctvm = civm.Parent;
-                    //    Items.Where(x => x.QueryOffsetIdx < nctvm.QueryOffsetIdx).ForEach(x => x.QueryOffsetIdx++);
-                    //    MpDataModelProvider.MoveQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx - 1);
-                    //    nctvm.QueryOffsetIdx = HeadQueryIdx - 1;
-                    //    Items.Move(Items.IndexOf(nctvm), 0);
-                    //} else {
-                    //    nctvm = await CreateClipTileViewModel(nci, HeadQueryIdx);
-                    //    MpDataModelProvider.InsertQueryItem(nctvm.HeadItem.CopyItemId, HeadQueryIdx);
-                    //    OnPropertyChanged(nameof(TotalTilesInQuery));
+                //    MpClipTileViewModel nctvm = await CreateClipTileViewModel(nci, idx);
+                //    MpDataModelProvider.InsertQueryItem(nctvm.HeadItem.CopyItemId, idx);
+                //    OnPropertyChanged(nameof(TotalTilesInQuery));
 
-                    //    Items.ForEach(x => x.QueryOffsetIdx++);
-                    //    Items.Insert(0, nctvm);
-                    //}
-                }
+                //    Items.ForEach(x => x.QueryOffsetIdx++);
+                //    Items.Insert(0, nctvm);
+                //}
+
+                MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
 
                 _newModels.Clear();
 
@@ -1685,9 +1671,9 @@ namespace MpWpfApp {
                 if(!string.IsNullOrEmpty(MpSearchBoxViewModel.Instance.LastSearchText)) {
                     return false;
                 }
-                if (MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
-                    return false;
-                }
+                //if (MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
+                //    return false;
+                //}
                 if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                     return true;
                 }

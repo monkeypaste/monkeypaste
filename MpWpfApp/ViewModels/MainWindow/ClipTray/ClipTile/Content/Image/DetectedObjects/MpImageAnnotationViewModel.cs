@@ -9,8 +9,8 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpImageAnnotationViewModel : 
         MpViewModelBase<MpImageAnnotationCollectionViewModel>,
-        MpIResizableViewModel,
-        MpIMovableViewModel,
+        //MpIResizableViewModel,
+        //MpIMovableViewModel,
         MpISelectableViewModel,
         MpIHoverableViewModel{
 
@@ -34,19 +34,19 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region MpIResizableViewModel Implementation
+        //#region MpIResizableViewModel Implementation
 
-        public bool IsResizing { get; set; }
-        public bool CanResize { get; set; }
+        //public bool IsResizing { get; set; }
+        //public bool CanResize { get; set; }
 
-        #endregion
+        //#endregion
 
-        #region MpIMovableViewModel Implementation
+        //#region MpIMovableViewModel Implementation
 
-        public bool IsMoving { get; set; }
-        public bool CanMove { get; set; }
+        //public bool IsMoving { get; set; }
+        //public bool CanMove { get; set; }
 
-        #endregion
+        //#endregion
 
         public bool IsNameReadOnly { get; set; }
 

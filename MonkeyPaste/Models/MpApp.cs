@@ -23,7 +23,7 @@ namespace MonkeyPaste {
         [Column("SourcePath")]
         public string AppPath { get; set; } = string.Empty;
 
-        public string ProcessName { get; set; } = string.Empty;
+        //public string ProcessName { get; set; } = string.Empty;
 
         public string AppName { get; set; } = string.Empty;
 
@@ -41,9 +41,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Fk Models
-
-        //[OneToOne(CascadeOperations = CascadeOperation.All)]
-        //public MpIcon Icon { get; set; }
 
         [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpUserDevice UserDevice { get; set; }
@@ -116,6 +113,9 @@ namespace MonkeyPaste {
             MpIcon icon = null,
             string guid = "",
             bool suppressWrite = false) {
+            if(appPath != null) {
+                appPath = appPath.ToLower();
+            }
             var dupApp = await MpDataModelProvider.GetAppByPath(appPath);
             if (dupApp != null) {
                 dupApp = await MpDb.GetItemAsync<MpApp>(dupApp.Id);
@@ -149,7 +149,7 @@ namespace MonkeyPaste {
                 IconId = icon.Id,
                 UserDeviceId = thisDevice.Id,
                 UserDevice = thisDevice,
-                ProcessName = Path.GetFileName(appPath)
+                //ProcessName = Path.GetFileName(appPath)
             };
 
             await newApp.WriteToDatabaseAsync();

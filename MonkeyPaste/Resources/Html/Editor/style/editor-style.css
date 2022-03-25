@@ -2,7 +2,6 @@ body {
     margin: 0px;
     padding: 0px;
     font-family: Arial;
-    background-color: transparent;
 }
 
 .btn {
@@ -48,6 +47,13 @@ body {
 .ql-picker-item[data-value]::before {
     content: attr(data-value) !important;
 }
+
+/* checkbox */
+
+.ql-editor ul[data-checked=true] > li {
+    text-decoration: line-through !important;
+}
+
 
 /* Table Styles*/
 .ql-snow .ql-Table-Input .ql-picker-options {

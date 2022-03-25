@@ -18,14 +18,12 @@ namespace MonkeyPaste {
         MpIContextMenuCloser ContextMenuCloser { get; }
         MpIMainThreadMarshal MainThreadMarshal { get; }
         MpIStringTools StringTools { get; }
+        MpIOsInfo OsInfo { get; }
     }
 
 
     public static class MpNativeWrapper {
-
-        #region Private Variables
         public static MpINativeInterfaceWrapper Services { get; private set; }
-        #endregion
 
         public static void Init(MpINativeInterfaceWrapper niw) {
             Services = niw;
