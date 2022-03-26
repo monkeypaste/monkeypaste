@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,6 +98,10 @@ namespace MpWpfApp {
             }
 
             var actionInput = GetInput(arg);
+
+            if(actionInput.CopyItem.Id == 0) {
+                Debugger.Break();
+            }
 
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             await ttvm.AddContentItem(actionInput.CopyItem.Id);

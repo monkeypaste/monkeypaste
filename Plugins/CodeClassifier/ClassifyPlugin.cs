@@ -50,9 +50,11 @@ namespace CodeClassifier {
                                 }
                             }};
                     } else {
-                        response = new MpPluginResponseFormat() {
-                            message = $"Detected language: {result.Key} did not meet minimum confidence: {minScore}, had score: {result.Value}"
-                        };
+                        MpConsole.WriteLine($"Detected language: {result.Key} did not meet minimum confidence: {minScore}, had score: {result.Value}");
+                        //response = new MpPluginResponseFormat() {
+                        //    message = $"Detected language: {result.Key} did not meet minimum confidence: {minScore}, had score: {result.Value}"
+                        //};
+                        return null;
                     }
                 } else {
                     Console.WriteLine("Unsupported request: " + args.ToString());

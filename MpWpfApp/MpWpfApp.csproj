@@ -328,7 +328,6 @@
     <Compile Include="Utils\MpVisualUtility.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfPreferences.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfQueryInfo.cs" />
-    <Compile Include="Utils\RESTful\MpGoogleApi.cs" />
     <Compile Include="Utils\RESTful\MpOpenAi.cs" />
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\Styling\MpMeasurements.cs" />
@@ -508,11 +507,11 @@
     <Compile Include="ViewModels\MainWindow\Source\Apps\MpAppViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Help\MpHelpViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\MpSettingsWindowViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpStandardBalloonViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundNotificationViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerGroupCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Sound\MpStandardBalloonViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Sound\MpSoundPlayerCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Sound\MpSoundNotificationViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Sound\MpSoundPlayerGroupCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Sound\MpSoundPlayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\MpPreferencesViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModelCollection.cs" />
@@ -624,9 +623,6 @@
     <Compile Include="Views\Reusable\Notifications\Toast\Collection\Items\MpUserActionNotificationView.xaml.cs">
       <DependentUpon>MpUserActionNotificationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\Notifications\Toast\Collection\MpNotificationCollectionView.xaml.cs">
-      <DependentUpon>MpNotificationCollectionView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml.cs">
       <DependentUpon>MpTextBoxMessageBox.xaml</DependentUpon>
     </Compile>
@@ -650,6 +646,9 @@
     <Compile Include="Views\Reusable\Notifications\ContentReport\Selector\MpTooltipContentViewTemplateSelector.cs" />
     <Compile Include="Views\Reusable\Notifications\Tooltip\MpTooltipInfoView.xaml.cs">
       <DependentUpon>MpTooltipInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\OAuth\MpGoogleSignInWindow.xaml.cs">
+      <DependentUpon>MpGoogleSignInWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\Shapes\MpHorizontalSeparator.xaml.cs">
       <DependentUpon>MpHorizontalSeparator.xaml</DependentUpon>
@@ -1026,10 +1025,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Reusable\Notifications\Toast\Collection\MpNotificationCollectionView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Reusable\MessageBoxes\MpTextBoxMessageBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1051,6 +1046,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Reusable\Notifications\Tooltip\MpTooltipInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Reusable\OAuth\MpGoogleSignInWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1387,9 +1386,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AirspaceFixer">
-      <Version>1.0.5</Version>
-    </PackageReference>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM">
       <Version>6.0.4</Version>
     </PackageReference>
@@ -1404,12 +1400,6 @@
     </PackageReference>
     <PackageReference Include="gong-wpf-dragdrop">
       <Version>3.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="Google.Apis">
-      <Version>1.55.0</Version>
-    </PackageReference>
-    <PackageReference Include="Google.Apis.Discovery.v1">
-      <Version>1.55.0</Version>
     </PackageReference>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf">
       <Version>1.1.0</Version>
@@ -1458,9 +1448,6 @@
     </PackageReference>
     <PackageReference Include="QRCoder">
       <Version>1.4.3</Version>
-    </PackageReference>
-    <PackageReference Include="SharpClipboard">
-      <Version>3.5.2</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.8.116</Version>
@@ -1516,6 +1503,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample5.html" />
+    <Resource Include="Resources\Images\google_signin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />
     <Resource Include="Utils\RESTful\RestExample1.xml" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />
@@ -2868,8 +2858,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Data\" />
-    <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
-    <Folder Include="ViewModels\MainWindow\Sidebar\" />
+    <Folder Include="Resources\Plugins\Google\PeopleApi\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>

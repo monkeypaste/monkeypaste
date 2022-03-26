@@ -24,7 +24,8 @@ namespace MonkeyPaste {
         DbError,
         LoadComplete,
         Help,
-        AnalyzerUpdated
+        AnalyzerUpdated,
+        Message
     }
 
     public enum MpNotificationExceptionSeverityType {
@@ -80,8 +81,9 @@ namespace MonkeyPaste {
             }
         }
 
-        public bool HasUserOptions => ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption ||
-                                      ExceptionType == MpNotificationExceptionSeverityType.ErrorWithOption;
+        public bool HasUserOptions => DialogType != MpNotificationDialogType.Message && 
+                                     (ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption ||
+                                      ExceptionType == MpNotificationExceptionSeverityType.ErrorWithOption);
 
         public bool IsStartupNotification => DialogType == MpNotificationDialogType.StartupLoader;
 

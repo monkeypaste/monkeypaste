@@ -137,7 +137,13 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
-            var dbo = await _connectionAsync.GetWithChildrenAsync<T>(id, true);
+            T dbo;
+            try {
+                dbo = await _connectionAsync.GetWithChildrenAsync<T>(id, true);
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Likely trying to access item of type '{typeof(T).Name}' with id {id} and it does not exist.", ex);
+                return default;
+            }
             return dbo;
         }
 
@@ -387,8 +393,6 @@ namespace MonkeyPaste {
             MpPreferences.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.ThisAppSourceId);
             MpPreferences.ThisAppIcon = await GetItemAsync<MpIcon>(MpPreferences.ThisAppSource.App.IconId);
 
-            //TEMPORARY
-            MpPreferences.ThisOsFileManagerSourceId = 4;
 
             MpPreferences.ThisOsFileManagerSource = await GetItemAsync<MpSource>(MpPreferences.ThisOsFileManagerSourceId);
 

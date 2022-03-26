@@ -29,22 +29,8 @@ namespace MpWpfApp {
 
         #region Properties
 
-        #region MpIMatcherTriggerViewModel Implementation
+        #region MpIActionComponent Implementation
 
-        #region MpIUserIcon Implementation
-
-        public bool IsReadOnly => true;
-        public async Task<MpIcon> Get() {
-            await Task.Delay(1);
-            throw new NotImplementedException();
-        }
-
-        public async Task Set(MpIcon icon) {
-            await Task.Delay(1);
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
         public void Register(MpActionViewModelBase mvm) {
             var fstvm = mvm as MpFileSystemTriggerViewModel;
@@ -57,11 +43,6 @@ namespace MpWpfApp {
             RemoveWatcher(fstvm.FileSystemPath);
             MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Label} matcher");
         }
-
-        //public ObservableCollection<MpActionViewModelBase> MatcherViewModels => new ObservableCollection<MpActionViewModelBase>(
-        //            MpActionCollectionViewModel.Instance.Matchers.Where(x =>
-        //                x.Action.TriggerType == MpTriggerType.FileSystemChange ||
-        //                 x.Action.TriggerType == MpTriggerType.FileSystemChange).ToList());
 
         #endregion
 
@@ -100,15 +81,15 @@ namespace MpWpfApp {
                 throw new Exception("Watcher already exists");
             }
 
-            watcher.NotifyFilter = watcher.NotifyFilter 
-                                 | NotifyFilters.Attributes
-                                 | NotifyFilters.CreationTime
-                                 | NotifyFilters.DirectoryName
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.Security
-                                 | NotifyFilters.Size;
+            //watcher.NotifyFilter = watcher.NotifyFilter
+            //                     //| NotifyFilters.Attributes
+            //                     //| NotifyFilters.CreationTime
+            //                     | NotifyFilters.DirectoryName
+            //                     | NotifyFilters.FileName
+            //                     //| NotifyFilters.LastAccess
+            //                     | NotifyFilters.LastWrite;
+            //                     //| NotifyFilters.Security
+            //                     //| NotifyFilters.Size;
 
             watcher.Changed += OnChanged;
             watcher.Created += OnCreated;
@@ -127,7 +108,7 @@ namespace MpWpfApp {
             if(Directory.Exists(path)) {
                 watcher.Filter = "*";
                 watcher.IncludeSubdirectories = watcher.IncludeSubdirectories;
-                watcher.EnableRaisingEvents = true;
+                //watcher.EnableRaisingEvents = true;
             }
         }
 
@@ -156,21 +137,21 @@ namespace MpWpfApp {
             if (e.ChangeType != WatcherChangeTypes.Changed) {
                 return;
             }
-            Console.WriteLine($"Changed: {e.FullPath}");
+            MpConsole.WriteLine($"Changed: {e.FullPath}");
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e) {
             string value = $"Created: {e.FullPath}";
-            Console.WriteLine(value);
+            MpConsole.WriteLine(value);
         }
 
         private void OnDeleted(object sender, FileSystemEventArgs e) =>
-            Console.WriteLine($"Deleted: {e.FullPath}");
+            MpConsole.WriteLine($"Deleted: {e.FullPath}");
 
         private void OnRenamed(object sender, RenamedEventArgs e) {
-            Console.WriteLine($"Renamed:");
-            Console.WriteLine($"    Old: {e.OldFullPath}");
-            Console.WriteLine($"    New: {e.FullPath}");
+            MpConsole.WriteLine($"Renamed:");
+            MpConsole.WriteLine($"    Old: {e.OldFullPath}");
+            MpConsole.WriteLine($"    New: {e.FullPath}");
         }
 
         private  void OnError(object sender, ErrorEventArgs e) =>
@@ -178,10 +159,10 @@ namespace MpWpfApp {
 
         private  void PrintException(object e) {
             if (e != null && e is Exception ex) {
-                Console.WriteLine($"Message: {ex.Message}");
-                Console.WriteLine("Stacktrace:");
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine();
+                MpConsole.WriteLine($"Message: {ex.Message}");
+                MpConsole.WriteLine("Stacktrace:");
+                MpConsole.WriteLine(ex.StackTrace);
+                MpConsole.WriteLine("");
                 PrintException(ex.InnerException);
             }
         }

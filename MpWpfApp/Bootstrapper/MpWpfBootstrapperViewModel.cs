@@ -88,9 +88,9 @@ namespace MpWpfApp {
 
             await MpNotificationCollectionViewModel.Instance.Init(doNotShowNotifications);
 
-            var nbv = new MpNotificationWindow();
-            await MpNotificationCollectionViewModel.Instance.RegisterWithWindow(nbv.NotificationBalloon);
-            nbv.DataContext = MpNotificationCollectionViewModel.Instance;
+            var nw = new MpNotificationWindow();
+            await MpNotificationCollectionViewModel.Instance.RegisterWithWindow(nw);
+            nw.DataContext = MpNotificationCollectionViewModel.Instance;
 
             await MpNotificationCollectionViewModel.Instance.BeginLoader(this);
 
@@ -101,7 +101,9 @@ namespace MpWpfApp {
 
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 
-            MpHtmlToRtfConverter.Test();
+            //var gsiw = new MpGoogleSignInWindow();
+            //var result = gsiw.ShowDialog();
+            //await MpGoogleApiHelpers.Test(null);
 
             IsLoaded = true;
         }

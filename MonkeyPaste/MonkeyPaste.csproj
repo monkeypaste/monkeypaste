@@ -19,7 +19,7 @@
     <Compile Remove="Models\Db\SQLite\**" />
     <Compile Remove="Models\PreferenceModels\**" />
     <Compile Remove="Repositories\**" />
-    <Compile Remove="Resources\Data\**" />
+    <Compile Remove="Resources\Data\Analytics\**" />
     <Compile Remove="Resources\Html\Editor\TestData\**" />
     <Compile Remove="Resources\Html\temp\**" />
     <Compile Remove="Services\**" />
@@ -31,7 +31,7 @@
     <EmbeddedResource Remove="Models\Db\SQLite\**" />
     <EmbeddedResource Remove="Models\PreferenceModels\**" />
     <EmbeddedResource Remove="Repositories\**" />
-    <EmbeddedResource Remove="Resources\Data\**" />
+    <EmbeddedResource Remove="Resources\Data\Analytics\**" />
     <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
     <EmbeddedResource Remove="Resources\Html\temp\**" />
     <EmbeddedResource Remove="Services\**" />
@@ -43,7 +43,7 @@
     <None Remove="Models\Db\SQLite\**" />
     <None Remove="Models\PreferenceModels\**" />
     <None Remove="Repositories\**" />
-    <None Remove="Resources\Data\**" />
+    <None Remove="Resources\Data\Analytics\**" />
     <None Remove="Resources\Html\Editor\TestData\**" />
     <None Remove="Resources\Html\temp\**" />
     <None Remove="Services\**" />
@@ -71,6 +71,9 @@
     <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
     <Compile Remove="Views\Shell\MpMainShell.xaml.cs" />
     <None Remove=".DS_Store" />
+    <None Remove="Resources\Data\db.create" />
+    <None Remove="Resources\Data\Google\client_secrets.json" />
+    <None Remove="Resources\Data\Google\client_secrets_desktop.json" />
     <None Remove="Resources\Fonts\password.ttf" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Html\Editor\Editor2.js" />
@@ -95,6 +98,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Resources\Data\Google\client_secrets_desktop.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
     <EmbeddedResource Include="Resources\Images\test.png" />
   </ItemGroup>
@@ -102,6 +111,9 @@
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.2.0.562" />
     <PackageReference Include="CsvHelper" Version="27.2.1" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.56.0" />
+    <PackageReference Include="Google.Apis.Books.v1" Version="1.56.0.2633" />
+    <PackageReference Include="Google.Apis.PeopleService.v1" Version="1.56.0.2637" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.40" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />

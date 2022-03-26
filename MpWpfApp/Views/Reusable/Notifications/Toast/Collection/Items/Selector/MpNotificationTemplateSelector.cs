@@ -23,7 +23,7 @@ namespace MpWpfApp {
                 throw new Exception("Unknown notification template");
             }
 
-            var uc = container.GetVisualAncestor<MpUserControl>();
+            var uc = container.GetVisualAncestor<Window>();
             if(uc == null) {
                 return null;
             }

@@ -521,6 +521,17 @@ namespace MonkeyPaste {
             return result.OrderBy(x=>ciida.IndexOf(x.Id)).ToList();
         }
 
+        public static async Task<MpCopyItem> GetCopyItemById(int ciid) {
+            // NOTE this is used to safely try to get item instead of MpDb.GetItemAsync 
+            // which crashes if the key doesn't exist...
+            string query = "select * from MpCopyItem where pk_MpCopyItemId=?";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, ciid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
         public static async Task<MpCopyItem> GetCopyItemByData(string text) {
             string query = "select * from MpCopyItem where ItemData=?";
             var result = await MpDb.QueryAsync<MpCopyItem>(query, text);

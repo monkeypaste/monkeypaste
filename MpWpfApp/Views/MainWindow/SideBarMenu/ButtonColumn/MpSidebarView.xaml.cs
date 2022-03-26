@@ -38,14 +38,19 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(BindingContext.IsAppendMode):
                 case nameof(BindingContext.IsAppendLineMode):
-                    AppendModeToggleButton.ContextMenu.IsOpen = false;
+                    if(AppendModeToggleButton.ContextMenu != null) {
+                        AppendModeToggleButton.ContextMenu.IsOpen = false;
+                    }
+                    
                     AppendModeToggleButton.IsChecked = BindingContext.IsAnyAppendMode;
                     BindingContext.OnPropertyChanged(nameof(BindingContext.IsAnyAppendMode));
 
                     break;
                 case nameof(BindingContext.IsAutoCopyMode):
                 case nameof(BindingContext.IsRightClickPasteMode):
-                    MouseModeToggleButton.ContextMenu.IsOpen = false;
+                    if (AppendModeToggleButton.ContextMenu != null) {
+                        AppendModeToggleButton.ContextMenu.IsOpen = false;
+                    }
                     MouseModeToggleButton.IsChecked = BindingContext.IsAnyMouseModeEnabled;
                     BindingContext.OnPropertyChanged(nameof(BindingContext.IsAnyMouseModeEnabled));
                     break;

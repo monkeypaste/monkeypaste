@@ -17,10 +17,9 @@
         Visibility="Visible"
         Topmost="True"
         BorderThickness="1"
-        Opacity="0"
         mc:Ignorable="d"
         SizeChanged="NotificationWindow_SizeChanged"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="Height"
         Loaded="NotificationWindow_Loaded"
         d:DataContext="{d:DesignInstance Type=pcl:MpNotificationCollectionViewModel,
                                          IsDesignTimeCreatable=False}">
@@ -42,28 +41,103 @@
                              AutoReverse="False"
                              Duration="0:0:0.5" />
         </Storyboard>
+        <DataTemplate x:Key="UserActionNotificationTemplate">
+            <local:MpUserActionNotificationView DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="LoaderNotificationTemplate">
+            <local:MpLoaderNotificationView DataContext="{Binding}" />
+        </DataTemplate>
+        <local:MpNotificationTemplateSelector x:Key="NotificationTemplateSelector" />
     </Window.Resources>
-    <Window.Style>
+    <!--<Window.Style>
         <Style TargetType="Window">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsVisible}"
                              Value="True">
                     <DataTrigger.EnterActions>
-                        <BeginStoryboard Storyboard="{StaticResource FadeIn}"/>
+                        <BeginStoryboard Storyboard="{StaticResource FadeIn}" />
                     </DataTrigger.EnterActions>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding IsVisible}"
                              Value="False">
                     <DataTrigger.EnterActions>
-                        <BeginStoryboard Storyboard="{StaticResource FadeOut}"/>
+                        <BeginStoryboard Storyboard="{StaticResource FadeOut}" />
                     </DataTrigger.EnterActions>
                 </DataTrigger>
             </Style.Triggers>
-        </Style>        
-    </Window.Style>
-    <Grid>
-        
-        <local:MpNotificationCollectionView x:Name="NotificationBalloon"
-                                         DataContext="{Binding}" />
-    </Grid>
+        </Style>
+    </Window.Style>-->
+
+    <Border HorizontalAlignment="Stretch"
+            BorderThickness="7"
+            BorderBrush="WhiteSmoke"
+            Background="MediumPurple"
+            local:MpHoverableExtension.IsEnabled="True"
+            local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                            Mode=TwoWay}">
+        <Grid x:Name="grid"
+              MouseLeftButtonUp="grid_MouseLeftButtonUp">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.35*" />
+                <ColumnDefinition Width="0.75*" />
+            </Grid.ColumnDefinitions>
+            <Image Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.RowSpan="3"
+                   Width="72"
+                   Height="72"
+                   Source="{Binding CurrentNotificationViewModel.IconImageBase64,
+                                    Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+                   Stretch="Fill"
+                   VerticalAlignment="Top"
+                   Margin="10,5,0,0" />
+            <CheckBox Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Bottom"
+                      VerticalContentAlignment="Center"
+                      Margin="7,0,0,5"
+                      Visibility="{Binding CurrentNotificationViewModel.CanChooseNotShowAgain,
+                                           Converter={StaticResource BoolToVisibilityConverter}}"
+                      IsChecked="{Binding CurrentNotificationViewModel.DoNotShowAgain,
+                                          Mode=TwoWay}">
+                <CheckBox.Content>
+                    <TextBlock MaxWidth="100"
+                               Foreground="White"
+                               FontSize="9"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"
+                               TextWrapping="Wrap"
+                               Text="Do Not Show Again" />
+                </CheckBox.Content>
+            </CheckBox>
+            <Button x:Name="CloseButton"
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="5"
+                    Background="Transparent"
+                    Style="{StaticResource SemiTransparentButton}"
+                    Click="CloseButton_Click"
+                    BorderThickness="0">
+                <Image Width="15"
+                       Height="15"
+                       Stretch="Fill"
+                       local:MpHoverableExtension.IsEnabled="True"
+                       local:MpHoverableExtension.HoverImageSource="/Resources/Images/close1.png"
+                       Source="/Resources/Images/close2.png">
+                    <Image.Effect>
+                        <local:MpInvertEffect />
+                    </Image.Effect>
+                </Image>
+            </Button>
+            <ContentControl Grid.Column="1"
+                            Grid.RowSpan="4"
+                            DataContext="{Binding CurrentNotificationViewModel}"
+                            DataContextChanged="ContentControl_DataContextChanged"
+                            Content="{Binding}"
+                            ContentTemplateSelector="{StaticResource NotificationTemplateSelector}" />
+        </Grid>
+    </Border>
 </Window>

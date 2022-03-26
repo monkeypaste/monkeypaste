@@ -105,6 +105,11 @@ namespace MpWpfApp {
         #region MpIFileSystemWatcher Implementation
 
         public void OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
+            if(!MpBootstrapperViewModelBase.IsLoaded) {
+                // file watcher triggers change on system load, maybe also at any point this action registers
+                // but it should be ignored
+                return;
+            }
             MpHelpers.RunOnMainThread(async () => {
                 MpCopyItem ci = null;
                 switch (e.ChangeType) {

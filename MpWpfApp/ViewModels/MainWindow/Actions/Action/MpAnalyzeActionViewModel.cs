@@ -90,7 +90,7 @@ namespace MpWpfApp {
 
             var actionInput = GetInput(arg);
 
-            var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(Action.ActionObjId);
+            var aipvm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(AnalyticItemPresetId);
             
             object[] args = new object[] { aipvm, actionInput.CopyItem };
             if(aipvm != null && 
@@ -110,11 +110,17 @@ namespace MpWpfApp {
                             TransactionResult = aipvm.Parent.LastTransaction.Response
                         });
                     return;
+                } else {
+                    MpConsole.WriteLine("");
+                    MpConsole.WriteLine($"Analyzer '{aipvm.FullName}' returned null to Action({ActionId}) '{FullName}', so {RootTriggerActionViewModel.Label} will stop.");
+                    MpConsole.WriteLine("");
                 }
+            } else {
+                MpConsole.WriteLine("");
+                MpConsole.WriteLine($"Action({ActionId}) '{FullName}' Failed to execute, analyzer w/ presetId({AnalyticItemPresetId}) not found");
+                MpConsole.WriteLine("");
             }
-            MpConsole.WriteLine("");
-            MpConsole.WriteLine($"Action({ActionId}) '{Label}' Failed to complete");
-            MpConsole.WriteLine("");
+            
         }
 
         #endregion

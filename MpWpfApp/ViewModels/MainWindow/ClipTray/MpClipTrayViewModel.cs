@@ -1451,6 +1451,9 @@ namespace MpWpfApp {
                     }
                     MpMessenger.Send<MpMessageType>(MpMessageType.TrayScrollChanged);
                     break;
+                case nameof(IsAppendMode):
+                    MpNotificationCollectionViewModel.Instance.ShowMessage(string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                    break;
             }
         }
 
@@ -2229,7 +2232,7 @@ namespace MpWpfApp {
 
                 IsBusy = true;
 
-                await Task.WhenAll(SelectedModels.Select(x => x.DeleteFromDatabaseAsync()).ToArray());
+                await Task.WhenAll(SelectedModels.Select(x => x.DeleteFromDatabaseAsync()));
 
                 //db delete event is handled in clip tile
                 IsBusy = false;

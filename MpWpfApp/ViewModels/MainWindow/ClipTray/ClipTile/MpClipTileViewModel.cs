@@ -1095,6 +1095,7 @@
                 ItemViewModels.Remove(rcivm);
 
                 if(ItemViewModels.Count == 0) {
+                    OnPropertyChanged(nameof(IsPlaceholder));
                     MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                 } else {
                     RequestListRefresh();
