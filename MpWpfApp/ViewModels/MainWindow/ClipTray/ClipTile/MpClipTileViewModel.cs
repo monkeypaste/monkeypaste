@@ -698,6 +698,8 @@
         #endregion
 
         #region Model
+
+
         public MpCopyItemType ItemType {
             get {
                 if(PrimaryItem == null) {

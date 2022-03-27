@@ -22,7 +22,6 @@ var fontFamilys = null;
 var fontSizes = null;
 var defaultFontIdx = null;
 var indentSize = 5;
-var htmlContent = '';//"[{\"templateId\":\"-1\",\"templateName\":\"Template #1\",\"templateColor\":\"#402A32\",\"docIdx\":[\"0\",\"3\",\"8\",\"35\"],\"templateText\":\"Template #1\"},{\"templateId\":\"-2\",\"templateName\":\"Template #2\",\"templateColor\":\"#D78484\",\"docIdx\":[\"2\",\"9\",\"32\"],\"templateText\":\"Template #2\"},{\"templateId\":\"-3\",\"templateName\":\"Template #3\",\"templateColor\":\"#165FA4\",\"docIdx\":\"4\",\"templateText\":\"Template #3\"},{\"templateId\":\"-4\",\"templateName\":\"Template #4\",\"templateColor\":\"#912505\",\"docIdx\":\"38\",\"templateText\":\"Template #4\"}]";        
 ////////////////////////////////////////////////////////////////////////////////
 
 function setWpfEnv() {
@@ -66,6 +65,8 @@ function init(html, isReadOnly, fontFamilys, fontSizes, defaultFontIdx, indentSi
         //hideScrollbars();
         //disableScrolling();
     }
+
+    loadTemplates(quill);
 
     isLoaded = true;
 
@@ -111,9 +112,9 @@ function registerToolbar(fontFamilys, fontSizes) {
             // ['templatebutton'],
             [{ 'Table-Input': registerTables() }]
         ],
-        //handlers: {
-        //    'Table-Input': () => { return; }
-        //}
+        handlers: {
+            'Table-Input': () => { return; }
+        }
     };
 
     return toolbar;
@@ -161,6 +162,7 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
 
     registerTemplateSpan(Quill);
 
+
     // Append the CSS stylesheet to the page
     var node = document.createElement('style');
     node.innerHTML = registerFontStyles(fontFamilys);
@@ -195,6 +197,8 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
             }
         }
     });
+
+    //registerContentBlots(Quill);
 
     var curTableIconSpan = curQuillDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
     curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
@@ -231,11 +235,6 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
         $(this).parent().children().removeClass("ql-picker-item-highlight");
     });
 
-    //document.body.querySelector('#insert-table')
-    //    .onclick = () => {
-    //        let tableModule = quill.getModule('better-table')
-    //        tableModule.insertTable(3, 3)
-    //    }
 
     // Toolbar Template Button
     const templateToolbarButton = new QuillToolbarButton({
@@ -390,6 +389,9 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
     });
 
     quill.on('text-change', function (delta, oldDelta, source) {
+        if (!isLoaded) {
+            return;
+        }
         var retainVal = 0;
         var textDelta = 0;
         var wasAddTemplate = false;
@@ -411,7 +413,7 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
         });
         if (!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
             shiftTemplates(retainVal, textDelta);
-            //console.log(getTemplates());
+            console.log(getTemplates());
         }
     });
 }
@@ -603,107 +605,7 @@ function enableScrolling() {
     document.querySelector('body').style.overflow = 'scroll';
 }
 
-function getTextWithEmbedTokens() {
-    var text = getText().split('');
-    var otl = getTemplatesByDocOrder()
-    var outText = '';
-    var offset = 0;
-    otl.forEach(function (ot) {
-        offset += parseInt(ot.docIdx);
-        var embedStr = getTemplateEmbedStr(ot);
-        //text.splice(offset, 1);
-        for (var i = 0; i < embedStr.length; i++) {
-            text.splice(offset + i, 0, embedStr[i]);
-        }
-        offset += (embedStr.length);
-    });
-    return text.join('');
-}
 
-function getTemplatesByDocOrder() {
-    var til = getTemplateInstances();
-    til.sort((a, b) => (parseInt(a.docIdx) > parseInt(b.docIdx)) ? 1 : -1);
-    return til;
-}
-
-function getUniqueTemplateInstanceId(tId) {
-    let newInstanceId = 1;
-    let isDup = true;
-    while (isDup) {
-        isDup = false;
-        getTemplateInstances(tId).forEach(function (ti) {
-            if (ti.instanceId == newInstanceId) {
-                isDup = true;
-            }
-        });
-        if (!isDup) {
-            return newInstanceId;
-        }
-        newInstanceId++;
-    }
-    return newInstanceId;
-}
-
-function getTemplateInstances(tId, iId) {
-    var til = [];
-    getTemplates().forEach(function (t) {
-        if (tId != null) {
-            if (t.templateId != tId) {
-                return;
-            }
-            if (iId != null && t.instanceId != iId) {
-                return;
-            }
-        }
-
-        if (Array.isArray(t.docIdx)) {
-            t.docIdx.forEach(function (tDocIdx) {
-                var ti = new Object();
-                var ti = Object.assign(ti, t);
-                ti.docIdx = tDocIdx;
-                til.push(ti);
-            });
-        } else {
-            til.push(t);
-        }
-    });
-    if (tId != null && iId != null && til.length == 1) {
-        return til[0];
-    }
-    return til;
-}
-
-function getTemplateOffset(_t, idx) {
-    var _tDocIdx = Array.isArray(_t.docIdx) ? _t.docIdx[idx] : _t.docIdx;
-    var text = getText();
-    var tl = getTemplates();
-    var offset = 0;
-    tl.forEach(function (t) {
-        var embedStr = '{{' + t.templateId + '}}';
-        if (Array.isArray(t.docIdx)) {
-            t.docIdx.forEach(function (tDocIdx) {
-                if (tDocIdx < _tDocIdx) {
-                    offset += getTemplateEmbedStr(t).length;
-                }
-            });
-        } else {
-            if (t.docIdx < _tDocIdx) {
-                offset += getTemplateEmbedStr(t).length;
-            }
-        }
-    });
-    return offset;
-}
-
-function getTemplateEmbedStr(t) {
-    var templateStr = '{{' + t.templateId + '}}';
-    return templateStr;
-}
-
-function getTemplatesJson() {
-    var val = JSON.stringify(getTemplates());
-    return val;
-}
 
 function decodeHtml(html) {
     var txt = document.createElement("textarea");

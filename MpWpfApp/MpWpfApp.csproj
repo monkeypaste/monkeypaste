@@ -2912,6 +2912,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /u /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"
-xcopy /y /f /S /I /E "$(ProjectDir)..\MonkeyPaste\Resources\Html" "$(TargetDir)Resources\Html"</PostBuildEvent>
+xcopy /u /y /f /S /I /E "$(ProjectDir)..\MonkeyPaste\Resources\Html" "$(TargetDir)Resources\Html"</PostBuildEvent>
   </PropertyGroup>
 </Project>

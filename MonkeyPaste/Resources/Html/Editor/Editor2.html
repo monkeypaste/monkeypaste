@@ -20,6 +20,7 @@
     <script src="lib/Quill-Html-Edit-Button/node_modules/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
 
     <script src="src/templates/template.js"></script>
+    <script src="src/content/contentBlot.js"></script>
 </head>
 <body>
     <div id='editor'>
@@ -84,6 +85,12 @@
     <div id="templateColorPaletteMenu" class="cls-context-menu"></div>
 
     <script src="src/editor.js"></script>
+
+    <script>
+        let html = '<p>dslikfjsdlkfj <span class="template_btn" contenteditable="false" templatename="Template #1" templatetype="dynamic" templatecolor="#68174A" templateid="-1" templatetext="undefined" instanceid="1" docidx="14" isfocus="false" spellcheck="false" style="background-color: rgb(104, 23, 74); color: white;">Template #1</span>  lkj <span class="template_btn" contenteditable="false" templatename="Template #2" templatetype="dynamic" templatecolor="#9280D4" templateid="-2" templatetext="undefined" instanceid="1" docidx="21" isfocus="false" spellcheck="false" style="background-color: rgb(146, 128, 212); color: white;">Template #2</span> jlkjgh</p><p>lklkjk <span class="template_btn" contenteditable="false" templatename="Template #1" templatetype="dynamic" templatecolor="#68174A" templateid="-1" templatetext="Template #1" instanceid="2" docidx="37" isfocus="false" spellcheck="false" style="background-color: rgb(104, 23, 74); color: white;">Template #1</span> <span class="template_btn" contenteditable="false" templatename="Template #2" templatetype="dynamic" templatecolor="#9280D4" templateid="-2" templatetext="Template #2" instanceid="2" docidx="39" isfocus="false" spellcheck="false" style="background-color: rgb(146, 128, 212); color: white;">Template #2</span> <span class="template_btn" contenteditable="false" templatename="Template #3" templatetype="dynamic" templatecolor="#784DBE" templateid="-3" templatetext="undefined" instanceid="1" docidx="41" isfocus="false" spellcheck="false" style="background-color: rgb(120, 77, 190); color: white;">Template #3</span> </p><p><br></p><p><span class="template_btn" contenteditable="false" templatename="Template #4" templatetype="dynamic" templatecolor="#DBE134" templateid="-4" templatetext="undefined" instanceid="1" docidx="45" isfocus="false" spellcheck="false" style="background-color: rgb(219, 225, 52); color: black;">Template #4</span> klhjljlkj <span class="template_btn" contenteditable="false" templatename="Template #1" templatetype="dynamic" templatecolor="#68174A" templateid="-1" templatetext="Template #1" instanceid="2" docidx="57" isfocus="false" spellcheck="false" style="background-color: rgb(104, 23, 74); color: white;">Template #1</span> </p>';
+        html = '';
+        init(html);
+    </script>
 </body>
 </html>
 

@@ -49,25 +49,6 @@
         </DataTemplate>
         <local:MpNotificationTemplateSelector x:Key="NotificationTemplateSelector" />
     </Window.Resources>
-    <!--<Window.Style>
-        <Style TargetType="Window">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsVisible}"
-                             Value="True">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard Storyboard="{StaticResource FadeIn}" />
-                    </DataTrigger.EnterActions>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsVisible}"
-                             Value="False">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard Storyboard="{StaticResource FadeOut}" />
-                    </DataTrigger.EnterActions>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Style>-->
-
     <Border HorizontalAlignment="Stretch"
             BorderThickness="7"
             BorderBrush="WhiteSmoke"

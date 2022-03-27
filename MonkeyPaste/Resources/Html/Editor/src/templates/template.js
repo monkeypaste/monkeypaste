@@ -1,4 +1,4 @@
-﻿const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
+const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
 
 var isShowingEditTemplateToolbar = false;
 var isShowingPasteTemplateToolbar = false;
@@ -8,9 +8,11 @@ var wasLastClickOnTemplate = false;
 
 function registerTemplateSpan(Quill) {
     const Parchment = Quill.imports.parchment;
-    const Delta = Quill.imports.delta;
 
     class TemplateSpanBlot extends Parchment.EmbedBlot {
+        //static blotName = 'templatespan';
+        //static tagName = 'SPAN';
+        //static className = 'template_btn';
         static create(value) {
             const node = super.create(value);
             let iId = getUniqueTemplateInstanceId(value.templateId);
@@ -68,9 +70,94 @@ function registerTemplateSpan(Quill) {
     }
     TemplateSpanBlot.blotName = 'templatespan';
     TemplateSpanBlot.tagName = 'SPAN';
-    TemplateSpanBlot.className = 'ql-templatespan';
+    TemplateSpanBlot.className = 'template_btn';
 
     Quill.register(TemplateSpanBlot);
+}
+
+
+
+function loadTemplates(quill) {
+    //var html = getHtml();
+    //var idx = 0;
+    //var lenDiff = 0;
+    //while (true) {
+    //    if (idx >= html.length) {
+    //        break;
+    //    }
+    //    var tt = findNextTemplateToken(idx + lenDiff, html);
+    //    if (tt == null) {
+    //        break;
+    //    }
+    //    var ttIdx = tt.sIdx;
+    //    var ttLen = tt.length;
+    //    delete tt.sIdx;
+    //    delete tt.length;
+    //    idx = createTemplate(tt, idx, ttLen);
+    //    lenDiff = getHtml().length - html.length + ttLen;
+    //    html = getHtml();
+    //}
+    var tl = getTemplateInstances();
+
+    tl = tl.sort((a, b) => (parseInt(a.docIdx) > parseInt(b.docIdx)) ? 1 : -1)
+    for (var i = 0; i < tl.length; i++) {
+        var t = tl[i];
+        //quill.deleteText(t.docIdx + i, 1);
+        //quill.insertEmbed(t.docIdx + i, 'templatespan', t);
+        //quill.insertText(t.docIdx + i, ' ');
+        //if (Array.isArray(t.docIdx)) {
+        //    for (var j = 0; j < t.docIdx.length; j++) {
+        //        var ti = JSON.parse(JSON.stringify(t));
+        //        ti.docIdx = t.docIdx[j];
+        //        quill.deleteText(ti.docIdx, 1);
+        //        quill.insertEmbed(ti.docIdx, 'templatespan', ti);
+        //    }
+        //} else {
+        //    quill.deleteText(t.docIdx, 1);
+        //    quill.insertEmbed(t.docIdx, 'templatespan', t);
+        //}
+        quill.deleteText(t.docIdx, 1);
+        quill.insertEmbed(t.docIdx, 'templatespan', t);
+    }
+}
+
+
+
+function getTemplates() {
+    var domTemplates = document.getElementsByClassName("template_btn");
+    var templates = [];
+    for (var i = 0; i < domTemplates.length; i++) {
+        var domTemplate = domTemplates[i];
+        var template = {
+            templateId: domTemplate.getAttribute('templateId'),
+            templateName: domTemplate.getAttribute('templateName'),
+            templateColor: domTemplate.getAttribute('templateColor'),
+            templateType: domTemplate.getAttribute('templateType'),
+            docIdx: domTemplate.getAttribute('docIdx'),
+            isFocus: domTemplate.getAttribute('isFocus'),
+            instanceId: domTemplate.getAttribute('instanceId'),
+            templateText: domTemplate.innerText,
+            domNode: domTemplate
+        }
+        //templates.push(template);
+        var curTemplateIdx = -1;
+        for (var j = 0; j < templates.length; j++) {
+            if (templates[j]['templateId'] == template['templateId']) {
+                curTemplateIdx = j;
+                break;
+            }
+        }
+        if (curTemplateIdx >= 0) {
+            if (Array.isArray(templates[curTemplateIdx].docIdx)) {
+                templates[curTemplateIdx].docIdx.push(template.docIdx);
+            } else {
+                templates[curTemplateIdx].docIdx = [templates[curTemplateIdx].docIdx, template.docIdx];
+            }
+        } else {
+            templates.push(template);
+        }
+    }
+    return templates;
 }
 
 function shiftTemplates(fromDocIdx, byVal) {
@@ -104,28 +191,6 @@ function getTemplatesFromRange(range) {
     return tl;
 }
 
-function loadTemplates() {
-    var html = getHtml();
-    var idx = 0;
-    var lenDiff = 0;
-    while (true) {
-        if (idx >= html.length) {
-            break;
-        }
-        var tt = findNextTemplateToken(idx + lenDiff, html);
-        if (tt == null) {
-            break;
-        }
-        var ttIdx = tt.sIdx;
-        var ttLen = tt.length;
-        delete tt.sIdx;
-        delete tt.length;
-        idx = createTemplate(tt, idx, ttLen);
-        lenDiff = getHtml().length - html.length + ttLen;
-        html = getHtml();
-    }
-}
-
 function findNextTemplateToken(fIdx, text, sToken = '{{', eToken = '}}', sep = ',') {
     text = text.substring(fIdx);
     var tsIdx = text.indexOf(sToken);
@@ -148,6 +213,108 @@ function findNextTemplateToken(fIdx, text, sToken = '{{', eToken = '}}', sep = '
         sIdx: fIdx + tsIdx,
         length: teIdx - tsIdx + eToken.length
     };
+}
+
+function getTextWithEmbedTokens() {
+    var text = getText().split('');
+    var otl = getTemplatesByDocOrder()
+    var outText = '';
+    var offset = 0;
+    otl.forEach(function (ot) {
+        offset += parseInt(ot.docIdx);
+        var embedStr = getTemplateEmbedStr(ot);
+        //text.splice(offset, 1);
+        for (var i = 0; i < embedStr.length; i++) {
+            text.splice(offset + i, 0, embedStr[i]);
+        }
+        offset += (embedStr.length);
+    });
+    return text.join('');
+}
+
+function getTemplatesByDocOrder() {
+    var til = getTemplateInstances();
+    til.sort((a, b) => (parseInt(a.docIdx) > parseInt(b.docIdx)) ? 1 : -1);
+    return til;
+}
+
+function getUniqueTemplateInstanceId(tId) {
+    let newInstanceId = 1;
+    let isDup = true;
+    while (isDup) {
+        isDup = false;
+        getTemplateInstances(tId).forEach(function (ti) {
+            if (ti.instanceId == newInstanceId) {
+                isDup = true;
+            }
+        });
+        if (!isDup) {
+            return newInstanceId;
+        }
+        newInstanceId++;
+    }
+    return newInstanceId;
+}
+
+function getTemplateInstances(tId, iId) {
+    var til = [];
+    getTemplates().forEach(function (t) {
+        if (tId != null) {
+            if (t.templateId != tId) {
+                return;
+            }
+            if (iId != null && t.instanceId != iId) {
+                return;
+            }
+        }
+
+        if (Array.isArray(t.docIdx)) {
+            t.docIdx.forEach(function (tDocIdx) {
+                var ti = new Object();
+                var ti = Object.assign(ti, t);
+                ti.docIdx = tDocIdx;
+                til.push(ti);
+            });
+        } else {
+            til.push(t);
+        }
+    });
+    if (tId != null && iId != null && til.length == 1) {
+        return til[0];
+    }
+    return til;
+}
+
+//function getTemplateOffset(_t, idx) {
+//    var _tDocIdx = Array.isArray(_t.docIdx) ? _t.docIdx[idx] : _t.docIdx;
+//    var text = getText();
+//    var tl = getTemplates();
+//    var offset = 0;
+//    tl.forEach(function (t) {
+//        var embedStr = '{{' + t.templateId + '}}';
+//        if (Array.isArray(t.docIdx)) {
+//            t.docIdx.forEach(function (tDocIdx) {
+//                if (tDocIdx < _tDocIdx) {
+//                    offset += getTemplateEmbedStr(t).length;
+//                }
+//            });
+//        } else {
+//            if (t.docIdx < _tDocIdx) {
+//                offset += getTemplateEmbedStr(t).length;
+//            }
+//        }
+//    });
+//    return offset;
+//}
+
+//function getTemplateEmbedStr(t) {
+//    var templateStr = '{{' + t.templateId + '}}';
+//    return templateStr;
+//}
+
+function getTemplatesJson() {
+    var val = JSON.stringify(getTemplates());
+    return val;
 }
 
 function createTemplate(templateObjOrId, idx, len) {
@@ -176,15 +343,15 @@ function createTemplate(templateObjOrId, idx, len) {
         newTemplateObj['templateName'] = getLowestAnonTemplateName();
     }
 
-    quill.deleteText(range.index, range.length, Quill.sources.SILENT);
+    quill.deleteText(range.index, range.length);//, Quill.sources.SILENT);
     if (Math.abs(parseInt(range.length)) > 0) {
-        shiftTemplates(range.index, -range.length);
+        //shiftTemplates(range.index, -range.length);
     }
-    shiftTemplates(range.index, 1);
-    quill.insertEmbed(range.index, "templatespan", newTemplateObj, Quill.sources.SILENT);
+    //shiftTemplates(range.index, 1);
+    quill.insertEmbed(range.index, "templatespan", newTemplateObj);//, Quill.sources.SILENT);
     var eofIdx = quill.getLength();
     if (range.index + newTemplateObj['templateName'].length >= eofIdx) {
-        quill.insertText(range.index + 1, ' ', Quill.sources.SILENT);
+        quill.insertText(range.index + 1, ' ');//, Quill.sources.SILENT);
     }
     quill.setSelection(range.index + 1, Quill.sources.API);
 
@@ -578,41 +745,6 @@ function setTemplateDocIdx(t, oldIdx, newIdx) {
             return;
         }
     }
-}
-
-function getTemplates() {
-    var domTemplates = document.getElementsByClassName("template_btn");
-    var templates = [];
-    for (var i = 0; i < domTemplates.length; i++) {
-        var domTemplate = domTemplates[i];
-        var template = {
-            templateId: domTemplate.getAttribute('templateId'),
-            templateName: domTemplate.getAttribute('templateName'),
-            templateColor: domTemplate.getAttribute('templateColor'),
-            templateType: domTemplate.getAttribute('templateType'),
-            docIdx: domTemplate.getAttribute('docIdx'),
-            isFocus: domTemplate.getAttribute('isFocus'),
-            instanceId: domTemplate.getAttribute('instanceId'),
-            templateText: domTemplate.innerText
-        }
-        var curTemplateIdx = -1;
-        for (var j = 0; j < templates.length; j++) {
-            if (templates[j]['templateId'] == template['templateId']) {
-                curTemplateIdx = j;
-                break;
-            }
-        }
-        if (curTemplateIdx >= 0) {
-            if (Array.isArray(templates[curTemplateIdx].docIdx)) {
-                templates[curTemplateIdx].docIdx.push(template.docIdx);
-            } else {
-                templates[curTemplateIdx].docIdx = [templates[curTemplateIdx].docIdx, template.docIdx];
-            }
-        } else {
-            templates.push(template);
-        }
-    }
-    return templates;
 }
 
 function getTemplatesJson() {
