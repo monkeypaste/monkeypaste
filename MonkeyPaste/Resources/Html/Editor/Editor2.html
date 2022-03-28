@@ -4,20 +4,19 @@
 <head>
     <meta charset="utf-8" />
     <title>Editor</title>
-    <link href="lib/Quill/node_modules/quill/dist//quill.snow.css" rel="stylesheet" />
+    <link href="lib/Quill/quill.snow.css" rel="stylesheet" />
     <link href="lib/HighlightJs/styles/github.min.css" rel="stylesheet" />
-    <link href="lib/Quill-Better-Table/node_modules/quill-better-table/dist/quill-better-table.css" rel="stylesheet" type="text/css" />
-    <!--<link href="https://unpkg.com/quill-better-table@1.2.8/dist/quill-better-table.css" rel="stylesheet" type="text/css" />-->
+    <link href="lib/Quill-Better-Table/quill-better-table.css" rel="stylesheet" type="text/css" />
     <link href="style/editor-style.css" rel="stylesheet" />
 
     <script src="lib/HighlightJs/highlight.min.js"></script>
     <script src="lib/HighlightJs/languages/xml.min.js"></script>
-    <script src="lib/Quill/node_modules/quill/dist/quill.min.js"></script>
-    <script src="lib/Quill-Better-Table/node_modules/quill-better-table/dist/quill-better-table.min.js"></script>
-    <!--<script src="https://unpkg.com/quill-better-table@1.2.8/dist/quill-better-table.min.js"></script>-->
-    <script src="lib/jquery/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="lib/Quill/quill.min.js"></script>
+    <script src="lib/Quill-Better-Table/quill-better-table.min.js"></script>
+    <script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/DynamicQuillTools/DynamicQuillTools.js"></script>
-    <script src="lib/Quill-Html-Edit-Button/node_modules/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
+    <script src="lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js"></script>
+    <script src="lib/DateFormatter/jquery.dateFormat.js"></script>
 
     <script src="src/templates/template.js"></script>
     <script src="src/content/contentBlot.js"></script>
@@ -37,6 +36,13 @@
     </div>
 
     <div id="editTemplateToolbar" class="edit-template-toolbar">
+        <!--<div id="templateNameAndColorContainer" class="template-name-and-color-container">-->
+        <!--<a id="templateColorBoxContainer" class="template-color-box-container" href="javascript:void(0);">
+        <div id="templateColorBox" class="template-color-box"></div>
+    </a>-->
+        <!--</div>-->
+        <div id="templateColorBox" class="edit-template-color-box"></div>
+        <input id="templateNameTextInput" class="edit-template-name-text-input" type="text" placeholder="Template Name" />
         <div class="edit-template-type-select-container">
             <select id="editTemplateTypeMenuSelector">
                 <option class="edit-template-type-option" value="datetime">DateTime</option>
@@ -48,14 +54,13 @@
                 <option class="edit-template-type-option" value="contact">Contact Property</option>
             </select>
         </div>
-        <div id="templateDetailTextInputContainer" class="template-detail-text-input-container">
+        <div id="templateDetailTextInputContainer" class="edit-template-detail-text-input-container">
             <input id="templateDetailTextInput" type="text" placeholder="Enter Details" />
         </div>
-        <div id="templateNameAndColorContainer" class="template-name-and-color-container">
-            <a id="templateColorBoxContainer" class="template-color-box-container" href="javascript:void(0);">
-                <div id="templateColorBox" class="template-color-box"></div>
-            </a>
-            <input id="templateNameTextInput" class="template-name-text-input" type="text" placeholder="Template Name" />
+
+        <div id="editTemplateOkCancelButtonContainer" class="edit-template-ok-cancel-button-container">
+            <input id="editTemplateCancelButton" type="button" value="Cancel" />
+            <input id="editTemplateOkButton" type="button" value="OK" />
         </div>
     </div>
 
@@ -81,15 +86,13 @@
         </div>
     </div>
 
-
     <div id="templateColorPaletteMenu" class="cls-context-menu"></div>
 
     <script src="src/editor.js"></script>
 
     <script>
-        let html = '<p>dslikfjsdlkfj <span class="template_btn" contenteditable="false" templatename="Template #1" templatetype="dynamic" templatecolor="#68174A" templateid="-1" templatetext="undefined" instanceid="1" docidx="14" isfocus="false" spellcheck="false" style="background-color: rgb(104, 23, 74); color: white;">Template #1</span>  lkj <span class="template_btn" contenteditable="false" templatename="Template #2" templatetype="dynamic" templatecolor="#9280D4" templateid="-2" templatetext="undefined" instanceid="1" docidx="21" isfocus="false" spellcheck="false" style="background-color: rgb(146, 128, 212); color: white;">Template #2</span> jlkjgh</p><p>lklkjk <span class="template_btn" contenteditable="false" templatename="Template #1" templatetype="dynamic" templatecolor="#68174A" templateid="-1" templatetext="Template #1" instanceid="2" docidx="37" isfocus="false" spellcheck="false" style="background-color: rgb(104, 23, 74); color: white;">Template #1</span> <span class="template_btn" contenteditable="false" templatename="Template #2" templatetype="dynamic" templatecolor="#9280D4" templateid="-2" templatetext="Template #2" instanceid="2" docidx="39" isfocus="false" spellcheck="false" style="background-color: rgb(146, 128, 212); color: white;">Template #2</span> <span class="template_btn" contenteditable="false" templatename="Template #3" templatetype="dynamic" templatecolor="#784DBE" templateid="-3" templatetext="undefined" instanceid="1" docidx="41" isfocus="false" spellcheck="false" style="background-color: rgb(120, 77, 190); color: white;">Template #3</span> </p><p><br></p><p><span class="template_btn" contenteditable="false" templatename="Template #4" templatetype="dynamic" templatecolor="#DBE134" templateid="-4" templatetext="undefined" instanceid="1" docidx="45" isfocus="false" spellcheck="false" style="background-color: rgb(219, 225, 52); color: black;">Template #4</span> klhjljlkj <span class="template_btn" contenteditable="false" templatename="Template #1" templatetype="dynamic" templatecolor="#68174A" templateid="-1" templatetext="Template #1" instanceid="2" docidx="57" isfocus="false" spellcheck="false" style="background-color: rgb(104, 23, 74); color: white;">Template #1</span> </p>';
-        html = '';
-        init(html);
+        let encodedHtml = '<p>{{-3,Template #3,#C9B0BB,Template #3,dynamic,}}fthgfgh {{-1,Template #1,#226A0E,Template #1,action,}} {{-2,Template #2,#7037C0,Template #2,dynamic,}} ghjghjgh n{{-1,Template #1,#226A0E,Template #1,action,}} </p><p><br></p><p>gcbnfgd {{-2,Template #2,#7037C0,Template #2,dynamic,}} {{-1,Template #1,#226A0E,Template #1,action,}} </p><p><br></p><ol><li data-list="ordered"><span class="ql-ui" contenteditable="false"></span>item 1</li><li data-list="ordered"><span class="ql-ui" contenteditable="false"></span><strong style="background-color: rgb(255, 153, 0);">jhgkhkjh </strong>{{-1,Template #1,#226A0E,Template #1,action,}}</li><li data-list="ordered"><span class="ql-ui" contenteditable="false"></span>{{-3,Template #3,#C9B0BB,Template #3,dynamic,}}</li></ol><p><br></p><p>lkjlkj {{-3,Template #3,#C9B0BB,Template #3,dynamic,}} {{-1,Template #1,#226A0E,Template #1,action,}} {{-3,Template #3,#C9B0BB,Template #3,dynamic,}} </p><p><br></p><p><br></p>';
+        init(encodedHtml);
     </script>
 </body>
 </html>

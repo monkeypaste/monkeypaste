@@ -10,9 +10,9 @@ function registerTemplateSpan(Quill) {
     const Parchment = Quill.imports.parchment;
 
     class TemplateSpanBlot extends Parchment.EmbedBlot {
-        //static blotName = 'templatespan';
-        //static tagName = 'SPAN';
-        //static className = 'template_btn';
+        static blotName = 'templatespan';
+        static tagName = 'SPAN';
+        static className = 'template_btn';
         static create(value) {
             const node = super.create(value);
             let iId = getUniqueTemplateInstanceId(value.templateId);
@@ -23,6 +23,7 @@ function registerTemplateSpan(Quill) {
             node.setAttribute('templateType', value.templateType);
             node.setAttribute('templateColor', value.templateColor);
             node.setAttribute('templateId', value.templateId);
+            node.setAttribute('templateData', value.templateData);
             node.setAttribute('templateText', value.templateText);
             node.setAttribute('instanceId', iId);
             node.setAttribute('docIdx', value.docIdx);
@@ -52,6 +53,7 @@ function registerTemplateSpan(Quill) {
                 templateColor: domNode.getAttribute('templateColor'),
                 templateText: domNode.getAttribute('templateText'),
                 templateType: domNode.getAttribute('templateType'),
+                templateData: domNode.getAttribute('templateData')
             }
         }
 
@@ -67,60 +69,111 @@ function registerTemplateSpan(Quill) {
             span.innerText = ' ';
             node.appendChild(span);
         }
+
+
     }
-    TemplateSpanBlot.blotName = 'templatespan';
-    TemplateSpanBlot.tagName = 'SPAN';
-    TemplateSpanBlot.className = 'template_btn';
 
     Quill.register(TemplateSpanBlot);
 }
 
+function decodeTemplates(quill) {
+    let regex = new RegExp("{{.*?}}", "");
+    let qtext = quill.getText();
+    let tcount = 0; 
+    while (result = regex.exec(qtext)) {
+        let encodedTemplateStr = result[0];
+        let t = decodeTemplate(encodedTemplateStr);
 
-
-function loadTemplates(quill) {
-    //var html = getHtml();
-    //var idx = 0;
-    //var lenDiff = 0;
-    //while (true) {
-    //    if (idx >= html.length) {
-    //        break;
-    //    }
-    //    var tt = findNextTemplateToken(idx + lenDiff, html);
-    //    if (tt == null) {
-    //        break;
-    //    }
-    //    var ttIdx = tt.sIdx;
-    //    var ttLen = tt.length;
-    //    delete tt.sIdx;
-    //    delete tt.length;
-    //    idx = createTemplate(tt, idx, ttLen);
-    //    lenDiff = getHtml().length - html.length + ttLen;
-    //    html = getHtml();
-    //}
-    var tl = getTemplateInstances();
-
-    tl = tl.sort((a, b) => (parseInt(a.docIdx) > parseInt(b.docIdx)) ? 1 : -1)
-    for (var i = 0; i < tl.length; i++) {
-        var t = tl[i];
-        //quill.deleteText(t.docIdx + i, 1);
-        //quill.insertEmbed(t.docIdx + i, 'templatespan', t);
-        //quill.insertText(t.docIdx + i, ' ');
-        //if (Array.isArray(t.docIdx)) {
-        //    for (var j = 0; j < t.docIdx.length; j++) {
-        //        var ti = JSON.parse(JSON.stringify(t));
-        //        ti.docIdx = t.docIdx[j];
-        //        quill.deleteText(ti.docIdx, 1);
-        //        quill.insertEmbed(ti.docIdx, 'templatespan', ti);
-        //    }
-        //} else {
-        //    quill.deleteText(t.docIdx, 1);
-        //    quill.insertEmbed(t.docIdx, 'templatespan', t);
-        //}
-        quill.deleteText(t.docIdx, 1);
-        quill.insertEmbed(t.docIdx, 'templatespan', t);
+        // NOTE embed blots have zero length in text (completely ignored) 
+        // BUT take up a signle character in actual content so tcount keeps track of the
+        // ignored character as they are added (SHEESH)
+        let tsIdx = qtext.indexOf(encodedTemplateStr) + tcount;
+        quill.deleteText(tsIdx, encodedTemplateStr.length);
+        //delete tt.length;
+        quill.insertEmbed(tsIdx, 'templatespan', t);
+        qtext = quill.getText();
+        tcount++;
     }
 }
+function decodeTemplate(encodedTemplateStr, sToken = '{{', eToken = '}}', sep = ',') {
+    var tsIdx = encodedTemplateStr.indexOf(sToken);
+    var teIdx = encodedTemplateStr.indexOf(eToken);
 
+    if (tsIdx < 0 || teIdx < 0) {
+        return null;
+    }
+
+    var templateSpan = encodedTemplateStr.substring(tsIdx + sToken.length, teIdx);
+    var templateParts = templateSpan.split(sep);
+
+    if (templateParts.length != 6) {
+        return null;
+    }
+    return {
+        templateId: parseInt(templateParts[0]),
+        templateName: templateParts[1],
+        templateColor: templateParts[2],
+        templateText: templateParts[3],
+        templateType: templateParts[4],
+        templateData: templateParts[5],
+        docIdx: tsIdx,
+        length: teIdx - tsIdx + eToken.length
+    };
+}
+function findNextEncodedTemplateToken(fIdx, sToken = '{{', eToken = '}}', sep = ',') {
+    var text = getText().substring(fIdx);
+    var tsIdx = text.indexOf(sToken);
+    var teIdx = text.indexOf(eToken);
+
+    if (tsIdx < 0 || teIdx < 0) {
+        return null;
+    }
+
+    var templateSpan = text.substring(tsIdx + sToken.length, teIdx);
+    var templateParts = templateSpan.split(sep);
+
+    if (templateParts.length != 6) {
+        return null;
+    }
+    return {
+        templateId: parseInt(templateParts[0]),
+        templateName: templateParts[1],
+        templateColor: templateParts[2],
+        templateText: templateParts[3],
+        templateType: templateParts[4],
+        templateData: templateParts[5],
+        docIdx: tsIdx,
+        length: teIdx - tsIdx + eToken.length
+    };
+}
+
+function getTemplateEmbedStr(t, sToken = '{{', eToken = '}}', sep = ',') {
+    var templateStr = [parseInt(t.templateId), t.templateName, t.templateColor, t.templateText, t.templateType, t.templateData].join(sep);
+    var result = sToken + templateStr + eToken;
+    return result;
+}
+
+function encodeTemplates() {
+    // NOTE template text should be cleared from html before calling this
+    var html = getHtml();
+    var til = getTemplateInstances();
+    for (var i = 0; i < til.length; i++) {
+        var ti = til[i];
+        var tin = ti.domNode;
+        var tihtml = tin.outerHTML;
+        var ties = getTemplateEmbedStr(ti);
+        var newHtml = html.replace(tihtml, ties);
+        if (newHtml == html) {
+            console.log("Template not replaced");
+            console.log("Template HTML: ");
+            console.log(tihtml);
+            console.log("Current Encoded HTML: ");
+            console.log(html);
+        }
+        html = newHtml;
+    }
+    return html;
+}
 
 
 function getTemplates() {
@@ -133,6 +186,7 @@ function getTemplates() {
             templateName: domTemplate.getAttribute('templateName'),
             templateColor: domTemplate.getAttribute('templateColor'),
             templateType: domTemplate.getAttribute('templateType'),
+            templateData: domTemplate.getAttribute('templateData'),
             docIdx: domTemplate.getAttribute('docIdx'),
             isFocus: domTemplate.getAttribute('isFocus'),
             instanceId: domTemplate.getAttribute('instanceId'),
@@ -191,33 +245,12 @@ function getTemplatesFromRange(range) {
     return tl;
 }
 
-function findNextTemplateToken(fIdx, text, sToken = '{{', eToken = '}}', sep = ',') {
-    text = text.substring(fIdx);
-    var tsIdx = text.indexOf(sToken);
-    var teIdx = text.indexOf(eToken);
 
-    if (tsIdx < 0 || teIdx < 0) {
-        return null;
-    }
-
-    var templateSpan = text.substring(tsIdx + sToken.length, teIdx);
-    var templateParts = templateSpan.split(sep);
-
-    if (templateParts.length != 3) {
-        return null;
-    }
-    return {
-        templateId: templateParts[0],
-        templateName: templateParts[1],
-        templateColor: templateParts[2],
-        sIdx: fIdx + tsIdx,
-        length: teIdx - tsIdx + eToken.length
-    };
-}
 
 function getTextWithEmbedTokens() {
+    // for pasting NOT encoding for db
     var text = getText().split('');
-    var otl = getTemplatesByDocOrder()
+    var otl = getTemplatesByDocOrder();
     var outText = '';
     var offset = 0;
     otl.forEach(function (ot) {
@@ -232,11 +265,13 @@ function getTextWithEmbedTokens() {
     return text.join('');
 }
 
+
 function getTemplatesByDocOrder() {
     var til = getTemplateInstances();
     til.sort((a, b) => (parseInt(a.docIdx) > parseInt(b.docIdx)) ? 1 : -1);
     return til;
 }
+
 
 function getUniqueTemplateInstanceId(tId) {
     let newInstanceId = 1;
@@ -257,32 +292,52 @@ function getUniqueTemplateInstanceId(tId) {
 }
 
 function getTemplateInstances(tId, iId) {
-    var til = [];
-    getTemplates().forEach(function (t) {
-        if (tId != null) {
-            if (t.templateId != tId) {
-                return;
-            }
-            if (iId != null && t.instanceId != iId) {
-                return;
-            }
-        }
+    //var til = [];
+    //getTemplates().forEach(function (t) {
+    //    if (tId != null) {
+    //        if (t.templateId != tId) {
+    //            return;
+    //        }
+    //        if (iId != null && t.instanceId != iId) {
+    //            return;
+    //        }
+    //    }
 
-        if (Array.isArray(t.docIdx)) {
-            t.docIdx.forEach(function (tDocIdx) {
-                var ti = new Object();
-                var ti = Object.assign(ti, t);
-                ti.docIdx = tDocIdx;
-                til.push(ti);
-            });
-        } else {
-            til.push(t);
+    //    if (Array.isArray(t.docIdx)) {
+    //        t.docIdx.forEach(function (tDocIdx) {
+    //            var ti = new Object();
+    //            var ti = Object.assign(ti, t);
+    //            ti.docIdx = tDocIdx;
+    //            til.push(ti);
+    //        });
+    //    } else {
+    //        til.push(t);
+    //    }
+    //});
+    //if (tId != null && iId != null && til.length == 1) {
+    //    return til[0];
+    //}
+    //return til;
+
+    var domTemplates = document.getElementsByClassName("template_btn");
+    var templates = [];
+    for (var i = 0; i < domTemplates.length; i++) {
+        var domTemplate = domTemplates[i];
+        var template = {
+            templateId: domTemplate.getAttribute('templateId'),
+            templateName: domTemplate.getAttribute('templateName'),
+            templateColor: domTemplate.getAttribute('templateColor'),
+            templateType: domTemplate.getAttribute('templateType'),
+            templateData: domTemplate.getAttribute('templateData'),
+            docIdx: domTemplate.getAttribute('docIdx'),
+            isFocus: domTemplate.getAttribute('isFocus'),
+            instanceId: domTemplate.getAttribute('instanceId'),
+            templateText: domTemplate.innerText,
+            domNode: domTemplate
         }
-    });
-    if (tId != null && iId != null && til.length == 1) {
-        return til[0];
-    }
-    return til;
+        templates.push(template);
+    } 
+    return templates.sort((a, b) => (parseInt(a.docIdx) > parseInt(b.docIdx)) ? 1 : -1);
 }
 
 //function getTemplateOffset(_t, idx) {
@@ -335,6 +390,7 @@ function createTemplate(templateObjOrId, idx, len) {
             templateColor: getRandomColor(),
             templateName: quill.getText(range.index, range.length).trim(),
             templateType: 'dynamic',
+            templateData: ''
         };
     }
     newTemplateObj.docIdx = range.index;
@@ -361,8 +417,11 @@ function createTemplate(templateObjOrId, idx, len) {
 
     showEditTemplateToolbar();
 
+    hideTemplateToolbarContextMenu();
+
     return range.index;
 }
+
 
 function getLowestAnonTemplateName(anonPrefix = 'Template #') {
     var tl = getTemplates();
@@ -414,15 +473,16 @@ function setTemplateType(templateId, templateTypeValue) {
         document.getElementById('templateDetailTextInputContainer').style.display = 'none';
     } else {
         document.getElementById('templateDetailTextInputContainer').style.display = 'inline-block';
-        document.getElementById('templateDetailTextInput').value = t['templateText'];
+        document.getElementById('templateDetailTextInput').value = t['templateData'];
+        document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
     }
 
     document.getElementById('templateColorBox').style.backgroundColor = t['templateColor'];
-    document.getElementById('templateColorBoxContainer').addEventListener('click', onTemplateColorBoxContainerClick);
+    document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
 
-    document.getElementById('templateNameAndColorContainer').style.display = 'inline-block';
+    //document.getElementById('templateNameAndColorContainer').style.display = 'inline-block';
     document.getElementById('templateNameTextInput').value = t['templateName'];
-    document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged)
+    document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
 }
 
 function selectTemplate(templateId, fromDropDown, iId) {
@@ -476,7 +536,7 @@ function isTemplateSelected() {
     return selectionHtml.includes('template_btn');
 }
 
-function getTemplateElement(tId, iId) {
+function getTemplateElements(tId, iId) {
     var tel = [];
     var stl = document.getElementsByClassName("template_btn");
     for (var i = 0; i < stl.length; i++) {
@@ -499,7 +559,7 @@ function focusTemplate(tn) {
     hideAllContextMenus();
     let tId = tn.getAttribute('templateId');
     let iId = parseInt(tn.getAttribute('instanceId'));
-    let te = getTemplateElement(tId, iId);
+    let te = getTemplateElements(tId, iId);
     te.isFocus = true;
     te.setAttribute('isFocus', true);
     selectTemplate(tId, false, iId);
@@ -534,12 +594,12 @@ function changeTemplateColorClick(tId, iId) {
     if (isShowingTemplateColorPaletteMenu) {
         hideTemplateColorPaletteMenu();
     }
-    let te = getTemplateElement(tId, iId);
+    let te = getTemplateElements(tId, iId);
     showTemplateColorPaletteMenu(te);
 }
 
 function onColorPaletteItemClick(tId, chex) {
-    let tel = getTemplateElement(tId);
+    let tel = getTemplateElements(tId);
 
     for (var i = 0; i < tel.length; i++) {
         var te = tel[i];
@@ -574,24 +634,24 @@ function templateTextAreaChange() {
     setTemplateText(selectedTemplateId, curText);
 }
 
-function setTemplateText(templateId, text) {
-    var stl = document.getElementsByClassName("template_btn");
-    for (var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        if (t.getAttribute('templateid') == templateId) {
-            t.innerText = text;
-            t.templateText = text;
-        }
-    }
-}
 
 function setTemplateName(tid, name) {
-    var tl = getTemplateElement(tid);
+    var tl = getTemplateElements(tid);
     for (var i = 0; i < tl.length; i++) {
         var te = tl[i];
         if (parseInt(te.getAttribute('templateid')) == tid) {
             te.setAttribute('templateName', name);
             te.innerHTML = name;
+        }
+    }
+}
+
+function setTemplateDetailData(tid, detailData) {
+    var tl = getTemplateElements(tid);
+    for (var i = 0; i < tl.length; i++) {
+        var te = tl[i];
+        if (parseInt(te.getAttribute('templateid')) == tid) {
+            te.setAttribute('templateData', detailData);
         }
     }
 }
@@ -660,6 +720,11 @@ function onTemplateColorBoxContainerClick(e) {
 function onTemplateNameChanged(e) {
     let newTemplateName = document.getElementById('templateNameTextInput').value;
     setTemplateName(selectedTemplateId, newTemplateName);
+}
+
+function onTemplateDetailChanged(e) {
+    let newDetailData = document.getElementById('templateDetailTextInput').value;
+    setTemplateName(selectedTemplateId, newDetailData);
 }
 
 function onLogKeyPress(e) {
@@ -738,7 +803,13 @@ function setTemplateDocIdx(t, oldIdx, newIdx) {
             templateName: domTemplate.getAttribute('templateName'),
             templateColor: domTemplate.getAttribute('templateColor'),
             docIdx: domTemplate.getAttribute('docIdx'),
-            templateText: domTemplate.innerText
+            templateText: domTemplate.innerText,
+
+            //templateType: domTemplate.getAttribute('templateType'),
+            //templateData: domTemplate.getAttribute('templateData'),
+            //isFocus: domTemplate.getAttribute('isFocus'),
+            //instanceId: domTemplate.getAttribute('instanceId'),
+            //domNode: domTemplate
         }
         if (template.templateId == t.templateId && template.docIdx == oldIdx) {
             domTemplate.setAttribute('docIdx', newIdx);
@@ -846,10 +917,10 @@ function hideTemplateContextMenu() {
 
 function showTemplateColorPaletteMenu(tid) {
     var te = null;
-    if (Array.isArray(getTemplateElement(tid))) {
-        te = getTemplateElement(tid)[0];
+    if (Array.isArray(getTemplateElements(tid))) {
+        te = getTemplateElements(tid)[0];
     } else {
-        te = getTemplateElement(tid);
+        te = getTemplateElements(tid);
     }
 
     if (isShowingTemplateColorPaletteMenu) {
@@ -918,41 +989,6 @@ function showEditTemplateToolbar() {
     setTemplateType(selectedTemplateId, t["templateType"]);
 
     document.getElementById('editTemplateTypeMenuSelector').addEventListener('change', onTemplateTypeChanged);
-
-    //document.getElementById('nextTemplateButton').addEventListener('click', function (e) {
-    //    gotoNextTemplate();
-    //});
-    //document.getElementById('nextTemplateButton').addEventListener('keydown', function (e) {
-    //    gotoNextTemplate();
-    //});
-    //document.getElementById('previousTemplateButton').addEventListener('click', function (e) {
-    //    gotoPrevTemplate();
-    //});
-    //document.getElementById('previousTemplateButton').addEventListener('keydown', function (e) {
-    //    gotoPrevTemplate();
-    //});
-    //document.getElementById('clearAllTemplateTextButton').addEventListener('click', function (e) {
-    //    clearAllTemplateText();
-    //});
-    //document.getElementById('clearAllTemplateTextButton').addEventListener('keydown', function (e) {
-    //    clearAllTemplateText();
-    //});
-    //document.getElementById('pasteTemplateButton').addEventListener('click', function (e) {
-    //    isCompleted = true;
-    //});
-    //document.getElementById('pasteTemplateButton').addEventListener('keydown', function (e) {
-    //    isCompleted = true;
-    //});
-
-    //createTemplateSelectorStyling(editTemplateTypeMenuSelector);
-
-    //let tbb = isShowingToolbar ? $(".ql-toolbar").outerHeight() : 0;
-    //moveToolbarTop(0);
-    //let wb = $(window).height();
-    //movePasteTemplateToolbarTop($(window).height() - $("#pasteTemplateToolbar").outerHeight());
-    //moveEditorTop($("#pasteTemplateToolbar").outerHeight() + tbb);
-
-    //$('#templateTextArea').focus();
 }
 
 function hideEditTemplateToolbar() {
@@ -1066,6 +1102,35 @@ function clearAllTemplateText() {
     var tl = getTemplates();
     for (var i = 0; i < tl.length; i++) {
         setTemplateText(tl[i]['templateId'], '');
+    }
+}
+
+function setTemplateText(templateId, text) {
+    var stl = document.getElementsByClassName("template_btn");
+    for (var i = 0; i < stl.length; i++) {
+        var t = stl[i];
+        if (t.getAttribute('templateid') == templateId) {
+            t.innerText = text;
+            t.templateText = text;
+        }
+    }
+}
+
+function resetTemplates() {
+    var tl = getTemplates();
+    for (var i = 0; i < tl.length; i++) {
+        var t = tl[i];
+
+        t.templateText = '';
+        t.isFocus = false;
+
+        var tel = getTemplateElements(t.templateId);
+        for (var j = 0; j < tel.length; j++) {
+            let te = tel[j];
+            te.innerHTML = t.templateName;
+            te.setAttribute('templateText', '');
+            te.setAttribute('isFocus', 'false');
+        }
     }
 }
 

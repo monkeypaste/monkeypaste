@@ -66,9 +66,12 @@ function init(html, isReadOnly, fontFamilys, fontSizes, defaultFontIdx, indentSi
         //disableScrolling();
     }
 
-    loadTemplates(quill);
+    window.onload = function (e) {
+        decodeTemplates(quill);
 
-    isLoaded = true;
+        isLoaded = true;
+    };
+
 
     //console.log('Quill init called');
     return "GREAT!";
@@ -442,7 +445,9 @@ function setContents(jsonStr) {
 }
 
 function getText() {
-    var text = quill.getText(0, quill.getLength() - 1);
+    //var text = quill.getText(0, quill.getLength() - 1);
+    //return text;
+    var text = quill.root.innerText;
     return text;
 }
 
@@ -458,6 +463,12 @@ function getHtml() {
     clearTemplateFocus();
     var val = quill.root.innerHTML;
     return unescape(val);
+}
+
+function getEncodedHtml() {
+    resetTemplates();
+    var result = encodeTemplates();
+    return result;
 }
 
 function getSelectedHtml() {
@@ -604,8 +615,6 @@ function disableScrolling() {
 function enableScrolling() {
     document.querySelector('body').style.overflow = 'scroll';
 }
-
-
 
 function decodeHtml(html) {
     var txt = document.createElement("textarea");
