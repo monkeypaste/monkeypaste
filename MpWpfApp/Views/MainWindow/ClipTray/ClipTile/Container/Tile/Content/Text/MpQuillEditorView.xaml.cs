@@ -1,4 +1,4 @@
-﻿using Microsoft.Web.WebView2.Core;
+﻿
 using MonkeyPaste;
 using System;
 using System.Collections.Generic;

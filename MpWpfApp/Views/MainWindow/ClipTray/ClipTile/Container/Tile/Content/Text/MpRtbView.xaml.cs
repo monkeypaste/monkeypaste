@@ -494,8 +494,8 @@ namespace MpWpfApp {
                 return;
             }
             var rtbSelection = Rtb?.Selection;
-            var templateModels = await MpDataModelProvider.GetTemplatesAsync(rtbvm.CopyItemId);
-            string templateRegEx = string.Join("|", templateModels.Select(x => x.TemplateToken));
+            var templateModels = await MpDataModelProvider.GetTextTemplatesAsync(rtbvm.CopyItemId);
+            string templateRegEx = string.Join("|", templateModels.Select(x => x.EncodedTemplate));
             string pt = rtbvm.CopyItem.ItemData.ToPlainText(); //Rtb.Document.ToPlainText();
             for (int i = 1; i < MpRegEx.RegExList.Count; i++) {
                 var linkType = (MpSubTextTokenType)i;
@@ -524,7 +524,7 @@ namespace MpWpfApp {
                             }
                             lastRangeEnd = matchRange.End;
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
-                                var copyItemTemplate = templateModels.Where(x => x.TemplateToken == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().TextToken;
+                                var copyItemTemplate = templateModels.Where(x => x.EncodedTemplate == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().TextToken;
                                 var thl = await MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
                             } else {
                                 var hlCheck1 = matchRange.Start.Parent.FindParentOfType<Hyperlink>();

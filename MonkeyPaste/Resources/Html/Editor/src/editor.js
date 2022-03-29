@@ -1,4 +1,4 @@
-﻿var quill;
+﻿//var quill;
 
 var clickCount = 0;
 var isCompleted = false;
@@ -28,7 +28,14 @@ function setWpfEnv() {
     envName = 'wpf';
 }
 
-function init(html, isReadOnly, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillingTemplates) {
+function init(html, isReadOnly, templateDefsStr, templateRegExInfoStr, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillingTemplates) {
+    if (templateRegExInfoStr != null) {
+        let templateRegExInfo = JSON.parse(templateRegExInfoStr);
+        ENCODED_TEMPLATE_OPEN_TOKEN = templateRegExInfo[0];
+        ENCODED_TEMPLATE_REGEXP = templateRegExInfo[1];
+        ENCODED_TEMPLATE_CLOSE_TOKEN = templateRegExInfo[2];
+    }
+
     if (fontFamilys == null) {
         fontFamilys = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
     }
@@ -38,6 +45,7 @@ function init(html, isReadOnly, fontFamilys, fontSizes, defaultFontIdx, indentSi
     if (defaultFontIdx == null) {
         defaultFontIdx = 3;
     }
+
     loadQuill(fontFamilys, fontSizes, defaultFontIdx);
 
     if (isFillingTemplates) {
@@ -49,7 +57,6 @@ function init(html, isReadOnly, fontFamilys, fontSizes, defaultFontIdx, indentSi
     }
 
     setHtml(html);
-
 
     if (envName == '') {
         //for testing in browser
@@ -67,13 +74,17 @@ function init(html, isReadOnly, fontFamilys, fontSizes, defaultFontIdx, indentSi
     }
 
     window.onload = function (e) {
-        decodeTemplates(quill);
+        if (templateDefsStr != null) {
+            let templateDefinitions = JSON.parse(templateDefsStr);
+            decodeTemplates(templateDefinitions);
+        }
+        
 
         isLoaded = true;
     };
 
 
-    //console.log('Quill init called');
+    console.log('Quill init called');
     return "GREAT!";
 }
 
@@ -246,7 +257,7 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
 
     templateToolbarButton.onClick = function (e) {
         var templateButton = document.getElementById('templateToolbarButton');
-        var tl = getTemplates();
+        var tl = getAvailableTemplateDefinitions();
         if (tl.length > 0) {
             showTemplateToolbarContextMenu(templateButton);
         } else {
@@ -275,10 +286,7 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
             clickCount++;
             if (!wasLastClickOnTemplate) {
                 clearTemplateSelection();
-                //hidePasteTemplateToolbar();
-            } //else if (!isShowingPasteTemplateToolbar) {
-                //showPasteTemplateToolbar();
-            //}
+            }
             wasLastClickOnTemplate = false;
         }
         return;
@@ -290,61 +298,15 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
 
     this.quill.root.addEventListener('click', (e) => {
         lastClickEvent = e;
-
-        //let image = Parchment.find(ev.target);
-
-        //if(image instanceof ImageBlot) {
-        //    this.quill.setSelection(image.offset(this.quill.scroll), 1, 'user');
-        //}
-
         if (isRenamingTemplate()) {
-            if (e.target.getAttribute('templateId') == null ||
-                e.target.getAttribute('contenteditable') == false) {
+            if (e.target.getAttribute('templateGuid') == null) {
                 endSetTemplateName();
+                hideEditTemplateToolbar();
             }
-
-            //let tl = getTemplatesFromRange(range);
-            //let isRenaming = false;
-            //tl.forEach(function (t) {
-            //    let tid = t.getAttribute('templateId');
-            //    let iid = t.getAttribute('instanceId');
-            //    let te = getTemplateElement(tid, iid);
-            //    let isEditable = te.getAttribute('contenteditable');
-            //    if(isEditable != null || isEditable == false) {
-            //        isRenaming = true;
-            //        return;
-            //    }
-            //})
-            //if(tl == null || !isRenaming) {
-            //    endSetTemplateName();
-            //}
-            //clearTemplateFocus();
-            //quill.setSelection(oldRange);
         }
     });
 
     quill.on('selection-change', function (range, oldRange, source) {
-        //if(isRenamingTemplate()) {
-
-        //    // Given DOM node, find corresponding Blot.
-        //    // Bubbling is useful when searching for a Embed Blot with its corresponding
-        //    // DOM node's descendant nodes.
-        //    let s = Parchment.find(domNode: Node, bubble: boolean = false): Blot;
-
-        //    find(lastClickEvent.target);
-
-        //    if(s instanceof TemplateSpanBlot) {
-        //        // TODO make sure s has contenteditable or its a different template
-        //        return;
-        //    } else {
-        //        endSetTemplateName();
-        //    }
-
-        //    //clearTemplateFocus();
-        //    //quill.setSelection(oldRange);
-        //}      
-
-
         if (range) {
             if (range.length == 0) {
                 console.log('User cursor is on', range.index);               
@@ -354,69 +316,11 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
                 console.log('User has highlighted', text);
             }
 
-            let isTemplateSelected = false;
-            var tl = getTemplates();
-            tl.forEach(function (t) {
-                if (Array.isArray(t.docIdx)) {
-                    t.docIdx.forEach(function (tDocIdx) {
-                        if (range.length == 0) {
-                            if (tDocIdx == range.index) {
-                                isTemplateSelected = true;
-                                return;
-                            }
-                        } //else if (parseInt(tDocIdx) >= range.index && parseInt(tDocIdx) <= range.index + range.length) {
-                        //    isTemplateSelected = true;
-                        //    return;
-                        //}
-                    });
-                } else {
-                    if (range.length == 0) {
-                        if (parseInt(t.docIdx) == range.index) {
-                            isTemplateSelected = true;
-                            return;
-                        }
-                    }// else if (parseInt(t.docIdx) >= range.index && parseInt(t.docIdx) <= range.index + range.length) {
-                    //    isTemplateSelected = true;
-                    //    return;
-                    //}
-                }
-            });
-            
-            if (!isTemplateSelected) {
-                selectedTemplateId = 0;
+            if (!isTemplateFocused()) {
                 hideEditTemplateToolbar();
             }
         } else {
             console.log('Cursor not in the editor');
-        }
-    });
-
-    quill.on('text-change', function (delta, oldDelta, source) {
-        if (!isLoaded) {
-            return;
-        }
-        var retainVal = 0;
-        var textDelta = 0;
-        var wasAddTemplate = false;
-        delta.ops.forEach(function (op) {
-            if (op.insert != null && op.insert.templatespan != null) {
-                //handle shifting in create template
-                wasAddTemplate = true;
-                return;
-            }
-            if (op.retain != null) {
-                retainVal = op.retain;
-            }
-            if (op.insert != null && op.insert.templatespan == null) {
-                textDelta += op.insert.length;
-            }
-            if (op.delete != null) {
-                textDelta -= parseInt(op.delete);
-            }
-        });
-        if (!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
-            shiftTemplates(retainVal, textDelta);
-            console.log(getTemplates());
         }
     });
 }
@@ -556,9 +460,16 @@ function enableReadOnly() {
 
     //hideScrollbars();
     disableScrolling();
+
+    //return updated master collection of templates
+    return JSON.stringify(getAvailableTemplateDefinitions());
 }
 
-function disableReadOnly() {
+function disableReadOnly(availTemplateStr) {
+    if (availTemplateStr != null) {
+        availableTemplates = JSON.parse(availTemplateStr);
+    }
+
     $('.ql-editor').attr('contenteditable', true);
     $('.ql-editor').css('caret-color', 'black');
 

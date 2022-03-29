@@ -17,7 +17,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpTemplateHyperlink.xaml
     /// </summary>
     public partial class MpTemplateHyperlink : Hyperlink {
-        public static async Task<MpTemplateHyperlink> Create(TextRange tr, MpTextToken cit) {
+        public static async Task<MpTemplateHyperlink> Create(TextRange tr, MpTextTemplate cit) {
             //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
             //needs to be broken into their text before the template hyperlink can be created
             var trSHl = tr.Start.Parent.FindParentOfType<Hyperlink>();
@@ -50,7 +50,7 @@ namespace MpWpfApp {
                 if (string.IsNullOrWhiteSpace(templateName)) {
                     templateName = thcvm.GetUniqueTemplateName();
                 } 
-                cit = await MpTextToken.Create(
+                cit = await MpTextTemplate.Create(
                             thcvm.Parent.CopyItemId,
                             templateName);
                 await cit.WriteToDatabaseAsync();
@@ -156,7 +156,7 @@ namespace MpWpfApp {
             //MpConsole.WriteLine($"CLEARING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
             //flag Tag so unloaded doesn't delete
             Tag = null;
-            string text = thlvm.Parent.Parent.IsPastingTemplate ? thlvm.TextToken.TemplateToken:thlvm.TemplateDisplayValue;
+            string text = thlvm.Parent.Parent.IsPastingTemplate ? thlvm.TextToken.EncodedTemplate:thlvm.TemplateDisplayValue;
             Inlines.Clear();
             new Span(new Run(text), ElementStart);
         }

@@ -1,14 +1,16 @@
-﻿using CefSharp;
+﻿using Azure;
+using CefSharp;
 using CefSharp.Wpf;
-using Microsoft.Web.WebView2.Wpf;
 using MonkeyPaste;
 using MonkeyPaste.Plugin;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ConstrainedExecution;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +21,19 @@ using Xamarin.Essentials;
 
 namespace MpWpfApp {
     public class MpDocumentHtmlExtension : DependencyObject {
+        public const string ENCODED_TEMPLATE_OPEN_TOKEN = "{{";
+        public const string ENCODED_TEMPLATE_CLOSE_TOKEN = "}}";
+
+        public static string ENCODED_TEMPLATE_REGEXP_STR = string.Format(
+            @"{0}{1}{2}",
+            ENCODED_TEMPLATE_OPEN_TOKEN,
+            ".*?",
+            ENCODED_TEMPLATE_CLOSE_TOKEN);
+
+        private static Regex _encodedTemplateRegEx;
+
+        private static string _encodedTemplateRegExInfoStr;
+
         #region IsReadOnly
 
         public static bool GetIsReadOnly(DependencyObject obj) {
@@ -43,7 +58,10 @@ namespace MpWpfApp {
                         if (cwb.DataContext is MpContentItemViewModel civm) {
                             if (isReadOnly) {
                                 MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is readonly");
-                                await cwb.EvaluateScriptAsync("enableReadOnly()");
+                                var readOnlyResult = await cwb.EvaluateScriptAsync("enableReadOnly()");
+                                if (readOnlyResult.Result != null) {
+                                    MpMasterTemplateModelCollection.Update(readOnlyResult.Result.ToString()).FireAndForgetSafeAsync(civm);
+                                }
 
                                 var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
                                 if (ctcv != null && civm.Parent != null) {
@@ -55,12 +73,14 @@ namespace MpWpfApp {
                                     ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
                                 }
 
-                                var response = await cwb.EvaluateScriptAsync("getHtml()");
+                                var response = await cwb.EvaluateScriptAsync("getEncodedHtml()");
                                 string itemHtml = response.Result.ToString();
                                 civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(itemHtml);
                             } else {
                                 MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is editable");
-                                await cwb.EvaluateScriptAsync("disableReadOnly()");
+
+                                string availTextTemplatesStr = JsonConvert.SerializeObject(MpMasterTemplateModelCollection.AllTemplates.ToArray());
+                                await cwb.EvaluateScriptAsync($"disableReadOnly({availTextTemplatesStr})");
 
                                 var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
                                 if (ctcv != null) {
@@ -109,6 +129,17 @@ namespace MpWpfApp {
                             itemHtml = JsonConvert.SerializeObject(itemHtml);
                         }
                     }
+                    string[] itemTemplateGuids = GetTextTemplateGuids(itemHtml).Select(x=>x.ToLower()).ToArray();
+
+                    var itemTemplates = MpMasterTemplateModelCollection.AllTemplates
+                                            .Where(x => itemTemplateGuids.Contains(x.Guid.ToLower()));
+
+                    string itemTemplatesStr = JsonConvert.SerializeObject(itemTemplates);
+
+                    if(_encodedTemplateRegExInfoStr == null) {
+                        _encodedTemplateRegExInfoStr = JsonConvert.SerializeObject(new string[] { JsonConvert.SerializeObject(ENCODED_TEMPLATE_OPEN_TOKEN), JsonConvert.SerializeObject(ENCODED_TEMPLATE_REGEXP_STR), JsonConvert.SerializeObject(ENCODED_TEMPLATE_CLOSE_TOKEN) });
+                    }
+
                     var fe = (FrameworkElement)obj;
 
                     if (fe.DataContext is MpContentItemViewModel civm) {
@@ -119,7 +150,12 @@ namespace MpWpfApp {
                             cwb.FrameLoadEnd += async (sender, args) => {
                                 if (args.Frame.IsMain) {
                                     await cwb.EvaluateScriptAsync("setWpfEnv()");
-                                    var initCmd = $"init({itemHtml},{JsonConvert.SerializeObject(civm.IsReadOnly)})";
+                                    var initCmd = string.Format(@"init({0},{1},{2})",
+                                                            itemHtml,
+                                                            JsonConvert.SerializeObject(civm.IsReadOnly),
+                                                            itemTemplatesStr);//,
+                                                            //_encodedTemplateRegExInfoStr);
+
                                     var result = await cwb.EvaluateScriptAsync(initCmd);
                                 }
                             };
@@ -130,30 +166,28 @@ namespace MpWpfApp {
 
         #endregion
 
-        private static async Task HandleReadOnlyChange(DependencyObject dpo, bool isReadOnly) {
-            if (dpo is ChromiumWebBrowser cwb && cwb.CanExecuteJavascriptInMainFrame) {
-                if (cwb.DataContext is MpContentItemViewModel civm) {
-                    if (isReadOnly) {
-                        MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is readonly");
-                        await cwb.EvaluateScriptAsync("enableReadOnly()");
+        private static string[] GetTextTemplateGuids(string itemData) {
+            if(_encodedTemplateRegEx == null) {
+                _encodedTemplateRegEx = new Regex(ENCODED_TEMPLATE_REGEXP_STR);
+            }
 
-                        var response = await cwb.EvaluateScriptAsync("getHtml()");
-                        string itemHtml = response.Result.ToString();
-                        civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(itemHtml);
-                    } else {
-                        MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is editable");
-                        await cwb.EvaluateScriptAsync("disableReadOnly()");
+            var etgl = new List<string>();
 
-                        var ctcv = dpo.GetVisualAncestor<MpClipTileContainerView>();
-                        if (ctcv != null) {
-                            double nw = MpMeasurements.Instance.ClipTileEditModeMinWidth;
-                            if (nw > ctcv.ActualWidth) {
-                                ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
-                            }
+            var mc = _encodedTemplateRegEx.Matches(itemData);
+            foreach (Match m in mc) {
+                foreach (Group mg in m.Groups) {
+                    foreach (Capture c in mg.Captures) {
+                        string tguid = c.Value
+                                            .Replace(ENCODED_TEMPLATE_OPEN_TOKEN, string.Empty)
+                                            .Replace(ENCODED_TEMPLATE_CLOSE_TOKEN, string.Empty);
+                        if(etgl.Contains(tguid)) {
+                            continue;
                         }
+                        etgl.Add(tguid);
                     }
                 }
             }
+            return etgl.ToArray();
         }
     }
 }

@@ -27,17 +27,12 @@ namespace MpWpfApp {
             string keyStr = "ContentTemplate";
             switch(civm.CopyItemType) {
                 case MpCopyItemType.Text:
-                    //if (civm.TemplateCollection == null || civm.TemplateCollection.Templates.Count == 0) {
-                    //    keyStr = "Rtb" + keyStr;
-                    //} else {
-                    //    keyStr = "FlowDocumentScrollViewer" + keyStr;
-                    //}
-                    //if(false) {//civm.CopyItemData.IsStringRichText()) {
-                    //    keyStr = "Rtb" + keyStr;
-                    //} else {
-                    //    keyStr = "Quill" + keyStr;
-                    //}
-                    keyStr = "Rtb" + keyStr;
+                    if (false) {//civm.CopyItemData.IsStringRichText()) {
+                        keyStr = "Rtb" + keyStr;
+                    } else {
+                        keyStr = "Quill" + keyStr;
+                    }
+                    //keyStr = "Rtb" + keyStr;
                     break;
                 default:
                     keyStr = civm.CopyItemType.EnumToName() + keyStr;

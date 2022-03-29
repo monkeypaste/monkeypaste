@@ -122,7 +122,7 @@ namespace MpWpfApp {
             var sctfl = new List<string>();
 
             //check for model templates
-            var templates = await MpDataModelProvider.GetTemplatesAsync(ci.Id);
+            var templates = await MpDataModelProvider.GetTextTemplatesAsync(ci.Id);
             bool hasTemplates = templates != null && templates.Count > 0;
 
             if(hasTemplates) {

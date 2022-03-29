@@ -1,9 +1,13 @@
 const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
 
+var ENCODED_TEMPLATE_OPEN_TOKEN = "{{";
+var ENCODED_TEMPLATE_CLOSE_TOKEN = "}}";
+var ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
+
 var isShowingEditTemplateToolbar = false;
 var isShowingPasteTemplateToolbar = false;
 
-var selectedTemplateId = 0;
+//var selectedTemplateId = 0;
 var wasLastClickOnTemplate = false;
 
 function registerTemplateSpan(Quill) {
@@ -13,41 +17,62 @@ function registerTemplateSpan(Quill) {
         static blotName = 'templatespan';
         static tagName = 'SPAN';
         static className = 'template_btn';
+
         static create(value) {
             const node = super.create(value);
-            let iId = getUniqueTemplateInstanceId(value.templateId);
-            var textColor = isBright(value.templateColor) ? 'black' : 'white';
-            node.contentEditable = 'false';
-            node.innerText = value.templateName;
-            node.setAttribute('templateName', value.templateName);
-            node.setAttribute('templateType', value.templateType);
-            node.setAttribute('templateColor', value.templateColor);
-            node.setAttribute('templateId', value.templateId);
-            node.setAttribute('templateData', value.templateData);
-            node.setAttribute('templateText', value.templateText);
-            node.setAttribute('instanceId', iId);
-            node.setAttribute('docIdx', value.docIdx);
-            node.setAttribute('isFocus', false);
+            if (value.domNode != null) {
+                // creating existing instance
+                node.setAttribute('templateGuid', value.domNode.getAttribute('templateGuid'));
+                node.setAttribute('templateInstanceGuid', generateGuid());
+                node.setAttribute('templateName', value.domNode.getAttribute('templateName'));
+                node.setAttribute('templateType', value.domNode.getAttribute('templateType'));
+                node.setAttribute('templateColor', value.domNode.getAttribute('templateColor'));
+                node.setAttribute('templateData', value.domNode.getAttribute('templateData'));
+                node.setAttribute('templateText', value.domNode.getAttribute('templateText'));
 
-            node.setAttribute("spellcheck", "false");
-            node.setAttribute('class', 'template_btn');
-            node.setAttribute('style', 'background-color: ' + value.templateColor + ';color:' + textColor + ';');
+
+                node.setAttribute('isFocus', false);
+                node.setAttribute("spellcheck", "false");
+                node.setAttribute('class', 'template_btn');
+
+                var textColor = isBright(value.domNode.getAttribute('templateColor')) ? 'black' : 'white';
+                node.setAttribute('style', 'background-color: ' + value.domNode.getAttribute('templateColor') + ';color:' + textColor + ';');
+
+                node.contentEditable = 'false';
+                node.innerText = value.domNode.getAttribute('templateName');
+            } else {
+                // new template
+                node.setAttribute('templateGuid', value.templateGuid);
+                node.setAttribute('templateInstanceGuid', generateGuid());
+                node.setAttribute('templateName', value.templateName);
+                node.setAttribute('templateType', value.templateType);
+                node.setAttribute('templateColor', value.templateColor);
+                node.setAttribute('templateData', value.templateData);
+                node.setAttribute('templateText', value.templateText);
+
+
+                node.setAttribute('isFocus', false);
+                node.setAttribute("spellcheck", "false");
+                node.setAttribute('class', 'template_btn');
+
+                var textColor = isBright(value.templateColor) ? 'black' : 'white';
+                node.setAttribute('style', 'background-color: ' + value.templateColor + ';color:' + textColor + ';');
+
+                node.contentEditable = 'false';
+                node.innerText = value.templateName;
+            }
 
             node.addEventListener('click', function (e) {
-                //console.log(e);
-                focusTemplate(node);
+                focusTemplate(e.target.getAttribute('templateGuid'));
             });
 
-            //node.addEventListener('keydown', onLogKeyDown);
-            //this._addRemovalButton(node);
             return node;
         }
 
         static value(domNode) {
             return {
-                docIdx: domNode.getAttribute('docIdx'),
-                templateId: domNode.getAttribute('templateId'),
-                instanceId: domNode.getAttribute('instanceId'),
+                templateGuid: domNode.getAttribute('templateGuid'),
+                templateInstanceGuid: domNode.getAttribute('templateInstanceGuid'),
                 isFocus: domNode.getAttribute('isFocus'),
                 templateName: domNode.getAttribute('templateName'),
                 templateColor: domNode.getAttribute('templateColor'),
@@ -56,46 +81,57 @@ function registerTemplateSpan(Quill) {
                 templateData: domNode.getAttribute('templateData')
             }
         }
-
-        static _addRemovalButton(node) {
-            const button = document.createElement('button');
-            button.innerText = 'x';
-            button.onclick = () => node.remove();
-            button.contentEditable = 'false';
-            node.appendChild(button);
-
-            // Extra span forces the cursor to the end of the label, otherwise it appears inside the removal button
-            const span = document.createElement('span');
-            span.innerText = ' ';
-            node.appendChild(span);
-        }
-
-
     }
 
     Quill.register(TemplateSpanBlot);
 }
 
-function decodeTemplates(quill) {
-    let regex = new RegExp("{{.*?}}", "");
+//#region Encode/Decode
+
+function getEncodedTemplateGuids(itemData) {
+    let etgl = [];
+
+    let tcount = 0;
+    while (result = ENCODED_TEMPLATE_REGEXP.exec(itemData)) {
+        let encodedTemplateStr = result[0];
+        let tguid = parseEncodedTemplateGuid(encodedTemplateStr);
+
+        let isDefined = etgl.some(function (etg) {
+            return etg == tguid
+        });
+        if (!isDefined) {
+            etgl.push(tguid);
+        }
+    }
+    return etgl;
+}
+
+function decodeTemplates(templateDefs) {
     let qtext = quill.getText();
     let tcount = 0; 
-    while (result = regex.exec(qtext)) {
+    while (result = ENCODED_TEMPLATE_REGEXP.exec(qtext)) {
         let encodedTemplateStr = result[0];
-        let t = decodeTemplate(encodedTemplateStr);
+        let tguid = parseEncodedTemplateGuid(encodedTemplateStr);
 
         // NOTE embed blots have zero length in text (completely ignored) 
         // BUT take up a signle character in actual content so tcount keeps track of the
         // ignored character as they are added (SHEESH)
         let tsIdx = qtext.indexOf(encodedTemplateStr) + tcount;
         quill.deleteText(tsIdx, encodedTemplateStr.length);
-        //delete tt.length;
+
+        let t = templateDefs.forEach(function (td) {
+            if (td.templateGuid == tguid) {
+                return td;
+            }
+        });
+
         quill.insertEmbed(tsIdx, 'templatespan', t);
         qtext = quill.getText();
         tcount++;
     }
 }
-function decodeTemplate(encodedTemplateStr, sToken = '{{', eToken = '}}', sep = ',') {
+
+function parseEncodedTemplateGuid(encodedTemplateStr, sToken = ENCODED_TEMPLATE_OPEN_TOKEN, eToken = ENCODED_TEMPLATE_CLOSE_TOKEN) {
     var tsIdx = encodedTemplateStr.indexOf(sToken);
     var teIdx = encodedTemplateStr.indexOf(eToken);
 
@@ -103,132 +139,46 @@ function decodeTemplate(encodedTemplateStr, sToken = '{{', eToken = '}}', sep = 
         return null;
     }
 
-    var templateSpan = encodedTemplateStr.substring(tsIdx + sToken.length, teIdx);
-    var templateParts = templateSpan.split(sep);
-
-    if (templateParts.length != 6) {
-        return null;
-    }
-    return {
-        templateId: parseInt(templateParts[0]),
-        templateName: templateParts[1],
-        templateColor: templateParts[2],
-        templateText: templateParts[3],
-        templateType: templateParts[4],
-        templateData: templateParts[5],
-        docIdx: tsIdx,
-        length: teIdx - tsIdx + eToken.length
-    };
-}
-function findNextEncodedTemplateToken(fIdx, sToken = '{{', eToken = '}}', sep = ',') {
-    var text = getText().substring(fIdx);
-    var tsIdx = text.indexOf(sToken);
-    var teIdx = text.indexOf(eToken);
-
-    if (tsIdx < 0 || teIdx < 0) {
-        return null;
-    }
-
-    var templateSpan = text.substring(tsIdx + sToken.length, teIdx);
-    var templateParts = templateSpan.split(sep);
-
-    if (templateParts.length != 6) {
-        return null;
-    }
-    return {
-        templateId: parseInt(templateParts[0]),
-        templateName: templateParts[1],
-        templateColor: templateParts[2],
-        templateText: templateParts[3],
-        templateType: templateParts[4],
-        templateData: templateParts[5],
-        docIdx: tsIdx,
-        length: teIdx - tsIdx + eToken.length
-    };
+    return encodedTemplateStr.substring(tsIdx + sToken.length, teIdx);
 }
 
-function getTemplateEmbedStr(t, sToken = '{{', eToken = '}}', sep = ',') {
-    var templateStr = [parseInt(t.templateId), t.templateName, t.templateColor, t.templateText, t.templateType, t.templateData].join(sep);
-    var result = sToken + templateStr + eToken;
+function getTemplateEmbedStr(t, sToken = ENCODED_TEMPLATE_OPEN_TOKEN, eToken = ENCODED_TEMPLATE_CLOSE_TOKEN) {
+    var result = sToken + t.domNode.getAttribute('templateGuid') + eToken;
     return result;
 }
 
 function encodeTemplates() {
     // NOTE template text should be cleared from html before calling this
     var html = getHtml();
-    var til = getTemplateInstances();
+    var til = getUsedTemplateInstances();
     for (var i = 0; i < til.length; i++) {
         var ti = til[i];
         var tin = ti.domNode;
         var tihtml = tin.outerHTML;
         var ties = getTemplateEmbedStr(ti);
-        var newHtml = html.replace(tihtml, ties);
-        if (newHtml == html) {
-            console.log("Template not replaced");
-            console.log("Template HTML: ");
-            console.log(tihtml);
-            console.log("Current Encoded HTML: ");
-            console.log(html);
-        }
-        html = newHtml;
+        html = html.replace(tihtml, ties);
     }
     return html;
 }
 
+//#endregion
 
-function getTemplates() {
-    var domTemplates = document.getElementsByClassName("template_btn");
-    var templates = [];
-    for (var i = 0; i < domTemplates.length; i++) {
-        var domTemplate = domTemplates[i];
-        var template = {
-            templateId: domTemplate.getAttribute('templateId'),
-            templateName: domTemplate.getAttribute('templateName'),
-            templateColor: domTemplate.getAttribute('templateColor'),
-            templateType: domTemplate.getAttribute('templateType'),
-            templateData: domTemplate.getAttribute('templateData'),
-            docIdx: domTemplate.getAttribute('docIdx'),
-            isFocus: domTemplate.getAttribute('isFocus'),
-            instanceId: domTemplate.getAttribute('instanceId'),
-            templateText: domTemplate.innerText,
-            domNode: domTemplate
-        }
-        //templates.push(template);
-        var curTemplateIdx = -1;
-        for (var j = 0; j < templates.length; j++) {
-            if (templates[j]['templateId'] == template['templateId']) {
-                curTemplateIdx = j;
-                break;
-            }
-        }
-        if (curTemplateIdx >= 0) {
-            if (Array.isArray(templates[curTemplateIdx].docIdx)) {
-                templates[curTemplateIdx].docIdx.push(template.docIdx);
-            } else {
-                templates[curTemplateIdx].docIdx = [templates[curTemplateIdx].docIdx, template.docIdx];
-            }
-        } else {
-            templates.push(template);
-        }
-    }
-    return templates;
+function isTemplateFocused() {
+    return getFocusTemplate() != null;
 }
 
-function shiftTemplates(fromDocIdx, byVal) {
-    var tl = getTemplates();
-    tl.forEach(function (t) {
-        if (Array.isArray(t.docIdx)) {
-            t.docIdx.forEach(function (tDocIdx) {
-                if (tDocIdx >= fromDocIdx) {
-                    setTemplateDocIdx(t, tDocIdx, parseInt(parseInt(tDocIdx) + parseInt(byVal)));
-                }
-            });
-        } else {
-            if (parseInt(t.docIdx) >= fromDocIdx) {
-                setTemplateDocIdx(t, t.docIdx, parseInt(parseInt(t.docIdx) + parseInt(byVal)));
-            }
-        }
-    });
+function getFocusTemplate() {
+    let til = getUsedTemplateInstances();
+    let result = til.find(x => x.domNode.getAttribute('isFocus') == "true");
+    return result;
+}
+
+function getFocusTemplateGuid() {
+    let ft = getFocusTemplate();
+    if (ft == null) {
+        return null;
+    }
+    return ft.domNode.getAttribute('templateGuid');
 }
 
 function getTemplatesFromRange(range) {
@@ -236,7 +186,7 @@ function getTemplatesFromRange(range) {
         console.log('invalid range: ' + range);
     }
     let tl = [];
-    getTemplatesByDocOrder().forEach(function (tn) {
+    getUsedTemplateInstances().forEach(function (tn) {
         let docIdx = tn.docIdx;
         if (docIdx >= range.index && docIdx <= range.index + range.length) {
             tl.push(tn);
@@ -246,11 +196,12 @@ function getTemplatesFromRange(range) {
 }
 
 
+//#region Paste 
 
 function getTextWithEmbedTokens() {
     // for pasting NOT encoding for db
     var text = getText().split('');
-    var otl = getTemplatesByDocOrder();
+    var otl = getUsedTemplateInstances();
     var outText = '';
     var offset = 0;
     otl.forEach(function (ot) {
@@ -265,118 +216,126 @@ function getTextWithEmbedTokens() {
     return text.join('');
 }
 
-
-function getTemplatesByDocOrder() {
-    var til = getTemplateInstances();
-    til.sort((a, b) => (parseInt(a.docIdx) > parseInt(b.docIdx)) ? 1 : -1);
-    return til;
-}
+//#endregion
 
 
-function getUniqueTemplateInstanceId(tId) {
-    let newInstanceId = 1;
-    let isDup = true;
-    while (isDup) {
-        isDup = false;
-        getTemplateInstances(tId).forEach(function (ti) {
-            if (ti.instanceId == newInstanceId) {
-                isDup = true;
-            }
-        });
-        if (!isDup) {
-            return newInstanceId;
+//function getUniqueTemplateInstanceId(tId) {
+//    let newInstanceId = 1;
+//    let isDup = true;
+//    while (isDup) {
+//        isDup = false;
+//        getTemplateInstances(tId).forEach(function (ti) {
+//            if (ti.instanceId == newInstanceId) {
+//                isDup = true;
+//            }
+//        });
+//        if (!isDup) {
+//            return newInstanceId;
+//        }
+//        newInstanceId++;
+//    }
+//    return newInstanceId;
+//}
+
+function getUsedTemplateDefinitions() {
+    let tdl = [];
+    getUsedTemplateInstances().forEach(function (ti) {
+        let isDefined = tdl.find(x => x.domNode.getAttribute('templateGuid') == ti.domNode.getAttribute('templateGuid')) != null;
+        if (!isDefined) {
+            tdl.push(ti);
         }
-        newInstanceId++;
-    }
-    return newInstanceId;
+    });
+    return tdl;
 }
 
-function getTemplateInstances(tId, iId) {
-    //var til = [];
-    //getTemplates().forEach(function (t) {
-    //    if (tId != null) {
-    //        if (t.templateId != tId) {
-    //            return;
-    //        }
-    //        if (iId != null && t.instanceId != iId) {
-    //            return;
-    //        }
-    //    }
+function getAvailableTemplateDefinitions() {
+    if (availableTemplates == null) {
+        return getUsedTemplateDefinitions();
+    }
 
-    //    if (Array.isArray(t.docIdx)) {
-    //        t.docIdx.forEach(function (tDocIdx) {
-    //            var ti = new Object();
-    //            var ti = Object.assign(ti, t);
-    //            ti.docIdx = tDocIdx;
-    //            til.push(ti);
-    //        });
-    //    } else {
-    //        til.push(t);
-    //    }
-    //});
-    //if (tId != null && iId != null && til.length == 1) {
-    //    return til[0];
-    //}
-    //return til;
+    let utdl = getUsedTemplateDefinitions();
+    let allMergedTemplates = [];
+    for (var i = 0; i < availableTemplates.length; i++) {
+        let atd = availableTemplates[i];
+        let isUsed = false;
+        //loop through all templates from master collection
+        for (var j = 0; j < utdl.length; j++) {
+            //check if this editor is using one available in master
+            let utd = utdl[j];
+            if (utd.domNode.getAttribute('templateGuid') == atd.templateGuid) {
+                //if this editor is using a template already known from master use this editor's version
+                allMergedTemplates.push({
+                    templateGuid: utd.domNode.getAttribute('templateGuid'),
+                    templateName: utd.domNode.getAttribute('templateName'),
+                    templateColor: utd.domNode.getAttribute('templateColor'),
+                    templateText: utd.domNode.getAttribute('templateText'),
+                    templateType: utd.domNode.getAttribute('templateType'),
+                    templateData: utd.domNode.getAttribute('templateData')
+                });
+                isUsed = true;
+                break;
+            }
+        }
+        if (!isUsed) {
+            allMergedTemplates.push(atd);
+        }
+    }
 
-    var domTemplates = document.getElementsByClassName("template_btn");
+    // now add any new templates in this editor that weren't in master list
+    for (var i = 0; i < utdl.length; i++) {
+        let utd = utdl[i];
+        let wasFound = allMergedTemplates.find(x => x.templateGuid == utd.domNode.getAttribute('templateGuid')) != null;
+        if (!wasFound) {
+            allMergedTemplates.push({
+                templateGuid: utd.domNode.getAttribute('templateGuid'),
+                templateName: utd.domNode.getAttribute('templateName'),
+                templateColor: utd.domNode.getAttribute('templateColor'),
+                templateText: utd.domNode.getAttribute('templateText'),
+                templateType: utd.domNode.getAttribute('templateType'),
+                templateData: utd.domNode.getAttribute('templateData')
+            });
+        }
+    }
+    return allMergedTemplates;
+}
+
+function getTemplateDocIdx(tguid, tiguid) {
+    let docLength = quill.getLength();
+    for (var i = 0; i < docLength; i++) {
+        let curDelta = quill.getContents(i, 1);
+        if (curDelta.ops[0].templateSpan != null) {
+            let curTemplate = curDelta.ops[0].templateSpan;
+            if (curTemplate.templateGuid == tguid && curTemplate.templateInstanceGuid == tiguid) {
+                return i;
+            }
+        }
+    }
+    return -1;
+} 
+
+function getUsedTemplateInstances() {
+    var domTemplates = document.querySelectorAll('.template_btn');
     var templates = [];
     for (var i = 0; i < domTemplates.length; i++) {
         var domTemplate = domTemplates[i];
-        var template = {
-            templateId: domTemplate.getAttribute('templateId'),
-            templateName: domTemplate.getAttribute('templateName'),
-            templateColor: domTemplate.getAttribute('templateColor'),
-            templateType: domTemplate.getAttribute('templateType'),
-            templateData: domTemplate.getAttribute('templateData'),
-            docIdx: domTemplate.getAttribute('docIdx'),
-            isFocus: domTemplate.getAttribute('isFocus'),
-            instanceId: domTemplate.getAttribute('instanceId'),
-            templateText: domTemplate.innerText,
-            domNode: domTemplate
+        var templateBlot = Quill.find(domTemplate);
+        if (templateBlot != null) {
+            templates.push(templateBlot);
         }
-        templates.push(template);
-    } 
-    return templates.sort((a, b) => (parseInt(a.docIdx) > parseInt(b.docIdx)) ? 1 : -1);
-}
-
-//function getTemplateOffset(_t, idx) {
-//    var _tDocIdx = Array.isArray(_t.docIdx) ? _t.docIdx[idx] : _t.docIdx;
-//    var text = getText();
-//    var tl = getTemplates();
-//    var offset = 0;
-//    tl.forEach(function (t) {
-//        var embedStr = '{{' + t.templateId + '}}';
-//        if (Array.isArray(t.docIdx)) {
-//            t.docIdx.forEach(function (tDocIdx) {
-//                if (tDocIdx < _tDocIdx) {
-//                    offset += getTemplateEmbedStr(t).length;
-//                }
-//            });
-//        } else {
-//            if (t.docIdx < _tDocIdx) {
-//                offset += getTemplateEmbedStr(t).length;
-//            }
-//        }
-//    });
-//    return offset;
-//}
-
-//function getTemplateEmbedStr(t) {
-//    var templateStr = '{{' + t.templateId + '}}';
-//    return templateStr;
-//}
-
-function getTemplatesJson() {
-    var val = JSON.stringify(getTemplates());
-    return val;
+    }
+    return templates.sort((a, b) => (
+        getTemplateDocIdx(a.domNode.getAttribute('templateGuid'), a.domNode.getAttribute('templateInstanceGuid')) > 
+        getTemplateDocIdx(b.domNode.getAttribute('templateGuid'), b.domNode.getAttribute('templateInstanceGuid')) ? -1 : 1));
 }
 
 function createTemplate(templateObjOrId, idx, len) {
-    var templateObj = templateObjOrId;
-    if (templateObj === parseInt(templateObj, 10)) {
-        templateObj = getTemplateById(templateObjOrId);
+    var templateObj;
+    if (templateObjOrId != null && typeof templateObjOrId === 'string') {
+        templateObj = getTemplateDefByGuid(templateObjOrId);
+    } else {
+        templateObj = templateObjOrId;
     }
+
     var range = quill.getSelection(true);
     if (idx != null && length != null) {
         range = { index: idx, length: len };
@@ -386,34 +345,31 @@ function createTemplate(templateObjOrId, idx, len) {
     var newTemplateObj = templateObj;
     if (isNew) {
         newTemplateObj = {
-            templateId: getNewTemplateId(),
+            templateGuid: generateGuid(),
             templateColor: getRandomColor(),
             templateName: quill.getText(range.index, range.length).trim(),
             templateType: 'dynamic',
             templateData: ''
         };
     }
-    newTemplateObj.docIdx = range.index;
+    //newTemplateObj.docIdx = range.index;
 
     if (range.length == 0 && isNew) {
         newTemplateObj['templateName'] = getLowestAnonTemplateName();
     }
 
     quill.deleteText(range.index, range.length);//, Quill.sources.SILENT);
-    if (Math.abs(parseInt(range.length)) > 0) {
+    //if (Math.abs(parseInt(range.length)) > 0) {
         //shiftTemplates(range.index, -range.length);
-    }
+    //}
     //shiftTemplates(range.index, 1);
     quill.insertEmbed(range.index, "templatespan", newTemplateObj);//, Quill.sources.SILENT);
-    var eofIdx = quill.getLength();
-    if (range.index + newTemplateObj['templateName'].length >= eofIdx) {
-        quill.insertText(range.index + 1, ' ');//, Quill.sources.SILENT);
-    }
+    quill.insertText(range.index + 1, ' ');//, Quill.sources.SILENT);
     quill.setSelection(range.index + 1, Quill.sources.API);
 
-    selectTemplate(newTemplateObj['templateId'], true);
+    focusTemplate(newTemplateObj['templateGuid'], true);
 
-    console.log(getTemplates());
+    //console.log(getTemplates());
 
     showEditTemplateToolbar();
 
@@ -424,25 +380,25 @@ function createTemplate(templateObjOrId, idx, len) {
 
 
 function getLowestAnonTemplateName(anonPrefix = 'Template #') {
-    var tl = getTemplates();
+    var tl = getUsedTemplateDefinitions();
     var maxNum = 0;
     tl.forEach(function (t) {
-        if (t.templateName.startsWith(anonPrefix)) {
-            var anonNum = parseInt(t.templateName.substring(anonPrefix.length));
+        if (t.domNode.getAttribute('templateName').startsWith(anonPrefix)) {
+            var anonNum = parseInt(t.domNode.getAttribute('templateName').substring(anonPrefix.length));
             maxNum = Math.max(maxNum, anonNum);
         }
     });
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
-function getNewTemplateId() {
-    var tl = getTemplates();
-    var minId = 0;
-    tl.forEach(function (t) {
-        minId = Math.min(minId, t.templateId);
-    });
-    return (parseInt(minId) - 1);
-}
+//function getNewTemplateId() {
+//    var tl = getUsedTemplateDefinitions();
+//    var minId = 0;
+//    tl.forEach(function (t) {
+//        minId = Math.min(minId, t.templateId);
+//    });
+//    return (parseInt(minId) - 1);
+//}
 
 function clearTemplateSelection() {
     var stl = document.getElementsByClassName("template_btn");
@@ -452,62 +408,77 @@ function clearTemplateSelection() {
     }
 }
 
-function setTemplateType(templateId, templateTypeValue) {
-    console.log('Template: ' + templateId + " selected type: " + templateTypeValue);
+function setTemplateType(templateGuid, templateTypeValue) {
+    console.log('Template: ' + templateGuid + " selected type: " + templateTypeValue);
 
-    var t = getTemplateById(templateId);
-    t['templateType'] = templateTypeValue;
-    document.getElementById("editTemplateTypeMenuSelector").value = t["templateType"];
+    var t = getTemplateDefByGuid(templateGuid);
+    t.domNode.setAttribute('templateType', templateTypeValue);
+    document.getElementById("editTemplateTypeMenuSelector").value = templateTypeValue;
 
     var stl = document.getElementsByClassName("template_btn");
     for (var i = 0; i < stl.length; i++) {
         var te = stl[i];
-        let ctid = parseInt(te.getAttribute('templateid'));
-        if (ctid == templateId) {
+        let ctguid = te.getAttribute('templateGuid');
+        if (ctguid == templateGuid) {
             te.setAttribute('templateType', templateTypeValue);
         }
     }
 
-    var t = getTemplateById(selectedTemplateId);
-    if (t['templateType'] == 'dynamic') {
+    if (templateTypeValue == 'dynamic') {
         document.getElementById('templateDetailTextInputContainer').style.display = 'none';
     } else {
         document.getElementById('templateDetailTextInputContainer').style.display = 'inline-block';
-        document.getElementById('templateDetailTextInput').value = t['templateData'];
+        document.getElementById('templateDetailTextInput').value = t.domNode.getAttribute('templateData');
         document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
     }
 
-    document.getElementById('templateColorBox').style.backgroundColor = t['templateColor'];
+    document.getElementById('templateColorBox').style.backgroundColor = t.domNode.getAttribute('templateColor');
     document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
 
     //document.getElementById('templateNameAndColorContainer').style.display = 'inline-block';
-    document.getElementById('templateNameTextInput').value = t['templateName'];
+    document.getElementById('templateNameTextInput').value = t.domNode.getAttribute('templateName');
     document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
 }
 
-function selectTemplate(templateId, fromDropDown, iId) {
-    if (templateId == null || isRenamingTemplate()) {
+
+//function focusTemplate(tn) {
+//    clearTemplateFocus();
+//    hideAllContextMenus();
+//    let tguid = tn.getAttribute('templateGuid');
+//    let tiguid = parseInt(tn.getAttribute('templateInstanceGuid'));
+//    let te = getTemplateElements(tguid, tiguid);
+//    te.isFocus = true;
+//    te.setAttribute('isFocus', true);
+//    focusTemplate(tguid, false, tiguid);
+//}
+
+function focusTemplate(tguid, fromDropDown, tiguid) {
+    if (tguid == null) {
         return;
     }
+    clearTemplateFocus();
+    hideAllContextMenus();
 
     var stl = document.getElementsByClassName("template_btn");
     for (var i = 0; i < stl.length; i++) {
         var t = stl[i];
-        if (t.getAttribute('templateid') == templateId) {
+        if (t.getAttribute('templateGuid') == tguid) {
             if (isPastingTemplate) {
                 $('#templateTextArea').placeholder = "Enter text for " + t.innerText;
-                if (t.innerText != getTemplateById(templateId)['templateName']) {
+                if (t.innerText != getTemplateDefByGuid(tguid)['templateName']) {
                     $('#templateTextArea').val(t.innerText);
                 } else {
                     $('#templateTextArea').val('');
                 }
             }
-            selectedTemplateId = templateId;
+            //selectedTemplateId = templateGuid;
+            t.setAttribute('isFocus', true);
             t.style.border = "2px solid red";
-            if (iId != null && t.getAttribute('instanceId') == iId) {
+            if (tiguid != null && t.getAttribute('templateInstanceGuid') == tiguid) {
                 t.style.border = "2px solid lightseagreen";
             }
         } else {
+            t.setAttribute('isFocus', false);
             t.style.border = "";
         }
     }
@@ -516,7 +487,7 @@ function selectTemplate(templateId, fromDropDown, iId) {
             //when user clicks a template this will adjust to drop dwon to the clicked element
             var items = document.getElementById('paste-template-custom-select').getElementsByTagName("div");
             for (var i = 0; i < items.length; i++) {
-                if (items[i].getAttribute('optionId') != null && items[i].getAttribute('optionId') == selectedTemplateId) {
+                if (items[i].getAttribute('optionId') != null && items[i].getAttribute('optionId') == getFocusTemplateGuid()) {
                     eventFire(items[i], 'click');
                     break;
                 }
@@ -531,39 +502,24 @@ function selectTemplate(templateId, fromDropDown, iId) {
     }
 }
 
-function isTemplateSelected() {
-    var selectionHtml = getSelectedHtml();
-    return selectionHtml.includes('template_btn');
-}
-
-function getTemplateElements(tId, iId) {
+function getTemplateElements(tguid, iguid) {
     var tel = [];
     var stl = document.getElementsByClassName("template_btn");
     for (var i = 0; i < stl.length; i++) {
         let t = stl[i];
-        let ctid = parseInt(t.getAttribute('templateId'));
-        let ciid = parseInt(t.getAttribute('instanceId'));
-        if (ctid == tId) {
-            if (iId == null) {
+        let ctguid = t.getAttribute('templateGuid');
+        let ctiguid = t.getAttribute('templateInstanceGuid');
+        if (ctguid == tguid) {
+            if (iguid == null) {
                 tel.push(t);
-            } else if (ciid == iId) {
+            } else if (ctiguid == iguid) {
                 return t;
             }
         }
     }
-    return iId == null ? tel : null;
+    return iguid == null ? tel : null;
 }
 
-function focusTemplate(tn) {
-    clearTemplateFocus();
-    hideAllContextMenus();
-    let tId = tn.getAttribute('templateId');
-    let iId = parseInt(tn.getAttribute('instanceId'));
-    let te = getTemplateElements(tId, iId);
-    te.isFocus = true;
-    te.setAttribute('isFocus', true);
-    selectTemplate(tId, false, iId);
-}
 
 function clearTemplateFocus() {
     var stl = document.getElementsByClassName("template_btn");
@@ -573,33 +529,22 @@ function clearTemplateFocus() {
     }
 }
 
-function getFocusTemplateElement() {
-    var stl = document.getElementsByClassName("template_btn");
-    for (var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        if (t.isFocus == true) {
-            return t;
-        }
-    }
-    return null;
-}
+//function renameTemplateClick(tId, iId) {
+//    startSetTemplateName(tId, iId);
+//}
 
-function renameTemplateClick(tId, iId) {
-    startSetTemplateName(tId, iId);
-}
+//function changeTemplateColorClick(tId, iId) {
+//    hideTemplateContextMenu();
 
-function changeTemplateColorClick(tId, iId) {
-    hideTemplateContextMenu();
+//    if (isShowingTemplateColorPaletteMenu) {
+//        hideTemplateColorPaletteMenu();
+//    }
+//    let te = getTemplateElements(tId, iId);
+//    showTemplateColorPaletteMenu(te);
+//}
 
-    if (isShowingTemplateColorPaletteMenu) {
-        hideTemplateColorPaletteMenu();
-    }
-    let te = getTemplateElements(tId, iId);
-    showTemplateColorPaletteMenu(te);
-}
-
-function onColorPaletteItemClick(tId, chex) {
-    let tel = getTemplateElements(tId);
+function onColorPaletteItemClick(chex) {
+    let tel = getTemplateElements(getFocusTemplateGuid());
 
     for (var i = 0; i < tel.length; i++) {
         var te = tel[i];
@@ -609,11 +554,11 @@ function onColorPaletteItemClick(tId, chex) {
     document.getElementById('templateColorBox').style.backgroundColor = chex;
 }
 
-function deleteAllTemplateClick(tId) {
+function deleteAllTemplateClick(tguid) {
     var stl = document.getElementsByClassName("template_btn");
     for (var i = 0; i < stl.length; i++) {
         var t = stl[i];
-        if (t.getAttribute('templateId') == tId) {
+        if (t.getAttribute('templateGuid') == tguid) {
             t.parentNode.removeChild(t);
         }
     }
@@ -631,26 +576,26 @@ function eventFire(el, etype) {
 
 function templateTextAreaChange() {
     var curText = $('#templateTextArea').val();
-    setTemplateText(selectedTemplateId, curText);
+    setTemplateText(getFocusTemplateGuid(), curText);
 }
 
 
-function setTemplateName(tid, name) {
-    var tl = getTemplateElements(tid);
+function setTemplateName(tguid, name) {
+    var tl = getTemplateElements(tguid);
     for (var i = 0; i < tl.length; i++) {
         var te = tl[i];
-        if (parseInt(te.getAttribute('templateid')) == tid) {
+        if (te.getAttribute('templateGuid') == tguid) {
             te.setAttribute('templateName', name);
             te.innerHTML = name;
         }
     }
 }
 
-function setTemplateDetailData(tid, detailData) {
-    var tl = getTemplateElements(tid);
+function setTemplateDetailData(tguid, detailData) {
+    var tl = getTemplateElements(tguid);
     for (var i = 0; i < tl.length; i++) {
         var te = tl[i];
-        if (parseInt(te.getAttribute('templateid')) == tid) {
+        if (te.getAttribute('templateGuid') == tguid) {
             te.setAttribute('templateData', detailData);
         }
     }
@@ -658,7 +603,7 @@ function setTemplateDetailData(tid, detailData) {
 
 var origTemplateName = null;
 
-function startSetTemplateName(tId, iId) {
+function startSetTemplateName(tguid, tiguid) {
     enterKeyBindings = disableKey('Enter');
     document.addEventListener('keypress', onLogKeyPress);
     document.addEventListener('keydown', onLogKeyDown);
@@ -670,9 +615,9 @@ function startSetTemplateName(tId, iId) {
         te.style.cursor = "pointer";
         te.style.caretColor = "transparent";
 
-        let ctId = te.getAttribute('templateId');
-        let ciId = te.getAttribute('instanceId');
-        if (ctId != tId && ciId != iId) {
+        let ctId = te.getAttribute('templateGuid');
+        let ciId = te.getAttribute('templateInstanceGuid');
+        if (ctId != tguid && ciId != tiguid) {
             continue;
         }
 
@@ -687,14 +632,14 @@ function startSetTemplateName(tId, iId) {
 }
 
 function endSetTemplateName(wasCancel) {
-    let fte = getFocusTemplateElement();
+    let fte = getFocusTemplate().domNode;
     var stl = document.getElementsByClassName("template_btn");
     for (var i = 0; i < stl.length; i++) {
         var t = stl[i];
         t.contentEditable = false;
         t.style.cursor = "pointer";
-        t.style.caretColor = "transparent";
-        if (t.getAttribute('templateId') == fte.getAttribute('templateId') && wasCancel == true) {
+        //t.style.caretColor = "transparent";
+        if (t.getAttribute('templateGuid') == fte.getAttribute('templateGuid') && wasCancel == true) {
             t.setAttribute('templateName', origTemplateName);
             t.innerText = origTemplateName;
         }
@@ -710,7 +655,7 @@ function endSetTemplateName(wasCancel) {
 }
 
 function onTemplateTypeChanged(e) {
-    setTemplateType(selectedTemplateId, this.value);
+    setTemplateType(getFocusTemplateGuid(), this.value);
 }
 
 function onTemplateColorBoxContainerClick(e) {
@@ -719,17 +664,17 @@ function onTemplateColorBoxContainerClick(e) {
 
 function onTemplateNameChanged(e) {
     let newTemplateName = document.getElementById('templateNameTextInput').value;
-    setTemplateName(selectedTemplateId, newTemplateName);
+    setTemplateName(getFocusTemplateGuid(), newTemplateName);
 }
 
 function onTemplateDetailChanged(e) {
     let newDetailData = document.getElementById('templateDetailTextInput').value;
-    setTemplateName(selectedTemplateId, newDetailData);
+    setTemplateDetailData(getFocusTemplateGuid(), newDetailData);
 }
 
 function onLogKeyPress(e) {
-    let fte = getFocusTemplateElement();
-    setTemplateName(parseInt(fte.getAttribute('templateId')), parseInt(fte.getAttribute('instanceId')), fte.innerText);
+    let ft = getFocusTemplate();
+    setTemplateName(ft.domNode.getAttribute('templateGuid'), ft.domNode.getAttribute('templateInstanceGuid'), ft.domNode.innerText);
 }
 
 function onLogKeyDown(e) {
@@ -784,53 +729,37 @@ function selectText(elm) {
 }
 
 function isRenamingTemplate() {
-    var stl = document.getElementsByClassName("template_btn");
-    for (var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        if (t.contentEditable == "true") {
-            return true;
-        }
-    }
-    return false;
+    return getUsedTemplateInstances().some(function (ti) {
+        return ti.domNode.contentEditable;
+    })
 }
 
-function setTemplateDocIdx(t, oldIdx, newIdx) {
-    var domTemplates = document.getElementsByClassName("template_btn");
-    for (var i = 0; i < domTemplates.length; i++) {
-        var domTemplate = domTemplates[i];
-        var template = {
-            templateId: domTemplate.getAttribute('templateId'),
-            templateName: domTemplate.getAttribute('templateName'),
-            templateColor: domTemplate.getAttribute('templateColor'),
-            docIdx: domTemplate.getAttribute('docIdx'),
-            templateText: domTemplate.innerText,
+//function setTemplateDocIdx(t, oldIdx, newIdx) {
+//    var domTemplates = document.getElementsByClassName("template_btn");
+//    for (var i = 0; i < domTemplates.length; i++) {
+//        var domTemplate = domTemplates[i];
+//        var template = {
+//            templateId: domTemplate.getAttribute('templateId'),
+//            templateName: domTemplate.getAttribute('templateName'),
+//            templateColor: domTemplate.getAttribute('templateColor'),
+//            docIdx: domTemplate.getAttribute('docIdx'),
+//            templateText: domTemplate.innerText,
 
-            //templateType: domTemplate.getAttribute('templateType'),
-            //templateData: domTemplate.getAttribute('templateData'),
-            //isFocus: domTemplate.getAttribute('isFocus'),
-            //instanceId: domTemplate.getAttribute('instanceId'),
-            //domNode: domTemplate
-        }
-        if (template.templateId == t.templateId && template.docIdx == oldIdx) {
-            domTemplate.setAttribute('docIdx', newIdx);
-            return;
-        }
-    }
-}
+//            //templateType: domTemplate.getAttribute('templateType'),
+//            //templateData: domTemplate.getAttribute('templateData'),
+//            //isFocus: domTemplate.getAttribute('isFocus'),
+//            //instanceId: domTemplate.getAttribute('instanceId'),
+//            //domNode: domTemplate
+//        }
+//        if (template.templateId == t.templateId && template.docIdx == oldIdx) {
+//            domTemplate.setAttribute('docIdx', newIdx);
+//            return;
+//        }
+//    }
+//}
 
-function getTemplatesJson() {
-    return JSON.stringify(getTemplates());
-}
-
-function getTemplateById(templateId) {
-    var tl = getTemplates();
-    for (var i = 0; i < tl.length; i++) {
-        var t = tl[i];
-        if (t['templateId'] == templateId) {
-            return t;
-        }
-    }
-    return null;
+function getTemplateDefByGuid(tguid) {
+    return getUsedTemplateDefinitions().find(x=>x.domNode.getAttribute('templateGuid') == tguid);
 }
 
 function showTemplateToolbarContextMenu(tb) {
@@ -840,20 +769,18 @@ function showTemplateToolbarContextMenu(tb) {
     var rgtClickContextMenuList = document.getElementById('templateToolbarMenuList');
     rgtClickContextMenuList.innerHTML = '';
 
-    var tl = getTemplates();
-    var listItemPrefix = 'templateListItem_';
-    for (var i = 0; i < tl.length; i++) {
-        var t = tl[i];
-        var itemId = listItemPrefix + t.templateId;
-        var templateItem = '<li><a onclick="createTemplate(' + t['templateId'] + ');">' +
-            '<div style="display:inline-block;margin: 0 5px 0 0;width: 15px; height: 15px;background-color:' + t['templateColor'] + '"></div>' +
-            '<span style="font-family:arial;">' + t['templateName'] + '</span></a></li>';
+    var atdl = getAvailableTemplateDefinitions();
+    for (var i = 0; i < atdl.length; i++) {
+        var t = atdl[i];
+        var templateItem = '<li onclick="createTemplate(\'' + t.domNode.getAttribute('templateGuid') + '\');">' +
+            '<div style="background-color:' + t.domNode.getAttribute('templateColor') + '"></div>' +
+            '<span>' + t.domNode.getAttribute('templateName') + '</span></li>';
         rgtClickContextMenuList.innerHTML += templateItem;
     }
 
-    rgtClickContextMenuList.innerHTML += '<li><a href="javascript:void(0);" onclick="createTemplate();">' +
-        '<span style="margin: 0 5px 0 0;color:lightseagreen;font-size:20px">+</span>' +
-        '<span style="font-family:arial;">Add Template</span></a></li>';
+    rgtClickContextMenuList.innerHTML += '<li onclick="createTemplate();">' +
+        '<span style="color:lightseagreen;font-size:20px">+</span>' +
+        '<span>Add Template</span></li>';
     const rect = tb.getBoundingClientRect();
     const x = rect.left + 20;
     const y = rect.bottom;
@@ -871,64 +798,64 @@ function hideTemplateToolbarContextMenu() {
     isShowingTemplateToolbarMenu = false;
 }
 
-function showTemplateContextMenu(te) {
-    if (te == null) {
-        return;
-    }
-    if (isShowingTemplateContextMenu) {
-        hideTemplateContextMenu();
-    }
-    clickCount = 0;
+//function showTemplateContextMenu(te) {
+//    if (te == null) {
+//        return;
+//    }
+//    if (isShowingTemplateContextMenu) {
+//        hideTemplateContextMenu();
+//    }
+//    clickCount = 0;
 
-    var rgtClickContextMenu = document.getElementById('templateContextMenu');
-    var rgtClickContextMenuList = document.getElementById('templateContextMenuList');
-    rgtClickContextMenuList.innerHTML = '';
+//    var rgtClickContextMenu = document.getElementById('templateContextMenu');
+//    var rgtClickContextMenuList = document.getElementById('templateContextMenuList');
+//    rgtClickContextMenuList.innerHTML = '';
 
-    let tId = te.getAttribute('templateId');
-    let iId = te.getAttribute('instanceId');
-    var context_items = [
-        { icon_class: 'template_rename_icon', label: '   Rename', func: 'renameTemplateClick' },
-        { icon_class: 'template_color_icon', label: '   Change Color', func: 'changeTemplateColorClick' },
-        { icon_class: 'template_delete_icon', label: '   Delete All', func: 'deleteAllTemplateClick' }];
+//    let tId = te.getAttribute('templateId');
+//    let iId = te.getAttribute('instanceId');
+//    var context_items = [
+//        { icon_class: 'template_rename_icon', label: '   Rename', func: 'renameTemplateClick' },
+//        { icon_class: 'template_color_icon', label: '   Change Color', func: 'changeTemplateColorClick' },
+//        { icon_class: 'template_delete_icon', label: '   Delete All', func: 'deleteAllTemplateClick' }];
 
-    context_items.forEach(function (ci) {
-        var context_item = '<li><a href="javascript:void(0);" onclick="' + ci.func + '(' + tId + ',' + iId + ');">' +
-            '<div class="template_context_item ' + ci.icon_class + '"></div> ' +
-            '<span style="font-family:arial;">' + ci.label + '</span></a></li>';
-        rgtClickContextMenuList.innerHTML += context_item;
-    });
+//    context_items.forEach(function (ci) {
+//        var context_item = '<li><a href="javascript:void(0);" onclick="' + ci.func + '(' + tId + ',' + iId + ');">' +
+//            '<div class="template_context_item ' + ci.icon_class + '"></div> ' +
+//            '<span style="font-family:arial;">' + ci.label + '</span></a></li>';
+//        rgtClickContextMenuList.innerHTML += context_item;
+//    });
 
-    const rect = te.getBoundingClientRect();
-    const x = rect.left + 20;
-    const y = rect.bottom;
-    rgtClickContextMenu.style.left = `${x}px`;
-    rgtClickContextMenu.style.top = `${y}px`;
-    rgtClickContextMenu.style.display = 'block';
+//    const rect = te.getBoundingClientRect();
+//    const x = rect.left + 20;
+//    const y = rect.bottom;
+//    rgtClickContextMenu.style.left = `${x}px`;
+//    rgtClickContextMenu.style.top = `${y}px`;
+//    rgtClickContextMenu.style.display = 'block';
 
-    isShowingTemplateContextMenu = true;
-}
+//    isShowingTemplateContextMenu = true;
+//}
 
-function hideTemplateContextMenu() {
-    var rgtClickContextMenu = document.getElementById('templateContextMenu');
-    rgtClickContextMenu.style.display = 'none';
+//function hideTemplateContextMenu() {
+//    var rgtClickContextMenu = document.getElementById('templateContextMenu');
+//    rgtClickContextMenu.style.display = 'none';
 
-    isShowingTemplateContextMenu = false;
-}
+//    isShowingTemplateContextMenu = false;
+//}
 
-function showTemplateColorPaletteMenu(tid) {
-    var te = null;
-    if (Array.isArray(getTemplateElements(tid))) {
-        te = getTemplateElements(tid)[0];
-    } else {
-        te = getTemplateElements(tid);
-    }
+function showTemplateColorPaletteMenu() {
+    //var te = null;
+    //if (Array.isArray(getTemplateElements(tguid))) {
+    //    te = getTemplateElements(tguid)[0];
+    //} else {
+    //    te = getTemplateElements(tguid);
+    //}
 
     if (isShowingTemplateColorPaletteMenu) {
         hideTemplateColorPaletteMenu();
     }
     clickCount = 0;
 
-    let tId = te.getAttribute('templateId');
+    let tguid = getFocusTemplateGuid();// te.getAttribute('templateId');
     var palette_item = {
         style_class: 'template_color_palette_item',
         func: 'onColorPaletteItemClick'
@@ -939,7 +866,7 @@ function showTemplateColorPaletteMenu(tid) {
         paletteHtml += '<tr>';
         for (var c = 0; c < 10; c++) {
             let c = getRandomColor().trim();
-            let item = '<td><a href="javascript:void(0);" onclick="' + palette_item.func + '(' + tId + ',\'' + c + '\');">' +
+            let item = '<td><a href="javascript:void(0);" onclick="' + palette_item.func + '(\'' + c + '\');">' +
                 '<div class="' + palette_item.style_class + '" style="background-color: ' + c + '" ></div></a></td > ';
             paletteHtml += item;
         }
@@ -971,7 +898,7 @@ function hideTemplateColorPaletteMenu() {
 
 function hideAllContextMenus() {
     hideTemplateColorPaletteMenu();
-    hideTemplateContextMenu();
+    //hideTemplateContextMenu();
     hideTemplateToolbarContextMenu();
 }
 
@@ -984,9 +911,9 @@ function showEditTemplateToolbar() {
     $("#editTemplateToolbar").css("position", "absolute");
     $("#editTemplateToolbar").css("top", $(window).height() - $("#editTemplateToolbar").outerHeight());
 
-    var t = getTemplateById(selectedTemplateId);
+    var t = getTemplateDefByGuid(getFocusTemplateGuid());
 
-    setTemplateType(selectedTemplateId, t["templateType"]);
+    setTemplateType(t.domNode.getAttribute('templateGuid'), t.domNode.getAttribute('templateType'));
 
     document.getElementById('editTemplateTypeMenuSelector').addEventListener('change', onTemplateTypeChanged);
 }
@@ -1013,10 +940,10 @@ function showPasteTemplateToolbar() {
     var templateMenuSelector = document.getElementById('pasteTemplateToolbarMenuSelector');
     templateMenuSelector.innerHTML = '';
 
-    var tl = getTemplates();
+    var tl = getUsedTemplateDefinitions();
     for (var i = 0; i < tl.length; i++) {
         var t = tl[i];
-        var templateItem = '<option class="templateOption" value="' + t['templateId'] + '" onchange="selectTemplate(' + t['templateId'] + ');">' +
+        var templateItem = '<option class="templateOption" value="' + t['templateGuid'] + '" onchange="focusTemplate(' + t['templateGuid'] + ');">' +
             t['templateName'] + '</option>';
         templateMenuSelector.innerHTML += templateItem;
     }
@@ -1069,9 +996,10 @@ function hidePasteTemplateToolbar() {
 }
 
 function gotoNextTemplate() {
+    var tl = getUsedTemplateDefinitions();
     var curIdx = 0;
     for (var i = 0; i < tl.length; i++) {
-        if (tl[i]['templateId'] == selectedTemplateId) {
+        if (tl[i]['templateGuid'] == getFocusTemplateGuid()) {
             curIdx = i;
             break;
         }
@@ -1080,13 +1008,14 @@ function gotoNextTemplate() {
     if (nextIdx >= tl.length) {
         nextIdx = 0;
     }
-    selectTemplate(tl[nextIdx]['templateId']);
+    focusTemplate(tl[nextIdx]['templateGuid']);
 }
 
 function gotoPrevTemplate() {
+    var tl = getUsedTemplateDefinitions();
     var curIdx = 0;
     for (var i = 0; i < tl.length; i++) {
-        if (tl[i]['templateId'] == selectedTemplateId) {
+        if (tl[i]['templateGuid'] == getFocusTemplateGuid()) {
             curIdx = i;
             break;
         }
@@ -1095,21 +1024,21 @@ function gotoPrevTemplate() {
     if (prevIdx < 0) {
         prevIdx = tl.length - 1;
     }
-    selectTemplate(tl[prevIdx]['templateId']);
+    focusTemplate(tl[prevIdx]['templateGuid']);
 }
 
 function clearAllTemplateText() {
-    var tl = getTemplates();
+    var tl = getUsedTemplateDefinitions();
     for (var i = 0; i < tl.length; i++) {
-        setTemplateText(tl[i]['templateId'], '');
+        setTemplateText(tl[i]['templateGuid'], '');
     }
 }
 
-function setTemplateText(templateId, text) {
+function setTemplateText(tguid, text) {
     var stl = document.getElementsByClassName("template_btn");
     for (var i = 0; i < stl.length; i++) {
         var t = stl[i];
-        if (t.getAttribute('templateid') == templateId) {
+        if (t.getAttribute('templateGuid') == tguid) {
             t.innerText = text;
             t.templateText = text;
         }
@@ -1117,25 +1046,18 @@ function setTemplateText(templateId, text) {
 }
 
 function resetTemplates() {
-    var tl = getTemplates();
-    for (var i = 0; i < tl.length; i++) {
-        var t = tl[i];
+    var til = getUsedTemplateInstances();
+    for (var i = 0; i < til.length; i++) {
+        var ti = til[i];
 
-        t.templateText = '';
-        t.isFocus = false;
-
-        var tel = getTemplateElements(t.templateId);
-        for (var j = 0; j < tel.length; j++) {
-            let te = tel[j];
-            te.innerHTML = t.templateName;
-            te.setAttribute('templateText', '');
-            te.setAttribute('isFocus', 'false');
-        }
+        ti.domNode.setAttribute('templateText', '');
+        ti.domNode.setAttribute('isFocus', 'false');
+        ti.domNode.innerHTML = ti.templateName;
     }
 }
 
 function createTemplateSelectorStyling() {
-    var tl = getTemplates();
+    var tl = getUsedTemplateDefinitions();
     var x, i, j, selElmnt, a, b, c;
     x = document.getElementsByClassName("paste-template-custom-select");
     for (i = 0; i < x.length; i++) {
@@ -1143,7 +1065,7 @@ function createTemplateSelectorStyling() {
         if (selElmnt.options.length == 0) {
             continue;
         }
-        var st = getTemplateById(selElmnt.options[selElmnt.selectedIndex].getAttribute('value'));
+        var st = getTemplateDefByGuid(selElmnt.options[selElmnt.selectedIndex].getAttribute('value'));
         a = document.createElement("DIV");
         a.setAttribute("class", "select-selected");
         a2 = document.createElement("SPAN");
@@ -1155,9 +1077,9 @@ function createTemplateSelectorStyling() {
         b = document.createElement("DIV");
         b.setAttribute("class", "select-items select-hide");
         for (j = 0; j < selElmnt.length; j++) {
-            var t = getTemplateById(selElmnt.options[j].getAttribute('value'));
+            var t = getTemplateDefByGuid(selElmnt.options[j].getAttribute('value'));
             c = document.createElement("DIV");
-            c.setAttribute('optionId', parseInt(t['templateId']));
+            c.setAttribute('optionId', t['templateGuid']);
             //c.innerHTML = selElmnt.options[j].innerHTML;
             d = document.createElement("SPAN");
             d.setAttribute("class", "square-box");
@@ -1201,13 +1123,13 @@ function createTemplateSelectorStyling() {
 
 function onTemplateOptionClick(e, target) {
     var targetDiv = e == null ? target : e.currentTarget;
-    var tVal = parseInt(targetDiv.getAttribute('optionId'));
-    var t = getTemplateById(tVal);
+    var tVal = targetDiv.getAttribute('optionId');
+    var t = getTemplateDefByGuid(tVal);
     var y, i, k, s, h;
     s = targetDiv.parentNode.parentNode.getElementsByTagName("select")[0];
     h = targetDiv.parentNode.previousSibling;
     for (i = 0; i < s.length; i++) {
-        var sVal = parseInt(s.options[i].value);
+        var sVal = s.options[i].value;
         if (sVal == tVal) {
             s.selectedIndex = i;
             h.innerHTML = targetDiv.innerHTML.replace(t['templateName'], '<span style="margin: 0 10px 0 50px;">' + t['templateName'] + '</span>');
@@ -1220,12 +1142,28 @@ function onTemplateOptionClick(e, target) {
         }
     }
 
-    selectTemplate(s.options[s.selectedIndex].value, true);
+    focusTemplate(s.options[s.selectedIndex].value, true);
     h.click();
 }
 
 function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;
+}
+
+function generateGuid() {
+    var d = new Date().getTime();//Timestamp
+    var d2 = (performance && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16;//random number between 0 and 16
+        if (d > 0) {//Use timestamp until depleted
+            r = (d + r) % 16 | 0;
+            d = Math.floor(d / 16);
+        } else {//Use microseconds since page-load if supported
+            r = (d2 + r) % 16 | 0;
+            d2 = Math.floor(d2 / 16);
+        }
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
 }
 
 // end templates

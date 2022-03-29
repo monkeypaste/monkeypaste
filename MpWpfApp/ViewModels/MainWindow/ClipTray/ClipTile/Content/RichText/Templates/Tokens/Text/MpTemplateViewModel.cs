@@ -25,7 +25,7 @@ namespace MpWpfApp {
     }    
     public class MpTemplateViewModel : MpViewModelBase<MpTemplateCollectionViewModel>, ICloneable {
         #region Private Variables
-        private MpTextToken _originalModel;
+        private MpTextTemplate _originalModel;
         #endregion
 
         #region Properties
@@ -218,7 +218,7 @@ namespace MpWpfApp {
                     HasText) {
                     return MatchData;
                 }
-                return TextToken.TemplateToken;
+                return TextToken.EncodedTemplate;
             }
         }
 
@@ -308,8 +308,8 @@ namespace MpWpfApp {
             }
         }
 
-        private MpTextToken _copyItemTemplate = null;
-        public MpTextToken TextToken {
+        private MpTextTemplate _copyItemTemplate = null;
+        public MpTextTemplate TextToken {
             get {
                 return _copyItemTemplate;
             }
@@ -339,8 +339,8 @@ namespace MpWpfApp {
 
         public MpTemplateViewModel() : base(null) { }
 
-        public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm, MpTextToken cit) : base(thlcvm) {
-             PropertyChanged += MpTemplateViewModel_PropertyChanged;
+        public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm, MpTextTemplate cit) : base(thlcvm) {
+            PropertyChanged += MpTemplateViewModel_PropertyChanged;
             TextToken = cit;
         }
 
@@ -415,8 +415,8 @@ namespace MpWpfApp {
         #region Commands
 
         public ICommand EditTemplateCommand => new RelayCommand(
-            () => {
-                _originalModel = TextToken.Clone() as MpTextToken;
+            async() => {
+                _originalModel = await TextToken.CloneDbModel();
                 //Parent.ClearAllEditing();
                 //Parent.ClearSelection();
 

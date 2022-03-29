@@ -470,7 +470,6 @@ namespace MpWpfApp {
                 Brushes.White,
                 dpiInfo.PixelsPerDip);
 
-
             int pad = (int)GetTailPadding(canvas);
 
             var rtb = new RenderTargetBitmap(

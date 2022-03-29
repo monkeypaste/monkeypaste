@@ -1,6 +1,5 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
-using Microsoft.Web.WebView2.Wpf;
 using MonkeyPaste;
 using Newtonsoft.Json;
 using System;
@@ -55,40 +54,6 @@ namespace MpWpfApp {
                         } else if (fe is FlowDocumentScrollViewer fdsv) {
                             fdsv.Document = fd;
                             fdsv.UpdateLayout();
-                        } else if (fe is WebView2 wv) {
-                            string itemHtml = JsonConvert.SerializeObject(MpRtfToHtmlConverter.ConvertFlowDocumentToHtml(fd));
-
-                            var qev = wv.GetVisualAncestor<MpQuillEditorView>();
-                            MpHelpers.RunOnMainThread(async() => {
-                                while(qev == null) {
-                                    await Task.Delay(100);
-                                    qev = wv.GetVisualAncestor<MpQuillEditorView>();
-                                }
-                                while(qev.IsDomContentLoaded == false) {
-                                    await Task.Delay(100);
-                                }
-
-                                await wv.ExecuteScriptAsync("setWpfEnv()");
-
-                                var initCmd = $"init({itemHtml})";
-
-                                string encodedResult = await wv.ExecuteScriptAsync(initCmd);
-
-                                string decodedResult = JsonConvert.DeserializeObject<string>(encodedResult);
-                                return;
-                            });
-
-                        } else if (fe is ChromiumWebBrowser cwb) {
-                            string itemHtml = JsonConvert.SerializeObject(MpRtfToHtmlConverter.ConvertFlowDocumentToHtml(fd));
-
-                            cwb.FrameLoadEnd += async(sender, args) => {
-                                if (args.Frame.IsMain) {
-                                    await cwb.EvaluateScriptAsync("setWpfEnv()");
-                                    var initCmd = $"init({itemHtml})";
-                                    var result = await cwb.EvaluateScriptAsync(initCmd);
-                                    return;
-                                }
-                            };
                         }
                     }
                 }

@@ -1,10 +1,7 @@
-﻿using System;
+﻿using MonkeyPaste.Plugin;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
-using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste {
     public abstract class MpBootstrapperViewModelBase : MpViewModelBase, MpIProgressLoader {
@@ -46,26 +43,26 @@ namespace MonkeyPaste {
                     new MpBootstrappedItem(typeof(MpConsole)),
                     new MpBootstrappedItem(typeof(MpNativeWrapper),niw),
                     new MpBootstrappedItem(typeof(MpCursor),niw.Cursor),
-                    new MpBootstrappedItem(typeof(MpPreferences),niw.PreferenceIO),       
+                    new MpBootstrappedItem(typeof(MpPreferences),niw.PreferenceIO),
                     new MpBootstrappedItem(typeof(MpTempFileManager)),
                     new MpBootstrappedItem(typeof(MpRegEx)),
                     new MpBootstrappedItem(typeof(MpDb),niw.DbInfo),
                     new MpBootstrappedItem(typeof(MpDataModelProvider),niw.QueryInfo),
+                    new MpBootstrappedItem(typeof(MpMasterTemplateModelCollection)),
                     new MpBootstrappedItem(typeof(MpPluginManager))
-                }
-                );
+                });
         }
 
         public abstract Task Init();
 
         protected void ReportItemLoading(MpBootstrappedItem item, int index) {
             MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
-            if(!MpNotificationCollectionViewModel.Instance.IsVisible) {
+            if (!MpNotificationCollectionViewModel.Instance.IsVisible) {
                 return;
             }
 
             var lnvm = MpNotificationCollectionViewModel.Instance.CurrentNotificationViewModel as MpLoaderNotificationViewModel;
-            if(lnvm == null) {
+            if (lnvm == null) {
                 // NOTE this occurs when warnings exist and loader is finished
                 return;
             }
@@ -87,4 +84,3 @@ namespace MonkeyPaste {
 
 
 
-            

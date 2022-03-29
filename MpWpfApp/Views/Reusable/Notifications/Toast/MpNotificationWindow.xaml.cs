@@ -21,8 +21,8 @@ namespace MpWpfApp {
         
         
         private void SetWindowToBottomRightOfScreen() {
-            Left = SystemParameters.WorkArea.Width - Width - 10;
-            Top = SystemParameters.WorkArea.Height - Height - 10;
+            Left = SystemParameters.WorkArea.Width - ActualWidth - 10;
+            Top = SystemParameters.WorkArea.Height - ActualHeight - 10;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e) {

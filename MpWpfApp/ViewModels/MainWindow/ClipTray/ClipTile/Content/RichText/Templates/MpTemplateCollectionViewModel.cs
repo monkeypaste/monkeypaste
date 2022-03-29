@@ -116,7 +116,7 @@ namespace MpWpfApp {
             ClearSelection();
         }
 
-        public MpTemplateViewModel CreateTemplateViewModel(MpTextToken ncit) {
+        public MpTemplateViewModel CreateTemplateViewModel(MpTextTemplate ncit) {
             MpTemplateViewModel ntvm = null;
 
             //check if template exists (it should)
@@ -170,7 +170,7 @@ namespace MpWpfApp {
             UpdateCommandsCanExecute();
         }
 
-        public async Task<bool> RemoveItem(MpTextToken cit, bool removeAll) {
+        public async Task<bool> RemoveItem(MpTextTemplate cit, bool removeAll) {
             MpConsole.WriteLine("Removing template: " + cit.TemplateName);
             //returns true if this was the last instance of the template
             var thlvmToRemove = Templates.Where(x => x.TextTokenId == cit.Id).FirstOrDefault();
@@ -191,19 +191,19 @@ namespace MpWpfApp {
             string uniqueName = $"Template";
             string testName = string.Format(
                                         @"{0}{1}{2}{3}",
-                                        MpTextToken.TEMPLATE_PREFIX,
+                                        MpTextTemplate.TEMPLATE_PREFIX,
                                         uniqueName.ToLower(),
                                         uniqueIdx,
-                                        MpTextToken.TEMPLATE_SUFFIX);
+                                        MpTextTemplate.TEMPLATE_SUFFIX);
             string pt = Parent.CopyItem.ItemData.ToPlainText().ToLower();
             while (pt.Contains(testName) || Templates.Any(x => x.TemplateDisplayValue.ToLower() == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
                                         @"{0}{1}{2}{3}",
-                                        MpTextToken.TEMPLATE_PREFIX,
+                                        MpTextTemplate.TEMPLATE_PREFIX,
                                         uniqueName.ToLower(),
                                         uniqueIdx,
-                                        MpTextToken.TEMPLATE_SUFFIX);
+                                        MpTextTemplate.TEMPLATE_SUFFIX);
             }
             return uniqueName + uniqueIdx;
         }
@@ -236,7 +236,7 @@ namespace MpWpfApp {
             if (e is MpCopyItem ci) {
                 if(ci.Id == Parent.CopyItemId && Templates != null) {
                     foreach(var cit in Templates) {
-                        await MpDb.DeleteItemAsync<MpTextToken>(cit.TextToken);
+                        await MpDb.DeleteItemAsync<MpTextTemplate>(cit.TextToken);
                     }
                 }
             }
@@ -309,7 +309,7 @@ namespace MpWpfApp {
                 MpConsole.WriteLine("Unmodified item rtf: ");
                 MpConsole.WriteLine(rtf);
                 foreach (var thlvm in Templates) {
-                    rtf = rtf.Replace(thlvm.TextToken.TemplateToken, thlvm.MatchData);
+                    rtf = rtf.Replace(thlvm.TextToken.EncodedTemplate, thlvm.MatchData);
                 }
                 Parent.TemplateRichText = rtf;
                 MpConsole.WriteLine("Pastable rtf: ");

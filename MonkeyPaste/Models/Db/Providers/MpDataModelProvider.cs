@@ -575,16 +575,26 @@ namespace MonkeyPaste {
 
         #region MpTextToken
 
-        public static async Task<List<MpTextToken>> GetTemplatesAsync(int ciid) {
-            string query = @"select * from MpTextToken where fk_MpCopyItemId=?";
-            var result = await MpDb.QueryAsync<MpTextToken>(query,ciid);
+        public static async Task<List<MpTextTemplate>> GetTextTemplatesAsync(int ciid) {
+            string query = @"select * from MpTextTemplate where fk_MpCopyItemId=?";
+            var result = await MpDb.QueryAsync<MpTextTemplate>(query,ciid);
             return result;
         }
 
-        public static async Task<MpTextToken> GetTemplateByNameAsync(int ciid, string templateName) {
+        public static async Task<MpTextTemplate> GetTextTemplateByGuid(string guid) {
             // NOTE may need to use '?' below
-            string query = @"select * from MpTextToken where fk_MpCopyItemId=? and TemplateName=?";
-            var result = await MpDb.QueryAsync<MpTextToken>(query,ciid,templateName);
+            string query = @"select * from MpTextTemplate where MpTextTemplateGuid=?";
+            var result = await MpDb.QueryAsync<MpTextTemplate>(query, guid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        public static async Task<MpTextTemplate> GetTextTemplateByNameAsync(int ciid, string templateName) {
+            // NOTE may need to use '?' below
+            string query = @"select * from MpTextTemplate where fk_MpCopyItemId=? and TemplateName=?";
+            var result = await MpDb.QueryAsync<MpTextTemplate>(query,ciid,templateName);
             if (result == null || result.Count == 0) {
                 return null;
             }

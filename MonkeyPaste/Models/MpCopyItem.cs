@@ -326,7 +326,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var citl = await MpDataModelProvider.GetTemplatesAsync(Id);
+            var citl = await MpDataModelProvider.GetTextTemplatesAsync(Id);
             await Task.WhenAll(citl.Select(x => x.DeleteFromDatabaseAsync()));
             await base.DeleteFromDatabaseAsync();
         }
@@ -509,9 +509,9 @@ namespace MonkeyPaste {
                     await MpCopyItemTag.Create(tag.Id, newItem.Id);
                 }
 
-                var templates = await MpDataModelProvider.GetTemplatesAsync(this.Id);
+                var templates = await MpDataModelProvider.GetTextTemplatesAsync(this.Id);
                 foreach (var template in templates) {
-                    var templateClone = template.Clone(true) as MpTextToken;
+                    var templateClone = await template.CloneDbModel();
                     templateClone.CopyItemId = newItem.Id;
                     await templateClone.WriteToDatabaseAsync();
                 }
