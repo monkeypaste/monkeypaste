@@ -14,7 +14,27 @@ using CsvHelper.Configuration;
 namespace MonkeyPaste {
     public static class MpStringExtensions {
         private static Random _Rand;
-                
+        
+        public static TEnum ToEnum<TEnum>(this object obj) where TEnum: struct {
+            if(obj != null) {
+                try {
+                    if (obj is string str) {
+                        if (Enum.TryParse<TEnum>(str, true, out TEnum result)) {
+                            return result;
+                        }
+                    } else {
+                        var eobj = Enum.ToObject(typeof(TEnum), obj);
+                        if (eobj != null) {
+                            return (TEnum)eobj;
+                        }
+                    }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                }
+            }
+            return default;
+        }
 
         public static string RemoveSpecialCharacters(this string str) {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);

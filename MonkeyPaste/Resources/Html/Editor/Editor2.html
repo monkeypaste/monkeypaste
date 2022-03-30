@@ -7,7 +7,9 @@
     <link href="lib/Quill/quill.snow.css" rel="stylesheet" />
     <link href="lib/HighlightJs/styles/github.min.css" rel="stylesheet" />
     <link href="lib/Quill-Better-Table/quill-better-table.css" rel="stylesheet" type="text/css" />
+    <link href="style/quill-style.css" rel="stylesheet" />
     <link href="style/editor-style.css" rel="stylesheet" />
+    <link href="style/template-style.css" rel="stylesheet" />
 
     <script src="lib/HighlightJs/highlight.min.js"></script>
     <script src="lib/HighlightJs/languages/xml.min.js"></script>
@@ -42,13 +44,8 @@
     </div>
 
     <div id="editTemplateToolbar" class="edit-template-toolbar">
-        <!--<div id="templateNameAndColorContainer" class="template-name-and-color-container">-->
-        <!--<a id="templateColorBoxContainer" class="template-color-box-container" href="javascript:void(0);">
-        <div id="templateColorBox" class="template-color-box"></div>
-    </a>-->
-        <!--</div>-->
         <div id="templateColorBox" class="edit-template-color-box"></div>
-        <input id="templateNameTextInput" class="edit-template-name-text-input" type="text" placeholder="Template Name" />
+        <textarea id="templateNameTextInput" rows="1" cols="20" class="edit-template-name-text-input" placeholder="Template Name"></textarea>
         <div class="edit-template-type-select-container">
             <select id="editTemplateTypeMenuSelector">
                 <option class="edit-template-type-option" value="datetime">DateTime</option>

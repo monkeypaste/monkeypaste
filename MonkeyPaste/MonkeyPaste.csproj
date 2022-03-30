@@ -218,6 +218,12 @@
     <EmbeddedResource Update="Controls\MpPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\style\quill-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\style\template-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Styles\MpWpfConverters.xaml">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MpWpfConverters.Designer.cs</LastGenOutput>

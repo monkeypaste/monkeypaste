@@ -39,20 +39,20 @@ namespace MonkeyPaste {
         [JsonProperty("templateGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
                 
-        [Column("fk_MpCopyItemId")]
-        [ForeignKey(typeof(MpCopyItem))]
-        public int CopyItemId { get; set; }
+        [JsonProperty("templateType")]
+        public string TemplateTypeStr { get; set; }
 
-        [Column("e_TemplateTypeId")]
-        public int TemplateTypeId { get; set; }
-
+        [JsonProperty("templateName")]
         public string TemplateName { get; set; }
 
+        [JsonProperty("templateData")]
         public string TemplateTypeData { get; set; }
 
         // TODO this should prolly be a serialized JSON obj of text format...
+        [JsonProperty("templateFormatInfoStr")]
         public string TemplateFormatInfoStr { get; set; } = string.Empty;
 
+        [JsonProperty("templateColor")]
         public string HexColor { get; set; }        
 
         #endregion
@@ -65,20 +65,17 @@ namespace MonkeyPaste {
 
         #region Properties
 
-        [Ignore]
-        [JsonProperty("templateType")]
-        public string TemplateTypeStr { get; set; }
 
         [Ignore]
-        public MpTextFormatInfoFormat TemplateFormatInfo {
-            get => JsonConvert.DeserializeObject<MpTextFormatInfoFormat>(TemplateFormatInfoStr);
+        public MpInlineTextFormatInfoFormat TemplateFormatInfo {
+            get => JsonConvert.DeserializeObject<MpInlineTextFormatInfoFormat>(TemplateFormatInfoStr);
             set => TemplateFormatInfoStr = JsonConvert.SerializeObject(value);
         }
 
         [Ignore]
         public MpTextTemplateType TemplateType {
-            get => (MpTextTemplateType)TemplateTypeId;
-            set => TemplateTypeId = (int)value;
+            get => TemplateTypeStr.ToEnum<MpTextTemplateType>();
+            set => TemplateTypeStr = value.ToString();
         }
 
 
@@ -111,7 +108,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpTextTemplate> Create(
-            int copyItemId = 0,
+            //int copyItemId = 0,
             string guid = "",
             MpTextTemplateType templateType = MpTextTemplateType.Dynamic,
             string templateName = "", 
@@ -130,7 +127,7 @@ namespace MonkeyPaste {
             var newTextTemplate = new MpTextTemplate() {
                 Id = templateId,
                 TextTemplateGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
-                CopyItemId = copyItemId,
+                //CopyItemId = copyItemId,
                 TemplateName = templateName,
                 HexColor = string.IsNullOrEmpty(templateColor) ? MpHelpers.GetRandomColor().ToHex() : templateColor,
                 TemplateType = templateType,
@@ -148,7 +145,7 @@ namespace MonkeyPaste {
 
         public async Task<MpTextTemplate> CloneDbModel() {
             var ccit = new MpTextTemplate() {
-                CopyItemId = this.CopyItemId,
+                //CopyItemId = this.CopyItemId,
                 TemplateName = this.TemplateName,
                 HexColor = this.HexColor,
                 TemplateText = this.TemplateText,
