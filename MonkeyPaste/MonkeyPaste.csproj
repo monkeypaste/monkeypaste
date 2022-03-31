@@ -82,6 +82,8 @@
     <None Remove="Resources\Html\Editor\lib\DynamicQuillTools\DynamicQuillTools.js" />
     <None Remove="Resources\Html\Editor\lib\HighlightJs\highlight.min.js" />
     <None Remove="Resources\Html\Editor\lib\HighlightJs\languages\xml.min.js" />
+    <None Remove="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.js" />
+    <None Remove="Resources\Html\Editor\lib\jquery-context-menus\src\context-menu.js" />
     <None Remove="Resources\Html\Editor\lib\jquery\jquery.min.js" />
     <None Remove="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.min.js" />
     <None Remove="Resources\Html\Editor\lib\Quill-Html-Edit-Button\quill.htmlEditButton.min.js" />
@@ -104,6 +106,7 @@
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />
     <EmbeddedResource Remove="Resources\Html\Editor\lib\HighlightJs\styles\github.min.css" />
+    <EmbeddedResource Remove="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.css" />
     <EmbeddedResource Remove="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.css" />
     <EmbeddedResource Remove="Resources\Html\Editor\lib\Quill\quill.snow.css" />
     <EmbeddedResource Remove="Resources\Html\Editor\style\editor-style.css" />
@@ -135,6 +138,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Html\Editor\lib\HighlightJs\styles\github.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Html\Editor\lib\jquery-context-menus\src\context-menu.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Html\Editor\lib\jquery\jquery.min.js">
@@ -177,6 +186,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
     <EmbeddedResource Include="Resources\Images\test.png" />
   </ItemGroup>
@@ -219,9 +231,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\style\quill-style.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Html\Editor\style\template-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Styles\MpWpfConverters.xaml">

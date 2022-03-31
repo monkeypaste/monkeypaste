@@ -1,34 +1,39 @@
-.template_btn {
-    display: inline-flex;
-    padding: 1px;
+.ql-template-embed-blot {
+    display: inline;
     text-decoration: none;
     color: #67c5ff;
     border-radius: 3px;
     transition: .4s;
-    margin: 0;
-    padding: 5px;cursor: pointer;
+    cursor: pointer;
+    border: 2px solid transparent;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    -o-user-select: none;
-    /*caret-color: transparent;*/
 }
 
-    .template_btn:hover {
-        padding: 3px;
+    .ql-template-embed-blot:hover {
+        padding: 1.5px;
         transition: .2s;
         cursor: pointer;
+        border: 2px solid yellow;
     }
 
-.template_context_item {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 0 10px 0;
-    height: 20px;
-    width: 20px;
-    background-color: orange;
-    background-size: contain;
+    .ql-template-embed-blot:focus {
+        border: 2px solid red;
+    }
+
+
+#editTemplateDeleteButton {
+    background-color: salmon;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    cursor:pointer;
+}
+
+#editTemplateDeleteButton:hover {
+    background-color: red;
 }
 
 .template_rename_icon {
@@ -55,57 +60,49 @@
         border: solid 3px dimgray;
     }
 
-/* Template Context Menu*/
-.cls-context-menu {
-    position: absolute;
-    width: fit-content;
+.ql-toolbar-template-context-menu {
     display: none;
+    position: fixed;
     border: solid 1px #CCC;
 }
 
-    .cls-context-menu ul {
-        display: block;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        background: white;
-    }
+.ql-toolbar-template-context-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 16px;
+    background: white;
+}
 
-    .cls-context-menu li {
-        border-bottom: solid 1px #CCC;
-        padding: 5px;
-        width: auto;
-        text-decoration: none;
-        color: blue;
-    }
+.ql-toolbar-template-context-menu a {
+    opacity: .8;
+    color: #ffffff;
+    cursor: pointer;
+    transition: 200ms;
+    text-decoration: none;
+    white-space: nowrap;
+    font-weight: 700;
+}
 
+.resizable-textarea {
+    min-height: 30px;
+    resize: both;
+    display: inline-block;
+    margin: 12px;
+}
 
-        .cls-context-menu li:hover {
-            background: blue;
-            color: #FFF;
-        }
+.resizer {
+    /* All resizers are positioned absolutely inside the element */
+    position: absolute;
+}
 
-        .cls-context-menu li div {
-            display: inline-block;
-            width: 25px;
-            border-radius: 5px;
-            height: 25px;
-            text-decoration: none;
-            color: blue;
-            /* margin: 10px 10px 5px 5px; */
-        }
-
-        .cls-context-menu li span {
-            font-family: arial;
-            vertical-align: middle;
-            margin-left: 10px;
-        }
-
-        .cls-context-menu li div span {
-            margin: 5px;
-        }
-
-
+/* Placed at the top side */
+.resizer-t {
+    top: 0;
+    cursor: row-resize;
+    height: 5px;
+    left: 0;
+    width: 100%;
+}
 /* Edit Template Toolbar */
 .edit-template-toolbar {
     display: none;
@@ -119,15 +116,17 @@
 }
 
 .edit-template-toolbar-resizer {
-    
-    width:100%;
-    cursor:row-resize;
-    height:10px;
-    background-color:aqua;
-vertical-align: top;position: relative;}
-.edit-template-toolbar-resizer:hover {
-    background-color:antiquewhite;
+    width: 100%;
+    cursor: row-resize;
+    height: 10px;
+    background-color: aqua;
+    vertical-align: top;
+    position: relative;
 }
+
+    .edit-template-toolbar-resizer:hover {
+        background-color: antiquewhite;
+    }
 
 .edit-template-color-box {
     display: inline-block;
@@ -146,11 +145,6 @@ vertical-align: top;position: relative;}
     }
 
 
-.edit-template-name-text-input {
-    min-height: 20px;resize: both;
-    display: inline-block;
-    margin: 12px;
-}
 
 .edit-template-type-select-container {
     margin-top: 11px;
@@ -170,11 +164,11 @@ vertical-align: top;position: relative;}
 
 .edit-template-detail-text-input-container {
     display: none;
-    position: absolute;
+    
     right: 140px;
     font-family: Arial;
     min-width: 160px;
-    margin-top: 12px;
+    
 }
 
 .edit-template-ok-cancel-button-container {

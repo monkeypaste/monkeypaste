@@ -9,13 +9,50 @@ var isShowingPasteTemplateToolbar = false;
 
 var wasLastClickOnTemplate = false;
 
+var templateTypesMenuOptions = [
+    {
+        label: 'Dynamic',
+        icon: 'fa-solid fa-keyboard'
+    },
+    {
+        label: 'Static',
+        icon: 'fa-solid fa-icicles'
+    },
+    {
+        label: 'Content',
+        icon: 'fa-solid fa-clipboard'
+    },
+    {
+        label: 'Analyzer',
+        icon: 'fa-solid fa-scale-balanced'
+    },
+    {
+        label: 'Action',
+        icon: 'fa-solid fa-bolt-lightning'
+    },
+    {
+        label: 'Contact',
+        icon: 'fa-solid fa-id-card'
+    },
+    {
+        label: 'DateTime',
+        icon: 'fa-solid fa-chess-clock'
+    },
+    {
+        label: 'New...'
+    }
+];
+
+var userDeletedTemplateGuids = [];
+
+
 function registerTemplateSpan(Quill) {
     const Parchment = Quill.imports.parchment;
 
-    class TemplateSpanBlot extends Parchment.EmbedBlot {
-        static blotName = 'templatespan';
-        static tagName = 'DIV';
-        static className = 'template_btn';
+    class TemplateEmbedBlot extends Parchment.EmbedBlot {
+        static blotName = 'template';
+        static tagName = 'SPAN';
+        static className = 'ql-template-embed-blot';
 
         static create(value) {
             const node = super.create(value);
@@ -36,7 +73,7 @@ function registerTemplateSpan(Quill) {
         }
     }
 
-    Quill.register(TemplateSpanBlot);
+    Quill.register(TemplateEmbedBlot);
 }
 
 //#region Init
@@ -53,20 +90,15 @@ function initTemplates(templateDefsStr, templateRegExInfoStr) {
         decodeTemplates(templateDefinitions);
     }
 
-    let templateNameTextArea = document.getElementById('templateNameTextInput');
-    let minNameHeight = $('#templateNameTextInput').outerHeight();
-
-    function outputsize() {
-        updateEditTemplateToolbarPosition();
-
-        if ($('#templateNameTextInput').height() < minNameHeight) {
-            $('#templateNameTextInput').height(minNameHeight);
-        }
-        console.log(templateNameTextArea.offsetWidth+'x'+templateNameTextArea.offsetHeight);
-    }
-    //outputsize()
-
-    new ResizeObserver(outputsize).observe(templateNameTextArea);
+    Array
+        .from(document.getElementsByClassName('resizable-textarea'))
+        .forEach((rta) => {
+            function updateToolbarSize() {
+                updateEditTemplateToolbarPosition();
+            }
+            new ResizeObserver(updateToolbarSize).observe(rta);
+        });
+    
 
     initTemplateToolbarButton();
 }
@@ -74,7 +106,8 @@ function initTemplates(templateDefsStr, templateRegExInfoStr) {
 function initTemplateToolbarButton() {
     // Toolbar Template Button
     const templateToolbarButton = new QuillToolbarButton({
-        icon: '<img id="templateToolbarButton" style="height:20px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAJ9ElEQVR4nO3dTW4bRxoG4LdaZhOYESDfQL6BtfBigMAS5wTWnECdE4Q+QTQnsOYEZk4Q+gRpytBOgOnd7EY5QWjAXoiU+5tFs6UWTVJssqrr731WiSJ3F+IXH6rrV4GskMv0DQoMoNRz222xRnAD4Ob+31UxhlI5/jbN1St82eaRSk/LqAkZdc6AZGC7HU4TGUNhiESG6vXs86Z/jIFumYw674Ckb7sdfikydTL7bZPfZKBbJHn6HkplttvhJUGOzm2mfsKf636NgW6BXOMAX9McSh3ZbovXRCZIkKnj6YdVv5K02Z4YycfOS4ZZE6WeQ9RQ8vT9yl9psz2xkY+dl/ieDKHwwnZbgiMyxv60tzgawgptSBlmlTPMhih1hK/d4eKPGWgDZNQ5Q5GMox5jboNCTy7TN49/RFpxjLllghvs3x5VXQ9WaI3mY8wD2+2IisILfOtmD/9KWnCM2aJalWaF3pFc40Dy7h8Ms0UKL/At7Zf/SFsrJ0y6Qyj0bLeFAPz99vme7Tb4qjb79w/bbaG5WfJfBnoLnMp2lADPbLfBN+VUtso5xuwi9ZwfhQ08zP4xzK5ioDcko84Zw+w+djk2cD/7xzEh57FCP4FT2X5hzVmDYW6quFAns7fL/ouM0l8BdW709SITBnoFTmU3sTrIi0wHm4FegmFuYvMwV0yGmoFewDA30TzMFcnTv0yMGPGjsIZhbmbbMJd/GBcam1J7LAFgmLehTm53yo+MuqKrLRVWaDDMIYl6YoWLjMITbYWeh3nAMIclygrNyhyu6Co0wxy2qALNMLtD8vSTiedGE2iGWb9yxm9Lhv4eogg0w2yIoL9NqE1VZyCCiRWG2TCRCRQu1Mn03xv9ep5+Mvl3EXSg5QqHmKVDhtmwDUJtOsiVYAM93//HcebIBBlohjlewQWaYY5bUIHmifkUTKDLD8AuT8yPXBBrOeajGWMo8MyMyHlfoR/CzANgyPOZQvnYeVl2MxhmKnlbofkBSMt4GWh+ANIq3n0U8gOQ1vEq0LXKzDDTUt50Oeb3mYzZzaB1vBjlKE/NZ5jpac5XaFZmasLpCi1XOGSYqQlnA/2wOJ9hps052eXgThPalnOB5h5A2oVTgWaYaVfOBJphJh2cCDTDTLpYDzTDTDpZXcsxnzQZQoFhJi3sjkOXYe5ZbQMFxVqgJU9/Z5hJNyuBnt9pcmrj3RS21j8KeUEPmdRqoBlmMq21UY75dbhZW++jOLVSoWXU/QUwc3MoUZ3xQMuocwYkA9PvIQIMB1ou0zcQNTT5DqI6Y4GWj52XKJKxqecTLWNkHHp+RnNu4tlE62gPtFzhsDyii+fNUfu0djm4Q5ts01ahH5aBMsxkj74ux9eU95qQdVoCzcVG5Iqdp745pU0u2emjkLOA5JqtA82JE3LRVn1oTpyQqxpX6Pnw3A0nTshFjSp07cgBhpmc1KzL8TW94FgzuWzjYbtyRIPDc+S2jfrQcvnsBLKXG24L0Y6K7MlA8+ph8kORqZPZb2v70HKNg/nB4wwzOawMM/DURyE/Asl9/SrMwJo+NKe1yXkiA9Wb/lz/0dJA388EsqtBziou1Mns7eJPf+hyyDUO8F0NGGZy1/IwA8v60N/SPvvN5C45XxVmYKHLwfFmctqSPvOixxW62BuYbA/R9oqLp8IM1AIto/RXbnAlJ4kM1nUz6hTAJaHkstUfgMuUFbqcQGGYyTHNwgwASq5wiLvujZkGEW2reZgBIMFdmhloDdH2GvSZFyUQ8DwNcscGQ3PrJJxEIWfsGGbA9sWbRBUNYQaABCITHe0h2prIUEeYASABFA+LIXtExtifZroel0BJruthRI2IjNGZnqpX+KLrkQkS4aU+1D6RCfYkUz/hT52PLae+8+7/uI6DWpUUR+r17LP2xwIAVHGu+8FEqxWZiTADtfXQkqd/cT0HGadpeG6Vh3Fopc5NvYQIACDITYYZWNyxwr40mVIOz/V0jmgs83imMPmemXwZRUpkont4bpVHgVbHdyMIh/FIo3J4rqd7eG6VH9dy7E8zCG7aeDkFrgqzoRGNZX4ItHqFL9gruKSUdpfA2PDc6lcuUTaiuGizIRQQkQmS4kgdTz+0/eq1x+lK3v0DCr2W2kIhsNDNqFu/Hnr/9pT9aWpESd9WmIENTvDnfYS0kbKbcaqO70Y2m/HkjpV5fzproS3kK5EJEmS2wwxsuAWrPFBazg23hXx0X5nb/wBcptHFmzLqvAOSvqnGkGcsfwAu0/wm2Tx9D8Xr3aLnYJiBLS+vlzz9HUpx8iVWjoYZ2DLQACB5+olnekTI4TADu5zLsT/tQYTDeTEpN7Ua2Tqly9YVGnh0mT0rdehaWs+8q50CDTDUUfAkzICGQAMMddA8CjOgKdAAQx0kz8IMaDysUb3CF34oBkRk6FuYAY0VulJW6u6Qy049JshV7/aftpuxDe2BrnBG0VOGz80wzVigAYbaO56HGTAcaICh9kYAYQZaOMG//J/E/YlOCyTMQAsVuiKjzhmQDNp6H20ooDADLQYaYKidE1iYgZYDDcz3KH5XOU86tczjobl1Wr8FS72efcae9Lib3CKRMfZvg1zP3nqFrnCq3JLy4MSjts6aa5u1ewofpsqR22pDdFo+ONEGaxW6jmPVLXB8p4kuTtwkOx+rzmy3I2iWTzRqixMVusIREFOKrDxbJXxOVOiKej37jIRH+epVXMQSZsCxQAPzWwTY/dBDZKBOZm9tN6NNTnU56jiruKMAZwE34VyFrvA8vR1EGmbA4Qpd4ZBeQyJD1Zv+y3YzbHG2QldUb/ozRAa22+GFclNrZrsZNjkfaADA/rTPzbdP8HCHtgnOdzkqXPuxBsN8z48Kjeq6OckgMrHdFqcwzI94E2igvvSUoQZQhnlPMob5gTddjjq5fHYC2cttt8MqwQ06t0GvnNuGVxW6Ev1sosiEYV7Oy0AD1cQL4rvvJYI1zbvwNtAAoE5u/xPVbGIka5p34WUfelEUs4mCG+wVpwzzekEEGgg81Bya21gwgQYCvZ2LYW7E6z70D/anWVBT5AxzY0EFunbo+tB2W3bGMG8lqC5Hndd96siXgO4iqApd5+2y0/IqiMx2M3wVbIWu+FWpi4vY9gDqFnygAW/2J/bLiSLaRbBdjjqn9yeKTKDklGHWI4oKXZHL9A0KDJw5yIazf9pFFWjAodOZBDn2b085LKdXdIEGXLhLkR9/pkQZ6IqMOu+ApL0lqCITJMjU8fRDa++MTNSBBlrsV7OL0YroAw0Y7oKITKDUOUcx2sFA18io+wtEzrVVa5EhOtM+d5e0h4FeIFc4xF2nv1PfWpBjr4jigHHXMNAryBUOMUvPG02bC3IkcsGPPnsY6CfINQ7wrZtBJFt6apPIGEoNkBQ5K7J9/we5E3dBSMQUXgAAAABJRU5ErkJggg=="></img>'//`<svg viewBox="0 0 18 18"> <path class="ql-stroke" d="M5,3V9a4.012,4.012,0,0,0,4,4H9a4.012,4.012,0,0,0,4-4V3"></path></svg>`
+        //icon: '<img id="templateToolbarButton" style="height:20px" src="data:image/png;base64,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"></img>'//`<svg viewBox="0 0 18 18"> <path class="ql-stroke" d="M5,3V9a4.012,4.012,0,0,0,4,4H9a4.012,4.012,0,0,0,4-4V3"></path></svg>`
+        icon: '<i id="templateToolbarButton" class="fa-solid fa-masks-theater"></i>'
     })
 
     templateToolbarButton.onClick = function (e) {
@@ -85,6 +118,8 @@ function initTemplateToolbarButton() {
         } else {
             createTemplate();
         }
+
+        event.stopPropagation(e);
     }
     templateToolbarButton.attach(quill);
 }
@@ -141,7 +176,7 @@ function applyTemplateToDomNode(node, value) {
     node.contentEditable = 'false';
     node.setAttribute('isFocus', false);
     node.setAttribute("spellcheck", "false");
-    node.setAttribute('class', 'template_btn');
+    node.setAttribute('class', 'ql-template-embed-blot');
 
     node.addEventListener('click', function (e) {
         focusTemplate(node.getAttribute('templateGuid'));
@@ -149,6 +184,23 @@ function applyTemplateToDomNode(node, value) {
 
     return node;
 }
+
+function setTemplateProperty(tguid, propertyName, propertyValue) {
+    getUsedTemplateInstances().forEach(function (ti) {
+        if (ti.domNode.getAttribute('templateGuid') == tguid) {
+            ti.domNode.setAttribute(propertyName, propertyValue);
+        }
+    });
+}
+
+function getTemplateProperty(tguid, propertyName) {
+    let t = getTemplateDefByGuid(tguid);
+    if (t == null) {
+        return null;
+    }
+    return t.domNode.getAttribute(propertyName);
+}
+
 //#endregion
 
 //#region Encode/Decode
@@ -199,7 +251,7 @@ function decodeTemplates(templateDefs) {
         });
 
         if (t != null) {
-            quill.insertEmbed(tsIdx, 'templatespan', t);
+            quill.insertEmbed(tsIdx, 'template', t);
             tcount++;
         } else {
             console.log('template def \'' + tguid + '\' not found so omitting from editor');
@@ -308,7 +360,7 @@ function getUsedTemplateDefinitions() {
 
 function getAvailableTemplateDefinitions() {
     if (availableTemplates == null) {
-        return getUsedTemplateDefinitions();
+        return getUsedTemplateDefinitions().map(x => getTemplateFromDomNode(x.domNode));
     }
 
     let utdl = getUsedTemplateDefinitions();
@@ -347,8 +399,10 @@ function getTemplateDocIdx(tguid, tiguid) {
     let docLength = quill.getLength();
     for (var i = 0; i < docLength; i++) {
         let curDelta = quill.getContents(i, 1);
-        if (curDelta.ops[0].hasOwnProperty('templateSpan')) {
-            let curTemplate = curDelta.ops[0].templateSpan;
+        if (curDelta.ops.length > 0 &&
+            curDelta.ops[0].hasOwnProperty('insert') &&
+            curDelta.ops[0].insert.hasOwnProperty('template')) {
+            let curTemplate = curDelta.ops[0].insert.template;
             if (curTemplate.templateGuid == tguid && curTemplate.templateInstanceGuid == tiguid) {
                 return i;
             }
@@ -358,7 +412,7 @@ function getTemplateDocIdx(tguid, tiguid) {
 } 
 
 function getUsedTemplateInstances() {
-    var domTemplates = document.querySelectorAll('.template_btn');
+    var domTemplates = document.querySelectorAll('.ql-template-embed-blot');
     var templates = [];
     for (var i = 0; i < domTemplates.length; i++) {
         var domTemplate = domTemplates[i];
@@ -368,11 +422,11 @@ function getUsedTemplateInstances() {
         }
     }
     return templates.sort((a, b) => (
-        getTemplateDocIdx(a.domNode.getAttribute('templateGuid'), a.domNode.getAttribute('templateInstanceGuid')) > 
+        getTemplateDocIdx(a.domNode.getAttribute('templateGuid'), a.domNode.getAttribute('templateInstanceGuid')) < 
         getTemplateDocIdx(b.domNode.getAttribute('templateGuid'), b.domNode.getAttribute('templateInstanceGuid')) ? -1 : 1));
 }
 
-function createTemplate(templateObjOrId, idx, len) {
+function createTemplate(templateObjOrId) {
     var templateObj;
     if (templateObjOrId != null && typeof templateObjOrId === 'string') {
         templateObj = getTemplateDefByGuid(templateObjOrId);
@@ -381,9 +435,6 @@ function createTemplate(templateObjOrId, idx, len) {
     }
 
     var range = quill.getSelection(true);
-    if (idx != null && length != null) {
-        range = { index: idx, length: len };
-    }
 
     var isNew = templateObj == null;
     var newTemplateObj = templateObj;
@@ -425,20 +476,13 @@ function createTemplate(templateObjOrId, idx, len) {
         };
     }
 
-
     quill.deleteText(range.index, range.length);
 
-    quill.insertText(range.index, ' ');
+    quill.insertText(range.index, ' ', Quill.sources.SILENT);
     range.index++;
-    quill.insertEmbed(range.index, "templatespan", newTemplateObj);
+    quill.insertEmbed(range.index, "template", newTemplateObj, Quill.sources.USER);
     quill.insertText(range.index + 1, ' ');
     quill.setSelection(range.index + 1, Quill.sources.API);
-
-    let t = getTemplateDefByGuid(newTemplateObj.templateGuid);
-
-    //t.domNode.setAttribute('style', t.templateHtmlFormat);
-
-    //quill.formatText(range.index, JSON.parse(newTemplateObj.templateDeltaFormat));
 
     focusTemplate(newTemplateObj['templateGuid'], true);
 
@@ -462,66 +506,71 @@ function getLowestAnonTemplateName(anonPrefix = 'Template #') {
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
-//function getNewTemplateId() {
-//    var tl = getUsedTemplateDefinitions();
-//    var minId = 0;
-//    tl.forEach(function (t) {
-//        minId = Math.min(minId, t.templateId);
-//    });
-//    return (parseInt(minId) - 1);
-//}
 
 function clearTemplateSelection() {
-    var stl = document.getElementsByClassName("template_btn");
-    for (var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        t.style.border = "";
+    var util = getUsedTemplateInstances();
+    for (var i = 0; i < util.length; i++) {
+        util[i].domNode.style.border = "";
+        util[i].domNode.setAttribute('isFocus', false);
     }
 }
 
-function setTemplateType(templateGuid, templateTypeValue) {
-    console.log('Template: ' + templateGuid + " selected type: " + templateTypeValue);
+function setTemplateType(tguid, ttype) {
+    console.log('Template: ' + tguid + " selected type: " + ttype);
 
-    var t = getTemplateDefByGuid(templateGuid);
-    t.domNode.setAttribute('templateType', templateTypeValue);
-    document.getElementById("editTemplateTypeMenuSelector").value = templateTypeValue;
+    setTemplateProperty(tguid, 'templateType', ttype);
 
-    var stl = document.getElementsByClassName("template_btn");
-    for (var i = 0; i < stl.length; i++) {
-        var te = stl[i];
-        let ctguid = te.getAttribute('templateGuid');
-        if (ctguid == templateGuid) {
-            te.setAttribute('templateType', templateTypeValue);
-        }
-    }
+    var t = getTemplateDefByGuid(tguid);
+    //t.domNode.setAttribute('templateType', templateTypeValue);
+    document.getElementById("editTemplateTypeMenuSelector").value = ttype;
 
-    if (templateTypeValue == 'dynamic') {
+    if (ttype == 'datetime' && t.domNode.getAttribute('templateData') == '') {
+        setTemplateProperty(tguid,'templateData', 'MM/dd/yyy HH:mm:ss');
+    } 
+
+    if (ttype == 'dynamic') {
         document.getElementById('templateDetailTextInputContainer').style.display = 'none';
     } else {
         document.getElementById('templateDetailTextInputContainer').style.display = 'inline-block';
-        document.getElementById('templateDetailTextInput').value = t.domNode.getAttribute('templateData');
+        document.getElementById('templateDetailTextInput').value = getTemplateProperty(tguid, 'templateData');
         document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
     }
 
-    document.getElementById('templateColorBox').style.backgroundColor = t.domNode.getAttribute('templateColor');
+    document.getElementById('templateColorBox').style.backgroundColor = getTemplateProperty(tguid, 'templateColor');
     document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
 
-    //document.getElementById('templateNameAndColorContainer').style.display = 'inline-block';
-    document.getElementById('templateNameTextInput').value = t.domNode.getAttribute('templateName');
+    document.getElementById('templateNameTextInput').value = getTemplateProperty(tguid, 'templateName');
     document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
 }
 
+function deleteFocusTemplate() {
+    let tguid_to_delete = getFocusTemplateGuid();
+    let td = getTemplateFromDomNode(getTemplateDefByGuid(tguid_to_delete).domNode);
+    let result = window.confirm('Are you sure you want to delete ALL usages of \'' + td.templateName + '\'?')
 
-//function focusTemplate(tn) {
-//    clearTemplateFocus();
-//    hideAllContextMenus();
-//    let tguid = tn.getAttribute('templateGuid');
-//    let tiguid = parseInt(tn.getAttribute('templateInstanceGuid'));
-//    let te = getTemplateElements(tguid, tiguid);
-//    te.isFocus = true;
-//    te.setAttribute('isFocus', true);
-//    focusTemplate(tguid, false, tiguid);
-//}
+    if (!result) {
+        return;
+    }
+
+    userDeletedTemplateGuids.push(tguid_to_delete);
+
+    let availTemplateRef = availableTemplates.filter(x => x.templateGuid == tguid_to_delete);
+    if (availTemplateRef != null && availTemplateRef.length > 0) {
+        let availIdx = availableTemplates.indexOf(availTemplateRef[0]);
+        availableTemplates.splice(availIdx, 1);
+    }
+
+    getUsedTemplateInstances()
+        .filter(x => x.domNode.getAttribute('templateGuid') == tguid_to_delete)
+        .forEach((ti) => {
+            let t = getTemplateFromDomNode(ti.domNode);
+            let docIdx = getTemplateDocIdx(tguid_to_delete, t.templateInstanceGuid);
+            quill.deleteText(docIdx, 1, Quill.sources.USER);
+        });
+
+    hideEditTemplateToolbar();
+    console.log('Template \'' + tguid_to_delete + '\' \'' + td.templateName + '\' was DELETED');
+}
 
 function focusTemplate(tguid, fromDropDown, tiguid) {
     if (tguid == null) {
@@ -530,7 +579,7 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
     clearTemplateFocus();
     hideAllContextMenus();
 
-    var stl = document.getElementsByClassName("template_btn");
+    var stl = document.getElementsByClassName("ql-template-embed-blot");
     for (var i = 0; i < stl.length; i++) {
         var t = stl[i];
         if (t.getAttribute('templateGuid') == tguid) {
@@ -564,17 +613,15 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
             }
         }
         //moved from quill embed constructor maybe causing selection issue on android
-        wasLastClickOnTemplate = true;
-
+        
         hideAllContextMenus();
-        //showTemplateContextMenu(getFocusTemplateElement());
         showEditTemplateToolbar();
     }
 }
 
 function getTemplateElements(tguid, iguid) {
     var tel = [];
-    var stl = document.getElementsByClassName("template_btn");
+    var stl = document.getElementsByClassName("ql-template-embed-blot");
     for (var i = 0; i < stl.length; i++) {
         let t = stl[i];
         let ctguid = t.getAttribute('templateGuid');
@@ -592,7 +639,7 @@ function getTemplateElements(tguid, iguid) {
 
 
 function clearTemplateFocus() {
-    var stl = document.getElementsByClassName("template_btn");
+    var stl = document.getElementsByClassName("ql-template-embed-blot");
     for (var i = 0; i < stl.length; i++) {
         var t = stl[i];
         t.isFocus = false;
@@ -610,16 +657,7 @@ function onColorPaletteItemClick(chex) {
         te.style.color = isBright(chex) ? 'black' : 'white';
     }
     document.getElementById('templateColorBox').style.backgroundColor = chex;
-}
-
-function deleteAllTemplateClick(tguid) {
-    var stl = document.getElementsByClassName("template_btn");
-    for (var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        if (t.getAttribute('templateGuid') == tguid) {
-            t.parentNode.removeChild(t);
-        }
-    }
+    hideAllContextMenus();
 }
 
 function eventFire(el, etype) {
@@ -643,7 +681,7 @@ function setTemplateName(tguid, name) {
         var te = tl[i];
         if (te.getAttribute('templateGuid') == tguid) {
             te.setAttribute('templateName', name);
-            te.innerHTML = name;
+            te.innerText = name;
         }
     }
 }
@@ -654,62 +692,14 @@ function setTemplateDetailData(tguid, detailData) {
         var te = tl[i];
         if (te.getAttribute('templateGuid') == tguid) {
             te.setAttribute('templateData', detailData);
+            if (te.getAttribute('templateType').toLowerCase() == 'datetime') {
+                console.log(jQuery.format.date(new Date(), detailData));
+            }
         }
     }
 }
 
-var origTemplateName = null;
-
-function startSetTemplateName(tguid, tiguid) {
-    enterKeyBindings = disableKey('Enter');
-    document.addEventListener('keypress', onLogKeyPress);
-    document.addEventListener('keydown', onLogKeyDown);
-
-    var stl = document.getElementsByClassName("template_btn");
-    for (var i = 0; i < stl.length; i++) {
-        let te = stl[i];
-        te.setAttribute('contentEditable', false);
-        te.style.cursor = "pointer";
-        te.style.caretColor = "transparent";
-
-        let ctId = te.getAttribute('templateGuid');
-        let ciId = te.getAttribute('templateInstanceGuid');
-        if (ctId != tguid && ciId != tiguid) {
-            continue;
-        }
-
-        te.setAttribute('contentEditable', true);
-        te.style.cursor = "text";
-        te.style.caretColor = "black";
-
-        origTemplateName = te.innerText;
-        selectText(te);
-    }
-    hideTemplateContextMenu();
-}
-
-function endSetTemplateName(wasCancel) {
-    let fte = getFocusTemplate().domNode;
-    var stl = document.getElementsByClassName("template_btn");
-    for (var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        t.contentEditable = false;
-        t.style.cursor = "pointer";
-        //t.style.caretColor = "transparent";
-        if (t.getAttribute('templateGuid') == fte.getAttribute('templateGuid') && wasCancel == true) {
-            t.setAttribute('templateName', origTemplateName);
-            t.innerText = origTemplateName;
-        }
-    }
-
-    reenableKey('Enter', enterKeyBindings);
-    enterKeyBindings = null;
-
-    origTemplateName = null;
-
-    document.removeEventListener('keypress', onLogKeyPress);
-    document.removeEventListener('keydown', onLogKeyDown);
-}
+//#region Event Callbacks
 
 function onTemplateTypeChanged(e) {
     setTemplateType(getFocusTemplateGuid(), this.value);
@@ -717,6 +707,7 @@ function onTemplateTypeChanged(e) {
 
 function onTemplateColorBoxContainerClick(e) {
     showTemplateColorPaletteMenu();
+    event.stopPropagation(e);
 }
 
 function onTemplateNameChanged(e) {
@@ -729,181 +720,73 @@ function onTemplateDetailChanged(e) {
     setTemplateDetailData(getFocusTemplateGuid(), newDetailData);
 }
 
-function onLogKeyPress(e) {
-    let ft = getFocusTemplate();
-    setTemplateName(ft.domNode.getAttribute('templateGuid'), ft.domNode.getAttribute('templateInstanceGuid'), ft.domNode.innerText);
-}
-
-function onLogKeyDown(e) {
-    if (!isRenamingTemplate) {
-        return;
-    }
-
-    if (e.code == "Escape") {
-        endSetTemplateName(true);
-        return;
-    }
-    if (e.code == "Enter") {
-        e.preventDefault();
-        endSetTemplateName(false);
-        return;
-    }
-
-    //if(!TEMPLATE_VALID_CHARS.includes(String.fromCharCode(e.keyCode))) {
-    //    e.preventDefault();
-    //}
-}
-
-function disableKey(keyName) {
-    var tempBindings = null;
-
-    var keyboard = quill.getModule('keyboard');
-    tempBindings = keyboard.bindings[keyName];
-    keyboard.bindings[keyName] = null;
-
-    return tempBindings;
-}
-
-function reenableKey(keyName, bindings) {
-    var keyboard = quill.getModule('keyboard');
-    keyboard.bindings[keyName] = bindings;
-}
-
-function selectText(elm) {
-    if (document.body.createTextRange) {
-        const range = document.body.createTextRange();
-        range.moveToElementText(elm);
-        range.select();
-    } else if (window.getSelection) {
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(elm);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    } else {
-        console.warn("Could not select text in node: Unsupported browser.");
-    }
-}
-
-function isRenamingTemplate() {
-    return getUsedTemplateInstances().some(function (ti) {
-        return ti.domNode.contentEditable;
-    })
-}
-
-//function setTemplateDocIdx(t, oldIdx, newIdx) {
-//    var domTemplates = document.getElementsByClassName("template_btn");
-//    for (var i = 0; i < domTemplates.length; i++) {
-//        var domTemplate = domTemplates[i];
-//        var template = {
-//            templateId: domTemplate.getAttribute('templateId'),
-//            templateName: domTemplate.getAttribute('templateName'),
-//            templateColor: domTemplate.getAttribute('templateColor'),
-//            docIdx: domTemplate.getAttribute('docIdx'),
-//            templateText: domTemplate.innerText,
-
-//            //templateType: domTemplate.getAttribute('templateType'),
-//            //templateData: domTemplate.getAttribute('templateData'),
-//            //isFocus: domTemplate.getAttribute('isFocus'),
-//            //instanceId: domTemplate.getAttribute('instanceId'),
-//            //domNode: domTemplate
-//        }
-//        if (template.templateId == t.templateId && template.docIdx == oldIdx) {
-//            domTemplate.setAttribute('docIdx', newIdx);
-//            return;
-//        }
-//    }
-//}
+//#endregion
 
 function getTemplateDefByGuid(tguid) {
     return getUsedTemplateDefinitions().find(x=>x.domNode.getAttribute('templateGuid') == tguid);
 }
 
+//#region Toolbar Context Menu
+
 function showTemplateToolbarContextMenu(tb) {
-    clickCount = 0;
+    let tb_rect = tb.getBoundingClientRect();
+    let x = tb_rect.left;
+    let y = tb_rect.bottom;
 
-    var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
-    var rgtClickContextMenuList = document.getElementById('templateToolbarMenuList');
-    rgtClickContextMenuList.innerHTML = '';
+    let allTemplateDefs = getAvailableTemplateDefinitions()
+    var cm = [];
+    
+    for (var i = 0; i < templateTypesMenuOptions.length; i++) {
+        let tmi = templateTypesMenuOptions[i];
 
-    var atdl = getAvailableTemplateDefinitions();
-    for (var i = 0; i < atdl.length; i++) {
-        var t = atdl[i];
-        var templateItem = '<li onclick="createTemplate(\'' + t.domNode.getAttribute('templateGuid') + '\');">' +
-            '<div style="background-color:' + t.domNode.getAttribute('templateColor') + '"></div>' +
-            '<span>' + t.domNode.getAttribute('templateName') + '</span></li>';
-        rgtClickContextMenuList.innerHTML += templateItem;
+        if (i == templateTypesMenuOptions.length - 1) {
+            cm.push({ separator: true });
+            // add new is always visible
+            tmi.action = function (option, contextMenuIndex, optionIndex) {
+                createTemplate();
+            },
+            cm.push(tmi);
+            continue;
+        }
+
+        let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.label.toLowerCase());
+
+        if (allTemplateDefsForType == null || allTemplateDefsForType.length == 0) {
+            continue;
+        }
+
+        tmi.submenu = allTemplateDefsForType.map(function (ttd) {
+            return {
+                icon: ' ',
+                iconBgColor: ttd.templateColor,
+                label: ttd.templateName,
+                action: function (option, contextMenuIndex, optionIndex) {
+                    createTemplate(ttd);
+                },
+            }
+        });
+        cm.push(tmi);
     }
 
-    rgtClickContextMenuList.innerHTML += '<li onclick="createTemplate();">' +
-        '<span style="color:lightseagreen;font-size:20px">+</span>' +
-        '<span>Add Template</span></li>';
-    const rect = tb.getBoundingClientRect();
-    const x = rect.left + 20;
-    const y = rect.bottom;
-    rgtClickContextMenu.style.left = `${x}px`;
-    rgtClickContextMenu.style.top = `${y}px`;
-    rgtClickContextMenu.style.display = 'block';
+    superCm.createMenu(cm, {pageX: x, pageY: y});
 
     isShowingTemplateToolbarMenu = true;
 }
 
 function hideTemplateToolbarContextMenu() {
-    var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
-    rgtClickContextMenu.style.display = 'none';
+    //var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
+    //rgtClickContextMenu.style.display = 'none';
+    superCm.destroyMenu()
 
     isShowingTemplateToolbarMenu = false;
 }
 
-//function showTemplateContextMenu(te) {
-//    if (te == null) {
-//        return;
-//    }
-//    if (isShowingTemplateContextMenu) {
-//        hideTemplateContextMenu();
-//    }
-//    clickCount = 0;
-
-//    var rgtClickContextMenu = document.getElementById('templateContextMenu');
-//    var rgtClickContextMenuList = document.getElementById('templateContextMenuList');
-//    rgtClickContextMenuList.innerHTML = '';
-
-//    let tId = te.getAttribute('templateId');
-//    let iId = te.getAttribute('instanceId');
-//    var context_items = [
-//        { icon_class: 'template_rename_icon', label: '   Rename', func: 'renameTemplateClick' },
-//        { icon_class: 'template_color_icon', label: '   Change Color', func: 'changeTemplateColorClick' },
-//        { icon_class: 'template_delete_icon', label: '   Delete All', func: 'deleteAllTemplateClick' }];
-
-//    context_items.forEach(function (ci) {
-//        var context_item = '<li><a href="javascript:void(0);" onclick="' + ci.func + '(' + tId + ',' + iId + ');">' +
-//            '<div class="template_context_item ' + ci.icon_class + '"></div> ' +
-//            '<span style="font-family:arial;">' + ci.label + '</span></a></li>';
-//        rgtClickContextMenuList.innerHTML += context_item;
-//    });
-
-//    const rect = te.getBoundingClientRect();
-//    const x = rect.left + 20;
-//    const y = rect.bottom;
-//    rgtClickContextMenu.style.left = `${x}px`;
-//    rgtClickContextMenu.style.top = `${y}px`;
-//    rgtClickContextMenu.style.display = 'block';
-
-//    isShowingTemplateContextMenu = true;
-//}
-
-//function hideTemplateContextMenu() {
-//    var rgtClickContextMenu = document.getElementById('templateContextMenu');
-//    rgtClickContextMenu.style.display = 'none';
-
-//    isShowingTemplateContextMenu = false;
-//}
+//#endregion
 
 function showTemplateColorPaletteMenu() {
     if (isShowingTemplateColorPaletteMenu) {
         hideTemplateColorPaletteMenu();
     }
-    clickCount = 0;
 
     let tguid = getFocusTemplateGuid();// te.getAttribute('templateId');
     var palette_item = {
@@ -916,7 +799,7 @@ function showTemplateColorPaletteMenu() {
         paletteHtml += '<tr>';
         for (var c = 0; c < 10; c++) {
             let c = getRandomColor().trim();
-            let item = '<td><a href="javascript:void(0);" onclick="' + palette_item.func + '(\'' + c + '\');">' +
+            let item = '<td><a href="javascript:void(0);" onclick="' + palette_item.func + '(\'' + c + '\'); event.stopPropagation();">' +
                 '<div class="' + palette_item.style_class + '" style="background-color: ' + c + '" ></div></a></td > ';
             paletteHtml += item;
         }
@@ -929,7 +812,7 @@ function showTemplateColorPaletteMenu() {
     rgtClickColorPaletteMenu.style.display = 'block';
     var paletteMenuRect = rgtClickColorPaletteMenu.getBoundingClientRect();
 
-    const editToolbarRect = document.getElementById('editTemplateToolbar').getBoundingClientRect(); //te.getBoundingClientRect();
+    const editToolbarRect = document.getElementById('editTemplateToolbar').getBoundingClientRect(); 
     const colorBoxRect = document.getElementById('templateColorBox').getBoundingClientRect();
     const x = colorBoxRect.left;
     const y = editToolbarRect.top - paletteMenuRect.height;
@@ -954,14 +837,70 @@ function hideAllContextMenus() {
 
 function updateEditTemplateToolbarPosition() {
     $("#editTemplateToolbar").css("position", "absolute");
-    $("#editTemplateToolbar").css("top", $(window).height() - $("#editTemplateToolbar").outerHeight());
+
+    let wh = window.visualViewport.height;
+    let etth = $("#editTemplateToolbar").outerHeight();
+    $("#editTemplateToolbar").css("top", wh-etth);
+}
+
+function enableResize(ele) {
+    // The current position of mouse
+    let x = 0;
+    let y = 0;
+
+    // The dimension of the element
+    let w = 0;
+    let h = 0;
+
+    // Handle the mousedown event
+    // that's triggered when user drags the resizer
+    const mouseDownHandler = function (e) {
+        // Get the current mouse position
+        x = e.clientX;
+        y = e.clientY;
+
+        // Calculate the dimension of element
+        const styles = window.getComputedStyle(ele);
+        w = parseInt(styles.width, 10);
+        h = parseInt(styles.height, 10);
+
+        // Attach the listeners to `document`
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+    };
+
+    const mouseMoveHandler = function (e) {
+        // How far the mouse has been moved
+        const dx = e.clientX - x;
+        const dy = e.clientY - y;
+
+        // Adjust the dimension of element
+        //ele.style.width = `${w + dx}px`;
+        ele.style.height = `${h - dy}px`;
+        updateEditTemplateToolbarPosition();
+    };
+
+    const mouseUpHandler = function () {
+        // Remove the handlers of `mousemove` and `mouseup`
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+    };
+
+    // Query all resizers
+    const resizers = ele.querySelectorAll('.resizer');
+
+    // Loop over them
+    [].forEach.call(resizers, function (resizer) {
+        resizer.addEventListener('mousedown', mouseDownHandler);
+    });
 }
 
 function showEditTemplateToolbar() {
-    clickCount = 0;
     isShowingEditTemplateToolbar = true;
     var ett = document.getElementById('editTemplateToolbar');
     ett.style.display = 'flex';
+
+    enableResize(document.getElementById('editTemplateToolbar'));
 
     updateEditTemplateToolbarPosition();
 
@@ -1091,7 +1030,7 @@ function clearAllTemplateText() {
 }
 
 function setTemplateText(tguid, text) {
-    var stl = document.getElementsByClassName("template_btn");
+    var stl = document.getElementsByClassName("ql-template-embed-blot");
     for (var i = 0; i < stl.length; i++) {
         var t = stl[i];
         if (t.getAttribute('templateGuid') == tguid) {

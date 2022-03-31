@@ -1,12 +1,4 @@
-﻿//var quill;
-
-var clickCount = 0;
-var isCompleted = false;
-var isLoaded = false;
-
-var consolelog = '';
-
-var enterKeyBindings = null;
+﻿var isLoaded = false;
 
 var isShowingTemplateContextMenu = false;
 var isShowingTemplateColorPaletteMenu = false;
@@ -19,8 +11,11 @@ var isShowingEditorToolbar = true;
 var envName = '';
 var isPastingTemplate = false;
 var fontFamilys = null;
-var fontSizes = null;
-var defaultFontIdx = null;
+var fontSizes = [];
+
+var defaultFontSize = '12px';
+var defaultFontFamily = 'Arial';
+
 var indentSize = 5;
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -28,18 +23,36 @@ function setWpfEnv() {
     envName = 'wpf';
 }
 
-function init(html, isReadOnly, templateDefsStr, templateRegExInfoStr, fontFamilys, fontSizes, defaultFontIdx, indentSize, isFillingTemplates) { 
-    if (fontFamilys == null) {
+function init(html, isReadOnly, templateDefsStr, templateRegExInfoStr, fontFamilysArg, fontSizesArg, defFontSize, defFontFamily, indentSize, isFillingTemplates) {
+    // font familys
+    if (fontFamilysArg == null) {
         fontFamilys = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
+    } else {
+        fontFamilys = fontFamilysArg;
     }
-    if (fontSizes == null) {
-        fontSizes = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
+    if (defFontFamily != null) {
+        defaultFontFamily = defFontFamily;
     }
-    if (defaultFontIdx == null) {
-        defaultFontIdx = 3;
+    let defFontFamilyCheck = fontFamilys.filter(x => x.toLowerCase() == defaultFontFamily.toLowerCase());
+    if (defFontFamilyCheck == null || defFontFamilyCheck.length == 0) {
+        fontSizes.push(defaultFontSize);
     }
 
-    loadQuill(fontFamilys, fontSizes, defaultFontIdx);
+    // font sizes
+    if (fontSizesArg == null) {
+        fontSizes = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
+    } else {
+        fontSizes = fontSizesArg;
+    }
+    if (defFontSize != null) {
+        defaultFontSize = defFontSize;        
+    }
+    let defFontSizeCheck = fontSizes.filter(x => x.toLowerCase() == defaultFontSize.toLowerCase());
+    if (defFontSizeCheck == null || defFontSizeCheck.length == 0) {
+        fontSizes.push(defaultFontSize);
+    }
+
+    loadQuill(fontFamilys, fontSizes);
 
     if (isFillingTemplates) {
         showPasteTemplateToolbar();
@@ -66,105 +79,16 @@ function init(html, isReadOnly, templateDefsStr, templateRegExInfoStr, fontFamil
         //disableScrolling();
     }
 
-    $(window).on("load", function () {
-        console.log("window loaded");
-    });
-
-    $('.edit-template-name-text-input').mouseup(function () {
-        $('.edit-template-name-text-input').css('height', $(this).height());
-    });
-
-    
-
     initTemplates(templateDefsStr, templateRegExInfoStr);
 
-
+    refreshFontSizePicker();
+    refreshFontFamilyPicker();
 
     isLoaded = true;
-
-    console.log('Quill init called');
     return "GREAT!";
 }
 
-function registerTables() {
-    var tableOptions = [];
-    var maxRows = 7;
-    var maxCols = 7;
-
-    for (let r = 1; r <= maxRows; r++) {
-        for (let c = 1; c <= maxCols; c++) {
-            tableOptions.push('newtable_' + r + '_' + c);
-        }
-    }
-    return tableOptions;
-}
-
-function registerToolbar(fontFamilys, fontSizes) {
-    var fonts = registerFonts(fontFamilys);
-
-    var toolbar = {
-        container: [
-            //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-            [{ 'size': fontSizes }],               // font sizes
-            [{ 'font': fonts.whitelist }],
-            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-            //['blockquote', 'code-block'],
-
-            // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }, {'list': 'check'}],
-            // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-            //[{ 'direction': 'rtl' }],                         // text direction
-
-            // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            ['link'],// 'image', 'video', 'formula'],
-            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-            [{ 'align': [] }],
-            // ['clean'],                                         // remove formatting button
-            // ['templatebutton'],
-            [{ 'Table-Input': registerTables() }]
-        ],
-        handlers: {
-            'Table-Input': () => { return; }
-        }
-    };
-
-    return toolbar;
-}
-
-function registerFonts(fontFamilys, fontSizes) {
-    // Specify Quill fonts
-    var fontNames = fontFamilys.map(font => getFontName(font));
-    var fonts = Quill.import('attributors/class/font');
-    fonts.whitelist = fontNames;
-    Quill.register(fonts, true);
-
-    //font sizes
-    var size = Quill.import('attributors/style/size');
-    size.whitelist = fontSizes;
-    Quill.register(size, true);
-
-    return fonts;
-}
-
-function registerFontStyles(fontFamilys) {
-    // Add fonts to CSS style
-    var fontStyles = "";
-    fontFamilys.forEach(function (font) {
-        var fontName = getFontName(font);
-        fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
-            "content: '" + font + "';" +
-            "font-family: '" + font + "', sans-serif;" +
-            "}" +
-            ".ql-font-" + fontName + "{" +
-            " font-family: '" + font + "', sans-serif;" +
-            "}";
-    });
-
-    return fontStyles;
-}
-
-function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
+function loadQuill(fontFamilys, fontSizes) {
     if (isLoaded) {
         return;
     }
@@ -248,35 +172,14 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
     });
 
 
-
-    document.addEventListener('click', function (e) {
-        //console.log(e.target);
-        //if(getFocusTemplateElement() == null) {
-        //    hideTemplateToolbarContextMenu();
-        //    hideTemplateContextMenu();
-        //}
-        if (clickCount > 0) {
-            if (isShowingTemplateToolbarMenu) {
-                hideTemplateToolbarContextMenu();
-            }
-            if (isShowingTemplateContextMenu) {
-                hideTemplateContextMenu();
-            }
-            if (isShowingTemplateColorPaletteMenu) {
-                hideTemplateColorPaletteMenu();
-            }
-        } else {
-            clickCount++;
-            if (!wasLastClickOnTemplate) {
-                clearTemplateSelection();
-            }
-            wasLastClickOnTemplate = false;
+    window.addEventListener('click', (e) => {
+        if (e.path.find(x => x.className == 'edit-template-toolbar') != null ||
+            e.path.find(x => x.className == 'paste-template-toolbar') != null ||
+            e.path.find(x => x.className == 'context-menu-option') != null) {
+            //ignore clicks within template toolbars
+            return;
         }
-        return;
-    });
-
-    this.quill.root.addEventListener('click', (e) => {
-        if (e.path.find(x => x.className == 'template_btn') == null) {
+        if (e.path.find(x => x.className == 'ql-template-embed-blot') == null) {
             hideAllContextMenus();
             hideEditTemplateToolbar();
             hidePasteTemplateToolbar();
@@ -285,8 +188,11 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
 
     quill.on('selection-change', function (range, oldRange, source) {
         if (range) {
+            refreshFontSizePicker();
+            refreshFontFamilyPicker();
+
             if (range.length == 0) {
-                console.log('User cursor is on', range.index);               
+                console.log('User cursor is on', range.index);
 
             } else {
                 var text = quill.getText(range.index, range.length);
@@ -302,9 +208,163 @@ function loadQuill(fontFamilys, fontSizes, defaultFontIdx) {
     });
 }
 
+function registerTables() {
+    var tableOptions = [];
+    var maxRows = 7;
+    var maxCols = 7;
+
+    for (let r = 1; r <= maxRows; r++) {
+        for (let c = 1; c <= maxCols; c++) {
+            tableOptions.push('newtable_' + r + '_' + c);
+        }
+    }
+    return tableOptions;
+}
+
+function registerToolbar(fontFamilys, fontSizes) {
+    var fonts = registerFonts(fontFamilys);
+
+    var toolbar = {
+        container: [
+            //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'size': fontSizes }],               // font sizes
+            [{ 'font': fonts.whitelist }],
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+
+            // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }, {'list': 'check'}],
+            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+
+            // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            ['link', 'image', 'video', 'formula'],
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'align': [] }],
+            // ['clean'],                                         // remove formatting button
+            // ['templatebutton'],
+            [{ 'Table-Input': registerTables() }]
+        ],
+        handlers: {
+            'Table-Input': () => { return; }
+        }
+    };
+
+    return toolbar;
+}
+
+function registerFonts(fontFamilys, fontSizes) {
+    // Specify Quill fonts
+    var fontNames = fontFamilys.map(font => getFontName(font));
+    var fonts = Quill.import('attributors/class/font');
+    fonts.whitelist = fontNames;
+    Quill.register(fonts, true);
+
+    //font sizes
+    var size = Quill.import('attributors/style/size');
+    size.whitelist = fontSizes;
+    Quill.register(size, true);
+
+    return fonts;
+}
+
+function registerFontStyles(fontFamilys) {
+    // Add fonts to CSS style
+    var fontStyles = "";
+    fontFamilys.forEach(function (font) {
+        var fontName = getFontName(font);
+        fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
+            "content: '" + font + "';" +
+            "font-family: '" + font + "', sans-serif;" +
+            "}" +
+            ".ql-font-" + fontName + "{" +
+            " font-family: '" + font + "', sans-serif;" +
+            "}";
+    });
+
+    return fontStyles;
+}
+
+
+
 function getFontName(font) {
     // Generate code-friendly font names
     return font.toLowerCase().replace(/\s/g, "-");
+}
+
+function refreshFontSizePicker() {
+    let curFormat = quill.getFormat();
+    let curFontSize = curFormat != null && curFormat.hasOwnProperty('size') ? curFormat.size : defaultFontSize;
+    let fontSizeFound = false;
+
+    document
+        .getElementsByClassName('ql-size ql-picker')[0]
+        .getElementsByClassName('ql-picker-label')[0]
+        .setAttribute('data-value', curFontSize);
+
+    Array
+        .from(
+            document
+                .getElementsByClassName('ql-size ql-picker')[0]
+                .getElementsByClassName('ql-picker-options')[0]
+                .children)
+        .forEach((fontSizeSpan) => {
+
+            fontSizeSpan.classList.remove('ql-selected');
+            if (fontSizeSpan.getAttribute('data-value').toLowerCase() == curFontSize.toLowerCase()) {
+                fontSizeSpan.classList.add('ql-selected');
+                fontSizeFound = true;
+            }
+        });
+
+    if (!fontSizeFound) {
+        let sizeElm = document
+            .getElementsByClassName('ql-size ql-picker')[0]
+            .getElementsByClassName('ql-picker-options')[0].firstChild.cloneNode();
+
+        sizeElm.setAttribute('data-value', curFontSize);
+        sizeElm.classList.add('ql-selected');
+        document
+            .getElementsByClassName('ql-size ql-picker')[0]
+            .getElementsByClassName('ql-picker-options')[0]
+            .innerHTML += sizeElm.outerHTML;
+    }
+}
+
+function refreshFontFamilyPicker() {
+    let curFormat = quill.getFormat();
+    let curFontFamily = curFormat != null && curFormat.hasOwnProperty('font') ? curFormat.font : defaultFontFamily;
+    let fontFamilyFound = false;
+
+    document
+        .getElementsByClassName('ql-font ql-picker')[0]
+        .getElementsByClassName('ql-picker-label')[0]
+        .setAttribute('data-value', curFontFamily);
+
+    Array
+        .from(document.getElementsByClassName('ql-font ql-picker')[0].getElementsByClassName('ql-picker-options')[0].children)
+        .forEach((fontFamilySpan) => {
+
+            fontFamilySpan.classList.remove('ql-selected');
+            if (fontFamilySpan.getAttribute('data-value').toLowerCase() == curFontFamily.toLowerCase()) {
+                fontFamilySpan.classList.add('ql-selected');
+                fontFamilyFound = true;
+            }
+        });
+
+    if (!fontFamilyFound) {
+        let familyElm = document
+            .getElementsByClassName('ql-font ql-picker')[0]
+            .getElementsByClassName('ql-picker-options')[0].firstChild.cloneNode();
+
+        familyElm.setAttribute('data-value', curFontFamily);
+        familyElm.classList.add('ql-selected');
+        document
+            .getElementsByClassName('ql-font ql-picker')[0]
+            .getElementsByClassName('ql-picker-options')[0]
+            .innerHTML += familyElm.outerHTML;
+    }
 }
 
 function setText(text) {
