@@ -264,7 +264,7 @@ namespace MpWpfApp {
                 if(TextToken == null) {
                     return 0;
                 }
-                return TextToken.CopyItemId;
+                return 0;// TextToken.CopyItemId;
             }
         }
 

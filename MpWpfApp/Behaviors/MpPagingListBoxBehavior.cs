@@ -68,7 +68,7 @@ namespace MpWpfApp {
         protected override void OnLoad() {
             base.OnLoad();
             MpHelpers.RunOnMainThread(async () => {
-                AssociatedObject.PreviewMouseWheel += Sv_MouseWheel;
+                AssociatedObject.PreviewMouseWheel += Sv_PreviewMouseWheel;
 
                 var hScrollBar = AssociatedObject.GetScrollBar(Orientation.Horizontal);
                 while (hScrollBar == null) {
@@ -252,10 +252,12 @@ namespace MpWpfApp {
             });
         }
 
-        private void Sv_MouseWheel(object sender, MouseWheelEventArgs e) {
+        private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
             if (//MpClipTrayViewModel.Instance.IsAnyTileFlipped ||
                 //MpClipTrayViewModel.Instance.IsAnyTileExpanded ||
-                MpMainWindowViewModel.Instance.IsMainWindowOpening) {
+                MpMainWindowViewModel.Instance.IsMainWindowOpening ||
+                !MpClipTrayViewModel.Instance.CanScroll) {
+                //e.Handled = true;
                 return;
             }
 

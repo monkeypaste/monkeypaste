@@ -41,20 +41,20 @@ namespace MonkeyPaste {
                 
         [JsonProperty("templateType")]
         public string TemplateTypeStr { get; set; }
+        [JsonProperty("templateData")]
+        public string TemplateData { get; set; }
 
         [JsonProperty("templateName")]
         public string TemplateName { get; set; }
-
-        [JsonProperty("templateData")]
-        public string TemplateTypeData { get; set; }
-
-        // TODO this should prolly be a serialized JSON obj of text format...
-        [JsonProperty("templateFormatInfoStr")]
-        public string TemplateFormatInfoStr { get; set; } = string.Empty;
-
         [JsonProperty("templateColor")]
-        public string HexColor { get; set; }        
+        public string HexColor { get; set; }
 
+
+        [JsonProperty("templateDeltaFormat")]
+        public string TemplateDeltaFormat { get; set; } = string.Empty;
+        [JsonProperty("templateHtmlFormat")]
+        public string TemplateHtmlFormat { get; set; } = string.Empty;
+  
         #endregion
 
         #region Fk Models
@@ -66,18 +66,17 @@ namespace MonkeyPaste {
         #region Properties
 
 
-        [Ignore]
-        public MpInlineTextFormatInfoFormat TemplateFormatInfo {
-            get => JsonConvert.DeserializeObject<MpInlineTextFormatInfoFormat>(TemplateFormatInfoStr);
-            set => TemplateFormatInfoStr = JsonConvert.SerializeObject(value);
-        }
+        //[Ignore]
+        //public MpQuillEditorFormats TemplateFormatInfo {
+        //    get => JsonConvert.DeserializeObject<MpQuillEditorFormats>(TemplateDeltaFormat);
+        //    set => TemplateDeltaFormat = JsonConvert.SerializeObject(value);
+        //}
 
         [Ignore]
         public MpTextTemplateType TemplateType {
             get => TemplateTypeStr.ToEnum<MpTextTemplateType>();
             set => TemplateTypeStr = value.ToString();
         }
-
 
         [Ignore]
         public Guid TextTemplateGuid {
@@ -131,8 +130,8 @@ namespace MonkeyPaste {
                 TemplateName = templateName,
                 HexColor = string.IsNullOrEmpty(templateColor) ? MpHelpers.GetRandomColor().ToHex() : templateColor,
                 TemplateType = templateType,
-                TemplateTypeData = templateTypeData,
-                TemplateFormatInfoStr = formatInfo
+                TemplateData = templateTypeData,
+                TemplateDeltaFormat = formatInfo
             };
 
             await newTextTemplate.WriteToDatabaseAsync();

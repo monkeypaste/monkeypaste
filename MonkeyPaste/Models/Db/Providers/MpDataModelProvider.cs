@@ -582,7 +582,6 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpTextTemplate> GetTextTemplateByGuid(string guid) {
-            // NOTE may need to use '?' below
             string query = @"select * from MpTextTemplate where MpTextTemplateGuid=?";
             var result = await MpDb.QueryAsync<MpTextTemplate>(query, guid);
             if (result == null || result.Count == 0) {
@@ -591,8 +590,14 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public static async Task<List<MpTextTemplate>> GetTextTemplatesByGuids(List<string> guids) {
+            string whereStr = string.Join(" or ", guids.Select(x => string.Format(@"MpTextTemplateGuid={0}", x)));
+            string query = @"select * from MpTextTemplate where ?";
+            var result = await MpDb.QueryAsync<MpTextTemplate>(query, whereStr);
+            return result;
+        }
+
         public static async Task<MpTextTemplate> GetTextTemplateByNameAsync(int ciid, string templateName) {
-            // NOTE may need to use '?' below
             string query = @"select * from MpTextTemplate where fk_MpCopyItemId=? and TemplateName=?";
             var result = await MpDb.QueryAsync<MpTextTemplate>(query,ciid,templateName);
             if (result == null || result.Count == 0) {

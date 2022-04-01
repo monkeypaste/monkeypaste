@@ -97,6 +97,8 @@ namespace MonkeyPaste {
         }
 
         public virtual async Task DeleteFromDatabaseAsync() {
+            MpConsole.WriteLine($"Deleting '{GetType()}' [{Id}]:{Guid}");
+
             if (IsSyncing) {
                 await DeleteFromDatabaseAsync(SyncingWithDeviceGuid, false, true);
             } else {

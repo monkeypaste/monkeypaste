@@ -18,7 +18,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         #endregion
 
         #region Public Methods
@@ -28,10 +27,19 @@ namespace MonkeyPaste {
             AllTemplates = new ObservableCollection<MpTextTemplate>(ttl);
         }
 
-        public static async Task Update(string updatedTemplatesStr) {
-            Debugger.Break();
-            var ttl = JsonConvert.DeserializeObject<MpTextTemplate>(updatedTemplatesStr);
-            return;
+        public static async Task Update(List<MpTextTemplate> updatedTemplates, List<string> removedGuids) {            
+            if(removedGuids != null) {
+                var rtl = await MpDataModelProvider.GetTextTemplatesByGuids(removedGuids);
+                await Task.WhenAll(rtl.Select(x => x.DeleteFromDatabaseAsync()));
+            }
+
+            if(updatedTemplates != null) {
+                await Task.WhenAll(updatedTemplates.Select(x => x.WriteToDatabaseAsync()));
+                AllTemplates = new ObservableCollection<MpTextTemplate>(updatedTemplates);
+            } else {
+                // NOTE not sure how to handle this..
+                await Init();
+            }
         }
 
         #endregion

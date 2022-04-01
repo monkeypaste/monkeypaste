@@ -509,12 +509,12 @@ namespace MonkeyPaste {
                     await MpCopyItemTag.Create(tag.Id, newItem.Id);
                 }
 
-                var templates = await MpDataModelProvider.GetTextTemplatesAsync(this.Id);
-                foreach (var template in templates) {
-                    var templateClone = await template.CloneDbModel();
-                    templateClone.CopyItemId = newItem.Id;
-                    await templateClone.WriteToDatabaseAsync();
-                }
+                //var templates = await MpDataModelProvider.GetTextTemplatesAsync(this.Id);
+                //foreach (var template in templates) {
+                //    var templateClone = await template.CloneDbModel();
+                //    templateClone.CopyItemId = newItem.Id;
+                //    await templateClone.WriteToDatabaseAsync();
+                //}
             }
 
             return newItem;

@@ -1,5 +1,5 @@
 .ql-template-embed-blot {
-    display: inline;
+    display: inline-flex;
     text-decoration: none;
     color: #67c5ff;
     border-radius: 3px;

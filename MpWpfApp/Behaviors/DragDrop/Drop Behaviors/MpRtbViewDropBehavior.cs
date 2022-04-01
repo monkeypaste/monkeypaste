@@ -190,16 +190,16 @@ namespace MpWpfApp {
             }
 
             // merge templates
-            var citl = await MpDataModelProvider.GetTextTemplatesAsync(AssociatedObject.BindingContext.CopyItemId);
-            var mcitl = await MpDataModelProvider.GetTextTemplatesAsync(mci.Id);
-            foreach (MpTextTemplate mcit in mcitl) {
-                if (citl.Any(x => x.TemplateName == mcit.TemplateName)) {
-                    //if merged item has template w/ same name just ignore it since it will already be parsed
-                    continue;
-                }
-                mcit.CopyItemId = AssociatedObject.BindingContext.CopyItemId;
-                await mcit.WriteToDatabaseAsync();
-            }
+            //var citl = await MpDataModelProvider.GetTextTemplatesAsync(AssociatedObject.BindingContext.CopyItemId);
+            //var mcitl = await MpDataModelProvider.GetTextTemplatesAsync(mci.Id);
+            //foreach (MpTextTemplate mcit in mcitl) {
+            //    if (citl.Any(x => x.TemplateName == mcit.TemplateName)) {
+            //        //if merged item has template w/ same name just ignore it since it will already be parsed
+            //        continue;
+            //    }
+            //    mcit.CopyItemId = AssociatedObject.BindingContext.CopyItemId;
+            //    await mcit.WriteToDatabaseAsync();
+            //}
 
             // merge tags
             var tl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(AssociatedObject.BindingContext.CopyItemId);

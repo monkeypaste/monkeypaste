@@ -15,7 +15,7 @@ var fontSizes = [];
 
 var defaultFontSize = '12px';
 var defaultFontFamily = 'Arial';
-
+//var reqMsgStr;
 var indentSize = 5;
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -23,51 +23,33 @@ function setWpfEnv() {
     envName = 'wpf';
 }
 
-function init(html, isReadOnly, templateDefsStr, templateRegExInfoStr, fontFamilysArg, fontSizesArg, defFontSize, defFontFamily, indentSize, isFillingTemplates) {
-    // font familys
-    if (fontFamilysArg == null) {
-        fontFamilys = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
+function init(reqMsgStr) { //html, isReadOnly, templateDefsStr, templateRegExInfoStr, fontFamilysArg, fontSizesArg, defFontSize, defFontFamily, indentSize, isFillingTemplates) {
+    //log('Load Request Msg:');
+    //log(reqMsgStr);
+
+    if (reqMsgStr == null) {
+        reqMsg = {
+            guidOpenTag: '{{',
+            guidCloseTag: '}}',
+            envName: 'web',
+            isPasteRequest: false,
+            isReadOnlyEnabled: false,
+            itemEncodedHtmlData: 'sup boyyyeee',
+            usedTextTemplates: []
+        }
     } else {
-        fontFamilys = fontFamilysArg;
-    }
-    if (defFontFamily != null) {
-        defaultFontFamily = defFontFamily;
-    }
-    let defFontFamilyCheck = fontFamilys.filter(x => x.toLowerCase() == defaultFontFamily.toLowerCase());
-    if (defFontFamilyCheck == null || defFontFamilyCheck.length == 0) {
-        fontSizes.push(defaultFontSize);
+        let reqMsgStr_decoded = atob(reqMsgStr);
+        reqMsg = JSON.parse(reqMsgStr_decoded);
     }
 
-    // font sizes
-    if (fontSizesArg == null) {
-        fontSizes = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
-    } else {
-        fontSizes = fontSizesArg;
-    }
-    if (defFontSize != null) {
-        defaultFontSize = defFontSize;        
-    }
-    let defFontSizeCheck = fontSizes.filter(x => x.toLowerCase() == defaultFontSize.toLowerCase());
-    if (defFontSizeCheck == null || defFontSizeCheck.length == 0) {
-        fontSizes.push(defaultFontSize);
-    }
+    loadQuill(reqMsg.envName);
 
-    loadQuill(fontFamilys, fontSizes);
+    setHtml(reqMsg.itemEncodedHtmlData);
 
-    if (isFillingTemplates) {
-        showPasteTemplateToolbar();
-    }
-
-    if (html == null) {
-        html = '';
-    }
-
-    setHtml(html);
-
-    if (envName == '') {
+    if (reqMsg.envName == 'web') {
         //for testing in browser
     } else {
-        if (isReadOnly == null || isReadOnly == true) {
+        if (reqMsg.isReadOnlyEnabled) {
             hideToolbar();
             enableReadOnly();
         } else {
@@ -79,7 +61,7 @@ function init(html, isReadOnly, templateDefsStr, templateRegExInfoStr, fontFamil
         //disableScrolling();
     }
 
-    initTemplates(templateDefsStr, templateRegExInfoStr);
+    initTemplates(reqMsg.usedTextTemplates, reqMsg.guidOpenTag, reqMsg.guidCloseTag, reqMsg.isPasteRequest);
 
     refreshFontSizePicker();
     refreshFontFamilyPicker();
@@ -88,7 +70,7 @@ function init(html, isReadOnly, templateDefsStr, templateRegExInfoStr, fontFamil
     return "GREAT!";
 }
 
-function loadQuill(fontFamilys, fontSizes) {
+function loadQuill(envName) {
     if (isLoaded) {
         return;
     }
@@ -101,17 +83,17 @@ function loadQuill(fontFamilys, fontSizes) {
 
     // Append the CSS stylesheet to the page
     var node = document.createElement('style');
-    node.innerHTML = registerFontStyles(fontFamilys);
+    node.innerHTML = registerFontStyles(envName);
     document.body.appendChild(node);
 
-    var curQuillDiv = $("#editor");
+    var editorDiv = $("#editor");
 
-    quill = new Quill(curQuillDiv[0], {
+    quill = new Quill(editorDiv[0], {
         placeholder: '',
         theme: 'snow',
         modules: {
             table: false,
-            toolbar: registerToolbar(fontFamilys, fontSizes),
+            toolbar: registerToolbar(envName),
             htmlEditButton: {
                 syntax: true,
             },
@@ -136,7 +118,7 @@ function loadQuill(fontFamilys, fontSizes) {
 
     //registerContentBlots(Quill);
 
-    var curTableIconSpan = curQuillDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
+    var curTableIconSpan = editorDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
     curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
     var curTableCellIconSpans = $(curTableIconSpan.parentNode.childNodes[1]).children();
     curTableCellIconSpans.click((function () {
@@ -192,18 +174,18 @@ function loadQuill(fontFamilys, fontSizes) {
             refreshFontFamilyPicker();
 
             if (range.length == 0) {
-                console.log('User cursor is on', range.index);
+                log('User cursor is on', range.index);
 
             } else {
                 var text = quill.getText(range.index, range.length);
-                console.log('User has highlighted', text);
+                log('User has highlighted', text);
             }
 
             if (!isTemplateFocused()) {
                 hideEditTemplateToolbar();
             }
         } else {
-            console.log('Cursor not in the editor');
+            log('Cursor not in the editor');
         }
     });
 }
@@ -221,13 +203,14 @@ function registerTables() {
     return tableOptions;
 }
 
-function registerToolbar(fontFamilys, fontSizes) {
-    var fonts = registerFonts(fontFamilys);
+function registerToolbar(envName) {
+    let sizes = registerFontSizes();
+    let fonts = registerFontFamilys(envName);
 
     var toolbar = {
         container: [
             //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-            [{ 'size': fontSizes }],               // font sizes
+            [{ 'size': sizes }],               // font sizes
             [{ 'font': fonts.whitelist }],
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
             ['blockquote', 'code-block'],
@@ -254,118 +237,6 @@ function registerToolbar(fontFamilys, fontSizes) {
     return toolbar;
 }
 
-function registerFonts(fontFamilys, fontSizes) {
-    // Specify Quill fonts
-    var fontNames = fontFamilys.map(font => getFontName(font));
-    var fonts = Quill.import('attributors/class/font');
-    fonts.whitelist = fontNames;
-    Quill.register(fonts, true);
-
-    //font sizes
-    var size = Quill.import('attributors/style/size');
-    size.whitelist = fontSizes;
-    Quill.register(size, true);
-
-    return fonts;
-}
-
-function registerFontStyles(fontFamilys) {
-    // Add fonts to CSS style
-    var fontStyles = "";
-    fontFamilys.forEach(function (font) {
-        var fontName = getFontName(font);
-        fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
-            "content: '" + font + "';" +
-            "font-family: '" + font + "', sans-serif;" +
-            "}" +
-            ".ql-font-" + fontName + "{" +
-            " font-family: '" + font + "', sans-serif;" +
-            "}";
-    });
-
-    return fontStyles;
-}
-
-
-
-function getFontName(font) {
-    // Generate code-friendly font names
-    return font.toLowerCase().replace(/\s/g, "-");
-}
-
-function refreshFontSizePicker() {
-    let curFormat = quill.getFormat();
-    let curFontSize = curFormat != null && curFormat.hasOwnProperty('size') ? curFormat.size : defaultFontSize;
-    let fontSizeFound = false;
-
-    document
-        .getElementsByClassName('ql-size ql-picker')[0]
-        .getElementsByClassName('ql-picker-label')[0]
-        .setAttribute('data-value', curFontSize);
-
-    Array
-        .from(
-            document
-                .getElementsByClassName('ql-size ql-picker')[0]
-                .getElementsByClassName('ql-picker-options')[0]
-                .children)
-        .forEach((fontSizeSpan) => {
-
-            fontSizeSpan.classList.remove('ql-selected');
-            if (fontSizeSpan.getAttribute('data-value').toLowerCase() == curFontSize.toLowerCase()) {
-                fontSizeSpan.classList.add('ql-selected');
-                fontSizeFound = true;
-            }
-        });
-
-    if (!fontSizeFound) {
-        let sizeElm = document
-            .getElementsByClassName('ql-size ql-picker')[0]
-            .getElementsByClassName('ql-picker-options')[0].firstChild.cloneNode();
-
-        sizeElm.setAttribute('data-value', curFontSize);
-        sizeElm.classList.add('ql-selected');
-        document
-            .getElementsByClassName('ql-size ql-picker')[0]
-            .getElementsByClassName('ql-picker-options')[0]
-            .innerHTML += sizeElm.outerHTML;
-    }
-}
-
-function refreshFontFamilyPicker() {
-    let curFormat = quill.getFormat();
-    let curFontFamily = curFormat != null && curFormat.hasOwnProperty('font') ? curFormat.font : defaultFontFamily;
-    let fontFamilyFound = false;
-
-    document
-        .getElementsByClassName('ql-font ql-picker')[0]
-        .getElementsByClassName('ql-picker-label')[0]
-        .setAttribute('data-value', curFontFamily);
-
-    Array
-        .from(document.getElementsByClassName('ql-font ql-picker')[0].getElementsByClassName('ql-picker-options')[0].children)
-        .forEach((fontFamilySpan) => {
-
-            fontFamilySpan.classList.remove('ql-selected');
-            if (fontFamilySpan.getAttribute('data-value').toLowerCase() == curFontFamily.toLowerCase()) {
-                fontFamilySpan.classList.add('ql-selected');
-                fontFamilyFound = true;
-            }
-        });
-
-    if (!fontFamilyFound) {
-        let familyElm = document
-            .getElementsByClassName('ql-font ql-picker')[0]
-            .getElementsByClassName('ql-picker-options')[0].firstChild.cloneNode();
-
-        familyElm.setAttribute('data-value', curFontFamily);
-        familyElm.classList.add('ql-selected');
-        document
-            .getElementsByClassName('ql-font ql-picker')[0]
-            .getElementsByClassName('ql-picker-options')[0]
-            .innerHTML += familyElm.outerHTML;
-    }
-}
 
 function setText(text) {
     quill.setText(text + '\n');
@@ -426,8 +297,8 @@ function changeInnerTextHelper(elm, text, newText) {
         elm.data = newText;
         return;
     }
-    changeInnerText(elm.firstChild, text, newText);
-    changeInnerText(elm.nextSibling, text, newText);
+    changeInnerTextHelper(elm.firstChild, text, newText);
+    changeInnerTextHelper(elm.nextSibling, text, newText);
 }
 
 function getSelectedHtml(maxLength) {
@@ -464,7 +335,7 @@ function hideToolbar() {
 
 function showToolbar() {
     isShowingEditorToolbar = true;
-    $(".ql-toolbar").css("display", "inline-block");
+    $(".ql-toolbar").css("display", "flex");
     let tbh = $(".ql-toolbar").outerHeight();
     moveEditorTop(tbh);
 }
@@ -527,14 +398,35 @@ function enableReadOnly() {
     //hideScrollbars();
     disableScrolling();
 
-    //return updated master collection of templates
-    return JSON.stringify(getAvailableTemplateDefinitions());
+    //return 'MpQuillResponseMessage'  updated master collection of templates
+    let qrmObj = {
+        itemEncodedHtmlData: getEncodedHtml(),
+        removedGuids: userDeletedTemplateGuids,
+        updatedAllAvailableTextTemplates: getAvailableTemplateDefinitions()
+    };
+    let qrmJsonStr = JSON.stringify(qrmObj);
+
+    log('enableReadOnly() response msg:');
+    log(qrmJsonStr);
+
+    return qrmJsonStr;
 }
 
-function disableReadOnly(availTemplateStr) {
-    if (availTemplateStr != null) {
-        availableTemplates = JSON.parse(availTemplateStr);
+function disableReadOnly(disableReadOnlyReqStr) {
+    let disableReadOnlyMsg = null;
+
+    if (disableReadOnlyReqStr == null) {
+        disableReadOnlyMsg = {
+            allAvailableTextTemplates: [],
+            editorHeight: window.visualViewport.height
+        };
+    } else {
+        let disableReadOnlyReqStr_decoded = atob(disableReadOnlyReqStr);
+        disableReadOnlyMsg = JSON.parse(disableReadOnlyReqStr_decoded);
     }
+
+    availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
+    document.body.style.height = disableReadOnlyMsg.editorHeight;
 
     $('.ql-editor').attr('contenteditable', true);
     $('.ql-editor').css('caret-color', 'black');
@@ -634,7 +526,7 @@ function createLink() {
         var ts = '<a class="square_btn" href="https://www.google.com">' + text + '</a>';
         quill.clipboard.dangerouslyPasteHTML(range.index, ts);
 
-        console.log('text:\n' + getText());
+        log('text:\n' + getText());
         console.table('\nhtml:\n' + getHtml());
     }
 }
@@ -678,3 +570,9 @@ function getTemplateIconStr(isEnabled) {
     }
 }
 
+function log(msg) {
+    if (!isLoggingEnabled) {
+        return;
+    }
+    console.log(msg);
+}

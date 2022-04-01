@@ -2,7 +2,7 @@ const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx
 
 var ENCODED_TEMPLATE_OPEN_TOKEN = "{{";
 var ENCODED_TEMPLATE_CLOSE_TOKEN = "}}";
-var ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
+var ENCODED_TEMPLATE_REGEXP;
 
 var isShowingEditTemplateToolbar = false;
 var isShowingPasteTemplateToolbar = false;
@@ -51,7 +51,7 @@ function registerTemplateSpan(Quill) {
 
     class TemplateEmbedBlot extends Parchment.EmbedBlot {
         static blotName = 'template';
-        static tagName = 'SPAN';
+        static tagName = 'DIV';
         static className = 'ql-template-embed-blot';
 
         static create(value) {
@@ -77,17 +77,14 @@ function registerTemplateSpan(Quill) {
 }
 
 //#region Init
-function initTemplates(templateDefsStr, templateRegExInfoStr) {
-    if (templateRegExInfoStr != null) {
-        let templateRegExInfo = JSON.parse(templateRegExInfoStr);
-        ENCODED_TEMPLATE_OPEN_TOKEN = templateRegExInfo[0];
-        ENCODED_TEMPLATE_REGEXP = templateRegExInfo[1];
-        ENCODED_TEMPLATE_CLOSE_TOKEN = templateRegExInfo[2];
-    }
+function initTemplates(usedTemplates, openTag, closeTag, isPasting) {
+    ENCODED_TEMPLATE_OPEN_TOKEN = openTag;
+    ENCODED_TEMPLATE_CLOSE_TOKEN = closeTag;
 
-    if (templateDefsStr != null) {
-        let templateDefinitions = JSON.parse(templateDefsStr);
-        decodeTemplates(templateDefinitions);
+    ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
+
+    if (usedTemplates != null) {
+        decodeTemplates(usedTemplates);
     }
 
     Array
@@ -101,6 +98,17 @@ function initTemplates(templateDefsStr, templateRegExInfoStr) {
     
 
     initTemplateToolbarButton();
+
+
+    if (isPasting) {
+        // this SHOULD only happen when there are templates 
+        // since browser extension will just return data...
+        if (usedTemplates != null && usedTemplates.length > 0) {
+            // TODO need set templateText by template type/data here
+            showPasteTemplateToolbar();
+        } else {
+        }
+    }
 }
 
 function initTemplateToolbarButton() {
@@ -254,7 +262,7 @@ function decodeTemplates(templateDefs) {
             quill.insertEmbed(tsIdx, 'template', t);
             tcount++;
         } else {
-            console.log('template def \'' + tguid + '\' not found so omitting from editor');
+            log('template def \'' + tguid + '\' not found so omitting from editor');
         }
         qtext = quill.getText();
     }
@@ -285,7 +293,7 @@ function encodeTemplates() {
         var tin = ti.domNode;
         var tihtml = tin.outerHTML;
         var ties = getTemplateEmbedStr(ti);
-        html = html.replace(tihtml, ties);
+        html = html.replaceAll(tihtml, ties);
     }
     return html;
 }
@@ -312,7 +320,7 @@ function getFocusTemplateGuid() {
 
 function getTemplatesFromRange(range) {
     if (range == null || range.index == null) {
-        console.log('invalid range: ' + range);
+        log('invalid range: ' + range);
     }
     let tl = [];
     getUsedTemplateInstances().forEach(function (tn) {
@@ -471,7 +479,7 @@ function createTemplate(templateObjOrId) {
             templateName: newTemplateName,
             templateType: 'dynamic',
             templateData: '',
-            templateDeltaFormat: JSON.stringify(formatInfo),
+            templateDeltaFormat: formatInfo,
             templateHtmlFormat: selectionInnerHtml
         };
     }
@@ -516,7 +524,7 @@ function clearTemplateSelection() {
 }
 
 function setTemplateType(tguid, ttype) {
-    console.log('Template: ' + tguid + " selected type: " + ttype);
+    log('Template: ' + tguid + " selected type: " + ttype);
 
     setTemplateProperty(tguid, 'templateType', ttype);
 
@@ -545,6 +553,11 @@ function setTemplateType(tguid, ttype) {
 
 function deleteFocusTemplate() {
     let tguid_to_delete = getFocusTemplateGuid();
+    if (tguid_to_delete == null) {
+        log('error, no focus template to delete, ignoring...');
+        return;
+    }
+
     let td = getTemplateFromDomNode(getTemplateDefByGuid(tguid_to_delete).domNode);
     let result = window.confirm('Are you sure you want to delete ALL usages of \'' + td.templateName + '\'?')
 
@@ -569,7 +582,7 @@ function deleteFocusTemplate() {
         });
 
     hideEditTemplateToolbar();
-    console.log('Template \'' + tguid_to_delete + '\' \'' + td.templateName + '\' was DELETED');
+    log('Template \'' + tguid_to_delete + '\' \'' + td.templateName + '\' was DELETED');
 }
 
 function focusTemplate(tguid, fromDropDown, tiguid) {
@@ -681,7 +694,7 @@ function setTemplateName(tguid, name) {
         var te = tl[i];
         if (te.getAttribute('templateGuid') == tguid) {
             te.setAttribute('templateName', name);
-            te.innerText = name;
+            changeInnerText(te, te.innerText, name);
         }
     }
 }
@@ -693,7 +706,7 @@ function setTemplateDetailData(tguid, detailData) {
         if (te.getAttribute('templateGuid') == tguid) {
             te.setAttribute('templateData', detailData);
             if (te.getAttribute('templateType').toLowerCase() == 'datetime') {
-                console.log(jQuery.format.date(new Date(), detailData));
+                log(jQuery.format.date(new Date(), detailData));
             }
         }
     }
@@ -920,7 +933,7 @@ function hideEditTemplateToolbar() {
 }
 
 function selectedTemplateTypeChanged() {
-    console.log("changed");
+    log("changed");
 }
 
 //#region Paste Toolbar
@@ -1062,7 +1075,7 @@ function createTemplateSelectorStyling() {
         if (selElmnt.options.length == 0) {
             continue;
         }
-        var st = getTemplateDefByGuid(selElmnt.options[selElmnt.selectedIndex].getAttribute('value'));
+        var st = getTemplateDefByGuid(selElmnt.options[selElmnt.selectedIndex].getAttribute('templateGuid'));
         a = document.createElement("DIV");
         a.setAttribute("class", "select-selected");
         a2 = document.createElement("SPAN");
@@ -1129,7 +1142,7 @@ function onTemplateOptionClick(e, target) {
         var sVal = s.options[i].value;
         if (sVal == tVal) {
             s.selectedIndex = i;
-            h.innerHTML = targetDiv.innerHTML.replace(t['templateName'], '<span style="margin: 0 10px 0 50px;">' + t['templateName'] + '</span>');
+            h.innerHTML = targetDiv.innerHTML.replaceAll(t['templateName'], '<span style="margin: 0 10px 0 50px;">' + t['templateName'] + '</span>');
             y = targetDiv.parentNode.getElementsByClassName("same-as-selected");
             for (k = 0; k < y.length; k++) {
                 y[k].removeAttribute("class");

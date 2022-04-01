@@ -393,6 +393,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsPasting { get; set; } = false;
+
         #region Virtual
 
         //set in civm IsSelected property change, DragDrop.Drop (copy mode)
@@ -400,6 +402,7 @@ namespace MpWpfApp {
 
         //<HeadCopyItemId, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
         public Dictionary<int, double> PersistentUniqueWidthTileLookup { get; set; } = new Dictionary<int, double>();
+
         #endregion
 
         #region Mouse Modes
@@ -549,6 +552,18 @@ namespace MpWpfApp {
 
         [MpAffectsChild]
         public bool IsScrolling { get; set; }
+
+        public bool CanScroll {
+            get {
+                if(PrimaryItem == null || PrimaryItem.PrimaryItem == null) {
+                    return false;
+                }
+                if(PrimaryItem.IsAnyEditingContent && PrimaryItem.IsHovering) {
+                    return false;
+                }
+                return true;
+            }
+        }
 
         public bool IsAnyEditingClipTitle => Items.Any(x => x.IsAnyEditingTitle);
 
@@ -1311,7 +1326,7 @@ namespace MpWpfApp {
         #region Private Methods
 
         private void CleanupAfterPasteSelected() {
-            IsPastingHotKey = IsPastingSelected = false;
+            IsPastingHotKey = IsPastingSelected = IsPasting = false;
             foreach (var sctvm in SelectedItems) {
                 //clean up pasted items state after paste
                 if (sctvm.HasTemplates) {
@@ -2111,6 +2126,8 @@ namespace MpWpfApp {
 
         public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(
             async(args) => {
+                IsPasting = true;
+
                 var pi = new MpProcessInfo() {
                     Handle = MpProcessManager.LastHandle,
                     ProcessPath = MpProcessManager.LastProcessPath
@@ -2153,6 +2170,8 @@ namespace MpWpfApp {
 
         public ICommand PasteCopyItemByIdCommand => new RelayCommand<object>(
             async (args) => {
+                IsPasting = true;
+
                 var pi = new MpProcessInfo() {
                     Handle = MpProcessManager.LastHandle,
                     ProcessPath = MpProcessManager.LastProcessPath
@@ -2163,6 +2182,8 @@ namespace MpWpfApp {
                 //var pasteDataObject = GetDataObjectByCopyItems(cil, false, true);
                 //MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
                 await MpWpfPasteHelper.Instance.PasteCopyItem(cil[0], pi, false);
+
+                IsPasting = false;
             },
             (args) => args != null && (args is int || args is int[]));
 

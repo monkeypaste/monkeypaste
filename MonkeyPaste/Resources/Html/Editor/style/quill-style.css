@@ -1,6 +1,6 @@
-﻿.ql-toolbar {
+.ql-toolbar {
     width: 100%;
-}
+display: flex;}
 
 
 /* maps font sizes to font drop down*/
@@ -12,8 +12,26 @@
     content: attr(data-value) !important;
 }
 
-/* checkbox */
+.ql-toolbar {
+    display: flex;
+}
 
+.ql-snow .ql-formats {
+    display: inline-flex;
+}
+
+.ql-toolbar.ql-snow 
+.ql-picker.ql-expanded 
+.ql-picker-options {
+    max-height: 500px;
+    overflow-y: scroll !important;
+}
+
+.ql-picker.ql-font .ql-picker-label {
+    overflow: hidden;
+}
+
+/* checkbox */
 .ql-editor ul[data-checked=true] > li {
     text-decoration: line-through !important;
 }

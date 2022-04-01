@@ -93,6 +93,7 @@
     <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
     <None Remove="Resources\Html\Editor\src\content\contentBlot.js" />
     <None Remove="Resources\Html\Editor\src\editor.js" />
+    <None Remove="Resources\Html\Editor\src\fonts\font.js" />
     <None Remove="Resources\Html\Editor\src\templates\template.js" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
@@ -106,10 +107,6 @@
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />
     <EmbeddedResource Remove="Resources\Html\Editor\lib\HighlightJs\styles\github.min.css" />
-    <EmbeddedResource Remove="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.css" />
-    <EmbeddedResource Remove="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.css" />
-    <EmbeddedResource Remove="Resources\Html\Editor\lib\Quill\quill.snow.css" />
-    <EmbeddedResource Remove="Resources\Html\Editor\style\editor-style.css" />
     <EmbeddedResource Remove="Resources\Styles\MpPagingListBoxResourceDictionary.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\MpMainView.xaml" />
@@ -122,73 +119,64 @@
     <Content Include="Resources\Data\Google\client_secrets_desktop.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Html\Editor\Editor2.html">
+    <EmbeddedResource Include="Resources\Html\Editor\Editor2.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\DateFormatter\jquery.dateFormat.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\DateFormatter\jquery.dateFormat.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\DynamicQuillTools\DynamicQuillTools.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\DynamicQuillTools\DynamicQuillTools.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\HighlightJs\highlight.min.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\HighlightJs\highlight.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Resources\Html\Editor\lib\HighlightJs\languages\xml.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Html\Editor\lib\HighlightJs\styles\github.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.css">
+    <EmbeddedResource Include="Resources\Html\Editor\lib\jquery-context-menus\src\context-menu.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\jquery-context-menus\src\context-menu.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\jquery\jquery.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\jquery\jquery.min.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.css">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\Quill-Html-Edit-Button\quill.htmlEditButton.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.min.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\Quill-Html-Edit-Button\quill.htmlEditButton.min.js.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\Quill-Html-Edit-Button\quill.htmlEditButton.min.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\Quill\quill.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\Quill-Html-Edit-Button\quill.htmlEditButton.min.js.map">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\Quill\quill.min.js.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\Quill\quill.min.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\content\contentBlot.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\Quill\quill.min.js.map">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\lib\Quill\quill.snow.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\src\content\contentBlot.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\src\editor.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\editor.js">
       <Generator></Generator>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\src\templates\template.js">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\fonts\font.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Html\Editor\style\editor-style.css">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\templates\template.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.js">
+    <EmbeddedResource Include="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
     <EmbeddedResource Include="Resources\Images\test.png" />
   </ItemGroup>
@@ -230,7 +218,22 @@
     <EmbeddedResource Update="Controls\MpPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\lib\Quill\quill.snow.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\style\editor-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\style\quill-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\style\template-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Styles\MpWpfConverters.xaml">

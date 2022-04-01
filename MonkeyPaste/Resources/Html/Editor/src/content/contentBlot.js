@@ -8,7 +8,7 @@
             node.innerHtml = value.itemData;
 
             node.domNode.addEventListener('mouseenter', function (e) {
-                console.log(node.domNode);
+                log(node.domNode);
             });
             return node;
         }

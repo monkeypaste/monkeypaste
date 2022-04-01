@@ -1,5 +1,6 @@
 ﻿using Azure;
 using CefSharp;
+using CefSharp.SchemeHandler;
 using CefSharp.Wpf;
 using MonkeyPaste;
 using MonkeyPaste.Plugin;
@@ -10,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ConstrainedExecution;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -32,7 +34,6 @@ namespace MpWpfApp {
 
         private static Regex _encodedTemplateRegEx;
 
-        private static string _encodedTemplateRegExInfoStr;
 
         #region IsReadOnly
 
@@ -59,44 +60,50 @@ namespace MpWpfApp {
                             if (isReadOnly) {
                                 MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is readonly");
                                 var readOnlyResult = await cwb.EvaluateScriptAsync("enableReadOnly()");
-                                if (readOnlyResult.Result != null) {
-                                    MpMasterTemplateModelCollection.Update(readOnlyResult.Result.ToString()).FireAndForgetSafeAsync(civm);
+                                if (readOnlyResult.Result != null && readOnlyResult.Result is string resultStr) {
+                                    var qrm = JsonConvert.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(resultStr);
+
+                                    civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(qrm.itemEncodedHtmlData);
+
+                                    MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates,qrm.removedGuids).FireAndForgetSafeAsync(civm);
                                 }
 
-                                var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
-                                if (ctcv != null && civm.Parent != null) {
-                                    double nw = civm.Parent.ReadOnlyContentSize.Width;
-                                    double nh = civm.EditorHeight;
-                                    //if(nh == double.NaN) {
-                                    //    nh = 
-                                    //}
-                                    ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
-                                }
-
-                                var response = await cwb.EvaluateScriptAsync("getEncodedHtml()");
-                                string itemHtml = response.Result.ToString();
-                                civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(itemHtml);
+                                //var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
+                                //if (ctcv != null && civm.Parent != null) {
+                                //    double nw = civm.Parent.ReadOnlyContentSize.Width;
+                                //    double nh = civm.EditorHeight;
+                                //    //if(nh == double.NaN) {
+                                //    //    nh = 
+                                //    //}
+                                //    ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
+                                //}
                             } else {
                                 MpConsole.WriteLine($"Tile '{civm.Parent.HeadItem.CopyItemTitle}' is editable");
 
-                                string availTextTemplatesStr = JsonConvert.SerializeObject(MpMasterTemplateModelCollection.AllTemplates.ToArray());
-                                await cwb.EvaluateScriptAsync($"disableReadOnly({availTextTemplatesStr})");
+                                MpQuillDisableReadOnlyRequestMessage drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
+                                    allAvailableTextTemplates = MpMasterTemplateModelCollection.AllTemplates.ToList(),
+                                    editorHeight = cwb.GetVisualAncestor<MpContentItemView>().ActualHeight
+                                };
 
-                                var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
-                                if (ctcv != null) {
-                                    double nw = MpMeasurements.Instance.ClipTileEditModeMinWidth;
-                                    double nh = civm.EditorHeight;
-                                    if (nh == double.NaN) {
-                                        nh = MpMeasurements.Instance.ClipTileEditToolbarHeight + civm.UnformattedContentSize.Height;
-                                    } else {
-                                        nh = civm.Parent.TileContentHeight;
-                                    }
-                                    //nh = 1000;
-                                    //cwb.Height = nh;
-                                    if (nw > ctcv.ActualWidth) {
-                                        ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
-                                    }
-                                }
+                                string drorMsgStr = JsonConvert.SerializeObject(drorMsg);
+                                string drorMsgStr64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(drorMsgStr));
+                                await cwb.EvaluateScriptAsync($"disableReadOnly('{drorMsgStr64}')");
+
+                                //var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
+                                //if (ctcv != null) {
+                                //    double nw = MpMeasurements.Instance.ClipTileEditModeMinWidth;
+                                //    double nh = civm.EditorHeight;
+                                //    if (nh == double.NaN) {
+                                //        nh = MpMeasurements.Instance.ClipTileEditToolbarHeight + civm.UnformattedContentSize.Height;
+                                //    } else {
+                                //        nh = civm.Parent.TileContentHeight;
+                                //    }
+                                //    //nh = 1000;
+                                //    //cwb.Height = nh;
+                                //    if (nw > ctcv.ActualWidth) {
+                                //        ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
+                                //    }
+                                //}
                             }
                         }
                     }
@@ -119,43 +126,43 @@ namespace MpWpfApp {
             typeof(string),
             typeof(MpDocumentHtmlExtension),
             new FrameworkPropertyMetadata {
-                PropertyChangedCallback =  (obj, e) => {
-                    string itemData = e.NewValue != null ? (string)e.NewValue:string.Empty;
-                    string itemHtml = string.Empty;
-                    if (!string.IsNullOrEmpty((string)e.NewValue)) {
-                        if(itemData.IsStringRichText()) {
-                            itemHtml = JsonConvert.SerializeObject(MpRtfToHtmlConverter.ConvertRtfToHtml(itemData));
-                        } else {
-                            itemHtml = JsonConvert.SerializeObject(itemHtml);
-                        }
+                PropertyChangedCallback = (obj, e) => {
+                MpQuillLoadRequestMessage lrm = new MpQuillLoadRequestMessage() {
+                    envName = "wpf",
+                    guidOpenTag = ENCODED_TEMPLATE_OPEN_TOKEN,
+                    guidCloseTag = ENCODED_TEMPLATE_CLOSE_TOKEN
+                };
+
+                string itemData = e.NewValue != null ? (string)e.NewValue : string.Empty;
+                lrm.itemEncodedHtmlData = string.Empty;
+                if (!string.IsNullOrEmpty((string)e.NewValue)) {
+                    if (itemData.IsStringRichText()) {
+                        lrm.itemEncodedHtmlData = MpRtfToHtmlConverter.ConvertRtfToHtml(itemData);
                     }
-                    string[] itemTemplateGuids = GetTextTemplateGuids(itemHtml).Select(x=>x.ToLower()).ToArray();
+                }
+                string[] itemTemplateGuids = GetTextTemplateGuids(lrm.itemEncodedHtmlData).Select(x => x.ToLower()).ToArray();
 
-                    var itemTemplates = MpMasterTemplateModelCollection.AllTemplates
-                                            .Where(x => itemTemplateGuids.Contains(x.Guid.ToLower()));
+                lrm.usedTextTemplates = MpMasterTemplateModelCollection.AllTemplates
+                                        .Where(x => itemTemplateGuids.Contains(x.Guid.ToLower()))
+                                        .ToList();
 
-                    string itemTemplatesStr = JsonConvert.SerializeObject(itemTemplates);
+                var fe = (FrameworkElement)obj;
 
-                    if(_encodedTemplateRegExInfoStr == null) {
-                        _encodedTemplateRegExInfoStr = JsonConvert.SerializeObject(new string[] { JsonConvert.SerializeObject(ENCODED_TEMPLATE_OPEN_TOKEN), JsonConvert.SerializeObject(ENCODED_TEMPLATE_REGEXP_STR), JsonConvert.SerializeObject(ENCODED_TEMPLATE_CLOSE_TOKEN) });
-                    }
+                if (fe.DataContext is MpContentItemViewModel civm) {
+                    lrm.isPasteRequest = MpClipTrayViewModel.Instance.IsPasting;
+                    lrm.isReadOnlyEnabled = civm.IsReadOnly;
 
-                    var fe = (FrameworkElement)obj;
+                    string lrmJsonStr = JsonConvert.SerializeObject(lrm);
+                    string lrmJsonStr64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(lrmJsonStr));
 
-                    if (fe.DataContext is MpContentItemViewModel civm) {
                         var fd = itemData.ToFlowDocument(out Size docSize);
                         civm.UnformattedContentSize = docSize;
 
                         if (fe is ChromiumWebBrowser cwb) {
                             cwb.FrameLoadEnd += async (sender, args) => {
-                                if (args.Frame.IsMain) {
-                                    await cwb.EvaluateScriptAsync("setWpfEnv()");
-                                    var initCmd = string.Format(@"init({0},{1},{2})",
-                                                            itemHtml,
-                                                            JsonConvert.SerializeObject(civm.IsReadOnly),
-                                                            itemTemplatesStr);//,
-                                                            //_encodedTemplateRegExInfoStr);
-
+                                if (args.Frame.IsMain) { 
+                                    //var test = await cwb.EvaluateScriptAsync(string.Format(@"reqMsgStr='{0}';", lrmJsonStr64));
+                                    var initCmd = $"init('{lrmJsonStr64}')";
                                     var result = await cwb.EvaluateScriptAsync(initCmd);
                                 }
                             };
@@ -165,6 +172,47 @@ namespace MpWpfApp {
             });
 
         #endregion
+
+        public static void Init() {
+            InitCef();
+        }
+
+        private static void InitCef() {
+            //var settings = new CefSettings();
+
+            //// Increase the log severity so CEF outputs detailed information, useful for debugging
+            //settings.LogSeverity = LogSeverity.Verbose;
+            //// By default CEF uses an in memory cache, to save cached data e.g. to persist cookies you need to specify a cache path
+            //// NOTE: The executing user must have sufficient privileges to write to this folder.
+            //settings.CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache");
+
+            //Cef.Initialize(settings);
+
+            //To support High DPI this must be before CefSharp.BrowserSubprocess.SelfHost.Main so the BrowserSubprocess is DPI Aware
+            Cef.EnableHighDPISupport();
+
+            var exitCode = CefSharp.BrowserSubprocess.SelfHost.Main(new string[] { });
+
+            if (exitCode >= 0) {
+                return;
+            }
+
+            var settings = new CefSettings() {
+                //By default CefSharp will use an in-memory cache, you need to specify a Cache Folder to persist data
+                //CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache"),
+                //BrowserSubprocessPath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName
+            };
+            settings.RegisterScheme(new CefCustomScheme {
+                SchemeName = "localfolder",
+                DomainName = "cefsharp",
+                SchemeHandlerFactory = new FolderSchemeHandlerFactory(
+                    rootFolder: Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor"),
+                    hostName: "cefsharp",
+                    defaultPage: "Editor2.html" // will default to index.html
+                )
+            });
+            Cef.Initialize(settings, performDependencyCheck: false);
+        }
 
         private static string[] GetTextTemplateGuids(string itemData) {
             if(_encodedTemplateRegEx == null) {

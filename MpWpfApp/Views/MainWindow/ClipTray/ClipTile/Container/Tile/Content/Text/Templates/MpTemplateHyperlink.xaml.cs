@@ -45,16 +45,16 @@ namespace MpWpfApp {
 
             string templateName = tr.Text;
 
-            if (cit == null) {
-                //occurs when its a new template
-                if (string.IsNullOrWhiteSpace(templateName)) {
-                    templateName = thcvm.GetUniqueTemplateName();
-                } 
-                cit = await MpTextTemplate.Create(
-                            thcvm.Parent.CopyItemId,
-                            templateName);
-                await cit.WriteToDatabaseAsync();
-            }
+            //if (cit == null) {
+            //    //occurs when its a new template
+            //    if (string.IsNullOrWhiteSpace(templateName)) {
+            //        templateName = thcvm.GetUniqueTemplateName();
+            //    } 
+            //    cit = await MpTextTemplate.Create(
+            //                thcvm.Parent.CopyItemId,
+            //                templateName);
+            //    await cit.WriteToDatabaseAsync();
+            //}
 
             tr.Text = string.Empty;
 
