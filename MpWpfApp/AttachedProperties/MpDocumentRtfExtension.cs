@@ -42,8 +42,6 @@ namespace MpWpfApp {
                     var fd = ((string)e.NewValue).ToFlowDocument(out Size docSize);
 
                     if (fe.DataContext is MpContentItemViewModel civm) {
-                        civm.UnformattedContentSize = docSize;
-
                         if (fe is RichTextBox rtb) {
 
                             rtb.Document = fd;

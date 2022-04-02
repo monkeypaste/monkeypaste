@@ -258,7 +258,15 @@ namespace MpWpfApp {
             }
         }
 
-        public Size UnformattedContentSize { get; set; }
+        public Size UnformattedContentSize { 
+            get {
+                if(CopyItem == null) {
+                    return new Size();
+                }
+                CopyItemData.ToFlowDocument(out Size docSize);
+                return docSize;
+            }
+        }
 
         #endregion
 
@@ -346,7 +354,9 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsPastingTemplate { get; set; } = false;
+        public bool IsPasting { get; set; } = false;
+
+        public bool IsPastingTemplate => IsPasting && HasTemplates;
 
 
         public bool HasTemplates {
@@ -382,9 +392,9 @@ namespace MpWpfApp {
 
         #region Business Logic
 
-        public Uri QuillEditorUri => new Uri(Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/Editor2.html"));
+        public Uri QuillEditorUri => new Uri(Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/index.html"));
 
-        public string QuillEditorPath => Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/Editor2.html");
+        public string QuillEditorPath => Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/index.html");
 
         public string TemplateRichText { get; set; }
 
@@ -493,6 +503,15 @@ namespace MpWpfApp {
                     CopyItem.ItemType = value;
                     OnPropertyChanged(nameof(CopyItemType));
                 }
+            }
+        }
+
+        public string CopyItemGuid {
+            get {
+                if(CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.Guid;
             }
         }
 
@@ -731,8 +750,8 @@ namespace MpWpfApp {
             //IsEditingContent = false;
             IsEditingTitle = false;
             TemplateCollection?.ClearAllEditing();
-            if (IsPastingTemplate) {
-                IsPastingTemplate = false;
+            if (IsPasting) {
+                IsPasting = false;
                 //Parent.RequestUnexpand();
             }
         }

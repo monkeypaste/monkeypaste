@@ -76,7 +76,7 @@ function getFontName(font) {
 
 function refreshFontSizePicker() {
     let curFormat = quill.getFormat();
-    let curFontSize = curFormat != null && curFormat.hasOwnProperty('size') ? curFormat.size : defaultFontSize;
+    let curFontSize = curFormat != null && curFormat.hasOwnProperty('size') && curFormat.size.length > 0 ? parseInt(curFormat.size)+'px' : defaultFontSize;
     let fontSizeFound = false;
 
     document

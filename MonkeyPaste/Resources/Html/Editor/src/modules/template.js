@@ -1,7 +1,7 @@
 const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
 
-var ENCODED_TEMPLATE_OPEN_TOKEN = "{{";
-var ENCODED_TEMPLATE_CLOSE_TOKEN = "}}";
+var ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
+var ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
 var ENCODED_TEMPLATE_REGEXP;
 
 var isShowingEditTemplateToolbar = false;
@@ -192,7 +192,7 @@ function applyTemplateToDomNode(node, value) {
 
     return node;
 }
-
+//#endregion
 function setTemplateProperty(tguid, propertyName, propertyValue) {
     getUsedTemplateInstances().forEach(function (ti) {
         if (ti.domNode.getAttribute('templateGuid') == tguid) {

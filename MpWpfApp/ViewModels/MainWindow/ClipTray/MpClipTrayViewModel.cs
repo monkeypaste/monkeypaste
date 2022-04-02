@@ -393,7 +393,26 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool IsPasting { get; set; } = false;
+        private bool _isPasting = false;
+        public bool IsPasting { 
+            get {
+                if(_isPasting) {
+                    return true;
+                }
+                if(Items.Any(x=>x.IsAnyPasting)) {
+                    // NOTE since copy items can be pasted from hot key and aren't in tray
+                    // IsPasting cannot be auto-property
+                    _isPasting = true;
+                }
+                return _isPasting;
+            }
+            set {
+                if(IsPasting != value) {
+                    _isPasting = value;
+                    OnPropertyChanged(nameof(IsPasting));
+                }
+            }
+        }
 
         #region Virtual
 
@@ -1332,7 +1351,6 @@ namespace MpWpfApp {
                 if (sctvm.HasTemplates) {
                     sctvm.ClearEditing();
                     foreach (var rtbvm in sctvm.ItemViewModels) {
-                        rtbvm.IsPastingTemplate = false;
                         rtbvm.TemplateCollection.ResetAll();
                         rtbvm.TemplateRichText = string.Empty;
                         rtbvm.RequestUiReset();
@@ -1651,7 +1669,7 @@ namespace MpWpfApp {
             _appendModeCopyItem != null);
 
         public ICommand AddNewItemsCommand => new RelayCommand(
-            async () => {
+            () => {
                 IsBusy = true;
 
                 //if(MpDataModelProvider.QueryInfo.TagId == MpTag.AllTagId) {

@@ -17,6 +17,8 @@ namespace MonkeyPaste {
 
         public string itemEncodedHtmlData { get; set; }
 
+        public List<MpCopyItemOperation> itemOperations { get; set; }
+
         public List<MpTextTemplate> usedTextTemplates { get; set; }
     }
 

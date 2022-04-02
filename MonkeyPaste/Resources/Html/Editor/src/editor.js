@@ -1,4 +1,5 @@
-﻿var isLoaded = false;
+
+var isLoaded = false;
 
 var isShowingTemplateContextMenu = false;
 var isShowingTemplateColorPaletteMenu = false;
@@ -15,7 +16,6 @@ var fontSizes = [];
 
 var defaultFontSize = '12px';
 var defaultFontFamily = 'Arial';
-//var reqMsgStr;
 var indentSize = 5;
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -23,18 +23,33 @@ function setWpfEnv() {
     envName = 'wpf';
 }
 
-function init(reqMsgStr) { //html, isReadOnly, templateDefsStr, templateRegExInfoStr, fontFamilysArg, fontSizesArg, defFontSize, defFontFamily, indentSize, isFillingTemplates) {
-    //log('Load Request Msg:');
-    //log(reqMsgStr);
-
+function init(reqMsgStr) { 
     if (reqMsgStr == null) {
+        let testOp1 = {
+            opGuid: 'f8579c1b-8847-4f06-a780-0f9021a0f5c4',
+            copyItemGuid: '8c09445e-8589-4a15-9f15-3e650d946826',
+            opData: '<p opGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4" class="ql-align-left"/><p class="ql-align-left"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0, 0, 0); "/><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(255, 0, 0); "> Visibility</span></p>'
+        }
+
+        let testOp2 = {
+            opGuid: 'ce732e51-32dc-415a-b847-461037b2150c',
+            copyItemGuid: '82a233e0-bd15-4ac2-b21e-55faf4457f3a',
+            opData: '<p opGuid="ce732e51-32dc-415a-b847-461037b2150c"><br></p><p><span class="ql-font-franklin-gothic"	style="font-size: 84px; background-color: rgb(0, 138, 0); color: rgb(230, 0, 0);">SUUUP!!!</span></p>'
+        }
+
+        let testOp3 = {
+            opGuid: 'bb4cb1c9-4d35-4af0-a60f-d8007fd43433',
+            copyItemGuid: '8c09445e-8589-4a15-9f15-3e650d946826',
+            opData: '<p opGuid="bb4cb1c9-4d35-4af0-a60f-d8007fd43433"	class="ql-align-left"/><span class="ql-font-consolas"	style="font-size: 12.6666666666667px; color: rgb(0, 0, 255);">=\"Collapsed\"</span></p>'
+        }
+
         reqMsg = {
             guidOpenTag: '{{',
             guidCloseTag: '}}',
             envName: 'web',
             isPasteRequest: false,
             isReadOnlyEnabled: false,
-            itemEncodedHtmlData: 'sup boyyyeee',
+            itemOperations: [testOp1,testOp2,testOp3],
             usedTextTemplates: []
         }
     } else {
@@ -44,7 +59,9 @@ function init(reqMsgStr) { //html, isReadOnly, templateDefsStr, templateRegExInf
 
     loadQuill(reqMsg.envName);
 
-    setHtml(reqMsg.itemEncodedHtmlData);
+    initContent(reqMsg.itemOperations);
+
+    //setHtml('');
 
     if (reqMsg.envName == 'web') {
         //for testing in browser
@@ -63,8 +80,10 @@ function init(reqMsgStr) { //html, isReadOnly, templateDefsStr, templateRegExInf
 
     initTemplates(reqMsg.usedTextTemplates, reqMsg.guidOpenTag, reqMsg.guidCloseTag, reqMsg.isPasteRequest);
 
+
     refreshFontSizePicker();
     refreshFontFamilyPicker();
+
 
     isLoaded = true;
     return "GREAT!";
@@ -77,9 +96,11 @@ function loadQuill(envName) {
 
     Quill.register("modules/htmlEditButton", htmlEditButton);
     Quill.register({ 'modules/better-table': quillBetterTable }, true);
+    //Quill.register("modules/imageResize", ImageResize);
 
+    //registerContentGuidAttribute();
+    registerContentBlots(Quill);
     registerTemplateSpan(Quill);
-
 
     // Append the CSS stylesheet to the page
     var node = document.createElement('style');
@@ -115,8 +136,6 @@ function loadQuill(envName) {
             }
         }
     });
-
-    //registerContentBlots(Quill);
 
     var curTableIconSpan = editorDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
     curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
@@ -186,6 +205,45 @@ function loadQuill(envName) {
             }
         } else {
             log('Cursor not in the editor');
+        }
+        if (!range && oldRange) {
+            //blur occured
+            quill.setSelection(oldRange);
+        }   
+    });
+
+
+    quill.on('text-change', function (delta, oldDelta, source) {
+        //var retainVal = 0;
+        //var textDelta = 0;
+        //var wasAddTemplate = false;
+        //delta.ops.forEach(function (op) {
+        //    if (op.insert) {
+        //        //handle shifting in create template
+        //        wasAddTemplate = true;
+        //        return;
+        //    }
+        //    if (op.retain != null) {
+        //        retainVal = op.retain;
+        //    }
+        //    if (op.insert != null && op.insert.templatespan == null) {
+        //        textDelta += op.insert.length;
+        //    }
+        //    if (op.delete != null) {
+        //        textDelta -= parseInt(op.delete);
+        //    }
+        //});
+        //if (!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
+        //    shiftTemplates(retainVal, textDelta);
+        //    //console.log(getTemplates());
+        //}
+        if (oldDelta) {
+            log('old:');
+            log(JSON.stringify(oldDelta));
+        }
+        if (delta) {
+            log('new:');
+            log(JSON.stringify(delta));
         }
     });
 }
@@ -299,6 +357,41 @@ function changeInnerTextHelper(elm, text, newText) {
     }
     changeInnerTextHelper(elm.firstChild, text, newText);
     changeInnerTextHelper(elm.nextSibling, text, newText);
+}
+
+function getElementsFromAndUntil(fromElm, untilElm) {
+    let elms = [];
+    getElementsFromAndUntilHelper(fromElm, untilElm, elms);
+    let filteredArr = [];
+    elms.forEach((item) => {
+        if (!filteredArr.includes(item)) {
+            filteredArr.push(item);
+        }
+    })
+
+    return filteredArr;
+}
+function getElementsFromAndUntilHelper(curElm, untilElm, elms) {
+    if (curElm == null) {
+        return;
+    }
+    elms.push(curElm);
+    if (curElm == untilElm) {
+        return;
+    }
+
+    let celms = [];
+    getElementsFromAndUntilHelper(curElm.firstChild, untilElm, celms);
+
+    let nelms = [];
+    nelms = getElementsFromAndUntilHelper(curElm.nextSibling, untilElm, nelms);
+
+    if (celms) {
+        elms.push(...celms);
+    }
+    if (nelms) {
+        elms.push(...nelms);
+    }
 }
 
 function getSelectedHtml(maxLength) {
@@ -575,4 +668,8 @@ function log(msg) {
         return;
     }
     console.log(msg);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

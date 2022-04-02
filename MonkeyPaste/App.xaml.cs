@@ -27,13 +27,13 @@ namespace MonkeyPaste {
             MainPage = new MpMainPage(niw);
 
             //string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
-            //string path = System.IO.Path.Combine(folder, string.Format(@"Editor2.html"));
+            //string path = System.IO.Path.Combine(folder, string.Format(@"index.html"));
 
-            //var html = MpHelpers.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.html");
+            //var html = MpHelpers.LoadFileResource("MonkeyPaste.Resources.Html.Editor.index.html");
             //MpHelpers.WriteTextToFile(path, html);
             //MpConsole.WriteLine(@"Editor written to: " + path);
 
-            //path = path.Replace("Editor2.html", "Editor2.js");
+            //path = path.Replace("index.html", "Editor2.js");
             //html = MpHelpers.LoadFileResource("MonkeyPaste.Resources.Html.Editor.Editor2.js");
             //MpHelpers.WriteTextToFile(path, html);
             //MpConsole.WriteLine(@"Editor js written to: " + path);

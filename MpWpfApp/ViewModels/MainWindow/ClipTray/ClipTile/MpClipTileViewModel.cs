@@ -600,7 +600,8 @@
 
         public bool IsAnyEditingTemplate => ItemViewModels.Any(x => x.IsEditingTemplate);
 
-        public bool IsAnyPastingTemplate => ItemViewModels.Any(x => x.IsPastingTemplate);
+        public bool IsAnyPasting => ItemViewModels.Any(x => x.IsPasting);
+        public bool IsAnyPastingTemplate => ItemViewModels.Any(x => x.IsPasting && x.HasTemplates);
 
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -973,7 +974,7 @@
                 }
                 bool isPastingTemplate = SelectedItems.Any(x => x.HasTemplates);
                 if (isPastingTemplate) {
-                    SelectedItems.Where(x => x.HasTemplates).Select(y => y.IsPastingTemplate = true);
+                    SelectedItems.Where(x => x.HasTemplates).ForEach(y => y.IsPasting = true);
                     if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
@@ -1008,9 +1009,9 @@
         public async Task FillAllTemplates() {
             bool hasExpanded = false;
             foreach (var rtbvm in SelectedItems) {
+                rtbvm.IsPasting = true;
                 if (rtbvm.HasTemplates) {
                     rtbvm.IsSelected = true;
-                    rtbvm.IsPastingTemplate = true;
                     if (!hasExpanded) {
                         //tile will be shrunk in on completed of hide window
                         IsReadOnly = false;

@@ -13,6 +13,9 @@ namespace MonkeyPaste.Plugin {
             return JsonConvert.SerializeObject(this);
         }
 
+        public string SerializeToByteString() {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(Serialize()));
+        }
         public object Deserialize(string jsonMsgStr) {
             var JSONCovert = typeof(JsonConvert);
             var parameterTypes = new[] { typeof(string) };
