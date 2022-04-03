@@ -12,6 +12,10 @@ using System.Windows.Media;
 using HtmlAgilityPack;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Linq;
+using CefSharp;
+using System.Runtime.InteropServices;
+using System.Web.UI.WebControls.WebParts;
 
 namespace MpWpfApp {
     public static class MpRtfToHtmlConverter {
@@ -24,20 +28,53 @@ namespace MpWpfApp {
 
         #endregion
 
-        public static string ConvertRtfToHtml(string rtf) {
+        public static string ConvertRtfToHtml(string rtf, Dictionary<string,string> globalAttributes = null) {
             if(rtf == null) {
                 return string.Empty;
             }
-            return ConvertFlowDocumentToHtml(rtf.ToFlowDocument());
+            return ConvertFlowDocumentToHtml(rtf.ToFlowDocument(), globalAttributes);
         }
 
-        public static string ConvertFlowDocumentToHtml(FlowDocument fd) {
+        public static string ConvertFlowDocumentToHtml(FlowDocument fd, Dictionary<string, string> globalAttributes = null) {
             var sb = new StringBuilder();
             foreach (Block b in fd.Blocks) {
                 sb.Append(ConvertTextElementToHtml(b));
             }
-            return sb.ToString();
+            
+            string html = sb.ToString();
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(html);
+
+            SetGlobalAttributes(htmlDoc, globalAttributes);
+            return htmlDoc.DocumentNode.InnerHtml;
         }
+
+        #region Global Attributes
+
+        private static void SetGlobalAttributes(HtmlDocument htmlDoc, Dictionary<string,string> attributes) {
+            if(attributes == null) {
+                return;
+            }
+
+            foreach(var n in htmlDoc.DocumentNode.ChildNodes.Where(x=>x.NodeType == HtmlNodeType.Element)) {
+                SetGlobalAttributesHelper(n, attributes);
+            }
+        }
+
+        private static void SetGlobalAttributesHelper(HtmlNode n, Dictionary<string, string> attributes) {
+            foreach(var kvp in attributes) {
+                SetAttribute(n, kvp);
+            }
+            foreach(var cn in n.ChildNodes.Where(x => x.NodeType == HtmlNodeType.Element)) {
+                SetGlobalAttributesHelper(cn, attributes);
+            }
+        }
+
+        private static void SetAttribute(HtmlNode n, KeyValuePair<string,string> kvp) {
+            n.SetAttributeValue(kvp.Key, kvp.Value);
+        }
+
+        #endregion
 
         private static string ConvertTextElementToHtml(TextElement te) {
             string html = string.Empty;
@@ -206,15 +243,40 @@ namespace MpWpfApp {
         
 
         public static void Test() {
-            MpHtmlToRtfConverter.Test();
+            //MpHtmlToRtfConverter.Test();
 
-            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpRtfToHtmlConverter)).Assembly;
-            var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample1.html");
-            using (var reader = new System.IO.StreamReader(stream)) {
-                string rtf = MpHtmlToRtfConverter.ConvertHtmlToRtf(reader.ReadToEnd());
-                string html = MpRtfToHtmlConverter.ConvertRtfToHtml(rtf);
-                MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
-            }
+            //var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpRtfToHtmlConverter)).Assembly;
+            //var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample1.html");
+            //using (var reader = new System.IO.StreamReader(stream)) {
+            //    string rtf = MpHtmlToRtfConverter.ConvertHtmlToRtf(reader.ReadToEnd());
+            //    string html = MpRtfToHtmlConverter.ConvertRtfToHtml(rtf);
+            //    MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
+            //}
+            string rtf = @"{\rtf1\ansi\ansicpg1252\uc1\htmautsp\deff2{\fonttbl{\f0\fcharset0 Times New Roman; } {\f2\fcharset0 Georgia; } {\f3\fcharset0 Consolas; } }
+{\colortbl\red0\green0\blue0;\red255\green255\blue255;\red0\green128\blue0;\red0\green0\blue255;\red43\green145\blue175; }\loch\hich\dbch\pard\plain\ltrpar\itap0{\lang1033\fs19\f3\cf0 \cf0\qj{\f3 {\cf2\ltrch //rtbvm.HasViewChanged = true;}\li0\ri0\sa0\sb0\fi0\ql\par}
+{\f3 {\ltrch rtbvm.OnPropertyChanged(} {\cf3\ltrch nameof} {\ltrch(rtbvm.CurrentSize)); }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 {\ltrch                 } {\cf3\ltrch var} {\ltrch cilv = } {\cf3\ltrch this} {\ltrch.GetVisualAncestor <} {\cf4\ltrch MpContentListView} {\ltrch > (); }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 {\ltrch cilv.UpdateAdorner(); }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 \li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 {\ltrch                 } {\cf3\ltrch var} {\ltrch rtbl = cilv.GetVisualDescendents <} {\cf4\ltrch RichTextBox} {\ltrch > (); }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 {\ltrch                 } {\cf3\ltrch double} {\ltrch totalHeight = rtbl.Sum(x => x.ActualHeight) + } {\cf4\ltrch MpMeasurements} {\ltrch.Instance.ClipTileEditToolbarHeight + } {\cf4\ltrch MpMeasurements} {\ltrch.Instance.ClipTileDetailHeight; }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 \li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 {\ltrch                 } {\cf3\ltrch var} {\ltrch ctcv = } {\cf3\ltrch this} {\ltrch.GetVisualAncestor <} {\cf4\ltrch MpClipTileContainerView} {\ltrch > (); }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 {\ltrch ctcv.ExpandBehavior.Resize(totalHeight); }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 {\ltrch                 }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 {\ltrch                 } {\cf3\ltrch var} {\ltrch sv = cilv.ContentListBox.GetScrollViewer(); }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 {\ltrch sv.InvalidateScrollInfo(); }\li0\ri0\sa0\sb0\fi0\ql\par}
+                            {\f3 \li0\ri0\sa0\sb0\fi0\ql\par}
+                        }
+                    }";
+
+            string html = MpRtfToHtmlConverter.ConvertRtfToHtml(
+                rtf,
+                new Dictionary<string, string>() {
+                    {"test1", "yo this is test1 value"},
+                    {"test2", null }
+                });
+            MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
         }
     }
 }

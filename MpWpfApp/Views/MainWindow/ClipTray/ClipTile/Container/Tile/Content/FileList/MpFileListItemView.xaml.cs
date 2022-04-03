@@ -29,7 +29,7 @@ namespace MpWpfApp {
         private void FileListItemPanel_Loaded(object sender, RoutedEventArgs e) {
             base.OnLoad();
 
-            BindingContext.UnformattedContentSize = new Size(ActualWidth, ActualHeight);
+            //BindingContext.UnformattedContentSize = new Size(ActualWidth, ActualHeight);
             
             if (BindingContext.ItemIdx == BindingContext.Parent.Count - 1) {
                 MpHelpers.RunOnMainThread(async () => {

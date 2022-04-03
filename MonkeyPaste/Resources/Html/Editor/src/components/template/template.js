@@ -77,10 +77,7 @@ function registerTemplateSpan(Quill) {
 }
 
 //#region Init
-function initTemplates(usedTemplates, openTag, closeTag, isPasting) {
-    ENCODED_TEMPLATE_OPEN_TOKEN = openTag;
-    ENCODED_TEMPLATE_CLOSE_TOKEN = closeTag;
-
+function initTemplates(usedTemplates, isPasting) {
     ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
 
     if (usedTemplates != null) {

@@ -104,7 +104,8 @@ namespace MpWpfApp {
             //var gsiw = new MpGoogleSignInWindow();
             //var result = gsiw.ShowDialog();
             //await MpGoogleApiHelpers.Test(null);
-
+            
+            //MpRtfToHtmlConverter.Test();
 
             IsLoaded = true;
         }

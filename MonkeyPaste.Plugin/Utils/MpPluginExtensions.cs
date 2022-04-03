@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,6 +9,13 @@ using System.Text;
 
 namespace MonkeyPaste.Plugin {
     public static class MpPluginExtensions {
+        public static string SerializeToJsonByteString(this object obj) {
+            if(obj == null) {
+                return string.Empty;
+            }
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj)));
+        }
+
         public static bool AddOrReplace<TKey, TValue>(this Dictionary<TKey, TValue> d, TKey key, TValue value) {
             //returns true if kvp was added
             //returns false if kvp was replaced

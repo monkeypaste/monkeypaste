@@ -263,8 +263,13 @@ namespace MpWpfApp {
                 if(CopyItem == null) {
                     return new Size();
                 }
-                CopyItemData.ToFlowDocument(out Size docSize);
-                return docSize;
+                if(CopyItemType == MpCopyItemType.Text) {
+                    CopyItemData.ToFlowDocument(out Size docSize);
+                    return docSize;
+                } else if(CopyItemType == MpCopyItemType.Image) {
+                    return itemSize;
+                }
+                return new Size(CopyItemData.Length * 12, 12);
             }
         }
 

@@ -1,23 +1,35 @@
 {
-  "name": "mp-editor",
+  "name": "editor",
   "version": "1.0.0",
-  "description": "put description here",
-  "main": "src/editor.js",
+  "description": "",
+  "private": true,
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "start": "webpack serve --open",
+    "build": "webpack"
   },
-  "author": "thomas kefauver",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "dependencies": {
-    "-": "0.0.1",
-    "global": "^4.4.0",
-    "save-dev": "0.0.1-security",
-    "webpack": "^5.71.0"
-  },
   "devDependencies": {
-    "webpack-cli": "^4.9.2"
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.71.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.1",
+    "jquery": "^3.6.0",
+    "katex": "^0.15.3",
+    "lodash": "^4.17.21",
+    "quill": "^2.0.0-dev.4",
+    "quill-better-table": "^1.2.10",
+    "quill-html-edit-button": "^2.2.12"
   }
 }

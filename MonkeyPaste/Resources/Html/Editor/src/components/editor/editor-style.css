@@ -42,7 +42,9 @@ body {
 
 .info-tooltip {
     position: absolute;
-    font-family: consolas;font-size: 10px;opacity: 0;
+    font-family: consolas;
+    font-size: 10px;
+    opacity: 0;
     z-index: 1;
     left: 50%;    
     transform: translateY(-100%);

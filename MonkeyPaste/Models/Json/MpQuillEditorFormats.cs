@@ -6,9 +6,6 @@ using System.Text;
 
 namespace MonkeyPaste {
     public class MpQuillLoadRequestMessage : MpJsonObject {
-        public string guidOpenTag { get; set; } = "{{";
-        public string guidCloseTag { get; set; } = "}}";
-
         public string envName { get; set; } // will be wpf,android, etc.
 
         public bool isPasteRequest { get; set; } = false; //request should ONLY happen if encoded w/ templates

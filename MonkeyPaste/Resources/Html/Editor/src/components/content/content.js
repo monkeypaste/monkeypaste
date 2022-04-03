@@ -17,11 +17,12 @@ function registerContentGuidAttribute() {
 
 
 function initContent(itemOps, openTag = "{c{", closeTag = "}c}") {
-    encodeContentOps(itemOps, openTag, closeTag);
+    //encodeContentOps(itemOps, openTag, closeTag);
 
-    decodeContent(itemOps);
+    //decodeContent(itemOps);
+    setHtml(itemOps);
 
-    initContentRangeListeners();
+    //initContentRangeListeners();
 }
 
 function encodeContentOps(itemOps, openTag, closeTag) {
@@ -77,18 +78,33 @@ function initContentRangeListeners() {
     //    await sleep(100);
     //}
     //let parser = new DOMParser();
-    document.getElementById('editor').addEventListener('mouseover', onOverContent);
+    //document.getElementById('editor').addEventListener('mouseover', onOverContent);
+    
+    Array.from(document.querySelectorAll('[copyItemGuid]')).forEach(cie => {
+        cie.addEventListener('mouseover', onOverContent);
+    });
+    
     return;
 }
 
 function onOverContent(e) {
-    let blot = Quill.find(e.target);
-    if (blot && blot.domNode.getAttribute('opGuid') != null) {
-        log('over: ' + blot.domNode.getAttribute('opGuid'));
-    } else {
-
-        log(e.target);
+    if (!e.target) {
+        return;
     }
+    let ciguid = e.target.getAttribute('copyItemGuid');
+    let testColor = getRandomColor();
+    Array.from(document.querySelectorAll('[copyItemGuid="' + ciguid + '"]')).forEach(cie => {
+        cie.style.backgroundColor = testColor;
+    });
+
+    //e.target.style.backgroundColor = getRandomColor();
+    //let blot = Quill.find(e.target);
+    //if (blot && blot.domNode.getAttribute('opGuid') != null) {
+    //    log('over: ' + blot.domNode.getAttribute('opGuid'));
+    //} else {
+
+    //    log(e.target);
+    //}
 }
 
 
