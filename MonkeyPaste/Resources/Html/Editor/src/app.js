@@ -10,7 +10,7 @@
 // });
 
 // server.listen(port, hostname, () => {
-//   console.log(`Server running at http://${hostname}:${port}/`);
+//   console.debug(`Server running at http://${hostname}:${port}/`);
 // });
 
 import $ from "jquery";

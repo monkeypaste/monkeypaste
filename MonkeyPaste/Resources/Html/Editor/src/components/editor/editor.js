@@ -6,6 +6,11 @@ var isShowingTemplateColorPaletteMenu = false;
 var isShowingTemplateToolbarMenu = false;
 var isShowingEditorToolbar = true;
 
+var IgnoreTextChange = false;
+
+var LastSelection = { index: 0, length: 0 };
+var LastSelectedHtml;
+var SelectedHtml;
 
 ////////////////////////////////////////////////////////////////////////////////
 /*  These var's can be parsed and replaced with values from app */
@@ -47,7 +52,7 @@ function init(reqMsgStr) {
             envName: 'web',
             isPasteRequest: false,
             isReadOnlyEnabled: false,
-            itemEncodedHtmlData: '<p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,128,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">//rtbvm.HasViewChanged = true;</span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">rtbvm.OnPropertyChanged( </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">nameof</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> (rtbvm.CurrentSize)); </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                                             </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">var</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> cilv =  </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">this</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> .GetVisualAncestor < </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">MpContentListView</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> > (); </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                            cilv.UpdateAdorner(); </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                            </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                                             </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">var</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> rtbl = cilv.GetVisualDescendents < </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">RichTextBox</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> > (); </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                                             </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">double</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> totalHeight = rtbl.Sum(x => x.ActualHeight) +  </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">MpMeasurements</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> .Instance.ClipTileEditToolbarHeight +  </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">MpMeasurements</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> .Instance.ClipTileDetailHeight; </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                            </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                                             </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">var</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> ctcv =  </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">this</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> .GetVisualAncestor < </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">MpClipTileContainerView</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> > (); </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                            ctcv.ExpandBehavior.Resize(totalHeight); </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                                            </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                                             </span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">var</span><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"> sv = cilv.ContentListBox.GetScrollViewer(); </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4">                            sv.InvalidateScrollInfo(); </span></p><p class="ql-align-left" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"><span class="ql-font-consolas--" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyItemGuid="f8579c1b-8847-4f06-a780-0f9021a0f5c4"></span></p>',
+            itemEncodedHtmlData: '<p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,128,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">//rtbvm.HasViewChanged = true;</span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">rtbvm.OnPropertyChanged(</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">nameof</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">(rtbvm.CurrentSize)); </span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> cilv =  </span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">this</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.GetVisualAncestor<</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpContentListView</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">>(); </span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">cilv.UpdateAdorner();</span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><br copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> rtbl = cilv.GetVisualDescendents<</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">RichTextBox</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">>(); </span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">double</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> totalHeight = rtbl.Sum(x => x.ActualHeight) +</span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpMeasurements</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.Instance.ClipTileEditToolbarHeight + </span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpMeasurements</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.Instance.ClipTileDetailHeight; </span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> ctcv =  </span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">this</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">.GetVisualAncestor<</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(43,145,175);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">MpClipTileContainerView</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">>(); </span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">ctcv.ExpandBehavior.Resize(totalHeight); </span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,255);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">var</span><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"> sv = cilv.ContentListBox.GetScrollViewer(); </span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><span class="ql-font-consolas" style="font-size: 12.6666666666667px; color: rgb(0,0,0);" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6">sv.InvalidateScrollInfo();</span></p><p class="ql-align-left" copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"><br copyitemguid="8a26a5ad-66eb-43b4-b4e6-4fa4005ebed6"></p>',
             //itemOperations: [testOp1,testOp2,testOp3],
             usedTextTemplates: []
         }
@@ -60,7 +65,6 @@ function init(reqMsgStr) {
 
     initContent(reqMsg.itemEncodedHtmlData);
 
-    //setHtml('');
 
     if (reqMsg.envName == 'web') {
         //for testing in browser
@@ -80,8 +84,8 @@ function init(reqMsgStr) {
     initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
 
 
-    //refreshFontSizePicker();
-    //refreshFontFamilyPicker();
+    refreshFontSizePicker();
+    refreshFontFamilyPicker();
 
 
     isLoaded = true;
@@ -95,10 +99,11 @@ function loadQuill(envName) {
 
     Quill.register("modules/htmlEditButton", htmlEditButton);
     Quill.register({ 'modules/better-table': quillBetterTable }, true);
+    
     //Quill.register("modules/imageResize", ImageResize);
 
     //registerContentGuidAttribute();
-    registerContentBlots(Quill);
+    //registerContentBlots(Quill);
     registerTemplateSpan(Quill);
 
     // Append the CSS stylesheet to the page
@@ -136,6 +141,8 @@ function loadQuill(envName) {
             }
         }
     });
+
+    quill.root.setAttribute("spellcheck", "false");
 
     var curTableIconSpan = editorDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
     curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
@@ -176,7 +183,8 @@ function loadQuill(envName) {
     window.addEventListener('click', (e) => {
         if (e.path.find(x => x.className == 'edit-template-toolbar') != null ||
             e.path.find(x => x.className == 'paste-template-toolbar') != null ||
-            e.path.find(x => x.className == 'context-menu-option') != null) {
+            e.path.find(x => x.className == 'context-menu-option') != null || 
+            e.path.find(x => x.className == 'ql-toolbar') != null) {
             //ignore clicks within template toolbars
             return;
         }
@@ -188,6 +196,9 @@ function loadQuill(envName) {
     });
 
     quill.on('selection-change', function (range, oldRange, source) {
+        LastSelectedHtml = SelectedHtml;
+        SelectedHtml = getSelectedHtml();
+
         if (range) {
             refreshFontSizePicker();
             refreshFontFamilyPicker();
@@ -214,94 +225,93 @@ function loadQuill(envName) {
 
 
     quill.on('text-change', function (delta, oldDelta, source) {
-        //var retainVal = 0;
-        //var textDelta = 0;
-        //var wasAddTemplate = false;
-        //delta.ops.forEach(function (op) {
-        //    if (op.insert) {
-        //        //handle shifting in create template
-        //        wasAddTemplate = true;
-        //        return;
-        //    }
-        //    if (op.retain != null) {
-        //        retainVal = op.retain;
-        //    }
-        //    if (op.insert != null && op.insert.templatespan == null) {
-        //        textDelta += op.insert.length;
-        //    }
-        //    if (op.delete != null) {
-        //        textDelta -= parseInt(op.delete);
-        //    }
-        //});
-        //if (!wasAddTemplate && textDelta != 0 && retainVal >= 0) {
-        //    shiftTemplates(retainVal, textDelta);
-        //    //console.log(getTemplates());
-        //}
+        if (!isLoaded) {
+            return;
+        }
+        if (IgnoreTextChange) {
+            IgnoreTextChange = false;
+            return;
+        }
+        let srange = quill.getSelection();
+        if (!srange) {
+            return;
+        }
+        if (PasteNode) {
+            let contentBlot = getContentItemFromDomNode(PasteNode);
+            let idx = 0;
+            let leafNode = null;
+            let insertGuid = '';
+            delta.ops.forEach(op => {
+                if (op.retain) {
+                    idx = op.retain + 1;
+                    if (idx > 0) {
+                        let insertNode = quill.getLeaf(idx - 1)[0].domNode;
+                        insertNode = insertNode.nodeType == 3 ? insertNode.parentElement : insertNode;
+                        insertGuid = ContentGuid.value(insertNode);
+                    }
+                }
+                if (op.insert) {
+                    leafNode = quill.getLeaf(idx)[0].domNode;
+                    leafNode = leafNode.nodeType == 3 ? leafNode.parentElement : leafNode;
+                    ContentGuid.add(leafNode, contentBlot.copyItemGuid);
+                    ContentSourceGuid.add(leafNode, contentBlot.copyItemSourceGuid);
+                    if (contentBlot.fromUser) {
+                        FromUser.add(leafNode, '');
+                    }
+                    idx += op.insert.length + 1;
+                }
+            });
+            if (leafNode) {
+                //retarget all elements after insert if from the split content
+                let afterInsertGuid = generateGuid();
+                for (var i = idx; i < quill.getLength(); i++) {
+                    let afterInsertNode = quill.getLeaf(i)[0].domNode;
+                    afterInsertNode = afterInsertNode.nodeType == 3 ? afterInsertNode.parentElement : afterInsertNode;
+                    while (afterInsertNode && afterInsertNode.getAttribute('copyItemGuid') == insertGuid) {
+                        let afterInsertBlot = getContentItemFromDomNode(afterInsertNode);
+                        if (afterInsertBlot.copyItemGuid != insertGuid) {
+                            break;
+                        }
+                        retargetContentItemDomNode(afterInsertNode, afterInsertGuid);
+                        afterInsertNode = afterInsertNode.parentElement;
+                    }
+                    
+                }
+            }
+
+            ParentNode = null;
+        } else {
+
+            let leafNode = quill.getLeaf(srange.index)[0].domNode;
+
+            leafNode = leafNode.nodeType == 3 ? leafNode.parentElement : leafNode;
+            let leafText = leafNode.innerText;
+
+            let checkNode = leafNode;
+            let leafStartIdx = srange.index;
+            while (checkNode.innerText == leafNode.innerText) {
+                checkNode = quill.getLeaf(leafStartIdx)[0].domNode;
+                checkNode = checkNode.nodeType == 3 ? checkNode.parentElement : checkNode;
+                leafStartIdx--;
+            }
+
+            let preText = leafText.substring(0, srange.index - leafStartIdx);
+           // leafNode.insertNode()
+            FromUser.add(leafNode, getRandomInt());
+        }
         if (oldDelta) {
-            log('old:');
-            log(JSON.stringify(oldDelta));
+            //log('old:');
+            //log(JSON.stringify(oldDelta));
         }
         if (delta) {
-            log('new:');
-            log(JSON.stringify(delta));
+            //log('new:');
+            //log(JSON.stringify(delta));
         }
+
+        initContentRangeListeners();
     });
 
-    //quill.keyboard.addBinding(
-    //    {
-    //        key: 'C',
-    //        shortKey: true,
-    //        ctrlKey: true
-    //    },
-    //    function (range, context) {
-    //        console.table(quill.clipboard);
-    //});
-
-    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-        return new Delta().insert(node.data);
-    });
-
-    //$("#editor").bind('cut copy', async function (e) {
-    //    navigator.clipboard.read()
-    //        .then(async function(clipboardItems) {
-    //            for (const clipboardItem of clipboardItems) {
-    //                for (const type of clipboardItem.types) {
-                        
-    //                    const blob = await clipboardItem.getType(type);
-    //                    const text = await blob.text();
-    //                    log(type+':');
-    //                    log(text);
-    //                }
-    //            }
-    //        })
-    //        .catch(err => {
-    //            console.error('Failed to read clipboard data: ', err);
-    //        });
-    //});
-
-
-    const clipboardItems = [];
-
-    document.addEventListener("copy", async (e) => {
-        e.preventDefault();
-        try {
-            let clipboardItems = [];
-            for (const item of e.clipboardData.items) {
-                if (!item.type.startsWith("text/html")) {
-                    continue;
-                }
-                clipboardItems.push(
-                    new ClipboardItem({
-                        [item.type]: item,
-                    })
-                );
-                await navigator.clipboard.write(clipboardItems);
-                console.log("Image copied.");
-            }
-        } catch (err) {
-            console.error(err.name, err.message);
-        }
-    });
+    initClipboard();
 }
 
 function registerTables() {
@@ -395,59 +405,6 @@ function getEncodedHtml() {
     return result;
 }
 
-function changeInnerText(elm,text,newText) {
-    if (elm == null) {
-        return;
-    }
-    changeInnerTextHelper(elm.firstChild, text, newText);
-}
-function changeInnerTextHelper(elm, text, newText) {
-    if (elm == null) {
-        return;
-    }
-    if (elm.nodeType == 3 && elm.data == text) {
-        elm.data = newText;
-        return;
-    }
-    changeInnerTextHelper(elm.firstChild, text, newText);
-    changeInnerTextHelper(elm.nextSibling, text, newText);
-}
-
-function getElementsFromAndUntil(fromElm, untilElm) {
-    let elms = [];
-    getElementsFromAndUntilHelper(fromElm, untilElm, elms);
-    let filteredArr = [];
-    elms.forEach((item) => {
-        if (!filteredArr.includes(item)) {
-            filteredArr.push(item);
-        }
-    })
-
-    return filteredArr;
-}
-function getElementsFromAndUntilHelper(curElm, untilElm, elms) {
-    if (curElm == null) {
-        return;
-    }
-    elms.push(curElm);
-    if (curElm == untilElm) {
-        return;
-    }
-
-    let celms = [];
-    getElementsFromAndUntilHelper(curElm.firstChild, untilElm, celms);
-
-    let nelms = [];
-    nelms = getElementsFromAndUntilHelper(curElm.nextSibling, untilElm, nelms);
-
-    if (celms) {
-        elms.push(...celms);
-    }
-    if (nelms) {
-        elms.push(...nelms);
-    }
-}
-
 function getSelectedHtml(maxLength) {
     maxLength = maxLength == null ? Number.MAX_SAFE_INTEGER : maxLength;
 
@@ -464,10 +421,27 @@ function getSelectedHtml(maxLength) {
     var selectedContent = quill.getContents(selection.index, selection.length);
     var tempContainer = document.createElement('div')
     var tempQuill = new Quill(tempContainer);
+
     tempQuill.setContents(selectedContent);
     let result = tempContainer.querySelector('.ql-editor').innerHTML;
     tempContainer.remove();
     return result;
+}
+
+function getSelectedHtml2() {
+    var selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+        var range = selection.getRangeAt(0);
+        var docFrag = range.cloneContents();
+
+        let docFragStr = domSerializer.serializeToString(docFrag);
+
+        const xmlnAttribute = ' xmlns="http://www.w3.org/1999/xhtml"';
+        const regEx = new RegExp(xmlnAttribute, 'g');
+        docFragStr = docFragStr.replace(regEx, '');
+        return docFragStr;
+    }
+    return '';
 }
 
 function isEditorLoaded() {
@@ -638,33 +612,6 @@ function decodeHtml(html) {
     return txt.value;
 }
 
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-function isBright(hex, brightThreshold = 150) {
-    var c = hexToRgb(hex.toLowerCase());
-    var grayVal = Math.sqrt(
-        c.R * c.R * .299 +
-        c.G * c.G * .587 +
-        c.B * c.B * .114);
-    return grayVal > brightThreshold;
-}
-
-function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        R: parseInt(result[1], 16),
-        G: parseInt(result[2], 16),
-        B: parseInt(result[3], 16)
-    } : null;
-}
-
 function createLink() {
     var range = quill.getSelection(true);
     if (range) {
@@ -717,13 +664,3 @@ function getTemplateIconStr(isEnabled) {
     }
 }
 
-function log(msg) {
-    if (!isLoggingEnabled) {
-        return;
-    }
-    console.log(msg);
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}

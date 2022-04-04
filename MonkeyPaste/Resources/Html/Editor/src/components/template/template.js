@@ -46,7 +46,7 @@ var templateTypesMenuOptions = [
 var userDeletedTemplateGuids = [];
 
 
-function registerTemplateSpan(Quill) {
+function registerTemplateSpan() {
     const Parchment = Quill.imports.parchment;
 
     class TemplateEmbedBlot extends Parchment.EmbedBlot {
@@ -73,7 +73,7 @@ function registerTemplateSpan(Quill) {
         }
     }
 
-    Quill.register(TemplateEmbedBlot);
+    Quill.register(TemplateEmbedBlot, true);
 }
 
 //#region Init
@@ -449,8 +449,7 @@ function createTemplate(templateObjOrId) {
         let selectionInnerHtml = '';
         let shtmlStr = getSelectedHtml(1);
         if (shtmlStr != null && shtmlStr.length > 0) {
-            let parser = new DOMParser();
-            let shtml = parser.parseFromString(shtmlStr, 'text/html');
+            let shtml = domParser.parseFromString(shtmlStr, 'text/html');
             let pc = shtml.getElementsByTagName('p');
             if (pc != null && pc.length > 0) {
                 let p = pc[0];

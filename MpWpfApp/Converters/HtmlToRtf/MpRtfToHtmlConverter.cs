@@ -122,6 +122,7 @@ namespace MpWpfApp {
                 throw new Exception(@"Unknown text element: " + te.ToString());
             }
         }
+
         private static string WrapWithList(List l, string content) {
             return WrapWithTag("ol", content);
         }
@@ -160,6 +161,9 @@ namespace MpWpfApp {
                     break;
             }
             sb.Append(GetParagraphIndent(p) + "'");
+            if(string.IsNullOrWhiteSpace(content)) {
+                content = @"<br>";
+            }
             sb.AppendFormat(@">{0}</p>",content);
             return sb.ToString();
         }        
@@ -186,6 +190,7 @@ namespace MpWpfApp {
             }
             return string.Empty;
         }
+
         private static string GetSpanAttributes(Span s) {
             var sb = new StringBuilder();
             sb.AppendFormat(@"class='ql-font-{0}'", GetHtmlFont(s));
@@ -214,7 +219,7 @@ namespace MpWpfApp {
         }
 
         private static string GetHtmlFont(Span s) {
-            string ff = s.FontFamily.ToString().ToLower();
+            string ff = s.FontFamily.ToString().ToLower().Trim();
             MpRichTextFormatProperties.Instance.AddFont(ff);
             return ff.Replace(" ", "-");
         }
@@ -252,29 +257,32 @@ namespace MpWpfApp {
             //    string html = MpRtfToHtmlConverter.ConvertRtfToHtml(rtf);
             //    MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
             //}
-            string rtf = @"{\rtf1\ansi\ansicpg1252\uc1\htmautsp\deff2{\fonttbl{\f0\fcharset0 Times New Roman; } {\f2\fcharset0 Georgia; } {\f3\fcharset0 Consolas; } }
-{\colortbl\red0\green0\blue0;\red255\green255\blue255;\red0\green128\blue0;\red0\green0\blue255;\red43\green145\blue175; }\loch\hich\dbch\pard\plain\ltrpar\itap0{\lang1033\fs19\f3\cf0 \cf0\qj{\f3 {\cf2\ltrch //rtbvm.HasViewChanged = true;}\li0\ri0\sa0\sb0\fi0\ql\par}
-{\f3 {\ltrch rtbvm.OnPropertyChanged(} {\cf3\ltrch nameof} {\ltrch(rtbvm.CurrentSize)); }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 {\ltrch                 } {\cf3\ltrch var} {\ltrch cilv = } {\cf3\ltrch this} {\ltrch.GetVisualAncestor <} {\cf4\ltrch MpContentListView} {\ltrch > (); }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 {\ltrch cilv.UpdateAdorner(); }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 \li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 {\ltrch                 } {\cf3\ltrch var} {\ltrch rtbl = cilv.GetVisualDescendents <} {\cf4\ltrch RichTextBox} {\ltrch > (); }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 {\ltrch                 } {\cf3\ltrch double} {\ltrch totalHeight = rtbl.Sum(x => x.ActualHeight) + } {\cf4\ltrch MpMeasurements} {\ltrch.Instance.ClipTileEditToolbarHeight + } {\cf4\ltrch MpMeasurements} {\ltrch.Instance.ClipTileDetailHeight; }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 \li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 {\ltrch                 } {\cf3\ltrch var} {\ltrch ctcv = } {\cf3\ltrch this} {\ltrch.GetVisualAncestor <} {\cf4\ltrch MpClipTileContainerView} {\ltrch > (); }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 {\ltrch ctcv.ExpandBehavior.Resize(totalHeight); }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 {\ltrch                 }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 {\ltrch                 } {\cf3\ltrch var} {\ltrch sv = cilv.ContentListBox.GetScrollViewer(); }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 {\ltrch sv.InvalidateScrollInfo(); }\li0\ri0\sa0\sb0\fi0\ql\par}
-                            {\f3 \li0\ri0\sa0\sb0\fi0\ql\par}
-                        }
-                    }";
+            string rtf = @"{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Consolas;}{\f1\fnil\fcharset0 Georgia;}{\f2\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green128\blue0;\red0\green0\blue0;\red0\green0\blue255;\red43\green145\blue175;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\cf1\f0\fs19 //rtbvm.HasViewChanged = true;\cf2\par
+rtbvm.OnPropertyChanged(\cf3 nameof\cf2 (rtbvm.CurrentSize)); \par
+\cf3 var\cf2  cilv =  \cf3 this\cf2 .GetVisualAncestor<\cf4 MpContentListView\cf2 >(); \par
+cilv.UpdateAdorner();\par
+\par
+
+\pard\ri-1800\tx10080\cf3 var\cf2  rtbl = cilv.GetVisualDescendents<\cf4 RichTextBox\cf2 >(); \par
+
+\pard\tx10080\cf3 double\cf2  totalHeight = rtbl.Sum(x => x.ActualHeight) +\par
+\cf4 MpMeasurements\cf2 .Instance.ClipTileEditToolbarHeight + \cf4 MpMeasurements\cf2 .Instance.ClipTileDetailHeight; \par
+
+\pard\cf3 var\cf2  ctcv =  \cf3 this\cf2 .GetVisualAncestor<\cf4 MpClipTileContainerView\cf2 >(); \par
+ctcv.ExpandBehavior.Resize(totalHeight); \par
+\cf3 var\cf2  sv = cilv.ContentListBox.GetScrollViewer(); \par
+sv.InvalidateScrollInfo();\cf0\f1\fs24\lang9\par
+
+\pard\sa200\sl276\slmult1\f2\fs22\par
+}";
 
             string html = MpRtfToHtmlConverter.ConvertRtfToHtml(
                 rtf,
                 new Dictionary<string, string>() {
-                    {"test1", "yo this is test1 value"},
-                    {"test2", null }
+                    {"copyItemGuid", System.Guid.NewGuid().ToString() }
                 });
             MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
         }

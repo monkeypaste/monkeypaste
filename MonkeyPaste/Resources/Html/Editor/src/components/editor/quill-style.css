@@ -1,6 +1,7 @@
 .ql-toolbar {
     width: 100%;
-    display: flex;
+    /*display: flex;*/
+    display:flex;
 }
 
 
@@ -14,11 +15,13 @@
 }
 
 .ql-toolbar {
-    display: flex;
+    /*display: flex;*/
+    display: block;
 }
 
 .ql-snow .ql-formats {
-    display: inline-flex;
+    /*display: inline-flex;*/
+    display: inline-block;
 }
 
 .ql-toolbar.ql-snow 
@@ -41,7 +44,7 @@
 /* Table Styles*/
 .ql-snow .ql-Table-Input .ql-picker-options {
     padding: 3px 5px;
-    width: 152px;
+    width: 180px;
 }
 
 .ql-editor {

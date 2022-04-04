@@ -105,7 +105,7 @@ namespace MpWpfApp {
             //var result = gsiw.ShowDialog();
             //await MpGoogleApiHelpers.Test(null);
             
-            //MpRtfToHtmlConverter.Test();
+            MpRtfToHtmlConverter.Test();
 
             IsLoaded = true;
         }

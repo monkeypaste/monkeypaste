@@ -169,8 +169,6 @@ namespace MpWpfApp {
 
                 return new MpQuillLoadRequestMessage() {
                     envName = "wpf",
-                    guidOpenTag = ENCODED_TEMPLATE_OPEN_TOKEN,
-                    guidCloseTag = ENCODED_TEMPLATE_CLOSE_TOKEN,
                     itemEncodedHtmlData = GetEncodedHtml(itemData,civm.CopyItemGuid),
                     usedTextTemplates = GetTextTemplates(itemData),
                     isPasteRequest = civm.IsPasting,

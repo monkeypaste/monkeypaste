@@ -5,9 +5,6 @@
     <meta charset="utf-8" />
     <title>Editor</title>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
-
     <link href="lib/jquery-context-menus/dist/context-menu.min.css" rel="stylesheet" />
     <link href="lib/Quill/quill.snow.css" rel="stylesheet" />
     <link href="lib/HighlightJs/styles/github.min.css" rel="stylesheet" />
@@ -42,7 +39,9 @@
         var quill;
         var availableTemplates = [];
 
-        var isLoggingEnabled = true;
+        const domParser = new DOMParser();
+        const domSerializer = new XMLSerializer();
+        var isDebug = true;
 
         //let browserAgentInfo = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36';
         //if (navigator.userAgent.toLowerCase() == browserAgentInfo.toLowerCase()) {
@@ -52,12 +51,15 @@
         //}
     </script>
 
+    <script src="src/components/util/debug.js"></script>
+    <script src="src/components/util/util.js"></script>
     <script src="src/components/template/template.js"></script>
     <script src="src/components/content/content.js"></script>
     <script src="src/components/font/font.js"></script>
+    <script src="src/components/clipboard/clipboard.js"></script>
 </head>
 <body>
-    <div id='editor' class="ql-editor">
+    <div id='editor'>
     </div>
 
     <div id="editTemplateToolbar" class="edit-template-toolbar">
