@@ -195,14 +195,21 @@ namespace MpWpfApp {
                 if(Parent == null || CopyItem == null) {
                     return 0;
                 }
+                double h = 0;
                 if(!IsReadOnly) {
                     if (Parent.Count > 1) {
-                        return Double.NaN;
+                        h = Double.NaN;
                     }
                     //return Parent.TileContentHeight; //quil editor height
-                    return Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                    h = Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                } else {
+
+                    h = ReadOnlyContentSize.Height;
                 }
-                return ReadOnlyContentSize.Height;
+                if(double.IsInfinity(h)) {
+                    return Double.NaN;
+                }
+                return h;
             }
         }
 
@@ -380,7 +387,7 @@ namespace MpWpfApp {
         }
 
         [MpAffectsParent]
-        public bool IsPlaceholder => CopyItem == null;
+        public bool IsPlaceholder => CopyItem == null || IsCompositeChild;
 
         #region Drag & Drop
         //[MpAffectsParent]
@@ -421,6 +428,22 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
+        public int CompositeOffset { 
+            get {
+                if(CopyItem == null) {
+                    return -1;
+                }
+                return CopyItem.CompositeOffset;
+            }
+            set {
+                if(CompositeOffset != value) {
+                    CopyItem.CompositeOffset = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CompositeOffset));
+                }
+            }
+        }
 
         public bool IsCompositeChild {
             get {

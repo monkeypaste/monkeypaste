@@ -107,6 +107,8 @@ namespace MonkeyPaste {
 
         public int CompositeSortOrderIdx { get; set; }
 
+        public int CompositeOffset { get; set; } = -1;
+
         [Column("MpCopyItemGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 

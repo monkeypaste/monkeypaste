@@ -8,8 +8,8 @@ function initClipboard() {
     const clipboardItems = [];
 
     quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-        PasteNode = retargetContentItemDomNode(node);
-
+        //PasteNode = retargetContentItemDomNode(node);
+        PasteNode = node;
         return delta;
     });
 

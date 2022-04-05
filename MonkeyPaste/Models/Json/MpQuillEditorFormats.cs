@@ -14,8 +14,6 @@ namespace MonkeyPaste {
 
         public string itemEncodedHtmlData { get; set; }
 
-        public List<MpCopyItemOperation> itemOperations { get; set; }
-
         public List<MpTextTemplate> usedTextTemplates { get; set; }
     }
 
@@ -27,7 +25,7 @@ namespace MonkeyPaste {
     public class MpQuillEnableReadOnlyResponseMessage : MpJsonObject {
         public string itemEncodedHtmlData { get; set; }
 
-        public List<string> removedGuids { get; set; }
+        public List<string> userDeletedTemplateGuids { get; set; }
         public List<MpTextTemplate> updatedAllAvailableTextTemplates { get; set; }
     }
 

@@ -257,34 +257,13 @@ namespace MpWpfApp {
             //    string html = MpRtfToHtmlConverter.ConvertRtfToHtml(rtf);
             //    MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
             //}
-            string rtf = @"{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Consolas;}{\f1\fnil\fcharset0 Georgia;}{\f2\fnil\fcharset0 Calibri;}}
-{\colortbl ;\red0\green128\blue0;\red0\green0\blue0;\red0\green0\blue255;\red43\green145\blue175;}
-{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
-\pard\cf1\f0\fs19 //rtbvm.HasViewChanged = true;\cf2\par
-rtbvm.OnPropertyChanged(\cf3 nameof\cf2 (rtbvm.CurrentSize)); \par
-\cf3 var\cf2  cilv =  \cf3 this\cf2 .GetVisualAncestor<\cf4 MpContentListView\cf2 >(); \par
-cilv.UpdateAdorner();\par
-\par
-
-\pard\ri-1800\tx10080\cf3 var\cf2  rtbl = cilv.GetVisualDescendents<\cf4 RichTextBox\cf2 >(); \par
-
-\pard\tx10080\cf3 double\cf2  totalHeight = rtbl.Sum(x => x.ActualHeight) +\par
-\cf4 MpMeasurements\cf2 .Instance.ClipTileEditToolbarHeight + \cf4 MpMeasurements\cf2 .Instance.ClipTileDetailHeight; \par
-
-\pard\cf3 var\cf2  ctcv =  \cf3 this\cf2 .GetVisualAncestor<\cf4 MpClipTileContainerView\cf2 >(); \par
-ctcv.ExpandBehavior.Resize(totalHeight); \par
-\cf3 var\cf2  sv = cilv.ContentListBox.GetScrollViewer(); \par
-sv.InvalidateScrollInfo();\cf0\f1\fs24\lang9\par
-
-\pard\sa200\sl276\slmult1\f2\fs22\par
-}";
 
             string html = MpRtfToHtmlConverter.ConvertRtfToHtml(
-                rtf,
+                MpHelpers.ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtf_sample.rtf"),
                 new Dictionary<string, string>() {
                     {"copyItemGuid", System.Guid.NewGuid().ToString() }
                 });
-            MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
+            MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html2.html", html, false);
         }
     }
 }

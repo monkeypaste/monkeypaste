@@ -1,6 +1,7 @@
-var ContentGuid;
-var ContentSourceGuid;
-var FromUser;
+var ContentInlineGuid;
+var ContentInlineSourceGuid;
+var FromUserInline;
+var Draggable;
 
 var ENCODED_CONTENT_OPEN_TOKEN = "{c{";
 var ENCODED_CONTENT_CLOSE_TOKEN = "}c}";
@@ -8,22 +9,43 @@ var ENCODED_CONTENT_REGEXP;
 
 //#region Content Blot Lifecycle
 
+function initContent(itemHtml, openTag = "{c{", closeTag = "}c}") {
+    //encodeContentOps(itemOps, openTag, closeTag);
+
+    //decodeContent(itemOps);
+    //registerContentGuidAttribute();
+    //registerContentBlots();
+    setHtml(itemHtml);
+    //
+
+
+    //initContentRangeListeners();
+
+    //Array.from(document.getElementsByTagName('span')).forEach(span => {
+    //    Draggable.add(span, true);
+
+    //    span.addEventListener('mousedown', function (e) {
+    //        e.preventDefault();
+
+    //    });
+    //});
+}
+
 function registerContentGuidAttribute() {
     Parchment = Quill.import('parchment');
 
-    let config = {
-        scope: Parchment.Scope.ANY,
+    let suppressWarning = false;
+    let inlineConfig = {
+        scope: Parchment.Scope.INLINE,
     };
 
-    let suppressWarning = false;
-
-    ContentGuid = new Parchment.Attributor('copyItemGuid', 'copyItemGuid', config);
+    ContentGuid = new Parchment.Attributor('copyItemGuid', 'copyItemGuid', inlineConfig);
     Quill.register(ContentGuid, suppressWarning);
 
-    ContentSourceGuid = new Parchment.Attributor('copyItemSourceGuid', 'copyItemSourceGuid', config);
+    ContentSourceGuid = new Parchment.Attributor('copyItemSourceGuid', 'copyItemSourceGuid', inlineConfig);
     Quill.register(ContentSourceGuid, suppressWarning);
 
-    FromUser = new Parchment.Attributor('fromUser', 'fromUser', config);
+    FromUser = new Parchment.Attributor('fromUser', 'fromUser', inlineConfig);
     Quill.register(FromUser, suppressWarning);
 }
 
@@ -42,25 +64,25 @@ function registerContentBlots() {
         }
     }
     ContentInlineBlot.blotName = 'contentInline';
-    ContentInlineBlot.tagName = 'SPAN';//,'A','EM','STRONG','U','S','SUB','SUP','IMG'];
+    ContentInlineBlot.tagName = 'DIV';//,'A','EM','STRONG','U','S','SUB','SUP','IMG'];
 
     Quill.register(ContentInlineBlot);
 
-    class ContentBlockBlot extends Parchment.BlockBlot {
-        static create(value) {
-            let node = super.create(value);
-            applyContentItemToDomNode(node, value);
-            return node;
-        }
+    //class ContentBlockBlot extends Parchment.BlockBlot {
+    //    static create(value) {
+    //        let node = super.create(value);
+    //        applyContentItemToDomNode(node, value);
+    //        return node;
+    //    }
 
-        static value(domNode) {
-            getContentItemFromDomNode(domNode);
-        }
-    }
-    ContentBlockBlot.blotName = 'contentBlock';
-    ContentBlockBlot.tagName = 'P';//, 'DIV', 'OL', 'UL','LI'];
+    //    static value(domNode) {
+    //        getContentItemFromDomNode(domNode);
+    //    }
+    //}
+    //ContentBlockBlot.blotName = 'contentBlock';
+    //ContentBlockBlot.tagName = 'P';//, 'DIV', 'OL', 'UL','LI'];
 
-    Quill.register(ContentBlockBlot);
+    //Quill.register(ContentBlockBlot);
 }
 
 function getContentItemFromDomNode(domNode) {
@@ -81,19 +103,14 @@ function applyContentItemToDomNode(node, value) {
     if (node == null || value == null) {
         return node;
     }
+    if (isBlockElement(node)) {
 
+    }
     node.setAttribute('copyItemGuid', value.copyItemGuid);
     node.setAttribute('copyItemSourceGuid', value.copyItemSourceGuid);
     if (value.fromUser) {
         node.setAttribute('fromUser', '');
     }
-    //node.innerHTML = value.opData;
-
-    //node.setAttribute('class', 'ql-content-embed-blot');
-
-    //node.addEventListener('mouseenter', function (e) {
-    //    console.log('entered content: ' + value.copyItemGuid);
-    //});
 
     return node;
 }
@@ -103,30 +120,17 @@ function retargetContentItemDomNode(node, newContentGuid) {
         return node;
     }
     newContentGuid = newContentGuid == null ? generateGuid() : newContentGuid;
-    node.setAttribute('copyItemSourceGuid', node.getAttribute('copyItemGuid'));
+    if (node.getAttribute('copyItemSourceGuid')) {
+        //when source is already set ignore if it changes again because new one is not original
+    } else {
+        node.setAttribute('copyItemSourceGuid', node.getAttribute('copyItemGuid'));
+    }
     node.setAttribute('copyItemGuid', newContentGuid);
     return node;
 }
 
-function finishRetarget(winSelection,blot) {
-    if (winSelection == null || blot == null) {
-        return;
-    }
-
-}
 //#endregion
 
-function initContent(itemHtml, openTag = "{c{", closeTag = "}c}") {
-    //encodeContentOps(itemOps, openTag, closeTag);
-
-    //decodeContent(itemOps);
-    registerContentGuidAttribute();
-    setHtml(itemHtml);
-    //registerContentBlots();
-   
-
-    initContentRangeListeners();
-}
 
 function encodeContentOps(itemOps, openTag, closeTag) {
     ENCODED_CONTENT_OPEN_TOKEN = openTag;
@@ -177,18 +181,10 @@ function getContentEmbedStr(ciop, sToken = ENCODED_CONTENT_OPEN_TOKEN, eToken = 
     return result;
 }
 
-function initContentRangeListeners() {
-    //while (quill.getLength() <= 1) {
-    //    await sleep(100);
-    //}
-    //let parser = new DOMParser();
-    //document.getElementById('editor').addEventListener('mouseover', onOverContent);
-    
+function initContentRangeListeners() {    
     Array.from(document.querySelectorAll('[copyItemGuid]')).forEach(cie => {
         cie.addEventListener('mouseover', onOverContent);
     });
-    
-    return;
 }
 
 function onOverContent(e) {
@@ -201,15 +197,14 @@ function onOverContent(e) {
         IgnoreTextChange = true;
         cie.style.backgroundColor = testColor;
     });
+}
 
-    //e.target.style.backgroundColor = getRandomColor();
-    //let blot = Quill.find(e.target);
-    //if (blot && blot.domNode.getAttribute('opGuid') != null) {
-    //    log('over: ' + blot.domNode.getAttribute('opGuid'));
-    //} else {
-
-    //    log(e.target);
-    //}
+function onOverInput(e) {
+    if (!e.target) {
+        return;
+    }
+    IgnoreTextChange = true;
+    e.target.style.backgroundColor = 'orange';
 }
 
 function getContentDocRanges(ciguid) {
@@ -251,17 +246,3 @@ function getContentDocRanges(ciguid) {
     }
     return allRanges;
 }
-
-function onMouseEnterContentRange(e) {
-    log('entered content range');
-    e.target.style.backgroundColor = 'magenta';
-}
-
-function onMouseLeaveContentRange(e) {
-    log('left content range');
-    e.target.style.backgroundColor = 'transparent';
-}
-
-
-
-

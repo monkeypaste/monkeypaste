@@ -197,7 +197,7 @@ namespace MpWpfApp {
 
                     civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(qrm.itemEncodedHtmlData);
 
-                    MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.removedGuids).FireAndForgetSafeAsync(civm);
+                    MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(civm);
                 }
             }
         }

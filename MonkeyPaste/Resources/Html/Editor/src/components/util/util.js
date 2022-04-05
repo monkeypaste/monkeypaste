@@ -121,6 +121,15 @@ function clone(obj) {
     let cloneObj = JSON.parse(JSON.stringify(obj));
     return cloneObj;
 }
+
 function getRandomInt(max = Number.MAX_SAFE_INTEGER) {
     return Math.floor(Math.random() * max);
+}
+
+function isNullOrEmpty(str) {
+    return str == null || str == '';
+}
+
+function isNullOrWhiteSpace(str) {
+    return str == null || str.every(x => x == ' ');
 }
