@@ -45,7 +45,7 @@
   word-wrap: break-word;
 }
 .ql-editor > * {
-  cursor: text;
+  /* cursor: text; */
 }
 .ql-editor p,
 .ql-editor ol,

@@ -7,6 +7,7 @@ var isShowingTemplateToolbarMenu = false;
 var isShowingEditorToolbar = true;
 
 var IgnoreTextChange = false;
+var IgnoreSelectionChange = false;
 
 var LastSelection = { index: 0, length: 0 };
 var LastSelectedHtml;
@@ -45,9 +46,7 @@ function init(reqMsgStr) {
         reqMsg = JSON.parse(reqMsgStr_decoded);
     }
 
-    loadQuill(reqMsg.envName);
-
-    initContent(reqMsg.itemEncodedHtmlData);
+    loadQuill(reqMsg);
 
     if (reqMsg.envName == 'web') {
         //for testing in browser
@@ -64,42 +63,35 @@ function init(reqMsgStr) {
         //disableScrolling();
     }
 
-    initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
-
-    refreshFontSizePicker();
-    refreshFontFamilyPicker();
 
     isLoaded = true;
     return "GREAT!";
 }
 
-function loadQuill(envName) {
-    if (isLoaded) {
-        return;
-    }
+function loadQuill(reqMsg) {
+    //if (isLoaded) {
+    //    return;
+    //}
 
     Quill.register("modules/htmlEditButton", htmlEditButton);
     Quill.register({ 'modules/better-table': quillBetterTable }, true);
 
     registerContentGuidAttribute();
-    //registerContentBlots();
-    registerTemplateSpan(Quill);
+    registerTemplateSpan();
 
     // Append the CSS stylesheet to the page
     var node = document.createElement('style');
-    node.innerHTML = registerFontStyles(envName);
+    node.innerHTML = registerFontStyles(reqMsg.envName);
     document.body.appendChild(node);
 
-    var editorDiv = $("#editor");
-
     quill = new Quill(
-        editorDiv[0], {
+        '#editor', {
             //debug: true,
         placeholder: '',
         theme: 'snow',
         modules: {
             table: false,
-            toolbar: registerToolbar(envName),
+            toolbar: registerToolbar(reqMsg.envName),
             htmlEditButton: {
                 syntax: true,
             },
@@ -124,60 +116,27 @@ function loadQuill(envName) {
 
     quill.root.setAttribute("spellcheck", "false");
 
-    var curTableIconSpan = editorDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
-    curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
-    var curTableCellIconSpans = $(curTableIconSpan.parentNode.childNodes[1]).children();
-    curTableCellIconSpans.click((function () {
-        var curQuillBetterTable = quill.getModule('better-table');
-        var curQuillToolbar = quill.getModule('toolbar');
-        return function () {
-            var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
-            var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
-            curQuillBetterTable.insertTable(curRowIndex, curColIndex);
-            // The following two lines have been added, thinking that it would fix the issue 
-            // of keeping the icon in blue color.
-            // However Quill keeps adding the classes back, so this fix doesn't work.
-            $(this).parent().parent().find(".ql-selected").removeClass("ql-selected");
-            $(this).parent().parent().find(".ql-active").removeClass("ql-active");
-        };
-    })());
-    curTableCellIconSpans.hover(function () {
-        var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
-        var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
-        $(this).parent().children().each((function () {
-            var curRowIndex1 = curRowIndex;
-            var curColIndex1 = curColIndex;
-            return function () {
-                var curRowIndex2 = Number(this.dataset.value.substring(9).split('_')[0]);
-                var curColIndex2 = Number(this.dataset.value.substring(9).split('_')[1]);
-                if (curRowIndex2 <= curRowIndex1 && curColIndex2 <= curColIndex1) {
-                    $(this).addClass("ql-picker-item-highlight");
-                }
-            };
-        })());
-    }, function () {
-        $(this).parent().children().removeClass("ql-picker-item-highlight");
-    });
-
+    initTableToolbarButton();
 
     window.addEventListener('click', (e) => {
-        if (e.path.find(x => x.className == 'edit-template-toolbar') != null ||
-            e.path.find(x => x.className == 'paste-template-toolbar') != null ||
-            e.path.find(x => x.className == 'context-menu-option') != null || 
-            e.path.find(x => x.className == 'ql-toolbar') != null) {
+        if (e.path.find(x => x.classList && x.classList.contains('edit-template-toolbar')) != null ||
+            e.path.find(x => x.classList && x.classList.contains('paste-template-toolbar')) != null ||
+            e.path.find(x => x.classList && x.classList.contains('context-menu-option')) != null || 
+            e.path.find(x => x.classList && x.classList.contains('ql-toolbar')) != null) {
             //ignore clicks within template toolbars
             return;
         }
-        if (e.path.find(x => x.className == 'ql-template-embed-blot') == null) {
+        if (e.path.find(x => x.classList && x.classList.contains('ql-template-embed-blot')) == null) {
             hideAllContextMenus();
             hideEditTemplateToolbar();
             hidePasteTemplateToolbar();
+            clearTemplateFocus();
         }
     });
 
     quill.on('selection-change', function (range, oldRange, source) {
-        LastSelectedHtml = SelectedHtml;
-        SelectedHtml = getSelectedHtml();
+        //LastSelectedHtml = SelectedHtml;
+        //SelectedHtml = getSelectedHtml();
 
         if (range) {
             refreshFontSizePicker();
@@ -191,9 +150,22 @@ function loadQuill(envName) {
                 log('User has highlighted', text);
             }
 
-            if (!isTemplateFocused()) {
-                hideEditTemplateToolbar();
-            }
+            refreshTemplatesAfterSelectionChange();
+
+            //if (IgnoreSelectionChange) {
+            //    IgnoreSelectionChange = false;
+            //    return;
+            //}
+            //let templateDocIdxLookup = getTemplateElementsWithDocIdx();
+
+            //for (var i = 0; i < templateDocIdxLookup.length; i++) {
+            //    let tdil = templateDocIdxLookup[i];
+            //    if (parseInt(tdil[0]) == parseInt(range.index)) {
+            //        range.index++;
+            //        IgnoreSelectionChange = true;
+            //        quill.setSelection(range, Quill.sources.SILENT);
+            //    }
+            //}
         } else {
             log('Cursor not in the editor');
         }
@@ -202,12 +174,6 @@ function loadQuill(envName) {
             //quill.setSelection(oldRange);
         }   
     });
-    window.addEventListener('dragstart', function (event) {
-        // (note: not cross-browser)
-        //var event2 = new CustomEvent('click2', { detail: { original: event } });
-        //event.target.dispatchEvent(event2);
-        event.stopPropagation();
-    }, true);
 
     quill.on('text-change', function (delta, oldDelta, source) {
         if (!isLoaded) {
@@ -221,10 +187,10 @@ function loadQuill(envName) {
         if (!srange) {
             return;
         }
+        let idx = 0;
         if (PasteNode) {
             let retargetedNode = retargetContentItemDomNode(PasteNode);
             let contentBlot = getContentItemFromDomNode(retargetedNode);
-            let idx = 0;
             IgnoreTextChange = true;
             for (var i = 0; i < delta.ops.length; i++) {
                 let op = delta.ops[i];
@@ -246,12 +212,11 @@ function loadQuill(envName) {
                     }
                     idx += op.insert.length;
                 }
-            };
+            }
             IgnoreTextChange = false;
             PasteNode = null;
         } else {
             IgnoreTextChange = true;
-            let idx = 0;
             for (var i = 0; i < delta.ops.length; i++) {
                 let op = delta.ops[i];
                 if (op.retain) {
@@ -266,6 +231,31 @@ function loadQuill(envName) {
             };
             IgnoreTextChange = false;
         }
+
+
+        //idx = 0;
+
+        //for (var i = 0; i < delta.ops.length; i++) {
+        //    let op = delta.ops[i];
+
+        //    if (op.retain) {
+        //        idx += op.retain;
+        //    }
+        //    if (op.delete) {
+        //        let templateDocIdxLookup = getTemplateElementsWithDocIdx();
+        //        if (templateDocIdxLookup.filter(x => x[0] == srange.index - 1) != null) {
+        //            log('here')
+        //        }
+        //        if (templateDocIdxLookup.filter(x => x[0] == srange.index) != null) {
+        //            IgnoreTextChange = true;
+        //            quill.insertText(srange.index, ' ', Quill.sources.SILENT);
+        //        }
+        //        if (templateDocIdxLookup.filter(x => x[0] == srange.index + 1) != null) {
+        //            log('or or here')
+        //        }
+        //    }
+        //}
+
         //initContentRangeListeners();
         if (oldDelta) {
             //log('old:');
@@ -278,6 +268,15 @@ function loadQuill(envName) {
     });
 
     initClipboard();
+
+    initContent(reqMsg.itemEncodedHtmlData);
+
+    initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
+
+    initDragDrop();
+
+    refreshFontSizePicker();
+    refreshFontFamilyPicker();
 }
 
 function registerTables() {
@@ -359,7 +358,6 @@ function getSelectedText() {
 function getHtml() {
     //document.getElementsByClassName
     //var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
-    clearTemplateSelection();
     clearTemplateFocus();
     var val = quill.root.innerHTML;
     return unescape(val);
@@ -648,6 +646,9 @@ function getOrCreateInlineElement(docIdx) {
     leafNode.inser
 }
 
+var InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
+var BlockTags = ['p','ol','ul','li','div','table','colgroup','col','tbody','tr','td','iframe']
+
 function isBlockElement(elm) {
     if (elm == null) {
         return false;
@@ -666,4 +667,46 @@ function isInlineElement(elm) {
             tn == 'sub' || tn == 'sup' || tn == 'img';
 }
 
+function getEditorIndexFromPoint(p,docIdxTemplateLookup) {
+    let closestIdx = -1;
+    let closestDist = Number.MAX_SAFE_INTEGER;
+    if (!p) {
+        return closestIdx;
+    }
 
+    let editorRect = document.getElementById('editor').getBoundingClientRect();
+    let erect = { x: 0, y: 0, w: editorRect.width, h: editorRect.height };
+
+    let ex = p.x - editorRect.left; //x position within the element.
+    let ey = p.y - editorRect.top;  //y position within the element.
+    let ep = { x: ex, y: ey };
+    //log('editor pos: ' + ep.x + ' '+ep.y);
+    if (!isPointInRect(erect, ep)) {
+        return closestIdx;
+    }
+
+    for (var i = 0; i < quill.getLength(); i++) {
+        let irect = quill.getBounds(i, 1);
+        let ix = irect.left;
+        let iy = irect.top + (irect.height / 2);
+        let ip = { x: ix, y: iy };
+        let idist = distSqr(ip, ep);
+        if (idist < closestDist) {
+            closestDist = idist;
+            closestIdx = i;
+        }
+    }
+
+    return closestIdx;
+}
+
+function setCaret(line, col) {
+    var ele = document.getElementById("editor").childNodes[0];
+    var rng = document.createRange();
+    var sel = window.getSelection();
+    rng.setStart(ele.childNodes[line], col);
+    rng.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(rng);
+    ele.focus();
+}

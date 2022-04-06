@@ -133,3 +133,49 @@ function isNullOrEmpty(str) {
 function isNullOrWhiteSpace(str) {
     return str == null || str.every(x => x == ' ');
 }
+
+function overrideEvent(elm, eventName, handler) {
+    let overrideEventName = "mp_" + eventName;
+
+    window.addEventListener(eventName, function (event) {
+        // (note: not cross-browser)
+        var event2 = new CustomEvent(overrideEventName, { detail: { original: event } });
+        event.target.dispatchEvent(event2);
+        event.stopPropagation();
+    }, true);
+
+    elm.addEventListener(overrideEventName, handler);
+}
+
+function getAllElementsBetween(fromElm, toElm, inclusive = { from: true, to: true }) {
+    let allElms = [];
+    if (fromElm == null || toElm == null) {
+        return allElms;
+    }
+
+
+    while (true) {
+
+    }
+}
+
+function getAllElementsBetweenHelper(elm, elms) {
+    if (elm == null) {
+        return elms;
+    }
+    elms.push(elm);
+    getAllElementsBetweenHelper(elm.firstChild, elms);
+    getAllElementsBetweenHelper(elm.nextSibling, elms);
+}
+
+function isPointInRect(rect, p) {
+    return rect.x <= p.x && p.x <= rect.x + rect.w && rect.y <= p.y && p.y <= rect.y + rect.h;
+}
+
+function dist(a, b) {
+    return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
+}
+
+function distSqr(a, b) {
+    return Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2);
+}

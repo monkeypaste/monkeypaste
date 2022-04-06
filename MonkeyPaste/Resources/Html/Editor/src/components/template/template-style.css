@@ -7,9 +7,9 @@
     transition: .4s;
     cursor: pointer;
     border: 2px solid transparent;
-    -moz-user-select: none;
+    /*-moz-user-select: none;
     -webkit-user-select: none;
-    -ms-user-select: none;
+    -ms-user-select: none;*/
     user-select: none;
 }
 
@@ -20,9 +20,18 @@
         border: 2px solid yellow;
     }
 
-    .ql-template-embed-blot:focus {
-        border: 2px solid red;
-    }
+.ql-template-embed-blot-focus {
+    border: 2px solid red;
+}
+
+.ql-template-embed-blot-focus-not-instance {
+    border: 2px solid #f98f8f;
+
+}
+
+.ql-template-embed-blot-at-insert {
+    border: 2px solid #31e40e !important;
+}
 
 
 #editTemplateDeleteButton {
@@ -30,7 +39,7 @@
     color: white;
     font-weight: bold;
     padding: 5px 10px;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 #editTemplateDeleteButton:hover {

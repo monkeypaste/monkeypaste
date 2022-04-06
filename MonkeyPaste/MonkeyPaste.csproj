@@ -82,11 +82,20 @@
     <None Remove="Resources\Html\Editor\Editor2.js" />
     <None Remove="Resources\Html\Editor\lib\DateFormatter\jquery.dateFormat.js" />
     <None Remove="Resources\Html\Editor\lib\DynamicQuillTools\DynamicQuillTools.js" />
+    <None Remove="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-brands-400.ttf" />
+    <None Remove="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-brands-400.woff2" />
+    <None Remove="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-regular-400.ttf" />
+    <None Remove="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-regular-400.woff2" />
+    <None Remove="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-solid-900.ttf" />
+    <None Remove="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-solid-900.woff2" />
+    <None Remove="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-v4compatibility.ttf" />
+    <None Remove="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-v4compatibility.woff2" />
     <None Remove="Resources\Html\Editor\lib\HighlightJs\highlight.min.js" />
     <None Remove="Resources\Html\Editor\lib\HighlightJs\languages\xml.min.js" />
     <None Remove="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.js" />
     <None Remove="Resources\Html\Editor\lib\jquery-context-menus\src\context-menu.js" />
     <None Remove="Resources\Html\Editor\lib\jquery\jquery.min.js" />
+    <None Remove="Resources\Html\Editor\lib\katex\katex.min.js" />
     <None Remove="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.min.js" />
     <None Remove="Resources\Html\Editor\lib\Quill-Html-Edit-Button\quill.htmlEditButton.min.js" />
     <None Remove="Resources\Html\Editor\lib\Quill-Html-Edit-Button\quill.htmlEditButton.min.js.map" />
@@ -124,6 +133,30 @@
     <EmbeddedResource Include="Resources\Html\Editor\lib\DynamicQuillTools\DynamicQuillTools.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-brands-400.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-brands-400.woff2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-regular-400.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-regular-400.woff2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-solid-900.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-solid-900.woff2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-v4compatibility.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-v4compatibility.woff2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\lib\HighlightJs\highlight.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -137,6 +170,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\lib\jquery\jquery.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\lib\katex\katex.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.min.js">
@@ -201,7 +237,13 @@
     <EmbeddedResource Update="Controls\MpPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\css\all.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\lib\katex\katex.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\lib\Quill-Better-Table\quill-better-table.css">

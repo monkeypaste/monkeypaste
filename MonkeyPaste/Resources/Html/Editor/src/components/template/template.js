@@ -1,4 +1,5 @@
 const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
+const MIN_TEMPLATE_DRAG_DIST = 5;
 
 var ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
 var ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
@@ -7,7 +8,9 @@ var ENCODED_TEMPLATE_REGEXP;
 var isShowingEditTemplateToolbar = false;
 var isShowingPasteTemplateToolbar = false;
 
-var wasLastClickOnTemplate = false;
+
+var MouseDownOnTemplatePos;
+var IsMovingTemplate = false;
 
 var templateTypesMenuOptions = [
     {
@@ -45,7 +48,6 @@ var templateTypesMenuOptions = [
 
 var userDeletedTemplateGuids = [];
 
-
 function registerTemplateSpan() {
     const Parchment = Quill.imports.parchment;
 
@@ -56,12 +58,16 @@ function registerTemplateSpan() {
 
         static create(value) {
             const node = super.create(value);
+
             if (value.domNode != null) {
                 // creating existing instance
                 value = getTemplateFromDomNode(value.domNode);
             }
-            //ensure new template has unique instance guid
-            value.templateInstanceGuid = generateGuid();
+
+            if (!IsMovingTemplate) {
+                //ensure new template has unique instance guid
+                value.templateInstanceGuid = generateGuid();
+            }
 
             applyTemplateToDomNode(node, value);
 
@@ -77,6 +83,7 @@ function registerTemplateSpan() {
 }
 
 //#region Init
+
 function initTemplates(usedTemplates, isPasting) {
     ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
 
@@ -183,12 +190,76 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute("spellcheck", "false");
     node.setAttribute('class', 'ql-template-embed-blot');
 
+    
+    node.setAttribute('contenteditable', false);
+
+    var templateDocIdxCache;
+
+    function pointerDown(e) {
+        node.onpointermove = pointerMove;
+        node.setPointerCapture(e.pointerId);
+        MouseDownOnTemplatePos = { x: e.clientX, y: e.clientY };
+    }
+
+    function pointerUp(e) {
+        templateDocIdxCache = null;
+
+        node.onpointermove = null;
+        node.releasePointerCapture(e.pointerId);
+        let curMousePos = { x: e.clientX, y: e.clientY };
+        if (dist(MouseDownOnTemplatePos, curMousePos) < MIN_TEMPLATE_DRAG_DIST) {
+            return;
+        }
+
+        let targetDocIdx = getEditorIndexFromPoint({ x: e.clientX, y: e.clientY });
+
+        if (targetDocIdx < 0) {
+            return;
+        }
+
+        moveTemplate(node.getAttribute('templateGuid'), node.getAttribute('templateInstanceGuid'), targetDocIdx);
+    }
+
+    function pointerMove(e) {
+        let curMousePos = { x: e.clientX, y: e.clientY };
+        if (dist(MouseDownOnTemplatePos, curMousePos) < MIN_TEMPLATE_DRAG_DIST) {
+            return;
+        }
+
+        if (templateDocIdxCache == null) {
+            templateDocIdxCache = getTemplateElementsWithDocIdx();
+        }
+
+        let docIdx = getEditorIndexFromPoint({ x: e.clientX, y: e.clientY }, templateDocIdxCache);
+        log('docIdx: ' + docIdx);
+
+        if (docIdx < 0) {
+            return;
+        }
+        if (!quill.hasFocus()) {
+            quill.focus();
+        }
+        quill.setSelection(docIdx, 0);
+    }
+
+
+    node.onpointerdown = pointerDown;
+    node.onpointerup = pointerUp;
+
     node.addEventListener('click', function (e) {
         focusTemplate(node.getAttribute('templateGuid'));
     });
 
+    //node.addEventListener('dragstart', function (e) {
+    //    log('dragstart template');
+    //});
+
+    //initDragDrop();
+
     return node;
 }
+
+
 //#endregion
 function setTemplateProperty(tguid, propertyName, propertyValue) {
     getUsedTemplateInstances().forEach(function (ti) {
@@ -297,6 +368,17 @@ function encodeTemplates() {
 
 //#endregion
 
+function clearTemplateFocus() {
+    let tel = getTemplateElements();
+    tel.forEach(te => {
+        te.setAttribute('isFocus', false);
+
+        te.classList.remove('ql-template-embed-blot-focus');
+        te.classList.remove('ql-template-embed-blot-focus-not-instance');
+    });
+}
+
+
 function isTemplateFocused() {
     return getFocusTemplate() != null;
 }
@@ -320,10 +402,12 @@ function getTemplatesFromRange(range) {
         log('invalid range: ' + range);
     }
     let tl = [];
-    getUsedTemplateInstances().forEach(function (tn) {
-        let docIdx = tn.docIdx;
+    let tel = getTemplateElements();
+    tel.forEach(function (te) {
+        let t = getTemplateFromDomNode(te);
+        let docIdx = getTemplateDocIdx(t.templateGuid, t.templateInstanceGuid);
         if (docIdx >= range.index && docIdx <= range.index + range.length) {
-            tl.push(tn);
+            tl.push(te);
         }
     });
     return tl;
@@ -414,7 +498,16 @@ function getTemplateDocIdx(tguid, tiguid) {
         }
     }
     return -1;
-} 
+}
+
+function getTemplateElementsWithDocIdx() {
+    let tewdil = [];
+    getTemplateElements().forEach(te => {
+        let teDocIdx = getTemplateDocIdx(te.getAttribute('templateGuid'), te.getAttribute('templateInstanceGuid'));
+        tewdil.push({ teDocIdx, te });
+    });
+    return tewdil;
+}
 
 function getUsedTemplateInstances() {
     var domTemplates = document.querySelectorAll('.ql-template-embed-blot');
@@ -480,15 +573,8 @@ function createTemplate(templateObjOrId) {
         };
     }
 
-    quill.deleteText(range.index, range.length);
+    insertTemplate(range, newTemplateObj);
 
-    quill.insertText(range.index, ' ', Quill.sources.SILENT);
-    range.index++;
-    quill.insertEmbed(range.index, "template", newTemplateObj, Quill.sources.USER);
-    quill.insertText(range.index + 1, ' ');
-    quill.setSelection(range.index + 1, Quill.sources.API);
-
-    focusTemplate(newTemplateObj['templateGuid'], true);
 
     showEditTemplateToolbar();
 
@@ -497,6 +583,73 @@ function createTemplate(templateObjOrId) {
     return range.index;
 }
 
+function insertTemplate(range, t) {
+    //IgnoreSelectionChange = true;
+    //IgnoreTextChange = true;
+    quill.deleteText(range.index, range.length);
+
+    let insertLine = quill.getLine(range.index);
+    let insertLineIdx = insertLine[1];
+    //if (insertLineIdx == 0) {
+
+    //IgnoreSelectionChange = true;
+    //IgnoreTextChange = true;
+        quill.insertText(range.index, ' ', Quill.sources.SILENT);
+        range.index++;
+    //}
+
+    //IgnoreSelectionChange = true;
+    //IgnoreTextChange = true;
+    quill.insertEmbed(range.index, "template", t, Quill.sources.USER);
+
+    //check line of template's next idx
+    let afterInsertLine = quill.getLine(range.index + 2);
+    //if (insertLine[0] != afterInsertLine[0]) {
+        // if template is at EOL its buggy so add a space
+
+    //IgnoreSelectionChange = true;
+    //IgnoreTextChange = true;
+        quill.insertText(range.index + 1, ' ', Quill.sources.SILENT);
+    //}
+
+    //IgnoreSelectionChange = true;
+    //IgnoreTextChange = true;
+    quill.setSelection(range.index + 1, Quill.sources.API);
+
+    focusTemplate(t.templateGuid, true);
+}
+
+function moveTemplate(tguid, tiguid, nidx) {
+    IsMovingTemplate = true;
+
+    let tidx = getTemplateDocIdx(tguid,tiguid);
+
+    let t = getTemplateInstance(tguid, tiguid);
+
+    if (tidx < nidx) {
+        //temp. removing template decreases doc size by 3 characters
+        nidx -= 3;
+    }
+    //set tidx to space behind and delete template and spaces from that index
+    quill.deleteText(tidx - 1, 3);
+
+    insertTemplate({ index: nidx, length: 0 },t);
+
+    IsMovingTemplate = false;
+    focusTemplate(t, true);
+}
+
+function refreshTemplatesAfterSelectionChange() {
+    let range = quill.getSelection();
+
+    getTemplateElements().forEach(telm => { telm.classList.remove('ql-template-embed-blot-at-insert') });
+
+    let tl = getTemplatesFromRange(range);
+    if (tl.length > 0) {
+
+        tl.forEach(telm => { telm.classList.add('ql-template-embed-blot-at-insert') });
+    }
+}
 
 function getLowestAnonTemplateName(anonPrefix = 'Template #') {
     var tl = getUsedTemplateDefinitions();
@@ -510,14 +663,6 @@ function getLowestAnonTemplateName(anonPrefix = 'Template #') {
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
-
-function clearTemplateSelection() {
-    var util = getUsedTemplateInstances();
-    for (var i = 0; i < util.length; i++) {
-        util[i].domNode.style.border = "";
-        util[i].domNode.setAttribute('isFocus', false);
-    }
-}
 
 function setTemplateType(tguid, ttype) {
     log('Template: ' + tguid + " selected type: " + ttype);
@@ -588,26 +733,29 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
     clearTemplateFocus();
     hideAllContextMenus();
 
-    var stl = document.getElementsByClassName("ql-template-embed-blot");
-    for (var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        if (t.getAttribute('templateGuid') == tguid) {
+    var tel = getTemplateElements();
+    for (var i = 0; i < tel.length; i++) {
+        var te = tel[i];
+        if (te.getAttribute('templateGuid') == tguid) {
             if (isPastingTemplate) {
-                $('#templateTextArea').placeholder = "Enter text for " + t.innerText;
-                if (t.innerText != getTemplateDefByGuid(tguid)['templateName']) {
-                    $('#templateTextArea').val(t.innerText);
+                $('#templateTextArea').placeholder = "Enter text for " + te.innerText;
+                if (te.innerText != getTemplateDefByGuid(tguid)['templateName']) {
+                    $('#templateTextArea').val(te.innerText);
                 } else {
                     $('#templateTextArea').val('');
                 }
             }
-            t.setAttribute('isFocus', true);
-            t.style.border = "2px solid red";
-            if (tiguid != null && t.getAttribute('templateInstanceGuid') == tiguid) {
-                t.style.border = "2px solid lightseagreen";
+            te.setAttribute('isFocus', true);
+
+            if (tiguid != null && te.getAttribute('templateInstanceGuid') == tiguid) {
+                te.classList.add('ql-template-embed-blot-focus');
+            } else {
+                te.classList.add('ql-template-embed-blot-focus-not-instance');
             }
         } else {
-            t.setAttribute('isFocus', false);
-            t.style.border = "";
+            te.setAttribute('isFocus', false);
+            te.classList.remove('ql-template-embed-blot-focus');
+            te.classList.remove('ql-template-embed-blot-focus-not-instance');
         }
     }
     if (fromDropDown == null || !fromDropDown) {
@@ -631,6 +779,9 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
 function getTemplateElements(tguid, iguid) {
     var tel = [];
     var stl = document.getElementsByClassName("ql-template-embed-blot");
+    if (!tguid && !iguid) {
+        return Array.from(stl);
+    }
     for (var i = 0; i < stl.length; i++) {
         let t = stl[i];
         let ctguid = t.getAttribute('templateGuid');
@@ -644,15 +795,6 @@ function getTemplateElements(tguid, iguid) {
         }
     }
     return iguid == null ? tel : null;
-}
-
-
-function clearTemplateFocus() {
-    var stl = document.getElementsByClassName("ql-template-embed-blot");
-    for (var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        t.isFocus = false;
-    }
 }
 
 function onColorPaletteItemClick(chex) {
@@ -735,6 +877,13 @@ function getTemplateDefByGuid(tguid) {
     return getUsedTemplateDefinitions().find(x=>x.domNode.getAttribute('templateGuid') == tguid);
 }
 
+function getTemplateInstance(tguid, tiguid) {
+    let telm = document.querySelector('[templateGuid="' + tguid + '"],[templateInstanceGuid="' + tiguid + '"]');
+    if (telm == null) {
+        return null;
+    }
+    return getTemplateFromDomNode(telm);
+}
 //#region Toolbar Context Menu
 
 function showTemplateToolbarContextMenu(tb) {

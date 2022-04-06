@@ -20,15 +20,6 @@ function initContent(itemHtml, openTag = "{c{", closeTag = "}c}") {
 
 
     //initContentRangeListeners();
-
-    //Array.from(document.getElementsByTagName('span')).forEach(span => {
-    //    Draggable.add(span, true);
-
-    //    span.addEventListener('mousedown', function (e) {
-    //        e.preventDefault();
-
-    //    });
-    //});
 }
 
 function registerContentGuidAttribute() {
@@ -47,42 +38,6 @@ function registerContentGuidAttribute() {
 
     FromUser = new Parchment.Attributor('fromUser', 'fromUser', inlineConfig);
     Quill.register(FromUser, suppressWarning);
-}
-
-function registerContentBlots() {
-    const Parchment = Quill.imports.parchment;
-
-    class ContentInlineBlot extends Parchment.InlineBlot {
-        static create(value) {
-            let node = super.create(value);
-            applyContentItemToDomNode(node, value);
-            return node;
-        }
-
-        static value(domNode) {
-            getContentItemFromDomNode(domNode);
-        }
-    }
-    ContentInlineBlot.blotName = 'contentInline';
-    ContentInlineBlot.tagName = 'DIV';//,'A','EM','STRONG','U','S','SUB','SUP','IMG'];
-
-    Quill.register(ContentInlineBlot);
-
-    //class ContentBlockBlot extends Parchment.BlockBlot {
-    //    static create(value) {
-    //        let node = super.create(value);
-    //        applyContentItemToDomNode(node, value);
-    //        return node;
-    //    }
-
-    //    static value(domNode) {
-    //        getContentItemFromDomNode(domNode);
-    //    }
-    //}
-    //ContentBlockBlot.blotName = 'contentBlock';
-    //ContentBlockBlot.tagName = 'P';//, 'DIV', 'OL', 'UL','LI'];
-
-    //Quill.register(ContentBlockBlot);
 }
 
 function getContentItemFromDomNode(domNode) {
