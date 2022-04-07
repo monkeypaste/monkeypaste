@@ -6,8 +6,8 @@ var isShowingTemplateColorPaletteMenu = false;
 var isShowingTemplateToolbarMenu = false;
 var isShowingEditorToolbar = true;
 
-var IgnoreTextChange = false;
-var IgnoreSelectionChange = false;
+var IgnoreNextTextChange = false;
+var IgnoreNextSelectionChange = false;
 
 var LastSelection = { index: 0, length: 0 };
 var LastSelectedHtml;
@@ -137,35 +137,27 @@ function loadQuill(reqMsg) {
     quill.on('selection-change', function (range, oldRange, source) {
         //LastSelectedHtml = SelectedHtml;
         //SelectedHtml = getSelectedHtml();
+        if (IgnoreNextSelectionChange) {
+            IgnoreNextSelectionChange = false;
+            return;
+        }
 
         if (range) {
             refreshFontSizePicker();
             refreshFontFamilyPicker();
 
             if (range.length == 0) {
-                log('User cursor is on', range.index);
+                var text = quill.getText(range.index, 1);
+                log('User cursor is at '+ range.index + ' idx before "'+text+'"');
 
             } else {
                 var text = quill.getText(range.index, range.length);
-                log('User has highlighted', text);
+                log('User cursor is at ' + range.index + ' with length '+ range.length + ' and selected text "'+text+'"');
             }
 
             refreshTemplatesAfterSelectionChange();
+            updateTemplatesAfterSelectionChanged(range, oldRange, source)
 
-            //if (IgnoreSelectionChange) {
-            //    IgnoreSelectionChange = false;
-            //    return;
-            //}
-            //let templateDocIdxLookup = getTemplateElementsWithDocIdx();
-
-            //for (var i = 0; i < templateDocIdxLookup.length; i++) {
-            //    let tdil = templateDocIdxLookup[i];
-            //    if (parseInt(tdil[0]) == parseInt(range.index)) {
-            //        range.index++;
-            //        IgnoreSelectionChange = true;
-            //        quill.setSelection(range, Quill.sources.SILENT);
-            //    }
-            //}
         } else {
             log('Cursor not in the editor');
         }
@@ -179,92 +171,20 @@ function loadQuill(reqMsg) {
         if (!isLoaded) {
             return;
         }
-        if (IgnoreTextChange) {
-            IgnoreTextChange = false;
+        if (IgnoreNextTextChange) {
+            IgnoreNextTextChange = false;
             return;
         }
         let srange = quill.getSelection();
         if (!srange) {
             return;
         }
-        let idx = 0;
+
         if (PasteNode) {
-            let retargetedNode = retargetContentItemDomNode(PasteNode);
-            let contentBlot = getContentItemFromDomNode(retargetedNode);
-            IgnoreTextChange = true;
-            for (var i = 0; i < delta.ops.length; i++) {
-                let op = delta.ops[i];
+            formatPasteNodeDelta(delta, oldDelta, source);
+        } 
 
-                if (op.retain) {
-                    idx += op.retain;
-                }
-                if (op.insert) {
-
-                    let insertRange = { index: idx, length: op.insert.length };
-                    if (contentBlot.copyItemGuid) {
-                        IgnoreTextChange = true;
-                        quill.formatText(insertRange, 'copyItemGuid', contentBlot.copyItemGuid);
-                        IgnoreTextChange = true;
-                        quill.formatText(insertRange, 'copyItemSourceGuid', contentBlot.copyItemSourceGuid);
-                    } else {
-                        IgnoreTextChange = true;
-                        quill.formatText(insertRange, 'fromUser', '');
-                    }
-                    idx += op.insert.length;
-                }
-            }
-            IgnoreTextChange = false;
-            PasteNode = null;
-        } else {
-            IgnoreTextChange = true;
-            for (var i = 0; i < delta.ops.length; i++) {
-                let op = delta.ops[i];
-                if (op.retain) {
-                    idx += op.retain;
-                }
-                if (op.insert) {
-                    let insertRange = { index: idx, length: op.insert.length };
-                    IgnoreTextChange = true;
-                    quill.formatText(insertRange, 'fromUser', '');
-                    idx += op.insert.length;
-                }
-            };
-            IgnoreTextChange = false;
-        }
-
-
-        //idx = 0;
-
-        //for (var i = 0; i < delta.ops.length; i++) {
-        //    let op = delta.ops[i];
-
-        //    if (op.retain) {
-        //        idx += op.retain;
-        //    }
-        //    if (op.delete) {
-        //        let templateDocIdxLookup = getTemplateElementsWithDocIdx();
-        //        if (templateDocIdxLookup.filter(x => x[0] == srange.index - 1) != null) {
-        //            log('here')
-        //        }
-        //        if (templateDocIdxLookup.filter(x => x[0] == srange.index) != null) {
-        //            IgnoreTextChange = true;
-        //            quill.insertText(srange.index, ' ', Quill.sources.SILENT);
-        //        }
-        //        if (templateDocIdxLookup.filter(x => x[0] == srange.index + 1) != null) {
-        //            log('or or here')
-        //        }
-        //    }
-        //}
-
-        //initContentRangeListeners();
-        if (oldDelta) {
-            //log('old:');
-            //log(JSON.stringify(oldDelta));
-        }
-        if (delta) {
-            //log('new:');
-            //log(JSON.stringify(delta));
-        }
+        updateTemplatesAfterTextChanged(delta, oldDelta, source);
     });
 
     initClipboard();
@@ -667,11 +587,9 @@ function isInlineElement(elm) {
             tn == 'sub' || tn == 'sup' || tn == 'img';
 }
 
-function getEditorIndexFromPoint(p,docIdxTemplateLookup) {
-    let closestIdx = -1;
-    let closestDist = Number.MAX_SAFE_INTEGER;
+function getEditorIndexFromPoint(p) {
     if (!p) {
-        return closestIdx;
+        return -1;
     }
 
     let editorRect = document.getElementById('editor').getBoundingClientRect();
@@ -682,15 +600,41 @@ function getEditorIndexFromPoint(p,docIdxTemplateLookup) {
     let ep = { x: ex, y: ey };
     //log('editor pos: ' + ep.x + ' '+ep.y);
     if (!isPointInRect(erect, ep)) {
-        return closestIdx;
+        return -1;
     }
 
-    for (var i = 0; i < quill.getLength(); i++) {
+    let closestLineIdx = -1;
+    let closestLineDist = Number.MAX_SAFE_INTEGER;
+    let docLines = quill.getLines(0, quill.getLength());
+
+    for (var i = 0; i < docLines.length; i++) {
+        let l = docLines[i];
+        let lrect = quill.getBounds(quill.getIndex(l));
+        let lineY = lrect.top + (lrect.height / 2);
+        let curYDist = Math.abs(lineY - ey);
+        if (curYDist < closestLineDist) {
+            closestLineIdx = i;
+            closestLineDist = curYDist;
+        }
+    }
+    if (closestLineIdx < 0) {
+        return -1;
+    }
+
+    log('closest line idx: ' + closestLineIdx);
+
+    let lineMinDocIdx = quill.getIndex(docLines[closestLineIdx]);
+    let nextLineMinDocIdx = quill.getLength();
+    if (closestLineIdx < docLines.length - 1) {
+        nextLineMinDocIdx = quill.getIndex(docLines[closestLineIdx + 1]);
+    }
+
+    let closestIdx = -1;
+    let closestDist = Number.MAX_SAFE_INTEGER;
+    for (var i = lineMinDocIdx; i < nextLineMinDocIdx; i++) {
         let irect = quill.getBounds(i, 1);
         let ix = irect.left;
-        let iy = irect.top + (irect.height / 2);
-        let ip = { x: ix, y: iy };
-        let idist = distSqr(ip, ep);
+        let idist = Math.abs(ix - ex);
         if (idist < closestDist) {
             closestDist = idist;
             closestIdx = i;
@@ -700,13 +644,28 @@ function getEditorIndexFromPoint(p,docIdxTemplateLookup) {
     return closestIdx;
 }
 
-function setCaret(line, col) {
-    var ele = document.getElementById("editor").childNodes[0];
-    var rng = document.createRange();
-    var sel = window.getSelection();
-    rng.setStart(ele.childNodes[line], col);
-    rng.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(rng);
-    ele.focus();
+function isDocIdxLineStart(docIdx) {
+    if (docIdx == 0) {
+        return true;
+    }
+    if (docIdx >= quill.getLength()) {
+        return false;
+    }
+    let idxLine = quill.getLine(docIdx);
+    let prevIdxLine = quill.getLine(docIdx - 1);
+    let allLines = quill.getLines();
+    return idxLine[0] != prevIdxLine[0];
+}
+
+function isDocIdxLineEnd(docIdx) {
+    if (docIdx == quill.getLength()) {
+        return true;
+    }
+    if (docIdx < 0) {
+        return false;
+    }
+    let idxLine = quill.getLine(docIdx);
+    let nextIdxLine = quill.getLine(docIdx + 1);
+    let allLines = quill.getLines();
+    return idxLine[0] != nextIdxLine[0];
 }

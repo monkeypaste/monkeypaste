@@ -74,6 +74,24 @@ function registerTemplateSpan() {
             return node;
         }
 
+        static formats(node) {
+            return getTemplateFromDomNode(node); 
+        }
+
+        format(name, value) {
+            // Handle unregistered embed formats
+            //if (name === 'height' || name === 'width') {
+            //    if (value) {
+            //        this.domNode.setAttribute(name, value);
+            //    } else {
+            //        this.domNode.removeAttribute(name, value);
+            //    }
+            //} else {
+            //    super.format(name, value);
+            //}
+            super.format(name, value);
+        }
+
         static value(domNode) {
             return getTemplateFromDomNode(domNode);
         }
@@ -181,9 +199,9 @@ function applyTemplateToDomNode(node, value) {
     // TODO instead of rejecting mouse down, template should be draggable
 
     //disable text selection
-    node.setAttribute('unselectable', 'on');
-    node.setAttribute('onselectstart', 'return false;');
-    node.setAttribute('onmousedown', 'return false;');
+    //node.setAttribute('unselectable', 'on');
+    //node.setAttribute('onselectstart', 'return false;');
+    //node.setAttribute('onmousedown', 'return false;');
 
     node.contentEditable = 'false';
     node.setAttribute('isFocus', false);
@@ -216,7 +234,7 @@ function applyTemplateToDomNode(node, value) {
         if (targetDocIdx < 0) {
             return;
         }
-
+        
         moveTemplate(node.getAttribute('templateGuid'), node.getAttribute('templateInstanceGuid'), targetDocIdx);
     }
 
@@ -242,12 +260,11 @@ function applyTemplateToDomNode(node, value) {
         quill.setSelection(docIdx, 0);
     }
 
-
     node.onpointerdown = pointerDown;
     node.onpointerup = pointerUp;
 
     node.addEventListener('click', function (e) {
-        focusTemplate(node.getAttribute('templateGuid'));
+        focusTemplate(node.getAttribute('templateGuid'),false, node.getAttribute('templateInstanceGuid'));
     });
 
     //node.addEventListener('dragstart', function (e) {
@@ -378,7 +395,6 @@ function clearTemplateFocus() {
     });
 }
 
-
 function isTemplateFocused() {
     return getFocusTemplate() != null;
 }
@@ -405,8 +421,10 @@ function getTemplatesFromRange(range) {
     let tel = getTemplateElements();
     tel.forEach(function (te) {
         let t = getTemplateFromDomNode(te);
-        let docIdx = getTemplateDocIdx(t.templateGuid, t.templateInstanceGuid);
-        if (docIdx >= range.index && docIdx <= range.index + range.length) {
+        let docIdx = getTemplateDocIdx(t.templateInstanceGuid);
+        if (docIdx == range.index) {
+            tl.push(te);
+        } else if (docIdx > range.index && docIdx < range.index + range.length) {
             tl.push(te);
         }
     });
@@ -484,7 +502,7 @@ function getAvailableTemplateDefinitions() {
     return allMergedTemplates;
 }
 
-function getTemplateDocIdx(tguid, tiguid) {
+function getTemplateDocIdx(tiguid) {
     let docLength = quill.getLength();
     for (var i = 0; i < docLength; i++) {
         let curDelta = quill.getContents(i, 1);
@@ -492,7 +510,7 @@ function getTemplateDocIdx(tguid, tiguid) {
             curDelta.ops[0].hasOwnProperty('insert') &&
             curDelta.ops[0].insert.hasOwnProperty('template')) {
             let curTemplate = curDelta.ops[0].insert.template;
-            if (curTemplate.templateGuid == tguid && curTemplate.templateInstanceGuid == tiguid) {
+            if (curTemplate.templateInstanceGuid == tiguid) {
                 return i;
             }
         }
@@ -503,7 +521,7 @@ function getTemplateDocIdx(tguid, tiguid) {
 function getTemplateElementsWithDocIdx() {
     let tewdil = [];
     getTemplateElements().forEach(te => {
-        let teDocIdx = getTemplateDocIdx(te.getAttribute('templateGuid'), te.getAttribute('templateInstanceGuid'));
+        let teDocIdx = getTemplateDocIdx(te.getAttribute('templateInstanceGuid'));
         tewdil.push({ teDocIdx, te });
     });
     return tewdil;
@@ -520,8 +538,8 @@ function getUsedTemplateInstances() {
         }
     }
     return templates.sort((a, b) => (
-        getTemplateDocIdx(a.domNode.getAttribute('templateGuid'), a.domNode.getAttribute('templateInstanceGuid')) < 
-        getTemplateDocIdx(b.domNode.getAttribute('templateGuid'), b.domNode.getAttribute('templateInstanceGuid')) ? -1 : 1));
+        getTemplateDocIdx(a.domNode.getAttribute('templateInstanceGuid')) < 
+        getTemplateDocIdx(b.domNode.getAttribute('templateInstanceGuid')) ? -1 : 1));
 }
 
 function createTemplate(templateObjOrId) {
@@ -575,7 +593,6 @@ function createTemplate(templateObjOrId) {
 
     insertTemplate(range, newTemplateObj);
 
-
     showEditTemplateToolbar();
 
     hideTemplateToolbarContextMenu();
@@ -584,45 +601,45 @@ function createTemplate(templateObjOrId) {
 }
 
 function insertTemplate(range, t) {
-    //IgnoreSelectionChange = true;
-    //IgnoreTextChange = true;
+    //IgnoreNextSelectionChange = true;
+    //IgnoreNextTextChange = true;
     quill.deleteText(range.index, range.length);
 
-    let insertLine = quill.getLine(range.index);
-    let insertLineIdx = insertLine[1];
+    //let insertLine = quill.getLine(range.index);
+    //let insertLineIdx = insertLine[1];
     //if (insertLineIdx == 0) {
 
-    //IgnoreSelectionChange = true;
-    //IgnoreTextChange = true;
-        quill.insertText(range.index, ' ', Quill.sources.SILENT);
-        range.index++;
+    //IgnoreNextSelectionChange = true;
+    //IgnoreNextTextChange = true;
+        //quill.insertText(range.index, ' ', Quill.sources.SILENT);
+        //range.index++;
     //}
 
-    //IgnoreSelectionChange = true;
-    //IgnoreTextChange = true;
+    //IgnoreNextSelectionChange = true;
+    //IgnoreNextTextChange = true;
     quill.insertEmbed(range.index, "template", t, Quill.sources.USER);
 
     //check line of template's next idx
-    let afterInsertLine = quill.getLine(range.index + 2);
+    //let afterInsertLine = quill.getLine(range.index + 2);
     //if (insertLine[0] != afterInsertLine[0]) {
         // if template is at EOL its buggy so add a space
 
-    //IgnoreSelectionChange = true;
-    //IgnoreTextChange = true;
-        quill.insertText(range.index + 1, ' ', Quill.sources.SILENT);
+    //IgnoreNextSelectionChange = true;
+    //IgnoreNextTextChange = true;
+        //quill.insertText(range.index + 1, ' ', Quill.sources.SILENT);
     //}
 
-    //IgnoreSelectionChange = true;
-    //IgnoreTextChange = true;
-    quill.setSelection(range.index + 1, Quill.sources.API);
+    //IgnoreNextSelectionChange = true;
+    //IgnoreNextTextChange = true;
+    //quill.setSelection(range.index + 1, Quill.sources.API);
 
     focusTemplate(t.templateGuid, true);
 }
 
-function moveTemplate(tguid, tiguid, nidx) {
+function moveTemplate(tguid, tiguid, nidx, isCopy) {
     IsMovingTemplate = true;
 
-    let tidx = getTemplateDocIdx(tguid,tiguid);
+    let tidx = getTemplateDocIdx(tiguid);
 
     let t = getTemplateInstance(tguid, tiguid);
 
@@ -718,7 +735,7 @@ function deleteFocusTemplate() {
         .filter(x => x.domNode.getAttribute('templateGuid') == tguid_to_delete)
         .forEach((ti) => {
             let t = getTemplateFromDomNode(ti.domNode);
-            let docIdx = getTemplateDocIdx(tguid_to_delete, t.templateInstanceGuid);
+            let docIdx = getTemplateDocIdx(t.templateInstanceGuid);
             quill.deleteText(docIdx, 1, Quill.sources.USER);
         });
 
@@ -749,6 +766,9 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
 
             if (tiguid != null && te.getAttribute('templateInstanceGuid') == tiguid) {
                 te.classList.add('ql-template-embed-blot-focus');
+                let teBlot = Quill.find(te);
+                let teIdx = quill.getIndex(teBlot);
+                quill.setSelection(teIdx,1);
             } else {
                 te.classList.add('ql-template-embed-blot-focus-not-instance');
             }
@@ -758,6 +778,7 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
             te.classList.remove('ql-template-embed-blot-focus-not-instance');
         }
     }
+
     if (fromDropDown == null || !fromDropDown) {
         if (isPastingTemplate) {
             //when user clicks a template this will adjust to drop dwon to the clicked element
@@ -774,6 +795,7 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
         hideAllContextMenus();
         showEditTemplateToolbar();
     }
+
 }
 
 function getTemplateElements(tguid, iguid) {
@@ -786,7 +808,7 @@ function getTemplateElements(tguid, iguid) {
         let t = stl[i];
         let ctguid = t.getAttribute('templateGuid');
         let ctiguid = t.getAttribute('templateInstanceGuid');
-        if (ctguid == tguid) {
+        if (ctguid == tguid || !tguid) {
             if (iguid == null) {
                 tel.push(t);
             } else if (ctiguid == iguid) {
@@ -1063,8 +1085,10 @@ function showEditTemplateToolbar() {
     updateEditTemplateToolbarPosition();
 
     var t = getTemplateDefByGuid(getFocusTemplateGuid());
-
-    setTemplateType(t.domNode.getAttribute('templateGuid'), t.domNode.getAttribute('templateType'));
+    if (t.domNode) {
+        setTemplateType(t.domNode.getAttribute('templateGuid'), t.domNode.getAttribute('templateType'));
+    }
+    
 
     document.getElementById('editTemplateTypeMenuSelector').addEventListener('change', onTemplateTypeChanged);
 }
@@ -1301,24 +1325,140 @@ function onTemplateOptionClick(e, target) {
     h.click();
 }
 
-function isEmptyOrSpaces(str) {
-    return str === null || str.match(/^ *$/) !== null;
+
+function padTemplate(tiguid,delta) {
+    let teDocIdx = getTemplateDocIdx(tiguid);
+    if (teDocIdx < 0) {
+        throw 'tiguid: ' + tiguid + ' cannot have docIdx: ' + teDocIdx;
+    }
+    let needsPre = false;
+    let needsPost = false;
+
+    if (isDocIdxLineStart(teDocIdx)) {
+        needsPre = true;
+    } else {
+        let preText = quill.getText(teDocIdx - 1, 1);
+        needsPre = preText != ' ';
+    }
+    if (isDocIdxLineEnd(teDocIdx)) {
+        needsPost = true;
+    } else {
+        let postText = quill.getText(teDocIdx + 1, 1);
+        needsPost = postText != ' ';
+    }
+
+    if (needsPre) {
+        IgnoreNextTextChange = true;
+        IgnoreNextSelectionChange = true;
+        quill.insertText(teDocIdx, ' ');
+        teDocIdx++;
+    }
+    if (needsPost) {
+        IgnoreNextTextChange = true;
+        IgnoreNextSelectionChange = true;
+        quill.insertText(teDocIdx + 1, ' ');
+    }
 }
 
-function generateGuid() {
-    var d = new Date().getTime();//Timestamp
-    var d2 = (performance && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16;//random number between 0 and 16
-        if (d > 0) {//Use timestamp until depleted
-            r = (d + r) % 16 | 0;
-            d = Math.floor(d / 16);
-        } else {//Use microseconds since page-load if supported
-            r = (d2 + r) % 16 | 0;
-            d2 = Math.floor(d2 / 16);
+function updateTemplatesAfterTextChanged(delta, oldDelta, source) {
+    let til = getTemplateElements();
+    let idx = 0;
+    for (var i = 0; i < delta.ops.length; i++) {
+        let op = delta.ops[i];
+
+        if (op.retain) {
+            idx += op.retain;
         }
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
+        if (op.insert) {
+            idx += op.insert.length;
+        }
+        if (op.delete) {
+
+            for (var j = 0; j < til.length; j++) {
+                let ti = til[j];
+                let tiDocIdx = getTemplateDocIdx(ti.getAttribute('templateInstanceGuid'));
+                if (idx - op.delete == tiDocIdx) {
+                    // deleting post pad so delete template and pre pad
+                    IgnoreNextTextChange = true;
+                    quill.deleteText(tiDocIdx - 1, 2);
+                }
+            }
+        }
+    }
+    til = getTemplateElements();
+    for (var i = 0; i < til.length; i++) {
+        let ti = til[i];
+        padTemplate(ti.getAttribute('templateInstanceGuid'));
+    }
 }
 
+function updateTemplatesAfterSelectionChanged(range, oldRange, source) {
+    if (!range) {
+        return;
+    }
+    /*
+    // cases
+    // 1. user clicks on template idx
+    // 2. user clicks on pre pad idx
+    // 3. user clicks on post pad idx
+    // 4. user arrows right onto pre pad idx
+    // 5. user arrows left onto pre pad idx
+    // 6. user arrows right onto post pad idx
+    // 7. user arrows left onto post pad idx
+    // 8. user dragging selection from right onto post pad idx
+    // 9. user dragging selection from left onto pre pad idx
+
+
+    // results
+    // 1. do nothing
+    // 2. selection moved +1 to template idx
+    // 3. selection is moved -1 to template idx
+    // 4. #2
+    // 5. do nothing
+    // 6. do nothing
+    // 7.
+    */
+    let tel = getTemplateElements();
+
+    for (var i = 0; i < tel.length; i++) {
+        let nrange = range;
+        let te = tel[i];
+        let tDocIdx = getTemplateDocIdx(te.getAttribute('templateInstanceGuid'));
+        if (range.index == tDocIdx + 1) {
+            //if start/caret idx is at post pad space
+            if (oldRange.index == range.index + 1) {
+                //caret moving left
+                nrange.index = tDocIdx;
+            } else if (oldRange.index == tDocIdx) {
+                //caret moving right
+                nrange.index++;
+            } else {
+                nrange = null;
+            }
+            //return;
+        } else if (range.index == tDocIdx - 1) {
+            //if start/caret idx is at pre pad space
+            if (oldRange.index == tDocIdx) {
+                //caret moving left
+                nrange.index--;
+            } else if (oldRange.index + 1 == range.index) {
+                //caret moving right
+                nrange.index++;
+            } else {
+                nrange = null;
+            }
+            //return;
+        } else if (range.index == tDocIdx) {
+            nrange = range;
+        }
+        if (nrange) {
+            //IgnoreNextSelectionChange = true;
+            quill.setSelection(nrange);
+            //range = nrange;
+            refreshTemplatesAfterSelectionChange();
+            break;
+        }
+    }
+
+}
 // end templates

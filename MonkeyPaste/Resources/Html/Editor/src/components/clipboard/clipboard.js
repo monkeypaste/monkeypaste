@@ -13,6 +13,10 @@ function initClipboard() {
         return delta;
     });
 
+    quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
+        //PasteNode = retargetContentItemDomNode(node);
+        PasteNode = node;
+        return delta;
 
     //document.addEventListener("cut", onCut);
     //document.addEventListener("copy", onCopy);

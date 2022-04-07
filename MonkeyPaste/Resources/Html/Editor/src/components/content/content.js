@@ -84,6 +84,33 @@ function retargetContentItemDomNode(node, newContentGuid) {
     return node;
 }
 
+function formatPasteNodeDelta(delta, oldDelta, source) {
+    // NOTE called in text-change when PasteNode != null
+    let idx = 0;
+    let retargetedNode = retargetContentItemDomNode(PasteNode);
+    let contentBlot = getContentItemFromDomNode(retargetedNode);
+    for (var i = 0; i < delta.ops.length; i++) {
+        let op = delta.ops[i];
+
+        if (op.retain) {
+            idx += op.retain;
+        }
+        if (op.insert) {
+            let insertRange = { index: idx, length: op.insert.length };
+            if (contentBlot.copyItemGuid) {
+                IgnoreNextTextChange = true;
+                quill.formatText(insertRange, 'copyItemGuid', contentBlot.copyItemGuid);
+                IgnoreNextTextChange = true;
+                quill.formatText(insertRange, 'copyItemSourceGuid', contentBlot.copyItemSourceGuid);
+            } else {
+                IgnoreNextTextChange = true;
+                quill.formatText(insertRange, 'fromUser', '');
+            }
+            idx += op.insert.length;
+        }
+    }
+    PasteNode = null;
+}
 //#endregion
 
 
@@ -149,7 +176,7 @@ function onOverContent(e) {
     let ciguid = e.target.getAttribute('copyItemGuid');
     let testColor = getRandomColor();
     Array.from(document.querySelectorAll('[copyItemGuid="' + ciguid + '"]')).forEach(cie => {
-        IgnoreTextChange = true;
+        IgnoreNextTextChange = true;
         cie.style.backgroundColor = testColor;
     });
 }
@@ -158,7 +185,7 @@ function onOverInput(e) {
     if (!e.target) {
         return;
     }
-    IgnoreTextChange = true;
+    IgnoreNextTextChange = true;
     e.target.style.backgroundColor = 'orange';
 }
 

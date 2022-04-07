@@ -14,7 +14,7 @@ function enableDragDrop(elm) {
 }
 
 function initDragDropOverrides() {
-
+    // from https://stackoverflow.com/a/46986927/105028
     window.addEventListener('dragstart', function (event) {
         // (note: not cross-browser)
         var event2 = new CustomEvent('mp_dragstart', { detail: { original: event } });

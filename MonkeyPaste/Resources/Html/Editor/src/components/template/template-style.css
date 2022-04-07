@@ -11,9 +11,9 @@
     -webkit-user-select: none;
     -ms-user-select: none;*/
     user-select: none;
-}
+margin-left: -3px;}
 
-    .ql-template-embed-blot:hover {
+    .ql-template-embed-blot:hover:not(.ql-template-embed-blot-focus) {
         padding: 1.5px;
         transition: .2s;
         cursor: pointer;
