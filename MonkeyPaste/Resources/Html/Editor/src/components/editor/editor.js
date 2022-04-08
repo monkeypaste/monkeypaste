@@ -180,20 +180,18 @@ function loadQuill(reqMsg) {
             return;
         }
 
-        if (PasteNode) {
-            formatPasteNodeDelta(delta, oldDelta, source);
-        } 
+        formatContentChange(delta, oldDelta, source);
 
         updateTemplatesAfterTextChanged(delta, oldDelta, source);
     });
-
-    initClipboard();
 
     initContent(reqMsg.itemEncodedHtmlData);
 
     initTemplates(reqMsg.usedTextTemplates, reqMsg.isPasteRequest);
 
     initDragDrop();
+
+    initClipboard();
 
     refreshFontSizePicker();
     refreshFontFamilyPicker();
@@ -587,7 +585,40 @@ function isInlineElement(elm) {
             tn == 'sub' || tn == 'sup' || tn == 'img';
 }
 
-function getEditorIndexFromPoint(p) {
+function getEditorIndexFromPoint(p, docIdxTemplateLookup) {
+    let closestIdx = -1;
+    let closestDist = Number.MAX_SAFE_INTEGER;
+    if (!p) {
+        return closestIdx;
+    }
+
+    let editorRect = document.getElementById('editor').getBoundingClientRect();
+    let erect = { x: 0, y: 0, w: editorRect.width, h: editorRect.height };
+
+    let ex = p.x - editorRect.left; //x position within the element.
+    let ey = p.y - editorRect.top;  //y position within the element.
+    let ep = { x: ex, y: ey };
+    //log('editor pos: ' + ep.x + ' '+ep.y);
+    if (!isPointInRect(erect, ep)) {
+        return closestIdx;
+    }
+
+    for (var i = 0; i < quill.getLength(); i++) {
+        let irect = quill.getBounds(i, 1);
+        let ix = irect.left;
+        let iy = irect.top + (irect.height / 2);
+        let ip = { x: ix, y: iy };
+        let idist = distSqr(ip, ep);
+        if (idist < closestDist) {
+            closestDist = idist;
+            closestIdx = i;
+        }
+    }
+
+    return closestIdx;
+}
+
+function getEditorIndexFromPoint2(p) {
     if (!p) {
         return -1;
     }
@@ -642,6 +673,12 @@ function getEditorIndexFromPoint(p) {
     }
 
     return closestIdx;
+}
+
+function getElementAtIdx(docIdx) {
+    let leafNode = quill.getLeaf(docIdx)[0].domNode;
+    let leafElementNode = leafNode.nodeType == 3 ? leafNode.parentElement : leafNode;
+    return leafElementNode;
 }
 
 function isDocIdxLineStart(docIdx) {

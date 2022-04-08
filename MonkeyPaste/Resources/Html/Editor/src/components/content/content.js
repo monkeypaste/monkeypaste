@@ -35,21 +35,23 @@ function registerContentGuidAttribute() {
 
     ContentSourceGuid = new Parchment.Attributor('copyItemSourceGuid', 'copyItemSourceGuid', inlineConfig);
     Quill.register(ContentSourceGuid, suppressWarning);
-
-    FromUser = new Parchment.Attributor('fromUser', 'fromUser', inlineConfig);
-    Quill.register(FromUser, suppressWarning);
 }
 
 function getContentItemFromDomNode(domNode) {
     if (domNode == null) {
         return null;
     }
-    let ci = {
+    let ci = null;
+
+    while (!domNode.getAttribute('copyItemGuid')) {
+        if (domNode.id == 'editor') {
+            return null;
+        }
+        domNode = domNode.parentNode;
+    }
+    ci = {
         copyItemGuid: domNode.getAttribute('copyItemGuid'),
         copyItemSourceGuid: domNode.getAttribute('copyItemSourceGuid'),
-    }
-    if (domNode.getAttribute('fromUser')) {
-        ci.fromUser = domNode.getAttribute('fromUser')
     }
     return ci;
 }
@@ -58,15 +60,8 @@ function applyContentItemToDomNode(node, value) {
     if (node == null || value == null) {
         return node;
     }
-    if (isBlockElement(node)) {
-
-    }
     node.setAttribute('copyItemGuid', value.copyItemGuid);
     node.setAttribute('copyItemSourceGuid', value.copyItemSourceGuid);
-    if (value.fromUser) {
-        node.setAttribute('fromUser', '');
-    }
-
     return node;
 }
 
@@ -84,31 +79,27 @@ function retargetContentItemDomNode(node, newContentGuid) {
     return node;
 }
 
-function formatPasteNodeDelta(delta, oldDelta, source) {
+function formatContentChange(delta, oldDelta, source) {
     // NOTE called in text-change when PasteNode != null
     let idx = 0;
-    let retargetedNode = retargetContentItemDomNode(PasteNode);
-    let contentBlot = getContentItemFromDomNode(retargetedNode);
-    for (var i = 0; i < delta.ops.length; i++) {
-        let op = delta.ops[i];
-
-        if (op.retain) {
-            idx += op.retain;
-        }
-        if (op.insert) {
-            let insertRange = { index: idx, length: op.insert.length };
-            if (contentBlot.copyItemGuid) {
-                IgnoreNextTextChange = true;
-                quill.formatText(insertRange, 'copyItemGuid', contentBlot.copyItemGuid);
-                IgnoreNextTextChange = true;
-                quill.formatText(insertRange, 'copyItemSourceGuid', contentBlot.copyItemSourceGuid);
-            } else {
-                IgnoreNextTextChange = true;
-                quill.formatText(insertRange, 'fromUser', '');
-            }
-            idx += op.insert.length;
-        }
+    let slength = 0;
+    let srange = quill.getSelection();
+    if (srange.length > 0) {
+        // NOTE when selection is being formatted 
+        // the element at idx will be PREVIOUS element so tick it
+        srange.index++;
     }
+    let domNode = getElementAtIdx(srange.index);
+    if (PasteNode) {
+        let contentGuidAtIdx = getContentGuidByIdx(srange.index);
+        domNode = retargetContentItemDomNode(PasteNode, contentGuidAtIdx);
+    }
+    
+    let contentBlot = getContentItemFromDomNode(domNode);
+    if (contentBlot && contentBlot.copyItemGuid) {
+            ContentGuid.add(domNode, contentBlot.copyItemGuid);
+            ContentSourceGuid.add(domNode, contentBlot.copyItemSourceGuid);
+    } 
     PasteNode = null;
 }
 //#endregion
@@ -227,4 +218,21 @@ function getContentDocRanges(ciguid) {
         curRange = null;
     }
     return allRanges;
+}
+
+function getContentGuidByIdx(docIdx) {
+    if (docIdx < 0 || docIdx >= quill.getLength()) {
+        return ''
+    };
+
+    let leafElementNode = getElementAtIdx(docIdx);
+    return leafElementNode.getAttribute('copyItemGuid');
+}
+
+function getContentSourceGuidByIdx(docIdx) {
+    if (docIdx < 0 || docIdx >= quill.getLength()) {
+        return ''
+    };
+    let leafElementNode = getElementAtIdx(docIdx);
+    return leafElementNode.getAttribute('copyItemSourceGuid');
 }

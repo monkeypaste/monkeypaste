@@ -79,16 +79,6 @@ function registerTemplateSpan() {
         }
 
         format(name, value) {
-            // Handle unregistered embed formats
-            //if (name === 'height' || name === 'width') {
-            //    if (value) {
-            //        this.domNode.setAttribute(name, value);
-            //    } else {
-            //        this.domNode.removeAttribute(name, value);
-            //    }
-            //} else {
-            //    super.format(name, value);
-            //}
             super.format(name, value);
         }
 
@@ -235,7 +225,7 @@ function applyTemplateToDomNode(node, value) {
             return;
         }
         
-        moveTemplate(node.getAttribute('templateGuid'), node.getAttribute('templateInstanceGuid'), targetDocIdx);
+        moveTemplate(node.getAttribute('templateGuid'), node.getAttribute('templateInstanceGuid'), targetDocIdx, e.ctrlKey);
     }
 
     function pointerMove(e) {
@@ -593,46 +583,19 @@ function createTemplate(templateObjOrId) {
 
     insertTemplate(range, newTemplateObj);
 
-    showEditTemplateToolbar();
+    if (isNew) {
+        showEditTemplateToolbar();
+    }
+    
 
     hideTemplateToolbarContextMenu();
 
-    return range.index;
+    return newTemplateObj;
 }
 
 function insertTemplate(range, t) {
-    //IgnoreNextSelectionChange = true;
-    //IgnoreNextTextChange = true;
     quill.deleteText(range.index, range.length);
-
-    //let insertLine = quill.getLine(range.index);
-    //let insertLineIdx = insertLine[1];
-    //if (insertLineIdx == 0) {
-
-    //IgnoreNextSelectionChange = true;
-    //IgnoreNextTextChange = true;
-        //quill.insertText(range.index, ' ', Quill.sources.SILENT);
-        //range.index++;
-    //}
-
-    //IgnoreNextSelectionChange = true;
-    //IgnoreNextTextChange = true;
     quill.insertEmbed(range.index, "template", t, Quill.sources.USER);
-
-    //check line of template's next idx
-    //let afterInsertLine = quill.getLine(range.index + 2);
-    //if (insertLine[0] != afterInsertLine[0]) {
-        // if template is at EOL its buggy so add a space
-
-    //IgnoreNextSelectionChange = true;
-    //IgnoreNextTextChange = true;
-        //quill.insertText(range.index + 1, ' ', Quill.sources.SILENT);
-    //}
-
-    //IgnoreNextSelectionChange = true;
-    //IgnoreNextTextChange = true;
-    //quill.setSelection(range.index + 1, Quill.sources.API);
-
     focusTemplate(t.templateGuid, true);
 }
 
@@ -643,14 +606,19 @@ function moveTemplate(tguid, tiguid, nidx, isCopy) {
 
     let t = getTemplateInstance(tguid, tiguid);
 
-    if (tidx < nidx) {
-        //temp. removing template decreases doc size by 3 characters
-        nidx -= 3;
-    }
-    //set tidx to space behind and delete template and spaces from that index
-    quill.deleteText(tidx - 1, 3);
+    if (isCopy) {
+        t.templateInstanceGuid = generateGuid();
+        t = createTemplate(t);
+    } else {
+        if (tidx < nidx) {
+            //removing template decreases doc size by 3 characters
+            nidx -= 3;
+        }
+        //set tidx to space behind and delete template and spaces from that index
+        quill.deleteText(tidx - 1, 3);
 
-    insertTemplate({ index: nidx, length: 0 },t);
+        insertTemplate({ index: nidx, length: 0 }, t);
+    }
 
     IsMovingTemplate = false;
     focusTemplate(t, true);

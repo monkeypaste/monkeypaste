@@ -31,7 +31,6 @@ function initDragDropOverrides() {
 }
 
 
-
 function onDragStart(e) {
     log('drag started yo');
 }

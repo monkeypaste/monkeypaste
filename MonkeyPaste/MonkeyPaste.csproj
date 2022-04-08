@@ -80,6 +80,7 @@
     <None Remove="Resources\Fonts\password.ttf" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Html\Editor\Editor2.js" />
+    <None Remove="Resources\Html\Editor\index.html" />
     <None Remove="Resources\Html\Editor\lib\DateFormatter\jquery.dateFormat.js" />
     <None Remove="Resources\Html\Editor\lib\DynamicQuillTools\DynamicQuillTools.js" />
     <None Remove="Resources\Html\Editor\lib\font-awesome\fontawesome-free-6.1.1-web\webfonts\fa-brands-400.ttf" />
@@ -102,6 +103,15 @@
     <None Remove="Resources\Html\Editor\lib\Quill\quill.min.js" />
     <None Remove="Resources\Html\Editor\lib\Quill\quill.min.js.map" />
     <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
+    <None Remove="Resources\Html\Editor\src\components\clipboard\clipboard.js" />
+    <None Remove="Resources\Html\Editor\src\components\content\content.js" />
+    <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
+    <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
+    <None Remove="Resources\Html\Editor\src\components\font\font.js" />
+    <None Remove="Resources\Html\Editor\src\components\table\table.js" />
+    <None Remove="Resources\Html\Editor\src\components\template\template.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\debug.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\util.js" />
     <None Remove="Resources\Html\Editor\src\editor.js" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
@@ -127,6 +137,9 @@
     <Content Include="Resources\Data\Google\client_secrets_desktop.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Resources\Html\Editor\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\lib\DateFormatter\jquery.dateFormat.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -196,6 +209,33 @@
     <EmbeddedResource Include="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\clipboard\clipboard.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\content\content.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\dragdrop\dragdrop.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\editor\editor.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\font\font.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\table\table.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\template\template.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\debug.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\util.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
     <EmbeddedResource Include="Resources\Images\test.png" />
   </ItemGroup>
@@ -250,6 +290,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\lib\Quill\quill.snow.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\content\content-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\editor-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\editor\quill-style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Html\Editor\src\components\template\template-style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Html\Editor\style\content-style.css">
