@@ -1,7 +1,9 @@
 ﻿function initDragDrop() {
     initDragDropOverrides();
 
-    let editorElms = document.getElementById('editor').querySelectorAll('p,span,div');
+    let allDocTags = [...InlineTags, ...BlockTags];
+    let allDocTagsQueryStr = allDocTags.join(',');
+    let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
 
     Array.from(editorElms).forEach(elm => {
         enableDragDrop(elm);
@@ -9,8 +11,12 @@
 }
 
 function enableDragDrop(elm) {
-    elm.addEventListener('mp_dragstart', onDragStart);
+    if (InlineTags.includes(elm.tagName.toLowerCase())) {
+        elm.setAttribute('draggable', true);
+        elm.addEventListener('mp_dragstart', onDragStart);
+    }
     elm.addEventListener('mp_drop', onDrop);
+    
 }
 
 function initDragDropOverrides() {
@@ -28,6 +34,8 @@ function initDragDropOverrides() {
         event.target.dispatchEvent(event2);
         event.stopPropagation();
     }, true);
+
+    //document.getElementById('editor').addEventListener('drop', onDrop);
 }
 
 
@@ -36,5 +44,30 @@ function onDragStart(e) {
 }
 
 function onDrop(e) {
-    log('drop dat shhhiiiit');
+    //e.detail.original.preventDefault();
+
+    let itemData = '';
+    let isHtml = false;
+    let dt = e.detail.original.dataTransfer;
+    if (dt.types.indexOf('text/html') > -1) {
+        itemData = dt.getData('text/html');
+        itemData = parseForHtmlContentStr(itemData);
+        isHtml = true;
+    }
+    if (itemData == '' && dt.types.indexOf('text/plain') > -1) {
+        itemData = dt.getData('text/plain');
+        //itemData = retargetPlainTextClipboardData(itemData);
+    }
+    if (itemData != '') {
+        let dropIdx = getEditorIndexFromPoint2({ x: e.detail.original.clientX, y: e.detail.original.clientY });
+        quill.setSelection(dropIdx, 0);
+        if (isHtml) {
+            quill.clipboard.dangerouslyPasteHTML(dropIdx, itemData);
+        } else {
+            quill.insertText(dropIdx, itemData);
+        }
+    }
+
+    log('drop dat shhhiiiit:');
+    log(itemData);
 }

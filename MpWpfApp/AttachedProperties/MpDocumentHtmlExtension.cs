@@ -59,37 +59,12 @@ namespace MpWpfApp {
                     bool isReadOnly = (bool)e.NewValue;
                     if (fe is ChromiumWebBrowser cwb && cwb.CanExecuteJavascriptInMainFrame) {
                         if (isReadOnly) {
-                            var readOnlyResult = await cwb.EvaluateScriptAsync("enableReadOnly()");
-                            ProcessReadOnlyResponse(fe, readOnlyResult);
-
-                            //var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
-                            //if (ctcv != null && civm.Parent != null) {
-                            //    double nw = civm.Parent.ReadOnlyContentSize.Width;
-                            //    double nh = civm.EditorHeight;
-                            //    //if(nh == double.NaN) {
-                            //    //    nh = 
-                            //    //}
-                            //    ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
-                            //}
+                            var enableReadOnlyResp = await cwb.EvaluateScriptAsync("enableReadOnly()");
+                            ProcessEnableReadOnlyResponse(fe, enableReadOnlyResp);
                         } else {
                             MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(fe);
-                            await cwb.EvaluateScriptAsync($"disableReadOnly('{drorMsg.SerializeToByteString()}')");
-
-                            //var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
-                            //if (ctcv != null) {
-                            //    double nw = MpMeasurements.Instance.ClipTileEditModeMinWidth;
-                            //    double nh = civm.EditorHeight;
-                            //    if (nh == double.NaN) {
-                            //        nh = MpMeasurements.Instance.ClipTileEditToolbarHeight + civm.UnformattedContentSize.Height;
-                            //    } else {
-                            //        nh = civm.Parent.TileContentHeight;
-                            //    }
-                            //    //nh = 1000;
-                            //    //cwb.Height = nh;
-                            //    if (nw > ctcv.ActualWidth) {
-                            //        ctcv.TileResizeBehvior.Resize(nw - ctcv.ActualWidth, 0);
-                            //    }
-                            //}
+                            var disableReadOnlyResponse = await cwb.EvaluateScriptAsync($"disableReadOnly('{drorMsg.SerializeToByteString()}')");
+                            ProcessDisableReadOnlyResponse(fe, disableReadOnlyResponse);                            
                         }
                     }
                 }
@@ -135,7 +110,7 @@ namespace MpWpfApp {
 
         private static void InitCef() {
             //To support High DPI this must be before CefSharp.BrowserSubprocess.SelfHost.Main so the BrowserSubprocess is DPI Aware
-            Cef.EnableHighDPISupport();
+            //Cef.EnableHighDPISupport();
 
             var exitCode = CefSharp.BrowserSubprocess.SelfHost.Main(new string[] { });
 
@@ -144,7 +119,7 @@ namespace MpWpfApp {
             }
 
             var settings = new CefSettings() {
-                LogSeverity = LogSeverity.Verbose
+                LogSeverity = LogSeverity.Verbose,
             };
             settings.RegisterScheme(new CefCustomScheme {                
                 SchemeName = "localfolder",
@@ -178,6 +153,20 @@ namespace MpWpfApp {
             return null;
         }
 
+        private static void ProcessEnableReadOnlyResponse(FrameworkElement fe, JavascriptResponse enableReadOnlyResponse) {
+            if (fe.DataContext is MpContentItemViewModel civm) {
+                if (enableReadOnlyResponse.Result != null && enableReadOnlyResponse.Result is string resultStr) {
+                    MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is readonly");
+
+                    var qrm = JsonConvert.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(resultStr.ToStringFromBase64());
+
+                    civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(qrm.itemEncodedHtmlData);
+
+                    MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(civm);
+                }
+            }
+        }
+
         private static MpQuillDisableReadOnlyRequestMessage CreateDisableReadOnlyMessage(FrameworkElement fe) {
             MpConsole.WriteLine($"Tile content item '{(fe.DataContext as MpContentItemViewModel).CopyItemTitle}' is editable");
 
@@ -188,16 +177,19 @@ namespace MpWpfApp {
             return drorMsg;
         }
 
-        private static void ProcessReadOnlyResponse(FrameworkElement fe, JavascriptResponse readOnlyResult) {
-            if(fe.DataContext is MpContentItemViewModel civm) {
-                if (readOnlyResult.Result != null && readOnlyResult.Result is string resultStr) {
-                    MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is readonly");
+        private static void ProcessDisableReadOnlyResponse(FrameworkElement fe, JavascriptResponse disableReadOnlyResponse) {
+            if (fe.DataContext is MpContentItemViewModel civm) {
+                if (disableReadOnlyResponse.Result != null && disableReadOnlyResponse.Result is string resultStr) {
+                    MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is editable");
 
-                    var qrm = JsonConvert.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(resultStr);
+                    var qrm = JsonConvert.DeserializeObject<MpQuillDisableReadOnlyResponseMessage>(resultStr.ToStringFromBase64());
 
-                    civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(qrm.itemEncodedHtmlData);
-
-                    MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(civm);
+                    var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
+                    if (ctcv != null) {
+                        if (qrm.editorWidth > ctcv.ActualWidth) {
+                            ctcv.TileResizeBehvior.Resize(qrm.editorWidth - ctcv.ActualWidth, 0);
+                        }
+                    }
                 }
             }
         }
@@ -205,7 +197,10 @@ namespace MpWpfApp {
 
         private static string GetEncodedHtml(string itemData, string itemGuid) {
             if (itemData.IsStringRichText()) {
-                return MpRtfToHtmlConverter.ConvertRtfToHtml(itemData, new Dictionary<string, string>() { { "copyItemGuid",itemGuid } });
+                return MpRtfToHtmlConverter.ConvertRtfToHtml(
+                    itemData,
+                    new Dictionary<string, string>() { { "copyItemBlockGuid",itemGuid } },
+                    new Dictionary<string, string>() { { "copyItemInlineGuid", itemGuid } });
             }
             return itemData;
         }

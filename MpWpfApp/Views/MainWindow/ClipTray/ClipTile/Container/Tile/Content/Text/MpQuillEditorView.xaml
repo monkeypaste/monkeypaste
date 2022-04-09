@@ -13,10 +13,11 @@
                             x:TypeArguments="local:MpContentItemViewModel"
                             mc:Ignorable="d">
     <wpf:ChromiumWebBrowser x:Name="QuillWebView"
+                            AllowDrop="True"
                             Loaded="EditorBrowser_Loaded"
                             Unloaded="QuillWebView_Unloaded"
                             DataContextChanged="QuillWebView_DataContextChanged"
-                            Width="Auto"
+                            Width="Auto" 
                             Height="{Binding EditorHeight}"
                             MinWidth="100"
                             IsEnabled="{Binding IsReadOnly,

@@ -61,8 +61,11 @@ function initClipboard() {
     //    if found in db use its source info when creating it (may be problematic)
     quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
         //PasteNode = retargetContentItemDomNode(node);
-        
-        PasteNode = node;
+        if (isContentItemNode(node) || isTemplateNode(node))
+        {
+
+            PasteNode = node;
+        }
         return delta;
     });
     quill.clipboard.addMatcher('[templateGuid]', function (node, delta) {
@@ -115,9 +118,17 @@ function parseForHtmlContentStr(htmlStr) {
     if (!htmlStr) {
         return '';
     }
+    
     let preTag = '<!--StartFragment-->';
     let preIdx = htmlStr.indexOf(preTag);
     if (preIdx < 0) {
+        let bodyOpenTag = '<body>';
+        let bodyOpenIdx = htmlStr.toLowerCase().indexOf(bodyOpenTag);
+        let bodyCloseTag = '</body>';
+        let bodyCloseIdx = htmlStr.toLowerCase().indexOf(bodyCloseTag);
+        if (bodyOpenIdx >= 0 && bodyCloseIdx >= 0) {
+            htmlStr = htmlStr.substring(bodyOpenIdx + bodyOpenTag.length, bodyCloseIdx - 1);
+        }
         return htmlStr;
     }
     preIdx += preTag.length;
@@ -155,7 +166,7 @@ function retargetHtmlClipboardData(htmlDataStr) {
 function retargetPlainTextClipboardData(pt) {
     // TODO maybe wise to use requestRecentClipboardData here 
     let newContentGuid = getContentGuidByIdx(quill.getSelection().index);
-    let ptHtmlStr = '<span copyItemGuid="' + newContentGuid + '">' + pt + '"</span>';
+    let ptHtmlStr = '<span copyItemInlineGuid="' + newContentGuid + '">' + pt + '"</span>';
     return ptHtmlStr;
 }
 

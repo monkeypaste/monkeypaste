@@ -7,18 +7,22 @@
 
     <link href="lib/jquery-context-menus/dist/context-menu.min.css" rel="stylesheet" />
     <link href="lib/Quill/quill.snow.css" rel="stylesheet" />
-    <link href="lib/HighlightJs/styles/github.min.css" rel="stylesheet" />
+    <link href="lib/HighlightJs/github.min.css" rel="stylesheet" />
     <link href="lib/Quill-Better-Table/quill-better-table.css" rel="stylesheet" type="text/css" />
-    <link href="src/components/editor/quill-style.css" rel="stylesheet" />
-    <link href="src/components/editor/editor-style.css" rel="stylesheet" />
-    <link href="src/components/template/template-style.css" rel="stylesheet" />
-    <link href="src/components/content/content-style.css" rel="stylesheet" />
     <link href="lib/katex/katex.min.css" rel="stylesheet" />
     <link href="lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet" />
 
-    <script src="lib/font-awesome/fontawesome-free-6.1.1-web/js/all.min.js"></script>
+
+    <link href="src/components/editor/quill-style.css" rel="stylesheet" />
+    <link href="src/components/editor/editor-style.css" rel="stylesheet" />
+    <link href="src/components/template/template-style.css" rel="stylesheet" />
+    <link href="src/components/template/toolbar/edit/edit-template-toolbar-style.css" rel="stylesheet" />
+    <link href="src/components/template/toolbar/paste/paste-template-toolbar-style.css" rel="stylesheet" />
+    <link href="src/components/content/content-style.css" rel="stylesheet" />
+
+    <script src="lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js"></script>
     <script src="lib/HighlightJs/highlight.min.js"></script>
-    <script src="lib/HighlightJs/languages/xml.min.js"></script>
+    <script src="lib/HighlightJs/xml.min.js"></script>
     <script src="lib/Quill/quill.min.js"></script>
     <script src="lib/Quill-Better-Table/quill-better-table.min.js"></script>
     <script src="lib/jquery/jquery.min.js"></script>
@@ -26,7 +30,6 @@
     <script src="lib/Quill-Html-Edit-Button/quill.htmlEditButton.min.js"></script>
     <script src="lib/DateFormatter/jquery.dateFormat.js"></script>
     <script src="lib/katex/katex.min.js"></script>
-    <!--<script src="lib/Quill-Image-Resize/node_modules/quill-image-resize/image-resize.min.js"></script>-->
     <!-- Context Menu From https://github.com/pwnedgod/supercontextmenu -->
     <script src="lib/jquery-context-menus/src/context-menu.js"></script>
 
@@ -50,12 +53,17 @@
 
     <script src="src/components/util/debug.js"></script>
     <script src="src/components/util/util.js"></script>
+    <script src="src/components/util/resize.js"></script>
     <script src="src/components/template/template.js"></script>
+    <script src="src/components/template/toolbar/create/createTemplateToolbarItem.js"></script>
+    <script src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
+    <script src="src/components/template/toolbar/paste/pasteTemplateToolbar.js"></script>
     <script src="src/components/content/content.js"></script>
     <script src="src/components/font/font.js"></script>
     <script src="src/components/clipboard/clipboard.js"></script>
     <script src="src/components/dragdrop/dragdrop.js"></script>
     <script src="src/components/table/table.js"></script>
+    <script src="src/components/editor/editor.js"></script>
 </head>
 <body>
     <div id='editor'>
@@ -136,8 +144,7 @@
     <div id="templateColorPaletteMenu" class="ql-toolbar-template-context-menu"></div>
 
     
-    <script src="src/components/editor/editor.js"></script>
-
+    <script src="src/app.js"></script>
 </body>
 </html>
 

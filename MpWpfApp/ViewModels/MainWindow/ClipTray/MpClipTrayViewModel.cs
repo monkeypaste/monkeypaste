@@ -1405,11 +1405,11 @@ namespace MpWpfApp {
                         //tile resize
                         PersistentUniqueWidthTileLookup
                             .AddOrReplace(PrimaryItem.HeadItem.CopyItemId, PrimaryItem.TileBorderWidth);
-                        if (PrimaryItem.CanResize) {
+                        //if (PrimaryItem.CanResize) {
                             Items.
                                 Where(x => x.QueryOffsetIdx >= PrimaryItem.QueryOffsetIdx).
                                 ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
-                        }
+                        //}
                     }
 
                     AdjustScrollOffsetToResize(oldHeadTrayX, oldScrollOffset);

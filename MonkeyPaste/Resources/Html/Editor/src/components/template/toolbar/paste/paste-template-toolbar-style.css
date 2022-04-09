@@ -1,0 +1,116 @@
+﻿.paste-template-toolbar {
+    display: none;
+    width: 100%;
+    background-color: lightyellow;
+    border: solid 1px yellow;
+    padding: 5px 10px;
+    position: fixed;
+}
+
+.paste-template-toolbar-btn {
+    display: inline-block;
+    padding: 2px 5px;
+    text-decoration: none;
+    font-size: 14px;
+    border: 1px solid #CCC;
+    color: white;
+    border: solid 2px #67c5ff;
+    border-radius: 7px;
+    transition: .4s;
+    margin: 0 5px;
+    background-color: dodgerblue;
+    cursor: pointer;
+}
+
+    .paste-template-toolbar-btn:hover {
+        color: dimgray;
+        transition: .4s;
+        cursor: pointer;
+    }
+
+/* Custom Selector style*/
+.Select-menu-outer {
+    top: auto;
+    bottom: 100%
+}
+
+
+/*.edit-template-custom-select select {
+        display: none;
+    }*/
+
+.paste-template-custom-select {
+    display: inline-block;
+    position: relative;
+    font-family: Arial;
+}
+
+    .paste-template-custom-select select {
+        display: none;
+    }
+
+.select-selected {
+    background-color: DodgerBlue;
+}
+
+.select-selected-item {
+    background-color: lightblue;
+}
+
+.select-selected:before {
+    position: absolute;
+    content: "";
+    top: 7px;
+    left: 5px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+}
+
+.select-selected.select-arrow-active:before {
+    border-color: transparent transparent #fff transparent;
+    top: 10px;
+}
+
+.select-items div,
+.select-selected {
+    color: #ffffff;
+    padding: 12px 5px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+    user-select: none;
+}
+
+.select-items {
+    position: absolute;
+    background-color: DodgerBlue;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+}
+
+.select-hide {
+    display: none;
+}
+
+.select-items div:hover,
+.same-as-selected {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.select-items .square-box {
+    height: 18px;
+    width: 18px;
+    float: left;
+    margin: 0 20px 0 20px;
+}
+
+.select-selected .square-box {
+    height: 18px;
+    width: 18px;
+    position: absolute;
+    margin: 0 20px 0 20px;
+}

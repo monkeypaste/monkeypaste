@@ -6,9 +6,9 @@
 body {
     margin: 0px;
     padding: 0px;
-    width: 100%;
-    height: 100%;
+    width: 100%;    
     font-family: Arial;
+    overflow: hidden;
 }
 
 .btn {
@@ -17,8 +17,7 @@ body {
     padding: 14px 28px;
     font-size: 16px;
     cursor: pointer;
-    display: inline-block;
-}
+    display: inline-block;}
 
     /* On mouse-over */
     .btn:hover {
@@ -30,8 +29,11 @@ body {
 }
 
 #editor {
-    width: 100%;
-    height: auto;
+    width: 100%;    
+    position: fixed;
+    overflow: auto;
+    padding: 5px;
+    z-index: -1;
 }
 
 .info-marker {
@@ -68,4 +70,8 @@ body {
     
     transition: 1s;
     width: 200px;
+}
+
+.hidden {
+    display: none;
 }

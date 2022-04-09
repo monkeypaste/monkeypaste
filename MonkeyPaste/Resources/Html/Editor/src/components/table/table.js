@@ -1,6 +1,20 @@
-﻿function initTable() {
+﻿function registerTables() {
+    var tableOptions = [];
+    var maxRows = 7;
+    var maxCols = 7;
+
+    for (let r = 1; r <= maxRows; r++) {
+        for (let c = 1; c <= maxCols; c++) {
+            tableOptions.push('newtable_' + r + '_' + c);
+        }
+    }
+    return tableOptions;
+}
+
+function initTable() {
     initTableToolbarButton();
 }
+
 
 function initTableToolbarButton() {
     let editorDiv = $("#editor");

@@ -1,0 +1,133 @@
+﻿#editTemplateDeleteButton {
+    background-color: salmon;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+    #editTemplateDeleteButton:hover {
+        background-color: red;
+    }
+
+
+.template_color_palette_item {
+    height: 15px;
+    width: 15px;
+    border-radius: 5px;
+    border: solid 3px transparent;
+}
+
+    .template_color_palette_item:hover {
+        transition: .2s;
+        border: solid 3px dimgray;
+    }
+
+.ql-toolbar-template-context-menu {
+    display: none;
+    position: fixed;
+    border: solid 1px #CCC;
+}
+
+    .ql-toolbar-template-context-menu ul {
+        list-style: none;
+        margin: 0;
+        padding: 16px;
+        background: white;
+    }
+
+    .ql-toolbar-template-context-menu a {
+        opacity: .8;
+        color: #ffffff;
+        cursor: pointer;
+        transition: 200ms;
+        text-decoration: none;
+        white-space: nowrap;
+        font-weight: 700;
+    }
+
+.edit-template-toolbar {
+    display: none;
+    flex-wrap: nowrap;
+    min-height: 35px;
+    width: 100%;
+    background-color: lightyellow;
+    position: fixed;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+.edit-template-toolbar-resizer {
+    width: 100%;
+    cursor: row-resize;
+    height: 10px;
+    background-color: aqua;
+    vertical-align: top;
+    position: relative;
+}
+
+    .edit-template-toolbar-resizer:hover {
+        background-color: antiquewhite;
+    }
+
+.edit-template-color-box {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    border: solid 3px black;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+    .edit-template-color-box:hover {
+        transition: .2s;
+        border: solid 3px dimgray;
+    }
+
+
+
+.edit-template-type-select-container {
+    margin-top: 11px;
+    margin-right: 12px;
+    vertical-align: middle;
+    font-family: Arial;
+    min-width: 160px;
+}
+
+    .edit-template-type-select-container select {
+        padding: 3px;
+    }
+
+.edit-template-type-option {
+    margin: 5px;
+}
+
+.edit-template-detail-text-input-container {
+    display: none;
+    right: 140px;
+    font-family: Arial;
+    min-width: 160px;
+}
+
+.edit-template-ok-cancel-button-container {
+    right: 0;
+    position: absolute;
+    margin: 12px;
+}
+
+div#editTemplateOkCancelButtonContainer input {
+    margin-left: 10px;
+}
+
+div#editTemplateOkCancelButtonContainer {
+}
+
+.template-name-and-color-container {
+    display: inline-block;
+    float: right;
+    position: relative;
+    font-family: Arial;
+    min-width: 160px;
+}

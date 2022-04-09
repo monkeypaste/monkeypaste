@@ -94,6 +94,12 @@ namespace MonkeyPaste {
             return bytes;
         }
 
+        public static string ToStringFromBase64(this string str) {
+            var bytes = Convert.FromBase64String(str);
+            var text = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+            return text;
+        }
+
         public static string ToFile(this string str, string forceDir = "", string forceNamePrefix = "", string forceExt = "", bool overwrite = false) {
             if(string.IsNullOrEmpty(forceExt)) {
                 if(str.IsStringRichText()) {

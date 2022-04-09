@@ -5,10 +5,6 @@ var ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
 var ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
 var ENCODED_TEMPLATE_REGEXP;
 
-var isShowingEditTemplateToolbar = false;
-var isShowingPasteTemplateToolbar = false;
-
-
 var MouseDownOnTemplatePos;
 var IsMovingTemplate = false;
 
@@ -282,6 +278,10 @@ function getTemplateProperty(tguid, propertyName) {
         return null;
     }
     return t.domNode.getAttribute(propertyName);
+}
+
+function isTemplateNode(node) {
+    return node.getAttribute('templateGuid') != null;
 }
 
 //#endregion
@@ -649,74 +649,12 @@ function getLowestAnonTemplateName(anonPrefix = 'Template #') {
 }
 
 
-function setTemplateType(tguid, ttype) {
-    log('Template: ' + tguid + " selected type: " + ttype);
-
-    setTemplateProperty(tguid, 'templateType', ttype);
-
-    var t = getTemplateDefByGuid(tguid);
-    //t.domNode.setAttribute('templateType', templateTypeValue);
-    document.getElementById("editTemplateTypeMenuSelector").value = ttype;
-
-    if (ttype == 'datetime' && t.domNode.getAttribute('templateData') == '') {
-        setTemplateProperty(tguid,'templateData', 'MM/dd/yyy HH:mm:ss');
-    } 
-
-    if (ttype == 'dynamic') {
-        document.getElementById('templateDetailTextInputContainer').style.display = 'none';
-    } else {
-        document.getElementById('templateDetailTextInputContainer').style.display = 'inline-block';
-        document.getElementById('templateDetailTextInput').value = getTemplateProperty(tguid, 'templateData');
-        document.getElementById('templateDetailTextInput').addEventListener('input', onTemplateDetailChanged);
-    }
-
-    document.getElementById('templateColorBox').style.backgroundColor = getTemplateProperty(tguid, 'templateColor');
-    document.getElementById('templateColorBox').addEventListener('click', onTemplateColorBoxContainerClick);
-
-    document.getElementById('templateNameTextInput').value = getTemplateProperty(tguid, 'templateName');
-    document.getElementById('templateNameTextInput').addEventListener('input', onTemplateNameChanged);
-}
-
-function deleteFocusTemplate() {
-    let tguid_to_delete = getFocusTemplateGuid();
-    if (tguid_to_delete == null) {
-        log('error, no focus template to delete, ignoring...');
-        return;
-    }
-
-    let td = getTemplateFromDomNode(getTemplateDefByGuid(tguid_to_delete).domNode);
-    let result = window.confirm('Are you sure you want to delete ALL usages of \'' + td.templateName + '\'?')
-
-    if (!result) {
-        return;
-    }
-
-    userDeletedTemplateGuids.push(tguid_to_delete);
-
-    let availTemplateRef = availableTemplates.filter(x => x.templateGuid == tguid_to_delete);
-    if (availTemplateRef != null && availTemplateRef.length > 0) {
-        let availIdx = availableTemplates.indexOf(availTemplateRef[0]);
-        availableTemplates.splice(availIdx, 1);
-    }
-
-    getUsedTemplateInstances()
-        .filter(x => x.domNode.getAttribute('templateGuid') == tguid_to_delete)
-        .forEach((ti) => {
-            let t = getTemplateFromDomNode(ti.domNode);
-            let docIdx = getTemplateDocIdx(t.templateInstanceGuid);
-            quill.deleteText(docIdx, 1, Quill.sources.USER);
-        });
-
-    hideEditTemplateToolbar();
-    log('Template \'' + tguid_to_delete + '\' \'' + td.templateName + '\' was DELETED');
-}
-
 function focusTemplate(tguid, fromDropDown, tiguid) {
     if (tguid == null) {
         return;
     }
     clearTemplateFocus();
-    hideAllContextMenus();
+    hideAllTemplateContextMenus();
 
     var tel = getTemplateElements();
     for (var i = 0; i < tel.length; i++) {
@@ -760,7 +698,7 @@ function focusTemplate(tguid, fromDropDown, tiguid) {
         }
         //moved from quill embed constructor maybe causing selection issue on android
         
-        hideAllContextMenus();
+        hideAllTemplateContextMenus();
         showEditTemplateToolbar();
     }
 
@@ -798,7 +736,7 @@ function onColorPaletteItemClick(chex) {
         te.style.color = isBright(chex) ? 'black' : 'white';
     }
     document.getElementById('templateColorBox').style.backgroundColor = chex;
-    hideAllContextMenus();
+    hideAllTemplateContextMenus();
 }
 
 function eventFire(el, etype) {
@@ -811,58 +749,6 @@ function eventFire(el, etype) {
     }
 }
 
-function templateTextAreaChange() {
-    var curText = $('#templateTextArea').val();
-    setTemplateText(getFocusTemplateGuid(), curText);
-}
-
-function setTemplateName(tguid, name) {
-    var tl = getTemplateElements(tguid);
-    for (var i = 0; i < tl.length; i++) {
-        var te = tl[i];
-        if (te.getAttribute('templateGuid') == tguid) {
-            te.setAttribute('templateName', name);
-            changeInnerText(te, te.innerText, name);
-        }
-    }
-}
-
-function setTemplateDetailData(tguid, detailData) {
-    var tl = getTemplateElements(tguid);
-    for (var i = 0; i < tl.length; i++) {
-        var te = tl[i];
-        if (te.getAttribute('templateGuid') == tguid) {
-            te.setAttribute('templateData', detailData);
-            if (te.getAttribute('templateType').toLowerCase() == 'datetime') {
-                log(jQuery.format.date(new Date(), detailData));
-            }
-        }
-    }
-}
-
-//#region Event Callbacks
-
-function onTemplateTypeChanged(e) {
-    setTemplateType(getFocusTemplateGuid(), this.value);
-}
-
-function onTemplateColorBoxContainerClick(e) {
-    showTemplateColorPaletteMenu();
-    event.stopPropagation(e);
-}
-
-function onTemplateNameChanged(e) {
-    let newTemplateName = document.getElementById('templateNameTextInput').value;
-    setTemplateName(getFocusTemplateGuid(), newTemplateName);
-}
-
-function onTemplateDetailChanged(e) {
-    let newDetailData = document.getElementById('templateDetailTextInput').value;
-    setTemplateDetailData(getFocusTemplateGuid(), newDetailData);
-}
-
-//#endregion
-
 function getTemplateDefByGuid(tguid) {
     return getUsedTemplateDefinitions().find(x=>x.domNode.getAttribute('templateGuid') == tguid);
 }
@@ -874,323 +760,11 @@ function getTemplateInstance(tguid, tiguid) {
     }
     return getTemplateFromDomNode(telm);
 }
-//#region Toolbar Context Menu
 
-function showTemplateToolbarContextMenu(tb) {
-    let tb_rect = tb.getBoundingClientRect();
-    let x = tb_rect.left;
-    let y = tb_rect.bottom;
-
-    let allTemplateDefs = getAvailableTemplateDefinitions()
-    var cm = [];
-    
-    for (var i = 0; i < templateTypesMenuOptions.length; i++) {
-        let tmi = templateTypesMenuOptions[i];
-
-        if (i == templateTypesMenuOptions.length - 1) {
-            cm.push({ separator: true });
-            // add new is always visible
-            tmi.action = function (option, contextMenuIndex, optionIndex) {
-                createTemplate();
-            },
-            cm.push(tmi);
-            continue;
-        }
-
-        let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.label.toLowerCase());
-
-        if (allTemplateDefsForType == null || allTemplateDefsForType.length == 0) {
-            continue;
-        }
-
-        tmi.submenu = allTemplateDefsForType.map(function (ttd) {
-            return {
-                icon: ' ',
-                iconBgColor: ttd.templateColor,
-                label: ttd.templateName,
-                action: function (option, contextMenuIndex, optionIndex) {
-                    createTemplate(ttd);
-                },
-            }
-        });
-        cm.push(tmi);
-    }
-
-    superCm.createMenu(cm, {pageX: x, pageY: y});
-
-    isShowingTemplateToolbarMenu = true;
-}
-
-function hideTemplateToolbarContextMenu() {
-    //var rgtClickContextMenu = document.getElementById('templateToolbarMenu');
-    //rgtClickContextMenu.style.display = 'none';
-    superCm.destroyMenu()
-
-    isShowingTemplateToolbarMenu = false;
-}
-
-//#endregion
-
-function showTemplateColorPaletteMenu() {
-    if (isShowingTemplateColorPaletteMenu) {
-        hideTemplateColorPaletteMenu();
-    }
-
-    let tguid = getFocusTemplateGuid();// te.getAttribute('templateId');
-    var palette_item = {
-        style_class: 'template_color_palette_item',
-        func: 'onColorPaletteItemClick'
-    };
-
-    let paletteHtml = '<table>';
-    for (var r = 0; r < 10; r++) {
-        paletteHtml += '<tr>';
-        for (var c = 0; c < 10; c++) {
-            let c = getRandomColor().trim();
-            let item = '<td><a href="javascript:void(0);" onclick="' + palette_item.func + '(\'' + c + '\'); event.stopPropagation();">' +
-                '<div class="' + palette_item.style_class + '" style="background-color: ' + c + '" ></div></a></td > ';
-            paletteHtml += item;
-        }
-        paletteHtml += '</tr>';
-    }
-
-    var rgtClickColorPaletteMenu = document.getElementById('templateColorPaletteMenu');
-    rgtClickColorPaletteMenu.innerHTML = paletteHtml;
-
-    rgtClickColorPaletteMenu.style.display = 'block';
-    var paletteMenuRect = rgtClickColorPaletteMenu.getBoundingClientRect();
-
-    const editToolbarRect = document.getElementById('editTemplateToolbar').getBoundingClientRect(); 
-    const colorBoxRect = document.getElementById('templateColorBox').getBoundingClientRect();
-    const x = colorBoxRect.left;
-    const y = editToolbarRect.top - paletteMenuRect.height;
-    rgtClickColorPaletteMenu.style.left = `${x}px`;
-    rgtClickColorPaletteMenu.style.top = `${y}px`;
-
-    isShowingTemplateColorPaletteMenu = true;
-}
-
-function hideTemplateColorPaletteMenu() {
-    var rgtClickColorPaletteMenu = document.getElementById('templateColorPaletteMenu');
-    rgtClickColorPaletteMenu.style.display = 'none';
-
-    isShowingTemplateColorPaletteMenu = false;
-}
-
-function hideAllContextMenus() {
+function hideAllTemplateContextMenus() {
     hideTemplateColorPaletteMenu();
-    //hideTemplateContextMenu();
     hideTemplateToolbarContextMenu();
 }
-
-function updateEditTemplateToolbarPosition() {
-    $("#editTemplateToolbar").css("position", "absolute");
-
-    let wh = window.visualViewport.height;
-    let etth = $("#editTemplateToolbar").outerHeight();
-    $("#editTemplateToolbar").css("top", wh-etth);
-}
-
-function enableResize(ele) {
-    // The current position of mouse
-    let x = 0;
-    let y = 0;
-
-    // The dimension of the element
-    let w = 0;
-    let h = 0;
-
-    // Handle the mousedown event
-    // that's triggered when user drags the resizer
-    const mouseDownHandler = function (e) {
-        // Get the current mouse position
-        x = e.clientX;
-        y = e.clientY;
-
-        // Calculate the dimension of element
-        const styles = window.getComputedStyle(ele);
-        w = parseInt(styles.width, 10);
-        h = parseInt(styles.height, 10);
-
-        // Attach the listeners to `document`
-        document.addEventListener('mousemove', mouseMoveHandler);
-        document.addEventListener('mouseup', mouseUpHandler);
-    };
-
-    const mouseMoveHandler = function (e) {
-        // How far the mouse has been moved
-        const dx = e.clientX - x;
-        const dy = e.clientY - y;
-
-        // Adjust the dimension of element
-        //ele.style.width = `${w + dx}px`;
-        ele.style.height = `${h - dy}px`;
-        updateEditTemplateToolbarPosition();
-    };
-
-    const mouseUpHandler = function () {
-        // Remove the handlers of `mousemove` and `mouseup`
-        document.removeEventListener('mousemove', mouseMoveHandler);
-        document.removeEventListener('mouseup', mouseUpHandler);
-    };
-
-    // Query all resizers
-    const resizers = ele.querySelectorAll('.resizer');
-
-    // Loop over them
-    [].forEach.call(resizers, function (resizer) {
-        resizer.addEventListener('mousedown', mouseDownHandler);
-    });
-}
-
-function showEditTemplateToolbar() {
-    isShowingEditTemplateToolbar = true;
-    var ett = document.getElementById('editTemplateToolbar');
-    ett.style.display = 'flex';
-
-    enableResize(document.getElementById('editTemplateToolbar'));
-
-    updateEditTemplateToolbarPosition();
-
-    var t = getTemplateDefByGuid(getFocusTemplateGuid());
-    if (t.domNode) {
-        setTemplateType(t.domNode.getAttribute('templateGuid'), t.domNode.getAttribute('templateType'));
-    }
-    
-
-    document.getElementById('editTemplateTypeMenuSelector').addEventListener('change', onTemplateTypeChanged);
-}
-
-function hideEditTemplateToolbar() {
-    isShowingEditTemplateToolbar = false;
-    var ett = document.getElementById('editTemplateToolbar');
-    ett.style.display = 'none';
-
-    document.getElementById('editTemplateTypeMenuSelector').removeEventListener('change', onTemplateTypeChanged);
-}
-
-function selectedTemplateTypeChanged() {
-    log("changed");
-}
-
-//#region Paste Toolbar
-
-function showPasteTemplateToolbar() {
-    isShowingPasteTemplateToolbar = true;
-    var ptt = document.getElementById('pasteTemplateToolbar');
-    ptt.style.display = 'inline-block';
-
-    document.getElementById('paste-template-custom-select').innerHTML = '<select id="pasteTemplateToolbarMenuSelector"></select >';
-
-    var templateMenuSelector = document.getElementById('pasteTemplateToolbarMenuSelector');
-    templateMenuSelector.innerHTML = '';
-
-    var tl = getUsedTemplateDefinitions();
-    for (var i = 0; i < tl.length; i++) {
-        var t = tl[i];
-        var templateItem = '<option class="templateOption" value="' + t['templateGuid'] + '" onchange="focusTemplate(' + t['templateGuid'] + ');">' +
-            t['templateName'] + '</option>';
-        templateMenuSelector.innerHTML += templateItem;
-    }
-
-    document.getElementById('nextTemplateButton').addEventListener('click', function (e) {
-        gotoNextTemplate();
-    });
-    document.getElementById('nextTemplateButton').addEventListener('keydown', function (e) {
-        gotoNextTemplate();
-    });
-    document.getElementById('previousTemplateButton').addEventListener('click', function (e) {
-        gotoPrevTemplate();
-    });
-    document.getElementById('previousTemplateButton').addEventListener('keydown', function (e) {
-        gotoPrevTemplate();
-    });
-    document.getElementById('clearAllTemplateTextButton').addEventListener('click', function (e) {
-        clearAllTemplateText();
-    });
-    document.getElementById('clearAllTemplateTextButton').addEventListener('keydown', function (e) {
-        clearAllTemplateText();
-    });
-    document.getElementById('pasteTemplateButton').addEventListener('click', function (e) {
-        isCompleted = true;
-    });
-    document.getElementById('pasteTemplateButton').addEventListener('keydown', function (e) {
-        isCompleted = true;
-    });
-
-    createTemplateSelectorStyling(templateMenuSelector);
-
-    //let tbb = isShowingToolbar ? $(".ql-toolbar").outerHeight() : 0;
-    //moveToolbarTop(0);
-    let wb = $(window).height();
-    movePasteTemplateToolbarTop($(window).height() - $("#pasteTemplateToolbar").outerHeight());
-    //moveEditorTop($("#pasteTemplateToolbar").outerHeight() + tbb);
-
-    $('#templateTextArea').focus();
-}
-
-function hidePasteTemplateToolbar() {
-    isShowingPasteTemplateToolbar = false;
-    var ptt = document.getElementById('pasteTemplateToolbar');
-    ptt.style.display = 'none';
-    if (isShowingEditorToolbar) {
-        moveEditorTop($(".ql-toolbar").outerHeight());
-    } else {
-        moveEditorTop(0);
-    }
-}
-
-function gotoNextTemplate() {
-    var tl = getUsedTemplateDefinitions();
-    var curIdx = 0;
-    for (var i = 0; i < tl.length; i++) {
-        if (tl[i]['templateGuid'] == getFocusTemplateGuid()) {
-            curIdx = i;
-            break;
-        }
-    }
-    var nextIdx = curIdx + 1;
-    if (nextIdx >= tl.length) {
-        nextIdx = 0;
-    }
-    focusTemplate(tl[nextIdx]['templateGuid']);
-}
-
-function gotoPrevTemplate() {
-    var tl = getUsedTemplateDefinitions();
-    var curIdx = 0;
-    for (var i = 0; i < tl.length; i++) {
-        if (tl[i]['templateGuid'] == getFocusTemplateGuid()) {
-            curIdx = i;
-            break;
-        }
-    }
-    var prevIdx = curIdx - 1;
-    if (prevIdx < 0) {
-        prevIdx = tl.length - 1;
-    }
-    focusTemplate(tl[prevIdx]['templateGuid']);
-}
-
-function clearAllTemplateText() {
-    var tl = getUsedTemplateDefinitions();
-    for (var i = 0; i < tl.length; i++) {
-        setTemplateText(tl[i]['templateGuid'], '');
-    }
-}
-
-function setTemplateText(tguid, text) {
-    var stl = document.getElementsByClassName("ql-template-embed-blot");
-    for (var i = 0; i < stl.length; i++) {
-        var t = stl[i];
-        if (t.getAttribute('templateGuid') == tguid) {
-            t.innerText = text;
-            t.templateText = text;
-        }
-    }
-}
-
-//#endregion
 
 function resetTemplates() {
     var til = getUsedTemplateInstances();
@@ -1202,97 +776,6 @@ function resetTemplates() {
         ti.domNode.innerHTML = ti.templateName;
     }
 }
-
-function createTemplateSelectorStyling() {
-    var tl = getUsedTemplateDefinitions();
-    var x, i, j, selElmnt, a, b, c;
-    x = document.getElementsByClassName("paste-template-custom-select");
-    for (i = 0; i < x.length; i++) {
-        selElmnt = x[i].getElementsByTagName("select")[0];
-        if (selElmnt.options.length == 0) {
-            continue;
-        }
-        var st = getTemplateDefByGuid(selElmnt.options[selElmnt.selectedIndex].getAttribute('templateGuid'));
-        a = document.createElement("DIV");
-        a.setAttribute("class", "select-selected");
-        a2 = document.createElement("SPAN");
-        a2.setAttribute("class", "square-box");
-        a2.setAttribute("style", "background-color: " + st['templateColor']);
-        a.appendChild(a2);
-        a.innerHTML += '<span style="margin: 0 10px 0 50px;">' + selElmnt.options[selElmnt.selectedIndex].innerHTML + '</span>';
-        x[i].appendChild(a);
-        b = document.createElement("DIV");
-        b.setAttribute("class", "select-items select-hide");
-        for (j = 0; j < selElmnt.length; j++) {
-            var t = getTemplateDefByGuid(selElmnt.options[j].getAttribute('value'));
-            c = document.createElement("DIV");
-            c.setAttribute('optionId', t['templateGuid']);
-            //c.innerHTML = selElmnt.options[j].innerHTML;
-            d = document.createElement("SPAN");
-            d.setAttribute("class", "square-box");
-            d.setAttribute("style", "background-color: " + t['templateColor']);
-            c.appendChild(d);
-            c.innerHTML += selElmnt.options[j].innerHTML;
-            c.addEventListener("click", onTemplateOptionClick);
-            b.appendChild(c);
-            if (j == selElmnt.selectedIndex) {
-                c.classList.add("class", "same-as-selected");
-            }
-        }
-        x[i].appendChild(b);
-        a.addEventListener("click", function (e) {
-            e.stopPropagation();
-            closeAllSelect(this);
-            this.nextSibling.classList.toggle("select-hide");
-            this.classList.toggle("select-arrow-active");
-        });
-    }
-
-    function closeAllSelect(elmnt) {
-        var x, y, i, arrNo = [];
-        x = document.getElementsByClassName("select-items");
-        y = document.getElementsByClassName("select-selected");
-        for (i = 0; i < y.length; i++) {
-            if (elmnt == y[i]) {
-                arrNo.push(i)
-            } else {
-                y[i].classList.remove("select-arrow-active");
-            }
-        }
-        for (i = 0; i < x.length; i++) {
-            if (arrNo.indexOf(i)) {
-                x[i].classList.add("select-hide");
-            }
-        }
-    }
-    document.addEventListener("click", closeAllSelect);
-}
-
-function onTemplateOptionClick(e, target) {
-    var targetDiv = e == null ? target : e.currentTarget;
-    var tVal = targetDiv.getAttribute('optionId');
-    var t = getTemplateDefByGuid(tVal);
-    var y, i, k, s, h;
-    s = targetDiv.parentNode.parentNode.getElementsByTagName("select")[0];
-    h = targetDiv.parentNode.previousSibling;
-    for (i = 0; i < s.length; i++) {
-        var sVal = s.options[i].value;
-        if (sVal == tVal) {
-            s.selectedIndex = i;
-            h.innerHTML = targetDiv.innerHTML.replaceAll(t['templateName'], '<span style="margin: 0 10px 0 50px;">' + t['templateName'] + '</span>');
-            y = targetDiv.parentNode.getElementsByClassName("same-as-selected");
-            for (k = 0; k < y.length; k++) {
-                y[k].removeAttribute("class");
-            }
-            targetDiv.setAttribute("class", "same-as-selected");
-            break;
-        }
-    }
-
-    focusTemplate(s.options[s.selectedIndex].value, true);
-    h.click();
-}
-
 
 function padTemplate(tiguid,delta) {
     let teDocIdx = getTemplateDocIdx(tiguid);
@@ -1429,4 +912,16 @@ function updateTemplatesAfterSelectionChanged(range, oldRange, source) {
     }
 
 }
-// end templates
+
+
+function getTemplateToolbarHeight() {
+    if (!isShowingEditTemplateToolbar() && !isShowingPasteTemplateToolbar()) {
+        return 0;
+    }
+    if (isShowingEditTemplateToolbar()) {
+        return parseInt($("#editTemplateToolbar").outerHeight());
+    } else if (isShowingPasteTemplateToolbar()) {
+        return parseInt($("#pasteTemplateToolbar").outerHeight());
+    }
+    return 0;
+}

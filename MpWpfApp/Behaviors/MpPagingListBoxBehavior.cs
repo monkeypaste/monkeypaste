@@ -154,7 +154,7 @@ namespace MpWpfApp {
                 //case MpMessageType.Resizing:
                 case MpMessageType.ResizeContentCompleted:
                     //ApplyOffsetChange(true);
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    //MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                     break;
             }
         }

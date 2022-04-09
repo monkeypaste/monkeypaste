@@ -1,11 +1,17 @@
 var ContentInlineGuid;
-var ContentInlineSourceGuid;
-var FromUserInline;
-var Draggable;
+var ContentSourceInlineGuid;
+
+var ContentBlockGuid;
+var ContentSourceBlockGuid;
 
 var ENCODED_CONTENT_OPEN_TOKEN = "{c{";
 var ENCODED_CONTENT_CLOSE_TOKEN = "}c}";
 var ENCODED_CONTENT_REGEXP;
+
+
+var InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
+var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe']
+
 
 //#region Content Blot Lifecycle
 
@@ -15,6 +21,7 @@ function initContent(itemHtml, openTag = "{c{", closeTag = "}c}") {
     //decodeContent(itemOps);
     //registerContentGuidAttribute();
     //registerContentBlots();
+
     setHtml(itemHtml);
     //
 
@@ -30,29 +37,96 @@ function registerContentGuidAttribute() {
         scope: Parchment.Scope.INLINE,
     };
 
-    ContentGuid = new Parchment.Attributor('copyItemGuid', 'copyItemGuid', inlineConfig);
-    Quill.register(ContentGuid, suppressWarning);
+    ContentInlineGuid = new Parchment.Attributor('copyItemInlineGuid', 'copyItemInlineGuid', inlineConfig);
+    Quill.register(ContentInlineGuid, suppressWarning);
 
-    ContentSourceGuid = new Parchment.Attributor('copyItemSourceGuid', 'copyItemSourceGuid', inlineConfig);
-    Quill.register(ContentSourceGuid, suppressWarning);
+    ContentSourceInlineGuid = new Parchment.Attributor('copyItemSourceInlineGuid', 'copyItemSourceInlineGuid', inlineConfig);
+    Quill.register(ContentSourceInlineGuid, suppressWarning);
+
+    let blockConfig = {
+        scope: Parchment.Scope.BLOCK,
+    };
+
+    ContentBlockGuid = new Parchment.Attributor('copyItemBlockGuid', 'copyItemBlockGuid', blockConfig);
+    Quill.register(ContentBlockGuid, suppressWarning);
+
+    ContentSourceBlockGuid = new Parchment.Attributor('copyItemSourceBlockGuid', 'copyItemSourceBlockGuid', blockConfig);
+    Quill.register(ContentSourceBlockGuid, suppressWarning);
+}
+
+function registerContentBlots() {
+    const Parchment = Quill.imports.parchment;
+
+    class ContentInlineBlot extends Parchment.InlineBlot {
+        static create(value) {
+            let node = super.create(value);
+            applyContentItemToDomNode(node, value);
+            return node;
+        }
+
+        static value(domNode) {
+            getContentItemFromDomNode(domNode);
+        }
+
+        static formats(node) {
+            //return getContentItemFromDomNode(node);
+            return node.attributes;
+        }
+
+        format(name, value) {
+            super.format(name, value);
+        }
+    }
+    ContentInlineBlot.blotName = 'contentInline';
+    ContentInlineBlot.tagName = InlineTags;
+
+    Quill.register(ContentInlineBlot);
+
+    class ContentBlockBlot extends Parchment.BlockBlot {
+        static create(value) {
+            let node = super.create(value);
+            applyContentItemToDomNode(node, value);
+            return node;
+        }
+
+        static value(domNode) {
+            getContentItemFromDomNode(domNode);
+        }
+
+        //static formats(node) {
+        //    return getContentItemFromDomNode(node);
+        //}
+
+        //format(name, value) {
+        //    super.format(name, value);
+        //}
+    }
+    ContentBlockBlot.blotName = 'contentBlock';
+    ContentBlockBlot.tagName = BlockTags;
+
+    //Quill.register(ContentBlockBlot);
 }
 
 function getContentItemFromDomNode(domNode) {
     if (domNode == null) {
         return null;
     }
+    //if (typeof domNode != HTMLElement) {
+    //    return { copyItemGuid: generateGuid(), copyItemSourceGuid: null };
+    //}
     let ci = null;
 
-    while (!domNode.getAttribute('copyItemGuid')) {
-        if (domNode.id == 'editor') {
+    while (!getContentNodeProperty(domNode,'copyItemGuid')) {
+        if (!domNode || domNode.id == 'editor' || domNode.tagName == 'body') {
             return null;
         }
         domNode = domNode.parentNode;
     }
     ci = {
-        copyItemGuid: domNode.getAttribute('copyItemGuid'),
-        copyItemSourceGuid: domNode.getAttribute('copyItemSourceGuid'),
+        copyItemGuid: getContentNodeProperty(domNode, 'copyItemGuid'),
+        copyItemSourceGuid: getContentNodeProperty(domNode, 'copyItemSourceGuid')
     }
+    
     return ci;
 }
 
@@ -60,45 +134,110 @@ function applyContentItemToDomNode(node, value) {
     if (node == null || value == null) {
         return node;
     }
-    node.setAttribute('copyItemGuid', value.copyItemGuid);
-    node.setAttribute('copyItemSourceGuid', value.copyItemSourceGuid);
+    setContentNodeProperty(node, 'copyItemGuid', value.copyItemGuid);
+    setContentNodeProperty(node, 'copyItemSourceGuid', value.copyItemSourceGuid);    
     return node;
+}
+
+function isContentItemNode(node) {
+    return getContentNodeProperty(node, 'copyItemGuid') != null;
+}
+
+function setContentNodeProperty(node, property, value) {
+    if (isBlockElement(node)) {
+        if (property == 'copyItemGuid') {
+            node.setAttribute('copyItemBlockGuid', value);
+        } else {
+            node.setAttribute('copyItemSourceBlockGuid', value);
+        }
+    } else if (isInlineElement(node)) {
+        if (property == 'copyItemGuid') {
+            node.setAttribute('copyItemInlineGuid', value);
+        } else {
+            node.setAttribute('copyItemSourceInlineGuid', value);
+        }
+    }
+    log('setContentNodeProperty error, unknown property: ' + property + ' on node ' + node.outerHTML + ' with value: '+value);
+}
+
+function getContentNodeProperty(node, property) {
+    if (isBlockElement(node)) {
+        if (property == 'copyItemGuid') {
+            return node.getAttribute('copyItemBlockGuid');
+        } else {
+            return node.getAttribute('copyItemBlockSourceGuid');
+        }
+    } else if (isInlineElement(node)) {
+        if (property == 'copyItemGuid') {
+            return node.getAttribute('copyItemInlineGuid');
+        } else {
+            return node.getAttribute('copyItemSourceInlineGuid');
+        }
+    }
+    //log('getContentNodeProperty error, unknown property: ' + property + ' on node' + node.outerHTML);
+    return null;
 }
 
 function retargetContentItemDomNode(node, newContentGuid) {
     if (node == null) {
         return node;
     }
+
+    let contentItem = getContentItemFromDomNode(node);
+    if (!contentItem) {
+        //when html content is dropped from external source
+        contentItem = {};
+    }
     newContentGuid = newContentGuid == null ? generateGuid() : newContentGuid;
-    if (node.getAttribute('copyItemSourceGuid')) {
+    if (contentItem.copyItemSourceGuid) {
         //when source is already set ignore if it changes again because new one is not original
     } else {
-        node.setAttribute('copyItemSourceGuid', node.getAttribute('copyItemGuid'));
+        setContentNodeProperty(node,'copyItemSourceGuid', contentItem.copyItemGuid);
     }
-    node.setAttribute('copyItemGuid', newContentGuid);
+    setContentNodeProperty(node, 'copyItemGuid', newContentGuid);
     return node;
 }
 
 function formatContentChange(delta, oldDelta, source) {
-    // NOTE called in text-change when PasteNode != null
-    let idx = 0;
-    let slength = 0;
     let srange = quill.getSelection();
     if (srange.length > 0) {
         // NOTE when selection is being formatted 
         // the element at idx will be PREVIOUS element so tick it
         srange.index++;
     }
-    let domNode = getElementAtIdx(srange.index);
-    if (PasteNode) {
-        let contentGuidAtIdx = getContentGuidByIdx(srange.index);
-        domNode = retargetContentItemDomNode(PasteNode, contentGuidAtIdx);
-    }
-    
+    let domNode = getElementAtIdx(srange.index); 
     let contentBlot = getContentItemFromDomNode(domNode);
+    while (contentBlot == null) {
+        //new content doesn't have a content guid so find first previous
+        srange.index--;
+        if (srange.index < 0) {
+            debugger;
+        }
+        domNode = getElementAtIdx(srange.index);
+        contentBlot = getContentItemFromDomNode(domNode);
+    }
+    if (PasteNode) {
+        if (isContentItemNode(PasteNode) || isTemplateNode(PasteNode)) {
+            let contentGuidAtIdx = getContentGuidByIdx(srange.index);
+            domNode = retargetContentItemDomNode(PasteNode, contentGuidAtIdx);
+        } else {
+            domNode = PasteNode;
+        }        
+    }
     if (contentBlot && contentBlot.copyItemGuid) {
-            ContentGuid.add(domNode, contentBlot.copyItemGuid);
-            ContentSourceGuid.add(domNode, contentBlot.copyItemSourceGuid);
+        if (isBlockElement(domNode)) {
+            ContentBlockGuid.add(domNode, contentBlot.copyItemGuid);
+            ContentSourceBlockGuid.add(domNode, contentBlot.copyItemSourceGuid);
+
+            let inlineChildNodes = domNode.querySelectorAll(InlineTags.join(','));
+            inlineChildNodes.forEach(icn => {
+                ContentInlineGuid.add(icn, contentBlot.copyItemGuid);
+                ContentSourceInlineGuid.add(icn, contentBlot.copyItemSourceGuid);
+            });
+        } else {
+            ContentInlineGuid.add(domNode, contentBlot.copyItemGuid);
+            ContentSourceInlineGuid.add(domNode, contentBlot.copyItemSourceGuid);
+        }
     } 
     PasteNode = null;
 }
@@ -155,7 +294,7 @@ function getContentEmbedStr(ciop, sToken = ENCODED_CONTENT_OPEN_TOKEN, eToken = 
 }
 
 function initContentRangeListeners() {    
-    Array.from(document.querySelectorAll('[copyItemGuid]')).forEach(cie => {
+    Array.from(document.querySelectorAll('[copyItemInlineGuid],[copyItemBlockGuid]')).forEach(cie => {
         cie.addEventListener('mouseover', onOverContent);
     });
 }
@@ -164,9 +303,9 @@ function onOverContent(e) {
     if (!e.target) {
         return;
     }
-    let ciguid = e.target.getAttribute('copyItemGuid');
+    let ci = getContentItemFromDomNode(e.target);
     let testColor = getRandomColor();
-    Array.from(document.querySelectorAll('[copyItemGuid="' + ciguid + '"]')).forEach(cie => {
+    Array.from(document.querySelectorAll('[copyItemInlineGuid="' + ci.copyItemGuid + '"],[copyItemBlockGuid="' + ci.copyItemGuid + '"]')).forEach(cie => {
         IgnoreNextTextChange = true;
         cie.style.backgroundColor = testColor;
     });
@@ -226,7 +365,7 @@ function getContentGuidByIdx(docIdx) {
     };
 
     let leafElementNode = getElementAtIdx(docIdx);
-    return leafElementNode.getAttribute('copyItemGuid');
+    return getContentNodeProperty(leafElementNode, 'copyItemGuid');
 }
 
 function getContentSourceGuidByIdx(docIdx) {
@@ -234,5 +373,63 @@ function getContentSourceGuidByIdx(docIdx) {
         return ''
     };
     let leafElementNode = getElementAtIdx(docIdx);
-    return leafElementNode.getAttribute('copyItemSourceGuid');
+    return getContentNodeProperty(leafElementNode, 'copyItemSourceGuid');
 }
+
+function getContentItemByIdx(docIdx) {
+    return {
+        copyItemGuid: getContentGuidByIdx(docIdx),
+        copyItemSourceGuid: getContentSourceGuidByIdx(docIdx)
+    };
+}
+
+function getContentWidth() {
+    var bounds = quill.getBounds(0, quill.getLength());
+    return bounds.width;
+}
+
+function getContentHeight() {
+    var bounds = quill.getBounds(0, quill.getLength());
+    return bounds.height;
+}
+
+function isBlockElement(elm) {
+    if (elm == null || !elm instanceof HTMLElement) {
+        return false;
+    }
+    let tn = elm.tagName.toLowerCase();
+    return BlockTags.includes(tn);
+}
+
+function isInlineElement(elm) {
+    if (elm == null || !elm instanceof HTMLElement) {
+        return false;
+    }
+    let tn = elm.tagName.toLowerCase();
+    return InlineTags.includes(tn);
+}
+
+function isDocIdxLineStart(docIdx) {
+    if (docIdx == 0) {
+        return true;
+    }
+    if (docIdx >= quill.getLength()) {
+        return false;
+    }
+    let idxLine = quill.getLine(docIdx);
+    let prevIdxLine = quill.getLine(docIdx - 1);
+    return idxLine[0] != prevIdxLine[0];
+}
+
+function isDocIdxLineEnd(docIdx) {
+    if (docIdx == quill.getLength()) {
+        return true;
+    }
+    if (docIdx < 0) {
+        return false;
+    }
+    let idxLine = quill.getLine(docIdx);
+    let nextIdxLine = quill.getLine(docIdx + 1);
+    return idxLine[0] != nextIdxLine[0];
+}
+

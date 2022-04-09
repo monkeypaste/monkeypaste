@@ -22,20 +22,24 @@ namespace MpWpfApp {
 
         #region private static Variables
         private static double _indentCharCount = 5;
+
+        private static string[] _inlineTags = new string[] {"span", "a", "em", "strong", "u", "s", "sub", "sup", "img"};
+        private static string[] _blockTags = new string[] { "p", "ol", "ul", "li", "div", "table", "colgroup", "col", "tbody", "tr", "td", "iframe" };
+
         #endregion
 
         #region Properties
 
         #endregion
 
-        public static string ConvertRtfToHtml(string rtf, Dictionary<string,string> globalAttributes = null) {
+        public static string ConvertRtfToHtml(string rtf, Dictionary<string,string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
             if(rtf == null) {
                 return string.Empty;
             }
-            return ConvertFlowDocumentToHtml(rtf.ToFlowDocument(), globalAttributes);
+            return ConvertFlowDocumentToHtml(rtf.ToFlowDocument(), globalBlockAttributes,globalInlineAttributes);
         }
 
-        public static string ConvertFlowDocumentToHtml(FlowDocument fd, Dictionary<string, string> globalAttributes = null) {
+        public static string ConvertFlowDocumentToHtml(FlowDocument fd, Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
             var sb = new StringBuilder();
             foreach (Block b in fd.Blocks) {
                 sb.Append(ConvertTextElementToHtml(b));
@@ -45,33 +49,31 @@ namespace MpWpfApp {
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
 
-            SetGlobalAttributes(htmlDoc, globalAttributes);
+            SetGlobalAttributes(htmlDoc, globalBlockAttributes,globalInlineAttributes);
             return htmlDoc.DocumentNode.InnerHtml;
         }
 
         #region Global Attributes
 
-        private static void SetGlobalAttributes(HtmlDocument htmlDoc, Dictionary<string,string> attributes) {
-            if(attributes == null) {
+        private static void SetGlobalAttributes(HtmlDocument htmlDoc, Dictionary<string,string> blockAttributes, Dictionary<string,string> inlineAttributes) {
+            if(blockAttributes == null) {
                 return;
             }
 
-            foreach(var n in htmlDoc.DocumentNode.ChildNodes.Where(x=>x.NodeType == HtmlNodeType.Element)) {
-                SetGlobalAttributesHelper(n, attributes);
+            foreach(var n in htmlDoc.DocumentNode.Descendants()) {
+                if(n.NodeType == HtmlNodeType.Text) {
+                    continue;
+                }
+                if(_blockTags.Contains(n.Name.ToLower())) {
+                    foreach(var bkvp in blockAttributes) {
+                        n.SetAttributeValue(bkvp.Key, bkvp.Value);
+                    }
+                } else if (_inlineTags.Contains(n.Name.ToLower())) {
+                    foreach (var ikvp in inlineAttributes) {
+                        n.SetAttributeValue(ikvp.Key, ikvp.Value);
+                    }
+                }
             }
-        }
-
-        private static void SetGlobalAttributesHelper(HtmlNode n, Dictionary<string, string> attributes) {
-            foreach(var kvp in attributes) {
-                SetAttribute(n, kvp);
-            }
-            foreach(var cn in n.ChildNodes.Where(x => x.NodeType == HtmlNodeType.Element)) {
-                SetGlobalAttributesHelper(cn, attributes);
-            }
-        }
-
-        private static void SetAttribute(HtmlNode n, KeyValuePair<string,string> kvp) {
-            n.SetAttributeValue(kvp.Key, kvp.Value);
         }
 
         #endregion
@@ -257,12 +259,11 @@ namespace MpWpfApp {
             //    string html = MpRtfToHtmlConverter.ConvertRtfToHtml(rtf);
             //    MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html.html", html, false);
             //}
-
+            string itemGuid = System.Guid.NewGuid().ToString();
             string html = MpRtfToHtmlConverter.ConvertRtfToHtml(
                 MpHelpers.ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtf_sample.rtf"),
-                new Dictionary<string, string>() {
-                    {"copyItemGuid", System.Guid.NewGuid().ToString() }
-                });
+                new Dictionary<string, string>() { { "copyItemBlockGuid", itemGuid } },
+                    new Dictionary<string, string>() { { "copyItemInlineGuid", itemGuid } });
             MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html2.html", html, false);
         }
     }

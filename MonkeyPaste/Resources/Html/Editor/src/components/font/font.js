@@ -1,4 +1,6 @@
-﻿
+﻿var DefaultFontSize = '12px';
+var DefaultFontFamily = 'Arial';
+
 function registerFontFamilys(envName) {
     let fontFamilys = getFontsByEnv(envName);
     var fontNames = fontFamilys.map(x => x.toLowerCase().replaceAll(' ', '-'));
@@ -27,12 +29,14 @@ function getFontFamilyCssStr(ff) {
         ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value='times-new-roman']::before, " +
         ".ql-snow .ql-picker.ql-font .ql-picker-item[data-value='times-new-roman']::before {" +
         "content: 'Times New Roman';" +
+        "z-index: 998" +
         "font-family: 'Times New Roman', sans-serif; }";
 
     //Set the font-family content used for the HTML content.
     let fontFamilyContentTemplateStr = "" +
         ".ql-font-times-new-roman {" +
         "font-family: 'Times New Roman', sans-serif;" +
+        "z-index: 999" +
         "}";
 
     return fontFamilyDropDownCssTemplateStr
@@ -76,7 +80,7 @@ function getFontName(font) {
 
 function refreshFontSizePicker() {
     let curFormat = quill.getFormat();
-    let curFontSize = curFormat != null && curFormat.hasOwnProperty('size') && curFormat.size.length > 0 ? parseInt(curFormat.size)+'px' : defaultFontSize;
+    let curFontSize = curFormat != null && curFormat.hasOwnProperty('size') && curFormat.size.length > 0 ? parseInt(curFormat.size)+'px' : DefaultFontSize;
     let fontSizeFound = false;
 
     document
@@ -115,7 +119,7 @@ function refreshFontSizePicker() {
 
 function refreshFontFamilyPicker() {
     let curFormat = quill.getFormat();
-    let curFontFamily = curFormat != null && curFormat.hasOwnProperty('font') ? curFormat.font : defaultFontFamily;
+    let curFontFamily = curFormat != null && curFormat.hasOwnProperty('font') ? curFormat.font : DefaultFontFamily;
     let fontFamilyFound = false;
 
     document

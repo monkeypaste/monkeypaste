@@ -1,4 +1,6 @@
 ﻿
+using CefSharp;
+using CefSharp.Enums;
 using MonkeyPaste;
 using System;
 using System.Collections.Generic;
@@ -22,7 +24,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpQuillEditorView.xaml
     /// </summary>
-    public partial class MpQuillEditorView : MpContentUserControl<MpContentItemViewModel> {
+    public partial class MpQuillEditorView : MpContentUserControl<MpContentItemViewModel>, IDragHandler {
         public bool IsDomContentLoaded { get; private set; }
 
         public MpQuillEditorView() {
@@ -34,6 +36,8 @@ namespace MpWpfApp {
             if(civm == null || civm.IsPlaceholder) {
                 return;
             }
+
+            QuillWebView.DragHandler = this;
 
             MpMessenger.Register<MpMessageType>(
                 BindingContext.Parent,
@@ -100,6 +104,14 @@ namespace MpWpfApp {
             if (e.Key == Key.Escape && BindingContext.IsEditingContent) {
                 BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
             }
+        }
+
+        public bool OnDragEnter(IWebBrowser chromiumWebBrowser, IBrowser browser, IDragData dragData, DragOperationsMask mask) {
+            return false;
+        }
+
+        public void OnDraggableRegionsChanged(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IList<DraggableRegion> regions) {
+            //throw new NotImplementedException();
         }
     }
 }

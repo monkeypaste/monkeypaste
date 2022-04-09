@@ -22,6 +22,10 @@ namespace MonkeyPaste {
         public double editorHeight { get; set; }
     }
 
+    public class MpQuillDisableReadOnlyResponseMessage : MpJsonObject {
+        public double editorWidth { get; set; }
+    }
+
     public class MpQuillEnableReadOnlyResponseMessage : MpJsonObject {
         public string itemEncodedHtmlData { get; set; }
 

@@ -201,7 +201,7 @@ namespace MpWpfApp {
                         h = Double.NaN;
                     }
                     //return Parent.TileContentHeight; //quil editor height
-                    h = Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                    h = Parent.TileContentHeight;// - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
                 } else {
 
                     h = ReadOnlyContentSize.Height;
