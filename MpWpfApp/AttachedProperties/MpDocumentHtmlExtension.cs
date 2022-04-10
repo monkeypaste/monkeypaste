@@ -1,5 +1,6 @@
 ﻿using Azure;
 using CefSharp;
+using CefSharp.JavascriptBinding;
 using CefSharp.SchemeHandler;
 using CefSharp.Wpf;
 using MonkeyPaste;
@@ -25,6 +26,10 @@ using Xamarin.Essentials;
 
 namespace MpWpfApp {
     public class MpDocumentHtmlExtension : DependencyObject {
+        #region Private Variables
+
+        private static double _readOnlyWidth;
+        #endregion
         public const string ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
         public const string ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
 
@@ -59,9 +64,15 @@ namespace MpWpfApp {
                     bool isReadOnly = (bool)e.NewValue;
                     if (fe is ChromiumWebBrowser cwb && cwb.CanExecuteJavascriptInMainFrame) {
                         if (isReadOnly) {
+                            cwb.JavascriptObjectRepository.ResolveObject -= JavascriptObjectRepository_ResolveObject;
+                            cwb.JavascriptObjectRepository.ObjectBoundInJavascript -= JavascriptObjectRepository_ObjectBoundInJavascript;
+
                             var enableReadOnlyResp = await cwb.EvaluateScriptAsync("enableReadOnly()");
                             ProcessEnableReadOnlyResponse(fe, enableReadOnlyResp);
                         } else {
+                            cwb.JavascriptObjectRepository.ResolveObject += JavascriptObjectRepository_ResolveObject;
+                            cwb.JavascriptObjectRepository.ObjectBoundInJavascript += JavascriptObjectRepository_ObjectBoundInJavascript;
+
                             MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(fe);
                             var disableReadOnlyResponse = await cwb.EvaluateScriptAsync($"disableReadOnly('{drorMsg.SerializeToByteString()}')");
                             ProcessDisableReadOnlyResponse(fe, disableReadOnlyResponse);                            
@@ -69,6 +80,18 @@ namespace MpWpfApp {
                     }
                 }
             });
+
+        private static void JavascriptObjectRepository_ObjectBoundInJavascript(object sender, CefSharp.Event.JavascriptBindingCompleteEventArgs e) {
+            Debug.WriteLine($"Object {e.ObjectName} was bound successfully.");
+        }
+
+        private static void JavascriptObjectRepository_ResolveObject(object sender, CefSharp.Event.JavascriptBindingEventArgs e) {
+            var repo = e.ObjectRepository;
+            if (e.ObjectName == "jsComAdapter") {
+                repo.NameConverter = new CamelCaseJavascriptNameConverter();
+                repo.Register("jsComAdapter", new MpJsComAdapter(), isAsync: true);
+            }
+        }
 
         #endregion
 
@@ -90,7 +113,6 @@ namespace MpWpfApp {
 
                 if (obj is ChromiumWebBrowser cwb) {
                         var lrm = CreateLoadRequestMessage(cwb, e.NewValue);
-
                         cwb.FrameLoadEnd += async (sender, args) => {
                             if (args.Frame.IsMain) {
                                 var initCmd = $"init('{lrm.SerializeToByteString()}')";
@@ -102,36 +124,6 @@ namespace MpWpfApp {
             });
 
         #endregion
-
-        public static void Init() {
-            //called in bootstrap
-            InitCef();
-        }
-
-        private static void InitCef() {
-            //To support High DPI this must be before CefSharp.BrowserSubprocess.SelfHost.Main so the BrowserSubprocess is DPI Aware
-            //Cef.EnableHighDPISupport();
-
-            var exitCode = CefSharp.BrowserSubprocess.SelfHost.Main(new string[] { });
-
-            if (exitCode >= 0) {
-                return;
-            }
-
-            var settings = new CefSettings() {
-                LogSeverity = LogSeverity.Verbose,
-            };
-            settings.RegisterScheme(new CefCustomScheme {                
-                SchemeName = "localfolder",
-                DomainName = "cefsharp",
-                SchemeHandlerFactory = new FolderSchemeHandlerFactory(
-                    rootFolder: Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor"),
-                    hostName: "cefsharp",
-                    defaultPage: "index.html"
-                )
-            });
-            Cef.Initialize(settings, performDependencyCheck: false);
-        }
 
         #region Messages
 
@@ -160,7 +152,14 @@ namespace MpWpfApp {
 
                     var qrm = JsonConvert.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(resultStr.ToStringFromBase64());
 
-                    civm.CopyItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(qrm.itemEncodedHtmlData);
+                    //civm.CopyItemData = qrm.itemEncodedHtmlData;
+                    MpConsole.WriteLine("Skipping writing updated item data: ");
+                    MpConsole.WriteLine(qrm.itemEncodedHtmlData);
+
+                    var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
+                    if (ctcv != null) {
+                        ctcv.TileResizeBehvior.Resize(_readOnlyWidth - ctcv.ActualWidth, 0);
+                    }
 
                     MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(civm);
                 }
@@ -186,9 +185,14 @@ namespace MpWpfApp {
 
                     var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
                     if (ctcv != null) {
+                        _readOnlyWidth = ctcv.ActualWidth;
                         if (qrm.editorWidth > ctcv.ActualWidth) {
                             ctcv.TileResizeBehvior.Resize(qrm.editorWidth - ctcv.ActualWidth, 0);
+
+                            fe.Focus();
                         }
+                    } else {
+                        _readOnlyWidth = MpClipTileViewModel.DefaultBorderWidth;
                     }
                 }
             }
@@ -196,12 +200,12 @@ namespace MpWpfApp {
         #endregion
 
         private static string GetEncodedHtml(string itemData, string itemGuid) {
-            if (itemData.IsStringRichText()) {
-                return MpRtfToHtmlConverter.ConvertRtfToHtml(
-                    itemData,
-                    new Dictionary<string, string>() { { "copyItemBlockGuid",itemGuid } },
-                    new Dictionary<string, string>() { { "copyItemInlineGuid", itemGuid } });
-            }
+            //if (itemData.IsStringRichText()) {
+            //    return MpRtfToHtmlConverter.ConvertRtfToHtml(
+            //        itemData,
+            //        new Dictionary<string, string>() { { "copyItemBlockGuid",itemGuid } },
+            //        new Dictionary<string, string>() { { "copyItemInlineGuid", itemGuid } });
+            //}
             return itemData;
         }
 
@@ -236,5 +240,41 @@ namespace MpWpfApp {
             }
             return etgl.ToArray();
         }
+
+        
+        public static void Init() {
+            //called in bootstrap
+            InitCef();
+        }
+
+        private static void InitCef() {
+            //To support High DPI this must be before CefSharp.BrowserSubprocess.SelfHost.Main so the BrowserSubprocess is DPI Aware
+            //Cef.EnableHighDPISupport();
+
+            var exitCode = CefSharp.BrowserSubprocess.SelfHost.Main(new string[] { });
+
+            if (exitCode >= 0) {
+                return;
+            }
+
+            CefSharpSettings.ConcurrentTaskExecution = true;
+
+            var settings = new CefSettings() {
+               // LogSeverity = LogSeverity.Verbose
+            };
+            settings.CefCommandLineArgs.Add(@"--disable-component-update");
+
+            settings.RegisterScheme(new CefCustomScheme {                
+                SchemeName = "localfolder",
+                DomainName = "cefsharp",
+                SchemeHandlerFactory = new FolderSchemeHandlerFactory(
+                    rootFolder: Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor"),
+                    hostName: "cefsharp",
+                    defaultPage: "index.html"
+                )
+            });
+            Cef.Initialize(settings, performDependencyCheck: false);
+        }
+
     }
 }

@@ -101,11 +101,60 @@ namespace MpWpfApp {
 
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 
-            //var gsiw = new MpGoogleSignInWindow();
-            //var result = gsiw.ShowDialog();
-            //await MpGoogleApiHelpers.Test(null);
             
+
             //MpRtfToHtmlConverter.Test();
+
+            //var cil = await MpDb.GetItemsAsync<MpCopyItem>();
+            //foreach (var ci in cil) {
+            //    try {
+            //        if (ci.ItemType != MpCopyItemType.Text || string.IsNullOrEmpty(ci.ItemData_rtf)) {
+            //            continue;
+            //        }
+
+            //        ci.ItemData = ci.ItemData_rtf;
+            //        ci.ItemData_rtf = string.Empty;
+            //        await ci.WriteToDatabaseAsync();
+            //    }
+            //    catch (Exception ex) {
+            //        Debugger.Break();
+            //    }
+            //}
+
+            //foreach (var ci in cil) {
+            //    try {
+            //        if (ci.ItemType != MpCopyItemType.Text || ci.Id <= 2189) {
+            //            continue;
+            //        }
+            //        ci.ItemData_rtf = ci.ItemData;
+
+            //        string itemHtml = MpRtfToHtmlConverter.ConvertRtfToHtml(ci.ItemData,
+            //            new Dictionary<string, string>() { { "copyItemBlockGuid", ci.Guid } },
+            //            new Dictionary<string, string>() { { "copyItemInlineGuid", ci.Guid } });
+
+            //        var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(ci.Id);
+            //        if (ccil.Count > 0) {
+            //            ci.RootCopyItemGuid = string.Empty;
+            //            foreach (var cci in ccil.OrderBy(x => x.CompositeSortOrderIdx)) {
+            //                string encodedItemStr = string.Format(
+            //                    @"{0}{1}{2}",
+            //                    "{c{",
+            //                    cci.Guid,
+            //                    "}c}");
+            //                itemHtml += encodedItemStr;
+            //            }
+            //        } else if (ci.CompositeParentCopyItemId > 0) {
+            //            var pci = await MpDb.GetItemAsync<MpCopyItem>(ci.CompositeParentCopyItemId);
+            //            ci.RootCopyItemGuid = pci.Guid;
+            //        } else {
+            //            ci.RootCopyItemGuid = string.Empty;
+            //        }
+            //        ci.ItemData = itemHtml;
+            //        await ci.WriteToDatabaseAsync();
+            //    } catch(Exception ex) {
+            //        Debugger.Break();
+            //    }
+            //}
 
             IsLoaded = true;
         }

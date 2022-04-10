@@ -19,6 +19,7 @@ namespace MonkeyPaste {
         MpIMainThreadMarshal MainThreadMarshal { get; }
         MpIStringTools StringTools { get; }
         MpIOsInfo OsInfo { get; }
+        MpIClipboardContentDataProvider ClipboardContentDataProvider { get; set; }
     }
 
 

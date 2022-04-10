@@ -166,7 +166,9 @@ namespace MpClipboardHelper {
                     //the above pointer points at to a place we can access it.
                     UIntPtr Length = WinApi.GlobalSize(ClipboardDataPointer);
                     IntPtr gLock = WinApi.GlobalLock(ClipboardDataPointer);
-
+                    if(gLock == IntPtr.Zero) {
+                        return string.Empty;
+                    }
                     //Init a buffer which will contain the clipboard data
                     byte[] Buffer = new byte[(int)Length];
 

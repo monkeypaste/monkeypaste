@@ -31,7 +31,8 @@ namespace MpWpfApp {
         MpViewModelBase, 
         MpISingletonViewModel<MpClipTrayViewModel>, 
         MpIActionComponent, 
-        MpIMenuItemViewModel {
+        MpIMenuItemViewModel,
+        MpIClipboardContentDataProvider {
         #region Private Variables      
 
         //private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -45,6 +46,10 @@ namespace MpWpfApp {
         private int _pageSize = 0;
 
         private Dictionary<int, int> _manualSortOrderLookup = null;
+
+        private bool _isAddingClipboardItem = false;
+
+        private MpCopyItem _currentClipboardItem;
 
         #endregion
 
@@ -623,6 +628,8 @@ namespace MpWpfApp {
             await MpHelpers.RunOnMainThreadAsync(() => {
                 IsBusy = true;
 
+                MpNativeWrapper.Services.ClipboardContentDataProvider = this;
+
                 PropertyChanged += MpClipTrayViewModel_PropertyChanged;
                 Items.CollectionChanged += Items_CollectionChanged;
                 MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
@@ -677,6 +684,25 @@ namespace MpWpfApp {
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
         }
 
+        #endregion
+
+        #region MpIClipboardContentDataProvider Implementation
+
+        public async Task<string> GetClipboardContentData() {
+            while(_isAddingClipboardItem) {
+                try {
+                    await Task.Delay(100).TimeoutAfter(TimeSpan.FromMilliseconds(3000));
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                    return null;
+                }                
+            }
+            if(_currentClipboardItem == null) {
+                return null;
+            }
+            return _currentClipboardItem.ItemData;
+        }
+        
         #endregion
 
         #region View Invokers
@@ -1491,6 +1517,8 @@ namespace MpWpfApp {
         }
 
         private async Task AddItemFromClipboard(MpDataObject cd) {
+            _isAddingClipboardItem = true;
+
             var totalAddSw = new Stopwatch();
             totalAddSw.Start();
 
@@ -1503,6 +1531,7 @@ namespace MpWpfApp {
             if (newCopyItem == null) {
                 //this occurs if the copy item is not a known format or app init
                 MpConsole.WriteTraceLine("Unable to create copy item from clipboard!");
+                _isAddingClipboardItem = false;
                 return;
             }
 
@@ -1576,6 +1605,16 @@ namespace MpWpfApp {
                     AddNewItemsCommand.Execute(null);
                 }                    
             }
+
+            while(IsBusy) {
+                await Task.Delay(100);
+            }
+            if(_appendModeCopyItem != null) {
+                _currentClipboardItem = _appendModeCopyItem;
+            } else {
+                _currentClipboardItem = newCopyItem;
+            }
+            _isAddingClipboardItem = false;
 
             OnCopyItemItemAdd?.Invoke(this, newCopyItem);
             totalAddSw.Stop();
@@ -2506,6 +2545,7 @@ namespace MpWpfApp {
                     IsAppendMode = false;
                 }
             }, !IsAppPaused);
+
 
         #endregion
     }

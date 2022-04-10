@@ -10,7 +10,7 @@ var ENCODED_CONTENT_REGEXP;
 
 
 var InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
-var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe']
+var BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe','blockquote']
 
 
 //#region Content Blot Lifecycle
@@ -199,6 +199,23 @@ function retargetContentItemDomNode(node, newContentGuid) {
 }
 
 function formatContentChange(delta, oldDelta, source) {
+    let idx = 0;
+    for (var i = 0; i < delta.ops.length; i++) {
+        let op = delta.ops[i];
+        if (op.retain) {
+            idx += op.retain;
+        }
+        if (op.insert) {
+            let insertLength = 1;
+            if (typeof op.insert == 'string') {
+                insertLength = op.insert.length;
+            }
+
+
+            idx += insertLength;
+        }
+    }
+
     let srange = quill.getSelection();
     if (srange.length > 0) {
         // NOTE when selection is being formatted 

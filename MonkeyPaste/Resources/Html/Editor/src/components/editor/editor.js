@@ -376,6 +376,8 @@ function IsReadOnly() {
 }
 
 function enableReadOnly() {
+    deleteJsComAdapter();
+
     $('.ql-editor').attr('contenteditable', false);
     $('.ql-editor').css('caret-color', 'transparent');
 
@@ -401,6 +403,8 @@ function enableReadOnly() {
 }
 
 function disableReadOnly(disableReadOnlyReqStr) {
+    bindJsComAdapter();
+
     let disableReadOnlyMsg = null;
 
     if (disableReadOnlyReqStr == null) {

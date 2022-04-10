@@ -10,12 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using HtmlAgilityPack;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Linq;
-using CefSharp;
-using System.Runtime.InteropServices;
-using System.Web.UI.WebControls.WebParts;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public static class MpRtfToHtmlConverter {
@@ -42,6 +37,18 @@ namespace MpWpfApp {
         public static string ConvertFlowDocumentToHtml(FlowDocument fd, Dictionary<string, string> globalBlockAttributes = null, Dictionary<string, string> globalInlineAttributes = null) {
             var sb = new StringBuilder();
             foreach (Block b in fd.Blocks) {
+                if(b is Table t) {
+                    // quill-better-table requires each row and cell to have unique identifiers
+                    // and since html is generated from inside out the id's need to be generated before recursing
+                    foreach(var trg in t.RowGroups) {
+                        foreach(var tr in trg.Rows) {
+                            tr.Tag = GetNewTableItemIdentifier("row");
+                            foreach(var tc in tr.Cells) {
+                                tc.Tag = GetNewTableItemIdentifier("cell");
+                            }
+                        }
+                    }
+                }
                 sb.Append(ConvertTextElementToHtml(b));
             }
             
@@ -88,7 +95,15 @@ namespace MpWpfApp {
         }
 
         private static string ConvertTextElementToHtmlHelper(TextElement te,string content) { 
-            if (te is List) {
+            if(te is Table) {
+                return WrapWithTable(te as Table, content);
+            } else if (te is TableRowGroup trg) {
+                return WrapWithTableRowGroup(trg, content);
+            } else if (te is TableRow tr) {
+                return WrapWithTableRow(tr, content);
+            } else if (te is TableCell tc) {
+                return WrapWithTableCell(tc, content);
+            } else if (te is List) {
                 return WrapWithList(te as List, content);
             } else if (te is ListItem) {
                 return WrapWithListItem(te as ListItem, content);
@@ -123,6 +138,47 @@ namespace MpWpfApp {
             } else {
                 throw new Exception(@"Unknown text element: " + te.ToString());
             }
+        }
+
+        private static string WrapWithTable(Table t, string content) {
+            double tableWidth = 0;
+            string colGroupInnerHtml = string.Empty;
+
+            foreach(var tc in t.Columns) {
+                double colWidth = 100;
+                if(tc.Width.GridUnitType == GridUnitType.Pixel) {
+                    colWidth = tc.Width.Value;
+                } else {
+                    Debugger.Break();
+                    
+                }
+                colGroupInnerHtml += string.Format(@"<col width='{0}px'>", colWidth);
+                tableWidth += colWidth;
+            }
+            string colGroupHtml = string.Format(@"<colgroup>{0}</colgroup>", colGroupInnerHtml);
+            return string.Format(
+                @"<div class='quill-better-table-wrapper'><table class='quill-better-table' style='width: {0}px'>{1}{2}</table></div>",
+                tableWidth,
+                colGroupHtml,
+                content);
+        }
+
+        private static string WrapWithTableRowGroup(TableRowGroup trg, string content) {
+            return WrapWithTag("tbody", content);
+        }
+
+        private static string WrapWithTableRow(TableRow tr, string content) {
+            var sb = new StringBuilder(@"<tr");
+            sb.AppendFormat(@" {0}>", string.Format(@"data-row='{0}'",tr.Tag as string));
+            sb.AppendFormat(@"{0}</tr>", content);
+            return sb.ToString();
+        }
+
+        private static string WrapWithTableCell(TableCell tc, string content) {
+            var sb = new StringBuilder(@"<td");
+            sb.AppendFormat(@" {0}>", GetTableCellAttributes(tc));
+            sb.AppendFormat(@"{0}</td>", content);
+            return sb.ToString();
         }
 
         private static string WrapWithList(List l, string content) {
@@ -162,7 +218,20 @@ namespace MpWpfApp {
                     sb.Append(@"class='ql-align-justify");
                     break;
             }
+            if(p.Parent is TableCell) {
+                sb.Append(@" qlbt-cell-line");
+            }
             sb.Append(GetParagraphIndent(p) + "'");
+            if(p.Parent is TableCell tc) {
+                string tcAttr = GetTableCellAttributes(tc);
+                tcAttr = tcAttr
+                    .Replace("rowspan", "data-rowspan")
+                    .Replace("colspan", "data-colspan");
+                string tcId = tc.Tag as string;
+                string trId = (tc.Parent as TableRow).Tag as string;
+                tcAttr += string.Format(@" data-row='{0}' data-cell='{1}'", trId, tcId);
+                sb.Append(" " + tcAttr);
+            }
             if(string.IsNullOrWhiteSpace(content)) {
                 content = @"<br>";
             }
@@ -191,6 +260,20 @@ namespace MpWpfApp {
                 return @" ql-indent-" + indentLevel; ;
             }
             return string.Empty;
+        }
+
+        private static string GetTableCellAttributes(TableCell tc) {
+            return string.Format(@"rowspan='{0}' colspan='{1}' data-row='{2}'", tc.RowSpan, tc.ColumnSpan, (tc.Parent as TableRow).Tag as string);
+        }
+
+
+        private static string GetNewTableItemIdentifier(string prefix) {
+            string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+            string id = string.Empty;
+            for (int i = 0; i < 4; i++) {
+                id += chars[MpHelpers.Rand.Next(0, chars.Length - 1)];
+            }
+            return string.Format(@"{0}-{1}", prefix, id);
         }
 
         private static string GetSpanAttributes(Span s) {
@@ -228,7 +311,25 @@ namespace MpWpfApp {
 
         private static List<TextElement> GetChildren(TextElement te) {
             var cl = new List<TextElement>();
-            if (te is List) {
+            if (te is Table t) {
+                foreach (var tbrg in t.RowGroups) {
+                    foreach(var tbr in tbrg.Rows) {
+                        cl.Add(tbr);
+                    }
+                }
+            } else if (te is TableRow tbr) {
+                foreach (var tc in tbr.Cells) {
+                    cl.Add(tc);
+                }
+            } else if (te is TableRowGroup trg) {
+                foreach(var tr in trg.Rows) {
+                    cl.Add(tr);
+                }
+            } else if (te is TableCell tc) {
+                foreach (var b in tc.Blocks) {
+                    cl.Add(b);
+                }
+            } else if (te is List) {
                 foreach (var li in (te as List).ListItems) {
                     cl.Add(li);
                 }
@@ -261,7 +362,7 @@ namespace MpWpfApp {
             //}
             string itemGuid = System.Guid.NewGuid().ToString();
             string html = MpRtfToHtmlConverter.ConvertRtfToHtml(
-                MpHelpers.ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtf_sample.rtf"),
+                MpHelpers.ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtfTableSample.rtf"),
                 new Dictionary<string, string>() { { "copyItemBlockGuid", itemGuid } },
                     new Dictionary<string, string>() { { "copyItemInlineGuid", itemGuid } });
             MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html2.html", html, false);

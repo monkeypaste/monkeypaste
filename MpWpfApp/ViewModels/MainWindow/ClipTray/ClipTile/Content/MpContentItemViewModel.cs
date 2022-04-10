@@ -429,22 +429,6 @@ namespace MpWpfApp {
 
         #region Model
 
-        public int CompositeOffset { 
-            get {
-                if(CopyItem == null) {
-                    return -1;
-                }
-                return CopyItem.CompositeOffset;
-            }
-            set {
-                if(CompositeOffset != value) {
-                    CopyItem.CompositeOffset = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(CompositeOffset));
-                }
-            }
-        }
-
         public bool IsCompositeChild {
             get {
                 if (CopyItem == null || base.Parent == null) {

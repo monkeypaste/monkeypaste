@@ -204,3 +204,4 @@ function generateGuid() {
 function parseBool(text) {
     return text == 'true';
 }
+

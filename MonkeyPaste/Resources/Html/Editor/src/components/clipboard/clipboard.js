@@ -22,124 +22,26 @@ const CB_DATA_TYPES = [
     'application/octet-stream'
 ];
 
-const CB_TEXT_DATA_TYPES = [CB_DATA_TYPES[0]];
-const CB_CSV_DATA_TYPES = [CB_DATA_TYPES[2]];
-const CB_HTML_DATA_TYPES = [CB_DATA_TYPES[4]];
-
-const CB_IMAGE_DATA_TYPES = [CB_DATA_TYPES[6], CB_DATA_TYPES[7], CB_DATA_TYPES[8], CB_DATA_TYPES[9]];
-
-const CB_URI_DATA_TYPES = [CB_DATA_TYPES[1]];
-
-const CB_SUPPORTED_FORMATS = [
-    CB_CSV_DATA_TYPES,
-    CB_TEXT_DATA_TYPES,
-    CB_HTML_DATA_TYPES
-];
-
 function initClipboard() {
-    const Delta = Quill.imports.delta;
-    const clipboardItems = [];
+    let allDocTags = [...InlineTags, ...BlockTags];
+    let allDocTagsQueryStr = allDocTags.join(',');
+    let editorElms = document.getElementById('editor').querySelectorAll(allDocTagsQueryStr);
 
-    // Cases
-    // 1. Cb data was cut or copied from THIS document 
-    //    - this is known if the clipboard html data equals Last var and can be pasted as is
-    // 2. Cb data was copied externally and only has text (NOTE 1)
-    // 3. Cb data was copied externally and has html (NOTE 1)
-    // 4. Cb data was copied from another tile within app
-
-
-    // Cases
-    // 1. A selection is CUT
-    //      -If remaining document does NOT contain a cut contentGuid then 
-    //       full item was removed so do not alter its contentBlot
-    // 2. A selection is COPIED
-    //      -Since content will be duplicated if pasted always give new guid
-
-    // Notes
-    // 1. When data is brought in externally then clipboard watcher will add it to db
-    //    so in enableReadOnly back in c# new guids should be cross-checked by data
-    //    if found in db use its source info when creating it (may be problematic)
-    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-        //PasteNode = retargetContentItemDomNode(node);
-        if (isContentItemNode(node) || isTemplateNode(node))
-        {
-
-            PasteNode = node;
-        }
-        return delta;
+    Array.from(editorElms).forEach(elm => {
+        enablePasteHandler(elm);
     });
-    quill.clipboard.addMatcher('[templateGuid]', function (node, delta) {
-        //PasteNode = retargetContentItemDomNode(node);
-        debugger;
-        PasteNode = node;
-        return delta;
-    });
-
-
-    //document.addEventListener('paste', function (e) {
-    //    if (!quill.hasFocus()) {
-    //        return;
-    //    }
-    //    let srange = quill.getSelection();
-    //    let cb = e.clipboardData;
-    //    if (!cb || !cb.items || cb.items.length == 0) {
-    //        return;
-    //    }
-
-    //    let itemData = ''
-    //    if (cb.types.indexOf('text/html') > -1) {
-    //        //itemData = cb.getData('text/html');
-    //        //itemData = parseForHtmlContentStr(itemData);
-    //    } else if (cb.types.indexOf('text/plain') > -1) {
-    //        itemData = cb.getData('text/plain');
-    //        itemData = retargetPlainTextClipboardData(itemData);
-    //    } 
-
-    //    if (itemData != '') {
-    //        e.preventDefault();
-            
-    //        if (srange.length > 0) {
-    //            quill.deleteText(srange.index,srange.length);
-    //        }
-    //        quill.clipboard.dangerouslyPasteHTML(srange.index, itemData);
-
-    //        //quill.insertText(
-    //        //    srange.index,
-    //        //    itemData,
-    //        //    {
-    //        //        copyItemGuid: generateGuid()
-    //        //    });
-    //    }
-    //});
-
+}
+function enablePasteHandler(elm) {
+    elm.onpaste = onPaste;
 }
 
-function parseForHtmlContentStr(htmlStr) {
-    if (!htmlStr) {
-        return '';
+function onPaste(e) {
+    var pastedText = undefined;
+    if (e.clipboardData && e.clipboardData.getData) {
+        pastedText = e.clipboardData.getData('text/plain');
     }
-    
-    let preTag = '<!--StartFragment-->';
-    let preIdx = htmlStr.indexOf(preTag);
-    if (preIdx < 0) {
-        let bodyOpenTag = '<body>';
-        let bodyOpenIdx = htmlStr.toLowerCase().indexOf(bodyOpenTag);
-        let bodyCloseTag = '</body>';
-        let bodyCloseIdx = htmlStr.toLowerCase().indexOf(bodyCloseTag);
-        if (bodyOpenIdx >= 0 && bodyCloseIdx >= 0) {
-            htmlStr = htmlStr.substring(bodyOpenIdx + bodyOpenTag.length, bodyCloseIdx - 1);
-        }
-        return htmlStr;
-    }
-    preIdx += preTag.length;
-
-    let postTag = '<!--EndFragment-->';
-    let postIdx = htmlStr.indexOf(postTag);
-    if (postIdx < 0) {
-        postIdx = htmlStr.length - 1;
-    }
-    let result = htmlStr.substring(preIdx, postIdx);
-    return result;
+    alert(pastedText); // Process and handle text...
+    return false; // Prevent the default handler from running.
 }
 
 

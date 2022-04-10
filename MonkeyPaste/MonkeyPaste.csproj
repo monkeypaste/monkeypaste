@@ -155,7 +155,9 @@
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\create\createTemplateToolbarItem.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\edit\editTemplateToolbar.js" />
     <None Remove="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\dataTransfer.js" />
     <None Remove="Resources\Html\Editor\src\components\util\debug.js" />
+    <None Remove="Resources\Html\Editor\src\components\util\jsComAdapter.js" />
     <None Remove="Resources\Html\Editor\src\components\util\resize.js" />
     <None Remove="Resources\Html\Editor\src\components\util\util.js" />
     <None Remove="Resources\Html\Editor\src\editor.js" />
@@ -264,7 +266,13 @@
     <EmbeddedResource Include="Resources\Html\Editor\src\components\template\toolbar\paste\pasteTemplateToolbar.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\dataTransfer.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\debug.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Html\Editor\src\components\util\jsComAdapter.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\util\resize.js">

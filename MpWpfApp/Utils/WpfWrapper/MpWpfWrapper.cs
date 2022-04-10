@@ -21,6 +21,7 @@ namespace MpWpfApp {
         public MpIMainThreadMarshal MainThreadMarshal { get; }
         public MpIStringTools StringTools { get; }
         public MpIOsInfo OsInfo { get; }
+        public MpIClipboardContentDataProvider ClipboardContentDataProvider { get; set; }
 
         public MpWpfWrapper() {
             Cursor = new MpWpfCursor();

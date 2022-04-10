@@ -24,7 +24,8 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpQuillEditorView.xaml
     /// </summary>
-    public partial class MpQuillEditorView : MpContentUserControl<MpContentItemViewModel>, IDragHandler {
+    public partial class MpQuillEditorView : MpContentUserControl<MpContentItemViewModel> {
+
         public bool IsDomContentLoaded { get; private set; }
 
         public MpQuillEditorView() {
@@ -37,7 +38,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            QuillWebView.DragHandler = this;
+            QuillWebView.DragHandler = new MpJsDropHandler();
 
             MpMessenger.Register<MpMessageType>(
                 BindingContext.Parent,

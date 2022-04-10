@@ -648,7 +648,6 @@ function getLowestAnonTemplateName(anonPrefix = 'Template #') {
     return anonPrefix + (parseInt(maxNum) + 1);
 }
 
-
 function focusTemplate(tguid, fromDropDown, tiguid) {
     if (tguid == null) {
         return;
@@ -799,14 +798,14 @@ function padTemplate(tiguid,delta) {
     }
 
     if (needsPre) {
-        IgnoreNextTextChange = true;
-        IgnoreNextSelectionChange = true;
+        //IgnoreNextTextChange = true;
+        //IgnoreNextSelectionChange = true;
         quill.insertText(teDocIdx, ' ');
         teDocIdx++;
     }
     if (needsPost) {
-        IgnoreNextTextChange = true;
-        IgnoreNextSelectionChange = true;
+        //IgnoreNextTextChange = true;
+        //IgnoreNextSelectionChange = true;
         quill.insertText(teDocIdx + 1, ' ');
     }
 }
@@ -912,7 +911,6 @@ function updateTemplatesAfterSelectionChanged(range, oldRange, source) {
     }
 
 }
-
 
 function getTemplateToolbarHeight() {
     if (!isShowingEditTemplateToolbar() && !isShowingPasteTemplateToolbar()) {

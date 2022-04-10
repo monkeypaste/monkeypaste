@@ -101,16 +101,18 @@ namespace MonkeyPaste {
         [Column("pk_MpCopyItemId")]
         public override int Id { get; set; } = 0;
 
+        [Column("MpCopyItemGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        public string RootCopyItemGuid { get; set; }
+        //public string ParentCopyItemGuid { get; set; }
+
         [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_ParentCopyItemId")]
         public int CompositeParentCopyItemId { get; set; }
 
         public int CompositeSortOrderIdx { get; set; }
 
-        public int CompositeOffset { get; set; } = -1;
-
-        [Column("MpCopyItemGuid")]
-        public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [ForeignKey(typeof(MpSource))]
         [Column("fk_MpSourceId")]
