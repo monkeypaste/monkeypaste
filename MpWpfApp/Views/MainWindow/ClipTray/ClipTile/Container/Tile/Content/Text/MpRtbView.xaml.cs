@@ -179,7 +179,7 @@ namespace MpWpfApp {
         }
 
         private void Rtb_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if(BindingContext.IsReadOnly) {
+            if(BindingContext.IsContentReadOnly) {
                 e.Handled = true;
                 return;
             }
@@ -321,7 +321,8 @@ namespace MpWpfApp {
 
         private void Rtb_PreviewKeyUp(object sender, KeyEventArgs e) {
             if (e.Key == Key.Escape && BindingContext.IsEditingContent) {
-                BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
+                //BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
+                BindingContext.Parent.ClearEditing();
             } 
         }
 

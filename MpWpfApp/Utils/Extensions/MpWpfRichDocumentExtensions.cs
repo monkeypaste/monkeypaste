@@ -26,7 +26,7 @@ namespace MpWpfApp {
         public static void FitDocToRtb(this RichTextBox rtb) {
             bool isReadOnly = false;
             if (rtb.DataContext is MpContentItemViewModel civm) {
-                isReadOnly = civm.IsReadOnly;
+                isReadOnly = civm.IsContentReadOnly;
             }
             if (!isReadOnly) {
                 var clv = rtb.GetVisualAncestor<MpContentListView>();

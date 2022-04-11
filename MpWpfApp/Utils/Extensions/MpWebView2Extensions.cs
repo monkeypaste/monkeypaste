@@ -11,7 +11,7 @@ namespace MpWpfApp {
         public static void FitDocToWebView(this ChromiumWebBrowser wv2) {
             bool isReadOnly = false;
             if (wv2.DataContext is MpContentItemViewModel civm) {
-                isReadOnly = civm.IsReadOnly;
+                isReadOnly = civm.IsContentReadOnly;
             }
             if (!isReadOnly) {
                 var clv = wv2.GetVisualAncestor<MpContentListView>();

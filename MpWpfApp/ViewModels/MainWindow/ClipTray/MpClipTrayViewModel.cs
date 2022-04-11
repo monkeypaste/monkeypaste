@@ -2382,7 +2382,7 @@ namespace MpWpfApp {
 
         public ICommand EditSelectedContentCommand => new RelayCommand(
             () => {
-                SelectedItems[0].IsReadOnly = false;
+                SelectedItems[0].SelectedItem.IsContentReadOnly = false;
             },
             () => {
                 if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {

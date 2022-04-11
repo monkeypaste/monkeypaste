@@ -12,16 +12,16 @@
                             d:DesignWidth="800"
                             x:TypeArguments="local:MpContentItemViewModel"
                             mc:Ignorable="d">
+    <Grid x:Name="QuillWebViewContainerGrid"
+          AllowDrop="True">
     <wpf:ChromiumWebBrowser x:Name="QuillWebView"
-                            AllowDrop="True"
                             Loaded="EditorBrowser_Loaded"
                             Unloaded="QuillWebView_Unloaded"
                             DataContextChanged="QuillWebView_DataContextChanged"
-                            Width="Auto" 
+                            Width="Auto"
                             Height="{Binding EditorHeight}"
                             MinWidth="100"
-                            IsEnabled="{Binding IsReadOnly,
-                                                Converter={StaticResource BoolFlipConverter}}"
+                            IsEnabled="True"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             DataContext="{Binding}"
@@ -29,8 +29,13 @@
                             PreviewKeyUp="QuillWebView_PreviewKeyUp"
                             local:MpIsFocusedExtension.IsEnabled="True"
                             local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
-                                                                           Mode=TwoWay}"
+                                                                                  Mode=TwoWay}"
                             local:MpDocumentHtmlExtension.DocumentRtf="{Binding CopyItemData}"
-                            local:MpDocumentHtmlExtension.IsReadOnly="{Binding IsReadOnly}"
+                            local:MpDocumentHtmlExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
+                            local:MpDocumentHtmlExtension.IsSelected="{Binding IsSelected,
+                                                                               Mode=TwoWay}"
+                            local:MpDocumentHtmlExtension.IsContentFocused="{Binding IsContentFocused,
+                                                                                     Mode=OneWay}"
                             LoadingStateChanged="Browser_LoadingStateChanged" />
+    </Grid>
 </local:MpContentUserControl>

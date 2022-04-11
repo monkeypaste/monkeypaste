@@ -592,7 +592,7 @@
 
         public int Count => ItemViewModels.Count;
 
-        public bool IsReadOnly { get; set; } = true;
+        public bool IsReadOnly => ItemViewModels.All((Func<MpContentItemViewModel, bool>)(x => (bool)x.IsContentReadOnly)) && ItemViewModels.All(x => x.IsTitleReadOnly);
 
         public bool IsAnyEditingContent => ItemViewModels.Any(x => x.IsEditingContent);
 
@@ -959,12 +959,8 @@
         }
 
         public void ClearEditing() {
-            if(!IsReadOnly) {
-                IsReadOnly = true;
-            }
-            foreach(var ivm in ItemViewModels) {
-                ivm.ClearEditing();
-            }
+            ItemViewModels.ForEach(x => x.ClearEditing());
+            OnPropertyChanged(nameof(IsReadOnly));
         }
 
         public async Task<string> GetSubSelectedPastableRichText(bool isToExternalApp = false) {
@@ -997,7 +993,7 @@
                 MpConsole.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
 
                 if (!IsReadOnly) {
-                    IsReadOnly = true;
+                    ClearEditing();
                 }
                 return rtf;
             }
@@ -1014,7 +1010,7 @@
                     rtbvm.IsSelected = true;
                     if (!hasExpanded) {
                         //tile will be shrunk in on completed of hide window
-                        IsReadOnly = false;
+                        rtbvm.IsContentReadOnly = false;
                         rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
                         rtbvm.TemplateCollection.UpdateCommandsCanExecute();
                         rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.Templates));
@@ -1205,7 +1201,7 @@
                     OnPropertyChanged(nameof(IsPlaceholder));
                     break;
                 case nameof(IsReadOnly):
-                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsReadOnly)));
+                    ItemViewModels.ForEach((Action<MpContentItemViewModel>)(x => x.OnPropertyChanged(nameof(x.IsContentReadOnly))));
                     break;
             }
         }
@@ -1215,7 +1211,8 @@
                 return;
             }
             if(e.Key == Key.Escape) {
-                ToggleReadOnlyCommand.Execute(null);
+                //ToggleReadOnlyCommand.Execute(null);
+                ClearEditing();
             }
         }
         #endregion
@@ -1269,13 +1266,13 @@
                 }
             }, () => IsSelected);
 
-        public ICommand ToggleReadOnlyCommand => new RelayCommand(
-            () => {
-                if(!IsSelected && IsReadOnly) {
-                    ResetSubSelection(false);
-                }
-                IsReadOnly = !IsReadOnly;
-            });
+        //public ICommand ToggleReadOnlyCommand => new RelayCommand(
+        //    () => {
+        //        if(!IsSelected && IsReadOnly) {
+        //            ResetSubSelection(false);
+        //        }
+        //        IsReadOnly = !IsReadOnly;
+        //    });
 
         private RelayCommand _editTitleCommand;
         public ICommand EditTitleCommand {

@@ -27,7 +27,8 @@ namespace MpWpfApp {
             string keyStr = "ContentTemplate";
             switch(civm.CopyItemType) {
                 case MpCopyItemType.Text:
-                    if (false) {//civm.CopyItemData.IsStringRichText()) {
+                    if (!MpContentItemViewModel.USING_BROWSER) {
+                        //civm.CopyItemData.IsStringRichText()) {
                         keyStr = "Rtb" + keyStr;
                     } else {
                         keyStr = "Quill" + keyStr;

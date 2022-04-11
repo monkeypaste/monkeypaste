@@ -58,7 +58,7 @@ namespace MpWpfApp {
                 return;
             }
             if (!BindingContext.IsEditingTitle) {
-                BindingContext.IsEditingTitle = true;
+                BindingContext.IsTitleReadOnly = false;
                 //MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
                 e.Handled = true;
             }
@@ -73,7 +73,7 @@ namespace MpWpfApp {
                 var tbr = new Rect(0, 0, ClipTileTitleTextBox.ActualWidth, ClipTileTitleTextBox.ActualHeight);
                 var tb_mp = Application.Current.MainWindow.TranslatePoint(new Point(e.Location.X, e.Location.Y), ClipTileTitleTextBox);
                 if(!tbr.Contains(tb_mp)) {
-                    BindingContext.IsEditingTitle = false;
+                    BindingContext.IsTitleReadOnly = true;
                 } else { 
                     ClipTileTitleTextBox.RaiseEvent(new MouseButtonEventArgs(Mouse.PrimaryDevice, (int)DateTime.Now.Ticks, MouseButton.Left));
                 }
@@ -101,7 +101,7 @@ namespace MpWpfApp {
             if (BindingContext == null) {
                 return;
             }
-            BindingContext.IsEditingTitle = false;
+            BindingContext.IsTitleReadOnly = true;
         }
 
         private void ClipTileTitleTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
@@ -110,7 +110,7 @@ namespace MpWpfApp {
             }
             if (e.Key == Key.Enter || e.Key == Key.Escape) {
                 //ctvm.CopyItemTitle = ClipTileTitleTextBox.Text;
-                BindingContext.IsEditingTitle = false;
+                BindingContext.IsTitleReadOnly = true;
                 e.Handled = true;
             }
         }

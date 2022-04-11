@@ -129,8 +129,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Grid Visibility="{Binding Parent.IsBusy,
-                                                               Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                                    <Grid Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}}">
                                         <Button Background="Transparent"
                                                 BorderThickness="0"
                                                 ToolTip="Analyze"
@@ -192,8 +191,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Grid Visibility="{Binding Parent.IsBusy,
-                                                               Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                                    <Grid Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}}">
 
                                         <Button Background="Transparent"
                                                 BorderThickness="0"

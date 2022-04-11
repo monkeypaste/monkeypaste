@@ -43,7 +43,7 @@ namespace MpWpfApp {
 
                     if (fe.DataContext is MpContentItemViewModel civm) {
                         if (fe is RichTextBox rtb) {
-
+                            civm.UnformattedContentSize = docSize;
                             rtb.Document = fd;
                             rtb.FitDocToRtb();
                         } else if (fe is FlowDocumentPageViewer fdr) {

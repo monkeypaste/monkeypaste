@@ -21,9 +21,9 @@
                Unloaded="ContentListDockPanel_Unloaded"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch">
-        <!--<local:MpRtbEditToolbarView x:Name="EditToolbarView"
+        <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                     DockPanel.Dock="Top"
-                                    Visibility="{Binding IsReadOnly,
+                                    Visibility="{Binding IsContentReadOnly,
                                                          Converter={StaticResource BoolToVisibilityFlipConverter}}"
                                     DataContext="{Binding PrimaryItem}" />
         <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
@@ -37,8 +37,8 @@
                                           Visibility="{Binding Parent.IsPastingTemplate,
                                                                Converter={StaticResource BoolToVisibilityConverter},
                                                                TargetNullValue=Collapsed}"
-                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />-->
-        <local:MpRtbEditToolbarView x:Name="EditToolbarView"
+                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />
+        <!--<local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                     DockPanel.Dock="Top"
                                     Visibility="Collapsed"
                                     DataContext="{Binding PrimaryItem}" />
@@ -49,7 +49,7 @@
         <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                           DockPanel.Dock="Bottom"
                                           Visibility="Collapsed"
-                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />
+                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />-->
         <AdornerDecorator>
             <ListBox x:Name="ContentListBox"
                      Loaded="ContentListBox_Loaded"

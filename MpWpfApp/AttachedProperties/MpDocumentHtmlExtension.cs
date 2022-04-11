@@ -5,10 +5,12 @@ using CefSharp.SchemeHandler;
 using CefSharp.Wpf;
 using MonkeyPaste;
 using MonkeyPaste.Plugin;
+using MpWpfApp.Properties;
 using Newtonsoft.Json;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -41,18 +43,68 @@ namespace MpWpfApp {
 
         private static Regex _encodedTemplateRegEx;
 
+        #region IsSelected
 
-        #region IsReadOnly
-
-        public static bool GetIsReadOnly(DependencyObject obj) {
-            return (bool)obj.GetValue(IsReadOnlyProperty);
+        public static bool GetIsSelected(DependencyObject obj) {
+            return (bool)obj.GetValue(IsSelectedProperty);
         }
-        public static void SetIsReadOnly(DependencyObject obj, bool value) {
-            obj.SetValue(IsReadOnlyProperty, value);
+        public static void SetIsSelected(DependencyObject obj, bool value) {
+            obj.SetValue(IsSelectedProperty, value);
         }
-        public static readonly DependencyProperty IsReadOnlyProperty =
+        public static readonly DependencyProperty IsSelectedProperty =
           DependencyProperty.RegisterAttached(
-            "IsReadOnly",
+            "IsSelected",
+            typeof(bool),
+            typeof(MpDocumentHtmlExtension),
+            new FrameworkPropertyMetadata(false));
+
+        #endregion
+
+        #region IsContentFocused
+
+        public static bool GetIsContentFocused(DependencyObject obj) {
+            return (bool)obj.GetValue(IsContentFocusedProperty);
+        }
+        public static void SetIsContentFocused(DependencyObject obj, bool value) {
+            obj.SetValue(IsContentFocusedProperty, value);
+        }
+        public static readonly DependencyProperty IsContentFocusedProperty =
+          DependencyProperty.RegisterAttached(
+            "IsContentFocused",
+            typeof(bool),
+            typeof(MpDocumentHtmlExtension),
+            new FrameworkPropertyMetadata() {
+                PropertyChangedCallback = async (s, e) => {
+                    if (e.NewValue == null) {
+                        return;
+                    }
+                    var fe = s as FrameworkElement;
+                    bool isContentFocused = (bool)e.NewValue;
+                    if (isContentFocused && !GetIsContentReadOnly(fe)) {
+                        SetIsSelected(fe, true);
+                        if (fe is ChromiumWebBrowser cwb) {
+                            if (cwb.CanExecuteJavascriptInMainFrame) {
+                                await cwb.EvaluateScriptAsync("document.getElementsByTagName('textarea')[0].focus();");
+                                //await cwb.EvaluateScriptAsync("focusEditor();");
+                            }
+                        }
+                    }
+                }
+            });
+
+        #endregion
+
+        #region IsContentReadOnly
+
+        public static bool GetIsContentReadOnly(DependencyObject obj) {
+            return (bool)obj.GetValue(IsContentReadOnlyProperty);
+        }
+        public static void SetIsContentReadOnly(DependencyObject obj, bool value) {
+            obj.SetValue(IsContentReadOnlyProperty, value);
+        }
+        public static readonly DependencyProperty IsContentReadOnlyProperty =
+          DependencyProperty.RegisterAttached(
+            "IsContentReadOnly",
             typeof(bool),
             typeof(MpDocumentHtmlExtension),
             new FrameworkPropertyMetadata() {
@@ -75,7 +127,9 @@ namespace MpWpfApp {
 
                             MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(fe);
                             var disableReadOnlyResponse = await cwb.EvaluateScriptAsync($"disableReadOnly('{drorMsg.SerializeToByteString()}')");
-                            ProcessDisableReadOnlyResponse(fe, disableReadOnlyResponse);                            
+                            ProcessDisableReadOnlyResponse(fe, disableReadOnlyResponse);
+
+                            SetIsContentFocused(fe, true);
                         }
                     }
                 }
@@ -139,7 +193,7 @@ namespace MpWpfApp {
                     itemEncodedHtmlData = GetEncodedHtml(itemData,civm.CopyItemGuid),
                     usedTextTemplates = GetTextTemplates(itemData),
                     isPasteRequest = civm.IsPasting,
-                    isReadOnlyEnabled = civm.IsReadOnly
+                    isReadOnlyEnabled = civm.IsContentReadOnly
                 };
             }
             return null;
@@ -248,8 +302,12 @@ namespace MpWpfApp {
         }
 
         private static void InitCef() {
+#if ANYCPU
+            //Only required for PlatformTarget of AnyCPU
+            CefRuntime.SubscribeAnyCpuAssemblyResolver();
+#endif
             //To support High DPI this must be before CefSharp.BrowserSubprocess.SelfHost.Main so the BrowserSubprocess is DPI Aware
-            //Cef.EnableHighDPISupport();
+            Cef.EnableHighDPISupport();
 
             var exitCode = CefSharp.BrowserSubprocess.SelfHost.Main(new string[] { });
 
@@ -259,10 +317,17 @@ namespace MpWpfApp {
 
             CefSharpSettings.ConcurrentTaskExecution = true;
 
-            var settings = new CefSettings() {
-               // LogSeverity = LogSeverity.Verbose
-            };
+            var settings = new CefSettings();
+            settings.CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache");
             settings.CefCommandLineArgs.Add(@"--disable-component-update");
+            settings.RemoteDebuggingPort = 8080;
+            //settings.ExternalMessagePump = true;
+            //NOTE: WebRTC Device Id's aren't persisted as they are in Chrome see https://bitbucket.org/chromiumembedded/cef/issues/2064/persist-webrtc-deviceids-across-restart
+            //settings.CefCommandLineArgs.Add("enable-media-stream");
+            //https://peter.sh/experiments/chromium-command-line-switches/#use-fake-ui-for-media-stream
+            //settings.CefCommandLineArgs.Add("use-fake-ui-for-media-stream");
+            //For screen sharing add (see https://bitbucket.org/chromiumembedded/cef/issues/2582/allow-run-time-handling-of-media-access#comment-58677180)
+            //settings.CefCommandLineArgs.Add("enable-usermedia-screen-capturing");
 
             settings.RegisterScheme(new CefCustomScheme {                
                 SchemeName = "localfolder",

@@ -144,7 +144,6 @@
     <None Remove="Resources\Html\Editor\package-lock.json" />
     <None Remove="Resources\Html\Editor\package.json" />
     <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
-    <None Remove="Resources\Html\Editor\src\app.js" />
     <None Remove="Resources\Html\Editor\src\components\clipboard\clipboard.js" />
     <None Remove="Resources\Html\Editor\src\components\content\content.js" />
     <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
@@ -231,9 +230,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Html\Editor\lib\jquery-context-menus\dist\context-menu.min.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Html\Editor\src\app.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Html\Editor\src\components\clipboard\clipboard.js">

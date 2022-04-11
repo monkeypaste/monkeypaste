@@ -33,8 +33,7 @@
                     Template="{StaticResource SearchButtonControlTemplate}"
                     ToolTip="{Binding HotkeyIconTooltip}"
                     ToolTipService.InitialShowDelay="0">
-                <Image Source="{Binding HotkeyIconSource,
-                                        Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                <Image Source="{Binding HotkeyIconSource, Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
             </Button>
             <TextBlock x:Name="ClipTileDetailTextBlock"
                        Grid.Column="1"
@@ -60,9 +59,9 @@
                 <Image Source="/Resources/Images/edit.png" />
             </Button>-->
             <local:MpContentReportView Grid.Column="2"
-                                     HorizontalAlignment="Right"
-                                     DataContext="{Binding CopyItemId,
-                                                           Converter={StaticResource CopyItemIdToReportCollectionConverter}}"/>
+                                       HorizontalAlignment="Right"
+                                       DataContext="{Binding CopyItemId,
+                                                             Converter={StaticResource CopyItemIdToReportCollectionConverter}}" />
 
         </Grid>
     </Border>

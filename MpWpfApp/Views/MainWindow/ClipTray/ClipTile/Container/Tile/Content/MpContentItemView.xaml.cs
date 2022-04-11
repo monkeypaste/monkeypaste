@@ -69,7 +69,7 @@ namespace MpWpfApp {
 
         private void Border_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (BindingContext.IsEditingTitle ||
-                !BindingContext.IsReadOnly ||
+                !BindingContext.IsContentReadOnly ||
                  BindingContext.Parent.Parent.IsAnyResizing ||
                  BindingContext.Parent.Parent.CanAnyResize ||
                  MpResizeBehavior.IsAnyResizing) {

@@ -8,7 +8,6 @@ using System.Windows.Controls.Primitives;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-
     public class MpIsFocusedExtension : DependencyObject {
         public static bool IsAnyTextBoxFocused = false;
 
@@ -29,6 +28,23 @@ namespace MpWpfApp {
                 BindsTwoWayByDefault = true,
                 DefaultValue = false
             });
+
+        #endregion
+
+        #region IsReadOnly
+
+        public static bool GetIsReadOnly(DependencyObject obj) {
+            return (bool)obj.GetValue(IsReadOnlyProperty);
+        }
+        public static void SetIsReadOnly(DependencyObject obj, bool value) {
+            obj.SetValue(IsReadOnlyProperty, value);
+        }
+        public static readonly DependencyProperty IsReadOnlyProperty =
+          DependencyProperty.RegisterAttached(
+            "IsReadOnly",
+            typeof(bool),
+            typeof(MpIsFocusedExtension),
+            new FrameworkPropertyMetadata(false));
 
         #endregion
 
@@ -76,7 +92,10 @@ namespace MpWpfApp {
                         fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
                         if (!fe.IsLoaded) {
                             fe.Loaded += Fe_Loaded;
+                        } else {
+                            Fe_Loaded(fe, null);
                         }
+
                         if(fe.GetType().IsSubclassOf(typeof(TextBoxBase))) {
                             var tbb = fe as TextBoxBase;
 
@@ -95,42 +114,6 @@ namespace MpWpfApp {
             });
 
         #endregion
-
-
-        #region IsSaveOnLostFocus
-
-        public static bool GetIsSaveOnLostFocus(DependencyObject obj) {
-            return (bool)obj.GetValue(IsSaveOnLostFocusProperty);
-        }
-        public static void SetIsSaveOnLostFocus(DependencyObject obj, bool value) {
-            obj.SetValue(IsSaveOnLostFocusProperty, value);
-        }
-        public static readonly DependencyProperty IsSaveOnLostFocusProperty =
-          DependencyProperty.RegisterAttached(
-            "IsSaveOnLostFocus",
-            typeof(bool),
-            typeof(MpIsFocusedExtension),
-            new FrameworkPropertyMetadata(false));
-
-        #endregion
-
-        #region SaveModel
-
-        public static MpDbModelBase GetSaveModel(DependencyObject obj) {
-            return (MpDbModelBase)obj.GetValue(SaveModelProperty);
-        }
-        public static void SetSaveModel(DependencyObject obj, MpDbModelBase value) {
-            obj.SetValue(SaveModelProperty, value);
-        }
-        public static readonly DependencyProperty SaveModelProperty =
-          DependencyProperty.RegisterAttached(
-            "SaveModel",
-            typeof(MpDbModelBase),
-            typeof(MpIsFocusedExtension),
-            new FrameworkPropertyMetadata(null));
-
-        #endregion
-
 
         private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
             var fe = sender as FrameworkElement;
@@ -158,29 +141,22 @@ namespace MpWpfApp {
             fe.LostFocus += Fe_LostFocus;
         }
 
-        private static void GotFocus(DependencyObject dpo) {
-            IsAnyTextBoxFocused = true;
+        private static void GotFocus(DependencyObject dpo) {            
             SetIsFocused(dpo, true);
             if (GetSelectAllOnFocus(dpo)) {
                 if (dpo is TextBoxBase tbb) {
+                    IsAnyTextBoxFocused = true;
                     tbb.SelectAll();
                 }
             }
         }
 
         private static void LostFocus(DependencyObject dpo) {
-            IsAnyTextBoxFocused = false;
-            SetIsFocused(dpo, false);
-
-            if (GetIsSaveOnLostFocus(dpo)) {
-                var dbo = GetSaveModel(dpo);
-                if (dbo == null) {
-                    return;
-                }
-                Task.Run(async () => {
-                    await dbo.WriteToDatabaseAsync();
-                });
+            if (dpo is TextBoxBase tbb) {
+                IsAnyTextBoxFocused = false;
             }
+            
+            SetIsFocused(dpo, false);
         }
 
         private static void Fe_LostFocus(object sender, RoutedEventArgs e) {
@@ -214,7 +190,7 @@ namespace MpWpfApp {
 
         private static void Tbb_OnReadOnlyChanged(object sender, EventArgs e) {
             var tbb = sender as TextBoxBase;
-            if(GetIsFocused(tbb) && tbb.IsReadOnly) {
+            if(tbb != null && GetIsFocused(tbb) && tbb.IsReadOnly) {
                 // when focused textbox becomes readonly need to make sure static IsAnyTextBoxFocused is toggled
                 LostFocus(tbb);
             }

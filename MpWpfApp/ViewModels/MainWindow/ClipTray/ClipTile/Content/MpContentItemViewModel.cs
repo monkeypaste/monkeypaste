@@ -36,6 +36,8 @@ namespace MpWpfApp {
 
         #endregion
 
+        public static bool USING_BROWSER = false;
+
         #region Properties
 
         #region View Models
@@ -132,7 +134,7 @@ namespace MpWpfApp {
                     return MpSystemColors.White;
                 }
                 if (IsHovering &&
-                    ((!IsReadOnly && !IsSelected) || IsReadOnly) &&
+                    ((!IsContentReadOnly && !IsSelected) || IsContentReadOnly) &&
                     Parent.Count > 1) {
                     return MpColorHelpers.GetLighterHexColor(CopyItemHexColor, 0.75);
                 }
@@ -195,21 +197,32 @@ namespace MpWpfApp {
                 if(Parent == null || CopyItem == null) {
                     return 0;
                 }
-                double h = 0;
-                if(!IsReadOnly) {
-                    if (Parent.Count > 1) {
-                        h = Double.NaN;
+                if(USING_BROWSER) {
+                    double h;
+                    if (!IsContentReadOnly) {
+                        if (Parent.Count > 1) {
+                            h = Double.NaN;
+                        }
+                        //return Parent.TileContentHeight; //quil editor height
+                        h = Parent.TileContentHeight;// - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                    } else {
+
+                        h = ReadOnlyContentSize.Height;
                     }
-                    //return Parent.TileContentHeight; //quil editor height
-                    h = Parent.TileContentHeight;// - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                    if (double.IsInfinity(h)) {
+                        return Double.NaN;
+                    }
+                    return h;
                 } else {
 
-                    h = ReadOnlyContentSize.Height;
+                    if (!IsContentReadOnly) {
+                        if (Parent.Count > 1) {
+                            return Double.NaN;
+                        }
+                        return Parent.TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                    }
+                    return ReadOnlyContentSize.Height;
                 }
-                if(double.IsInfinity(h)) {
-                    return Double.NaN;
-                }
-                return h;
             }
         }
 
@@ -258,33 +271,31 @@ namespace MpWpfApp {
                 if (Parent == null) {
                     return new Size();
                 }
-                if (!IsReadOnly) {
+                if (!IsContentReadOnly) {
                     return EditableContentSize;
                 }
                 return ReadOnlyContentSize;
             }
         }
 
-        public Size UnformattedContentSize { 
-            get {
-                if(CopyItem == null) {
-                    return new Size();
-                }
-                if(CopyItemType == MpCopyItemType.Text) {
-                    CopyItemData.ToFlowDocument(out Size docSize);
-                    return docSize;
-                } else if(CopyItemType == MpCopyItemType.Image) {
-                    return itemSize;
-                }
-                return new Size(CopyItemData.Length * 12, 12);
-            }
-        }
+        public Size UnformattedContentSize { get; set; }
+        //    get {
+        //        if(CopyItem == null) {
+        //            return new Size();
+        //        }
+        //        if(CopyItemType == MpCopyItemType.Text) {
+        //            CopyItemData.ToFlowDocument(out Size docSize);
+        //            return docSize;
+        //        } else if(CopyItemType == MpCopyItemType.Image) {
+        //            return itemSize;
+        //        }
+        //        return new Size(CopyItemData.Length * 12, 12);
+        //    }
+        //}
 
         #endregion
 
         #region State
-
-        public bool IsReadOnly => Parent == null ? false : Parent.IsReadOnly;
 
         public bool HasDetectedObjects => DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.Items.Count > 0;
 
@@ -348,13 +359,17 @@ namespace MpWpfApp {
         [MpAffectsParent]
         public bool IsContextMenuOpen { get; set; } = false;
 
+        public bool IsTitleReadOnly { get; set; } = true;
+
+        public bool IsContentReadOnly { get; set; } = true;
+
         public bool IsContentFocused { get; set; } = false;
 
         public bool IsTitleFocused { get; set; } = false;
 
-        public bool IsEditingContent => IsContentFocused && !IsReadOnly;
+        public bool IsEditingContent => IsContentFocused && !IsContentReadOnly;
 
-        public bool IsEditingTitle { get; set; } // affects TileTitleTextGridBackgroundBrush
+        public bool IsEditingTitle => IsTitleFocused && IsSelected;
 
         public bool IsEditingTemplate {
             get {
@@ -387,7 +402,7 @@ namespace MpWpfApp {
         }
 
         [MpAffectsParent]
-        public bool IsPlaceholder => CopyItem == null || IsCompositeChild;
+        public bool IsPlaceholder => CopyItem == null;
 
         #region Drag & Drop
         //[MpAffectsParent]
@@ -567,6 +582,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
 
         public int IconId {
             get {
@@ -760,7 +776,9 @@ namespace MpWpfApp {
 
         public void ClearEditing() {
             //IsEditingContent = false;
-            IsEditingTitle = false;
+            //IsEditingTitle = false;
+            IsTitleReadOnly = true;
+
             TemplateCollection?.ClearAllEditing();
             if (IsPasting) {
                 IsPasting = false;
@@ -886,6 +904,10 @@ namespace MpWpfApp {
                                 .ForEach(y => y.IsSelected = false);
                         }
                         Parent.RequestScrollIntoView(this);
+
+                        if(!IsTitleFocused) {
+                            IsContentFocused = true;
+                        }
                     }
                     if (ItemIdx > 0) {
                         //trigger so prev item shows/hides separator line
@@ -921,8 +943,22 @@ namespace MpWpfApp {
                     //} else if(!IsSelected) {
                     //    IsSelected = true;
                     //}
-                    if(IsEditingTitle && !IsSelected) {
-                        IsSelected = true;
+                    if (IsEditingTitle) {
+                        if (!IsSelected) {
+                            IsSelected = true;
+                        }
+                        if(!IsTitleFocused) {
+                            IsTitleFocused = true;
+                        }
+                    } else {
+                        IsTitleFocused = false;
+                    }
+                    break;
+                case nameof(IsTitleFocused):
+                    if(IsTitleFocused) {
+                        if(!IsEditingTitle) {
+
+                        }
                     }
                     break;
                 case nameof(IsBusy):
@@ -956,7 +992,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(HotkeyIconSource));
                     OnPropertyChanged(nameof(HotkeyIconTooltip));
                     break;
-                case nameof(IsReadOnly):
+                case nameof(IsContentReadOnly):
                     OnPropertyChanged(nameof(EditorHeight));
                     break;
                 case nameof(HasModelChanged):
@@ -1135,7 +1171,8 @@ namespace MpWpfApp {
                    base.Parent.SelectedItems.Count == 1;
         }
         private void EditSubTitle() {
-            IsEditingTitle = !IsEditingTitle;
+            //IsEditingTitle = !IsEditingTitle;
+            IsTitleReadOnly = false;
         }
 
         //public string GetColor() {

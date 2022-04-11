@@ -2,6 +2,7 @@
 using CefSharp;
 using CefSharp.Enums;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +20,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpQuillEditorView.xaml
     /// </summary>
     public partial class MpQuillEditorView : MpContentUserControl<MpContentItemViewModel> {
-
+        private DispatcherTimer timer;
         public bool IsDomContentLoaded { get; private set; }
 
         public MpQuillEditorView() {
@@ -38,7 +40,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            QuillWebView.DragHandler = new MpJsDropHandler();
+            //QuillWebView.DragHandler = new MpJsDropHandler();
 
             MpMessenger.Register<MpMessageType>(
                 BindingContext.Parent,
@@ -48,6 +50,8 @@ namespace MpWpfApp {
             MpMessenger.Register<MpMessageType>(
                 (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
                 ReceivedMainWindowResizeBehviorMessage);
+
+            QuillWebViewContainerGrid.DragEnter += QuillWebView_DragEnter;
         }
 
         private void QuillWebView_Unloaded(object sender, RoutedEventArgs e) {
@@ -67,6 +71,13 @@ namespace MpWpfApp {
                 }
             }
         }
+
+
+        private void QuillWebView_DragEnter(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("WPF drag enter called");
+            return;
+        }
+
 
 
         private void QuillWebView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -103,7 +114,8 @@ namespace MpWpfApp {
 
         private void QuillWebView_PreviewKeyUp(object sender, KeyEventArgs e) {
             if (e.Key == Key.Escape && BindingContext.IsEditingContent) {
-                BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
+                //BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
+                BindingContext.Parent.ClearEditing();
             }
         }
 
@@ -113,6 +125,15 @@ namespace MpWpfApp {
 
         public void OnDraggableRegionsChanged(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IList<DraggableRegion> regions) {
             //throw new NotImplementedException();
+        }
+
+        private void QuillWebView_GotFocus(object sender, RoutedEventArgs e) {
+
+        }
+
+
+        public void Dispose() {
+            throw new NotImplementedException();
         }
     }
 }

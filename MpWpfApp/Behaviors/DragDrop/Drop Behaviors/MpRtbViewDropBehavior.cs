@@ -147,7 +147,7 @@ namespace MpWpfApp {
             //clean up all tiles with content dragged
             //if tile has no items recycle it
             //if it still has items sync sort order from its visuals
-            if (AssociatedObject.BindingContext.IsReadOnly && !isCopy) {
+            if (AssociatedObject.BindingContext.IsContentReadOnly && !isCopy) {
                 bool needsRequery = false;
                 foreach (var dctvm in dragTiles) {
                     if (dctvm.HeadItem == null ||
@@ -218,11 +218,16 @@ namespace MpWpfApp {
             }
 
             // write and restore item
+
+            //for some reason the control reloads after writing so storing vm
+            var civm = AssociatedObject.BindingContext;
             await AssociatedObject.BindingContext.CopyItem.WriteToDatabaseAsync();
 
-            AssociatedObject.BindingContext.OnPropertyChanged(nameof(AssociatedObject.BindingContext.CopyItemData));
+            civm.OnPropertyChanged(nameof(civm.CopyItemData));
 
-            await AssociatedObject.CreateHyperlinksAsync(AssociatedObject.CTS.Token);
+            civm.RequestCreateHyperlinks();
+
+            //await AssociatedObject.CreateHyperlinksAsync(AssociatedObject.CTS.Token);
         }
 
         public override void AutoScrollByMouse() {

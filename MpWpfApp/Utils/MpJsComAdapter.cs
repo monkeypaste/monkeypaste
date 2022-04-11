@@ -48,28 +48,25 @@ namespace MpWpfApp {
             //    //}
             //});
 
-            var dataObject = new DataObject();
+            //var dataObject = new DataObject();
 
-            dataObject.SetText(dragData.FragmentText, TextDataFormat.Text);
-            dataObject.SetText(dragData.FragmentText, TextDataFormat.UnicodeText);
-            dataObject.SetText(dragData.FragmentHtml, TextDataFormat.Html);
+            //dataObject.SetText(dragData.FragmentText, TextDataFormat.Text);
+            //dataObject.SetText(dragData.FragmentText, TextDataFormat.UnicodeText);
+            //dataObject.SetText(dragData.FragmentHtml, TextDataFormat.Html);
 
-            // TODO: The following code block *should* handle images, but GetFileContents is
-            // not yet implemented.
-            //if (dragData.IsFile)
-            //{
-            //    var bmi = new BitmapImage();
-            //    bmi.BeginInit();
-            //    bmi.StreamSource = dragData.GetFileContents();
-            //    bmi.EndInit();
-            //    dataObject.SetImage(bmi);
-            //}
+            //// TODO: The following code block *should* handle images, but GetFileContents is
+            //// not yet implemented.
+            ////if (dragData.IsFile)
+            ////{
+            ////    var bmi = new BitmapImage();
+            ////    bmi.BeginInit();
+            ////    bmi.StreamSource = dragData.GetFileContents();
+            ////    bmi.EndInit();
+            ////    dataObject.SetImage(bmi);
+            ////}
 
-            MpHelpers.RunOnMainThread(async()=> {
-                var cwb = chromiumWebBrowser as ChromiumWebBrowser;
-                var results = DragDrop.DoDragDrop(cwb, dataObject, DragDropEffects.Move);
-            });
 
+            MpConsole.WriteLine("Chromium drag enter called");
             return false;
         }
 

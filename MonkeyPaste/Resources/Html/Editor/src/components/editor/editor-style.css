@@ -12,12 +12,7 @@ body {
 }
 
 .btn {
-    border: none;
-    background-color: green;
-    padding: 14px 28px;
-    font-size: 16px;
-    cursor: pointer;
-    display: inline-block;}
+    
 
     /* On mouse-over */
     .btn:hover {
@@ -34,6 +29,14 @@ body {
     overflow: auto;
     padding: 5px;
     z-index: -1;
+}
+
+div:focus {
+    background-color: aqua;
+}
+
+textarea:focus {
+    background-color: maroon;
 }
 
 .info-marker {

@@ -70,6 +70,9 @@
   <PropertyGroup>
     <StartupObject>MpWpfApp.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
@@ -1159,6 +1162,7 @@
     <None Include="..\.editorconfig">
       <Link>Views\.editorconfig</Link>
     </None>
+    <None Include="app.manifest" />
     <None Include="Properties\DefaultUiStrings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>DefaultUiStrings.Designer.cs</LastGenOutput>

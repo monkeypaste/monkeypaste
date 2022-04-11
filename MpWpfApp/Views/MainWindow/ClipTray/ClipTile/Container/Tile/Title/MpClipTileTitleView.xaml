@@ -152,8 +152,8 @@
                     local:MpMarqueeExtension.MaxRenderWidth="{Binding ActualWidth,
                                                                       ElementName=ClipTileTitleTextCanvas}"
                     local:MpMarqueeExtension.TextBox="{Binding ElementName=ClipTileTitleTextBox}"
-                    Visibility="{Binding IsEditingTitle,
-                                         Converter={StaticResource BoolToVisibilityFlipConverter}}" />
+                    Visibility="{Binding IsTitleReadOnly,
+                                         Converter={StaticResource BoolToVisibilityConverter}}" />
 
             <TextBox x:Name="ClipTileTitleTextBox"
                      IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
@@ -168,8 +168,8 @@
                                                             Mode=OneWay}"
                      IsReadOnly="False"
                      Tag="{Binding ElementName=ClipTileTitleMarqueeCanvas}"
-                     Visibility="{Binding IsEditingTitle,
-                                          Converter={StaticResource BoolToVisibilityConverter},
+                     Visibility="{Binding IsTitleReadOnly,
+                                          Converter={StaticResource BoolToVisibilityFlipConverter},
                                           ConverterParameter={StaticResource Hide}}"
                      Text="{Binding CopyItemTitle,
                                     Mode=TwoWay,

@@ -36,7 +36,7 @@
                                           Path=Background,
                                           Converter={StaticResource BackgroundBrushToForegroundBrushConverter}}"
                      BorderThickness="0"
-                     Focusable="{Binding IsReadOnly,
+                     Focusable="{Binding IsContentReadOnly,
                                          Converter={StaticResource BoolFlipConverter}}"
                      local:MpIsFocusedExtension.IsEnabled="True"
                      local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
@@ -45,8 +45,7 @@
                      IsDocumentEnabled="True"
                      IsEnabled="True"
                      IsInactiveSelectionHighlightEnabled="True"
-                     IsReadOnly="{Binding IsEditingContent,
-                                          Converter={StaticResource BoolFlipConverter}}"
+                     IsReadOnly="{Binding IsContentReadOnly}"
                      IsUndoEnabled="True"
                      Loaded="Rtb_Loaded"
                      PreviewKeyUp="Rtb_PreviewKeyUp"

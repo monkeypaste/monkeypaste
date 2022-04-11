@@ -35,7 +35,7 @@
                                               Converter={StaticResource BoolToVisibilityConverter}}"
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"
-                         Stroke="White" 
+                         Stroke="White"
                          Fill="{Binding EnableToggleButtonShapeHexColor,
                                         Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"

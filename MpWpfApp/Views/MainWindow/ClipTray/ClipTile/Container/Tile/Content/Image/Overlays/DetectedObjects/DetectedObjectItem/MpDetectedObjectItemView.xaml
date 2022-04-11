@@ -55,8 +55,7 @@
                                                   StrokeThickness="{Binding BackgroundCircle.Thickness}">
                                                 <Path.Data>
                                                     <PathGeometry>
-                                                        <PathFigure StartPoint="{Binding BackgroundCircle.StartPosition,
-                                                                                         FallbackValue=0 0}">
+                                                        <PathFigure StartPoint="{Binding BackgroundCircle.StartPosition, FallbackValue=0 0}">
                                                             <PathFigure.Segments>
                                                                 <ArcSegment RotationAngle="0"
                                                                             SweepDirection="Clockwise"
@@ -77,8 +76,7 @@
                                                   StrokeEndLineCap="Round">
                                                 <Path.Data>
                                                     <PathGeometry>
-                                                        <PathFigure StartPoint="{Binding BackgroundCircle.StartPosition,
-                                                                                         FallbackValue=0 0}">
+                                                        <PathFigure StartPoint="{Binding BackgroundCircle.StartPosition, FallbackValue=0 0}">
                                                             <PathFigure.Segments>
                                                                 <ArcSegment RotationAngle="0"
                                                                             SweepDirection="Clockwise"
