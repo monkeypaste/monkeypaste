@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -26,7 +28,18 @@ namespace MpWpfApp {
             typeof(MpIsFocusedExtension),
             new FrameworkPropertyMetadata {
                 BindsTwoWayByDefault = true,
-                DefaultValue = false
+                DefaultValue = false,
+                PropertyChangedCallback = (s,e) => {
+                    if(e.NewValue == null) {
+                        return;
+                    }
+                    bool isFocused = (bool)e.NewValue;
+                    if(isFocused) {
+                        GotFocus(s as FrameworkElement);
+                    } else {
+                        LostFocus(s as FrameworkElement);
+                    }
+                }
             });
 
         #endregion
@@ -141,24 +154,6 @@ namespace MpWpfApp {
             fe.LostFocus += Fe_LostFocus;
         }
 
-        private static void GotFocus(DependencyObject dpo) {            
-            SetIsFocused(dpo, true);
-            if (GetSelectAllOnFocus(dpo)) {
-                if (dpo is TextBoxBase tbb) {
-                    IsAnyTextBoxFocused = true;
-                    tbb.SelectAll();
-                }
-            }
-        }
-
-        private static void LostFocus(DependencyObject dpo) {
-            if (dpo is TextBoxBase tbb) {
-                IsAnyTextBoxFocused = false;
-            }
-            
-            SetIsFocused(dpo, false);
-        }
-
         private static void Fe_LostFocus(object sender, RoutedEventArgs e) {
             var dpo = (DependencyObject)sender;
             if (dpo == null) {
@@ -177,11 +172,11 @@ namespace MpWpfApp {
 
         private static void MpIsFocusedExtension_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e) {
             var dpo = (DependencyObject)sender;
-            if(dpo == null) {
+            if (dpo == null) {
                 return;
             }
             bool isFocused = (bool)e.NewValue;
-            if(isFocused) {
+            if (isFocused) {
                 GotFocus(dpo);
             } else {
                 LostFocus(dpo);
@@ -190,10 +185,51 @@ namespace MpWpfApp {
 
         private static void Tbb_OnReadOnlyChanged(object sender, EventArgs e) {
             var tbb = sender as TextBoxBase;
-            if(tbb != null && GetIsFocused(tbb) && tbb.IsReadOnly) {
-                // when focused textbox becomes readonly need to make sure static IsAnyTextBoxFocused is toggled
-                LostFocus(tbb);
+            if (tbb != null) {
+                bool isFocused = GetIsFocused(tbb);
+                if(isFocused) {
+                    if(tbb.IsReadOnly) {
+                        // when focused textbox becomes readonly need to make sure static IsAnyTextBoxFocused is toggled
+                        LostFocus(tbb);
+                    } else {
+                        GotFocus(tbb);
+                    }
+                } else {
+                    LostFocus(tbb);
+                }
             }
+        }
+
+        private static void GotFocus(DependencyObject dpo) {            
+            SetIsFocused(dpo, true);
+            if(dpo is FrameworkElement fe) {
+                Keyboard.Focus(fe);
+            }
+            if (dpo is TextBoxBase tbb) {
+                if(tbb.IsReadOnly) {
+                    IsAnyTextBoxFocused = false;
+                } else {
+                    IsAnyTextBoxFocused = true;
+                    Keyboard.Focus(tbb);
+                    if (GetSelectAllOnFocus(dpo)) {
+                        tbb.SelectAll();
+                    } else {
+                        if(tbb is TextBox tb) {
+                            tb.CaretIndex = 0;
+                        } else if(tbb is RichTextBox rtb) {
+                            rtb.CaretPosition = rtb.Document.ContentStart;
+                        }
+                    }
+                }  
+            }            
+        }
+
+        private static void LostFocus(DependencyObject dpo) {
+            if (dpo is TextBoxBase tbb) {
+                IsAnyTextBoxFocused = false;
+            }
+            
+            SetIsFocused(dpo, false);
         }
     }
 }

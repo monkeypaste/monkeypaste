@@ -339,7 +339,7 @@
                     return ScrollBarVisibility.Hidden;
                 }
                 if (!IsReadOnly) {
-                    if (EditableContentSize.Width > ContentWidth) {
+                     if (EditableContentSize.Width > ContentWidth) {
                         return ScrollBarVisibility.Visible;
                     }
                 }
@@ -767,7 +767,9 @@
             }
 
             if (headItem != null) {
-                var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(headItem.Id);
+                //var ccgl = GetCompositeChildrenGuids(headItem.ItemData);
+
+                var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(headItem.Id);                
                 ccil.Insert(0, headItem);
 
                 for (int i = 0; i < ccil.OrderBy(x=>x.CompositeSortOrderIdx).Count(); i++) {
@@ -1204,6 +1206,30 @@
                     ItemViewModels.ForEach((Action<MpContentItemViewModel>)(x => x.OnPropertyChanged(nameof(x.IsContentReadOnly))));
                     break;
             }
+        }
+
+        private string[] GetCompositeChildrenGuids(string headItemData) {
+            List<string> childGuids = new List<string>();
+            if(IsPlaceholder) {
+                return childGuids.ToArray();
+            }
+
+            var mc = Regex.Matches(headItemData, @"{c{.*?}c}");
+            foreach (Match m in mc) {
+                foreach (Group mg in m.Groups) {
+                    foreach (Capture c in mg.Captures) {
+                        string cguid = c.Value
+                                            .Replace("{c{", string.Empty)
+                                            .Replace("}c}", string.Empty);
+                        if (childGuids.Contains(cguid)) {
+                            continue;
+                        }
+                        childGuids.Add(cguid);
+                    }
+                }
+            }
+
+            return childGuids.ToArray();
         }
 
         private void ExpandedKeyDown_Handler(object sender, KeyEventArgs e) {

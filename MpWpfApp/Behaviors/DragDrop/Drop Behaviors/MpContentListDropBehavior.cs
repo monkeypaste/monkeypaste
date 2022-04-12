@@ -133,15 +133,15 @@ namespace MpWpfApp {
             if (lastItemIdx < rtbvl.Count) {
                 Rect lastItemRect = targetRects[lastItemIdx];
                 double listRectBottom = AssociatedObject.ActualHeight;
-                //if (lastItemRect.Bottom <= listRectBottom) 
-                {
+                var tailDropRects = rtbvl[lastItemIdx].RtbViewDropBehavior.DropRects;
+                if (tailDropRects.Count > 0) {
                     //due to async loading sometimes the rtb view's are not always loaded in time (probably for larger or heavy tokened items)
                     //or this item is a different content type so don't expect item list to be populated
                     double tailX = lastItemRect.Location.X;
                     double tailY = rtbvl.Count != itemRects.Count ?
                                          listRectBottom :
                                          rtbvl[lastItemIdx].Rtb.TranslatePoint(
-                                             rtbvl[lastItemIdx].RtbViewDropBehavior.DropRects[1].BottomRight, 
+                                             rtbvl[lastItemIdx].RtbViewDropBehavior.DropRects[tailDropRects.Count - 1].BottomRight, 
                                              RelativeToElement)
                                                 .Y;
                     double tailW = lastItemRect.Width;

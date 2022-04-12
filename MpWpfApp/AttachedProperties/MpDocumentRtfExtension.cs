@@ -1,8 +1,12 @@
 ﻿using CefSharp;
+using CefSharp.JavascriptBinding;
 using CefSharp.Wpf;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using Newtonsoft.Json;
+using SQLite;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,13 +15,93 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpDocumentRtfExtension : DependencyObject {
-        private static string _editorHtml;
-        private static bool _isCefLoaded = false;
+        #region Private Variables
+
+        private static readonly double _EDITOR_DEFAULT_WIDTH = 900;
+
+        private static double _readOnlyWidth;
+
+        #endregion
+
+
+        #region IsSelected
+
+        public static bool GetIsSelected(DependencyObject obj) {
+            return (bool)obj.GetValue(IsSelectedProperty);
+        }
+        public static void SetIsSelected(DependencyObject obj, bool value) {
+            obj.SetValue(IsSelectedProperty, value);
+        }
+        public static readonly DependencyProperty IsSelectedProperty =
+          DependencyProperty.RegisterAttached(
+            "IsSelected",
+            typeof(bool),
+            typeof(MpDocumentRtfExtension),
+            new FrameworkPropertyMetadata(false));
+
+        #endregion
+
+        #region IsContentReadOnly
+
+        public static bool GetIsContentReadOnly(DependencyObject obj) {
+            return (bool)obj.GetValue(IsContentReadOnlyProperty);
+        }
+        public static void SetIsContentReadOnly(DependencyObject obj, bool value) {
+            obj.SetValue(IsContentReadOnlyProperty, value);
+        }
+        public static readonly DependencyProperty IsContentReadOnlyProperty =
+          DependencyProperty.RegisterAttached(
+            "IsContentReadOnly",
+            typeof(bool),
+            typeof(MpDocumentRtfExtension),
+            new FrameworkPropertyMetadata() {
+                PropertyChangedCallback = async (s, e) => {
+                    if (e.NewValue == null) {
+                        return;
+                    }
+                    var fe = s as FrameworkElement;
+                    bool isReadOnly = (bool)e.NewValue;
+                    if (isReadOnly) {
+                        EnableReadOnly(fe);
+                    } else {
+                        DisableReadOnly(fe);
+                    }
+                }
+            });
+
+        private static void EnableReadOnly(FrameworkElement fe) {
+            if (fe.DataContext is MpContentItemViewModel civm) {
+                var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
+                if (ctcv != null) {
+                    ctcv.TileResizeBehvior.Resize(_readOnlyWidth - ctcv.ActualWidth, 0);
+                }
+
+                //MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(civm);
+            }
+        }
+
+        private static void DisableReadOnly(FrameworkElement fe) {
+            if (fe.DataContext is MpContentItemViewModel civm) {
+                var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
+                if (ctcv != null) {
+                    _readOnlyWidth = ctcv.ActualWidth;
+                    if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
+                        ctcv.TileResizeBehvior.Resize(_EDITOR_DEFAULT_WIDTH - ctcv.ActualWidth, 0);
+                    }
+                    MpIsFocusedExtension.SetIsFocused(fe, true);
+                }
+            }
+        }
+
+        #endregion
+
+        #region DocumentRtf
 
         public static string GetDocumentRtf(DependencyObject obj) {
             return (string)obj.GetValue(DocumentRtfProperty);
@@ -56,6 +140,7 @@ namespace MpWpfApp {
                     }
                 }
             });
-        
+
+        #endregion
     }
 }

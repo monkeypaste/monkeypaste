@@ -71,8 +71,8 @@
                      VirtualizingPanel.ScrollUnit="Pixel"
                      VirtualizingPanel.VirtualizationMode="Recycling"
                      ScrollViewer.CanContentScroll="False"
-                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ScrollViewer.VerticalScrollBarVisibility="{Binding VerticalScrollbarVisibility}"
+                     ScrollViewer.HorizontalScrollBarVisibility="{Binding HorizontalScrollbarVisibility}"
                      ScrollViewer.ScrollChanged="ContentListBox_ScrollChanged"
                      Padding="0">
                 <ListBox.InputBindings>

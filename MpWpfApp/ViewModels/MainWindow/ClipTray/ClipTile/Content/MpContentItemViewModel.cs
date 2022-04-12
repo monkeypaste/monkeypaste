@@ -778,7 +778,7 @@ namespace MpWpfApp {
             //IsEditingContent = false;
             //IsEditingTitle = false;
             IsTitleReadOnly = true;
-
+            IsContentReadOnly = true;
             TemplateCollection?.ClearAllEditing();
             if (IsPasting) {
                 IsPasting = false;
@@ -936,13 +936,6 @@ namespace MpWpfApp {
                     RequestUiUpdate();
                     break;
                 case nameof(IsEditingTitle):
-                    //if(!IsEditingTitle) {
-                    //    Task.Run(async () => {
-                    //        await CopyItem.WriteToDatabaseAsync();
-                    //    });
-                    //} else if(!IsSelected) {
-                    //    IsSelected = true;
-                    //}
                     if (IsEditingTitle) {
                         if (!IsSelected) {
                             IsSelected = true;
@@ -994,6 +987,14 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsContentReadOnly):
                     OnPropertyChanged(nameof(EditorHeight));
+                    Parent.OnPropertyChanged(nameof(Parent.HorizontalScrollbarVisibility));
+                    Parent.OnPropertyChanged(nameof(Parent.VerticalScrollbarVisibility)); 
+                    if(IsContentReadOnly) {
+                        // BUG when content is editable and new items are added and the
+                        // list is refreshed the tile goes back to readonly, resizes but
+                        // toolbars don't go away and properties get out of sync
+                        ClearEditing();
+                    }
                     break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {

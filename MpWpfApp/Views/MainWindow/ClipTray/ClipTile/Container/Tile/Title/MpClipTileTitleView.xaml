@@ -118,7 +118,6 @@
                                            Converter={StaticResource BoolFlipConverter}}"
                 MouseEnter="ClipTileTitleTextGrid_MouseEnter"
                 MouseLeave="ClipTileTitleTextGrid_MouseLeave"
-                PreviewMouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
                 Margin="10,3,0,0"
                 HorizontalAlignment="Stretch">
             <!--  Clip Title TextBlock  -->
@@ -142,6 +141,7 @@
             <Canvas x:Name="ClipTileTitleMarqueeCanvas"
                     Height="{Binding ActualHeight,
                                      ElementName=ClipTileTitleTextCanvas}"
+                    MouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
                     local:MpMarqueeExtension.IsEnabled="True"
                     local:MpMarqueeExtension.LoopDelayMs="0"
                     local:MpMarqueeExtension.DropShadowOffset="1 1"

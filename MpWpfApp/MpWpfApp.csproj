@@ -114,6 +114,7 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpDocumentHtmlExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
+    <Compile Include="AttachedProperties\MpEncodedDocumentExtension.cs" />
     <Compile Include="AttachedProperties\MpTextSelectionRangeExtension.cs" />
     <Compile Include="AttachedProperties\MpImageSourceExtension.cs" />
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />

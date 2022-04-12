@@ -268,9 +268,7 @@ namespace MpWpfApp {
             if (!BindingContext.Parent.IsReadOnly) {
                 MpCursor.UnsetCursor(this);
             }
-        }
-
-        
+        }        
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpContentItemViewModel;
@@ -299,6 +297,10 @@ namespace MpWpfApp {
 
         private void Rtb_GotFocus(object sender, RoutedEventArgs e) {
             var rtbvm = DataContext as MpContentItemViewModel;
+            if(!rtbvm.IsSelected) {
+                rtbvm.IsSelected = true;
+            }
+
             if(!rtbvm.Parent.IsReadOnly) {
                 //rtbvm.IsEditingContent = true;
                 var plv = this.GetVisualAncestor<MpContentListView>();

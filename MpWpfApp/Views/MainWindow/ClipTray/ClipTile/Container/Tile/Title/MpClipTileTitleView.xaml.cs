@@ -59,25 +59,8 @@ namespace MpWpfApp {
             }
             if (!BindingContext.IsEditingTitle) {
                 BindingContext.IsTitleReadOnly = false;
-                //MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
                 e.Handled = true;
-            }
-            
-        }
-
-        private void ApplicationHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (BindingContext == null) {
-                return;
-            }
-            if (BindingContext.IsEditingTitle) {
-                var tbr = new Rect(0, 0, ClipTileTitleTextBox.ActualWidth, ClipTileTitleTextBox.ActualHeight);
-                var tb_mp = Application.Current.MainWindow.TranslatePoint(new Point(e.Location.X, e.Location.Y), ClipTileTitleTextBox);
-                if(!tbr.Contains(tb_mp)) {
-                    BindingContext.IsTitleReadOnly = true;
-                } else { 
-                    ClipTileTitleTextBox.RaiseEvent(new MouseButtonEventArgs(Mouse.PrimaryDevice, (int)DateTime.Now.Ticks, MouseButton.Left));
-                }
-            }
+            }            
         }
 
         private void ClipTileTitleTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {

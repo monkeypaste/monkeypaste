@@ -604,7 +604,7 @@ namespace MpWpfApp {
                         }
                         CollectionViewSource.GetDefaultView(SelectedItem.Items).Refresh();
                         //Items.ForEach(x => x.IsEditingParameters = false);
-                        //SelectedItem.IsEditingParameters = true;
+                        //SelectedIt em.IsEditingParameters = true;
                     }                    
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));

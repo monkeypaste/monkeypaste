@@ -370,6 +370,10 @@ namespace MpWpfApp {
             if (Math.Abs(dx + dy) < 0.1) {
                 return;
             }
+            if(BoundWidth + dx < 0) {
+                ResetToDefault();
+                return;
+            }
             double nw = BoundWidth + dx;
             BoundWidth = Math.Min(Math.Max(nw, MinWidth), MaxWidth);
 

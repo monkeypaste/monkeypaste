@@ -1671,23 +1671,34 @@ namespace MpWpfApp {
                 IsBusy = true;
 
 
-                if (MpDataModelProvider.QueryInfo.TagId != MpTag.AllTagId) {
-                    //this occurs when appending within non-default tag
-
-                    foreach (var nci in _newModels) {
-                        await MpCopyItemTag.Create(
-                                MpDataModelProvider.QueryInfo.TagId,
-                                nci.Id);
-                    }
-                }
 
                 foreach (var sctvm in SelectedItems) {
                     foreach (var ivm in sctvm.SelectedItems) {
                         var clonedCopyItem = (MpCopyItem)await ivm.CopyItem.Clone(true);
-                        await clonedCopyItem.WriteToDatabaseAsync();
+                        if(ivm.CompositeSortOrderIdx > 0) {
+                            ivm.Parent.ItemViewModels
+                                .Where(x => x.CompositeSortOrderIdx > ivm.CompositeSortOrderIdx)
+                                .ForEach(x => x.CompositeSortOrderIdx++);
+                        }
+
+                        clonedCopyItem.CompositeSortOrderIdx = ivm.CompositeSortOrderIdx + 1;
+                        clonedCopyItem.CompositeParentCopyItemId = ivm.CopyItemId;
+
+                        await clonedCopyItem.WriteToDatabaseAsync();                        
                         _newModels.Add(clonedCopyItem);
                     }
                 }
+
+
+                //if (MpDataModelProvider.QueryInfo.TagId != MpTag.AllTagId) {
+                //    //this occurs when appending within non-default tag
+
+                //    foreach (var nci in _newModels) {
+                //        await MpCopyItemTag.Create(
+                //                MpDataModelProvider.QueryInfo.TagId,
+                //                nci.Id);
+                //    }
+                //}
 
                 AddNewItemsCommand.Execute(true);
 
@@ -2413,6 +2424,7 @@ namespace MpWpfApp {
             },
             () => {
                 return SelectedItems.Count > 0 &&
+                       SelectedItems[0].ItemViewModels.Count > 1 &&
                        SelectedItems.All(x => x.ItemType == SelectedItems[0].ItemType) &&
                        (SelectedItems[0].ItemType == MpCopyItemType.Text);
             });

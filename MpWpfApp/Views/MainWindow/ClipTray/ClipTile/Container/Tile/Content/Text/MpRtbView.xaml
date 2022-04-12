@@ -29,6 +29,9 @@
                      HorizontalContentAlignment="Stretch"
                      VerticalContentAlignment="Stretch"
                      local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemData}"
+                     local:MpDocumentRtfExtension.IsSelected="{Binding IsSelected,
+                                                                       Mode=TwoWay}"
+                     local:MpDocumentRtfExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
                      AutoWordSelection="False"
                      Background="{Binding ItemBackgroundHexColor,
                                           Converter={StaticResource StringHexToBrushConverter}}"

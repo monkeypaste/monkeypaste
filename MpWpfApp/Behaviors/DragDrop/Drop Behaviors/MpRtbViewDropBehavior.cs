@@ -72,6 +72,28 @@ namespace MpWpfApp {
                 AssociatedObject.Rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Backward)
             };
             return homeAndEndRects;
+
+            //var insertRects = new List<Rect>();
+
+            //var rtb = AssociatedObject.Rtb;
+            //var ctr_mp = Mouse.GetPosition(rtb.Document);
+            //Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth, rtb.ActualHeight);
+            //if (!rtb_rect.Contains(ctr_mp)) {
+            //    return insertRects;
+            //}
+
+            //var cp = AssociatedObject.Rtb.Document.ContentStart;
+            //while(cp != null && cp != AssociatedObject.Rtb.Document.ContentEnd) {
+            //    if(cp.IsAtInsertionPosition) {
+            //        insertRects.Add(cp.GetCharacterRect(LogicalDirection.Forward));
+            //        if(cp == AssociatedObject.Rtb.Document.ContentEnd) {
+            //            insertRects.Add(cp.GetCharacterRect(LogicalDirection.Backward));
+            //            return insertRects;
+            //        }
+            //    }
+            //    cp = cp.GetNextInsertionPosition(LogicalDirection.Forward);
+            //}
+            //return insertRects;
         }
 
         public override int GetDropTargetRectIdx() {
@@ -81,6 +103,11 @@ namespace MpWpfApp {
             if (!rtb_rect.Contains(ctr_mp)) {
                 return -1;
             }
+
+            //var insertRects = GetDropTargetRects();
+            //var closestRect = insertRects.Aggregate((a, b) => a.Location.Distance(ctr_mp) < b.Location.Distance(ctr_mp) ? a : b);
+
+            //return insertRects.IndexOf(closestRect);
 
             double homeDist = GetDropTargetRects()[0].Location.Distance(ctr_mp);
             double endDist = GetDropTargetRects()[1].Location.Distance(ctr_mp);
@@ -171,7 +198,6 @@ namespace MpWpfApp {
             }
         }
 
-
         public async Task MergeContentItem(MpCopyItem mci, bool isDuplicating) {
             if(AssociatedObject == null) {
                 return;
@@ -231,6 +257,7 @@ namespace MpWpfApp {
         }
 
         public override void AutoScrollByMouse() {
+
             if (DropIdx == 0) {
                 AssociatedObject.BindingContext.ScrollToHomeCommand.Execute(null);
             } else if(DropIdx == 1) {
