@@ -678,7 +678,7 @@ namespace MpWpfApp {
             if (dpo == null) {
                 return default;
             }
-            if (dpo.GetType() == typeof(T)) {
+            if (dpo.GetType() == typeof(T) || dpo.GetType().IsSubclassOf(typeof(T))) {
                 return (dpo as T);
             }
             if (dpo.GetType().IsSubclassOf(typeof(FrameworkContentElement))) {

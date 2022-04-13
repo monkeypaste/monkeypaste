@@ -21,8 +21,8 @@ namespace MpWpfApp {
             get {
                 List<MpIContentDropTarget> dtl = new List<MpIContentDropTarget>();
 
-                var clvl = Application.Current.MainWindow.GetVisualDescendents<MpContentListView>();
-                dtl.AddRange(clvl.Select(x => x.ContentListDropBehavior).Where(x => x.IsDropEnabled).ToList());
+                //var clvl = Application.Current.MainWindow.GetVisualDescendents<MpContentListView>();
+                //dtl.AddRange(clvl.Select(x => x.ContentListDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
                 var rtbvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbView>();
                 dtl.AddRange(rtbvl.Select(x => x.RtbViewDropBehavior).Where(x => x.IsDropEnabled).ToList());

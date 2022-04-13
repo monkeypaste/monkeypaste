@@ -84,7 +84,7 @@ namespace MpWpfApp {
 
         public Brush TemplateBorderBrush {
             get {
-                if(HostClipTileViewModel == null || HostClipTileViewModel.IsReadOnly) {
+                if(HostClipTileViewModel == null || HostClipTileViewModel.IsContentReadOnly) {
                     return Brushes.Transparent;
                 }
                 if(IsSelected) {
@@ -111,7 +111,7 @@ namespace MpWpfApp {
                 if(HostClipTileViewModel == null) {
                     return TemplateBrush;
                 }
-                if(!HostClipTileViewModel.IsReadOnly) {
+                if(!HostClipTileViewModel.IsContentReadOnly) {
                     if (IsHovering) {
                         return MpWpfColorHelpers.GetDarkerBrush(TemplateBrush);
                     }
@@ -428,7 +428,7 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel == null) {
                     return false;
                 }
-                return !HostClipTileViewModel.IsReadOnly;
+                return !HostClipTileViewModel.IsContentReadOnly;
             });
 
         public ICommand DeleteTemplateCommand => new RelayCommand(

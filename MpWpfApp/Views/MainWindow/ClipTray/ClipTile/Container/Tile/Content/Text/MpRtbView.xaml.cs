@@ -31,7 +31,7 @@ namespace MpWpfApp {
         public Hyperlink LastEditedHyperlink;
 
 
-        public ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
+        public ObservableCollection<MpTemplateHyperlink_old> TemplateViews = new ObservableCollection<MpTemplateHyperlink_old>();
 
         public MpRtbView() : base() {
             InitializeComponent();
@@ -252,20 +252,20 @@ namespace MpWpfApp {
         }
 
         private void Rtb_MouseEnter(object sender, MouseEventArgs e) {
-            if (!BindingContext.Parent.IsReadOnly) {
+            if (!BindingContext.Parent.IsContentReadOnly) {
                 MpCursor.SetCursor(this, MpCursorType.IBeam);
             }
         }
 
         private void Rtb_MouseMove(object sender, MouseEventArgs e) {
             e.Handled = false;
-            if (!BindingContext.Parent.IsReadOnly) {
+            if (!BindingContext.Parent.IsContentReadOnly) {
                 MpCursor.SetCursor(this, MpCursorType.IBeam);
             }
         }
 
         private void Rtb_MouseLeave(object sender, MouseEventArgs e) {
-            if (!BindingContext.Parent.IsReadOnly) {
+            if (!BindingContext.Parent.IsContentReadOnly) {
                 MpCursor.UnsetCursor(this);
             }
         }        
@@ -301,7 +301,7 @@ namespace MpWpfApp {
                 rtbvm.IsSelected = true;
             }
 
-            if(!rtbvm.Parent.IsReadOnly) {
+            if(!rtbvm.Parent.IsContentReadOnly) {
                 //rtbvm.IsEditingContent = true;
                 var plv = this.GetVisualAncestor<MpContentListView>();
                 if (plv != null) {
@@ -528,7 +528,7 @@ namespace MpWpfApp {
                             lastRangeEnd = matchRange.End;
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
                                 var copyItemTemplate = templateModels.Where(x => x.EncodedTemplate == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().TextToken;
-                                var thl = await MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
+                                var thl = await MpTemplateHyperlink_old.Create(matchRange, copyItemTemplate);
                             } else {
                                 var hlCheck1 = matchRange.Start.Parent.FindParentOfType<Hyperlink>();
                                 var hlCheck2 = matchRange.End.Parent.FindParentOfType<Hyperlink>();

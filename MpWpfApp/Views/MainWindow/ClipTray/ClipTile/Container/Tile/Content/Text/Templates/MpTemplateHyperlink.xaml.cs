@@ -17,52 +17,17 @@ namespace MpWpfApp {
     /// Interaction logic for MpTemplateHyperlink.xaml
     /// </summary>
     public partial class MpTemplateHyperlink : Hyperlink {
-        public static async Task<MpTemplateHyperlink> Create(TextRange tr, MpTextTemplate cit) {
-            //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
-            //needs to be broken into their text before the template hyperlink can be created
-            var trSHl = tr.Start.Parent.FindParentOfType<Hyperlink>();
-            var trEHl = tr.End.Parent.FindParentOfType<Hyperlink>();
-            var trText = tr.Text;
-
-            if (trSHl != null) {
-                var linkText = new TextRange(trSHl.ElementStart, trSHl.ElementEnd).Text;
-                trSHl.Inlines.Clear();
-                var span = new Span(new Run(linkText), trSHl.ElementStart);
-                tr = MpHelpers.FindStringRangeFromPosition(span.ContentStart, trText, true);
-                MpConsole.WriteLine("Splitting range");
-            }
-            if (trEHl != null && trEHl != trSHl) {
-                var linkText = new TextRange(trEHl.ElementStart, trEHl.ElementEnd).Text;
-                trEHl.Inlines.Clear();
-                var span = new Span(new Run(linkText), trEHl.ElementStart);
-                tr = MpHelpers.FindStringRangeFromPosition(span.ContentStart, trText, true);
-                MpConsole.WriteLine("Splitting range");
-            }
-
+        public static MpTemplateHyperlink Create(TextRange tr, MpTextTemplate cit) {
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
             var rtbvm = rtb.DataContext as MpContentItemViewModel;
             var thcvm = rtbvm.TemplateCollection;
-
-            string templateName = tr.Text;
-
-            //if (cit == null) {
-            //    //occurs when its a new template
-            //    if (string.IsNullOrWhiteSpace(templateName)) {
-            //        templateName = thcvm.GetUniqueTemplateName();
-            //    } 
-            //    cit = await MpTextTemplate.Create(
-            //                thcvm.Parent.CopyItemId,
-            //                templateName);
-            //    await cit.WriteToDatabaseAsync();
-            //}
-
             tr.Text = string.Empty;
 
             MpTemplateViewModel thlvm = thcvm.CreateTemplateViewModel(cit);
 
             var nthl = new MpTemplateHyperlink(tr, thlvm);
-            nthl.Tag = Application.Current.Resources["TemplateHyperlinkTag"] as string;
-           //tb.GetVisualAncestor<MpRtbView>().TemplateViews.Add(nthl);
+            //ensure tag is set so decode document doesn't override
+            nthl.Tag = thlvm;
             return nthl;
         }
 
@@ -75,42 +40,6 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private void Hyperlink_Loaded(object sender, RoutedEventArgs e) {
-            Tag = Application.Current.Resources["TemplateHyperlinkTag"] as string;
-            var rtbv = ElementStart.Parent.FindParentOfType<MpRtbView>();
-            rtbv.TemplateViews.Add(this);
-
-            var thlvm = DataContext as MpTemplateViewModel;
-            //MpConsole.WriteLine($"template {thlvm.TemplateName} loaded from: " + sender.GetType().ToString());
-        }
-
-        private void Hyperlink_Unloaded(object sender, RoutedEventArgs e) {
-            var rtbv = ElementStart.Parent.FindParentOfType<MpRtbView>();
-            if(rtbv != null) {
-                rtbv.TemplateViews.Remove(this);
-            }
-
-            //var thlvm = DataContext as MpTemplateViewModel;
-            //bool wasMovedToDiffTile = thlvm.HostClipTileViewModel.IsPlaceholder;
-            //MpConsole.WriteLine("Ignoring unload");
-            //return;
-            //if (Tag != null && !wasMovedToDiffTile) {
-            //    MpConsole.WriteLine($"UNLOAD-DELETING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
-            //    //Tag is null when formatting is cleared, it is non-null when the instance should be removed
-            //    var rtb = ElementStart.Parent.FindParentOfType<RichTextBox>();
-            //    if (rtb != null) {
-            //        var rtbv = rtb.FindParentOfType<MpRtbView>();
-            //        if (rtbv != null) {
-            //            if (rtbv.TemplateViews.Contains(this)) {
-            //                rtbv.TemplateViews.Remove(this);
-            //            }
-            //        }
-            //    }
-            //    thlvm.Parent.RemoveItem(thlvm.TextToken, false);
-            //} else {
-            //    MpConsole.WriteLine($"UNLOAD-CLEARING template {thlvm.TemplateName} from item {thlvm.Parent.Parent.CopyItemTitle}");
-            //}
-        }
 
         private void Hyperlink_MouseEnter(object sender, MouseEventArgs e) {
             var thlvm = DataContext as MpTemplateViewModel;
@@ -130,7 +59,7 @@ namespace MpWpfApp {
                 //without doing this
                 thlvm.Parent.Parent.IsSelected = true;
             }
-            if (!thlvm.HostClipTileViewModel.IsReadOnly) {
+            if (!thlvm.HostClipTileViewModel.IsContentReadOnly) {
                 if(thlvm.Parent.Parent.IsPastingTemplate) {
                     thlvm.IsSelected = true;
                 } else {

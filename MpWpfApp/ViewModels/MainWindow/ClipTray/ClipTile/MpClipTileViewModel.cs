@@ -252,7 +252,7 @@
                     return cs;
                 }
                 double ch = MpMeasurements.Instance.ClipTileContentHeight;
-                if (IsAnyEditingContent) {
+                if (!IsContentReadOnly) {
                     ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
                 }
                 if (IsAnyPastingTemplate) {
@@ -264,7 +264,7 @@
                 if (Count == 1) {
                     cs.Height = ch;
                 } else {
-                    double h = IsReadOnly ? ReadOnlyContentSize.Height : EditableContentSize.Height;
+                    double h = IsContentReadOnly ? ReadOnlyContentSize.Height : EditableContentSize.Height;
                     cs.Height = Math.Max(MpMeasurements.Instance.ClipTileScrollViewerWidth, Math.Max(ch, h));
                 }
                 return cs;
@@ -338,7 +338,7 @@
                 if (Parent == null) {
                     return ScrollBarVisibility.Hidden;
                 }
-                if (!IsReadOnly) {
+                if (!IsContentReadOnly) {
                      if (EditableContentSize.Width > ContentWidth) {
                         return ScrollBarVisibility.Visible;
                     }
@@ -352,7 +352,7 @@
                 if (Parent == null) {
                     return ScrollBarVisibility.Hidden;
                 }
-                if (!IsReadOnly) {
+                if (!IsContentReadOnly) {
                     if (EditableContentSize.Height > ContainerSize.Height) {
                         return ScrollBarVisibility.Visible;
                     }
@@ -480,7 +480,10 @@
         }
         #endregion
 
-        #region State Properties
+        #region State 
+
+
+        public bool IsContentFocused { get; set; } = false;
 
         public bool IsOverPinButton { get; set; } = false;
 
@@ -488,7 +491,7 @@
                                 HeadItem != null && 
                                 Parent.PinnedItems.Any(x => x.HeadItem.CopyItemId == HeadItem.CopyItemId);
 
-        public bool CanVerticallyScroll => !IsReadOnly ?
+        public bool CanVerticallyScroll => !IsContentReadOnly ?
                                                 EditableContentSize.Height > TileContentHeight :
                                                 ItemViewModels.Sum(x => x.UnformattedContentSize.Height) > TileContentHeight;
 
@@ -545,7 +548,7 @@
                     return false;
                 }
 
-                if (!IsReadOnly) {
+                if (!IsContentReadOnly) {
                     if (IsAnyEditingTemplate ||
                         IsAnyPastingTemplate) {
                         return false;
@@ -592,11 +595,14 @@
 
         public int Count => ItemViewModels.Count;
 
-        public bool IsReadOnly => ItemViewModels.All((Func<MpContentItemViewModel, bool>)(x => (bool)x.IsContentReadOnly)) && ItemViewModels.All(x => x.IsTitleReadOnly);
+        public bool IsContentReadOnly => ItemViewModels.All(x => x.IsContentReadOnly);
 
-        public bool IsAnyEditingContent => ItemViewModels.Any(x => x.IsEditingContent);
+        public bool IsTitleReadOnly => ItemViewModels.All(x => x.IsTitleReadOnly);
 
-        public bool IsAnyEditingTitle => ItemViewModels.Any(x => x.IsEditingTitle);
+        public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
+        //public bool IsAnyEditingContent => ItemViewModels.Any(x => x.IsEditingContent);
+
+       // public bool IsAnyEditingTitle => ItemViewModels.Any(x => x.IsEditingTitle);
 
         public bool IsAnyEditingTemplate => ItemViewModels.Any(x => x.IsEditingTemplate);
 
@@ -675,13 +681,14 @@
                 if(IsNew) {
                     return false;
                 }
-                if(Parent == null || ItemViewModels.Count == 0) {
-                    return true;
-                }
+                //if(Parent == null || ItemViewModels.Count == 0) {
+                //    return true;
+                //}
                 if(IsPinned) {
                     return true;
                 }
-                return false;// ItemViewModels.Count > 0;
+                //return false;
+                return RootCopyItem == null;
             }
         }
 
@@ -717,6 +724,14 @@
                 return PrimaryItem.CopyItemCreatedDateTime;
             }
         }
+
+        public string MergedItemData {
+            get {
+                return "This is a test".ToRichText();
+            }
+        }
+
+        public MpCopyItem RootCopyItem { get; private set; }
         
         #endregion
 
@@ -756,6 +771,7 @@
         public async Task InitializeAsync(MpCopyItem headItem, int queryOffset = -1) {
             PropertyChanged -= MpClipTileViewModel_PropertyChanged;
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
+
             QueryOffsetIdx = queryOffset < 0 ? QueryOffsetIdx : queryOffset;
             IsBusy = true;
 
@@ -767,13 +783,64 @@
             }
 
             if (headItem != null) {
-                //var ccgl = GetCompositeChildrenGuids(headItem.ItemData);
 
-                var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(headItem.Id);                
+                var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(headItem.Id);
                 ccil.Insert(0, headItem);
 
-                for (int i = 0; i < ccil.OrderBy(x=>x.CompositeSortOrderIdx).Count(); i++) {
-                    if(ItemViewModels.Any(x=>x.CopyItemId == ccil[i].Id)) {
+                for (int i = 0; i < ccil.OrderBy(x => x.CompositeSortOrderIdx).Count(); i++) {
+                    if (ItemViewModels.Any(x => x.CopyItemId == ccil[i].Id)) {
+                        //this prevents a strange bug i think from async loading that loads 2 of each item
+                        continue;
+                    }
+                    ccil[i].CompositeParentCopyItemId = i == 0 ? 0 : ccil[0].Id;
+                    ccil[i].CompositeSortOrderIdx = i;
+                    var civm = await CreateContentItemViewModel(ccil[i]);
+                    ItemViewModels.Add(civm);
+                }
+
+
+                RootCopyItem = headItem;
+                IsNew = false;
+                RequestUiUpdate();
+
+                MpMessenger.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
+            }
+
+            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
+            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.EditorHeight)));
+
+            OnPropertyChanged(nameof(ItemViewModels));
+            OnPropertyChanged(nameof(IsPlaceholder));
+            OnPropertyChanged(nameof(PrimaryItem));
+            OnPropertyChanged(nameof(TrayX));
+            OnPropertyChanged(nameof(TileBorderBrush));
+            OnPropertyChanged(nameof(CanVerticallyScroll));
+
+            IsBusy = false;
+        }
+
+        public async Task InitializeAsync_old(MpCopyItem headItem, int queryOffset = -1) {
+            PropertyChanged -= MpClipTileViewModel_PropertyChanged;
+            PropertyChanged += MpClipTileViewModel_PropertyChanged;
+
+            QueryOffsetIdx = queryOffset < 0 ? QueryOffsetIdx : queryOffset;
+            IsBusy = true;
+
+            ItemViewModels.Clear();
+            if (headItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(headItem.Id, out double uniqueWidth)) {
+                TileBorderWidth = uniqueWidth;
+            } else {
+                TileBorderWidth = DefaultBorderHeight;
+            }
+
+            if (headItem != null) {
+                //var ccgl = GetCompositeChildrenGuids(headItem.ItemData);
+
+                var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(headItem.Id);
+                ccil.Insert(0, headItem);
+
+                for (int i = 0; i < ccil.OrderBy(x => x.CompositeSortOrderIdx).Count(); i++) {
+                    if (ItemViewModels.Any(x => x.CopyItemId == ccil[i].Id)) {
                         //this prevents a strange bug i think from async loading that loads 2 of each item
                         continue;
                     }
@@ -962,7 +1029,7 @@
 
         public void ClearEditing() {
             ItemViewModels.ForEach(x => x.ClearEditing());
-            OnPropertyChanged(nameof(IsReadOnly));
+            OnPropertyChanged(nameof(IsContentReadOnly));
         }
 
         public async Task<string> GetSubSelectedPastableRichText(bool isToExternalApp = false) {
@@ -994,7 +1061,7 @@
                 sw.Stop();
                 MpConsole.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
 
-                if (!IsReadOnly) {
+                if (!IsContentReadOnly) {
                     ClearEditing();
                 }
                 return rtf;
@@ -1139,42 +1206,6 @@
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     break;
-                case nameof(IsAnyEditingContent):
-                    MpMessenger.Send<MpMessageType>(IsReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
-
-                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
-                    //MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
-                    //OnPropertyChanged(nameof(TileBorderWidth));
-                    //OnPropertyChanged(nameof(PinButtonVisibility));
-
-                    //Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
-                    Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
-                    //Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
-                    
-
-                    //var mwrb = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior;
-                    //if (IsExpanded) {
-                    //    Parent.ScrollOffset = Parent.LastScrollOfset = 0;
-
-                    //    if (SelectedItems.Count == 0) {
-                    //        PrimaryItem.IsSelected = true;
-                    //    }
-
-                    //    _unexpandedHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
-                    //    mwrb.Resize(0,Math.Max(TileBorderHeight, EditableContentSize.Height - TileBorderHeight));
-
-                    //    Keyboard.AddKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
-                    //} else {
-                    //    Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
-                    //    mwrb.Resize(0,_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
-                    //}
-                    //OnPropertyChanged(nameof(TrayX));
-
-                    //MpMessenger.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
-                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
-                    
-                    OnPropertyChanged(nameof(CanVerticallyScroll));
-                    break;
                 case nameof(IsFlipping):
                     if (IsFlipping) {
                         FrontVisibility = Visibility.Collapsed;
@@ -1202,35 +1233,46 @@
                     OnPropertyChanged(nameof(PinIconSourcePath));
                     OnPropertyChanged(nameof(IsPlaceholder));
                     break;
-                case nameof(IsReadOnly):
-                    ItemViewModels.ForEach((Action<MpContentItemViewModel>)(x => x.OnPropertyChanged(nameof(x.IsContentReadOnly))));
+                case nameof(IsContentReadOnly):
+                    //ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsContentReadOnly)));
+                    MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
+
+                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
+                    //MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
+                    //OnPropertyChanged(nameof(TileBorderWidth));
+                    //OnPropertyChanged(nameof(PinButtonVisibility));
+
+                    //Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
+                    Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
+                    //Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
+
+
+                    //var mwrb = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior;
+                    //if (IsExpanded) {
+                    //    Parent.ScrollOffset = Parent.LastScrollOfset = 0;
+
+                    //    if (SelectedItems.Count == 0) {
+                    //        PrimaryItem.IsSelected = true;
+                    //    }
+
+                    //    _unexpandedHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
+                    //    mwrb.Resize(0,Math.Max(TileBorderHeight, EditableContentSize.Height - TileBorderHeight));
+
+                    //    Keyboard.AddKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
+                    //} else {
+                    //    Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
+                    //    mwrb.Resize(0,_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
+                    //}
+                    //OnPropertyChanged(nameof(TrayX));
+
+                    //MpMessenger.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
+                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
+
+                    OnPropertyChanged(nameof(CanVerticallyScroll));
                     break;
             }
         }
 
-        private string[] GetCompositeChildrenGuids(string headItemData) {
-            List<string> childGuids = new List<string>();
-            if(IsPlaceholder) {
-                return childGuids.ToArray();
-            }
-
-            var mc = Regex.Matches(headItemData, @"{c{.*?}c}");
-            foreach (Match m in mc) {
-                foreach (Group mg in m.Groups) {
-                    foreach (Capture c in mg.Captures) {
-                        string cguid = c.Value
-                                            .Replace("{c{", string.Empty)
-                                            .Replace("}c}", string.Empty);
-                        if (childGuids.Contains(cguid)) {
-                            continue;
-                        }
-                        childGuids.Add(cguid);
-                    }
-                }
-            }
-
-            return childGuids.ToArray();
-        }
 
         private void ExpandedKeyDown_Handler(object sender, KeyEventArgs e) {
             if(MpDragDropManager.IsDragAndDrop) {
@@ -1370,8 +1412,8 @@
         }
         private bool CanPasteSubSelectedClips(object ptapId) {
             return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
-                !IsAnyEditingContent &&
-                !IsAnyEditingTitle &&
+                IsContentReadOnly &&
+                IsTitleReadOnly &&
                 !IsAnyPastingTemplate &&
                 !MpPreferences.IsTrialExpired;
         }
@@ -1489,8 +1531,8 @@
         }
         private bool CanDeleteSubSelectedClips() {
             return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
-                !IsAnyEditingContent &&
-                !IsAnyEditingTitle &&
+                IsContentReadOnly &&
+                IsTitleReadOnly &&
                 !IsAnyPastingTemplate;
         }
         private void DeleteSubSelectedClips() {

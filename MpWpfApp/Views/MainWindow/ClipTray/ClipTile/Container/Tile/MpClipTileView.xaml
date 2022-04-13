@@ -108,7 +108,7 @@
                                                                  ConverterParameter={StaticResource Hide}}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!--  Content Container Canvas  -->
-                <local:MpContentListView x:Name="ContentListView" />
+                <local:MpContentListView x:Name="ContentListView" DataContext="{Binding}" />
 
             </DockPanel>
             <!--  Overlays  -->

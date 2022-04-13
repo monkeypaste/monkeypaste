@@ -47,7 +47,7 @@ namespace MpWpfApp {
             }
             AddTemplateButton.SetActiveRtb(trtb);
             artb = trtb;
-            DataContext = artb.DataContext as MpContentItemViewModel;
+            DataContext = (artb.DataContext as MpClipTileViewModel).PrimaryItem;
 
             if(buttons == null) {
                 buttons = new List<ButtonBase>() {

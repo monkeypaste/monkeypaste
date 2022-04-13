@@ -28,7 +28,12 @@ namespace MonkeyPaste {
         LastOutput
     }
 
-    public class MpCopyItem : MpUserObject, MpISyncableDbObject {
+    public interface MpICopyItemReference {
+        public string CopyItemGuid { get; }
+        public string CopyItemSourceGuid { get;  }
+    }
+
+    public class MpCopyItem : MpUserObject, MpISyncableDbObject, MpICopyItemReference {
         #region Statics
 
         public static string[] PhysicalComparePropertyPaths {
@@ -105,6 +110,8 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         public string RootCopyItemGuid { get; set; }
+
+        public string CopyItemSourceGuid { get; set; }
         //public string ParentCopyItemGuid { get; set; }
 
         [ForeignKey(typeof(MpCopyItem))]
@@ -199,6 +206,13 @@ namespace MonkeyPaste {
                 }
             }
         }
+
+        #endregion
+
+        #region MpICopyItemReference Implementation
+
+
+        string MpICopyItemReference.CopyItemGuid => Guid;
 
         #endregion
 
@@ -523,6 +537,7 @@ namespace MonkeyPaste {
 
             return newItem;
         }
+
     }
 
     public static class MpCopyItemExtensions {

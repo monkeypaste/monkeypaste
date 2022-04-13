@@ -988,8 +988,9 @@ namespace MpWpfApp {
                 case nameof(IsContentReadOnly):
                     OnPropertyChanged(nameof(EditorHeight));
                     Parent.OnPropertyChanged(nameof(Parent.HorizontalScrollbarVisibility));
-                    Parent.OnPropertyChanged(nameof(Parent.VerticalScrollbarVisibility)); 
-                    if(IsContentReadOnly) {
+                    Parent.OnPropertyChanged(nameof(Parent.VerticalScrollbarVisibility));
+                    Parent.OnPropertyChanged(nameof(Parent.IsContentReadOnly));
+                    if (IsContentReadOnly) {
                         // BUG when content is editable and new items are added and the
                         // list is refreshed the tile goes back to readonly, resizes but
                         // toolbars don't go away and properties get out of sync

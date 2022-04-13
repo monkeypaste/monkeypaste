@@ -204,6 +204,9 @@ namespace MpWpfApp {
             SetIsFocused(dpo, true);
             if(dpo is FrameworkElement fe) {
                 Keyboard.Focus(fe);
+                if(fe.DataContext is MpISelectableViewModel svm) {
+                    svm.IsSelected = true;
+                }
             }
             if (dpo is TextBoxBase tbb) {
                 if(tbb.IsReadOnly) {
@@ -221,7 +224,8 @@ namespace MpWpfApp {
                         }
                     }
                 }  
-            }            
+            }          
+            
         }
 
         private static void LostFocus(DependencyObject dpo) {

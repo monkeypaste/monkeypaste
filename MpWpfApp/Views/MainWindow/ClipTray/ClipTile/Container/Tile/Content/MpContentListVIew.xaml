@@ -12,45 +12,44 @@
                      d:DesignWidth="800"
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
-    <i:Interaction.Behaviors>
-        <local:MpContentListDropBehavior IsDebugEnabled="False"
-                                         x:Name="ContentListDropBehavior" />
-    </i:Interaction.Behaviors>
-    <DockPanel x:Name="ContentListDockPanel"
-               DataContextChanged="UserControl_DataContextChanged"
-               Unloaded="ContentListDockPanel_Unloaded"
-               HorizontalAlignment="Stretch"
-               VerticalAlignment="Stretch">
-        <local:MpRtbEditToolbarView x:Name="EditToolbarView"
-                                    DockPanel.Dock="Top"
-                                    Visibility="{Binding IsContentReadOnly,
-                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                    DataContext="{Binding PrimaryItem}" />
-        <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
-                                         DockPanel.Dock="Bottom"
-                                         Visibility="{Binding IsAnyEditingTemplate,
-                                                              Converter={StaticResource BoolToVisibilityConverter},
-                                                              TargetNullValue=Collapsed}"
-                                         DataContext="{Binding PrimaryItem.TemplateCollection}" />
-        <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
-                                          DockPanel.Dock="Bottom"
-                                          Visibility="{Binding Parent.IsPastingTemplate,
-                                                               Converter={StaticResource BoolToVisibilityConverter},
-                                                               TargetNullValue=Collapsed}"
-                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />
-        <!--<local:MpRtbEditToolbarView x:Name="EditToolbarView"
-                                    DockPanel.Dock="Top"
-                                    Visibility="Collapsed"
-                                    DataContext="{Binding PrimaryItem}" />
-        <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
-                                         DockPanel.Dock="Bottom"
-                                         Visibility="Collapsed"
-                                         DataContext="{Binding PrimaryItem.TemplateCollection}" />
-        <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
-                                          DockPanel.Dock="Bottom"
-                                          Visibility="Collapsed"
-                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />-->
-        <AdornerDecorator>
+    <local:MpUserControl.Resources>
+        <Style x:Key="ItemContentControlStyle"
+               TargetType="ContentControl">
+            <Style.Resources>
+                <SolidColorBrush Color="Transparent"
+                                 x:Key="{x:Static SystemColors.HighlightBrushKey}" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                 Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                 Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                                 Color="Transparent" />
+            </Style.Resources>
+            <Setter Property="FocusVisualStyle"
+                    Value="{x:Null}" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContentControl">
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="BorderBrush"
+                                        Value="Transparent" />
+                                <Setter Property="Background"
+                                        Value="Transparent" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="RtbDataTemplate">
+            <local:MpTextContentView DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="ContentListDataTemplate">
             <ListBox x:Name="ContentListBox"
                      Loaded="ContentListBox_Loaded"
                      Unloaded="ContentListDockPanel_Unloaded"
@@ -118,6 +117,53 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </AdornerDecorator>
+        </DataTemplate>
+        <local:MpContentListViewSelector x:Key="ContentListViewSelector" />
+    </local:MpUserControl.Resources>
+    <i:Interaction.Behaviors>
+        <!--<local:MpContentListDropBehavior IsDebugEnabled="False"
+                                         x:Name="ContentListDropBehavior" />-->
+    </i:Interaction.Behaviors>
+    <DockPanel x:Name="ContentListDockPanel"
+               DataContextChanged="UserControl_DataContextChanged"
+               Unloaded="ContentListDockPanel_Unloaded"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch">
+        <local:MpRtbEditToolbarView x:Name="EditToolbarView"
+                                    DockPanel.Dock="Top"
+                                    Visibility="{Binding IsContentReadOnly,
+                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                    DataContext="{Binding PrimaryItem}" />
+        <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
+                                         DockPanel.Dock="Bottom"
+                                         Visibility="{Binding IsAnyEditingTemplate,
+                                                              Converter={StaticResource BoolToVisibilityConverter},
+                                                              TargetNullValue=Collapsed}"
+                                         DataContext="{Binding PrimaryItem.TemplateCollection}" />
+        <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
+                                          DockPanel.Dock="Bottom"
+                                          Visibility="{Binding Parent.IsPastingTemplate,
+                                                               Converter={StaticResource BoolToVisibilityConverter},
+                                                               TargetNullValue=Collapsed}"
+                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />
+        <!--<local:MpRtbEditToolbarView x:Name="EditToolbarView"
+                                    DockPanel.Dock="Top"
+                                    Visibility="Collapsed"
+                                    DataContext="{Binding PrimaryItem}" />
+        <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
+                                         DockPanel.Dock="Bottom"
+                                         Visibility="Collapsed"
+                                         DataContext="{Binding PrimaryItem.TemplateCollection}" />
+        <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
+                                          DockPanel.Dock="Bottom"
+                                          Visibility="Collapsed"
+                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />-->
+        <!--<AdornerDecorator>
+            <ContentControl ContentTemplateSelector="{StaticResource ContentListViewSelector}"
+                            Loaded="ContentControl_Loaded"
+                            Content="{Binding}" />
+        </AdornerDecorator>-->
+
+        <local:MpTextContentView DataContext="{Binding}" />
     </DockPanel>
 </local:MpUserControl>

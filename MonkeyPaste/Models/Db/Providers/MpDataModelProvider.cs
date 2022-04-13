@@ -525,7 +525,7 @@ namespace MonkeyPaste {
             if(cigl.Length == 0) {
                 return new List<MpCopyItem>();
             }
-            string whereStr = string.Join(" or ", cigl.Select(x => string.Format(@"MpCopyItemGuid={0}", x)));
+            string whereStr = string.Join(" or ", cigl.Select(x => string.Format(@"MpCopyItemGuid='{0}'", x)));
             string query = $"select * from MpCopyItem where {whereStr}";
             var result = await MpDb.QueryAsync<MpCopyItem>(query);
             return result.OrderBy(x => cigl).ToList();

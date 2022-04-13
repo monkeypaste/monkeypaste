@@ -22,6 +22,8 @@ namespace MpWpfApp {
     /// Interaction logic for MpContentListVIew.xaml
     /// </summary>
     public partial class MpContentListView : MpUserControl<MpClipTileViewModel> {
+        public ListBox ContentListBox;
+
         private MpContentItemSeperatorAdorner seperatorAdorner;
         public AdornerLayer SeperatorAdornerLayer;
 
@@ -31,6 +33,9 @@ namespace MpWpfApp {
 
         public void UpdateAdorner() {
             //NOTE DISABLED IN ADORNER RENDER
+            if(ContentListBox == null) {
+                return;
+            }
 
             if(seperatorAdorner == null) {
                 //selection changed is called before load so adorner is null
@@ -74,6 +79,10 @@ namespace MpWpfApp {
 
         #region Rtb ListBox Events
         private void ContentListBox_Loaded(object sender, RoutedEventArgs e) {
+            if(ContentListBox == null) {
+                return;
+            }
+
             UnregisterMouseWheel();
 
             seperatorAdorner = new MpContentItemSeperatorAdorner(ContentListBox);
@@ -82,7 +91,7 @@ namespace MpWpfApp {
 
             UpdateAdorner();
 
-            ContentListDropBehavior.Attach(this);
+            //ContentListDropBehavior.Attach(this);
             
             UpdateUi();
 
@@ -110,7 +119,7 @@ namespace MpWpfApp {
         }
 
         private void ContentListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if(BindingContext.IsReadOnly) {
+            if(BindingContext.IsContentReadOnly) {
                 e.Handled = true;
                 return;
             }
@@ -128,7 +137,7 @@ namespace MpWpfApp {
         }
 
         private void ContentListDockPanel_Unloaded(object sender, RoutedEventArgs e) {
-            ContentListDropBehavior.Detach();
+            //ContentListDropBehavior.Detach();
 
             if (BindingContext == null) {
                 return;
@@ -141,6 +150,9 @@ namespace MpWpfApp {
         }
 
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
+            if (ContentListBox == null) {
+                return;
+            }
             switch (msg) {
                 case MpMessageType.IsEditable:
                     ContentListBox.GetVisualDescendent<ScrollViewer>().HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
@@ -175,6 +187,9 @@ namespace MpWpfApp {
         }
 
         public async Task RefreshContext() {
+            if (ContentListBox == null) {
+                return;
+            }
             await MpHelpers.RunOnMainThreadAsync(() => {
                 for (int i = 0; i < ContentListBox.Items.Count; i++) {
                     var lbi = ContentListBox.GetListBoxItem(i);
@@ -199,6 +214,9 @@ namespace MpWpfApp {
         }
 
         private void Octvm_OnListBoxRefresh(object sender, EventArgs e) {
+            if (ContentListBox == null) {
+                return;
+            }
             ContentListBox?.Items.Refresh();
         }
 
@@ -207,17 +225,26 @@ namespace MpWpfApp {
         }
 
         private void Rtbcvm_OnScrollToHomeRequest(object sender, EventArgs e) {
+            if (ContentListBox == null) {
+                return;
+            }
             ContentListBox?.GetVisualDescendent<ScrollViewer>().ScrollToHome();
         }
 
         private void Rtbcvm_OnScrollIntoViewRequest(object sender, object e) {
+            if (ContentListBox == null) {
+                return;
+            }
             ContentListBox?.ScrollIntoView(e);
         }
 
         #endregion
 
         public void Civm_OnScrollWheelRequest(object sender, int e) {
-            if (!BindingContext.IsReadOnly && BindingContext.IsSelected) {
+            if (ContentListBox == null) {
+                return;
+            }
+            if (!BindingContext.IsContentReadOnly && BindingContext.IsSelected) {
                 var sv = ContentListBox.GetVisualDescendent<ScrollViewer>();
                 double yOffset = sv.VerticalOffset + e;
                 sv.ScrollToVerticalOffset(yOffset);
@@ -225,6 +252,9 @@ namespace MpWpfApp {
         }
 
         public void UpdateUi() {
+            if (ContentListBox == null) {
+                return;
+            }
             UpdateAdorner();
             if(ContentListBox.Items.Count > 1) {
                 //ContentListBox.Items.Refresh();
@@ -279,7 +309,7 @@ namespace MpWpfApp {
         }
 
         private void ContentListBox_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (BindingContext.IsAnyEditingTitle || 
+            if (!BindingContext.IsTitleReadOnly || 
                 BindingContext.ItemViewModels.Count == 0) {
                 e.Handled = false;
                 return;
@@ -300,6 +330,10 @@ namespace MpWpfApp {
                 e.GetPosition(Application.Current.MainWindow));
 
             e.Handled = true;
+        }
+
+        private void ContentControl_Loaded(object sender, RoutedEventArgs e) {
+
         }
     }
 }

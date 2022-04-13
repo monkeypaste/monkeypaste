@@ -75,14 +75,14 @@ namespace MpWpfApp {
         private void TemplateDropDownItem_Click(object sender, RoutedEventArgs e) {
             MpHelpers.RunOnMainThread(async () => {
                 Rtb.Focus();
-                MpTemplateHyperlink thl = null;
+                MpTemplateHyperlink_old thl = null;
                 var mi = sender as MenuItem;
                 if (mi.DataContext == null) {
                     //when clicking add new
-                    thl = await MpTemplateHyperlink.Create(Rtb.Selection, null);
+                    thl = await MpTemplateHyperlink_old.Create(Rtb.Selection, null);
                 } else if (mi.DataContext is MpTemplateViewModel thlvm) {
                     //when clicking a pre-existing template
-                    thl = await MpTemplateHyperlink.Create(Rtb.Selection, thlvm.TextToken);
+                    thl = await MpTemplateHyperlink_old.Create(Rtb.Selection, thlvm.TextToken);
                 }
 
                 //add trailing run of one space to allow clicking after template
@@ -110,7 +110,7 @@ namespace MpWpfApp {
                 var rtbvm = Rtb.DataContext as MpContentItemViewModel;
                 if (rtbvm.TemplateCollection.Templates.Count == 0) {
                     //when no templates exist create a new default one
-                    var thl = await MpTemplateHyperlink.Create(Rtb.Selection, null);
+                    var thl = await MpTemplateHyperlink_old.Create(Rtb.Selection, null);
                     var thlvm = thl.DataContext as MpTemplateViewModel;
                     thlvm.EditTemplateCommand.Execute(null);
                 } else {

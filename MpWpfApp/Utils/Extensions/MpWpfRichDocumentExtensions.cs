@@ -126,6 +126,18 @@ namespace MpWpfApp {
             }
         }
 
+        public static IEnumerable<TextElement> GetAllTextElements(this FlowDocument doc) {
+            for (TextPointer position = doc.ContentStart;
+              position != null && position.CompareTo(doc.ContentEnd) <= 0;
+              position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
+                    if(position.Parent is TextElement te) {
+                        yield return te;
+                    }
+                }
+            }
+        }
+
         public static IEnumerable<TextElement> GetRunsAndParagraphs(this FlowDocument doc) {
             for (TextPointer position = doc.ContentStart;
               position != null && position.CompareTo(doc.ContentEnd) <= 0;
@@ -150,6 +162,8 @@ namespace MpWpfApp {
                 }
             }
         }
+
+
 
         public static string ToRichText(this FlowDocument fd) {
             RichTextBox rtb = null;
@@ -336,34 +350,107 @@ namespace MpWpfApp {
             
         //}
 
-        public static string ToXaml(this string str) {
+        public static string ToRichText(this TextRange tr) {
+            //if(tr == null) {
+            //    return string.Empty;
+            //}
+            //using (var rangeStream = new MemoryStream()) {
+            //    using(var writerStream = new StreamWriter(rangeStream)) {
+            //        try {
+            //            if (tr.CanLoad(DataFormats.Rtf)) {
+            //                tr.Load(rangeStream, DataFormats.Rtf);
+
+            //                rangeStream.Seek(0, SeekOrigin.Begin);
+            //                using (var rtfStreamReader = new StreamReader(rangeStream)) {
+            //                    return rtfStreamReader.ReadToEnd();
+            //                }
+            //            }
+            //        }
+            //        catch (Exception ex) {
+            //            MpConsole.WriteTraceLine(ex);
+            //            return tr.Text;
+            //        }
+            //    }
+            //}
+            //return tr.Text;
+            using (MemoryStream ms = new MemoryStream()) {
+                tr.Save(ms, DataFormats.Rtf);
+                return Encoding.Default.GetString(ms.ToArray());
+            }
+                
+        }
+        public static string ToXamlPackage(this string str) {
             if (string.IsNullOrEmpty(str)) {
-                return string.Empty.ToRichText().ToXaml();
+                return string.Empty.ToRichText().ToXamlPackage();
             }
             if (str.IsStringQuillText()) {
-                return str.ToRichText().ToXaml();
+                return str.ToRichText().ToXamlPackage();
             }
             if (str.IsStringPlainText()) {
-                return str.ToRichText().ToXaml();
+                return str.ToRichText().ToXamlPackage();
             }
             if (str.IsStringRichText()) {
                 var assembly = Assembly.GetAssembly(typeof(System.Windows.FrameworkElement));
                 var xamlRtfConverterType = assembly.GetType("System.Windows.Documents.XamlRtfConverter");
                 var xamlRtfConverter = Activator.CreateInstance(xamlRtfConverterType, true);
-                var convertRtfToXaml = xamlRtfConverterType.GetMethod("ConvertRtfToXaml");
+                var convertRtfToXaml = xamlRtfConverterType.GetMethod("ConvertRtfToXaml", BindingFlags.Instance | BindingFlags.NonPublic);
                 var xamlContent = (string)convertRtfToXaml.Invoke(xamlRtfConverter, new object[] { str });
                 return xamlContent;
             }
             throw new Exception("ToXaml exception string must be plain or rich text. Its content is: " + str);
         }
 
-        public static string ToXaml(this FlowDocument fd) {
-            TextRange range = new TextRange(fd.ContentStart, fd.ContentEnd);
-            using (MemoryStream stream = new MemoryStream()) {
-                range.Save(stream, DataFormats.Xaml);
-                //return ASCIIEncoding.Default.GetString(stream.ToArray());
-                return UTF8Encoding.Default.GetString(stream.ToArray());
+        public static string ToXamlPackage(this FlowDocument fd) {
+            //TextRange range = new TextRange(fd.ContentStart, fd.ContentEnd);
+            //using (MemoryStream stream = new MemoryStream()) {
+            //    range.Save(stream, DataFormats.Xaml);
+            //    //return ASCIIEncoding.Default.GetString(stream.ToArray());
+            //    return UTF8Encoding.Default.GetString(stream.ToArray());
+            //}
+            return fd.ToRichText().ToXamlPackage();
+        }
+
+        private static MethodInfo findMethod = null;
+        [Flags]
+        public enum FindFlags {
+            FindInReverse = 2,
+            FindWholeWordsOnly = 4,
+            MatchAlefHamza = 0x20,
+            MatchCase = 1,
+            MatchDiacritics = 8,
+            MatchKashida = 0x10,
+            None = 0
+        }
+
+
+        public static TextRange FindText(
+            this TextPointer findContainerStartPosition, 
+            TextPointer findContainerEndPosition, 
+            string input, 
+            FindFlags flags = FindFlags.FindWholeWordsOnly | FindFlags.MatchCase, 
+            CultureInfo cultureInfo = null) {
+            cultureInfo = cultureInfo == null ? CultureInfo.CurrentCulture : cultureInfo;
+
+            TextRange textRange = null;
+            if (findContainerStartPosition.CompareTo(findContainerEndPosition) < 0) {
+                try {
+                    if (findMethod == null) {
+                        findMethod = typeof(FrameworkElement).Assembly
+                                        .GetType("System.Windows.Documents.TextFindEngine")
+                                        .GetMethod("Find", BindingFlags.Static | BindingFlags.Public);
+                    }
+                    object result = findMethod.Invoke(null, new object[] { 
+                        findContainerStartPosition,
+                        findContainerEndPosition,
+                        input, flags, cultureInfo });
+                    textRange = result as TextRange;
+                }
+                catch (ApplicationException) {
+                    textRange = null;
+                }
             }
+
+            return textRange;
         }
 
         public static Size GetDocumentSize(this FlowDocument doc) {
@@ -512,6 +599,16 @@ namespace MpWpfApp {
                 }
             }, priority);
             return fd;
+        }
+
+        public static FlowDocument InsertFlowDocument(this FlowDocument to, FlowDocument from, TextRange toInsertRange) {
+            using (MemoryStream stream = new MemoryStream()) {
+                var rangeFrom = new TextRange(from.ContentStart, from.ContentEnd);
+                XamlWriter.Save(rangeFrom, stream);
+                rangeFrom.Save(stream, DataFormats.XamlPackage);
+                toInsertRange.Load(stream, DataFormats.XamlPackage);
+                return to;
+            }
         }
 
 

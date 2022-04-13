@@ -21,7 +21,7 @@
         <RichTextBox x:Name="Rtb"
                      DataContext="{Binding}"
                      Width="Auto"
-                     Height="{Binding EditorHeight}"
+                     Height="400"
                      MinWidth="100"
                      Padding="5,0,5,0"
                      HorizontalAlignment="Stretch"

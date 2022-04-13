@@ -544,7 +544,7 @@ namespace MpWpfApp {
 
         public bool CanAnyResize => Items.Any(x => x.CanResize);
 
-        public bool IsAnyEditing => Items.Any(x => x.IsAnyEditingContent);
+        public bool IsAnyEditing => Items.Any(x => x.IsContentAndTitleReadOnly == false);
 
         private bool _isFilteringByApp = false;
         public bool IsFilteringByApp {
@@ -582,16 +582,16 @@ namespace MpWpfApp {
                 if(PrimaryItem == null || PrimaryItem.PrimaryItem == null) {
                     return false;
                 }
-                if(PrimaryItem.IsAnyEditingContent && PrimaryItem.IsHovering) {
+                if(!PrimaryItem.IsContentReadOnly && PrimaryItem.IsHovering) {
                     return false;
                 }
                 return true;
             }
         }
 
-        public bool IsAnyEditingClipTitle => Items.Any(x => x.IsAnyEditingTitle);
+        public bool IsAnyEditingClipTitle => Items.Any(x => x.IsTitleReadOnly == false);
 
-        public bool IsAnyEditingClipTile => Items.Any(x => x.IsAnyEditingContent);
+        public bool IsAnyEditingClipTile => Items.Any(x => x.IsContentReadOnly == false);
 
         public bool IsAnyPastingTemplate => Items.Any(x => x.IsAnyPastingTemplate);
 
