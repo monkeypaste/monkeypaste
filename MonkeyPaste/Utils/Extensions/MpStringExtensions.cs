@@ -10,6 +10,7 @@ using MonkeyPaste.Plugin;
 using CsvHelper;
 using System.Globalization;
 using CsvHelper.Configuration;
+using System.Xml.Linq;
 
 namespace MonkeyPaste {
     public static class MpStringExtensions {
@@ -45,6 +46,17 @@ namespace MonkeyPaste {
             return jt.ToString();
         }
 
+        public static string ToPrettyPrintXml(this string xmlStr) {
+            try {
+                XDocument doc = XDocument.Parse(xmlStr);
+                return doc.ToString();
+            }
+            catch (Exception) {
+                // Handle and throw if fatal exception here; don't just ignore them
+                return xmlStr;
+            }
+        }
+             
         public static string Escape(this string badString) {
             return badString.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace(">", "&gt;").Replace("<", "&lt;");
         }
@@ -247,6 +259,21 @@ namespace MonkeyPaste {
             if(_IsNotBase64RegEx.IsMatch(str)) {
                 return false;
             }
+            return true;
+        }
+
+        public static bool IsStringFileOrPathFormat(this string path) {
+            if(string.IsNullOrWhiteSpace(path) || path.Length < 3) {
+                return false;
+            }
+            Regex driveCheck = new Regex(@"^[a-zA-Z]:\\$");
+            if (!driveCheck.IsMatch(path.Substring(0, 3))) 
+                return false;
+            string strTheseAreInvalidFileNameChars = new string(System.IO.Path.GetInvalidPathChars());
+            strTheseAreInvalidFileNameChars += @":/?*" + "\"";
+            Regex containsABadCharacter = new Regex("[" + Regex.Escape(strTheseAreInvalidFileNameChars) + "]");
+            if (containsABadCharacter.IsMatch(path.Substring(3, path.Length - 3)))
+                return false;
             return true;
         }
 

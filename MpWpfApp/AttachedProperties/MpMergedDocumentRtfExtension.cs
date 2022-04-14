@@ -99,6 +99,7 @@ namespace MpWpfApp {
                 if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
                     ctcv.TileResizeBehvior.Resize(_EDITOR_DEFAULT_WIDTH - ctcv.ActualWidth, 0);
                 }
+                (fe as RichTextBox).FitDocToRtb();
                 MpIsFocusedExtension.SetIsFocused(fe, true);
             }
 
@@ -148,25 +149,25 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region RootCopyItem
+        #region HeadContentItemViewModel
 
-        public static string GetRootCopyItem(DependencyObject obj) {
-            return (string)obj.GetValue(RootCopyItemProperty);
+        public static object GetHeadContentItemViewModel(DependencyObject obj) {
+            return (object)obj.GetValue(HeadContentItemViewModelProperty);
         }
-        public static void SetRootCopyItem(DependencyObject obj, string value) {
-            obj.SetValue(RootCopyItemProperty, value);
+        public static void SetHeadContentItemViewModel(DependencyObject obj, object value) {
+            obj.SetValue(HeadContentItemViewModelProperty, value);
         }
-        public static readonly DependencyProperty RootCopyItemProperty =
+        public static readonly DependencyProperty HeadContentItemViewModelProperty =
           DependencyProperty.RegisterAttached(
-            "RootCopyItem",
-            typeof(string),
+            "HeadContentItemViewModel",
+            typeof(object),
             typeof(MpMergedDocumentRtfExtension),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (s, e) => {
                     if(e.NewValue == null) {
+                        //occurs when tile is placeholder
                         return;
                     }
-                    var rci = e.NewValue as MpCopyItem;
                     var rtb = s as RichTextBox;
                     if (rtb == null) {
                         return;
@@ -186,11 +187,11 @@ namespace MpWpfApp {
                 return;
             }
 
-            LoadTextContent(rtb).FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
+            LoadContent(rtb).FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
         }
 
 
-        private static async Task LoadTextContent(RichTextBox rtb) {
+        private static async Task LoadContent(RichTextBox rtb) {
             if(rtb == null) {
                 return;
             }
@@ -205,29 +206,63 @@ namespace MpWpfApp {
             if(ctvm.IsPlaceholder) {
                 return;
             }
-            rtb.Document = await DecodeContentItem(ctvm.RootCopyItem, true);
-            rtb.FitDocToRtb();
+            rtb.Document = await DecodeContentItem(ctvm.HeadItem.CopyItemGuid,ctvm.ItemViewModels.Select(x=>x.CopyItem).ToList(), true);
+            
+            switch (ctvm.HeadItem.CopyItemType) {
+                case MpCopyItemType.Text:
+                case MpCopyItemType.FileList:
+                    rtb.FitDocToRtb();
+                    break;
+                case MpCopyItemType.Image:
+                    rtb.Document.PageWidth = rtb.ActualWidth;
+                    rtb.Document.PageHeight = rtb.ActualHeight;
+                    rtb.HorizontalAlignment = HorizontalAlignment.Center;
+                    rtb.VerticalAlignment = VerticalAlignment.Center;
+
+                    var p = rtb.Document.Blocks.FirstBlock as Paragraph;
+                    var iuic = p.Inlines.FirstInline as InlineUIContainer;
+                    
+                    var img = iuic.Child as System.Windows.Controls.Image;
+                    iuic.Child = null;
+                    //p.Inlines.Clear();
+
+                    iuic.Child = new Viewbox() {
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Stretch = Stretch.Uniform,
+                        Width = rtb.ActualWidth,
+                        Height = rtb.ActualHeight,
+                        Margin = new Thickness(5),
+                        Child = img
+                    };
+
+                    //p.Inlines.Add(new InlineUIContainer(vb));
+
+                    rtb.Document.LineStackingStrategy = LineStackingStrategy.MaxHeight;
+                    rtb.Document.ConfigureLineHeight();
+
+                    new TextRange(p.ContentStart, p.ContentEnd).ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Center);
+
+                    rtb.VerticalAlignment = VerticalAlignment.Top;
+                    rtb.VerticalContentAlignment = VerticalAlignment.Top;
+                    rtb.GetVisualAncestor<MpContentListView>().VerticalAlignment = VerticalAlignment.Top;
+                    rtb.GetVisualAncestor<MpContentListView>().VerticalContentAlignment = VerticalAlignment.Top;
+                    break;
+            }
+
+            //rtb.FitDocToRtb();
 
             //wait till full doc is loaded to hook textChanged
             rtb.TextChanged += Rtb_TextChanged;
         }
 
-        private static async Task<FlowDocument> DecodeContentItem(object copyItemOrGuid, bool decodeTemplates = false) {
-            MpCopyItem ci = null;
-            if(copyItemOrGuid is string) {
-                string ciguid = copyItemOrGuid as string;
-                var cil = await MpDataModelProvider.GetCopyItemsByGuids(new string[] { ciguid });
-                if(cil.Count > 0) {
-                    ci = cil[0];
-                }
-            } else if(copyItemOrGuid is MpCopyItem) {
-                ci = copyItemOrGuid as MpCopyItem;
-            }
-            if(ci == null) {
-                MpConsole.WriteLine("error fetching copy item: " + copyItemOrGuid.ToString());
+        private static async Task<FlowDocument> DecodeContentItem(string itemGuid, List<MpCopyItem> items, bool decodeTemplates = false) {
+            MpCopyItem ci = items.FirstOrDefault(x=>x.Guid == itemGuid);
+
+            if (ci == default) {
+                MpConsole.WriteLine("error fetching copy item: " + itemGuid);
             }
 
-            FlowDocument fd = ci.ItemData.ToFlowDocument();
+            FlowDocument fd = ci.ItemData.ToFlowDocument(ci.IconId);
             var childRanges = GetEncodedRanges(fd,"{c{","}c}");
             var childGuids = childRanges.Select(x => x.Text.Replace("{c{", string.Empty).Replace("}c}", string.Empty)).ToArray();
             var childItems = await MpDataModelProvider.GetCopyItemsByGuids(childGuids.ToArray());
@@ -239,7 +274,7 @@ namespace MpWpfApp {
                     childRanges[i].Text = string.Empty;
                     continue;
                 }
-                var cfd = await DecodeContentItem(childGuid);
+                var cfd = await DecodeContentItem(childGuid,items);
                 fd.InsertFlowDocument(cfd, childRanges[i]);
             }
 
@@ -291,7 +326,7 @@ namespace MpWpfApp {
             var rtb = sender as RichTextBox;
             var ctvm = rtb.DataContext as MpClipTileViewModel;
             
-            MpConsole.WriteLines("Tile " + ctvm.RootCopyItem.Title + " text changed:");
+            MpConsole.WriteLines("Tile " + ctvm.HeadItem.CopyItemTitle + " text changed:");
             MpConsole.WriteLine(rtb.Document.ToXamlPackage());
 
             foreach(var tc in e.Changes) {

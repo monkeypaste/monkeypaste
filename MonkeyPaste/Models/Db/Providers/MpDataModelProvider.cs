@@ -124,9 +124,12 @@ namespace MonkeyPaste {
             QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
         }
 
-        public static async Task<IList<MpCopyItem>> FetchCopyItemRangeAsync(int startIndex, int count, Dictionary<int, int> manualSortOrderLookup = null) {
+        public static async Task<List<List<MpCopyItem>>> FetchCopyItemRangeAsync(
+            int startIndex, 
+            int count, 
+            Dictionary<int, int> manualSortOrderLookup = null) {
             var fetchRange = AllFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
-            var items = await GetCopyItemsByIdList(fetchRange); 
+            var items = await GetCopyItemsByRootIdList(fetchRange); 
             if(items.Count == 0 && startIndex + count < AllFetchedAndSortedCopyItemIds.Count) {
                 MpConsole.WriteTraceLine("Bad data detected for ids: " + string.Join(",", fetchRange));
             }
@@ -519,6 +522,17 @@ namespace MonkeyPaste {
             string query = $"select * from MpCopyItem where {whereStr}";
             var result = await MpDb.QueryAsync<MpCopyItem>(query);
             return result.OrderBy(x=>ciida.IndexOf(x.Id)).ToList();
+        }
+
+        public static async Task<List<List<MpCopyItem>>> GetCopyItemsByRootIdList(List<int> ciida) {
+            string whereStr = string.Join(" or ", ciida.Select(x => string.Format(@"pk_MpCopyItemId={0} or fk_ParentCopyItemId={0}", x)));
+            string query = $"select * from MpCopyItem where {whereStr}";
+            var queryResult = await MpDb.QueryAsync<MpCopyItem>(query);
+            var result = queryResult
+                            .Where(x => x.CompositeParentCopyItemId == 0)
+                            .Select(x => queryResult
+                                            .Where(y => y.Id == x.Id || y.CompositeParentCopyItemId == x.Id).OrderBy(x=>x.CompositeSortOrderIdx).ToList()).ToList();
+            return result;
         }
 
         public static async Task<List<MpCopyItem>> GetCopyItemsByGuids(string[] cigl) {

@@ -29,6 +29,7 @@
     using MonkeyPaste;
     using MonkeyPaste.Plugin;
     using System.Speech.Synthesis;
+    using GongSolutions.Wpf.DragDrop;
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 
@@ -681,14 +682,14 @@
                 if(IsNew) {
                     return false;
                 }
-                //if(Parent == null || ItemViewModels.Count == 0) {
-                //    return true;
-                //}
-                if(IsPinned) {
+                if (Parent == null || ItemViewModels.Count == 0) {
                     return true;
                 }
-                //return false;
-                return RootCopyItem == null;
+                if (IsPinned) {
+                    return true;
+                }
+                return false;
+                //return RootCopyItem == null;
             }
         }
 
@@ -731,7 +732,7 @@
             }
         }
 
-        public MpCopyItem RootCopyItem { get; private set; }
+        //public MpCopyItem RootCopyItem { get; private set; }
         
         #endregion
 
@@ -768,6 +769,51 @@
 
         #region Public Methods
 
+        public async Task InitializeAsync(List<MpCopyItem> items, int queryOffset = -1) {
+            PropertyChanged -= MpClipTileViewModel_PropertyChanged;
+            PropertyChanged += MpClipTileViewModel_PropertyChanged;
+
+            QueryOffsetIdx = queryOffset < 0 ? QueryOffsetIdx : queryOffset;
+            IsBusy = true;
+
+            ItemViewModels.Clear();
+            if (items != null && items.Count > 0 && Parent.PersistentUniqueWidthTileLookup.TryGetValue(items[0].Id, out double uniqueWidth)) {
+                TileBorderWidth = uniqueWidth;
+            } else {
+                TileBorderWidth = DefaultBorderHeight;
+            }
+
+            if (items != null && items.Count > 0) {
+                for (int i = 0; i < items.Count; i++) {
+                    if (ItemViewModels.Any(x => x.CopyItemId == items[i].Id)) {
+                        //this prevents a strange bug i think from async loading that loads 2 of each item
+                        continue;
+                    }
+                    items[i].CompositeParentCopyItemId = i == 0 ? 0 : items[0].Id;
+                    items[i].CompositeSortOrderIdx = i;
+                    var civm = await CreateContentItemViewModel(items[i]);
+                    ItemViewModels.Add(civm);
+                }
+                IsNew = false;
+                RequestUiUpdate();
+
+                MpMessenger.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
+            }
+
+            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
+            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.EditorHeight)));
+
+            OnPropertyChanged(nameof(ItemViewModels));
+            OnPropertyChanged(nameof(IsPlaceholder));
+            OnPropertyChanged(nameof(PrimaryItem));
+            OnPropertyChanged(nameof(TrayX));
+            OnPropertyChanged(nameof(TileBorderBrush));
+            OnPropertyChanged(nameof(CanVerticallyScroll));
+            OnPropertyChanged(nameof(HeadItem));
+
+            IsBusy = false;
+        }
+
         public async Task InitializeAsync(MpCopyItem headItem, int queryOffset = -1) {
             PropertyChanged -= MpClipTileViewModel_PropertyChanged;
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
@@ -797,9 +843,6 @@
                     var civm = await CreateContentItemViewModel(ccil[i]);
                     ItemViewModels.Add(civm);
                 }
-
-
-                RootCopyItem = headItem;
                 IsNew = false;
                 RequestUiUpdate();
 

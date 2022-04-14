@@ -40,6 +40,15 @@ namespace MpWpfApp {
             }
         }
 
+        public string IconBase64 {
+            get {
+                if(Icon == null || Icon.IconImage == null) {
+                    return string.Empty;
+                }
+                return Icon.IconImage.ImageBase64;
+            }
+        }
+
         public MpIcon Icon { get; set; }
 
         #endregion

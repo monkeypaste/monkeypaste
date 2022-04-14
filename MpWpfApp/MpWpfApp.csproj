@@ -393,8 +393,8 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpQuillEditorView.xaml.cs">
       <DependentUpon>MpQuillEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpTextContentView.xaml.cs">
-      <DependentUpon>MpTextContentView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpContentView.xaml.cs">
+      <DependentUpon>MpContentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Selector\MpTextViewTemplateSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Templates\MpTemplateHyperlink_old.xaml.cs">
@@ -778,7 +778,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpTextContentView.xaml">
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpContentView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

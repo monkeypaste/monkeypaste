@@ -1813,7 +1813,7 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.FetchCopyItemRangeAsync(offsetIdx, loadCount);
 
                     for (int i = 0; i < cil.Count; i++) {
-                        if(PinnedItems.Any(x=>x.HeadItem.CopyItemId == cil[i].Id)) {
+                        if(PinnedItems.Any(x=>x.ItemViewModels.Any(y => cil[i].Any(z=>z.Id == y.CopyItemId)))) {
                             continue;
                         }
                         await Items[i].InitializeAsync(cil[i], i + offsetIdx);
@@ -1881,7 +1881,7 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.FetchCopyItemRangeAsync(offsetIdx, fetchCount);
 
                     for (int i = 0; i < cil.Count; i++) {
-                        if (PinnedItems.Any(x => x.HeadItem.CopyItemId == cil[i].Id)) {
+                        if (PinnedItems.Any(x => x.ItemViewModels.Any(y => cil[i].Any(z => z.Id == y.CopyItemId)))) {
                             continue;
                         }
 
@@ -1903,7 +1903,7 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.FetchCopyItemRangeAsync(offsetIdx, fetchCount);
 
                     for (int i = cil.Count - 1; i >= 0; i--) {
-                        if (PinnedItems.Any(x => x.HeadItem.CopyItemId == cil[i].Id)) {
+                        if (PinnedItems.Any(x => x.ItemViewModels.Any(y => cil[i].Any(z => z.Id == y.CopyItemId)))) {
                             continue;
                         }
 
@@ -1949,7 +1949,7 @@ namespace MpWpfApp {
                 var cil = await MpDataModelProvider.FetchCopyItemRangeAsync(idx, loadCount);
 
                 for (int i = 0; i < cil.Count; i++) {
-                    if (PinnedItems.Any(x => x.HeadItem.CopyItemId == cil[i].Id) ||
+                    if (PinnedItems.Any(x => x.ItemViewModels.Any(y => cil[i].Any(z => z.Id == y.CopyItemId))) ||
                         i >= Items.Count) {
                         // NOTE checking i w/ item count is probably a side affect bug
                         //of resizing window and tile/scoll offset and tray dimensions

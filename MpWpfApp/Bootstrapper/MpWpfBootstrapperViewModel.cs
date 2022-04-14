@@ -101,8 +101,6 @@ namespace MpWpfApp {
 
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 
-            
-
             //MpRtfToHtmlConverter.Test();
 
             //var cil = await MpDb.GetItemsAsync<MpCopyItem>();

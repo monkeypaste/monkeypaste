@@ -193,7 +193,9 @@ namespace MpWpfApp {
             return rtf;
         }
 
-        public static string ToRichText(this string str) {
+        [System.Diagnostics.DebuggerNonUserCode]
+        public static string ToRichText(this string str, int iconId = 0) {
+            // NOTE iconId is only used for converting file path's icons to rtf
             if(str == null) {
                 str = string.Empty;
             }
@@ -264,10 +266,13 @@ namespace MpWpfApp {
                     return doc.ToRichText();
                 }
             }
-            if(str.IsStringBase64()) {
+            if (str.IsStringBase64()) {
                 return str.ToImageRtf();
             }
-            if(str.IsStringPlainText()) {
+            if (str.IsStringFileOrPathFormat()) {
+                return str.ToFileDropItemRtf(iconId);
+            }
+            if (str.IsStringPlainText()) {
                 using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                     rtb.Text = str;
                     rtb.Font = new System.Drawing.Font(MpPreferences.DefaultFontFamily, (float)MpPreferences.DefaultFontSize);
@@ -297,12 +302,14 @@ namespace MpWpfApp {
             return CombineFlowDocuments(text.ToRichText().ToFlowDocument(), fd, insertNewline);
         }
 
-        public static FlowDocument ToFlowDocument(this string str) {
+        public static FlowDocument ToFlowDocument(this string str, int iconId = 0) {
+            // NOTE iconId is only used to convert file path's to rtf w/ icon 
+
             if (string.IsNullOrEmpty(str)) {
                 return string.Empty.ToRichText().ToFlowDocument();
             }
             if(!str.IsStringRichText()) {
-                str = str.ToRichText();
+                str = str.ToRichText(iconId);
             }
             using (var stream = new MemoryStream(UTF8Encoding.Default.GetBytes(str))) {
                 try {
