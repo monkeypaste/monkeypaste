@@ -48,7 +48,7 @@
     <DefineConstants>TRACE;DEBUG;TRACE_DATASOURCE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>true</Prefer32Bit>
+    <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -70,9 +70,7 @@
   <PropertyGroup>
     <StartupObject>MpWpfApp.App</StartupObject>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
@@ -112,7 +110,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AttachedProperties\MpDocumentHtmlExtension.cs" />
     <Compile Include="AttachedProperties\MpMergedDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
     <Compile Include="AttachedProperties\MpEncodedDocumentExtension.cs" />
@@ -164,6 +161,7 @@
     <Compile Include="Behaviors\MpMoveBehavior.cs" />
     <Compile Include="Behaviors\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpWpfBootstrapperViewModel.cs" />
+    <Compile Include="Controls\MpRichTextBox.cs" />
     <Compile Include="Controls\MpSlickToggleButton.cs" />
     <Compile Include="Controls\MpDesignerCanvas.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
@@ -267,8 +265,6 @@
     </Compile>
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
-    <Compile Include="Utils\Extensions\MpWebView2Extensions.cs" />
-    <Compile Include="Utils\MpJsComAdapter.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfIconBuilder.cs" />
@@ -338,7 +334,7 @@
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\Styling\MpMeasurements.cs" />
     <Compile Include="Utils\BindingExtensions\MpMeasurementsBindingExtension.cs" />
-    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfPasteHelper.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfDataObjectHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
@@ -390,9 +386,6 @@
       <DependentUpon>MpDetectedObjectsCollectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Selector\MpContentListViewSelector.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpQuillEditorView.xaml.cs">
-      <DependentUpon>MpQuillEditorView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpContentView.xaml.cs">
       <DependentUpon>MpContentView.xaml</DependentUpon>
     </Compile>
@@ -771,10 +764,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\MpDetectedObjectsCollectionView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpQuillEditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1179,7 +1168,6 @@
     <None Include="..\.editorconfig">
       <Link>Views\.editorconfig</Link>
     </None>
-    <None Include="app.manifest" />
     <None Include="Properties\DefaultUiStrings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>DefaultUiStrings.Designer.cs</LastGenOutput>
@@ -1414,20 +1402,17 @@
     <PackageReference Include="Azure.AI.TextAnalytics">
       <Version>5.1.1</Version>
     </PackageReference>
-    <PackageReference Include="CefSharp.Wpf">
-      <Version>99.2.120</Version>
-    </PackageReference>
     <PackageReference Include="CsvHelper">
       <Version>27.2.1</Version>
     </PackageReference>
     <PackageReference Include="gong-wpf-dragdrop">
-      <Version>3.0.0</Version>
+      <Version>3.1.1</Version>
     </PackageReference>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf">
       <Version>1.1.0</Version>
     </PackageReference>
     <PackageReference Include="HtmlAgilityPack">
-      <Version>1.11.40</Version>
+      <Version>1.11.42</Version>
     </PackageReference>
     <PackageReference Include="InputSimulatorPlus">
       <Version>1.0.7</Version>
@@ -1436,7 +1421,7 @@
       <Version>4.7.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.ML.OnnxRuntime">
-      <Version>1.10.0</Version>
+      <Version>1.11.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.SDK.Contracts">
       <Version>10.0.22000.196</Version>
@@ -1495,11 +1480,8 @@
     <PackageReference Include="UwpDesktop-Updated">
       <Version>10.0.17763.132</Version>
     </PackageReference>
-    <PackageReference Include="WPFSpark">
-      <Version>1.4.0</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.Forms.Platform.WPF">
-      <Version>5.0.0.2337</Version>
+      <Version>5.0.0.2401</Version>
     </PackageReference>
     <PackageReference Include="Yolov5Net">
       <Version>1.0.9</Version>
@@ -2927,7 +2909,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /u /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"
-xcopy /y /f /S /I /E "$(ProjectDir)..\MonkeyPaste\Resources\Html" "$(TargetDir)Resources\Html"</PostBuildEvent>
+    <PostBuildEvent>xcopy /u /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

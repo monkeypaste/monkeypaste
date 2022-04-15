@@ -26,6 +26,8 @@ namespace MpClipboardHelper {
                     return DataFormats.FileDrop;
                 case MpClipboardFormatType.Csv:
                     return DataFormats.CommaSeparatedValue;
+                case MpClipboardFormatType.InternalContent:
+                    return MpDataObject.InternalContentFormat;
                 default:
                     throw new Exception("Unknown portable format: " + portableType.ToString());
             }
@@ -49,6 +51,9 @@ namespace MpClipboardHelper {
             }
             if (DataFormats.CommaSeparatedValue == nativeFormatName) {
                 return MpClipboardFormatType.Csv;
+            }
+            if(MpDataObject.InternalContentFormat == nativeFormatName) {
+                return MpClipboardFormatType.InternalContent;
             }
             throw new Exception("Unknown native format name: " + nativeFormatName);
         }

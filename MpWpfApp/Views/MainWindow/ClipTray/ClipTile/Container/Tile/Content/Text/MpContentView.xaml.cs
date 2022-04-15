@@ -56,22 +56,6 @@ namespace MpWpfApp {
             //RegisterBehavior(RtbHighlightBehavior);
         }
 
-        //private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
-        //    switch (msg) {
-        //        case MpMessageType.RequeryCompleted:
-        //            if(BindingContext.IsPlaceholder) {
-        //                break;
-        //            }
-        //            if(string.IsNullOrEmpty(MpDataModelProvider.QueryInfo.SearchText)) {
-        //                break;
-        //            }
-
-        //            break;
-        //    }
-        //}
-
-
-
         private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ResizingContent:
@@ -233,7 +217,7 @@ namespace MpWpfApp {
                 }
             }
         }
-        private void Border_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+        private void Rtb_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
             //if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
             //    return;
             //}
@@ -255,45 +239,7 @@ namespace MpWpfApp {
                 MpCursor.SetCursor(this, MpCursorType.IBeam);
             }
         }
-
-        private bool _isDragging;
-        private Point _mouseDownPoint;
-        private void Rtb_MouseMove(object sender, MouseEventArgs e) {
-            e.Handled = false;
-            if (!BindingContext.IsContentReadOnly) {
-                MpCursor.SetCursor(this, MpCursorType.IBeam);
-            }
-            if(Mouse.LeftButton == MouseButtonState.Released) {
-                if (_isDragging) { 
-                    
-                }
-                _mouseDownPoint = new Point();
-                _isDragging = false;
-            } else {
-                if(!_isDragging) {
-                    if(_mouseDownPoint.Distance(e.GetPosition(Rtb)) > 5) {
-                        _isDragging = true;
-
-                        DataObject data = new DataObject();
-                        if (Rtb.Selection.IsEmpty) {
-
-                        } else {
-
-                        }
-                        //data.SetData(DataFormats.StringFormat, circleUI.Fill.ToString());
-                        //data.SetData("Double", circleUI.Height);
-                        //data.SetData("Object", this);
-
-                        DragDrop.DoDragDrop(Rtb, data, DragDropEffects.Move | DragDropEffects.Copy);
-                    }
-                }
-            }
-        }
-
-        private void Rtb_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            _mouseDownPoint = e.GetPosition(Rtb);
-        }
-
+        
         private void Rtb_MouseLeave(object sender, MouseEventArgs e) {
             if (!BindingContext.IsContentReadOnly) {
                 MpCursor.UnsetCursor(this);
@@ -834,18 +780,6 @@ namespace MpWpfApp {
         }
 
         #endregion
-
-        private void Rtb_DragEnter(object sender, DragEventArgs e) {
-            e.Effects = DragDropEffects.None;
-
-            if (e.Data.GetDataPresent(DataFormats.Text)) {
-                e.Effects = DragDropEffects.Copy;
-            }
-        }
-
-        private void Rtb_DragOver(object sender, DragEventArgs e) {
-
-        }
 
     }
 }

@@ -10,12 +10,27 @@ using MpProcessHelper;
 using System.Windows.Input;
 using System.IO;
 using System.Threading;
+using MpClipboardHelper;
+using System.Collections.Specialized;
+using System.Windows.Controls;
 
 namespace MpWpfApp {
-    public class MpWpfPasteHelper : MpIExternalPasteHandler, MpIErrorHandler, MpIPasteObjectBuilder {
+    public class MpWpfDataObjectHelper : MpIExternalPasteHandler, MpIErrorHandler, MpIDataObjectBuilder {
+        #region Private Variables
+
         private Queue<MpPasteItem> _pasteQueue = new Queue<MpPasteItem>();
-        private static MpWpfPasteHelper _instance;
-        public static MpWpfPasteHelper Instance => _instance ?? (_instance = new MpWpfPasteHelper());
+
+        #endregion
+
+        #region Statics
+
+        private static MpWpfDataObjectHelper _instance;
+        public static MpWpfDataObjectHelper Instance => _instance ?? (_instance = new MpWpfDataObjectHelper());
+
+
+        #endregion
+
+        #region Public Methods
 
         public void Init() {
             MpHelpers.RunOnMainThread(async () => {
@@ -36,7 +51,6 @@ namespace MpWpfApp {
             }).FireAndForgetSafeAsync(this);
         }
 
-
         public string GetFormat(MpClipboardFormatType format, string data, string fileNameWithoutExtension = "", string directory = "", string textFormat = ".rtf", string imageFormat = ".png", bool isTemporary = false) {
             return new MpWpfPasteObjectBuilder().GetFormat(format, data, fileNameWithoutExtension, directory, textFormat, imageFormat, isTemporary);
         }
@@ -52,37 +66,10 @@ namespace MpWpfApp {
             await PasteDataObject(mpdo, pi, finishWithEnterKey);
         }
 
-        private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {
-            if (_pasteQueue == null || _pasteQueue.IsNullOrEmpty()) {
-                return;
-            }
-            int pasteCount = _pasteQueue.Count;
-            while(pasteCount > 0) {
-                var pasteItem = _pasteQueue.Dequeue();
-
-                var processInfo = MpProcessHelper.MpProcessAutomation.SetActiveProcess(pasteItem.ProcessInfo);
-
-                if(processInfo != null && processInfo.Handle != IntPtr.Zero) {
-
-                    var ido = (System.Windows.Forms.IDataObject)MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(pasteItem.DataObject);
-
-                    System.Windows.Forms.Clipboard.SetDataObject(ido);
-                    Thread.Sleep(100);
-                    System.Windows.Forms.SendKeys.SendWait("^v");
-                    Thread.Sleep(100);
-                    if (pasteItem.FinishWithEnterKey) {
-                        System.Windows.Forms.SendKeys.SendWait("{ENTER}");
-                    }
-                }
-                pasteCount--;
-            }
-        }
-
         public async Task PasteCopyItem(MpCopyItem ci, MpProcessInfo pi, bool finishWithEnterKey = false) {
-            MpDataObject cido = await GetCopyItemDataObject(ci, false, pi.Handle);
+            MpDataObject cido = await GetCopyItemDataObjectAsync(ci, false, pi.Handle);
             await PasteDataObject(cido, pi, finishWithEnterKey);
         }
-
 
         public async Task PasteDataObject(MpDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
             var pasteItem = new MpPasteItem() {
@@ -97,22 +84,44 @@ namespace MpWpfApp {
 
             if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 MpMainWindowViewModel.Instance.IsMainWindowLocked = false;
-                
+
                 MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             } else {
                 Mwvm_OnMainWindowHide(this, null);
             }
-            while(!_pasteQueue.IsNullOrEmpty()) {
+            while (!_pasteQueue.IsNullOrEmpty()) {
                 await Task.Delay(100);
             }
         }
 
-
-        public MpDataObject ConvertToDataObject(string format, object data) {
-            throw new NotImplementedException();
+        public bool IsContentDropDragDataValid(DataObject wpfdo) {
+            if(wpfdo == null) {
+                return false;
+            }
+            foreach (var sdf in MpDataObject.SupportedFormats) {
+                string wpfFormatName = GetWpfFormatName(sdf);
+                if(wpfdo.GetDataPresent(wpfFormatName)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public async Task<MpDataObject> GetCopyItemDataObject(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {
+        public async Task<DataObject> ConvertToWpfDataObject(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {
+            var wpfdo = await GetCopyItemDataObjectAsync(ci, isDragDrop, targetHandleObj);
+            DataObject dobj = new DataObject();
+            foreach (var kvp in wpfdo.DataFormatLookup) {
+                SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
+            }
+
+            if(targetHandleObj == null) {
+                dobj.SetData(MpDataObject.InternalContentFormat, ci);
+            }            
+
+            return dobj;
+        }
+
+        public async Task<MpDataObject> GetCopyItemDataObjectAsync(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {
             IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : (IntPtr)targetHandleObj;
             bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
 
@@ -125,12 +134,12 @@ namespace MpWpfApp {
             var templates = await MpDataModelProvider.GetTextTemplatesAsync(ci.Id);
             bool hasTemplates = templates != null && templates.Count > 0;
 
-            if(hasTemplates) {
+            if (hasTemplates) {
                 // trigger query change before showing main window may need to tweak...
                 MpDataModelProvider.SetManualQuery(new List<int>() { ci.Id });
                 if (MpMainWindowViewModel.Instance.IsMainWindowOpen == false) {
                     MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                    while(MpMainWindowViewModel.Instance.IsMainWindowOpen == false) {
+                    while (MpMainWindowViewModel.Instance.IsMainWindowOpen == false) {
                         await Task.Delay(100);
                     }
                 }
@@ -139,34 +148,34 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
                 var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id);
-                if(civm != null) {
-                    while(civm.IsBusy || civm.Parent.IsBusy) {
+                if (civm != null) {
+                    while (civm.IsBusy || civm.Parent.IsBusy) {
                         await Task.Delay(100);
                     }
                     civm.Parent.ClearSelection();
                     civm.IsSelected = true;
 
                     rtf = await civm.Parent.GetSubSelectedPastableRichText(isToExternalApp);
-                } 
+                }
             } else {
                 rtf = ci.ItemData.ToRichText();
             }
             pt = rtf.ToPlainText();
 
-            if(isToExternalApp) {
-                if(isDragDrop) {
+            if (isToExternalApp) {
+                if (isDragDrop) {
                     string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
                     var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
                     List<MpAppInteropSetting> targetInteropSettings = null;
-                    if(app != null) {
+                    if (app != null) {
                         targetInteropSettings = await MpDataModelProvider.GetInteropSettingsByAppId(app.Id);
                     }
-                    if(targetInteropSettings != null) {
-                        targetInteropSettings = targetInteropSettings.Where(x=>x.Priority >= 0).OrderByDescending(x => x.Priority).ToList();
-                        foreach(var targetSetting in targetInteropSettings.OrderByDescending(x=>x.Priority)) {
-                            switch(targetSetting.FormatType) {
+                    if (targetInteropSettings != null) {
+                        targetInteropSettings = targetInteropSettings.Where(x => x.Priority >= 0).OrderByDescending(x => x.Priority).ToList();
+                        foreach (var targetSetting in targetInteropSettings.OrderByDescending(x => x.Priority)) {
+                            switch (targetSetting.FormatType) {
                                 case MpClipboardFormatType.FileDrop:
-                                    if(!string.IsNullOrEmpty(targetSetting.FormatInfo)) {
+                                    if (!string.IsNullOrEmpty(targetSetting.FormatInfo)) {
                                         sctfl.Add(ci.ItemData.ToFile(null, ci.Title, targetSetting.FormatInfo));
                                     } else {
                                         sctfl.Add(ci.ItemData.ToFile(null, ci.Title));
@@ -175,8 +184,8 @@ namespace MpWpfApp {
                                 default:
                                     sctfl.Add(ci.ItemData.ToFile(null, ci.Title, targetSetting.FormatInfo));
                                     break;
-                            }                            
-                        } 
+                            }
+                        }
                     } else {
                         // NOTE using plain text here for more compatibility
                         sctfl.Add(ci.ItemData.ToFile(null, ci.Title));
@@ -227,8 +236,7 @@ namespace MpWpfApp {
                 if (!string.IsNullOrWhiteSpace(sctcsv)) {
                     d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Csv, sctcsv);
                 }
-
-            }
+            } 
 
             //set resorting
             //if (isDragDrop && SelectedItems != null && SelectedItems.Count > 0) {
@@ -250,7 +258,35 @@ namespace MpWpfApp {
             MpConsole.WriteTraceLine(ex);
         }
 
+        #endregion
+
         #region Private Methods
+
+        private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {
+            if (_pasteQueue == null || _pasteQueue.IsNullOrEmpty()) {
+                return;
+            }
+            int pasteCount = _pasteQueue.Count;
+            while(pasteCount > 0) {
+                var pasteItem = _pasteQueue.Dequeue();
+
+                var processInfo = MpProcessHelper.MpProcessAutomation.SetActiveProcess(pasteItem.ProcessInfo);
+
+                if(processInfo != null && processInfo.Handle != IntPtr.Zero) {
+
+                    var ido = (System.Windows.Forms.IDataObject)MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(pasteItem.DataObject);
+
+                    System.Windows.Forms.Clipboard.SetDataObject(ido);
+                    Thread.Sleep(100);
+                    System.Windows.Forms.SendKeys.SendWait("^v");
+                    Thread.Sleep(100);
+                    if (pasteItem.FinishWithEnterKey) {
+                        System.Windows.Forms.SendKeys.SendWait("{ENTER}");
+                    }
+                }
+                pasteCount--;
+            }
+        }
 
         private bool IsProcessLikeNotepad(string processPath) {
             if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
@@ -297,6 +333,45 @@ namespace MpWpfApp {
             catch (Exception ex) {
                 MpConsole.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
                 return false;
+            }
+        }
+
+        private void SetDataWrapper(ref DataObject dobj, MpClipboardFormatType format, string dataStr) {
+            string nativeTypeName = GetWpfFormatName(format);
+            switch (format) {
+                case MpClipboardFormatType.Bitmap:
+                    dobj.SetImage(dataStr.ToBitmapSource());
+                    break;
+                case MpClipboardFormatType.FileDrop:
+                    var fl = dataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    var sc = new StringCollection();
+                    sc.AddRange(fl);
+                    dobj.SetFileDropList(sc);
+                    break;
+                default:
+                    dobj.SetData(nativeTypeName, dataStr);
+                    break;
+            }
+        }
+
+        private string GetWpfFormatName(MpClipboardFormatType portableType) {
+            switch (portableType) {
+                case MpClipboardFormatType.Text:
+                    return DataFormats.Text;
+                case MpClipboardFormatType.Html:
+                    return DataFormats.Html;
+                case MpClipboardFormatType.Rtf:
+                    return DataFormats.Rtf;
+                case MpClipboardFormatType.Bitmap:
+                    return DataFormats.Bitmap;
+                case MpClipboardFormatType.FileDrop:
+                    return DataFormats.FileDrop;
+                case MpClipboardFormatType.Csv:
+                    return DataFormats.CommaSeparatedValue;
+                case MpClipboardFormatType.InternalContent:
+                    return MpDataObject.InternalContentFormat;
+                default:
+                    throw new Exception("Unknown portable format: " + portableType.ToString());
             }
         }
 

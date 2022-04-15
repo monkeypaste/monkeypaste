@@ -75,7 +75,7 @@ namespace MpWpfApp {
 
         public override async Task StartDrop() {
             //var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
-            var mpdo = await MpWpfPasteHelper.Instance.GetCopyItemDataObject(MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem, true, MpProcessHelper.MpProcessManager.LastHandle);
+            var mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem, true, MpProcessHelper.MpProcessManager.LastHandle);
             var ido = MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(mpdo);
             DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
         }

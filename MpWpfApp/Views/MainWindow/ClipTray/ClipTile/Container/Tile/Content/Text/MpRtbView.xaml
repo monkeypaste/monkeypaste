@@ -39,8 +39,7 @@
                                           Path=Background,
                                           Converter={StaticResource BackgroundBrushToForegroundBrushConverter}}"
                      BorderThickness="0"
-                     Focusable="{Binding IsContentReadOnly,
-                                         Converter={StaticResource BoolFlipConverter}}"
+                     Focusable="True"
                      local:MpIsFocusedExtension.IsEnabled="True"
                      local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
                                                                     Mode=TwoWay}"

@@ -2188,7 +2188,7 @@ namespace MpWpfApp {
             async () => {
                 //var ido = await GetDataObjectFromSelectedClips(false, false);
                 //MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(ido);
-                var ido = await MpWpfPasteHelper.Instance.GetCopyItemDataObject(PrimaryItem.PrimaryItem.CopyItem, false, null);
+                var ido = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(PrimaryItem.PrimaryItem.CopyItem, false, null);
                 System.Windows.Forms.Clipboard.SetDataObject(MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(ido));
             });
 
@@ -2222,7 +2222,7 @@ namespace MpWpfApp {
                 //In order to paste the app must hide first 
                 //this triggers hidewindow to paste selected items
                 IsPastingSelected = true;
-                await MpWpfPasteHelper.Instance.PasteCopyItem(PrimaryItem.PrimaryItem.CopyItem, pi, ptapvm == null ? false : ptapvm.PressEnter);
+                await MpWpfDataObjectHelper.Instance.PasteCopyItem(PrimaryItem.PrimaryItem.CopyItem, pi, ptapvm == null ? false : ptapvm.PressEnter);
                 //MpMainWindowViewModel.Instance.HideWindowCommand.Execute(true);
                 CleanupAfterPasteSelected();
             },
@@ -2249,7 +2249,7 @@ namespace MpWpfApp {
                 var cil = await MpDataModelProvider.GetCopyItemsByIdList(ciidl.ToList());
                 //var pasteDataObject = GetDataObjectByCopyItems(cil, false, true);
                 //MpMainWindowViewModel.Instance.HideWindowCommand.Execute(pasteDataObject);
-                await MpWpfPasteHelper.Instance.PasteCopyItem(cil[0], pi, false);
+                await MpWpfDataObjectHelper.Instance.PasteCopyItem(cil[0], pi, false);
 
                 IsPasting = false;
             },

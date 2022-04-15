@@ -13,10 +13,11 @@ namespace MonkeyPaste.Plugin {
         Rtf,
         Bitmap,
         FileDrop,
-        Csv
+        Csv,
+        InternalContent
     }
 
-    public interface MpIPasteObjectBuilder {
+    public interface MpIDataObjectBuilder {
         string GetFormat(
             MpClipboardFormatType format,
             string data,
@@ -60,10 +61,13 @@ namespace MonkeyPaste.Plugin {
 
     public class MpDataObject  {
         #region Private Variables
-        private static MpIPasteObjectBuilder _pasteObjectBuilder;
+        private static MpIDataObjectBuilder _pasteObjectBuilder;
         #endregion
 
+
         #region Properties
+
+        public static string InternalContentFormat = "MpInternalContentFormat";
 
         private static ObservableCollection<MpClipboardFormatType> _supportedFormats;
         public static ObservableCollection<MpClipboardFormatType> SupportedFormats {
@@ -75,7 +79,8 @@ namespace MonkeyPaste.Plugin {
                         MpClipboardFormatType.Rtf,
                         MpClipboardFormatType.Bitmap,
                         MpClipboardFormatType.FileDrop,
-                        MpClipboardFormatType.Csv
+                        MpClipboardFormatType.Csv,
+                        MpClipboardFormatType.InternalContent
                     };
                 }
                 return _supportedFormats;
@@ -91,7 +96,7 @@ namespace MonkeyPaste.Plugin {
 
         #region Constructors
 
-        public static void Init(MpIPasteObjectBuilder pob) {
+        public static void Init(MpIDataObjectBuilder pob) {
             _pasteObjectBuilder = pob;
         }
         #endregion

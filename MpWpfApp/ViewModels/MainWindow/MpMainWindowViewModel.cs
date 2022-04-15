@@ -204,10 +204,6 @@ namespace MpWpfApp {
                     break;
             }
         }
-        #endregion
-
-        #region Private Methods
-
         private void ReceivedSearchBoxViewModelMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.SearchCriteriaItemsChanged:

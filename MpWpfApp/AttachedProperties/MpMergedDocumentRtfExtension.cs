@@ -1,6 +1,6 @@
-﻿using CefSharp;
-using CefSharp.JavascriptBinding;
-using CefSharp.Wpf;
+﻿//using CefSharp;
+//using CefSharp.JavascriptBinding;
+//using CefSharp.Wpf;
 using MonkeyPaste;
 using MonkeyPaste.Plugin;
 using Newtonsoft.Json;

@@ -42,10 +42,11 @@ namespace MpClipboardHelper {
             ConvertManagedFormats((IDataObject)nativeDataObj, retryCount);
 
         public object ConvertToNativeFormat(MpDataObject portableObj) => 
-            ConvertToOleDataObject(portableObj);
+            ConvertToWinFormsDataObject(portableObj);
 
         public void SetDataObjectWrapper(MpDataObject portableObj) => 
             SetDataObjectWrapper(portableObj);
+
         #endregion
 
         #region MpIClipboardMonitor Implementation
@@ -122,7 +123,7 @@ namespace MpClipboardHelper {
             }
         }
 
-        private IDataObject ConvertToOleDataObject(MpDataObject mpdo) {
+        private IDataObject ConvertToWinFormsDataObject(MpDataObject mpdo) {
             DataObject dobj = new DataObject();
             foreach (var kvp in mpdo.DataFormatLookup) {
                 SetDataWrapper(ref dobj, kvp.Key, kvp.Value);

@@ -18,51 +18,51 @@
     </i:Interaction.Behaviors>
 
     <AdornerDecorator>
-        <RichTextBox x:Name="Rtb"
-                     DataContext="{Binding}"
-                     AllowDrop="True"
-                     Width="Auto"
-                     MinWidth="100"
-                     Height="{Binding HeadItem.EditorHeight}"
-                     Padding="5,0,5,0"
-                     PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch"
-                     HorizontalContentAlignment="Stretch"
-                     VerticalContentAlignment="Stretch"
-                     local:MpMergedDocumentRtfExtension.HeadContentItemViewModel="{Binding HeadItem}"
-                     local:MpMergedDocumentRtfExtension.IsSelected="{Binding IsSelected,
-                                                                             Mode=TwoWay}"
-                     local:MpMergedDocumentRtfExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
-                     AutoWordSelection="False"
-                     Background="White"
-                     Foreground="Black"
-                     BorderThickness="0"
-                     local:MpIsFocusedExtension.IsEnabled="True"
-                     local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
-                                                                    Mode=TwoWay}"
-                     GotFocus="Rtb_GotFocus"
-                     IsDocumentEnabled="True"
-                     IsEnabled="True"
-                     IsInactiveSelectionHighlightEnabled="True"
-                     IsReadOnly="{Binding IsContentReadOnly}"
-                     IsUndoEnabled="True"
-                     Loaded="Rtb_Loaded"
-                     PreviewKeyUp="Rtb_PreviewKeyUp"
-                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                     DataContextChanged="Rtb_DataContextChanged"
-                     Unloaded="Rtb_Unloaded"
-                     SelectionChanged="Rtb_SelectionChanged"
-                     SizeChanged="Rtb_SizeChanged"
-                     MouseEnter="Rtb_MouseEnter"
-                     MouseLeftButtonDown="Rtb_MouseLeftButtonDown"
-                     MouseMove="Rtb_MouseMove"
-                     MouseLeave="Rtb_MouseLeave">
-            <RichTextBox.Resources>
+        <local:MpRichTextBox x:Name="Rtb"
+                             DataContext="{Binding}"
+                             Width="Auto"
+                             MinWidth="100"
+                             Height="{Binding HeadItem.EditorHeight}"
+                             Padding="5,0,5,0"
+                             PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             HorizontalContentAlignment="Stretch"
+                             VerticalContentAlignment="Stretch"
+                             local:MpMergedDocumentRtfExtension.HeadContentItemViewModel="{Binding HeadItem}"
+                             local:MpMergedDocumentRtfExtension.IsSelected="{Binding IsSelected,
+                                                                                     Mode=TwoWay}"
+                             local:MpMergedDocumentRtfExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
+                             local:MpTextSelectionRangeExtension.IsEnabled="True"
+                             local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
+                             AutoWordSelection="False"
+                             Background="White"
+                             Foreground="Black"
+                             BorderThickness="0"
+                             local:MpIsFocusedExtension.IsEnabled="True"
+                             local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
+                                                                            Mode=TwoWay}"
+                             GotFocus="Rtb_GotFocus"
+                             IsDocumentEnabled="True"
+                             IsEnabled="True"
+                             IsInactiveSelectionHighlightEnabled="True"
+                             IsReadOnly="{Binding IsContentReadOnly}"
+                             IsUndoEnabled="True"
+                             Loaded="Rtb_Loaded"
+                             PreviewKeyUp="Rtb_PreviewKeyUp"
+                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                             DataContextChanged="Rtb_DataContextChanged"
+                             Unloaded="Rtb_Unloaded"
+                             SelectionChanged="Rtb_SelectionChanged"
+                             SizeChanged="Rtb_SizeChanged"
+                             MouseEnter="Rtb_MouseEnter"
+                             AllowDrop="True"
+                             MouseLeave="Rtb_MouseLeave">
+            <local:MpRichTextBox.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                  Color="Blue" />
-            </RichTextBox.Resources>
-        </RichTextBox>
+            </local:MpRichTextBox.Resources>
+        </local:MpRichTextBox>
     </AdornerDecorator>
 </local:MpUserControl>

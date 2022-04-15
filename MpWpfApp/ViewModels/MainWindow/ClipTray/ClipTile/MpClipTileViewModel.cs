@@ -5,36 +5,23 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Controls.Primitives;
     using System.Windows.Data;
-    using System.Windows.Documents;
     using System.Windows.Input;
-    using System.Windows.Interactivity;
-    using System.Windows.Interop;
     using System.Windows.Media;
-    using System.Windows.Media.Animation;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Shapes;
     using System.Windows.Threading;
     using GalaSoft.MvvmLight.CommandWpf;
-    using GongSolutions.Wpf.DragDrop.Utilities;
-    using Newtonsoft.Json;
     using MonkeyPaste;
     using MonkeyPaste.Plugin;
     using System.Speech.Synthesis;
-    using GongSolutions.Wpf.DragDrop;
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 
         MpISelectableViewModel,
-        MpIResizableViewModel {
+        MpIResizableViewModel,
+        MpITextSelectionRangeViewModel {
         #region Private Variables
 
         private List<string> _tempFileList = new List<string>();
@@ -73,8 +60,15 @@
         //}
         #endregion
 
+        #region MpITextSelectionRangeViewModel Implementation 
+
+        public int SelectionStart { get; set; }
+        public int SelectionLength { get; set; }
+
+        #endregion
+
         #region View Models
-        
+
         private ObservableCollection<MpContentItemViewModel> _itemViewModels = new ObservableCollection<MpContentItemViewModel>();
         [MpChildViewModel(typeof(MpContentItemViewModel),true)]
         public ObservableCollection<MpContentItemViewModel> ItemViewModels {
@@ -482,7 +476,6 @@
         #endregion
 
         #region State 
-
 
         public bool IsContentFocused { get; set; } = false;
 
@@ -1727,6 +1720,7 @@
                     });
             }
         }
+
 
         #endregion
     }

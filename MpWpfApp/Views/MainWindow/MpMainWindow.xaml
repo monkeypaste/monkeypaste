@@ -25,7 +25,7 @@
         Width="{Binding MainWindowWidth}"
         d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
                                          IsDesignTimeCreatable=False}">
-    <Canvas x:Name="MainWindowCanvas"
+    <Canvas x:Name="MainWindowCanvas" 
             Height="{local:MpMeasurementsBinding ScreenHeight}"
             Width="{Binding MainWindowWidth}">
 

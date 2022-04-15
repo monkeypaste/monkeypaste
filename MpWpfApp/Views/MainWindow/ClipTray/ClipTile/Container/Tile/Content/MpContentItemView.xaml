@@ -65,7 +65,7 @@
                 <local:MpRtbView DataContext="{Binding}" />
             </DataTemplate>
             <DataTemplate x:Key="QuillContentTemplate">
-                <local:MpQuillEditorView DataContext="{Binding}" />
+                <!--<local:MpQuillEditorView DataContext="{Binding}" />-->
             </DataTemplate>
             <DataTemplate x:Key="FlowDocumentScrollViewerContentTemplate">
                 <FlowDocumentScrollViewer Loaded="FlowDocumentScrollViewer_Loaded" />

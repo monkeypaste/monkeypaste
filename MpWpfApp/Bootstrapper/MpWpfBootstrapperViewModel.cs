@@ -10,10 +10,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows;
 using MpProcessHelper;
 using MonkeyPaste.Plugin;
-using CefSharp.Wpf;
-using CefSharp;
 using System.IO;
-using CefSharp.SchemeHandler;
 using System.Windows.Media;
 
 namespace MpWpfApp {
@@ -26,7 +23,7 @@ namespace MpWpfApp {
 
             _items.AddRange(
                 new List<MpBootstrappedItem>() {
-                    new MpBootstrappedItem(typeof(MpDocumentHtmlExtension)),
+                    //new MpBootstrappedItem(typeof(MpDocumentHtmlExtension)),
                     new MpBootstrappedItem(typeof(MpProcessManager)),
                     new MpBootstrappedItem(typeof(MpProcessAutomation)),
 
@@ -64,9 +61,9 @@ namespace MpWpfApp {
 
                     new MpBootstrappedItem(typeof(MpDragDropManager)),
 
-                    new MpBootstrappedItem(typeof(MpClipboardHelper.MpClipboardManager),MpWpfPasteHelper.Instance),
+                    new MpBootstrappedItem(typeof(MpClipboardHelper.MpClipboardManager),MpWpfDataObjectHelper.Instance),
 
-                    new MpBootstrappedItem(typeof(MpWpfPasteHelper)),
+                    new MpBootstrappedItem(typeof(MpWpfDataObjectHelper)),
                     new MpBootstrappedItem(typeof(MpDataObject), new MpWpfPasteObjectBuilder())
                     //new MpBootstrappedItem(typeof(MpMouseHook))
                 });
