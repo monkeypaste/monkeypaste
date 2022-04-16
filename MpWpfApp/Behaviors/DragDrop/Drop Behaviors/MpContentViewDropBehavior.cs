@@ -10,7 +10,8 @@ using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpRtbViewDropBehavior : MpDropBehaviorBase<MpRtbView> {        
+    public class MpContentViewDropBehavior : MpDropBehaviorBase<MpContentView> {
+        
         public override bool IsDropEnabled { get; set; } = true;
 
         public override MpDropType DropType => MpDropType.Content;
@@ -66,55 +67,24 @@ namespace MpWpfApp {
         }
 
         public override List<Rect> GetDropTargetRects() {
-            var homeAndEndRects = new List<Rect>() {
-                AssociatedObject.Rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward),
-                AssociatedObject.Rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Backward)
+            var rtbRect = new List<Rect>() {
+                new Rect(0, 0, AssociatedObject.Rtb.ActualWidth, AssociatedObject.Rtb.ActualHeight)
             };
-            return homeAndEndRects;
-
-            //var insertRects = new List<Rect>();
-
-            //var rtb = AssociatedObject.Rtb;
-            //var ctr_mp = Mouse.GetPosition(rtb.Document);
-            //Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth, rtb.ActualHeight);
-            //if (!rtb_rect.Contains(ctr_mp)) {
-            //    return insertRects;
-            //}
-
-            //var cp = AssociatedObject.Rtb.Document.ContentStart;
-            //while(cp != null && cp != AssociatedObject.Rtb.Document.ContentEnd) {
-            //    if(cp.IsAtInsertionPosition) {
-            //        insertRects.Add(cp.GetCharacterRect(LogicalDirection.Forward));
-            //        if(cp == AssociatedObject.Rtb.Document.ContentEnd) {
-            //            insertRects.Add(cp.GetCharacterRect(LogicalDirection.Backward));
-            //            return insertRects;
-            //        }
-            //    }
-            //    cp = cp.GetNextInsertionPosition(LogicalDirection.Forward);
-            //}
-            //return insertRects;
+            return rtbRect;
         }
 
         public override int GetDropTargetRectIdx() {
             var rtb = AssociatedObject.Rtb;
-            var ctr_mp = Mouse.GetPosition(rtb.Document);
+            var ctr_mp = Mouse.GetPosition(rtb);
             Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth, rtb.ActualHeight);
             if (!rtb_rect.Contains(ctr_mp)) {
+                Reset();
                 return -1;
             }
-
-            //var insertRects = GetDropTargetRects();
-            //var closestRect = insertRects.Aggregate((a, b) => a.Location.Distance(ctr_mp) < b.Location.Distance(ctr_mp) ? a : b);
-
-            //return insertRects.IndexOf(closestRect);
-
-            double homeDist = GetDropTargetRects()[0].Location.Distance(ctr_mp);
-            double endDist = GetDropTargetRects()[1].Location.Distance(ctr_mp);
-            if (homeDist <= endDist) {
-                return 0;
-            } else {
-                return 1;
-            }
+            //MpIsFocusedExtension.SetIsFocused(rtb, true);
+            var mptp = rtb.GetPositionFromPoint(ctr_mp, true);
+            rtb.CaretPosition = mptp;
+            return rtb.Document.ContentStart.GetOffsetToPosition(mptp);
         }
 
         public override bool IsDragDataValid(bool isCopy,object dragData) {
@@ -123,7 +93,7 @@ namespace MpWpfApp {
             }
             if(AssociatedObject != null && dragData is List<MpCopyItem> ddl) {
                 if(!isCopy && 
-                   ddl.Any(x=>x.Id ==AssociatedObject.BindingContext.CopyItemId)) {
+                   ddl.Any(x=>x.Id ==AssociatedObject.BindingContext.HeadItem.CopyItemId)) {
                     return false;
                 }
 
@@ -136,20 +106,19 @@ namespace MpWpfApp {
 
         public override async Task Drop(bool isCopy, object dragData) {
             await base.Drop(isCopy, dragData);
-
             List<MpCopyItem> dragModels = isCopy ? await GetDragDataCopy(dragData) : dragData as List<MpCopyItem>;
 
             List<MpClipTileViewModel> dragTiles = new List<MpClipTileViewModel>();
             
-            if(dragModels.Count == 1 && dragModels[0].Id == AssociatedObject.BindingContext.CopyItem.Id) {
-                return;
-            }
+            //if(dragModels.Count == 1 && dragModels[0].Id == AssociatedObject.BindingContext.HeadItem.CopyItem.Id) {
+            //    return;
+            //}
             
 
             if (!isCopy) {
                 for (int i = 0; i < dragModels.Count; i++) {
                     if (dragModels[i].CompositeParentCopyItemId == 0 &&
-                        !AssociatedObject.BindingContext.Parent.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
+                        !AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
                         //if drag item is head of ANOTHER tile swap or remove from main query ref w/ first child
                         await MpDataModelProvider.RemoveQueryItem(dragModels[i].Id);
                     }
@@ -209,32 +178,32 @@ namespace MpWpfApp {
 
             // merge content
             if (isHomeMerge) {
-                AssociatedObject.BindingContext.CopyItem.ItemData = MpWpfStringExtensions.CombineRichText(AssociatedObject.Rtb.Document.ToRichText(), mci.ItemData);
+                AssociatedObject.BindingContext.HeadItem.CopyItem.ItemData = MpWpfStringExtensions.CombineRichText(AssociatedObject.Rtb.Document.ToRichText(), mci.ItemData);
             } else {
-                AssociatedObject.BindingContext.CopyItem.ItemData = MpWpfStringExtensions.CombineRichText(mci.ItemData, AssociatedObject.Rtb.Document.ToRichText());
+                AssociatedObject.BindingContext.HeadItem.CopyItem.ItemData = MpWpfStringExtensions.CombineRichText(mci.ItemData, AssociatedObject.Rtb.Document.ToRichText());
             }
 
             // merge templates
-            //var citl = await MpDataModelProvider.GetTextTemplatesAsync(AssociatedObject.BindingContext.CopyItemId);
+            //var citl = await MpDataModelProvider.GetTextTemplatesAsync(AssociatedObject.BindingContext.HeadItem.CopyItemId);
             //var mcitl = await MpDataModelProvider.GetTextTemplatesAsync(mci.Id);
             //foreach (MpTextTemplate mcit in mcitl) {
             //    if (citl.Any(x => x.TemplateName == mcit.TemplateName)) {
             //        //if merged item has template w/ same name just ignore it since it will already be parsed
             //        continue;
             //    }
-            //    mcit.CopyItemId = AssociatedObject.BindingContext.CopyItemId;
+            //    mcit.CopyItemId = AssociatedObject.BindingContext.HeadItem.CopyItemId;
             //    await mcit.WriteToDatabaseAsync();
             //}
 
             // merge tags
-            var tl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(AssociatedObject.BindingContext.CopyItemId);
+            var tl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(AssociatedObject.BindingContext.HeadItem.CopyItemId);
             var mtl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(mci.Id);
             foreach (MpCopyItemTag mt in mtl) {
                 if (tl.Any(x => x.TagId == mt.TagId)) {
                     //if merged item has tags w/ same name just ignore it 
                     continue;
                 }
-                mt.CopyItemId = AssociatedObject.BindingContext.CopyItemId;
+                mt.CopyItemId = AssociatedObject.BindingContext.HeadItem.CopyItemId;
                 await mt.WriteToDatabaseAsync();
             }
 
@@ -245,8 +214,8 @@ namespace MpWpfApp {
             // write and restore item
 
             //for some reason the control reloads after writing so storing vm
-            var civm = AssociatedObject.BindingContext;
-            await AssociatedObject.BindingContext.CopyItem.WriteToDatabaseAsync();
+            var civm = AssociatedObject.BindingContext.HeadItem;
+            await AssociatedObject.BindingContext.HeadItem.CopyItem.WriteToDatabaseAsync();
 
             civm.OnPropertyChanged(nameof(civm.CopyItemData));
 
@@ -258,14 +227,20 @@ namespace MpWpfApp {
         public override void AutoScrollByMouse() {
 
             if (DropIdx == 0) {
-                AssociatedObject.BindingContext.ScrollToHomeCommand.Execute(null);
+                AssociatedObject.BindingContext.HeadItem.ScrollToHomeCommand.Execute(null);
             } else if(DropIdx == 1) {
-                AssociatedObject.BindingContext.ScrollToEndCommand.Execute(null);
+                AssociatedObject.BindingContext.HeadItem.ScrollToEndCommand.Execute(null);
             }
         }
 
         public override async Task StartDrop() {
             await Task.Delay(1);
+        }
+
+        public override void Reset() {
+            base.Reset();
+            AssociatedObject.Rtb.ScrollToHome();
+            AssociatedObject.Rtb.Selection.Select(AssociatedObject.Rtb.Document.ContentStart, AssociatedObject.Rtb.Document.ContentStart);
         }
     }
 

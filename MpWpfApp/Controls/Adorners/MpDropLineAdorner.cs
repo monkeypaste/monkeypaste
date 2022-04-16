@@ -10,10 +10,12 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpDropLineAdorner : Adorner {
         #region Private Variables
+        private bool _isDash = true;
 
         private Color _debugColor;
 
@@ -38,6 +40,15 @@ namespace MpWpfApp {
         
         public MpLine DropLine { 
             get {
+                if(_dropBehavior is MpContentViewDropBehavior cvdb) {
+                    _isDash = false;
+                    MpConsole.WriteLine("ContentView DropIdx: " + cvdb.DropIdx);
+
+                    var dltp = (cvdb.RelativeToElement as RichTextBox).Document.ContentStart.GetPositionAtOffset(cvdb.DropIdx);
+                    var dltp_rect = dltp.GetCharacterRect(LogicalDirection.Forward);
+                    return new MpLine(dltp_rect.Left, dltp_rect.Top, dltp_rect.Left, dltp_rect.Bottom);
+                }
+
                 if(DropIdx < 0 || 
                    _dropBehavior == null ||
                    DropIdx >= DropRects.Count) {
@@ -46,11 +57,11 @@ namespace MpWpfApp {
                 Rect dropRect = DropRects[DropIdx];
                 if(_dropBehavior.AdornerOrientation == Orientation.Vertical) {
                     //tray or rtb view vertical drop line
-                    double x = dropRect.Left + (dropRect.Width / 2);
+                    double x = dropRect.Left + (dropRect.Width / 2) + 2;
                     if(DropIdx > 0 && DropIdx < DropRects.Count - 1) {
                         // NOTE due to margin/padding issues calculate mid-point between drop rects and 
                         // do not derive from singluar drop rect
-                        //double midX1 = 
+                        //x = dropRect.Left + 5;// ((DropRects[DropIdx + 1].Left - dropRect.Left) / 2);
                     }
                     return new MpLine(x,dropRect.Top,x,dropRect.Bottom);
                 }
@@ -140,7 +151,7 @@ namespace MpWpfApp {
             if(IsShowing) {
                 Visibility = Visibility.Visible;
                 drawingContext.DrawLine(
-                    new Pen(Brushes.Red, 1.5) { DashStyle = DashStyles.Dash },
+                    new Pen(Brushes.Red, 1.5) { DashStyle = _isDash ? DashStyles.Dash : DashStyles.Solid },
                     DropLine.P1.ToWpfPoint(),
                     DropLine.P2.ToWpfPoint());
             } else if(!IsDebugMode) {

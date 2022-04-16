@@ -19,6 +19,13 @@ using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public static class MpWpfRichDocumentExtensions {
+        public static bool IsPointInRange(this TextRange tr, Point p) {
+            var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
+
+            var ptp = rtb.GetPositionFromPoint(p, true);
+
+            return tr.Contains(ptp);
+        }
         public static bool HasTable(this RichTextBox rtb) {
             return rtb.Document.Blocks.Any(x => x is Table);
         }

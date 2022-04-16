@@ -7,18 +7,18 @@ using System.Collections.Generic;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
-    [Flags]
-    public enum MpRectEdgeFlags {
-        None = 0b_0000,
-        Left = 0b_0001,
-        Top = 0b_0010,
-        Right = 0b_0100,
-        Bottom = 0b_1000
-    }
+    //[Flags]
+    //public enum MpRectEdgeFlags {
+    //    None = 0b_0000,
+    //    Left = 0b_0001,
+    //    Top = 0b_0010,
+    //    Right = 0b_0100,
+    //    Bottom = 0b_1000
+    //}
 
-    public class MpResizeBehavior : MpBehavior<FrameworkElement> {
+    public class MpMainWindowResizeBehavior : MpBehavior<FrameworkElement> {
         #region Private Variables
-        private static List<MpResizeBehavior> _allResizers = new List<MpResizeBehavior>();
+        private static List<MpMainWindowResizeBehavior> _allResizers = new List<MpMainWindowResizeBehavior>();
 
         private Point _lastMousePosition;
         private Point _mouseDownPosition;
@@ -48,7 +48,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty IsResizingProperty =
              DependencyProperty.Register(
                  "IsResizing", typeof(bool),
-                 typeof(MpResizeBehavior),
+                 typeof(MpMainWindowResizeBehavior),
                  new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
 
         #endregion
@@ -63,7 +63,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty CanResizeProperty =
             DependencyProperty.Register(
                 "CanResize", typeof(bool),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsRender));
 
         #endregion
@@ -78,7 +78,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty MaxDistanceProperty =
             DependencyProperty.Register(
                 "MaxDistance", typeof(double),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(10.0d));
 
         #endregion
@@ -93,7 +93,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty DoubleClickFrameworkElementProperty =
             DependencyProperty.Register(
                 "DoubleClickFrameworkElement", typeof(FrameworkElement),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(null));
 
         #endregion
@@ -108,7 +108,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty BoundElementProperty =
             DependencyProperty.Register(
                 "BoundElement", typeof(FrameworkElement),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(null));
 
         #endregion
@@ -125,7 +125,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty BoundWidthProperty =
             DependencyProperty.Register(
                 "BoundWidth", typeof(double),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(default(double), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
 
         #endregion
@@ -140,8 +140,8 @@ namespace MpWpfApp {
         public static readonly DependencyProperty BoundHeightProperty =
             DependencyProperty.Register(
                 "BoundHeight", typeof(double),
-                typeof(MpResizeBehavior),
-                new FrameworkPropertyMetadata(default(double), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+                typeof(MpMainWindowResizeBehavior),
+                new FrameworkPropertyMetadata(default(double)));
 
         #endregion
 
@@ -155,7 +155,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty MinWidthProperty =
             DependencyProperty.Register(
                 "MinWidth", typeof(double),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(default(double)));
 
         #endregion
@@ -170,7 +170,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty MinHeightProperty =
             DependencyProperty.Register(
                 "MinHeight", typeof(double),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(default(double)));
 
         #endregion
@@ -185,7 +185,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty MaxWidthProperty =
             DependencyProperty.Register(
                 "MaxWidth", typeof(double),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(double.MaxValue));
 
         #endregion
@@ -200,7 +200,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty MaxHeightProperty =
             DependencyProperty.Register(
                 "MaxHeight", typeof(double),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(double.MaxValue));
 
         #endregion
@@ -215,7 +215,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty DefaultWidthProperty =
             DependencyProperty.Register(
                 "DefaultWidth", typeof(double),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(default(double)));
 
         #endregion
@@ -230,7 +230,7 @@ namespace MpWpfApp {
         public static readonly DependencyProperty DefaultHeightProperty =
             DependencyProperty.Register(
                 "DefaultHeight", typeof(double),
-                typeof(MpResizeBehavior),
+                typeof(MpMainWindowResizeBehavior),
                 new FrameworkPropertyMetadata(default(double)));
 
         #endregion
@@ -247,57 +247,11 @@ namespace MpWpfApp {
 
         #endregion
 
-        //#region DropBehaviorBase Implementation
-
-        //public override bool IsEnabled { get; set; } = true;
-        //public override MpDropType DropType => MpDropType.Resize;
-        //public override UIElement RelativeToElement => BoundElement;
-        //public override FrameworkElement AdornedElement => AssociatedObject;
-        //public override Orientation AdornerOrientation => Orientation.Horizontal;
-        //public override MpCursorType MoveCursor { get; }
-        //public override MpCursorType CopyCursor { get; }
-
-        //public override List<Rect> GetDropTargetRects() {
-        //    var r = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
-        //    var edgeRects = new List<Rect>();
-
-        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Left)) {
-        //        Rect lr = new Rect(r.Left, r.Top, r.Left, r.Bottom);
-        //        lr.Inflate(new Size(MaxDistance, MaxDistance));
-        //        edgeRects.Add(lr);
-        //    }
-        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Right)) {
-        //        Rect rr = new Rect(r.Right, r.Top, r.Right, r.Bottom);
-        //        rr.Inflate(new Size(MaxDistance, MaxDistance));
-        //        edgeRects.Add(rr);
-        //    }
-        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Top)) {
-        //        Rect tr = new Rect(r.Left, r.Top, r.Right, r.Top);
-        //        tr.Inflate(new Size(MaxDistance, MaxDistance));
-        //        edgeRects.Add(tr);
-        //    }
-        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Bottom)) {
-        //        Rect br = new Rect(r.Left, r.Bottom, r.Right, r.Bottom);
-        //        br.Inflate(new Size(MaxDistance, MaxDistance));
-        //        edgeRects.Add(br);
-        //    }
-        //    return edgeRects;
-        //}
-
-        //public override async Task StartDrop() {
-        //    await Task.Delay(1);
-        //}
-
-        //public override bool IsDragDataValid(bool isCopy, object dragData) {
-        //    return base.IsDragDataValid(isCopy, dragData);
-        //}
-
-        //public override void AutoScrollByMouse() {
-            
-        //}
-        //#endregion
-
         protected override void OnLoad() {
+            if(!IsEnabled) {
+                return;
+            }
+
             base.OnLoad();
             if(AssociatedObject == null) {
                 return;
@@ -378,8 +332,19 @@ namespace MpWpfApp {
             BoundWidth = Math.Min(Math.Max(nw, MinWidth), MaxWidth);
 
             double nh = BoundHeight + dy;
-            BoundHeight = Math.Min(Math.Max(nh, MinHeight), MaxHeight);
+            double oldHeight = BoundHeight;
+            //BoundHeight = Math.Min(Math.Max(nh, MinHeight), MaxHeight);
+            //MpMainWindowViewModel.Instance.MainWindowContainerTop += dy;// BoundHeight - oldHeight;
 
+            //Application.Current.MainWindow.Top -= dy;
+            MpMainWindowViewModel.Instance.MainWindowContainerTop -= dy;// 
+            Application.Current.MainWindow.Top = MpMainWindowViewModel.Instance.MainWindowContainerTop;
+            Application.Current.MainWindow.Height = MpMainWindowViewModel.Instance.MainWindowHeight;
+            MpMainWindowViewModel.Instance.MainWindowTop = 0;
+            MpMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpMainWindowViewModel.Instance.MainWindowHeight));
+
+            Application.Current.MainWindow.InvalidateMeasure();
+            Application.Current.MainWindow.UpdateLayout();
             //if (ResizableEdges.HasFlag(MpRectEdgeFlags.Left) || ResizableEdges.HasFlag(MpRectEdgeFlags.Right)) {
             //    double nw = BoundWidth + dx;
             //    BoundWidth = Math.Min(Math.Max(nw, MinWidth), MaxWidth);
@@ -389,9 +354,9 @@ namespace MpWpfApp {
             //    BoundHeight = Math.Min(Math.Max(nh, MinHeight), MaxHeight);
             //}
 
-            if(AffectsContent) {
+            if (AffectsContent) {
                 MpMessenger.Send(MpMessageType.ResizingContent);
-                if(!IsResizing) {
+                if (!IsResizing) {
                     MpMessenger.Send(MpMessageType.ResizeContentCompleted);
                 }
             }
@@ -407,9 +372,6 @@ namespace MpWpfApp {
         private void DoubleClickFrameworkElement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (MpDragDropManager.IsDragAndDrop || AssociatedObject == null || !IsEnabled || MpIsFocusedExtension.IsAnyTextBoxFocused) {
                 return;
-            }
-            if (AssociatedObject.DataContext is MpISelectableViewModel svm) {
-                svm.IsSelected = true;
             }
             if (e.ClickCount == 2) {
                 ResetToDefault();
@@ -471,6 +433,9 @@ namespace MpWpfApp {
                     
                 } else {
                     CanResize = false;
+                    if(!CanAnyResize) {
+                        //MpCursorStack.CurrentCursor = MpCursorType.Default;
+                    }                    
                 }
             }
         }
@@ -481,10 +446,6 @@ namespace MpWpfApp {
             }
             if (AssociatedObject == null) {
                 return;
-            }
-
-            if (AssociatedObject.DataContext is MpISelectableViewModel svm) {
-                svm.IsSelected = true;
             }
 
             if (DoubleClickFrameworkElement != AssociatedObject && e.ClickCount == 2) {

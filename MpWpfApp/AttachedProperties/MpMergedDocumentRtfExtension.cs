@@ -325,7 +325,10 @@ namespace MpWpfApp {
         private static void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
             var rtb = sender as RichTextBox;
             var ctvm = rtb.DataContext as MpClipTileViewModel;
-            
+            if(ctvm.IsPlaceholder) {
+                // BUG I think this event gets called when a tile is dropped and its turned into placeholder
+                return;
+            }
             MpConsole.WriteLines("Tile " + ctvm.HeadItem.CopyItemTitle + " text changed:");
             MpConsole.WriteLine(rtb.Document.ToXamlPackage());
 

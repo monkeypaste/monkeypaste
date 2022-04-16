@@ -477,6 +477,8 @@
 
         #region State 
 
+        public bool IsSubSelectionEnabled { get; set; } = false;
+
         public bool IsContentFocused { get; set; } = false;
 
         public bool IsOverPinButton { get; set; } = false;
@@ -1225,19 +1227,22 @@
                     OnPropertyChanged(nameof(IsAnyBusy));
                     break;
                 case nameof(IsSelected):
-                    if (!IsSelected) {
-                        if (IsFlipped) {
-                            Parent.FlipTileCommand.Execute(this);
-                        }
-                        //ClearSelection();
-                    } else {
+                    if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                         //RequestFocus();
-                        if(IsPinned) {
+                        if (IsPinned) {
                             Parent.ClearClipSelection(false);
                         } else {
                             Parent.ClearPinnedSelection(false);
+                        }                        
+                    } else {
+                        if (IsFlipped) {
+                            Parent.FlipTileCommand.Execute(this);
                         }
+                        if(IsContentReadOnly) {
+                            IsSubSelectionEnabled = false;
+                        }
+                        //ClearSelection();
                     }
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -1305,6 +1310,7 @@
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
 
                     OnPropertyChanged(nameof(CanVerticallyScroll));
+                    IsSubSelectionEnabled = !IsContentReadOnly;
                     break;
             }
         }

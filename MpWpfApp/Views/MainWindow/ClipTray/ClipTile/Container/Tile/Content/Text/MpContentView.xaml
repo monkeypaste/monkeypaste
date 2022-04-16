@@ -12,19 +12,17 @@
                      d:DesignHeight="450"
                      d:DesignWidth="800">
     <i:Interaction.Behaviors>
-        <!--<local:MpDropBehavior x:Name="DropBehavior" />-->
-        <!--<local:MpRtbViewDropBehavior x:Name="RtbViewDropBehavior" />-->
+        <local:MpContentViewDropBehavior x:Name="ContentViewDropBehavior" />
         <!--<local:MpRtbHighlightBehavior x:Name="RtbHighlightBehavior" />-->
     </i:Interaction.Behaviors>
 
     <AdornerDecorator>
-        <local:MpRichTextBox x:Name="Rtb"
+        <RichTextBox x:Name="Rtb"
                              DataContext="{Binding}"
                              Width="Auto"
                              MinWidth="100"
                              Height="{Binding HeadItem.EditorHeight}"
                              Padding="5,0,5,0"
-                             PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              HorizontalContentAlignment="Stretch"
@@ -43,6 +41,7 @@
                              local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
                                                                             Mode=TwoWay}"
                              GotFocus="Rtb_GotFocus"
+                            LostFocus="Rtb_LostFocus"
                              IsDocumentEnabled="True"
                              IsEnabled="True"
                              IsInactiveSelectionHighlightEnabled="True"
@@ -57,12 +56,13 @@
                              SelectionChanged="Rtb_SelectionChanged"
                              SizeChanged="Rtb_SizeChanged"
                              MouseEnter="Rtb_MouseEnter"
-                             AllowDrop="True"
+                     PreviewMouseLeftButtonDown="Rtb_PreviewMouseLeftButtonDown"
+                             PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
                              MouseLeave="Rtb_MouseLeave">
-            <local:MpRichTextBox.Resources>
+            <RichTextBox.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                  Color="Blue" />
-            </local:MpRichTextBox.Resources>
-        </local:MpRichTextBox>
+            </RichTextBox.Resources>
+        </RichTextBox>
     </AdornerDecorator>
 </local:MpUserControl>

@@ -180,7 +180,7 @@ namespace MpWpfApp {
             Reset();
         }
 
-        public void Reset() {
+        public virtual void Reset() {
             DropIdx = -1;
             UpdateAdorner();
         }

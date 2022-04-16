@@ -235,15 +235,13 @@ namespace MpWpfApp {
         }
 
         private void Rtb_MouseEnter(object sender, MouseEventArgs e) {
-            if (!BindingContext.IsContentReadOnly) {
-                MpCursor.SetCursor(this, MpCursorType.IBeam);
+            if (!BindingContext.IsContentReadOnly || BindingContext.IsSubSelectionEnabled) {
+                MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
             }
         }
         
         private void Rtb_MouseLeave(object sender, MouseEventArgs e) {
-            if (!BindingContext.IsContentReadOnly) {
-                MpCursor.UnsetCursor(this);
-            }
+            MpCursor.UnsetCursor(BindingContext);
         }        
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
@@ -262,6 +260,13 @@ namespace MpWpfApp {
             //        }
             //    }
             //}
+            if(MpDragDropManager.IsDragAndDrop) {
+                return;
+            }
+
+            if(!Rtb.Selection.IsEmpty && !BindingContext.IsSubSelectionEnabled) {
+                Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);
+            }
         }
 
         private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
@@ -295,12 +300,60 @@ namespace MpWpfApp {
             //    }                
             //}
         }
+        private void Rtb_LostFocus(object sender, RoutedEventArgs e) {
+            if (MpDragDropManager.IsDragAndDrop) {
+                return;
+            }
+            if (!BindingContext.IsSelected && !BindingContext.IsSubSelectionEnabled && !Rtb.Selection.IsEmpty) {
+                Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);
+                MpCursor.UnsetCursor(BindingContext);
+            }
+        }
 
         private void Rtb_PreviewKeyUp(object sender, KeyEventArgs e) {
             if (e.Key == Key.Escape && !BindingContext.IsContentReadOnly) {
                 //BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
                 BindingContext.ClearEditing();
             } 
+        }
+
+        private void Rtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            BindingContext.IsSelected = true;
+            MpIsFocusedExtension.SetIsFocused(Rtb, true);
+
+            if (e.ClickCount >= 2) {
+                BindingContext.IsSubSelectionEnabled = true;
+                MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
+                return;
+            }
+            if (!BindingContext.IsTitleReadOnly ||
+                !BindingContext.IsContentReadOnly ||
+                 BindingContext.Parent.IsAnyResizing ||
+                 BindingContext.Parent.CanAnyResize ||
+                 MpResizeBehavior.IsAnyResizing) {
+                e.Handled = false;
+                return;
+            }
+            if(BindingContext.IsSubSelectionEnabled) {
+                // NOTE onlyh check for drag when there is selected text AND
+                // drag is from somewhere in the selection range.
+                // If mouse down isn't in selection range reset selection to down position
+                if(Rtb.Selection.IsEmpty) {
+                    e.Handled = false;
+                    return;
+                }
+                if(!Rtb.Selection.IsPointInRange(e.GetPosition(Rtb))) {
+                    var mptp = Rtb.GetPositionFromPoint(e.GetPosition(Rtb),true);
+                    Rtb.Selection.Select(mptp, mptp);
+                    e.Handled = false;
+                    return;
+                }
+            }
+
+            MpDragDropManager.StartDragCheck(
+                e.GetPosition(Application.Current.MainWindow));
+
+            e.Handled = true;
         }
 
         #endregion
@@ -778,6 +831,7 @@ namespace MpWpfApp {
 
 //            BindingContext.IsBusy = false;
         }
+
 
         #endregion
 
