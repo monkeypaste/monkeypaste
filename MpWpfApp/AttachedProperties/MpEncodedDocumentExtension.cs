@@ -39,17 +39,17 @@ namespace MpWpfApp {
 
         #region TextSelectionRange DependencyProperty
 
-        public static MpITextSelectionRangeViewModel GetTextSelectionRange(DependencyObject obj) {
-            return (MpITextSelectionRangeViewModel)obj.GetValue(TextSelectionRangeProperty);
+        public static MpITextSelectionRange GetTextSelectionRange(DependencyObject obj) {
+            return (MpITextSelectionRange)obj.GetValue(TextSelectionRangeProperty);
         }
 
-        public static void SetTextSelectionRange(DependencyObject obj, MpITextSelectionRangeViewModel value) {
+        public static void SetTextSelectionRange(DependencyObject obj, MpITextSelectionRange value) {
             obj.SetValue(TextSelectionRangeProperty, value);
         }
 
         public static readonly DependencyProperty TextSelectionRangeProperty =
             DependencyProperty.Register(
-                "TextSelectionRange", typeof(MpITextSelectionRangeViewModel), 
+                "TextSelectionRange", typeof(MpITextSelectionRange), 
                 typeof(MpEncodedDocumentExtension), 
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 

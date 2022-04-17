@@ -13,7 +13,7 @@ using MonkeyPaste;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
-    public class MpDropLineAdorner : Adorner {
+    public class MpDropShapeAdorner : Adorner {
         #region Private Variables
         private bool _isDash = true;
 
@@ -21,60 +21,47 @@ namespace MpWpfApp {
 
         private MpIContentDropTarget _dropBehavior;
 
-        private bool _isTargetSelected {
-            get {
-                if(_dropBehavior == null || 
-                    _dropBehavior.DataContext == null ||
-                    _dropBehavior.DataContext is MpClipTrayViewModel) {
-                    return false;
-                }
-                if(_dropBehavior.DataContext is MpClipTileViewModel ctvm) {
-                    return ctvm.IsSelected;
-                }
-                return false;
-            }
-        }
         #endregion
 
         #region Properties
         
-        public MpLine DropLine { 
-            get {
-                if(_dropBehavior is MpContentViewDropBehavior cvdb) {
-                    _isDash = false;
-                    MpConsole.WriteLine("ContentView DropIdx: " + cvdb.DropIdx);
+        //public MpLine DropLine { 
+        //    get {
+        //        if(_dropBehavior is MpContentViewDropBehavior cvdb) {
+        //            _isDash = false;
+        //            MpConsole.WriteLine("ContentView DropIdx: " + cvdb.DropIdx);
 
-                    var dltp = (cvdb.RelativeToElement as RichTextBox).Document.ContentStart.GetPositionAtOffset(cvdb.DropIdx);
-                    var dltp_rect = dltp.GetCharacterRect(LogicalDirection.Forward);
-                    return new MpLine(dltp_rect.Left, dltp_rect.Top, dltp_rect.Left, dltp_rect.Bottom);
-                }
+        //            var dltp = (cvdb.RelativeToElement as RichTextBox).Document.ContentStart.GetPositionAtOffset(cvdb.DropIdx);
+        //            var dltp_rect = dltp.GetCharacterRect(LogicalDirection.Forward);
+        //            return new MpLine(dltp_rect.Left, dltp_rect.Top, dltp_rect.Left, dltp_rect.Bottom);
+        //        }
 
-                if(DropIdx < 0 || 
-                   _dropBehavior == null ||
-                   DropIdx >= DropRects.Count) {
-                    return new MpLine();
-                }
-                Rect dropRect = DropRects[DropIdx];
-                if(_dropBehavior.AdornerOrientation == Orientation.Vertical) {
-                    //tray or rtb view vertical drop line
-                    double x = dropRect.Left + (dropRect.Width / 2) + 2;
-                    if(DropIdx > 0 && DropIdx < DropRects.Count - 1) {
-                        // NOTE due to margin/padding issues calculate mid-point between drop rects and 
-                        // do not derive from singluar drop rect
-                        //x = dropRect.Left + 5;// ((DropRects[DropIdx + 1].Left - dropRect.Left) / 2);
-                    }
-                    return new MpLine(x,dropRect.Top,x,dropRect.Bottom);
-                }
+        //        if(DropIdx < 0 || 
+        //           _dropBehavior == null ||
+        //           DropIdx >= DropRects.Count) {
+        //            return new MpLine();
+        //        }
+        //        Rect dropRect = DropRects[DropIdx];
+        //        if(_dropBehavior.AdornerOrientation == Orientation.Vertical) {
+        //            //tray or rtb view vertical drop line
+        //            double x = dropRect.Left + (dropRect.Width / 2) + 2;
+        //            if(DropIdx > 0 && DropIdx < DropRects.Count - 1) {
+        //                // NOTE due to margin/padding issues calculate mid-point between drop rects and 
+        //                // do not derive from singluar drop rect
+        //                //x = dropRect.Left + 5;// ((DropRects[DropIdx + 1].Left - dropRect.Left) / 2);
+        //            }
+        //            return new MpLine(x,dropRect.Top,x,dropRect.Bottom);
+        //        }
 
-                double x1 = dropRect.Left;
-                double x2 = dropRect.Right;
-                double y = dropRect.Bottom - MpContentListDropBehavior.TargetMargin;
-                if(DropIdx == DropRects.Count - 1) {
-                    y = dropRect.Top;
-                }
-                return new MpLine(x1, y, x2, y);
-            }        
-        }
+        //        double x1 = dropRect.Left;
+        //        double x2 = dropRect.Right;
+        //        double y = dropRect.Bottom - MpContentListDropBehavior.TargetMargin;
+        //        if(DropIdx == DropRects.Count - 1) {
+        //            y = dropRect.Top;
+        //        }
+        //        return new MpLine(x1, y, x2, y);
+        //    }        
+        //}
 
         public bool IsShowing => DropIdx >= 0;
 
@@ -108,7 +95,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpDropLineAdorner(UIElement uie, MpIContentDropTarget dropBehavior) : base(uie) {
+        public MpDropShapeAdorner(UIElement uie, MpIContentDropTarget dropBehavior) : base(uie) {
             _dropBehavior = dropBehavior;
             _debugColor = MpWpfColorHelpers.GetRandomColor();
             _debugColor.A = 50;
@@ -149,11 +136,28 @@ namespace MpWpfApp {
             }
 
             if(IsShowing) {
+                var pen = new Pen(Brushes.Red, 1.5) { DashStyle = _isDash ? DashStyles.Dash : DashStyles.Solid };
                 Visibility = Visibility.Visible;
-                drawingContext.DrawLine(
-                    new Pen(Brushes.Red, 1.5) { DashStyle = _isDash ? DashStyles.Dash : DashStyles.Solid },
-                    DropLine.P1.ToWpfPoint(),
-                    DropLine.P2.ToWpfPoint());
+                var dropShape = _dropBehavior.GetDropTargetAdornerShape();
+                if(dropShape is MpLine dl) {
+                    drawingContext.DrawLine(
+                        pen,
+                        dl.P1.ToWpfPoint(),
+                        dl.P2.ToWpfPoint());
+                } else if(dropShape is MpEllipse de) {
+                    drawingContext.DrawEllipse(
+                        Brushes.Transparent,
+                        pen,
+                        de.Center.ToWpfPoint(),
+                        de.Size.Width / 2,
+                        de.Size.Height / 2);
+                } else if(dropShape is MpRect dr) {
+                    drawingContext.DrawRectangle(
+                        Brushes.Transparent,
+                        pen,
+                        dr.ToWpfRect());
+                }
+                
             } else if(!IsDebugMode) {
                 Visibility = Visibility.Hidden;
             }

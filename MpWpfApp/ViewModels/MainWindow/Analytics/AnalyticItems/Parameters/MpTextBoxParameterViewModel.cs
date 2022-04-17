@@ -14,7 +14,7 @@ namespace MpWpfApp {
     public class MpTextBoxParameterViewModel : 
         MpAnalyticItemParameterViewModelBase,
         MpIMenuItemViewModel,
-        MpITextSelectionRangeViewModel,
+        MpITextSelectionRange,
         MpIContentQueryTextBoxViewModel {
         #region Private Variables
         
@@ -54,7 +54,7 @@ namespace MpWpfApp {
 
         public int SelectionStart { get; set; } = 0;
         public int SelectionLength { get; set; } = 0;
-
+        public bool IsAllSelected { get; set; } = false;
         #endregion
 
         #region MpIContentQueryTextBoxViewModel Implementation

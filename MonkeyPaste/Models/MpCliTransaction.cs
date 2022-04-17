@@ -13,6 +13,7 @@ namespace MonkeyPaste {
         protected int iconId { get; set; } = 0;
 
         #endregion
+
         #region Columns
 
         [PrimaryKey, AutoIncrement]
@@ -152,6 +153,8 @@ namespace MonkeyPaste {
         public int RootId => Id;
         [Ignore]
         public bool IsUrl => false;
+        [Ignore]
+        public bool IsContent => false;
         [Ignore]
         public bool IsDll => false;
         [Ignore]

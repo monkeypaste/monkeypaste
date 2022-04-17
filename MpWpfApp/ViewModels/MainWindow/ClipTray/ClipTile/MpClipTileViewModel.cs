@@ -21,7 +21,7 @@
         MpViewModelBase<MpClipTrayViewModel>, 
         MpISelectableViewModel,
         MpIResizableViewModel,
-        MpITextSelectionRangeViewModel {
+        MpITextSelectionRange {
         #region Private Variables
 
         private List<string> _tempFileList = new List<string>();
@@ -64,6 +64,8 @@
 
         public int SelectionStart { get; set; }
         public int SelectionLength { get; set; }
+
+        public bool IsAllSelected { get; set; }
 
         #endregion
 
@@ -780,12 +782,12 @@
 
             if (items != null && items.Count > 0) {
                 for (int i = 0; i < items.Count; i++) {
-                    if (ItemViewModels.Any(x => x.CopyItemId == items[i].Id)) {
-                        //this prevents a strange bug i think from async loading that loads 2 of each item
-                        continue;
-                    }
-                    items[i].CompositeParentCopyItemId = i == 0 ? 0 : items[0].Id;
-                    items[i].CompositeSortOrderIdx = i;
+                    //if (ItemViewModels.Any(x => x.CopyItemId == items[i].Id)) {
+                    //    //this prevents a strange bug i think from async loading that loads 2 of each item
+                    //    continue;
+                    //}
+                    //items[i].CompositeParentCopyItemId = i == 0 ? 0 : items[0].Id;
+                    //items[i].CompositeSortOrderIdx = i;
                     var civm = await CreateContentItemViewModel(items[i]);
                     ItemViewModels.Add(civm);
                 }
@@ -910,8 +912,9 @@
         public async Task<MpContentItemViewModel> CreateContentItemViewModel(MpCopyItem ci) {
             var civm = new MpContentItemViewModel(this);
             await civm.InitializeAsync(ci);
-            return civm;
+            return civm; 
         }
+
 
         public async Task UserPreparingDynamicPaste() {
             await Task.Delay(1);
@@ -1091,9 +1094,9 @@
                 foreach (var rtbvm in SelectedItems) {
                     if (rtbvm.HasTemplates) {
                         string rtbvmrtf = rtbvm.TemplateRichText;
-                        rtf = rtf.ToFlowDocument().Combine(rtbvmrtf.ToFlowDocument(), true).ToRichText();
+                        rtf = rtf.ToFlowDocument().Combine(rtbvmrtf.ToFlowDocument(),null, true).ToRichText();
                     } else {
-                        rtf = rtf.ToFlowDocument().Combine(rtbvm.CopyItem.ItemData.ToFlowDocument(), true).ToRichText();
+                        rtf = rtf.ToFlowDocument().Combine(rtbvm.CopyItem.ItemData.ToFlowDocument(),null, true).ToRichText();
                     }
                 }
                 sw.Stop();

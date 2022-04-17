@@ -28,12 +28,12 @@ namespace MonkeyPaste {
         LastOutput
     }
 
-    public interface MpICopyItemReference {
-        public string CopyItemGuid { get; }
-        public string CopyItemSourceGuid { get;  }
+    public class MpCopyItemReference {
+        public string CopyItemGuid { get; set; }
+        public string CopyItemSourceGuid { get; set; }
     }
 
-    public class MpCopyItem : MpUserObject, MpISyncableDbObject, MpICopyItemReference {
+    public class MpCopyItem : MpUserObject, MpISyncableDbObject {
         #region Statics
 
         public static string[] PhysicalComparePropertyPaths {
@@ -206,13 +206,10 @@ namespace MonkeyPaste {
                 }
             }
         }
-
         #endregion
 
         #region MpICopyItemReference Implementation
 
-
-        string MpICopyItemReference.CopyItemGuid => Guid;
 
         #endregion
 

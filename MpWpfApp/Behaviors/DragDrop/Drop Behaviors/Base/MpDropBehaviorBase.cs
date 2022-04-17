@@ -35,7 +35,7 @@ namespace MpWpfApp {
 
         #region Properties
 
-        public MpDropLineAdorner DropLineAdorner { get; set; }
+        public MpDropShapeAdorner DropLineAdorner { get; set; }
 
         public int DropIdx { get; set; } = -1;
 
@@ -170,7 +170,7 @@ namespace MpWpfApp {
             if (DropIdx < 0) {
                 throw new Exception($"DropIdx {DropIdx} must be >= 0");
             }
-            MpClipTrayViewModel.Instance.PersistentSelectedModels = dragData as List<MpCopyItem>;
+            //MpClipTrayViewModel.Instance.PersistentSelectedModels = dragData as List<MpCopyItem>;
             
             
             await Task.Delay(1);
@@ -200,6 +200,9 @@ namespace MpWpfApp {
             if (dragData == null) {
                 return false;
             }
+            if(dragData is MpClipTileViewModel ctvm) {
+                return true;
+            }
             if (dragData is List<MpCopyItem> dcil) {
                 if (dcil.Count == 0) {
                     return false;
@@ -227,11 +230,13 @@ namespace MpWpfApp {
             return DropRects.IndexOf(targetRect);
         }
 
+        public abstract MpShape GetDropTargetAdornerShape();
+
         public void InitAdorner() {
             if(AdornedElement != null) {
                 adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
                 if(adornerLayer != null) {
-                    DropLineAdorner = new MpDropLineAdorner(AdornedElement, this);
+                    DropLineAdorner = new MpDropShapeAdorner(AdornedElement, this);
                     adornerLayer.Add(DropLineAdorner);
                     RefreshDropRects();
                 }
@@ -255,6 +260,7 @@ namespace MpWpfApp {
         }
 
         protected async Task<List<MpCopyItem>> GetDragDataCopy(object dragData) {
+
             var clones = (await Task.WhenAll((dragData as List<MpCopyItem>).Select(x => x.Clone(true)).ToArray())).Cast<MpCopyItem>().ToList();
             MpClipTrayViewModel.Instance.PersistentSelectedModels = clones;
             return clones;

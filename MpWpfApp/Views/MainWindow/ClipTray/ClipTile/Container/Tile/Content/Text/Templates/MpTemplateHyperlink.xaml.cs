@@ -74,7 +74,7 @@ namespace MpWpfApp {
             if(thlvm.Parent.Parent.IsPastingTemplate) {
                 return;
             }
-            var rtbv = rtb.FindParentOfType<MpRtbView>();
+            var rtbv = rtb.FindParentOfType<MpContentView>();
             rtbv.LastEditedHyperlink = this;
 
             thlvm.EditTemplateCommand.Execute(null);
@@ -107,7 +107,7 @@ namespace MpWpfApp {
         private void DeleteAll_Click(object sender, RoutedEventArgs e) {
             var thlvm = DataContext as MpTemplateViewModel;
             var rtb = ElementStart.Parent.FindParentOfType<RichTextBox>();
-            var rtbv = rtb.FindParentOfType<MpRtbView>();
+            var rtbv = rtb.FindParentOfType<MpContentView>();
             var hlToRemove = rtbv.TemplateViews.Where(x => x.DataContext == thlvm).ToList();
 
             foreach (var thl in hlToRemove) {

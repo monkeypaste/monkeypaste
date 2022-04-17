@@ -118,6 +118,8 @@ namespace MonkeyPaste {
         [Ignore]
         public int RootId => Id;
         [Ignore]
+        public bool IsContent => false;
+        [Ignore]
         public bool IsUrl => false;
         [Ignore]
         public bool IsDll => true;

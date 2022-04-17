@@ -30,7 +30,6 @@ namespace MpWpfApp {
         #endregion
 
         public override MpDropType DropType => MpDropType.External;
-
         public override FrameworkElement AdornedElement => AssociatedObject;
         public override Orientation AdornerOrientation => Orientation.Horizontal;
 
@@ -56,14 +55,15 @@ namespace MpWpfApp {
         public override List<Rect> GetDropTargetRects() {
             Rect extRect = new Rect(
                 0,0,
-                MpMeasurements.Instance.ScreenWidth,MpMainWindowViewModel.Instance.MainWindowTop + 20);
+                MpMeasurements.Instance.ScreenWidth,MpMainWindowViewModel.Instance.MainWindowTop);
             return new List<Rect> { extRect };
         }
 
         public override int GetDropTargetRectIdx() {
-            Point mp = Mouse.GetPosition(Application.Current.MainWindow);
+            //Point mp = Mouse.GetPosition(Application.Current.MainWindow);
+            Point mp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             //MpConsole.WriteLine("Mouse Relative to Main Window: " + mp.ToString());
-            if(GetDropTargetRects()[0].Contains(mp)) {
+            if (GetDropTargetRects()[0].Contains(mp)) {
                 //Application.Current.MainWindow.Top = 20000;
                 IntPtr lastHandle = MpProcessHelper.MpProcessManager.LastHandle;
                 WinApi.SetForegroundWindow(lastHandle);
@@ -71,6 +71,14 @@ namespace MpWpfApp {
                 return 0;
             }
             return -1;
+        }
+        public override MpShape GetDropTargetAdornerShape() {
+            var drl = GetDropTargetRects();
+            if (DropIdx < 0 || DropIdx >= drl.Count) {
+                return null;
+            }
+
+            return new MpRect(new MpPoint(), new MpSize(drl[0].Width, drl[0].Height));
         }
 
         public override async Task StartDrop() {

@@ -95,7 +95,7 @@
                            Stroke="{Binding BorderBrushHexColor,
                                             Converter={StaticResource StringHexToBrushConverter}}"
                            Fill="{Binding ActionBackgroundHexColor,
-                                        Converter={StaticResource StringHexToBrushConverter}}" />
+                                          Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        Stretch="UniformToFill"
@@ -159,7 +159,7 @@
                            Stroke="{Binding BorderBrushHexColor,
                                             Converter={StaticResource StringHexToBrushConverter}}"
                            Fill="{Binding ActionBackgroundHexColor,
-                                        Converter={StaticResource StringHexToBrushConverter}}" />
+                                          Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        IsHitTestVisible="False"
@@ -191,7 +191,7 @@
                            Stroke="{Binding BorderBrushHexColor,
                                             Converter={StaticResource StringHexToBrushConverter}}"
                            Fill="{Binding ActionBackgroundHexColor,
-                                        Converter={StaticResource StringHexToBrushConverter}}" />
+                                          Converter={StaticResource StringHexToBrushConverter}}" />
                 <Image Width="20"
                        Height="20"
                        Stretch="UniformToFill"

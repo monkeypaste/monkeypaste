@@ -5,7 +5,7 @@ using System.Windows.Documents;
 
 namespace MpWpfApp {
 
-    public class MpRtbHighlightBehavior : MpHighlightBehaviorBase<MpRtbView> {
+    public class MpRtbHighlightBehavior : MpHighlightBehaviorBase<MpContentView> {
         protected override TextRange ContentRange {
             get {
                 if(AssociatedObject == null || 

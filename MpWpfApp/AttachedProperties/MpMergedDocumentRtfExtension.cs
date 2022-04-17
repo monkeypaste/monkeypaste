@@ -186,10 +186,53 @@ namespace MpWpfApp {
             if(rtb == null) {
                 return;
             }
-
+            if(rtb.DataContext is MpClipTileViewModel ctvm && ctvm.HeadItem.CopyItemTitle == "Untitled1857") {
+                Debugger.Break();
+            }
             LoadContent(rtb).FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
         }
 
+        public static async Task<List<MpCopyItem>> EncodeContent(RichTextBox rtb) {
+            var encodedItems = new List<MpCopyItem>();
+
+            var allTextElements = rtb.Document.GetAllTextElements().OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
+            string rootGuid = (allTextElements[0].Tag as MpCopyItemReference).CopyItemGuid;
+            var ctp_start = rtb.Document.ContentStart;
+            string encodedContentStr = string.Empty;
+            while (ctp_start != null && ctp_start != rtb.Document.ContentEnd) {
+                string curGuid = null;
+                if (ctp_start.Parent is FlowDocument fd) {
+                    curGuid = (fd.Tag as MpCopyItemReference).CopyItemGuid;
+                } else if (ctp_start.Parent is TextElement te) {
+                    curGuid = (te.Tag as MpCopyItemReference).CopyItemGuid;
+                } else {
+                    Debugger.Break();
+                } 
+                var ctp_end = allTextElements
+                                .Where(x => x.Tag is MpCopyItemReference cir && cir.CopyItemGuid == curGuid)
+                                .Aggregate((a, b) => rtb.Document.ContentStart.GetOffsetToPosition(a.ContentEnd) > rtb.Document.ContentStart.GetOffsetToPosition(b.ContentEnd) ? a : b).ContentEnd;
+                var ctp_range = new TextRange(ctp_start, ctp_end);
+                if (curGuid == rootGuid) {
+                    encodedContentStr += ctp_range.ToRichText();
+                } else {
+                    var cur_ci = await MpDataModelProvider.GetCopyItemByGuid(curGuid);
+                    if (cur_ci == null) {
+                        Debugger.Break();
+                    }
+                    cur_ci.ItemData = ctp_range.ToRichText();
+                    await cur_ci.WriteToDatabaseAsync();
+                    encodedItems.Add(cur_ci);
+                    encodedContentStr += "{c{" + curGuid + "}c}";
+                }
+                ctp_start = ctp_end.GetNextInsertionPosition(LogicalDirection.Forward);
+            }
+
+            var root_ci = await MpDataModelProvider.GetCopyItemByGuid(rootGuid);
+            root_ci.ItemData = encodedContentStr;
+            await root_ci.WriteToDatabaseAsync();
+            encodedItems.Insert(0, root_ci);
+            return encodedItems;
+        }
 
         private static async Task LoadContent(RichTextBox rtb) {
             if(rtb == null) {
@@ -249,8 +292,6 @@ namespace MpWpfApp {
                     break;
             }
 
-            //rtb.FitDocToRtb();
-
             //wait till full doc is loaded to hook textChanged
             rtb.TextChanged += Rtb_TextChanged;
         }
@@ -260,6 +301,7 @@ namespace MpWpfApp {
 
             if (ci == default) {
                 MpConsole.WriteLine("error fetching copy item: " + itemGuid);
+                ci = await MpDataModelProvider.GetCopyItemByGuid(itemGuid);
             }
 
             FlowDocument fd = ci.ItemData.ToFlowDocument(ci.IconId);
@@ -268,14 +310,34 @@ namespace MpWpfApp {
             var childItems = await MpDataModelProvider.GetCopyItemsByGuids(childGuids.ToArray());
             
             for (int i = 0; i < childGuids.Length; i++) {
+                var insertRange = childRanges[i];
                 string childGuid = childGuids[i];
                 if(childItems.All(x=>x.Guid != childGuid)) {
                     MpConsole.WriteTraceLine("Missing content child detected, replacing w/ empty string " + childGuid);
-                    childRanges[i].Text = string.Empty;
+                    insertRange.Text = string.Empty;
                     continue;
                 }
                 var cfd = await DecodeContentItem(childGuid,items);
-                fd.InsertFlowDocument(cfd, childRanges[i]);
+
+                //fd.Combine(cfd, childRange.Start);
+                using (MemoryStream stream = new MemoryStream()) {
+                    var rangeFrom = new TextRange(cfd.ContentStart, cfd.ContentEnd);
+                    if (insertRange.Start.Parent is Inline insertInline) { 
+                        if(false) {//insertInline.PreviousInline == null) {
+                            //insert is at beginning of paragraph so no need to alter child doc
+                        } else {
+                            rangeFrom = new TextRange(
+                                cfd.ContentStart.GetInsertionPosition(LogicalDirection.Forward),
+                                cfd.ContentEnd);
+                            //remove line ending from text? (alt. change ContentEnd point maybe)
+                            rangeFrom.Text = rangeFrom.Text.Replace(Environment.NewLine, string.Empty);
+                        }
+                    }
+                    XamlWriter.Save(rangeFrom, stream);
+                    rangeFrom.Save(stream, DataFormats.XamlPackage, true);
+                    var rangeTo = new TextRange(insertRange.Start, insertRange.End);
+                    rangeTo.Load(stream, DataFormats.XamlPackage);
+                }
             }
 
             if(decodeTemplates) {
@@ -295,8 +357,12 @@ namespace MpWpfApp {
             }
 
             var allTextElements = fd.GetAllTextElements();
-            fd.Tag = (MpICopyItemReference)ci;
-            allTextElements.Where(x => x.Tag == null).ForEach(x => x.Tag = (MpICopyItemReference)ci);
+            var cir = new MpCopyItemReference() { CopyItemGuid = ci.Guid, CopyItemSourceGuid = ci.CopyItemSourceGuid };
+            fd.Tag = cir;
+            allTextElements.Where(x => x.Tag == null).ForEach(x => x.Tag = cir);
+
+            MpConsole.WriteLine("FlowDoc w/ Tags Xaml:");
+            MpConsole.WriteLine(fd.ToXamlPackage());
             return fd;
         }
 
@@ -323,6 +389,10 @@ namespace MpWpfApp {
         }
 
         private static void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
+            if(MpDragDropManager.IsDragAndDrop) {
+                // NOTE during drop rtb will be reinitialized
+                return;
+            }
             var rtb = sender as RichTextBox;
             var ctvm = rtb.DataContext as MpClipTileViewModel;
             if(ctvm.IsPlaceholder) {
@@ -351,7 +421,9 @@ namespace MpWpfApp {
                             tcte = tcp.Parent.FindParentOfType<FrameworkContentElement>();
                         }
                     }
-                    tcte.Tag = FindNearestContentReference(tcte);
+                    if(tcte.Tag == null) {
+                        tcte.Tag = FindNearestContentReference(tcte);
+                    }
                 }
             }
         }
@@ -376,11 +448,11 @@ namespace MpWpfApp {
                 if(curOffset < 0) {
                     break;
                 }
-                ctp = ctp.GetPositionAtOffset(curOffset - 1);
                 var pte = ctp.Parent.FindParentOfType<FrameworkContentElement>();
-                if(pte != null && pte.Tag is MpDbModelBase dbo) {
-                    return dbo;
+                if (pte != null && pte.Tag != null) {
+                    return pte.Tag;
                 }
+                ctp = ctp.GetPositionAtOffset(curOffset - 1);                
             }
             //now search forward
             ctp = (fce as TextElement).ContentStart;
@@ -392,8 +464,8 @@ namespace MpWpfApp {
                 }
                 ctp = ctp.GetPositionAtOffset(curOffset + 1);
                 var pte = ctp.Parent.FindParentOfType<TextElement>();
-                if (pte != null && pte.Tag is MpDbModelBase dbo) {
-                    return dbo;
+                if (pte != null && pte.Tag != null) {
+                    return pte.Tag;
                 }
             }
 

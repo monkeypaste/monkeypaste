@@ -219,7 +219,7 @@ namespace MonkeyPaste {
         }
 
         public static string ToReadableTimeSpan(this DateTime dt) {
-            int totalYears, totalMonths, totalWeeks, totalDays, totalMinutes;
+            int totalYears, totalMonths, totalWeeks, totalDays, totalHours, totalMinutes;
 
             var ts = DateTime.Now - dt;
             string outStr = string.Empty;
@@ -227,6 +227,7 @@ namespace MonkeyPaste {
             totalMonths = DateTime.Now.MonthDifference(dt);
             totalWeeks = DateTime.Now.WeekDifference(dt);
             totalDays = (int)ts.TotalDays;
+            totalHours = (int)ts.TotalHours;
             totalMinutes = (int)ts.TotalMinutes;
 
             if(totalYears > 1) {
@@ -240,6 +241,9 @@ namespace MonkeyPaste {
             }
             if (totalDays >= 1) {
                 return string.Format($"{totalDays} day{(totalDays == 1 ? string.Empty : "s")} ago");
+            }
+            if(totalHours >= 1) {
+                return string.Format($"{totalHours} hour{(totalHours == 1 ? string.Empty : "s")} ago");
             }
             if (totalMinutes >= 1) {
                 return string.Format($"{totalMinutes} minute{(totalMinutes == 1 ? string.Empty : "s")} ago");

@@ -64,11 +64,26 @@ namespace MpWpfApp {
                     break;
             }
         }
-        
+
+        private void ReceivedDragDropManagerMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ItemDragBegin:
+                    if(BindingContext != null && BindingContext.IsSelected) {
+                        if(BindingContext.SelectionLength == 0) {
+                            Rtb.SelectAll();
+                        }
+                    }
+                    break;
+            }
+        }
+
         #region Event Handlers
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
             base.OnLoad();
+            MpMessenger.Register<MpMessageType>(
+                nameof(MpDragDropManager),
+                ReceivedDragDropManagerMessage);
 
             //if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
 
@@ -260,6 +275,7 @@ namespace MpWpfApp {
             //        }
             //    }
             //}
+            
             if(MpDragDropManager.IsDragAndDrop) {
                 return;
             }
@@ -324,6 +340,7 @@ namespace MpWpfApp {
             if (e.ClickCount >= 2) {
                 BindingContext.IsSubSelectionEnabled = true;
                 MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
+                Rtb.SelectAll();
                 return;
             }
             if (!BindingContext.IsTitleReadOnly ||
@@ -350,8 +367,7 @@ namespace MpWpfApp {
                 }
             }
 
-            MpDragDropManager.StartDragCheck(
-                e.GetPosition(Application.Current.MainWindow));
+            MpDragDropManager.StartDragCheck(BindingContext);
 
             e.Handled = true;
         }
@@ -835,5 +851,14 @@ namespace MpWpfApp {
 
         #endregion
 
+        private void Rtb_MouseMove(object sender, MouseEventArgs e) {
+            if (BindingContext.IsHovering && BindingContext.IsSubSelectionEnabled) {
+                // BUG when sub selection becomes empty the cursor goes back to default
+                // so this ensures it stays ibeam
+                MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
+            } else {
+                MpCursor.UnsetCursor(BindingContext);
+            }
+        }
     }
 }

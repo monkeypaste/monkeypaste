@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MonkeyPaste.Plugin;
+using System.Windows;
 
 namespace MpWpfApp {
     public class MpShortcutCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpShortcutCollectionViewModel> {
@@ -31,17 +32,28 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool IsCtrlDown { get; private set; } = false;
+        public bool GlobalIsCtrlDown { get; private set; } = false;
 
-        public bool IsAltDown { get; private set; } = false;
+        public bool GlobalIsAltDown { get; private set; } = false;
 
-        public bool IsShiftDown { get; private set; } = false;
+        public bool GlobalIsShiftDown { get; private set; } = false;
 
-        public bool IsMultiSelectKeyDown => IsCtrlDown || IsAltDown || IsShiftDown;
+        public bool IsMultiSelectKeyDown => GlobalIsCtrlDown || GlobalIsAltDown || GlobalIsShiftDown;
 
         public int SelectedShortcutIndex { get; set; }
 
+        public Point GlobalMouseLocation { get; private set; }
+        public bool GlobalIsMouseLeftButtonDown { get; private set; } = false;
+
         #endregion
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler<Point> GlobalMouseMove;
+        public event EventHandler GlobalMouseLeftButtonUp;
+        public event EventHandler GlobalEscKeyPressed;
 
         #endregion
 
@@ -49,7 +61,6 @@ namespace MpWpfApp {
 
         private static MpShortcutCollectionViewModel _instance;
         public static MpShortcutCollectionViewModel Instance => _instance ?? (_instance = new MpShortcutCollectionViewModel());
-
 
         public MpShortcutCollectionViewModel() : base(null) { }
 
@@ -109,8 +120,7 @@ namespace MpWpfApp {
             MpMainWindowViewModel.Instance.IsShowingDialog = false;
             return shortcutKeyString;
         }
-        
-        public void UpdateInputGestures(ItemsControl cm) {
+                public void UpdateInputGestures(ItemsControl cm) {
             foreach (var item in cm.Items) {
                 if (item is MenuItem mi) {
                     int tagNum =  mi.Tag == null ? -1 : Convert.ToInt32(mi.Tag.ToString());
@@ -186,11 +196,11 @@ namespace MpWpfApp {
                     ApplicationHook = Hook.AppEvents();
 
 
-                    MpMainWindowViewModel.Instance.OnMainWindowShow += Mwvm_OnMainWindowShow;
-                    MpMainWindowViewModel.Instance.OnMainWindowHidden += Mwvm_OnMainWindowHide;
+                    //MpMainWindowViewModel.Instance.OnMainWindowShow += Mwvm_OnMainWindowShow;
+                    //MpMainWindowViewModel.Instance.OnMainWindowHidden += Mwvm_OnMainWindowHide;
 
-                    //trigger global hooks since mainwindow init's hidden
-                    Mwvm_OnMainWindowHide(this, new EventArgs());
+                    ////trigger global hooks since mainwindow init's hidden
+                    //Mwvm_OnMainWindowHide(this, new EventArgs());
 
                     #region Global
 
@@ -216,15 +226,18 @@ namespace MpWpfApp {
                     //    }
                     //}
                     //});
+                    GlobalHook.MouseMove += GlobalHook_MouseMove;
+                    GlobalHook.MouseDown += GlobalHook_MouseDown; ;
+                    GlobalHook.MouseUp += GlobalHook_MouseUp;
+                    GlobalHook.MouseWheel += GlobalHook_MouseWheel;
+
+                    GlobalHook.KeyPress += GlobalHook_KeyPress;
+                    GlobalHook.KeyDown += GlobalHook_KeyDown;
+                    GlobalHook.KeyUp += GlobalHook_KeyUp;
+
                     #endregion
 
                     #region Local
-
-                    ApplicationHook.KeyPress += ApplicationHook_KeyPress;
-
-                    ApplicationHook.KeyDown += ApplicationHook_KeyDown;
-
-                    ApplicationHook.KeyUp += ApplicationHook_KeyUp;
 
                     #endregion
 
@@ -235,17 +248,18 @@ namespace MpWpfApp {
             });
         }
 
-        private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {
-            GlobalHook.MouseMove += GlobalHook_MouseMove;
-            GlobalHook.MouseUp += GlobalHook_MouseUp;
-            GlobalHook.MouseWheel += GlobalHook_MouseWheel;
-        }
 
-        private void Mwvm_OnMainWindowShow(object sender, EventArgs e) {
-            GlobalHook.MouseMove -= GlobalHook_MouseMove;
-            GlobalHook.MouseUp -= GlobalHook_MouseUp;
-            GlobalHook.MouseWheel -= GlobalHook_MouseWheel;
-        }
+        //private void Mwvm_OnMainWindowHide(object sender, EventArgs e) {
+        //    GlobalHook.MouseMove += GlobalHook_MouseMove;
+        //    GlobalHook.MouseUp += GlobalHook_MouseUp;
+        //    GlobalHook.MouseWheel += GlobalHook_MouseWheel;
+        //}
+
+        //private void Mwvm_OnMainWindowShow(object sender, EventArgs e) {
+        //    GlobalHook.MouseMove -= GlobalHook_MouseMove;
+        //    GlobalHook.MouseUp -= GlobalHook_MouseUp;
+        //    GlobalHook.MouseWheel -= GlobalHook_MouseWheel;
+        //}
 
         private async Task InitShortcuts() {
             await MpHelpers.RunOnMainThreadAsync(async () => {
@@ -425,9 +439,19 @@ namespace MpWpfApp {
         }
 
         private void GlobalHook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
+            double wpf_x = Math.Max(0,96.0d * e.Location.X / MpScreenInformation.DpiX);
+            double wpf_y = Math.Max(0,96.0d * e.Location.Y / MpScreenInformation.DpiY);
+            GlobalMouseLocation = new Point(wpf_x, wpf_y);
+
+            //MpConsole.WriteLine("WinForms: " + e.Location.X + "," + e.Location.Y);
+            //MpConsole.WriteLine("Wpf: " + GlobalMouseLocation.X + "," + GlobalMouseLocation.Y);
+            //MpConsole.WriteLine("");
+
+            if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
+                GlobalMouseMove?.Invoke(this, GlobalMouseLocation);
+            } else {
                 if (MpPreferences.DoShowMainWindowWithMouseEdge &&
-               !MpPreferences.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                    !MpPreferences.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
                     if (e.Y <= MpPreferences.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
@@ -435,7 +459,17 @@ namespace MpWpfApp {
             }
         }
 
+        private void GlobalHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+            if(e.Button == System.Windows.Forms.MouseButtons.Left) {
+                GlobalIsMouseLeftButtonDown = true;
+            }
+        }
         private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+                GlobalIsMouseLeftButtonDown = false;
+                GlobalMouseLeftButtonUp?.Invoke(this, null);
+            }
+
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 if (MpClipTrayViewModel.Instance.IsAutoCopyMode) {
                     if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.ApplicationIsActivated()) {
@@ -456,20 +490,35 @@ namespace MpWpfApp {
 
         #region Application Handlers
 
-        private void ApplicationHook_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
-            IsAltDown = e.Alt;
-            IsShiftDown = e.Shift;
-            IsCtrlDown = e.Control;
+        private void GlobalHook_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
+            if (e.KeyCode == System.Windows.Forms.Keys.Alt) {
+                GlobalIsAltDown = false;
+            }
+            if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {
+                GlobalIsShiftDown = false;
+            }
+            if (e.KeyCode == System.Windows.Forms.Keys.LControlKey || e.KeyCode == System.Windows.Forms.Keys.RControlKey) {
+                GlobalIsCtrlDown = false;
+            }
         }
 
-        private void ApplicationHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-            IsAltDown = e.Alt;
-            IsShiftDown = e.Shift;
-            IsCtrlDown = e.Control;
+        private void GlobalHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
+            if(e.KeyCode == System.Windows.Forms.Keys.Alt) {
+                GlobalIsAltDown = true;
+            }
+            if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {
+                GlobalIsShiftDown = true;
+            }
+            if (e.KeyCode == System.Windows.Forms.Keys.LControlKey || e.KeyCode == System.Windows.Forms.Keys.RControlKey) {
+                GlobalIsCtrlDown = true;
+            }
         }
 
-        private void ApplicationHook_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {
+        private void GlobalHook_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {
             //AutoSearchOnKeyPress(e.KeyChar);
+            if(e.KeyChar == (char)27) {
+                GlobalEscKeyPressed?.Invoke(this, null);
+            }
         }
 
         #endregion

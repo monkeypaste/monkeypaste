@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using static SkiaSharp.SKImageFilter;
 
 namespace MpWpfApp {
     public class MpClipTrayDropBehavior : MpDropBehaviorBase<MpClipTrayView> {
@@ -128,8 +129,16 @@ namespace MpWpfApp {
                     targetRects.Add(tailRect);
                 }
             }
-
             return targetRects;
+        }
+        public override MpShape GetDropTargetAdornerShape() {
+            var drl = GetDropTargetRects();
+            if(DropIdx < 0 || DropIdx >= drl.Count) {
+                return null;
+            }
+            var dr = drl[DropIdx];
+            double x = dr.Left + (dr.Width / 2) + 2;
+            return new MpLine(x, dr.Top, x, dr.Bottom);
         }
 
         public override async Task StartDrop() { 

@@ -25,12 +25,12 @@ namespace MpWpfApp {
                     case MpCopyItemType.Image:
                         fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(
                                 ci.ItemDescription.ToFlowDocument(),
-                                fd, true);
+                                fd, null,true);
                         break;
                     default:
                         fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(
                                 ci.ItemData.ToFlowDocument(),
-                                fd, true);
+                                fd,null, true);
                         break;
                 }
             }

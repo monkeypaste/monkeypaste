@@ -535,6 +535,15 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task<MpCopyItem> GetCopyItemByGuid(string cig) {
+            string query = "select * from MpCopyItem where MpCopyItemGuid=?";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query,cig);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
         public static async Task<List<MpCopyItem>> GetCopyItemsByGuids(string[] cigl) {
             if(cigl.Length == 0) {
                 return new List<MpCopyItem>();

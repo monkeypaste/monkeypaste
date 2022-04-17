@@ -80,9 +80,9 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         #region MpICopyItemSource Implementation
-
+        [Ignore]
+        public bool IsContent => false;
         [Ignore]
         public bool IsUrl => true;
 

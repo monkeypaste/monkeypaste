@@ -134,6 +134,8 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsUrl => true;
         [Ignore]
+        public bool IsContent => false;
+        [Ignore]
         public bool IsDll => false;
         [Ignore]
         public bool IsExe => false;

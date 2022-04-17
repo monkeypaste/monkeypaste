@@ -44,7 +44,7 @@ namespace MpWpfApp {
                 //        _originalSelection.Text = _originalText;
                 //        var sr = MpHelpers.FindStringRangeFromPosition(selectionStart, _originalText, true);
                 //        SubSelectedRtbViewModel.Rtb.Selection.Select(sr.Start, sr.End); 
-                var rtbv = _activeRtb.GetVisualAncestor<MpRtbView>();
+                var rtbv = _activeRtb.GetVisualAncestor<MpContentView>();
                 new TextRange(rtbv.LastEditedHyperlink.ElementStart, rtbv.LastEditedHyperlink.ElementEnd).Text = string.Empty;
 
                 _activeRtb.Selection.Select(rtbv.NewStartRange.Start, rtbv.NewStartRange.End);

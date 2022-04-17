@@ -10,7 +10,6 @@ namespace MpWpfApp {
         object DataContext { get; }
         bool IsDropEnabled { get; set; }
         bool IsDebugEnabled { get; set; }
-
         int DropIdx { get; set; }
         MpDropType DropType { get; }
 
@@ -29,13 +28,13 @@ namespace MpWpfApp {
         List<Rect> DropRects { get; }
         List<Rect> GetDropTargetRects();
         int GetDropTargetRectIdx();
+        MpShape GetDropTargetAdornerShape();
         void ContinueDragOverTarget();
 
-        MpDropLineAdorner DropLineAdorner { get; set; }
+        MpDropShapeAdorner DropLineAdorner { get; set; }
         Orientation AdornerOrientation { get; }
         void InitAdorner();
         void UpdateAdorner();
-
         void Reset();
     }
 

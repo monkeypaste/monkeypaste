@@ -70,6 +70,14 @@ namespace MpWpfApp {
             }
             return -1;
         }
+        public override MpShape GetDropTargetAdornerShape() {
+            var drl = GetDropTargetRects();
+            if (DropIdx < 0 || DropIdx >= drl.Count) {
+                return null;
+            }
+            var s = new MpSize(AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);
+            return new MpEllipse(new MpPoint(s.Width / 2, s.Height / 2), s);
+        }
 
         public override bool IsDragDataValid(bool isCopy,object dragData) {
             if(AssociatedObject.DataContext is MpActionViewModelBase avm && !avm.IsValid) {

@@ -14,6 +14,7 @@ namespace MonkeyPaste {
         bool IsUrl { get; }
         bool IsDll { get; }
         bool IsExe { get; }
+        //bool IsContent { get; }
 
         bool IsRejected { get; }
         bool IsSubRejected { get; }

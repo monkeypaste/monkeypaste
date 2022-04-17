@@ -145,6 +145,18 @@ namespace MpWpfApp {
             }
         }
 
+        public static IEnumerable<TextElement> GetAllTextElements(this TextRange tr) {
+            for (TextPointer position = tr.Start;
+              position != null && position.CompareTo(tr.End) <= 0;
+              position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
+                    if (position.Parent is TextElement te) {
+                        yield return te;
+                    }
+                }
+            }
+        }
+
         public static IEnumerable<TextElement> GetRunsAndParagraphs(this FlowDocument doc) {
             for (TextPointer position = doc.ContentStart;
               position != null && position.CompareTo(doc.ContentEnd) <= 0;
@@ -183,7 +195,7 @@ namespace MpWpfApp {
             using (var ms = new MemoryStream()) {
                 try {
                     var range2 = new TextRange(fd.ContentStart, fd.ContentEnd);
-                    range2.Save(ms, System.Windows.DataFormats.Rtf);
+                    range2.Save(ms, System.Windows.DataFormats.Rtf,true);
                     ms.Seek(0, SeekOrigin.Begin);
                     using (var sr = new StreamReader(ms)) {
                         rtf = sr.ReadToEnd();
@@ -301,12 +313,12 @@ namespace MpWpfApp {
             return new TextRange(te.ContentStart, te.ContentEnd).Text;
         }
 
-        public static FlowDocument Combine(this FlowDocument fd, FlowDocument ofd, bool insertNewline = true) {
-            return CombineFlowDocuments(ofd, fd, insertNewline);
+        public static FlowDocument Combine(this FlowDocument fd, FlowDocument ofd, TextPointer insertPointer = null, bool insertNewline = true) {
+            return CombineFlowDocuments(ofd, fd, insertPointer, insertNewline);
         }
 
-        public static FlowDocument Combine(this FlowDocument fd, string text, bool insertNewline = true) {
-            return CombineFlowDocuments(text.ToRichText().ToFlowDocument(), fd, insertNewline);
+        public static FlowDocument Combine(this FlowDocument fd, string text, TextPointer insertPointer = null, bool insertNewline = true) {
+            return CombineFlowDocuments(text.ToRichText().ToFlowDocument(), fd, insertPointer, insertNewline);
         }
 
         public static FlowDocument ToFlowDocument(this string str, int iconId = 0) {
@@ -441,7 +453,7 @@ namespace MpWpfApp {
             this TextPointer findContainerStartPosition, 
             TextPointer findContainerEndPosition, 
             string input, 
-            FindFlags flags = FindFlags.FindWholeWordsOnly | FindFlags.MatchCase, 
+            FindFlags flags = FindFlags.MatchCase, 
             CultureInfo cultureInfo = null) {
             cultureInfo = cultureInfo == null ? CultureInfo.CurrentCulture : cultureInfo;
 
@@ -541,22 +553,12 @@ namespace MpWpfApp {
             return sb.ToString();
         }
 
-        public static FlowDocument CombineFlowDocuments(FlowDocument from, FlowDocument to, bool insertNewLine = false) {
-            RichTextBox fromRtb = null, toRtb = null;
-            TextSelection fromSelection = null, toSelection = null;
-            if (from.Parent != null && from.Parent.GetType() == typeof(RichTextBox)) {
-                fromRtb = (RichTextBox)from.Parent;
-                fromSelection = fromRtb.Selection;
-            }
-            if (to.Parent != null && to.Parent.GetType() == typeof(RichTextBox)) {
-                toRtb = (RichTextBox)to.Parent;
-                toSelection = toRtb.Selection;
-            }
+        public static FlowDocument CombineFlowDocuments(FlowDocument from, FlowDocument to, TextPointer toInsertPointer = null, bool insertNewLine = false) {
             using (MemoryStream stream = new MemoryStream()) {
                 var rangeFrom = new TextRange(from.ContentStart, from.ContentEnd);
 
-                System.Windows.Markup.XamlWriter.Save(rangeFrom, stream);
-                rangeFrom.Save(stream, DataFormats.XamlPackage);
+                XamlWriter.Save(rangeFrom, stream);
+                rangeFrom.Save(stream, DataFormats.XamlPackage,true);
 
                 //if(insertNewLine) {
                 //    var lb = new LineBreak();
@@ -567,13 +569,6 @@ namespace MpWpfApp {
 
                 var rangeTo = new TextRange(to.ContentEnd, to.ContentEnd);
                 rangeTo.Load(stream, DataFormats.XamlPackage);
-
-                if (fromRtb != null && fromSelection != null) {
-                    fromRtb.Selection.Select(fromSelection.Start, fromSelection.End);
-                }
-                if (toRtb != null && toSelection != null) {
-                    toRtb.Selection.Select(toSelection.Start, toSelection.End);
-                }
 
                 var tr = new TextRange(to.ContentStart, to.ContentEnd);
                 var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
@@ -615,15 +610,6 @@ namespace MpWpfApp {
             return fd;
         }
 
-        public static FlowDocument InsertFlowDocument(this FlowDocument to, FlowDocument from, TextRange toInsertRange) {
-            using (MemoryStream stream = new MemoryStream()) {
-                var rangeFrom = new TextRange(from.ContentStart, from.ContentEnd);
-                XamlWriter.Save(rangeFrom, stream);
-                rangeFrom.Save(stream, DataFormats.XamlPackage);
-                toInsertRange.Load(stream, DataFormats.XamlPackage);
-                return to;
-            }
-        }
 
 
         public static void AppendBitmapSourceToFlowDocument(FlowDocument flowDocument, BitmapSource bitmapSource) {

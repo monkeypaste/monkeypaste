@@ -255,7 +255,7 @@ namespace MpWpfApp {
         public static string CombineRichText(string from, string to, bool insertNewLine = false) {
             return CombineFlowDocuments(
                 from.ToFlowDocument(),
-                to.ToFlowDocument(),
+                to.ToFlowDocument(),null,
                 insertNewLine).ToRichText();
         }
 

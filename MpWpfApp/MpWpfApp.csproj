@@ -142,10 +142,8 @@
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpActionDesignerItemDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpContentViewDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpDragDropManager.cs" />
-    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpContentListDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\Base\MpDropBehaviorBase.cs" />
     <Compile Include="Behaviors\DragDrop\Interfaces\MpIContentDropTarget.cs" />
-    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpRtbViewDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\MpMouseHook.cs" />
     <Compile Include="Behaviors\Highlighting\MpClipTileTitleHighlightBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\MpSourceHighlightBehavior.cs" />
@@ -167,7 +165,7 @@
     <Compile Include="Controls\MpDesignerCanvas.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
-    <Compile Include="Controls\Adorners\MpDropLineAdorner.cs" />
+    <Compile Include="Controls\Adorners\MpDropShapeAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMoveThumb.cs" />
@@ -386,14 +384,11 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\MpDetectedObjectsCollectionView.xaml.cs">
       <DependentUpon>MpDetectedObjectsCollectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Selector\MpContentListViewSelector.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpContentView.xaml.cs">
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentView.xaml.cs">
       <DependentUpon>MpContentView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Selector\MpContentListViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Selector\MpTextViewTemplateSelector.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Templates\MpTemplateHyperlink_old.xaml.cs">
-      <DependentUpon>MpTemplateHyperlink_old.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml.cs">
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
@@ -544,18 +539,12 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\MpImageItemView.xaml.cs">
       <DependentUpon>MpImageItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentItemView.xaml.cs">
-      <DependentUpon>MpContentItemView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentListVIew.xaml.cs">
       <DependentUpon>MpContentListVIew.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Selector\MpContentViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Hyperlinks\MpTextHyperlink.xaml.cs">
       <DependentUpon>MpTextHyperlink.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpRtbView.xaml.cs">
-      <DependentUpon>MpRtbView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Templates\MpTemplateHyperlink.xaml.cs">
       <DependentUpon>MpTemplateHyperlink.xaml</DependentUpon>
@@ -768,11 +757,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpContentView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Templates\MpTemplateHyperlink_old.xaml">
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -792,19 +777,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentListVIew.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Hyperlinks\MpTextHyperlink.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpRtbView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
