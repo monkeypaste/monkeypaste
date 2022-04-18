@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public static class MpDragDropManager {
@@ -17,7 +18,7 @@ namespace MpWpfApp {
 
         private static MpIContentDropTarget _curDropTarget;
 
-        private static object _dragData;
+        
 
         private static List<MpIContentDropTarget> _dropTargets {
             get {
@@ -45,6 +46,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        public static object DragData { get; private set; }
 
         public static bool IsDropValid => _curDropTarget != null;
 
@@ -69,6 +71,7 @@ namespace MpWpfApp {
         public static bool IsDragAndDrop { get; private set; }
 
         public static bool IsCheckingForDrag { get; private set; } = false;
+
 
         #endregion
 
@@ -98,13 +101,28 @@ namespace MpWpfApp {
                 return;
             }
 
-            _dragData = dragData;
+            DragData = dragData;
             IsCheckingForDrag = true;
 
             _mouseStartPosition = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
 
             MpShortcutCollectionViewModel.Instance.GlobalMouseMove += GlobalHook_MouseMove;
             MpShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonUp += GlobalHook_MouseUp;
+        }
+
+        public static bool PrepareDropDataFromExternalSource(IDataObject extDragData) {
+            //bool isValid = MpWpfDataObjectHelper.Instance.IsContentDropDragDataValid((DataObject)extDragData);
+            //if (isValid) {
+            //    // TODO add other format checks
+
+            //    return true;
+            //}
+            //return false;
+            DragData = MpWpfDataObjectHelper.Instance.ConvertToSupportedPortableFormats(extDragData);
+            if(DragData != null) {
+                MpConsole.WriteLine((DragData as MpDataObject).ToJson().ToPrettyPrintJson());
+            }
+            return DragData != null;
         }
 
         #endregion
@@ -142,70 +160,77 @@ namespace MpWpfApp {
                 return;
             }
             if (IsDragAndDrop) {
-                await PerformDrop(_dragData);
+                await PerformDrop(DragData);
             }
         }
 
         private static void GlobalHook_MouseMove(object sender, Point mp) {
-            if (!IsCheckingForDrag && !IsDragAndDrop) {
-                Reset();
-                return;
-            }
-            if(!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                // this is a sanity check since global event handlers are needed and 
-                // probably something isn't releasing mouse capture
-                Reset();
-                return;
-            }
-            Vector diff = mp - _mouseStartPosition;
-
-            if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragAndDrop) {
-                if (!IsDragAndDrop) {
-                    IsDragAndDrop = true;
-                    _timer.Start();
-                    MpShortcutCollectionViewModel.Instance.GlobalEscKeyPressed += GlobalEscKey_Pressed;
-                    MpMessenger.Send(MpMessageType.ItemDragBegin);
+            MpHelpers.RunOnMainThread(() => {
+                // NOTE is not on main thread from external drag
+                if (!IsCheckingForDrag && !IsDragAndDrop) {
+                    Reset();
+                    return;
                 }
-
-                var dropTarget = SelectDropTarget(_dragData);
-
-                if (dropTarget != _curDropTarget) {
-                    _curDropTarget?.CancelDrop();
-                    _curDropTarget = dropTarget;
-                    _curDropTarget?.StartDrop();
+                if (!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                    // this is a sanity check since global event handlers are needed and 
+                    // probably something isn't releasing mouse capture
+                    Reset();
+                    return;
                 }
-                _curDropTarget?.ContinueDragOverTarget();
-            }
+                MpConsole.WriteLine("In DragDrop mouse move " + MpShortcutCollectionViewModel.Instance.GlobalMouseLocation);
+
+                Vector diff = mp - _mouseStartPosition;
+
+                if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragAndDrop) {
+                    if (!IsDragAndDrop) {
+                        IsDragAndDrop = true;
+                        _timer.Start();
+                        MpShortcutCollectionViewModel.Instance.GlobalEscKeyPressed += GlobalEscKey_Pressed;
+                        MpMessenger.Send(MpMessageType.ItemDragBegin);
+                    }
+
+                    var dropTarget = SelectDropTarget(DragData);
+
+                    if (dropTarget != _curDropTarget) {
+                        _curDropTarget?.CancelDrop();
+                        _curDropTarget = dropTarget;
+                        _curDropTarget?.StartDrop();
+                    }
+                    _curDropTarget?.ContinueDragOverTarget();
+                }
+            });
         }
 
-        private static async Task PerformDrop(object dragData) {
-            if (_curDropTarget != null) {
-                await _curDropTarget?.Drop(
-                        MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
-                        dragData);
+        private static async Task PerformDrop(object dragData) {            
+            await MpHelpers.RunOnMainThreadAsync(async() => {
+                if (_curDropTarget != null) {
+                    await _curDropTarget?.Drop(
+                            MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
+                            dragData);
 
-                bool wasExternalDrop = _curDropTarget is MpExternalDropBehavior;
+                    bool wasExternalDrop = _curDropTarget is MpExternalDropBehavior;
 
-                if (wasExternalDrop) {
-                    Application.Current.MainWindow.Activate();
-                    Application.Current.MainWindow.Focus();
-                    Application.Current.MainWindow.Topmost = true;
+                    if (wasExternalDrop) {
+                        Application.Current.MainWindow.Activate();
+                        Application.Current.MainWindow.Focus();
+                        Application.Current.MainWindow.Topmost = true;
 
-                    MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-                    Application.Current.MainWindow.Top = 0;
+                        MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                        Application.Current.MainWindow.Top = 0;
+                    }
                 }
-            }
 
-            MpMessenger.Send(MpMessageType.ItemDragEnd);
+                MpMessenger.Send(MpMessageType.ItemDragEnd);
 
-            Reset();
+                Reset();
+            });
 
         }
         private static void Reset() {
             IsCheckingForDrag = IsDragAndDrop = false;
 
             _curDropTarget = null;
-            _dragData = null;
+            DragData = null;
             _timer.Stop();
             _dropTargets.ForEach(x => x.Reset());
 

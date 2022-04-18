@@ -53,6 +53,18 @@ namespace MpWpfApp {
             }
         }
 
+        public override int GetDropTargetRectIdx() {
+            var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            var mp = Application.Current.MainWindow.TranslatePoint(gmp, RelativeToElement);
+            Point trayMp = Mouse.GetPosition(RelativeToElement);
+
+            Rect targetRect = DropRects.FirstOrDefault(x => x.Contains(trayMp));
+            if (targetRect == null || targetRect.IsEmpty) {
+                return -1;
+            }
+            return DropRects.IndexOf(targetRect);
+        }
+
         public override void AutoScrollByMouse() {
             var ctr_mp = Mouse.GetPosition(AssociatedObject);
             Rect ctr_sv_rect = new Rect(0, 0, AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);

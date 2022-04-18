@@ -102,20 +102,18 @@ namespace MpWpfApp {
 
             //var cil = await MpDb.GetItemsAsync<MpCopyItem>();
             //foreach (var ci in cil) {
-            //    try {
-            //        if (ci.ItemType != MpCopyItemType.Text || string.IsNullOrEmpty(ci.ItemData_rtf)) {
+            //    if(ci.CompositeParentCopyItemId > 0) {
+            //        var rci = cil.FirstOrDefault(x => x.Id == ci.CompositeParentCopyItemId);
+            //        if(rci == null) {
+            //            MpConsole.WriteLine("Bad one: " + ci.Id);
             //            continue;
             //        }
 
-            //        ci.ItemData = ci.ItemData_rtf;
-            //        ci.ItemData_rtf = string.Empty;
+            //        ci.RootCopyItemGuid = rci.Guid;
             //        await ci.WriteToDatabaseAsync();
             //    }
-            //    catch (Exception ex) {
-            //        Debugger.Break();
-            //    }
             //}
-
+            //Debugger.Break();
             //foreach (var ci in cil) {
             //    try {
             //        if (ci.ItemType != MpCopyItemType.Text || ci.Id <= 2189) {

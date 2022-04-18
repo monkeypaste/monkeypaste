@@ -186,9 +186,6 @@ namespace MpWpfApp {
             if(rtb == null) {
                 return;
             }
-            if(rtb.DataContext is MpClipTileViewModel ctvm && ctvm.HeadItem.CopyItemTitle == "Untitled1857") {
-                Debugger.Break();
-            }
             LoadContent(rtb).FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
         }
 
@@ -307,7 +304,12 @@ namespace MpWpfApp {
             FlowDocument fd = ci.ItemData.ToFlowDocument(ci.IconId);
             var childRanges = GetEncodedRanges(fd,"{c{","}c}");
             var childGuids = childRanges.Select(x => x.Text.Replace("{c{", string.Empty).Replace("}c}", string.Empty)).ToArray();
-            var childItems = await MpDataModelProvider.GetCopyItemsByGuids(childGuids.ToArray());
+            var childItems = items.Where(x => childGuids.Contains(x.Guid)).ToList();
+            if(childItems.Count != childGuids.Length) {
+                var missingGuids = childGuids.Where(x => childItems.All(y => y.Guid != x));
+                var missingItems = await MpDataModelProvider.GetCopyItemsByGuids(missingGuids.ToArray());
+                childItems.AddRange(missingItems);
+            }
             
             for (int i = 0; i < childGuids.Length; i++) {
                 var insertRange = childRanges[i];
@@ -334,9 +336,28 @@ namespace MpWpfApp {
                         }
                     }
                     XamlWriter.Save(rangeFrom, stream);
-                    rangeFrom.Save(stream, DataFormats.XamlPackage, true);
+                    rangeFrom.Save(stream, DataFormats.XamlPackage);
                     var rangeTo = new TextRange(insertRange.Start, insertRange.End);
                     rangeTo.Load(stream, DataFormats.XamlPackage);
+
+                    if(decodeTemplates) {
+                        //only register events on root document
+                        var allRangeElements = rangeTo.GetAllTextElements();
+                        allRangeElements.ForEach(x => x.Tag = new MpCopyItemReference() { CopyItemGuid = childGuid });
+                        foreach (var te in allRangeElements) {
+                            var origBrush = te.Background;
+                            te.MouseEnter += (s, e) => {
+                                te.Background = Brushes.Yellow;
+                                //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemGuid == childGuid)).ItemViewModels.FirstOrDefault(x => x.CopyItemGuid == childGuid);
+                                //civm.IsHovering = true;
+                            };
+                            te.MouseLeave += (s, e) => {
+                                te.Background = origBrush;
+                                //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemGuid == childGuid)).ItemViewModels.FirstOrDefault(x => x.CopyItemGuid == childGuid);
+                                //civm.IsHovering = false;
+                            };
+                        }
+                    }
                 }
             }
 

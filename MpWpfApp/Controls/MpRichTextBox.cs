@@ -21,39 +21,39 @@ namespace MpWpfApp {
 
         protected override void OnMouseMove(MouseEventArgs e) {
             base.OnMouseMove(e);
-            e.Handled = false;
-            if (!IsReadOnly) {
-                MpCursor.SetCursor(this, MpCursorType.IBeam);
-            }
-            if (Mouse.LeftButton == MouseButtonState.Released) {
-                if (_isDragging) {
+            //e.Handled = false;
+            //if (!IsReadOnly) {
+            //    MpCursor.SetCursor(this, MpCursorType.IBeam);
+            //}
+            //if (Mouse.LeftButton == MouseButtonState.Released) {
+            //    if (_isDragging) {
 
-                }
-                _mouseDownPoint = null;
-                _isDragging = false;
-            } else {
-                if (!_isDragging) {
-                    if (!_mouseDownPoint.HasValue) {
-                        _mouseDownPoint = e.GetPosition(this);
-                    } else {
-                        if (_mouseDownPoint.Value.Distance(e.GetPosition(this)) > 5) {
-                            _isDragging = true;
+            //    }
+            //    _mouseDownPoint = null;
+            //    _isDragging = false;
+            //} else {
+            //    if (!_isDragging) {
+            //        if (!_mouseDownPoint.HasValue) {
+            //            _mouseDownPoint = e.GetPosition(this);
+            //        } else {
+            //            if (_mouseDownPoint.Value.Distance(e.GetPosition(this)) > 5) {
+            //                _isDragging = true;
 
-                            MpHelpers.RunOnMainThread((Action)(async () => {
-                                DataObject data = new DataObject();
-                                var ci = (DataContext as MpClipTileViewModel).HeadItem.CopyItem;
-                                data = await MpWpfDataObjectHelper.Instance.ConvertToWpfDataObject(
-                                                ci, true, null);
+            //                MpHelpers.RunOnMainThread((Action)(async () => {
+            //                    DataObject data = new DataObject();
+            //                    var ci = (DataContext as MpClipTileViewModel).HeadItem.CopyItem;
+            //                    data = await MpWpfDataObjectHelper.Instance.ConvertToWpfDataObject(
+            //                                    ci, true, null);
 
-                                //Debugger.Break();
+            //                    //Debugger.Break();
 
-                                DragDrop.DoDragDrop(this, data, DragDropEffects.Move | DragDropEffects.Copy);
-                            }));
-                        }
-                    }
+            //                    DragDrop.DoDragDrop(this, data, DragDropEffects.Move | DragDropEffects.Copy);
+            //                }));
+            //            }
+            //        }
 
-                }
-            }
+            //    }
+            //}
         }
 
         protected override void OnDragEnter(DragEventArgs e) {
@@ -61,38 +61,17 @@ namespace MpWpfApp {
         }
 
         protected override void OnDragOver(DragEventArgs e) {
-            e.Effects = DragDropEffects.None;
 
-            bool isValid = MpWpfDataObjectHelper.Instance.IsContentDropDragDataValid((DataObject)e.Data);
-            if (isValid) {
-                if (e.KeyStates == DragDropKeyStates.ControlKey ||
-                   e.KeyStates == DragDropKeyStates.AltKey ||
-                   e.KeyStates == DragDropKeyStates.ShiftKey) {
-                    e.Effects = DragDropEffects.Copy;
-                } else {
-                    e.Effects = DragDropEffects.Move;
-                }
-            }
-            e.Handled = true;
+            this.GetVisualAncestor<MpContentView>().ContentViewDropBehavior.Rtb_DragOver(this, e);
         }
 
         protected override void OnDragLeave(DragEventArgs e) {
-            // base.OnDragLeave(e);
+            this.GetVisualAncestor<MpContentView>().ContentViewDropBehavior.Rtb_DragLeave(this, e);
         }
 
         protected override void OnDrop(DragEventArgs e) {
-            if (e.Handled) {
-                return;
-            }
-            if (e.Data.GetDataPresent(MpDataObject.InternalContentFormat)) {
-                var dci = e.Data.GetData(MpDataObject.InternalContentFormat) as MpCopyItem;
-
-                Selection.Text = string.Format(
-                    @"{0}{1}{2}",
-                    "{c{",
-                    dci.Guid,
-                    "}c}");
-            }
+            
+            this.GetVisualAncestor<MpContentView>().ContentViewDropBehavior.Rtb_Drop(this, e);
         }
 
         #endregion

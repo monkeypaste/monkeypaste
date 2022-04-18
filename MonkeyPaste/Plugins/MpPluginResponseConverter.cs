@@ -81,11 +81,17 @@ namespace MonkeyPaste {
             }
             var source = await MpDb.GetItemAsync<MpSource>(transSourceId);
 
+            string title = sourceCopyItem.Title + " Analysis";
+            if(prf.newContentItem.label != null) {
+                title = prf.newContentItem.label.value;
+            }
+
             var targetCopyItem = await MpCopyItem.Create(
                 source: source,
-                title: prf.newContentItem.content.value,
+                title: title,
                 data: prf.newContentItem.content.value,
-                itemType: MpCopyItemType.Text,
+                copyItemSourceGuid: sourceCopyItem.Guid,
+                //itemType: MpCopyItemType.Text,
                 suppressWrite: suppressWrite);
 
             return targetCopyItem;

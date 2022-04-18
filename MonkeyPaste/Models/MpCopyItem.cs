@@ -231,6 +231,8 @@ namespace MonkeyPaste {
         public static async Task<MpCopyItem> Create(
             MpSource source = null, 
             string data = "", 
+            string copyItemSourceGuid = "",
+            string rootCopyItemGuid = "",
             MpCopyItemType itemType = MpCopyItemType.None,
             string title = "",
             string description = "",
@@ -245,6 +247,17 @@ namespace MonkeyPaste {
 
             int count = await MpDataModelProvider.GetTotalCopyItemCountAsync();
             
+            if(itemType == MpCopyItemType.None) {
+                //derive content type from data
+                if(data.IsStringBase64()) {
+                    itemType = MpCopyItemType.Image;
+                } else if(data.IsStringFileOrPathFormat()) {
+                    // TODO this check will not work if data is list of files need to check for EOL char, split and check first item
+                    itemType = MpCopyItemType.FileList;
+                } else {
+                    itemType = MpCopyItemType.Text;
+                }
+            }
             if(itemType == MpCopyItemType.FileList) {
                 // NOTE when filedrop is added to clipboard the string collection is broken into file list composite item
                 // sorted by given order
@@ -254,7 +267,7 @@ namespace MonkeyPaste {
                     string iconBase64Str = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(pl[i]);
 
                     var icon = await MpIcon.Create(iconBase64Str);
-                    int iconId = 0;
+                    int iconId;
                     if(icon == null) {
                         iconId = MpPreferences.ThisAppIcon.Id;
                     } else {
@@ -273,10 +286,14 @@ namespace MonkeyPaste {
                         IconId = iconId,
                         CopyCount = 1,
                         CompositeSortOrderIdx = i,
-                        CompositeParentCopyItemId = 0
+                        CompositeParentCopyItemId = 0,
+                        CopyItemSourceGuid = copyItemSourceGuid
                     };
                     if(i > 0) {
                         curItem.CompositeParentCopyItemId = parentItem.Id;
+                        curItem.RootCopyItemGuid = string.IsNullOrEmpty(rootCopyItemGuid) ? parentItem.Guid : rootCopyItemGuid;
+                    } else {
+                        curItem.RootCopyItemGuid = rootCopyItemGuid;
                     }
                     if(!suppressWrite) {
                         await curItem.WriteToDatabaseAsync();
@@ -297,7 +314,9 @@ namespace MonkeyPaste {
                 ItemType = itemType,
                 SourceId = source.Id,
                 Source = source,
-                CopyCount = 1
+                CopyCount = 1,
+                CopyItemSourceGuid = copyItemSourceGuid,
+                RootCopyItemGuid = rootCopyItemGuid
             };
             if (!suppressWrite) {
                 await newCopyItem.WriteToDatabaseAsync();

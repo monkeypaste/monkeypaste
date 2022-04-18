@@ -1,0 +1,35 @@
+{
+  "title": "QR Code Generator",
+  "description": "Converts text to QR code",
+  "version": "1.0",
+  "credits": "Raffael Herrmann",
+  "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
+  "url": "https://github.com/codebude/QRCoder/",
+  "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/QR_icon.svg/480px-QR_icon.svg.png",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "image": true
+    },
+    "parameters": [
+      {
+        "label": "Content for Detection",
+        "description": "The Snippet to detect",
+        "controlType": "TextBox",
+        "unitType": "ContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ItemData}"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -31,16 +31,13 @@ namespace MpWpfApp {
         }
 
         public static void FitDocToRtb(this RichTextBox rtb) {
-            bool isReadOnly = false;
-            if (rtb.DataContext is MpContentItemViewModel civm) {
-                isReadOnly = civm.IsContentReadOnly;
-            }
+            bool isReadOnly = rtb.IsReadOnly;
             if (!isReadOnly) {
-                var clv = rtb.GetVisualAncestor<MpContentListView>();
-                double w = clv == null ? rtb.ActualWidth : clv.ActualWidth;
-                double h = clv == null ? rtb.ActualHeight : clv.ActualHeight;
+                var cv = rtb.GetVisualAncestor<MpContentView>();
+                double w = cv == null ? rtb.ActualWidth : cv.ActualWidth;
+                double h = cv == null ? rtb.ActualHeight : cv.ActualHeight;
                 rtb.Document.PageWidth = Math.Max(0, w - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
-                rtb.Document.PageHeight = Math.Max(0, rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
+                rtb.Document.PageHeight = Math.Max(0, h - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
             } else {
                 rtb.Document.PageWidth = Math.Max(0, rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
                 rtb.Document.PageHeight = Math.Max(0, rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
@@ -558,7 +555,7 @@ namespace MpWpfApp {
                 var rangeFrom = new TextRange(from.ContentStart, from.ContentEnd);
 
                 XamlWriter.Save(rangeFrom, stream);
-                rangeFrom.Save(stream, DataFormats.XamlPackage,true);
+                rangeFrom.Save(stream, DataFormats.XamlPackage);
 
                 //if(insertNewLine) {
                 //    var lb = new LineBreak();

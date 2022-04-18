@@ -13,9 +13,10 @@ using System.Threading;
 using MpClipboardHelper;
 using System.Collections.Specialized;
 using System.Windows.Controls;
+using System.Drawing.Imaging;
 
 namespace MpWpfApp {
-    public class MpWpfDataObjectHelper : MpIExternalPasteHandler, MpIErrorHandler, MpIDataObjectBuilder {
+    public class MpWpfDataObjectHelper : MpIExternalPasteHandler, MpIErrorHandler, MpIDataObjectBuilder, MpIClipboardInterop {
         #region Private Variables
 
         private Queue<MpPasteItem> _pasteQueue = new Queue<MpPasteItem>();
@@ -105,6 +106,73 @@ namespace MpWpfApp {
                 }
             }
             return false;
+        }
+
+        #region MpIClipboardInterop Implementation
+        public MpDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
+            return ConvertWpfDataObjectToPortableFormat(nativeDataObj as IDataObject, retryCount);
+        }
+
+        public object ConvertToNativeFormat(MpDataObject portableObj) {
+            throw new NotImplementedException();
+        }
+
+        public void SetDataObjectWrapper(MpDataObject portableObj) {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        private MpDataObject ConvertWpfDataObjectToPortableFormat(IDataObject ido, int retryCount = 5) {
+            
+            if (retryCount == 0) {
+                MpConsole.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
+                return null;
+            }
+            if(ido == null) {
+                return null;
+            }
+            var ndo = new MpDataObject();
+            try {
+                bool autoConvert = false;
+                foreach (MpClipboardFormatType supportedType in MpDataObject.SupportedFormats) {
+                    string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
+                    if (ido != null) {
+                        if (ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
+                            continue;
+                        }
+                    }
+                    string data = null;
+                    switch (supportedType) {
+                        case MpClipboardFormatType.Bitmap:
+                            var bmpSrc = Clipboard.GetImage();
+                            if (bmpSrc != null) {
+                                data = bmpSrc.ToBase64String();
+                            }
+                            break;
+                        case MpClipboardFormatType.FileDrop:
+                            string[] sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
+                            if (sa != null && sa.Length > 0) {
+                                data = string.Join(Environment.NewLine, sa);
+                            }
+                            break;
+                        default:
+                            data = ido.GetData(nativeTypeName, autoConvert) as string;
+                            break;
+                    }
+                    if (!string.IsNullOrEmpty(data)) {
+                        ndo.DataFormatLookup.Add(supportedType, data);
+                    }
+                }
+                if(ndo.DataFormatLookup.Count == 0) {
+                    return null;
+                }
+                return ndo;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteLine($"Error accessing clipboard {retryCount} attempts remaining", ex);
+                Thread.Sleep((5 - retryCount) * 100);
+                return ConvertWpfDataObjectToPortableFormat(ido, retryCount--);
+            }
         }
 
         public async Task<DataObject> ConvertToWpfDataObject(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {

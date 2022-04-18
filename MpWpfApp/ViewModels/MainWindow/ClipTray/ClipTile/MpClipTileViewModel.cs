@@ -120,7 +120,7 @@
                 if (ItemViewModels == null || ItemViewModels.Count == 0) {
                     return null;
                 }
-                return ItemViewModels.Where(x => x.IsHovering).FirstOrDefault();
+                return ItemViewModels.FirstOrDefault(x => x.IsHovering);
             }
         }
 
@@ -1194,7 +1194,19 @@
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
+            if (e is MpCopyItem ci && ItemViewModels.Any(x => x.CopyItemId == ci.Id)) {
+                //MpContentItemViewModel itemToRemove = null;
+                //if (Parent.GetClipTileViewModelByGuid(ci.Guid) != this) {
+                //    itemToRemove = ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id);
+                //}
+                //ItemViewModels.Remove(itemToRemove);
+
+                //if (ItemViewModels.Count == 0) {
+                //    OnPropertyChanged(nameof(IsPlaceholder));
+                //    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                //} else {
+                //    RequestListRefresh();
+                //}
             }
         }
 

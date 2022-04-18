@@ -7,7 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpDllTransaction : MpDbModelBase, MpISourceTransaction {
+    public enum MpUserTransactionType {
+        None = 0,
+        Input,
+        Paste,
+        Drop
+    }
+    public class MpUserTransaction : MpDbModelBase, MpISourceTransaction {
         #region Protected variables 
         //uses manifest iconUrl for MpISourceItem interface
         protected int iconId { get; set; } = 0;
@@ -17,16 +23,18 @@ namespace MonkeyPaste {
         #region Columns
 
         [PrimaryKey, AutoIncrement]
-        [Column("pk_MpDllTransactionId")]
+        [Column("pk_MpUserTransactionId")]
         public override int Id { get; set; }
 
-        [Column("MpDllTransactionGuid")]
+        [Column("MpUserTransactionGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
 
-        [ForeignKey(typeof(MpAnalyticItemPreset))]
-        [Column("fk_MpAnalyticItemPresetId")]
-        public int PresetId { get; set; }
+        [ForeignKey(typeof(MpCopyItem))]
+        [Column("fk_MpCopyItemId")]
+        public int CopyItemId { get; set; }
+
+        public string TransactionData { get; set; }
 
         [ForeignKey(typeof(MpUserDevice))]
         [Column("fk_MpUserDeviceId")]
@@ -34,10 +42,8 @@ namespace MonkeyPaste {
 
         public string TransactionErrorMessage { get; set; }
 
-        public string DllPath { get; set; }
-        public string DllName { get; set; }
-
-        public string Args { get; set; }
+        [Column("e_MpUserTransactionTypeId")]
+        public int UserTransactionTypeId { get; set; } = 0;
 
         public DateTime TransactionDateTime { get; set; }
 
@@ -52,7 +58,7 @@ namespace MonkeyPaste {
         #region Properties
 
         [Ignore]
-        public Guid DllTransactionGuid {
+        public Guid UserTransactionGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
@@ -63,34 +69,39 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
+
+        [Ignore]
+        public MpUserTransactionType UserTransactionType {
+            get => (MpUserTransactionType)UserTransactionTypeId;
+            set => UserTransactionTypeId = (int)value;
+        }
         #endregion
 
-        public static async Task<MpDllTransaction> Create(
-            int presetId = 0,
+        public static async Task<MpUserTransaction> Create(
+            int copyItemId = 0,
             int deviceId = 0,
-            string dllPath = "",
-            string dllName = "",
-            string args = "",
+            string transactionData = "",
+            MpUserTransactionType transType = MpUserTransactionType.None,
             DateTime? transDateTime = null,
             string errorMsg = null,
             bool suppressWrite = false) {
-            if(string.IsNullOrWhiteSpace(dllPath)) {
-                throw new Exception("Must specifiy path");
+            if(copyItemId == 0) {
+                throw new Exception("Must specifiy copyitemId");
             }
             if (deviceId <= 0) {
                 deviceId = MpPreferences.ThisUserDevice.Id;
             }
-            var mr = new MpDllTransaction() {
-                DllTransactionGuid = System.Guid.NewGuid(),
-                PresetId = presetId,
-                DllPath = dllPath,
-                DllName = string.IsNullOrWhiteSpace(dllName) ? Path.GetFileNameWithoutExtension(dllPath) : dllName,
-                Args = args,
+            var mr = new MpUserTransaction() {
+                UserTransactionGuid = System.Guid.NewGuid(),
+                DeviceId = deviceId,
+                CopyItemId = copyItemId,
+                TransactionData = transactionData,
+                UserTransactionType = transType,
                 TransactionDateTime = !transDateTime.HasValue ? DateTime.Now : transDateTime.Value,
                 TransactionErrorMessage = errorMsg
             };
-            if (presetId > 0) {
-                var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(presetId);
+            if (copyItemId > 0) {
+                var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(copyItemId);
                 if (preset != null) {
                     mr.iconId = preset.IconId;
                 }
@@ -101,20 +112,20 @@ namespace MonkeyPaste {
             return mr;
         }
 
-        public MpDllTransaction() { }
+        public MpUserTransaction() { }
 
         #region MpISourceItem Implementation
 
         [Ignore]
         public int IconId => 0;
         [Ignore]
-        public string SourcePath => DllPath;
+        public string SourcePath => UserTransactionTypeId.ToString();
         [Ignore]
-        public string SourceName => DllName;
+        public string SourceName => UserTransactionType.ToString();
         [Ignore]
         public int RootId => Id;
         [Ignore]
-        public bool IsUser => false;
+        public bool IsUser => true;
         [Ignore]
         public bool IsUrl => false;
         [Ignore]

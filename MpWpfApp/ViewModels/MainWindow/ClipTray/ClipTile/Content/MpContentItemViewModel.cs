@@ -542,6 +542,22 @@ namespace MpWpfApp {
             }
         }
 
+        public string RootCopyItemGuid {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.RootCopyItemGuid;
+            }
+            set {
+                if (RootCopyItemGuid != value) {
+                    CopyItem.RootCopyItemGuid = value;
+                    OnPropertyChanged(nameof(RootCopyItemGuid));
+                }
+            }
+        }
+
+
         public int CopyItemId {
             get {
                 if (CopyItem == null) {
@@ -591,6 +607,11 @@ namespace MpWpfApp {
                 }
                 if(CopyItem.IconId == 0) {
                     // defer icon to primary source if not set by user
+                    if(CopyItem.Source == null || CopyItem.Source.PrimarySource == null) {
+                        // BUG currently when plugin creates new content it is not setting source info
+                        // so return app icon
+                        return MpPreferences.ThisAppSource.PrimarySource.IconId;
+                    }
                     return CopyItem.Source.PrimarySource.IconId;
                 }
                 return CopyItem.IconId;

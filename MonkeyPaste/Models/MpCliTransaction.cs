@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpCliTransaction : MpDbModelBase, MpISourceTransaction {
@@ -107,10 +108,7 @@ namespace MonkeyPaste {
                 throw new Exception("Must specifiy path");
             }
             if (deviceId <= 0) {
-                var device = await MpDataModelProvider.GetUserDeviceByGuid(MpPreferences.ThisDeviceGuid);
-                if (device != null) {
-                    deviceId = device.Id;
-                }
+                deviceId = MpPreferences.ThisUserDevice.Id;
             }
 
             var mr = new MpCliTransaction() {
@@ -151,6 +149,9 @@ namespace MonkeyPaste {
         public string SourceName => CliName;
         [Ignore]
         public int RootId => Id;
+
+        [Ignore]
+        public bool IsUser => false;
         [Ignore]
         public bool IsUrl => false;
         [Ignore]

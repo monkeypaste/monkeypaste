@@ -87,10 +87,7 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine("Http transaction must have source ip");
             }
             if (deviceId <= 0) {
-                var device = await MpDataModelProvider.GetUserDeviceByGuid(MpPreferences.ThisDeviceGuid);
-                if (device != null) {
-                    deviceId = device.Id;
-                }
+                deviceId = MpPreferences.ThisUserDevice.Id;
             }
 
 
@@ -134,7 +131,7 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsUrl => true;
         [Ignore]
-        public bool IsContent => false;
+        public bool IsUser => false;
         [Ignore]
         public bool IsDll => false;
         [Ignore]

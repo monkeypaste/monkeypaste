@@ -17,11 +17,11 @@
     </i:Interaction.Behaviors>
 
     <AdornerDecorator>
-        <RichTextBox x:Name="Rtb"
+        <local:MpRichTextBox x:Name="Rtb"
                      DataContext="{Binding}"
                      Width="Auto"
                      MinWidth="100"
-                     Height="{Binding HeadItem.EditorHeight}"
+                     Height="Auto"
                      Padding="5,0,5,0"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
@@ -57,13 +57,14 @@
                      SizeChanged="Rtb_SizeChanged"
                      MouseEnter="Rtb_MouseEnter"
                      MouseMove="Rtb_MouseMove"
+                     AllowDrop="True"
                      PreviewMouseLeftButtonDown="Rtb_PreviewMouseLeftButtonDown"
                      PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
                      MouseLeave="Rtb_MouseLeave">
-            <RichTextBox.Resources>
+            <local:MpRichTextBox.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                  Color="Blue" />
-            </RichTextBox.Resources>
-        </RichTextBox>
+            </local:MpRichTextBox.Resources>
+        </local:MpRichTextBox>
     </AdornerDecorator>
 </local:MpUserControl>

@@ -88,7 +88,7 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsExe => false;
         [Ignore]
-        public bool IsContent => false;
+        public bool IsUser => false;
 
         [Ignore]
         public bool IsRejected => IsAppRejected;

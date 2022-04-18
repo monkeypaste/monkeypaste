@@ -21,7 +21,7 @@ namespace MpWpfApp {
 
         #region Public Methods
         
-        public static async Task<MpCopyItem> CreateFromClipboard(MpDataObject mpdo) {
+        public static async Task<MpCopyItem> CreateFromDataObject(MpDataObject mpdo) {
             try {                
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
@@ -166,7 +166,7 @@ namespace MpWpfApp {
         }
 
         public async Task<MpCopyItem> Create() {
-            var ci = await MpCopyItemBuilder.CreateFromClipboard(null);
+            var ci = await MpCopyItemBuilder.CreateFromDataObject(null);
             return ci;
         }
         #endregion

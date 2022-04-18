@@ -1135,9 +1135,37 @@ namespace MpWpfApp {
             return null;
         }
 
+        public MpContentItemViewModel GetContentItemViewModelByGuid(string ciguid) {
+            foreach (var ctvm in PinnedItems) {
+                foreach (var civm in ctvm.ItemViewModels) {
+                    var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItemGuid == ciguid).FirstOrDefault();
+                    if (ortbvm != null) {
+                        return ortbvm;
+                    }
+                }
+            }
+            foreach (var ctvm in Items) {
+                foreach (var civm in ctvm.ItemViewModels) {
+                    var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItemGuid == ciguid).FirstOrDefault();
+                    if (ortbvm != null) {
+                        return ortbvm;
+                    }
+                }
+            }
+            return null;
+        }
+
         public MpClipTileViewModel GetClipTileViewModelById(int ciid) {
             var civm = GetContentItemViewModelById(ciid);
             if(civm == null) {
+                return null;
+            }
+            return civm.Parent;
+        }
+
+        public MpClipTileViewModel GetClipTileViewModelByGuid(string ciguid) {
+            var civm = GetContentItemViewModelByGuid(ciguid);
+            if (civm == null) {
                 return null;
             }
             return civm.Parent;
@@ -1524,7 +1552,7 @@ namespace MpWpfApp {
 
             var createItemSw = new Stopwatch();
             createItemSw.Start();
-            var newCopyItem = await MpCopyItemBuilder.CreateFromClipboard(cd);
+            var newCopyItem = await MpCopyItemBuilder.CreateFromDataObject(cd);
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 
@@ -1720,7 +1748,7 @@ namespace MpWpfApp {
 
         public ICommand AddNewItemsCommand => new RelayCommand(
             () => {
-                IsBusy = true;
+                //IsBusy = true;
 
                 //if(MpDataModelProvider.QueryInfo.TagId == MpTag.AllTagId) {
                 //    //instead of handling all unique cases manual insert new items in head of current query if which may not be 
@@ -1741,11 +1769,11 @@ namespace MpWpfApp {
                 //    Items.Insert(0, nctvm);
                 //}
 
-                MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                MpDataModelProvider.QueryInfo.NotifyQueryChanged();
 
                 _newModels.Clear();
 
-                IsBusy = false;
+                //IsBusy = false;
 
                 //using tray scroll changed so tile drop behaviors update their drop rects
                 MpMessenger.Send<MpMessageType>(MpMessageType.TrayScrollChanged);

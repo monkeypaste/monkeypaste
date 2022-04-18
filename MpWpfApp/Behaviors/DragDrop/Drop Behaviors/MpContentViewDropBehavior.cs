@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,6 +48,46 @@ namespace MpWpfApp {
                 AssociatedObject.DataContext,
                 ReceivedAssociateObjectViewModelMessage,
                 AssociatedObject.DataContext);
+
+            //AssociatedObject.Rtb.DragOver += Rtb_DragOver;
+            //AssociatedObject.Rtb.Drop += Rtb_Drop;
+        }
+
+        public void Rtb_Drop(object sender, DragEventArgs e) {
+            if (e.Handled) {
+                return;
+            }
+            if (e.Data.GetDataPresent(MpDataObject.InternalContentFormat)) {
+                
+            }
+        }
+
+        public void Rtb_DragOver(object sender, DragEventArgs e) {
+            e.Effects = DragDropEffects.None;
+
+            bool isValid = true;
+            if(MpDragDropManager.DragData == null) {
+                isValid = MpDragDropManager.PrepareDropDataFromExternalSource(e.Data);
+            }
+            
+            if (isValid) {
+                if (e.KeyStates == DragDropKeyStates.ControlKey ||
+                   e.KeyStates == DragDropKeyStates.AltKey ||
+                   e.KeyStates == DragDropKeyStates.ShiftKey) {
+                    e.Effects = DragDropEffects.Copy;
+                } else {
+                    e.Effects = DragDropEffects.Move;
+                }
+
+                if(!MpDragDropManager.IsCheckingForDrag) {
+                    MpDragDropManager.StartDragCheck(MpDragDropManager.DragData);
+                }
+            }
+            e.Handled = true;
+        }
+
+        public void Rtb_DragLeave(object sender, DragEventArgs e) {
+            Reset();
         }
 
         public override void OnUnloaded() {
@@ -94,12 +135,15 @@ namespace MpWpfApp {
                 return -1;
             }
             var rtb = AssociatedObject.Rtb;
-            var mp = Mouse.GetPosition(rtb);
+            var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            var mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
             Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth, rtb.ActualHeight);
             if (!rtb_rect.Contains(mp)) {
                 //Reset();
+                MpConsole.WriteLine("rtb mp (no hit): " + mp);
                 return -1;
             }
+            MpConsole.WriteLine("rtb mp: " + mp);
             //MpIsFocusedExtension.SetIsFocused(rtb, true);
             var mptp = rtb.GetPositionFromPoint(mp, true);
             var mptp_rect = mptp.GetCharacterRect(LogicalDirection.Forward);
@@ -168,75 +212,11 @@ namespace MpWpfApp {
                         return false;
                     }
                 }
+                
             }
-            return true;
+            return dragData != null;
         }
 
-        //public override async Task Drop(bool isCopy, object dragData) {
-        //    if (AssociatedObject == null) {
-        //        return;
-        //    }
-        //    await base.Drop(isCopy, dragData);
-
-        //    List<MpCopyItem> dragModels = isCopy ? await GetDragDataCopy(dragData) : dragData as List<MpCopyItem>;
-
-        //    List<MpClipTileViewModel> dragTiles = new List<MpClipTileViewModel>();
-
-        //    //if(dragModels.Count == 1 && dragModels[0].Id == AssociatedObject.BindingContext.HeadItem.CopyItem.Id) {
-        //    //    return;
-        //    //}
-
-
-        //    if (!isCopy) {
-        //        for (int i = 0; i < dragModels.Count; i++) {
-        //            if (dragModels[i].CompositeParentCopyItemId == 0 &&
-        //                !AssociatedObject.BindingContext.ItemViewModels.Any(x => x.CopyItemId == dragModels[i].Id)) {
-        //                //if drag item is head of ANOTHER tile swap or remove from main query ref w/ first child
-        //                await MpDataModelProvider.RemoveQueryItem(dragModels[i].Id);
-        //            }
-        //            var dcivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModels[i].Id);
-        //            if (dcivm != null) {
-        //                //will be null if virtualized
-        //                if (!dragTiles.Contains(dcivm.Parent) && dcivm.Parent != AssociatedObject.DataContext) {
-        //                    dragTiles.Add(dcivm.Parent);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    //now all drag items are removed from their tiles and dropIdx should be correct
-        //    //reverse drag items and merge incrementally
-        //    dragModels.Reverse();
-
-        //    foreach (var dragModel in dragModels.ToList()) {
-        //        await MergeContentItem(dragModel, isCopy);
-        //    }
-
-        //    //clean up all tiles with content dragged
-        //    //if tile has no items recycle it
-        //    //if it still has items sync sort order from its visuals
-        //    if (AssociatedObject.BindingContext.IsContentReadOnly && !isCopy) {
-        //        bool needsRequery = false;
-        //        foreach (var dctvm in dragTiles) {
-        //            if (dctvm.HeadItem == null ||
-        //                dragModels.Any(x => x.Id == dctvm.HeadItem.CopyItemId)) {
-        //                if (dctvm.ItemViewModels.Count <= 1) {
-        //                    //this tile needs to be removed and instead of shifting all the query idx's 
-        //                    //just requery at current offset
-        //                    needsRequery = true;
-        //                    break;
-        //                }
-        //                await dctvm.InitializeAsync(dctvm.ItemViewModels[1].CopyItem, dctvm.QueryOffsetIdx);
-        //            } else {
-        //                await dctvm.InitializeAsync(dctvm.ItemViewModels[0].CopyItem, dctvm.QueryOffsetIdx);
-        //            }
-        //        }
-
-        //        if (needsRequery) {
-        //            MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-        //            //MpClipTrayViewModel.Instance.RequeryCommand.Execute(MpClipTrayViewModel.Instance.HeadQueryIdx);
-        //        }
-        //    }
-        //}
         public override async Task Drop(bool isCopy, object dragData) {
             if (AssociatedObject == null) {
                 return;
@@ -250,17 +230,30 @@ namespace MpWpfApp {
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
 
             if(dctvm == null) {
-                return;
+                if(dragData is MpDataObject mpdo) {
+                    // from external source\
+                    var exci = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                    dctvm = ctvm;
+                    //ensure external drop will be treated like new content
+                    isCopy = false;
+                    dctvm.IsAllSelected = false;
+                } else {
+                    ;
+                }
+
             }
             var rtb = AssociatedObject.Rtb;
             var drtb = Application.Current.MainWindow.GetVisualDescendents<MpContentView>()
                             .FirstOrDefault(x => x.DataContext is MpClipTileViewModel temp && temp.HeadItem.CopyItemId == dctvm.HeadItem.CopyItemId).Rtb;
 
             string rootGuid = ctvm.HeadItem.CopyItemGuid;
-            bool isNewRoot = rtb.Document.ContentStart.GetPositionAtOffset(dropIdx).GetNextInsertionPosition(LogicalDirection.Backward) == rtb.Document.ContentStart;
-            if (isNewRoot) {
-                rootGuid = null;
-            }
+
+            //string preText = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentStart.GetPositionAtOffset(dropIdx)).Text;
+            //bool isNewRoot = string.IsNullOrWhiteSpace(preText.Trim().Replace(Environment.NewLine,string.Empty));
+            //if (isNewRoot) {
+            //    rootGuid = null;
+            //}
+            bool isNewRoot = false;
 
             var dragTextElements = drtb.Selection.GetAllTextElements().OrderBy(x=>drtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart));
             var dragContentRefs = dragTextElements
@@ -343,7 +336,13 @@ namespace MpWpfApp {
             if (_isPreBlockDrop) {
                 dtp = dtp.GetLineStartPosition(0).InsertLineBreak();
             } else if (_isPostBlockDrop) {
-                dtp = dtp.GetLineStartPosition(1).InsertLineBreak();
+                if(dtp == null || dtp.GetLineStartPosition(1) == null) {
+                    //at end of document
+                    dtp = rtb.Document.ContentEnd;
+                } else {
+                    dtp = dtp.GetLineStartPosition(1);
+                }
+                dtp = dtp.InsertLineBreak();
             }
 
             //insert encoded items
@@ -352,11 +351,23 @@ namespace MpWpfApp {
                 var dr = new Run("{c{" + dci.CopyItemGuid + "}c}") {
                     Tag = dci_cir
                 };
-                new Span(dr, dtp) {
+                var span = new Span(dr, dtp) {
                     Tag = dci_cir
                 };
-            }            
-            
+                dtp = span.ElementEnd.GetNextInsertionPosition(LogicalDirection.Forward);
+            }
+
+            if (_isBlockDrop) {
+                //add trailing line break
+                if (dtp == null || dtp.GetLineStartPosition(1) == null) {
+                    //at end of document
+                    dtp = rtb.Document.ContentEnd;
+                } else {
+                    dtp = dtp.GetLineStartPosition(1);
+                }
+                dtp = dtp.InsertLineBreak();
+            } 
+
             var allTargetItems = dropCopyItems;
             allTargetItems.AddRange(ctvm.ItemViewModels.Select(x => x.CopyItem));
             allTargetItems = allTargetItems.Distinct().ToList();
@@ -380,7 +391,14 @@ namespace MpWpfApp {
 
             var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
 
-            await ctvm.InitializeAsync(encodedItems);
+            //await ctvm.InitializeAsync(encodedItems);
+            MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+
+            while(MpClipTrayViewModel.Instance.IsBusy) {
+                await Task.Delay(100);
+            }
+
+            MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(rootGuid).IsSelected = true;
         }
        
         public override void AutoScrollByMouse() {

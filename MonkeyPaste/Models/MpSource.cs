@@ -48,15 +48,15 @@ namespace MonkeyPaste {
 
         #region Fk Objects
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpApp App { get; set; }
 
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeInsert | CascadeOperation.CascadeRead)]
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpUrl Url { get; set; }
 
 
-        [OneToOne(CascadeOperations = CascadeOperation.All)]
+        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public MpCopyItemTransaction CopyItemTransaction { get; set; }
 
         #endregion

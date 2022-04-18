@@ -479,6 +479,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
             await _connectionAsync.CreateTableAsync<MpUserSearch>();
+            await _connectionAsync.CreateTableAsync<MpUserTransaction>();
         }
 
         private static async Task CreateViews() {

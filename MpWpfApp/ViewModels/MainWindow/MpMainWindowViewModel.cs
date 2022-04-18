@@ -110,15 +110,20 @@ namespace MpWpfApp {
         //public Rect MainWindowRect { get; set; } = new Rect(0, 0, MpMeasurements.Instance.ScreenWidth, MpMeasurements.Instance.MainWindowDefaultHeight);
         public double MainWindowContainerTop {
             get {
-                if(IsMainWindowLocked) {
-                    return 20000;
-                }
-                if(MpDragDropManager.IsDragAndDrop &&
-                   MpDragDropManager.DropType == MpDropType.External) {
-                    return (double)int.MaxValue;
-                }
+                //if(IsMainWindowLocked) {
+                //    return MpMeasurements.Instance.WorkAreaBottom - MainWindowHeight;
+                //}
                 return 0;
             }            
+        }
+
+        public double MainWindowContainerHeight {
+            get {
+                //if(IsMainWindowLocked) {
+                //    return MainWindowHeight;
+                //}
+                return MpMeasurements.Instance.WorkAreaBottom;
+            }
         }
 
         public double MainWindowWidth { get; set; } = MpMeasurements.Instance.ScreenWidth;
@@ -192,10 +197,28 @@ namespace MpWpfApp {
         private void MpMainWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsMainWindowLocked):
-                    OnPropertyChanged(nameof(MainWindowContainerTop));
+
+                    //if (IsMainWindowLocked) {
+                    //    MainWindowTop = 0;
+                    //} else {
+                    //    MainWindowTop = MpMeasurements.Instance.WorkAreaBottom - MainWindowHeight;
+                    //}
+
+                    //Application.Current.MainWindow.Height = MainWindowContainerHeight;
+                    //Application.Current.MainWindow.Top = MainWindowContainerTop;
+
                     break;
                 case nameof(MainWindowHeight):
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
+
+                    //if (IsMainWindowLocked) {
+                    //    MainWindowTop = 0;
+                    //} else {
+                    //    MainWindowTop = MpMeasurements.Instance.WorkAreaBottom - MainWindowHeight;
+                    //}
+
+                    //Application.Current.MainWindow.Height = MainWindowContainerHeight;
+                    //Application.Current.MainWindow.Top = MainWindowContainerTop;
                     break;
                 case nameof(IsResizing):
                     if(!IsResizing) {
@@ -223,9 +246,13 @@ namespace MpWpfApp {
             switch (msg) {
                 case MpMessageType.ResizingContent:
                     //IsResizing = true;
+                    //if(IsMainWindowLocked) {
+                    //    MainWindowTop = 0;
+                    //} else {
+                    //    MainWindowTop = MpMeasurements.Instance.WorkAreaBottom - MainWindowHeight;
+                    //}
 
                     MainWindowTop = MpMeasurements.Instance.WorkAreaBottom - MainWindowHeight;
-                    
                     break;
                 case MpMessageType.ResizeContentCompleted:
                     //IsResizing = false;

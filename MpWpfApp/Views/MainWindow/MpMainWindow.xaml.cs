@@ -27,9 +27,9 @@ namespace MpWpfApp {
             MpProcessHelper.MpProcessManager.ThisAppHandle = wndHelper.Handle;
             MpClipboardHelper.MpClipboardManager.ThisAppHandle = wndHelper.Handle;
 
-            int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
-            exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
-            WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
+            //int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
+            //exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
+            //WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
 
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
 
@@ -47,6 +47,10 @@ namespace MpWpfApp {
             HwndSource Source;
             Source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
             Source.AddHook(new HwndSourceHook(Window_Proc));
+
+
+            //Application.Current.MainWindow.Height = mwvm.MainWindowContainerHeight;
+            //Application.Current.MainWindow.Top = mwvm.MainWindowContainerTop;
         }
 
         private IntPtr Window_Proc(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam, ref bool Handled) {

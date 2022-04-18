@@ -35,6 +35,7 @@ namespace MpWpfApp {
 
         #region MpISourceItemViewModel Implementation
 
+        public bool IsUser => false;
         public bool IsDll => false;
 
         public bool IsExe => false;

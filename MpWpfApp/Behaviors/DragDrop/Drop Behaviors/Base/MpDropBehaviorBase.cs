@@ -200,6 +200,9 @@ namespace MpWpfApp {
             if (dragData == null) {
                 return false;
             }
+            if(dragData is MpDataObject) {
+                return true;
+            }
             if(dragData is MpClipTileViewModel ctvm) {
                 return true;
             }
@@ -220,15 +223,7 @@ namespace MpWpfApp {
             return false;
         }
 
-        public virtual int GetDropTargetRectIdx() {
-            Point trayMp = Mouse.GetPosition(RelativeToElement);
-
-            Rect targetRect = DropRects.FirstOrDefault(x => x.Contains(trayMp));
-            if (targetRect == null || targetRect.IsEmpty) {
-                return -1;
-            }
-            return DropRects.IndexOf(targetRect);
-        }
+        public abstract int GetDropTargetRectIdx();
 
         public abstract MpShape GetDropTargetAdornerShape();
 
@@ -260,7 +255,6 @@ namespace MpWpfApp {
         }
 
         protected async Task<List<MpCopyItem>> GetDragDataCopy(object dragData) {
-
             var clones = (await Task.WhenAll((dragData as List<MpCopyItem>).Select(x => x.Clone(true)).ToArray())).Cast<MpCopyItem>().ToList();
             MpClipTrayViewModel.Instance.PersistentSelectedModels = clones;
             return clones;

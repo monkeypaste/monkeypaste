@@ -11,7 +11,8 @@ namespace MonkeyPaste {
         None = 0,
         Dll,
         Cli,
-        Http
+        Http,
+        User
     }
 
     public class MpCopyItemTransaction : MpDbModelBase {
@@ -68,6 +69,9 @@ namespace MonkeyPaste {
 
         [Ignore]
         public MpDllTransaction DllTransaction { get; set; }
+
+        [Ignore]
+        public MpUserTransaction UserTransaction { get; set; }
         #endregion
 
 
