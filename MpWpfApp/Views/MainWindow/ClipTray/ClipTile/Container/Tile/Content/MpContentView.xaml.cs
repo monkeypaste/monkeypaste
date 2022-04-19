@@ -85,47 +85,43 @@ namespace MpWpfApp {
                 nameof(MpDragDropManager),
                 ReceivedDragDropManagerMessage);
 
-            //if (DataContext != null && DataContext is MpContentItemViewModel rtbivm) {
+            if (BindingContext != null) {
 
-            //    if(rtbivm.IsPlaceholder) {
-            //        return;
-            //    }
+                if (BindingContext.IsPlaceholder) {
+                    return;
+                }
 
-            //    if (rtbivm.IsNewAndFirstLoad) {
-            //        //force new items to have left alignment
-            //        Rtb.CaretPosition = Rtb.Document.ContentStart;
-            //        Rtb.Document.TextAlignment = TextAlignment.Left;
-            //        rtbivm.IsNewAndFirstLoad = false;
-            //    }
-            //    ScrollToHome();
+                //if (rtbivm.IsNewAndFirstLoad) {
+                //    //force new items to have left alignment
+                //    Rtb.CaretPosition = Rtb.Document.ContentStart;
+                //    Rtb.Document.TextAlignment = TextAlignment.Left;
+                //    rtbivm.IsNewAndFirstLoad = false;
+                //}
+                ScrollToHome();
 
-            //    MpHelpers.RunOnMainThread(async () => {
-            //        await CreateHyperlinksAsync(CTS.Token);
+                //MpHelpers.RunOnMainThread(async () => {
+                //    await CreateHyperlinksAsync(CTS.Token);
 
-            //    });
+                //});
 
-            //    //MpMessenger.Register<MpMessageType>(
-            //    //    MpClipTrayViewModel.Instance,
-            //    //    ReceivedClipTrayViewModelMessage);
+                MpMessenger.Register<MpMessageType>(
+                    BindingContext.Parent,
+                    ReceivedClipTileViewModelMessage,
+                    BindingContext.Parent);
 
-            //    MpMessenger.Register<MpMessageType>(
-            //        BindingContext.Parent,
-            //        ReceivedClipTileViewModelMessage,
-            //        BindingContext.Parent);
-
-            //    MpMessenger.Register<MpMessageType>(
-            //        (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
-            //        ReceivedMainWindowResizeBehviorMessage);
+                MpMessenger.Register<MpMessageType>(
+                    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
+                    ReceivedMainWindowResizeBehviorMessage);
 
 
-            //    //RtbHighlightBehavior.Attach(this);
-            //    //RtbViewDropBehavior.Attach(this);
-            //}
+                RtbHighlightBehavior.Attach(this);
+                ContentViewDropBehavior.Attach(this);
+            }
         }
 
         private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
-            //RtbHighlightBehavior.Detach();
-            //RtbViewDropBehavior.Detach();
+            RtbHighlightBehavior.Detach();
+            ContentViewDropBehavior.Detach();
 
             base.OnUnload();
 
@@ -138,11 +134,11 @@ namespace MpWpfApp {
             //BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
             //BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
 
-            if(BindingContext.Parent != null) {
+            if(BindingContext != null) {
                 MpMessenger.Unregister<MpMessageType>(
-                    BindingContext.Parent,
+                    BindingContext,
                     ReceivedClipTileViewModelMessage,
-                    BindingContext.Parent);
+                    BindingContext);
             }
 
             var mw = Application.Current.MainWindow as MpMainWindow;
@@ -158,7 +154,8 @@ namespace MpWpfApp {
         }
 
         private void Rtb_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if(BindingContext.IsContentReadOnly) {
+            if(BindingContext.IsContentReadOnly && 
+               !BindingContext.IsSubSelectionEnabled) {
                 e.Handled = true;
                 return;
             }
@@ -291,31 +288,6 @@ namespace MpWpfApp {
             }
         }
 
-        private void Rtb_GotFocus(object sender, RoutedEventArgs e) {
-            //var rtbvm = DataContext as MpContentItemViewModel;
-            //if(!rtbvm.IsSelected) {
-            //    rtbvm.IsSelected = true;
-            //}
-
-            //if(!rtbvm.Parent.IsReadOnly) {
-            //    //rtbvm.IsEditingContent = true;
-            //    var plv = this.GetVisualAncestor<MpContentListView>();
-            //    if (plv != null) {
-            //        var et = plv.GetVisualDescendent<MpRtbEditToolbarView>();
-            //        var ettb = plv.GetVisualDescendent<MpEditTemplateToolbarView>();
-            //        var pttb = plv.GetVisualDescendent<MpPasteTemplateToolbarView>();
-            //        if (et != null) {
-            //            et.SetActiveRtb(Rtb);
-            //        }
-            //        if (ettb != null) {
-            //            ettb.SetActiveRtb(Rtb);
-            //        }
-            //        if (pttb != null) {
-            //            pttb.SetActiveRtb(Rtb);
-            //        }
-            //    }                
-            //}
-        }
         private void Rtb_LostFocus(object sender, RoutedEventArgs e) {
             if (MpDragDropManager.IsDragAndDrop) {
                 return;
@@ -327,7 +299,9 @@ namespace MpWpfApp {
         }
 
         private void Rtb_PreviewKeyUp(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Escape && !BindingContext.IsContentReadOnly) {
+            // BUG For some reason IsContentReadOnly is set to true before this is called
+            // so not checking if read only so should be aight
+            if (e.Key == Key.Escape) {
                 //BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
                 BindingContext.ClearEditing();
             } 
@@ -337,7 +311,7 @@ namespace MpWpfApp {
             BindingContext.IsSelected = true;
             MpIsFocusedExtension.SetIsFocused(Rtb, true);
 
-            if (e.ClickCount >= 2) {
+            if (e.ClickCount >= 2 && BindingContext.IsContentReadOnly) {
                 BindingContext.IsSubSelectionEnabled = true;
                 MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
                 Rtb.SelectAll();

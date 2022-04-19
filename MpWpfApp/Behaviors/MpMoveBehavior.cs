@@ -100,11 +100,11 @@ namespace MpWpfApp {
             AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
 
             if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
-                var dupCheck = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
-                if (dupCheck != null) {
-                    MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
-                    _allMovables.Remove(dupCheck);
-                }
+                //var dupCheck = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
+                //if (dupCheck != null) {
+                //    MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
+                //    _allMovables.Remove(dupCheck);
+                //}
                 _allMovables.Add(rvm);
             }
         }

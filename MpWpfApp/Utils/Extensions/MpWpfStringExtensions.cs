@@ -66,7 +66,9 @@ namespace MpWpfApp {
             };
 
             var fd = string.Empty.ToFlowDocument();
-            var iuc = new InlineUIContainer(pathIcon);
+            var iuc = new InlineUIContainer(pathIcon) {
+                BaselineAlignment = BaselineAlignment.Bottom
+            };
             var p = new Paragraph(iuc);
 
             string pathDir = path;
@@ -75,10 +77,20 @@ namespace MpWpfApp {
             }
 
             var pathLink = new Hyperlink(new Run(Path.GetFileName(pathDir))) {
+                IsEnabled = true,
                 NavigateUri = new Uri(pathDir, UriKind.Absolute)
             };
+            pathLink.RequestNavigate += (s, e) => {
+                return;
+            };
+            pathLink.PreviewMouseDown += (s, e) => {
+                return;
+            };
+            pathLink.MouseEnter += (s, e) => {
+                return;
+            };
             p.Inlines.Add(pathLink);
-
+            fd.Blocks.Clear();
             fd.Blocks.Add(p);
             return fd.ToRichText();
         }

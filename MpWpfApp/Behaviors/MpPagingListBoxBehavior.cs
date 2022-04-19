@@ -127,19 +127,21 @@ namespace MpWpfApp {
 
             double offsetX = 0;
             for (int i = 0; i < totalTileCount; i++) {
-                offsetX += MpMeasurements.Instance.ClipTileMargin * 3;
+                offsetX += MpMeasurements.Instance.ClipTileMargin;
                 int tileHeadId = headItemIds[i];
+
+
+                if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
+                    offsetX += uniqueWidthLookup[tileHeadId];
+                    //offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
+                } else {
+                    offsetX += MpClipTileViewModel.DefaultBorderWidth;
+                }
 
                 if (offsetX >= trackValue) {
                     return i;
                 }
-
-                if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
-                    offsetX += uniqueWidthLookup[tileHeadId];
-                    offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
-                } else {
-                    offsetX += MpClipTileViewModel.DefaultBorderWidth;
-                }
+                offsetX += MpMeasurements.Instance.ClipTileMargin;
             }
 
             return totalTileCount - 1;
@@ -153,8 +155,10 @@ namespace MpWpfApp {
             switch (msg) {
                 //case MpMessageType.Resizing:
                 case MpMessageType.ResizeContentCompleted:
-                    //ApplyOffsetChange(true);
-                    //MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.MaximumScrollOfset));
+                    ApplyOffsetChange(true);
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    
                     break;
             }
         }
@@ -167,6 +171,16 @@ namespace MpWpfApp {
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.JumpToIdxCompleted:
                     AssociatedObject.UpdateLayout();
+                    _velocity = _lastWheelDelta = 0;
+                    var cttvl = AssociatedObject.GetVisualDescendents<MpClipTileTitleView>();
+                    if (cttvl != null) {
+                        foreach (var cttv in cttvl) {
+                            if (cttv.ClipTileTitleMarqueeCanvas != null) {
+                                MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                                MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                            }
+                        }
+                    }
                     break;
             }
         }
@@ -240,13 +254,14 @@ namespace MpWpfApp {
                 //    return ;
                 //}
                 double newTrackVal = (htrack_mp.X / htrack.RenderSize.Width) * htrack.Maximum;
-                newTrackVal += htrack.Thumb.RenderSize.Width / 2;
+                //newTrackVal += htrack.Thumb.RenderSize.Width / 2;
                 newTrackVal = Math.Min(Math.Max(htrack.Minimum, newTrackVal), htrack.Maximum);
                 //MpClipTrayViewModel.Instance.ScrollOffset = newTrackVal;
                 
                 int targetTileIdx = FindJumpTileIdx(newTrackVal);
 
                 MpClipTrayViewModel.Instance.JumpToQueryIdxCommand.Execute(targetTileIdx);
+                //MpClipTrayViewModel.Instance.RequeryCommand.Execute(targetTileIdx);
 
                 return;
             });

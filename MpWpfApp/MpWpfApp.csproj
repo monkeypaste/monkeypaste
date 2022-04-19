@@ -149,7 +149,6 @@
     <Compile Include="Behaviors\Highlighting\MpSourceHighlightBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Selector\MpHighlightSelectorBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Interfaces\MpIHighlightRegion.cs" />
-    <Compile Include="Behaviors\Highlighting\MpFileListItemHighlightBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\MpRtbHighlightBehavior.cs" />
     <Compile Include="Behaviors\Input\MpKeyGestureBehavior.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
@@ -533,14 +532,8 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml.cs">
       <DependentUpon>MpClipTileContainerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FileList\MpFileListItemView.xaml.cs">
-      <DependentUpon>MpFileListItemView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\MpImageItemView.xaml.cs">
       <DependentUpon>MpImageItemView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentListVIew.xaml.cs">
-      <DependentUpon>MpContentListVIew.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Selector\MpContentViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Hyperlinks\MpTextHyperlink.xaml.cs">
@@ -769,15 +762,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FileList\MpFileListItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\MpImageItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentListVIew.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -2836,6 +2821,7 @@
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Plugins\Google\PeopleApi\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
+    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FileList\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>
   <ItemGroup>

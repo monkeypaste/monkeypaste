@@ -77,6 +77,8 @@
                                         Value="{Binding TrayX}" />
                                 <Setter Property="Canvas.Top"
                                         Value="0" />
+                                <Setter Property="SnapsToDevicePixels"
+                                        Value="True" />
                                 <Setter Property="Visibility"
                                         Value="{Binding IsPlaceholder,
                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}" />
@@ -130,9 +132,8 @@
                        FontStyle="Oblique"
                        FontSize="34">
                 <TextBlock.Inlines>
-                    <Run Text="'" />
                     <Run Text="{Binding SelectedTagTile.TagName, Source={x:Static local:MpTagTrayViewModel.Instance}, FallbackValue=This}" />
-                    <Run Text="' has no items" />
+                    <Run Text="has no items" />
                 </TextBlock.Inlines>
             </TextBlock>
         </Grid>

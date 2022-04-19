@@ -445,17 +445,42 @@ namespace MpWpfApp {
             None = 0
         }
 
+        public static IEnumerable<TextRange> FindAllText(
+            this TextPointer start,
+            TextPointer end,
+            string input,
+            bool isCaseSensitive = true) {
+            if (start == null) {
+                yield return null;
+            }
+
+            //var matchRangeList = new List<TextRange>();
+            while (start != null && start != end) {
+                var matchRange = start.FindText(end, input, isCaseSensitive ? FindFlags.MatchCase : FindFlags.None);
+                if (matchRange == null) {
+                    break;
+                }
+                //matchRangeList.Add(matchRange);
+                start = matchRange.End.GetNextContextPosition(LogicalDirection.Forward);
+                yield return matchRange;
+            }
+
+            //return matchRangeList;
+        }
 
         public static TextRange FindText(
-            this TextPointer findContainerStartPosition, 
-            TextPointer findContainerEndPosition, 
+            this TextPointer start, 
+            TextPointer end, 
             string input, 
             FindFlags flags = FindFlags.MatchCase, 
             CultureInfo cultureInfo = null) {
+            if(string.IsNullOrEmpty(input) || start == null || end == null) {
+                return null;
+            }
             cultureInfo = cultureInfo == null ? CultureInfo.CurrentCulture : cultureInfo;
 
             TextRange textRange = null;
-            if (findContainerStartPosition.CompareTo(findContainerEndPosition) < 0) {
+            if (start.CompareTo(end) < 0) {
                 try {
                     if (findMethod == null) {
                         findMethod = typeof(FrameworkElement).Assembly
@@ -463,8 +488,8 @@ namespace MpWpfApp {
                                         .GetMethod("Find", BindingFlags.Static | BindingFlags.Public);
                     }
                     object result = findMethod.Invoke(null, new object[] { 
-                        findContainerStartPosition,
-                        findContainerEndPosition,
+                        start,
+                        end,
                         input, flags, cultureInfo });
                     textRange = result as TextRange;
                 }

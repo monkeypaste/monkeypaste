@@ -130,11 +130,11 @@ namespace MpWpfApp {
 
         public string ItemBackgroundHexColor {
             get {
-                if(MpDragDropManager.IsDragAndDrop) {
+                if(MpDragDropManager.IsDragAndDrop || Parent == null) {
                     return MpSystemColors.White;
                 }
                 if (IsHovering &&
-                    ((!IsContentReadOnly && !IsSelected) || IsContentReadOnly) &&
+                    ((!Parent.IsContentReadOnly && !IsSelected) || Parent.IsContentReadOnly) &&
                     Parent.Count > 1) {
                     return MpColorHelpers.GetLighterHexColor(CopyItemHexColor, 0.75);
                 }
@@ -199,7 +199,7 @@ namespace MpWpfApp {
                 }
                 if(USING_BROWSER) {
                     double h;
-                    if (!IsContentReadOnly) {
+                    if (!Parent.IsContentReadOnly) {
                         if (Parent.Count > 1) {
                             h = Double.NaN;
                         }
@@ -215,7 +215,7 @@ namespace MpWpfApp {
                     return h;
                 } else {
 
-                    if (!IsContentReadOnly) {
+                    if (!Parent.IsContentReadOnly) {
                         if (Parent.Count > 1) {
                             return Double.NaN;
                         }
@@ -271,7 +271,7 @@ namespace MpWpfApp {
                 if (Parent == null) {
                     return new Size();
                 }
-                if (!IsContentReadOnly) {
+                if (!Parent.IsContentReadOnly) {
                     return EditableContentSize;
                 }
                 return ReadOnlyContentSize;
@@ -361,13 +361,11 @@ namespace MpWpfApp {
 
         public bool IsTitleReadOnly { get; set; } = true;
 
-        public bool IsContentReadOnly { get; set; } = true;
-
         public bool IsContentFocused { get; set; } = false;
 
         public bool IsTitleFocused { get; set; } = false;
 
-        public bool IsEditingContent => IsContentFocused && !IsContentReadOnly;
+        //public bool IsEditingContent => IsContentFocused && !IsContentReadOnly;
 
         public bool IsEditingTitle => IsTitleFocused && IsSelected;
 
@@ -659,7 +657,6 @@ namespace MpWpfApp {
         public event EventHandler<bool> OnUiResetRequest;
         public event EventHandler OnClearTemplatesRequest;
         public event EventHandler OnCreateTemplatesRequest;
-        public event EventHandler OnSyncModels;
 
         #endregion
 
@@ -715,9 +712,7 @@ namespace MpWpfApp {
         public void RequestFitContent() {
             OnFitContentRequest?.Invoke(this, null);
         }
-        public void RequestSyncModel() {
-            OnSyncModels?.Invoke(this, null);
-        }
+        
         
         public void RequestMerge() {
             OnMergeRequest?.Invoke(this, null);
@@ -799,7 +794,7 @@ namespace MpWpfApp {
             //IsEditingContent = false;
             //IsEditingTitle = false;
             IsTitleReadOnly = true;
-            IsContentReadOnly = true;
+            Parent.IsContentReadOnly = true;
             TemplateCollection?.ClearAllEditing();
             if (IsPasting) {
                 IsPasting = false;
@@ -850,7 +845,7 @@ namespace MpWpfApp {
                 if (sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if(e is MpCopyItem ci) {
+            } else if(e is MpCopyItem ci && ci.Id == CopyItemId) {
                 if(ci.Id == CopyItemId) {
 
                 }
@@ -924,7 +919,7 @@ namespace MpWpfApp {
                                 .Where(x => x != this)
                                 .ForEach(y => y.IsSelected = false);
                         }
-                        Parent.RequestScrollIntoView(this);
+                        //Parent.RequestScrollIntoView(this);
 
                         if(!IsTitleFocused) {
                             IsContentFocused = true;
@@ -1006,18 +1001,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(HotkeyIconSource));
                     OnPropertyChanged(nameof(HotkeyIconTooltip));
                     break;
-                case nameof(IsContentReadOnly):
-                    OnPropertyChanged(nameof(EditorHeight));
-                    Parent.OnPropertyChanged(nameof(Parent.HorizontalScrollbarVisibility));
-                    Parent.OnPropertyChanged(nameof(Parent.VerticalScrollbarVisibility));
-                    Parent.OnPropertyChanged(nameof(Parent.IsContentReadOnly));
-                    if (IsContentReadOnly) {
-                        // BUG when content is editable and new items are added and the
-                        // list is refreshed the tile goes back to readonly, resizes but
-                        // toolbars don't go away and properties get out of sync
-                        ClearEditing();
-                    }
-                    break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         Task.Run(async () => {
@@ -1098,13 +1081,6 @@ namespace MpWpfApp {
             },
             () => IsSelected);
 
-        public ICommand UnexpandItemCommand => new RelayCommand(
-            () => {
-                RequestSyncModel();
-                ClearEditing();
-                OnPropertyChanged(nameof(EditorHeight));
-                OnPropertyChanged(nameof(IsEditingContent));
-            });
 
         public ICommand CycleDetailCommand => new RelayCommand(
             () => {
@@ -1118,24 +1094,6 @@ namespace MpWpfApp {
             });
 
 
-        private RelayCommand _sendSubSelectedToEmailCommand;
-        public ICommand SendSubSelectedToEmailCommand {
-            get {
-                if (_sendSubSelectedToEmailCommand == null) {
-                    _sendSubSelectedToEmailCommand = new RelayCommand(SendSubSelectedToEmail, CanSendSubSelectedToEmail);
-                }
-                return _sendSubSelectedToEmailCommand;
-            }
-        }
-        private bool CanSendSubSelectedToEmail() {
-            return !IsEditingContent;
-        }
-        private void SendSubSelectedToEmail() {
-            MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItem.Title, CopyItem.ItemData.ToPlainText()));
-            //MpClipTrayViewModel.Instance.ClearClipSelection();
-            //IsSelected = true;
-            //MpHelpers.CreateEmail(MpPreferences.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
-        }
 
         private RelayCommand _createQrCodeFromSubSelectedItemCommand;
         public ICommand CreateQrCodeFromSubSelectedItemCommand {
@@ -1164,18 +1122,6 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(ShortcutKeyString));
             });
 
-        public ICommand RefreshDocumentCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        RequestSyncModel();
-                        //MessageBox.Show(TemplateCollection.ToString());
-                    },
-                    () => {
-                        return true;// HasModelChanged
-                    });
-            }
-        }
 
         private RelayCommand _editSubTitleCommand;
         public ICommand EditSubTitleCommand {
@@ -1217,17 +1163,6 @@ namespace MpWpfApp {
                 CopyItemHexColor = b.ToHex();
             });
 
-        public ICommand BringToFrontCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        Parent.BringToFrontCommand.Execute(null);
-                    },
-                    () => {
-                        return Parent.BringToFrontCommand.CanExecute(null);
-                    });
-            }
-        }
 
 
         public ICommand CopyCommand {

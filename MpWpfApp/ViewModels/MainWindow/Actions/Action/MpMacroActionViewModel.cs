@@ -72,11 +72,7 @@ namespace MpWpfApp {
                 } else {
                     if(arg is MpCompareOutput co) {
                         var fd = co.CopyItem.ItemData.ToFlowDocument();
-                        var matchRanges = await MpHelpers.FindStringRangesFromPositionAsync(
-                             position: fd.ContentStart,
-                             matchStr: co.MatchValue, 
-                             isCaseSensitive: (ParentActionViewModel as MpCompareActionViewModelBase).IsCaseSensitive,
-                             ct: MpActionCollectionViewModel.CTS.Token);
+                        var matchRanges = fd.ContentStart.FindAllText(fd.ContentEnd,co.MatchValue, (ParentActionViewModel as MpCompareActionViewModelBase).IsCaseSensitive);
 
                         foreach(var matchRange in matchRanges) {
                             var hl = new Hyperlink(matchRange.Start, matchRange.End);

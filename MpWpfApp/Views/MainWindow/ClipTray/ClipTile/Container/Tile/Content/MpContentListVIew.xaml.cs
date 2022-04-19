@@ -143,10 +143,10 @@ namespace MpWpfApp {
                 return;
             }
             BindingContext.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
-            BindingContext.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
+            //BindingContext.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
             BindingContext.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
             BindingContext.PropertyChanged -= Rtbcvm_PropertyChanged;
-            BindingContext.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
+            //BindingContext.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
         }
 
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
@@ -172,17 +172,17 @@ namespace MpWpfApp {
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {            
             if(e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
                 octvm.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
-                octvm.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
+                //octvm.OnScrollIntoViewRequest -= Rtbcvm_OnScrollIntoViewRequest;
                 octvm.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
                 octvm.PropertyChanged -= Rtbcvm_PropertyChanged;
-                octvm.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
+               // octvm.OnListBoxRefresh -= Octvm_OnListBoxRefresh;
             }
             if(e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
                 nctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
-                nctvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
+                //nctvm.OnScrollIntoViewRequest += Rtbcvm_OnScrollIntoViewRequest;
                 nctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
                 nctvm.PropertyChanged += Rtbcvm_PropertyChanged;
-                nctvm.OnListBoxRefresh += Octvm_OnListBoxRefresh;
+                //nctvm.OnListBoxRefresh += Octvm_OnListBoxRefresh;
             } 
         }
 

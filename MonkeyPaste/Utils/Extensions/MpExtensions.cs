@@ -23,6 +23,15 @@ namespace MonkeyPaste {
 
         #region Collections
 
+        public static int FastIndexOf<T>(this IList<T> list, T value) {
+            //this is 15x faster according to: https://stackoverflow.com/a/8266937/105028
+            for (int index = 0; index < list.Count; index++) {
+                if (list[index].Equals(value)) {
+                    return index;
+                }
+            }
+            return -1;
+        }
         public static bool IsNullOrEmpty<T>(this IList<T> list) {
             return list == null || list.Count == 0;
         }

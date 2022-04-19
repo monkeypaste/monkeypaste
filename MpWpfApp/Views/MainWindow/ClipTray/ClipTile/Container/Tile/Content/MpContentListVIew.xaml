@@ -25,7 +25,7 @@
                                     DockPanel.Dock="Top"
                                     Visibility="{Binding IsContentReadOnly,
                                                          Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                    DataContext="{Binding PrimaryItem}" />
+                                    DataContext="{Binding}" />
         <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
                                          DockPanel.Dock="Bottom"
                                          Visibility="{Binding IsAnyEditingTemplate,
@@ -38,24 +38,6 @@
                                                                Converter={StaticResource BoolToVisibilityConverter},
                                                                TargetNullValue=Collapsed}"
                                           DataContext="{Binding PrimaryItem.TemplateCollection}" />
-        <!--<local:MpRtbEditToolbarView x:Name="EditToolbarView"
-                                    DockPanel.Dock="Top"
-                                    Visibility="Collapsed"
-                                    DataContext="{Binding PrimaryItem}" />
-        <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
-                                         DockPanel.Dock="Bottom"
-                                         Visibility="Collapsed"
-                                         DataContext="{Binding PrimaryItem.TemplateCollection}" />
-        <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
-                                          DockPanel.Dock="Bottom"
-                                          Visibility="Collapsed"
-                                          DataContext="{Binding PrimaryItem.TemplateCollection}" />-->
-        <!--<AdornerDecorator>
-            <ContentControl ContentTemplateSelector="{StaticResource ContentListViewSelector}"
-                            Loaded="ContentControl_Loaded"
-                            Content="{Binding}" />
-        </AdornerDecorator>-->
-
         <local:MpContentView DataContext="{Binding}" />
     </DockPanel>
 </local:MpUserControl>

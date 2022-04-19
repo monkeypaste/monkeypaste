@@ -31,7 +31,8 @@
                         MouseEnter="ClipTileClipBorder_MouseEnter"
                         MouseLeave="ClipTileClipBorder_MouseLeave"
                         LostFocus="ClipTileClipBorder_LostFocus"
-                        Focusable="False" 
+                        Focusable="False"
+                        SnapsToDevicePixels="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         ToolTipService.ShowDuration="1000"
@@ -108,7 +109,30 @@
                                                                  ConverterParameter={StaticResource Hide}}"
                                             DataContext="{Binding PrimaryItem}" />
                 <!--  Content Container Canvas  -->
-                <local:MpContentListView x:Name="ContentListView" DataContext="{Binding}" />
+
+                <DockPanel x:Name="ContentListDockPanel"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch">
+                    <local:MpRtbEditToolbarView x:Name="EditToolbarView"
+                                                DockPanel.Dock="Top"
+                                                Visibility="{Binding IsContentReadOnly,
+                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                DataContext="{Binding}" />
+                    <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
+                                                     DockPanel.Dock="Bottom"
+                                                     Visibility="{Binding IsAnyEditingTemplate,
+                                                                          Converter={StaticResource BoolToVisibilityConverter},
+                                                                          TargetNullValue=Collapsed}"
+                                                     DataContext="{Binding PrimaryItem.TemplateCollection}" />
+                    <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
+                                                      DockPanel.Dock="Bottom"
+                                                      Visibility="{Binding Parent.IsPastingTemplate,
+                                                                           Converter={StaticResource BoolToVisibilityConverter},
+                                                                           TargetNullValue=Collapsed}"
+                                                      DataContext="{Binding PrimaryItem.TemplateCollection}" />
+                    <local:MpContentView x:Name="ContentView"
+                                         DataContext="{Binding}" />
+                </DockPanel>
 
             </DockPanel>
             <!--  Overlays  -->
@@ -124,8 +148,7 @@
                 </local:MpClipTileLoadingOverlayView.Background>
             </local:MpClipTileLoadingOverlayView>
             <!--  Trial Expired  -->
-            <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired,
-                                                                                     Converter={StaticResource BoolToVisibilityConverter}}" />
+            <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>
     </local:MpClipBorder>
 </local:MpUserControl>

@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Media;
+using System.Linq;
 
 namespace MpWpfApp {
     public enum MpHighlightType {
@@ -132,10 +133,7 @@ namespace MpWpfApp {
             }
             string st = MpDataModelProvider.QueryInfo.SearchText;
 
-            _matches = MpHelpers.FindStringRangesFromPosition(
-                ContentRange.Start,
-                st);
-
+            _matches = ContentRange.Start.FindAllText(ContentRange.End, st).ToList();
             SelectedIdx = -1;
 
             if (_matches.Count > 1) {
@@ -153,6 +151,9 @@ namespace MpWpfApp {
         }
 
         public virtual void ApplyHighlighting() {
+            if(_matches.Count == 0) {
+                return;
+            }
             for (int i = 0; i < _matches.Count; i++) {
                 var match = _matches[i];
                 Brush b = i == SelectedIdx ? ActiveHighlightBrush : InactiveHighlightBrush;

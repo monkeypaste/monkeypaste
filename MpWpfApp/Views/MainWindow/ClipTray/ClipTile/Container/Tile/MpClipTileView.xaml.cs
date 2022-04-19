@@ -29,28 +29,15 @@ namespace MpWpfApp {
 
         private void ClipTileClipBorder_Unloaded(object sender, RoutedEventArgs e) {
             HighlightSelectorBehavior.Detach();
-            if (BindingContext == null) {
-                return;
-            }
-            BindingContext.OnSearchRequest -= Ctvm_OnSearchRequest;
+
         }
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if (e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
-                octvm.OnFocusRequest -= Nctvm_OnFocusRequest;
-                octvm.OnSearchRequest -= Ctvm_OnSearchRequest;
-            }
-            if (e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
-                nctvm.OnFocusRequest += Nctvm_OnFocusRequest;
-                nctvm.OnSearchRequest += Ctvm_OnSearchRequest;
-                UpdateLayout();
-            }
+
+            UpdateLayout();
         }
 
         private void Nctvm_OnFocusRequest(object sender, EventArgs e) {
-            if(ContentListView != null && ContentListView.ContentListBox != null) {
-                bool result = ContentListView.ContentListBox.Focus();
-                MpConsole.WriteLine($"Tile {BindingContext.HeadItem.CopyItemTitle} {(result ? "SUCCESSFULLY" : "UNSUCESSFULLY")} received focus");
-            }
+            Focus();
         }
 
         private void ClipTileClipBorder_MouseEnter(object sender, MouseEventArgs e) {
@@ -66,17 +53,38 @@ namespace MpWpfApp {
                 BindingContext.ClearEditing();
             }
         }
-
-
-        private void Ctvm_OnSearchRequest(object sender, string e) {
-            if(BindingContext.IsPlaceholder) {
-                return;
+        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if (e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
+                octvm.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;
+                octvm.OnScrollToHomeRequest -= Rtbcvm_OnScrollToHomeRequest;
+                octvm.PropertyChanged -= Rtbcvm_PropertyChanged;
             }
-            //var result = await BindingContext.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(e, TitlesAndRtbs);
+            if (e.NewValue != null && e.NewValue is MpClipTileViewModel nctvm) {
+                nctvm.OnUiUpdateRequest += Rtbcvm_OnUiUpdateRequest;
+                nctvm.OnScrollToHomeRequest += Rtbcvm_OnScrollToHomeRequest;
+                nctvm.PropertyChanged += Rtbcvm_PropertyChanged;
+            }
+        }
+        private void Rtbcvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var ctvm = sender as MpClipTileViewModel;
+            switch (e.PropertyName) {
+                case nameof(ctvm.IsSelected):
+                    break;
+                case nameof(ctvm.IsBusy):
+                    if (!ctvm.IsBusy) {
+                        UpdateLayout();
+                    }
+                    break;
+            }
         }
 
+        private void Rtbcvm_OnUiUpdateRequest(object sender, EventArgs e) {
+            UpdateLayout();
+        }
 
-        
+        private void Rtbcvm_OnScrollToHomeRequest(object sender, EventArgs e) {
+            ContentView.ScrollToHome();
+        }
 
         private void ClipTileClipBorder_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
             e.Handled = true;

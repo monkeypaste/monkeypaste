@@ -55,7 +55,7 @@ namespace MonkeyPaste {
             sw.Stop();
             MpConsole.WriteLine($"{ItemType} loaded in {sw.ElapsedMilliseconds} ms");
 
-            await Task.Delay(300);
+            //await Task.Delay(300);
         }
     }
 }

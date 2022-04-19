@@ -240,7 +240,6 @@ namespace MpWpfApp {
                 } else {
                     ;
                 }
-
             }
             var rtb = AssociatedObject.Rtb;
             var drtb = Application.Current.MainWindow.GetVisualDescendents<MpContentView>()
@@ -334,7 +333,7 @@ namespace MpWpfApp {
             // isolate insertion point and account for block drop
             var dtp = rtb.Document.ContentStart.GetPositionAtOffset(dropIdx).GetNextInsertionPosition(LogicalDirection.Backward);
             if (_isPreBlockDrop) {
-                dtp = dtp.GetLineStartPosition(0).InsertLineBreak();
+                dtp = dtp.GetLineStartPosition(0).InsertParagraphBreak();
             } else if (_isPostBlockDrop) {
                 if(dtp == null || dtp.GetLineStartPosition(1) == null) {
                     //at end of document
@@ -342,7 +341,7 @@ namespace MpWpfApp {
                 } else {
                     dtp = dtp.GetLineStartPosition(1);
                 }
-                dtp = dtp.InsertLineBreak();
+                dtp = dtp.InsertParagraphBreak();
             }
 
             //insert encoded items
@@ -365,7 +364,7 @@ namespace MpWpfApp {
                 } else {
                     dtp = dtp.GetLineStartPosition(1);
                 }
-                dtp = dtp.InsertLineBreak();
+                dtp = dtp.InsertParagraphBreak();
             } 
 
             var allTargetItems = dropCopyItems;

@@ -532,6 +532,10 @@ namespace MonkeyPaste {
                             .Where(x => x.CompositeParentCopyItemId == 0)
                             .Select(x => queryResult
                                             .Where(y => y.Id == x.Id || y.CompositeParentCopyItemId == x.Id).OrderBy(x=>x.CompositeSortOrderIdx).ToList()).ToList();
+            if(result.Count != ciida.Count) {
+                // BUG grand children are storing parent instead of root/grand parent and not matched correctly
+                Debugger.Break();
+            }
             return result;
         }
 

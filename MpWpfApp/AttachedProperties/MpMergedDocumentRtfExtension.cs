@@ -81,12 +81,12 @@ namespace MpWpfApp {
                 }
             });
 
-        private static void EnableReadOnly(FrameworkElement fe) {
+        private static async void EnableReadOnly(FrameworkElement fe) {
+            await SaveTextContent(fe as RichTextBox);
             var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
             if (ctcv != null) {
                 ctcv.TileResizeBehvior.Resize(_readOnlyWidth - ctcv.ActualWidth, 0);
-            }
-            SaveTextContent(fe as RichTextBox).FireAndForgetSafeAsync(fe.DataContext as MpClipTileViewModel);
+            }//.FireAndForgetSafeAsync(fe.DataContext as MpClipTileViewModel);
         }
 
         private static void DisableReadOnly(FrameworkElement fe) {
@@ -109,23 +109,23 @@ namespace MpWpfApp {
             if(rtb.DataContext is MpClipTileViewModel ctvm) {
                 var contentLookup = new Dictionary<string, List<TextElement>>();
 
-                var allTextElements = rtb.Document.GetAllTextElements();
+                var allTextElements = rtb.Document.GetAllTextElements().ToList();
                 foreach(var te in allTextElements) {
+                    // fill dictionary w/ all text elements per copy item in doc order
                     if(te.Tag == null) {
+                        Debugger.Break();
                         throw new Exception("Error all text elements should have a model as their tag (either MpCopyItem or MpTextTemplate)");
                     }
-                    if(te.Tag is MpDbModelBase dbo) {
-                        if(dbo is MpTextTemplate) {
-                            continue;
+                    if(te.Tag is MpCopyItemReference dbo) {                        
+                        if(!contentLookup.ContainsKey(dbo.CopyItemGuid)) {
+                            contentLookup.Add(dbo.CopyItemGuid, new List<TextElement>());
                         }
-                        if(!contentLookup.ContainsKey(dbo.Guid)) {
-                            contentLookup.Add(dbo.Guid, new List<TextElement>());
-                        }
-                        contentLookup[dbo.Guid].Add(te);
-                        contentLookup[dbo.Guid].Sort((a, b) => {
+                        contentLookup[dbo.CopyItemGuid].Add(te);
+                        contentLookup[dbo.CopyItemGuid].Sort((a, b) => {
                             return a.ContentStart.CompareTo(b.ContentStart);
                         });
                     }
+                    // TODO should add template reference obj and check here probably
                 }
 
                 foreach(var ckvp in contentLookup) {
@@ -134,15 +134,22 @@ namespace MpWpfApp {
                     var end = ckvp.Value.Aggregate((a, b) =>
                         rtb.Document.ContentStart.GetOffsetToPosition(a.ElementEnd) > rtb.Document.ContentStart.GetOffsetToPosition(b.ElementEnd) ? a : b).ElementEnd;
 
-                    var cil = await MpDataModelProvider.GetCopyItemsByGuids(new string[] { ckvp.Key });
-                    if(cil == null || cil.Count == 0) {
-                        //a new item
+                    string itemRtf = new TextRange(start, end).ToRichText();
+                    var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(ckvp.Key);
+                    if(civm == null) {
+                        // NOTE this should proibably not happen
+                        var ci = await MpDataModelProvider.GetCopyItemByGuid(ckvp.Key);
+                        if (ci == null) {
+                            //a new item
 
+                        } else {
+                            ci.ItemData = itemRtf;
+                            await ci.WriteToDatabaseAsync();
+                        }
                     } else {
-                        string itemRtf = new TextRange(start, end).ToRichText();
-                        cil[0].ItemData = itemRtf;
-                        await cil[0].WriteToDatabaseAsync();
+                        civm.CopyItemData = itemRtf;
                     }
+                    
                 }
             }
         }
@@ -181,12 +188,12 @@ namespace MpWpfApp {
             });
 
 
-        private static void Rtb_Loaded(object sender, RoutedEventArgs e) {
+        private static async void Rtb_Loaded(object sender, RoutedEventArgs e) {
             var rtb = sender as RichTextBox;
             if(rtb == null) {
                 return;
             }
-            LoadContent(rtb).FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
+            await LoadContent(rtb);//.FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
         }
 
         public static async Task<List<MpCopyItem>> EncodeContent(RichTextBox rtb) {
@@ -232,7 +239,7 @@ namespace MpWpfApp {
         }
 
         private static async Task LoadContent(RichTextBox rtb) {
-            if(rtb == null) {
+             if(rtb == null) {
                 return;
             }
             var ctvm = rtb.DataContext as MpClipTileViewModel;
@@ -284,8 +291,6 @@ namespace MpWpfApp {
 
                     rtb.VerticalAlignment = VerticalAlignment.Top;
                     rtb.VerticalContentAlignment = VerticalAlignment.Top;
-                    rtb.GetVisualAncestor<MpContentListView>().VerticalAlignment = VerticalAlignment.Top;
-                    rtb.GetVisualAncestor<MpContentListView>().VerticalContentAlignment = VerticalAlignment.Top;
                     break;
             }
 
@@ -299,6 +304,11 @@ namespace MpWpfApp {
             if (ci == default) {
                 MpConsole.WriteLine("error fetching copy item: " + itemGuid);
                 ci = await MpDataModelProvider.GetCopyItemByGuid(itemGuid);
+                if(ci == default) {
+                    MpConsole.WriteLine("and " + itemGuid + " was not found");
+                } else {
+                    MpConsole.WriteLine("but " + itemGuid + " was found");
+                }
             }
 
             FlowDocument fd = ci.ItemData.ToFlowDocument(ci.IconId);
@@ -382,8 +392,8 @@ namespace MpWpfApp {
             fd.Tag = cir;
             allTextElements.Where(x => x.Tag == null).ForEach(x => x.Tag = cir);
 
-            MpConsole.WriteLine("FlowDoc w/ Tags Xaml:");
-            MpConsole.WriteLine(fd.ToXamlPackage());
+            //MpConsole.WriteLine("FlowDoc w/ Tags Xaml:");
+            //MpConsole.WriteLine(fd.ToXamlPackage());
             return fd;
         }
 

@@ -28,6 +28,8 @@
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
 
+        private int _lastQueryOffset = -1;
+
         #endregion
 
         #region Statics
@@ -497,7 +499,14 @@
 
         public bool IsResizing { get; set; } = false;
 
-        public int QueryOffsetIdx { get; set; } = 0;
+        public int QueryOffsetIdx { 
+            get {
+                if(IsPlaceholder) {
+                    return -1;
+                }
+                return MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(HeadItem.CopyItemId);
+            }
+        }
 
         public bool IsLoading {
             get {
@@ -593,7 +602,7 @@
 
         public int Count => ItemViewModels.Count;
 
-        public bool IsContentReadOnly => ItemViewModels.All(x => x.IsContentReadOnly);
+        public bool IsContentReadOnly { get; set; } = true;
 
         public bool IsTitleReadOnly => ItemViewModels.All(x => x.IsTitleReadOnly);
 
@@ -671,18 +680,11 @@
             }
         }
 
-        public bool IsNew { get; set; } = false;
 
         [MpDependsOnChild("IsPlaceholder")]
         public bool IsPlaceholder {
             get {
-                if(IsNew) {
-                    return false;
-                }
-                if (Parent == null || ItemViewModels.Count == 0) {
-                    return true;
-                }
-                if (IsPinned) {
+                if (Parent == null || ItemViewModels.Count == 0 ||  HeadItem == null || IsPinned) {
                     return true;
                 }
                 return false;
@@ -737,13 +739,10 @@
 
         #region Events
 
-        public event EventHandler<string> OnSearchRequest;
-
-        public event EventHandler OnListBoxRefresh;
         public event EventHandler OnUiUpdateRequest;
-        public event EventHandler<object> OnScrollIntoViewRequest;
         public event EventHandler OnScrollToHomeRequest;
         public event EventHandler OnFocusRequest;
+        public event EventHandler OnSyncModels;
 
         #endregion
 
@@ -770,9 +769,23 @@
             PropertyChanged -= MpClipTileViewModel_PropertyChanged;
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
 
-            QueryOffsetIdx = queryOffset < 0 ? QueryOffsetIdx : queryOffset;
+            //QueryOffsetIdx = queryOffset < 0 ? QueryOffsetIdx : queryOffset;
             IsBusy = true;
 
+            if(items != null && items.Count > 0 && !string.IsNullOrEmpty(items[0].RootCopyItemGuid)) {
+                // NOTE this ensures root item is first so it becomes the head
+                var headItem = items.FirstOrDefault(x => string.IsNullOrEmpty(x.RootCopyItemGuid));
+                if(headItem == null) {
+                    throw new Exception("There should be a root item...");
+                }
+                items.Remove(headItem);
+                items.Insert(0, headItem);
+            }
+            if( items != null && items.Count > 0 && queryOffset >= 0) {
+                if(MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(items[0].Id) != queryOffset) {
+                    Debugger.Break();
+                }
+            }
             ItemViewModels.Clear();
             if (items != null && items.Count > 0 && Parent.PersistentUniqueWidthTileLookup.TryGetValue(items[0].Id, out double uniqueWidth)) {
                 TileBorderWidth = uniqueWidth;
@@ -782,16 +795,26 @@
 
             if (items != null && items.Count > 0) {
                 for (int i = 0; i < items.Count; i++) {
-                    //if (ItemViewModels.Any(x => x.CopyItemId == items[i].Id)) {
-                    //    //this prevents a strange bug i think from async loading that loads 2 of each item
-                    //    continue;
-                    //}
-                    //items[i].CompositeParentCopyItemId = i == 0 ? 0 : items[0].Id;
-                    //items[i].CompositeSortOrderIdx = i;
-                    var civm = await CreateContentItemViewModel(items[i]);
+                    if(i > 0 && string.IsNullOrEmpty(items[i].RootCopyItemGuid)) {
+                        MpConsole.WriteLine("warning, initializing tile w/ head item " + items[0].CopyItemSourceGuid + " fragment item " + items[i].Guid + " did not have root guid set, fixing...");
+                        items[i].RootCopyItemGuid = items[0].Guid;
+                        await items[i].WriteToDatabaseAsync();
+                    }
+                    if (i > 0 && items[i].CompositeParentCopyItemId == 0 && !string.IsNullOrEmpty(items[i].RootCopyItemGuid)) {
+                        MpConsole.WriteLine("warning, initializing tile w/ head item " + items[0].CopyItemSourceGuid + " fragment item " + items[i].Guid + " did not have parent id set, fixing...");
+                        items[i].CompositeParentCopyItemId = items[0].Id;
+                        await items[i].WriteToDatabaseAsync();
+                    }
+                    if (i > 0 && items[i].CompositeSortOrderIdx == 0) {
+                        MpConsole.WriteLine("warning, initializing tile w/ head item " + items[0].CopyItemSourceGuid + " fragment item " + items[i].Guid + " did not have non-zero sort idx, fixing...");
+                        items[i].CompositeSortOrderIdx = i;
+                        await items[i].WriteToDatabaseAsync();
+                    }
+
+                     var civm = await CreateContentItemViewModel(items[i]);
                     ItemViewModels.Add(civm);
                 }
-                IsNew = false;
+                OnPropertyChanged(nameof(QueryOffsetIdx)); 
                 RequestUiUpdate();
 
                 MpMessenger.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
@@ -807,105 +830,10 @@
             OnPropertyChanged(nameof(TileBorderBrush));
             OnPropertyChanged(nameof(CanVerticallyScroll));
             OnPropertyChanged(nameof(HeadItem));
-
-            IsBusy = false;
-        }
-
-        public async Task InitializeAsync(MpCopyItem headItem, int queryOffset = -1) {
-            PropertyChanged -= MpClipTileViewModel_PropertyChanged;
-            PropertyChanged += MpClipTileViewModel_PropertyChanged;
-
-            QueryOffsetIdx = queryOffset < 0 ? QueryOffsetIdx : queryOffset;
-            IsBusy = true;
-
-            ItemViewModels.Clear();
-            if(headItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(headItem.Id, out double uniqueWidth)) {
-                TileBorderWidth = uniqueWidth;
-            } else {
-                TileBorderWidth = DefaultBorderHeight;
+            if (HeadItem != null) {
+                // BUG titles not updating on load more
+                HeadItem.OnPropertyChanged(nameof(HeadItem.CopyItemTitle));
             }
-
-            if (headItem != null) {
-
-                var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(headItem.Id);
-                ccil.Insert(0, headItem);
-
-                for (int i = 0; i < ccil.OrderBy(x => x.CompositeSortOrderIdx).Count(); i++) {
-                    if (ItemViewModels.Any(x => x.CopyItemId == ccil[i].Id)) {
-                        //this prevents a strange bug i think from async loading that loads 2 of each item
-                        continue;
-                    }
-                    ccil[i].CompositeParentCopyItemId = i == 0 ? 0 : ccil[0].Id;
-                    ccil[i].CompositeSortOrderIdx = i;
-                    var civm = await CreateContentItemViewModel(ccil[i]);
-                    ItemViewModels.Add(civm);
-                }
-                IsNew = false;
-                RequestUiUpdate();
-
-                MpMessenger.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
-            }
-
-            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
-            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.EditorHeight)));
-
-            OnPropertyChanged(nameof(ItemViewModels));
-            OnPropertyChanged(nameof(IsPlaceholder));
-            OnPropertyChanged(nameof(PrimaryItem));
-            OnPropertyChanged(nameof(TrayX));
-            OnPropertyChanged(nameof(TileBorderBrush));
-            OnPropertyChanged(nameof(CanVerticallyScroll));
-
-            IsBusy = false;
-        }
-
-        public async Task InitializeAsync_old(MpCopyItem headItem, int queryOffset = -1) {
-            PropertyChanged -= MpClipTileViewModel_PropertyChanged;
-            PropertyChanged += MpClipTileViewModel_PropertyChanged;
-
-            QueryOffsetIdx = queryOffset < 0 ? QueryOffsetIdx : queryOffset;
-            IsBusy = true;
-
-            ItemViewModels.Clear();
-            if (headItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(headItem.Id, out double uniqueWidth)) {
-                TileBorderWidth = uniqueWidth;
-            } else {
-                TileBorderWidth = DefaultBorderHeight;
-            }
-
-            if (headItem != null) {
-                //var ccgl = GetCompositeChildrenGuids(headItem.ItemData);
-
-                var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(headItem.Id);
-                ccil.Insert(0, headItem);
-
-                for (int i = 0; i < ccil.OrderBy(x => x.CompositeSortOrderIdx).Count(); i++) {
-                    if (ItemViewModels.Any(x => x.CopyItemId == ccil[i].Id)) {
-                        //this prevents a strange bug i think from async loading that loads 2 of each item
-                        continue;
-                    }
-                    ccil[i].CompositeParentCopyItemId = i == 0 ? 0 : ccil[0].Id;
-                    ccil[i].CompositeSortOrderIdx = i;
-                    var civm = await CreateContentItemViewModel(ccil[i]);
-                    ItemViewModels.Add(civm);
-                }
-
-                IsNew = false;
-                RequestUiUpdate();
-
-                MpMessenger.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
-            }
-
-            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
-            ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.EditorHeight)));
-
-            OnPropertyChanged(nameof(ItemViewModels));
-            OnPropertyChanged(nameof(IsPlaceholder));
-            OnPropertyChanged(nameof(PrimaryItem));
-            OnPropertyChanged(nameof(TrayX));
-            OnPropertyChanged(nameof(TileBorderBrush));
-            OnPropertyChanged(nameof(CanVerticallyScroll));
-
             IsBusy = false;
         }
 
@@ -972,45 +900,6 @@
             return HeadItem.GetDetailText(detailType);
         }
 
-        public async Task InsertRange(int idx, List<MpCopyItem> models) {
-            await MpHelpers.RunOnMainThreadAsync(async () => {
-                var curModels = ItemViewModels.Where(x => x.CopyItem != null).Select(x => x.CopyItem).ToList();
-
-                idx = idx < 0 ? 0 : idx >= curModels.Count ? curModels.Count : idx;
-
-                curModels.InsertRange(idx, models);
-                for (int i = 0; i < curModels.Count; i++) {
-                    curModels[i].CompositeSortOrderIdx = i;
-                    if (i == 0) {
-                        curModels[i].CompositeParentCopyItemId = 0;
-                    } else {
-                        curModels[i].CompositeParentCopyItemId = curModels[0].Id;
-                    }
-                    await curModels[i].WriteToDatabaseAsync();
-                }
-
-                //only will occur during drag & drop
-                await InitializeAsync(curModels[0]);
-            });
-        }
-
-        public async Task RemoveRange(List<MpCopyItem> models) {
-            await MpHelpers.RunOnMainThreadAsync(() => {
-                for (int i = 0; i < models.Count; i++) {
-                    var ivm = ItemViewModels.Where(x => x.CopyItem.Id == models[i].Id).FirstOrDefault();
-                    if (ivm != null) {
-                        ItemViewModels.Remove(ivm);
-                    }
-                }
-                //if (ItemViewModels.Count == 0) {
-                //    IsPlaceholder = true;
-                //    Parent.ClipTileViewModels.Move(Parent.ClipTileViewModels.IndexOf(this), Parent.ClipTileViewModels.Count - 1);
-                //} else {
-                //    UpdateSortOrder();
-                //}
-            });
-        }
-
         public async Task UpdateSortOrderAsync(bool fromModel = false) {
             if (fromModel) {
                 ItemViewModels.Sort(x => x.CompositeSortOrderIdx);
@@ -1035,10 +924,6 @@
             CollectionViewSource.GetDefaultView(ItemViewModels).Refresh();
         }
 
-        public void RequestScrollIntoView(object obj) {
-            OnScrollIntoViewRequest?.Invoke(this, obj);
-        }
-
         public void RequestScrollToHome() {
             OnScrollToHomeRequest?.Invoke(this, null);
         }
@@ -1047,12 +932,12 @@
             OnUiUpdateRequest?.Invoke(this, null);
         }
 
-        public void RequestSearch(string st) {
-            OnSearchRequest?.Invoke(this, st);
-        }
-
         public void RequestFocus() {
             OnFocusRequest?.Invoke(this, null);
+        }
+
+        public void RequestSyncModel() {
+            OnSyncModels?.Invoke(this, null);
         }
 
         #endregion
@@ -1120,8 +1005,8 @@
                     rtbvm.IsSelected = true;
                     if (!hasExpanded) {
                         //tile will be shrunk in on completed of hide window
-                        rtbvm.IsContentReadOnly = false;
-                        rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
+                        rtbvm.Parent.IsContentReadOnly = false;
+                        //rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
                         rtbvm.TemplateCollection.UpdateCommandsCanExecute();
                         rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.Templates));
                         rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.HasMultipleTemplates));
@@ -1210,14 +1095,24 @@
             }
         }
 
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpCopyItem ci && ItemViewModels.Any(x=>x.CopyItemId == ci.Id)) {
+        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if(e is MpCopyItem ci && ItemViewModels.Any(x=>x.CopyItemId == ci.Id)) {                
                 var rcivm = ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id);
                 ItemViewModels.Remove(rcivm);
 
                 if(ItemViewModels.Count == 0) {
-                    OnPropertyChanged(nameof(IsPlaceholder));
+                    int qIdx = Parent.Items.IndexOf(this);
+                    await MpDataModelProvider.RemoveQueryItem(ci.Id);
                     MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    while(Parent.IsBusy) {
+                        await Task.Delay(100);
+                    }
+                    if(qIdx < Parent.Items.Count - 1) {
+                        Parent.Items[qIdx].IsSelected = true;
+                    } else if(Parent.Items.Count > 0) {
+                        Parent.Items[qIdx-1].IsSelected = true;
+                    }
+                    
                 } else {
                     RequestListRefresh();
                 }
@@ -1291,37 +1186,22 @@
                     break;
                 case nameof(IsContentReadOnly):
                     //ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsContentReadOnly)));
-                    MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
+                    //MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
 
-                    ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
+                    //ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
                     //MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
                     //OnPropertyChanged(nameof(TileBorderWidth));
                     //OnPropertyChanged(nameof(PinButtonVisibility));
 
                     //Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
-                    //Parent.OnPropertyChanged(nameof(Parent.ClipTrayScreenWidth));
 
-
-                    //var mwrb = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior;
-                    //if (IsExpanded) {
-                    //    Parent.ScrollOffset = Parent.LastScrollOfset = 0;
-
-                    //    if (SelectedItems.Count == 0) {
-                    //        PrimaryItem.IsSelected = true;
-                    //    }
-
-                    //    _unexpandedHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
-                    //    mwrb.Resize(0,Math.Max(TileBorderHeight, EditableContentSize.Height - TileBorderHeight));
-
-                    //    Keyboard.AddKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
-                    //} else {
-                    //    Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, ExpandedKeyDown_Handler);
-                    //    mwrb.Resize(0,_unexpandedHeight - MpMainWindowViewModel.Instance.MainWindowHeight);
-                    //}
-                    //OnPropertyChanged(nameof(TrayX));
-
-                    //MpMessenger.Send<MpMessageType>(IsExpanded ? MpMessageType.Expand : MpMessageType.Unexpand, this);
+                    OnPropertyChanged(nameof(HorizontalScrollbarVisibility));
+                    OnPropertyChanged(nameof(VerticalScrollbarVisibility));
+                    //OnPropertyChanged(nameof(IsContentReadOnly));
+                    if (IsContentReadOnly) {
+                        ItemViewModels.ForEach(x => x.ClearEditing());
+                    }
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
 
                     OnPropertyChanged(nameof(CanVerticallyScroll));
@@ -1335,7 +1215,7 @@
             if(MpDragDropManager.IsDragAndDrop) {
                 return;
             }
-            if(e.Key == Key.Escape) {
+             if(e.Key == Key.Escape) {
                 //ToggleReadOnlyCommand.Execute(null);
                 ClearEditing();
             }
@@ -1343,6 +1223,11 @@
         #endregion
 
         #region Commands
+
+        public ICommand SendSubSelectedToEmailCommand => new RelayCommand(
+            () => {
+                MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, HeadItem.CopyItemTitle, HeadItem.CopyItemData.ToPlainText()));
+            });
 
         public ICommand ScrollUpCommand => new RelayCommand(
              () => {
@@ -1492,74 +1377,7 @@
             MpMainWindowViewModel.Instance.HideWindowCommand.Execute(true);
         }
 
-        public ICommand BringToFrontCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        try {
-                            IsBusy = true;
-                            MpHelpers.RunOnMainThread(
-                                    (Action)(() => {
-                                        var tempSelectedClipTiles = SelectedItems;
-                                        ClearSelection();
-
-                                        foreach (var sctvm in tempSelectedClipTiles) {
-                                            ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), 0);
-                                            sctvm.IsSelected = true;
-                                        }
-                                        RequestScrollIntoView(SelectedItems[0]);
-                                    }));
-                        }
-                        finally {
-                            IsBusy = false;
-                        }
-                    },
-                    () => {
-                        if (IsBusy || MpMainWindowViewModel.Instance.IsMainWindowLoading || VisibleItems.Count == 0) {
-                            return false;
-                        }
-                        bool canBringForward = false;
-                        for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
-                            if (!SelectedItems.Contains(VisibleItems[i])) {
-                                canBringForward = true;
-                                break;
-                            }
-                        }
-                        return canBringForward;
-                    });
-            }
-        }
-
-        public ICommand SendSubSelectedClipTilesToBackCommand => new RelayCommand(
-            () => {
-                try {
-                    IsBusy = true;
-                    var tempSelectedClipTiles = SelectedItems;
-                    ClearSelection();
-
-                    foreach (var sctvm in tempSelectedClipTiles) {
-                        ItemViewModels.Move(ItemViewModels.IndexOf(sctvm), ItemViewModels.Count - 1);
-                        sctvm.IsSelected = true;
-                    }
-                    RequestScrollIntoView(SelectedItems[SelectedItems.Count - 1]);
-                }
-                finally {
-                    IsBusy = false;
-                }
-            },
-            () => {
-                if (IsBusy || MpMainWindowViewModel.Instance.IsMainWindowLoading || VisibleItems.Count == 0) {
-                    return false;
-                }
-                bool canSendBack = false;
-                for (int i = 0; i < SelectedItems.Count && i < VisibleItems.Count; i++) {
-                    if (!SelectedItems.Contains(VisibleItems[VisibleItems.Count - 1 - i])) {
-                        canSendBack = true;
-                        break;
-                    }
-                }
-                return canSendBack;
-            });
+        
 
         private RelayCommand<object> _searchWebCommand;
         public ICommand SearchWebCommand {
@@ -1642,6 +1460,18 @@
         //        return true;
         //    });
 
+        public ICommand RefreshDocumentCommand {
+            get {
+                return new RelayCommand(
+                    () => {
+                        RequestSyncModel();
+                        //MessageBox.Show(TemplateCollection.ToString());
+                    },
+                    () => {
+                        return true;// HasModelChanged
+                    });
+            }
+        }
         public ICommand AssignHotkeyCommand => new RelayCommand(
             () => {
                 SelectedItems[0].AssignHotkeyCommand.Execute(null);

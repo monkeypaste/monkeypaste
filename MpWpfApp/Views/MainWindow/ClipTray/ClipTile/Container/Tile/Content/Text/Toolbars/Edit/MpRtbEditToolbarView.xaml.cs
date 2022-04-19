@@ -20,7 +20,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpRtbEditToolbarView.xaml
     /// </summary>
-    public partial class MpRtbEditToolbarView : MpUserControl<MpContentItemViewModel> {
+    public partial class MpRtbEditToolbarView : MpUserControl<MpClipTileViewModel> {
         ToggleButton selectedAlignmentButton;
         ToggleButton selectedListButton;
         RichTextBox artb;
@@ -47,14 +47,13 @@ namespace MpWpfApp {
             }
             AddTemplateButton.SetActiveRtb(trtb);
             artb = trtb;
-            DataContext = (artb.DataContext as MpClipTileViewModel).PrimaryItem;
-
+            
             if(buttons == null) {
                 buttons = new List<ButtonBase>() {
                 PrintButton,
-                CutButton,
-                CopyButton,
-                PasteButton,
+                //CutButton,
+                //CopyButton,
+                //PasteButton,
                 UndoButton,
                 RedoButton,
                 BoldButton,
@@ -84,8 +83,6 @@ namespace MpWpfApp {
         #region Toolbar Events
 
         public void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            var ertbtvm = DataContext as MpContentItemViewModel;
-
             var fontFamily = artb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
             FontFamilyCombo.SelectedItem = fontFamily;
 
@@ -192,11 +189,7 @@ namespace MpWpfApp {
 
         private void BackgroundColorButton_Click(object sender, RoutedEventArgs e) {
             var colorMenuItem = new MenuItem();
-            var colorContextMenu = new ContextMenu();
-
-            var rtbetbvm = DataContext as MpContentItemViewModel;
-            var hctvm = rtbetbvm.Parent;
-            
+            var colorContextMenu = new ContextMenu();           
 
             colorContextMenu.Items.Add(colorMenuItem);
             MpHelpers.SetColorChooserMenuItem(

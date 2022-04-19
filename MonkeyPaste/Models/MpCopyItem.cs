@@ -107,6 +107,7 @@ namespace MonkeyPaste {
         public override int Id { get; set; } = 0;
 
         [Column("MpCopyItemGuid")]
+        [Indexed]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         public string RootCopyItemGuid { get; set; }

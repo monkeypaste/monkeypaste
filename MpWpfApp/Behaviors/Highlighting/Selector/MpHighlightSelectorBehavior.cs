@@ -78,9 +78,6 @@ namespace MpWpfApp {
             var rtbvl = AssociatedObject.GetVisualDescendents<MpContentView>();
             dtl.AddRange(rtbvl.Select(x => x.RtbHighlightBehavior).ToList());
 
-            var flivl = AssociatedObject.GetVisualDescendents<MpFileListItemView>();
-            dtl.AddRange(flivl.Select(x => x.FileListItemHighlightBehavior).ToList());
-
             dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);
             dtl.Add(AssociatedObject.TileTitleView.SourceHighlightBehavior);
 
