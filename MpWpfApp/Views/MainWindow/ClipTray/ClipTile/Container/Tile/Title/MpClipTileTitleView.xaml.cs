@@ -19,22 +19,30 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileTitleView.xaml
     /// </summary>
-    public partial class MpClipTileTitleView : MpContentUserControl<MpContentItemViewModel> {
+    public partial class MpClipTileTitleView : MpUserControl<MpContentItemViewModel> {
         private bool _isAnimating = false;
 
         public MpClipTileTitleView() : base() {
             InitializeComponent();
         }
         private void ClipTileTitleContainerGrid_Loaded(object sender, RoutedEventArgs e) {
-            ClipTileTitleHighlightBehavior.Attach(this);
-            SourceHighlightBehavior.Attach(this);
+            //AttachAllBehaviors();
             RenderOptions.SetBitmapScalingMode(ClipTileAppIconBorderImage, BitmapScalingMode.LowQuality);
+        }
+
+        private void AttachAllBehaviors() {
+            //ClipTileTitleHighlightBehavior.Attach(this);
+            //SourceHighlightBehavior.Attach(this);
+        }
+
+        private void DetachAllBehaviors() {
+            //ClipTileTitleHighlightBehavior.Detach();
+            //SourceHighlightBehavior.Detach();
         }
 
 
         private void ClipTileTitleContainerGrid_Unloaded(object sender, RoutedEventArgs e) {
-            ClipTileTitleHighlightBehavior.Detach();
-            SourceHighlightBehavior.Detach();
+            //DetachAllBehaviors();
         }
 
         private void ClipTileTitleTextGrid_MouseEnter(object sender, MouseEventArgs e) {

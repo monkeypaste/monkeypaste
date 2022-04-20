@@ -113,9 +113,9 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <local:MpClipTileContainerView Visibility="{Binding IsPlaceholder,
-                                                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                                               DataContext="{Binding}" />
+                                <local:MpClipTileContainerView DataContext="{Binding}"
+                                                               Visibility="{Binding IsPlaceholder,
+                                                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

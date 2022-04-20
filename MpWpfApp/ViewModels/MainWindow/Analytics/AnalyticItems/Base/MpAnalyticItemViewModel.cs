@@ -452,7 +452,7 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
-            MpMessenger.Register(MpClipTrayViewModel.Instance, ReceivedClipTrayMessage);
+            MpMessenger.Register<MpMessageType>(MpClipTrayViewModel.Instance, ReceivedClipTrayMessage);
 
             IsBusy = false;
         }

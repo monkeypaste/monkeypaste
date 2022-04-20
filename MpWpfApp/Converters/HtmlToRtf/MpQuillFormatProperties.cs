@@ -8,40 +8,53 @@ using System.Windows.Media;
 using Windows.Networking;
 
 namespace MpWpfApp {
-    public class MpQuillFormatProperties {
-        #region Singleton
-        private static readonly Lazy<MpQuillFormatProperties> _Lazy = new Lazy<MpQuillFormatProperties>(() => new MpQuillFormatProperties());
-        public static MpQuillFormatProperties Instance { get { return _Lazy.Value; } }
-        #endregion
+    public static class MpQuillFormatProperties {
 
-        public readonly string QuillHeader = "<!-- QuillFormat -->";
-
-        public string[] QuillTagNames {
+        public static string[] QuillInlineTagNames {
             get {
                 return new string[] {
                     "#text",
-                    "img",
-                    "em",
                     "span",
-                    "strong",
-                    "u",
-                    "br",
-                    "a",
-                    "p",
-                    "li",
-                    "ol"
+                    "a", 
+                    "em", 
+                    "strong", 
+                    "u", 
+                    "s", 
+                    "sub", 
+                    "sup", 
+                    "img"
                 };
             }
         }
 
-        public string[] QuillOpenTags {
+        public static string[] QuillBlockTagNames {
             get {
-                var tags = new List<string>();
-                foreach(var t in QuillTagNames) {
-                    tags.Add(string.Format(@"<{0}>", t));
-                }
-                return tags.ToArray();
+                return new string[] {
+                    "p", 
+                    "ol", 
+                    "ul", 
+                    "li",
+                    "div", 
+                    "table", 
+                    "colgroup", 
+                    "col", 
+                    "tbody", 
+                    "tr", 
+                    "td", 
+                    "iframe", 
+                    "blockquote"
+                };
             }
         }
+
+        public static string[] QuillTagNames {
+            get {
+                var allTags = new List<string>();
+                allTags.AddRange(QuillBlockTagNames);
+                allTags.AddRange(QuillInlineTagNames);
+                return allTags.ToArray();
+            }
+        }
+
     }
 }

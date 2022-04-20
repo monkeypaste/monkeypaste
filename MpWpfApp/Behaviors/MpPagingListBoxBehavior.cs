@@ -147,6 +147,59 @@ namespace MpWpfApp {
             return totalTileCount - 1;
         }
 
+        public void ScrollIntoView(object obj) {
+            return;
+            var ctrvm = AssociatedObject.DataContext as MpClipTrayViewModel;
+            if (ctrvm.HasScrollVelocity || ctrvm.IsBusy) {
+                return;
+            }
+            if (obj is MpClipTileViewModel ctvm && ctvm.HeadItem != null) {
+                //var ctcv = this.GetVisualDescendents<MpClipTileContainerView>().FirstOrDefault(x => x.DataContext == ctvm);
+                //if(ctcv == null) {
+                //    return;
+                //}
+                if(!ctrvm.Items.Contains(ctvm)) {
+                    return;
+                }
+                double itemX = ctvm.TrayX;
+                double itemWidth = ctvm.TileBorderWidth;
+                double pad = 20;
+                double deltaScrollOfset = 0;
+                if (itemX < ctrvm.ScrollOffset) {
+                    // tile is before current scroll location
+                    double diff = ctrvm.ScrollOffset - itemX;
+                    deltaScrollOfset = diff - pad;
+                } else if (ctrvm.ScrollOffset + ctrvm.ClipTrayScreenWidth < itemX + itemWidth) {
+                    // tile is either after current viewport or only partially visible
+                    double diff = (itemX + itemWidth) - (ctrvm.ScrollOffset + ctrvm.ClipTrayScreenWidth);
+                    deltaScrollOfset = diff + pad;
+                }
+                if (deltaScrollOfset != 0) {
+                    double newOffset = ctrvm.ScrollOffset + deltaScrollOfset;
+
+                    newOffset = Math.Max(0, Math.Min(newOffset, ctrvm.MaximumScrollOfset));
+
+                    MpHelpers.RunOnMainThread(async () => {
+                        while(true) {
+                            double diff = Math.Abs(ctrvm.ScrollOffset - newOffset);
+                            if (diff < 0.1) {
+                                return;
+                            }
+                            double v = 0;
+                            if(ctrvm.ScrollOffset < newOffset) {
+                                v = 75;
+                            } else {
+                                v = -75;
+                            }
+                            v *= WheelDampening;
+                            ApplyVelocity(v);
+                            await Task.Delay(10);
+                        }
+                    });
+                }
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -157,7 +210,7 @@ namespace MpWpfApp {
                 case MpMessageType.ResizeContentCompleted:
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.MaximumScrollOfset));
                     ApplyOffsetChange(true);
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    //MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                     
                     break;
             }
@@ -176,6 +229,8 @@ namespace MpWpfApp {
                     if (cttvl != null) {
                         foreach (var cttv in cttvl) {
                             if (cttv.ClipTileTitleMarqueeCanvas != null) {
+                                // BUG this is a workaround because marquee attached property
+                                // doesn't recognize that the data context has changed
                                 MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
                                 MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
                             }
@@ -268,6 +323,10 @@ namespace MpWpfApp {
         }
 
         private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            ApplyVelocity(e.Delta);
+        }
+
+        private void ApplyVelocity(double v) {
             if (//MpClipTrayViewModel.Instance.IsAnyTileFlipped ||
                 //MpClipTrayViewModel.Instance.IsAnyTileExpanded ||
                 MpMainWindowViewModel.Instance.IsMainWindowOpening ||
@@ -277,20 +336,20 @@ namespace MpWpfApp {
             }
 
 
-            if ((e.Delta < 0 && MpClipTrayViewModel.Instance.ScrollOffset >= MpClipTrayViewModel.Instance.ClipTrayTotalWidth) ||
-                (e.Delta > 0 && MpClipTrayViewModel.Instance.ScrollOffset <= 0)) {
+            if ((v < 0 && MpClipTrayViewModel.Instance.ScrollOffset >= MpClipTrayViewModel.Instance.ClipTrayTotalWidth) ||
+                (v > 0 && MpClipTrayViewModel.Instance.ScrollOffset <= 0)) {
                 _velocity = 0;
                 return;
             }
 
 
-            if ((_lastWheelDelta < 0 && e.Delta > 0) ||
-               (_lastWheelDelta > 0 && e.Delta < 0)) {
+            if ((_lastWheelDelta < 0 && v > 0) ||
+               (_lastWheelDelta > 0 && v < 0)) {
                 _velocity = 0;
             }
 
-            _velocity -= e.Delta * WheelDampening;
-            _lastWheelDelta = e.Delta;
+            _velocity -= v * WheelDampening;
+            _lastWheelDelta = (int)v;
         }
 
         private void ApplyOffsetChange(bool isChangeResize = false) {

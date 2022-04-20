@@ -76,10 +76,10 @@ namespace MpWpfApp {
             }
 
             var rtbvl = AssociatedObject.GetVisualDescendents<MpContentView>();
-            dtl.AddRange(rtbvl.Select(x => x.RtbHighlightBehavior).ToList());
+            //dtl.AddRange(rtbvl.Select(x => x.RtbHighlightBehavior).ToList());
 
-            dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);
-            dtl.Add(AssociatedObject.TileTitleView.SourceHighlightBehavior);
+            //dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);
+            //dtl.Add(AssociatedObject.TileTitleView.SourceHighlightBehavior);
 
             dtl.Sort((x, y) => x.ContentItemIdx.CompareTo(y.ContentItemIdx));
             return dtl;

@@ -11,10 +11,14 @@ namespace MpWpfApp {
     public class MpMoveBehavior : MpBehavior<FrameworkElement> {
         #region Private Variables
 
-        private static List<MpIMovableViewModel> _allMovables = new List<MpIMovableViewModel>();
+        //private static List<MpIMovableViewModel> _allMovables = new List<MpIMovableViewModel>();
 
-        public static bool IsAnyMoving => _allMovables.Any(x => x.IsMoving);
-        public static bool CanAnyMove => _allMovables.Any(x => x.CanMove);
+        //public static bool IsAnyMoving => _allMovables.Any(x => x.IsMoving);
+        //public static bool CanAnyMove => _allMovables.Any(x => x.CanMove);
+
+
+        public static bool IsAnyMoving => Application.Current.MainWindow.GetVisualDescendents<MpMoveBehavior>().Any(x => x.IsMoving);
+        public static bool CanAnyMove => Application.Current.MainWindow.GetVisualDescendents<MpMoveBehavior>().Any(x => x.CanMove);
 
         private Point _lastMousePosition;
 
@@ -99,14 +103,14 @@ namespace MpWpfApp {
             AssociatedObject.MouseEnter += AssociatedObject_MouseEnter;
             AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
 
-            if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
-                //var dupCheck = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
-                //if (dupCheck != null) {
-                //    MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
-                //    _allMovables.Remove(dupCheck);
-                //}
-                _allMovables.Add(rvm);
-            }
+            //if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
+            //    //var dupCheck = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
+            //    //if (dupCheck != null) {
+            //    //    MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
+            //    //    _allMovables.Remove(dupCheck);
+            //    //}
+            //    _allMovables.Add(rvm);
+            //}
         }
 
 
@@ -120,12 +124,12 @@ namespace MpWpfApp {
                 AssociatedObject.MouseEnter -= AssociatedObject_MouseEnter;
                 AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
 
-                if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
-                    var toRemove = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
-                    if (toRemove != null) {
-                        _allMovables.Remove(toRemove);
-                    }
-                }
+                //if (AssociatedObject.DataContext is MpIMovableViewModel rvm) {
+                //    var toRemove = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
+                //    if (toRemove != null) {
+                //        _allMovables.Remove(toRemove);
+                //    }
+                //}
             }
         }
 

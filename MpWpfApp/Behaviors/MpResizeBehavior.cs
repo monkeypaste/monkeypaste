@@ -5,6 +5,8 @@ using System.Windows.Input;
 using System.Linq;
 using System.Collections.Generic;
 using MonkeyPaste.Plugin;
+using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace MpWpfApp {
     [Flags]
@@ -18,7 +20,7 @@ namespace MpWpfApp {
 
     public class MpResizeBehavior : MpBehavior<FrameworkElement> {
         #region Private Variables
-        private static List<MpResizeBehavior> _allResizers = new List<MpResizeBehavior>();
+        //private static List<MpResizeBehavior> _allResizers = new List<MpResizeBehavior>();
 
         private Point _lastMousePosition;
         private Point _mouseDownPosition;
@@ -30,13 +32,17 @@ namespace MpWpfApp {
 
         #region Properties
 
-        public static bool IsAnyResizing => _allResizers
-            .Where(x => x != null && x.AssociatedObject != null && x.AssociatedObject.DataContext != null)
-            .Any(x => (x.AssociatedObject.DataContext as MpIResizableViewModel).IsResizing);
+        //public static bool IsAnyResizing => _allResizers
+        //    .Where(x => x != null && x.AssociatedObject != null && x.AssociatedObject.DataContext != null)
+        //    .Any(x => (x.AssociatedObject.DataContext as MpIResizableViewModel).IsResizing);
 
-        public static bool CanAnyResize => _allResizers
-            .Where(x => x != null && x.AssociatedObject != null && x.AssociatedObject.DataContext != null)
-            .Any(x => (x.AssociatedObject.DataContext as MpIResizableViewModel).CanResize);
+        public static bool IsAnyResizing => Application.Current.MainWindow.GetVisualDescendents<MpResizeBehavior>().Any(x => x.IsResizing);
+
+        //public static bool CanAnyResize => _allResizers
+        //    .Where(x => x != null && x.AssociatedObject != null && x.AssociatedObject.DataContext != null)
+        //    .Any(x => (x.AssociatedObject.DataContext as MpIResizableViewModel).CanResize);
+
+        public static bool CanAnyResize => Application.Current.MainWindow.GetVisualDescendents<MpResizeBehavior>().Any(x => x.CanResize);
 
         #region IsResizing DependencyProperty
 
@@ -246,57 +252,6 @@ namespace MpWpfApp {
         public virtual MpRectEdgeFlags ResizableEdges => ResizableEdge1 | ResizableEdge2;
 
         #endregion
-
-        //#region DropBehaviorBase Implementation
-
-        //public override bool IsEnabled { get; set; } = true;
-        //public override MpDropType DropType => MpDropType.Resize;
-        //public override UIElement RelativeToElement => BoundElement;
-        //public override FrameworkElement AdornedElement => AssociatedObject;
-        //public override Orientation AdornerOrientation => Orientation.Horizontal;
-        //public override MpCursorType MoveCursor { get; }
-        //public override MpCursorType CopyCursor { get; }
-
-        //public override List<Rect> GetDropTargetRects() {
-        //    var r = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
-        //    var edgeRects = new List<Rect>();
-
-        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Left)) {
-        //        Rect lr = new Rect(r.Left, r.Top, r.Left, r.Bottom);
-        //        lr.Inflate(new Size(MaxDistance, MaxDistance));
-        //        edgeRects.Add(lr);
-        //    }
-        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Right)) {
-        //        Rect rr = new Rect(r.Right, r.Top, r.Right, r.Bottom);
-        //        rr.Inflate(new Size(MaxDistance, MaxDistance));
-        //        edgeRects.Add(rr);
-        //    }
-        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Top)) {
-        //        Rect tr = new Rect(r.Left, r.Top, r.Right, r.Top);
-        //        tr.Inflate(new Size(MaxDistance, MaxDistance));
-        //        edgeRects.Add(tr);
-        //    }
-        //    if (ResizableEdges.HasFlag(MpRectEdgeFlags.Bottom)) {
-        //        Rect br = new Rect(r.Left, r.Bottom, r.Right, r.Bottom);
-        //        br.Inflate(new Size(MaxDistance, MaxDistance));
-        //        edgeRects.Add(br);
-        //    }
-        //    return edgeRects;
-        //}
-
-        //public override async Task StartDrop() {
-        //    await Task.Delay(1);
-        //}
-
-        //public override bool IsDragDataValid(bool isCopy, object dragData) {
-        //    return base.IsDragDataValid(isCopy, dragData);
-        //}
-
-        //public override void AutoScrollByMouse() {
-            
-        //}
-        //#endregion
-
         protected override void OnLoad() {
             base.OnLoad();
             if(AssociatedObject == null) {
@@ -319,15 +274,15 @@ namespace MpWpfApp {
                 DoubleClickFrameworkElement.MouseLeftButtonDown += DoubleClickFrameworkElement_MouseLeftButtonDown;
             }            
 
-            MpMessenger.Register(this, MpClipTrayViewModel.Instance.ReceivedResizerBehaviorMessage);
-            MpMessenger.Register(this, MpMainWindowViewModel.Instance.ReceivedResizerBehaviorMessage);
-
-            if (_allResizers.Contains(this)) {
-                var old = _allResizers.FirstOrDefault(x => x == this);
-                MpConsole.WriteLine($"Duplicate resizer detected while loading, swapping for new... (old: '{old.AssociatedObject.GetType()}' new:'{AssociatedObject.GetType()}'");
-                _allResizers.Remove(old);
-            }
-            _allResizers.Add(this);
+            MpMessenger.Register<MpMessageType>(this, MpClipTrayViewModel.Instance.ReceivedResizerBehaviorMessage);
+            MpMessenger.Register<MpMessageType>(this, MpMainWindowViewModel.Instance.ReceivedResizerBehaviorMessage);
+            
+            //if (_allResizers.Contains(this)) {
+            //    var old = _allResizers.FirstOrDefault(x => x == this);
+            //    MpConsole.WriteLine($"Duplicate resizer detected while loading, swapping for new... (old: '{old.AssociatedObject.GetType()}' new:'{AssociatedObject.GetType()}'");
+            //    _allResizers.Remove(old);
+            //}
+            //_allResizers.Add(this);
         }
 
         protected override void OnUnload() {
@@ -340,10 +295,10 @@ namespace MpWpfApp {
                 AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
             }
 
-            if (_allResizers.Contains(this)) {
-                _allResizers.Remove(this);
-                MpConsole.WriteLine(@"Resizer of type " + AssociatedObject.GetType() + " unloaded");
-            }
+            //if (_allResizers.Contains(this)) {
+            //    _allResizers.Remove(this);
+            //    MpConsole.WriteLine(@"Resizer of type " + AssociatedObject.GetType() + " unloaded");
+            //}
 
             if (DoubleClickFrameworkElement != null) {
                 DoubleClickFrameworkElement.MouseLeftButtonDown -= DoubleClickFrameworkElement_MouseLeftButtonDown;
@@ -390,9 +345,30 @@ namespace MpWpfApp {
             //}
 
             if(AffectsContent) {
-                MpMessenger.Send(MpMessageType.ResizingContent);
+                MpMessenger.SendGlobal(MpMessageType.ResizingContent);
                 if(!IsResizing) {
-                    MpMessenger.Send(MpMessageType.ResizeContentCompleted);
+                    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
+                }
+            }
+        }
+
+        public void ResizeWidth(double newWidth) {
+            if (newWidth < 0) {
+                Debugger.Break();
+                return;
+            }
+            if (newWidth > MaxWidth || newWidth < MinWidth) {
+                MpConsole.WriteLine(@"Cannot resize width to " + newWidth + " its outside bounds of min: " + MinWidth + " max: " + MaxWidth);
+                MpConsole.WriteLine("Restoring to default: " + DefaultWidth);
+                ResetToDefault();
+                return;
+            }
+            BoundWidth = newWidth;
+
+            if (AffectsContent) {
+                MpMessenger.SendGlobal(MpMessageType.ResizingContent);
+                if (!IsResizing) {
+                    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
                 }
             }
         }
@@ -414,23 +390,27 @@ namespace MpWpfApp {
             if (e.ClickCount == 2) {
                 ResetToDefault();
                 if (AffectsContent) {
-                    MpMessenger.Send(MpMessageType.ResizeContentCompleted);
+                    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
                 }
             }
         }
 
-        private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {
+        private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {            
             if (MpDragDropManager.IsDragAndDrop || AssociatedObject == null || !IsEnabled) {
                 return;
             }
             if (!IsResizing && !AssociatedObject.IsMouseCaptured) {
                 //MpCursorStack.CurrentCursor = MpCursorType.Default;
+                MpCursor.UnsetCursor(this);
                 CanResize = false;
             }
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            if (MpDragDropManager.IsDragAndDrop || AssociatedObject == null || !IsEnabled) {
+            if (MpDragDropManager.IsDragAndDrop || 
+                AssociatedObject == null || 
+                !IsEnabled || 
+                MpClipTrayViewModel.Instance.HasScrollVelocity) {
                 return;
             }
             if(Mouse.LeftButton == MouseButtonState.Released) {
@@ -457,6 +437,7 @@ namespace MpWpfApp {
                 _curCursor = GetCursorByRectFlags(edgeFlags);
                 if (_curCursor != MpCursorType.Default) {
                     CanResize = true;
+                    MpCursor.SetCursor(this, _curCursor);
                     if(Mouse.LeftButton == MouseButtonState.Pressed) {
                         double totalDist = mwmp.Distance(_mouseDownPosition);
 
@@ -467,9 +448,9 @@ namespace MpWpfApp {
                                 Resize(delta.X, delta.Y);
                             }
                         }
-                    }
-                    
+                    }                    
                 } else {
+                    MpCursor.UnsetCursor(this);
                     CanResize = false;
                 }
             }
@@ -515,7 +496,7 @@ namespace MpWpfApp {
                 _curCursor = MpCursorType.None;
                 IsResizing = false;
                 if(AffectsContent) {
-                    MpMessenger.Send(MpMessageType.ResizeContentCompleted);
+                    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
                 }
             }
         }

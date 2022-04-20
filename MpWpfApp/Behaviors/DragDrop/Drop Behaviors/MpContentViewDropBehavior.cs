@@ -101,7 +101,7 @@ namespace MpWpfApp {
 
         private void ReceivedAssociateObjectViewModelMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ContentListItemsChanged:
+                case MpMessageType.ContentItemsChanged:
                 case MpMessageType.ContentListScrollChanged:
                     RefreshDropRects();
                     break;
@@ -278,9 +278,7 @@ namespace MpWpfApp {
                     var thisSourceEnd = thisSourceElements.Aggregate((a, b) => drtb.Document.ContentStart.GetOffsetToPosition(a.ContentStart) > drtb.Document.ContentStart.GetOffsetToPosition(b.ContentStart) ? a : b).ElementEnd;
 
                     var thisSourceRange = new TextRange(thisSourceStart, thisSourceEnd);
-
                     var thisSourceRtf = thisSourceRange.ToRichText();
-
                     var thisSourceCi = dragCopyItems.FirstOrDefault(x => x.Guid == dcr_guid);
 
                     MpCopyItem thisSourceNewCi = null;

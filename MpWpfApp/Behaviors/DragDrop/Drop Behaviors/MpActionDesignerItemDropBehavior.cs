@@ -48,7 +48,7 @@ namespace MpWpfApp {
 
         private void ReceivedAssociateObjectViewModelMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ContentListItemsChanged:
+                case MpMessageType.ContentItemsChanged:
                 case MpMessageType.ContentListScrollChanged:
                     //RefreshDropRects();
                     break;

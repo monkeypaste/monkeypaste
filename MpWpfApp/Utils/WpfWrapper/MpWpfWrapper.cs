@@ -22,6 +22,7 @@ namespace MpWpfApp {
         public MpIStringTools StringTools { get; }
         public MpIOsInfo OsInfo { get; }
         public MpIClipboardContentDataProvider ClipboardContentDataProvider { get; set; }
+        public MpINativeMessageBox NativeMessageBox { get; }
 
         public MpWpfWrapper() {
             Cursor = new MpWpfCursor();
@@ -35,6 +36,7 @@ namespace MpWpfApp {
             MainThreadMarshal = new MpWpfMainThreadMarshal();
             StringTools = new MpWpfStringTools();
             OsInfo = new MpWpfOsInfo();
+            NativeMessageBox = new MpWpfMessageBox();
         }
 
         

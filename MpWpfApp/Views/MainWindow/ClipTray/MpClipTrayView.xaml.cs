@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -110,7 +111,7 @@ namespace MpWpfApp {
         }
 
         private void Ctrvm_OnScrollIntoViewRequest(object sender, object e) {
-            ClipTray?.ScrollIntoView(e);
+            LoadMoreItemsBehavior.ScrollIntoView(e);
         }
         #endregion
 

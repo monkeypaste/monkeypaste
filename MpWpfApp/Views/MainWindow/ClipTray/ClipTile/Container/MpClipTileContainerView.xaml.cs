@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,5 +25,24 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
+        private void StackPanel_Loaded(object sender, RoutedEventArgs e) {
+            MpMessenger.Register<MpMessageType>(
+                BindingContext,
+                ReceivedClipTileViewModelMessage,
+                BindingContext);
+        }
+
+
+        private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ContentItemsChanged:
+                    TileResizeBehavior.Reattach();
+                    break;
+                case MpMessageType.IsEditable:
+                case MpMessageType.IsReadOnly:
+                    MpClipTrayViewModel.Instance.RequestScrollIntoView(BindingContext);
+                    break;
+            }
+        }
     }
 }

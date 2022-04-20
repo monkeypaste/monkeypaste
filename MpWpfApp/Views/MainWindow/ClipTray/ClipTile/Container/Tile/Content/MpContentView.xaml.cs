@@ -51,9 +51,14 @@ namespace MpWpfApp {
             }
         }
 
-        protected override void RegisterAllBehaviors() {
-            //RegisterBehavior(RtbViewDropBehavior);
-            //RegisterBehavior(RtbHighlightBehavior);
+        private void AttachAllBehaviors() {
+            //RtbHighlightBehavior.Attach(this);
+            //ContentViewDropBehavior.Attach(this);
+        }
+
+        private void DetachAllBehaviors() {
+            //RtbHighlightBehavior.Detach();
+            //ContentViewDropBehavior.Detach();
         }
 
         private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
@@ -80,7 +85,6 @@ namespace MpWpfApp {
         #region Event Handlers
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
-            base.OnLoad();
             MpMessenger.Register<MpMessageType>(
                 nameof(MpDragDropManager),
                 ReceivedDragDropManagerMessage);
@@ -114,16 +118,14 @@ namespace MpWpfApp {
                     ReceivedMainWindowResizeBehviorMessage);
 
 
-                RtbHighlightBehavior.Attach(this);
-                ContentViewDropBehavior.Attach(this);
+                //AttachAllBehaviors();
             }
         }
 
         private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
-            RtbHighlightBehavior.Detach();
-            ContentViewDropBehavior.Detach();
+            //DetachAllBehaviors();
 
-            base.OnUnload();
+            //base.OnUnload();
 
             if (BindingContext == null) {
                 return;
@@ -219,7 +221,7 @@ namespace MpWpfApp {
                     !Rtb.IsReadOnly) {
                     //MpMainWindowResizeBehavior.Instance.Resize(e.NewSize.Height - e.PreviousSize.Height);
                 }
-                if(e.WidthChanged) {
+                if(e.WidthChanged || e.HeightChanged) {
                     //during expand/unexpand
                     Rtb.FitDocToRtb();
                 }

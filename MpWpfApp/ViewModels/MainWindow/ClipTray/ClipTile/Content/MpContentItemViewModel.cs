@@ -702,7 +702,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(ItemBorderBrush));
             OnPropertyChanged(nameof(ShortcutKeyString));
 
-            MpMessenger.Register(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
+            MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
             IsBusy = false;
         }

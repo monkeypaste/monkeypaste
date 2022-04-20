@@ -74,6 +74,7 @@ namespace MpWpfApp {
 
         public List<string> GetFileList(MpCopyItem CopyItem,string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
             //returns path of tmp file for rt or img and actual paths of filelist
+            bool isTemp = true;
             var fileList = new List<string>();
             if (CopyItem.ItemType == MpCopyItemType.FileList) {
                 if (forceType == MpCopyItemType.Image) {
@@ -81,6 +82,7 @@ namespace MpWpfApp {
                 } else if (forceType == MpCopyItemType.Text) {
                     fileList.Add(MpHelpers.WriteTextToFile(Path.GetTempFileName(), CopyItem.ItemData.ToRichText()));
                 } else {
+                    isTemp = false;
                     var splitArray = CopyItem.ItemData.ToPlainText().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     if (splitArray == null || splitArray.Length == 0) {
                         throw new Exception("CopyItem GetFileList error, file list should not be empty");
@@ -122,7 +124,7 @@ namespace MpWpfApp {
                 }
             }
 
-            if (string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
+            if (isTemp && string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
                 //for temporary files add to mwvm list for shutdown cleanup
                 foreach (var fp in fileList) {
                     if(!fp.IsFileOrDirectory()) {

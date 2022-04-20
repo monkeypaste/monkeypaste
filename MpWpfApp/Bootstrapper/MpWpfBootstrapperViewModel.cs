@@ -102,53 +102,34 @@ namespace MpWpfApp {
 
             //var cil = await MpDb.GetItemsAsync<MpCopyItem>();
             //foreach (var ci in cil) {
-            //    if(ci.CompositeParentCopyItemId > 0) {
+            //    bool needsWrite = false;
+            //    if (ci.CompositeParentCopyItemId > 0) {
             //        var rci = cil.FirstOrDefault(x => x.Id == ci.CompositeParentCopyItemId);
-            //        if(rci == null) {
+            //        if (rci == null) {
             //            MpConsole.WriteLine("Bad one: " + ci.Id);
             //            continue;
             //        }
 
             //        ci.RootCopyItemGuid = rci.Guid;
+
+            //        needsWrite = true;
+            //    }
+            //    if (!string.IsNullOrEmpty(ci.ItemData_rtf)) {
+            //        ci.ItemData = ci.ItemData_rtf;
+            //        needsWrite = true;
+            //    }
+
+            //    if(ci.ItemData.IsStringQuillText()) {
+            //        ci.ItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(ci.ItemData);
+            //        needsWrite = true;
+            //    }
+                
+            //    if(needsWrite) {
             //        await ci.WriteToDatabaseAsync();
             //    }
             //}
             //Debugger.Break();
-            //foreach (var ci in cil) {
-            //    try {
-            //        if (ci.ItemType != MpCopyItemType.Text || ci.Id <= 2189) {
-            //            continue;
-            //        }
-            //        ci.ItemData_rtf = ci.ItemData;
-
-            //        string itemHtml = MpRtfToHtmlConverter.ConvertRtfToHtml(ci.ItemData,
-            //            new Dictionary<string, string>() { { "copyItemBlockGuid", ci.Guid } },
-            //            new Dictionary<string, string>() { { "copyItemInlineGuid", ci.Guid } });
-
-            //        var ccil = await MpDataModelProvider.GetCompositeChildrenAsync(ci.Id);
-            //        if (ccil.Count > 0) {
-            //            ci.RootCopyItemGuid = string.Empty;
-            //            foreach (var cci in ccil.OrderBy(x => x.CompositeSortOrderIdx)) {
-            //                string encodedItemStr = string.Format(
-            //                    @"{0}{1}{2}",
-            //                    "{c{",
-            //                    cci.Guid,
-            //                    "}c}");
-            //                itemHtml += encodedItemStr;
-            //            }
-            //        } else if (ci.CompositeParentCopyItemId > 0) {
-            //            var pci = await MpDb.GetItemAsync<MpCopyItem>(ci.CompositeParentCopyItemId);
-            //            ci.RootCopyItemGuid = pci.Guid;
-            //        } else {
-            //            ci.RootCopyItemGuid = string.Empty;
-            //        }
-            //        ci.ItemData = itemHtml;
-            //        await ci.WriteToDatabaseAsync();
-            //    } catch(Exception ex) {
-            //        Debugger.Break();
-            //    }
-            //}
-
+            
             IsLoaded = true;
         }
     }

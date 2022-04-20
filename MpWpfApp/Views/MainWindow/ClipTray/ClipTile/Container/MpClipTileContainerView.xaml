@@ -10,28 +10,27 @@
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
 
-
-    <!--<AdornerDecorator>-->
-    <Grid>
-
-        <local:MpClipTileView x:Name="ClipTileView"
-                              Visibility="{Binding FrontVisibility}" />
-
-        <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
+    <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
                                   OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"
                                   Visibility="{Binding IsFlipping,
                                                        Converter={StaticResource BoolToVisibilityConverter}}" />-->
 
+
+    <StackPanel Orientation="Horizontal" Loaded="StackPanel_Loaded">
+        <local:MpClipTileView Visibility="{Binding IsPlaceholder,
+                                                   Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                              DataContext="{Binding}" />
+        <!--  Resize Region  -->
         <Rectangle VerticalAlignment="Stretch"
                    local:MpHoverableExtension.IsEnabled="True"
                    local:MpHoverableExtension.HoverCursor="ResizeWE"
-                   Margin="0,0,5,0"
-                   Width="5"
+                   Width="10"
                    Fill="Transparent"
-                   StrokeThickness="0"
-                   HorizontalAlignment="Right">
+                   Margin="-15,0,0,0"
+                   StrokeThickness="5"
+                   HorizontalAlignment="Left">
             <i:Interaction.Behaviors>
-                <local:MpResizeBehavior x:Name="TileResizeBehvior"
+                <local:MpResizeBehavior x:Name="TileResizeBehavior"
                                         BoundElement="{Binding ElementName=ClipTileView}"
                                         AffectsContent="True"
                                         IsResizing="{Binding IsResizing,
@@ -57,6 +56,6 @@
 
             </i:Interaction.Behaviors>
         </Rectangle>
-    </Grid>
+    </StackPanel>
     <!--</AdornerDecorator>-->
 </local:MpUserControl>

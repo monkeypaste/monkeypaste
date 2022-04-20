@@ -28,7 +28,7 @@ namespace MonkeyPaste {
         TrayScrollChanged,
         TraySelectionChanged,
         ContentListScrollChanged, //has context (tile)
-        ContentListItemsChanged, //has context (tile)
+        ContentItemsChanged, //has context (tile)
         ResizingContent,
         ResizeContentCompleted,
         SelectNextMatch,
@@ -45,10 +45,6 @@ namespace MonkeyPaste {
         //private static readonly List<object> _globalRecipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
         private static readonly ConcurrentDictionary<MessengerKey, List<object>> _recipientDictionary = new ConcurrentDictionary<MessengerKey, List<object>>();
 
-        public static void Register(object sender, Action<MpMessageType> receiverAction, object context = null) {
-            Register<MpMessageType>(sender, receiverAction, context);
-        }
-
         public static void Register<T>(object sender, Action<T> receiverAction) {
             Register(sender, receiverAction, null);
         }
@@ -62,19 +58,6 @@ namespace MonkeyPaste {
             }            
         }
 
-        //public static void RegisterGlobal(object sender, Action<MpMessageType> receiverAction) {
-        //    RegisterGlobal<MpMessageType>(sender, receiverAction);
-        //}
-
-        //public static void RegisterGlobal<T>(object sender, Action<T> receiverAction) {
-        //    var key = new MessengerKey(sender, typeof(T), null);
-        //    if (_globalRecipientDictionary.ContainsKey(key)) {
-        //        _globalRecipientDictionary[key].Add(receiverAction);
-        //    } else {
-        //        _globalRecipientDictionary.TryAdd(key, new List<object> { receiverAction });
-        //    }
-        //}
-
         public static void Unregister<T>(object sender, Action<T> receiverAction) {
             Unregister(sender, receiverAction, null);
         }
@@ -87,27 +70,13 @@ namespace MonkeyPaste {
             }
         }
 
-        //public static void UnregisterGlobal(object sender, Action<MpMessageType> receiverAction) {
-        //    UnregisterGlobal<MpMessageType>(sender, receiverAction);
-        //}
-
-        //public static void UnregisterGlobal<T>(object sender, Action<T> receiverAction) {
-        //    var key = new MessengerKey(sender, typeof(T), null);
-        //    if (_globalRecipientDictionary.ContainsKey(key)) {
-        //        _globalRecipientDictionary[key].Remove(receiverAction);
-        //    }
-        //}
 
         public static void UnregisterAll() {
             _recipientDictionary.Clear();
            // _globalRecipientDictionary.Clear();
         }
 
-        public static void Send(MpMessageType message, object context = null) {
-            Send<MpMessageType>(message, context);
-        }
-
-        public static void Send<T>(T message) {
+        public static void SendGlobal<T>(T message) {
             Send(message, null);
         }
 
@@ -131,16 +100,6 @@ namespace MonkeyPaste {
                 }
             }
         }
-
-        //public static void SendGlobal(MpMessageType message) {
-        //    SendGlobal<MpMessageType>(message);
-        //}
-
-        //public static void SendGlobal<T>(T message) {
-        //    foreach(var kvp in _globalRecipientDictionary) {
-        //        kvp.Value.ToList().ForEach(x => (x as Action<T>)?.Invoke(message));
-        //    }
-        //}
 
         #region (Internal class) Message Key
 

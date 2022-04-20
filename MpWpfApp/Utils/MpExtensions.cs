@@ -30,6 +30,8 @@ using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 
 using MonkeyPaste.Plugin;
+using Microsoft.Xaml.Behaviors;
+
 namespace MpWpfApp {
     public static class MpExtensions {
         #region Input
@@ -509,8 +511,7 @@ namespace MpWpfApp {
             return result;
         }
 
-        public static T GetVisualAncestor<T>(this DependencyObject d)
-            where T : class {
+        public static T GetVisualAncestor<T>(this DependencyObject d) where T : class {
             var item = VisualTreeHelper.GetParent(d.FindVisualTreeRoot());
 
             while (item != null) {

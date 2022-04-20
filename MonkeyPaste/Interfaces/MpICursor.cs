@@ -20,7 +20,6 @@ namespace MonkeyPaste {
         ResizeAll,
         Hand
     }
-
     public interface MpICursor {
         void SetCursor(MpCursorType newCursor);
     }

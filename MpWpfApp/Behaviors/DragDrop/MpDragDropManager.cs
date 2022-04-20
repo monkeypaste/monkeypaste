@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,7 +15,7 @@ namespace MpWpfApp {
 
         private const double MINIMUM_DRAG_DISTANCE = 10;
 
-        private static Point _mouseStartPosition;
+        private static Point? _mouseDragCheckStartPosition;
 
         private static MpIContentDropTarget _curDropTarget;
 
@@ -100,11 +101,17 @@ namespace MpWpfApp {
             if(MpMoveBehavior.IsAnyMoving) {
                 return;
             }
+            if(!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                //this shouldn't happen 
+                // preview mouse down and global hook maybe out of since
+                var isLeftButtonDown = Mouse.LeftButton == MouseButtonState.Pressed;
+                Debugger.Break();
+            }
 
             DragData = dragData;
             IsCheckingForDrag = true;
 
-            _mouseStartPosition = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            _mouseDragCheckStartPosition = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
 
             MpShortcutCollectionViewModel.Instance.GlobalMouseMove += GlobalHook_MouseMove;
             MpShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonUp += GlobalHook_MouseUp;
@@ -155,12 +162,10 @@ namespace MpWpfApp {
         }
 
         private static  async void GlobalHook_MouseUp(object sender, EventArgs e) {
-            if (IsCheckingForDrag && !IsDragAndDrop) {
-                Reset();
-                return;
-            }
             if (IsDragAndDrop) {
                 await PerformDrop(DragData);
+            } else if (IsCheckingForDrag) {
+                Reset();
             }
         }
 
@@ -171,7 +176,8 @@ namespace MpWpfApp {
                     Reset();
                     return;
                 }
-                if (!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                bool isLeftMouseButtonDown = MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown;
+                if (!isLeftMouseButtonDown || !_mouseDragCheckStartPosition.HasValue) {
                     // this is a sanity check since global event handlers are needed and 
                     // probably something isn't releasing mouse capture
                     Reset();
@@ -179,14 +185,14 @@ namespace MpWpfApp {
                 }
                 MpConsole.WriteLine("In DragDrop mouse move " + MpShortcutCollectionViewModel.Instance.GlobalMouseLocation);
 
-                Vector diff = mp - _mouseStartPosition;
+                Vector diff = mp - _mouseDragCheckStartPosition.Value;
 
                 if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragAndDrop) {
                     if (!IsDragAndDrop) {
                         IsDragAndDrop = true;
                         _timer.Start();
                         MpShortcutCollectionViewModel.Instance.GlobalEscKeyPressed += GlobalEscKey_Pressed;
-                        MpMessenger.Send(MpMessageType.ItemDragBegin);
+                        MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
                     }
 
                     var dropTarget = SelectDropTarget(DragData);
@@ -220,7 +226,7 @@ namespace MpWpfApp {
                     }
                 }
 
-                MpMessenger.Send(MpMessageType.ItemDragEnd);
+                MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
 
                 Reset();
             });
@@ -229,6 +235,7 @@ namespace MpWpfApp {
         private static void Reset() {
             IsCheckingForDrag = IsDragAndDrop = false;
 
+            _mouseDragCheckStartPosition = null;
             _curDropTarget = null;
             DragData = null;
             _timer.Stop();

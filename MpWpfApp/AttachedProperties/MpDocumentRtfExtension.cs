@@ -74,9 +74,9 @@ namespace MpWpfApp {
 
         private static void EnableReadOnly(FrameworkElement fe) {
             if (fe.DataContext is MpContentItemViewModel civm) {
-                var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
-                if (ctcv != null) {
-                    ctcv.TileResizeBehvior.Resize(_readOnlyWidth - ctcv.ActualWidth, 0);
+                var rb = fe.GetVisualAncestor<MpResizeBehavior>();
+                if (rb != null) {
+                    rb.Resize(_readOnlyWidth - rb.AssociatedObjectRef.ActualWidth, 0);
                 }
 
                 //MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(civm);
@@ -85,11 +85,11 @@ namespace MpWpfApp {
 
         private static void DisableReadOnly(FrameworkElement fe) {
             if (fe.DataContext is MpContentItemViewModel civm) {
-                var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
-                if (ctcv != null) {
-                    _readOnlyWidth = ctcv.ActualWidth;
-                    if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
-                        ctcv.TileResizeBehvior.Resize(_EDITOR_DEFAULT_WIDTH - ctcv.ActualWidth, 0);
+                var rb = fe.GetVisualAncestor<MpResizeBehavior>();
+                if (rb != null) {
+                    _readOnlyWidth = rb.AssociatedObjectRef.ActualWidth;
+                    if (rb.AssociatedObjectRef.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
+                        rb.Resize(_EDITOR_DEFAULT_WIDTH - rb.AssociatedObjectRef.ActualWidth, 0);
                     }
                     MpIsFocusedExtension.SetIsFocused(fe, true);
                 }

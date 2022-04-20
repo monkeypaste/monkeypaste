@@ -13,7 +13,7 @@
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
-        <local:MpHighlightSelectorBehavior x:Name="HighlightSelectorBehavior" />
+        <!--<local:MpHighlightSelectorBehavior x:Name="HighlightSelectorBehavior" />-->
     </i:Interaction.Behaviors>
     <local:MpClipBorder x:Name="ClipTileClipBorder"
                         DataContext="{Binding}"
@@ -149,6 +149,7 @@
             </local:MpClipTileLoadingOverlayView>
             <!--  Trial Expired  -->
             <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
+            
         </Grid>
     </local:MpClipBorder>
 </local:MpUserControl>

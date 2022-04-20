@@ -222,7 +222,7 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsResizing):
                     if(!IsResizing) {
-                        MpMessenger.Send<MpMessageType>(MpMessageType.ResizingMainWindowComplete);
+                        MpMessenger.SendGlobal<MpMessageType>(MpMessageType.ResizingMainWindowComplete);
                     }
                     break;
             }
@@ -301,7 +301,7 @@ namespace MpWpfApp {
 
 
 
-                MpMessenger.Send<MpMessageType>(MpMessageType.MainWindowOpening);
+                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowOpening);
 
                 var mw = (MpMainWindow)Application.Current.MainWindow;
                 while(mw == null) {

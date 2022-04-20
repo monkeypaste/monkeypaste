@@ -28,7 +28,7 @@ namespace MpWpfApp {
 
         private static readonly double _EDITOR_DEFAULT_WIDTH = 900;
 
-        private static double _readOnlyWidth;
+        //private static double _readOnlyWidth;
 
         #endregion
 
@@ -49,6 +49,23 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region ReadOnlyWidth
+
+        public static double GetReadOnlyWidth(DependencyObject obj) {
+            return (double)obj.GetValue(ReadOnlyWidthProperty);
+        }
+        public static void SetReadOnlyWidth(DependencyObject obj, double value) {
+            obj.SetValue(ReadOnlyWidthProperty, value);
+        }
+        public static readonly DependencyProperty ReadOnlyWidthProperty =
+          DependencyProperty.RegisterAttached(
+            "ReadOnlyWidth",
+            typeof(double),
+            typeof(MpMergedDocumentRtfExtension),
+            new FrameworkPropertyMetadata(default));
+
+        #endregion
+
         #region IsContentReadOnly
 
         public static bool GetIsContentReadOnly(DependencyObject obj) {
@@ -63,7 +80,7 @@ namespace MpWpfApp {
             typeof(bool),
             typeof(MpMergedDocumentRtfExtension),
             new FrameworkPropertyMetadata() {
-                PropertyChangedCallback = async (s, e) => {
+                PropertyChangedCallback = (s, e) => {
                     if (e.NewValue == null) {
                         return;
                     }
@@ -82,22 +99,35 @@ namespace MpWpfApp {
             });
 
         private static async void EnableReadOnly(FrameworkElement fe) {
+            //if(fe is RichTextBox rtb && rtb.IsReadOnly || 
+            //    fe.DataContext is MpClipTileViewModel ctvm && ctvm.IsContentReadOnly) {
+
+            //}
+             
+            // when this works:
+            // rtb.IsReadOnly = false
+            // ctvm.IsContentReadOnly = true
             await SaveTextContent(fe as RichTextBox);
             var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
             if (ctcv != null) {
-                ctcv.TileResizeBehvior.Resize(_readOnlyWidth - ctcv.ActualWidth, 0);
+                ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(fe));
             }//.FireAndForgetSafeAsync(fe.DataContext as MpClipTileViewModel);
         }
 
         private static void DisableReadOnly(FrameworkElement fe) {
+            // when this works:
+            // rtb.IsReadOnly = true
+            // ctvm.IsContentReadOnly = false
+
+            //
             var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
             
             if (ctcv != null) {
-                _readOnlyWidth = ctcv.ActualWidth;
+                SetReadOnlyWidth(fe,ctcv.ActualWidth);
                 ctcv.GetVisualDescendent<MpRtbEditToolbarView>().SetActiveRtb(fe as RichTextBox);
 
                 if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
-                    ctcv.TileResizeBehvior.Resize(_EDITOR_DEFAULT_WIDTH - ctcv.ActualWidth, 0);
+                    ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
                 }
                 (fe as RichTextBox).FitDocToRtb();
                 MpIsFocusedExtension.SetIsFocused(fe, true);
@@ -188,18 +218,20 @@ namespace MpWpfApp {
             });
 
 
-        private static async void Rtb_Loaded(object sender, RoutedEventArgs e) {
+        private static void Rtb_Loaded(object sender, RoutedEventArgs e) {
             var rtb = sender as RichTextBox;
             if(rtb == null) {
                 return;
             }
-            await LoadContent(rtb);//.FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
+            LoadContent(rtb).FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
         }
 
         public static async Task<List<MpCopyItem>> EncodeContent(RichTextBox rtb) {
             var encodedItems = new List<MpCopyItem>();
 
-            var allTextElements = rtb.Document.GetAllTextElements().OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
+            var allTextElements = rtb.Document
+                                        .GetAllTextElements()
+                                        .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
             string rootGuid = (allTextElements[0].Tag as MpCopyItemReference).CopyItemGuid;
             var ctp_start = rtb.Document.ContentStart;
             string encodedContentStr = string.Empty;
@@ -250,7 +282,7 @@ namespace MpWpfApp {
                 // wait till ctvm finishes initializing 
                 await Task.Delay(100);
             }
-            if(ctvm.IsPlaceholder) {
+            if(ctvm.IsPlaceholder && !ctvm.IsPinned) {
                 return;
             }
             rtb.Document = await DecodeContentItem(ctvm.HeadItem.CopyItemGuid,ctvm.ItemViewModels.Select(x=>x.CopyItem).ToList(), true);
@@ -271,7 +303,6 @@ namespace MpWpfApp {
                     
                     var img = iuic.Child as System.Windows.Controls.Image;
                     iuic.Child = null;
-                    //p.Inlines.Clear();
 
                     iuic.Child = new Viewbox() {
                         VerticalAlignment = VerticalAlignment.Top,
@@ -281,8 +312,6 @@ namespace MpWpfApp {
                         Margin = new Thickness(5),
                         Child = img
                     };
-
-                    //p.Inlines.Add(new InlineUIContainer(vb));
 
                     rtb.Document.LineStackingStrategy = LineStackingStrategy.MaxHeight;
                     rtb.Document.ConfigureLineHeight();

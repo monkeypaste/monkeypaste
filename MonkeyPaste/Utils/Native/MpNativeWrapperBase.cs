@@ -20,6 +20,7 @@ namespace MonkeyPaste {
         MpIStringTools StringTools { get; }
         MpIOsInfo OsInfo { get; }
         MpIClipboardContentDataProvider ClipboardContentDataProvider { get; set; }
+        MpINativeMessageBox NativeMessageBox { get; }
     }
 
 

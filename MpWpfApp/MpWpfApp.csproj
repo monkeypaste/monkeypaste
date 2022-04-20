@@ -110,6 +110,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpMergedDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
     <Compile Include="AttachedProperties\MpEncodedDocumentExtension.cs" />
@@ -119,7 +120,6 @@
     <Compile Include="AttachedProperties\MpGradientBackgroundExtension.cs" />
     <Compile Include="AttachedProperties\MpIsFocusedExtension.cs" />
     <Compile Include="AttachedProperties\MpPopupMenuExtension.cs" />
-    <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpHoverableExtension.cs" />
     <Compile Include="AttachedProperties\MpScrollViewerExtension.cs" />
     <Compile Include="AttachedProperties\MpSizeObserverExtension.cs" />
@@ -265,6 +265,7 @@
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfMessageBox.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfIconBuilder.cs" />
     <Compile Include="Utils\Builders\MpWpfPasteObjectBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
@@ -377,6 +378,9 @@
     <Compile Include="Views\Base\MpContextMenu.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
     <Compile Include="Views\Base\MpIRectViewModel.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml.cs">
+      <DependentUpon>MpClipTileContainerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\DetectedObjectItem\MpDetectedObjectItemView.xaml.cs">
       <DependentUpon>MpDetectedObjectItemView.xaml</DependentUpon>
     </Compile>
@@ -392,7 +396,6 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\MpContentUserControl.cs" />
     <Compile Include="Views\MainWindow\SideBarMenu\ButtonColumn\MpSidebarView.xaml.cs">
       <DependentUpon>MpSidebarView.xaml</DependentUpon>
     </Compile>
@@ -529,9 +532,6 @@
     <Compile Include="ViewModels\Reusable\MpMarqueeTextBlockViewModel.cs" />
     <Compile Include="Views\Base\MpUserControl.cs" />
     <Compile Include="Views\Base\MpWindow.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml.cs">
-      <DependentUpon>MpClipTileContainerView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\MpImageItemView.xaml.cs">
       <DependentUpon>MpImageItemView.xaml</DependentUpon>
     </Compile>
@@ -742,6 +742,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\DetectedObjectItem\MpDetectedObjectItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -757,10 +761,6 @@
     <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\MpImageItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -2821,6 +2821,7 @@
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Plugins\Google\PeopleApi\" />
     <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
+    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FileList\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>

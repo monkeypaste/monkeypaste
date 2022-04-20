@@ -10,6 +10,8 @@ namespace MpWpfApp {
         protected object _dataContext;
         protected bool _isLoaded = false;
 
+        public T AssociatedObjectRef => AssociatedObject;
+
         #region IsEnabled DependencyProperty
 
         public bool IsEnabled {
@@ -24,6 +26,12 @@ namespace MpWpfApp {
                  new FrameworkPropertyMetadata(true));
 
         #endregion
+
+        public void Reattach() {
+            var assocObj = AssociatedObject;
+            Detach();
+            Attach(assocObj);
+        }
 
         protected override void OnAttached() {
             base.OnAttached();

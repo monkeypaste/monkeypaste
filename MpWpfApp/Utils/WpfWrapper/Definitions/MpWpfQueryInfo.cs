@@ -40,9 +40,9 @@ namespace MpWpfApp {
 
             MpHelpers.RunOnMainThread(() => {
                 if (isFilterSortOrSearch) {
-                    MpMessenger.Send<MpMessageType>(MpMessageType.QueryChanged);
+                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.QueryChanged);
                 } else {
-                    MpMessenger.Send<MpMessageType>(MpMessageType.SubQueryChanged);
+                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SubQueryChanged);
                 }
             });
         }

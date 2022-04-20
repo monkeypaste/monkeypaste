@@ -228,6 +228,16 @@ namespace MpWpfApp {
         }
 
         public async Task UpdateTagAssociation() {
+            // BUG after tray jump and scroll then resizing tile then resize to default (double click) 
+            // there's a collection is modified exception
+            // I think this is because of tray's load (since scroll changes from resizing) more and handling persistent selection so wait till tray's done
+
+            while(MpClipTrayViewModel.Instance.IsBusy || 
+                  MpClipTrayViewModel.Instance.Items.Any(x=>x.IsBusy) ||
+                  MpClipTrayViewModel.Instance.Items.Any(x => x.ItemViewModels.Any(y=>y.IsBusy))) {
+                await Task.Delay(100);
+            }
+            
             foreach (var ttvm in Items) {
                 if (ttvm.IsSudoTag || ttvm.IsSelected) {
                     continue;

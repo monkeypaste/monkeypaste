@@ -543,12 +543,12 @@ namespace MpWpfApp {
 
         public ICommand NextMatchCommand => new RelayCommand(
             () => {
-                MpMessenger.Send(MpMessageType.SelectNextMatch);
+                MpMessenger.SendGlobal(MpMessageType.SelectNextMatch);
             });
 
         public ICommand PrevMatchCommand => new RelayCommand(
             () => {
-                MpMessenger.Send(MpMessageType.SelectPreviousMatch);
+                MpMessenger.SendGlobal(MpMessageType.SelectPreviousMatch);
             });
 
         public ICommand ClearSearchCriteriaItemsCommand => new RelayCommand(
@@ -556,7 +556,7 @@ namespace MpWpfApp {
                 CriteriaItems.Clear();
                 OnPropertyChanged(nameof(CriteriaItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
-                MpMessenger.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
+                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             });
 
         public ICommand AddSearchCriteriaItemCommand => new RelayCommand(
@@ -568,7 +568,7 @@ namespace MpWpfApp {
                 CriteriaItems.Add(nscivm);
                 OnPropertyChanged(nameof(CriteriaItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
-                MpMessenger.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
+                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             },CanAddCriteriaItem);
 
         public ICommand RemoveSearchCriteriaItemCommand => new RelayCommand<MpSearchCriteriaItemViewModel>(
@@ -579,7 +579,7 @@ namespace MpWpfApp {
                     await scivm.SearchCriteriaItem.DeleteFromDatabaseAsync();
                 }
                 await UpdateCriteriaSortOrder();
-                MpMessenger.Send<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
+                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             });
 
         public ICommand SaveSearchCommand => new RelayCommand(

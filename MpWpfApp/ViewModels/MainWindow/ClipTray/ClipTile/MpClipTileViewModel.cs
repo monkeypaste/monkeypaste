@@ -817,7 +817,7 @@
                 OnPropertyChanged(nameof(QueryOffsetIdx)); 
                 RequestUiUpdate();
 
-                MpMessenger.Send<MpMessageType>(MpMessageType.ContentListItemsChanged, this);
+                MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
             }
 
             ItemViewModels.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
@@ -1144,6 +1144,7 @@
                             Parent.ClearClipSelection(false);
                         } else {
                             Parent.ClearPinnedSelection(false);
+                            Parent.RequestScrollIntoView(this);
                         }                        
                     } else {
                         if (IsFlipped) {
@@ -1186,7 +1187,7 @@
                     break;
                 case nameof(IsContentReadOnly):
                     //ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsContentReadOnly)));
-                    //MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
+                    MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
 
                     //ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
                     //MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
@@ -1198,10 +1199,9 @@
 
                     OnPropertyChanged(nameof(HorizontalScrollbarVisibility));
                     OnPropertyChanged(nameof(VerticalScrollbarVisibility));
-                    //OnPropertyChanged(nameof(IsContentReadOnly));
-                    if (IsContentReadOnly) {
-                        ItemViewModels.ForEach(x => x.ClearEditing());
-                    }
+                    //if (IsContentReadOnly) {
+                    //    ItemViewModels.ForEach(x => x.ClearEditing());
+                    //}
                     ItemViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
 
                     OnPropertyChanged(nameof(CanVerticallyScroll));

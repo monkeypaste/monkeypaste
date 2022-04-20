@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using MonkeyPaste.Plugin;
+using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
@@ -24,11 +25,13 @@ namespace MpWpfApp {
         }
 
         private void ClipTileClipBorder_Loaded(object sender, RoutedEventArgs e) {
-            HighlightSelectorBehavior.Attach(this);
+            //HighlightSelectorBehavior.Attach(this);
+            
+
         }
 
         private void ClipTileClipBorder_Unloaded(object sender, RoutedEventArgs e) {
-            HighlightSelectorBehavior.Detach();
+            //HighlightSelectorBehavior.Detach();
 
         }
         private void ClipTileClipBorder_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {

@@ -27,9 +27,14 @@ namespace MonkeyPaste {
                 // check if temp file list existed and log file and remove all temps
                 if (File.Exists(TempFilePath)) {
                     string[] lastTempFileList = MpFileIo.ReadTextFromFile(TempFilePath).Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var lastTempFileToDelete in lastTempFileList) {
-                        if (File.Exists(lastTempFileToDelete)) {
-                            File.Delete(lastTempFileToDelete);
+
+                    string msg = "Warning! Do you want to delete these? " + Environment.NewLine + string.Join(Environment.NewLine, lastTempFileList);
+                    var result = MpNativeWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox("Temp File Manager", msg);
+                    if (result) {
+                        foreach (var lastTempFileToDelete in lastTempFileList) {
+                            if (File.Exists(lastTempFileToDelete)) {
+                                File.Delete(lastTempFileToDelete);
+                            }
                         }
                     }
                     File.Delete(TempFilePath);
@@ -44,6 +49,11 @@ namespace MonkeyPaste {
         }
 
         public static void Shutdown() {
+            string msg = "Warning! Do you want to delete these? " + Environment.NewLine + string.Join(Environment.NewLine, _tempFileList);
+            var result = MpNativeWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox("Temp File Manager", msg);
+            if(!result) {
+                return;
+            }
             foreach (string tfp in _tempFileList) {
                 if (File.Exists(tfp)) {
                     try {

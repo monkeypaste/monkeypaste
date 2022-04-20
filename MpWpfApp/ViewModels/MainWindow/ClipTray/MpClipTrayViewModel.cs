@@ -1001,7 +1001,7 @@ namespace MpWpfApp {
         }
 
         public void NotifySelectionChanged() {
-            MpMessenger.Send(MpMessageType.TraySelectionChanged);
+            MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
         }
 
         public void StoreSelectionState(MpClipTileViewModel tile) {
@@ -1201,10 +1201,6 @@ namespace MpWpfApp {
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(IsTrayEmpty));
-            //return;
-            //if (IsAnyTileExpanded) {
-            //    return;
-            //}
             if (e.OldItems != null) { //if (e.Action == NotifyCollectionChangedAction.Move && IsLoadingMore) {
                 foreach (MpClipTileViewModel octvm in e.OldItems) {
                     octvm.Dispose();
@@ -1320,7 +1316,7 @@ namespace MpWpfApp {
                     foreach (MpClipTileViewModel nctvm in Items) {
                         nctvm.OnPropertyChanged(nameof(nctvm.TrayX));
                     }
-                    MpMessenger.Send<MpMessageType>(MpMessageType.TrayScrollChanged);
+                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
                     break;
                 case nameof(IsAppendMode):
                     MpNotificationCollectionViewModel.Instance.ShowMessage(string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
@@ -1562,7 +1558,7 @@ namespace MpWpfApp {
                 //IsBusy = false;
 
                 //using tray scroll changed so tile drop behaviors update their drop rects
-                MpMessenger.Send<MpMessageType>(MpMessageType.TrayScrollChanged);
+                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
             },
             () => {
                 if (_newModels.Count == 0) {
@@ -1669,7 +1665,7 @@ namespace MpWpfApp {
                 IsBusy = false;
                 IsRequery = false;
 
-                MpMessenger.Send<MpMessageType>(MpMessageType.RequeryCompleted);
+                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.RequeryCompleted);
 
                 sw.Stop();
                 MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
@@ -1762,14 +1758,13 @@ namespace MpWpfApp {
                        !IsBusy &&
                        !IsLoadingMore &&
                        !IsScrollJumping &&
-                       //!IsAnyTileExpanded &&
                        !MpMainWindowViewModel.Instance.IsMainWindowLoading;
             });
 
         public ICommand JumpToQueryIdxCommand => new RelayCommand<int>(
             async (idx) => {
                 if (idx < TailQueryIdx && idx > HeadQueryIdx) {
-                    MpMessenger.Send<MpMessageType>(MpMessageType.JumpToIdxCompleted);
+                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.JumpToIdxCompleted);
                     return;
                 }
 
@@ -1801,7 +1796,7 @@ namespace MpWpfApp {
                     RestoreSelectionState(Items[i]);
                 }
 
-                MpMessenger.Send<MpMessageType>(MpMessageType.JumpToIdxCompleted);
+                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.JumpToIdxCompleted);
 
                 IsScrollJumping = false;
                 IsBusy = false;
@@ -2065,7 +2060,6 @@ namespace MpWpfApp {
             },
             (args) => {
                 return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
-                    //!IsAnyTileExpanded &&
                     !IsAnyEditingClipTile &&
                     !IsAnyEditingClipTitle &&
                     !IsAnyPastingTemplate &&
