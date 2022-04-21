@@ -343,6 +343,8 @@ namespace MpWpfApp {
 
         public double ClipTrayScreenWidth => MpMeasurements.Instance.ClipTrayDefaultWidth - PinTrayTotalWidth;
 
+        public double MaxTileWidth => ClipTrayScreenWidth - (MpMeasurements.Instance.ClipTileMaxWidthPadding * 2);
+
         public double ClipTrayTotalTileWidth {
             get {
                 //int totalTileCount = TotalTilesInQuery;

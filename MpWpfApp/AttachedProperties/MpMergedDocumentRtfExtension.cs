@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ConstrainedExecution;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
@@ -26,6 +27,7 @@ namespace MpWpfApp {
     public class MpMergedDocumentRtfExtension : DependencyObject {
         #region Private Variables
 
+        
         private static readonly double _EDITOR_DEFAULT_WIDTH = 900;
 
         //private static double _readOnlyWidth;
@@ -194,6 +196,8 @@ namespace MpWpfApp {
         public static void SetHeadContentItemViewModel(DependencyObject obj, object value) {
             obj.SetValue(HeadContentItemViewModelProperty, value);
         }
+        private static int _loadCallCount = 0;
+
         public static readonly DependencyProperty HeadContentItemViewModelProperty =
           DependencyProperty.RegisterAttached(
             "HeadContentItemViewModel",
@@ -201,6 +205,7 @@ namespace MpWpfApp {
             typeof(MpMergedDocumentRtfExtension),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (s, e) => {
+                    MpConsole.WriteLine("Load call count: " + (++_loadCallCount));
                     if(e.NewValue == null) {
                         //occurs when tile is placeholder
                         return;
@@ -285,49 +290,33 @@ namespace MpWpfApp {
             if(ctvm.IsPlaceholder && !ctvm.IsPinned) {
                 return;
             }
-            rtb.Document = await DecodeContentItem(ctvm.HeadItem.CopyItemGuid,ctvm.ItemViewModels.Select(x=>x.CopyItem).ToList(), true);
+            rtb.Document = await DecodeContentItem(
+                itemGuid: ctvm.HeadItem.CopyItemGuid,
+                itemRange: new TextRange(rtb.Document.ContentStart,rtb.Document.ContentEnd),
+                items: ctvm.ItemViewModels.Select(x=>x.CopyItem).ToList(), 
+                rootDocument: rtb.Document, 
+                decodeAsRootDocument: true);
             
             switch (ctvm.HeadItem.CopyItemType) {
                 case MpCopyItemType.Text:
                 case MpCopyItemType.FileList:
+                    rtb.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    rtb.VerticalAlignment = VerticalAlignment.Stretch;
                     rtb.FitDocToRtb();
                     break;
-                case MpCopyItemType.Image:
-                    rtb.Document.PageWidth = rtb.ActualWidth;
-                    rtb.Document.PageHeight = rtb.ActualHeight;
-                    rtb.HorizontalAlignment = HorizontalAlignment.Center;
-                    rtb.VerticalAlignment = VerticalAlignment.Center;
-
-                    var p = rtb.Document.Blocks.FirstBlock as Paragraph;
-                    var iuic = p.Inlines.FirstInline as InlineUIContainer;
-                    
-                    var img = iuic.Child as System.Windows.Controls.Image;
-                    iuic.Child = null;
-
-                    iuic.Child = new Viewbox() {
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Stretch = Stretch.Uniform,
-                        Width = rtb.ActualWidth,
-                        Height = rtb.ActualHeight,
-                        Margin = new Thickness(5),
-                        Child = img
-                    };
-
-                    rtb.Document.LineStackingStrategy = LineStackingStrategy.MaxHeight;
-                    rtb.Document.ConfigureLineHeight();
-
-                    new TextRange(p.ContentStart, p.ContentEnd).ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Center);
-
-                    rtb.VerticalAlignment = VerticalAlignment.Top;
-                    rtb.VerticalContentAlignment = VerticalAlignment.Top;
-                    break;
+                
             }
 
             //wait till full doc is loaded to hook textChanged
             rtb.TextChanged += Rtb_TextChanged;
         }
 
-        private static async Task<FlowDocument> DecodeContentItem(string itemGuid, List<MpCopyItem> items, bool decodeTemplates = false) {
+        private static async Task<FlowDocument> DecodeContentItem(
+            string itemGuid, 
+            TextRange itemRange,
+            List<MpCopyItem> items, 
+            FlowDocument rootDocument, 
+            bool decodeAsRootDocument = false) {
             MpCopyItem ci = items.FirstOrDefault(x=>x.Guid == itemGuid);
 
             if (ci == default) {
@@ -340,25 +329,32 @@ namespace MpWpfApp {
                 }
             }
 
+            //using (var stream = new MemoryStream(Encoding.Default.GetBytes(ci.ItemData))) {
+
+            //}
+
+            // convert itemData to flow document and gather child fragment guid ranges and their content
             FlowDocument fd = ci.ItemData.ToFlowDocument(ci.IconId);
+
             var childRanges = GetEncodedRanges(fd,"{c{","}c}");
             var childGuids = childRanges.Select(x => x.Text.Replace("{c{", string.Empty).Replace("}c}", string.Empty)).ToArray();
-            var childItems = items.Where(x => childGuids.Contains(x.Guid)).ToList();
-            if(childItems.Count != childGuids.Length) {
-                var missingGuids = childGuids.Where(x => childItems.All(y => y.Guid != x));
+            var childCopyItems = items.Where(x => childGuids.Contains(x.Guid)).ToList();
+            if(childCopyItems.Count != childGuids.Length) {
+                var missingGuids = childGuids.Where(x => childCopyItems.All(y => y.Guid != x));
                 var missingItems = await MpDataModelProvider.GetCopyItemsByGuids(missingGuids.ToArray());
-                childItems.AddRange(missingItems);
+                childCopyItems.AddRange(missingItems);
             }
             
+            // decode fragment and replace its guid range with fragment content
             for (int i = 0; i < childGuids.Length; i++) {
                 var insertRange = childRanges[i];
                 string childGuid = childGuids[i];
-                if(childItems.All(x=>x.Guid != childGuid)) {
+                if(childCopyItems.All(x=>x.Guid != childGuid)) {
                     MpConsole.WriteTraceLine("Missing content child detected, replacing w/ empty string " + childGuid);
                     insertRange.Text = string.Empty;
                     continue;
                 }
-                var cfd = await DecodeContentItem(childGuid,items);
+                var cfd = await DecodeContentItem(childGuid,null,items,rootDocument);
 
                 //fd.Combine(cfd, childRange.Start);
                 using (MemoryStream stream = new MemoryStream()) {
@@ -379,7 +375,7 @@ namespace MpWpfApp {
                     var rangeTo = new TextRange(insertRange.Start, insertRange.End);
                     rangeTo.Load(stream, DataFormats.XamlPackage);
 
-                    if(decodeTemplates) {
+                    if(decodeAsRootDocument) {
                         //only register events on root document
                         var allRangeElements = rangeTo.GetAllTextElements();
                         allRangeElements.ForEach(x => x.Tag = new MpCopyItemReference() { CopyItemGuid = childGuid });
@@ -400,7 +396,7 @@ namespace MpWpfApp {
                 }
             }
 
-            if(decodeTemplates) {
+            if(decodeAsRootDocument) {
                 // this should only occur in root document once all children are added to avoid different document error
                 var templateRanges = GetEncodedRanges(fd, "{t{", "}t}");
                 var templateGuids = templateRanges.Select(x => x.Text.Replace("{c{", string.Empty).Replace("}c}", string.Empty)).ToList();
@@ -459,8 +455,8 @@ namespace MpWpfApp {
                 // BUG I think this event gets called when a tile is dropped and its turned into placeholder
                 return;
             }
-            MpConsole.WriteLines("Tile " + ctvm.HeadItem.CopyItemTitle + " text changed:");
-            MpConsole.WriteLine(rtb.Document.ToXamlPackage());
+            //MpConsole.WriteLines("Tile " + ctvm.HeadItem.CopyItemTitle + " text changed:");
+            //MpConsole.WriteLine(rtb.Document.ToXamlPackage());
 
             foreach(var tc in e.Changes) {
                 if(tc.AddedLength == 0) {

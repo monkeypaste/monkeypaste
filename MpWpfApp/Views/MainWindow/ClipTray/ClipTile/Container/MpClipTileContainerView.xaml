@@ -16,7 +16,9 @@
                                                        Converter={StaticResource BoolToVisibilityConverter}}" />-->
 
 
-    <StackPanel Orientation="Horizontal" Loaded="StackPanel_Loaded">
+    <StackPanel Orientation="Horizontal"
+                Loaded="StackPanel_Loaded"
+                SizeChanged="StackPanel_SizeChanged">
         <local:MpClipTileView Visibility="{Binding IsPlaceholder,
                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}"
                               DataContext="{Binding}" />
@@ -51,6 +53,8 @@
                                                              NotifyOnTargetUpdated=True}"
                                         DefaultWidth="{Binding ClipTileDefaultMinSize,
                                                                Source={x:Static local:MpMeasurements.Instance}}"
+                                        MaxWidth="{Binding MaxTileWidth,
+                                                           Source={x:Static local:MpClipTrayViewModel.Instance}}"
                                         MinWidth="{Binding ClipTileBorderMinWidth,
                                                            Source={x:Static local:MpMeasurements.Instance}}" />
 

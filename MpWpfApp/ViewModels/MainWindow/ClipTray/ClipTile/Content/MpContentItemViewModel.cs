@@ -261,7 +261,7 @@ namespace MpWpfApp {
                                         MpMeasurements.Instance.ClipTileContentItemMinHeight);
                 }
                 return new Size(
-                            MpMeasurements.Instance.ClipTileContentMinWidth,
+                            MpMeasurements.Instance.ClipTileContentDefaultWidth,
                             h);
             }
         }

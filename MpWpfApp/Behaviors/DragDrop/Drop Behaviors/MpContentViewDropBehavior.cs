@@ -53,43 +53,6 @@ namespace MpWpfApp {
             //AssociatedObject.Rtb.Drop += Rtb_Drop;
         }
 
-        public void Rtb_Drop(object sender, DragEventArgs e) {
-            if (e.Handled) {
-                return;
-            }
-            if (e.Data.GetDataPresent(MpDataObject.InternalContentFormat)) {
-                
-            }
-        }
-
-        public void Rtb_DragOver(object sender, DragEventArgs e) {
-            e.Effects = DragDropEffects.None;
-
-            bool isValid = true;
-            if(MpDragDropManager.DragData == null) {
-                isValid = MpDragDropManager.PrepareDropDataFromExternalSource(e.Data);
-            }
-            
-            if (isValid) {
-                if (e.KeyStates == DragDropKeyStates.ControlKey ||
-                   e.KeyStates == DragDropKeyStates.AltKey ||
-                   e.KeyStates == DragDropKeyStates.ShiftKey) {
-                    e.Effects = DragDropEffects.Copy;
-                } else {
-                    e.Effects = DragDropEffects.Move;
-                }
-
-                if(!MpDragDropManager.IsCheckingForDrag) {
-                    MpDragDropManager.StartDragCheck(MpDragDropManager.DragData);
-                }
-            }
-            e.Handled = true;
-        }
-
-        public void Rtb_DragLeave(object sender, DragEventArgs e) {
-            Reset();
-        }
-
         public override void OnUnloaded() {
             base.OnUnloaded();
 
@@ -140,10 +103,10 @@ namespace MpWpfApp {
             Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth, rtb.ActualHeight);
             if (!rtb_rect.Contains(mp)) {
                 //Reset();
-                MpConsole.WriteLine("rtb mp (no hit): " + mp);
+               // MpConsole.WriteLine("rtb mp (no hit): " + mp);
                 return -1;
             }
-            MpConsole.WriteLine("rtb mp: " + mp);
+            //MpConsole.WriteLine("rtb mp: " + mp);
             //MpIsFocusedExtension.SetIsFocused(rtb, true);
             var mptp = rtb.GetPositionFromPoint(mp, true);
             var mptp_rect = mptp.GetCharacterRect(LogicalDirection.Forward);
@@ -221,7 +184,7 @@ namespace MpWpfApp {
             if (AssociatedObject == null) {
                 return;
             }
-            // BUG storing dropIdx because somehow it got lost while step tracing
+            // BUG storing dropIdx because somehow it gets lost after calling base
             int dropIdx = DropIdx;
             
             await base.Drop(isCopy, dragData);

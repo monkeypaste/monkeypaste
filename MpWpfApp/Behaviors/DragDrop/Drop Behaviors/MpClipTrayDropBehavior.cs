@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -55,10 +56,13 @@ namespace MpWpfApp {
 
         public override int GetDropTargetRectIdx() {
             var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-            var mp = Application.Current.MainWindow.TranslatePoint(gmp, RelativeToElement);
-            Point trayMp = Mouse.GetPosition(RelativeToElement);
-
-            Rect targetRect = DropRects.FirstOrDefault(x => x.Contains(trayMp));
+            var mp = Application.Current.MainWindow.TranslatePoint(gmp, AssociatedObject.ClipTray);
+            //MpConsole.WriteLine("Global mp in tray coords: " + mp);
+            var tray_rect = new Rect(0, 0, AssociatedObject.ClipTray.ActualWidth, AssociatedObject.ClipTray.ActualHeight);
+            if(!tray_rect.Contains(mp)) {
+                return -1;
+            }
+            Rect targetRect = DropRects.FirstOrDefault(x => x.Contains(mp));
             if (targetRect == null || targetRect.IsEmpty) {
                 return -1;
             }
@@ -66,7 +70,15 @@ namespace MpWpfApp {
         }
 
         public override void AutoScrollByMouse() {
-            var ctr_mp = Mouse.GetPosition(AssociatedObject);
+            var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            var ctr_mp = Application.Current.MainWindow.TranslatePoint(gmp, AssociatedObject.ClipTray);
+            //MpConsole.WriteLine("Global mp in tray coords: " + mp);
+            var tray_rect = new Rect(0, 0, AssociatedObject.ClipTray.ActualWidth, AssociatedObject.ClipTray.ActualHeight);
+            if (!tray_rect.Contains(ctr_mp)) {
+                return;
+            }
+
+            //var ctr_mp = Mouse.GetPosition(AssociatedObject);
             Rect ctr_sv_rect = new Rect(0, 0, AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);
             if(!ctr_sv_rect.Contains(ctr_mp)) {
                 return;
@@ -101,7 +113,7 @@ namespace MpWpfApp {
                 if (i == 0) {
                     targetRect.Location = new Point(0, 0);
 
-                    targetRect.Width = targetRect.Left + tileMargin;
+                    targetRect.Width = 10;// targetRect.Left + tileMargin;
                 } 
                 //else if(i < tileRects.Count - 1) {
                 //    double curMidX = targetRect.Location.X + (targetRect.Width / 2);
@@ -150,6 +162,10 @@ namespace MpWpfApp {
             }
             var dr = drl[DropIdx];
             double x = dr.Left + (dr.Width / 2) + 2;
+            if(DropIdx == 0) {
+                x = 3;
+            }
+            MpConsole.WriteLine("Tray DropLine X: " + x);
             return new MpLine(x, dr.Top, x, dr.Bottom);
         }
 
@@ -159,17 +175,31 @@ namespace MpWpfApp {
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
+            if(AssociatedObject == null) {
+                return;
+            }
+            // BUG storing dropIdx because somehow it gets lost after calling base
+            int dropIdx = DropIdx;
+
             await base.Drop(isCopy, dragData);
 
-            MpClipTileSortViewModel.Instance.SetToManualSort();            
+            MpClipTileSortViewModel.Instance.SetToManualSort();
 
-            List<MpCopyItem> dragModels = isCopy ? await GetDragDataCopy(dragData) : dragData as List<MpCopyItem>;
+            List<MpCopyItem> dragModels;
+            
+            if(dragData is MpDataObject mpdo) {
+                var ci = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                dragModels = new List<MpCopyItem>() { ci };
+            } else {
+                dragModels = isCopy ? await GetDragDataCopy(dragData) : dragData as List<MpCopyItem>;
+            }
+            
             
             if(!isCopy) {
                 dragModels = await Detach(dragModels);
             }
 
-            int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + DropIdx;
+            int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + dropIdx;
 
             MpDataModelProvider.InsertQueryItem(dragModels[0].Id, queryDropIdx);
 

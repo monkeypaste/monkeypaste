@@ -16,15 +16,28 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml;
 using MonkeyPaste.Plugin;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public static class MpWpfRichDocumentExtensions {
+        public static TextRange ContentRange(this TextElement te) {
+            return new TextRange(te.ContentStart, te.ContentEnd);
+        }
+        public static TextRange ElementRange(this TextElement te) {
+            return new TextRange(te.ElementStart, te.ElementEnd);
+        }
         public static bool IsPointInRange(this TextRange tr, Point p) {
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
 
             var ptp = rtb.GetPositionFromPoint(p, true);
 
             return tr.Contains(ptp);
+        }
+
+        public static bool IsImageDocument(this FlowDocument fd) {
+            return fd.Blocks.FirstBlock is Paragraph p &&
+                    p.Inlines.FirstInline is InlineUIContainer iuic &&
+                    iuic.Child is Image;
         }
         public static bool HasTable(this RichTextBox rtb) {
             return rtb.Document.Blocks.Any(x => x is Table);
@@ -68,53 +81,6 @@ namespace MpWpfApp {
             }
         }
 
-        public static TextRange Clone(this TextSelection ts) {
-            return new TextRange(ts.Start, ts.End);
-        }
-
-        public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
-            //var rtbSelection = rtb.Selection;
-            var documentBytes = UTF8Encoding.Default.GetBytes(document);
-            using (var reader = new MemoryStream(documentBytes)) {
-                reader.Position = 0;
-                new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Load(reader, System.Windows.DataFormats.Rtf);
-                //rtb.SelectAll();
-                //rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
-                //rtb.CaretPosition = rtb.Document.ContentStart;
-                //if (rtbSelection != null) {
-                //    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-                //}
-            }
-        }
-
-        public static void SetRtf(this FlowDocument fd, string document) {
-            //var rtbSelection = rtb.Selection;
-            var documentBytes = UTF8Encoding.Default.GetBytes(document);
-            using (var reader = new MemoryStream(documentBytes)) {
-                reader.Position = 0;
-                new TextRange(fd.ContentStart, fd.ContentEnd).Load(reader, System.Windows.DataFormats.Rtf);
-                //rtb.SelectAll();
-                //rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
-                //rtb.CaretPosition = rtb.Document.ContentStart;
-                //if (rtbSelection != null) {
-                //    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-                //}
-            }
-        }
-
-        public static string GetRtf(this RichTextBox rtb) {
-            return rtb.Document.ToRichText();
-        }
-
-        public static void SetXaml(this System.Windows.Controls.RichTextBox rtb, string document) {
-            var documentBytes = Encoding.Default.GetBytes(document);
-            using (var reader = new MemoryStream(documentBytes)) {
-                reader.Position = 0;
-                rtb.SelectAll();
-                rtb.Selection.Load(reader, System.Windows.DataFormats.Xaml);
-            }
-        }
-
         public static IEnumerable<TextElement> GetTextElementsOfTypes(this FlowDocument doc, params object[] types) {
             for (TextPointer position = doc.ContentStart;
               position != null && position.CompareTo(doc.ContentEnd) <= 0;
@@ -153,7 +119,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
         public static IEnumerable<TextElement> GetRunsAndParagraphs(this FlowDocument doc) {
             for (TextPointer position = doc.ContentStart;
               position != null && position.CompareTo(doc.ContentEnd) <= 0;
@@ -179,15 +144,165 @@ namespace MpWpfApp {
             }
         }
 
+        public static void LoadImage(this TextRange tr, string base64Str, Size? docSize = null) {
+            if (!base64Str.IsStringBase64()) {
+                Debugger.Break();
+                return;
+            }
 
+            BitmapSource bmpSrc = base64Str.ToBitmapSource();
+
+            var img = new Image() {
+                Source = bmpSrc,
+                Width = bmpSrc.Width,
+                Height = bmpSrc.Height,
+                Stretch = System.Windows.Media.Stretch.None
+            };
+
+            docSize = docSize.HasValue ? docSize : MpMeasurements.Instance.ClipTileContentDefaultSize;
+            double pad = 0;
+
+            var vb = new Viewbox() {
+                VerticalAlignment = VerticalAlignment.Top,
+                Stretch = Stretch.Uniform,
+                Width = docSize.Value.Width - pad,
+                Height = docSize.Value.Width - pad,
+                //Margin = new Thickness(5),
+                Child = img
+            };
+
+            tr.Text = string.Empty;
+            new InlineUIContainer(vb,tr.Start);
+        }
+        
+        public static FlowDocument ToImageDocument(this string base64Str, Size? docSize = null) {
+            if (!base64Str.IsStringBase64()) {
+                Debugger.Break();
+                return string.Empty.ToFlowDocument();
+            }
+
+            BitmapSource bmpSrc = base64Str.ToBitmapSource();
+
+            var img = new Image() {
+                Source = bmpSrc,
+                Width = bmpSrc.Width,
+                Height = bmpSrc.Height,
+                Stretch = System.Windows.Media.Stretch.Uniform
+            };
+
+            var fd = string.Empty.ToFlowDocument();
+            var p = fd.Blocks.FirstBlock as Paragraph;
+            p.ContentRange().LoadImage(base64Str, docSize);
+
+            //p.Inlines.Clear();
+
+            //docSize = docSize.HasValue ? docSize : MpMeasurements.Instance.ClipTileContentDefaultSize;
+
+            //var vb = new Viewbox() {
+            //    VerticalAlignment = VerticalAlignment.Top,
+            //    Stretch = Stretch.Uniform,
+            //    Width = docSize.Value.Width,
+            //    Height = docSize.Value.Width,
+            //    Margin = new Thickness(5),
+            //    Child = img
+            //};
+            //var iuic = new InlineUIContainer(vb);
+            //p.Inlines.Add(iuic);
+
+            fd.LineStackingStrategy = LineStackingStrategy.MaxHeight;
+            fd.ConfigureLineHeight();
+            p.ContentRange().ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Center);
+
+            return fd;
+        }
+
+        public static void LoadFileItem(this TextRange tr, string path, int iconId = 0, double iconSize = 16) {
+            string iconBase64 = string.Empty;
+
+            if (iconId > 0) {
+                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
+                if (ivm == default) {
+                    iconBase64 = MpBase64Images.Warning;
+                } else {
+                    iconBase64 = ivm.IconBase64;
+                }
+            } else if (path.IsFileOrDirectory()) {
+                iconBase64 = MpShellEx.GetBitmapFromPath(path, MpIconSize.SmallIcon16).ToBase64String();
+            }
+            if (string.IsNullOrEmpty(iconBase64)) {
+                iconBase64 = MpBase64Images.Warning;
+            }
+
+            BitmapSource bmpSrc = iconBase64.ToBitmapSource();
+            var pathIcon = new Image() {
+                Source = bmpSrc,
+                Width = iconSize,
+                Height = iconSize,
+                Stretch = System.Windows.Media.Stretch.Fill
+            };
+
+            tr.Text = string.Empty;
+            //var fd = string.Empty.ToFlowDocument();
+            var iuc = new InlineUIContainer(pathIcon) {
+                BaselineAlignment = BaselineAlignment.Bottom
+            };
+
+            Paragraph p = null;
+            if (tr.Start.Parent is Block b) {
+                if (b is Paragraph) {
+                    p = b as Paragraph;
+                    p.Inlines.Clear();
+                    p.Inlines.Add(iuc);
+                }
+            } else {
+                Debugger.Break();
+            }
+            //else if(tr.Start.Parent is Inline i) {
+
+            //} else if(tr.Start.Parent is FlowDocument fd) {
+
+            //}
+
+
+            string pathDir = path;
+            if (File.Exists(pathDir)) {
+                pathDir = Path.GetDirectoryName(pathDir);
+            }
+
+            var pathLink = new Hyperlink(new Run(Path.GetFileName(pathDir))) {
+                IsEnabled = true,
+                NavigateUri = new Uri(pathDir, UriKind.Absolute)
+            };
+            pathLink.RequestNavigate += (s, e) => {
+                return;
+            };
+            pathLink.PreviewMouseDown += (s, e) => {
+                return;
+            };
+            pathLink.MouseEnter += (s, e) => {
+                return;
+            };
+
+            p.Inlines.Add(pathLink);
+            //fd.Blocks.Clear();
+            //fd.Blocks.Add(p);
+
+            return;
+        }
+
+        public static FlowDocument ToFilePathDocument(this string path, int iconId = 0, double iconSize = 16) {
+            var fd = string.Empty.ToFlowDocument();
+            fd.Blocks.FirstBlock.ContentRange().LoadFileItem(path, iconId, iconSize);
+            return fd;
+        }
 
         public static string ToRichText(this FlowDocument fd) {
-            RichTextBox rtb = null;
-            TextSelection rtbSelection = null;
-            if (fd.Parent != null && fd.Parent.GetType() == typeof(RichTextBox)) {
-                rtb = (RichTextBox)fd.Parent;
-                rtbSelection = rtb.Selection;
-            }
+            //RichTextBox rtb = null;
+            //TextSelection rtbSelection = null;
+            //if (fd.Parent != null && fd.Parent.GetType() == typeof(RichTextBox)) {
+            //    rtb = (RichTextBox)fd.Parent;
+            //    rtbSelection = rtb.Selection;
+            //}
             string rtf = string.Empty;
             using (var ms = new MemoryStream()) {
                 try {
@@ -203,13 +318,12 @@ namespace MpWpfApp {
                     return rtf;
                 }
             }
-            if (rtb != null && rtbSelection != null) {
-                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-            }
+            //if (rtb != null && rtbSelection != null) {
+            //    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            //}
             return rtf;
         }
 
-        [System.Diagnostics.DebuggerNonUserCode]
         public static string ToRichText(this string str, int iconId = 0) {
             // NOTE iconId is only used for converting file path's icons to rtf
             if(str == null) {
@@ -283,10 +397,10 @@ namespace MpWpfApp {
                 }
             }
             if (str.IsStringBase64()) {
-                return str.ToImageRtf();
+                return str.ToImageDocument().ToRichText();
             }
             if (str.IsStringFileOrPathFormat()) {
-                return str.ToFileDropItemRtf(iconId);
+                return str.ToFilePathDocument(iconId).ToRichText();
             }
             if (str.IsStringPlainText()) {
                 using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
@@ -318,41 +432,97 @@ namespace MpWpfApp {
             return CombineFlowDocuments(text.ToRichText().ToFlowDocument(), fd, insertPointer, insertNewline);
         }
 
+        public static void LoadAsRtf(this TextRange tr, string str, int iconId = 0) {
+            // NOTE iconId is only used to convert file path's to rtf w/ icon 
+
+            if (string.IsNullOrEmpty(str)) {
+                tr.Text = str;
+                return;
+            }
+            if (str.IsStringRichText()) {
+                using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
+                    try {
+                        tr.Load(stream, System.Windows.DataFormats.Rtf);
+
+                        var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
+                        if (rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
+                            //ignore to r
+                        } else if ((TextAlignment)rtbAlignment == TextAlignment.Justify) {
+                            tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                        }
+
+                        //var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
+                        //var ps = fd.GetDocumentSize();
+                        //fd.PageWidth = ps.Width;
+                        //fd.PageHeight = ps.Height;
+                        //fd.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+                        //fd.ConfigureLineHeight();
+
+                        //return fd;
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
+                        MpConsole.WriteLine("Exception Details: " + ex);
+                        return;// str.ToPlainText().ToFlowDocument();
+                    }
+                }
+                return;
+            }
+            if (str.IsStringBase64()) {
+                tr.LoadImage(str);
+                return;
+                //return str.ToImageDocument();
+            }
+            if (str.IsStringFileOrPathFormat()) {
+                tr.LoadFileItem(str, iconId);
+                return;
+                //return str.ToFilePathDocument();
+            }
+            tr.LoadAsRtf(str.ToRichText(iconId), iconId);
+        }
         public static FlowDocument ToFlowDocument(this string str, int iconId = 0) {
             // NOTE iconId is only used to convert file path's to rtf w/ icon 
 
             if (string.IsNullOrEmpty(str)) {
                 return string.Empty.ToRichText().ToFlowDocument();
             }
-            if(!str.IsStringRichText()) {
-                str = str.ToRichText(iconId);
-            }
-            using (var stream = new MemoryStream(UTF8Encoding.Default.GetBytes(str))) {
-                try {
-                    var flowDocument = new FlowDocument();
-                    var range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-                    range.Load(stream, System.Windows.DataFormats.Rtf);
+            if(str.IsStringRichText()) {
+                using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
+                    try {
+                        var fd = new FlowDocument();
+                        var range = new TextRange(fd.ContentStart, fd.ContentEnd);
+                        range.Load(stream, System.Windows.DataFormats.Rtf);
 
-                    var tr = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-                    var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
-                    if (rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
-                        //ignore to r
-                    } else if ((TextAlignment)rtbAlignment == TextAlignment.Justify) {
-                        tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                        var tr = new TextRange(fd.ContentStart, fd.ContentEnd);
+                        var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
+                        if (rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
+                            //ignore to r
+                        } else if ((TextAlignment)rtbAlignment == TextAlignment.Justify) {
+                            tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                        }
+
+                        var ps = fd.GetDocumentSize();
+                        fd.PageWidth = ps.Width;
+                        fd.PageHeight = ps.Height;
+                        fd.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+                        fd.ConfigureLineHeight();
+
+                        return fd;
                     }
-                    var ps = flowDocument.GetDocumentSize();
-                    flowDocument.PageWidth = ps.Width;
-                    flowDocument.PageHeight = ps.Height;
-                    flowDocument.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
-                    flowDocument.ConfigureLineHeight();
-                    return flowDocument;
+                    catch (Exception ex) {
+                        MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
+                        MpConsole.WriteLine("Exception Details: " + ex);
+                        return str.ToPlainText().ToFlowDocument();
+                    }
                 }
-                catch (Exception ex) {
-                    MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
-                    MpConsole.WriteLine("Exception Details: " + ex);
-                    return str.ToPlainText().ToFlowDocument();
-                }
-            }        
+            }
+            if(str.IsStringBase64()) {
+                return str.ToImageDocument();
+            }
+            if(str.IsStringFileOrPathFormat()) {
+                return str.ToFilePathDocument();
+            }
+            return str.ToRichText(iconId).ToFlowDocument();
         }
 
         public static FlowDocument ToFlowDocument(this string str, out Size docSize) {

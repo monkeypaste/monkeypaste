@@ -62,16 +62,16 @@ namespace MpWpfApp {
 
         protected override void OnDragOver(DragEventArgs e) {
 
-            this.GetVisualAncestor<MpContentView>().ContentViewDropBehavior.Rtb_DragOver(this, e);
+            this.GetVisualAncestor<MpContentView>().ContentViewDropBehavior.OnDragOver(this, e);
         }
 
         protected override void OnDragLeave(DragEventArgs e) {
-            this.GetVisualAncestor<MpContentView>().ContentViewDropBehavior.Rtb_DragLeave(this, e);
+            this.GetVisualAncestor<MpContentView>().ContentViewDropBehavior.OnDragLeave(this, e);
         }
 
         protected override void OnDrop(DragEventArgs e) {
             
-            this.GetVisualAncestor<MpContentView>().ContentViewDropBehavior.Rtb_Drop(this, e);
+            this.GetVisualAncestor<MpContentView>().ContentViewDropBehavior.OnDrop(this, e);
         }
 
         #endregion

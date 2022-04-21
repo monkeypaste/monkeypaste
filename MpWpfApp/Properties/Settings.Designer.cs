@@ -1552,5 +1552,17 @@ namespace MpWpfApp.Properties {
                 this["ThisOsFileManagerSourceId"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string IgnoredProcessNames {
+            get {
+                return ((string)(this["IgnoredProcessNames"]));
+            }
+            set {
+                this["IgnoredProcessNames"] = value;
+            }
+        }
     }
 }

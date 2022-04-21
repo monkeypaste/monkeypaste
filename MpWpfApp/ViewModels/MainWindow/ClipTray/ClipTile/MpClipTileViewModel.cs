@@ -250,7 +250,7 @@
                 if (Parent == null) {
                     return cs;
                 }
-                double ch = MpMeasurements.Instance.ClipTileContentHeight;
+                double ch = MpMeasurements.Instance.ClipTileContentDefaultHeight;
                 if (!IsContentReadOnly) {
                     ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
                 }
@@ -317,8 +317,8 @@
         public Size ReadOnlyContentSize {
             get {
                 return new Size(
-                    MpMeasurements.Instance.ClipTileContentMinWidth,
-                    MpMeasurements.Instance.ClipTileContentHeight);
+                    MpMeasurements.Instance.ClipTileContentDefaultWidth,
+                    MpMeasurements.Instance.ClipTileContentDefaultHeight);
             }
         }
 

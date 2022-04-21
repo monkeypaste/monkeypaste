@@ -32,6 +32,8 @@ namespace MpProcessHelper {
 
         private static string _FallbackProcessPath = @"C:\WINDOWS\Explorer.EXE";
 
+        public static string[] _ignoredProcessNames;
+
         #endregion
 
         #region Properties
@@ -48,6 +50,7 @@ namespace MpProcessHelper {
 
         public static string LastProcessPath => GetProcessPath(LastHandle);
 
+        
         #endregion
 
         #region Events
@@ -58,7 +61,9 @@ namespace MpProcessHelper {
 
         #region Public Methods
 
-        public static void Init() {
+        public static void Init(string ignoredProcessNames) {
+            _ignoredProcessNames = ignoredProcessNames.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
             LastHandle = IntPtr.Zero;
             var pkvp = GetOpenWindows();
             foreach(var kvp in pkvp) {
@@ -168,8 +173,9 @@ namespace MpProcessHelper {
                 using (Process proc = Process.GetProcessById((int)pid)) {
                     // TODO when user clicks eye (to hide it) icon on running apps it should add to a string[] pref
                     // and if it contains proc.ProcessName return fallback (so choice persists
-                    if (proc.ProcessName == @"csrss") {
+                    if (_ignoredProcessNames.Contains(proc.ProcessName.ToLower())) {
                         //occurs with messageboxes and dialogs
+                        MpConsole.WriteTraceLine($"Active process '{proc.ProcessName}' is on ignored list, using fallback '{fallback}'");
                         return fallback; //fallback;
                     }
                     if (proc.MainWindowHandle == IntPtr.Zero) {

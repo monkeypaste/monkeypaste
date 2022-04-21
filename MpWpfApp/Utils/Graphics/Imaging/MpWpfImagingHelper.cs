@@ -132,7 +132,7 @@ namespace MpWpfApp {
         }
         public static string ConvertBitmapSourceToPlainTextAsciiArt(BitmapSource bmpSource) {
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
-            bmpSource.Scale(new Size(MpMeasurements.Instance.ClipTileBorderMinSize, MpMeasurements.Instance.ClipTileContentHeight));
+            bmpSource.Scale(new Size(MpMeasurements.Instance.ClipTileBorderMinSize, MpMeasurements.Instance.ClipTileContentDefaultHeight));
             using (System.Drawing.Bitmap image = bmpSource.ToBitmap()) {
                 string outStr = string.Empty;
                 for (int h = 0; h < image.Height; h++) {

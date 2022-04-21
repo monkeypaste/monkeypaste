@@ -212,6 +212,8 @@ namespace MpWpfApp {
             }
         }
 
+        
+
         #region Clip Tile
 
         #region Outer Border
@@ -293,6 +295,7 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileMaxWidthPadding => 15;
         #endregion
 
         #region Title
@@ -408,7 +411,7 @@ namespace MpWpfApp {
 
         public double ClipTileScrollViewerWidth {
             get {
-                return ClipTileContentMinWidth - ScrollbarWidth;
+                return ClipTileContentDefaultWidth - ScrollbarWidth;
             }
         }
 
@@ -418,11 +421,18 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileContentHeight {
+        public double ClipTileContentDefaultHeight {
             get {
                 return ClipTileMinSize - ClipTileTitleHeight - ClipTileMargin - ClipTileBorderThickness - ClipTileDetailHeight;
             }
         }
+        public double ClipTileContentDefaultWidth {
+            get {
+                return ClipTileMinSize;
+            }
+        }
+
+        public Size ClipTileContentDefaultSize => new Size(ClipTileContentDefaultWidth, ClipTileContentDefaultHeight);
 
         public double ClipTileContentMargin {
             get {
@@ -430,11 +440,6 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileContentMinWidth {
-            get {
-                return ClipTileMinSize - ClipTileContentMargin;
-            }
-        }
 
         public double ClipTileContentMinMaxWidth {
             get {
@@ -458,7 +463,7 @@ namespace MpWpfApp {
 
         public double ClipTileContentItemMinHeight {
             get {
-                return ClipTileContentHeight / 5;
+                return ClipTileContentDefaultHeight / 5;
             }
         }
 
@@ -471,7 +476,7 @@ namespace MpWpfApp {
 
         public double ClipTileFileListRowHeight {
             get {
-                return ClipTileContentHeight / 8;
+                return ClipTileContentDefaultHeight / 8;
             }
         }
 

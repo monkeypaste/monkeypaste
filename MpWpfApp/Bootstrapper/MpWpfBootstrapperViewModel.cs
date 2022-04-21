@@ -24,7 +24,7 @@ namespace MpWpfApp {
             _items.AddRange(
                 new List<MpBootstrappedItem>() {
                     //new MpBootstrappedItem(typeof(MpDocumentHtmlExtension)),
-                    new MpBootstrappedItem(typeof(MpProcessManager)),
+                    new MpBootstrappedItem(typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
                     new MpBootstrappedItem(typeof(MpProcessAutomation)),
 
                     new MpBootstrappedItem(typeof(MpThemeColors)),
@@ -70,8 +70,15 @@ namespace MpWpfApp {
         }
 
         public override async Task Init() {
-            // NOTE Remove this later start
+            // NOTE Move this later (to first load init native data in app.cs) start
             Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr = string.Empty;
+
+            Properties.Settings.Default.IgnoredProcessNames =
+                "csrss" + Environment.NewLine + //Client Server Runtime Subsystem
+                "dwm" + Environment.NewLine + //desktop window manager
+                "mmc"; // Microsoft Management Console (like event viewer)
+
+
             Properties.Settings.Default.Save();
             // NOTE Remove this later finish
 

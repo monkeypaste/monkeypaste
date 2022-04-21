@@ -333,6 +333,14 @@ namespace MonkeyPaste {
 
         public static MpUserDevice ThisUserDevice { get; set; }
         
+        public static string IgnoredProcessNames {
+            get {
+                return Default.Get(nameof(IgnoredProcessNames), string.Empty);
+            }
+            set {
+                Default.Set(nameof(IgnoredProcessNames), value);
+            }
+        }
         public static string DoNotShowAgainNotificationIdCsvStr {
             // NOTE this is stored as a property because the loader window
             // is used before bootstrapping the database occurs

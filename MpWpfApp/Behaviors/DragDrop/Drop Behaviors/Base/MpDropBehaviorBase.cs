@@ -164,6 +164,51 @@ namespace MpWpfApp {
 
         }
 
+        #region External Drop Event Handlers
+
+
+        public void OnDrop(object sender, DragEventArgs e) {
+            if (e.Handled) {
+                return;
+            }
+            if (e.Data.GetDataPresent(MpDataObject.InternalContentFormat)) {
+
+            }
+        }
+
+        public void OnDragOver(object sender, DragEventArgs e) {
+            //this is unset in drag drop manager global mouse move when mouse up
+            MpDragDropManager.IsDraggingFromExternal = true;
+
+            e.Effects = DragDropEffects.None;
+
+            bool isValid = true;
+            if (MpDragDropManager.DragData == null) {
+                isValid = MpDragDropManager.PrepareDropDataFromExternalSource(e.Data);
+            }
+
+            if (isValid) {
+                if (e.KeyStates == DragDropKeyStates.ControlKey ||
+                   e.KeyStates == DragDropKeyStates.AltKey ||
+                   e.KeyStates == DragDropKeyStates.ShiftKey) {
+                    e.Effects = DragDropEffects.Copy;
+                } else {
+                    e.Effects = DragDropEffects.Move;
+                }
+
+                if (!MpDragDropManager.IsCheckingForDrag) {
+                    MpDragDropManager.StartDragCheck(MpDragDropManager.DragData);
+                }
+            }
+            e.Handled = true;
+        }
+
+        public void OnDragLeave(object sender, DragEventArgs e) {
+            Reset();
+        }
+
+        #endregion
+
         #region MpIDropTarget Implementation        
 
         public virtual async Task Drop(bool isCopy, object dragData) {
@@ -237,8 +282,6 @@ namespace MpWpfApp {
                 }
             }            
 
-            IsDebugEnabled = false;
-
         }
 
         public void UpdateAdorner() {
@@ -255,7 +298,13 @@ namespace MpWpfApp {
         }
 
         protected async Task<List<MpCopyItem>> GetDragDataCopy(object dragData) {
-            var clones = (await Task.WhenAll((dragData as List<MpCopyItem>).Select(x => x.Clone(true)).ToArray())).Cast<MpCopyItem>().ToList();
+            List<MpCopyItem> cil = null;
+            if(dragData is List<MpCopyItem>) {
+                cil = dragData as List<MpCopyItem>;
+            } else if(dragData is MpClipTileViewModel ctvm) {
+                cil = ctvm.ItemViewModels.Select(x => x.CopyItem).ToList();
+            }
+            var clones = (await Task.WhenAll(cil.Select(x => x.Clone(true)).ToArray())).Cast<MpCopyItem>().ToList();
             MpClipTrayViewModel.Instance.PersistentSelectedModels = clones;
             return clones;
         }

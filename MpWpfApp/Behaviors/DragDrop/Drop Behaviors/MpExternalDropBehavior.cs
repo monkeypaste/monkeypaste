@@ -52,6 +52,13 @@ namespace MpWpfApp {
             }
         }
 
+        public override bool IsDragDataValid(bool isCopy, object dragData) {
+            if(MpDragDropManager.IsDraggingFromExternal) {
+                return false;
+            }
+            return base.IsDragDataValid(isCopy, dragData);            
+        }
+
         public override List<Rect> GetDropTargetRects() {
             Rect extRect = new Rect(
                 0,0,
@@ -82,6 +89,7 @@ namespace MpWpfApp {
         }
 
         public override async Task StartDrop() {
+
             //var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
             var mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem, true, MpProcessHelper.MpProcessManager.LastHandle);
             var ido = MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(mpdo);

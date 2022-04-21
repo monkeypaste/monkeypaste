@@ -44,5 +44,13 @@ namespace MpWpfApp {
                     break;
             }
         }
+
+        private void StackPanel_SizeChanged(object sender, SizeChangedEventArgs e) {
+            var rtb = this.GetVisualDescendent<RichTextBox>();
+            if(rtb == null) {
+                return;
+            }
+            rtb.FitDocToRtb();
+        }
     }
 }

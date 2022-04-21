@@ -47,6 +47,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
+        public static bool IsDraggingFromExternal { get; set; } = false;
         public static object DragData { get; private set; }
 
         public static bool IsDropValid => _curDropTarget != null;
@@ -170,6 +172,9 @@ namespace MpWpfApp {
         }
 
         private static void GlobalHook_MouseMove(object sender, Point mp) {
+            if(IsDraggingFromExternal && !MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                IsDraggingFromExternal = false;
+            }
             MpHelpers.RunOnMainThread(() => {
                 // NOTE is not on main thread from external drag
                 if (!IsCheckingForDrag && !IsDragAndDrop) {
@@ -183,7 +188,7 @@ namespace MpWpfApp {
                     Reset();
                     return;
                 }
-                MpConsole.WriteLine("In DragDrop mouse move " + MpShortcutCollectionViewModel.Instance.GlobalMouseLocation);
+                //MpConsole.WriteLine("In DragDrop mouse move " + MpShortcutCollectionViewModel.Instance.GlobalMouseLocation);
 
                 Vector diff = mp - _mouseDragCheckStartPosition.Value;
 

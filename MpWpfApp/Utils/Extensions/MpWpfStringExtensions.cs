@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
@@ -16,84 +17,9 @@ using static MpWpfApp.MpWpfRichDocumentExtensions;
 
 namespace MpWpfApp {
     public static class MpWpfStringExtensions {
-        public static string ToImageRtf(this string base64Str) {
-            if (!base64Str.IsStringBase64()) {
-                return base64Str;
-            }
+        
 
-            BitmapSource bmpSrc = base64Str.ToBitmapSource();            
-
-            var img = new Image() {
-                Source = bmpSrc,
-                Width = bmpSrc.Width,
-                Height = bmpSrc.Height,
-                Stretch = System.Windows.Media.Stretch.Uniform
-            };
-            //var vb = new Viewbox() { Stretch = System.Windows.Media.Stretch.Uniform };
-            //vb.Child = img;
-
-            var fd = string.Empty.ToFlowDocument();
-            var p = fd.Blocks.FirstBlock as Paragraph;
-            p.Inlines.Clear();
-            var iuic = new InlineUIContainer(img);
-            p.Inlines.Add(iuic);
-            return fd.ToRichText();
-        }
-
-        public static string ToFileDropItemRtf(this string path, int iconId = 0, double iconSize = 16) {
-            string iconBase64 = string.Empty;
-
-            if(iconId > 0) {
-                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
-                if(ivm == default) {
-                    iconBase64 = MpBase64Images.Warning;
-                } else {
-                    iconBase64 = ivm.IconBase64;
-                }
-            } else if(path.IsFileOrDirectory()) {
-                iconBase64 = MpShellEx.GetBitmapFromPath(path, MpIconSize.SmallIcon16).ToBase64String();
-            }
-            if(string.IsNullOrEmpty(iconBase64)) {
-                iconBase64 = MpBase64Images.Warning;
-            }
-
-            BitmapSource bmpSrc = iconBase64.ToBitmapSource();
-            var pathIcon = new Image() {
-                Source = bmpSrc,
-                Width = iconSize,
-                Height = iconSize,
-                Stretch = System.Windows.Media.Stretch.Fill
-            };
-
-            var fd = string.Empty.ToFlowDocument();
-            var iuc = new InlineUIContainer(pathIcon) {
-                BaselineAlignment = BaselineAlignment.Bottom
-            };
-            var p = new Paragraph(iuc);
-
-            string pathDir = path;
-            if(File.Exists(pathDir)) {
-                pathDir = Path.GetDirectoryName(pathDir);
-            }
-
-            var pathLink = new Hyperlink(new Run(Path.GetFileName(pathDir))) {
-                IsEnabled = true,
-                NavigateUri = new Uri(pathDir, UriKind.Absolute)
-            };
-            pathLink.RequestNavigate += (s, e) => {
-                return;
-            };
-            pathLink.PreviewMouseDown += (s, e) => {
-                return;
-            };
-            pathLink.MouseEnter += (s, e) => {
-                return;
-            };
-            p.Inlines.Add(pathLink);
-            fd.Blocks.Clear();
-            fd.Blocks.Add(p);
-            return fd.ToRichText();
-        }
+        
 
         public static int GetColCount(string text) {
             int maxCols = int.MinValue;
@@ -184,7 +110,7 @@ namespace MpWpfApp {
         }
 
         public static bool IsStringQuillText(this string text) {
-            if(MpQuillFormatProperties.QuillTagNames.Any(x=>text.ToLower().StartsWith("<"+x))) {
+            if(MpQuillFormatProperties.QuillTagNames.Any(x=>text.StartsWith("<"+x))) {
                 return true;
             }
             return false;

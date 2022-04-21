@@ -159,6 +159,7 @@
     <Compile Include="Behaviors\MpMoveBehavior.cs" />
     <Compile Include="Behaviors\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpWpfBootstrapperViewModel.cs" />
+    <Compile Include="Controls\MpListBox.cs" />
     <Compile Include="Controls\MpRichTextBox.cs" />
     <Compile Include="Controls\MpSlickToggleButton.cs" />
     <Compile Include="Controls\MpDesignerCanvas.cs" />
