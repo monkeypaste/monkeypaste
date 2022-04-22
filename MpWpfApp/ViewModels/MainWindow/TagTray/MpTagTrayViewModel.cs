@@ -232,9 +232,7 @@ namespace MpWpfApp {
             // there's a collection is modified exception
             // I think this is because of tray's load (since scroll changes from resizing) more and handling persistent selection so wait till tray's done
 
-            while(MpClipTrayViewModel.Instance.IsBusy || 
-                  MpClipTrayViewModel.Instance.Items.Any(x=>x.IsBusy) ||
-                  MpClipTrayViewModel.Instance.Items.Any(x => x.ItemViewModels.Any(y=>y.IsBusy))) {
+            while(MpClipTrayViewModel.Instance.IsAnyBusy) {
                 await Task.Delay(100);
             }
             
@@ -246,7 +244,7 @@ namespace MpWpfApp {
 
                 bool isTagLinkedToAnySelectedClips = false;
                 foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
-                    if(sctvm.ItemViewModels.Select(x=>x.CopyItemId).Any(x=>ciidl.Contains(x))) {
+                    if(sctvm.Items.Select(x=>x.CopyItemId).Any(x=>ciidl.Contains(x))) {
                         isTagLinkedToAnySelectedClips = true;
                         break;
                     }

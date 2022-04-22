@@ -23,6 +23,7 @@ namespace MpWpfApp {
     public class MpContentItemViewModel : 
         MpViewModelBase<MpClipTileViewModel>, 
         MpIShortcutCommand,
+        MpIHoverableViewModel,
         MpIUserColorViewModel,
         MpISelectableViewModel {
         #region Private Variables
@@ -59,6 +60,38 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public MpSourceViewModel SourceViewModel {
+            get {
+                //if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                //    return null;
+                //}
+                var svm = MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId); 
+                if (svm == null) {
+                    return MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPreferences.ThisAppSource.Id);
+                }
+                return svm;
+            }
+        }
+
+        public MpAppViewModel AppViewModel {
+            get {
+                //if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                //    return null;
+                //}
+                return SourceViewModel.AppViewModel;
+            }
+        }
+
+        public MpUrlViewModel UrlViewModel {
+            get {
+                //if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                //    return null;
+                //}
+                return SourceViewModel.UrlViewModel;
+            }
+        }
+
 
         #endregion
 
@@ -395,7 +428,7 @@ namespace MpWpfApp {
                 if (Parent == null) {
                     return -1;
                 }
-                return Parent.ItemViewModels.IndexOf(this);
+                return Parent.Items.IndexOf(this);
             }
         }
 
@@ -603,16 +636,15 @@ namespace MpWpfApp {
                 if(CopyItem == null) {
                     return 0;
                 }
-                if(CopyItem.IconId == 0) {
-                    // defer icon to primary source if not set by user
-                    if(CopyItem.Source == null || CopyItem.Source.PrimarySource == null) {
-                        // BUG currently when plugin creates new content it is not setting source info
-                        // so return app icon
-                        return MpPreferences.ThisAppSource.PrimarySource.IconId;
-                    }
-                    return CopyItem.Source.PrimarySource.IconId;
+                if(CopyItem.IconId > 0) {
+                    return CopyItem.IconId;
                 }
-                return CopyItem.IconId;
+                if (SourceViewModel == null) {
+                    // BUG currently when plugin creates new content it is not setting source info
+                    // so return app icon
+                    return MpPreferences.ThisAppSource.PrimarySource.IconId;
+                }
+                return SourceViewModel.PrimarySource.IconId;                
             }
             set {
                 if(IconId != value) {
@@ -677,9 +709,9 @@ namespace MpWpfApp {
 
             MpMessenger.Unregister<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
-            if (ci != null && ci.Source == null) {
-                ci.Source = await MpDb.GetItemAsync<MpSource>(ci.SourceId);
-            }
+            //if (ci != null && ci.Source == null) {
+            //    ci.Source = await MpDb.GetItemAsync<MpSource>(ci.SourceId);
+            //}
             CopyItem = ci;
 
             IsNewAndFirstLoad = !MpMainWindowViewModel.Instance.IsMainWindowLoading;
@@ -767,18 +799,19 @@ namespace MpWpfApp {
                     info = CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
                     break;
                 case MpCopyItemDetailType.UrlInfo:
-                    if (CopyItem.Source.Url == null) {
+                    if (SourceViewModel == null || SourceViewModel.UrlViewModel == null) {
                         _detailIdx++;
                         info = GetDetailText((MpCopyItemDetailType)_detailIdx);
                     } else {
-                        info = CopyItem.Source.Url.UrlPath;
+                        info = SourceViewModel.UrlViewModel.UrlPath;
                     }
                     break;
                 case MpCopyItemDetailType.AppInfo:
-                    if (CopyItem.Source.App.UserDevice.Guid == MpPreferences.ThisDeviceGuid) {
-                        info = CopyItem.Source.App.AppPath;
+                    if (SourceViewModel == null || SourceViewModel.AppViewModel == null) {
+                        _detailIdx++;
+                        info = GetDetailText((MpCopyItemDetailType)_detailIdx);
                     } else {
-                        info = CopyItem.Source.App.AppPath;
+                        info = SourceViewModel.AppViewModel.AppPath;
                     }
 
                     break;
@@ -915,7 +948,7 @@ namespace MpWpfApp {
                                 .ForEach(y => y.IsSelected = false);
 
                             //deselect other items
-                            Parent.ItemViewModels
+                            Parent.Items
                                 .Where(x => x != this)
                                 .ForEach(y => y.IsSelected = false);
                         }
@@ -927,7 +960,7 @@ namespace MpWpfApp {
                     }
                     if (ItemIdx > 0) {
                         //trigger so prev item shows/hides separator line
-                        var pcivm = Parent.ItemViewModels[ItemIdx - 1];
+                        var pcivm = Parent.Items[ItemIdx - 1];
                         pcivm.OnPropertyChanged(nameof(pcivm.ItemSeparatorBrush));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));

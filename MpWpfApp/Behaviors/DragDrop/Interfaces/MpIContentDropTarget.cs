@@ -28,7 +28,7 @@ namespace MpWpfApp {
         List<Rect> DropRects { get; }
         List<Rect> GetDropTargetRects();
         int GetDropTargetRectIdx();
-        MpShape GetDropTargetAdornerShape();
+        MpShape[] GetDropTargetAdornerShape();
         void ContinueDragOverTarget();
 
         MpDropShapeAdorner DropLineAdorner { get; set; }

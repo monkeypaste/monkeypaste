@@ -126,40 +126,38 @@ namespace MpWpfApp {
                     }                    
                 }
             } else {
-                if (MpClipTrayViewModel.Instance.IsBusy || 
-                   !MpDragDropManager.IsDragAndDrop || 
-                   !_dropBehavior.IsDropEnabled ||
-                   DropRects == null) {
-                    Visibility = Visibility.Hidden;
-                    return;
-                }
+                
             }
 
             if(IsShowing) {
                 var pen = new Pen(Brushes.Red, 1.5) { DashStyle = _isDash ? DashStyles.Dash : DashStyles.Solid };
                 Visibility = Visibility.Visible;
-                var dropShape = _dropBehavior.GetDropTargetAdornerShape();
-                if(dropShape is MpLine dl) {
-                    drawingContext.DrawLine(
-                        pen,
-                        dl.P1.ToWpfPoint(),
-                        dl.P2.ToWpfPoint());
-                } else if(dropShape is MpEllipse de) {
-                    drawingContext.DrawEllipse(
-                        Brushes.Transparent,
-                        pen,
-                        de.Center.ToWpfPoint(),
-                        de.Size.Width / 2,
-                        de.Size.Height / 2);
-                } else if(dropShape is MpRect dr) {
-                    drawingContext.DrawRectangle(
-                        Brushes.Transparent,
-                        pen,
-                        dr.ToWpfRect());
-                }
+                var dropShapes = _dropBehavior.GetDropTargetAdornerShape();
+                dropShapes.ForEach(x => DrawShape(drawingContext, x, pen));
                 
             } else if(!IsDebugMode) {
                 Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void DrawShape(DrawingContext dc, MpShape dropShape, Pen pen) {
+            if (dropShape is MpLine dl) {
+                dc.DrawLine(
+                    pen,
+                    dl.P1.ToWpfPoint(),
+                    dl.P2.ToWpfPoint());
+            } else if (dropShape is MpEllipse de) {
+                dc.DrawEllipse(
+                    Brushes.Transparent,
+                    pen,
+                    de.Center.ToWpfPoint(),
+                    de.Size.Width / 2,
+                    de.Size.Height / 2);
+            } else if (dropShape is MpRect dr) {
+                dc.DrawRectangle(
+                    Brushes.Transparent,
+                    pen,
+                    dr.ToWpfRect());
             }
         }
         #endregion

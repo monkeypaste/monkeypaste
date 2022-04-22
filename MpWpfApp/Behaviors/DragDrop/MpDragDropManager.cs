@@ -103,12 +103,7 @@ namespace MpWpfApp {
             if(MpMoveBehavior.IsAnyMoving) {
                 return;
             }
-            if(!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                //this shouldn't happen 
-                // preview mouse down and global hook maybe out of since
-                var isLeftButtonDown = Mouse.LeftButton == MouseButtonState.Pressed;
-                Debugger.Break();
-            }
+            
 
             DragData = dragData;
             IsCheckingForDrag = true;
@@ -207,7 +202,9 @@ namespace MpWpfApp {
                         _curDropTarget = dropTarget;
                         _curDropTarget?.StartDrop();
                     }
+
                     _curDropTarget?.ContinueDragOverTarget();
+
                 }
             });
         }
@@ -238,7 +235,7 @@ namespace MpWpfApp {
 
         }
         private static void Reset() {
-            IsCheckingForDrag = IsDragAndDrop = false;
+            IsCheckingForDrag = IsDragAndDrop = IsDraggingFromExternal = false;
 
             _mouseDragCheckStartPosition = null;
             _curDropTarget = null;

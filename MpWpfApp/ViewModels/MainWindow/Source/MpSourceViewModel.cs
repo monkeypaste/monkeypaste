@@ -11,25 +11,9 @@ namespace MpWpfApp {
 
         #region View Models
 
-        //public MpAppViewModel AppViewModel {
-        //    get {
-        //        if (Source == null) {
-        //            return null;
-        //        }
-        //        int appId = Source.IsUrlPrimarySource ? SecondarySource.RootId : PrimarySource.RootId;
-        //        return MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == appId);
-        //    }
-        //}
+        public MpAppViewModel AppViewModel => MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == AppId);
 
-        //public MpUrlViewModel UrlViewModel {
-        //    get {
-        //        if (Source == null) {
-        //            return null;
-        //        }
-        //        int urlId = Source.IsUrlPrimarySource ? PrimarySource.RootId : SecondarySource.RootId;
-        //        return MpUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == urlId);
-        //    }
-        //}
+        public MpUrlViewModel UrlViewModel => MpUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == UrlId);
 
         //public MpIconViewModel PrimarySourceIconViewModel {
         //    get {
@@ -81,6 +65,34 @@ namespace MpWpfApp {
 
         #region Model
 
+        public int UrlId {
+            get {
+                if(Source == null) {
+                    return 0;
+                }
+
+                return Source.UrlId;
+            }
+        }
+
+        public int AppId {
+            get {
+                if (Source == null) {
+                    return 0;
+                }
+
+                return Source.AppId;
+            }
+        }
+
+        public int SourceId {
+            get {
+                if(Source == null) {
+                    return 0;
+                }
+                return Source.Id;
+            }
+        }
         public MpISourceItem PrimarySource {
             get {
                 if(Source == null) {

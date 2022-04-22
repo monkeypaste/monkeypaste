@@ -182,11 +182,23 @@ namespace MpProcessHelper {
                         return fallback; //fallback;
                     }
 
-                    if(!Environment.Is64BitProcess && Is64Bit(proc)) {
+
+                    if (!Environment.Is64BitProcess && Is64Bit(proc)) {
                         return fallback;
                     }
 
-                    return proc.MainModule.FileName.ToString().ToLower();
+                    //bool isThisAppAdmin = UACHelper.UACHelper.IsAdministrator;
+                    //bool isProcElevated = UACHelper.UACHelper.IsProcessElevated(proc);
+
+                    //if (!isThisAppAdmin && isProcElevated) {
+                    //    return fallback;
+                    //}
+                    try {
+                        return proc.MainModule.FileName.ToString().ToLower();
+                    }catch(InvalidOperationException) {
+                        return fallback;
+                    }
+                    
                 }
             }
             catch (Exception e) {

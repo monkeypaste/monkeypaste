@@ -120,10 +120,25 @@ namespace MpWpfApp {
             return outStr;
         }
 
-        public static FlowDocument GetFlowDocument(string str) {
-            var csv = FromString(str).ToList();
-            // from https://docs.microsoft.com/en-us/dotnet/desktop/wpf/advanced/how-to-build-a-table-programmatically?redirectedfrom=MSDN&view=netframeworkdesktop-4.8
+        public static void LoadTable(this TextRange tr, string csv) {
+            tr.Text = string.Empty;
+            var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
+            var table = CreateTable(csv);
+            fd.Blocks.InsertAfter(tr.Start.Paragraph, table);
+        }
 
+        public static FlowDocument GetFlowDocument(string str) {  
+            FlowDocument fd = new FlowDocument();
+            var table = CreateTable(str);
+            fd.Blocks.Add(table);
+            //add a blank trailing paragraph for merging in case table goes outside tile bounds
+            fd.Blocks.Add(new Paragraph());
+            return fd;
+        }
+
+        private static Table CreateTable(string str) {
+            // from https://docs.microsoft.com/en-us/dotnet/desktop/wpf/advanced/how-to-build-a-table-programmatically?redirectedfrom=MSDN&view=netframeworkdesktop-4.8
+            var csv = FromString(str).ToList();
             var table = new Table();
 
             //table.CellSpacing = double.NaN;
@@ -134,9 +149,9 @@ namespace MpWpfApp {
 
             int totalColumns = csv.Max(x => x.Count);
             for (int c = 0; c < totalColumns; c++) {
-                table.Columns.Add(new TableColumn()); 
+                table.Columns.Add(new TableColumn());
             }
-           
+
             for (int r = 0; r < csv.Count; r++) {
                 TableRow row = new TableRow();
 
@@ -145,7 +160,7 @@ namespace MpWpfApp {
 
                 for (int rc = 0; rc < totalColumns; rc++) {
                     string val = string.Empty;
-                    if(rc < csv[r].Count) {
+                    if (rc < csv[r].Count) {
                         val = csv[r][rc].ToString();
                     }
                     var tableCell = new TableCell(new Paragraph(new Run(val)));
@@ -158,14 +173,8 @@ namespace MpWpfApp {
             }
 
             AutoResizeColumns(table);
-            
-            FlowDocument fd = new FlowDocument();
-            fd.Blocks.Add(table);
-            //add a blank trailing paragraph for merging in case table goes outside tile bounds
-            fd.Blocks.Add(new Paragraph());
-            return fd;
+            return table;
         }
-
         static void AutoResizeColumns(Table table) {
             TableColumnCollection columns = table.Columns;
             TableRowCollection rows = table.RowGroups[0].Rows;

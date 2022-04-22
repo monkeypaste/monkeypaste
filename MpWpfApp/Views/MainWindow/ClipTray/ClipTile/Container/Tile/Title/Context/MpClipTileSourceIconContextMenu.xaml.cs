@@ -25,12 +25,12 @@ namespace MpWpfApp {
         private void ContextMenu_Loaded(object sender, RoutedEventArgs e) {
             var civm = DataContext as MpContentItemViewModel;
 
-            if(civm.CopyItem.Source.IsUrlPrimarySource) {
-                string domainName = MonkeyPaste.MpUrlHelpers.GetUrlDomain(civm.CopyItem.Source.PrimarySource.SourcePath);                
+            if(civm.UrlViewModel != null) {
+                string domainName = civm.UrlViewModel.UrlDomainPath;
                 ExcludeSourceItem.Header = string.Format(@"Exclude '{0}'",domainName);
             } else {
 
-                ExcludeSourceItem.Header = string.Format(@"Exclude '{0}'", civm.CopyItem.Source.PrimarySource.SourceName);
+                ExcludeSourceItem.Header = string.Format(@"Exclude '{0}'", civm.AppViewModel.AppName);
                 ExcludeSourceDomainItem.Visibility = Visibility.Hidden;
             }
 

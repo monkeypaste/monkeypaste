@@ -103,11 +103,12 @@ namespace MonkeyPaste {
 
         public ImageSource IconImageSource {
             get {
-                if (CopyItem == null || CopyItem.Source == null) {
+                if (CopyItem == null || CopyItem.SourceId <= 0) {
                     return null;
                 }
+                var s = MpDb.GetItem<MpSource>(CopyItem.SourceId);
                 var imgStr = MpDb.GetItem<MpDbImage>(
-                                MpDb.GetItem<MpIcon>(CopyItem.Source.PrimarySource.IconId).IconImageId).ImageBase64;
+                                MpDb.GetItem<MpIcon>(s.PrimarySource.IconId).IconImageId).ImageBase64;
 
                 return (StreamImageSource)new MpImageConverter().Convert(imgStr, typeof(ImageSource));
             }

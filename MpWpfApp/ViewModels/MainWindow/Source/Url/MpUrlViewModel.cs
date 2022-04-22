@@ -106,6 +106,15 @@ namespace MpWpfApp {
             }
         }
 
+        public string UrlTitle {
+            get {
+                if (Url == null) {
+                    return string.Empty;
+                }
+                return Url.UrlTitle;
+            }
+        }
+
         public string UrlDomainPath {
             get {
                 if (Url == null) {

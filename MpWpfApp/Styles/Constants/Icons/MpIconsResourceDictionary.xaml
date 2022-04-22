@@ -1,9 +1,10 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:s="clr-namespace:System;assembly=mscorlib"
-                    xmlns:local="clr-namespace:MpWpfApp">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:MpWpfApp"
+    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <!--  Icon/Image Source Paths  -->
     <s:String x:Key="AppIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/monkey(2).png

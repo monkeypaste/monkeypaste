@@ -128,10 +128,10 @@ namespace MpWpfApp {
                 if (args is int) {
                     tabIdx = (int)args;
                 } else if (args is MpClipTileViewModel) {
-                    args = (args as MpClipTileViewModel).PrimaryItem.CopyItem.Source.App;
+                    args = (args as MpClipTileViewModel).PrimaryItem.AppViewModel.App;
                     tabIdx = 1;
                 } else if (args is MpContentItemViewModel) {
-                    args = (args as MpContentItemViewModel).CopyItem.Source.App;
+                    args = (args as MpContentItemViewModel).AppViewModel.App;
                     tabIdx = 1;
                 }
 

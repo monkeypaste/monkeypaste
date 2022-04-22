@@ -79,13 +79,13 @@ namespace MpWpfApp {
             }
             return -1;
         }
-        public override MpShape GetDropTargetAdornerShape() {
+        public override MpShape[] GetDropTargetAdornerShape() {
             var drl = GetDropTargetRects();
             if (DropIdx < 0 || DropIdx >= drl.Count) {
                 return null;
             }
 
-            return new MpRect(new MpPoint(), new MpSize(drl[0].Width, drl[0].Height));
+            return new MpRect(new MpPoint(), new MpSize(drl[0].Width, drl[0].Height)).ToArray<MpShape>();
         }
 
         public override async Task StartDrop() {

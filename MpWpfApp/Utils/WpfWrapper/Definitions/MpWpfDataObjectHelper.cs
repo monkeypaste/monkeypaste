@@ -135,6 +135,9 @@ namespace MpWpfApp {
             try {
                 bool autoConvert = false;
                 foreach (MpClipboardFormatType supportedType in MpDataObject.SupportedFormats) {
+                    if(supportedType == MpClipboardFormatType.UnicodeText) {
+                        int b = 5;
+                    }
                     string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
                     if (ido != null) {
                         if (ido.GetDataPresent(nativeTypeName, autoConvert) == false) {

@@ -498,7 +498,7 @@ namespace MpWpfApp {
                         while (HasModelChanged) {
                             await Task.Delay(100);
                         }
-                        await Task.WhenAll(MpClipTrayViewModel.Instance.Items.SelectMany(x => x.ItemViewModels).Select(x => x.TitleSwirlViewModel.InitializeAsync()));
+                        await Task.WhenAll(MpClipTrayViewModel.Instance.Items.SelectMany(x => x.Items).Select(x => x.TitleSwirlViewModel.InitializeAsync()));
                     });
                     break;
             }
@@ -569,7 +569,7 @@ namespace MpWpfApp {
         }
 
         public async Task<bool> IsLinkedAsync(MpClipTileViewModel ctvm) {
-            foreach(var civm in ctvm.ItemViewModels) {
+            foreach(var civm in ctvm.Items) {
                 bool isLinked = await IsLinkedAsync(civm);
                 if(isLinked) {
                     return true;

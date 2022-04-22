@@ -68,6 +68,14 @@ namespace MpWpfApp {
                     itemType = MpCopyItemType.Text;
                     itemData = iData[MpClipboardFormatType.Text].ToRichText();
                     //itemData = itemData.ToQuillText();
+                } else if (iData.ContainsKey(MpClipboardFormatType.UnicodeText)) {
+                    itemType = MpCopyItemType.Text;
+                    itemData = iData[MpClipboardFormatType.UnicodeText].ToRichText();
+                    //itemData = itemData.ToQuillText();
+                } else if (iData.ContainsKey(MpClipboardFormatType.OemText)) {
+                    itemType = MpCopyItemType.Text;
+                    itemData = iData[MpClipboardFormatType.OemText].ToRichText();
+                    //itemData = itemData.ToQuillText();
                 } else {
                     MpConsole.WriteTraceLine("clipboard data is not known format");
                     return null;

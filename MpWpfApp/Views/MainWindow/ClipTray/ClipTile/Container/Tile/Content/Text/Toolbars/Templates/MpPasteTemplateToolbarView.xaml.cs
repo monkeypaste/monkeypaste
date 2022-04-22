@@ -48,7 +48,7 @@ namespace MpWpfApp {
             if(BindingContext == null) {
                 return;
             }
-            foreach (var civm in BindingContext.Parent.Parent.ItemViewModels) {
+            foreach (var civm in BindingContext.Parent.Parent.Items) {
                 foreach (var thlvm in civm.TemplateCollection.Templates) {
                     thlvm.OnTemplateSelected -= Thlvm_OnTemplateSelected;
                 }
@@ -84,7 +84,7 @@ namespace MpWpfApp {
             if(BindingContext == null || ((bool)e.NewValue) == false) {
                 return;
             }
-            foreach(var civm in BindingContext.Parent.Parent.ItemViewModels) {
+            foreach(var civm in BindingContext.Parent.Parent.Items) {
                 foreach (var thlvm in civm.TemplateCollection.Templates) {
                     thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
                 }

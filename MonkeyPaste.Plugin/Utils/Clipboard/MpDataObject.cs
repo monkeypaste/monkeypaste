@@ -14,7 +14,9 @@ namespace MonkeyPaste.Plugin {
         Bitmap,
         FileDrop,
         Csv,
-        InternalContent
+        InternalContent,
+        UnicodeText,
+        OemText
     }
 
     public interface MpIDataObjectBuilder {
@@ -80,7 +82,9 @@ namespace MonkeyPaste.Plugin {
                         MpClipboardFormatType.Bitmap,
                         MpClipboardFormatType.FileDrop,
                         MpClipboardFormatType.Csv,
-                        MpClipboardFormatType.InternalContent
+                        MpClipboardFormatType.InternalContent,
+                        MpClipboardFormatType.UnicodeText,
+                        MpClipboardFormatType.OemText
                     };
                 }
                 return _supportedFormats;

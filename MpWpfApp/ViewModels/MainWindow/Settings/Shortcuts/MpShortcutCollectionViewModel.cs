@@ -212,7 +212,7 @@ namespace MpWpfApp {
                     //            if(!string.IsNullOrEmpty(cbText)) {
                     //                Application.Current.Dispatcher.BeginInvoke((Action)(()=>{
                     //                    foreach(var ctvm in MpClipTrayViewModel.Instance.Items) {
-                    //                        foreach(var rtbvm in ctvm.ItemViewModels) {
+                    //                        foreach(var rtbvm in ctvm.Items) {
                     //                            if(rtbvm.CopyItem.ItemData.ToPlainText() == cbText) {
                     //                                rtbvm.CopyItem.PasteCount++;
                     //                            }
@@ -491,7 +491,10 @@ namespace MpWpfApp {
         #region Application Handlers
 
         private void GlobalHook_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
-            if (e.KeyCode == System.Windows.Forms.Keys.Alt) {
+            if (e.KeyCode == System.Windows.Forms.Keys.Alt || 
+                !e.Alt ||
+               e.KeyCode == System.Windows.Forms.Keys.LMenu ||
+               e.KeyCode == System.Windows.Forms.Keys.RMenu) {
                 GlobalIsAltDown = false;
             }
             if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {
@@ -503,7 +506,11 @@ namespace MpWpfApp {
         }
 
         private void GlobalHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-            if(e.KeyCode == System.Windows.Forms.Keys.Alt) {
+            
+            if(e.KeyCode == System.Windows.Forms.Keys.Alt || 
+                e.Alt || 
+               e.KeyCode == System.Windows.Forms.Keys.LMenu ||
+               e.KeyCode == System.Windows.Forms.Keys.RMenu) {
                 GlobalIsAltDown = true;
             }
             if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {

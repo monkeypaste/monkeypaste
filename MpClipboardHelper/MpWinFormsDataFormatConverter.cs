@@ -28,6 +28,10 @@ namespace MpClipboardHelper {
                     return DataFormats.CommaSeparatedValue;
                 case MpClipboardFormatType.InternalContent:
                     return MpDataObject.InternalContentFormat;
+                case MpClipboardFormatType.UnicodeText:
+                    return DataFormats.UnicodeText;
+                case MpClipboardFormatType.OemText:
+                    return DataFormats.OemText;
                 default:
                     throw new Exception("Unknown portable format: " + portableType.ToString());
             }
@@ -52,7 +56,13 @@ namespace MpClipboardHelper {
             if (DataFormats.CommaSeparatedValue == nativeFormatName) {
                 return MpClipboardFormatType.Csv;
             }
-            if(MpDataObject.InternalContentFormat == nativeFormatName) {
+            if (DataFormats.OemText == nativeFormatName) {
+                return MpClipboardFormatType.OemText;
+            }
+            if (DataFormats.UnicodeText == nativeFormatName) {
+                return MpClipboardFormatType.UnicodeText;
+            }
+            if (MpDataObject.InternalContentFormat == nativeFormatName) {
                 return MpClipboardFormatType.InternalContent;
             }
             throw new Exception("Unknown native format name: " + nativeFormatName);

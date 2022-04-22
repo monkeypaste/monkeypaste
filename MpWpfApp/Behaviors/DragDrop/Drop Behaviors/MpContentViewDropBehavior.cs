@@ -11,14 +11,17 @@ using System.Windows.Annotations;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using static System.Net.WebRequestMethods;
+using static Xamarin.Forms.Internals.Profile;
 
 namespace MpWpfApp {
     public class MpContentViewDropBehavior : MpDropBehaviorBase<MpContentView> {
         #region Private Variables
 
-        private bool _isBlockDrop => _isPreBlockDrop || _isPostBlockDrop;
+        private bool _isBlockDrop => _isPreBlockDrop || _isPostBlockDrop || _isInlineBlockDrop;
 
         private bool _isPreBlockDrop = false;
+        private bool _isInlineBlockDrop = false;
         private bool _isPostBlockDrop = false;
 
         #endregion
@@ -97,6 +100,10 @@ namespace MpWpfApp {
             if (AssociatedObject == null || AssociatedObject.Rtb == null) {
                 return -1;
             }
+            if (!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                // NOTE only continue if drop isn't executing or debugging drop idx will be off
+                return DropIdx;
+            }
             var rtb = AssociatedObject.Rtb;
             var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             var mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
@@ -111,37 +118,50 @@ namespace MpWpfApp {
             var mptp = rtb.GetPositionFromPoint(mp, true);
             var mptp_rect = mptp.GetCharacterRect(LogicalDirection.Forward);
             double blockThreshold = 0.1;
-            if(Math.Abs(mp.Y - mptp_rect.Top) < blockThreshold || mp.Y < mptp_rect.Top) {
+            _isInlineBlockDrop = false;
+            if (Math.Abs(mp.Y - mptp_rect.Top) < blockThreshold || mp.Y < mptp_rect.Top) {
                 _isPreBlockDrop = true;
             } else if (Math.Abs(mp.Y - mptp_rect.Bottom) < blockThreshold || mp.Y > mptp_rect.Bottom) {
                 _isPostBlockDrop = true;
             } else {
                 _isPostBlockDrop = _isPreBlockDrop = false;
             }
-            //rtb.CaretPosition = mptp;
+            if(!_isBlockDrop && MpShortcutCollectionViewModel.Instance.GlobalIsAltDown) {
+                _isInlineBlockDrop = true;
+            } 
+            //MpConsole.WriteLine("Pre: " + (_isPreBlockDrop ? "YES" : "NO"));
+            //MpConsole.WriteLine("Inline: " + (_isInlineBlockDrop ? "YES" : "NO"));
+            //MpConsole.WriteLine("Post: " + (_isPostBlockDrop ? "YES" : "NO"));
             return rtb.Document.ContentStart.GetOffsetToPosition(mptp);
         }
 
-        public override MpShape GetDropTargetAdornerShape() {
+        public override MpShape[] GetDropTargetAdornerShape() {
             if (AssociatedObject == null || AssociatedObject.Rtb == null) {
                 return null;
             }
             if (DropIdx < 0) {
                 return null;
             }
+            var dll = new List<MpShape>();
+
             var dltp = AssociatedObject.Rtb.Document.ContentStart.GetPositionAtOffset(DropIdx);
             var dltp_rect = dltp.GetCharacterRect(LogicalDirection.Forward);
             if (_isBlockDrop) {
                 double blockLineOffset = 3;
-                double y = 0;
+                double y;
                 if(_isPreBlockDrop) {
                     y = dltp_rect.Top - blockLineOffset;
                 } else {
                     y = dltp_rect.Bottom + blockLineOffset;
                 }
-                return new MpLine(0, y, AssociatedObject.Rtb.ActualWidth, y);
+                var blockLine = new MpLine(0, y, AssociatedObject.Rtb.ActualWidth, y);
+                dll.Add(blockLine);
             }
-            return new MpLine(dltp_rect.Left, dltp_rect.Top, dltp_rect.Left, dltp_rect.Bottom);
+            if(!_isBlockDrop || _isInlineBlockDrop) {
+                var inlineLine = new MpLine(dltp_rect.Left, dltp_rect.Top, dltp_rect.Left, dltp_rect.Bottom);
+                dll.Add(inlineLine);
+            }
+            return dll.ToArray();
         }
         public override bool IsDragDataValid(bool isCopy,object dragData) {
             if (AssociatedObject == null || AssociatedObject.Rtb == null) {
@@ -150,18 +170,19 @@ namespace MpWpfApp {
             if (!base.IsDragDataValid(isCopy,dragData)) {
                 return false;
             }
-            if(AssociatedObject != null) {
+            var rtb = AssociatedObject.Rtb;
+            if (AssociatedObject != null) {
                 if(dragData is MpClipTileViewModel ctvm) {
-                    if(ctvm == AssociatedObject.Rtb.DataContext) {
+                    if(ctvm == rtb.DataContext) {
                         //if dropping onto self
-                        if(AssociatedObject.Rtb.Selection.IsEmpty ||
-                           (AssociatedObject.Rtb.Selection.Start == AssociatedObject.Rtb.Document.ContentStart &&
-                            AssociatedObject.Rtb.Selection.End == AssociatedObject.Rtb.Document.ContentEnd)) {
+                        if(rtb.Selection.IsEmpty ||
+                           (rtb.Selection.Start == rtb.Document.ContentStart &&
+                            rtb.Selection.End == rtb.Document.ContentEnd)) {
                             //only allow self drop for partial selection
                             return false;
                         }
-                        var rtb_mp = Application.Current.MainWindow.TranslatePoint(MpShortcutCollectionViewModel.Instance.GlobalMouseLocation, AssociatedObject.Rtb);
-                        return !AssociatedObject.Rtb.Selection.IsPointInRange(rtb_mp);
+                        var rtb_mp = Application.Current.MainWindow.TranslatePoint(MpShortcutCollectionViewModel.Instance.GlobalMouseLocation, rtb);
+                        return !rtb.Selection.IsPointInRange(rtb_mp);
                     }
                     return true;
                 }
@@ -184,115 +205,38 @@ namespace MpWpfApp {
             if (AssociatedObject == null) {
                 return;
             }
-            // BUG storing dropIdx because somehow it gets lost after calling base
-            int dropIdx = DropIdx;
-            
-            await base.Drop(isCopy, dragData);
-
             var dctvm = dragData as MpClipTileViewModel;
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            // BUG storing dropIdx because somehow it gets lost after calling base
+            int rtfDropIdx = DropIdx;
+
+            string rootGuid = ctvm.HeadItem.CopyItemGuid;
+
+            bool isNewRoot = rtfDropIdx <= 0;
+
+            await base.Drop(isCopy, dragData);
+
 
             if(dctvm == null) {
                 if(dragData is MpDataObject mpdo) {
-                    // from external source\
+                    // from external source
                     var exci = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
-                    dctvm = ctvm;
-                    //ensure external drop will be treated like new content
-                    isCopy = false;
-                    dctvm.IsAllSelected = false;
-                } else {
-                    ;
-                }
+                    if(isNewRoot) {
+                        rootGuid = exci.Guid;
+                    }
+                    await DropFromExternal(exci, rtfDropIdx);
+                    return;
+                } 
             }
+
             var rtb = AssociatedObject.Rtb;
             var drtb = Application.Current.MainWindow.GetVisualDescendents<MpContentView>()
                             .FirstOrDefault(x => x.DataContext is MpClipTileViewModel temp && temp.HeadItem.CopyItemId == dctvm.HeadItem.CopyItemId).Rtb;
 
-            string rootGuid = ctvm.HeadItem.CopyItemGuid;
 
-            //string preText = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentStart.GetPositionAtOffset(dropIdx)).Text;
-            //bool isNewRoot = string.IsNullOrWhiteSpace(preText.Trim().Replace(Environment.NewLine,string.Empty));
-            //if (isNewRoot) {
-            //    rootGuid = null;
-            //}
-            bool isNewRoot = false;
-
-            var dragTextElements = drtb.Selection.GetAllTextElements().OrderBy(x=>drtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart));
-            var dragContentRefs = dragTextElements
-                                        .Where(x => x.Tag is MpCopyItemReference)
-                                        .Select(x => x.Tag as MpCopyItemReference)
-                                        .Distinct()
-                                        .ToList();
-            var dragCopyItems = await MpDataModelProvider.GetCopyItemsByGuids(dragContentRefs.Select(x => x.CopyItemGuid).ToArray());
-            List<MpCopyItem> dropCopyItems = new List<MpCopyItem>();
-
-            bool willSourceBeRemoved = dctvm.Count == dragCopyItems.Count && !isCopy;
-
-            //var drtf_fd = drtb.Selection.ToRichText().ToFlowDocument();
-            if (!dctvm.IsAllSelected || isCopy) {
-                //retarget partial drag refs
-                foreach(var dcr in dragContentRefs) {
-
-                    string dcr_guid = dcr.CopyItemGuid;                    
-
-                    var thisSourceElements = dragTextElements.Where(x => x.Tag is MpCopyItemReference cir && cir.CopyItemGuid == dcr_guid);
-
-                    var thisSourceStart = thisSourceElements.Aggregate((a, b) => drtb.Document.ContentStart.GetOffsetToPosition(a.ContentStart) < drtb.Document.ContentStart.GetOffsetToPosition(b.ContentStart) ? a : b).ElementStart;
-                    var thisSourceEnd = thisSourceElements.Aggregate((a, b) => drtb.Document.ContentStart.GetOffsetToPosition(a.ContentStart) > drtb.Document.ContentStart.GetOffsetToPosition(b.ContentStart) ? a : b).ElementEnd;
-
-                    var thisSourceRange = new TextRange(thisSourceStart, thisSourceEnd);
-                    var thisSourceRtf = thisSourceRange.ToRichText();
-                    var thisSourceCi = dragCopyItems.FirstOrDefault(x => x.Guid == dcr_guid);
-
-                    MpCopyItem thisSourceNewCi = null;
-                    MpCopyItemReference retargeted_dcr = null;
-
-                    string fullSourcePlainText = thisSourceCi.ItemData.ToPlainText().Trim();
-                    string dragSourcePlainText = thisSourceRange.Text.Trim();
-                    if (fullSourcePlainText == dragSourcePlainText && !isCopy) {
-                        // NOTE this means this entire item is moving so don't retarget
-                        // may need to trim line breaks...
-                        retargeted_dcr = new MpCopyItemReference() { CopyItemGuid = thisSourceCi.Guid, CopyItemSourceGuid = thisSourceCi.CopyItemSourceGuid };
-                        thisSourceNewCi = thisSourceCi;
-                    } else {
-                        retargeted_dcr = new MpCopyItemReference();
-                        if (string.IsNullOrEmpty(dcr.CopyItemSourceGuid)) {
-                            //when source is direct content make retargeted source the direct content
-                            retargeted_dcr.CopyItemSourceGuid = dcr_guid;
-                        } else {
-                            //otherwise carry original content source
-                            retargeted_dcr.CopyItemSourceGuid = dcr.CopyItemSourceGuid;
-                        }
-                        retargeted_dcr.CopyItemGuid = System.Guid.NewGuid().ToString();
-
-                        thisSourceNewCi = await thisSourceCi.Clone(false) as MpCopyItem;
-                        thisSourceNewCi.Id = 0;
-                        thisSourceNewCi.Guid = retargeted_dcr.CopyItemGuid;
-                        thisSourceNewCi.CopyItemSourceGuid = retargeted_dcr.CopyItemSourceGuid;
-                        thisSourceNewCi.ItemData = thisSourceRtf;
-                    }                    
-                    
-                    if(string.IsNullOrEmpty(rootGuid)) {
-                        // NOTE this is only null if drop is at beginning of target and this the first drop item
-                        rootGuid = thisSourceNewCi.Guid;
-                    } else {
-                        thisSourceNewCi.RootCopyItemGuid = rootGuid;
-                    }
-                    await thisSourceNewCi.WriteToDatabaseAsync();
-
-                    dropCopyItems.Add(thisSourceNewCi);
-                    // NOTE retain sort from source
-                    dropCopyItems = dropCopyItems.OrderBy(x => dragCopyItems.IndexOf(dragCopyItems.FirstOrDefault(y => y.Guid == dcr_guid))).ToList();
-                }
-            } else {
-                // NOTE sort is carried from drag
-                dropCopyItems = dragCopyItems;
-                if(string.IsNullOrEmpty(rootGuid)) {
-                    rootGuid = dropCopyItems[0].Guid;
-                }
-            }
+            
             // isolate insertion point and account for block drop
-            var dtp = rtb.Document.ContentStart.GetPositionAtOffset(dropIdx).GetNextInsertionPosition(LogicalDirection.Backward);
+            var dtp = rtb.Document.ContentStart.GetPositionAtOffset(rtfDropIdx).GetNextInsertionPosition(LogicalDirection.Backward);
             if (_isPreBlockDrop) {
                 dtp = dtp.GetLineStartPosition(0).InsertParagraphBreak();
             } else if (_isPostBlockDrop) {
@@ -305,14 +249,14 @@ namespace MpWpfApp {
                 dtp = dtp.InsertParagraphBreak();
             }
 
+            var dropCopyItems = new List<MpCopyItem>();
             //insert encoded items
             foreach(var dci in dropCopyItems) {
-                var dci_cir = new MpCopyItemReference() { CopyItemGuid = dci.Guid, CopyItemSourceGuid = dci.CopyItemSourceGuid };
-                var dr = new Run("{c{" + dci.CopyItemGuid + "}c}") {
-                    Tag = dci_cir
+                var dr = new Run("{c{" + dci.Guid + "}c}") {
+                    Tag = dci
                 };
                 var span = new Span(dr, dtp) {
-                    Tag = dci_cir
+                    Tag = dci
                 };
                 dtp = span.ElementEnd.GetNextInsertionPosition(LogicalDirection.Forward);
             }
@@ -329,7 +273,7 @@ namespace MpWpfApp {
             } 
 
             var allTargetItems = dropCopyItems;
-            allTargetItems.AddRange(ctvm.ItemViewModels.Select(x => x.CopyItem));
+            allTargetItems.AddRange(ctvm.Items.Select(x => x.CopyItem));
             allTargetItems = allTargetItems.Distinct().ToList();
             var rootItem = allTargetItems.FirstOrDefault(x => x.Guid == rootGuid);
             rootItem.RootCopyItemGuid = string.Empty;
@@ -360,6 +304,161 @@ namespace MpWpfApp {
 
             MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(rootGuid).IsSelected = true;
         }
+
+        private async Task DropFromExternal(MpCopyItem dropItem, int rtfDropIdx) {
+            await Task.Delay(1);
+            var rtb = AssociatedObject.Rtb;
+
+            var dropRange = GetDropRange(rtfDropIdx);
+            
+            switch(dropItem.ItemType) {
+                case MpCopyItemType.Text:
+                    if(dropItem.ItemData.IsStringRichTextTable()) {
+                        string csv = MpCsvToRtfTableConverter.GetCsv(dropItem.ItemData);
+                        dropRange.LoadTable(csv);
+                    } else {
+                        dropRange.Text = dropItem.ItemData.ToPlainText().TrimTrailingLineEndings();
+                    }                    
+                    break;
+                case MpCopyItemType.Image:
+                    dropRange.LoadImage(dropItem.ItemData);
+                    break;
+                case MpCopyItemType.FileList:
+                    dropRange.LoadFileItem(dropItem.ItemData.Replace(Environment.NewLine, string.Empty),dropItem.IconId);
+                    break;
+            }
+
+
+            if (_isBlockDrop) {
+                //var tdtp = dtp;
+                ////add trailing line break
+                //if (tdtp == null || tdtp.GetLineStartPosition(1) == null) {
+                //    //at end of document
+                //    tdtp = rtb.Document.ContentEnd;
+                //} else {
+                //    tdtp = tdtp.GetLineStartPosition(1);
+                //}
+                //tdtp.InsertParagraphBreak();
+                dropRange.End.InsertLineBreak();
+            }
+
+            dropRange.GetAllTextElements().ForEach(x => x.Tag = dropItem);
+
+            await MpMergedDocumentRtfExtension.EncodeContent(rtb);
+
+            if (rtb.DataContext is MpClipTileViewModel ctvm && !ctvm.IsSelected) {
+                ctvm.IsSelected = true;
+            }
+        }
+
+        private TextRange GetDropRange(int rtfDropIdx) {
+            var rtb = AssociatedObject.Rtb;
+
+            // isolate insertion point and account for block drop
+            var dtp = rtb.Document.ContentStart
+                            .GetPositionAtOffset(rtfDropIdx)
+                            .GetNextInsertionPosition(LogicalDirection.Backward);
+
+            if (_isPreBlockDrop) {
+                if(dtp.GetLineStartPosition(0) == null) {
+                    //at start of doc
+                    dtp = rtb.Document.ContentStart.InsertLineBreak();
+                } else {
+                    dtp = dtp.GetLineStartPosition(0).InsertLineBreak();
+                }
+                
+            } else if (_isPostBlockDrop) {
+                if (dtp == null || dtp.GetLineStartPosition(1) == null) {
+                    //at end of document
+                    dtp = rtb.Document.ContentEnd;
+                } else {
+                    dtp = dtp.GetLineStartPosition(1);
+                }
+                dtp = dtp.InsertLineBreak();
+            } else if(_isInlineBlockDrop) {
+                dtp = dtp.InsertLineBreak();
+            }
+
+            return new TextRange(dtp,dtp);
+        }
+
+        private async Task<TextRange> RetargetRange(TextRange foreignTextRange, bool isCopy, string rootGuid) {
+            var foreign_rtb = foreignTextRange.Start.Parent.FindParentOfType<RichTextBox>();
+            var foreign_ctvm = foreign_rtb.DataContext as MpClipTileViewModel;
+            var dtel = foreignTextRange.GetAllTextElements();
+            var dragTextElements = dtel.OrderBy(x => foreign_rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart));
+            var dragCopyItemRefs = dragTextElements
+                                        .Where(x => x.Tag is MpICopyItemReference)
+                                        .Select(x => x.Tag as MpICopyItemReference)
+                                        .Distinct()
+                                        .ToList();
+            var dragCopyItems = await MpDataModelProvider.GetCopyItemsByGuids(dragCopyItemRefs.Select(x => x.Guid).ToArray());
+
+            List<MpCopyItem> dropCopyItems = new List<MpCopyItem>();
+
+            bool willSourceBeRemoved = foreign_ctvm.Count == dragCopyItems.Count && !isCopy;
+
+            //var drtf_fd = drtb.Selection.ToRichText().ToFlowDocument();
+            if (!foreign_ctvm.IsAllSelected || isCopy) {
+                //retarget partial drag refs
+                foreach (var dcr in dragCopyItemRefs) {
+
+                    string dcr_guid = dcr.Guid;
+
+                    var curDragTextElements = dragTextElements.Where(x => x.Tag is MpICopyItemReference cir && cir.Guid == dcr_guid);
+
+                    var curDragSourceRangeStart = curDragTextElements.Aggregate((a, b) => foreign_rtb.Document.ContentStart.GetOffsetToPosition(a.ContentStart) < foreign_rtb.Document.ContentStart.GetOffsetToPosition(b.ContentStart) ? a : b).ElementStart;
+                    var curDragSourceRangeEnd = curDragTextElements.Aggregate((a, b) => foreign_rtb.Document.ContentStart.GetOffsetToPosition(a.ContentStart) > foreign_rtb.Document.ContentStart.GetOffsetToPosition(b.ContentStart) ? a : b).ElementEnd;
+
+                    var curDragSourceRange = new TextRange(curDragSourceRangeStart, curDragSourceRangeEnd);
+                    var thisSourceRtf = curDragSourceRange.ToRichText();
+                    var thisSourceCi = dragCopyItems.FirstOrDefault(x => x.Guid == dcr_guid);
+
+                    MpCopyItem thisSourceNewCi = null;
+
+                    string fullSourcePlainText = thisSourceCi.ItemData.ToPlainText().Trim();
+                    string dragSourcePlainText = curDragSourceRange.Text.Trim();
+                    if (fullSourcePlainText == dragSourcePlainText && !isCopy) {
+                        // NOTE this means this entire item is moving so don't retarget
+                        // may need to trim line breaks...
+                        thisSourceNewCi = thisSourceCi;
+                    } else {
+                        if (string.IsNullOrEmpty(dcr.CopyItemSourceGuid)) {
+                            //when source is direct content make retargeted source the direct content
+                            thisSourceNewCi.CopyItemSourceGuid = dcr_guid;
+                        } else {
+                            //otherwise carry original content source
+                            thisSourceNewCi.CopyItemSourceGuid = dcr.CopyItemSourceGuid;
+                        }
+                        thisSourceNewCi.Guid = System.Guid.NewGuid().ToString();
+
+                        thisSourceNewCi = await thisSourceCi.Clone(false) as MpCopyItem;
+                        thisSourceNewCi.Id = 0;
+                        thisSourceNewCi.ItemData = thisSourceRtf;
+                    }
+
+                    if (string.IsNullOrEmpty(rootGuid)) {
+                        // NOTE this is only null if drop is at beginning of target and this the first drop item
+                        rootGuid = thisSourceNewCi.Guid;
+                    } else {
+                        thisSourceNewCi.RootCopyItemGuid = rootGuid;
+                    }
+                    await thisSourceNewCi.WriteToDatabaseAsync();
+
+                    dropCopyItems.Add(thisSourceNewCi);
+                    // NOTE retain sort from source
+                    dropCopyItems = dropCopyItems.OrderBy(x => dragCopyItems.IndexOf(dragCopyItems.FirstOrDefault(y => y.Guid == dcr_guid))).ToList();
+                }
+            } else {
+                // NOTE sort is carried from drag
+                dropCopyItems = dragCopyItems;
+                if (string.IsNullOrEmpty(rootGuid)) {
+                    rootGuid = dropCopyItems[0].Guid;
+                }
+            }
+
+            return null;
+        }
        
         public override void AutoScrollByMouse() {
             if (AssociatedObject == null || AssociatedObject.Rtb == null) {
@@ -378,7 +477,7 @@ namespace MpWpfApp {
 
         public override void Reset() {
             base.Reset();
-            _isPostBlockDrop = _isPreBlockDrop = false;
+            _isPostBlockDrop = _isPreBlockDrop = _isInlineBlockDrop = false;
 
             if(AssociatedObject == null || AssociatedObject.Rtb == null || AssociatedObject.DataContext == null) {
                 return;

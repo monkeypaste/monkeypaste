@@ -23,7 +23,19 @@ namespace MpWpfApp {
              DependencyProperty.Register(
                  "IsEnabled", typeof(bool),
                  typeof(MpBehavior<T>),
-                 new FrameworkPropertyMetadata(true));
+                 //new FrameworkPropertyMetadata(true));
+                 new FrameworkPropertyMetadata() {
+                     DefaultValue = true,
+                     PropertyChangedCallback = (s, e) => {
+                         bool isEnabled = (bool)e.NewValue;
+                         if (!isEnabled) {
+                             var b = s as MpBehavior<T>;
+                             if (b != null) {
+                                 b.Detach();
+                             }
+                         }
+                     }
+                 });
 
         #endregion
 
@@ -43,6 +55,11 @@ namespace MpWpfApp {
             }
         }
 
+        protected override void OnDetaching() {
+            base.OnDetaching();
+            OnUnload();
+        }
+
         protected virtual void OnLoad() {
             MpMainWindowViewModel.Instance.OnMainWindowShow += OnMainWindowShow; 
             MpMainWindowViewModel.Instance.OnMainWindowHidden += OnMainWindowHide;
@@ -55,7 +72,10 @@ namespace MpWpfApp {
         protected virtual void OnUnload() {
             _wasUnloaded = true;
             _isLoaded = false;
+            MpMainWindowViewModel.Instance.OnMainWindowShow -= OnMainWindowShow;
+            MpMainWindowViewModel.Instance.OnMainWindowHidden -= OnMainWindowHide;
         }
+
 
         protected virtual void OnMainWindowHide(object sender, EventArgs e) { }
 

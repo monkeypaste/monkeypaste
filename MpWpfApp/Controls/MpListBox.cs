@@ -18,7 +18,7 @@ namespace MpWpfApp {
         #region Overrides
 
         protected override void OnDragEnter(DragEventArgs e) {
-            MpConsole.WriteLine("Tray drag enter");
+            //MpConsole.WriteLine("Tray drag enter");
             OnDragOver(e);
         }
 

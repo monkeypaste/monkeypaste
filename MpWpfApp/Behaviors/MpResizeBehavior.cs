@@ -22,8 +22,8 @@ namespace MpWpfApp {
         #region Private Variables
         //private static List<MpResizeBehavior> _allResizers = new List<MpResizeBehavior>();
 
-        private Point _lastMousePosition;
-        private Point _mouseDownPosition;
+        private Point? _lastMousePosition;
+        private Point? _mouseDownPosition;
 
 
         private MpCursorType _curCursor = MpCursorType.None;
@@ -254,7 +254,7 @@ namespace MpWpfApp {
         #endregion
         protected override void OnLoad() {
             base.OnLoad();
-            if(AssociatedObject == null) {
+            if(AssociatedObject == null || !IsEnabled) {
                 return;
             }
             if (BoundElement == null) {
@@ -270,19 +270,13 @@ namespace MpWpfApp {
             AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
             AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
 
-            if(DoubleClickFrameworkElement != null && DoubleClickFrameworkElement != AssociatedObject) {
+            if (DoubleClickFrameworkElement != null) {
                 DoubleClickFrameworkElement.MouseLeftButtonDown += DoubleClickFrameworkElement_MouseLeftButtonDown;
-            }            
+            }
 
             MpMessenger.Register<MpMessageType>(this, MpClipTrayViewModel.Instance.ReceivedResizerBehaviorMessage);
             MpMessenger.Register<MpMessageType>(this, MpMainWindowViewModel.Instance.ReceivedResizerBehaviorMessage);
             
-            //if (_allResizers.Contains(this)) {
-            //    var old = _allResizers.FirstOrDefault(x => x == this);
-            //    MpConsole.WriteLine($"Duplicate resizer detected while loading, swapping for new... (old: '{old.AssociatedObject.GetType()}' new:'{AssociatedObject.GetType()}'");
-            //    _allResizers.Remove(old);
-            //}
-            //_allResizers.Add(this);
         }
 
         protected override void OnUnload() {
@@ -294,11 +288,6 @@ namespace MpWpfApp {
                 AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
                 AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
             }
-
-            //if (_allResizers.Contains(this)) {
-            //    _allResizers.Remove(this);
-            //    MpConsole.WriteLine(@"Resizer of type " + AssociatedObject.GetType() + " unloaded");
-            //}
 
             if (DoubleClickFrameworkElement != null) {
                 DoubleClickFrameworkElement.MouseLeftButtonDown -= DoubleClickFrameworkElement_MouseLeftButtonDown;
@@ -319,6 +308,12 @@ namespace MpWpfApp {
 
             Vector delta = curSize - defaultSize;
             Resize(-delta.X, -delta.Y);
+            Reset();
+
+            if(AssociatedObject.DataContext is MpClipTileViewModel ctvm && ctvm.HeadItem != null) {
+                MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup.Remove(ctvm.HeadItem.CopyItemId);
+                
+            }
         }
 
         public void Resize(double dx, double dy) {
@@ -381,9 +376,9 @@ namespace MpWpfApp {
             }
             if (e.ClickCount == 2) {
                 ResetToDefault();
-                if (AffectsContent) {
-                    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
-                }
+                //if (AffectsContent) {
+                //    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
+                //}
             }
         }
 
@@ -402,21 +397,18 @@ namespace MpWpfApp {
             if (MpDragDropManager.IsDragAndDrop || 
                 AssociatedObject == null || 
                 !IsEnabled || 
-                MpClipTrayViewModel.Instance.HasScrollVelocity) {
+                MpClipTrayViewModel.Instance.HasScrollVelocity ||
+                !_mouseDownPosition.HasValue) {
                 return;
             }
             if(Mouse.LeftButton == MouseButtonState.Released) {
-                if(IsResizing) {
-                    IsResizing = false;
-                }
-                if(AssociatedObject.IsMouseCaptured) {
-                    AssociatedObject.ReleaseMouseCapture();
-                }
+                Reset();
+                return;
             }
             var mwmp = e.GetPosition(Application.Current.MainWindow);
 
-            Vector delta =  mwmp - _lastMousePosition;
-            _lastMousePosition = mwmp;
+            _lastMousePosition = _lastMousePosition.HasValue ? _lastMousePosition : mwmp;
+            Vector delta =  mwmp - _lastMousePosition.Value;
 
             if (AssociatedObject.DataContext is MpClipTileViewModel || AssociatedObject.DataContext is MpImageAnnotationViewModel) {
                 //Debugger.Break();
@@ -431,7 +423,7 @@ namespace MpWpfApp {
                     CanResize = true;
                     MpCursor.SetCursor(this, _curCursor);
                     if(Mouse.LeftButton == MouseButtonState.Pressed) {
-                        double totalDist = mwmp.Distance(_mouseDownPosition);
+                        double totalDist = mwmp.Distance(_mouseDownPosition.Value);
 
                         if (totalDist >= 1) {
                             IsResizing = AssociatedObject.CaptureMouse();
@@ -446,10 +438,11 @@ namespace MpWpfApp {
                     CanResize = false;
                 }
             }
+            _lastMousePosition = mwmp;
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            if (MpDragDropManager.IsDragAndDrop || AssociatedObject == null || !IsEnabled) {
+            if (MpDragDropManager.IsDragAndDrop || AssociatedObject == null || !IsEnabled || e.ClickCount > 1) {
                 return;
             }
             if (AssociatedObject == null) {
@@ -460,9 +453,10 @@ namespace MpWpfApp {
                 svm.IsSelected = true;
             }
 
-            if (DoubleClickFrameworkElement != AssociatedObject && e.ClickCount == 2) {
-                ResetToDefault();
-            }
+            //if (DoubleClickFrameworkElement != AssociatedObject && e.ClickCount == 2) {
+            //    ResetToDefault();
+            //    return;
+            //}
             _lastMousePosition = _mouseDownPosition = e.GetPosition(Application.Current.MainWindow);
 
             var rect = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
@@ -484,9 +478,7 @@ namespace MpWpfApp {
             AssociatedObject.ReleaseMouseCapture();
 
             if (IsResizing) {
-                
-                _curCursor = MpCursorType.None;
-                IsResizing = false;
+                Reset();
                 if(AffectsContent) {
                     MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
                 }
@@ -494,6 +486,15 @@ namespace MpWpfApp {
         }
 
         #endregion
+
+        private void Reset() {
+            _curCursor = MpCursorType.None;
+            IsResizing = false;
+            _lastMousePosition = _mouseDownPosition = null;
+            if (AssociatedObject.IsMouseCaptured) {
+                AssociatedObject.ReleaseMouseCapture();
+            }
+        }
 
         private MpRectEdgeFlags GetClosestEdgeOrCorner(Rect rect, Point p) {
             if(!rect.Contains(p)) {

@@ -23,6 +23,13 @@ namespace MonkeyPaste {
 
         #region Collections
 
+        public static T[] ToArray<T>(this object obj) where T:class {
+            return new T[] { obj as T };
+        }
+
+        public static List<T> ToList<T>(this object obj) where T:class {
+            return new List<T> { obj as T };
+        }
         public static int FastIndexOf<T>(this IList<T> list, T value) {
             //this is 15x faster according to: https://stackoverflow.com/a/8266937/105028
             for (int index = 0; index < list.Count; index++) {

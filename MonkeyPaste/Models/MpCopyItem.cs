@@ -28,12 +28,14 @@ namespace MonkeyPaste {
         LastOutput
     }
 
-    public class MpCopyItemReference {
-        public string CopyItemGuid { get; set; }
-        public string CopyItemSourceGuid { get; set; }
+    public interface MpICopyItemReference {
+        string Guid { get; set; }
+        string CopyItemSourceGuid { get; set; }
+
+        Task<MpCopyItem> Retarget(MpITextSelectionRange plainTextRange);
     }
 
-    public class MpCopyItem : MpUserObject, MpISyncableDbObject {
+    public class MpCopyItem : MpUserObject, MpISyncableDbObject, MpICopyItemReference {
         #region Statics
 
         public static string[] PhysicalComparePropertyPaths {
@@ -159,8 +161,8 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeInsert)]
-        public MpSource Source { get; set; }
+        //[ManyToOne(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeInsert)]
+        //public MpSource Source { get; set; }
 
         //[OneToOne(CascadeOperations = CascadeOperation.All)]
         //public MpDbImage SsDbImage { get; set; }
@@ -211,6 +213,29 @@ namespace MonkeyPaste {
 
         #region MpICopyItemReference Implementation
 
+        public async Task<MpCopyItem> Retarget(MpITextSelectionRange plainTextRange) {
+            // this is used when a fragment of a copy item is moved either to become a new tile or part of another document
+            // where only the ORIGINAL item reference is carried to new fragment 
+            // if fragment was already a fragment its info is not tracked
+
+            var rci = await Clone(false) as MpCopyItem;
+            rci.Id = 0;
+            rci.Guid = System.Guid.NewGuid().ToString();
+            string allPlainText = MpNativeWrapper.Services.StringTools.ToPlainText(ItemData);
+            string selectionPlainText = allPlainText.Substring(plainTextRange.SelectionStart, plainTextRange.SelectionLength);
+            rci.ItemData = MpNativeWrapper.Services.StringTools.ToRichText(selectionPlainText);
+            if(string.IsNullOrEmpty(CopyItemSourceGuid)) {
+                rci.CopyItemSourceGuid = Guid;
+            } else {
+                rci.CopyItemSourceGuid = CopyItemSourceGuid;
+            }
+            await rci.WriteToDatabaseAsync();
+
+
+
+
+            return rci;
+        }
 
         #endregion
 
@@ -283,7 +308,7 @@ namespace MonkeyPaste {
                         ItemDescription = description,
                         ItemType = itemType,
                         SourceId = source.Id,
-                        Source = source,
+                        //Source = source,
                         IconId = iconId,
                         CopyCount = 1,
                         CompositeSortOrderIdx = i,
@@ -314,7 +339,7 @@ namespace MonkeyPaste {
                 ItemData = data,
                 ItemType = itemType,
                 SourceId = source.Id,
-                Source = source,
+                //Source = source,
                 CopyCount = 1,
                 CopyItemSourceGuid = copyItemSourceGuid,
                 RootCopyItemGuid = rootCopyItemGuid
@@ -339,14 +364,15 @@ namespace MonkeyPaste {
             return $"{Title} Id:{Id}";
         }
 
+
         public override async Task WriteToDatabaseAsync() {
             if(IgnoreDb) {
                 MpConsole.WriteLine($"Db write for '{ToString()}' was ignored");
                 return;
             }
-            if(Source == null) {
-                Source = await MpDb.GetItemAsync<MpSource>(SourceId);
-            }
+            //if(Source == null) {
+            //    Source = await MpDb.GetItemAsync<MpSource>(SourceId);
+            //}
             if(CompositeParentCopyItemId == Id && Id > 0) {
                 MpConsole.WriteLine("Warning! circular copy item ref detected, attempting to fix...");
                 CompositeParentCopyItemId = CompositeSortOrderIdx = 0;
@@ -371,6 +397,9 @@ namespace MonkeyPaste {
         public async Task<object> DeserializeDbObject(string objStr) {
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
+
+            var source = await MpDb.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
+
             var ci = new MpCopyItem() {
                 CopyItemGuid = System.Guid.Parse(objParts[0]),
                 Title = objParts[1],
@@ -378,9 +407,10 @@ namespace MonkeyPaste {
                 CopyDateTime = DateTime.Parse(objParts[3]),
                 ItemData = objParts[4],
                 ItemDescription = objParts[5],
-                ItemType = (MpCopyItemType)Convert.ToInt32(objParts[6])
+                ItemType = (MpCopyItemType)Convert.ToInt32(objParts[6]),
+                SourceId = source == null ? MpPreferences.ThisAppSourceId : source.Id
             };
-            ci.Source = await MpDb.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
+            //ci.Source = await MpDb.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
             //TODO deserialize this once img and files added
             //ci.ItemType = MpCopyItemType.RichText;
             return ci;
@@ -399,7 +429,7 @@ namespace MonkeyPaste {
                 ItemData,
                 ItemDescription,
                 ((int)ItemType).ToString(),
-                Source.SourceGuid.ToString()
+                MpDb.GetItem<MpSource>(SourceId).Guid//Source.SourceGuid.ToString()
                 );
         }
 
@@ -455,7 +485,7 @@ namespace MonkeyPaste {
                 other.SourceId,
                 "fk_MpSourceId",
                 diffLookup,
-                Source.SourceGuid.ToString());
+                MpDb.GetItem<MpSource>(SourceId).Guid);
             diffLookup = CheckValue(
                 ItemType,
                 other.ItemType,
@@ -495,11 +525,11 @@ namespace MonkeyPaste {
                         newCopyItem.ItemDescription = li.AffectedColumnValue;
                         break;
                     case "fk_MpSourceId":
-                        newCopyItem.Source = await MpDataModelProvider.GetSourceByGuid(li.AffectedColumnValue);
-                        if(newCopyItem.Source != null) {
-                            newCopyItem.Source = await MpDb.GetItemAsync<MpSource>(newCopyItem.Source.Id);
+                        var source = await MpDataModelProvider.GetSourceByGuid(li.AffectedColumnValue);
+                        if(source != null) {
+                            source = await MpDb.GetItemAsync<MpSource>(source.Id);
                         }
-                        newCopyItem.SourceId = Convert.ToInt32(newCopyItem.Source.Id);
+                        newCopyItem.SourceId = Convert.ToInt32(source.Id);
                         break;
                     case "fk_MpCopyItemTypeId":
                         newCopyItem.ItemType = (MpCopyItemType)Convert.ToInt32(li.AffectedColumnValue);
@@ -517,17 +547,17 @@ namespace MonkeyPaste {
         public async Task<object> Clone(bool isReplica) {
             // NOTE isReplica is used when duplicating item which retains tag associations but not shortcuts
 
-            if(Source == null) {
-                Source = await MpDb.GetItemAsync<MpSource>(SourceId);
-            }
+            //if(Source == null) {
+            //    Source = await MpDb.GetItemAsync<MpSource>(SourceId);
+            //}
 
             var newItem = new MpCopyItem() {
                 ItemType = this.ItemType,
                 Title = isReplica ? this.Title + " Copy":this.Title,
                 ItemData = this.ItemData,
                 IconId = this.IconId,
-                Source = this.Source,
-                SourceId = this.Source.Id,
+                //Source = this.Source,
+                SourceId = this.SourceId,
                 CopyCount = 1,
                 CopyDateTime = DateTime.Now,
                 CompositeParentCopyItemId = isReplica ? 0:this.CompositeParentCopyItemId,

@@ -24,7 +24,7 @@ namespace MpClipboardHelper {
 
         #region Properties
 
-        public uint CF_HTML, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15;
+        public uint CF_HTML, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15, CF_UNICODE_TEXT,CF_OEM_TEXT;
 
         public bool IgnoreClipboardChangeEvent { get; set; } = false;
 
@@ -69,6 +69,8 @@ namespace MpClipboardHelper {
             UIPermission clipBoard = new UIPermission(PermissionState.Unrestricted);
             clipBoard.Clipboard = UIPermissionClipboard.AllClipboard;
 
+            CF_UNICODE_TEXT = WinApi.RegisterClipboardFormatA("UnicodeText");
+            CF_OEM_TEXT = WinApi.RegisterClipboardFormatA("OemText");
             CF_HTML = WinApi.RegisterClipboardFormatA("HTML Format");
             CF_RTF = WinApi.RegisterClipboardFormatA("Rich Text Format");
             CF_CSV = WinApi.RegisterClipboardFormatA(DataFormats.CommaSeparatedValue);

@@ -270,7 +270,7 @@ namespace MpWpfApp {
 
         public abstract int GetDropTargetRectIdx();
 
-        public abstract MpShape GetDropTargetAdornerShape();
+        public abstract MpShape[] GetDropTargetAdornerShape();
 
         public void InitAdorner() {
             if(AdornedElement != null) {
@@ -302,7 +302,7 @@ namespace MpWpfApp {
             if(dragData is List<MpCopyItem>) {
                 cil = dragData as List<MpCopyItem>;
             } else if(dragData is MpClipTileViewModel ctvm) {
-                cil = ctvm.ItemViewModels.Select(x => x.CopyItem).ToList();
+                cil = ctvm.Items.Select(x => x.CopyItem).ToList();
             }
             var clones = (await Task.WhenAll(cil.Select(x => x.Clone(true)).ToArray())).Cast<MpCopyItem>().ToList();
             MpClipTrayViewModel.Instance.PersistentSelectedModels = clones;

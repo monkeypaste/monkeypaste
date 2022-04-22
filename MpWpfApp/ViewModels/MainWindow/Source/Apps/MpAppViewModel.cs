@@ -83,6 +83,15 @@ namespace MpWpfApp {
 
         #region Model
 
+        public int UserDeviceId {
+            get {
+                if (App == null) {
+                    return 0;
+                }
+                return App.UserDeviceId;
+            }
+        }
+
         public int AppId {
             get {
                 if(App == null) {

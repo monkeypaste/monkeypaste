@@ -121,9 +121,11 @@ namespace MpWpfApp {
                     if(e.NewValue is bool isEnabled) {
                         var fe = obj as FrameworkElement;
                         if (isEnabled) {
-                            fe.MouseEnter += Fe_MouseEnter;
-                            fe.MouseLeave += Fe_MouseLeave;
-                            fe.Unloaded += Fe_Unloaded;
+                            if(fe.IsLoaded) {
+                                Fe_Loaded(obj, null);
+                            } else {
+                                fe.Loaded += Fe_Loaded;
+                            }
                         } else {
                             Fe_Unloaded(fe, null);
                         }
@@ -131,6 +133,15 @@ namespace MpWpfApp {
                 }
             });
 
+        private static void Fe_Loaded(object sender, RoutedEventArgs e) {
+            var fe = sender as FrameworkElement;
+            if(fe == null) {
+                return;
+            }
+            fe.MouseEnter += Fe_MouseEnter;
+            fe.MouseLeave += Fe_MouseLeave;
+            fe.Unloaded += Fe_Unloaded;
+        }
         private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
             var fe = sender as FrameworkElement;
 

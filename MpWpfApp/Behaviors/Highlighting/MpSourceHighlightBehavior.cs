@@ -39,18 +39,18 @@ namespace MpWpfApp {
             var qi = MpDataModelProvider.QueryInfo;
             string st = qi.SearchText;
             if(qi.FilterFlags.HasFlag(MpContentFilterType.Url) && 
-               civm.CopyItem.Source.Url != null &&
-               civm.CopyItem.Source.Url.UrlPath.ContainsByCaseOrRegexSetting(qi.SearchText)) {
+               civm.UrlViewModel != null &&
+               civm.UrlViewModel.UrlPath.ContainsByCaseOrRegexSetting(qi.SearchText)) {
                 _matches.Add(null);
             } else if (qi.FilterFlags.HasFlag(MpContentFilterType.UrlTitle) &&
-                       civm.CopyItem.Source.Url != null &&
-                       civm.CopyItem.Source.Url.UrlTitle.ContainsByCaseOrRegexSetting(qi.SearchText)) {
+                       civm.UrlViewModel != null &&
+                       civm.UrlViewModel.UrlTitle.ContainsByCaseOrRegexSetting(qi.SearchText)) {
                 _matches.Add(null);
             } else if (qi.FilterFlags.HasFlag(MpContentFilterType.AppName) &&
-               civm.CopyItem.Source.App.AppName.ContainsByCaseOrRegexSetting(qi.SearchText)) {
+               civm.AppViewModel.AppName.ContainsByCaseOrRegexSetting(qi.SearchText)) {
                 _matches.Add(null);
             } else if (qi.FilterFlags.HasFlag(MpContentFilterType.AppPath) &&
-                civm.CopyItem.Source.App.AppPath.ContainsByCaseOrRegexSetting(qi.SearchText)) {
+                civm.AppViewModel.AppPath.ContainsByCaseOrRegexSetting(qi.SearchText)) {
                 _matches.Add(null);
             }
 

@@ -148,12 +148,12 @@ namespace MpWpfApp {
                         Debugger.Break();
                         throw new Exception("Error all text elements should have a model as their tag (either MpCopyItem or MpTextTemplate)");
                     }
-                    if(te.Tag is MpCopyItemReference dbo) {                        
-                        if(!contentLookup.ContainsKey(dbo.CopyItemGuid)) {
-                            contentLookup.Add(dbo.CopyItemGuid, new List<TextElement>());
+                    if(te.Tag is MpICopyItemReference dbo) {                        
+                        if(!contentLookup.ContainsKey(dbo.Guid)) {
+                            contentLookup.Add(dbo.Guid, new List<TextElement>());
                         }
-                        contentLookup[dbo.CopyItemGuid].Add(te);
-                        contentLookup[dbo.CopyItemGuid].Sort((a, b) => {
+                        contentLookup[dbo.Guid].Add(te);
+                        contentLookup[dbo.Guid].Sort((a, b) => {
                             return a.ContentStart.CompareTo(b.ContentStart);
                         });
                     }
@@ -196,7 +196,6 @@ namespace MpWpfApp {
         public static void SetHeadContentItemViewModel(DependencyObject obj, object value) {
             obj.SetValue(HeadContentItemViewModelProperty, value);
         }
-        private static int _loadCallCount = 0;
 
         public static readonly DependencyProperty HeadContentItemViewModelProperty =
           DependencyProperty.RegisterAttached(
@@ -205,7 +204,6 @@ namespace MpWpfApp {
             typeof(MpMergedDocumentRtfExtension),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (s, e) => {
-                    MpConsole.WriteLine("Load call count: " + (++_loadCallCount));
                     if(e.NewValue == null) {
                         //occurs when tile is placeholder
                         return;
@@ -237,20 +235,20 @@ namespace MpWpfApp {
             var allTextElements = rtb.Document
                                         .GetAllTextElements()
                                         .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
-            string rootGuid = (allTextElements[0].Tag as MpCopyItemReference).CopyItemGuid;
+            string rootGuid = (allTextElements[0].Tag as MpICopyItemReference).Guid;
             var ctp_start = rtb.Document.ContentStart;
             string encodedContentStr = string.Empty;
             while (ctp_start != null && ctp_start != rtb.Document.ContentEnd) {
                 string curGuid = null;
                 if (ctp_start.Parent is FlowDocument fd) {
-                    curGuid = (fd.Tag as MpCopyItemReference).CopyItemGuid;
+                    curGuid = (fd.Tag as MpICopyItemReference).Guid;
                 } else if (ctp_start.Parent is TextElement te) {
-                    curGuid = (te.Tag as MpCopyItemReference).CopyItemGuid;
+                    curGuid = (te.Tag as MpICopyItemReference).Guid;
                 } else {
                     Debugger.Break();
                 } 
                 var ctp_end = allTextElements
-                                .Where(x => x.Tag is MpCopyItemReference cir && cir.CopyItemGuid == curGuid)
+                                .Where(x => x.Tag is MpICopyItemReference cir && cir.Guid == curGuid)
                                 .Aggregate((a, b) => rtb.Document.ContentStart.GetOffsetToPosition(a.ContentEnd) > rtb.Document.ContentStart.GetOffsetToPosition(b.ContentEnd) ? a : b).ContentEnd;
                 var ctp_range = new TextRange(ctp_start, ctp_end);
                 if (curGuid == rootGuid) {
@@ -283,7 +281,7 @@ namespace MpWpfApp {
             if(ctvm == null) {
                 return;
             }
-            while(ctvm.IsBusy) {
+            while(ctvm.IsAnyBusy) {
                 // wait till ctvm finishes initializing 
                 await Task.Delay(100);
             }
@@ -293,7 +291,7 @@ namespace MpWpfApp {
             rtb.Document = await DecodeContentItem(
                 itemGuid: ctvm.HeadItem.CopyItemGuid,
                 itemRange: new TextRange(rtb.Document.ContentStart,rtb.Document.ContentEnd),
-                items: ctvm.ItemViewModels.Select(x=>x.CopyItem).ToList(), 
+                items: ctvm.Items.Select(x=>x.CopyItem).ToList(), 
                 rootDocument: rtb.Document, 
                 decodeAsRootDocument: true);
             
@@ -349,7 +347,8 @@ namespace MpWpfApp {
             for (int i = 0; i < childGuids.Length; i++) {
                 var insertRange = childRanges[i];
                 string childGuid = childGuids[i];
-                if(childCopyItems.All(x=>x.Guid != childGuid)) {
+                var childItem = childCopyItems.FirstOrDefault(x => x.Guid == childGuid);
+                if(childItem == null) {
                     MpConsole.WriteTraceLine("Missing content child detected, replacing w/ empty string " + childGuid);
                     insertRange.Text = string.Empty;
                     continue;
@@ -378,17 +377,17 @@ namespace MpWpfApp {
                     if(decodeAsRootDocument) {
                         //only register events on root document
                         var allRangeElements = rangeTo.GetAllTextElements();
-                        allRangeElements.ForEach(x => x.Tag = new MpCopyItemReference() { CopyItemGuid = childGuid });
+                        allRangeElements.ForEach(x => x.Tag = (MpICopyItemReference)childItem);
                         foreach (var te in allRangeElements) {
                             var origBrush = te.Background;
                             te.MouseEnter += (s, e) => {
                                 te.Background = Brushes.Yellow;
-                                //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemGuid == childGuid)).ItemViewModels.FirstOrDefault(x => x.CopyItemGuid == childGuid);
+                                //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.Guid == childGuid)).Items.FirstOrDefault(x => x.Guid == childGuid);
                                 //civm.IsHovering = true;
                             };
                             te.MouseLeave += (s, e) => {
                                 te.Background = origBrush;
-                                //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemGuid == childGuid)).ItemViewModels.FirstOrDefault(x => x.CopyItemGuid == childGuid);
+                                //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.Guid == childGuid)).Items.FirstOrDefault(x => x.Guid == childGuid);
                                 //civm.IsHovering = false;
                             };
                         }
@@ -413,7 +412,7 @@ namespace MpWpfApp {
             }
 
             var allTextElements = fd.GetAllTextElements();
-            var cir = new MpCopyItemReference() { CopyItemGuid = ci.Guid, CopyItemSourceGuid = ci.CopyItemSourceGuid };
+            var cir = (MpICopyItemReference)ci;
             fd.Tag = cir;
             allTextElements.Where(x => x.Tag == null).ForEach(x => x.Tag = cir);
 

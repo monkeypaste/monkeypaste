@@ -50,9 +50,9 @@ namespace MpWpfApp {
                 }
                 if(AssociatedObject.DataContext is MpContentItemViewModel civm) {
                     if(HighlightType == MpHighlightType.Content) {
-                        return -(civm.Parent.ItemViewModels.Count-civm.ItemIdx);
+                        return -(civm.Parent.Items.Count-civm.ItemIdx);
                     }
-                    return -Priority - civm.Parent.ItemViewModels.Count;
+                    return -Priority - civm.Parent.Items.Count;
                 }
                 return int.MaxValue;
             }

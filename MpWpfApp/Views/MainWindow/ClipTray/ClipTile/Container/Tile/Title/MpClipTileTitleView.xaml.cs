@@ -191,11 +191,11 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.ClearClipSelection();
             BindingContext.IsSelected = true;
             foreach (var vctvm in MpClipTrayViewModel.Instance.Items) {
-                if (vctvm.ItemViewModels.Any(x=>x.CopyItem.Source.AppId != BindingContext.CopyItem.Source.AppId)) {
+                if (vctvm.Items.Any(x=>x.SourceViewModel.AppViewModel.AppId != BindingContext.SourceViewModel.AppViewModel.AppId)) {
                     bool hasSubItemWithApp = false;
-                    if (vctvm.ItemViewModels.Count > 1) {
-                        foreach (var vrtbvm in vctvm.ItemViewModels) {
-                            if (vrtbvm.CopyItem.Source.App.Id != BindingContext.CopyItem.Source.AppId) {
+                    if (vctvm.Items.Count > 1) {
+                        foreach (var vrtbvm in vctvm.Items) {
+                            if (vrtbvm.SourceViewModel.AppViewModel.AppId != BindingContext.SourceViewModel.AppViewModel.AppId) {
                                // vrtbvm.ItemVisibility = Visibility.Collapsed;
                             } else {
                                 hasSubItemWithApp = true;

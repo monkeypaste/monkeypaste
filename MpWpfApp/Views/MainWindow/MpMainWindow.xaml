@@ -61,7 +61,7 @@
             <!--  Title Menu  -->
             <Grid x:Name="TitleBarDockPanel"
                   Grid.Row="0"
-                  local:MpHoverableExtension.IsEnabled="True"
+                  local:MpHoverableExtension.IsEnabled="False"
                   local:MpHoverableExtension.HoverCursor="ResizeNS"
                   Background="{Binding .,
                                        Converter={StaticResource StringToThemeBrushConverter},

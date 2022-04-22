@@ -70,13 +70,13 @@ namespace MpWpfApp {
             }
             return -1;
         }
-        public override MpShape GetDropTargetAdornerShape() {
+        public override MpShape[] GetDropTargetAdornerShape() {
             var drl = GetDropTargetRects();
             if (DropIdx < 0 || DropIdx >= drl.Count) {
                 return null;
             }
             var s = new MpSize(AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);
-            return new MpEllipse(new MpPoint(s.Width / 2, s.Height / 2), s);
+            return  new MpEllipse(new MpPoint(s.Width / 2, s.Height / 2), s).ToArray<MpShape>();
         }
 
         public override bool IsDragDataValid(bool isCopy,object dragData) {

@@ -112,9 +112,11 @@ namespace MpWpfApp {
         }
 
         public async Task InitializeAsync() {
-            if(Parent.IsPlaceholder) {
+            if(Parent.IsPlaceholder || IsBusy) {
                 return;
             }
+            IsBusy = true;
+
             var icon = await MpDb.GetItemAsync<MpIcon>(Parent.IconId);
 
             var pallete = new List<string>{
@@ -131,22 +133,28 @@ namespace MpWpfApp {
                 var tagColors = await MpDataModelProvider.GetTagColorsForCopyItem(Parent.CopyItemId);
                 pallete.InsertRange(0, tagColors);
             }
+            pallete = pallete.Take(5).ToList();
 
-            for (int i = 0; i < 5; i++) {
+            Swirls.Clear();
+
+            for (int i = 0; i < pallete.Count; i++) {
                 var scb = new SolidColorBrush(pallete[i].ToWinMediaColor());
-                if (i < Swirls.Count) {
-                    Swirls[i].LayerId = i;
-                    Swirls[i].LayerBrush = scb;
-                    Swirls[i].LayerOpacity = (double)MpHelpers.Rand.Next(40, 120) / 255;
-                } else {
-                    Swirls.Add(
-                        new MpSwirlLayerViewModel(
-                            this,
-                            i,
-                            scb,
-                            (double)MpHelpers.Rand.Next(40, 120) / 255));
-                }
+                MpSwirlLayerViewModel slvm = CreateSwirlLayerViewModel(i, scb);
+
+                Swirls.Add(slvm);
             }
+
+            IsBusy = false;
+        }
+
+        private MpSwirlLayerViewModel CreateSwirlLayerViewModel(int layerId,SolidColorBrush b) {
+            var slvm = new MpSwirlLayerViewModel(
+                            this,
+                            layerId,
+                            b,
+                            (double)MpHelpers.Rand.Next(40, 120) / 255);
+            return slvm;
+
         }
 
         public override void Dispose() {

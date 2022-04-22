@@ -26,6 +26,7 @@ namespace MpWpfApp {
         public static TextRange ElementRange(this TextElement te) {
             return new TextRange(te.ElementStart, te.ElementEnd);
         }
+
         public static bool IsPointInRange(this TextRange tr, Point p) {
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
 
@@ -55,7 +56,9 @@ namespace MpWpfApp {
                 rtb.Document.PageWidth = Math.Max(0, rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
                 rtb.Document.PageHeight = Math.Max(0, rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
             }
-
+            var p = rtb.Document.PagePadding;
+            p.Top = 3;
+            rtb.Document.PagePadding = p;
             rtb.UpdateLayout();
         }
 
@@ -144,6 +147,7 @@ namespace MpWpfApp {
             }
         }
 
+        
         public static void LoadImage(this TextRange tr, string base64Str, Size? docSize = null) {
             if (!base64Str.IsStringBase64()) {
                 Debugger.Break();
@@ -683,6 +687,7 @@ namespace MpWpfApp {
         }
 
         public static void ConfigureLineHeight(this FlowDocument doc) {
+            return;
             if (doc == null) {
                 throw new ArgumentNullException("doc");
             }

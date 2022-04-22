@@ -8,9 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using static SkiaSharp.SKImageFilter;
 
 namespace MpWpfApp {
     public class MpClipTrayDropBehavior : MpDropBehaviorBase<MpClipTrayView> {
@@ -155,7 +152,7 @@ namespace MpWpfApp {
             }
             return targetRects;
         }
-        public override MpShape GetDropTargetAdornerShape() {
+        public override MpShape[] GetDropTargetAdornerShape() {
             var drl = GetDropTargetRects();
             if(DropIdx < 0 || DropIdx >= drl.Count) {
                 return null;
@@ -165,8 +162,8 @@ namespace MpWpfApp {
             if(DropIdx == 0) {
                 x = 3;
             }
-            MpConsole.WriteLine("Tray DropLine X: " + x);
-            return new MpLine(x, dr.Top, x, dr.Bottom);
+            //MpConsole.WriteLine("Tray DropLine X: " + x);
+            return new MpLine(x, dr.Top, x, dr.Bottom).ToArray<MpShape>();
         }
 
         public override async Task StartDrop() { 
@@ -204,6 +201,15 @@ namespace MpWpfApp {
             MpDataModelProvider.InsertQueryItem(dragModels[0].Id, queryDropIdx);
 
             MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+
+            while (MpClipTrayViewModel.Instance.IsAnyBusy) {
+                await Task.Delay(100);
+            }
+
+            var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModels[0].Id);
+            if(civm != null) {
+                civm.IsSelected = true;
+            }
         }
     }
 

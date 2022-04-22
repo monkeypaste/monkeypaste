@@ -88,7 +88,11 @@ namespace MpWpfApp {
         #region Selection
         private async void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             BindingContext.RefreshAllCommands();
-            await MpTagTrayViewModel.Instance.UpdateTagAssociation();
+            if(!MpResizeBehavior.IsAnyResizing) {
+                // BUG when reseting tile size this throws a collection changed while enumerating error
+                await MpTagTrayViewModel.Instance.UpdateTagAssociation();
+            }
+            
         }
 
         #endregion

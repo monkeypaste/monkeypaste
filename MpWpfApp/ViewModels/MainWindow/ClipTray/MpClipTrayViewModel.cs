@@ -255,18 +255,19 @@ namespace MpWpfApp {
                                     }
                                 },
                                 new MpMenuItemViewModel() {
-                                    Header = $"'{PrimaryItem.PrimaryItem.CopyItem.Source.App.AppName}' to _Excluded App",
-                                    IconId = PrimaryItem.PrimaryItem.CopyItem.Source.AppId,
+                                    Header = $"'{PrimaryItem.PrimaryItem.SourceViewModel.AppViewModel.AppName}' to _Excluded App",
+                                    IconId = PrimaryItem.PrimaryItem.SourceViewModel.AppViewModel.AppId,
                                     Command = ExcludeSubSelectedItemApplicationCommand
                                 },
                                 new MpMenuItemViewModel() {
-                                    Header = PrimaryItem.PrimaryItem.CopyItem.Source.Url == null ? 
+                                    Header = PrimaryItem.PrimaryItem.SourceViewModel == null ||
+                                             PrimaryItem.PrimaryItem.SourceViewModel.UrlViewModel == null? 
                                                 null :
-                                                $"'{PrimaryItem.PrimaryItem.CopyItem.Source.Url.UrlDomainPath}' to _Excluded Domain",
-                                    IconId = PrimaryItem.PrimaryItem.CopyItem.Source.Url == null ?
+                                                $"'{PrimaryItem.PrimaryItem.SourceViewModel.UrlViewModel.UrlDomainPath}' to _Excluded Domain",
+                                    IconId = PrimaryItem.PrimaryItem.SourceViewModel.UrlViewModel == null ?
                                                 0 :
-                                                PrimaryItem.PrimaryItem.CopyItem.Source.Url.IconId,
-                                    IsVisible = PrimaryItem.PrimaryItem.CopyItem.Source.Url != null,
+                                                PrimaryItem.PrimaryItem.SourceViewModel.UrlViewModel.IconId,
+                                    IsVisible = PrimaryItem.PrimaryItem.SourceViewModel.UrlViewModel != null,
                                     Command = ExcludeSubSelectedItemUrlDomainCommand
                                 },
                                 new MpMenuItemViewModel() {
@@ -740,7 +741,7 @@ namespace MpWpfApp {
                 //loop through available tiles and reset tag's sort order, 
                 //removing existing items from known ones and creating new ones if that's the case (it shouldn't)
                 foreach (var ctvm in Items) {
-                    foreach (var civm in ctvm.ItemViewModels) {
+                    foreach (var civm in ctvm.Items) {
                         MpCopyItemTag cit = citl.Where(x => x.CopyItemId == civm.CopyItem.Id).FirstOrDefault();
                         if (cit == null) {
                             cit = await MpCopyItemTag.Create(tagId, (int)civm.CopyItem.Id, count);
@@ -894,7 +895,7 @@ namespace MpWpfApp {
         public List<MpClipTileViewModel> GetClipTilesByAppId(int appId) {
             var ctvml = new List<MpClipTileViewModel>();
             foreach (MpClipTileViewModel ctvm in Items) {
-                if (ctvm.ItemViewModels.Any(x => x.CopyItem.Source.AppId == appId)) {
+                if (ctvm.Items.Any(x => x.SourceViewModel != null && x.SourceViewModel.AppViewModel.AppId == appId)) {
                     ctvml.Add(ctvm);
                 }
             }
@@ -903,16 +904,16 @@ namespace MpWpfApp {
 
         public MpContentItemViewModel GetContentItemViewModelById(int ciid) {
             foreach (var ctvm in PinnedItems) {
-                foreach (var civm in ctvm.ItemViewModels) {
-                    var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItemId == ciid).FirstOrDefault();
+                foreach (var civm in ctvm.Items) {
+                    var ortbvm = ctvm.Items.Where(x => x.CopyItemId == ciid).FirstOrDefault();
                     if (ortbvm != null) {
                         return ortbvm;
                     }
                 }
             }
             foreach (var ctvm in Items) {
-                foreach (var civm in ctvm.ItemViewModels) {
-                    var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItemId == ciid).FirstOrDefault();
+                foreach (var civm in ctvm.Items) {
+                    var ortbvm = ctvm.Items.Where(x => x.CopyItemId == ciid).FirstOrDefault();
                     if (ortbvm != null) {
                         return ortbvm;
                     }
@@ -923,16 +924,16 @@ namespace MpWpfApp {
 
         public MpContentItemViewModel GetContentItemViewModelByGuid(string ciguid) {
             foreach (var ctvm in PinnedItems) {
-                foreach (var civm in ctvm.ItemViewModels) {
-                    var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItemGuid == ciguid).FirstOrDefault();
+                foreach (var civm in ctvm.Items) {
+                    var ortbvm = ctvm.Items.Where(x => x.CopyItemGuid == ciguid).FirstOrDefault();
                     if (ortbvm != null) {
                         return ortbvm;
                     }
                 }
             }
             foreach (var ctvm in Items) {
-                foreach (var civm in ctvm.ItemViewModels) {
-                    var ortbvm = ctvm.ItemViewModels.Where(x => x.CopyItemGuid == ciguid).FirstOrDefault();
+                foreach (var civm in ctvm.Items) {
+                    var ortbvm = ctvm.Items.Where(x => x.CopyItemGuid == ciguid).FirstOrDefault();
                     if (ortbvm != null) {
                         return ortbvm;
                     }
@@ -1019,7 +1020,7 @@ namespace MpWpfApp {
         }
 
         public void RestoreSelectionState(MpClipTileViewModel tile) {
-            var prevSelectedItems = tile.ItemViewModels.Where(x =>
+            var prevSelectedItems = tile.Items.Where(x =>
                                                 PersistentSelectedModels.Any(y =>
                                                     y.Id == x.CopyItemId)).ToList();
             if (prevSelectedItems.Count == 0) {
@@ -1029,7 +1030,7 @@ namespace MpWpfApp {
 
             IsRestoringSelection = true;
 
-            tile.ItemViewModels.ForEach(x => x.IsSelected = PersistentSelectedModels.Any(y=>y.Id == x.CopyItemId));
+            tile.Items.ForEach(x => x.IsSelected = PersistentSelectedModels.Any(y=>y.Id == x.CopyItemId));
 
             IsRestoringSelection = false;
         }
@@ -1101,12 +1102,12 @@ namespace MpWpfApp {
                 if (PersistentUniqueWidthTileLookup.Any(x => x.Key == ci.Id)) {
                     PersistentUniqueWidthTileLookup.Remove(ci.Id);
                 }
-                //if (PinnedItems.Any(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id))) {
-                //    var pctvm = PinnedItems.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemId == ci.Id));
-                //    pctvm.ItemViewModels.Remove(pctvm.ItemViewModels.FirstOrDefault(x => x.CopyItemId == ci.Id));
+                //if (PinnedItems.Any(x => x.Items.Any(y => y.CopyItemId == ci.Id))) {
+                //    var pctvm = PinnedItems.FirstOrDefault(x => x.Items.Any(y => y.CopyItemId == ci.Id));
+                //    pctvm.Items.Remove(pctvm.Items.FirstOrDefault(x => x.CopyItemId == ci.Id));
                 //}
-            } else if (e is MpCopyItemTag cit && Items.Any(x=>x.ItemViewModels.Any(y => y.CopyItemId == cit.CopyItemId))) {
-                var ctvm = Items.FirstOrDefault(x => x.ItemViewModels.Any(y => y.CopyItemId == cit.CopyItemId));
+            } else if (e is MpCopyItemTag cit && Items.Any(x=>x.Items.Any(y => y.CopyItemId == cit.CopyItemId))) {
+                var ctvm = Items.FirstOrDefault(x => x.Items.Any(y => y.CopyItemId == cit.CopyItemId));
                 if(ctvm == null) {
                     return;
                 }
@@ -1133,8 +1134,8 @@ namespace MpWpfApp {
                     if (ctvmToRemove != null) {
                         ctvmToRemove.CopyItem.StartSync(e.SourceGuid);
                         //ctvmToRemove.CopyItem.Color.StartSync(e.SourceGuid);
-                        ctvmToRemove.Parent.ItemViewModels.Remove(ctvmToRemove);
-                        if (ctvmToRemove.Parent.ItemViewModels.Count == 0) {
+                        ctvmToRemove.Parent.Items.Remove(ctvmToRemove);
+                        if (ctvmToRemove.Parent.Items.Count == 0) {
                             Items.Remove(ctvmToRemove.Parent);
                         }
                         ctvmToRemove.CopyItem.EndSync();
@@ -1153,7 +1154,11 @@ namespace MpWpfApp {
             MpHelpers.RunOnMainThread(async () => {
                 if (sender is MpCopyItem ci) {
                     ci.StartSync(e.SourceGuid);
-                    ci.Source.App.StartSync(e.SourceGuid);
+
+                    var svm = MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == ci.SourceId);
+
+                    var app = svm.AppViewModel.App;
+                    app.StartSync(e.SourceGuid);
                     //ci.Source.App.Icon.StartSync(e.SourceGuid);
                     //ci.Source.App.Icon.IconImage.StartSync(e.SourceGuid);
 
@@ -1168,7 +1173,7 @@ namespace MpWpfApp {
                         MpConsole.WriteTraceLine(@"Warning, attempting to add existing copy item: " + dupCheck.CopyItem.ItemData + " ignoring and updating existing.");
                         //dupCheck.CopyItem = ci;
                     }
-                    ci.Source.App.EndSync();
+                    app.EndSync();
                     //ci.Source.App.Icon.EndSync();
                     //ci.Source.App.Icon.IconImage.EndSync();
                     ci.EndSync();
@@ -1190,7 +1195,7 @@ namespace MpWpfApp {
                 //clean up pasted items state after paste
                 if (sctvm.HasTemplates) {
                     sctvm.ClearEditing();
-                    foreach (var rtbvm in sctvm.ItemViewModels) {
+                    foreach (var rtbvm in sctvm.Items) {
                         rtbvm.TemplateCollection.ResetAll();
                         rtbvm.TemplateRichText = string.Empty;
                         rtbvm.RequestUiReset();
@@ -1449,7 +1454,7 @@ namespace MpWpfApp {
                     PinnedItems.Remove(pctvm);
                     resultTile = Items.FirstOrDefault(x => x.QueryOffsetIdx == pctvm.QueryOffsetIdx);
                 } else {
-                    resultTile = await CreateClipTileViewModel(pctvm.ItemViewModels.Select(x=>x.CopyItem).ToList());
+                    resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x=>x.CopyItem).ToList());
                     if(resultTile.QueryOffsetIdx != pctvm.QueryOffsetIdx) {
                         Debugger.Break();
                     }
@@ -1488,7 +1493,7 @@ namespace MpWpfApp {
                     foreach (var ivm in sctvm.SelectedItems) {
                         var clonedCopyItem = (MpCopyItem)await ivm.CopyItem.Clone(true);
                         if(ivm.CompositeSortOrderIdx > 0) {
-                            ivm.Parent.ItemViewModels
+                            ivm.Parent.Items
                                 .Where(x => x.CompositeSortOrderIdx > ivm.CompositeSortOrderIdx)
                                 .ForEach(x => x.CompositeSortOrderIdx++);
                         }
@@ -1642,7 +1647,7 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.FetchCopyItemRangeAsync(offsetIdx, loadCount);
 
                     for (int i = 0; i < cil.Count; i++) {
-                        if(PinnedItems.Any(x=>x.ItemViewModels.Any(y => cil[i].Any(z=>z.Id == y.CopyItemId)))) {
+                        if(PinnedItems.Any(x=>x.Items.Any(y => cil[i].Any(z=>z.Id == y.CopyItemId)))) {
                             continue;
                         }
                         await Items[i].InitializeAsync(cil[i], i + offsetIdx);
@@ -1717,7 +1722,7 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.FetchCopyItemRangeAsync(offsetIdx, fetchCount);
 
                     for (int i = 0; i < cil.Count; i++) {
-                        if (PinnedItems.Any(x => x.ItemViewModels.Any(y => cil[i].Any(z => z.Id == y.CopyItemId)))) {
+                        if (PinnedItems.Any(x => x.Items.Any(y => cil[i].Any(z => z.Id == y.CopyItemId)))) {
                             continue;
                         }
 
@@ -1739,7 +1744,7 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.FetchCopyItemRangeAsync(offsetIdx, fetchCount);
 
                     for (int i = cil.Count - 1; i >= 0; i--) {
-                        if (PinnedItems.Any(x => x.ItemViewModels.Any(y => cil[i].Any(z => z.Id == y.CopyItemId)))) {
+                        if (PinnedItems.Any(x => x.Items.Any(y => cil[i].Any(z => z.Id == y.CopyItemId)))) {
                             continue;
                         }
 
@@ -1783,7 +1788,7 @@ namespace MpWpfApp {
                 var cil = await MpDataModelProvider.FetchCopyItemRangeAsync(idx, loadCount);
 
                 for (int i = 0; i < cil.Count; i++) {
-                    if (PinnedItems.Any(x => x.ItemViewModels.Any(y => cil[i].Any(z => z.Id == y.CopyItemId))) ||
+                    if (PinnedItems.Any(x => x.Items.Any(y => cil[i].Any(z => z.Id == y.CopyItemId))) ||
                         i >= Items.Count) {
                         // NOTE checking i w/ item count is probably a side affect bug
                         //of resizing window and tile/scoll offset and tray dimensions
@@ -1841,7 +1846,7 @@ namespace MpWpfApp {
 
         public ICommand ExcludeSubSelectedItemApplicationCommand => new RelayCommand(
             async () => {
-                var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == PrimaryItem.PrimaryItem.CopyItem.Source.AppId);
+                var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == PrimaryItem.PrimaryItem.SourceViewModel.AppViewModel.AppId);
                 if(avm == null) {
                     return;
                 }
@@ -1851,14 +1856,14 @@ namespace MpWpfApp {
 
         public ICommand ExcludeSubSelectedItemUrlDomainCommand => new RelayCommand(
             async () => {
-                var uvm = MpUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == PrimaryItem.PrimaryItem.CopyItem.Source.UrlId);
+                var uvm = MpUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == PrimaryItem.PrimaryItem.SourceViewModel.UrlViewModel.UrlId);
                 if(uvm == null) {
-                    MpConsole.WriteTraceLine("Error cannot find url id: " + PrimaryItem.PrimaryItem.CopyItem.Source.UrlId);
+                    MpConsole.WriteTraceLine("Error cannot find url id: " + PrimaryItem.PrimaryItem.SourceViewModel.UrlViewModel.UrlId);
                     return;
                 }
                 await uvm.RejectUrlOrDomain(true);
             },
-            PrimaryItem != null && PrimaryItem.PrimaryItem != null);
+            PrimaryItem != null && PrimaryItem.PrimaryItem != null && PrimaryItem.PrimaryItem.SourceViewModel.UrlViewModel != null);
 
         public ICommand SearchWebCommand => new RelayCommand<object>(
             (args) => {
@@ -2094,7 +2099,7 @@ namespace MpWpfApp {
                 var sil = PrimaryItem.SelectedItems;
                 sil.Reverse();
                 foreach (var scivm in sil) {
-                    PrimaryItem.ItemViewModels.Move(PrimaryItem.ItemViewModels.IndexOf(scivm), 0);
+                    PrimaryItem.Items.Move(PrimaryItem.Items.IndexOf(scivm), 0);
                 }
                 await PrimaryItem.UpdateSortOrderAsync();
                 IsBusy = false;
@@ -2110,7 +2115,7 @@ namespace MpWpfApp {
                 bool canBringForward = false;
 
                 for (int i = 0; i < PrimaryItem.Count && i < PrimaryItem.SelectedItems.Count; i++) {
-                    if (!PrimaryItem.SelectedItems.Contains(PrimaryItem.ItemViewModels[i])) {
+                    if (!PrimaryItem.SelectedItems.Contains(PrimaryItem.Items[i])) {
                         canBringForward = true;
                         break;
                     }
@@ -2125,7 +2130,7 @@ namespace MpWpfApp {
                 var sil = PrimaryItem.SelectedItems;
                 sil.Reverse();
                 foreach (var scivm in sil) {
-                    PrimaryItem.ItemViewModels.Move(PrimaryItem.ItemViewModels.IndexOf(scivm), PrimaryItem.Count - 1);
+                    PrimaryItem.Items.Move(PrimaryItem.Items.IndexOf(scivm), PrimaryItem.Count - 1);
                 }
                 await PrimaryItem.UpdateSortOrderAsync();
                 IsBusy = false;
@@ -2140,7 +2145,7 @@ namespace MpWpfApp {
                 }
                 bool canSendBack = false;
                 for (int i = 0; i < PrimaryItem.Count && i < PrimaryItem.SelectedItems.Count; i++) {
-                    if (!PrimaryItem.SelectedItems.Contains(PrimaryItem.ItemViewModels[PrimaryItem.ItemViewModels.Count - 1 - i])) {
+                    if (!PrimaryItem.SelectedItems.Contains(PrimaryItem.Items[PrimaryItem.Items.Count - 1 - i])) {
                         canSendBack = true;
                         break;
                     }
@@ -2257,7 +2262,7 @@ namespace MpWpfApp {
             },
             () => {
                 return SelectedItems.Count > 0 &&
-                       SelectedItems[0].ItemViewModels.Count > 1 &&
+                       SelectedItems[0].Items.Count > 1 &&
                        SelectedItems.All(x => x.ItemType == SelectedItems[0].ItemType) &&
                        (SelectedItems[0].ItemType == MpCopyItemType.Text);
             });
@@ -2315,7 +2320,7 @@ namespace MpWpfApp {
                     PromptBuilder promptBuilder = new PromptBuilder();
 
                     foreach (var sctvm in SelectedItems) {
-                        foreach (var ivm in sctvm.ItemViewModels) {
+                        foreach (var ivm in sctvm.Items) {
                             //speechSynthesizer.SpeakAsync(sctvm.CopyItemPlainText);
                             promptBuilder.AppendText(Environment.NewLine + ivm.CopyItem.ItemData.ToPlainText());
                         }

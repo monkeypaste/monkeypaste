@@ -1,14 +1,15 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpClipTileContainerView"
-                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpClipTileViewModel"
-                     mc:Ignorable="d"
-                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
-                                                      IsDesignTimeCreatable=False}">
+﻿<local:MpUserControl
+    x:Class="MpWpfApp.MpClipTileContainerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:MpWpfApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
+                                     IsDesignTimeCreatable=False}"
+    x:TypeArguments="local:MpClipTileViewModel"
+    mc:Ignorable="d">
 
     <!--<local:MpClipTileFlipView OwnerFront="{Binding ElementName=ClipTileView}"
                                   OwnerBack="{Binding ElementName=ContentItemAnalyticsView}"
@@ -16,47 +17,53 @@
                                                        Converter={StaticResource BoolToVisibilityConverter}}" />-->
 
 
-    <StackPanel Orientation="Horizontal"
-                Loaded="StackPanel_Loaded"
-                SizeChanged="StackPanel_SizeChanged">
-        <local:MpClipTileView Visibility="{Binding IsPlaceholder,
-                                                   Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                              DataContext="{Binding}" />
+    <StackPanel
+        Loaded="StackPanel_Loaded"
+        Orientation="Horizontal"
+        SizeChanged="StackPanel_SizeChanged">
+        <local:MpClipTileView
+            DataContext="{Binding}"
+            Visibility="{Binding IsPlaceholder,
+                                 Converter={StaticResource BoolToVisibilityFlipConverter}}" />
         <!--  Resize Region  -->
-        <Rectangle VerticalAlignment="Stretch"
-                   local:MpHoverableExtension.IsEnabled="True"
-                   local:MpHoverableExtension.HoverCursor="ResizeWE"
-                   Width="10"
-                   Fill="Transparent"
-                   Margin="-15,0,0,0"
-                   StrokeThickness="5"
-                   HorizontalAlignment="Left">
+        <Rectangle
+            x:Name="ResizeRectangle"
+            Width="10"
+            Margin="-15,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Stretch"
+            local:MpHoverableExtension.HoverCursor="ResizeWE"
+            local:MpHoverableExtension.IsEnabled="True"
+            Fill="Transparent"
+            StrokeThickness="5">
             <i:Interaction.Behaviors>
-                <local:MpResizeBehavior x:Name="TileResizeBehavior"
-                                        BoundElement="{Binding ElementName=ClipTileView}"
-                                        AffectsContent="True"
-                                        IsResizing="{Binding IsResizing,
-                                                             Mode=TwoWay,
-                                                             UpdateSourceTrigger=PropertyChanged,
-                                                             NotifyOnSourceUpdated=True,
-                                                             NotifyOnTargetUpdated=True}"
-                                        CanResize="{Binding CanResize,
-                                                            Mode=TwoWay,
-                                                            UpdateSourceTrigger=PropertyChanged,
-                                                            NotifyOnSourceUpdated=True,
-                                                            NotifyOnTargetUpdated=True}"
-                                        ResizableEdge1="Right"
-                                        BoundWidth="{Binding TileBorderWidth,
-                                                             Mode=TwoWay,
-                                                             UpdateSourceTrigger=PropertyChanged,
-                                                             NotifyOnSourceUpdated=True,
-                                                             NotifyOnTargetUpdated=True}"
-                                        DefaultWidth="{Binding ClipTileDefaultMinSize,
-                                                               Source={x:Static local:MpMeasurements.Instance}}"
-                                        MaxWidth="{Binding MaxTileWidth,
-                                                           Source={x:Static local:MpClipTrayViewModel.Instance}}"
-                                        MinWidth="{Binding ClipTileBorderMinWidth,
-                                                           Source={x:Static local:MpMeasurements.Instance}}" />
+                <local:MpResizeBehavior
+                    x:Name="TileResizeBehavior"
+                    MinWidth="{Binding ClipTileBorderMinWidth,
+                                       Source={x:Static local:MpMeasurements.Instance}}"
+                    MaxWidth="{Binding MaxTileWidth,
+                                       Source={x:Static local:MpClipTrayViewModel.Instance}}"
+                    AffectsContent="True"
+                    BoundElement="{Binding ElementName=ClipTileView}"
+                    BoundWidth="{Binding TileBorderWidth,
+                                         Mode=TwoWay,
+                                         UpdateSourceTrigger=PropertyChanged,
+                                         NotifyOnSourceUpdated=True,
+                                         NotifyOnTargetUpdated=True}"
+                    CanResize="{Binding CanResize,
+                                        Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged,
+                                        NotifyOnSourceUpdated=True,
+                                        NotifyOnTargetUpdated=True}"
+                    DefaultWidth="{Binding ClipTileDefaultMinSize,
+                                           Source={x:Static local:MpMeasurements.Instance}}"
+                    DoubleClickFrameworkElement="{Binding ElementName=ResizeRectangle}"
+                    IsResizing="{Binding IsResizing,
+                                         Mode=TwoWay,
+                                         UpdateSourceTrigger=PropertyChanged,
+                                         NotifyOnSourceUpdated=True,
+                                         NotifyOnTargetUpdated=True}"
+                    ResizableEdge1="Right" />
 
             </i:Interaction.Behaviors>
         </Rectangle>
