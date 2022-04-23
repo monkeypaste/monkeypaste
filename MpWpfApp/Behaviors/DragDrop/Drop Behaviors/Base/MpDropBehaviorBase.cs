@@ -33,6 +33,7 @@ namespace MpWpfApp {
 
         #endregion
 
+
         #region Properties
 
         public MpDropShapeAdorner DropLineAdorner { get; set; }

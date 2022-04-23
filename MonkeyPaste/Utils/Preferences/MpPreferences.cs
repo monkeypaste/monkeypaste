@@ -395,7 +395,15 @@ namespace MonkeyPaste {
                 Default.Set(nameof(ThisDeviceGuid), value);
             }
         }
-
+        //
+        public static bool ShowMainWindowOnDragToScreenTop {
+            get {
+                return Default.Get(nameof(ShowMainWindowOnDragToScreenTop), true);
+            }
+            set {
+                Default.Set(nameof(ShowMainWindowOnDragToScreenTop), value);
+            }
+        }
         public static int ThisAppSourceId {
             get {
                 return Default.Get(nameof(ThisAppSourceId), 0);

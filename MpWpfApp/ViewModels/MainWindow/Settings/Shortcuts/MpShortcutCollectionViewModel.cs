@@ -427,6 +427,8 @@ namespace MpWpfApp {
         #region Global Handlers
 
         #region Global Mouse Handlers
+        private Point? _globalMouseDownPosition = null;
+        private double _MIN_GLOBAL_DRAG_DIST = 20;
 
         private void GlobalHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen && !MpMainWindowViewModel.Instance.IsMainWindowOpening && MpBootstrapperViewModelBase.IsLoaded) {
@@ -448,24 +450,42 @@ namespace MpWpfApp {
             //MpConsole.WriteLine("");
 
             if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
+                // NOTE!! this maybe bad only firing when window open 
+                // but its for drag/drop and not doing could interfere w/ performance too much
                 GlobalMouseMove?.Invoke(this, GlobalMouseLocation);
             } else {
+                bool isShowingMainWindow = false;
                 if (MpPreferences.DoShowMainWindowWithMouseEdge &&
                     !MpPreferences.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
                     if (e.Y <= MpPreferences.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+                        isShowingMainWindow = true;
                     }
                 }
+
+                if(!isShowingMainWindow &&
+                    _globalMouseDownPosition.HasValue && 
+                    GlobalMouseLocation.Distance(_globalMouseDownPosition.Value) >= _MIN_GLOBAL_DRAG_DIST &&
+                    GlobalMouseLocation.Y <= MpPreferences.ShowMainWindowMouseHitZoneHeight &&
+                    MpPreferences.ShowMainWindowOnDragToScreenTop) {
+                    MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+                }
             }
+
+
         }
 
         private void GlobalHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
             if(e.Button == System.Windows.Forms.MouseButtons.Left) {
                 GlobalIsMouseLeftButtonDown = true;
+                _globalMouseDownPosition = GlobalMouseLocation;
             }
         }
         private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
+            
+
             if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+                _globalMouseDownPosition = null;
                 GlobalIsMouseLeftButtonDown = false;
                 GlobalMouseLeftButtonUp?.Invoke(this, null);
             }

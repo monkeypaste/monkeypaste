@@ -378,6 +378,15 @@
 
         #region Appearance       
 
+        public Size UnformattedAndDecodedContentSize {
+            get {
+                if(IsPlaceholder) {
+                    return new Size();
+                }
+                return HeadItem.UnformattedContentSize;
+            }
+        }
+
         public string PinIconSourcePath {
             get {
                 string path = "PinIcon";
@@ -704,6 +713,8 @@
         public event EventHandler OnFocusRequest;
         public event EventHandler OnSyncModels;
 
+        public event EventHandler<Point> OnScrollOffsetRequest;
+
         #endregion
 
         #region Static Builder
@@ -898,6 +909,10 @@
 
         public void RequestSyncModel() {
             OnSyncModels?.Invoke(this, null);
+        }
+
+        public void RequestScrollOffset(Point p) {
+            OnScrollOffsetRequest?.Invoke(this, p);
         }
 
         #endregion

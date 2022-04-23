@@ -1054,6 +1054,7 @@ namespace MpWpfApp {
         }
 
         private void StartAnimation() {
+            return;
             if(_timer == null) {
                 _timer = new DispatcherTimer();
                 _timer.Interval = TimeSpan.FromMilliseconds(300);
@@ -1070,12 +1071,14 @@ namespace MpWpfApp {
             if(dbr.Location.X >= dbr.Width) {
                 dbr.Location = new Point(0, dbr.Y);
             }
+            //MpConsole.WriteLine("Border Brush loc: " + dbr.Location);
             MpMeasurements.Instance.DottedBorderRect = dbr;
             OnPropertyChanged(nameof(ItemBorderBrushRect));
             OnPropertyChanged(nameof(ItemBorderBrush));
         }
 
         private void StopAnimation() {
+            return;
             MpMeasurements.Instance.DottedBorderRect = MpMeasurements.Instance.DottedBorderDefaultRect;
             OnPropertyChanged(nameof(ItemBorderBrushRect));
             OnPropertyChanged(nameof(ItemBorderBrush));

@@ -1564,5 +1564,17 @@ namespace MpWpfApp.Properties {
                 this["IgnoredProcessNames"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowMainWindowOnDragToScreenTop {
+            get {
+                return ((bool)(this["ShowMainWindowOnDragToScreenTop"]));
+            }
+            set {
+                this["ShowMainWindowOnDragToScreenTop"] = value;
+            }
+        }
     }
 }

@@ -70,6 +70,7 @@ namespace MpClipboardHelper {
             clipBoard.Clipboard = UIPermissionClipboard.AllClipboard;
 
             CF_UNICODE_TEXT = WinApi.RegisterClipboardFormatA("UnicodeText");
+            CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
             CF_OEM_TEXT = WinApi.RegisterClipboardFormatA("OemText");
             CF_HTML = WinApi.RegisterClipboardFormatA("HTML Format");
             CF_RTF = WinApi.RegisterClipboardFormatA("Rich Text Format");

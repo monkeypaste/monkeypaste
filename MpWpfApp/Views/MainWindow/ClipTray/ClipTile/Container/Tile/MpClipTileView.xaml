@@ -79,7 +79,7 @@
                         <GeometryDrawing Brush="{Binding TileBorderBrush}">
                             <GeometryDrawing.Geometry>
                                 <GeometryGroup>
-                                    <RectangleGeometry Rect="{Binding TileBorderBrushRect}" />
+                                    <RectangleGeometry Rect="{Binding TileBorderBrushRect, NotifyOnSourceUpdated=True}" />
                                     <RectangleGeometry Rect="50,50,50,50" />
                                 </GeometryGroup>
                             </GeometryDrawing.Geometry>

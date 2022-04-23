@@ -289,6 +289,7 @@ namespace MpWpfApp {
                 return;
             }
             rtb.Document = await DecodeContentItem(
+                rtb: rtb,
                 itemGuid: ctvm.HeadItem.CopyItemGuid,
                 itemRange: new TextRange(rtb.Document.ContentStart,rtb.Document.ContentEnd),
                 items: ctvm.Items.Select(x=>x.CopyItem).ToList(), 
@@ -310,6 +311,7 @@ namespace MpWpfApp {
         }
 
         private static async Task<FlowDocument> DecodeContentItem(
+            RichTextBox rtb,
             string itemGuid, 
             TextRange itemRange,
             List<MpCopyItem> items, 
@@ -353,7 +355,7 @@ namespace MpWpfApp {
                     insertRange.Text = string.Empty;
                     continue;
                 }
-                var cfd = await DecodeContentItem(childGuid,null,items,rootDocument);
+                var cfd = await DecodeContentItem(rtb,childGuid,null,items,rootDocument);
 
                 //fd.Combine(cfd, childRange.Start);
                 using (MemoryStream stream = new MemoryStream()) {
@@ -409,6 +411,9 @@ namespace MpWpfApp {
                     }
                     MpTemplateHyperlink.Create(templateRanges[i], templateItems[i]);
                 }
+
+                var rcivm = (rtb.DataContext as MpClipTileViewModel).HeadItem;
+                rcivm.UnformattedContentSize = fd.GetDocumentSize();
             }
 
             var allTextElements = fd.GetAllTextElements();

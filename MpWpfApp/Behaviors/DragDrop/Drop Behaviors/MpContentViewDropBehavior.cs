@@ -10,20 +10,21 @@ using System.Windows;
 using System.Windows.Annotations;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
-using static System.Net.WebRequestMethods;
-using static Xamarin.Forms.Internals.Profile;
 
 namespace MpWpfApp {
     public class MpContentViewDropBehavior : MpDropBehaviorBase<MpContentView> {
-        #region Private Variables
+        #region Privates              
+        private double _autoScrollMinScrollDist = 15;
 
-        private bool _isBlockDrop => _isPreBlockDrop || _isPostBlockDrop || _isInlineBlockDrop;
+        private double _autoScrollAccumulator = 5.0d;
+        private double _baseAutoScrollVelocity = 5.0d;
+        private double _autoScrollVelocity;
 
         private bool _isPreBlockDrop = false;
-        private bool _isInlineBlockDrop = false;
         private bool _isPostBlockDrop = false;
 
+        private bool _isBlockDrop => _isPreBlockDrop || _isPostBlockDrop || _isSplitBlockDrop;
+        private bool _isSplitBlockDrop => MpShortcutCollectionViewModel.Instance.GlobalIsAltDown;
         #endregion
 
         public override bool IsDropEnabled { get; set; } = true;
@@ -104,33 +105,32 @@ namespace MpWpfApp {
                 // NOTE only continue if drop isn't executing or debugging drop idx will be off
                 return DropIdx;
             }
+
             var rtb = AssociatedObject.Rtb;
             var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             var mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
             Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth, rtb.ActualHeight);
             if (!rtb_rect.Contains(mp)) {
-                //Reset();
-               // MpConsole.WriteLine("rtb mp (no hit): " + mp);
+                Reset();
+                // MpConsole.WriteLine("rtb mp (no hit): " + mp);
                 return -1;
             }
-            //MpConsole.WriteLine("rtb mp: " + mp);
-            //MpIsFocusedExtension.SetIsFocused(rtb, true);
             var mptp = rtb.GetPositionFromPoint(mp, true);
             var mptp_rect = mptp.GetCharacterRect(LogicalDirection.Forward);
-            double blockThreshold = 0.1;
-            _isInlineBlockDrop = false;
-            if (Math.Abs(mp.Y - mptp_rect.Top) < blockThreshold || mp.Y < mptp_rect.Top) {
+
+            double blockThreshold = 1;
+            _isPreBlockDrop = _isPostBlockDrop = false;
+
+            if(_isSplitBlockDrop) {
+                // inline takes priority if alt is down so pre/post is ignored
+            } else if(Math.Abs(mp.Y - mptp_rect.Top) < blockThreshold || mp.Y < mptp_rect.Top) {
                 _isPreBlockDrop = true;
             } else if (Math.Abs(mp.Y - mptp_rect.Bottom) < blockThreshold || mp.Y > mptp_rect.Bottom) {
                 _isPostBlockDrop = true;
-            } else {
-                _isPostBlockDrop = _isPreBlockDrop = false;
             }
-            if(!_isBlockDrop && MpShortcutCollectionViewModel.Instance.GlobalIsAltDown) {
-                _isInlineBlockDrop = true;
-            } 
+
             //MpConsole.WriteLine("Pre: " + (_isPreBlockDrop ? "YES" : "NO"));
-            //MpConsole.WriteLine("Inline: " + (_isInlineBlockDrop ? "YES" : "NO"));
+            //MpConsole.WriteLine("Inline: " + (_isSplitBlockDrop ? "YES" : "NO"));
             //MpConsole.WriteLine("Post: " + (_isPostBlockDrop ? "YES" : "NO"));
             return rtb.Document.ContentStart.GetOffsetToPosition(mptp);
         }
@@ -142,26 +142,51 @@ namespace MpWpfApp {
             if (DropIdx < 0) {
                 return null;
             }
-            var dll = new List<MpShape>();
+            var dt_ll = new List<MpShape>();
+            var dt_tp = AssociatedObject.Rtb.Document.ContentStart.GetPositionAtOffset(DropIdx);
 
-            var dltp = AssociatedObject.Rtb.Document.ContentStart.GetPositionAtOffset(DropIdx);
-            var dltp_rect = dltp.GetCharacterRect(LogicalDirection.Forward);
-            if (_isBlockDrop) {
-                double blockLineOffset = 3;
-                double y;
-                if(_isPreBlockDrop) {
-                    y = dltp_rect.Top - blockLineOffset;
-                } else {
-                    y = dltp_rect.Bottom + blockLineOffset;
-                }
-                var blockLine = new MpLine(0, y, AssociatedObject.Rtb.ActualWidth, y);
-                dll.Add(blockLine);
+            // NOTE since default tile width is usually less than document width the lines will wrap
+            // so for block drop use rect at beginning/end of line or it will be at weird spot
+
+            double blockLineOffset = 3;
+
+            var line_start_tp = dt_tp.GetLineStartPosition(0);
+            var line_start_rect = line_start_tp.GetCharacterRect(LogicalDirection.Forward);
+            double pre_y = line_start_rect.Top - blockLineOffset;
+            var pre_line = new MpLine(0, pre_y, AssociatedObject.Rtb.ActualWidth, pre_y);
+
+            var line_end_tp = dt_tp.GetLineEndPosition(0);
+            var line_end_rect = line_end_tp.GetCharacterRect(LogicalDirection.Backward);
+            double post_y = line_end_rect.Bottom + blockLineOffset;
+            var post_line = new MpLine(0, post_y, AssociatedObject.Rtb.ActualWidth, post_y);
+
+            var dltp_rect = dt_tp.GetCharacterRect(LogicalDirection.Forward);
+            var caret_line = new MpLine(dltp_rect.Left, dltp_rect.Top, dltp_rect.Left, dltp_rect.Bottom);
+
+            if (_isSplitBlockDrop) {
+                /*                
+                                                                     ------------------------ (pre)
+                        this is a line of text and the caret is here | and the line continues
+                   (post)----------------------------------------------
+
+                */
+
+                var pre_split_line = pre_line;
+                pre_split_line.P1.X = caret_line.P1.X;
+
+                var post_split_line = post_line;
+                post_split_line.P2.X = caret_line.P1.X;
+
+                dt_ll.AddRange(new MpShape[] { pre_split_line, caret_line, post_split_line });
+            } else if (_isPreBlockDrop) {
+                dt_ll.Add(pre_line);
+            } else if (_isPostBlockDrop) {
+                dt_ll.Add(post_line);
+            } else {
+                dt_ll.Add(caret_line);
             }
-            if(!_isBlockDrop || _isInlineBlockDrop) {
-                var inlineLine = new MpLine(dltp_rect.Left, dltp_rect.Top, dltp_rect.Left, dltp_rect.Bottom);
-                dll.Add(inlineLine);
-            }
-            return dll.ToArray();
+
+            return dt_ll.ToArray();
         }
         public override bool IsDragDataValid(bool isCopy,object dragData) {
             if (AssociatedObject == null || AssociatedObject.Rtb == null) {
@@ -215,7 +240,6 @@ namespace MpWpfApp {
             bool isNewRoot = rtfDropIdx <= 0;
 
             await base.Drop(isCopy, dragData);
-
 
             if(dctvm == null) {
                 if(dragData is MpDataObject mpdo) {
@@ -317,7 +341,11 @@ namespace MpWpfApp {
                         string csv = MpCsvToRtfTableConverter.GetCsv(dropItem.ItemData);
                         dropRange.LoadTable(csv);
                     } else {
-                        dropRange.Text = dropItem.ItemData.ToPlainText().TrimTrailingLineEndings();
+                        string pt = dropItem.ItemData.ToPlainText();
+                        MpConsole.WriteLine("Drop Plain Text: " + pt);
+                        pt = pt.TrimTrailingLineEndings();
+                        MpConsole.WriteLine("Trimmed Plain Text: " + pt);
+                        dropRange.Text = pt; 
                     }                    
                     break;
                 case MpCopyItemType.Image:
@@ -361,10 +389,13 @@ namespace MpWpfApp {
 
             if (_isPreBlockDrop) {
                 if(dtp.GetLineStartPosition(0) == null) {
+                    MpConsole.WriteLine(@"Pre block doc start detected");
                     //at start of doc
-                    dtp = rtb.Document.ContentStart.InsertLineBreak();
+                    dtp = rtb.Document.ContentStart;
+                    //rtb.Document.ContentStart.InsertLineBreak();
                 } else {
-                    dtp = dtp.GetLineStartPosition(0).InsertLineBreak();
+                    dtp = dtp.GetLineStartPosition(0);
+                    //dtp.InsertLineBreak();
                 }
                 
             } else if (_isPostBlockDrop) {
@@ -375,7 +406,7 @@ namespace MpWpfApp {
                     dtp = dtp.GetLineStartPosition(1);
                 }
                 dtp = dtp.InsertLineBreak();
-            } else if(_isInlineBlockDrop) {
+            } else if(_isSplitBlockDrop) {
                 dtp = dtp.InsertLineBreak();
             }
 
@@ -459,35 +490,93 @@ namespace MpWpfApp {
 
             return null;
         }
-       
+
         public override void AutoScrollByMouse() {
             if (AssociatedObject == null || AssociatedObject.Rtb == null) {
                 return;
             }
-            if (DropIdx == 0) {
-                AssociatedObject.BindingContext.HeadItem.ScrollToHomeCommand.Execute(null);
-            } else if(DropIdx == 1) {
-                AssociatedObject.BindingContext.HeadItem.ScrollToEndCommand.Execute(null);
+            
+            var rtb = AssociatedObject.Rtb;
+            var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            var mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
+
+            Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth,rtb.ActualHeight);
+
+            if(rtb.HorizontalScrollBarVisibility == ScrollBarVisibility.Visible) {
+                rtb_rect.Height -= rtb.GetVisualDescendent<ScrollViewer>().GetScrollBar(Orientation.Horizontal).Height;
             }
+            if (rtb.VerticalScrollBarVisibility == ScrollBarVisibility.Visible) {
+                rtb_rect.Width -= rtb.GetVisualDescendent<ScrollViewer>().GetScrollBar(Orientation.Vertical).Width;
+            }
+
+            if (!rtb_rect.Contains(mp)) {
+                return;
+            }
+
+            double ldist = Math.Abs(mp.X - rtb_rect.Left);
+            double rdist = Math.Abs(mp.X - rtb_rect.Right);
+            double tdist = Math.Abs(mp.Y - rtb_rect.Top);
+            double bdist = Math.Abs(mp.Y - rtb_rect.Bottom);
+
+            Point rtbScrollOffsetDelta = new Point(); 
+            if(ldist <= _autoScrollMinScrollDist) {
+                rtbScrollOffsetDelta.X = -_autoScrollVelocity;
+            } else if (rdist <= _autoScrollMinScrollDist) {
+                rtbScrollOffsetDelta.X = _autoScrollVelocity;
+            }
+
+            if (tdist <= _autoScrollMinScrollDist) {
+                rtbScrollOffsetDelta.Y = -_autoScrollVelocity;
+            } else if (bdist <= _autoScrollMinScrollDist) {
+                rtbScrollOffsetDelta.Y = _autoScrollVelocity;
+            }
+
+            //MpConsole.WriteLine(string.Format(@"L {0} R {1} T {2} B {3} V {4}",ldist, rdist, tdist, bdist, _autoScrollVelocity));
+
+            if(rtbScrollOffsetDelta.X != 0 || rtbScrollOffsetDelta.Y != 0) {
+                _autoScrollVelocity += _autoScrollAccumulator;
+                var cv = rtb.GetVisualAncestor<MpContentView>();
+                cv.ScrollByPointDelta(rtbScrollOffsetDelta);
+            }
+
         }
 
         public override async Task StartDrop() {
             await Task.Delay(1);
+            if (AssociatedObject == null || AssociatedObject.Rtb == null) {
+                return;
+            }
+            var rtb = AssociatedObject.Rtb;
+            rtb.FitDocToRtb();
+            _autoScrollVelocity = _baseAutoScrollVelocity;
         }
+
 
         public override void Reset() {
             base.Reset();
-            _isPostBlockDrop = _isPreBlockDrop = _isInlineBlockDrop = false;
+
+            _autoScrollVelocity = _baseAutoScrollVelocity;
+            _isPostBlockDrop = _isPreBlockDrop = false;
 
             if(AssociatedObject == null || AssociatedObject.Rtb == null || AssociatedObject.DataContext == null) {
                 return;
             }
-            if(!MpDragDropManager.IsDragAndDrop || 
+
+            var rtb = AssociatedObject.Rtb;
+            rtb.FitDocToRtb();
+
+            //if(rtb.IsReadOnly ) {
+            //    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+
+            //}
+
+            if (!MpDragDropManager.IsDragAndDrop || 
                !(AssociatedObject.DataContext as MpClipTileViewModel).IsAnyItemDragging) {
                 // these checks make sure selection isn't cleared during self drop
 
-                AssociatedObject.Rtb.ScrollToHome();
-                AssociatedObject.Rtb.Selection.Select(AssociatedObject.Rtb.Document.ContentStart, AssociatedObject.Rtb.Document.ContentStart);
+                rtb.ScrollToHome();
+                rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
             }
         }
     }

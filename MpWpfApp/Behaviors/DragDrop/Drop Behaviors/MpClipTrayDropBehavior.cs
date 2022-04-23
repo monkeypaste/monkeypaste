@@ -12,7 +12,7 @@ using System.Windows.Controls;
 namespace MpWpfApp {
     public class MpClipTrayDropBehavior : MpDropBehaviorBase<MpClipTrayView> {
         #region Private Variables               
-        private double _minScrollDist = 30;
+        private double _autoScrollMinScrollDist = 30;
 
         private double _autoScrollAccumulator = 5;
         private double _baseAutoScrollVelocity = 25;
@@ -83,9 +83,9 @@ namespace MpWpfApp {
 
             double origScrollOfset = MpClipTrayViewModel.Instance.ScrollOffset;
 
-            if (Math.Abs(ctr_sv_rect.Right - ctr_mp.X) <= _minScrollDist) {
+            if (Math.Abs(ctr_sv_rect.Right - ctr_mp.X) <= _autoScrollMinScrollDist) {
                 MpClipTrayViewModel.Instance.ScrollOffset += _autoScrollVelocity;
-            } else if (Math.Abs(ctr_sv_rect.Left - ctr_mp.X) <= _minScrollDist) {
+            } else if (Math.Abs(ctr_sv_rect.Left - ctr_mp.X) <= _autoScrollMinScrollDist) {
                 MpClipTrayViewModel.Instance.ScrollOffset -= _autoScrollVelocity;
             }
 
@@ -210,6 +210,12 @@ namespace MpWpfApp {
             if(civm != null) {
                 civm.IsSelected = true;
             }
+        }
+
+        public override void Reset() {
+            base.Reset();
+
+            _autoScrollVelocity = 0;
         }
     }
 

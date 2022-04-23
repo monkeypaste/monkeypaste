@@ -20,6 +20,21 @@ using System.Diagnostics;
 
 namespace MpWpfApp {
     public static class MpWpfRichDocumentExtensions {
+        public static TextPointer GetLineEndPosition(this TextPointer tp, int count) {
+            var next_line_start_tp = tp.GetLineStartPosition(count + 1);
+            if (next_line_start_tp == null) {
+                // tp is DocumentEnd pointer
+                return tp;
+            }
+            
+            var line_end_tp = next_line_start_tp.GetNextInsertionPosition(LogicalDirection.Backward);
+            if(line_end_tp == null) {
+                // doc is empty and tp is both Document Start/End
+                return tp;
+            }
+            return line_end_tp;
+        }
+
         public static TextRange ContentRange(this TextElement te) {
             return new TextRange(te.ContentStart, te.ContentEnd);
         }
@@ -46,7 +61,35 @@ namespace MpWpfApp {
 
         public static void FitDocToRtb(this RichTextBox rtb) {
             bool isReadOnly = rtb.IsReadOnly;
-            if (!isReadOnly) {
+            bool isDropping = false;
+            Size ds = new Size();
+
+            if(rtb.GetVisualAncestor<MpContentView>() != null) {
+                isDropping = MpDragDropManager.CurDropTarget == rtb.GetVisualAncestor<MpContentView>().ContentViewDropBehavior;
+            }
+
+            if (isDropping) {
+                var fd = rtb.Document;
+                double pad = 15;
+                ds = fd.GetDocumentSize(pad);
+                fd.PageWidth = ds.Width;
+                fd.PageHeight = ds.Height;
+                fd.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+                fd.ConfigureLineHeight();
+
+
+                var p = rtb.Document.PagePadding;
+                p.Top = 3;
+                rtb.Document.PagePadding = p;
+                //double w = 1000;
+                //double h = ds.Height;
+                //rtb.Document.PageWidth = Math.Max(0, w - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
+                //rtb.Document.PageHeight = Math.Max(0, h - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
+
+
+            } else if (!isReadOnly) {
+                ds = rtb.Document.GetDocumentSize();
+
                 var cv = rtb.GetVisualAncestor<MpContentView>();
                 double w = cv == null ? rtb.ActualWidth : cv.ActualWidth;
                 double h = cv == null ? rtb.ActualHeight : cv.ActualHeight;
@@ -56,10 +99,26 @@ namespace MpWpfApp {
                 rtb.Document.PageWidth = Math.Max(0, rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
                 rtb.Document.PageHeight = Math.Max(0, rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
             }
-            var p = rtb.Document.PagePadding;
-            p.Top = 3;
-            rtb.Document.PagePadding = p;
+
             rtb.UpdateLayout();
+
+            if(isDropping || !isReadOnly) {
+                if (ds.Width > rtb.ActualWidth || isDropping) {
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                } else {
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                }
+
+                if (ds.Height > rtb.ActualHeight) {
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                } else {
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                }
+            } else {
+
+                rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            }
         }
 
         public static bool Equals(this TextRange tra, TextRange trb) {
@@ -675,19 +734,18 @@ namespace MpWpfApp {
             return textRange;
         }
 
-        public static Size GetDocumentSize(this FlowDocument doc) {
+        public static Size GetDocumentSize(this FlowDocument doc, double padToAdd = 0) {
             //Table docTable = doc.GetVisualDescendent<Table>();
             //if (docTable != null) {
             //    // TODO may need to uniquely find table dimensions
             //}
             var ft = doc.GetFormattedText();
-            var ds = new Size(ft.Width, ft.Height);
-
+            var ds = new Size(ft.Width + padToAdd, ft.Height + padToAdd);
             return ds;
         }
 
         public static void ConfigureLineHeight(this FlowDocument doc) {
-            return;
+            //return;
             if (doc == null) {
                 throw new ArgumentNullException("doc");
             }

@@ -19,6 +19,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using MonkeyPaste.Plugin;
+using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
     /// <summary>
@@ -130,11 +131,8 @@ namespace MpWpfApp {
             if (BindingContext == null) {
                 return;
             }
-            //BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
-            //BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
-            BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
-            //BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
-            //BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
+
+            UnregisterViewModelRequests();
 
             if(BindingContext != null) {
                 MpMessenger.Unregister<MpMessageType>(
@@ -155,6 +153,50 @@ namespace MpWpfApp {
             //BindingContext.Dispose();
         }
 
+        private void RegisterViewModelRequests() {
+            BindingContext.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
+            BindingContext.OnScrollOffsetRequest += BindingContext_OnScrollOffsetRequest;
+            //BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
+            //BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
+            //BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
+            //BindingContext.OnFitContenBindingContexttRequest -= Ncivm_OnFitContentRequest;
+        }
+
+        private void UnregisterViewModelRequests() {
+            BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
+            BindingContext.OnScrollOffsetRequest -= BindingContext_OnScrollOffsetRequest;
+            //BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
+            //BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
+            //.OnSyncModels -= Rtbivm_OnSyncModels;
+            //BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
+        }
+
+        private void BindingContext_OnScrollOffsetRequest(object sender, Point e) {
+            ScrollByPointDelta(e);
+        }
+
+        public void ScrollByPointDelta(Point e) {
+            var sv = Rtb.GetVisualDescendent<ScrollViewer>();
+            if (sv == null) {
+                Debugger.Break();
+                return;
+            }
+            //MpConsole.WriteLine("pre clamp auto scroll delta: " + e);
+
+            var hsb = sv.GetScrollBar(Orientation.Horizontal);
+            var vsb = sv.GetScrollBar(Orientation.Vertical);
+
+            //MpConsole.WriteLine(string.Format(@"Scrollable Width {0} Extent Width {1} ScrollBar Max {2} Track Max {3}", sv.ScrollableWidth, sv.ExtentWidth, hsb.Maximum, hsb.Track.Maximum));
+
+            double new_x_offset = Math.Max(0,Math.Min(sv.HorizontalOffset + e.X, hsb.Maximum));
+            double new_y_offset = Math.Max(0, Math.Min(sv.VerticalOffset + e.Y, vsb.Maximum));
+            //MpConsole.WriteLine("clamped delta: " + new Point(new_x_offset, new_y_offset));
+
+            sv.ScrollToHorizontalOffset(new_x_offset);
+            sv.ScrollToVerticalOffset(new_y_offset);
+
+            sv.InvalidateScrollInfo();
+        }
         private void Rtb_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
             if(BindingContext.IsContentReadOnly && 
                !BindingContext.IsSubSelectionEnabled) {
@@ -222,8 +264,11 @@ namespace MpWpfApp {
                     //MpMainWindowResizeBehavior.Instance.Resize(e.NewSize.Height - e.PreviousSize.Height);
                 }
                 if(e.WidthChanged || e.HeightChanged) {
-                    //during expand/unexpand
-                    Rtb.FitDocToRtb();
+                    if(!MpDragDropManager.IsDragAndDrop) {
+                        // NOTE content drop removes wrapping (changes page size)
+                        // and fit will discard that
+                        Rtb.FitDocToRtb();
+                    }
                 }
 
                 if(BindingContext.IsSelected) {
@@ -406,35 +451,6 @@ namespace MpWpfApp {
 
             //CaretAdornerLayer.Update();
         }
-
-        //public static void ShowHomeCaretAdorner(MpContentView rtbView) {
-        //    ClearCaretAdorner();
-        //    DropOverHomeItemId = rtbView.BindingContext.CopyItemId;
-        //    rtbView.ScrollToHome();
-        //    rtbView.CaretAdorner.CaretLine = new MpLine(rtbView.HomeRect.TopLeft, rtbView.HomeRect.BottomLeft);
-        //    rtbView.CaretAdornerLayer.Update();
-        //    CurDropOverRtbView = rtbView;
-        //}
-
-        //public static void ShowEndCaretAdorner(MpContentView rtbView) {
-        //    ClearCaretAdorner();
-        //    DropOverEndItemId = rtbView.BindingContext.CopyItemId;
-        //    rtbView.ScrollToEnd();
-        //    rtbView.CaretAdorner.CaretLine = new MpLine(rtbView.EndRect.TopRight, rtbView.EndRect.BottomRight);
-        //    rtbView.CaretAdornerLayer.Update();
-        //    CurDropOverRtbView = rtbView;
-        //}
-
-        //public static void ClearCaretAdorner() {
-        //    DropOverHomeItemId = DropOverEndItemId = -1;
-        //    if(CurDropOverRtbView != null) {
-        //        CurDropOverRtbView.ScrollToHome();
-        //        CurDropOverRtbView.CaretAdornerLayer.Update();
-        //        CurDropOverRtbView = null;
-        //    }
-        //}
-
-        
 
         #endregion
 

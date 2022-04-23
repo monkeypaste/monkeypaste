@@ -337,8 +337,6 @@ namespace MpWpfApp {
         //}
 
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {
-            //var sbl = sv.GetVisualDescendents<ScrollBar>();
-            //return sbl.Where(x => x.Orientation == orientation).FirstOrDefault();
             if(orientation == Orientation.Vertical) {
                 return sv.Template.FindName("PART_VerticalScrollBar", sv) as ScrollBar;
             }

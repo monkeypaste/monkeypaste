@@ -15,7 +15,7 @@ namespace MpWpfApp {
         }
 
         public string GetDbName() {
-            return "Mp.db";
+            return "mp.db";
         }
 
         public string GetDbPassword() {

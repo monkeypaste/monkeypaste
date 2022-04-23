@@ -17,10 +17,6 @@ namespace MpWpfApp {
 
         private static Point? _mouseDragCheckStartPosition;
 
-        private static MpIContentDropTarget _curDropTarget;
-
-        
-
         private static List<MpIContentDropTarget> _dropTargets {
             get {
                 List<MpIContentDropTarget> dtl = new List<MpIContentDropTarget>();
@@ -51,7 +47,7 @@ namespace MpWpfApp {
         public static bool IsDraggingFromExternal { get; set; } = false;
         public static object DragData { get; private set; }
 
-        public static bool IsDropValid => _curDropTarget != null;
+        public static bool IsDropValid => CurDropTarget != null;
 
         public static bool IsDragCopy {
             get {
@@ -64,12 +60,14 @@ namespace MpWpfApp {
 
         public static MpDropType DropType {
             get {
-                if(_curDropTarget == null) {
+                if(CurDropTarget == null) {
                     return MpDropType.None;
                 }
-                return _curDropTarget.DropType;
+                return CurDropTarget.DropType;
             }
         }
+
+        public static MpIContentDropTarget CurDropTarget { get; private set; }
 
         public static bool IsDragAndDrop { get; private set; }
 
@@ -170,7 +168,7 @@ namespace MpWpfApp {
             if(IsDraggingFromExternal && !MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
                 IsDraggingFromExternal = false;
             }
-            MpHelpers.RunOnMainThread(() => {
+            //MpHelpers.RunOnMainThread(() => {
                 // NOTE is not on main thread from external drag
                 if (!IsCheckingForDrag && !IsDragAndDrop) {
                     Reset();
@@ -197,26 +195,26 @@ namespace MpWpfApp {
 
                     var dropTarget = SelectDropTarget(DragData);
 
-                    if (dropTarget != _curDropTarget) {
-                        _curDropTarget?.CancelDrop();
-                        _curDropTarget = dropTarget;
-                        _curDropTarget?.StartDrop();
+                    if (dropTarget != CurDropTarget) {
+                        CurDropTarget?.CancelDrop();
+                        CurDropTarget = dropTarget;
+                        CurDropTarget?.StartDrop();
                     }
 
-                    _curDropTarget?.ContinueDragOverTarget();
+                    CurDropTarget?.ContinueDragOverTarget();
 
                 }
-            });
+            //});
         }
 
         private static async Task PerformDrop(object dragData) {            
-            await MpHelpers.RunOnMainThreadAsync(async() => {
-                if (_curDropTarget != null) {
-                    await _curDropTarget?.Drop(
+            //await MpHelpers.RunOnMainThreadAsync(async() => {
+                if (CurDropTarget != null) {
+                    await CurDropTarget?.Drop(
                             MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
                             dragData);
 
-                    bool wasExternalDrop = _curDropTarget is MpExternalDropBehavior;
+                    bool wasExternalDrop = CurDropTarget is MpExternalDropBehavior;
 
                     if (wasExternalDrop) {
                         Application.Current.MainWindow.Activate();
@@ -231,14 +229,14 @@ namespace MpWpfApp {
                 MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
 
                 Reset();
-            });
+            //});
 
         }
         private static void Reset() {
             IsCheckingForDrag = IsDragAndDrop = IsDraggingFromExternal = false;
 
             _mouseDragCheckStartPosition = null;
-            _curDropTarget = null;
+            CurDropTarget = null;
             DragData = null;
             _timer.Stop();
             _dropTargets.ForEach(x => x.Reset());
@@ -262,9 +260,9 @@ namespace MpWpfApp {
             } else if (!IsDropValid) {
                 currentCursor = MpCursorType.Invalid;
             } else if (IsDragCopy) {
-                currentCursor = _curDropTarget.CopyCursor;
+                currentCursor = CurDropTarget.CopyCursor;
             } else if (IsDragAndDrop) {
-                currentCursor = _curDropTarget.MoveCursor;
+                currentCursor = CurDropTarget.MoveCursor;
             } else {
                 return;
             }
