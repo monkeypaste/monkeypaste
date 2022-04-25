@@ -21,10 +21,8 @@
         Loaded="StackPanel_Loaded"
         Orientation="Horizontal"
         SizeChanged="StackPanel_SizeChanged">
-        <local:MpClipTileView
-            DataContext="{Binding}"
-            Visibility="{Binding IsPlaceholder,
-                                 Converter={StaticResource BoolToVisibilityFlipConverter}}" />
+        <local:MpClipTileView DataContext="{Binding}">
+        </local:MpClipTileView>
         <!--  Resize Region  -->
         <Rectangle
             x:Name="ResizeRectangle"

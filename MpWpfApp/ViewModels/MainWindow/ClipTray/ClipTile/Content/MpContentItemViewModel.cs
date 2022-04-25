@@ -163,17 +163,27 @@ namespace MpWpfApp {
 
         public string ItemBackgroundHexColor {
             get {
-                if(MpDragDropManager.IsDragAndDrop || Parent == null) {
+                if(MpDragDropManager.IsDragAndDrop || Parent == null || CopyItem == null) {
                     return MpSystemColors.White;
                 }
-                if (IsHovering &&
-                    ((!Parent.IsContentReadOnly && !IsSelected) || Parent.IsContentReadOnly) &&
-                    Parent.Count > 1) {
+
+                if(IsHovering) {
+                    if(string.IsNullOrEmpty(CopyItem.ItemColor)) {
+                        return MpSystemColors.Yellow;
+                    }
                     return MpColorHelpers.GetLighterHexColor(CopyItemHexColor, 0.75);
                 }
-                return MpSystemColors.White;
+                //if (IsHovering &&
+                //    ((!Parent.IsContentReadOnly && !IsSelected) || Parent.IsContentReadOnly) &&
+                //    Parent.Count > 1) {
+                //    return MpColorHelpers.GetLighterHexColor(CopyItemHexColor, 0.75);
+                //}
+                //return MpSystemColors.White;
+                return ItemEditorBackgroundHexColor;
             }
         }
+
+        public string ItemEditorBackgroundHexColor { get; set; } = MpSystemColors.Transparent;
 
         public Brush ItemBorderBrush {
             get {

@@ -89,7 +89,7 @@ namespace MonkeyPaste {
             "#FF6D5AB3",
             "#FFAA5AB3",
             "#FFCD3C75",
-            "#FF414141"
+            "#00414141"
         };
 
         #region X11 Colors

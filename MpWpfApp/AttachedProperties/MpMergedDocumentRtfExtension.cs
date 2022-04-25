@@ -101,14 +101,6 @@ namespace MpWpfApp {
             });
 
         private static async void EnableReadOnly(FrameworkElement fe) {
-            //if(fe is RichTextBox rtb && rtb.IsReadOnly || 
-            //    fe.DataContext is MpClipTileViewModel ctvm && ctvm.IsContentReadOnly) {
-
-            //}
-             
-            // when this works:
-            // rtb.IsReadOnly = false
-            // ctvm.IsContentReadOnly = true
             await SaveTextContent(fe as RichTextBox);
             var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
             if (ctcv != null) {
@@ -145,8 +137,10 @@ namespace MpWpfApp {
                 foreach(var te in allTextElements) {
                     // fill dictionary w/ all text elements per copy item in doc order
                     if(te.Tag == null) {
-                        Debugger.Break();
-                        throw new Exception("Error all text elements should have a model as their tag (either MpCopyItem or MpTextTemplate)");
+                        // this should only happen when tile is initially loading which means it doesn't need to be saved
+                        return;
+                        //Debugger.Break();
+                        //throw new Exception("Error all text elements should have a model as their tag (either MpCopyItem or MpTextTemplate)");
                     }
                     if(te.Tag is MpICopyItemReference dbo) {                        
                         if(!contentLookup.ContainsKey(dbo.Guid)) {
@@ -191,7 +185,7 @@ namespace MpWpfApp {
         #region HeadContentItemViewModel
 
         public static object GetHeadContentItemViewModel(DependencyObject obj) {
-            return (object)obj.GetValue(HeadContentItemViewModelProperty);
+            return obj.GetValue(HeadContentItemViewModelProperty);
         }
         public static void SetHeadContentItemViewModel(DependencyObject obj, object value) {
             obj.SetValue(HeadContentItemViewModelProperty, value);
@@ -212,10 +206,12 @@ namespace MpWpfApp {
                     if (rtb == null) {
                         return;
                     }
+                    rtb.Loaded += Rtb_Loaded;
+                    rtb.Unloaded += Rtb_Unloaded;
                     if (rtb.IsLoaded) {
                         Rtb_Loaded(rtb, null);
                     } else {
-                        rtb.Loaded += Rtb_Loaded;
+                        
                     }
                 }
             });
@@ -226,6 +222,7 @@ namespace MpWpfApp {
             if(rtb == null) {
                 return;
             }
+
             LoadContent(rtb).FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
         }
 
@@ -310,6 +307,19 @@ namespace MpWpfApp {
             rtb.TextChanged += Rtb_TextChanged;
         }
 
+        private static void Rtb_Unloaded(object sender, RoutedEventArgs e) {
+            if(sender is RichTextBox rtb) {
+                UnloadContent(rtb);
+            }
+        }
+
+        private static void UnloadContent(RichTextBox rtb) {
+            rtb.Loaded -= Rtb_Loaded;
+            rtb.Unloaded -= Rtb_Unloaded;
+            rtb.TextChanged -= Rtb_TextChanged;
+            rtb.Document.GetAllTextElements().ForEach(x => UnregisterTextElement(x));
+        }
+
         private static async Task<FlowDocument> DecodeContentItem(
             RichTextBox rtb,
             string itemGuid, 
@@ -376,24 +386,6 @@ namespace MpWpfApp {
                     var rangeTo = new TextRange(insertRange.Start, insertRange.End);
                     rangeTo.Load(stream, DataFormats.XamlPackage);
 
-                    if(decodeAsRootDocument) {
-                        //only register events on root document
-                        var allRangeElements = rangeTo.GetAllTextElements();
-                        allRangeElements.ForEach(x => x.Tag = (MpICopyItemReference)childItem);
-                        foreach (var te in allRangeElements) {
-                            var origBrush = te.Background;
-                            te.MouseEnter += (s, e) => {
-                                te.Background = Brushes.Yellow;
-                                //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.Guid == childGuid)).Items.FirstOrDefault(x => x.Guid == childGuid);
-                                //civm.IsHovering = true;
-                            };
-                            te.MouseLeave += (s, e) => {
-                                te.Background = origBrush;
-                                //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.Guid == childGuid)).Items.FirstOrDefault(x => x.Guid == childGuid);
-                                //civm.IsHovering = false;
-                            };
-                        }
-                    }
                 }
             }
 
@@ -421,8 +413,11 @@ namespace MpWpfApp {
             fd.Tag = cir;
             allTextElements.Where(x => x.Tag == null).ForEach(x => x.Tag = cir);
 
-            //MpConsole.WriteLine("FlowDoc w/ Tags Xaml:");
-            //MpConsole.WriteLine(fd.ToXamlPackage());
+
+            if (decodeAsRootDocument) {
+                //only register events on root document
+                fd.GetAllTextElements().ForEach(x => RegisterTextElement(x));
+            }
             return fd;
         }
 
@@ -531,6 +526,93 @@ namespace MpWpfApp {
 
             // TODO need to create new element here, return root or throw an error depending on how changes handled
             return null;
+        }
+
+        private static void RegisterTextElement(TextElement te) {
+            if(te == null) {
+                return;
+            }
+            te.MouseEnter += Te_MouseEnter;
+            te.MouseLeave += Te_MouseLeave;
+            te.PreviewMouseLeftButtonDown += Te_PreviewMouseLeftButtonDown;
+
+            var ci = te.Tag as MpCopyItem;
+            if (ci == null) {
+                Debugger.Break();
+            }
+            var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id);
+            if (civm == null) {
+                Debugger.Break();
+            }
+
+            //if(te.Background == null) {
+            //    te.Background = Brushes.Transparent;
+            //}
+            civm.ItemEditorBackgroundHexColor = te.Background == null ? MpSystemColors.Transparent : te.Background.ToHex();
+
+            MpHelpers.CreateBinding(
+               civm,
+               new PropertyPath(
+                   nameof(civm.ItemBackgroundHexColor)),
+                   te, 
+                   TextElement.BackgroundProperty);
+        }
+
+        private static void UnregisterTextElement(TextElement te) {
+            if (te == null) {
+                return;
+            }
+            te.MouseEnter -= Te_MouseEnter;
+            te.MouseLeave -= Te_MouseLeave;
+            te.PreviewMouseLeftButtonDown -= Te_PreviewMouseLeftButtonDown;
+        }
+
+
+        private static void Te_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        }
+
+        private static void Te_MouseLeave(object sender, MouseEventArgs e) {
+            var te = sender as TextElement;
+            if (te == null) {
+                return;
+            }
+            var ci = te.Tag as MpCopyItem;
+            if (ci == null) {
+                Debugger.Break();
+            }
+            var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id);
+            if (civm == null) {
+                Debugger.Break();
+            }
+
+            civm.IsHovering = false;
+        }
+
+        private static void Te_MouseEnter(object sender, MouseEventArgs e) {
+            var te = sender as TextElement;
+            if(te == null) {
+                return;
+            }
+            var ci = te.Tag as MpCopyItem;
+            if(ci == null) {
+                Debugger.Break();
+            }
+            var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id);
+            if(civm == null) {
+                Debugger.Break();
+            }
+
+            civm.IsHovering = true;
+            //te.MouseEnter += (s, e) => {
+            //    te.Background = Brushes.Yellow;
+            //    //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.Guid == childGuid)).Items.FirstOrDefault(x => x.Guid == childGuid);
+            //    //civm.IsHovering = true;
+            //};
+            //te.MouseLeave += (s, e) => {
+            //    te.Background = origBrush;
+            //    //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.Guid == childGuid)).Items.FirstOrDefault(x => x.Guid == childGuid);
+            //    //civm.IsHovering = false;
+            //};
         }
 
         #endregion

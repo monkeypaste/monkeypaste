@@ -2237,7 +2237,7 @@ namespace MpWpfApp {
                 if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                     return false;
                 }
-                return SelectedItems.Count == 1 && !SelectedItems[0].IsPlaceholder;
+                return SelectedItems.Count == 1 && (!SelectedItems[0].IsPlaceholder || SelectedItems[0].IsPinned);
             });
 
         public ICommand SendToEmailCommand => new RelayCommand(

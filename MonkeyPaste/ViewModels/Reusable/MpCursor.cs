@@ -45,10 +45,10 @@ namespace MonkeyPaste {
             CurrentCursor = cursor;
             _cursor.SetCursor(CurrentCursor);
 
-            string logStr = $"Type: '{sender.GetType()}' set Cursor to: '{cursor.ToString()}'";
-            if(sender is MpDbModelBase dbo) {
-                logStr = $"Guid: '{dbo.Guid}' " + logStr;
-            }
+            //string logStr = $"Type: '{sender.GetType()}' set Cursor to: '{cursor.ToString()}'";
+            //if(sender is MpDbModelBase dbo) {
+            //    logStr = $"Guid: '{dbo.Guid}' " + logStr;
+            //}
             //MpConsole.WriteLogLine(logStr);
         }
 

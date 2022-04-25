@@ -15,20 +15,26 @@ namespace MpWpfApp {
         #region Private Variables
         private DispatcherTimer _renderTimer = null;
 
-        private UIElement child = null;
+        //private UIElement Child = null;
 
         private Point tt_origin;
         private Point mp_start;
                 
         private Point grid_offset {
             get {
-                if(child == null) {
+                if(Child == null) {
                     return new Point();
                 }
-                var tt = GetTranslateTransform(child);
+                var tt = GetTranslateTransform(Child);
                 return new Point(tt.X, tt.Y);
             }
         }
+
+        #endregion
+
+        #region Statics
+
+        public static bool IsTranslating { get; private set; } = false;
 
         #endregion
 
@@ -85,31 +91,47 @@ namespace MpWpfApp {
 
         #endregion
 
-        public override UIElement Child {
-            get { return base.Child; }
-            set {
-                if (value != null && value != this.Child) {
-                    this.Initialize(value);
-                }
-                base.Child = value;
-            }
-        }
+        //public override UIElement Child {
+        //    get { return base.Child; }
+        //    set {
+        //        if (value != null && value != this.Child) {
+        //            this.Initialize(value);
+        //        }
+        //        base.Child = value;
+        //    }
+        //}
 
         #endregion
 
         #region Public Methods
 
         public void Initialize(UIElement element) {
-            this.child = element;
-            if (child != null) {
-                this.PreviewMouseWheel += child_MouseWheel;
-                this.MouseLeftButtonDown += child_PreviewMouseLeftButtonDown;
-                this.MouseLeftButtonUp += child_MouseLeftButtonUp;
-                this.MouseMove += child_MouseMove;
-                this.PreviewMouseRightButtonDown += child_PreviewMouseRightButtonDown;
+            this.Child = element;
+            if (Child != null) {
+                Child.PreviewMouseWheel += child_MouseWheel;
+                Child.PreviewMouseLeftButtonDown += child_PreviewMouseLeftButtonDown;
+                Child.MouseLeftButtonUp += child_MouseLeftButtonUp;
+                Child.MouseMove += child_MouseMove;
+                Child.PreviewMouseRightButtonDown += child_PreviewMouseRightButtonDown;
             }
         }
 
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
+            base.OnMouseLeftButtonDown(e);
+            e.Handled = true;
+            child_PreviewMouseLeftButtonDown(Child, e);
+        }
+        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
+            base.OnMouseLeftButtonUp(e);
+            e.Handled = true;
+            child_MouseLeftButtonUp(Child, e);
+        }
+
+        protected override void OnMouseMove(System.Windows.Input.MouseEventArgs e) {
+            base.OnMouseMove(e);
+            e.Handled = true;
+            child_MouseMove(Child, e);
+        }
         public void Reset() {
             MpPoint scale = new MpPoint(1, 1);
             MpPoint offset = new MpPoint();
@@ -117,14 +139,15 @@ namespace MpWpfApp {
                 scale = new MpPoint(DesignerItem.ScaleX, DesignerItem.ScaleY);
                 offset = new MpPoint(DesignerItem.TranslateOffsetX, DesignerItem.TranslateOffsetY);
             }
-            if (child != null) {
+
+            if (Child != null) {
                 // reset zoom
-                var st = GetScaleTransform(child);
+                var st = GetScaleTransform(Child);
                 st.ScaleX = scale.X;
                 st.ScaleY = scale.Y;
 
                 // reset pan
-                var tt = GetTranslateTransform(child);
+                var tt = GetTranslateTransform(Child);
                 tt.X = offset.X;
                 tt.Y = offset.Y;
             }
@@ -132,7 +155,7 @@ namespace MpWpfApp {
 
         public void Translate(double x, double y) {
             // NOTE to be used by DesignerItem Drop Behavior
-            var tt = GetTranslateTransform(child);
+            var tt = GetTranslateTransform(Child);
             tt.X = tt_origin.X - x;
             tt.Y = tt_origin.Y - y;
         }
@@ -156,6 +179,12 @@ namespace MpWpfApp {
             }
         }
 
+        protected override void OnMouseWheel(MouseWheelEventArgs e) {
+            base.OnMouseWheel(e);
+
+            child_MouseWheel(Child,e);
+        }
+
         #endregion
 
         #region Private Methods
@@ -163,15 +192,15 @@ namespace MpWpfApp {
         #region Child Events
 
         private void child_MouseWheel(object sender, MouseWheelEventArgs e) {
-            if (child != null) {
-                var st = GetScaleTransform(child);
-                var tt = GetTranslateTransform(child);
+            if (Child != null) {
+                var st = GetScaleTransform(Child);
+                var tt = GetTranslateTransform(Child);
 
                 double zoom = e.Delta > 0 ? .2 : -.2;
                 if (!(e.Delta > 0) && (st.ScaleX < MinScale || st.ScaleY < MinScale)) {
                     return;
                 }
-                Point relative = e.GetPosition(child);
+                Point relative = e.GetPosition(Child);
                 double absoluteX;
                 double absoluteY;
 
@@ -201,28 +230,28 @@ namespace MpWpfApp {
                 }
             }
         }
-        bool isMoving = false;
+        
         private void child_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if (child != null && !MpMoveBehavior.IsAnyMoving) {
-                var tt = GetTranslateTransform(child);
+            if (Child != null && !MpMoveBehavior.IsAnyMoving) {
+                var tt = GetTranslateTransform(Child);
                 mp_start = e.GetPosition(this);
                 tt_origin = new Point(tt.X, tt.Y);
                 MpCursor.SetCursor(DataContext, MpCursorType.Hand);
-                bool result = child.CaptureMouse();
+                bool result = CaptureMouse();
                 if(!result) {
                     var capturer = Mouse.Captured;
                     Debugger.Break();
                 } else {
-                    isMoving = true;
+                    IsTranslating = true;
                     e.Handled = true;
                 }
             }
         }
 
         private void child_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            if (child != null) {
-                isMoving = false;
-                child.ReleaseMouseCapture();
+            if (Child != null) {
+                IsTranslating = false;
+                ReleaseMouseCapture();
                 MpCursor.UnsetCursor(DataContext);
                 if(DataContext is MpActionCollectionViewModel acvm) {
                     acvm.HasModelChanged = true;
@@ -235,10 +264,12 @@ namespace MpWpfApp {
         }
 
         private void child_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            if (child != null) {
-                if (isMoving) {
-                    var tt = GetTranslateTransform(child);
+            if (Child != null) {
+                if (IsTranslating) {
+                    var tt = GetTranslateTransform(Child);
                     Vector v = mp_start - e.GetPosition(this);
+
+
                     tt.X = tt_origin.X - v.X;
                     tt.Y = tt_origin.Y - v.Y;
 
@@ -263,14 +294,15 @@ namespace MpWpfApp {
         }
         
         private void DrawGrid(DrawingContext dc) {
-            Point offset = new Point(10, 10);
+            Point offset = new Point();// (grid_offset.ToMpPoint() * -1).ToWpfPoint(); //new Point(10, 10);
 
-            var st = GetScaleTransform(child);
+            var st = GetScaleTransform(Child);
             int HorizontalGridLineCount = (int)((RenderSize.Width / GridLineSpacing) * (1/st.ScaleX));
             int VerticalGridLineCount = (int)((RenderSize.Height / GridLineSpacing) * (1/st.ScaleY));
 
             double xStep = RenderSize.Width / HorizontalGridLineCount;
             double yStep = RenderSize.Height / VerticalGridLineCount;
+
             double curX = 0;
             double curY = 0;
 
@@ -282,9 +314,9 @@ namespace MpWpfApp {
 
                 bool isOrigin = x == (int)(HorizontalGridLineCount / 2);
                 if (isOrigin) {
-                    dc.DrawLine(new Pen(OriginBrush, OriginThickness), p1, p2);
+                    DrawLine(dc,new Pen(OriginBrush, OriginThickness), p1, p2);
                 } else {
-                    dc.DrawLine(new Pen(GridLineBrush, GridLineThickness), p1, p2);
+                    DrawLine(dc,new Pen(GridLineBrush, GridLineThickness), p1, p2);
                 }
 
                 curX += xStep;
@@ -298,13 +330,24 @@ namespace MpWpfApp {
 
                 bool isOrigin = y == (int)(VerticalGridLineCount / 2);
                 if (isOrigin) {
-                    dc.DrawLine(new Pen(OriginBrush, OriginThickness), p1, p2);
+                    DrawLine(dc,new Pen(OriginBrush, OriginThickness), p1, p2);
                 } else {
-                    dc.DrawLine(new Pen(GridLineBrush, GridLineThickness), p1, p2);
+                    DrawLine(dc,new Pen(GridLineBrush, GridLineThickness), p1, p2);
                 }
 
                 curY += yStep;
             }
+        }
+
+        private void DrawLine(DrawingContext dc, Pen p, Point p1, Point p2) {
+            var offset = new Point(); //grid_offset;
+            p1.X -= offset.X;
+            p1.Y -= offset.Y;
+
+            p2.X -= offset.X;
+            p2.Y -= offset.Y;
+
+            dc.DrawLine(p, p1, p2);
         }
 
         #endregion

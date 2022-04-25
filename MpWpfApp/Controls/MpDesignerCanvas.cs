@@ -69,6 +69,8 @@ namespace MpWpfApp {
             voroObj = null;
         }
 
+        
+
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
 

@@ -176,12 +176,21 @@ namespace MpWpfApp {
             var mwmp = e.GetPosition(Application.Current.MainWindow);
 
             Vector delta = mwmp - _lastMousePosition;
-            _lastMousePosition = mwmp;
+
+            // NOTE must transform mouse delta from designer canvas scaling
+            delta.X *= 1 / MpActionCollectionViewModel.Instance.ScaleX;
+            delta.Y *= 1 / MpActionCollectionViewModel.Instance.ScaleY;
 
             Move(delta.X, delta.Y);
+
+            _lastMousePosition = mwmp;
         }
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            if(MpZoomBorder.IsTranslating) {
+                return;
+            }
+
             _mouseDownPosition = _lastMousePosition = e.GetPosition(Application.Current.MainWindow);
             if (AssociatedObject.DataContext is MpISelectableViewModel svm) {
                 svm.IsSelected = true;

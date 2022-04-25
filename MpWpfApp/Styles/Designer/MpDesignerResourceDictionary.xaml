@@ -7,11 +7,17 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!--  MoveThumb Template  -->
-    <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type local:MpMoveThumb}">
-        <Rectangle Cursor="SizeAll" Fill="Transparent" />
+    <ControlTemplate
+        x:Key="MoveThumbTemplate"
+        TargetType="{x:Type local:MpMoveThumb}">
+        <Rectangle
+            Cursor="SizeAll"
+            Fill="Transparent" />
     </ControlTemplate>
     <!--  ResizeDecorator Template  -->
-    <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
+    <ControlTemplate
+        x:Key="ResizeDecoratorTemplate"
+        TargetType="{x:Type Control}">
         <Grid>
             <local:MpResizeThumb
                 Height="3"
@@ -68,12 +74,16 @@
         </Grid>
     </ControlTemplate>
     <!--  Designer Item Template  -->
-    <Style x:Key="ResizableDesignerControlStyle" TargetType="{x:Type ContentControl}">
+    <Style
+        x:Key="ResizableDesignerControlStyle"
+        TargetType="{x:Type ContentControl}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContentControl">
                     <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                        <local:MpMoveThumb Cursor="SizeAll" Template="{StaticResource MoveThumbTemplate}" />
+                        <local:MpMoveThumb
+                            Cursor="SizeAll"
+                            Template="{StaticResource MoveThumbTemplate}" />
                         <Control Template="{StaticResource ResizeDecoratorTemplate}" />
                         <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
                     </Grid>
@@ -81,19 +91,26 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsMouseOver}" Value="True">
+            <DataTrigger
+                Binding="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                  Path=IsMouseOver}"
+                Value="True">
                 <Setter Property="Background" Value="Transparent" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
-    <Style x:Key="MovableDesignerControlStyle" TargetType="{x:Type ContentControl}">
+    <Style
+        x:Key="MovableDesignerControlStyle"
+        TargetType="{x:Type ContentControl}">
         <Setter Property="MinHeight" Value="20" />
         <Setter Property="MinWidth" Value="20" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContentControl">
                     <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                        <local:MpMoveThumb Cursor="SizeAll" Template="{StaticResource MoveThumbTemplate}" />
+                        <local:MpMoveThumb
+                            Cursor="SizeAll"
+                            Template="{StaticResource MoveThumbTemplate}" />
                         <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
                     </Grid>
                 </ControlTemplate>

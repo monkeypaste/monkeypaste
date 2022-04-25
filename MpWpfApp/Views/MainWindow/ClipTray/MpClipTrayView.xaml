@@ -80,10 +80,10 @@
                                         Value="0" />
                                 <Setter Property="SnapsToDevicePixels"
                                         Value="True" />
-                                <Setter Property="Visibility"
+                                <!--<Setter Property="Visibility"
                                         Value="{Binding IsPlaceholder,
                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}" />
-                                <!--<Setter Property="Width"
+                                <Setter Property="Width"
                                         Value="{Binding TileBorderWidth}"/>
                                 <Setter Property="Height"
                                         Value="{Binding TileBorderHeight}"/>-->

@@ -153,7 +153,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region MpIViewportCameraViewModel Implementation
+        #region MpIDesignerSettingsViewModel Implementation
 
         public double ScaleX { get; set; } = 1;
         public double ScaleY { get; set; } = 1;

@@ -5,7 +5,6 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:local="clr-namespace:MpWpfApp">
 
-
     <local:MpContextMenuItemContainerSelector x:Key="MenuItemContainerSelector" />
     <!--  MenuItem  -->
     <HierarchicalDataTemplate
@@ -225,7 +224,7 @@
                     ItemsSource="{Binding SubItems}"
                     Margin="5"
                     BorderThickness="0"
-                    Background="Transparent"
+                    Background="Cyan"
                     VerticalAlignment="Stretch"
                     VerticalContentAlignment="Top"
                     HorizontalAlignment="Left"

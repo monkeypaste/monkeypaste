@@ -54,7 +54,8 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <local:MpClipTileContainerView DataContext="{Binding}"
-                                                   Visibility="{Binding IsPlaceholder,
+                                                  
+                                                   Visibility="{Binding IsPinned,
                                                                         Converter={StaticResource BoolToVisibilityConverter}}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>

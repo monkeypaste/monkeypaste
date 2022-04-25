@@ -308,6 +308,7 @@ namespace MonkeyPaste {
                         ItemDescription = description,
                         ItemType = itemType,
                         SourceId = source.Id,
+
                         //Source = source,
                         IconId = iconId,
                         CopyCount = 1,

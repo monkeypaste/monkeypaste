@@ -35,7 +35,7 @@
                              local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
                              AutoWordSelection="False"
                              Background="Linen"
-                             Foreground="Black"
+                             Foreground="Black" 
                              BorderThickness="0"
                              local:MpIsFocusedExtension.IsEnabled="True"
                              local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,

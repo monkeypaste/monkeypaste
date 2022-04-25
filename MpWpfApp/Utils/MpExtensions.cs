@@ -329,12 +329,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        //public static ScrollViewer GetScrollViewer(this ListBox lb) {
-        //    if(lb.DataContext is MpClipTrayViewModel) {
-        //        return lb.GetVisualAncestor<ScrollViewer>();
-        //    }
-        //    return lb.GetVisualDescendent<ScrollViewer>();
-        //}
 
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {
             if(orientation == Orientation.Vertical) {

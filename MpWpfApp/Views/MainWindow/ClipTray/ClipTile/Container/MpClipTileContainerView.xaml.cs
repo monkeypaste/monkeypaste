@@ -21,6 +21,8 @@ namespace MpWpfApp {
     /// Interaction logic for MpClipTileContainerView.xaml
     /// </summary>
     public partial class MpClipTileContainerView : MpUserControl<MpClipTileViewModel> {
+        public bool IsPinTrayTile { get; set; } = false;
+
         public MpClipTileContainerView() {
             InitializeComponent();
         }

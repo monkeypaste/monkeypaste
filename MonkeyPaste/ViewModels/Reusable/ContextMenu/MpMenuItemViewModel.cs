@@ -136,9 +136,7 @@ namespace MonkeyPaste {
 
         public bool HasTooltip => Tooltip != null;
 
-        #endregion
-
-        
+        #endregion        
 
         #endregion
 

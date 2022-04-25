@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Documents;
 
 namespace MpWpfApp {
     public class MpRichTextBox : RichTextBox {
@@ -18,7 +20,26 @@ namespace MpWpfApp {
         #region Methods
 
         #region Overrides
+        protected override void OnRender(DrawingContext drawingContext) {
+            base.OnRender(drawingContext);
 
+            if (DataContext is MpClipTileViewModel ctvm &&
+               IsReadOnly &&
+               ctvm.IsSubSelectionEnabled &&
+               Selection.IsEmpty) {
+                var caret_rect = Selection.Start.GetCharacterRect(LogicalDirection.Forward);
+
+                drawingContext.DrawLine(
+                    new Pen(Brushes.Black, 1),
+                    caret_rect.TopLeft,
+                    caret_rect.BottomLeft);
+            }
+        }
+
+        protected override void OnSelectionChanged(RoutedEventArgs e) {
+            base.OnSelectionChanged(e);
+            InvalidateVisual();
+        }
         protected override void OnMouseMove(MouseEventArgs e) {
             base.OnMouseMove(e);
             //e.Handled = false;
