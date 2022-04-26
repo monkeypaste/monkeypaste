@@ -364,7 +364,6 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-
         #region Manual Resize Event Handlers
 
         private void DoubleClickFrameworkElement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
@@ -383,7 +382,8 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {            
-            if (MpDragDropManager.IsDragAndDrop || AssociatedObject == null || !IsEnabled) {
+            if (MpDragDropManager.IsDragAndDrop || 
+                AssociatedObject == null || !IsEnabled) {
                 return;
             }
             if (!IsResizing && !AssociatedObject.IsMouseCaptured) {
@@ -394,14 +394,15 @@ namespace MpWpfApp {
         }
 
         private void AssociatedObject_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-            if (MpDragDropManager.IsDragAndDrop || 
-                AssociatedObject == null || 
-                !IsEnabled || 
+            // BUG resizing main window makes dd think its external drop
+            if (MpDragDropManager.IsDragAndDrop ||
+                AssociatedObject == null ||
+                !IsEnabled ||
                 MpClipTrayViewModel.Instance.HasScrollVelocity ||
                 !_mouseDownPosition.HasValue) {
-                return;
+                    return;
             }
-            if(Mouse.LeftButton == MouseButtonState.Released) {
+            if (Mouse.LeftButton == MouseButtonState.Released) {
                 Reset();
                 return;
             }

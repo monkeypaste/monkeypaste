@@ -33,10 +33,9 @@ namespace MpWpfApp {
 
         #endregion
 
-
         #region Properties
 
-        public MpDropShapeAdorner DropLineAdorner { get; set; }
+        public MpContentAdorner DropLineAdorner { get; set; }
 
         public int DropIdx { get; set; } = -1;
 
@@ -151,6 +150,7 @@ namespace MpWpfApp {
             MpMessenger.Register<MpMessageType>(
                 MpMainWindowViewModel.Instance, 
                 ReceivedMainWindowViewModelMessage);
+                        
 
             MpMessenger.Register<MpMessageType>(
                 (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
@@ -172,7 +172,7 @@ namespace MpWpfApp {
             if (e.Handled) {
                 return;
             }
-            if (e.Data.GetDataPresent(MpDataObject.InternalContentFormat)) {
+            if (e.Data.GetDataPresent(MpPortableDataObject.InternalContentFormat)) {
 
             }
         }
@@ -246,7 +246,7 @@ namespace MpWpfApp {
             if (dragData == null) {
                 return false;
             }
-            if(dragData is MpDataObject) {
+            if(dragData is MpPortableDataObject) {
                 return true;
             }
             if(dragData is MpClipTileViewModel ctvm) {
@@ -277,7 +277,7 @@ namespace MpWpfApp {
             if(AdornedElement != null) {
                 adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
                 if(adornerLayer != null) {
-                    DropLineAdorner = new MpDropShapeAdorner(AdornedElement, this);
+                    DropLineAdorner = new MpContentAdorner(AdornedElement, this);
                     adornerLayer.Add(DropLineAdorner);
                     RefreshDropRects();
                 }

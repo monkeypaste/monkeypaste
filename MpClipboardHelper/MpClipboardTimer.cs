@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 
 namespace MpClipboardHelper {
-    public class MpClipboardTimer : MpIClipboardInterop, MpIClipboardMonitor {
+    public class MpClipboardTimer : MpIClipboardMonitor {
         #region Private Varibles
 
         private bool _isStopped = false;
-        private MpDataObject _lastCbo;
+        private MpPortableDataObject _lastCbo;
         private Thread _workThread;
 
         #endregion
@@ -32,26 +32,13 @@ namespace MpClipboardHelper {
 
         #region Events
 
-        public event EventHandler<MpDataObject> OnClipboardChanged;
-
-        #endregion
-
-        #region MpIClipboardInterop Implementation
-
-        public MpDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) => 
-            ConvertManagedFormats((IDataObject)nativeDataObj, retryCount);
-
-        public object ConvertToNativeFormat(MpDataObject portableObj) => 
-            ConvertToWinFormsDataObject(portableObj);
-
-        public void SetDataObjectWrapper(MpDataObject portableObj) => 
-            SetDataObjectWrapper(portableObj);
+        public event EventHandler<MpPortableDataObject> OnClipboardChanged;
 
         #endregion
 
         #region MpIClipboardMonitor Implementation
 
-        public event EventHandler<MpDataObject> OnClipboardChange;
+        public event EventHandler<MpPortableDataObject> OnClipboardChange;
 
         public void StartMonitor() => Start();
 
@@ -126,7 +113,7 @@ namespace MpClipboardHelper {
             }
         }
 
-        private IDataObject ConvertToWinFormsDataObject(MpDataObject mpdo) {
+        private IDataObject ConvertToWinFormsDataObject(MpPortableDataObject mpdo) {
             DataObject dobj = new DataObject();
             foreach (var kvp in mpdo.DataFormatLookup) {
                 SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
@@ -212,7 +199,7 @@ namespace MpClipboardHelper {
             return 0;
         }
 
-        private MpDataObject ConvertManagedFormats(IDataObject ido = null, int retryCount = 5) {
+        private MpPortableDataObject ConvertManagedFormats(IDataObject ido = null, int retryCount = 5) {
             /*
             from: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.dataobject?view=windowsdesktop-6.0&viewFallbackFrom=net-5.0
             Special considerations may be necessary when using the metafile format with the Clipboard. 
@@ -231,14 +218,14 @@ namespace MpClipboardHelper {
                 //ido = Clipboard.GetDataObject();
                 //Debugger.Break();
             }
-            var ndo = new MpDataObject();
+            var ndo = new MpPortableDataObject();
             if (retryCount == 0) {
                 MpConsole.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
                 return ndo;
             }
             try {
                 bool autoConvert = false;
-                foreach (MpClipboardFormatType supportedType in MpDataObject.SupportedFormats) {
+                foreach (MpClipboardFormatType supportedType in MpPortableDataObject.SupportedFormats) {
                     string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
                     while(IsClipboardOpen()) {
                         Thread.Sleep(100);
@@ -303,7 +290,7 @@ namespace MpClipboardHelper {
             }
         }
 
-        private bool HasChanged(MpDataObject nco) {
+        private bool HasChanged(MpPortableDataObject nco) {
             if (_lastCbo == null && nco != null) {
                 return true;
             }

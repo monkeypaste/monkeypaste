@@ -10,7 +10,7 @@ namespace MpProcessHelper {
 
         #region MpIExternalPasteHandler Implementation
 
-        public async Task PasteDataObject(MpDataObject mpdo, IntPtr handle, bool finishWithEnterKey = false) {
+        public async Task PasteDataObject(MpPortableDataObject mpdo, IntPtr handle, bool finishWithEnterKey = false) {
             throw new NotImplementedException();
         }
 

@@ -18,14 +18,12 @@ namespace MpClipboardHelper {
 
         public static MpIClipboardMonitor MonitorService { get; private set; }
 
-        public static MpIClipboardInterop InteropService { get; private set; }
-
         public static MpIExternalPasteHandler PasteService { get; private set; }
         #endregion
 
         #region Events
 
-        public static event EventHandler<MpDataObject> OnClipboardChange;
+        public static event EventHandler<MpPortableDataObject> OnClipboardChange;
 
         #endregion
 
@@ -36,13 +34,12 @@ namespace MpClipboardHelper {
             // and monitoring window messages (using MpClipboardWatcher) crashes application
             // intermittently when copying rtf from Visual Studio BUT maybe it can be fixed
             MonitorService = new MpClipboardTimer();
-            InteropService = (MpIClipboardInterop)MonitorService;
             PasteService = pasteHandler;
             Start();
         }
 
         public static void Start() {
-            if(MonitorService == null || InteropService == null) {
+            if(MonitorService == null) {
                 throw new Exception("Must call init");
             }
             MonitorService.OnClipboardChanged += MpClipboardWatcher_OnClipboardChange;
@@ -60,7 +57,7 @@ namespace MpClipboardHelper {
 
         #region Private Methods
 
-        private static void MpClipboardWatcher_OnClipboardChange(object sender, MpDataObject e) {
+        private static void MpClipboardWatcher_OnClipboardChange(object sender, MpPortableDataObject e) {
             OnClipboardChange?.Invoke(sender, e);
         }
 

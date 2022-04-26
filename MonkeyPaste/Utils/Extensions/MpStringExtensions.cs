@@ -125,11 +125,11 @@ namespace MonkeyPaste {
                 }
             }  else {
                 if (forceExt.ToLower().Contains("rtf")) {
-                    str = MpNativeWrapper.Services.StringTools.ToRichText(str);
+                    str = MpPlatformWrapper.Services.StringTools.ToRichText(str);
                 } else if (forceExt.ToLower().Contains("txt")) {
-                    str = MpNativeWrapper.Services.StringTools.ToPlainText(str);
+                    str = MpPlatformWrapper.Services.StringTools.ToPlainText(str);
                 } else if (forceExt.ToLower().Contains("csv")) {
-                    str = MpNativeWrapper.Services.StringTools.ToCsv(str);
+                    str = MpPlatformWrapper.Services.StringTools.ToCsv(str);
                 }
             }
 

@@ -27,7 +27,7 @@ namespace MpClipboardHelper {
                 case MpClipboardFormatType.Csv:
                     return DataFormats.CommaSeparatedValue;
                 case MpClipboardFormatType.InternalContent:
-                    return MpDataObject.InternalContentFormat;
+                    return MpPortableDataObject.InternalContentFormat;
                 case MpClipboardFormatType.UnicodeText:
                     return DataFormats.UnicodeText;
                 case MpClipboardFormatType.OemText:
@@ -62,7 +62,7 @@ namespace MpClipboardHelper {
             if (DataFormats.UnicodeText == nativeFormatName) {
                 return MpClipboardFormatType.UnicodeText;
             }
-            if (MpDataObject.InternalContentFormat == nativeFormatName) {
+            if (MpPortableDataObject.InternalContentFormat == nativeFormatName) {
                 return MpClipboardFormatType.InternalContent;
             }
             throw new Exception("Unknown native format name: " + nativeFormatName);

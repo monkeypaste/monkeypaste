@@ -4,6 +4,7 @@ using System.Text;
 using MonkeyPaste;
 using Xamarin.Forms.PlatformConfiguration;
 using System.Threading.Tasks;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpWpfWrapper : MpINativeInterfaceWrapper {
@@ -21,7 +22,7 @@ namespace MpWpfApp {
         public MpIMainThreadMarshal MainThreadMarshal { get; }
         public MpIStringTools StringTools { get; }
         public MpIOsInfo OsInfo { get; }
-        public MpIClipboardContentDataProvider ClipboardContentDataProvider { get; set; }
+        public MpIPlatformDataObjectHelper DataObjectHelper { get; }
         public MpINativeMessageBox NativeMessageBox { get; }
 
         public MpWpfWrapper() {
@@ -37,6 +38,7 @@ namespace MpWpfApp {
             StringTools = new MpWpfStringTools();
             OsInfo = new MpWpfOsInfo();
             NativeMessageBox = new MpWpfMessageBox();
+            DataObjectHelper = new MpWpfDataObjectHelper();
         }
 
         

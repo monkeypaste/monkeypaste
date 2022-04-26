@@ -285,6 +285,7 @@ namespace MpWpfApp {
             if(ctvm.IsPlaceholder && !ctvm.IsPinned) {
                 return;
             }
+
             rtb.Document = await DecodeContentItem(
                 rtb: rtb,
                 itemGuid: ctvm.HeadItem.CopyItemGuid,
@@ -305,6 +306,11 @@ namespace MpWpfApp {
 
             //wait till full doc is loaded to hook textChanged
             rtb.TextChanged += Rtb_TextChanged;
+
+            var rtb_a = rtb.GetVisualAncestor<AdornerLayer>();
+            if (rtb_a != null) {
+                rtb_a.Update();
+            }
         }
 
         private static void Rtb_Unloaded(object sender, RoutedEventArgs e) {
@@ -444,11 +450,17 @@ namespace MpWpfApp {
         }
 
         private static void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
-            if(MpDragDropManager.IsDragAndDrop) {
+            var rtb = sender as RichTextBox;
+
+            var rtb_a = rtb.GetVisualAncestor<AdornerLayer>();
+            if(rtb_a != null) {
+                rtb_a.Update();
+            }
+
+            if (MpDragDropManager.IsDragAndDrop) {
                 // NOTE during drop rtb will be reinitialized
                 return;
             }
-            var rtb = sender as RichTextBox;
             var ctvm = rtb.DataContext as MpClipTileViewModel;
             if(ctvm.IsPlaceholder) {
                 // BUG I think this event gets called when a tile is dropped and its turned into placeholder
@@ -545,17 +557,14 @@ namespace MpWpfApp {
                 Debugger.Break();
             }
 
-            //if(te.Background == null) {
-            //    te.Background = Brushes.Transparent;
-            //}
-            civm.ItemEditorBackgroundHexColor = te.Background == null ? MpSystemColors.Transparent : te.Background.ToHex();
+            //civm.ItemEditorBackgroundHexColor = te.Background == null ? MpSystemColors.Transparent : te.Background.ToHex();
 
-            MpHelpers.CreateBinding(
-               civm,
-               new PropertyPath(
-                   nameof(civm.ItemBackgroundHexColor)),
-                   te, 
-                   TextElement.BackgroundProperty);
+            //MpHelpers.CreateBinding(
+            //   civm,
+            //   new PropertyPath(
+            //       nameof(civm.ItemBackgroundHexColor)),
+            //       te, 
+            //       TextElement.BackgroundProperty);
         }
 
         private static void UnregisterTextElement(TextElement te) {

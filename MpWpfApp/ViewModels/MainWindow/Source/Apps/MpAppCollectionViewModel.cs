@@ -97,7 +97,7 @@ namespace MpWpfApp {
                 var handle = MpProcessManager.CurrentProcessWindowHandleStackDictionary[uap][0];
                 string appName = MpProcessManager.GetProcessApplicationName(handle);
 
-                var iconStr = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(uap);
+                var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(uap);
                 var icon = await MpIcon.Create(iconStr);
                 var app = await MpApp.Create(uap, appName, icon);
                 al.Add(app);
@@ -112,7 +112,7 @@ namespace MpWpfApp {
 
             if(isUnknown) {
                 MpHelpers.RunOnMainThread(async () => {
-                    var iconStr = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
+                    var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
                     var icon = await MpIcon.Create(iconStr);
                     var app = await MpApp.Create(e.ProcessPath, e.ApplicationName, icon);
 
@@ -148,7 +148,7 @@ namespace MpWpfApp {
                     MpApp app = null;
                     var avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
                     if (avm == null) {
-                        var iconBmpSrc = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath).ToBitmapSource();
+                        var iconBmpSrc = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath).ToBitmapSource();
                         var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
                         app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
                         avm = await CreateAppViewModel(app);

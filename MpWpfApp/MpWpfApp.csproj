@@ -184,7 +184,7 @@
     <Compile Include="Controls\MpDesignerCanvas.cs" />
     <Compile Include="Controls\Adorners\MpNotificationAdorner.cs" />
     <Compile Include="Controls\Adorners\MpContentItemSeperatorAdorner.cs" />
-    <Compile Include="Controls\Adorners\MpDropShapeAdorner.cs" />
+    <Compile Include="Controls\Adorners\MpContentAdorner.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMoveThumb.cs" />
@@ -234,6 +234,8 @@
     <Compile Include="Converters\MpIsNotNullToVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpIsObjectNullConverter.cs" />
     <Compile Include="Converters\MpIsObjectNullFlipConverter.cs" />
+    <Compile Include="Converters\MpMultiBoolAndConverter.cs" />
+    <Compile Include="Converters\MpMultiBoolOrConverter.cs" />
     <Compile Include="Converters\MpObjectToImageSourceOrIconConverter.cs" />
     <Compile Include="Converters\MpItemToItemsSourceConverter.cs" />
     <Compile Include="Converters\MpMultiSelectHoverableToBrushConverter.cs" />

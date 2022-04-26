@@ -31,7 +31,7 @@ namespace MpWpfApp {
         MpShape[] GetDropTargetAdornerShape();
         void ContinueDragOverTarget();
 
-        MpDropShapeAdorner DropLineAdorner { get; set; }
+        MpContentAdorner DropLineAdorner { get; set; }
         Orientation AdornerOrientation { get; }
         void InitAdorner();
         void UpdateAdorner();

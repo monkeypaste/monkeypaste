@@ -82,5 +82,7 @@
     <local:MpDoesFileOrDirectoryExistToVisibilityFlipConverter x:Key="DoesFileOrDirectoryExistToVisibilityFlipConverter" />
     <local:MpIsHexColorBrightToBlackOrWhiteBrushConverter x:Key="IsHexColorBrightToBlackOrWhiteBrushConverter" />
     <local:MpParameterFormatToItemsSourceConverter x:Key="ParameterFormatToItemsSourceConverter" />
+    <local:MpMultiBoolAndConverter x:Key="MultiBoolAndConverter" />
+    <local:MpMultiBoolOrConverter x:Key="MultiBoolOrConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

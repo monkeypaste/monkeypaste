@@ -35,5 +35,4 @@ namespace MpWpfApp {
             throw new NotImplementedException();
         }
     }
-
 }

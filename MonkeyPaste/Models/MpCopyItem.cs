@@ -221,9 +221,9 @@ namespace MonkeyPaste {
             var rci = await Clone(false) as MpCopyItem;
             rci.Id = 0;
             rci.Guid = System.Guid.NewGuid().ToString();
-            string allPlainText = MpNativeWrapper.Services.StringTools.ToPlainText(ItemData);
+            string allPlainText = MpPlatformWrapper.Services.StringTools.ToPlainText(ItemData);
             string selectionPlainText = allPlainText.Substring(plainTextRange.SelectionStart, plainTextRange.SelectionLength);
-            rci.ItemData = MpNativeWrapper.Services.StringTools.ToRichText(selectionPlainText);
+            rci.ItemData = MpPlatformWrapper.Services.StringTools.ToRichText(selectionPlainText);
             if(string.IsNullOrEmpty(CopyItemSourceGuid)) {
                 rci.CopyItemSourceGuid = Guid;
             } else {
@@ -290,7 +290,7 @@ namespace MonkeyPaste {
                 MpCopyItem parentItem = null;
                 var pl = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < pl.Length; i++) {
-                    string iconBase64Str = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(pl[i]);
+                    string iconBase64Str = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(pl[i]);
 
                     var icon = await MpIcon.Create(iconBase64Str);
                     int iconId;

@@ -51,11 +51,6 @@ namespace MpWpfApp {
             BindingContext.IsHovering = false;
         }
 
-        private void ClipTileClipBorder_LostFocus(object sender, RoutedEventArgs e) {
-            if (!BindingContext.IsSelected) {
-                BindingContext.ClearEditing();
-            }
-        }
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if (e.OldValue != null && e.OldValue is MpClipTileViewModel octvm) {
                 octvm.OnUiUpdateRequest -= Rtbcvm_OnUiUpdateRequest;

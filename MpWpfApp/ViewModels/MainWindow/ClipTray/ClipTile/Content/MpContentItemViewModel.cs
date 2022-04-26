@@ -167,18 +167,15 @@ namespace MpWpfApp {
                     return MpSystemColors.White;
                 }
 
-                if(IsHovering) {
-                    if(string.IsNullOrEmpty(CopyItem.ItemColor)) {
+                if (IsHovering &&
+                    ((!Parent.IsContentReadOnly && !IsSelected) || Parent.IsContentReadOnly) &&
+                    Parent.Count > 1) {
+                    if (string.IsNullOrEmpty(CopyItem.ItemColor)) {
                         return MpSystemColors.Yellow;
                     }
                     return MpColorHelpers.GetLighterHexColor(CopyItemHexColor, 0.75);
                 }
-                //if (IsHovering &&
-                //    ((!Parent.IsContentReadOnly && !IsSelected) || Parent.IsContentReadOnly) &&
-                //    Parent.Count > 1) {
-                //    return MpColorHelpers.GetLighterHexColor(CopyItemHexColor, 0.75);
-                //}
-                //return MpSystemColors.White;
+
                 return ItemEditorBackgroundHexColor;
             }
         }

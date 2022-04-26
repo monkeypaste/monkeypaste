@@ -378,6 +378,15 @@
 
         #region Appearance       
 
+        public string CaretBrushHexColor {
+            get {
+                if(IsContentReadOnly) {
+                    return MpSystemColors.Red;
+                }
+                return MpSystemColors.Black;
+            }
+        }
+
         public Size UnformattedAndDecodedContentSize {
             get {
                 if(IsPlaceholder) {
@@ -419,7 +428,7 @@
         public Brush TileBorderBrush {
             get {
                 if(IsResizing) {
-                    return Brushes.MediumVioletRed;
+                    return Brushes.Pink;
                 }
                 if(CanResize) {
                     return Brushes.Orange;
@@ -441,11 +450,6 @@
             }
         }
 
-        public Brush TestBgBrush {
-            get {
-                return IsAnyBusy ? Brushes.HotPink : Brushes.LightBlue;
-            }
-        }
         #endregion
 
         #region State 
@@ -714,7 +718,7 @@
         public event EventHandler OnSyncModels;
 
         public event EventHandler<Point> OnScrollOffsetRequest;
-
+        public event EventHandler<object> OnPastePortableDataObject;
         #endregion
 
         #region Static Builder
@@ -913,6 +917,10 @@
 
         public void RequestScrollOffset(Point p) {
             OnScrollOffsetRequest?.Invoke(this, p);
+        }
+
+        public void RequestPastePortableDataObject(object portableDataObjectOrCopyItem) {
+            OnPastePortableDataObject?.Invoke(this, portableDataObjectOrCopyItem);
         }
 
         #endregion

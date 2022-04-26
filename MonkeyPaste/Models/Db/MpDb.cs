@@ -576,6 +576,7 @@ namespace MonkeyPaste {
             var sh1 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("5dff238e-770e-4665-93f5-419e48326f01"),
                 ShortcutName = "Show Window",
+                ShortcutType = MpShortcutType.ShowMainWindow,
                 RouteType = 2,
                 KeyString = "Control+Shift+D",
                 DefaultKeyString = "Control+Shift+D"
@@ -585,6 +586,7 @@ namespace MonkeyPaste {
             var sh2 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("cb807500-9121-4e41-80d3-8c3682ce90d9"),
                 ShortcutName = "Hide Window",
+                ShortcutType = MpShortcutType.HideMainWindow,
                 RouteType = 1,
                 KeyString = "Escape",
                 DefaultKeyString = "Escape"
@@ -594,6 +596,7 @@ namespace MonkeyPaste {
             var sh3 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("a41aeed8-d4f3-47de-86c5-f9ca296fb103"),
                 ShortcutName = "Append Mode",
+                ShortcutType = MpShortcutType.ToggleAppendMode,
                 RouteType = 2,
                 KeyString = "Control+Shift+A",
                 DefaultKeyString = "Control+Shift+A"
@@ -603,6 +606,7 @@ namespace MonkeyPaste {
             var sh4 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("892bf7d7-ba8e-4db1-b2ca-62b41ff6614c"),
                 ShortcutName = "Auto-Copy Mode",
+                ShortcutType = MpShortcutType.ToggleAutoCopyMode,
                 RouteType = 2,
                 KeyString = "Control+Shift+C",
                 DefaultKeyString = "Control+Shift+C"
@@ -612,6 +616,7 @@ namespace MonkeyPaste {
             var sh5 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("a12c4211-ab1f-4b97-98ff-fbeb514e9a1c"),
                 ShortcutName = "Right-Click Paste Mode",
+                ShortcutType = MpShortcutType.ToggleRightClickPasteMode,
                 RouteType = 2,
                 KeyString = "Control+Shift+R",
                 DefaultKeyString = "Control+Shift+R"
@@ -621,6 +626,7 @@ namespace MonkeyPaste {
             var sh6 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("1d212ca5-fb2a-4962-8f58-24ed9a5d007d"),
                 ShortcutName = "Paste Selected Clip",
+                ShortcutType = MpShortcutType.PasteSelectedItems,
                 RouteType = 1,
                 KeyString = "Enter",
                 DefaultKeyString = "Enter"
@@ -630,6 +636,7 @@ namespace MonkeyPaste {
             var sh7 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("e94ca4f3-4c6e-40dc-8941-c476a81543c7"),
                 ShortcutName = "Delete Selected Clip",
+                ShortcutType = MpShortcutType.DeleteSelectedItems,
                 RouteType = 1,
                 KeyString = "Delete",
                 DefaultKeyString = "Delete"
@@ -639,6 +646,7 @@ namespace MonkeyPaste {
             var sh8 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("7fe24929-6c9e-49c0-a880-2f49780dfb3a"),
                 ShortcutName = "Select Next",
+                ShortcutType = MpShortcutType.SelectNextItem,
                 RouteType = 1,
                 KeyString = "Right",
                 DefaultKeyString = "Right"
@@ -648,6 +656,7 @@ namespace MonkeyPaste {
             var sh9 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("ee657845-f1dc-40cf-848d-6768c0081670"),
                 ShortcutName = "Select Previous",
+                ShortcutType = MpShortcutType.SelectPreviousItem,
                 RouteType = 1,
                 KeyString = "Left",
                 DefaultKeyString = "Left"
@@ -657,6 +666,7 @@ namespace MonkeyPaste {
             var sh10 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("5480f103-eabd-4e40-983c-ebae81645a10"),
                 ShortcutName = "Select All",
+                ShortcutType = MpShortcutType.SelectAll,
                 RouteType = 1,
                 KeyString = "Control+A",
                 DefaultKeyString = "Control+A"
@@ -666,6 +676,7 @@ namespace MonkeyPaste {
             var sh11 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("39a6b8b5-a585-455b-af83-015fd97ac3fa"),
                 ShortcutName = "Invert Selection",
+                ShortcutType = MpShortcutType.InvertSelection,
                 RouteType = 1,
                 KeyString = "Control+Shift+Alt+A",
                 DefaultKeyString = "Control+Shift+Alt+A"
@@ -675,6 +686,7 @@ namespace MonkeyPaste {
             var sh12 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("166abd7e-7295-47f2-bbae-c96c03aa6082"),
                 ShortcutName = "Bring to front",
+                ShortcutType = MpShortcutType.BringSelectedToFront,
                 RouteType = 1,
                 KeyString = "Control+Home",
                 DefaultKeyString = "Control+Home"
@@ -684,6 +696,7 @@ namespace MonkeyPaste {
             var sh13 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("84c11b86-3acc-4d22-b8e9-3bd785446f72"),
                 ShortcutName = "Send to back",
+                ShortcutType = MpShortcutType.SendSelectedToBack,
                 RouteType = 1,
                 KeyString = "Control+End",
                 DefaultKeyString = "Control+End"
@@ -693,6 +706,7 @@ namespace MonkeyPaste {
             var sh14 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("6487f6ff-da0c-475b-a2ae-ef1484233de0"),
                 ShortcutName = "Assign Hotkey",
+                ShortcutType = MpShortcutType.AssignShortcut,
                 RouteType = 1,
                 KeyString = "Control+Shift+H",
                 DefaultKeyString = "Control+Shift+H"
@@ -702,6 +716,7 @@ namespace MonkeyPaste {
             var sh15 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("837e0c20-04b8-4211-ada0-3b4236da0821"),
                 ShortcutName = "Change Color",
+                ShortcutType = MpShortcutType.ChangeColor,
                 RouteType = 1,
                 KeyString = "Control+Shift+Alt+C",
                 DefaultKeyString = "Control+Shift+Alt+C"
@@ -711,6 +726,7 @@ namespace MonkeyPaste {
             var sh16 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("4a567aff-33a8-4a1f-8484-038196812849"),
                 ShortcutName = "Say",
+                ShortcutType = MpShortcutType.SpeakSelectedItem,
                 RouteType = 1,
                 KeyString = "Control+Shift+S",
                 DefaultKeyString = "Control+Shift+S"
@@ -720,6 +736,7 @@ namespace MonkeyPaste {
             var sh17 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("330afa20-25c3-425c-8e18-f1423eda9066"),
                 ShortcutName = "Merge",
+                ShortcutType = MpShortcutType.MergeSelectedItems,
                 RouteType = 1,
                 KeyString = "Control+Shift+M",
                 DefaultKeyString = "Control+Shift+M"
@@ -729,6 +746,7 @@ namespace MonkeyPaste {
             var sh18 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("118a2ca6-7021-47a0-8458-7ebc31094329"),
                 ShortcutName = "Undo",
+                ShortcutType = MpShortcutType.Undo,
                 RouteType = 1,
                 KeyString = "Control+Z",
                 DefaultKeyString = "Control+Z"
@@ -738,6 +756,7 @@ namespace MonkeyPaste {
             var sh19 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("3980efcc-933b-423f-9cad-09e455c6824a"),
                 ShortcutName = "Redo",
+                ShortcutType = MpShortcutType.Redo,
                 RouteType = 1,
                 KeyString = "Control+Y",
                 DefaultKeyString = "Control+Y"
@@ -747,6 +766,7 @@ namespace MonkeyPaste {
             var sh20 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("7a7580d1-4129-432d-a623-2fff0dc21408"),
                 ShortcutName = "Edit",
+                ShortcutType = MpShortcutType.EditContent,
                 RouteType = 1,
                 KeyString = "Control+E",
                 DefaultKeyString = "Control+E"
@@ -756,6 +776,7 @@ namespace MonkeyPaste {
             var sh21 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("085338fb-f297-497a-abb7-eeb7310dc6f3"),
                 ShortcutName = "Rename",
+                ShortcutType = MpShortcutType.EditTitle,
                 RouteType = 1,
                 KeyString = "F2",
                 DefaultKeyString = "F2"
@@ -765,6 +786,7 @@ namespace MonkeyPaste {
             var sh22 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("e22faafd-4313-441a-b361-16910fc7e9d3"),
                 ShortcutName = "Duplicate",
+                ShortcutType = MpShortcutType.Duplicate,
                 RouteType = 1,
                 KeyString = "Control+D",
                 DefaultKeyString = "Control+D"
@@ -774,6 +796,7 @@ namespace MonkeyPaste {
             var sh23 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("4906a01e-b2f7-43f0-af1e-fb99d55c9778"),
                 ShortcutName = "Email",
+                ShortcutType = MpShortcutType.SendToEmail,
                 RouteType = 1,
                 KeyString = "Control+E",
                 DefaultKeyString = "Control+E"
@@ -783,6 +806,7 @@ namespace MonkeyPaste {
             var sh24 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("c7248087-2031-406d-b4ab-a9007fbd4bc4"),
                 ShortcutName = "Qr Code",
+                ShortcutType = MpShortcutType.CreateQrCode,
                 RouteType = 1,
                 KeyString = "Control+Shift+Q",
                 DefaultKeyString = "Control+Shift+Q"
@@ -792,6 +816,7 @@ namespace MonkeyPaste {
             var sh25 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("777367e6-c161-4e93-93e0-9bf12221f7ff"),
                 ShortcutName = "Toggle Append Line Mode",
+                ShortcutType = MpShortcutType.ToggleAppendLineMode,
                 RouteType = 2,
                 KeyString = "Control+Shift+B",
                 DefaultKeyString = "Control+Shift+B"
@@ -801,6 +826,7 @@ namespace MonkeyPaste {
             var sh26 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("97e29b06-0ec4-4c55-a393-8442d7695038"),
                 ShortcutName = "Toggle Is App Paused",
+                ShortcutType = MpShortcutType.ToggleListenToClipboard,
                 RouteType = 2,
                 KeyString = "Control+Shift+P",
                 DefaultKeyString = "Control+Shift+P"
@@ -810,6 +836,7 @@ namespace MonkeyPaste {
             var sh27 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("ee74dd92-d18b-46cf-91b7-3946ab55427c"),
                 ShortcutName = "Copy Selection",
+                ShortcutType = MpShortcutType.CopySelection,
                 RouteType = 1,
                 KeyString = "Control+C",
                 DefaultKeyString = "Control+C"
@@ -819,6 +846,7 @@ namespace MonkeyPaste {
             var sh28 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("ac8abe92-82c3-46fb-9bd5-39d74b100b23"),
                 ShortcutName = "Scroll Home",
+                ShortcutType = MpShortcutType.ScrollToHome,
                 RouteType = 1,
                 KeyString = "Home",
                 DefaultKeyString = "Home"
@@ -828,15 +856,17 @@ namespace MonkeyPaste {
             var sh29 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("ac8abe92-82c3-46fb-9bd5-39d74b100b23"),
                 ShortcutName = "Scroll End",
+                ShortcutType = MpShortcutType.ScrollToEnd,
                 RouteType = 1,
                 KeyString = "End",
                 DefaultKeyString = "End"
             };
-            await AddItemAsync<MpShortcut>(sh28);
+            await AddItemAsync<MpShortcut>(sh29);
 
             var sh30 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("9b0ca09a-5724-4004-98d2-f5ef8ae02055"),
-                ShortcutName = "Scroll Up",
+                ShortcutName = "Increase Size",
+                ShortcutType = MpShortcutType.IncreaseSize,
                 RouteType = 1,
                 KeyString = "Up",
                 DefaultKeyString = "Up"
@@ -845,12 +875,22 @@ namespace MonkeyPaste {
 
             var sh31 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("39a6194e-37e3-4d37-a9f4-254ed83157f2"),
-                ShortcutName = "Scroll Down",
+                ShortcutName = "Decrease Size",
+                ShortcutType = MpShortcutType.DecreaseSize,
                 RouteType = 1,
                 KeyString = "Down",
                 DefaultKeyString = "Down"
             };
             await AddItemAsync<MpShortcut>(sh28);
+
+            var sh32 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("94e81589-fe2f-4e80-8940-ed066f0d9c27"),
+                ShortcutName = "Paste Here",
+                RouteType = 1,
+                KeyString = "Control+V",
+                DefaultKeyString = "Control+V"
+            };
+            await AddItemAsync<MpShortcut>(sh32);
             #endregion
 
             #region Anayltic Items
@@ -928,7 +968,7 @@ namespace MonkeyPaste {
             var thisAppSource = await MpSource.Create(thisApp, null);
             MpPreferences.ThisAppSourceId = thisAppSource.Id;
 
-            var osApp = await MpApp.Create(MpNativeWrapper.Services.OsInfo.OsFileManagerPath, MpNativeWrapper.Services.OsInfo.OsFileManagerName);
+            var osApp = await MpApp.Create(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
             var osAppSource = await MpSource.Create(osApp, null);
             MpPreferences.ThisOsFileManagerSourceId = osAppSource.Id;
 

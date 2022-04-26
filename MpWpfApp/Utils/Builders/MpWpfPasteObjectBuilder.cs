@@ -14,7 +14,7 @@ using System.Windows;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
-    public class MpWpfPasteObjectBuilder : MpIDataObjectBuilder {
+    public class MpWpfPasteObjectB78uilder  {
         public string GetFormat(
             MpClipboardFormatType format, 
             string data, 

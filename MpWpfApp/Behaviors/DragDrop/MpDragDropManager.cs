@@ -17,7 +17,14 @@ namespace MpWpfApp {
 
         private static Point? _mouseDragCheckStartPosition;
 
-        private static List<MpIContentDropTarget> _dropTargets {
+
+        private static DispatcherTimer _timer;
+
+        #endregion
+
+        #region Properties
+
+        public static List<MpIContentDropTarget> DropTargets {
             get {
                 List<MpIContentDropTarget> dtl = new List<MpIContentDropTarget>();
 
@@ -37,12 +44,6 @@ namespace MpWpfApp {
                 return dtl;
             }
         }
-
-        private static DispatcherTimer _timer;
-
-        #endregion
-
-        #region Properties
 
         public static bool IsDraggingFromExternal { get; set; } = false;
         public static object DragData { get; private set; }
@@ -98,7 +99,8 @@ namespace MpWpfApp {
         #region public static Methods
 
         public static void StartDragCheck(object dragData) {
-            if(MpMoveBehavior.IsAnyMoving) {
+            if(MpMoveBehavior.IsAnyMoving || 
+               MpResizeBehavior.IsAnyResizing) {
                 return;
             }
             
@@ -121,9 +123,9 @@ namespace MpWpfApp {
             //}
             //return false;
             DragData = MpWpfDataObjectHelper.Instance.ConvertToSupportedPortableFormats(extDragData);
-            if(DragData != null) {
-                MpConsole.WriteLine((DragData as MpDataObject).ToJson().ToPrettyPrintJson());
-            }
+            //if(DragData != null) {
+            //    MpConsole.WriteLine((DragData as MpPortableDataObject).ToJson().ToPrettyPrintJson());
+            //}
             return DragData != null;
         }
 
@@ -133,7 +135,7 @@ namespace MpWpfApp {
 
         private static MpIContentDropTarget SelectDropTarget(object dragData) {
             MpIContentDropTarget selectedTarget = null;
-            foreach (var dt in _dropTargets.Where(x => x.IsDropEnabled)) {
+            foreach (var dt in DropTargets.Where(x => x.IsDropEnabled)) {
                 if (!dt.IsDragDataValid(MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData)) {
                     continue;
                 }
@@ -239,7 +241,7 @@ namespace MpWpfApp {
             CurDropTarget = null;
             DragData = null;
             _timer.Stop();
-            _dropTargets.ForEach(x => x.Reset());
+            DropTargets.ForEach(x => x.Reset());
 
             MpShortcutCollectionViewModel.Instance.GlobalMouseMove -= GlobalHook_MouseMove;
             MpShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonUp -= GlobalHook_MouseUp;
@@ -275,8 +277,8 @@ namespace MpWpfApp {
         }
 
         private static void _timer_Tick(object sender, EventArgs e) {            
-            _dropTargets.ForEach(x => x.UpdateAdorner());
-            _dropTargets.ForEach(x => x.AutoScrollByMouse());
+            DropTargets.ForEach(x => x.UpdateAdorner());
+            DropTargets.ForEach(x => x.AutoScrollByMouse());
 
             UpdateCursor();
         }
@@ -287,7 +289,7 @@ namespace MpWpfApp {
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.TrayScrollChanged:
                     if(IsCheckingForDrag || IsDragAndDrop) {
-                        _dropTargets.ForEach(x => x.UpdateAdorner());
+                        DropTargets.ForEach(x => x.UpdateAdorner());
                     }
                     
                     break;

@@ -4,35 +4,25 @@ using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Speech.Synthesis;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
-using FFImageLoading.Helpers.Exif;
 using MpProcessHelper;
 using MonkeyPaste.Plugin;
-using Microsoft.Office.Core;
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel : 
         MpViewModelBase, 
         MpISingletonViewModel<MpClipTrayViewModel>, 
         MpIActionComponent, 
-        MpIMenuItemViewModel,
-        MpIClipboardContentDataProvider {
+        MpIMenuItemViewModel {
         #region Private Variables      
 
         //private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -46,8 +36,7 @@ namespace MpWpfApp {
         private int _pageSize = 0;
 
         private Dictionary<int, int> _manualSortOrderLookup = null;
-
-        private bool _isAddingClipboardItem = false;
+                
 
         private MpCopyItem _currentClipboardItem;
 
@@ -149,12 +138,18 @@ namespace MpWpfApp {
                             Header = @"_Copy",
                             IconResourceKey = Application.Current.Resources["CopyIcon"] as string,
                             Command = CopySelectedClipsCommand,
-                            ShortcutType = MpShortcutType.CopySelectedItems
+                            ShortcutType = MpShortcutType.CopySelection
                         },
                         new MpMenuItemViewModel() {
                             Header = @"_Paste",
                             IconResourceKey = Application.Current.Resources["PasteIcon"] as string,
                             Command = PasteSelectedClipsCommand,
+                            ShortcutType = MpShortcutType.PasteSelectedItems
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = @"Paste _Here",
+                            IconResourceKey = Application.Current.Resources["PasteIcon"] as string,
+                            Command = PasteCurrentClipboardIntoSelectedTileCommand,
                             ShortcutType = MpShortcutType.PasteSelectedItems
                         },
                         new MpMenuItemViewModel() {
@@ -409,6 +404,8 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsAddingClipboardItem { get; private set; } = false;
+
         private bool _isPasting = false;
         public bool IsPasting { 
             get {
@@ -613,8 +610,6 @@ namespace MpWpfApp {
             await MpHelpers.RunOnMainThreadAsync(() => {
                 IsBusy = true;
 
-                MpNativeWrapper.Services.ClipboardContentDataProvider = this;
-
                 PropertyChanged += MpClipTrayViewModel_PropertyChanged;
                 Items.CollectionChanged += Items_CollectionChanged;
                 MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
@@ -674,7 +669,7 @@ namespace MpWpfApp {
         #region MpIClipboardContentDataProvider Implementation
 
         public async Task<string> GetClipboardContentData() {
-            while(_isAddingClipboardItem) {
+            while(IsAddingClipboardItem) {
                 try {
                     await Task.Delay(100).TimeoutAfter(TimeSpan.FromMilliseconds(3000));
                 } catch(Exception ex) {
@@ -876,7 +871,7 @@ namespace MpWpfApp {
         }
         
 
-        public void ClipboardChanged(object sender, MpDataObject mpdo) {
+        public void ClipboardChanged(object sender, MpPortableDataObject mpdo) {
             if(MpMainWindowViewModel.Instance.IsMainWindowLoading || IsAppPaused) {
                 return;
             }
@@ -1258,6 +1253,8 @@ namespace MpWpfApp {
                     break;
                 case MpMessageType.ResizeContentCompleted:
                     _oldMainWindowHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
+
+                    //MpDragDropManager.DropTargets.ForEach(x => x.Reset());
                     break;
             }
         }
@@ -1331,8 +1328,8 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task AddItemFromClipboard(MpDataObject cd) {
-            _isAddingClipboardItem = true;
+        private async Task AddItemFromClipboard(MpPortableDataObject cd) {
+            IsAddingClipboardItem = true;
 
             var totalAddSw = new Stopwatch();
             totalAddSw.Start();
@@ -1346,7 +1343,7 @@ namespace MpWpfApp {
             if (newCopyItem == null) {
                 //this occurs if the copy item is not a known format or app init
                 MpConsole.WriteTraceLine("Unable to create copy item from clipboard!");
-                _isAddingClipboardItem = false;
+                IsAddingClipboardItem = false;
                 return;
             }
 
@@ -1429,7 +1426,7 @@ namespace MpWpfApp {
             } else {
                 _currentClipboardItem = newCopyItem;
             }
-            _isAddingClipboardItem = false;
+            IsAddingClipboardItem = false;
 
             OnCopyItemItemAdd?.Invoke(this, newCopyItem);
             totalAddSw.Stop();
@@ -1454,9 +1451,14 @@ namespace MpWpfApp {
                     PinnedItems.Remove(pctvm);
                     resultTile = Items.FirstOrDefault(x => x.QueryOffsetIdx == pctvm.QueryOffsetIdx);
                 } else {
-                    resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x=>x.CopyItem).ToList());
-                    if(resultTile.QueryOffsetIdx != pctvm.QueryOffsetIdx) {
-                        Debugger.Break();
+                    if(pctvm.QueryOffsetIdx >= 0) {
+                        // only recreate tiles that are already in the tray (they won't be if new)
+                        resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x => x.CopyItem).ToList());
+                        if (resultTile.QueryOffsetIdx != pctvm.QueryOffsetIdx) {
+                            Debugger.Break();
+                        }
+                    } else {
+                        resultTile = pctvm;
                     }
                     PinnedItems.Add(resultTile);
                 }
@@ -1536,8 +1538,8 @@ namespace MpWpfApp {
             _appendModeCopyItem != null);
 
         public ICommand AddNewItemsCommand => new RelayCommand(
-            () => {
-                //IsBusy = true;
+            async () => {
+                IsBusy = MpMainWindowViewModel.Instance.IsMainWindowOpen;
 
                 //if(MpDataModelProvider.QueryInfo.TagId == MpTag.AllTagId) {
                 //    //instead of handling all unique cases manual insert new items in head of current query if which may not be 
@@ -1558,22 +1560,30 @@ namespace MpWpfApp {
                 //    Items.Insert(0, nctvm);
                 //}
 
-                MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                //MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+
+                foreach (var ci in _newModels) {
+                    var nctvm = await CreateClipTileViewModel(new List<MpCopyItem>() { ci });
+                    while(nctvm.IsAnyBusy) {
+                        await Task.Delay(100);
+                    }
+                    ToggleTileIsPinnedCommand.Execute(nctvm);
+                }
 
                 _newModels.Clear();
 
-                //IsBusy = false;
+                IsBusy = false;
 
                 //using tray scroll changed so tile drop behaviors update their drop rects
-                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
+                //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
             },
             () => {
                 if (_newModels.Count == 0) {
                     return false;
                 }
-                if(!string.IsNullOrEmpty(MpSearchBoxViewModel.Instance.LastSearchText)) {
-                    return false;
-                }
+                //if(!string.IsNullOrEmpty(MpSearchBoxViewModel.Instance.LastSearchText)) {
+                //    return false;
+                //}
                 //if (MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
                 //    return false;
                 //}
@@ -2028,7 +2038,7 @@ namespace MpWpfApp {
                 //var ido = await GetDataObjectFromSelectedClips(false, false);
                 //MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(ido);
                 var ido = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(PrimaryItem.PrimaryItem.CopyItem, false, null);
-                System.Windows.Forms.Clipboard.SetDataObject(MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(ido));
+                MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformFormat(ido);
             });
 
         public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(
@@ -2073,6 +2083,20 @@ namespace MpWpfApp {
                     !MpPreferences.IsTrialExpired;
             });
 
+        public ICommand PasteCurrentClipboardIntoSelectedTileCommand => new RelayCommand(
+            async() => {
+                while (IsAddingClipboardItem) {
+                    // wait in case tray is still processing the data
+                    await Task.Delay(100);
+                }
+
+                // NOTE even though re-creating paste object here the copy item
+                // builder should recognize it as a duplicate and use original (just created)
+                var wpfdo = MpPlatformWrapper.Services.DataObjectHelper.GetDataObjectWrapper();
+                var mpdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToSupportedPortableFormats(wpfdo);
+
+                PrimaryItem.RequestPastePortableDataObject(mpdo);
+            }, PrimaryItem != null && !PrimaryItem.IsPlaceholder);
 
         public ICommand PasteCopyItemByIdCommand => new RelayCommand<object>(
             async (args) => {

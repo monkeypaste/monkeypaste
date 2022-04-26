@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +20,12 @@ namespace MonkeyPaste {
         MpIMainThreadMarshal MainThreadMarshal { get; }
         MpIStringTools StringTools { get; }
         MpIOsInfo OsInfo { get; }
-        MpIClipboardContentDataProvider ClipboardContentDataProvider { get; set; }
+        MpIPlatformDataObjectHelper DataObjectHelper { get; }
         MpINativeMessageBox NativeMessageBox { get; }
     }
 
 
-    public static class MpNativeWrapper {
+    public static class MpPlatformWrapper {
         public static MpINativeInterfaceWrapper Services { get; private set; }
 
         public static void Init(MpINativeInterfaceWrapper niw) {

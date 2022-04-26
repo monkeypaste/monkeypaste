@@ -272,6 +272,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+        public ICommand IncreaseSizeCommand => new RelayCommand(
+             () => {
+                 IsResizing = true;
+                 var mw = Application.Current.MainWindow as MpMainWindow;
+                 mw.MainWindowResizeBehvior.Resize(0, 50);
+                 IsResizing = false;
+             });
+
+        public ICommand DecreaseSizeCommand => new RelayCommand(
+             () => {
+                 IsResizing = true;
+                 var mw = Application.Current.MainWindow as MpMainWindow;
+                 mw.MainWindowResizeBehvior.Resize(0, -50);
+                 IsResizing = false;
+             });
 
         private RelayCommand _undoCommand;
         public ICommand UndoCommand {
@@ -357,13 +372,13 @@ namespace MpWpfApp {
                     return;
                 }
 
-                MpDataObject pasteDataObject = null;
+                MpPortableDataObject pasteDataObject = null;
                 bool pasteSelected = false;
                 if (args != null) {
                     if (args is bool) {
                         pasteSelected = (bool)args;
-                    } else if (args is MpDataObject) {
-                        pasteDataObject = (MpDataObject)args;
+                    } else if (args is MpPortableDataObject) {
+                        pasteDataObject = (MpPortableDataObject)args;
                     }
                 }
 

@@ -21,7 +21,7 @@ namespace MpWpfApp {
 
         #region Public Methods
         
-        public static async Task<MpCopyItem> CreateFromDataObject(MpDataObject mpdo) {
+        public static async Task<MpCopyItem> CreateFromDataObject(MpPortableDataObject mpdo) {
             try {                
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
@@ -40,7 +40,7 @@ namespace MpWpfApp {
                 } else {
                     processPath = MpProcessManager.GetProcessPath(processHandle);
                     appName = MpProcessManager.GetProcessApplicationName(processHandle);
-                    processIconImg64 = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(processPath);
+                    processIconImg64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(processPath);
                 }
                 
                 string itemData = null;

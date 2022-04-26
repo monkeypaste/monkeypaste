@@ -184,7 +184,7 @@ namespace MpWpfApp {
 
             List<MpCopyItem> dragModels;
             
-            if(dragData is MpDataObject mpdo) {
+            if(dragData is MpPortableDataObject mpdo) {
                 var ci = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
                 dragModels = new List<MpCopyItem>() { ci };
             } else {

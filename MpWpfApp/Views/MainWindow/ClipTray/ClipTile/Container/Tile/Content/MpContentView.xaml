@@ -1,69 +1,77 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpContentView"
-                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     mc:Ignorable="d"
-                     xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpClipTileViewModel"
-                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
-                                                      IsDesignTimeCreatable=False}"
-                     d:DesignHeight="450"
-                     d:DesignWidth="800">
+﻿<local:MpUserControl
+    x:Class="MpWpfApp.MpContentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:local="clr-namespace:MpWpfApp"
+    x:TypeArguments="local:MpClipTileViewModel"
+    d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
+                                     IsDesignTimeCreatable=False}"
+    d:DesignHeight="450"
+    d:DesignWidth="800">
     <i:Interaction.Behaviors>
         <local:MpContentViewDropBehavior x:Name="ContentViewDropBehavior" />
         <!--<local:MpRtbHighlightBehavior x:Name="RtbHighlightBehavior" />-->
     </i:Interaction.Behaviors>
 
     <AdornerDecorator>
-        <local:MpRichTextBox x:Name="Rtb"
-                             DataContext="{Binding}"
-                             Width="Auto"
-                             MinWidth="100"
-                             Height="Auto"
-                             Padding="5,0,5,0"
-                             HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             HorizontalContentAlignment="Stretch"
-                             VerticalContentAlignment="Stretch"
-                             local:MpMergedDocumentRtfExtension.HeadContentItemViewModel="{Binding HeadItem}"
-                             local:MpMergedDocumentRtfExtension.IsSelected="{Binding IsSelected,
-                                                                                     Mode=TwoWay}"
-                             local:MpMergedDocumentRtfExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
-                             local:MpTextSelectionRangeExtension.IsEnabled="True"
-                             local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
-                             AutoWordSelection="False"
-                             Background="Linen"
-                             Foreground="Black" 
-                             BorderThickness="0"
-                             local:MpIsFocusedExtension.IsEnabled="True"
-                             local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
-                                                                            Mode=TwoWay}"
-                             LostFocus="Rtb_LostFocus"
-                             IsDocumentEnabled="True"
-                             IsEnabled="True"
-                             IsInactiveSelectionHighlightEnabled="True"
-                             IsReadOnly="{Binding IsContentReadOnly}"
-                             IsUndoEnabled="True"
-                             Loaded="Rtb_Loaded"
-                             PreviewKeyUp="Rtb_PreviewKeyUp"
-                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                             DataContextChanged="Rtb_DataContextChanged"
-                             Unloaded="Rtb_Unloaded"
-                             SelectionChanged="Rtb_SelectionChanged"
-                             SizeChanged="Rtb_SizeChanged"
-                             MouseEnter="Rtb_MouseEnter"
-                             MouseMove="Rtb_MouseMove"
-                             AllowDrop="True"
-                             PreviewMouseWheel="Rtb_PreviewMouseWheel"
-                             PreviewMouseLeftButtonDown="Rtb_PreviewMouseLeftButtonDown"
-                             PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
-                             MouseLeave="Rtb_MouseLeave">
+        <local:MpRichTextBox
+            x:Name="Rtb"
+            DataContext="{Binding}"
+            Width="Auto"
+            MinWidth="100"
+            Height="Auto"
+            Padding="5,0,5,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            local:MpMergedDocumentRtfExtension.HeadContentItemViewModel="{Binding HeadItem}"
+            local:MpMergedDocumentRtfExtension.IsSelected="{Binding IsSelected,
+                                                                    Mode=TwoWay}"
+            local:MpMergedDocumentRtfExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
+            local:MpTextSelectionRangeExtension.IsEnabled="True"
+            local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
+            AutoWordSelection="False"
+            Background="Linen"
+            Foreground="Black"
+            BorderThickness="0"
+            CaretBrush="{Binding CaretBrushHexColor,
+                                 Converter={StaticResource StringHexToBrushConverter}}"
+            local:MpIsFocusedExtension.IsEnabled="True"
+            local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
+                                                           Mode=TwoWay}"
+            LostFocus="Rtb_LostFocus"
+            IsDocumentEnabled="True"
+            IsEnabled="True"
+            IsReadOnlyCaretVisible="{Binding IsSubSelectionEnabled}"
+            IsReadOnly="{Binding IsContentReadOnly}"
+            IsInactiveSelectionHighlightEnabled="True"
+            IsUndoEnabled="True"
+            Loaded="Rtb_Loaded"
+            PreviewKeyDown="Rtb_PreviewKeyDown"
+            PreviewKeyUp="Rtb_PreviewKeyUp"
+            ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+            DataContextChanged="Rtb_DataContextChanged"
+            Unloaded="Rtb_Unloaded"
+            SelectionChanged="Rtb_SelectionChanged"
+            SizeChanged="Rtb_SizeChanged"
+            MouseEnter="Rtb_MouseEnter"
+            MouseMove="Rtb_MouseMove"
+            AllowDrop="True"
+            TextChanged="Rtb_TextChanged"
+            PreviewMouseWheel="Rtb_PreviewMouseWheel"
+            PreviewMouseLeftButtonDown="Rtb_PreviewMouseLeftButtonDown"
+            PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
+            MouseLeave="Rtb_MouseLeave">
             <local:MpRichTextBox.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                 Color="Blue" />
+                <SolidColorBrush
+                    x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                    Color="Blue" />
             </local:MpRichTextBox.Resources>
         </local:MpRichTextBox>
     </AdornerDecorator>

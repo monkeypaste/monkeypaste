@@ -24,13 +24,13 @@ namespace MpWpfApp {
             var next_line_start_tp = tp.GetLineStartPosition(count + 1);
             if (next_line_start_tp == null) {
                 // tp is DocumentEnd pointer
-                return tp;
+                return tp.DocumentEnd;
             }
             
             var line_end_tp = next_line_start_tp.GetNextInsertionPosition(LogicalDirection.Backward);
             if(line_end_tp == null) {
                 // doc is empty and tp is both Document Start/End
-                return tp;
+                return tp.DocumentEnd;
             }
             return line_end_tp;
         }
@@ -60,7 +60,11 @@ namespace MpWpfApp {
         }
 
         public static void FitDocToRtb(this RichTextBox rtb) {
-            bool isReadOnly = rtb.IsReadOnly;
+            if(!rtb.IsLoaded) {
+                return;            
+            }
+
+            bool isReadOnly = (rtb.DataContext as MpClipTileViewModel).IsContentReadOnly;
             bool isDropping = false;
             Size ds = new Size();
 
@@ -115,7 +119,6 @@ namespace MpWpfApp {
                     rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 }
             } else {
-
                 rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
             }

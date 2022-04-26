@@ -16,7 +16,10 @@ using System.Windows.Controls;
 using System.Drawing.Imaging;
 
 namespace MpWpfApp {
-    public class MpWpfDataObjectHelper : MpIExternalPasteHandler, MpIErrorHandler, MpIDataObjectBuilder, MpIClipboardInterop {
+    public class MpWpfDataObjectHelper : 
+        MpIExternalPasteHandler, 
+        MpIErrorHandler, 
+        MpIPlatformDataObjectHelper {
         #region Private Variables
 
         private Queue<MpPasteItem> _pasteQueue = new Queue<MpPasteItem>();
@@ -52,36 +55,34 @@ namespace MpWpfApp {
             }).FireAndForgetSafeAsync(this);
         }
 
-        public string GetFormat(MpClipboardFormatType format, string data, string fileNameWithoutExtension = "", string directory = "", string textFormat = ".rtf", string imageFormat = ".png", bool isTemporary = false) {
-            return new MpWpfPasteObjectBuilder().GetFormat(format, data, fileNameWithoutExtension, directory, textFormat, imageFormat, isTemporary);
+        public MpPortableDataObject ConvertNativeClipboardObjectToPortableFormat(object nativeClipboardObject) {
+            return ConvertWpfDataObjectToPortableFormat(nativeClipboardObject as IDataObject);
         }
 
-        public string GetFormat(MpClipboardFormatType format, string[] data, string[] fileNameWithoutExtension = null, string directory = "", string textFormat = ".rtf", string imageFormat = ".png", bool isTemporary = false, bool isCopy = false) {
-            return new MpWpfPasteObjectBuilder().GetFormat(format, data, fileNameWithoutExtension, directory, textFormat, imageFormat, isTemporary, isCopy);
-        }
-
-        public async Task PasteDataObject(MpDataObject mpdo, IntPtr handle, bool finishWithEnterKey = false) {
+        public async Task PasteDataObject(MpPortableDataObject mpdo, IntPtr handle, bool finishWithEnterKey = false) {
             var pi = new MpProcessInfo() {
                 Handle = handle
             };
             await PasteDataObject(mpdo, pi, finishWithEnterKey);
         }
 
+        public object GetDataObjectWrapper() {
+            var result = Clipboard.GetDataObject();
+            return result;
+        }
+
         public async Task PasteCopyItem(MpCopyItem ci, MpProcessInfo pi, bool finishWithEnterKey = false) {
-            MpDataObject cido = await GetCopyItemDataObjectAsync(ci, false, pi.Handle);
+            MpPortableDataObject cido = await GetCopyItemDataObjectAsync(ci, false, pi.Handle);
             await PasteDataObject(cido, pi, finishWithEnterKey);
         }
 
-        public async Task PasteDataObject(MpDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
+        public async Task PasteDataObject(MpPortableDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
             var pasteItem = new MpPasteItem() {
                 DataObject = mpdo,
                 ProcessInfo = pi,
                 FinishWithEnterKey = finishWithEnterKey
             };
             _pasteQueue.Enqueue(pasteItem);
-
-            MpConsole.WriteLine("Attempting to paste data object: ");
-            MpConsole.WriteLine(mpdo.ToJson().ToPrettyPrintJson());
 
             if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 MpMainWindowViewModel.Instance.IsMainWindowLocked = false;
@@ -99,7 +100,7 @@ namespace MpWpfApp {
             if(wpfdo == null) {
                 return false;
             }
-            foreach (var sdf in MpDataObject.SupportedFormats) {
+            foreach (var sdf in MpPortableDataObject.SupportedFormats) {
                 string wpfFormatName = GetWpfFormatName(sdf);
                 if(wpfdo.GetDataPresent(wpfFormatName)) {
                     return true;
@@ -109,20 +110,20 @@ namespace MpWpfApp {
         }
 
         #region MpIClipboardInterop Implementation
-        public MpDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
+        public MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
             return ConvertWpfDataObjectToPortableFormat(nativeDataObj as IDataObject, retryCount);
         }
 
-        public object ConvertToNativeFormat(MpDataObject portableObj) {
+        public object ConvertToPlatformFormat(MpPortableDataObject portableObj) {
             throw new NotImplementedException();
         }
 
-        public void SetDataObjectWrapper(MpDataObject portableObj) {
+        public void SetDataObjectWrapper(MpPortableDataObject portableObj) {
             throw new NotImplementedException();
         }
         #endregion
 
-        private MpDataObject ConvertWpfDataObjectToPortableFormat(IDataObject ido, int retryCount = 5) {
+        private MpPortableDataObject ConvertWpfDataObjectToPortableFormat(IDataObject ido, int retryCount = 5) {
             
             if (retryCount == 0) {
                 MpConsole.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
@@ -131,10 +132,10 @@ namespace MpWpfApp {
             if(ido == null) {
                 return null;
             }
-            var ndo = new MpDataObject();
+            var ndo = new MpPortableDataObject();
             try {
                 bool autoConvert = false;
-                foreach (MpClipboardFormatType supportedType in MpDataObject.SupportedFormats) {
+                foreach (MpClipboardFormatType supportedType in MpPortableDataObject.SupportedFormats) {
                     if(supportedType == MpClipboardFormatType.UnicodeText) {
                         int b = 5;
                     }
@@ -186,17 +187,20 @@ namespace MpWpfApp {
             }
 
             if(targetHandleObj == null) {
-                dobj.SetData(MpDataObject.InternalContentFormat, ci);
+                dobj.SetData(MpPortableDataObject.InternalContentFormat, ci);
             }            
 
             return dobj;
         }
 
-        public async Task<MpDataObject> GetCopyItemDataObjectAsync(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {
+        public async Task<MpPortableDataObject> GetCopyItemDataObjectAsync(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {
+            // NOTE this is NOT part of data object interface (which is in MonkeyPaste.Plugin) because it needs MpCopyItem
+            // and am trying to isolate data object for pluggability
+
             IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : (IntPtr)targetHandleObj;
             bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
 
-            MpDataObject d = new MpDataObject();
+            MpPortableDataObject d = new MpPortableDataObject();
             string rtf = string.Empty.ToRichText();
             string pt = string.Empty;
             var sctfl = new List<string>();
@@ -345,7 +349,7 @@ namespace MpWpfApp {
 
                 if(processInfo != null && processInfo.Handle != IntPtr.Zero) {
 
-                    var ido = (System.Windows.Forms.IDataObject)MpClipboardHelper.MpClipboardManager.InteropService.ConvertToNativeFormat(pasteItem.DataObject);
+                    var ido = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformFormat(pasteItem.DataObject);
 
                     System.Windows.Forms.Clipboard.SetDataObject(ido);
                     Thread.Sleep(100);
@@ -440,7 +444,7 @@ namespace MpWpfApp {
                 case MpClipboardFormatType.Csv:
                     return DataFormats.CommaSeparatedValue;
                 case MpClipboardFormatType.InternalContent:
-                    return MpDataObject.InternalContentFormat;
+                    return MpPortableDataObject.InternalContentFormat;
                 default:
                     throw new Exception("Unknown portable format: " + portableType.ToString());
             }
@@ -449,7 +453,7 @@ namespace MpWpfApp {
         #endregion
 
         internal class MpPasteItem {
-            internal MpDataObject DataObject { get; set; }
+            internal MpPortableDataObject DataObject { get; set; }
             internal MpProcessInfo ProcessInfo { get; set; }
             internal bool FinishWithEnterKey { get; set; }
         }

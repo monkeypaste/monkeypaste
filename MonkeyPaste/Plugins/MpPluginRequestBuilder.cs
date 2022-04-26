@@ -52,7 +52,7 @@ namespace MonkeyPaste {
                     curVal = curVal.ToFile();
                     break;
                 default:
-                    curVal = MpNativeWrapper.Services.StringTools.ToPlainText(curVal);
+                    curVal = MpPlatformWrapper.Services.StringTools.ToPlainText(curVal);
                     break;
             }
             return curVal;

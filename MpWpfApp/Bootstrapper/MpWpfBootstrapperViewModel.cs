@@ -63,8 +63,7 @@ namespace MpWpfApp {
 
                     new MpBootstrappedItem(typeof(MpClipboardHelper.MpClipboardManager),MpWpfDataObjectHelper.Instance),
 
-                    new MpBootstrappedItem(typeof(MpWpfDataObjectHelper)),
-                    new MpBootstrappedItem(typeof(MpDataObject), new MpWpfPasteObjectBuilder())
+                    new MpBootstrappedItem(typeof(MpWpfDataObjectHelper))
                     //new MpBootstrappedItem(typeof(MpMouseHook))
                 });
         }

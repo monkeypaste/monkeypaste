@@ -30,7 +30,6 @@
                         DataContextChanged="ClipTileClipBorder_DataContextChanged"
                         MouseEnter="ClipTileClipBorder_MouseEnter"
                         MouseLeave="ClipTileClipBorder_MouseLeave"
-                        LostFocus="ClipTileClipBorder_LostFocus"
                         Focusable="False"
                         SnapsToDevicePixels="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"

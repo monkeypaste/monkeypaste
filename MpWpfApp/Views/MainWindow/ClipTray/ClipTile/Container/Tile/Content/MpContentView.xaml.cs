@@ -92,23 +92,6 @@ namespace MpWpfApp {
 
             if (BindingContext != null) {
 
-                if (BindingContext.IsPlaceholder) {
-                    return;
-                }
-
-                //if (rtbivm.IsNewAndFirstLoad) {
-                //    //force new items to have left alignment
-                //    Rtb.CaretPosition = Rtb.Document.ContentStart;
-                //    Rtb.Document.TextAlignment = TextAlignment.Left;
-                //    rtbivm.IsNewAndFirstLoad = false;
-                //}
-                ScrollToHome();
-
-                //MpHelpers.RunOnMainThread(async () => {
-                //    await CreateHyperlinksAsync(CTS.Token);
-
-                //});
-
                 MpMessenger.Register<MpMessageType>(
                     BindingContext.Parent,
                     ReceivedClipTileViewModelMessage,
@@ -118,10 +101,20 @@ namespace MpWpfApp {
                     (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
                     ReceivedMainWindowResizeBehviorMessage);
 
+                RegisterViewModelRequests();
 
+                if (BindingContext.IsPlaceholder) {
+                    return;
+                }
+                ScrollToHome();
+
+
+
+                
                 //AttachAllBehaviors();
             }
         }
+
 
         private void Rtb_Unloaded(object sender, RoutedEventArgs e) {
             //DetachAllBehaviors();
@@ -149,13 +142,12 @@ namespace MpWpfApp {
                             ReceivedMainWindowResizeBehviorMessage);
                 }
             }
-            
-            //BindingContext.Dispose();
         }
 
         private void RegisterViewModelRequests() {
             BindingContext.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
             BindingContext.OnScrollOffsetRequest += BindingContext_OnScrollOffsetRequest;
+            BindingContext.OnPastePortableDataObject += BindingContext_OnPastePortableDataObject;
             //BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
             //BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
             //BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
@@ -165,10 +157,16 @@ namespace MpWpfApp {
         private void UnregisterViewModelRequests() {
             BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
             BindingContext.OnScrollOffsetRequest -= BindingContext_OnScrollOffsetRequest;
+            BindingContext.OnPastePortableDataObject -= BindingContext_OnPastePortableDataObject;
             //BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
             //BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
             //.OnSyncModels -= Rtbivm_OnSyncModels;
             //BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
+        }
+
+
+        private void BindingContext_OnPastePortableDataObject(object sender, object portableDataObjectOrCopyItem) {
+            ContentViewDropBehavior.Paste(BindingContext, e).FireAndForgetSafeAsync(BindingContext);
         }
 
         private void BindingContext_OnScrollOffsetRequest(object sender, Point e) {
@@ -192,11 +190,23 @@ namespace MpWpfApp {
             double new_y_offset = Math.Max(0, Math.Min(sv.VerticalOffset + e.Y, vsb.Maximum));
             //MpConsole.WriteLine("clamped delta: " + new Point(new_x_offset, new_y_offset));
 
-            sv.ScrollToHorizontalOffset(new_x_offset);
-            sv.ScrollToVerticalOffset(new_y_offset);
+            ScrollToPoint(new Point(new_x_offset, new_y_offset));
+
+        }
+
+        public void ScrollToPoint(Point p) {
+            var sv = Rtb.GetVisualDescendent<ScrollViewer>();
+            if (sv == null) {
+                Debugger.Break();
+                return;
+            }
+
+            sv.ScrollToHorizontalOffset(p.X);
+            sv.ScrollToVerticalOffset(p.Y);
 
             sv.InvalidateScrollInfo();
         }
+
         private void Rtb_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
             if(BindingContext.IsContentReadOnly && 
                !BindingContext.IsSubSelectionEnabled) {
@@ -240,23 +250,6 @@ namespace MpWpfApp {
                 ctvm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
             }
         }
-
-        private void Ncivm_OnMergeRequest(object sender, EventArgs e) {
-            //MpHelpers.RunOnMainThread(async () => {
-            //    RtbViewDropBehavior.Attach(this);
-
-            //    RtbViewDropBehavior.DropIdx = 1;
-
-            //    var mergeModels = MpClipTrayViewModel.Instance.PersistentSelectedModels;
-
-            //    mergeModels.Remove(BindingContext.CopyItem);
-
-            //    await RtbViewDropBehavior.Drop(false, mergeModels);
-
-            //    RtbViewDropBehavior.DropIdx = -1;
-            //});
-        }
-
         private void Rtb_SizeChanged(object sender, SizeChangedEventArgs e) {
             if (BindingContext != null) {
                 if (e.HeightChanged && 
@@ -271,7 +264,8 @@ namespace MpWpfApp {
                     }
                 }
 
-                if(BindingContext.IsSelected) {
+                if(BindingContext.IsSelected &&
+                   !BindingContext.IsTitleReadOnly) {
                     Rtb.Focus();
                 }
             }
@@ -304,44 +298,35 @@ namespace MpWpfApp {
         }        
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            //var rtbvm = DataContext as MpContentItemViewModel;
-            //if (rtbvm.IsEditingContent && Rtb.IsFocused) {
-            //    var thl = Rtb.Selection.Start.Parent.FindParentOfType<MpTemplateHyperlink>();
-            //    bool canAddTemplate = true;
-            //    if (thl != null) {
-            //        canAddTemplate = false;
-            //    }
-            //    var plv = this.GetVisualAncestor<MpContentListView>();
-            //    if (plv != null) {
-            //        var et = plv.GetVisualDescendent<MpRtbEditToolbarView>();
-            //        if (et != null) {
-            //            et.AddTemplateButton.IsEnabled = canAddTemplate;
-            //        }
-            //    }
-            //}
-            
             if(MpDragDropManager.IsDragAndDrop) {
                 return;
             }
 
-            if(!Rtb.Selection.IsEmpty && !BindingContext.IsSubSelectionEnabled) {
-                Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);
-            }
-        }
+            //if(!Rtb.Selection.IsEmpty && !BindingContext.IsSubSelectionEnabled) {
+            //    // NOTE don't 
+            //    Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);
+            //}
 
-        private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
-            if (!BindingContext.IsContentReadOnly && e.Changes.Count > 0) {
-                //SizeContainerToContent();
-            }
+            //
         }
 
         private void Rtb_LostFocus(object sender, RoutedEventArgs e) {
             if (MpDragDropManager.IsDragAndDrop) {
                 return;
             }
-            if (!BindingContext.IsSelected && !BindingContext.IsSubSelectionEnabled && !Rtb.Selection.IsEmpty) {
-                Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);
+            if (!BindingContext.IsSelected && 
+                !BindingContext.IsSubSelectionEnabled && !Rtb.Selection.IsEmpty) {
+                //Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);
+                //ScrollToHome();
                 MpCursor.UnsetCursor(BindingContext);
+            }
+        }
+        private void Rtb_PreviewKeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+                if(!BindingContext.IsSelected) {
+                    BindingContext.IsSelected = true;
+                }
+                MpClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand.Execute(null);
             }
         }
 
@@ -358,10 +343,15 @@ namespace MpWpfApp {
             BindingContext.IsSelected = true;
             MpIsFocusedExtension.SetIsFocused(Rtb, true);
 
-            if (e.ClickCount >= 2 && BindingContext.IsContentReadOnly) {
+            if (e.ClickCount >= 2 && 
+                BindingContext.IsContentReadOnly &&
+                !BindingContext.IsSubSelectionEnabled) {
+                // NOTE only do select all when enabling otherwise default (select word)
                 BindingContext.IsSubSelectionEnabled = true;
                 MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
-                Rtb.SelectAll();
+                //Rtb.SelectAll();
+                //ScrollToHome();
+                UpdateAdorners();
                 return;
             }
             if (!BindingContext.IsTitleReadOnly ||
@@ -373,7 +363,7 @@ namespace MpWpfApp {
                 return;
             }
             if(BindingContext.IsSubSelectionEnabled) {
-                // NOTE onlyh check for drag when there is selected text AND
+                // NOTE only check for drag when there is selected text AND
                 // drag is from somewhere in the selection range.
                 // If mouse down isn't in selection range reset selection to down position
                 if(Rtb.Selection.IsEmpty) {
@@ -381,8 +371,8 @@ namespace MpWpfApp {
                     return;
                 }
                 if(!Rtb.Selection.IsPointInRange(e.GetPosition(Rtb))) {
-                    var mptp = Rtb.GetPositionFromPoint(e.GetPosition(Rtb),true);
-                    Rtb.Selection.Select(mptp, mptp);
+                    //var mptp = Rtb.GetPositionFromPoint(e.GetPosition(Rtb),true);
+                    //Rtb.Selection.Select(mptp, mptp);
                     e.Handled = false;
                     return;
                 }
@@ -425,34 +415,15 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Merging
-
         public void ScrollToHome() {
             Rtb.ScrollToHome();
-            InitCaretAdorner();
+            ScrollToPoint(new Point());
         }
 
         public void ScrollToEnd() {
             Rtb.ScrollToEnd();
-            InitCaretAdorner();
         }
 
-        public void InitCaretAdorner() {
-            //if(CaretAdorner == null) {
-            //    CaretAdorner = new MpContentItemCaretAdorner(Rtb);
-            //    CaretAdornerLayer = AdornerLayer.GetAdornerLayer(Rtb);
-            //    CaretAdornerLayer.Add(CaretAdorner);
-            //}
-            //CaretAdorner.Test.Clear();
-
-            //HomeRect = Rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
-
-            //EndRect = Rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
-
-            //CaretAdornerLayer.Update();
-        }
-
-        #endregion
 
         #region Template/Hyperlinks
 
@@ -851,6 +822,21 @@ namespace MpWpfApp {
             } else {
                 MpCursor.UnsetCursor(BindingContext);
             }
+        }
+
+        private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
+            UpdateAdorners();
+        }
+
+        private void UpdateAdorners() {
+            if (Rtb == null) {
+                return;
+            }
+            var rtb_a = AdornerLayer.GetAdornerLayer(Rtb);
+            if (rtb_a == null) {
+                return;
+            }
+            rtb_a.Update();
         }
     }
 }

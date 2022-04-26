@@ -120,7 +120,7 @@ namespace MpWpfApp {
             MpMainWindowViewModel.Instance.IsShowingDialog = false;
             return shortcutKeyString;
         }
-                public void UpdateInputGestures(ItemsControl cm) {
+        public void UpdateInputGestures(ItemsControl cm) {
             foreach (var item in cm.Items) {
                 if (item is MenuItem mi) {
                     int tagNum =  mi.Tag == null ? -1 : Convert.ToInt32(mi.Tag.ToString());
@@ -237,7 +237,9 @@ namespace MpWpfApp {
 
                     #endregion
 
-                    #region Local
+                    #region Application
+
+                    
 
                     #endregion
 
@@ -286,6 +288,9 @@ namespace MpWpfApp {
                             break;
                         case MpShortcutType.PasteSelectedItems:
                             shortcutCommand = MpClipTrayViewModel.Instance.PasteSelectedClipsCommand;
+                            break;
+                        case MpShortcutType.PasteHere:
+                            shortcutCommand = MpClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand;
                             break;
                         case MpShortcutType.DeleteSelectedItems:
                             shortcutCommand = MpClipTrayViewModel.Instance.DeleteSelectedClipsCommand;
@@ -347,7 +352,7 @@ namespace MpWpfApp {
                         case MpShortcutType.ToggleListenToClipboard:
                             shortcutCommand = MpClipTrayViewModel.Instance.ToggleIsAppPausedCommand;
                             break;
-                        case MpShortcutType.CopySelectedItems:
+                        case MpShortcutType.CopySelection:
                             shortcutCommand = MpClipTrayViewModel.Instance.CopySelectedClipsCommand;
                             break;
                         case MpShortcutType.ScrollToHome:
@@ -356,11 +361,11 @@ namespace MpWpfApp {
                         case MpShortcutType.ScrollToEnd:
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollToEndCommand;
                             break;
-                        case MpShortcutType.ScrollUp:
-                            shortcutCommand = MpClipTrayViewModel.Instance.ScrollUpCommand;
+                        case MpShortcutType.IncreaseSize:
+                            shortcutCommand = MpMainWindowViewModel.Instance.IncreaseSizeCommand;
                             break;
-                        case MpShortcutType.ScrollDown:
-                            shortcutCommand = MpClipTrayViewModel.Instance.ScrollDownCommand;
+                        case MpShortcutType.DecreaseSize:
+                            shortcutCommand = MpMainWindowViewModel.Instance.DecreaseSizeCommand;
                             break;
                         default:
                             if (sc.ShortcutType == MpShortcutType.PasteCopyItem) {

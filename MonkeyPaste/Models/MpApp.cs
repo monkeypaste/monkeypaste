@@ -137,7 +137,7 @@ namespace MonkeyPaste {
             }
 
             if(icon == null) {
-                string iconImgBase64 = MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath);
+                string iconImgBase64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath);
 
                 icon = await MpIcon.Create(
                     iconImgBase64: iconImgBase64,

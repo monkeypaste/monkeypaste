@@ -226,6 +226,23 @@ namespace MpWpfApp {
             return dragData != null;
         }
 
+        public async Task Paste(MpITextSelectionRange tsr, object pasteData) {
+            if(AssociatedObject == null) {
+                return;
+            }
+            var rtb = AssociatedObject.Rtb;
+            if(rtb == null) {
+                return;
+            }
+            // paste into selection range 
+            if(pasteData is MpPortableDataObject pdo) {
+                if (tsr.SelectionLength > 0) {
+                    rtb.Selection.Text = string.Empty;
+                }
+                DropIdx = tsr.SelectionStart;
+                await Drop(false, pdo);
+            }
+        }
         public override async Task Drop(bool isCopy, object dragData) {
             if (AssociatedObject == null) {
                 return;
@@ -235,6 +252,9 @@ namespace MpWpfApp {
             // BUG storing dropIdx because somehow it gets lost after calling base
             int rtfDropIdx = DropIdx;
 
+            if(ctvm.HeadItem == null) {
+                return;
+            }
             string rootGuid = ctvm.HeadItem.CopyItemGuid;
 
             bool isNewRoot = rtfDropIdx <= 0;
@@ -242,7 +262,7 @@ namespace MpWpfApp {
             await base.Drop(isCopy, dragData);
 
             if(dctvm == null) {
-                if(dragData is MpDataObject mpdo) {
+                if(dragData is MpPortableDataObject mpdo) {
                     // from external source
                     var exci = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
                     if(isNewRoot) {
@@ -329,7 +349,7 @@ namespace MpWpfApp {
             MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(rootGuid).IsSelected = true;
         }
 
-        private async Task DropFromExternal(MpCopyItem dropItem, int rtfDropIdx) {
+        public async Task DropFromExternal(MpCopyItem dropItem, int rtfDropIdx) {
             await Task.Delay(1);
             var rtb = AssociatedObject.Rtb;
 
