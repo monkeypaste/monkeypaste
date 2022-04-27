@@ -190,7 +190,7 @@ namespace MpWpfApp {
                 };
                 bool result = dlg.ShowDialog() == true;
 
-                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+                MpMainWindowViewModel.Instance.IsShowingDialog = false;
                 if (result) {
                     FileSystemPath = dlg.ResultPath;
                     await ReEnable();

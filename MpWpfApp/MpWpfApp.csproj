@@ -262,6 +262,7 @@
     <Compile Include="Converters\MpSourceIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringHexToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringHexToWinMediaColorConverter.cs" />
+    <Compile Include="Converters\MpStringPathToFileOrFolderNameConverter.cs" />
     <Compile Include="Converters\MpStringResourceToImageBrushConverter.cs" />
     <Compile Include="Converters\MpStringToDateTimeConverter.cs" />
     <Compile Include="Converters\MpStringToSizeConverter.cs" />

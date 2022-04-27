@@ -142,6 +142,8 @@ namespace MpWpfApp {
                 range.Save(stream, DataFormats.XamlPackage);
                 TextRange range2 = new TextRange(clonedDoc.ContentEnd, clonedDoc.ContentEnd);
                 range2.Load(stream, DataFormats.XamlPackage);
+
+                
                 return clonedDoc;
             }
         }
@@ -210,10 +212,10 @@ namespace MpWpfApp {
         }
 
         
-        public static void LoadImage(this TextRange tr, string base64Str, Size? docSize = null) {
+        public static InlineUIContainer LoadImage(this TextRange tr, string base64Str, Size? docSize = null) {
             if (!base64Str.IsStringBase64()) {
                 Debugger.Break();
-                return;
+                return null;
             }
 
             BitmapSource bmpSrc = base64Str.ToBitmapSource();
@@ -238,7 +240,7 @@ namespace MpWpfApp {
             };
 
             tr.Text = string.Empty;
-            new InlineUIContainer(vb,tr.Start);
+            return new InlineUIContainer(vb,tr.Start);
         }
         
         public static FlowDocument ToImageDocument(this string base64Str, Size? docSize = null) {
@@ -282,7 +284,7 @@ namespace MpWpfApp {
             return fd;
         }
 
-        public static void LoadFileItem(this TextRange tr, string path, int iconId = 0, double iconSize = 16) {
+        public static Paragraph LoadFileItem(this TextRange tr, string path, int iconId = 0, double iconSize = 16) {
             string iconBase64 = string.Empty;
 
             if (iconId > 0) {
@@ -353,7 +355,7 @@ namespace MpWpfApp {
             //fd.Blocks.Clear();
             //fd.Blocks.Add(p);
 
-            return;
+            return p;
         }
 
         public static FlowDocument ToFilePathDocument(this string path, int iconId = 0, double iconSize = 16) {

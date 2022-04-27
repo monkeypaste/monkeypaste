@@ -268,6 +268,7 @@ namespace MpWpfApp {
             AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_MouseDown;
             AssociatedObject.PreviewMouseLeftButtonUp += AssociatedObject_MouseLeftButtonUp;
             AssociatedObject.PreviewMouseMove += AssociatedObject_MouseMove;
+            AssociatedObject.MouseEnter += AssociatedObject_MouseEnter;
             AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
 
             if (DoubleClickFrameworkElement != null) {
@@ -286,6 +287,7 @@ namespace MpWpfApp {
                 AssociatedObject.PreviewMouseLeftButtonDown -= AssociatedObject_MouseDown;
                 AssociatedObject.PreviewMouseLeftButtonUp -= AssociatedObject_MouseLeftButtonUp;
                 AssociatedObject.PreviewMouseMove -= AssociatedObject_MouseMove;
+                AssociatedObject.MouseEnter -= AssociatedObject_MouseEnter;
                 AssociatedObject.MouseLeave -= AssociatedObject_MouseLeave;
             }
 
@@ -379,6 +381,14 @@ namespace MpWpfApp {
                 //    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
                 //}
             }
+        }
+        private void AssociatedObject_MouseEnter(object sender, MouseEventArgs e) {
+            if (MpDragDropManager.IsDragAndDrop ||
+                !IsEnabled ||
+                IsAnyResizing) {
+                return;
+            }
+            CanResize = true;
         }
 
         private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {            

@@ -229,12 +229,42 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Protected Methods
+
+        protected override async Task Enable() {
+            await base.Enable();
+        }
+
+        protected async Task ShowUserEnableChangeNotification() {
+            string enabledText = IsEnabled.HasValue && IsEnabled.Value ?
+                                    "ENABLED" :
+                                    "DISABLED";
+            string notificationText = $"Action '{FullName}' is now  {enabledText}";
+            MpMainWindowViewModel.Instance.IsShowingDialog = MpMainWindowViewModel.Instance.IsMainWindowOpen;
+
+            await MpNotificationCollectionViewModel.Instance.ShowMessage(
+                title: "ACTION STATUS",
+                msg: notificationText);
+
+
+            MpMainWindowViewModel.Instance.IsShowingDialog = false;
+        }
+        #endregion
+
         #region Private Methods
 
         private void MpTriggerActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
+                    break;
+                case nameof(IsEnabled):
+                    if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                        return;
+                    }                    
+                    MpHelpers.RunOnMainThread(async () => {
+                        await ShowUserEnableChangeNotification();
+                    });
                     break;
             }
         }

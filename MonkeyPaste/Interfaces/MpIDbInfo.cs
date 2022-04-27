@@ -8,4 +8,5 @@ namespace MonkeyPaste {
         string GetDbPassword();
         string GetDbName();
     }
+
 }

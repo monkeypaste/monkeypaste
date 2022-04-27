@@ -423,8 +423,6 @@
             }
         }
 
-        [MpDependsOnParent("PrimaryItem","SelectedItems")]
-        [MpDependsOnSibling("IsSelected")]
         public Brush TileBorderBrush {
             get {
                 if(IsResizing) {
@@ -770,6 +768,7 @@
 
             if (items != null && items.Count > 0) {
                 for (int i = 0; i < items.Count; i++) {
+                    // Composite Sanity Check Start
                     if(i > 0 && string.IsNullOrEmpty(items[i].RootCopyItemGuid)) {
                         MpConsole.WriteLine("warning, initializing tile w/ head item " + items[0].CopyItemSourceGuid + " fragment item " + items[i].Guid + " did not have root guid set, fixing...");
                         items[i].RootCopyItemGuid = items[0].Guid;
@@ -785,8 +784,9 @@
                         items[i].CompositeSortOrderIdx = i;
                         await items[i].WriteToDatabaseAsync();
                     }
+                    // Composite Sanity Check End
 
-                     var civm = await CreateContentItemViewModel(items[i]);
+                    var civm = await CreateContentItemViewModel(items[i]);
                     Items.Add(civm);
                 }
                 OnPropertyChanged(nameof(QueryOffsetIdx)); 

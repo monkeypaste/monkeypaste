@@ -43,7 +43,7 @@
                    HorizontalAlignment="Left"
                    Margin="10,5,10,0"
                    TextWrapping="Wrap"
-                   FontSize="12"
+                   FontSize="14"
                    FontWeight="SemiBold"
                    Background="Transparent"
                    Focusable="True"

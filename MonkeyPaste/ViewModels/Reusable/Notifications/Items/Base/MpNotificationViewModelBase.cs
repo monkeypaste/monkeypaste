@@ -25,7 +25,9 @@ namespace MonkeyPaste {
         LoadComplete,
         Help,
         AnalyzerUpdated,
-        Message
+        Message,
+        UserTriggerEnabled,
+        UserTriggerDisabled
     }
 
     public enum MpNotificationExceptionSeverityType {
@@ -54,7 +56,7 @@ namespace MonkeyPaste {
                 if (ExceptionType != MpNotificationExceptionSeverityType.None) {
                     return MpSystemColors.royalblue;
                 }
-                return MpSystemColors.Black;
+                return MpSystemColors.White;
             }
         }
 

@@ -36,7 +36,7 @@
             local:MpTextSelectionRangeExtension.IsEnabled="True"
             local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
             AutoWordSelection="False"
-            Background="Linen"
+            Background="White"
             Foreground="Black"
             BorderThickness="0"
             CaretBrush="{Binding CaretBrushHexColor,

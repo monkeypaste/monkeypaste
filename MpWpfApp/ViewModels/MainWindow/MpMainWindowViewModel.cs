@@ -86,6 +86,8 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsMainWindowLocked_silent { get; set; } = false;
+
         public string LogText { get; set; }
 
         public BitmapSource Ss { get; set; }
@@ -447,7 +449,6 @@ namespace MpWpfApp {
                       Application.Current.MainWindow.Visibility == Visibility.Visible &&
                       !IsShowingDialog &&
                       !IsResizing &&
-                      !IsShowingDialog &&
                       !IsMainWindowClosing &&
                       IsMainWindowOpen &&
                       !IsMainWindowOpening) || args != null);

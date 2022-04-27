@@ -84,5 +84,6 @@
     <local:MpParameterFormatToItemsSourceConverter x:Key="ParameterFormatToItemsSourceConverter" />
     <local:MpMultiBoolAndConverter x:Key="MultiBoolAndConverter" />
     <local:MpMultiBoolOrConverter x:Key="MultiBoolOrConverter" />
+    <local:MpStringPathToFileOrFolderNameConverter x:Key="StringPathToFileOrFolderNameConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

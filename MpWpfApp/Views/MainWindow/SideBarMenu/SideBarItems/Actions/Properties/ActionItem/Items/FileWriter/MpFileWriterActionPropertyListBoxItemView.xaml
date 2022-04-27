@@ -47,7 +47,8 @@
                                VerticalAlignment="Center" />
                     <TextBlock Visibility="{Binding FileSystemPath,
                                                     Converter={StaticResource IsNotNullToVisibilityConverter}}"
-                               Text="{Binding FileSystemPath}"
+                               Text="{Binding FileSystemPath, Converter={StaticResource StringPathToFileOrFolderNameConverter}}"
+                               ToolTip="{Binding FileSystemPath}"
                                TextAlignment="Right"
                                VerticalAlignment="Center" />
                 </Grid>

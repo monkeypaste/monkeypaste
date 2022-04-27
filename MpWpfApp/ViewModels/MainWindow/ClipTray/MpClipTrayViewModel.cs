@@ -1602,7 +1602,7 @@ namespace MpWpfApp {
 
                 var sw = new Stopwatch();
                 sw.Start();
-                bool isDragDropRequery = offsetIdxArg != null;
+                bool isInPlaceRequery = offsetIdxArg != null;
                 int offsetIdx = offsetIdxArg == null ? 0 : (int)offsetIdxArg;
 
                 IsBusy = true;
@@ -1664,7 +1664,7 @@ namespace MpWpfApp {
                         //Items.Add(await CreateClipTileViewModel(cil[i]));
 
 
-                        if (isDragDropRequery) {
+                        if (isInPlaceRequery) {
                             RestoreSelectionState(Items[i]);
                         }
                     }

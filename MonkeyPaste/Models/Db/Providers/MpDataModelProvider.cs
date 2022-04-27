@@ -1232,5 +1232,18 @@ namespace MonkeyPaste {
             MpConsole.WriteLine($"QueryItem {copyItemId} was inserted at idx [{newIdx}]");            
         }
 
+        public static void SwapQueryItem(int queryOffsetIdx, int copyItemId) {
+            if (queryOffsetIdx < 0) {
+                throw new Exception($"Idx must be >= 0, was [{queryOffsetIdx}]");
+            }
+            if (queryOffsetIdx >= AllFetchedAndSortedCopyItemIds.Count) {
+                throw new Exception($"Idx must be < item count ({AllFetchedAndSortedCopyItemIds.Count}), idx was [{queryOffsetIdx}]");
+            }
+            int oldItemId = AllFetchedAndSortedCopyItemIds[queryOffsetIdx];
+            AllFetchedAndSortedCopyItemIds[queryOffsetIdx] = copyItemId;
+
+            MpConsole.WriteLine($"QueryItem {oldItemId} was swapped for {copyItemId} at idx [{queryOffsetIdx}]");
+        }
+
     }
 }

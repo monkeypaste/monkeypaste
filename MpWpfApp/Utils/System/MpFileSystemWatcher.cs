@@ -81,15 +81,15 @@ namespace MpWpfApp {
                 throw new Exception("Watcher already exists");
             }
 
-            //watcher.NotifyFilter = watcher.NotifyFilter
-            //                     //| NotifyFilters.Attributes
-            //                     //| NotifyFilters.CreationTime
-            //                     | NotifyFilters.DirectoryName
-            //                     | NotifyFilters.FileName
-            //                     //| NotifyFilters.LastAccess
-            //                     | NotifyFilters.LastWrite;
-            //                     //| NotifyFilters.Security
-            //                     //| NotifyFilters.Size;
+            watcher.NotifyFilter = watcher.NotifyFilter
+                                 //| NotifyFilters.Attributes
+                                 //| NotifyFilters.CreationTime
+                                 | NotifyFilters.DirectoryName
+                                 | NotifyFilters.FileName
+                                 //| NotifyFilters.LastAccess
+                                 | NotifyFilters.LastWrite; 
+            //| NotifyFilters.Security
+            //| NotifyFilters.Size;
 
             watcher.Changed += OnChanged;
             watcher.Created += OnCreated;
@@ -108,7 +108,7 @@ namespace MpWpfApp {
             if(Directory.Exists(path)) {
                 watcher.Filter = "*";
                 watcher.IncludeSubdirectories = watcher.IncludeSubdirectories;
-                //watcher.EnableRaisingEvents = true;
+                watcher.EnableRaisingEvents = true;
             }
         }
 

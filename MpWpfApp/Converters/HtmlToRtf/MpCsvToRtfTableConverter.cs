@@ -120,11 +120,12 @@ namespace MpWpfApp {
             return outStr;
         }
 
-        public static void LoadTable(this TextRange tr, string csv) {
+        public static Table LoadTable(this TextRange tr, string csv) {
             tr.Text = string.Empty;
             var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
             var table = CreateTable(csv);
             fd.Blocks.InsertAfter(tr.Start.Paragraph, table);
+            return table;
         }
 
         public static FlowDocument GetFlowDocument(string str) {  

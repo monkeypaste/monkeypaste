@@ -166,7 +166,7 @@ namespace MpWpfApp {
 
 
         private void BindingContext_OnPastePortableDataObject(object sender, object portableDataObjectOrCopyItem) {
-            ContentViewDropBehavior.Paste(BindingContext, e).FireAndForgetSafeAsync(BindingContext);
+            ContentViewDropBehavior.Paste(BindingContext, portableDataObjectOrCopyItem).FireAndForgetSafeAsync(BindingContext);
         }
 
         private void BindingContext_OnScrollOffsetRequest(object sender, Point e) {
@@ -197,7 +197,7 @@ namespace MpWpfApp {
         public void ScrollToPoint(Point p) {
             var sv = Rtb.GetVisualDescendent<ScrollViewer>();
             if (sv == null) {
-                Debugger.Break();
+                MpConsole.WriteTraceLine("Warning, scroll viewer not loaded yet. This may need to be async");
                 return;
             }
 
@@ -396,6 +396,10 @@ namespace MpWpfApp {
         }
 
         private void Rtbivm_OnUiUpdateRequest(object sender, EventArgs e) {
+            if (!Rtb.IsLoaded) {
+                // likely during startup
+                return;
+            }
             ScrollToHome();
             Rtb.UpdateLayout();
         }

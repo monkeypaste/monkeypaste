@@ -21,8 +21,7 @@
         Loaded="StackPanel_Loaded"
         Orientation="Horizontal"
         SizeChanged="StackPanel_SizeChanged">
-        <local:MpClipTileView DataContext="{Binding}">
-        </local:MpClipTileView>
+        <local:MpClipTileView DataContext="{Binding}" />
         <!--  Resize Region  -->
         <Rectangle
             x:Name="ResizeRectangle"
@@ -42,17 +41,17 @@
                     MaxWidth="{Binding MaxTileWidth,
                                        Source={x:Static local:MpClipTrayViewModel.Instance}}"
                     AffectsContent="True"
+                    CanResize="{Binding CanResize,
+                                        Mode=TwoWay,
+                                        UpdateSourceTrigger=PropertyChanged,
+                                        NotifyOnSourceUpdated=True,
+                                        NotifyOnTargetUpdated=True}"
                     BoundElement="{Binding ElementName=ClipTileView}"
                     BoundWidth="{Binding TileBorderWidth,
                                          Mode=TwoWay,
                                          UpdateSourceTrigger=PropertyChanged,
                                          NotifyOnSourceUpdated=True,
                                          NotifyOnTargetUpdated=True}"
-                    CanResize="{Binding CanResize,
-                                        Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged,
-                                        NotifyOnSourceUpdated=True,
-                                        NotifyOnTargetUpdated=True}"
                     DefaultWidth="{Binding ClipTileDefaultMinSize,
                                            Source={x:Static local:MpMeasurements.Instance}}"
                     DoubleClickFrameworkElement="{Binding ElementName=ResizeRectangle}"
