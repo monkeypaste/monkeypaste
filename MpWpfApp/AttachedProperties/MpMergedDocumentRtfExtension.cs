@@ -234,6 +234,10 @@ namespace MpWpfApp {
                                         .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
 
             var allStrayElements = allTextElements.Where(x => x.Tag == null).ToList();
+            if(allStrayElements.Count > 0) {
+                // shouldn't happen, somethings isn't tagged in drop
+                Debugger.Break();
+            }
             var tagGroups = allTextElements
                                 .GroupBy(x => x.Tag as MpCopyItem)
                                 .ToDictionary(t => t.Key, te => te.ToList());
@@ -312,6 +316,8 @@ namespace MpWpfApp {
             if(ctvm == null) {
                 return;
             }
+            MpConsole.WriteLine("Loading " + MpClipTrayViewModel.Instance.Items.IndexOf(ctvm));
+
             while(ctvm.IsAnyBusy) {
                 // wait till ctvm finishes initializing 
                 await Task.Delay(100);
@@ -367,6 +373,7 @@ namespace MpWpfApp {
             List<MpCopyItem> items, 
             FlowDocument rootDocument, 
             bool decodeAsRootDocument = false) {
+
             MpCopyItem ci = items.FirstOrDefault(x=>x.Guid == itemGuid);
 
             if (ci == default) {
@@ -378,10 +385,6 @@ namespace MpWpfApp {
                     MpConsole.WriteLine("but " + itemGuid + " was found");
                 }
             }
-
-            //using (var stream = new MemoryStream(Encoding.Default.GetBytes(ci.ItemData))) {
-
-            //}
 
             // convert itemData to flow document and gather child fragment guid ranges and their content
             FlowDocument fd = ci.ItemData.ToFlowDocument(ci.IconId);
@@ -618,6 +621,9 @@ namespace MpWpfApp {
         }
 
         private static void Te_MouseLeave(object sender, MouseEventArgs e) {
+            if(MpDragDropManager.IsDragAndDrop) {
+                return;
+            }
             var te = sender as TextElement;
             if (te == null) {
                 return;
@@ -635,6 +641,9 @@ namespace MpWpfApp {
         }
 
         private static void Te_MouseEnter(object sender, MouseEventArgs e) {
+            if (MpDragDropManager.IsDragAndDrop) {
+                return;
+            }
             var te = sender as TextElement;
             if(te == null) {
                 return;
@@ -653,16 +662,6 @@ namespace MpWpfApp {
             if(civm.CompositeParentCopyItemId > 0) {
                 Debugger.Break();
             }
-            //te.MouseEnter += (s, e) => {
-            //    te.Background = Brushes.Yellow;
-            //    //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.Guid == childGuid)).Items.FirstOrDefault(x => x.Guid == childGuid);
-            //    //civm.IsHovering = true;
-            //};
-            //te.MouseLeave += (s, e) => {
-            //    te.Background = origBrush;
-            //    //var civm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.Guid == childGuid)).Items.FirstOrDefault(x => x.Guid == childGuid);
-            //    //civm.IsHovering = false;
-            //};
         }
 
         #endregion

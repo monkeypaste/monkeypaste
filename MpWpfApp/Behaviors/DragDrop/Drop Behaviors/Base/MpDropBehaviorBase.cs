@@ -121,6 +121,7 @@ namespace MpWpfApp {
 
         protected virtual void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
             switch(msg) {
+                case MpMessageType.TrayScrollChanged:
                 case MpMessageType.JumpToIdxCompleted:
                     DropIdx = -1;
                     RefreshDropRects();

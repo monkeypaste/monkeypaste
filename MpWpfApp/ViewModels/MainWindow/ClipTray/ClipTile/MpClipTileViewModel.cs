@@ -1009,6 +1009,20 @@
             }
         }
 
+        public async Task<MpCopyItem> GetSelectionAsModel(bool isCopy) {
+            if(IsPlaceholder) {
+                return null;
+            }
+            if(SelectionLength == 0) {
+                if(isCopy) {
+                    var cloneItem = await HeadItem.CopyItem.Clone(true) as MpCopyItem;
+                    return cloneItem;
+                }
+                return HeadItem.CopyItem;
+            }
+            return HeadItem.CopyItem;
+        }
+
         public void DeleteTempFiles() {
             foreach (var f in _tempFileList) {
                 if (File.Exists(f)) {

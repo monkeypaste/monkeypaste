@@ -30,7 +30,7 @@ namespace MpWpfApp {
         public string NewOriginalText;
         public Hyperlink LastEditedHyperlink;
 
-
+        private bool _isNew = true;
         public ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
 
         public MpContentView() : base() {
@@ -54,7 +54,7 @@ namespace MpWpfApp {
 
         private void AttachAllBehaviors() {
             //RtbHighlightBehavior.Attach(this);
-            //ContentViewDropBehavior.Attach(this);
+             ContentViewDropBehavior.Attach(this);
         }
 
         private void DetachAllBehaviors() {
@@ -86,32 +86,40 @@ namespace MpWpfApp {
         #region Event Handlers
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
-            MpMessenger.Register<MpMessageType>(
-                nameof(MpDragDropManager),
-                ReceivedDragDropManagerMessage);
+            
 
             if (BindingContext != null) {
+                if(_isNew) {
+                    _isNew = false;
 
-                MpMessenger.Register<MpMessageType>(
-                    BindingContext.Parent,
-                    ReceivedClipTileViewModelMessage,
-                    BindingContext.Parent);
+                    MpMessenger.Register<MpMessageType>(
+                        nameof(MpDragDropManager),
+                        ReceivedDragDropManagerMessage);
 
-                MpMessenger.Register<MpMessageType>(
-                    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
-                    ReceivedMainWindowResizeBehviorMessage);
+                    MpMessenger.Register<MpMessageType>(
+                        BindingContext.Parent,
+                        ReceivedClipTileViewModelMessage,
+                        BindingContext.Parent);
 
-                RegisterViewModelRequests();
+                    MpMessenger.Register<MpMessageType>(
+                        (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
+                        ReceivedMainWindowResizeBehviorMessage);
 
-                if (BindingContext.IsPlaceholder) {
-                    return;
+                    RegisterViewModelRequests();
+
+                    if (BindingContext.IsPlaceholder) {
+                        return;
+                    }
+                } else {
+                    AttachAllBehaviors();
                 }
-                ScrollToHome();
+                
+                ScrollToHome(); 
 
 
 
                 
-                //AttachAllBehaviors();
+                 //
             }
         }
 

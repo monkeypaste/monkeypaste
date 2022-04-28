@@ -55,9 +55,11 @@ namespace MpWpfApp {
                 var lbi = ClipTray.GetListBoxItem(e.Position.Index);
                 if(lbi != null) {
                     var cttv = lbi.GetVisualDescendent<MpClipTileTitleView>();
-                    if(cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
-                        MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
-                        MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                    if(cttv != null) {
+                        if(cttv.ClipTileTitleMarqueeCanvas != null) {
+                            MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                            MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                        }
                     }
                 }
             }

@@ -33,6 +33,7 @@ namespace MpWpfApp {
         public override FrameworkElement AdornedElement => AssociatedObject;
         public override Orientation AdornerOrientation => Orientation.Horizontal;
 
+        
         public override bool IsDropEnabled { get; set; } = true;
 
         public override UIElement RelativeToElement {
@@ -44,6 +45,11 @@ namespace MpWpfApp {
         public override MpCursorType MoveCursor => MpCursorType.ContentMove;
         public override MpCursorType CopyCursor => MpCursorType.ContentCopy;
 
+        protected override void OnLoad() {
+            IsDebugEnabled = false;
+            base.OnLoad();
+
+        }
         protected override void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ResizingMainWindowComplete:

@@ -72,6 +72,8 @@ namespace MpWpfApp {
 
         public static bool IsDragAndDrop { get; private set; }
 
+        public static bool IsPerformingDrop { get; private set; }
+
         public static bool IsCheckingForDrag { get; private set; } = false;
 
 
@@ -167,72 +169,75 @@ namespace MpWpfApp {
         }
 
         private static void GlobalHook_MouseMove(object sender, Point mp) {
+            if(IsPerformingDrop) {
+                // NOTE added this state to try to fix DropIdx from clearing during drop                
+                return;
+            }
             if(IsDraggingFromExternal && !MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
                 IsDraggingFromExternal = false;
             }
-            //MpHelpers.RunOnMainThread(() => {
-                // NOTE is not on main thread from external drag
-                if (!IsCheckingForDrag && !IsDragAndDrop) {
-                    Reset();
-                    return;
+            // NOTE is not on main thread from external drag
+            if (!IsCheckingForDrag && !IsDragAndDrop) {
+                Reset();
+                return;
+            }
+            bool isLeftMouseButtonDown = MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown;
+            if (!isLeftMouseButtonDown || !_mouseDragCheckStartPosition.HasValue) {
+                // this is a sanity check since global event handlers are needed and 
+                // probably something isn't releasing mouse capture
+                Reset();
+                return;
+            }
+            //MpConsole.WriteLine("In DragDrop mouse move " + MpShortcutCollectionViewModel.Instance.GlobalMouseLocation);
+
+            Vector diff = mp - _mouseDragCheckStartPosition.Value;
+
+            if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragAndDrop) {
+                if (!IsDragAndDrop) {
+                    IsDragAndDrop = true;
+                    _timer.Start();
+                    MpShortcutCollectionViewModel.Instance.GlobalEscKeyPressed += GlobalEscKey_Pressed;
+                    MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
                 }
-                bool isLeftMouseButtonDown = MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown;
-                if (!isLeftMouseButtonDown || !_mouseDragCheckStartPosition.HasValue) {
-                    // this is a sanity check since global event handlers are needed and 
-                    // probably something isn't releasing mouse capture
-                    Reset();
-                    return;
+
+                var dropTarget = SelectDropTarget(DragData);
+
+                if (dropTarget != CurDropTarget) {
+                    CurDropTarget?.CancelDrop();
+                    CurDropTarget = dropTarget;
+                    CurDropTarget?.StartDrop();
                 }
-                //MpConsole.WriteLine("In DragDrop mouse move " + MpShortcutCollectionViewModel.Instance.GlobalMouseLocation);
 
-                Vector diff = mp - _mouseDragCheckStartPosition.Value;
+                CurDropTarget?.ContinueDragOverTarget();
 
-                if (diff.Length >= MINIMUM_DRAG_DISTANCE || IsDragAndDrop) {
-                    if (!IsDragAndDrop) {
-                        IsDragAndDrop = true;
-                        _timer.Start();
-                        MpShortcutCollectionViewModel.Instance.GlobalEscKeyPressed += GlobalEscKey_Pressed;
-                        MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
-                    }
-
-                    var dropTarget = SelectDropTarget(DragData);
-
-                    if (dropTarget != CurDropTarget) {
-                        CurDropTarget?.CancelDrop();
-                        CurDropTarget = dropTarget;
-                        CurDropTarget?.StartDrop();
-                    }
-
-                    CurDropTarget?.ContinueDragOverTarget();
-
-                }
-            //});
+            }
         }
 
-        private static async Task PerformDrop(object dragData) {            
-            //await MpHelpers.RunOnMainThreadAsync(async() => {
-                if (CurDropTarget != null) {
-                    await CurDropTarget?.Drop(
-                            MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
-                            dragData);
+        private static async Task PerformDrop(object dragData) {
+            if (CurDropTarget != null) {
+                IsPerformingDrop = true;
 
-                    bool wasExternalDrop = CurDropTarget is MpExternalDropBehavior;
+                await CurDropTarget?.Drop(
+                        MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
+                        dragData);
 
-                    if (wasExternalDrop) {
-                        Application.Current.MainWindow.Activate();
-                        Application.Current.MainWindow.Focus();
-                        Application.Current.MainWindow.Topmost = true;
+                bool wasExternalDrop = CurDropTarget is MpExternalDropBehavior;
 
-                        MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
-                        Application.Current.MainWindow.Top = 0;
-                    }
+                if (wasExternalDrop) {
+                    Application.Current.MainWindow.Activate();
+                    Application.Current.MainWindow.Focus();
+                    Application.Current.MainWindow.Topmost = true;
+
+                    MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                    Application.Current.MainWindow.Top = 0;
                 }
 
-                MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
+                IsPerformingDrop = false;
+            }
 
-                Reset();
-            //});
+            MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
 
+            Reset();
         }
         private static void Reset() {
             IsCheckingForDrag = IsDragAndDrop = IsDraggingFromExternal = false;

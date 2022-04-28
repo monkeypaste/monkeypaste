@@ -108,11 +108,15 @@ namespace MpWpfApp {
 
             var rtb = AssociatedObject.Rtb;
             var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+
+            var tsv = Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().PagingScrollViewer;
+            
+            var tsv_mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
             var mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
             Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth, rtb.ActualHeight);
             if (!rtb_rect.Contains(mp)) {
                 Reset();
-                // MpConsole.WriteLine("rtb mp (no hit): " + mp);
+                MpConsole.WriteLine("rtb mp (no hit): " + mp);
                 return -1;
             }
             var mptp = rtb.GetPositionFromPoint(mp, true);
@@ -243,14 +247,20 @@ namespace MpWpfApp {
                 await Drop(false, pdo);
             }
         }
+
         public override async Task Drop(bool isCopy, object dragData) {
-            if (AssociatedObject == null) {
+            if (AssociatedObject == null || DropIdx < 0) {
                 return;
             }
+            var rtb = AssociatedObject.Rtb;
             var dctvm = dragData as MpClipTileViewModel;
             var ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
             // BUG storing dropIdx because somehow it gets lost after calling base
             int rtfDropIdx = DropIdx;
+
+            bool pre = _isPreBlockDrop;
+            bool post = _isPostBlockDrop;
+            bool split = _isSplitBlockDrop;
 
             if(ctvm.HeadItem == null) {
                 return;
@@ -261,89 +271,132 @@ namespace MpWpfApp {
 
             await base.Drop(isCopy, dragData);
 
-            if(dctvm == null) {
-                if(dragData is MpPortableDataObject mpdo) {
+            MpCopyItem dropItem = null;
+            if (dctvm == null) {
+                if (dragData is MpPortableDataObject mpdo) {
                     // from external source
-                    var exci = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
-                    if(isNewRoot) {
-                        rootGuid = exci.Guid;
-                    }
-                    await DropFromExternal(exci, rtfDropIdx);
-                    //return;
-                } 
+                    dropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                }
+            } else {
+                //find drag content view
+                var dctv = Application.Current.MainWindow
+                                .GetVisualDescendents<MpContentView>()
+                                .FirstOrDefault(x => x.DataContext is MpClipTileViewModel tctvm && tctvm == dctvm);
+                if(dctv == null) {
+                    Debugger.Break();
+                }
+
+                // from internal content
+                if (dctvm.IsSubSelectionEnabled) {
+                    // TODO probably need to use ctvm SelectionRange w/ isCopy and splice source content here
+                } else {
+
+                }
+
+                dropItem = dctvm.HeadItem.CopyItem;
             }
 
-            //var rtb = AssociatedObject.Rtb;
-            //var drtb = Application.Current.MainWindow.GetVisualDescendents<MpContentView>()
-            //                .FirstOrDefault(x => x.DataContext is MpClipTileViewModel temp && temp.HeadItem.CopyItemId == dctvm.HeadItem.CopyItemId).Rtb;
-
+            var dropRange = GetDropRange(rtfDropIdx,pre,post,split);
 
             
-            //// isolate insertion point and account for block drop
-            //var dtp = rtb.Document.ContentStart.GetPositionAtOffset(rtfDropIdx).GetNextInsertionPosition(LogicalDirection.Backward);
-            //if (_isPreBlockDrop) {
-            //    if(dtp == null) {
-            //        //at start of document
-            //        dtp = rtb.Document.ContentStart;
+            TextElement dropElement = null;
+
+            switch (dropItem.ItemType) {
+                case MpCopyItemType.Text:
+                    if (dropItem.ItemData.IsStringRichTextTable()) {
+                        string csv = MpCsvToRtfTableConverter.GetCsv(dropItem.ItemData);
+                        dropElement = dropRange.LoadTable(csv);
+                    } else {
+                        string pt = dropItem.ItemData.ToPlainText();
+                        MpConsole.WriteLine("Drop Plain Text: " + pt);
+                        pt = pt.TrimTrailingLineEndings();
+
+                        if (pre) {
+                            pt = pt + Environment.NewLine;
+                            if(dropRange.Start.GetLineStartPosition(0) == null ||
+                               dropRange.Start.GetLineStartPosition(0) == rtb.Document.ContentStart) {
+
+                            } else {
+                               // pt = Environment.NewLine + pt;
+                            }
+                        } else if (post) {
+                            pt = Environment.NewLine + pt;
+                            if (dropRange.End.GetLineStartPosition(1) == null ||
+                               dropRange.Start.GetLineEndPosition(0) == rtb.Document.ContentEnd) {
+
+                            } else {
+                                pt = pt + Environment.NewLine;
+                            }
+                        } else if (split) {
+                            pt = Environment.NewLine + pt + Environment.NewLine;
+                        }
+                        MpConsole.WriteLine("Trimmed Plain Text: " + pt);
+                        // NOTE if dropRange.Text is simply set to drop text there will be no 
+                        // unique TextElement to tag for its content item and dropRange 
+                        // is already prepared for block drops so it can just be a span
+
+
+                        //dropElement = new Span(dropRange.Start, dropRange.End);
+                        //(dropElement as Span).Inlines.Clear();
+                        //(dropElement as Span).Inlines.Add(new Run(pt));
+
+                        dropRange.Text = pt;//string.Empty;
+                        //dropElement = new Run(pt, dropRange.Start);
+                    }
+                    break;
+                case MpCopyItemType.Image:
+                    dropElement = dropRange.LoadImage(dropItem.ItemData);
+                    break;
+                case MpCopyItemType.FileList:
+                    dropElement = dropRange.LoadFileItem(dropItem.ItemData.Replace(Environment.NewLine, string.Empty), dropItem.IconId);
+                    break;
+            }
+
+            //if (dropElement == null) {
+            //    Debugger.Break();
+            //} else {
+            //    var allDropElements = new TextRange(dropElement.ElementStart, dropElement.ElementEnd).GetAllTextElements().ToList();
+            //    //var allDropElements2 = new TextRange(dropElement.ContentStart, dropElement.ContentEnd).GetAllTextElements().ToList();
+            //    //just to ensure the parent element add it here...
+            //    if(!allDropElements.Contains(dropElement)) {
+            //        // NOTE need to test other drops besides inline and alter GetAllTextElements from
+            //        // yield return so it clearly returns param and children
+            //        allDropElements.Add(dropElement);
             //    }
-            //    dtp = dtp.GetLineStartPosition(0).InsertParagraphBreak();
-            //} else if (_isPostBlockDrop) {
-            //    if(dtp == null || dtp.GetLineStartPosition(1) == null) {
-            //        //at end of document
-            //        dtp = rtb.Document.ContentEnd;
-            //    } else {
-            //        dtp = dtp.GetLineStartPosition(1);
-            //    }
-            //    dtp = dtp.InsertParagraphBreak();
+            //    allDropElements.ForEach(x => x.Tag = dropItem);
             //}
 
-            //var dropCopyItems = new List<MpCopyItem>();
-            ////insert encoded items
-            //foreach(var dci in dropCopyItems) {
-            //    var dr = new Run("{c{" + dci.Guid + "}c}") {
-            //        Tag = dci
-            //    };
-            //    var span = new Span(dr, dtp) {
-            //        Tag = dci
-            //    };
-            //    dtp = span.ElementEnd.GetNextInsertionPosition(LogicalDirection.Forward);
-            //}
+            if (pre || post || split) {
+                //var tdtp = dtp;
+                ////add trailing line break
+                //if (tdtp == null || tdtp.GetLineStartPosition(1) == null) {
+                //    //at end of document
+                //    tdtp = rtb.Document.ContentEnd;
+                //} else {
+                //    tdtp = tdtp.GetLineStartPosition(1);
+                //}
+                //tdtp.InsertParagraphBreak();
+                //dropRange.End.InsertLineBreak();                
+            }
 
-            //if (_isBlockDrop) {
-            //    //add trailing line break
-            //    if (dtp == null || dtp.GetLineStartPosition(1) == null) {
-            //        //at end of document
-            //        dtp = rtb.Document.ContentEnd;
-            //    } else {
-            //        dtp = dtp.GetLineStartPosition(1);
-            //    }
-            //    dtp = dtp.InsertParagraphBreak();
-            //} 
+            // instead of handling all added text elements uniquely
+            // find all with null tag (which will be added content) and set tag to added content
 
-            //var allTargetItems = dropCopyItems;
-            //allTargetItems.AddRange(ctvm.Items.Select(x => x.CopyItem));
-            //allTargetItems = allTargetItems.Distinct().ToList();
-            //var rootItem = allTargetItems.FirstOrDefault(x => x.Guid == rootGuid);
-            //rootItem.RootCopyItemGuid = string.Empty;
-            //rootItem.CompositeSortOrderIdx = 0;
-            //rootItem.CompositeParentCopyItemId = 0;
-            //await rootItem.WriteToDatabaseAsync();
+            var allTextElements = rtb.Document
+                                        .GetAllTextElements()
+                                        .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
+            var allStrayElements = allTextElements.Where(x => x.Tag == null).ToList();
+            if (allStrayElements.Count > 0) {
+                allStrayElements.ForEach(x => x.Tag = dropItem);
+            }
 
-            //allTargetItems.Remove(rootItem);
-            //allTargetItems.Insert(0, rootItem);
-            //foreach (var cci in allTargetItems.Where(x => x.Id != rootItem.Id)) {
-            //    cci.RootCopyItemGuid = rootGuid;
-            //    cci.CompositeParentCopyItemId = rootItem.Id;
-            //    cci.CompositeSortOrderIdx = allTargetItems.IndexOf(cci);
-            //    // BUG this just ensures sub-items don't seem like the root in instances where sortOrder = 0 is used to decide
-            //    cci.CompositeSortOrderIdx = Math.Max(1, cci.CompositeSortOrderIdx);
-            //    await cci.WriteToDatabaseAsync();
-            //}
-            
 
-            var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(AssociatedObject.Rtb);
+            //dropRange.GetAllTextElements().ForEach(x => x.Tag = dropItem);
 
-            if(ctvm.IsPinned) {
+            var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
+
+
+            if (ctvm.IsPinned) {
                 await ctvm.InitializeAsync(encodedItems);
             } else {
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
@@ -354,85 +407,30 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
-            MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(rootGuid).IsSelected = true;
-        }
-
-        public async Task DropFromExternal(MpCopyItem dropItem, int rtfDropIdx) {
-            await Task.Delay(1);
-            var rtb = AssociatedObject.Rtb;
-
-            var dropRange = PrepareDropRange(rtfDropIdx, dropItem);
-            TextElement dropElement = null;
-
-            switch(dropItem.ItemType) {
-                case MpCopyItemType.Text:
-                    if(dropItem.ItemData.IsStringRichTextTable()) {
-                        string csv = MpCsvToRtfTableConverter.GetCsv(dropItem.ItemData);
-                        dropElement = dropRange.LoadTable(csv);
-                    } else {
-                        string pt = dropItem.ItemData.ToPlainText();
-                        MpConsole.WriteLine("Drop Plain Text: " + pt);
-                        pt = pt.TrimTrailingLineEndings();
-                        MpConsole.WriteLine("Trimmed Plain Text: " + pt);
-
-                        // NOTE if dropRange.Text is simply set to drop text there will be no 
-                        // unique TextElement to tag for its content item and dropRange 
-                        // is already prepared for block drops so it can just be a span
-
-                        dropElement = new Span(dropRange.Start, dropRange.End);
-                        (dropElement as Span).Inlines.Clear();
-                        (dropElement as Span).Inlines.Add(new Run(pt));
-                    }                    
-                    break;
-                case MpCopyItemType.Image:
-                    dropElement = dropRange.LoadImage(dropItem.ItemData);
-                    break;
-                case MpCopyItemType.FileList:
-                    dropElement = dropRange.LoadFileItem(dropItem.ItemData.Replace(Environment.NewLine, string.Empty), dropItem.IconId);
-                    break;
-            }
-
-            if(dropElement == null) {
-                Debugger.Break();
-            } else {
-                var allDropElements = new TextRange(dropElement.ElementStart, dropElement.ElementEnd).GetAllTextElements().ToList();
-                //just to ensure the parent element add it here...
-                allDropElements.Add(dropElement);
-                allDropElements.ForEach(x => x.Tag = dropItem);
-            }
-
-            if (_isBlockDrop) {
-                //var tdtp = dtp;
-                ////add trailing line break
-                //if (tdtp == null || tdtp.GetLineStartPosition(1) == null) {
-                //    //at end of document
-                //    tdtp = rtb.Document.ContentEnd;
-                //} else {
-                //    tdtp = tdtp.GetLineStartPosition(1);
-                //}
-                //tdtp.InsertParagraphBreak();
-                dropRange.End.InsertLineBreak();
-            }
-
-            //dropRange.GetAllTextElements().ForEach(x => x.Tag = dropItem);
-
-            await MpMergedDocumentRtfExtension.EncodeContent(rtb);
-
-            if (rtb.DataContext is MpClipTileViewModel ctvm && !ctvm.IsSelected) {
-                ctvm.IsSelected = true;
+            var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(rootGuid);
+            if(civm != null) {
+                civm.IsSelected = true;
             }
         }
 
-        private TextRange PrepareDropRange(int rtfDropIdx, MpCopyItem dropItem) {
+
+        private TextRange GetDropRange(int rtfDropIdx, bool pre, bool post, bool split) {
+            MpConsole.WriteLine("Pre: " + (pre ? "TRUE" : "FALSE"));
+            MpConsole.WriteLine("Post: " + (post ? "TRUE" : "FALSE"));
+            MpConsole.WriteLine("Split: " + (split ? "TRUE" : "FALSE"));
+
             var rtb = AssociatedObject.Rtb;
 
             // isolate insertion point and account for block drop
             var dtp = rtb.Document.ContentStart
                             .GetPositionAtOffset(rtfDropIdx)
                             .GetNextInsertionPosition(LogicalDirection.Backward);
+            if(dtp == null) {
+                dtp = rtb.Document.ContentStart;
+            }
 
-            if (_isPreBlockDrop) {
-                if(dtp.GetLineStartPosition(0) == null) {
+            if (pre) {
+                if (dtp.GetLineStartPosition(0) == null) {
                     MpConsole.WriteLine(@"Pre block doc start detected");
                     //at start of doc
                     dtp = rtb.Document.ContentStart;
@@ -441,18 +439,21 @@ namespace MpWpfApp {
                     dtp = dtp.GetLineStartPosition(0);
                     //dtp.InsertLineBreak();
                 }
-                
-            } else if (_isPostBlockDrop) {
+
+            } else if (post) {
                 if (dtp == null || dtp.GetLineStartPosition(1) == null) {
                     //at end of document
                     dtp = rtb.Document.ContentEnd;
                 } else {
                     dtp = dtp.GetLineStartPosition(1);
                 }
-                dtp = dtp.InsertLineBreak();
-                
-            } else if(_isSplitBlockDrop) {
-                dtp = dtp.InsertLineBreak();
+                //dtp = dtp.InsertLineBreak();
+            } else  {
+                //dtp = dtp.InsertParagraphBreak();
+                //dtp.InsertParagraphBreak();
+                dtp = rtb.Document.ContentStart
+                            .GetPositionAtOffset(rtfDropIdx + 1)
+                            .GetNextInsertionPosition(LogicalDirection.Backward);
             }
 
             return new TextRange(dtp,dtp);

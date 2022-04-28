@@ -185,6 +185,15 @@ namespace MpWpfApp {
                     }
                 }
             }
+            //if(tr.Start.Parent is TextElement ste) {
+            //    // inlcude param element (different from FlowDocument version)
+            //    if(tr.End.Parent is TextElement ete) {
+            //        if(ste != ete) {
+            //            yield return ete;
+            //        }
+            //    }
+            //    yield return ste;
+            //}
         }
         public static IEnumerable<TextElement> GetRunsAndParagraphs(this FlowDocument doc) {
             for (TextPointer position = doc.ContentStart;
