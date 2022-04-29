@@ -129,7 +129,7 @@ namespace MpWpfApp {
 
         }
 
-        private static async Task SaveTextContent(RichTextBox rtb) {
+        public static async Task SaveTextContent(RichTextBox rtb) {
             if(rtb.DataContext is MpClipTileViewModel ctvm) {
                 var contentLookup = new Dictionary<string, List<TextElement>>();
 
@@ -630,11 +630,11 @@ namespace MpWpfApp {
             }
             var ci = te.Tag as MpCopyItem;
             if (ci == null) {
-                Debugger.Break();
+                return;
             }
             var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id);
             if (civm == null) {
-                Debugger.Break();
+                return;
             }
 
             civm.IsHovering = false;
@@ -650,17 +650,17 @@ namespace MpWpfApp {
             }
             var ci = te.Tag as MpCopyItem;
             if(ci == null) {
-                Debugger.Break();
+                return;
             }
             var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id);
             if(civm == null) {
-                Debugger.Break();
+                return;
             }
 
             civm.IsHovering = true;
 
             if(civm.CompositeParentCopyItemId > 0) {
-                Debugger.Break();
+                return;
             }
         }
 

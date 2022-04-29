@@ -20,6 +20,44 @@ using System.Diagnostics;
 
 namespace MpWpfApp {
     public static class MpWpfRichDocumentExtensions {
+        public static void CloneNeighborFormatting(this TextElement te, LogicalDirection prefDir = LogicalDirection.Backward) {
+            if (prefDir == LogicalDirection.Backward && te.PreviousElement() == null) {
+                prefDir = LogicalDirection.Forward;
+            } else if (prefDir == LogicalDirection.Forward && te.NextElement() == null) {
+                prefDir = LogicalDirection.Backward;
+            }
+            TextElement neighbor = null;
+            if (prefDir == LogicalDirection.Forward) {
+                neighbor = te.NextElement();
+            } else {
+                neighbor = te.PreviousElement();
+            }
+            if (neighbor == null) {
+                return;
+            }
+            neighbor.CloneFormatting(te);
+        }
+
+        public static void CloneFormatting(this TextElement from, TextElement to) {
+            to.FontFamily = from.FontFamily;
+            to.FontStyle = from.FontStyle;
+            to.FontWeight = from.FontWeight;
+            to.FontStretch = from.FontStretch;
+            to.FontSize = from.FontSize;
+            to.Foreground = from.Foreground;
+            to.Background = from.Background;
+            to.TextEffects = from.TextEffects;
+        }
+
+        public static TextElement PreviousElement(this TextElement te) {
+            return te.ContentStart.GetAdjacentElement(LogicalDirection.Backward) as TextElement;
+        }
+
+        public static TextElement NextElement(this TextElement te) {
+            return te.ContentEnd.GetAdjacentElement(LogicalDirection.Forward) as TextElement;
+        }
+
+
         public static TextPointer GetLineEndPosition(this TextPointer tp, int count) {
             var next_line_start_tp = tp.GetLineStartPosition(count + 1);
             if (next_line_start_tp == null) {
@@ -176,24 +214,26 @@ namespace MpWpfApp {
         }
 
         public static IEnumerable<TextElement> GetAllTextElements(this TextRange tr) {
+            var tel = new List<TextElement>();
             for (TextPointer position = tr.Start;
               position != null && position.CompareTo(tr.End) <= 0;
               position = position.GetNextContextPosition(LogicalDirection.Forward)) {
                 if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
                     if (position.Parent is TextElement te) {
-                        yield return te;
+                        tel.Add(te);
                     }
                 }
             }
-            //if(tr.Start.Parent is TextElement ste) {
-            //    // inlcude param element (different from FlowDocument version)
-            //    if(tr.End.Parent is TextElement ete) {
-            //        if(ste != ete) {
-            //            yield return ete;
-            //        }
-            //    }
-            //    yield return ste;
-            //}
+            if (tr.Start.Parent is TextElement ste) {
+                // inlcude param element (different from FlowDocument version)
+                if (tr.End.Parent is TextElement ete) {
+                    if (ste != ete) {
+                        tel.Add(ete);
+                    }
+                }
+                tel.Add(ste);
+            }
+            return tel;
         }
         public static IEnumerable<TextElement> GetRunsAndParagraphs(this FlowDocument doc) {
             for (TextPointer position = doc.ContentStart;

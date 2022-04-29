@@ -1097,10 +1097,22 @@ namespace MpWpfApp {
                 if (PersistentUniqueWidthTileLookup.Any(x => x.Key == ci.Id)) {
                     PersistentUniqueWidthTileLookup.Remove(ci.Id);
                 }
-                //if (PinnedItems.Any(x => x.Items.Any(y => y.CopyItemId == ci.Id))) {
-                //    var pctvm = PinnedItems.FirstOrDefault(x => x.Items.Any(y => y.CopyItemId == ci.Id));
-                //    pctvm.Items.Remove(pctvm.Items.FirstOrDefault(x => x.CopyItemId == ci.Id));
-                //}
+                if (PinnedItems.Any(x => x.Items.Any(y => y.CopyItemId == ci.Id))) {
+                    var pctvm = PinnedItems.FirstOrDefault(x => x.Items.Any(y => y.CopyItemId == ci.Id));
+                    pctvm.Items.Remove(pctvm.Items.FirstOrDefault(x => x.CopyItemId == ci.Id));
+                    if(pctvm.Items.Count == 0) {
+                        PinnedItems.Remove(pctvm);
+                    }
+                    OnPropertyChanged(nameof(PinnedItems));
+                }
+
+                if (MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Contains(ci.Id)) {
+                    MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Remove(ci.Id);
+                    
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                }
+                MpDataModelProvider.TotalItemCount--;
+                OnPropertyChanged(nameof(TotalTilesInQuery));                
             } else if (e is MpCopyItemTag cit && Items.Any(x=>x.Items.Any(y => y.CopyItemId == cit.CopyItemId))) {
                 var ctvm = Items.FirstOrDefault(x => x.Items.Any(y => y.CopyItemId == cit.CopyItemId));
                 if(ctvm == null) {
@@ -2182,6 +2194,9 @@ namespace MpWpfApp {
                 while(IsBusy) { await Task.Delay(100); }
 
                 IsBusy = true;
+
+                //await MpDataModelProvider.RemoveQueryItem(PrimaryItem.PrimaryItem.CopyItemId);
+                
 
                 await Task.WhenAll(SelectedModels.Select(x => x.DeleteFromDatabaseAsync()));
 

@@ -388,8 +388,12 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var citl = await MpDataModelProvider.GetTextTemplatesAsync(Id);
+            var citml = await MpDataModelProvider.GetTextTemplatesAsync(Id);
+            await Task.WhenAll(citml.Select(x => x.DeleteFromDatabaseAsync()));
+
+            var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
             await Task.WhenAll(citl.Select(x => x.DeleteFromDatabaseAsync()));
+
             await base.DeleteFromDatabaseAsync();
         }
 
