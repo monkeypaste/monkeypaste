@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Plugin;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -81,6 +82,8 @@ namespace MonkeyPaste {
         }
 
         public static void Send<T>(T message, object context) {
+            MpConsole.WriteLine("Messenger sending: " + message.ToString());
+
             IEnumerable<KeyValuePair<MessengerKey, List<object>>> results;
 
             if (context == null) {

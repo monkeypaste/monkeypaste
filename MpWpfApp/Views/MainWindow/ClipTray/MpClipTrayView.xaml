@@ -1,85 +1,80 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpClipTrayView"
-                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpClipTrayViewModel"
-                     mc:Ignorable="d"
-                     d:DesignHeight="450"
-                     d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
-                                                      IsDesignTimeCreatable=False}">
+﻿<local:MpUserControl
+    x:Class="MpWpfApp.MpClipTrayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MpWpfApp"
+    x:TypeArguments="local:MpClipTrayViewModel"
+    mc:Ignorable="d"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
+                                     IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
         <local:MpClipTrayDropBehavior x:Name="ClipTrayDropBehavior" />
     </i:Interaction.Behaviors>
-    <Grid x:Name="ClipTrayGrid"
-          Background="{Binding .,
-                               Converter={StaticResource StringToThemeBrushConverter},
-                               ConverterParameter=Clip_Tray_Background_Color}">
+    <Grid
+        x:Name="ClipTrayGrid"
+        Background="{Binding .,
+                             Converter={StaticResource StringToThemeBrushConverter},
+                             ConverterParameter=Clip_Tray_Background_Color}">
         <Grid>
             <AdornerDecorator>
-                <ScrollViewer x:Name="PagingScrollViewer"
-                              MaxWidth="{Binding ClipTrayScreenWidth}"
-                              HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible,
-                                                                      Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
-                              VerticalScrollBarVisibility="Hidden">
+                <ScrollViewer
+                    x:Name="PagingScrollViewer"
+                    MaxWidth="{Binding ClipTrayScreenWidth}"
+                    HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible,
+                                                            Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
+                    VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Behaviors>
                         <!--  old values:  Friction=0.85 WheelDampening=0.08  -->
-                        <local:MpPagingListBoxBehavior x:Name="LoadMoreItemsBehavior"
-                                                       Friction="0.85"
-                                                       WheelDampening="0.08"
-                                                       RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
-                                                       LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
+                        <local:MpPagingListBoxBehavior
+                            x:Name="LoadMoreItemsBehavior"
+                            Friction="0.85"
+                            WheelDampening="0.08"
+                            RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
+                            LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
                     </i:Interaction.Behaviors>
-                    <local:MpListBox x:Name="ClipTray"
-                             AllowDrop="True"
-                             ClipToBounds="True"
-                             SnapsToDevicePixels="True"
-                             Width="{Binding ClipTrayTotalWidth}"
-                             SelectionChanged="ClipTray_SelectionChanged"
-                             Visibility="{Binding IsTrayEmpty,
-                                                  Converter={StaticResource BoolToVisibilityFlipConverter},
-                                                  ConverterParameter={StaticResource Hide}}"
-                             ItemsSource="{Binding Items}"
-                             Background="Transparent"
-                             Loaded="ClipTray_Loaded"
-                             IsSynchronizedWithCurrentItem="True"
-                             Margin="0,0,0,0"
-                             Focusable="True"
-                             BorderThickness="0"
-                             VerticalAlignment="Stretch"
-                             VerticalContentAlignment="Stretch"
-                             HorizontalAlignment="Left"
-                             HorizontalContentAlignment="Stretch"
-                             SelectionMode="Single"
-                             ScrollViewer.CanContentScroll="False"
-                             ScrollViewer.IsDeferredScrollingEnabled="True"
-                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                             ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                        <local:MpListBox.InputBindings>
-                            <KeyBinding Gesture="Ctrl+A"
-                                        Command="{Binding SelectAllCommand}" />
-                        </local:MpListBox.InputBindings>
+                    <local:MpListBox
+                        x:Name="ClipTray"
+                        AllowDrop="True"
+                        ClipToBounds="True"
+                        SnapsToDevicePixels="True"
+                        Width="{Binding ClipTrayTotalWidth}"
+                        SelectionChanged="ClipTray_SelectionChanged"
+                        Visibility="{Binding IsTrayEmpty,
+                                             Converter={StaticResource BoolToVisibilityFlipConverter},
+                                             ConverterParameter={StaticResource Hide}}"
+                        ItemsSource="{Binding Items}"
+                        Background="Transparent"
+                        Loaded="ClipTray_Loaded"
+                        IsSynchronizedWithCurrentItem="True"
+                        Margin="0,0,0,0"
+                        Focusable="True"
+                        BorderThickness="0"
+                        VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Stretch"
+                        SelectionMode="Single"
+                        ScrollViewer.CanContentScroll="False"
+                        ScrollViewer.IsDeferredScrollingEnabled="True"
+                        ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                        ScrollViewer.VerticalScrollBarVisibility="Hidden">                        
                         <local:MpListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
-                                <EventSetter Event="RequestBringIntoView"
-                                             Handler="ClipTray_RequestBringIntoView" />
-                                <Setter Property="IsSelected"
-                                        Value="{Binding IsSelected}" />
-                                <Setter Property="FocusVisualStyle"
-                                        Value="{x:Null}" />
-                                <Setter Property="HorizontalContentAlignment"
-                                        Value="Left" />
-                                <Setter Property="VerticalContentAlignment"
-                                        Value="Top" />
-                                <Setter Property="Canvas.Left"
-                                        Value="{Binding TrayX}" />
-                                <Setter Property="Canvas.Top"
-                                        Value="0" />
-                                <Setter Property="SnapsToDevicePixels"
-                                        Value="True" />
+                                <EventSetter
+                                    Event="RequestBringIntoView"
+                                    Handler="ClipTray_RequestBringIntoView" />
+                                <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                <Setter Property="VerticalContentAlignment" Value="Top" />
+                                <Setter Property="Canvas.Left" Value="{Binding TrayX}" />
+                                <Setter Property="Canvas.Top" Value="0" />
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
                                 <!--<Setter Property="Visibility"
                                         Value="{Binding IsPlaceholder,
                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}" />
@@ -92,12 +87,9 @@
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                             <ContentPresenter />
                                             <ControlTemplate.Triggers>
-                                                <Trigger Property="IsSelected"
-                                                         Value="True">
-                                                    <Setter Property="BorderBrush"
-                                                            Value="Transparent" />
-                                                    <Setter Property="Background"
-                                                            Value="Transparent" />
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                                    <Setter Property="Background" Value="Transparent" />
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -107,31 +99,34 @@
                         </local:MpListBox.ItemContainerStyle>
                         <local:MpListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <Canvas IsItemsHost="True"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch" />
+                                <Canvas
+                                    IsItemsHost="True"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch" />
                             </ItemsPanelTemplate>
                         </local:MpListBox.ItemsPanel>
                         <local:MpListBox.ItemTemplate>
                             <DataTemplate>
-                                <local:MpClipTileContainerView DataContext="{Binding}"
-                                                               Visibility="{Binding IsPlaceholder,
-                                                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}" />
+                                <local:MpClipTileContainerView
+                                    DataContext="{Binding}"
+                                    Visibility="{Binding IsPlaceholder,
+                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}" />
                             </DataTemplate>
                         </local:MpListBox.ItemTemplate>
                     </local:MpListBox>
                 </ScrollViewer>
             </AdornerDecorator>
-            <TextBlock x:Name="EmptyListTextBlock"
-                       Focusable="False"
-                       Visibility="{Binding IsTrayEmpty,
-                                            Converter={StaticResource BoolToVisibilityConverter}}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Margin="0,0,0,15"
-                       Foreground="LightGray"
-                       FontStyle="Oblique"
-                       FontSize="34">
+            <TextBlock
+                x:Name="EmptyListTextBlock"
+                Focusable="False"
+                Visibility="{Binding IsTrayEmpty,
+                                     Converter={StaticResource BoolToVisibilityConverter}}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="0,0,0,15"
+                Foreground="LightGray"
+                FontStyle="Oblique"
+                FontSize="34">
                 <TextBlock.Inlines>
                     <Run Text="{Binding SelectedTagTile.TagName, Source={x:Static local:MpTagTrayViewModel.Instance}, FallbackValue=This}" />
                     <Run Text="has no items" />
@@ -139,9 +134,10 @@
             </TextBlock>
         </Grid>
         <Viewbox Visibility="{Binding IsRequery, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource Hide}}">
-            <local:MpSpinnerApple Margin="20"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center" />
+            <local:MpSpinnerApple
+                Margin="20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
         </Viewbox>
     </Grid>
 </local:MpUserControl>

@@ -116,7 +116,16 @@ namespace MpWpfApp {
                 System.Windows.Media.Imaging.BitmapEncoder enc = new BmpBitmapEncoder();
                 enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bitmapsource));
                 enc.Save(outStream);
-                return new System.Drawing.Bitmap(outStream);
+                var bmp = new System.Drawing.Bitmap(outStream);
+
+                bmp.MakeTransparent();
+
+                double dpiX = MpScreenInformation.DpiX;
+                double dpiY = MpScreenInformation.DpiY;
+                bmp.SetResolution((float)dpiX, (float)dpiY);
+
+                return bmp;
+                
             }
         }
         

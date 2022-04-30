@@ -533,6 +533,10 @@ namespace MpWpfApp {
                     }
                 }
             }
+            if (ctvm.IsTextItem) {
+                rtb.Document.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+                rtb.Document.ConfigureLineHeight();
+            }
         }
 
         private static object FindNearestContentReference(FrameworkContentElement fce) {
@@ -552,7 +556,7 @@ namespace MpWpfApp {
             
             while(true) {
                 int curOffset = fd.ContentStart.GetOffsetToPosition(ctp);
-                if(curOffset < 0) {
+                if(curOffset <= 1) {
                     break;
                 }
                 var pte = ctp.Parent.FindParentOfType<FrameworkContentElement>();

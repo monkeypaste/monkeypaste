@@ -210,6 +210,8 @@ namespace MpWpfApp {
             KeyList = MpHelpers.ConvertStringToKeySequence(keyString);
             _assigningCommand = command;
             ShortcutDisplayName = shortcutName;
+
+            OnPropertyChanged(nameof(KeyString));
             //KeysString = keysList;
         }
 

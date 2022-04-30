@@ -26,7 +26,7 @@ namespace MpClipboardHelper {
 
         public uint CF_HTML, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15, CF_UNICODE_TEXT,CF_OEM_TEXT;
 
-        public bool IgnoreClipboardChangeEvent { get; set; } = false;
+        public bool IgnoreNextClipboardChangeEvent { get; set; } = false;
 
         #endregion
 
@@ -90,7 +90,7 @@ namespace MpClipboardHelper {
             //setting last here will ensure item on cb isn't added when starting
             _lastCbo = ConvertManagedFormats();
             while (true) {
-                while (_isStopped || IgnoreClipboardChangeEvent) {
+                while (_isStopped) {
                     Thread.Sleep(100);
                 }
                 Thread.Sleep(500);
@@ -99,8 +99,8 @@ namespace MpClipboardHelper {
                 if (HasChanged(cbo)) {
                     _lastCbo = cbo;
 
-
                     OnClipboardChanged?.Invoke(typeof(MpClipboardTimer).ToString(), cbo);
+
                     // NOTE word 2007 does weird stuff and alters cb after read
                     // this attempts to circumvent that by waiting a second
                     // then replacing _last with current
@@ -112,37 +112,7 @@ namespace MpClipboardHelper {
                 Thread.Sleep(500);
             }
         }
-
-        private IDataObject ConvertToWinFormsDataObject(MpPortableDataObject mpdo) {
-            DataObject dobj = new DataObject();
-            foreach (var kvp in mpdo.DataFormatLookup) {
-                SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
-            }
-            return dobj;
-        }
-
-        private void SetDataWrapper(ref DataObject dobj, MpClipboardFormatType format, string dataStr) {
-            string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(format);
-            switch (format) {
-                case MpClipboardFormatType.Bitmap:
-                    byte[] bytes = Convert.FromBase64String(dataStr);
-                    Image image;
-                    using (MemoryStream ms = new MemoryStream(bytes)) {
-                        image = Image.FromStream(ms);
-                        dobj.SetData(DataFormats.Bitmap, image);
-                    }
-                    break;
-                case MpClipboardFormatType.FileDrop:
-                    var fl = dataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                    var sc = new StringCollection();
-                    sc.AddRange(fl);
-                    dobj.SetFileDropList(sc);
-                    break;
-                default:
-                    dobj.SetData(nativeTypeName, dataStr);
-                    break;
-            }
-        }
+                
 
         private string GetClipboardData(string nativeFormatStr) {
             uint format = GetWin32FormatId(nativeFormatStr);

@@ -31,16 +31,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-
-        //public static bool IsAnyResizing => _allResizers
-        //    .Where(x => x != null && x.AssociatedObject != null && x.AssociatedObject.DataContext != null)
-        //    .Any(x => (x.AssociatedObject.DataContext as MpIResizableViewModel).IsResizing);
-
         public static bool IsAnyResizing => Application.Current.MainWindow.GetVisualDescendents<MpResizeBehavior>().Any(x => x.IsResizing);
-
-        //public static bool CanAnyResize => _allResizers
-        //    .Where(x => x != null && x.AssociatedObject != null && x.AssociatedObject.DataContext != null)
-        //    .Any(x => (x.AssociatedObject.DataContext as MpIResizableViewModel).CanResize);
 
         public static bool CanAnyResize => Application.Current.MainWindow.GetVisualDescendents<MpResizeBehavior>().Any(x => x.CanResize);
 
@@ -393,7 +384,7 @@ namespace MpWpfApp {
 
         private void AssociatedObject_MouseLeave(object sender, MouseEventArgs e) {            
             if (MpDragDropManager.IsDragAndDrop || 
-                AssociatedObject == null || !IsEnabled) {
+                AssociatedObject == null || !IsEnabled || IsResizing) {
                 return;
             }
             if (!IsResizing && !AssociatedObject.IsMouseCaptured) {

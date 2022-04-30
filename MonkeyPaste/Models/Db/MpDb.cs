@@ -871,7 +871,7 @@ namespace MonkeyPaste {
                 KeyString = "Up",
                 DefaultKeyString = "Up"
             };
-            await AddItemAsync<MpShortcut>(sh28);
+            await AddItemAsync<MpShortcut>(sh30);
 
             var sh31 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("39a6194e-37e3-4d37-a9f4-254ed83157f2"),
@@ -881,16 +881,37 @@ namespace MonkeyPaste {
                 KeyString = "Down",
                 DefaultKeyString = "Down"
             };
-            await AddItemAsync<MpShortcut>(sh28);
+            await AddItemAsync<MpShortcut>(sh31);
 
             var sh32 = new MpShortcut() {
                 ShortcutGuid = Guid.Parse("94e81589-fe2f-4e80-8940-ed066f0d9c27"),
                 ShortcutName = "Paste Here",
+                ShortcutType = MpShortcutType.PasteHere,
                 RouteType = 1,
                 KeyString = "Control+V",
                 DefaultKeyString = "Control+V"
             };
             await AddItemAsync<MpShortcut>(sh32);
+            
+            var sh33 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("30c813a0-d466-4ae7-b75e-82680b4542fc"),
+                ShortcutName = "Previous Page",
+                ShortcutType = MpShortcutType.PreviousPage,
+                RouteType = 1,
+                KeyString = "PageUp",
+                DefaultKeyString = "PageUp"
+            };
+            await AddItemAsync<MpShortcut>(sh33);
+
+            var sh34 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("09df97ea-f786-48d9-9112-a60266df6586"),
+                ShortcutName = "Next Page",
+                ShortcutType = MpShortcutType.NextPage,
+                RouteType = 1,
+                KeyString = "PageDown",
+                DefaultKeyString = "PageDown"
+            };
+            await AddItemAsync<MpShortcut>(sh34);
             #endregion
 
             #region Anayltic Items

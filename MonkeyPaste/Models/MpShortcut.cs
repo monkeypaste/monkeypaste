@@ -42,6 +42,8 @@ namespace MonkeyPaste {
         IncreaseSize,
         DecreaseSize, 
         PasteHere,
+        PreviousPage,
+        NextPage,
         //remaining are data (not context) driven using commandId
         PasteCopyItem = 101,
         SelectTag = 102,
@@ -956,7 +958,7 @@ namespace MonkeyPaste {
         public List<List<MpWindowsKey>> KeyList {
             get {
                 var keyList = new List<List<MpWindowsKey>>();
-                var combos = KeyString.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();
+                var combos = KeyString.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var c in combos) {
                     var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
                     keyList.Add(new List<MpWindowsKey>());

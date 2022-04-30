@@ -22,6 +22,8 @@ namespace MonkeyPaste {
         MpIOsInfo OsInfo { get; }
         MpIPlatformDataObjectHelper DataObjectHelper { get; }
         MpINativeMessageBox NativeMessageBox { get; }
+
+        MpIClipboardMonitor ClipboardMonitor { get; set; }
     }
 
 

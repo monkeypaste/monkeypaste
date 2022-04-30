@@ -21,7 +21,6 @@ namespace MpWpfApp {
         #region View Models
         #endregion
 
-
         #region State
 
         public bool IsSelected { get; set; }

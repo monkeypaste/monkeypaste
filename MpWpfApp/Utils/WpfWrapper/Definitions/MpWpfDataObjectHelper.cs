@@ -78,7 +78,7 @@ namespace MpWpfApp {
 
         public async Task PasteDataObject(MpPortableDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
             var pasteItem = new MpPasteItem() {
-                DataObject = mpdo,
+                PortableDataObject = mpdo,
                 ProcessInfo = pi,
                 FinishWithEnterKey = finishWithEnterKey
             };
@@ -96,35 +96,30 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsContentDropDragDataValid(DataObject wpfdo) {
-            if(wpfdo == null) {
-                return false;
-            }
-            foreach (var sdf in MpPortableDataObject.SupportedFormats) {
-                string wpfFormatName = GetWpfFormatName(sdf);
-                if(wpfdo.GetDataPresent(wpfFormatName)) {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         #region MpIClipboardInterop Implementation
         public MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
             return ConvertWpfDataObjectToPortableFormat(nativeDataObj as IDataObject, retryCount);
         }
 
-        public object ConvertToPlatformFormat(MpPortableDataObject portableObj) {
-            throw new NotImplementedException();
+        public object ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
+            DataObject dobj = new DataObject();
+            foreach (var kvp in mpdo.DataFormatLookup) {
+                SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
+            }
+            return dobj;
         }
 
-        public void SetDataObjectWrapper(MpPortableDataObject portableObj) {
-            throw new NotImplementedException();
+        public void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreChange) {
+            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreChange;
+
+            DataObject wpfDataObject = ConvertToPlatformClipboardDataObject(portableObj) as DataObject;
+            Clipboard.SetDataObject(wpfDataObject);
         }
+
         #endregion
 
-        private MpPortableDataObject ConvertWpfDataObjectToPortableFormat(IDataObject ido, int retryCount = 5) {
-            
+        private MpPortableDataObject ConvertWpfDataObjectToPortableFormat(IDataObject ido, int retryCount = 5) {            
             if (retryCount == 0) {
                 MpConsole.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
                 return null;
@@ -179,22 +174,9 @@ namespace MpWpfApp {
             }
         }
 
-        public async Task<DataObject> ConvertToWpfDataObject(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {
-            var wpfdo = await GetCopyItemDataObjectAsync(ci, isDragDrop, targetHandleObj);
-            DataObject dobj = new DataObject();
-            foreach (var kvp in wpfdo.DataFormatLookup) {
-                SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
-            }
-
-            if(targetHandleObj == null) {
-                dobj.SetData(MpPortableDataObject.InternalContentFormat, ci);
-            }            
-
-            return dobj;
-        }
-
         public async Task<MpPortableDataObject> GetCopyItemDataObjectAsync(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {
-            // NOTE this is NOT part of data object interface (which is in MonkeyPaste.Plugin) because it needs MpCopyItem
+            // NOTE this is NOT part of data object interface (which is in MonkeyPaste.Plugin)
+            // because it needs MpCopyItem
             // and am trying to isolate data object for pluggability
 
             IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : (IntPtr)targetHandleObj;
@@ -346,12 +328,10 @@ namespace MpWpfApp {
                 var pasteItem = _pasteQueue.Dequeue();
 
                 var processInfo = MpProcessHelper.MpProcessAutomation.SetActiveProcess(pasteItem.ProcessInfo);
-
+               
                 if(processInfo != null && processInfo.Handle != IntPtr.Zero) {
 
-                    var ido = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformFormat(pasteItem.DataObject);
-
-                    System.Windows.Forms.Clipboard.SetDataObject(ido);
+                    SetPlatformClipboard(pasteItem.PortableDataObject, true);
                     Thread.Sleep(100);
                     System.Windows.Forms.SendKeys.SendWait("^v");
                     Thread.Sleep(100);
@@ -429,6 +409,7 @@ namespace MpWpfApp {
             }
         }
 
+
         private string GetWpfFormatName(MpClipboardFormatType portableType) {
             switch (portableType) {
                 case MpClipboardFormatType.Text:
@@ -453,7 +434,7 @@ namespace MpWpfApp {
         #endregion
 
         internal class MpPasteItem {
-            internal MpPortableDataObject DataObject { get; set; }
+            internal MpPortableDataObject PortableDataObject { get; set; }
             internal MpProcessInfo ProcessInfo { get; set; }
             internal bool FinishWithEnterKey { get; set; }
         }

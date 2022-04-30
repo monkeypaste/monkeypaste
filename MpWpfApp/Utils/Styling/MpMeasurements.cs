@@ -304,7 +304,7 @@ namespace MpWpfApp {
 
         public double ClipTileTitleHeight {
             get {
-                return ClipTileMinSize / 5;
+                return ClipTileDefaultMinSize / 5;
             }
         }
 

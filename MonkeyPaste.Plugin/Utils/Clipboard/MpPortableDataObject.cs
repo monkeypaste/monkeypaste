@@ -22,7 +22,7 @@ namespace MonkeyPaste.Plugin {
     public interface MpIClipboardMonitor {
         event EventHandler<MpPortableDataObject> OnClipboardChanged;
         
-        bool IgnoreClipboardChangeEvent { get; set; }
+        bool IgnoreNextClipboardChangeEvent { get; set; }
 
         void StartMonitor();
         void StopMonitor();
@@ -30,8 +30,8 @@ namespace MonkeyPaste.Plugin {
 
     public interface MpIPlatformDataObjectHelper {
         MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5);
-        object ConvertToPlatformFormat(MpPortableDataObject portableObj);
-        void SetDataObjectWrapper(MpPortableDataObject portableObj);
+        object ConvertToPlatformClipboardDataObject(MpPortableDataObject portableObj);
+        void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange);
         object GetDataObjectWrapper();
     }
 

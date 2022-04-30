@@ -98,7 +98,7 @@ namespace MpWpfApp {
 
             //var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
             var mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem, true, MpProcessHelper.MpProcessManager.LastHandle);
-            var ido = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformFormat(mpdo);
+            var ido = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo);
 
             DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
         }

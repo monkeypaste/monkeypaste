@@ -875,6 +875,10 @@ namespace MpWpfApp {
             if(MpMainWindowViewModel.Instance.IsMainWindowLoading || IsAppPaused) {
                 return;
             }
+            if(MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent) {
+                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = false;
+                return;
+            }
             MpHelpers.RunOnMainThread(async () => {
                 await AddItemFromClipboard(mpdo);
             });
@@ -1906,9 +1910,37 @@ namespace MpWpfApp {
             async () => {
                 JumpToQueryIdxCommand.Execute(TotalTilesInQuery - 1);
                 await Task.Delay(100);
-                while (IsScrollJumping) { await Task.Delay(10); }
-                ScrollOffset = LastScrollOfset = ClipTrayTotalWidth;
+                while (IsAnyBusy) { await Task.Delay(10); }
+                
+                ScrollOffset = Math.Max(0,ClipTrayTotalWidth-ClipTrayScreenWidth);
                 Items[Items.Count - 1].IsSelected = true;
+            },
+            () => !IsBusy);
+
+        public ICommand ScrollToNextPageCommand => new RelayCommand(
+             async() => {
+                 int nextPageOffset = Math.Min(TotalTilesInQuery - 1, TailQueryIdx + 1);
+                 JumpToQueryIdxCommand.Execute(nextPageOffset);
+                 await Task.Delay(100);
+                 while (IsScrollJumping) { await Task.Delay(10); }
+                 if(Items.Where(x=>!x.IsPlaceholder).Count() == 0) {
+                     return;
+                 }
+                 Items[0].IsSelected = true;                 
+             },
+            () => !IsBusy);
+
+        public ICommand ScrollToPreviousPageCommand => new RelayCommand(
+            async() => {
+                int prevPageOffset = Math.Max(0, HeadQueryIdx - 1);
+                JumpToQueryIdxCommand.Execute(prevPageOffset);
+                await Task.Delay(100);
+                while (IsScrollJumping) { await Task.Delay(10); }
+                //ScrollOffset = LastScrollOfset = ClipTrayTotalWidth;
+                if (Items.Where(x => !x.IsPlaceholder).Count() == 0) {
+                    return;
+                }
+                Items[0].IsSelected = true;
             },
             () => !IsBusy);
 
@@ -2050,7 +2082,7 @@ namespace MpWpfApp {
                 //var ido = await GetDataObjectFromSelectedClips(false, false);
                 //MpClipboardHelper.MpClipboardManager.SetDataObjectWrapper(ido);
                 var ido = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(PrimaryItem.PrimaryItem.CopyItem, false, null);
-                MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformFormat(ido);
+                MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(ido);
             });
 
         public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(

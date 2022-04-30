@@ -116,6 +116,9 @@ namespace MpWpfApp {
                 Shortcuts.Add(scvm);
             } else {
                 //if shorcut updated
+                scvm.KeyString = shortcutKeyString;
+
+                await scvm.InitializeAsync(scvm.Shortcut, scvm.Command);
             }
             MpMainWindowViewModel.Instance.IsShowingDialog = false;
             return shortcutKeyString;
@@ -269,7 +272,7 @@ namespace MpWpfApp {
                 var scl = await MpDb.GetItemsAsync<MpShortcut>();
                 foreach (var sc in scl) {
                     ICommand shortcutCommand = null;
-                    switch ((MpShortcutType)sc.ShortcutId) {
+                    switch (sc.ShortcutType) {
                         case MpShortcutType.ShowMainWindow:
                             shortcutCommand = MpMainWindowViewModel.Instance.ShowWindowCommand;
                             break;
@@ -366,6 +369,12 @@ namespace MpWpfApp {
                             break;
                         case MpShortcutType.DecreaseSize:
                             shortcutCommand = MpMainWindowViewModel.Instance.DecreaseSizeCommand;
+                            break;
+                        case MpShortcutType.PreviousPage:
+                            shortcutCommand = MpClipTrayViewModel.Instance.ScrollToPreviousPageCommand;
+                            break;
+                        case MpShortcutType.NextPage:
+                            shortcutCommand = MpClipTrayViewModel.Instance.ScrollToNextPageCommand;
                             break;
                         default:
                             if (sc.ShortcutType == MpShortcutType.PasteCopyItem) {

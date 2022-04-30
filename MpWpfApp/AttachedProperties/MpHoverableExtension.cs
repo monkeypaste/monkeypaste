@@ -120,6 +120,9 @@ namespace MpWpfApp {
                 PropertyChangedCallback = (obj, e) => {
                     if(e.NewValue is bool isEnabled) {
                         var fe = obj as FrameworkElement;
+                        if(fe == null) {
+                            return;
+                        }
                         if (isEnabled) {
                             if(fe.IsLoaded) {
                                 Fe_Loaded(obj, null);

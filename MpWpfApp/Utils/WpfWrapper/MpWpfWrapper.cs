@@ -24,8 +24,11 @@ namespace MpWpfApp {
         public MpIOsInfo OsInfo { get; }
         public MpIPlatformDataObjectHelper DataObjectHelper { get; }
         public MpINativeMessageBox NativeMessageBox { get; }
-
+        
+        public MpIClipboardMonitor ClipboardMonitor { get; set; }
         public MpWpfWrapper() {
+            // NOTE ClipboardMonitor is set after bootstrapping
+
             Cursor = new MpWpfCursor();
             DbInfo = new MpWpfDbInfo();
             PreferenceIO = new MpWpfPreferences();

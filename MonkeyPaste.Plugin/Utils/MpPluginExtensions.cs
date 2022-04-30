@@ -72,6 +72,13 @@ namespace MonkeyPaste.Plugin {
             return new MemoryStream(bytes);
         }
 
+        public static string RemoveLastLineEnding(this string str) {
+            if (str.EndsWith(Environment.NewLine)) {
+                return str.Substring(0, str.Length - Environment.NewLine.Length);
+            }
+            return str;
+        }
+
         public static string TrimTrailingLineEndings(this string str) {
             return str.TrimEnd(System.Environment.NewLine.ToCharArray());
         }

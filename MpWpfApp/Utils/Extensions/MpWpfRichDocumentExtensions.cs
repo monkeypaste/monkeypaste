@@ -35,10 +35,10 @@ namespace MpWpfApp {
             if (neighbor == null) {
                 return;
             }
-            neighbor.CloneFormatting(te);
+            neighbor.CloneFormatting(ref te);
         }
 
-        public static void CloneFormatting(this TextElement from, TextElement to) {
+        public static void CloneFormatting(this TextElement from, ref TextElement to) {
             to.FontFamily = from.FontFamily;
             to.FontStyle = from.FontStyle;
             to.FontWeight = from.FontWeight;
@@ -116,8 +116,6 @@ namespace MpWpfApp {
                 ds = fd.GetDocumentSize(pad);
                 fd.PageWidth = ds.Width;
                 fd.PageHeight = ds.Height;
-                fd.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
-                fd.ConfigureLineHeight();
 
 
                 var p = rtb.Document.PagePadding;
@@ -156,6 +154,9 @@ namespace MpWpfApp {
                 } else {
                     rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 }
+
+                rtb.Document.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+                rtb.Document.ConfigureLineHeight();
             } else {
                 rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
@@ -259,8 +260,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        
         public static InlineUIContainer LoadImage(this TextRange tr, string base64Str, Size? docSize = null) {
             if (!base64Str.IsStringBase64()) {
                 Debugger.Break();
@@ -413,6 +412,54 @@ namespace MpWpfApp {
             return fd;
         }
 
+        public static void LoadAsRtf(this TextRange tr, string str, int iconId = 0) {
+            // NOTE iconId is only used to convert file path's to rtf w/ icon 
+
+            if (string.IsNullOrEmpty(str)) {
+                tr.Text = str;
+                return;
+            }
+            if (str.IsStringRichText()) {
+                using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
+                    try {
+                        tr.Load(stream, System.Windows.DataFormats.Rtf);
+
+                        var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
+                        if (rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
+                            //ignore to r
+                        } else if ((TextAlignment)rtbAlignment == TextAlignment.Justify) {
+                            tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                        }
+
+                        //var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
+                        //var ps = fd.GetDocumentSize();
+                        //fd.PageWidth = ps.Width;
+                        //fd.PageHeight = ps.Height;
+                        //fd.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+                        //fd.ConfigureLineHeight();
+
+                        //return fd;
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
+                        MpConsole.WriteLine("Exception Details: " + ex);
+                        return;// str.ToPlainText().ToFlowDocument();
+                    }
+                }
+                return;
+            }
+            if (str.IsStringBase64()) {
+                tr.LoadImage(str);
+                return;
+                //return str.ToImageDocument();
+            }
+            if (str.IsStringFileOrPathFormat()) {
+                tr.LoadFileItem(str, iconId);
+                return;
+                //return str.ToFilePathDocument();
+            }
+            tr.LoadAsRtf(str.ToRichText(iconId), iconId);
+        }
         public static string ToRichText(this FlowDocument fd) {
             //RichTextBox rtb = null;
             //TextSelection rtbSelection = null;
@@ -531,14 +578,18 @@ namespace MpWpfApp {
         }
 
         public static string ToPlainText(this FlowDocument fd) {
-            return new TextRange(fd.ContentStart, fd.ContentEnd).Text;
+            // NOTE this always adds a trailing line break so remove last two characters
+            return new TextRange(fd.ContentStart, fd.ContentEnd).Text.RemoveLastLineEnding();
+            
         }
 
         public static string ToPlainText(this TextElement te) {
+            // NOTE this always adds a trailing line break so remove last two characters
+
             if (te == null) {
                 return string.Empty;
             }
-            return new TextRange(te.ContentStart, te.ContentEnd).Text;
+            return new TextRange(te.ContentStart, te.ContentEnd).Text.RemoveLastLineEnding();
         }
 
         public static FlowDocument Combine(this FlowDocument fd, FlowDocument ofd, TextPointer insertPointer = null, bool insertNewline = true) {
@@ -549,54 +600,7 @@ namespace MpWpfApp {
             return CombineFlowDocuments(text.ToRichText().ToFlowDocument(), fd, insertPointer, insertNewline);
         }
 
-        public static void LoadAsRtf(this TextRange tr, string str, int iconId = 0) {
-            // NOTE iconId is only used to convert file path's to rtf w/ icon 
-
-            if (string.IsNullOrEmpty(str)) {
-                tr.Text = str;
-                return;
-            }
-            if (str.IsStringRichText()) {
-                using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
-                    try {
-                        tr.Load(stream, System.Windows.DataFormats.Rtf);
-
-                        var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
-                        if (rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
-                            //ignore to r
-                        } else if ((TextAlignment)rtbAlignment == TextAlignment.Justify) {
-                            tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-                        }
-
-                        //var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
-                        //var ps = fd.GetDocumentSize();
-                        //fd.PageWidth = ps.Width;
-                        //fd.PageHeight = ps.Height;
-                        //fd.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
-                        //fd.ConfigureLineHeight();
-
-                        //return fd;
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
-                        MpConsole.WriteLine("Exception Details: " + ex);
-                        return;// str.ToPlainText().ToFlowDocument();
-                    }
-                }
-                return;
-            }
-            if (str.IsStringBase64()) {
-                tr.LoadImage(str);
-                return;
-                //return str.ToImageDocument();
-            }
-            if (str.IsStringFileOrPathFormat()) {
-                tr.LoadFileItem(str, iconId);
-                return;
-                //return str.ToFilePathDocument();
-            }
-            tr.LoadAsRtf(str.ToRichText(iconId), iconId);
-        }
+        
         public static FlowDocument ToFlowDocument(this string str, int iconId = 0) {
             // NOTE iconId is only used to convert file path's to rtf w/ icon 
 
@@ -807,6 +811,7 @@ namespace MpWpfApp {
             foreach (var b in doc.Blocks) {
                 if (b is Paragraph p) {
                     p.LineHeight = p.FontSize + (p.FontSize * 0.333);
+                    doc.LineHeight = p.LineHeight; 
                 }
             }
         }

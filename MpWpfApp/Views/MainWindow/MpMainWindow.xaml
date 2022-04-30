@@ -1,54 +1,73 @@
-<Window x:Class="MpWpfApp.MpMainWindow"
-        x:Name="MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        xmlns:local="clr-namespace:MpWpfApp"
-        Title="MpMainWindow"
-        WindowStyle="None"
-        Background="Transparent"
-        AllowsTransparency="True"
-        Left="0"        
-        Visibility="Visible"
-        Loaded="MainWindow_Loaded"
-        Deactivated="MainWindow_Deactivated"
-        ShowInTaskbar="False"
-        ResizeMode="CanResize"
-        WindowState="Normal"
-        MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
-        DataContext="{x:Static local:MpMainWindowViewModel.Instance}"
-        Width="{Binding MainWindowWidth}"
-        d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
-                                         IsDesignTimeCreatable=False}">
-    
+<Window
+    x:Class="MpWpfApp.MpMainWindow"
+    x:Name="MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:local="clr-namespace:MpWpfApp"
+    Title="MpMainWindow"
+    WindowStyle="None"
+    Background="Transparent"
+    AllowsTransparency="True"
+    Left="0"
+    Visibility="Visible"
+    Loaded="MainWindow_Loaded"
+    Deactivated="MainWindow_Deactivated"
+    ShowInTaskbar="False"
+    ResizeMode="CanResize"
+    WindowState="Normal"
+    MouseLeftButtonDown="MainWindowCanvas_MouseLeftButtonDown"
+    DataContext="{x:Static local:MpMainWindowViewModel.Instance}"
+    Width="{Binding MainWindowWidth}"
+    d:DataContext="{d:DesignInstance Type=local:MpMainWindowViewModel,
+                                     IsDesignTimeCreatable=False}">
+
     <Window.Top>
-        <Binding Path="MainWindowContainerTop"
-                 Source="{x:Static local:MpMainWindowViewModel.Instance}" />
+        <Binding
+            Path="MainWindowContainerTop"
+            Source="{x:Static local:MpMainWindowViewModel.Instance}" />
     </Window.Top>
     <Window.Height>
-        <Binding Path="MainWindowContainerHeight"
-                 Source="{x:Static local:MpMainWindowViewModel.Instance}" />
+        <Binding
+            Path="MainWindowContainerHeight"
+            Source="{x:Static local:MpMainWindowViewModel.Instance}" />
     </Window.Height>
-    <Canvas x:Name="MainWindowCanvas"
-            Height="{Binding MainWindowContainerHeight}"
-            Width="{Binding MainWindowWidth}">
+    <!--<Window.InputBindings>
+        <KeyBinding
+            Gesture="Ctrl+A"
+            Command="{Binding SelectAllCommand,
+                              Source={x:Static local:MpClipTrayViewModel.Instance}}" />
+        <KeyBinding
+            Key="PageUp"
+            Command="{Binding ScrollToPreviousPageCommand,
+                              Source={x:Static local:MpClipTrayViewModel.Instance}}" />
+        <KeyBinding
+            Key="PageDown"
+            Command="{Binding ScrollToNextPageCommand,
+                              Source={x:Static local:MpClipTrayViewModel.Instance}}" />
+    </Window.InputBindings>-->
+    <Canvas
+        x:Name="MainWindowCanvas"
+        Height="{Binding MainWindowContainerHeight}"
+        Width="{Binding MainWindowWidth}">
 
         <i:Interaction.Behaviors>
             <local:MpExternalDropBehavior x:Name="ExternalDropBehavior" />
         </i:Interaction.Behaviors>
         <!--<AdornerDecorator>-->
-        <Grid x:Name="MainWindowGrid"
-              Height="{Binding MainWindowHeight,
-                               Mode=TwoWay,
-                               UpdateSourceTrigger=PropertyChanged,
-                               NotifyOnSourceUpdated=True,
-                               NotifyOnTargetUpdated=True}"
-              Width="{Binding MainWindowWidth}"
-              Canvas.Top="{Binding MainWindowTop}"
-              Canvas.Left="0">
+        <Grid
+            x:Name="MainWindowGrid"
+            Height="{Binding MainWindowHeight,
+                             Mode=TwoWay,
+                             UpdateSourceTrigger=PropertyChanged,
+                             NotifyOnSourceUpdated=True,
+                             NotifyOnTargetUpdated=True}"
+            Width="{Binding MainWindowWidth}"
+            Canvas.Top="{Binding MainWindowTop}"
+            Canvas.Left="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />
                 <RowDefinition Height="{local:MpMeasurementsBinding FilterMenuHeight}" />
@@ -59,47 +78,51 @@
             <local:MpSystemTrayView DataContext="{x:Static local:MpSystemTrayViewModel.Instance}" />
 
             <!--  Title Menu  -->
-            <Grid x:Name="TitleBarDockPanel"
-                  Grid.Row="0"
-                  local:MpHoverableExtension.IsEnabled="True"
-                  local:MpHoverableExtension.HoverCursor="ResizeNS"
-                  Background="{Binding .,
-                                       Converter={StaticResource StringToThemeBrushConverter},
-                                       ConverterParameter=Title_Menu_Background_Color}">
+            <Grid
+                x:Name="TitleBarDockPanel"
+                Grid.Row="0"
+                local:MpHoverableExtension.IsEnabled="True"
+                local:MpHoverableExtension.HoverCursor="ResizeNS"
+                Background="{Binding .,
+                                     Converter={StaticResource StringToThemeBrushConverter},
+                                     ConverterParameter=Title_Menu_Background_Color}">
 
                 <i:Interaction.Behaviors>
-                    <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
-                                            AffectsContent="True"
-                                            BoundElement="{Binding ElementName=MainWindowGrid}"
-                                            DoubleClickFrameworkElement="{Binding ElementName=FrameGripButton}"
-                                            IsResizing="{Binding IsResizing,
-                                                                 Mode=TwoWay,
-                                                                 UpdateSourceTrigger=PropertyChanged,
-                                                                 NotifyOnSourceUpdated=True,
-                                                                 NotifyOnTargetUpdated=True}"
-                                            CanResize="{Binding CanResize,
-                                                                Mode=TwoWay,
-                                                                UpdateSourceTrigger=PropertyChanged,
-                                                                NotifyOnSourceUpdated=True,
-                                                                NotifyOnTargetUpdated=True}"
-                                            ResizableEdge1="Top"
-                                            BoundHeight="{Binding MainWindowHeight,
-                                                                  Mode=TwoWay,
-                                                                  UpdateSourceTrigger=PropertyChanged,
-                                                                  NotifyOnSourceUpdated=True,
-                                                                  NotifyOnTargetUpdated=True}"
-                                            DefaultHeight="{Binding MainWindowDefaultHeight,
-                                                                    Source={x:Static local:MpMeasurements.Instance}}"
-                                            MinHeight="{Binding MainWindowMinHeight,
-                                                                Source={x:Static local:MpMeasurements.Instance}}"
-                                            MaxHeight="{Binding MainWindowMaxHeight,
-                                                                Source={x:Static local:MpMeasurements.Instance}}" />
+                    <local:MpResizeBehavior
+                        x:Name="MainWindowResizeBehvior"
+                        AffectsContent="True"
+                        BoundElement="{Binding ElementName=MainWindowGrid}"
+                        DoubleClickFrameworkElement="{Binding ElementName=FrameGripButton}"
+                        IsResizing="{Binding IsResizing,
+                                             Mode=TwoWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             NotifyOnSourceUpdated=True,
+                                             NotifyOnTargetUpdated=True}"
+                        CanResize="{Binding CanResize,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            NotifyOnSourceUpdated=True,
+                                            NotifyOnTargetUpdated=True}"
+                        ResizableEdge1="Top"
+                        BoundHeight="{Binding MainWindowHeight,
+                                              Mode=TwoWay,
+                                              UpdateSourceTrigger=PropertyChanged,
+                                              NotifyOnSourceUpdated=True,
+                                              NotifyOnTargetUpdated=True}"
+                        DefaultHeight="{Binding MainWindowDefaultHeight,
+                                                Source={x:Static local:MpMeasurements.Instance}}"
+                        MinHeight="{Binding MainWindowMinHeight,
+                                            Source={x:Static local:MpMeasurements.Instance}}"
+                        MaxHeight="{Binding MainWindowMaxHeight,
+                                            Source={x:Static local:MpMeasurements.Instance}}" />
 
                 </i:Interaction.Behaviors>
-                <TextBlock DockPanel.Dock="Left"
-                           Text="{Binding LogText}" />
-                <Button x:Name="FrameGripButton"
-                        Style="{StaticResource FrameGripButton}">
+                <TextBlock
+                    DockPanel.Dock="Left"
+                    Text="{Binding LogText}" />
+                <Button
+                    x:Name="FrameGripButton"
+                    Style="{StaticResource FrameGripButton}">
                     <!--<Grid HorizontalAlignment="Stretch"
                                       VerticalAlignment="Stretch" Background="Pink">
                                     <Grid.RowDefinitions>
@@ -122,10 +145,11 @@
             </Grid>
 
             <!--  FilterMenu  -->
-            <Grid Grid.Row="1"
-                  Background="{Binding .,
-                                       Converter={StaticResource StringToThemeBrushConverter},
-                                       ConverterParameter=Filter_Menu_Background_Color}">
+            <Grid
+                Grid.Row="1"
+                Background="{Binding .,
+                                     Converter={StaticResource StringToThemeBrushConverter},
+                                     ConverterParameter=Filter_Menu_Background_Color}">
                 <!--<Grid.Background>
                     <SolidColorBrush Color="DarkViolet" Opacity="0.4"/>
                 </Grid.Background>-->
@@ -135,60 +159,69 @@
                     <ColumnDefinition Width="5*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal"
-                            Grid.Column="0">
+                <StackPanel
+                    Orientation="Horizontal"
+                    Grid.Column="0">
                     <!--  Settings Button  -->
-                    <Button x:Name="SettingsWindowButton"
-                            Width="35"
-                            Height="35"
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
+                    <Button
+                        x:Name="SettingsWindowButton"
+                        Width="35"
+                        Height="35"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Command="{Binding ShowSettingsWindowCommand,
+                                          Source={x:Static local:MpSystemTrayViewModel.Instance}}"
+                        Template="{StaticResource SearchButtonControlTemplate}">
+                        <Image
+                            Source="{Binding .,
+                                             Source={StaticResource CogIcon},
+                                             Converter={StaticResource StringResourceToImageSourceConverter}}"
                             HorizontalAlignment="Center"
-                            Command="{Binding ShowSettingsWindowCommand,
-                                              Source={x:Static local:MpSystemTrayViewModel.Instance}}"
-                            Template="{StaticResource SearchButtonControlTemplate}">
-                        <Image Source="{Binding .,
-                                                Source={StaticResource CogIcon},
-                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
+                            VerticalAlignment="Center" />
                     </Button>
                     <!--  Lock Button  -->
-                    <ToggleButton x:Name="ToggleMainWindowLockButton"
-                                  Width="35"
-                                  Height="35"
-                                  Margin="5,0,0,0"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"
-                                  IsChecked="{Binding IsMainWindowLocked}"
-                                  Command="{Binding ToggleMainWindowLockCommand}"
-                                  CommandParameter="{StaticResource True}"
-                                  Template="{StaticResource LockToggleButtonControlTemplate}">
-                        <Image Source="{Binding Source={StaticResource LockIcon},
-                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
+                    <ToggleButton
+                        x:Name="ToggleMainWindowLockButton"
+                        Width="35"
+                        Height="35"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        IsChecked="{Binding IsMainWindowLocked}"
+                        Command="{Binding ToggleMainWindowLockCommand}"
+                        CommandParameter="{StaticResource True}"
+                        Template="{StaticResource LockToggleButtonControlTemplate}">
+                        <Image
+                            Source="{Binding Source={StaticResource LockIcon},
+                                             Converter={StaticResource StringResourceToImageSourceConverter}}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
                     </ToggleButton>
                 </StackPanel>
                 <!--  Sort Combobox  -->
-                <local:MpItemSortView x:Name="ItemSortView"
-                                      Grid.Column="1"
-                                      DataContext="{x:Static local:MpClipTileSortViewModel.Instance}" />
+                <local:MpItemSortView
+                    x:Name="ItemSortView"
+                    Grid.Column="1"
+                    DataContext="{x:Static local:MpClipTileSortViewModel.Instance}" />
                 <!--  Tag Tray  -->
-                <local:MpTagTrayView x:Name="TagTrayView"
-                                     Grid.Column="2"
-                                     DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
+                <local:MpTagTrayView
+                    x:Name="TagTrayView"
+                    Grid.Column="2"
+                    DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
                 <!--  Search  -->
-                <local:MpSearchBoxView x:Name="SearchView"
-                                       Grid.Column="3"
-                                       DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />
+                <local:MpSearchBoxView
+                    x:Name="SearchView"
+                    Grid.Column="3"
+                    DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />
             </Grid>
 
             <!--  3rd row row for tray  -->
-            <Grid Grid.Row="2"
-                  Background="{Binding .,
-                                       Converter={StaticResource StringToThemeBrushConverter},
-                                       ConverterParameter=Tag_Tree_Background_Color}">
+            <Grid
+                Grid.Row="2"
+                Background="{Binding .,
+                                     Converter={StaticResource StringToThemeBrushConverter},
+                                     ConverterParameter=Tag_Tree_Background_Color}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{Binding Path=SearchCriteriaListBoxHeight, Source={x:Static local:MpSearchBoxViewModel.Instance}}" />
                     <RowDefinition Height="*" />
@@ -199,66 +232,77 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <local:MpSearchCriteriaListBoxView x:Name="SearchDetailView"
-                                                   Grid.Row="0"
-                                                   Grid.ColumnSpan="2"
-                                                   VerticalAlignment="Stretch"
-                                                   VerticalContentAlignment="Stretch"
-                                                   DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />
+                <local:MpSearchCriteriaListBoxView
+                    x:Name="SearchDetailView"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"
+                    DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />
 
                 <!--  Side bar AppState Buttons  -->
-                <local:MpSidebarView Grid.Row="1"
-                                     Grid.Column="0"
-                                     HorizontalAlignment="Stretch"
-                                     HorizontalContentAlignment="Left"
-                                     VerticalAlignment="Stretch"
-                                     VerticalContentAlignment="Stretch"
-                                     Margin="0,3"
-                                     DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
+                <local:MpSidebarView
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"
+                    Margin="0,3"
+                    DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
 
-                <local:MpTagTreeView x:Name="TagTreeView"
-                                     Grid.Row="1"
-                                     Grid.Column="1"
-                                     Visibility="{Binding IsSidebarVisible,
-                                                          Converter={StaticResource BoolToVisibilityConverter}}"
-                                     DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
-                <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
-                                                  Grid.Row="1"
-                                                  Grid.Column="1"
-                                                  DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
-                                                  Visibility="{Binding IsSidebarVisible,
-                                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
-                <local:MpTriggerActionChooserView x:Name="ActionCollectionView"
-                                                  Grid.Row="1"
-                                                  Grid.Column="1"
-                                                  DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
-                                                  Visibility="{Binding IsSidebarVisible,
-                                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
-                <GridSplitter x:Name="SidebarGridSplitter"
-                              Grid.Row="1"
-                              Grid.Column="1"
-                              HorizontalAlignment="Right"
-                              VerticalAlignment="Stretch"
-                              Width="5"
-                              local:MpHoverableExtension.IsEnabled="True"
-                              local:MpHoverableExtension.HoverCursor="ResizeWE"
-                              IsVisibleChanged="SidebarGridSplitter_IsVisibleChanged">
+                <local:MpTagTreeView
+                    x:Name="TagTreeView"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Visibility="{Binding IsSidebarVisible,
+                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                    DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
+                <local:MpAnalyticItemSelectorView
+                    x:Name="ManageAnalyticItemsContainerView"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
+                    Visibility="{Binding IsSidebarVisible,
+                                         Converter={StaticResource BoolToVisibilityConverter}}" />
+                <local:MpTriggerActionChooserView
+                    x:Name="ActionCollectionView"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    DataContext="{x:Static local:MpActionCollectionViewModel.Instance}"
+                    Visibility="{Binding IsSidebarVisible,
+                                         Converter={StaticResource BoolToVisibilityConverter}}" />
+                <GridSplitter
+                    x:Name="SidebarGridSplitter"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Width="5"
+                    local:MpHoverableExtension.IsEnabled="True"
+                    local:MpHoverableExtension.HoverCursor="ResizeWE"
+                    IsVisibleChanged="SidebarGridSplitter_IsVisibleChanged">
                     <GridSplitter.Visibility>
-                        <MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}"
-                                      ConverterParameter="OR">
-                            <Binding Path="IsSidebarVisible"
-                                     Source="{x:Static local:MpTagTrayViewModel.Instance}" />
-                            <Binding Path="IsSidebarVisible"
-                                     Source="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}" />
-                            <Binding Path="IsSidebarVisible"
-                                     Source="{x:Static local:MpActionCollectionViewModel.Instance}" />
+                        <MultiBinding
+                            Converter="{StaticResource MultiBoolToVisibilityConverter}"
+                            ConverterParameter="OR">
+                            <Binding
+                                Path="IsSidebarVisible"
+                                Source="{x:Static local:MpTagTrayViewModel.Instance}" />
+                            <Binding
+                                Path="IsSidebarVisible"
+                                Source="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}" />
+                            <Binding
+                                Path="IsSidebarVisible"
+                                Source="{x:Static local:MpActionCollectionViewModel.Instance}" />
                         </MultiBinding>
                     </GridSplitter.Visibility>
                 </GridSplitter>
-                <local:MpClipTrayContainerView x:Name="ClipTrayView"
-                                               Grid.Row="1"
-                                               Grid.Column="2"
-                                               DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
+                <local:MpClipTrayContainerView
+                    x:Name="ClipTrayView"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    DataContext="{x:Static local:MpClipTrayViewModel.Instance}" />
             </Grid>
         </Grid>
         <!--</AdornerDecorator>-->

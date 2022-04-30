@@ -13,15 +13,15 @@ namespace MpWpfApp {
     /// </summary>
     /// 
     public class MpNotifyIcon : IDisposable {
-        public NotifyIcon targetNotifyIcon;
+        public NotifyIcon TargetNotifyIcon { get; private set; }
 
         public event EventHandler<bool> MouseClick;
 
         public MpNotifyIcon() {
             // Configure and show a notification icon in the system tray
-            targetNotifyIcon = new NotifyIcon();
-            targetNotifyIcon.Visible = true;
-            targetNotifyIcon.MouseClick += TargetNotifyIcon_MouseClick;
+            TargetNotifyIcon = new NotifyIcon();
+            TargetNotifyIcon.Visible = true;
+            TargetNotifyIcon.MouseClick += TargetNotifyIcon_MouseClick;
         }
 
         private void TargetNotifyIcon_MouseClick(object sender, MouseEventArgs e) {
@@ -52,7 +52,7 @@ namespace MpWpfApp {
                 return;
 
             if (IsDisposing) {
-                targetNotifyIcon.Dispose();
+                TargetNotifyIcon.Dispose();
             }
 
             // Free any unmanaged resources in this section

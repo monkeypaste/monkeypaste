@@ -26,11 +26,27 @@ namespace MpWpfApp {
         RichTextBox artb;
         List<ButtonBase> buttons;
 
+        private ObservableCollection<double> _defaultFontSizes = new ObservableCollection<double>() {
+            8,
+            9,
+            10,
+            12,
+            14,
+            16,
+            18,
+            24,
+            36,
+            48,
+            72
+        };
+
         public MpRtbEditToolbarView() {
             InitializeComponent();
 
             FontFamilyCombo.ItemsSource = Fonts.SystemFontFamilies;
+            FontSizeCombo.ItemsSource = _defaultFontSizes;
             Visibility = Visibility.Collapsed;
+            
         }
 
 
@@ -93,7 +109,11 @@ namespace MpWpfApp {
             } else {
                 fontSize = Math.Round((double)fontSize);
             }
-            FontSizeCombo.Text = fontSize.ToString();
+            if(!_defaultFontSizes.Contains((double)fontSize)) {
+                _defaultFontSizes.Add((double)fontSize);
+                _defaultFontSizes = new ObservableCollection<double>(_defaultFontSizes.OrderBy(x => x));
+            }
+            FontSizeCombo.SelectedItem = (double)fontSize;
 
             // Set Font buttons
             BoldButton.IsChecked = artb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
@@ -162,7 +182,7 @@ namespace MpWpfApp {
                 return;
             }
             // Process selection
-            artb.Focus();
+            
             var pointSize = FontSizeCombo.SelectedItem.ToString();
             var pixelSize = System.Convert.ToDouble(pointSize); // * (96 / 72);
             var textRange = new TextRange(artb.Selection.Start, artb.Selection.End);

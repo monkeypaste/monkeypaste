@@ -102,6 +102,8 @@ namespace MpWpfApp {
                 await _items[i].Register();
             }
 
+            MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardHelper.MpClipboardManager.MonitorService;
+
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 
             //MpRtfToHtmlConverter.Test();
