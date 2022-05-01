@@ -141,16 +141,16 @@ namespace MpWpfApp {
         }
 
         public override MpShape[] GetDropTargetAdornerShape() {
+            var dt_ll = new List<MpShape>();
             if (AssociatedObject == null || AssociatedObject.Rtb == null) {
-                return null;
+                return dt_ll.ToArray();
             }
             if (DropIdx < 0) {
-                return null;
+                return dt_ll.ToArray();
             }
-            var dt_ll = new List<MpShape>();
             var dt_tp = AssociatedObject.Rtb.Document.ContentStart.GetPositionAtOffset(DropIdx);
             if(dt_tp == null) {
-                return null;
+                return dt_ll.ToArray();
             }
             // NOTE since default tile width is usually less than document width the lines will wrap
             // so for block drop use rect at beginning/end of line or it will be at weird spot

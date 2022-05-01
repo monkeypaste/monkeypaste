@@ -310,6 +310,12 @@ namespace MpWpfApp {
         }
 
         public void Resize(double dx, double dy) {
+            if(!ResizableEdges.HasFlag(MpRectEdgeFlags.Left) && !ResizableEdges.HasFlag(MpRectEdgeFlags.Right)) {
+                dx = 0;
+            }
+            if (!ResizableEdges.HasFlag(MpRectEdgeFlags.Top) && !ResizableEdges.HasFlag(MpRectEdgeFlags.Bottom)) {
+                dy = 0;
+            }
             if (Math.Abs(dx + dy) < 0.1) {
                 return;
             }

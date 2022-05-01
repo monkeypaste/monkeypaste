@@ -266,29 +266,30 @@ namespace MpWpfApp {
                 return null;
             }
 
-            BitmapSource bmpSrc = base64Str.ToBitmapSource();
+            docSize = docSize.HasValue ? docSize : MpMeasurements.Instance.ClipTileContentDefaultSize;
+            BitmapSource bmpSrc = base64Str.ToBitmapSource();//.Resize(docSize.Value);
 
             var img = new Image() {
                 Source = bmpSrc,
-                Width = bmpSrc.Width,
-                Height = bmpSrc.Height,
-                Stretch = System.Windows.Media.Stretch.None
+                Width = docSize.Value.Width,
+                Height = docSize.Value.Height,
+                Stretch = System.Windows.Media.Stretch.Uniform
             };
 
-            docSize = docSize.HasValue ? docSize : MpMeasurements.Instance.ClipTileContentDefaultSize;
+            
             double pad = 0;
 
-            var vb = new Viewbox() {
-                VerticalAlignment = VerticalAlignment.Top,
-                Stretch = Stretch.Uniform,
-                Width = docSize.Value.Width - pad,
-                Height = docSize.Value.Width - pad,
-                //Margin = new Thickness(5),
-                Child = img
-            };
+            //var vb = new Viewbox() {
+            //    VerticalAlignment = VerticalAlignment.Top,
+            //    Stretch = Stretch.Uniform,
+            //    Width = docSize.Value.Width - pad,
+            //    Height = docSize.Value.Width - pad,
+            //    //Margin = new Thickness(5),
+            //    Child = img
+            //};
 
             tr.Text = string.Empty;
-            return new InlineUIContainer(vb,tr.Start);
+            return new InlineUIContainer(img,tr.Start);
         }
         
         public static FlowDocument ToImageDocument(this string base64Str, Size? docSize = null) {
@@ -297,14 +298,14 @@ namespace MpWpfApp {
                 return string.Empty.ToFlowDocument();
             }
 
-            BitmapSource bmpSrc = base64Str.ToBitmapSource();
+            //BitmapSource bmpSrc = base64Str.ToBitmapSource();
 
-            var img = new Image() {
-                Source = bmpSrc,
-                Width = bmpSrc.Width,
-                Height = bmpSrc.Height,
-                Stretch = System.Windows.Media.Stretch.Uniform
-            };
+            //var img = new Image() {
+            //    Source = bmpSrc,
+            //    Width = bmpSrc.Width,
+            //    Height = bmpSrc.Height,
+            //    Stretch = System.Windows.Media.Stretch.Uniform
+            //};
 
             var fd = string.Empty.ToFlowDocument();
             var p = fd.Blocks.FirstBlock as Paragraph;
@@ -326,7 +327,7 @@ namespace MpWpfApp {
             //p.Inlines.Add(iuic);
 
             fd.LineStackingStrategy = LineStackingStrategy.MaxHeight;
-            fd.ConfigureLineHeight();
+            //fd.ConfigureLineHeight();
             p.ContentRange().ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Center);
 
             return fd;

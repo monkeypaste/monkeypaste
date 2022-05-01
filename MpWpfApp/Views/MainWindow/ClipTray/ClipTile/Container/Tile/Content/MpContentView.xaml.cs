@@ -49,17 +49,41 @@ namespace MpWpfApp {
                         await SyncModelsAsync();
                     });
                     break;
+                case MpMessageType.ContentItemsChanged:
+                    ReattachAllBehaviors();
+                    break;
             }
         }
 
+        public void ReattachAllBehaviors() {
+            DetachAllBehaviors();
+            AttachAllBehaviors();
+        }
         private void AttachAllBehaviors() {
             //RtbHighlightBehavior.Attach(this);
              ContentViewDropBehavior.Attach(this);
+
+            var ctv = this.GetVisualAncestor<MpClipTileView>();
+            if (ctv != null) {
+                var cttv = ctv.TileTitleView;
+                if (cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
+                    MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                    MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                }
+            }
         }
 
         private void DetachAllBehaviors() {
             //RtbHighlightBehavior.Detach();
-            //ContentViewDropBehavior.Detach();
+            ContentViewDropBehavior.Detach();
+
+            //var ctv = this.GetVisualAncestor<MpClipTileView>();
+            //if (ctv != null) {
+            //    var cttv = ctv.TileTitleView;
+            //    if (cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
+            //        MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+            //    }
+            //}
         }
 
         private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
@@ -97,9 +121,9 @@ namespace MpWpfApp {
                         ReceivedDragDropManagerMessage);
 
                     MpMessenger.Register<MpMessageType>(
-                        BindingContext.Parent,
+                        BindingContext,
                         ReceivedClipTileViewModelMessage,
-                        BindingContext.Parent);
+                        BindingContext);
 
                     MpMessenger.Register<MpMessageType>(
                         (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior,
@@ -111,7 +135,7 @@ namespace MpWpfApp {
                         return;
                     }
                 } else {
-                    AttachAllBehaviors();
+                    //AttachAllBehaviors();
                 }
                 
                 ScrollToHome(); 

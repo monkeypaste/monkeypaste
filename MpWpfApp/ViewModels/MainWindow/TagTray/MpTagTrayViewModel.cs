@@ -233,7 +233,8 @@ namespace MpWpfApp {
             // I think this is because of tray's load (since scroll changes from resizing) more and handling persistent selection so wait till tray's done
 
             while(MpClipTrayViewModel.Instance.IsAnyBusy) {
-                await Task.Delay(100);
+                //await Task.Delay(100);
+                return;
             }
             
             foreach (var ttvm in Items) {

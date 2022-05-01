@@ -57,6 +57,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool IsAnyBusy => IsBusy || Templates.Any(x => x.IsBusy);
         public bool IsAllTemplatesFilled => Templates.All(x => x.HasText);
 
         public bool IsAnyTemplateHasText => Templates.Any(x => x.HasText);

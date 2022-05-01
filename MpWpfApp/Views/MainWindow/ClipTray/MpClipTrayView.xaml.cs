@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,18 +52,35 @@ namespace MpWpfApp {
         }
 
         private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e) {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move) {
-                var lbi = ClipTray.GetListBoxItem(e.Position.Index);
-                if(lbi != null) {
-                    var cttv = lbi.GetVisualDescendent<MpClipTileTitleView>();
-                    if(cttv != null) {
-                        if(cttv.ClipTileTitleMarqueeCanvas != null) {
+            //if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move) {
+            //    var lbi = ClipTray.GetListBoxItem(e.Position.Index);
+            //    if(lbi != null) {
+            //        var cttv = lbi.GetVisualDescendent<MpClipTileTitleView>();
+            //        if(cttv != null) {
+            //            if(cttv.ClipTileTitleMarqueeCanvas != null) {
+            //                MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+            //                MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+            //            }
+            //        }
+            //    }
+            //}
+
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
+               e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move ||
+               e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset ||
+               e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace) {
+
+                var cttvl = this.GetVisualDescendents<MpClipTileTitleView>();
+                foreach (var cttv in cttvl) {
+                    if (cttv != null) {
+                        if (cttv.ClipTileTitleMarqueeCanvas != null) {
                             MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
                             MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
                         }
                     }
                 }
             }
+
         }
 
 

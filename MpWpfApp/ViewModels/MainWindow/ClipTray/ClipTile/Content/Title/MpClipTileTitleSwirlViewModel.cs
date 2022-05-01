@@ -88,6 +88,7 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsAnyBusy => IsBusy || Swirls.Any(x => x.IsBusy);
         public bool HasUserDefinedColor {
             get {
                 if(Parent == null || Parent.CopyItem == null || string.IsNullOrEmpty(Parent.CopyItem.ItemColor)) {
@@ -117,7 +118,7 @@ namespace MpWpfApp {
             }
             IsBusy = true;
 
-            var icon = await MpDb.GetItemAsync<MpIcon>(Parent.IconId);
+            var icon = MpDb.GetItem<MpIcon>(Parent.IconId);
 
             var pallete = new List<string>{
                     icon.HexColor1,
@@ -137,7 +138,7 @@ namespace MpWpfApp {
 
             Swirls.Clear();
 
-            for (int i = 0; i < pallete.Count; i++) {
+            for (int i = 0; i < pallete.ToList().Count; i++) {
                 var scb = new SolidColorBrush(pallete[i].ToWinMediaColor());
                 MpSwirlLayerViewModel slvm = CreateSwirlLayerViewModel(i, scb);
 

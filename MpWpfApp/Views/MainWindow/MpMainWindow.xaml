@@ -35,20 +35,6 @@
             Path="MainWindowContainerHeight"
             Source="{x:Static local:MpMainWindowViewModel.Instance}" />
     </Window.Height>
-    <!--<Window.InputBindings>
-        <KeyBinding
-            Gesture="Ctrl+A"
-            Command="{Binding SelectAllCommand,
-                              Source={x:Static local:MpClipTrayViewModel.Instance}}" />
-        <KeyBinding
-            Key="PageUp"
-            Command="{Binding ScrollToPreviousPageCommand,
-                              Source={x:Static local:MpClipTrayViewModel.Instance}}" />
-        <KeyBinding
-            Key="PageDown"
-            Command="{Binding ScrollToNextPageCommand,
-                              Source={x:Static local:MpClipTrayViewModel.Instance}}" />
-    </Window.InputBindings>-->
     <Canvas
         x:Name="MainWindowCanvas"
         Height="{Binding MainWindowContainerHeight}"

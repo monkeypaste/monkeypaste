@@ -333,12 +333,19 @@ namespace MpWpfApp {
                 items: ctvm.Items.Select(x=>x.CopyItem).ToList(), 
                 rootDocument: rtb.Document, 
                 decodeAsRootDocument: true);
+
+            if(ctvm == null || ctvm.HeadItem == null) {
+                return;
+            }
             
             switch (ctvm.HeadItem.CopyItemType) {
                 case MpCopyItemType.Text:
                 case MpCopyItemType.FileList:
                     rtb.HorizontalAlignment = HorizontalAlignment.Stretch;
                     rtb.VerticalAlignment = VerticalAlignment.Stretch;
+                    rtb.FitDocToRtb();
+                    break;
+                case MpCopyItemType.Image:
                     rtb.FitDocToRtb();
                     break;
                 
@@ -447,7 +454,14 @@ namespace MpWpfApp {
                     MpTemplateHyperlink.Create(templateRanges[i], templateItems[i]);
                 }
 
-                var rcivm = (rtb.DataContext as MpClipTileViewModel).HeadItem;
+                var ctvm = rtb.DataContext as MpClipTileViewModel;
+                if(ctvm == null) {
+                    return fd;
+                }
+                var rcivm = ctvm.HeadItem;
+                if(rcivm == null) {
+                    return fd;
+                }
                 rcivm.UnformattedContentSize = fd.GetDocumentSize();
                 //if(rcivm.CopyItemTitle == "Untitled1942") {
                     //Debugger.Break();

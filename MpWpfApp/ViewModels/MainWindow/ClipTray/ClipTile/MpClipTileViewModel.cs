@@ -1061,6 +1061,13 @@
 
         #endregion
 
+        public override string ToString() {
+            if(IsPlaceholder) {
+                return "PLACEHOLDER";
+            }
+            return $"TILE ({TrayX})" + HeadItem.ToString();
+        }
+
         #endregion
 
         #region Protected Methods

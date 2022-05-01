@@ -403,6 +403,8 @@ namespace MpWpfApp {
         }
 
         public static int GetItemIndexAtPoint(this ListBox lb, Point mp, Visual relativeTo = null) {
+            relativeTo = relativeTo == null ? lb : relativeTo;
+
             Rect lbr = lb.GetListBoxRect();
             //mp.X += sv.HorizontalOffset;
             //mp.Y += sv.VerticalOffset;

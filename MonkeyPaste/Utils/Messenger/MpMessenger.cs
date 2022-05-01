@@ -82,7 +82,7 @@ namespace MonkeyPaste {
         }
 
         public static void Send<T>(T message, object context) {
-            MpConsole.WriteLine("Messenger sending: " + message.ToString());
+            //MpConsole.WriteLine("Messenger sending: " + message.ToString());
 
             IEnumerable<KeyValuePair<MessengerKey, List<object>>> results;
 

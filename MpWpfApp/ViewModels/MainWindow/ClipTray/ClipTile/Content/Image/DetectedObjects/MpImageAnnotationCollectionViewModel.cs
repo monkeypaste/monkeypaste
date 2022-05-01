@@ -24,6 +24,13 @@ namespace MpWpfApp {
         #region View Models
 
         #endregion
+
+        #region State
+
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
+
+        #endregion
+
         #endregion
 
         #region Public Methods

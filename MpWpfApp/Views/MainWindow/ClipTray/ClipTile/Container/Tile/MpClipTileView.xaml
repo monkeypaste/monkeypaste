@@ -17,7 +17,7 @@
     </i:Interaction.Behaviors>
     <local:MpClipBorder x:Name="ClipTileClipBorder"
                         DataContext="{Binding}"
-                        Margin="{local:MpMeasurementsBinding ClipTileMargin}"
+                        Margin="{Binding ClipTileMargin, Source={x:Static local:MpMeasurements.Instance}}"
                         BorderThickness="{local:MpMeasurementsBinding ClipTileBorderThickness}"
                         Width="{Binding TileBorderWidth}"
                         Height="{Binding TileBorderHeight}"

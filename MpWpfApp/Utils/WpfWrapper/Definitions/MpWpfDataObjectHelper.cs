@@ -392,6 +392,9 @@ namespace MpWpfApp {
         }
 
         private void SetDataWrapper(ref DataObject dobj, MpClipboardFormatType format, string dataStr) {
+            if(string.IsNullOrEmpty(dataStr)) {
+                return;
+            }
             string nativeTypeName = GetWpfFormatName(format);
             switch (format) {
                 case MpClipboardFormatType.Bitmap:

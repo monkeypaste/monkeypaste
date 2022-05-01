@@ -132,6 +132,7 @@ namespace MpWpfApp {
 
         public double MainWindowHeight { get; set; } = MpMeasurements.Instance.MainWindowDefaultHeight;
 
+
         public double MainWindowTop { get; set; } = MpMeasurements.Instance.WorkAreaBottom;
 
         #endregion

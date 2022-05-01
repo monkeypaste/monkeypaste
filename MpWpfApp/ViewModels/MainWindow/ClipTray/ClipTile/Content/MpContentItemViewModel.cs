@@ -337,6 +337,35 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsAnyBusy {
+            get {
+                if(IsBusy) {
+                    return true;
+                }
+                if(TitleSwirlViewModel != null && TitleSwirlViewModel.IsAnyBusy) {
+                    return true;
+                }
+                if(DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.IsAnyBusy) {
+                    return true;
+                }
+                if(TemplateCollection != null && TemplateCollection.IsAnyBusy) {
+                    return true;
+                }
+                if(AppViewModel != null && AppViewModel.IsBusy) {
+                    return true;
+                }
+                if(UrlViewModel != null && UrlViewModel.IsBusy) {
+                    return true;
+                }
+                if(SourceViewModel != null && SourceViewModel.IsBusy) {
+                    return true;
+                }
+                if(ShortcutViewModel != null && ShortcutViewModel.IsBusy) {
+                    return true;
+                }
+                return false;
+            }
+        }
         public bool HasDetectedObjects => DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.Items.Count > 0;
 
         public bool IsOverHyperlink { get; set; } = false;
@@ -846,6 +875,12 @@ namespace MpWpfApp {
             // TODO maybe add archiving
         }
 
+        public override string ToString() {
+            if (IsPlaceholder) {
+                return "PLACEHOLDER";
+            }
+            return CopyItem.ToString();
+        }
         #region IDisposable
 
         public override void Dispose() {

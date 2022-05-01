@@ -23,7 +23,7 @@
         <Grid>
             <AdornerDecorator>
                 <ScrollViewer
-                    x:Name="PagingScrollViewer"
+                    x:Name="PagingScrollViewer" 
                     MaxWidth="{Binding ClipTrayScreenWidth}"
                     HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible,
                                                             Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
@@ -108,6 +108,7 @@
                         <local:MpListBox.ItemTemplate>
                             <DataTemplate>
                                 <local:MpClipTileContainerView
+                                    SnapsToDevicePixels="True"
                                     DataContext="{Binding}"
                                     Visibility="{Binding IsPlaceholder,
                                                          Converter={StaticResource BoolToVisibilityFlipConverter}}" />

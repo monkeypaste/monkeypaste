@@ -11,8 +11,7 @@ using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpPagingListBoxBehavior : MpBehavior<ScrollViewer> {
-        
+    public class MpPagingListBoxBehavior : MpBehavior<ScrollViewer> {        
         #region Private Variables
 
         private int _lastWheelDelta = 0;
@@ -206,12 +205,18 @@ namespace MpWpfApp {
 
         private void ReceivedMainWindowResizeBehaviorMessage(MpMessageType msg) {
             switch (msg) {
-                //case MpMessageType.Resizing:
+                case MpMessageType.ResizingMainWindowComplete:
+                case MpMessageType.ResizingContent:
                 case MpMessageType.ResizeContentCompleted:
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.MaximumScrollOfset));
-                    ApplyOffsetChange(true);
-                    //MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                    
+                    //
+                    if (msg == MpMessageType.ResizingMainWindowComplete ||
+                       msg == MpMessageType.ResizeContentCompleted) {
+                        //  MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                        ApplyOffsetChange(true);
+                    }
+
+
                     break;
             }
         }
@@ -353,48 +358,58 @@ namespace MpWpfApp {
         }
 
         private void ApplyOffsetChange(bool isChangeResize = false) {
-            if (!LoadMoreCommand.CanExecute(0) || MpClipTrayViewModel.Instance.IsThumbDragging) {
+            if (!LoadMoreCommand.CanExecute(0) || MpClipTrayViewModel.Instance.IsThumbDragging || isChangeResize != MpResizeBehavior.IsAnyResizing) {
                 return;
             }
 
             double horizontalChange = MpClipTrayViewModel.Instance.ScrollOffset - MpClipTrayViewModel.Instance.LastScrollOfset;
 
-            Rect svr = AssociatedObject.Bounds();
+            
             ListBox lb = AssociatedObject.GetVisualDescendent<ListBox>();
+            Rect svr = AssociatedObject.Bounds();
 
             if (horizontalChange > 0 || isChangeResize) {
                 //scrolling down towards end of list
 
                 //get item under point in middle of right edge of listbox
-                int r_target_idx = lb.GetItemIndexAtPoint(new Point(svr.Right, svr.Height / 2), AssociatedObject);
-                if (r_target_idx < 0) {
-                    return;
-                }
-                if (r_target_idx >= lb.Items.Count) {
-                    r_target_idx = lb.Items.Count - 1;
-                }
-                //when last visible item's right edge is past the listboxes edge
-                int remainingItemsOnRight = lb.Items.Count - r_target_idx - 1;
+                int item_at_left_edge_idx = lb.GetItemIndexAtPoint(new Point(svr.Left, svr.Height / 2), AssociatedObject);
+                //if (item_at_left_edge_idx < 0) {
+                //    return;
+                //}
+                //if (item_at_left_edge_idx >= lb.Items.Count) {
+                //    item_at_left_edge_idx = lb.Items.Count - 1;
+                    
+                //}
+                ////when last visible item's right edge is past the listboxes edge
+                //int remainingItemsOnRight = lb.Items.Count - item_at_left_edge_idx - 1;
 
-                if (remainingItemsOnRight < RemainingItemsThreshold) {
+                if (item_at_left_edge_idx >= RemainingItemsThreshold) {
                     LoadMoreCommand.Execute(1);
                 }
+
             } 
+            if(isChangeResize) {
+                if (!LoadMoreCommand.CanExecute(0)) {
+                    return;
+                }
+            }
             if (horizontalChange < 0 || isChangeResize) {
                 //scrolling up towards beginning of list
 
-                int l_lbi_idx = lb.GetItemIndexAtPoint(new Point(svr.Left, svr.Height / 2),AssociatedObject);
-                if (l_lbi_idx < 0) {
-                    l_lbi_idx = 0;
+                int item_at_right_edge_idx = lb.GetItemIndexAtPoint(new Point(svr.Right, svr.Height / 2), AssociatedObject);
+                if (item_at_right_edge_idx < 0) {
+                    item_at_right_edge_idx = 0;
                 }
 
                 //when last visible item's right edge is past the listboxes edge
-                int remainingItemsOnLeft = l_lbi_idx;
+                int remainingItemsOnRight = lb.Items.Count - item_at_right_edge_idx - 1;
                 //MpConsole.WriteLine($"Scrolling left, right most idx: {l_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
 
-                if (remainingItemsOnLeft < RemainingItemsThreshold) {
+                if (remainingItemsOnRight >= RemainingItemsThreshold) {
                     LoadMoreCommand.Execute(-1);
                 }
+
+
             }
         }
         #endregion
