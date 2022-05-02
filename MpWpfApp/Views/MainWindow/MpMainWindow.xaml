@@ -77,8 +77,8 @@
                     <local:MpResizeBehavior
                         x:Name="MainWindowResizeBehvior"
                         AffectsContent="True"
+                        IsEnabled="True"
                         BoundElement="{Binding ElementName=MainWindowGrid}"
-                        DoubleClickFrameworkElement="{Binding ElementName=FrameGripButton}"
                         IsResizing="{Binding IsResizing,
                                              Mode=TwoWay,
                                              UpdateSourceTrigger=PropertyChanged,

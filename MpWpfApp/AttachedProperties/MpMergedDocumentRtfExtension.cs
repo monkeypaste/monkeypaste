@@ -569,6 +569,9 @@ namespace MpWpfApp {
             //always search backwards first for first reference
             
             while(true) {
+                if(ctp == null) {
+                    break;
+                }
                 int curOffset = fd.ContentStart.GetOffsetToPosition(ctp);
                 if(curOffset <= 1) {
                     break;
@@ -608,11 +611,11 @@ namespace MpWpfApp {
 
             var ci = te.Tag as MpCopyItem;
             if (ci == null) {
-                Debugger.Break();
+                return;
             }
             var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id);
             if (civm == null) {
-                Debugger.Break();
+                return;
             }
 
             //civm.ItemEditorBackgroundHexColor = te.Background == null ? MpSystemColors.Transparent : te.Background.ToHex();

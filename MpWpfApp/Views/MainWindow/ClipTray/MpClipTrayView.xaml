@@ -23,13 +23,12 @@
         <Grid>
             <AdornerDecorator>
                 <ScrollViewer
-                    x:Name="PagingScrollViewer" 
+                    x:Name="PagingScrollViewer"
                     MaxWidth="{Binding ClipTrayScreenWidth}"
                     HorizontalScrollBarVisibility="{Binding IsHorizontalScrollBarVisible,
                                                             Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
                     VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Behaviors>
-                        <!--  old values:  Friction=0.85 WheelDampening=0.08  -->
                         <local:MpPagingListBoxBehavior
                             x:Name="LoadMoreItemsBehavior"
                             Friction="0.85"
@@ -62,7 +61,7 @@
                         ScrollViewer.CanContentScroll="False"
                         ScrollViewer.IsDeferredScrollingEnabled="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                        ScrollViewer.VerticalScrollBarVisibility="Hidden">                        
+                        ScrollViewer.VerticalScrollBarVisibility="Hidden">
                         <local:MpListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
                                 <EventSetter

@@ -11,9 +11,9 @@ using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpPagingListBoxBehavior : MpBehavior<ScrollViewer> {        
+    public class MpPagingListBoxBehavior : MpBehavior<ScrollViewer> {
         #region Private Variables
-
+        private bool _isScrollingIntoView = false;
         private int _lastWheelDelta = 0;
         private static double _velocity = 0;
 
@@ -119,35 +119,8 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public int FindJumpTileIdx(double trackValue) {
-            int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
-            var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
-            var uniqueWidthLookup = MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup;
-
-            double offsetX = 0;
-            for (int i = 0; i < totalTileCount; i++) {
-                offsetX += MpMeasurements.Instance.ClipTileMargin;
-                int tileHeadId = headItemIds[i];
-
-
-                if (uniqueWidthLookup.ContainsKey(tileHeadId)) {
-                    offsetX += uniqueWidthLookup[tileHeadId];
-                    //offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
-                } else {
-                    offsetX += MpClipTileViewModel.DefaultBorderWidth;
-                }
-
-                if (offsetX >= trackValue) {
-                    return i;
-                }
-                offsetX += MpMeasurements.Instance.ClipTileMargin;
-            }
-
-            return totalTileCount - 1;
-        }
 
         public void ScrollIntoView(object obj) {
-            return;
             var ctrvm = AssociatedObject.DataContext as MpClipTrayViewModel;
             if (ctrvm.HasScrollVelocity || ctrvm.IsBusy) {
                 return;
@@ -160,42 +133,45 @@ namespace MpWpfApp {
                 if(!ctrvm.Items.Contains(ctvm)) {
                     return;
                 }
-                double itemX = ctvm.TrayX;
-                double itemWidth = ctvm.TileBorderWidth;
-                double pad = 20;
-                double deltaScrollOfset = 0;
-                if (itemX < ctrvm.ScrollOffset) {
-                    // tile is before current scroll location
-                    double diff = ctrvm.ScrollOffset - itemX;
-                    deltaScrollOfset = diff - pad;
-                } else if (ctrvm.ScrollOffset + ctrvm.ClipTrayScreenWidth < itemX + itemWidth) {
-                    // tile is either after current viewport or only partially visible
-                    double diff = (itemX + itemWidth) - (ctrvm.ScrollOffset + ctrvm.ClipTrayScreenWidth);
-                    deltaScrollOfset = diff + pad;
+                var svr = AssociatedObject.Bounds();
+                var ctvm_rect = new Rect(ctvm.TrayX - ctrvm.ScrollOffset, 0, ctvm.TileBorderWidth, ctvm.TileBorderHeight);
+                if(svr.Contains(ctvm_rect)) {
+                    return;
                 }
-                if (deltaScrollOfset != 0) {
-                    double newOffset = ctrvm.ScrollOffset + deltaScrollOfset;
+                double pad = 10;
+                double deltaScrollOfset;
+                if(ctvm_rect.Left < svr.Left) {
+                    //item is outside on left
+                    deltaScrollOfset = ctvm_rect.Left - svr.Left - pad;
+                } else if(ctvm_rect.Right > svr.Right) {
+                    //item is outside on right
+                    deltaScrollOfset = ctvm_rect.Right - svr.Right + pad;
+                } else {
+                    return;
+                }
 
-                    newOffset = Math.Max(0, Math.Min(newOffset, ctrvm.MaximumScrollOfset));
-
-                    MpHelpers.RunOnMainThread(async () => {
-                        while(true) {
-                            double diff = Math.Abs(ctrvm.ScrollOffset - newOffset);
-                            if (diff < 0.1) {
-                                return;
+                MpHelpers.RunOnMainThread(async () => {
+                    double targetScrollOffset = ctrvm.ScrollOffset + deltaScrollOfset;
+                    double vel = 30;
+                    while(true) {
+                        if(deltaScrollOfset > 0) {
+                            if(ctrvm.ScrollOffset > targetScrollOffset) {
+                                ctrvm.ScrollOffset = targetScrollOffset;
+                                _velocity = 0;
+                                break;
                             }
-                            double v = 0;
-                            if(ctrvm.ScrollOffset < newOffset) {
-                                v = 75;
-                            } else {
-                                v = -75;
+                            _velocity = vel;
+                        } else {
+                            if (ctrvm.ScrollOffset < targetScrollOffset) {
+                                ctrvm.ScrollOffset = targetScrollOffset;
+                                _velocity = 0;
+                                break;
                             }
-                            v *= WheelDampening;
-                            ApplyVelocity(v);
-                            await Task.Delay(10);
+                            _velocity = -vel;
                         }
-                    });
-                }
+                        await Task.Delay(1000 / 30);
+                    }
+                });
             }
         }
 
@@ -318,10 +294,10 @@ namespace MpWpfApp {
                 newTrackVal = Math.Min(Math.Max(htrack.Minimum, newTrackVal), htrack.Maximum);
                 //MpClipTrayViewModel.Instance.ScrollOffset = newTrackVal;
                 
-                int targetTileIdx = FindJumpTileIdx(newTrackVal);
-
+                int targetTileIdx = MpClipTrayViewModel.Instance.FindJumpTileIdx(newTrackVal);
                 MpClipTrayViewModel.Instance.JumpToQueryIdxCommand.Execute(targetTileIdx);
-                //MpClipTrayViewModel.Instance.RequeryCommand.Execute(targetTileIdx);
+
+                //MpClipTrayViewModel.Instance.RequeryCommand.Execute(newTrackVal);
 
                 return;
             });
@@ -358,60 +334,88 @@ namespace MpWpfApp {
         }
 
         private void ApplyOffsetChange(bool isChangeResize = false) {
-            if (!LoadMoreCommand.CanExecute(0) || MpClipTrayViewModel.Instance.IsThumbDragging || isChangeResize != MpResizeBehavior.IsAnyResizing) {
+            if (MpClipTrayViewModel.Instance.IsAnyBusy || 
+                MpClipTrayViewModel.Instance.IsThumbDragging || 
+                isChangeResize != MpResizeBehavior.IsAnyResizing) {
                 return;
             }
-
+            var ctrvm = MpClipTrayViewModel.Instance;
+            var lb = AssociatedObject.GetVisualDescendent<ListBox>();
+            var lbil = lb.GetListBoxItems();
+            if(lbil == null || lbil.Count() == 0) {
+                return;
+            }
+            lbil = lbil.Where(x => x.Visibility == Visibility.Visible);
+            Rect svr = AssociatedObject.Bounds();
             double horizontalChange = MpClipTrayViewModel.Instance.ScrollOffset - MpClipTrayViewModel.Instance.LastScrollOfset;
+            var tail_lbi_origin = lbil.Aggregate((a, b) => a.GetRect(true).X > b.GetRect(true).X ? a : b).TranslatePoint(new Point(),AssociatedObject);
+
+            if (tail_lbi_origin.X < svr.Right) {
+                ctrvm.LoadMoreClipsCommand.Execute(1);
+            } else if(horizontalChange < 0) {
+                var head_lbi_origin = lbil.Aggregate((a, b) => a.GetRect(true).X < b.GetRect(true).X ? a : b).TranslatePoint(new Point(), AssociatedObject);
+                if (head_lbi_origin.X > 0) {
+                    ctrvm.LoadMoreClipsCommand.Execute(-1);
+                }
+            }
+
+            //return;
+            //if (!LoadMoreCommand.CanExecute(0) || MpClipTrayViewModel.Instance.IsThumbDragging || isChangeResize != MpResizeBehavior.IsAnyResizing) {
+            //    return;
+            //}
+
+            //double horizontalChange = MpClipTrayViewModel.Instance.ScrollOffset - MpClipTrayViewModel.Instance.LastScrollOfset;
 
             
-            ListBox lb = AssociatedObject.GetVisualDescendent<ListBox>();
-            Rect svr = AssociatedObject.Bounds();
+            //ListBox lb = AssociatedObject.GetVisualDescendent<ListBox>();
+            //Rect svr = AssociatedObject.Bounds();
 
-            if (horizontalChange > 0 || isChangeResize) {
-                //scrolling down towards end of list
+            //if (horizontalChange > 0 || isChangeResize) {
+            //    //scrolling down towards end of list
 
-                //get item under point in middle of right edge of listbox
-                int item_at_left_edge_idx = lb.GetItemIndexAtPoint(new Point(svr.Left, svr.Height / 2), AssociatedObject);
-                //if (item_at_left_edge_idx < 0) {
-                //    return;
-                //}
-                //if (item_at_left_edge_idx >= lb.Items.Count) {
-                //    item_at_left_edge_idx = lb.Items.Count - 1;
+            //    //get item under point in middle of right edge of listbox
+            //    int item_at_left_edge_idx = lb.GetItemIndexAtPoint(new Point(svr.Left, svr.Height / 2), AssociatedObject);
+            //    //if (item_at_left_edge_idx < 0) {
+            //    //    return;
+            //    //}
+            //    //if (item_at_left_edge_idx >= lb.Items.Count) {
+            //    //    item_at_left_edge_idx = lb.Items.Count - 1;
                     
-                //}
-                ////when last visible item's right edge is past the listboxes edge
-                //int remainingItemsOnRight = lb.Items.Count - item_at_left_edge_idx - 1;
+            //    //}
+            //    ////when last visible item's right edge is past the listboxes edge
+            //    //int remainingItemsOnRight = lb.Items.Count - item_at_left_edge_idx - 1;
 
-                if (item_at_left_edge_idx >= RemainingItemsThreshold) {
-                    LoadMoreCommand.Execute(1);
-                }
+            //    if (item_at_left_edge_idx >= RemainingItemsThreshold) {
+            //        LoadMoreCommand.Execute(1);
+            //    }
 
-            } 
-            if(isChangeResize) {
-                if (!LoadMoreCommand.CanExecute(0)) {
-                    return;
-                }
-            }
-            if (horizontalChange < 0 || isChangeResize) {
-                //scrolling up towards beginning of list
+            //} 
+            //if(isChangeResize) {
+            //    if (!LoadMoreCommand.CanExecute(0)) {
+            //        return;
+            //    }
+            //}
+            //if (horizontalChange < 0 || isChangeResize) {
+            //    //scrolling up towards beginning of list
 
-                int item_at_right_edge_idx = lb.GetItemIndexAtPoint(new Point(svr.Right, svr.Height / 2), AssociatedObject);
-                if (item_at_right_edge_idx < 0) {
-                    item_at_right_edge_idx = 0;
-                }
+            //    int item_at_right_edge_idx = lb.GetItemIndexAtPoint(new Point(svr.Right, svr.Height / 2), AssociatedObject);
+            //    if (item_at_right_edge_idx < 0) {
+            //        item_at_right_edge_idx = 0;
+            //    }
 
-                //when last visible item's right edge is past the listboxes edge
-                int remainingItemsOnRight = lb.Items.Count - item_at_right_edge_idx - 1;
-                //MpConsole.WriteLine($"Scrolling left, right most idx: {l_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
+            //    //when last visible item's right edge is past the listboxes edge
+            //    int remainingItemsOnRight = lb.Items.Count - item_at_right_edge_idx - 1;
+            //    //MpConsole.WriteLine($"Scrolling left, right most idx: {l_lbi_idx} with remaining: {itemsRemaining}  and threshold: {thresholdRemainingItemCount}");
 
-                if (remainingItemsOnRight >= RemainingItemsThreshold) {
-                    LoadMoreCommand.Execute(-1);
-                }
+            //    if (remainingItemsOnRight >= RemainingItemsThreshold) {
+            //        LoadMoreCommand.Execute(-1);
+            //    }
 
 
-            }
+            //}
         }
+
+
         #endregion
     }
 }

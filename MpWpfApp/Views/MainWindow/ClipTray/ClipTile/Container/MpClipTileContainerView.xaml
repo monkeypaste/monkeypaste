@@ -52,7 +52,7 @@
                                          UpdateSourceTrigger=PropertyChanged,
                                          NotifyOnSourceUpdated=True,
                                          NotifyOnTargetUpdated=True}"
-                    DefaultWidth="{Binding ClipTileDefaultMinSize,
+                    DefaultWidth="{Binding ClipTileMinSize,
                                            Source={x:Static local:MpMeasurements.Instance}}"
                     DoubleClickFrameworkElement="{Binding ElementName=ResizeRectangle}"
                     IsResizing="{Binding IsResizing,

@@ -470,14 +470,16 @@
 
         public bool IsResizing { get; set; } = false;
 
-        public int QueryOffsetIdx { 
-            get {
-                if(IsPlaceholder) {
-                    return -1;
-                }
-                return MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(HeadItem.CopyItemId);
-            }
-        }
+        //public int QueryOffsetIdx { 
+        //    get {
+        //        if(IsPlaceholder) {
+        //            return -1;
+        //        }
+        //        return MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(HeadItem.CopyItemId);
+        //    }
+        //}
+
+        public int QueryOffsetIdx { get; set; } = -1;
 
         public bool IsLoading {
             get {
@@ -742,7 +744,7 @@
             PropertyChanged -= MpClipTileViewModel_PropertyChanged;
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
 
-            //QueryOffsetIdx = queryOffset < 0 ? QueryOffsetIdx : queryOffset;
+            QueryOffsetIdx = queryOffset < 0 && items != null ? QueryOffsetIdx : queryOffset;
             IsBusy = true;
 
             if(items != null && items.Count > 0 && !string.IsNullOrEmpty(items[0].RootCopyItemGuid)) {
@@ -1149,12 +1151,12 @@
                         } else {
                             Parent.ClearPinnedSelection(false);
                             Parent.RequestScrollIntoView(this);
-                        }                        
+                        }
                     } else {
                         if (IsFlipped) {
                             Parent.FlipTileCommand.Execute(this);
                         }
-                        if(IsContentReadOnly) {
+                        if (IsContentReadOnly) {
                             IsSubSelectionEnabled = false;
                         }
                         //ClearSelection();
@@ -1182,7 +1184,7 @@
                     if (HeadItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(HeadItem.CopyItemId, out double uniqueWidth)) {
                         //this occurs when mainwindow is resized and user gives tile unique width
                         Parent.PersistentUniqueWidthTileLookup[HeadItem.CopyItemId] = TileBorderWidth;
-                    } 
+                    }
                     break;
                 case nameof(IsOverPinButton):
                 case nameof(IsPinned):
@@ -1213,6 +1215,22 @@
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(PrimaryItem));
+                    break;
+                case nameof(TrayX):
+                    //if (Parent.IsLoadingMore) {
+                    //    return;
+                    //}
+                    //if (QueryOffsetIdx == Parent.TailQueryIdx) {
+                    //    double screenLeft = TrayX - Parent.ScrollOffset;
+                    //    if (screenLeft < Parent.ClipTrayScreenWidth) {
+                    //        Parent.LoadMoreClipsCommand.Execute(1);
+                    //    }
+                    //} else if (QueryOffsetIdx == Parent.HeadQueryIdx) {
+                    //    double screenRight = TrayX - Parent.ScrollOffset + TileBorderWidth;
+                    //    if (screenRight > 0) {
+                    //        Parent.LoadMoreClipsCommand.Execute(-1);
+                    //    }
+                    //}
                     break;
             }
         }

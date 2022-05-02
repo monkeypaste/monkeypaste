@@ -360,6 +360,12 @@ namespace MpWpfApp {
             return null;
         }
 
+        public static IEnumerable<ListBoxItem> GetListBoxItems(this ListBox lb) {
+            for (int i = 0; i < lb.Items.Count; i++) {
+                yield return lb.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+            }
+        }
+
         public static int GetListBoxItemIdx(this ListBoxItem lbi) {
             var lb = lbi.GetParentListBox();
             return lb.ItemContainerGenerator.IndexFromContainer(lbi);
