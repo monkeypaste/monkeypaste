@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste;
+using MonkeyPaste.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -99,9 +100,18 @@ namespace MpWpfApp {
 
             var actionInput = GetInput(arg);
 
-            if(actionInput.CopyItem.Id == 0) {
+            if (ParentActionViewModel is MpFileSystemTriggerViewModel fstvm) {
+                if (actionInput.CopyItem.Id <= 0) {
+
+                }
+                // TODO This occurs when parent action is File watcher. Probably need option to store item or just acknowledge the change
+                MpConsole.WriteLine("Classify child action of file watcher called for " + actionInput.CopyItem.ItemData + " with change type " + (actionInput as MpFileSystemTriggerOutput).FileSystemChangeType + ", no id so ignoring...");
+                //await actionInput.CopyItem.WriteToDatabaseAsync();
+                return;
+            } else {
                 Debugger.Break();
             }
+            
 
             var ttvm = MpTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
             await ttvm.AddContentItem(actionInput.CopyItem.Id);

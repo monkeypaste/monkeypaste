@@ -55,8 +55,8 @@
             Canvas.Top="{Binding MainWindowTop}"
             Canvas.Left="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="{local:MpMeasurementsBinding TitleMenuHeight}" />
-                <RowDefinition Height="{local:MpMeasurementsBinding FilterMenuHeight}" />
+                <RowDefinition Height="{Binding TitleMenuHeight, Source={x:Static local:MpMeasurements.Instance}}" />
+                <RowDefinition Height="{Binding FilterMenuHeight, Source={x:Static local:MpMeasurements.Instance}}" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 

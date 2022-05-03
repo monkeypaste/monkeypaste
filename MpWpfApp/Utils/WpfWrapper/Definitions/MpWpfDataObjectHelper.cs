@@ -24,6 +24,8 @@ namespace MpWpfApp {
 
         private Queue<MpPasteItem> _pasteQueue = new Queue<MpPasteItem>();
 
+        private List<string> _tempFiles = new List<string>();
+
         #endregion
 
         #region Statics
@@ -221,13 +223,17 @@ namespace MpWpfApp {
 
             if (isToExternalApp) {
                 if (isDragDrop) {
+
                     string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
                     var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
                     List<MpAppInteropSetting> targetInteropSettings = null;
                     if (app != null) {
                         targetInteropSettings = await MpDataModelProvider.GetInteropSettingsByAppId(app.Id);
+                        MpConsole.WriteLine("Dragging over " + targetProcessPath);
                     }
+
                     if (targetInteropSettings != null) {
+                        // order and set data object entry by priority (ignoring < 0) and formatInfo 
                         targetInteropSettings = targetInteropSettings.Where(x => x.Priority >= 0).OrderByDescending(x => x.Priority).ToList();
                         foreach (var targetSetting in targetInteropSettings.OrderByDescending(x => x.Priority)) {
                             switch (targetSetting.FormatType) {
@@ -248,35 +254,15 @@ namespace MpWpfApp {
                         sctfl.Add(ci.ItemData.ToFile(null, ci.Title));
                     }
 
-                    ////set file drop (always must set so when dragged out of application user doesn't get no-drop cursor)
-                    //if (MpExternalDropBehavior.Instance.IsProcessNeedFileDrop(targetProcessPath)) {
-                    //    //only when pasting into explorer or notepad must have file drop
-
-                    //    if (ci.ItemType != MpCopyItemType.FileList &&
-                    //        (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))) {
-                    //        //external drop w/ ctrl down merges all selected items (unless file list)
-                    //        // TODO maybe for multiple files w/ ctrl down compress into zip?
-                    //        if (MpExternalDropBehavior.Instance.IsProcessLikeNotepad(MpProcessManager.LastProcessPath)) {
-                    //            //merge as plain text
-                    //            string fp = MpHelpers.GetUniqueFileName(MpExternalDropFileType.Txt, ci.Title);
-                    //            sctfl.Add(MpHelpers.WriteTextToFile(fp, pt, true));
-                    //        } else {
-                    //            //merge as rich text
-                    //            string fp = MpHelpers.GetUniqueFileName(MpExternalDropFileType.Rtf, ci.Title);
-                    //            sctfl.Add(MpHelpers.WriteTextToFile(fp, rtf, true));
-                    //        }
-                    //    } else {
-
-                    //    }
-
-
-                    //    // d.SetData(MpClipboardFormat.FileDrop, sctfl.ToStringCollection());
-                    //}
-                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
+                    bool ignoreFileDrop = targetInteropSettings != null &&
+                                            targetInteropSettings
+                                            .Where(x => x.FormatType == MpClipboardFormatType.FileDrop)
+                                            .All(x => x.Priority < 0);
+                    if(!ignoreFileDrop) {
+                        d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
+                    }
                 }
-            }
 
-            if (isToExternalApp) {
                 //set rtf and text
                 if (!string.IsNullOrEmpty(rtf)) {
                     d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Rtf, rtf);
@@ -308,7 +294,6 @@ namespace MpWpfApp {
             //}
 
             return d;
-            //awaited in MpMainWindowViewModel.Instance.HideWindow
         }
 
         public void HandleError(Exception ex) {

@@ -316,7 +316,6 @@ namespace MpWpfApp {
             if(ctvm == null) {
                 return;
             }
-            MpConsole.WriteLine("Loading " + MpClipTrayViewModel.Instance.Items.IndexOf(ctvm));
 
             while(ctvm.IsAnyBusy) {
                 // wait till ctvm finishes initializing 

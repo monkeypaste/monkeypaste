@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,13 +11,15 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpPagingListBoxBehavior : MpBehavior<ScrollViewer> {
         #region Private Variables
-        private bool _isScrollingIntoView = false;
+
         private int _lastWheelDelta = 0;
-        private static double _velocity = 0;
+        
+        private double _velocity = 0;
 
         private DispatcherTimer _timer;
 
@@ -120,65 +124,75 @@ namespace MpWpfApp {
         #region Public Methods
 
 
-        public void ScrollIntoView(object obj) {
+        public async Task ScrollIntoView(object obj) {
             var ctrvm = AssociatedObject.DataContext as MpClipTrayViewModel;
-            if (ctrvm.HasScrollVelocity || ctrvm.IsBusy) {
+            if (ctrvm.IsScrollingIntoView) {
                 return;
             }
-            if (obj is MpClipTileViewModel ctvm && ctvm.HeadItem != null) {
-                //var ctcv = this.GetVisualDescendents<MpClipTileContainerView>().FirstOrDefault(x => x.DataContext == ctvm);
-                //if(ctcv == null) {
-                //    return;
-                //}
-                if(!ctrvm.Items.Contains(ctvm)) {
-                    return;
-                }
-                var svr = AssociatedObject.Bounds();
-                var ctvm_rect = new Rect(ctvm.TrayX - ctrvm.ScrollOffset, 0, ctvm.TileBorderWidth, ctvm.TileBorderHeight);
-                if(svr.Contains(ctvm_rect)) {
-                    return;
-                }
-                double pad = 10;
-                double deltaScrollOfset;
-                if(ctvm_rect.Left < svr.Left) {
-                    //item is outside on left
-                    deltaScrollOfset = ctvm_rect.Left - svr.Left - pad;
-                } else if(ctvm_rect.Right > svr.Right) {
-                    //item is outside on right
-                    deltaScrollOfset = ctvm_rect.Right - svr.Right + pad;
-                } else {
+
+            if (obj is MpClipTileViewModel ctvm) {
+                if (!ctrvm.Items.Contains(ctvm) || ctvm.IsPinned) {
                     return;
                 }
 
-                MpHelpers.RunOnMainThread(async () => {
-                    double targetScrollOffset = ctrvm.ScrollOffset + deltaScrollOfset;
+                while (true) {
+                    ctrvm.IsScrollingIntoView = true;
+                    double deltaScrollOffset = GetScrollIntoViewDeltaOffset(ctvm);
+                    MpConsole.WriteLine("Delta offset: " + deltaScrollOffset);
+                    double targetScrollOffset = ctrvm.ScrollOffset + deltaScrollOffset;
                     double vel = 30;
-                    while(true) {
-                        if(deltaScrollOfset > 0) {
-                            if(ctrvm.ScrollOffset > targetScrollOffset) {
-                                ctrvm.ScrollOffset = targetScrollOffset;
-                                _velocity = 0;
-                                break;
-                            }
-                            _velocity = vel;
-                        } else {
-                            if (ctrvm.ScrollOffset < targetScrollOffset) {
-                                ctrvm.ScrollOffset = targetScrollOffset;
-                                _velocity = 0;
-                                break;
-                            }
-                            _velocity = -vel;
-                        }
-                        await Task.Delay(1000 / 30);
+
+                    if (Math.Abs(deltaScrollOffset) < 1) {
+                        ctrvm.ScrollOffset = targetScrollOffset;
+                        _velocity = 0;
+                        break;
                     }
-                });
+
+                    if (deltaScrollOffset > 0) {
+                        if (ctrvm.ScrollOffset > targetScrollOffset) {
+                            ctrvm.ScrollOffset = targetScrollOffset;
+                            _velocity = 0;
+                            break;
+                        }
+                        _velocity = vel;
+                    } else {
+                        if (ctrvm.ScrollOffset < targetScrollOffset) {
+                            ctrvm.ScrollOffset = targetScrollOffset;
+                            _velocity = 0;
+                            break;
+                        }
+                        _velocity = -vel;
+                    }
+                    await Task.Delay(1000 / 30);
+                }
+
+                ctrvm.IsScrollingIntoView = false;
             }
         }
 
         #endregion
 
         #region Private Methods
+        private double GetScrollIntoViewDeltaOffset(MpClipTileViewModel ctvm) {
+            var ctrvm = MpClipTrayViewModel.Instance;
 
+            double pad = 0;
+            var svr = AssociatedObject.Bounds();
+            var ctvm_rect = new Rect(ctvm.TrayX - ctrvm.ScrollOffset, 0, ctvm.TileBorderWidth, ctvm.TileBorderHeight);
+            if (svr.Contains(ctvm_rect)) {
+                return 0;
+            }
+
+            if (ctvm_rect.Left < svr.Left) {
+                //item is outside on left
+                return ctvm_rect.Left - svr.Left - pad;
+            } else if (ctvm_rect.Right > svr.Right) {
+                //item is outside on right
+                return ctvm_rect.Right - svr.Right + pad;
+            }
+
+            return 0;
+        }
         private void ReceivedMainWindowResizeBehaviorMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ResizingMainWindowComplete:
@@ -191,8 +205,6 @@ namespace MpWpfApp {
                         //  MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                         ApplyOffsetChange(true);
                     }
-
-
                     break;
             }
         }
@@ -225,6 +237,10 @@ namespace MpWpfApp {
             if(MpClipTrayViewModel.Instance.IsScrollJumping) {
                 return;
             }
+            MpClipTrayViewModel.Instance.ScrollOffset = Math.Max(0, Math.Min(
+                        MpClipTrayViewModel.Instance.MaximumScrollOfset,
+                        MpClipTrayViewModel.Instance.ScrollOffset));
+
             AssociatedObject.ScrollToHorizontalOffset(MpClipTrayViewModel.Instance.ScrollOffset);
             if(Math.Abs(_velocity) < 0.1) {
                 _velocity = 0;
@@ -310,6 +326,7 @@ namespace MpWpfApp {
         private void ApplyVelocity(double v) {
             if (//MpClipTrayViewModel.Instance.IsAnyTileFlipped ||
                 //MpClipTrayViewModel.Instance.IsAnyTileExpanded ||
+                MpClipTrayViewModel.Instance.IsScrollingIntoView ||
                 MpMainWindowViewModel.Instance.IsMainWindowOpening ||
                 !MpClipTrayViewModel.Instance.CanScroll) {
                 //e.Handled = true;

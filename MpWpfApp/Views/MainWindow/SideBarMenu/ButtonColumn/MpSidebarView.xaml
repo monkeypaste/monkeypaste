@@ -131,8 +131,8 @@
                         <Grid>
                             <Popup IsOpen="False">
                                 <StackPanel Orientation="Vertical">
-                                    <ToggleButton Width="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
-                                                  Height="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                    <ToggleButton Width="{Binding AppStateButtonPanelWidth,Source={x:Static local:MpMeasurements.Instance}}"
+                                                  Height="{Binding AppStateButtonPanelWidth,Source={x:Static local:MpMeasurements.Instance}}"
                                                   ToolTipService.InitialShowDelay="0"
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"
@@ -156,8 +156,8 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
-                                    <ToggleButton Width="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
-                                                  Height="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                    <ToggleButton Width="{Binding AppStateButtonPanelWidth,Source={x:Static local:MpMeasurements.Instance}}"
+                                                  Height="{Binding AppStateButtonPanelWidth,Source={x:Static local:MpMeasurements.Instance}}"
                                                   ToolTipService.InitialShowDelay="0"
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"
@@ -203,8 +203,8 @@
                         <Grid>
                             <Popup IsOpen="False">
                                 <StackPanel Orientation="Vertical">
-                                    <ToggleButton Width="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
-                                                  Height="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                    <ToggleButton Width="{Binding AppStateButtonPanelWidth,Source={x:Static local:MpMeasurements.Instance}}"
+                                                  Height="{Binding AppStateButtonPanelWidth,Source={x:Static local:MpMeasurements.Instance}}"
                                                   ToolTipService.InitialShowDelay="0"
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"
@@ -226,8 +226,8 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
-                                    <ToggleButton Width="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
-                                                  Height="{local:MpMeasurementsBinding AppStateButtonPanelWidth}"
+                                    <ToggleButton Width="{Binding AppStateButtonPanelWidth,Source={x:Static local:MpMeasurements.Instance}}"
+                                                  Height="{Binding AppStateButtonPanelWidth,Source={x:Static local:MpMeasurements.Instance}}"
                                                   ToolTipService.InitialShowDelay="0"
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"

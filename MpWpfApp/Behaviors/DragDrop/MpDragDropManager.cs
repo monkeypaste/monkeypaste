@@ -85,7 +85,7 @@ namespace MpWpfApp {
 
         #region Init
         public static void Init() {
-            _timer = new DispatcherTimer();
+            _timer = new DispatcherTimer(DispatcherPriority.Render);
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             _timer.Tick += _timer_Tick;
 
@@ -258,23 +258,27 @@ namespace MpWpfApp {
         }
 
         private static void UpdateCursor() {
-            MpCursor.UnsetCursor(nameof(MpDragDropManager));
+            //MpCursor.UnsetCursor(nameof(MpDragDropManager));
 
-            MpCursorType currentCursor = MpCursorType.Default;
+            MpCursorType dropCursor = MpCursorType.Default;
 
             if (!IsDragAndDrop) {
+                MpCursor.UnsetCursor(nameof(MpDragDropManager));
                 return;
             } else if (!IsDropValid) {
-                currentCursor = MpCursorType.Invalid;
+                dropCursor = MpCursorType.Invalid;
             } else if (IsDragCopy) {
-                currentCursor = CurDropTarget.CopyCursor;
+                dropCursor = CurDropTarget.CopyCursor;
             } else if (IsDragAndDrop) {
-                currentCursor = CurDropTarget.MoveCursor;
+                dropCursor = CurDropTarget.MoveCursor;
             } else {
+                MpCursor.UnsetCursor(nameof(MpDragDropManager));
                 return;
             }
 
-            MpCursor.SetCursor(nameof(MpDragDropManager), currentCursor);
+            if(MpCursor.CurrentCursor != dropCursor) {
+                MpCursor.SetCursor(nameof(MpDragDropManager), dropCursor);
+            }
         }
 
         private static void Instance_OnMainWindowHide(object sender, EventArgs e) {

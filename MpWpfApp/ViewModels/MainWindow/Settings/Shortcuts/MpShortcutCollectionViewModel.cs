@@ -455,9 +455,7 @@ namespace MpWpfApp {
         }
 
         private void GlobalHook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
-            double wpf_x = Math.Max(0,96.0d * e.Location.X / MpScreenInformation.DpiX);
-            double wpf_y = Math.Max(0,96.0d * e.Location.Y / MpScreenInformation.DpiY);
-            GlobalMouseLocation = new Point(wpf_x, wpf_y);
+            GlobalMouseLocation = MpScreenInformation.ConvertWinFormsScreenPointToWpf(e.Location);
 
             //MpConsole.WriteLine("WinForms: " + e.Location.X + "," + e.Location.Y);
             //MpConsole.WriteLine("Wpf: " + GlobalMouseLocation.X + "," + GlobalMouseLocation.Y);
@@ -495,8 +493,7 @@ namespace MpWpfApp {
                 _globalMouseDownPosition = GlobalMouseLocation;
             }
         }
-        private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {
-            
+        private void GlobalHook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e) {            
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left) {
                 _globalMouseDownPosition = null;
@@ -515,6 +512,10 @@ namespace MpWpfApp {
                         System.Windows.Forms.SendKeys.SendWait("^v");
                     }
                 }
+            } else if(!MpMainWindowViewModel.Instance.IsMainWindowClosing && 
+                      !MpMainWindowViewModel.Instance.IsMainWindowLocked &&
+                      GlobalMouseLocation.Y < MpMainWindowViewModel.Instance.MainWindowTop) {
+                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             }
         }
 

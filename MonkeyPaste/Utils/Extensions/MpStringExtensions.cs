@@ -148,7 +148,7 @@ namespace MonkeyPaste {
 
             if(!string.IsNullOrEmpty(forceNamePrefix)) {
                 string tfnwe = Path.GetFileName(tfp);
-                string ofnwe = Path.GetFileNameWithoutExtension(tfp) + "." + Path.GetExtension(tfp);
+                string ofnwe = forceNamePrefix + Path.GetExtension(tfp);
                 ofp = ofp.Replace(tfnwe, ofnwe);
             }
 
@@ -167,10 +167,36 @@ namespace MonkeyPaste {
             }
             if(ofp.ToLower() != tfp.ToLower()) {
                 if(ofp.IsFileOrDirectory() && !overwrite) {
-                    ofp = MpFileIo.GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileNameWithoutExtension(ofp));
+                    if(string.IsNullOrEmpty(forceDir)) {
+                        // this means file is going to write to temp folder and to avoid IO or name issues preserve name
+                        // but put in random subdirectory of temp folder
+                        string randomSubDirPath = Path.Combine(Path.GetDirectoryName(ofp), Path.GetRandomFileName());
+                        try {
+                            Directory.CreateDirectory(randomSubDirPath);
+                            ofp = Path.Combine(randomSubDirPath, Path.GetFileName(ofp));
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine("Error creating random temp subdirectory: "+ex);
+                            ofp = MpFileIo.GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileName(ofp));
+                        }
+                    } else {
+                        ofp = MpFileIo.GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileName(ofp));
+                    }
+                    
                 }
-                File.Copy(tfp, ofp,overwrite);
-                File.Delete(tfp);
+                // move temporary file to processed output file path and delete temporary
+                try {
+                    File.Copy(tfp, ofp, overwrite);
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Error copying temp file '{tfp}' to '{ofp}', returning temporary. Exception: " + ex);
+                    return tfp;
+                }
+                try {
+                    File.Delete(tfp);
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Error deleting temp file '{tfp}' during swap to '{ofp}', ignoring delete. Exception: " + ex);
+                    return ofp;
+                }                
             }
             return ofp;
         }

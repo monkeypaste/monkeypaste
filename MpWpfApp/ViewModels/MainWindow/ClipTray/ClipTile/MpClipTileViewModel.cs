@@ -1102,26 +1102,26 @@
         }
 
         protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpCopyItem ci && Items.Any(x=>x.CopyItemId == ci.Id)) {                
-                //var rcivm = Items.FirstOrDefault(x => x.CopyItemId == ci.Id);
-                //Items.Remove(rcivm);
+            if(e is MpCopyItem ci && Items.Any(x=>x.CopyItemId == ci.Id)) {
+                var rcivm = Items.FirstOrDefault(x => x.CopyItemId == ci.Id);
+                Items.Remove(rcivm);
 
-                //if(Items.Count == 0) {
-                //    int qIdx = Parent.Items.IndexOf(this);
-                //    await MpDataModelProvider.RemoveQueryItem(ci.Id);
-                //    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                //    while(Parent.IsBusy) {
-                //        await Task.Delay(100);
-                //    }
-                //    if(qIdx < Parent.Items.Count - 1) {
-                //        Parent.Items[qIdx].IsSelected = true;
-                //    } else if(Parent.Items.Count > 0) {
-                //        Parent.Items[qIdx-1].IsSelected = true;
-                //    }
-                    
-                //} else {
-                //    RequestListRefresh();
-                //}
+                if (Items.Count == 0) {
+                    int qIdx = Parent.Items.IndexOf(this);
+                    await MpDataModelProvider.RemoveQueryItem(ci.Id);
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    while (Parent.IsBusy) {
+                        await Task.Delay(100);
+                    }
+                    if (qIdx < Parent.Items.Count - 1) {
+                        Parent.Items[qIdx].IsSelected = true;
+                    } else if (Parent.Items.Count > 0) {
+                        Parent.Items[qIdx - 1].IsSelected = true;
+                    }
+
+                } else {
+                    RequestListRefresh();
+                }
             }
         }
 

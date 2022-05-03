@@ -396,7 +396,7 @@ namespace MpWpfApp {
             }
             if (!IsResizing && !AssociatedObject.IsMouseCaptured) {
                 //MpCursorStack.CurrentCursor = MpCursorType.Default;
-                MpCursor.UnsetCursor(this);
+                //MpCursor.UnsetCursor(this);
                 CanResize = false;
             }
         }
@@ -405,48 +405,47 @@ namespace MpWpfApp {
             // BUG resizing main window makes dd think its external drop
             if (MpDragDropManager.IsDragAndDrop ||
                 AssociatedObject == null ||
+                !AssociatedObject.IsMouseCaptured ||
                 !IsEnabled ||
                 MpClipTrayViewModel.Instance.HasScrollVelocity ||
                 !_mouseDownPosition.HasValue) {
                     return;
             }
+
             if (Mouse.LeftButton == MouseButtonState.Released) {
                 Reset();
                 return;
             }
             var mwmp = e.GetPosition(Application.Current.MainWindow);
 
-            _lastMousePosition = _lastMousePosition.HasValue ? _lastMousePosition : mwmp;
+            //_lastMousePosition = _lastMousePosition.HasValue ? _lastMousePosition : mwmp;
             Vector delta =  mwmp - _lastMousePosition.Value;
 
-            if (AssociatedObject.DataContext is MpClipTileViewModel || AssociatedObject.DataContext is MpImageAnnotationViewModel) {
-                //Debugger.Break();
-            }
             if (IsResizing) {
                 Resize(delta.X, -delta.Y);
-            } else if(!IsAnyResizing) {
-                var rect = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
-                MpRectEdgeFlags edgeFlags = GetClosestEdgeOrCorner(rect, e.GetPosition(AssociatedObject));
-                _curCursor = GetCursorByRectFlags(edgeFlags);
-                if (_curCursor != MpCursorType.Default) {
-                    CanResize = true;
-                    MpCursor.SetCursor(this, _curCursor);
-                    if(Mouse.LeftButton == MouseButtonState.Pressed) {
-                        double totalDist = mwmp.Distance(_mouseDownPosition.Value);
+            } //else if(!IsAnyResizing) {
+            //    var rect = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
+            //    MpRectEdgeFlags edgeFlags = GetClosestEdgeOrCorner(rect, e.GetPosition(AssociatedObject));
+            //    _curCursor = GetCursorByRectFlags(edgeFlags);
+            //    if (_curCursor != MpCursorType.Default) {
+            //        CanResize = true;
+            //        MpCursor.SetCursor(this, _curCursor);
+            //        if(Mouse.LeftButton == MouseButtonState.Pressed) {
+            //            double totalDist = mwmp.Distance(_mouseDownPosition.Value);
 
-                        if (totalDist >= 1) {
-                            IsResizing = AssociatedObject.CaptureMouse();
+            //            if (totalDist >= 1) {
+            //                IsResizing = AssociatedObject.IsMouseCaptured;
 
-                            if (IsResizing) {
-                                Resize(delta.X, delta.Y);
-                            }
-                        }
-                    }                    
-                } else {
-                    MpCursor.UnsetCursor(this);
-                    CanResize = false;
-                }
-            }
+            //                if (IsResizing) {
+            //                    Resize(delta.X, delta.Y);
+            //                }
+            //            }
+            //        }                    
+            //    } else {
+            //        MpCursor.UnsetCursor(this);
+            //        CanResize = false;
+            //    }
+            //}
             _lastMousePosition = mwmp;
         }
 
@@ -470,11 +469,14 @@ namespace MpWpfApp {
 
             var rect = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
 
-            MpRectEdgeFlags edgeFlags = GetClosestEdgeOrCorner(rect, e.GetPosition(AssociatedObject));
-            _curCursor = GetCursorByRectFlags(edgeFlags);
-            if (_curCursor != MpCursorType.Default) {
+            //MpRectEdgeFlags edgeFlags = GetClosestEdgeOrCorner(rect, e.GetPosition(AssociatedObject));
+            //_curCursor = GetCursorByRectFlags(edgeFlags);
+
+            //if (_curCursor != MpCursorType.Default) {
+                IsResizing = AssociatedObject.CaptureMouse();
+              //  MpCursor.SetCursor(this, _curCursor);
                 e.Handled = true;
-            }
+            //}
         }
 
         private void AssociatedObject_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {

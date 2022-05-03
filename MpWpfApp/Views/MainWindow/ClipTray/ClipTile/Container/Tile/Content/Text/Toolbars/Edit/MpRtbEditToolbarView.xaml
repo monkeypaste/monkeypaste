@@ -16,7 +16,7 @@
         x:Name="ClipTileEditorToolbar"
         Unloaded="ClipTileEditorToolbar_Unloaded"
         HorizontalAlignment="Stretch"
-        Height="{local:MpMeasurementsBinding Path=ClipTileEditToolbarHeight}"
+            Height="{Binding Path=ClipTileEditToolbarHeight, Source={x:Static local:MpMeasurements.Instance}}"
         Background="OldLace"
         BorderBrush="OldLace"
         BorderThickness="0,0,0,1"

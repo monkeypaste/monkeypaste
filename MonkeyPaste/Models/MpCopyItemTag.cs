@@ -30,11 +30,11 @@ namespace MonkeyPaste {
             }
         }
 
-        [ForeignKey(typeof(MpTag))]
+        //[ForeignKey(typeof(MpTag))]
         [Column("fk_MpTagId")]
         public int TagId { get; set; }
 
-        [ForeignKey(typeof(MpCopyItem))]
+        //[ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
 
@@ -71,8 +71,7 @@ namespace MonkeyPaste {
             return newCopyItemTag;
         }
 
-        #endregion
-              
+        #endregion              
 
         #region Sync
 

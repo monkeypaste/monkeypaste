@@ -787,6 +787,7 @@ namespace MpWpfApp {
             if (!CanPerformAction(arg)) {
                 return;
             }
+
             if(arg is MpActionOutput ao) {
                 MpConsole.WriteLine("");
                 MpConsole.WriteLine($"Action({ActionId}) '{Label}' Completed Successfully");

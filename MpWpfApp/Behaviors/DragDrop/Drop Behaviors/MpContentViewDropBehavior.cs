@@ -110,14 +110,11 @@ namespace MpWpfApp {
             var rtb = AssociatedObject.Rtb;
             var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
 
-            var tsv = Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().PagingScrollViewer;
-            
-            var tsv_mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
             var mp = Application.Current.MainWindow.TranslatePoint(gmp, rtb);
             Rect rtb_rect = new Rect(0, 0, rtb.ActualWidth, rtb.ActualHeight);
             if (!rtb_rect.Contains(mp)) {
                 Reset();
-                MpConsole.WriteLine("rtb mp (no hit): " + mp);
+                //MpConsole.WriteLine("rtb mp (no hit): " + mp);
                 return -1;
             }
             var mptp = rtb.GetPositionFromPoint(mp, true);

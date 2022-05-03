@@ -85,6 +85,22 @@ namespace MpProcessHelper {
             _timer.Start();
         }
 
+        public static IntPtr GetParentHandleAtPoint(System.Drawing.Point p) {
+            // Get the window/control that the mouse is hovering over...
+            IntPtr hwnd = WinApi.WindowFromPoint(p);
+            if(hwnd == null || hwnd == IntPtr.Zero) {
+                return IntPtr.Zero;
+            }
+            // Continue to get the parent until we reach the top-level window (with parent of NULL)...
+            while (true) {
+                IntPtr p_hwnd = WinApi.GetParent(hwnd); 
+                if(p_hwnd == null || p_hwnd == IntPtr.Zero) {
+                    return hwnd;
+                }
+                hwnd = p_hwnd;
+            }
+        }
+
         public static void Stop() {
             _timer?.Stop();
         }

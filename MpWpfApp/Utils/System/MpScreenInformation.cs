@@ -115,6 +115,18 @@ namespace MpWpfApp {
             DpiY = dpiY;
         }
 
+        public static Point ConvertWinFormsScreenPointToWpf(System.Drawing.Point winFormsPoint) {
+            double wpf_x = Math.Max(0, 96.0d * winFormsPoint.X / DpiX);
+            double wpf_y = Math.Max(0, 96.0d * winFormsPoint.Y / DpiY);
+            return new Point(wpf_x, wpf_y);
+        }
+
+        public static System.Drawing.Point ConvertWpfScreenPointToWinForms(Point wpfPoint) {
+            double winforms_x = Math.Max(0, wpfPoint.X * DpiX / 96.0d);
+            double winforms_y = Math.Max(0, wpfPoint.Y * DpiY / 96.0d);
+            return new System.Drawing.Point((int)winforms_x, (int)winforms_y);
+        }
+
         public static MpTaskbarLocation TaskbarLocation {
             get {
                 if (SystemParameters.WorkArea.Top == 0) {

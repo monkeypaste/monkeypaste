@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MonkeyPaste.Plugin;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
 
@@ -66,9 +67,13 @@ namespace MpWpfApp {
         }
 
         public override List<Rect> GetDropTargetRects() {
+            int pad = 1;
+            // NOTE subtracting pad from bottom of rect (main window top) because converting mp to winforms
+            // isn't exactly accurate or the title bar highlight border isn't accounted for w/ main window top or
+            // timing may make point within this app
             Rect extRect = new Rect(
                 0,0,
-                MpMeasurements.Instance.ScreenWidth,MpMainWindowViewModel.Instance.MainWindowTop);
+                MpMeasurements.Instance.ScreenWidth,MpMainWindowViewModel.Instance.MainWindowTop - pad);
             return new List<Rect> { extRect };
         }
 
@@ -78,9 +83,14 @@ namespace MpWpfApp {
             //MpConsole.WriteLine("Mouse Relative to Main Window: " + mp.ToString());
             if (GetDropTargetRects()[0].Contains(mp)) {
                 //Application.Current.MainWindow.Top = 20000;
-                IntPtr lastHandle = MpProcessHelper.MpProcessManager.LastHandle;
-                WinApi.SetForegroundWindow(lastHandle);
-                WinApi.SetActiveWindow(lastHandle);
+                var winforms_mp = MpScreenInformation.ConvertWpfScreenPointToWinForms(mp);
+                IntPtr dropHandle = MpProcessHelper.MpProcessManager.GetParentHandleAtPoint(winforms_mp);
+                if(dropHandle == MpProcessHelper.MpProcessManager.ThisAppHandle) {
+                    Debugger.Break();
+                }
+
+                WinApi.SetForegroundWindow(dropHandle);
+                WinApi.SetActiveWindow(dropHandle);
                 return 0;
             }
             return -1;
@@ -97,7 +107,10 @@ namespace MpWpfApp {
         public override async Task StartDrop() {
 
             //var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
-            var mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem, true, MpProcessHelper.MpProcessManager.LastHandle);
+            var mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(
+                MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem, 
+                true, 
+                MpProcessHelper.MpProcessManager.LastHandle);
             var ido = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo);
 
             DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
@@ -107,6 +120,7 @@ namespace MpWpfApp {
             await Task.Delay(1);
         }
 
+        
         public override void AutoScrollByMouse() {
             return;
         }

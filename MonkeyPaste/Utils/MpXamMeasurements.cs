@@ -138,12 +138,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public double ClipTileExpandedMargin {
-            get {
-                return ClipTilePadding * 2;
-            }
-        }
-
         public int TotalVisibleClipTiles {
             get {
                 return (int)(ClipTrayWidth / ClipTileMinSize);

@@ -229,17 +229,6 @@ namespace MpWpfApp {
                 return ClipTileDefaultMinSize / 2;
             }
         }
-        //public double ClipTilePadding {
-        //    get {
-        //        return 17;
-        //    }
-        //}
-
-        public double ClipTileExpandedMargin {
-            get {
-                return 5;// ClipTilePadding * 2;
-            }
-        }
 
         public double ClipTileDefaultMinSize {
             get {

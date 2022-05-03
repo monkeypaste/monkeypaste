@@ -30,7 +30,7 @@
                     VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Behaviors>
                         <local:MpPagingListBoxBehavior
-                            x:Name="LoadMoreItemsBehavior"
+                            x:Name="PagingListBoxBehavior"
                             Friction="0.85"
                             WheelDampening="0.08"
                             RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
@@ -108,6 +108,9 @@
                             <DataTemplate>
                                 <local:MpClipTileContainerView
                                     SnapsToDevicePixels="True"
+                                    IsHitTestVisible="{Binding HasScrollVelocity,
+                                                               Source={x:Static local:MpClipTrayViewModel.Instance},
+                                                               Converter={StaticResource BoolFlipConverter}}"
                                     DataContext="{Binding}"
                                     Visibility="{Binding IsPlaceholder,
                                                          Converter={StaticResource BoolToVisibilityFlipConverter}}" />

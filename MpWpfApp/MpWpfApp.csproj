@@ -355,7 +355,6 @@
     <Compile Include="Utils\RESTful\MpOpenAi.cs" />
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\Styling\MpMeasurements.cs" />
-    <Compile Include="Utils\BindingExtensions\MpMeasurementsBindingExtension.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfDataObjectHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />

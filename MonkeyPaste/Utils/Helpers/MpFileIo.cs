@@ -36,7 +36,7 @@ namespace MonkeyPaste {
 
         
 
-        public static string GetUniqueFileOrDirectoryName(string dir, string fileOrDirectoryName) {
+        public static string GetUniqueFileOrDirectoryName(string dir, string fileOrDirectoryName, string instanceSeparator = "_") {
             //only support Image and RichText fileTypes
             string fp = string.IsNullOrEmpty(dir) ? Path.GetTempPath() : dir;
             string fn = string.IsNullOrEmpty(fileOrDirectoryName) ? Path.GetRandomFileName() : fileOrDirectoryName;
@@ -61,7 +61,7 @@ namespace MonkeyPaste {
             string newFullPath = Path.Combine(dir, fn + fe);
 
             while (File.Exists(newFullPath) || Directory.Exists(newFullPath)) {
-                newFullPath = Path.Combine(dir, fn + count + fe);
+                newFullPath = Path.Combine(dir, fn + instanceSeparator + count + fe);
                 count++;
             }
             return newFullPath;

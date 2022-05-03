@@ -186,8 +186,7 @@ namespace MpWpfApp {
         [DllImport("user32.dll")]
         public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
-        [DllImport("user32.dll")]
-        public static extern IntPtr WindowFromPoint(System.Windows.Point Point);
+        
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]

@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MpWpfApp {
+    public class MpFileSystemTriggerOutput : MpActionOutput {
+        public override object OutputData { get; }
+
+        public WatcherChangeTypes FileSystemChangeType { get; set; }
+        public override string ActionDescription => $"CopyItem({CopyItem.Id},{CopyItem.Title}) had file system change of type: {FileSystemChangeType}";
+    }
     public class MpFileSystemTriggerViewModel : MpTriggerActionViewModelBase, MpIFileSystemEventHandler {
         #region Properties
 
@@ -106,8 +112,7 @@ namespace MpWpfApp {
 
         public void OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
             if(!MpBootstrapperViewModelBase.IsLoaded) {
-                // file watcher triggers change on system load, maybe also at any point this action registers
-                // but it should be ignored
+                // NOTE this check maybe unnecessary. Rtf test was being generated onto desktop during startup and interfering w/ this trigger's lifecycle
                 return;
             }
             MpHelpers.RunOnMainThread(async () => {
@@ -148,7 +153,11 @@ namespace MpWpfApp {
                 }
 
                 if (ci != null) {
-                    await PerformAction(ci);
+                    var ao = new MpFileSystemTriggerOutput() {
+                        CopyItem = ci,
+                        FileSystemChangeType = e.ChangeType
+                    };
+                    await PerformAction(ao);
                 }
             });
         }

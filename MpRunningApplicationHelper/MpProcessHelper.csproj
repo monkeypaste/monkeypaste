@@ -54,7 +54,6 @@
     <Compile Include="MpProcessAutomation.cs" />
     <Compile Include="MpProcessInfo.cs" />
     <Compile Include="MpProcessManager.cs" />
-    <Compile Include="MpWinFormsExternalPasteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WinApi.cs" />
   </ItemGroup>

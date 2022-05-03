@@ -23,7 +23,7 @@ namespace MonkeyPaste {
         public override int Id { get; set; }
 
         [Column("fk_ParentTagId")]
-        [ForeignKey(typeof(MpTag))]
+        //[ForeignKey(typeof(MpTag))]
         public int ParentTagId { get; set; } = 0;
 
         [Column("MpTagGuid")]
@@ -44,7 +44,8 @@ namespace MonkeyPaste {
         #endregion
 
         #region Fk Models
-        [ManyToMany(typeof(MpCopyItemTag))]
+        //[ManyToMany(typeof(MpCopyItemTag))]
+        [Ignore]
         public List<MpCopyItem> CopyItems { get; set; } = new List<MpCopyItem>();
 
         //[OneToMany]

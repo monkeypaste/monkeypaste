@@ -1,61 +1,62 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpClipTileView"
-                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:local="clr-namespace:MpWpfApp"
-                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                     x:TypeArguments="local:MpClipTileViewModel"
-                     mc:Ignorable="d"
-                     d:DesignHeight="450"
-                     d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
-                                                      IsDesignTimeCreatable=False}">
+﻿<local:MpUserControl
+    x:Class="MpWpfApp.MpClipTileView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MpWpfApp"
+    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+    x:TypeArguments="local:MpClipTileViewModel"
+    mc:Ignorable="d"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
+                                     IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
         <!--<local:MpHighlightSelectorBehavior x:Name="HighlightSelectorBehavior" />-->
     </i:Interaction.Behaviors>
-    <local:MpClipBorder x:Name="ClipTileClipBorder"
-                        DataContext="{Binding}"
-                        Margin="{Binding ClipTileMargin, Source={x:Static local:MpMeasurements.Instance}}"
-                        BorderThickness="{local:MpMeasurementsBinding ClipTileBorderThickness}"
-                        Width="{Binding TileBorderWidth}"
-                        Height="{Binding TileBorderHeight}"
-                        IsHitTestVisible="{Binding HasScrollVelocity,
-                                                   Source={x:Static local:MpClipTrayViewModel.Instance},
-                                                   Converter={StaticResource BoolFlipConverter}}"
-                        IsVisibleChanged="ClipTileClipBorder_IsVisibleChanged"
-                        Loaded="ClipTileClipBorder_Loaded"
-                        Unloaded="ClipTileClipBorder_Unloaded"
-                        DataContextChanged="ClipTileClipBorder_DataContextChanged"
-                        MouseEnter="ClipTileClipBorder_MouseEnter"
-                        MouseLeave="ClipTileClipBorder_MouseLeave"
-                        Focusable="False"
-                        SnapsToDevicePixels="True"
-                        ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                        ToolTipService.ShowDuration="1000"
-                        CornerRadius="10">
+    <local:MpClipBorder
+        x:Name="ClipTileClipBorder"
+        DataContext="{Binding}"
+        Margin="{Binding ClipTileMargin,
+                         Source={x:Static local:MpMeasurements.Instance}}"
+                        BorderThickness="{Binding ClipTileBorderThickness, Source={x:Static local:MpMeasurements.Instance}}"
+        Width="{Binding TileBorderWidth}"
+        Height="{Binding TileBorderHeight}"
+        IsVisibleChanged="ClipTileClipBorder_IsVisibleChanged"
+        Loaded="ClipTileClipBorder_Loaded"
+        Unloaded="ClipTileClipBorder_Unloaded"
+        DataContextChanged="ClipTileClipBorder_DataContextChanged"
+        MouseEnter="ClipTileClipBorder_MouseEnter"
+        MouseLeave="ClipTileClipBorder_MouseLeave"
+        Focusable="False"
+        SnapsToDevicePixels="True"
+        ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+        ToolTipService.ShowDuration="1000"
+        CornerRadius="10">
         <local:MpClipBorder.Resources>
-            <DropShadowEffect x:Key="DropShadow"
-                              RenderingBias="Quality"
-                              Color="Black"
-                              Direction="315"
-                              Opacity="0.3"
-                              BlurRadius="5" />
+            <DropShadowEffect
+                x:Key="DropShadow"
+                RenderingBias="Quality"
+                Color="Black"
+                Direction="315"
+                Opacity="0.3"
+                BlurRadius="5" />
         </local:MpClipBorder.Resources>
         <local:MpClipBorder.Style>
             <Style TargetType="{x:Type local:MpClipBorder}">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsPinned}"
-                                 Value="True">
-                        <Setter Property="Effect"
-                                Value="{StaticResource DropShadow}" />
+                    <DataTrigger
+                        Binding="{Binding IsPinned}"
+                        Value="True">
+                        <Setter Property="Effect" Value="{StaticResource DropShadow}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsPinned}"
-                                 Value="False">
-                        <Setter Property="Effect"
-                                Value="{x:Null}" />
+                    <DataTrigger
+                        Binding="{Binding IsPinned}"
+                        Value="False">
+                        <Setter Property="Effect" Value="{x:Null}" />
                     </DataTrigger>
                     <!--<Trigger Property="Perf:RenderCapabilityWrapper.Tier" Value="0">
                         <Setter Property="Effect" Value="{x:Null}"/>
@@ -70,9 +71,10 @@
             </Style>
         </local:MpClipBorder.Style>
         <local:MpClipBorder.BorderBrush>
-            <DrawingBrush Viewport="0,0,8,8"
-                          ViewportUnits="Absolute"
-                          TileMode="Tile">
+            <DrawingBrush
+                Viewport="0,0,8,8"
+                ViewportUnits="Absolute"
+                TileMode="Tile">
                 <DrawingBrush.Drawing>
                     <DrawingGroup>
                         <GeometryDrawing Brush="{Binding TileBorderBrush}">
@@ -88,67 +90,79 @@
             </DrawingBrush>
         </local:MpClipBorder.BorderBrush>
         <Grid x:Name="ClipTileBorderGrid">
-            <DockPanel x:Name="ClipTileDockPanel"
-                       Background="{Binding .,
-                                            Converter={StaticResource StringToThemeBrushConverter},
-                                            ConverterParameter=Clip_Tile_Content_Item_Background_Color}">
+            <DockPanel
+                x:Name="ClipTileDockPanel"
+                Background="{Binding .,
+                                     Converter={StaticResource StringToThemeBrushConverter},
+                                     ConverterParameter=Clip_Tile_Content_Item_Background_Color}">
                 <!--  Tile Title Canvas  -->
-                <local:MpClipTileTitleView x:Name="TileTitleView"
-                                           DockPanel.Dock="Top"
-                                           MaxHeight="{local:MpMeasurementsBinding ClipTileTitleHeight,
-                                                                                   Mode=OneWay}"
-                                           DataContext="{Binding PrimaryItem}" />
+                <local:MpClipTileTitleView
+                    x:Name="TileTitleView"
+                    DockPanel.Dock="Top"
+                    MaxHeight="{Binding ClipTileTitleHeight,
+                                        Source={x:Static local:MpMeasurements.Instance},
+                                        Mode=OneWay}"
+                    DataContext="{Binding PrimaryItem}" />
                 <!--  Tile Detail Grid  -->
-                <local:MpClipTileDetailView x:Name="TileDetailView"
-                                            DockPanel.Dock="Bottom"
-                                            Height="{local:MpMeasurementsBinding ClipTileDetailHeight,
-                                                                                 Mode=OneWay}"
-                                            Visibility="{Binding Parent.IsDetailGridVisibile,
-                                                                 Converter={StaticResource BoolToVisibilityConverter},
-                                                                 ConverterParameter={StaticResource Hide}}"
-                                            DataContext="{Binding PrimaryItem}" />
+                <local:MpClipTileDetailView
+                    x:Name="TileDetailView"
+                    DockPanel.Dock="Bottom"
+                    Height="{Binding ClipTileDetailHeight,
+                                     Source={x:Static local:MpMeasurements.Instance},
+                                     Mode=OneWay}"
+                    Visibility="{Binding Parent.IsDetailGridVisibile,
+                                         Converter={StaticResource BoolToVisibilityConverter},
+                                         ConverterParameter={StaticResource Hide}}"
+                    DataContext="{Binding PrimaryItem}" />
                 <!--  Content Container Canvas  -->
 
-                <DockPanel x:Name="ContentListDockPanel"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch">
-                    <local:MpRtbEditToolbarView x:Name="EditToolbarView"
-                                                DockPanel.Dock="Top"
-                                                Visibility="{Binding IsContentReadOnly,
-                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                                DataContext="{Binding}" />
-                    <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
-                                                     DockPanel.Dock="Bottom"
-                                                     Visibility="{Binding IsAnyEditingTemplate,
-                                                                          Converter={StaticResource BoolToVisibilityConverter},
-                                                                          TargetNullValue=Collapsed}"
-                                                     DataContext="{Binding PrimaryItem.TemplateCollection}" />
-                    <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
-                                                      DockPanel.Dock="Bottom"
-                                                      Visibility="{Binding Parent.IsPastingTemplate,
-                                                                           Converter={StaticResource BoolToVisibilityConverter},
-                                                                           TargetNullValue=Collapsed}"
-                                                      DataContext="{Binding PrimaryItem.TemplateCollection}" />
-                    <local:MpContentView x:Name="ContentView"
-                                         DataContext="{Binding}" />
+                <DockPanel
+                    x:Name="ContentListDockPanel"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                    <local:MpRtbEditToolbarView
+                        x:Name="EditToolbarView"
+                        DockPanel.Dock="Top"
+                        Visibility="{Binding IsContentReadOnly,
+                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                        DataContext="{Binding}" />
+                    <local:MpEditTemplateToolbarView
+                        x:Name="EditTemplateView"
+                        DockPanel.Dock="Bottom"
+                        Visibility="{Binding IsAnyEditingTemplate,
+                                             Converter={StaticResource BoolToVisibilityConverter},
+                                             TargetNullValue=Collapsed}"
+                        DataContext="{Binding PrimaryItem.TemplateCollection}" />
+                    <local:MpPasteTemplateToolbarView
+                        x:Name="PasteTemplateView"
+                        DockPanel.Dock="Bottom"
+                        Visibility="{Binding Parent.IsPastingTemplate,
+                                             Converter={StaticResource BoolToVisibilityConverter},
+                                             TargetNullValue=Collapsed}"
+                        DataContext="{Binding PrimaryItem.TemplateCollection}" />
+                    <local:MpContentView
+                        x:Name="ContentView"
+                        DataContext="{Binding}" />
                 </DockPanel>
 
             </DockPanel>
             <!--  Overlays  -->
             <!--  Loading Spinner  -->
-            <local:MpClipTileLoadingOverlayView x:Name="ClipTileBusyView"
-                                                Visibility="{Binding IsAnyBusy,
-                                                                     Converter={StaticResource BoolToVisibilityConverter}}">
+            <local:MpClipTileLoadingOverlayView
+                x:Name="ClipTileBusyView"
+                Visibility="{Binding IsAnyBusy,
+                                     Converter={StaticResource BoolToVisibilityConverter}}">
                 <local:MpClipTileLoadingOverlayView.Background>
-                    <SolidColorBrush Color="{Binding Source={x:Static pcl:MpSystemColors.LoadingSpinnerBackground},
-                                                     Converter={StaticResource StringHexToWinMediaColorConverter},
-                                                     Mode=OneWay}"
-                                     Opacity="0.7" />
+                    <SolidColorBrush
+                        Color="{Binding Source={x:Static pcl:MpSystemColors.LoadingSpinnerBackground},
+                                        Converter={StaticResource StringHexToWinMediaColorConverter},
+                                        Mode=OneWay}"
+                        Opacity="0.7" />
                 </local:MpClipTileLoadingOverlayView.Background>
             </local:MpClipTileLoadingOverlayView>
             <!--  Trial Expired  -->
             <local:MpClipTileTrialExpiredOverlay Visibility="{local:MpSettingBinding Path=IsTrialExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
-            
+
         </Grid>
     </local:MpClipBorder>
 </local:MpUserControl>
