@@ -324,6 +324,7 @@ namespace MpWpfApp {
             if(ctvm.IsPlaceholder && !ctvm.IsPinned) {
                 return;
             }
+            ctvm.IsBusy = true;
 
             rtb.Document = await DecodeContentItem(
                 rtb: rtb,
@@ -333,10 +334,15 @@ namespace MpWpfApp {
                 rootDocument: rtb.Document, 
                 decodeAsRootDocument: true);
 
-            if(ctvm == null || ctvm.HeadItem == null) {
+            if(ctvm == null) {
                 return;
             }
-            
+            ctvm.IsBusy = false;
+            if(ctvm.HeadItem == null) {
+                return;
+            }
+
+
             switch (ctvm.HeadItem.CopyItemType) {
                 case MpCopyItemType.Text:
                 case MpCopyItemType.FileList:

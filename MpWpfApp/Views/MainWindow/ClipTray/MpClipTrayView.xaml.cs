@@ -135,7 +135,7 @@ namespace MpWpfApp {
         }
 
         private void Ctrvm_OnScrollIntoViewRequest(object sender, object e) {
-            PagingListBoxBehavior.ScrollIntoView(e).FireAndForgetSafeAsync(BindingContext);
+            PagingListBoxBehavior.ScrollIntoView(e);
 
         }
         #endregion

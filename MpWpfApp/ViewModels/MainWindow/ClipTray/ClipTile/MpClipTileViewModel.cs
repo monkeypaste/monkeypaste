@@ -618,13 +618,13 @@
             set {
                 if (value) {
                     if (!IsSelected) {
-                        if (Parent.IsSelectionReset) {
+                        //if (Parent.IsSelectionReset) {
                             if (HeadItem != null) {
                                 HeadItem.IsSelected = value;
                             }
-                        } else {
-                            SubSelectAll();
-                        }
+                        //} else {
+                            //SubSelectAll();
+                        //}
                     }
                 } else {
                     SelectedItems.ForEach(x => x.IsSelected = false);
@@ -940,7 +940,7 @@
 
         public void ClearEditing() {
             Items.ForEach(x => x.ClearEditing());
-            OnPropertyChanged(nameof(IsContentReadOnly));
+            //OnPropertyChanged(nameof(IsContentReadOnly));
         }
 
         public async Task<string> GetSubSelectedPastableRichText(bool isToExternalApp = false) {
