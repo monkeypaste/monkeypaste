@@ -126,13 +126,22 @@ namespace MonkeyPaste {
 
         public static async Task<List<List<MpCopyItem>>> FetchCopyItemRangeAsync(
             int startIndex, 
-            int count, 
-            Dictionary<int, int> manualSortOrderLookup = null) {
+            int count) {
             var fetchRange = AllFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
-            var items = await GetCopyItemsByRootIdList(fetchRange); 
-            if(items.Count == 0 && startIndex + count < AllFetchedAndSortedCopyItemIds.Count) {
+            var items = await GetCopyItemsByRootIdList(fetchRange);
+            if (items.Count == 0 && startIndex + count < AllFetchedAndSortedCopyItemIds.Count) {
                 MpConsole.WriteTraceLine("Bad data detected for ids: " + string.Join(",", fetchRange));
             }
+            return items;
+        }
+
+        public static async Task<List<List<MpCopyItem>>> FetchCopyItemsByQueryIdxList(
+            List<int> copyItemQueryIdxList) {
+            var fetchRootIds = AllFetchedAndSortedCopyItemIds
+                                .Select((val, idx) => (val, idx))
+                                .Where(x => copyItemQueryIdxList.Contains(x.idx))
+                                .Select(x => x.val).ToList();
+            var items = await GetCopyItemsByRootIdList(fetchRootIds);
             return items;
         }
 

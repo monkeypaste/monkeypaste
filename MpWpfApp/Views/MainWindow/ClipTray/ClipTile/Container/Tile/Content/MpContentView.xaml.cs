@@ -206,9 +206,12 @@ namespace MpWpfApp {
         }
 
         public void ScrollByPointDelta(Point e) {
+            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                return;
+            }
             var sv = Rtb.GetVisualDescendent<ScrollViewer>();
             if (sv == null) {
-                Debugger.Break();
+                MpConsole.WriteTraceLine("Warning, scroll viewer not loaded yet. This may need to be async");
                 return;
             }
             //MpConsole.WriteLine("pre clamp auto scroll delta: " + e);

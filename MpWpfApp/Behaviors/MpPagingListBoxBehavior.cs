@@ -126,7 +126,7 @@ namespace MpWpfApp {
 
         public void ScrollIntoView(object obj) {
             var ctrvm = AssociatedObject.DataContext as MpClipTrayViewModel;
-            if (ctrvm.IsScrollingIntoView) {
+            if (ctrvm.IsScrollingIntoView || ctrvm.IsAnyBusy) {
                 return;
             }
 
@@ -239,7 +239,7 @@ namespace MpWpfApp {
         }
 
         private void HandleWorldTimerTick(object sender, EventArgs e) {
-            if(MpClipTrayViewModel.Instance.IsScrollJumping || 
+            if(MpClipTrayViewModel.Instance.IsRequery || 
                !MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 return;
             }
@@ -370,11 +370,13 @@ namespace MpWpfApp {
             }
             lbil = lbil.Where(x => x.DataContext is MpClipTileViewModel ctvm && !ctvm.IsPlaceholder);
             Rect svr = new Rect(0, 0, ctrvm.ClipTrayScreenWidth, ctrvm.ClipTrayHeight);//AssociatedObject.Bounds();
-            double horizontalChange = MpClipTrayViewModel.Instance.ScrollOffset - MpClipTrayViewModel.Instance.LastScrollOfset;
-            var tail_lbi_origin = lbil.Aggregate((a, b) => a.GetRect(true).X > b.GetRect(true).X ? a : b).TranslatePoint(new Point(),AssociatedObject);
+            double horizontalChange = MpClipTrayViewModel.Instance.ScrollOffset - MpClipTrayViewModel.Instance.LastScrollOffset;            
 
-            if (tail_lbi_origin.X < svr.Right) {
-                ctrvm.LoadMoreClipsCommand.Execute(1);
+            if(horizontalChange > 0) {
+                var tail_lbi_origin = lbil.Aggregate((a, b) => a.GetRect(true).X > b.GetRect(true).X ? a : b).TranslatePoint(new Point(), AssociatedObject);
+                if (tail_lbi_origin.X < svr.Right) {
+                    ctrvm.LoadMoreClipsCommand.Execute(1);
+                }
             } else if(horizontalChange < 0) {
                 var head_lbi_origin = lbil.Aggregate((a, b) => a.GetRect(true).X < b.GetRect(true).X ? a : b).TranslatePoint(new Point(), AssociatedObject);
                 if (head_lbi_origin.X > 0) {

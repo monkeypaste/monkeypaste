@@ -704,6 +704,15 @@
             }
         }
 
+        public int HeadCopyItemId {
+            get {
+                if(HeadItem == null) {
+                    return 0;
+                }
+                return HeadItem.CopyItemId;
+            }
+        }
+
         //public MpCopyItem RootCopyItem { get; private set; }
         
         #endregion
