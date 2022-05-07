@@ -38,7 +38,7 @@ namespace MpWpfApp {
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ContentItemsChanged:
-                    TileResizeBehavior.Reattach();
+                    TileResizeBehavior.Reattach();//.FireAndForgetSafeAsync(BindingContext);
                     break;
                 case MpMessageType.IsEditable:
                 case MpMessageType.IsReadOnly:

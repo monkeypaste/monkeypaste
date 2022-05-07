@@ -60,8 +60,14 @@ namespace MpWpfApp {
             AttachAllBehaviors();
         }
         private void AttachAllBehaviors() {
+            //if(BindingContext.HeadItem.CopyItemTitle == "Untitled2054") {
+            //    Debugger.Break();
+            //}
+            //while (BindingContext.IsAnyBusy) {
+            //    await Task.Delay(100);
+            //}
             //RtbHighlightBehavior.Attach(this);
-             ContentViewDropBehavior.Attach(this);
+            ContentViewDropBehavior.Attach(this);
 
             var ctv = this.GetVisualAncestor<MpClipTileView>();
             if (ctv != null) {
@@ -135,7 +141,7 @@ namespace MpWpfApp {
                         return;
                     }
                 } else {
-                    //AttachAllBehaviors();
+                    AttachAllBehaviors();
                 }
                 
                 ScrollToHome(); 

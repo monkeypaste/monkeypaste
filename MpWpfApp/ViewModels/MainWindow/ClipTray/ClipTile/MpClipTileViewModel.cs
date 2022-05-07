@@ -188,11 +188,11 @@
                     return 0;
                 }
                 return Parent.FindTileOffsetX(QueryOffsetIdx);
-
-                //return QueryOffsetIdx* TileBorderHeight;
             }
         }
 
+
+        
         public double PasteTemplateToolbarHeight => MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
                       
 
@@ -618,13 +618,13 @@
             set {
                 if (value) {
                     if (!IsSelected) {
-                        //if (Parent.IsSelectionReset) {
+                        if (Parent.IsSelectionReset) {
                             if (HeadItem != null) {
                                 HeadItem.IsSelected = value;
                             }
-                        //} else {
-                            //SubSelectAll();
-                        //}
+                        } else {
+                            SubSelectAll();
+                        }
                     }
                 } else {
                     SelectedItems.ForEach(x => x.IsSelected = false);
@@ -801,9 +801,9 @@
                     Items.Add(civm);
                 }
                 OnPropertyChanged(nameof(QueryOffsetIdx)); 
-                RequestUiUpdate();
+                //RequestUiUpdate();
 
-                MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
+                //MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
             }
 
             Items.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
@@ -816,10 +816,21 @@
             OnPropertyChanged(nameof(TileBorderBrush));
             OnPropertyChanged(nameof(CanVerticallyScroll));
             OnPropertyChanged(nameof(HeadItem));
+            
+            while(Items.Any(x=>x.IsAnyBusy)) {
+                await Task.Delay(100);
+            }
+
+            
+            RequestUiUpdate();
+
+            MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
+            
             if (HeadItem != null) {
                 // BUG titles not updating on load more
                 HeadItem.OnPropertyChanged(nameof(HeadItem.CopyItemTitle));
             }
+
             IsBusy = false;
         }
 
@@ -1168,6 +1179,7 @@
                         if (IsContentReadOnly) {
                             IsSubSelectionEnabled = false;
                         }
+                        //LastSelectedDateTime = DateTime.MinValue;
                         //ClearSelection();
                     }
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));

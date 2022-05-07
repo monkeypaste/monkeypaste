@@ -243,12 +243,16 @@ namespace MpWpfApp {
                !MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 return;
             }
-            MpClipTrayViewModel.Instance.ScrollOffset = Math.Max(0, Math.Min(
-                        MpClipTrayViewModel.Instance.MaximumScrollOfset,
-                        MpClipTrayViewModel.Instance.ScrollOffset));
+            if(MpClipTrayViewModel.Instance.ScrollOffset < 0) {
+                MpClipTrayViewModel.Instance.ScrollOffset = 0;
+                _velocity = 0;
+            } else if(MpClipTrayViewModel.Instance.ScrollOffset > MpClipTrayViewModel.Instance.MaximumScrollOfset) {
+                MpClipTrayViewModel.Instance.ScrollOffset = MpClipTrayViewModel.Instance.MaximumScrollOfset;
+                _velocity = 0;
+            }
 
             AssociatedObject.ScrollToHorizontalOffset(MpClipTrayViewModel.Instance.ScrollOffset);
-            if(Math.Abs(_velocity) < 0.1) {
+            if(Math.Abs(_velocity) < 0.1){
                 _velocity = 0;
                 MpClipTrayViewModel.Instance.HasScrollVelocity = false;
             } else {
@@ -317,7 +321,7 @@ namespace MpWpfApp {
                 //MpClipTrayViewModel.Instance.ScrollOffset = newTrackVal;
                 
                 int targetTileIdx = MpClipTrayViewModel.Instance.FindJumpTileIdx(newTrackVal);
-                MpClipTrayViewModel.Instance.JumpToQueryIdxCommand.Execute(targetTileIdx);
+                MpClipTrayViewModel.Instance.QueryCommand.Execute(targetTileIdx);
 
                 //MpClipTrayViewModel.Instance.RequeryCommand.Execute(newTrackVal);
 
@@ -375,12 +379,12 @@ namespace MpWpfApp {
             if(horizontalChange > 0) {
                 var tail_lbi_origin = lbil.Aggregate((a, b) => a.GetRect(true).X > b.GetRect(true).X ? a : b).TranslatePoint(new Point(), AssociatedObject);
                 if (tail_lbi_origin.X < svr.Right) {
-                    ctrvm.LoadMoreClipsCommand.Execute(1);
+                    ctrvm.QueryCommand.Execute(true);
                 }
             } else if(horizontalChange < 0) {
                 var head_lbi_origin = lbil.Aggregate((a, b) => a.GetRect(true).X < b.GetRect(true).X ? a : b).TranslatePoint(new Point(), AssociatedObject);
                 if (head_lbi_origin.X > 0) {
-                    ctrvm.LoadMoreClipsCommand.Execute(-1);
+                    ctrvm.QueryCommand.Execute(false);
                 }
             }
 

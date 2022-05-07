@@ -81,7 +81,7 @@ namespace MpWpfApp {
         protected override void OnAttached() {
             base.OnAttached();
 
-            MpMainWindowViewModel.Instance.OnMainWindowHidden += MainWindowViewModel_OnMainWindowHide;
+            //MpMainWindowViewModel.Instance.OnMainWindowHidden += MainWindowViewModel_OnMainWindowHide;
 
             AssociatedObject.Loaded += AssociatedObject_Loaded;
             AssociatedObject.Unloaded += AssociatedObject_Unloaded;
@@ -112,7 +112,7 @@ namespace MpWpfApp {
             OnLoaded();
         }
 
-        private void MainWindowViewModel_OnMainWindowHide(object sender, EventArgs e) {
+        protected override void OnMainWindowHide(object sender, EventArgs e) {
             if(DropType == MpDropType.External) {
                 return;
             }

@@ -439,6 +439,9 @@ namespace MpWpfApp {
             canvas.MouseLeave -= Canvas_MouseLeave;
             canvas.MouseLeave += Canvas_MouseLeave;
 
+            canvas.Loaded -= Canvas_Loaded;
+            canvas.Loaded += Canvas_Loaded;
+
             canvas.Unloaded -= Canvas_Unloaded;
             canvas.Unloaded += Canvas_Unloaded;
 

@@ -34,7 +34,7 @@
                             Friction="0.85"
                             WheelDampening="0.08"
                             RemainingItemsThreshold="{Binding RemainingItemsCountThreshold}"
-                            LoadMoreCommand="{Binding LoadMoreClipsCommand}" />
+                            LoadMoreCommand="{Binding QueryCommand}" />
                     </i:Interaction.Behaviors>
                     <local:MpListBox
                         x:Name="ClipTray"

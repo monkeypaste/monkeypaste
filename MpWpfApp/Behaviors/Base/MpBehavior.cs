@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Linq;
 
 namespace MpWpfApp {
     
@@ -9,6 +11,7 @@ namespace MpWpfApp {
         protected bool _wasUnloaded;
         protected object _dataContext;
         protected bool _isLoaded = false;
+
 
         public T AssociatedObjectRef => AssociatedObject;
 
@@ -40,6 +43,12 @@ namespace MpWpfApp {
         #endregion
 
         public void Reattach() {
+            //if(AssociatedObject == null && _dataContext != null) {
+            //    AssociatedObject = Application.Current.MainWindow
+            //                        .GetVisualDescendent<MpClipTrayContainerView>()
+            //                        .GetVisualDescendents<MpContentView>()
+            //                        .FirstOrDefault(x => x.DataContext == _dataContext) as T;
+            //}
             var assocObj = AssociatedObject;
             Detach();
             Attach(assocObj);

@@ -452,7 +452,8 @@ namespace MpWpfApp {
                         //unregister if already exists
                         Unregister();
                         var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(keyValStr) };
-                        KeysObservable = hook.KeyDownObservable().Matching(t).Subscribe(
+                        
+                        KeysObservable = hook.KeyUpObservable().Matching(t).Subscribe(
                             (trigger) => PerformShortcutCommand.Execute(null)
                         );
                     }
