@@ -284,12 +284,12 @@ namespace MpWpfApp {
                 //find drag content view
                 var dctv = Application.Current.MainWindow
                                 .GetVisualDescendents<MpContentView>()
-                                .FirstOrDefault(x => x.DataContext is MpClipTileViewModel tctvm && tctvm == dctvm);
+                                .FirstOrDefault(x => x.DataContext is MpClipTileViewModel tctvm && tctvm.HeadCopyItemId == dctvm.HeadCopyItemId);
                 if(dctv == null) {
                     Debugger.Break();
                 }
                 dragItems = new List<MpCopyItem>();
-                string dragPlainText = dctv.Rtb.Selection.Text;
+                string dragPlainText = dctvm.SelectedPlainText;
                 
                 // from internal content
                 if (dctvm.IsSubSelectionEnabled) {
@@ -317,7 +317,6 @@ namespace MpWpfApp {
                 if(dragItems.Count > 0) {
                     dropItem.CopyItemSourceGuid = dragItems[0].Guid;
                 }
-
             }
 
             var dropRange = GetDropRange(rtfDropIdx,pre,post,split);
@@ -584,6 +583,10 @@ namespace MpWpfApp {
             _autoScrollVelocity = _baseAutoScrollVelocity;
         }
 
+        public override void CancelDrop() {
+            base.CancelDrop();
+
+        }
 
         public override void Reset() {
             base.Reset();
@@ -595,21 +598,16 @@ namespace MpWpfApp {
                 return;
             }
 
-            var rtb = AssociatedObject.Rtb;
-            rtb.FitDocToRtb();
-
-            //if(rtb.IsReadOnly ) {
-            //    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-
-            //}
-
+            
             if (!MpDragDropManager.IsDragAndDrop || 
                !(AssociatedObject.DataContext as MpClipTileViewModel).IsAnyItemDragging) {
                 // these checks make sure selection isn't cleared during self drop
-
+                //rtb.FitDocToRtb();
+                var rtb = AssociatedObject.Rtb;
                 rtb.ScrollToHome();
                 rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
+
+                rtb.FitDocToRtb();
             }
         }
     }

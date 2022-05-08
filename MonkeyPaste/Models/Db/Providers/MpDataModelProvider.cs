@@ -534,13 +534,17 @@ namespace MonkeyPaste {
         }
 
         public static async Task<List<List<MpCopyItem>>> GetCopyItemsByRootIdList(List<int> ciida) {
+            if(ciida == null || ciida.Count == 0) {
+                return new List<List<MpCopyItem>>();
+            }
             string whereStr = string.Join(" or ", ciida.Select(x => string.Format(@"pk_MpCopyItemId={0} or fk_ParentCopyItemId={0}", x)));
             string query = $"select * from MpCopyItem where {whereStr}";
             var queryResult = await MpDb.QueryAsync<MpCopyItem>(query);
             var result = queryResult
                             .Where(x => x.CompositeParentCopyItemId == 0)
                             .Select(x => queryResult
-                                            .Where(y => y.Id == x.Id || y.CompositeParentCopyItemId == x.Id).OrderBy(x=>x.CompositeSortOrderIdx).ToList()).ToList();
+                                            .Where(y => y.Id == x.Id || y.CompositeParentCopyItemId == x.Id)
+                                            .OrderBy(x=>x.CompositeSortOrderIdx).ToList()).ToList();
             if(result.Count != ciida.Count) {
                 // BUG grand children are storing parent instead of root/grand parent and not matched correctly
                 Debugger.Break();

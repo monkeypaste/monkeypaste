@@ -68,6 +68,8 @@
         public int SelectionStart { get; set; }
         public int SelectionLength { get; set; }
 
+        public string SelectedPlainText { get; set; }
+
         public bool IsAllSelected { get; set; }
 
         #endregion
@@ -331,7 +333,7 @@
                 if (HeadItem == null || !MpPreferences.ShowItemPreview) {
                     return Visibility.Collapsed;
                 }
-                return (Parent.IsScrolling || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
+                return (Parent.HasScrollVelocity || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
@@ -438,7 +440,7 @@
                 if (IsSelected) {
                     return Brushes.Red;
                 }
-                if (Parent.IsScrolling || Parent.HasScrollVelocity) {
+                if (Parent.HasScrollVelocity || Parent.HasScrollVelocity) {
                     return Brushes.Transparent;
                 }
                 if (IsHovering) {
@@ -930,7 +932,8 @@
         }
 
         public void RequestFocus() {
-            OnFocusRequest?.Invoke(this, null);
+            //OnFocusRequest?.Invoke(this, null);
+            IsContentFocused = true;
         }
 
         public void RequestSyncModel() {
@@ -1165,7 +1168,7 @@
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
-                        //RequestFocus();
+                        RequestFocus();
                         if (IsPinned) {
                             Parent.ClearClipSelection(false);
                         } else {
@@ -1177,7 +1180,10 @@
                             Parent.FlipTileCommand.Execute(this);
                         }
                         if (IsContentReadOnly) {
-                            IsSubSelectionEnabled = false;
+                            if(IsSubSelectionEnabled) {
+                                IsSubSelectionEnabled = false;
+                                RequestUiUpdate();
+                            }
                         }
                         //LastSelectedDateTime = DateTime.MinValue;
                         //ClearSelection();

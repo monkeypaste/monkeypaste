@@ -83,9 +83,9 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
 
-                hScrollBar.Track.PreviewMouseDown += Track_PreviewMouseDown;
-                hScrollBar.Track.MouseMove += Track_MouseMove;
-                //hScrollBar.Track.Thumb.MouseMove += Thumb_MouseMove;
+                hScrollBar.Track.PreviewMouseLeftButtonDown += Track_PreviewMouseLeftButtonDown;
+                hScrollBar.Track.PreviewMouseLeftButtonUp += Track_PreviewMouseUp;
+                hScrollBar.Track.PreviewMouseMove += Track_PreviewMouseMove;
 
                 MpHelpers.CreateBinding(
                    MpClipTrayViewModel.Instance,
@@ -118,6 +118,7 @@ namespace MpWpfApp {
             });
             
         }
+
 
         #endregion
 
@@ -243,12 +244,17 @@ namespace MpWpfApp {
                !MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 return;
             }
+
             if(MpClipTrayViewModel.Instance.ScrollOffset < 0) {
                 MpClipTrayViewModel.Instance.ScrollOffset = 0;
                 _velocity = 0;
             } else if(MpClipTrayViewModel.Instance.ScrollOffset > MpClipTrayViewModel.Instance.MaximumScrollOfset) {
                 MpClipTrayViewModel.Instance.ScrollOffset = MpClipTrayViewModel.Instance.MaximumScrollOfset;
                 _velocity = 0;
+            }
+
+            if(MpClipTrayViewModel.Instance.IsThumbDragging) {
+                return;
             }
 
             AssociatedObject.ScrollToHorizontalOffset(MpClipTrayViewModel.Instance.ScrollOffset);
@@ -262,71 +268,47 @@ namespace MpWpfApp {
             }
         }
 
-        private async void Track_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+
+        private void Track_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             e.Handled = true;
-            await PerformPageJump();
+
+            Track htrack = AssociatedObject.GetScrollBar(Orientation.Horizontal).Track;
+            htrack.CaptureMouse();
         }
 
-        private async void Track_MouseMove(object sender, MouseEventArgs e) {
-            //only used when dragging data onto trackbar
-            if(!MpDragDropManager.IsDragAndDrop || 
-                MpClipTrayViewModel.Instance.IsScrollJumping ||
-                MpClipTrayViewModel.Instance.IsThumbDragging) {
-                return;
+        private void Track_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
+            Track htrack = AssociatedObject.GetScrollBar(Orientation.Horizontal).Track;
+            htrack.ReleaseMouseCapture();
+
+            e.Handled = true;
+            PerformPageJump();
+        }
+
+        private void Track_PreviewMouseMove(object sender, MouseEventArgs e) {
+            MpClipTrayViewModel.Instance.IsThumbDragging = Mouse.LeftButton == MouseButtonState.Pressed;
+
+            if (MpClipTrayViewModel.Instance.IsThumbDragging) {
+                e.Handled = true;
+
+                MpClipTrayViewModel.Instance.ForceScrollOffset(GetTrackValue());
             }
-            await PerformPageJump();
         }
 
 
-        private async Task PerformPageJump() {
-            await MpHelpers.RunOnMainThreadAsync(() => {
+        private void PerformPageJump() {
+            double newTrackVal = GetTrackValue();
 
-                Track htrack = AssociatedObject.GetScrollBar(Orientation.Horizontal).Track;
+            int targetTileIdx = MpClipTrayViewModel.Instance.FindJumpTileIdx(newTrackVal);
+            MpClipTrayViewModel.Instance.QueryCommand.Execute(targetTileIdx);
+        }
 
-                var htrack_mp = Mouse.GetPosition(htrack);
-                if (htrack_mp.Y < 0) {
-                    return;
-                }
+        private double GetTrackValue() {
+            Track htrack = AssociatedObject.GetScrollBar(Orientation.Horizontal).Track;
 
-                //MpClipTrayViewModel.Instance.IsThumbDragging = true;
-
-                _velocity = _lastWheelDelta = 0;
-
-                //double deltaX = htrack.ValueFromPoint(htrack_mp);
-                //while (Mouse.LeftButton == MouseButtonState.Pressed) {
-                //    await Task.Delay(10);
-                //    var new_mp = Mouse.GetPosition(htrack);
-                //    deltaX += new_mp.X - htrack_mp.X;
-                //    htrack_mp = new_mp;
-
-                //    double newOffset = MpClipTrayViewModel.Instance.ScrollOffset + deltaX;
-                //    MpClipTrayViewModel.Instance.ScrollOffset =
-                //    MpClipTrayViewModel.Instance.LastScrollOfset =
-                //        newOffset;
-                //}
-
-                //int targetTileIdx = FindJumpTileIdx(MpClipTrayViewModel.Instance.ScrollOffset);
-                //MpClipTrayViewModel.Instance.IsThumbDragging = false;
-
-                //if (htrack.Thumb.Bounds().Contains(Mouse.GetPosition(htrack.Thumb))) {
-
-
-
-                //    MpClipTrayViewModel.Instance.JumpToQueryIdxCommand.Execute(dragTargetTileIdx);
-                //    return ;
-                //}
-                double newTrackVal = (htrack_mp.X / htrack.RenderSize.Width) * htrack.Maximum;
-                //newTrackVal += htrack.Thumb.RenderSize.Width / 2;
-                newTrackVal = Math.Min(Math.Max(htrack.Minimum, newTrackVal), htrack.Maximum);
-                //MpClipTrayViewModel.Instance.ScrollOffset = newTrackVal;
-                
-                int targetTileIdx = MpClipTrayViewModel.Instance.FindJumpTileIdx(newTrackVal);
-                MpClipTrayViewModel.Instance.QueryCommand.Execute(targetTileIdx);
-
-                //MpClipTrayViewModel.Instance.RequeryCommand.Execute(newTrackVal);
-
-                return;
-            });
+            var htrack_mp = Mouse.GetPosition(htrack);
+            _velocity = _lastWheelDelta = 0;
+            double newTrackVal = (htrack_mp.X / htrack.RenderSize.Width) * htrack.Maximum;
+            return Math.Min(Math.Max(htrack.Minimum, newTrackVal), htrack.Maximum);
         }
 
         private void Sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {

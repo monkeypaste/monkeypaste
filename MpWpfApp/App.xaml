@@ -107,13 +107,25 @@
                 ItemsSource="{Binding SubItems}">
                 <!--  Currently only for Tags  -->
                 <MenuItem
+                    PreviewMouseDown="Button_PreviewMouseDown"
                     InputGestureText="{Binding InputGestureText}"
                     ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"
                     ItemsSource="{Binding SubItems}"
                     UsesItemContainerTemplate="true"
                     Visibility="{Binding IsVisible,
                                          Converter={StaticResource BoolToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <Image
+                            Width="15"
+                            Height="15"
+                            Source="{Binding IconHexStr,
+                                             Converter={StaticResource StringHexToImageSourceConverter},
+                                             ConverterParameter=checked}" />
+                    </MenuItem.Icon>
                     <MenuItem.Header>
+                        <Label Content="{Binding Header}" />
+                    </MenuItem.Header>
+                    <!--<MenuItem.Header>
                         <Button
                             Background="Transparent"
                             BorderThickness="0"
@@ -131,7 +143,7 @@
                                     DockPanel.Dock="Right" />
                             </DockPanel>
                         </Button>
-                    </MenuItem.Header>
+                    </MenuItem.Header>-->
                 </MenuItem>
             </HierarchicalDataTemplate>
             <!--  Unchecked Tag Menu Item  -->
@@ -141,13 +153,24 @@
                 ItemsSource="{Binding SubItems}">
                 <!--  Currently only for Tags  -->
                 <MenuItem
+                    PreviewMouseDown="Button_PreviewMouseDown"
                     InputGestureText="{Binding InputGestureText}"
                     ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"
                     ItemsSource="{Binding SubItems}"
-                    UsesItemContainerTemplate="true"
+                    UsesItemContainerTemplate="True"
                     Visibility="{Binding IsVisible,
                                          Converter={StaticResource BoolToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <Image
+                            Width="15"
+                            Height="15"
+                            Source="{Binding IconHexStr,
+                                             Converter={StaticResource StringHexToImageSourceConverter}}" />
+                    </MenuItem.Icon>
                     <MenuItem.Header>
+                        <Label Content="{Binding Header}" />
+                    </MenuItem.Header>
+                    <!--<MenuItem.Header>
                         <Button
                             HorizontalAlignment="Stretch"
                             Background="Transparent"
@@ -163,7 +186,7 @@
                                 <Label Content="{Binding Header}" />
                             </DockPanel>
                         </Button>
-                    </MenuItem.Header>
+                    </MenuItem.Header>-->
                 </MenuItem>
 
             </HierarchicalDataTemplate>

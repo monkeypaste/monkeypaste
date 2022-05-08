@@ -126,7 +126,7 @@ namespace MpWpfApp {
 
         private void AnimateEnter() {
             if (BindingContext == null || 
-                MpClipTrayViewModel.Instance.IsScrolling) {
+                MpClipTrayViewModel.Instance.HasScrollVelocity) {
                 return;
             }
 
@@ -160,7 +160,7 @@ namespace MpWpfApp {
 
         private void AnimateLeave() {
             if (BindingContext == null ||
-                MpClipTrayViewModel.Instance.IsScrolling || 
+                MpClipTrayViewModel.Instance.HasScrollVelocity || 
                 BindingContext.Parent.IsContextMenuOpened) {
                 return;
             }

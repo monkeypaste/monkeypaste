@@ -102,9 +102,10 @@ namespace MpWpfApp {
                 return;            
             }
 
-            bool isReadOnly = (rtb.DataContext as MpClipTileViewModel).IsContentReadOnly;
+            var ctvm = rtb.DataContext as MpClipTileViewModel;
+            bool isReadOnly = ctvm.IsContentReadOnly;
             bool isDropping = false;
-            Size ds = new Size();
+            Size ds = ctvm.UnformattedAndDecodedContentSize;
 
             if(rtb.GetVisualAncestor<MpContentView>() != null) {
                 isDropping = MpDragDropManager.CurDropTarget == rtb.GetVisualAncestor<MpContentView>().ContentViewDropBehavior;
@@ -113,7 +114,7 @@ namespace MpWpfApp {
             if (isDropping) {
                 var fd = rtb.Document;
                 double pad = 15;
-                ds = fd.GetDocumentSize(pad);
+                //ds = fd.GetDocumentSize(pad);
                 fd.PageWidth = ds.Width;
                 fd.PageHeight = ds.Height;
 
@@ -128,7 +129,7 @@ namespace MpWpfApp {
 
 
             } else if (!isReadOnly) {
-                ds = rtb.Document.GetDocumentSize();
+                //ds = rtb.Document.GetDocumentSize();
 
                 var cv = rtb.GetVisualAncestor<MpContentView>();
                 double w = cv == null ? rtb.ActualWidth : cv.ActualWidth;
@@ -140,7 +141,6 @@ namespace MpWpfApp {
                 rtb.Document.PageHeight = Math.Max(0, rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
             }
 
-            rtb.UpdateLayout();
 
             if(isDropping || !isReadOnly) {
                 if (ds.Width > rtb.ActualWidth || isDropping) {
@@ -161,6 +161,7 @@ namespace MpWpfApp {
                 rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
             }
+            rtb.UpdateLayout();
         }
 
         public static bool Equals(this TextRange tra, TextRange trb) {

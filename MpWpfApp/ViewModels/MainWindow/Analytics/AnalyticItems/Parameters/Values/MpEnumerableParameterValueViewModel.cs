@@ -29,6 +29,7 @@ namespace MpWpfApp {
         public int SelectionStart { get; set; } = 0;
         public int SelectionLength { get; set; } = 0;
 
+        public string SelectedPlainText { get; set; }
         public bool IsAllSelected { get; set; } = false;
         #endregion
 

@@ -68,24 +68,17 @@ namespace MpWpfApp {
 
         public override void AutoScrollByMouse() {
             var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-            var ctr_mp = Application.Current.MainWindow.TranslatePoint(gmp, AssociatedObject.ClipTray);
-            //MpConsole.WriteLine("Global mp in tray coords: " + mp);
-            var tray_rect = new Rect(0, 0, AssociatedObject.ClipTray.ActualWidth, AssociatedObject.ClipTray.ActualHeight);
-            if (!tray_rect.Contains(ctr_mp)) {
-                return;
-            }
-
-            //var ctr_mp = Mouse.GetPosition(AssociatedObject);
-            Rect ctr_sv_rect = new Rect(0, 0, AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);
-            if(!ctr_sv_rect.Contains(ctr_mp)) {
+            var ctr_sv_mp = Application.Current.MainWindow.TranslatePoint(gmp, AssociatedObject.PagingScrollViewer);
+            Rect ctr_sv_rect = new Rect(0, 0, AssociatedObject.PagingScrollViewer.ActualWidth, AssociatedObject.PagingScrollViewer.ActualHeight);
+            if(!ctr_sv_rect.Contains(ctr_sv_mp)) {
                 return;
             }
 
             double origScrollOfset = MpClipTrayViewModel.Instance.ScrollOffset;
 
-            if (Math.Abs(ctr_sv_rect.Right - ctr_mp.X) <= _autoScrollMinScrollDist) {
+            if (Math.Abs(ctr_sv_rect.Right - ctr_sv_mp.X) <= _autoScrollMinScrollDist) {
                 MpClipTrayViewModel.Instance.ScrollOffset += _autoScrollVelocity;
-            } else if (Math.Abs(ctr_sv_rect.Left - ctr_mp.X) <= _autoScrollMinScrollDist) {
+            } else if (Math.Abs(ctr_sv_rect.Left - ctr_sv_mp.X) <= _autoScrollMinScrollDist) {
                 MpClipTrayViewModel.Instance.ScrollOffset -= _autoScrollVelocity;
             }
 
@@ -95,8 +88,6 @@ namespace MpWpfApp {
         }
 
         public override List<Rect> GetDropTargetRects() {
-            double margin = MpMeasurements.Instance.ClipTileMargin;
-            double borderThickness = MpMeasurements.Instance.ClipTileBorderThickness;
             double tileMargin = Math.Floor(MpMeasurements.Instance.ClipTileMargin * 1) - MpMeasurements.Instance.ClipTileBorderThickness;
 
             double offset = 5;

@@ -237,7 +237,10 @@ namespace MpWpfApp {
 
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
 
-            Reset();
+            Reset(); 
+
+            DropTargets.ForEach(x => x.Reset()); 
+            UpdateCursor();
         }
         private static void Reset() {
             IsCheckingForDrag = IsDragAndDrop = IsDraggingFromExternal = false;
@@ -246,15 +249,13 @@ namespace MpWpfApp {
             CurDropTarget = null;
             DragData = null;
             _timer.Stop();
-            DropTargets.ForEach(x => x.Reset());
+            //DropTargets.ForEach(x => x.Reset());
 
             MpShortcutCollectionViewModel.Instance.GlobalMouseMove -= GlobalHook_MouseMove;
             MpShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonUp -= GlobalHook_MouseUp;
-
             MpShortcutCollectionViewModel.Instance.GlobalEscKeyPressed -= GlobalEscKey_Pressed;
-            //Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, GlobalEscKey_Pressed);
 
-            UpdateCursor();
+            //
         }
 
         private static void UpdateCursor() {

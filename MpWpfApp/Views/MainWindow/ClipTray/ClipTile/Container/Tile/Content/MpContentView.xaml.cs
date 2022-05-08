@@ -186,11 +186,13 @@ namespace MpWpfApp {
             BindingContext.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
             BindingContext.OnScrollOffsetRequest += BindingContext_OnScrollOffsetRequest;
             BindingContext.OnPastePortableDataObject += BindingContext_OnPastePortableDataObject;
+            //BindingContext.OnFocusRequest += BindingContext_OnFocusRequest;
             //BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
             //BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
             //BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
             //BindingContext.OnFitContenBindingContexttRequest -= Ncivm_OnFitContentRequest;
         }
+
 
         private void UnregisterViewModelRequests() {
             BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
@@ -202,6 +204,9 @@ namespace MpWpfApp {
             //BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
         }
 
+        private void BindingContext_OnFocusRequest(object sender, EventArgs e) {
+           // MpIsFocusedExtension.SetIsFocused()
+        }
 
         private void BindingContext_OnPastePortableDataObject(object sender, object portableDataObjectOrCopyItem) {
             ContentViewDropBehavior.Paste(BindingContext, portableDataObjectOrCopyItem).FireAndForgetSafeAsync(BindingContext);
@@ -443,6 +448,14 @@ namespace MpWpfApp {
             }
             ScrollToHome();
             Rtb.UpdateLayout();
+            UpdateAdorners();
+
+            if(BindingContext != null && 
+               !BindingContext.IsSubSelectionEnabled &&
+               BindingContext.IsContentReadOnly &&
+               !BindingContext.IsAnyItemDragging) {
+                Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
+            }
         }
 
         private void Rtbivm_OnScrollWheelRequest(object sender, double e) {

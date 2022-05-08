@@ -22,39 +22,38 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        public void RefreshTray() {
-            MpHelpers.RunOnMainThread(async () => {
-                var sv = TagTray.GetVisualDescendent<ScrollViewer>();
-                while (sv == null) {
-                    await Task.Delay(100);
-                    sv = TagTray.GetVisualDescendent<ScrollViewer>();
-                }
-                if (sv.ExtentWidth >= TagTray.MaxWidth) {
-                    TagTrayNavLeftButton.Visibility = Visibility.Visible;
-                    TagTrayNavRightButton.Visibility = Visibility.Visible;
-                } else {
-                    TagTrayNavLeftButton.Visibility = Visibility.Collapsed;
-                    TagTrayNavRightButton.Visibility = Visibility.Collapsed;
-                }
-            });
-        }
+        //public async void RefreshTray() {
+        //    var sv = TagTray.GetVisualDescendent<ScrollViewer>();
+        //    while (sv == null) {
+        //        await Task.Delay(100);
+        //        sv = TagTray.GetVisualDescendent<ScrollViewer>();
+        //    }
+
+        //    if (sv.ExtentWidth >= TagTray.MaxWidth) {
+        //        TagTrayNavLeftButton.Visibility = Visibility.Visible;
+        //        TagTrayNavRightButton.Visibility = Visibility.Visible;
+        //    } else {
+        //        TagTrayNavLeftButton.Visibility = Visibility.Collapsed;
+        //        TagTrayNavRightButton.Visibility = Visibility.Collapsed;
+        //    }
+        //}
 
 
-        private void TagTray_Loaded(object sender, RoutedEventArgs e) {
-            TagTray.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
-            MpHelpers.RunOnMainThread(async () => {
-                while (BindingContext == null || BindingContext.IsBusy) {
-                    await Task.Delay(100);
-                }
+        //private void TagTray_Loaded(object sender, RoutedEventArgs e) {
+        //    TagTray.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
+        //    MpHelpers.RunOnMainThread(async () => {
+        //        while (BindingContext == null || BindingContext.IsBusy) {
+        //            await Task.Delay(100);
+        //        }
 
-                //BindingContext.Items.CollectionChanged += TagTileViewModels_CollectionChanged;
-                RefreshTray();
-            });
-        }
+        //        //BindingContext.Items.CollectionChanged += TagTileViewModels_CollectionChanged;
+        //        RefreshTray();
+        //    });
+        //}
 
-        private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e) {
-            RefreshTray();
-        }
+        //private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e) {
+        //    RefreshTray();
+        //}
 
 
         private void TagTrayContainerGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
@@ -83,5 +82,8 @@ namespace MpWpfApp {
             BindingContext.SelectTagCommand.Execute(sttvm.TagId);
         }
 
+        //private void MpTagTileView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+        //    RefreshTray();
+        //}
     }
 }

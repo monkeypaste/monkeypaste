@@ -223,7 +223,7 @@ namespace MpWpfApp {
             await Task.Delay(1);
         }
 
-        public void CancelDrop() {
+        public virtual void CancelDrop() {
             Reset();
         }
 

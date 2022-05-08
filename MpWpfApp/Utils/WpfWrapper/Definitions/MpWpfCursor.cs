@@ -32,8 +32,7 @@ namespace MpWpfApp {
             };
 
         public void SetCursor(MpCursorType newCursor) {
-            if (MpClipTrayViewModel.Instance.IsScrolling ||
-               MpClipTrayViewModel.Instance.IsLoadingMore) {
+            if (MpClipTrayViewModel.Instance.HasScrollVelocity) {
                 return;
             }
 

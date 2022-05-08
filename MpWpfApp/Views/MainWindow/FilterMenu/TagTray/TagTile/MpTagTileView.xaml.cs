@@ -93,7 +93,7 @@ namespace MpWpfApp {
         }
 
         private void TagTextBox_TextChanged(object sender, TextChangedEventArgs e) {
-            this.GetVisualAncestor<MpTagTrayView>()?.RefreshTray();
+            //this.GetVisualAncestor<MpTagTrayView>()?.RefreshTray();
         }
 
         private void StackPanel_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {

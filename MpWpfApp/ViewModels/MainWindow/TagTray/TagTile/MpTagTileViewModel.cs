@@ -295,6 +295,9 @@ namespace MpWpfApp {
                 return TagHeight * 0.5;
             }
         }
+
+        public double TagTileTrayWidth { get; set; }
+
         #endregion
 
         #region Model
@@ -500,6 +503,12 @@ namespace MpWpfApp {
                         }
                         await Task.WhenAll(MpClipTrayViewModel.Instance.Items.SelectMany(x => x.Items).Select(x => x.TitleSwirlViewModel.InitializeAsync()));
                     });
+                    break;
+                case nameof(TagTileTrayWidth):
+                    if(Parent == null) {
+                        return;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.IsNavButtonsVisible));
                     break;
             }
         }

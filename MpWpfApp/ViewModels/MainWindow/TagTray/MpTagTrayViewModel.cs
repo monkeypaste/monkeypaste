@@ -80,7 +80,7 @@ namespace MpWpfApp {
 
         #region State
 
-
+        public bool IsNavButtonsVisible => Items.Where(x => x.IsPinned).Sum(x => x.TagTileTrayWidth) > MpMeasurements.Instance.TagTrayDefaultMaxWidth;
         public bool IsEditingTagName {
             get {
                 if(SelectedTagTile == null) {
@@ -92,20 +92,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Layout
-
-        private double _TagTrayDefaultMaxWidth = MpMeasurements.Instance.TagTrayDefaultMaxWidth;
-        public double TagTrayDefaultMaxWidth { 
-            get {
-                return _TagTrayDefaultMaxWidth;
-            }
-            set {
-                if(_TagTrayDefaultMaxWidth != value) {
-                    _TagTrayDefaultMaxWidth = value;
-                    OnPropertyChanged(nameof(TagTrayDefaultMaxWidth));
-                }
-            }
-        }
+        #region Appearance
 
         #endregion
 
@@ -339,6 +326,7 @@ namespace MpWpfApp {
 
                 OnPropertyChanged(nameof(PinnedItems));
                 pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
+                OnPropertyChanged(nameof(IsNavButtonsVisible));
             },
             (args) => args != null &&
                       (args is MpTagTileViewModel ||

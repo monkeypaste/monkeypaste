@@ -503,7 +503,6 @@ namespace MpWpfApp {
 
         public int TailQueryIdx => Items.Count == 0 ? -1 : Items.Max(x => x.QueryOffsetIdx);// Math.Min(TotalTilesInQuery - 1, Items.Max(x => x.QueryOffsetIdx));
 
-        // NOTE (I think at least) this is - 2 because DefaultLoadC
         public int MaxLoadQueryIdx => Math.Max(0,MaxClipTrayQueryIdx - DefaultLoadCount + 1);
 
         public int MaxClipTrayQueryIdx {
@@ -538,9 +537,7 @@ namespace MpWpfApp {
                 return minClipTrayQueryIdx;
             }
         }
-        public bool IsLoadingMore { get; set; } = false;
 
-        public bool IsScrollJumping { get; set; } = false;
         public bool IsArrowSelecting { get; set; } = false;
 
 
@@ -582,23 +579,7 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isMouseDown = false;
-        public bool IsMouseDown {
-            get {
-                return _isMouseDown;
-            }
-            set {
-                if (_isMouseDown != value) {
-                    _isMouseDown = value;
-                    OnPropertyChanged(nameof(IsMouseDown));
-                }
-            }
-        }
-
         public bool IsAnyHovering => Items.Any(x => x.IsHovering);
-
-        [MpAffectsChild]
-        public bool IsScrolling { get; set; }
 
         public bool CanScroll {
             get {
@@ -653,7 +634,6 @@ namespace MpWpfApp {
 
                 PropertyChanged += MpClipTrayViewModel_PropertyChanged;
                 Items.CollectionChanged += Items_CollectionChanged;
-                MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
                 MpDb.SyncAdd += MpDbObject_SyncAdd;
                 MpDb.SyncUpdate += MpDbObject_SyncUpdate;
                 MpDb.SyncDelete += MpDbObject_SyncDelete;
@@ -672,21 +652,6 @@ namespace MpWpfApp {
 
                 IsBusy = false;
             });
-        }
-
-        private void AllFetchedAndSortedCopyItemIds_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            if(IsRequery || IsLoadingMore || IsScrollJumping) {
-                return;
-            }
-            switch(e.Action) {
-                case NotifyCollectionChangedAction.Remove:
-                    if(e.OldItems != null) {
-                        foreach(int removedQueryItemId in e.OldItems) {
-
-                        }
-                    }
-                    break;
-            }
         }
 
         #endregion
@@ -1169,6 +1134,10 @@ namespace MpWpfApp {
             ScrollOffset = newScrollOfset;
         }
 
+        public void ForceScrollOffset(double newOffset) {
+            _scrollOffset = LastScrollOffset = newOffset;
+            OnPropertyChanged(nameof(ScrollOffset));
+        }
         #endregion
 
         #region Db Events
@@ -1623,7 +1592,7 @@ namespace MpWpfApp {
 
                 
 
-                if (needsRequery ) {
+                if (needsRequery) {
                     //MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                     QueryCommand.Execute(ScrollOffset);
                     await Task.Delay(100);
@@ -1807,6 +1776,7 @@ namespace MpWpfApp {
                     MpDataModelProvider.ResetQuery();
                     await MpDataModelProvider.QueryForTotalCount();
 
+                    Items.Clear();
 
                     OnPropertyChanged(nameof(TotalTilesInQuery));
                     OnPropertyChanged(nameof(ClipTrayTotalWidth));
@@ -1911,8 +1881,7 @@ namespace MpWpfApp {
                                 RestoreSelectionState(Items[i]);
                             }
 
-                        }
-                        
+                        }                        
                     }
                 }
 
@@ -1925,13 +1894,6 @@ namespace MpWpfApp {
                     TotalTilesInQuery > 0) {
                     ResetClipSelection();
                 }
-
-
-                if (IsScrollJumping) {
-                    //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.JumpToIdxCompleted);
-                    IsScrollJumping = false;
-                }
-                
 
                 OnPropertyChanged(nameof(TotalTilesInQuery));
                 OnPropertyChanged(nameof(ClipTrayTotalWidth));

@@ -91,6 +91,7 @@ namespace MpWpfApp {
                 }
                 tsrvm.SelectionStart = tb.SelectionStart;
                 tsrvm.SelectionLength = tb.SelectionLength;
+                tsrvm.SelectedPlainText = tb.SelectedText;
             } else if (sender is RichTextBox rtb) {
                 var tsrvm = GetTextSelectionRange(rtb);
                 if (tsrvm == null) {
@@ -105,6 +106,8 @@ namespace MpWpfApp {
                 TextRange end = new TextRange(rtb.Document.ContentStart, rtb.Selection.End);
                 tsrvm.SelectionStart = start.Text.Length;
                 tsrvm.SelectionLength = end.Text.Length - start.Text.Length;
+                tsrvm.SelectedPlainText = rtb.Selection.Text;
+
                 int totalLength = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Length;
                 tsrvm.IsAllSelected = tsrvm.SelectionLength == totalLength;
             }
