@@ -251,20 +251,20 @@ namespace MpWpfApp {
                 return true;
             }
             if(dragData is MpClipTileViewModel ctvm) {
-                return true;
+                return ctvm.ItemType != MpCopyItemType.Image;
             }
             if (dragData is List<MpCopyItem> dcil) {
                 if (dcil.Count == 0) {
                     return false;
                 }
-                return dcil.All(x => x.ItemType == dcil[0].ItemType);
+                return dcil.All(x => x.ItemType == dcil[0].ItemType && x.ItemType != MpCopyItemType.Image);
             } 
 
             if (dragData is List<MpContentItemViewModel> dcivml) {
                 if (dcivml.Count == 0) {
                     return false;
                 }
-                return dcivml.All(x => x.CopyItemType == dcivml[0].CopyItemType);
+                return dcivml.All(x => x.CopyItemType == dcivml[0].CopyItemType && x.CopyItemType != MpCopyItemType.Image);
             } 
 
             return false;

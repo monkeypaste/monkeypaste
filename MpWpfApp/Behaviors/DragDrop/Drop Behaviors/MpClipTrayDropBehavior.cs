@@ -22,7 +22,7 @@ namespace MpWpfApp {
         public override Orientation AdornerOrientation => Orientation.Vertical;
         public override FrameworkElement AdornedElement => AssociatedObject.ClipTray;
 
-        public override bool IsDropEnabled { get; set; } = true;
+        public override bool IsDropEnabled { get; set; } = false;
 
         public override MpDropType DropType => MpDropType.Tray;
 
@@ -159,7 +159,6 @@ namespace MpWpfApp {
 
         public override async Task StartDrop() { 
             await Task.Delay(1);
-            _autoScrollVelocity = _baseAutoScrollVelocity;
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
@@ -206,7 +205,7 @@ namespace MpWpfApp {
         public override void Reset() {
             base.Reset();
 
-            _autoScrollVelocity = 0;
+            _autoScrollVelocity = _baseAutoScrollVelocity;
         }
     }
 

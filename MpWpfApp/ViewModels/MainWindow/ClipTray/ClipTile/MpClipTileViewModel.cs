@@ -264,9 +264,9 @@
                 foreach (var ivm in Items) {
                     var ivs = ivm.EditableContentSize;
                     ts.Width = Math.Max(ts.Width, ivs.Width);
-                    if(Parent.PersistentUniqueWidthTileLookup.ContainsKey(HeadItem.CopyItemId)) {
-                        if(Parent.PersistentUniqueWidthTileLookup[HeadItem.CopyItemId] > ts.Width) {
-                            ts.Width = Parent.PersistentUniqueWidthTileLookup[HeadItem.CopyItemId];
+                    if(Parent.PersistentUniqueWidthTileLookup.ContainsKey(QueryOffsetIdx)) {
+                        if(Parent.PersistentUniqueWidthTileLookup[QueryOffsetIdx] > ts.Width) {
+                            ts.Width = Parent.PersistentUniqueWidthTileLookup[QueryOffsetIdx];
                         }
                     }
                     ts.Height += ivs.Height;
@@ -773,7 +773,7 @@
                 }
             }
             Items.Clear();
-            if (items != null && items.Count > 0 && Parent.PersistentUniqueWidthTileLookup.TryGetValue(items[0].Id, out double uniqueWidth)) {
+            if (items != null && items.Count > 0 && Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
                 TileBorderWidth = uniqueWidth;
             } else {
                 TileBorderWidth = DefaultBorderHeight;
@@ -1131,17 +1131,26 @@
 
                 if (Items.Count == 0) {
                     int qIdx = Parent.Items.IndexOf(this);
+                    
                     await MpDataModelProvider.RemoveQueryItem(ci.Id);
                     MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                     while (Parent.IsBusy) {
                         await Task.Delay(100);
                     }
-                    if (qIdx < Parent.Items.Count - 1) {
+                    if(qIdx < 0) {
+                        //not sure why this happens but it did in drag drop
+                    } else if (qIdx < Parent.Items.Count - 1) {
                         Parent.Items[qIdx].IsSelected = true;
                     } else if (Parent.Items.Count > 0) {
                         Parent.Items[qIdx - 1].IsSelected = true;
                     }
 
+                    var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.HeadCopyItemId == ci.Id);
+                    if (pctvm != null) {
+                        // Flag QueryOffsetIdx = -1 so it tray doesn't attempt to return it to tray
+                        pctvm.QueryOffsetIdx = -1;
+                        Parent.ToggleTileIsPinnedCommand.Execute(pctvm);
+                    }
                 } else {
                     RequestListRefresh();
                 }
@@ -1208,9 +1217,9 @@
                     OnPropertyChanged(nameof(TileBorderBrush));
                     break;
                 case nameof(TileBorderWidth):
-                    if (HeadItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(HeadItem.CopyItemId, out double uniqueWidth)) {
+                    if (HeadItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
                         //this occurs when mainwindow is resized and user gives tile unique width
-                        Parent.PersistentUniqueWidthTileLookup[HeadItem.CopyItemId] = TileBorderWidth;
+                        Parent.PersistentUniqueWidthTileLookup[QueryOffsetIdx] = TileBorderWidth;
                     }
                     break;
                 case nameof(IsOverPinButton):

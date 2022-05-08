@@ -49,6 +49,7 @@ namespace MpWpfApp {
             to.TextEffects = from.TextEffects;
         }
 
+
         public static TextElement PreviousElement(this TextElement te) {
             return te.ContentStart.GetAdjacentElement(LogicalDirection.Backward) as TextElement;
         }
@@ -57,6 +58,40 @@ namespace MpWpfApp {
             return te.ContentEnd.GetAdjacentElement(LogicalDirection.Forward) as TextElement;
         }
 
+        public static TextPointer GetTextPositionAtOffset(this TextPointer position, int offset) {
+            for (TextPointer current = position; 
+                 current != null; 
+                 current = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                position = current;
+                var adjacent = position.GetAdjacentElement(LogicalDirection.Forward);
+                var context = position.GetPointerContext(LogicalDirection.Forward);
+                switch (context) {
+                    case TextPointerContext.Text:
+                        int count = position.GetTextRunLength(LogicalDirection.Forward);
+                        if (offset <= count) {
+                            return position.GetPositionAtOffset(offset);
+                        }
+                        offset -= count;
+                        break;
+                    case TextPointerContext.ElementStart:
+                        if (adjacent is InlineUIContainer) {
+                            offset--;
+                        } else if (adjacent is ListItem lsItem) {
+                            var trange = new TextRange(lsItem.ElementStart, lsItem.ElementEnd);
+                            var index = trange.Text.IndexOf('\t');
+                            if (index >= 0) {
+                                offset -= index + 1;
+                            }
+                        }
+                        break;
+                    case TextPointerContext.ElementEnd:
+                        if (adjacent is Paragraph)
+                            offset -= 2;
+                        break;
+                }
+            }
+            return position;
+        }
 
         public static TextPointer GetLineEndPosition(this TextPointer tp, int count) {
             var next_line_start_tp = tp.GetLineStartPosition(count + 1);
@@ -105,7 +140,7 @@ namespace MpWpfApp {
             var ctvm = rtb.DataContext as MpClipTileViewModel;
             bool isReadOnly = ctvm.IsContentReadOnly;
             bool isDropping = false;
-            Size ds = ctvm.UnformattedAndDecodedContentSize;
+            Size ds = new Size(); //ctvm.UnformattedAndDecodedContentSize;
 
             if(rtb.GetVisualAncestor<MpContentView>() != null) {
                 isDropping = MpDragDropManager.CurDropTarget == rtb.GetVisualAncestor<MpContentView>().ContentViewDropBehavior;
@@ -114,7 +149,7 @@ namespace MpWpfApp {
             if (isDropping) {
                 var fd = rtb.Document;
                 double pad = 15;
-                //ds = fd.GetDocumentSize(pad);
+                ds = fd.GetDocumentSize(pad);
                 fd.PageWidth = ds.Width;
                 fd.PageHeight = ds.Height;
 
@@ -129,7 +164,7 @@ namespace MpWpfApp {
 
 
             } else if (!isReadOnly) {
-                //ds = rtb.Document.GetDocumentSize();
+                ds = rtb.Document.GetDocumentSize();
 
                 var cv = rtb.GetVisualAncestor<MpContentView>();
                 double w = cv == null ? rtb.ActualWidth : cv.ActualWidth;
@@ -143,7 +178,7 @@ namespace MpWpfApp {
 
 
             if(isDropping || !isReadOnly) {
-                if (ds.Width > rtb.ActualWidth || isDropping) {
+                if (ds.Width > rtb.ActualWidth) {
                     rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
                 } else {
                     rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;

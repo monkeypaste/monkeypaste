@@ -23,7 +23,8 @@
             <ColumnDefinition Width="0.1*" />
             <ColumnDefinition
                 Width="auto"
-                MaxWidth="{Binding TagTrayDefaultMaxWidth}" />
+                MaxWidth="{Binding TagTrayDefaultMaxWidth,
+                                   Source={x:Static local:MpMeasurements.Instance}}" />
             <ColumnDefinition Width="0.1*" />
             <ColumnDefinition Width="0.2*" />
         </Grid.ColumnDefinitions>

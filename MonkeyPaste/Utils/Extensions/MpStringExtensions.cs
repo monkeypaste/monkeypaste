@@ -276,7 +276,7 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(str)) {
                 return false;
             }
-            if (str.Length % 4 != 0) {
+            if (str.Length % 4 != 0 || str.Length < 100) {
                 return false;
             }
             if(_IsNotBase64RegEx == null) {

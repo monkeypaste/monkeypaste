@@ -56,8 +56,7 @@ namespace MpWpfApp {
                     itemData = csvStr.ToRichTextTable();
                     //itemData = itemData.ToQuillText();
                 } else if (iData.ContainsKey(MpClipboardFormatType.Rtf)) {
-                    itemType = MpCopyItemType.Text;                   
-
+                    itemType = MpCopyItemType.Text;
                     itemData = iData[MpClipboardFormatType.Rtf].EscapeExtraOfficeRtfFormatting();
                     //itemData = itemData.ToQuillText();
 
@@ -166,6 +165,7 @@ namespace MpWpfApp {
                     source: source,
                     data: itemData,
                     itemType: itemType);
+
                 return ci;
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine(ex);
