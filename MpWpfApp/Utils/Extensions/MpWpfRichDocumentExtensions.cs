@@ -118,8 +118,10 @@ namespace MpWpfApp {
         public static bool IsPointInRange(this TextRange tr, Point p) {
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
 
-            var ptp = rtb.GetPositionFromPoint(p, true);
-
+            var ptp = rtb.GetPositionFromPoint(p, false);
+            if(ptp == null) {
+                return false;
+            }
             return tr.Contains(ptp);
         }
 

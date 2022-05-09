@@ -257,14 +257,14 @@ namespace MpWpfApp {
                 if (dcil.Count == 0) {
                     return false;
                 }
-                return dcil.All(x => x.ItemType == dcil[0].ItemType && x.ItemType != MpCopyItemType.Image);
+                return dcil.All(x => x.ItemType == dcil[0].ItemType);
             } 
 
             if (dragData is List<MpContentItemViewModel> dcivml) {
                 if (dcivml.Count == 0) {
                     return false;
                 }
-                return dcivml.All(x => x.CopyItemType == dcivml[0].CopyItemType && x.CopyItemType != MpCopyItemType.Image);
+                return dcivml.All(x => x.CopyItemType == dcivml[0].CopyItemType);
             } 
 
             return false;

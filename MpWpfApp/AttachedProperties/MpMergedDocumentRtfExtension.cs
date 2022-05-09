@@ -441,6 +441,10 @@ namespace MpWpfApp {
                     var rangeTo = new TextRange(insertRange.Start, insertRange.End);
                     rangeTo.Load(stream, DataFormats.XamlPackage);
 
+                    if(decodeAsRootDocument) {
+                        var ctel = rangeTo.GetAllTextElements();
+                        ctel.Where(x => x is Run).ForEach(x => x.Tag = childItem);
+                    }
                 }
             }
 
@@ -664,6 +668,8 @@ namespace MpWpfApp {
             }
 
             civm.IsHovering = false;
+            //civm.Parent.Items.ForEach(x => x.IsHovering = x.CopyItemId == civm.CopyItemId);
+            UpdateHoverHighlight(te.Parent.FindParentOfType<RichTextBox>());
         }
 
         private static void Te_MouseEnter(object sender, MouseEventArgs e) {
@@ -683,11 +689,36 @@ namespace MpWpfApp {
                 return;
             }
 
-            civm.IsHovering = true;
+            MpConsole.WriteLine("Hover Item Id: " + civm.CopyItemId);
+
+            civm.Parent.Items.ForEach(x => x.IsHovering = x.CopyItemId == civm.CopyItemId);
+
+            UpdateHoverHighlight(te.Parent.FindParentOfType<RichTextBox>());
 
             if(civm.CompositeParentCopyItemId > 0) {
                 return;
             }
+        }
+
+        private static void UpdateHoverHighlight(RichTextBox rtb) {
+            if (rtb == null) {
+                return;
+            }
+            var ctvm = rtb.DataContext as MpClipTileViewModel;
+            if (ctvm.Items.Count <= 1 ||
+                !ctvm.IsContentReadOnly) {
+                //return;
+            }
+            var fd = rtb.Document;
+            var allRuns = fd.GetAllTextElements().Where(x => x is Run);
+
+            allRuns.ForEach(x =>
+                    new TextRange(x.ContentStart, x.ContentEnd)
+                    .ApplyPropertyValue(
+                        TextElement.BackgroundProperty,
+                        x.Tag != null && ctvm.HoverItem != null && (x.Tag as MpCopyItem).Id == ctvm.HoverItem.CopyItemId ?
+                            Brushes.Yellow :
+                            Brushes.Transparent));
         }
 
         #endregion

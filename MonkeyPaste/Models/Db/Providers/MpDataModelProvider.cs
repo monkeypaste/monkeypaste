@@ -546,8 +546,8 @@ namespace MonkeyPaste {
                                             .Where(y => y.Id == x.Id || y.CompositeParentCopyItemId == x.Id)
                                             .OrderBy(x=>x.CompositeSortOrderIdx).ToList()).ToList();
             if(result.Count != ciida.Count) {
-                // BUG grand children are storing parent instead of root/grand parent and not matched correctly
-                Debugger.Break();
+                var missingRootIds = ciida.Where(x => result.All(y => y.All(z => z.Id != x)));
+                MpConsole.WriteTraceLine("Fetch query mismatch, (ignoring) missing id's: " + string.Join(",", missingRootIds));
             }
             return result;
         }

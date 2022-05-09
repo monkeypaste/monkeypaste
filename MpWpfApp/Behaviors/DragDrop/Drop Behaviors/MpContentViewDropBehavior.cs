@@ -99,8 +99,7 @@ namespace MpWpfApp {
             return rtbRect;
         }
 
-        public override int GetDropTargetRectIdx() {
-            
+        public override int GetDropTargetRectIdx() {            
             if (AssociatedObject == null || AssociatedObject.Rtb == null) {
                 return -1;
             }
@@ -119,18 +118,52 @@ namespace MpWpfApp {
                 //MpConsole.WriteLine("rtb mp (no hit): " + mp);
                 return -1;
             }
-            var mptp = rtb.GetPositionFromPoint(mp, true); 
-            var mptp_rect = mptp.GetCharacterRect(LogicalDirection.Forward);
 
-            double blockThreshold = 1;
-            _isPreBlockDrop = _isPostBlockDrop = false;
+            var this_ctvm = rtb.DataContext as MpClipTileViewModel;
+            if (this_ctvm.IsAnyItemDragging) {
+                //if dropping onto self
+                if (rtb.Selection.IsEmpty ||
+                   (rtb.Selection.Start == rtb.Document.ContentStart &&
+                    rtb.Selection.End == rtb.Document.ContentEnd)) {
+                    //only allow self drop for partial selection
+                    return -1;
+                }
+                var rtb_mp = Application.Current.MainWindow.TranslatePoint(MpShortcutCollectionViewModel.Instance.GlobalMouseLocation, rtb);
+                
+                if(rtb.Selection.IsPointInRange(rtb_mp)) {
+                    // do not allow drop onto selection
+                    return -1;
+                }
+            }
+
+            var mptp = rtb.GetPositionFromPoint(mp, true); 
+            if(mptp == null) {
+                // TODO? maybe to differentiate block drops turn off snap in GetPositionFromPoint and only 
+                // snap to find block drop
+
+                // (when not snapping) this means mouse is NOT directly over part of text 
+                // either after a line break, in header/footer or before line start
+                // snap but only check for block drops
+
+
+                return -1;
+            }
+
+            var mptp_rect = mptp.GetCharacterRect(LogicalDirection.Forward);
+            var doc_start_rect = rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
+
+            double blockThreshold = Math.Max(2, mptp_rect.Height / 4);
+            // NOTE to avoid conflicts between each line as pre/post drop only use pre for first
+            // line of content then only check post for others
+            _isPreBlockDrop = Math.Abs(mp.Y - doc_start_rect.Top) < blockThreshold || mp.Y < doc_start_rect.Top;
+            _isPostBlockDrop = Math.Abs(mp.Y - mptp_rect.Bottom) < blockThreshold || mp.Y > mptp_rect.Bottom;
 
             if(_isSplitBlockDrop) {
                 // inline takes priority if alt is down so pre/post is ignored
-            } else if(Math.Abs(mp.Y - mptp_rect.Top) < blockThreshold || mp.Y < mptp_rect.Top) {
-                _isPreBlockDrop = true;
-            } else if (Math.Abs(mp.Y - mptp_rect.Bottom) < blockThreshold || mp.Y > mptp_rect.Bottom) {
-                _isPostBlockDrop = true;
+                _isPreBlockDrop = _isPostBlockDrop = false;
+            }
+            if(_isPreBlockDrop) {
+                mptp = rtb.Document.ContentStart;
             }
 
             //MpConsole.WriteLine("Pre: " + (_isPreBlockDrop ? "YES" : "NO"));
@@ -202,20 +235,9 @@ namespace MpWpfApp {
                 return false;
             }
             var rtb = AssociatedObject.Rtb;
+            var drop_ctvm = rtb.DataContext as MpClipTileViewModel;
             if (AssociatedObject != null) {
                 if(dragData is MpClipTileViewModel drag_ctvm) {
-                    if(drag_ctvm == rtb.DataContext) {
-                        //if dropping onto self
-                        if(rtb.Selection.IsEmpty ||
-                           (rtb.Selection.Start == rtb.Document.ContentStart &&
-                            rtb.Selection.End == rtb.Document.ContentEnd)) {
-                            //only allow self drop for partial selection
-                            return false;
-                        }
-                        var rtb_mp = Application.Current.MainWindow.TranslatePoint(MpShortcutCollectionViewModel.Instance.GlobalMouseLocation, rtb);
-                        return !rtb.Selection.IsPointInRange(rtb_mp);
-                    }
-                    var drop_ctvm = rtb.DataContext as MpClipTileViewModel;
                     return drop_ctvm.ItemType == drag_ctvm.ItemType;
                 }
                 if(dragData is List<MpCopyItem> ddl) {
@@ -258,6 +280,9 @@ namespace MpWpfApp {
             var rtb = AssociatedObject.Rtb;
             var drag_ctvm = dragData as MpClipTileViewModel;
             var drop_ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            if (drop_ctvm.HeadItem == null) {
+                return;
+            }
 
             // BUG storing dropIdx because somehow it gets lost after calling base
             int rtfDropIdx = DropIdx;
@@ -266,55 +291,63 @@ namespace MpWpfApp {
             bool post = _isPostBlockDrop;
             bool split = _isSplitBlockDrop;
 
-            if(drop_ctvm.HeadItem == null) {
-                return;
-            }
             string rootGuid = drop_ctvm.HeadItem.CopyItemGuid;
-
             bool isNewRoot = rtfDropIdx <= 0;
 
             bool deleteDragItem = false;
 
             await base.Drop(isCopy, dragData);
 
+            // get drop range before altering content (if self drop offset may change if selection is before drop so use pointer which is passive ref
+            var dropRange = GetDropRange(rtfDropIdx, pre, post, split);
+
             MpCopyItem dropItem = null;
-            List<MpCopyItem> dragItems = null;
+            List<MpCopyItem> dropItemSourceItems = null;
             if (drag_ctvm == null) {
                 if (dragData is MpPortableDataObject mpdo) {
                     // from external source
                     dropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                } else {
+                    // external data should be pre-processed
+                    Debugger.Break();
                 }
             } else {
+                // from internal content
+
                 //find drag content view
                 var dctv = Application.Current.MainWindow
                                 .GetVisualDescendents<MpContentView>()
-                                .FirstOrDefault(x => x.DataContext is MpClipTileViewModel tctvm && tctvm.HeadCopyItemId == drag_ctvm.HeadCopyItemId);
+                                .FirstOrDefault(x => 
+                                    x.DataContext is MpClipTileViewModel tctvm && 
+                                    tctvm.HeadCopyItemId == drag_ctvm.HeadCopyItemId);
+
                 if(dctv == null) {
                     Debugger.Break();
                 }
-                dragItems = new List<MpCopyItem>();
+                dropItemSourceItems = new List<MpCopyItem>();
                 string dragPlainText = drag_ctvm.SelectedPlainText;
                 
-                // from internal content
                 if (drag_ctvm.IsSubSelectionEnabled) {
                     // TODO probably need to use ctvm SelectionRange w/ isCopy and splice source content here
-                    dragItems = dctv.Rtb.Selection.GetAllTextElements().Select(x => x.Tag as MpCopyItem).Distinct().ToList();
+                    dropItemSourceItems = dctv.Rtb.Selection.GetAllTextElements().Select(x => x.Tag as MpCopyItem).Distinct().ToList();
 
                 } else {
-                    dragItems = drag_ctvm.Items.Select(x => x.CopyItem).ToList();
+                    dropItemSourceItems = drag_ctvm.Items.Select(x => x.CopyItem).ToList();
                 }
                 if (!isCopy) {
+                    //when drag selection is not copy delete selection from source
                     dctv.Rtb.Selection.Text = string.Empty;
 
                     string dpt = dctv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
                     if(string.IsNullOrWhiteSpace(dpt)) {
+                        //when all content is being dropped flag drag source for delete
                         deleteDragItem = true;
                     } else {
                         MpMergedDocumentRtfExtension.SaveTextContent(dctv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
                     }                    
                 }
                 if(string.IsNullOrEmpty(dragPlainText)) {
-                    // BUG copyItem builder won't create item w/ null data and shouldn't happen
+                    // BUG copyItem builder won't create item w/ null data and this shouldn't happen
                     // occurs dropping on pin stage
                     Debugger.Break();
                     return;
@@ -323,14 +356,11 @@ namespace MpWpfApp {
                 var mpdo = new MpPortableDataObject();
                 mpdo.DataFormatLookup.Add(MpClipboardFormatType.Text, dragPlainText);
                 dropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
-                if(dragItems.Count > 0) {
-                    dropItem.CopyItemSourceGuid = dragItems[0].Guid;
+                if(dropItemSourceItems.Count > 0) {
+                    dropItem.CopyItemSourceGuid = dropItemSourceItems[0].Guid;
                 }
             }
 
-            var dropRange = GetDropRange(rtfDropIdx,pre,post,split);
-
-            
             switch (dropItem.ItemType) {
                 case MpCopyItemType.Text:
                     if (dropItem.ItemData.IsStringRichTextTable()) {
@@ -343,25 +373,26 @@ namespace MpWpfApp {
 
                         if (pre) {
                             pt = pt + Environment.NewLine;
-                            if(dropRange.Start.GetLineStartPosition(0) == null ||
-                               dropRange.Start.GetLineStartPosition(0) == rtb.Document.ContentStart) {
+                            //rtb.Document.ContentStart.InsertTextInRun(pt);
 
-                            } else {
-                               // pt = Environment.NewLine + pt;
-                            }
+                            //if(dropRange.Start.GetLineStartPosition(0) == null ||
+                            //   dropRange.Start.GetLineStartPosition(0) == rtb.Document.ContentStart) {
+
+                            //} else {
+                            //   // pt = Environment.NewLine + pt;
+                            //}
                         } else if (post) {
                             pt = Environment.NewLine + pt;
-                            if (dropRange.End.GetLineStartPosition(1) == null ||
-                               dropRange.Start.GetLineEndPosition(0) == rtb.Document.ContentEnd) {
-
-                            } else {
+                            var post_tp = dropRange.End.GetLineStartPosition(1);
+                            if (post_tp != null) {
                                 pt = pt + Environment.NewLine;
                             }
+                            //post_tp.InsertTextInRun(pt);
                         } else if (split) {
                             pt = Environment.NewLine + pt + Environment.NewLine;
                         }
 
-                        if (pre || post || split) {
+                        if (true) {//pre || post || split) {
                             dropRange.Text = pt;
                         } else {
                             dropRange.Start.InsertTextInRun(pt);
@@ -390,8 +421,8 @@ namespace MpWpfApp {
 
             var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
 
-            if (deleteDragItem && dragItems != null) {
-                foreach (var dri in dragItems) {
+            if (deleteDragItem && dropItemSourceItems != null) {
+                foreach (var dri in dropItemSourceItems) {
                     await dri.DeleteFromDatabaseAsync();
                 }
                 while (MpClipTrayViewModel.Instance.IsBusy) {
@@ -428,63 +459,73 @@ namespace MpWpfApp {
 
             // isolate insertion point and account for block drop
             TextPointer dtp_end = null;
+            
+
             //var dtp_end = rtb.Document.ContentStart
             //                .GetTextPositionAtOffset(rtfDropIdx);
             //.GetPositionAtOffset(rtfDropIdx)
             //.GetNextInsertionPosition(LogicalDirection.Backward);
-            
+
 
             if (pre) {
-                dtp_end = rtb.Document.ContentStart.GetTextPositionAtOffset(rtfDropIdx);
-                if (dtp_end == null) {
-                    dtp_end = rtb.Document.ContentStart;//.GetTextPositionAtOffset(rtfDropIdx);
-                }
-                dtp_end = dtp_end.GetLineStartPosition(0);
-
-                if (dtp_end == null) {
-                    MpConsole.WriteLine(@"Pre block doc start detected");
-                    //at start of doc
-                    dtp_end = rtb.Document.ContentStart.GetLineStartPosition(0);
-                    //rtb.Document.ContentStart.InsertLineBreak();
-                } //else {
-                //    dtp_end = dtp_end.GetLineStartPosition(0);
-                //    //dtp.InsertLineBreak();
+                //dtp_end = rtb.Document.ContentStart.GetTextPositionAtOffset(rtfDropIdx);
+                //if (dtp_end == null) {
+                //    dtp_end = rtb.Document.ContentStart;//.GetTextPositionAtOffset(rtfDropIdx);
                 //}
-                dtp_end = dtp_end.GetTextPositionAtOffset(0);
+                //dtp_end = dtp_end.GetLineStartPosition(0);
+
+                //if (dtp_end == null) {
+                //    MpConsole.WriteLine(@"Pre block doc start detected");
+                //    //at start of doc
+                //    dtp_end = rtb.Document.ContentStart.GetLineStartPosition(0);
+                //    //rtb.Document.ContentStart.InsertLineBreak();
+                //} //else {
+                ////    dtp_end = dtp_end.GetLineStartPosition(0);
+                ////    //dtp.InsertLineBreak();
+                ////}
+                //dtp_end = dtp_end.GetTextPositionAtOffset(0);
+                dtp_end = rtb.Document.ContentStart.GetInsertionPosition(LogicalDirection.Forward);
 
             } else if (post) {
-                dtp_end = rtb.Document.ContentStart.GetTextPositionAtOffset(rtfDropIdx);
-                if (dtp_end == null) {
-                    dtp_end = rtb.Document.ContentEnd;
-                }
-                dtp_end = dtp_end.GetLineStartPosition(1);
+                //dtp_end = rtb.Document.ContentStart.GetTextPositionAtOffset(rtfDropIdx);
+                //if (dtp_end == null) {
+                //    dtp_end = rtb.Document.ContentEnd;
+                //}
+                //dtp_end = dtp_end.GetLineStartPosition(1);
 
-                if (dtp_end == null) {
-                    //at end of document
-                    dtp_end = rtb.Document.ContentEnd;
-                } //else {
+                //if (dtp_end == null) {
+                //    //at end of document
+                //    dtp_end = rtb.Document.ContentEnd;
+                //} //else {
                 //    dtp_end = dtp_end.GetLineStartPosition(1);
                 //}
-                dtp_end = dtp_end.GetTextPositionAtOffset(0);
+                //dtp_end = dtp_end.GetTextPositionAtOffset(0);
                 //dtp = dtp.InsertLineBreak();
+                dtp_end = rtb.Document.ContentStart.GetPositionAtOffset(rtfDropIdx).GetLineStartPosition(1);
+                if(dtp_end == null) {
+                    dtp_end = rtb.Document.ContentEnd.GetInsertionPosition(LogicalDirection.Backward);
+                } else {
+                    dtp_end = dtp_end.GetInsertionPosition(LogicalDirection.Forward);
+                }
+
             } else  {
                 //dtp = dtp.InsertParagraphBreak();
                 //dtp.InsertParagraphBreak();
                 // NOTE adding 1 
-                //dtp_end = rtb.Document.ContentStart
-                //            .GetPositionAtOffset(rtfDropIdx + 1)
-                //            .GetNextInsertionPosition(LogicalDirection.Backward)
-                //            .GetTextPositionAtOffset(0);
-                dtp_end = rtb.Document.ContentStart.GetTextPositionAtOffset(rtfDropIdx + 1);
+                dtp_end = rtb.Document.ContentStart
+                            .GetPositionAtOffset(rtfDropIdx)
+                            .GetInsertionPosition(LogicalDirection.Forward);
+                            //.GetTextPositionAtOffset(0);
+                //dtp_end = rtb.Document.ContentStart.GetTextPositionAtOffset(rtfDropIdx + 1);
             }
-            dtp_end = dtp_end.GetTextPositionAtOffset(0);
-            var dtp_start = dtp_end;//.GetPositionAtOffset(0, LogicalDirection.Forward);
+            //dtp_end = dtp_end.GetTextPositionAtOffset(0);
+            //var dtp_start = dtp_end;//.GetPositionAtOffset(0, LogicalDirection.Forward);
 
             //var dtp_context = dtp_end.GetPointerContext(LogicalDirection.Forward);
             //if (dtp_context != TextPointerContext.Text) {
             //    Debugger.Break();
             //}
-            return new TextRange(dtp_start, dtp_end);
+            return new TextRange(dtp_end, dtp_end);
         }
 
         public override void AutoScrollByMouse() {
@@ -545,11 +586,17 @@ namespace MpWpfApp {
             var rtb = AssociatedObject.Rtb;
             rtb.FitDocToRtb();
             _autoScrollVelocity = _baseAutoScrollVelocity;
+            if(rtb.DataContext is MpClipTileViewModel ctvm) {
+                ctvm.IsCurrentDropTarget = true;
+            }
         }
 
         public override void CancelDrop() {
             base.CancelDrop();
-
+            if (AssociatedObject != null && 
+                AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
+                ctvm.IsCurrentDropTarget = false;
+            }
         }
 
         public override void Reset() {
@@ -572,6 +619,10 @@ namespace MpWpfApp {
                 rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
 
                 rtb.FitDocToRtb();
+            }
+            if (AssociatedObject != null &&
+                AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
+                ctvm.IsCurrentDropTarget = false;
             }
         }
 

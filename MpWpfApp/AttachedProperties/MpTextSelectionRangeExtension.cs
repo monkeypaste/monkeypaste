@@ -101,14 +101,16 @@ namespace MpWpfApp {
                 //tsrvm.SelectionStart = rtb.Document.ContentStart.GetOffsetToPosition(rtb.Selection.Start);
                 //tsrvm.SelectionLength = rtb.Selection.Start.GetOffsetToPosition(rtb.Selection.End);
 
+
                 //these values will give you the absolute character positions relative to the very beginning of the text.
                 TextRange start = new TextRange(rtb.Document.ContentStart, rtb.Selection.Start);
-                TextRange end = new TextRange(rtb.Document.ContentStart, rtb.Selection.End);
+                //TextRange end = new TextRange(rtb.Document.ContentStart, rtb.Selection.End);
                 tsrvm.SelectionStart = start.Text.Length;
-                tsrvm.SelectionLength = end.Text.Length - start.Text.Length;
+                tsrvm.SelectionLength = rtb.Selection.Text.Length; //end.Text.Length - start.Text.Length;
                 tsrvm.SelectedPlainText = rtb.Selection.Text;
 
-                int totalLength = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Length;
+                string pt = rtb.Document.ToPlainText();
+                int totalLength = pt.Length;
                 tsrvm.IsAllSelected = tsrvm.SelectionLength == totalLength;
             }
         }

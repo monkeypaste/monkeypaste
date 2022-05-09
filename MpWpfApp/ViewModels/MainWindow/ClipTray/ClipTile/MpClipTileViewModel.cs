@@ -567,12 +567,14 @@
         //[MpDependsOnChild("IsItemDragging")]
         public bool IsAnyItemDragging => Items.Any(x => x.IsItemDragging);
 
+        public bool IsCurrentDropTarget { get; set; } = false;
 
         [MpDependsOnChild("IsContextMenuOpen")]
         public bool IsAnyItemContextMenuOpened => Items.Any(x => x.IsContextMenuOpen);
 
         public bool IsAnySelected => Items.Any(x => x.IsSelected);
 
+        public bool IsAnyHoveringOverItem => Items.Any(x => x.IsHovering);
         public bool HasTemplates => Items.Any(x => x.HasTemplates);
 
         public int Count => Items.Count;

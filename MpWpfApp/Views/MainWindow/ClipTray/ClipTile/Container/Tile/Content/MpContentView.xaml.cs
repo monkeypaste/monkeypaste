@@ -886,7 +886,7 @@ namespace MpWpfApp {
             UpdateAdorners();
         }
 
-        private void UpdateAdorners() {
+        public void UpdateAdorners() {
             if (Rtb == null) {
                 return;
             }
@@ -896,5 +896,7 @@ namespace MpWpfApp {
             }
             rtb_a.Update();
         }
+
+        
     }
 }

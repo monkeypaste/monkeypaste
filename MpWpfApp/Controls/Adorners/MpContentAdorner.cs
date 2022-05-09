@@ -54,6 +54,20 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsShowingContentBounds {
+            get {
+                if (AdornedElement != null &&
+                   AdornedElement is RichTextBox rtb &&
+                    rtb.DataContext is MpClipTileViewModel ctvm &&
+                    ctvm.Items.Count > 1 &&
+                    ctvm.IsContentReadOnly &&
+                    ctvm.IsAnyHoveringOverItem) {
+                    return true;
+                }
+                return false;
+            }
+        }
+
         public bool IsShowing => MpMainWindowViewModel.Instance.IsMainWindowOpen &&
                                  (IsShowingDropShape || 
                                  IsShowingCaret || 
@@ -121,6 +135,9 @@ namespace MpWpfApp {
                     DrawUnderlines(dc, new Pen(Brushes.DimGray, 1));
                 }
 
+                if(IsShowingContentBounds) {
+
+                }
             } else {
                 Visibility = Visibility.Hidden;
             }
@@ -191,6 +208,24 @@ namespace MpWpfApp {
                 pen,
                 caret_rect.TopLeft,
                 caret_rect.BottomLeft);
+        }
+
+        private void DrawContentHull(DrawingContext dc, Pen pen) {
+            //var rtb = AdornedElement as RichTextBox;
+            //if (rtb == null) {
+            //    return;
+            //}
+            //var ctvm = rtb.DataContext as MpClipTileViewModel;
+            //var fd = rtb.Document;
+            //var allRuns = fd.GetAllTextElements().Where(x => x is Run);
+
+            //allRuns.ForEach(x =>
+            //      new TextRange(x.ContentStart, x.ContentEnd)
+            //      .ApplyPropertyValue(
+            //          TextElement.BackgroundProperty, 
+            //          x.Tag != null && ctvm.HoverItem != null && (x.Tag as MpCopyItem).Id == ctvm.HoverItem.CopyItemId ? 
+            //                Brushes.Yellow :
+            //                Brushes.Transparent));
         }
 
         private void DrawDebugRects(DrawingContext dc) {
