@@ -33,22 +33,9 @@ namespace MonkeyPaste {
 
         #region View Models
 
-        public ObservableCollection<MpNotificationViewModelBase> NotificationQueue { get; private set; } = new ObservableCollection<MpNotificationViewModelBase>();
+        public ObservableCollection<MpNotificationViewModelBase> Notifications { get; private set; } = new ObservableCollection<MpNotificationViewModelBase>();
 
-        public MpNotificationViewModelBase CurrentNotificationViewModel => NotificationQueue.FirstOrDefault();
-
-        #endregion
-
-        #region State
-
-        public bool IsHovering { get; set; } = false;
-
-        public bool IsVisible { get; set; } = false;
-
-        #endregion
-
-        #region Appearance
-
+        //public MpNotificationViewModelBase CurrentNotificationViewModel => NotificationQueue.FirstOrDefault();
 
         #endregion
 
@@ -87,7 +74,10 @@ namespace MonkeyPaste {
             _nbv = nbv;
         }
 
-        public async Task ShowMessage(string title = "", string msg = "", double maxShowTimeMs = 3000) {
+        public async Task ShowMessage(
+            string title = "", 
+            string msg = "", 
+            double maxShowTimeMs = 3000) {
             await ShowUserAction(
                 dialogType: MpNotificationDialogType.Message,
                 title: title,
@@ -128,11 +118,12 @@ namespace MonkeyPaste {
                 Body = msg
             };
 
-            NotificationQueue.Insert(0, unvm);
-            OnPropertyChanged(nameof(CurrentNotificationViewModel));
+            Notifications.Add(unvm);
+            //OnPropertyChanged(nameof(CurrentNotificationViewModel));
 
-            if (!IsVisible) {
-                ShowBalloon();
+            //if (!IsVisible) 
+            {
+                ShowBalloon(unvm);
             }
 
             MpConsole.WriteLines(
@@ -147,7 +138,7 @@ namespace MonkeyPaste {
                         DateTime.Now - startTime <= TimeSpan.FromMilliseconds(maxShowTimeMs)) {
                     await Task.Delay(100);
 
-                    while(IsHovering) {
+                    while(unvm.IsHovering) {
                         await Task.Delay(100);
                     }
                 }
@@ -157,7 +148,7 @@ namespace MonkeyPaste {
                 }
             }
 
-            ShiftToNextNotificationCommand.Execute(null);
+            RemoveNotificationCommand.Execute(unvm);
 
             if (unvm.DialogResult == MpDialogResultType.Retry &&
                retryAction != null) {
@@ -175,24 +166,28 @@ namespace MonkeyPaste {
             }
 
             var lvm = await CreateLoaderViewModel(loader); 
-            NotificationQueue.Add(lvm);
+            Notifications.Add(lvm);
 
-            OnPropertyChanged(nameof(CurrentNotificationViewModel));
+            //OnPropertyChanged(nameof(CurrentNotificationViewModel));
 
-            ShowBalloon();
+            ShowBalloon(lvm);
         }
 
         public void FinishLoading() {
-            ShiftToNextNotificationCommand.Execute(null);
+            var lvm = Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
+            if(lvm != null) {
+                RemoveNotificationCommand.Execute(lvm);
+            }
         }
 
-        public void ShowBalloon() {
-            _nbv.ShowWindow();
+        public void ShowBalloon(MpNotificationViewModelBase nvmb) {
+            _nbv.ShowWindow(nvmb);
             //IsVisible = true;
         }
 
-        public void HideBalloon() {
-            _nbv.HideWindow();
+        public void HideBalloon(MpNotificationViewModelBase nvmb) {
+            _nbv.HideWindow(nvmb);
+            Notifications.Remove(nvmb);
             //IsVisible = false;
         }
         #endregion
@@ -224,7 +219,7 @@ namespace MonkeyPaste {
                 if(DoNotShowNotificationIds.Contains(notificationId)) {
                     return;
                 }
-                ShiftToNextNotificationCommand.Execute(null);
+                RemoveNotificationCommand.Execute(Notifications.FirstOrDefault(x=>x.NotificationId == notificationId));
 
                 while(!MpBootstrapperViewModelBase.IsLoaded) {
                     //wait for dependencies to load
@@ -236,17 +231,31 @@ namespace MonkeyPaste {
                 MpPreferences.DoNotShowAgainNotificationIdCsvStr = string.Join(",", DoNotShowNotificationIds);
             });
 
-        public ICommand ShiftToNextNotificationCommand => new MpCommand(
-             () => {                
-                 if (CurrentNotificationViewModel == null || NotificationQueue.Count <= 1) {
-                    HideBalloon();
-                 }
+        //public ICommand ShiftToNextNotificationCommand => new MpCommand(
+        //     () => {                
+        //         if (CurrentNotificationViewModel == null || NotificationQueue.Count <= 1) {
+        //            if(NotificationQueue.Count > 0) {
+        //                 HideBalloon(NotificationQueue[0]);
+        //             } else {
+        //                 HideBalloon(null);
+        //             }
+        //         }
 
-                 if (NotificationQueue.Count >= 1) {
-                     NotificationQueue.RemoveAt(0);
-                 }
-                 OnPropertyChanged(nameof(CurrentNotificationViewModel));
-             });
+        //         if (NotificationQueue.Count >= 1) {
+        //             NotificationQueue.RemoveAt(0);
+        //         }
+        //         OnPropertyChanged(nameof(CurrentNotificationViewModel));
+        //     });
+
+        public ICommand RemoveNotificationCommand => new MpCommand<object>(
+            (arg) => {
+                var nvm = arg as MpNotificationViewModelBase;
+                if(nvm == null) {
+                    return;
+                }
+                HideBalloon(nvm);
+                //OnPropertyChanged(nameof(CurrentNotificationViewModel));
+            });
         #endregion
     }
 }

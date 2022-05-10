@@ -17,6 +17,8 @@ using System.Windows.Threading;
 using System.Xml;
 using MonkeyPaste.Plugin;
 using System.Diagnostics;
+using System.Windows.Navigation;
+using System.Windows.Input;
 
 namespace MpWpfApp {
     public static class MpWpfRichDocumentExtensions {
@@ -192,12 +194,12 @@ namespace MpWpfApp {
                     rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 }
 
-                rtb.Document.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
-                rtb.Document.ConfigureLineHeight();
             } else {
                 rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
             }
+
+            rtb.Document.ConfigureLineHeight();
             rtb.UpdateLayout();
         }
 
@@ -349,23 +351,7 @@ namespace MpWpfApp {
             var p = fd.Blocks.FirstBlock as Paragraph;
             p.ContentRange().LoadImage(base64Str, docSize);
 
-            //p.Inlines.Clear();
-
-            //docSize = docSize.HasValue ? docSize : MpMeasurements.Instance.ClipTileContentDefaultSize;
-
-            //var vb = new Viewbox() {
-            //    VerticalAlignment = VerticalAlignment.Top,
-            //    Stretch = Stretch.Uniform,
-            //    Width = docSize.Value.Width,
-            //    Height = docSize.Value.Width,
-            //    Margin = new Thickness(5),
-            //    Child = img
-            //};
-            //var iuic = new InlineUIContainer(vb);
-            //p.Inlines.Add(iuic);
-
-            fd.LineStackingStrategy = LineStackingStrategy.MaxHeight;
-            //fd.ConfigureLineHeight();
+            fd.ConfigureLineHeight(LineStackingStrategy.MaxHeight);
             p.ContentRange().ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Center);
 
             return fd;
@@ -396,53 +382,91 @@ namespace MpWpfApp {
                 Stretch = System.Windows.Media.Stretch.Fill
             };
 
-            tr.Text = string.Empty;
-            //var fd = string.Empty.ToFlowDocument();
             var iuc = new InlineUIContainer(pathIcon) {
-                BaselineAlignment = BaselineAlignment.Bottom
+                BaselineAlignment = BaselineAlignment.Bottom                
             };
 
-            Paragraph p = null;
-            if (tr.Start.Parent is Block b) {
-                if (b is Paragraph) {
-                    p = b as Paragraph;
-                    p.Inlines.Clear();
-                    p.Inlines.Add(iuc);
-                }
-            } else {
-                Debugger.Break();
-            }
-            //else if(tr.Start.Parent is Inline i) {
-
-            //} else if(tr.Start.Parent is FlowDocument fd) {
-
-            //}
-
+            Paragraph p = new Paragraph(iuc);
 
             string pathDir = path;
             if (File.Exists(pathDir)) {
                 pathDir = Path.GetDirectoryName(pathDir);
             }
 
-            var pathLink = new Hyperlink(new Run(Path.GetFileName(pathDir))) {
+            var pathLink = new Hyperlink(new Run(Path.GetFileName(path))) {
                 IsEnabled = true,
                 NavigateUri = new Uri(pathDir, UriKind.Absolute)
             };
-            pathLink.RequestNavigate += (s, e) => {
-                return;
-            };
-            pathLink.PreviewMouseDown += (s, e) => {
-                return;
-            };
-            pathLink.MouseEnter += (s, e) => {
-                return;
-            };
 
+            p.Inlines.Add(new Run(" "));
             p.Inlines.Add(pathLink);
+
+            double fontSize = 16;
+            //p.LineHeight = fontSize + pad;
+            p.FontFamily = new FontFamily(MpPreferences.DefaultFontFamily);
+            p.FontSize = fontSize;
             //fd.Blocks.Clear();
             //fd.Blocks.Add(p);
 
-            return p;
+
+            using (var stream = new MemoryStream()) {
+                var subDoc = new FlowDocument();
+                subDoc.Blocks.Add(p);
+                p.ContentRange().Save(stream, DataFormats.XamlPackage, true);
+                stream.Seek(0, SeekOrigin.Begin);
+                tr.Load(stream, DataFormats.XamlPackage);
+
+                var fileItemParagraph = tr.GetAllTextElements().FirstOrDefault(x => x is Paragraph) as Paragraph;
+                var hl = tr.GetAllTextElements().FirstOrDefault(x => x is Hyperlink) as Hyperlink;
+
+                fileItemParagraph.TextAlignment = TextAlignment.Left;
+
+                RequestNavigateEventHandler hl_nav_handler = (s, e) => {
+                    System.Diagnostics.Process.Start(e.Uri.ToString());
+                };
+                RoutedEventHandler hl_Unload_handler = null;
+                hl_Unload_handler = (s, e) => {
+                    hl.RequestNavigate -= hl_nav_handler;
+                    hl.Unloaded -= hl_Unload_handler;
+                };
+
+                MouseEventHandler p_mouseEnter_handler = (s, e) => {
+                    fileItemParagraph.Background = Brushes.Gainsboro;
+                    fileItemParagraph.BorderBrush = Brushes.Black;
+                    fileItemParagraph.BorderThickness = new Thickness(0.5);
+                    fileItemParagraph.Padding = new Thickness(3);
+                };
+                MouseEventHandler p_mouseLeave_handler = (s, e) => {
+                    fileItemParagraph.Background = Brushes.Transparent;
+                    fileItemParagraph.BorderBrush = Brushes.Transparent;
+                    fileItemParagraph.BorderThickness = new Thickness(0);
+                    fileItemParagraph.Padding = new Thickness(0);
+                };
+                MouseButtonEventHandler p_mouseLeftButtonUp_handler = (s, e) => {
+                    Process.Start(hl.NavigateUri.ToString());
+                };
+                RoutedEventHandler p_Unload_handler = null;
+                
+                p_Unload_handler = (s, e) => {
+                    fileItemParagraph.MouseEnter -= p_mouseEnter_handler;
+                    fileItemParagraph.MouseLeave -= p_mouseLeave_handler;
+                    fileItemParagraph.MouseLeftButtonUp -= p_mouseLeftButtonUp_handler;
+                    fileItemParagraph.Unloaded -= p_Unload_handler;
+                };
+
+                hl.RequestNavigate += hl_nav_handler;
+                hl.Unloaded += hl_Unload_handler;
+
+                fileItemParagraph.MouseEnter += p_mouseEnter_handler;
+                fileItemParagraph.MouseLeave += p_mouseLeave_handler;
+                fileItemParagraph.MouseLeftButtonUp += p_mouseLeftButtonUp_handler;
+                fileItemParagraph.Unloaded += p_Unload_handler;
+                //var outDoc = fileItemParagraph.Parent.FindParentOfType<FlowDocument>();
+                //string outXamlPackage = outDoc.ToXamlPackage();
+
+                return fileItemParagraph;
+            }
+
         }
 
         public static FlowDocument ToFilePathDocument(this string path, int iconId = 0, double iconSize = 16) {
@@ -451,7 +475,7 @@ namespace MpWpfApp {
             return fd;
         }
 
-        public static void LoadAsRtf(this TextRange tr, string str, int iconId = 0) {
+        public static void LoadRtf(this TextRange tr, string str, int iconId = 0) {
             // NOTE iconId is only used to convert file path's to rtf w/ icon 
 
             if (string.IsNullOrEmpty(str)) {
@@ -497,7 +521,7 @@ namespace MpWpfApp {
                 return;
                 //return str.ToFilePathDocument();
             }
-            tr.LoadAsRtf(str.ToRichText(iconId), iconId);
+            tr.LoadRtf(str.ToRichText(iconId), iconId);
         }
         public static string ToRichText(this FlowDocument fd) {
             //RichTextBox rtb = null;
@@ -664,8 +688,7 @@ namespace MpWpfApp {
                         var ps = fd.GetDocumentSize();
                         fd.PageWidth = ps.Width;
                         fd.PageHeight = ps.Height;
-                        fd.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
-                        fd.ConfigureLineHeight();
+                        fd.ConfigureLineHeight(LineStackingStrategy.BlockLineHeight);
 
                         return fd;
                     }
@@ -841,15 +864,17 @@ namespace MpWpfApp {
             return ds;
         }
 
-        public static void ConfigureLineHeight(this FlowDocument doc) {
+        public static void ConfigureLineHeight(this FlowDocument doc, LineStackingStrategy lss = LineStackingStrategy.BlockLineHeight) {
             //return;
             if (doc == null) {
                 throw new ArgumentNullException("doc");
             }
-
+            doc.LineStackingStrategy = lss;
             foreach (var b in doc.Blocks) {
+                b.LineStackingStrategy = lss;
                 if (b is Paragraph p) {
-                    p.LineHeight = p.FontSize + (p.FontSize * 0.333);
+                    p.Margin = new Thickness(0);
+                    p.LineHeight = p.FontSize + 1;// (p.FontSize * 0.333);
                     doc.LineHeight = p.LineHeight; 
                 }
             }

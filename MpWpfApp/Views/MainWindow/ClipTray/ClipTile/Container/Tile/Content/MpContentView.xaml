@@ -22,7 +22,7 @@
             x:Name="Rtb"
             DataContext="{Binding}"
             Width="Auto"
-            MinWidth="100"
+            MinWidth="100" 
             Height="Auto"
             Padding="5,0,5,0"
             HorizontalAlignment="Stretch"

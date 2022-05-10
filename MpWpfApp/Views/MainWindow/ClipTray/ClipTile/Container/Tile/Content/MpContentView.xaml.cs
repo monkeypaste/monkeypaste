@@ -454,7 +454,8 @@ namespace MpWpfApp {
                !BindingContext.IsSubSelectionEnabled &&
                BindingContext.IsContentReadOnly &&
                !BindingContext.IsAnyItemDragging) {
-                Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
+                //Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
+                Rtb.CaretPosition = Rtb.Document.ContentStart;
             }
         }
 

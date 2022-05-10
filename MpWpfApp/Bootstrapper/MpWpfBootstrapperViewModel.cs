@@ -93,7 +93,7 @@ namespace MpWpfApp {
 
             var nw = new MpNotificationWindow();
             await MpNotificationCollectionViewModel.Instance.RegisterWithWindow(nw);
-            nw.DataContext = MpNotificationCollectionViewModel.Instance;
+            //nw.DataContext = MpNotificationCollectionViewModel.Instance;
 
             await MpNotificationCollectionViewModel.Instance.BeginLoader(this);
 
@@ -104,6 +104,7 @@ namespace MpWpfApp {
 
             MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardHelper.MpClipboardManager.MonitorService;
 
+            await Task.Delay(500);
             MpNotificationCollectionViewModel.Instance.FinishLoading();
 
             //MpRtfToHtmlConverter.Test();

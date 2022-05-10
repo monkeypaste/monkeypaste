@@ -91,6 +91,10 @@ namespace MonkeyPaste {
 
         public bool IsLoaderNotification => DialogType == MpNotificationDialogType.Loader;
 
+
+        public bool IsHovering { get; set; } = false;
+
+        public bool IsVisible { get; set; } = false;
         #endregion
 
         #region Model
@@ -118,6 +122,8 @@ namespace MonkeyPaste {
         public virtual MpNotificationDialogType DialogType { get; set; }
 
         public MpNotificationExceptionSeverityType ExceptionType { get; set; }
+
+        public int NotificationId => (int)DialogType;
 
         #endregion
 

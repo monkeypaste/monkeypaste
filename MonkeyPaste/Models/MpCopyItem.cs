@@ -271,7 +271,9 @@ namespace MonkeyPaste {
                 return dupCheck;
             }
 
-            int count = await MpDataModelProvider.GetTotalCopyItemCountAsync();
+            if(MpPreferences.UniqueContentItemIdx == 0) {
+                MpPreferences.UniqueContentItemIdx = await MpDataModelProvider.GetTotalCopyItemCountAsync();
+            }
             
             if(itemType == MpCopyItemType.None) {
                 //derive content type from data
@@ -303,7 +305,7 @@ namespace MonkeyPaste {
                     var curItem = new MpCopyItem() {
                         CopyItemGuid = System.Guid.NewGuid(),
                         CopyDateTime = DateTime.Now,
-                        Title = string.IsNullOrEmpty(title) ? "Untitled" + (++count) : title,
+                        Title = string.IsNullOrEmpty(title) ? "Untitled" + (++MpPreferences.UniqueContentItemIdx) : title,
                         ItemData = pl[i],
                         ItemDescription = description,
                         ItemType = itemType,
@@ -335,7 +337,7 @@ namespace MonkeyPaste {
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,
-                Title = string.IsNullOrEmpty(title) ? "Untitled" + (++count) : title,
+                Title = string.IsNullOrEmpty(title) ? "Untitled" + (++MpPreferences.UniqueContentItemIdx) : title,
                 ItemDescription = description,
                 ItemData = data,
                 ItemType = itemType,

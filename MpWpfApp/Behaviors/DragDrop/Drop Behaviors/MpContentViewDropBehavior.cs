@@ -301,12 +301,13 @@ namespace MpWpfApp {
             // get drop range before altering content (if self drop offset may change if selection is before drop so use pointer which is passive ref
             var dropRange = GetDropRange(rtfDropIdx, pre, post, split);
 
-            MpCopyItem dropItem = null;
+            List<MpCopyItem> dropItems = new List<MpCopyItem>();
             List<MpCopyItem> dropItemSourceItems = null;
             if (drag_ctvm == null) {
                 if (dragData is MpPortableDataObject mpdo) {
                     // from external source
-                    dropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                    var extDropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                    dropItems.Add(extDropItem);
                 } else {
                     // external data should be pre-processed
                     Debugger.Break();
@@ -317,16 +318,16 @@ namespace MpWpfApp {
                 //find drag content view
                 var dctv = Application.Current.MainWindow
                                 .GetVisualDescendents<MpContentView>()
-                                .FirstOrDefault(x => 
-                                    x.DataContext is MpClipTileViewModel tctvm && 
+                                .FirstOrDefault(x =>
+                                    x.DataContext is MpClipTileViewModel tctvm &&
                                     tctvm.HeadCopyItemId == drag_ctvm.HeadCopyItemId);
 
-                if(dctv == null) {
+                if (dctv == null) {
                     Debugger.Break();
                 }
                 dropItemSourceItems = new List<MpCopyItem>();
                 string dragPlainText = drag_ctvm.SelectedPlainText;
-                
+
                 if (drag_ctvm.IsSubSelectionEnabled) {
                     // TODO probably need to use ctvm SelectionRange w/ isCopy and splice source content here
                     dropItemSourceItems = dctv.Rtb.Selection.GetAllTextElements().Select(x => x.Tag as MpCopyItem).Distinct().ToList();
@@ -334,90 +335,104 @@ namespace MpWpfApp {
                 } else {
                     dropItemSourceItems = drag_ctvm.Items.Select(x => x.CopyItem).ToList();
                 }
-                if (!isCopy) {
-                    //when drag selection is not copy delete selection from source
-                    dctv.Rtb.Selection.Text = string.Empty;
 
-                    string dpt = dctv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                    if(string.IsNullOrWhiteSpace(dpt)) {
-                        //when all content is being dropped flag drag source for delete
-                        deleteDragItem = true;
-                    } else {
-                        MpMergedDocumentRtfExtension.SaveTextContent(dctv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
-                    }                    
-                }
-                if(string.IsNullOrEmpty(dragPlainText)) {
+                if (string.IsNullOrEmpty(dragPlainText)) {
                     // BUG copyItem builder won't create item w/ null data and this shouldn't happen
                     // occurs dropping on pin stage
                     Debugger.Break();
                     return;
                 }
-
-                var mpdo = new MpPortableDataObject();
-                mpdo.DataFormatLookup.Add(MpClipboardFormatType.Text, dragPlainText);
-                dropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
-                if(dropItemSourceItems.Count > 0) {
-                    dropItem.CopyItemSourceGuid = dropItemSourceItems[0].Guid;
-                }
-            }
-
-            switch (dropItem.ItemType) {
-                case MpCopyItemType.Text:
-                    if (dropItem.ItemData.IsStringRichTextTable()) {
-                        string csv = MpCsvToRtfTableConverter.GetCsv(dropItem.ItemData);
-                        dropRange.LoadTable(csv);
+                               
+                
+                if(isCopy) {
+                    var mpdo = new MpPortableDataObject();
+                    if (dropItemSourceItems.Count == 0) {
+                        Debugger.Break();
+                    } else if (dropItemSourceItems[0].ItemType == MpCopyItemType.Text) {
+                        mpdo.DataFormatLookup.Add(MpClipboardFormatType.Text, dragPlainText);
+                    } else if (dropItemSourceItems[0].ItemType == MpCopyItemType.FileList) {
+                        mpdo.DataFormatLookup.Add(
+                            MpClipboardFormatType.FileDrop,
+                            string.Join(Environment.NewLine, dropItemSourceItems.Select(x => x.ItemData)));
                     } else {
-                        string pt = dropItem.ItemData.ToPlainText();
-                        MpConsole.WriteLine("Drop Plain Text: " + pt);
-                        pt = pt.TrimTrailingLineEndings();
-
-                        if (pre) {
-                            pt = pt + Environment.NewLine;
-                            //rtb.Document.ContentStart.InsertTextInRun(pt);
-
-                            //if(dropRange.Start.GetLineStartPosition(0) == null ||
-                            //   dropRange.Start.GetLineStartPosition(0) == rtb.Document.ContentStart) {
-
-                            //} else {
-                            //   // pt = Environment.NewLine + pt;
-                            //}
-                        } else if (post) {
-                            pt = Environment.NewLine + pt;
-                            var post_tp = dropRange.End.GetLineStartPosition(1);
-                            if (post_tp != null) {
-                                pt = pt + Environment.NewLine;
-                            }
-                            //post_tp.InsertTextInRun(pt);
-                        } else if (split) {
-                            pt = Environment.NewLine + pt + Environment.NewLine;
-                        }
-
-                        if (true) {//pre || post || split) {
-                            dropRange.Text = pt;
-                        } else {
-                            dropRange.Start.InsertTextInRun(pt);
-                        }
-
+                        Debugger.Break();
                     }
-                    break;
-                case MpCopyItemType.Image:
-                    dropRange.LoadImage(dropItem.ItemData);
-                    break;
-                case MpCopyItemType.FileList:
-                    dropRange.LoadFileItem(dropItem.ItemData.Replace(Environment.NewLine, string.Empty), dropItem.IconId);
-                    break;
+                    var internalDropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                    if (dropItemSourceItems.Count > 0) {
+                        internalDropItem.CopyItemSourceGuid = dropItemSourceItems[0].Guid;
+                    }
+                    dropItemSourceItems.Add(internalDropItem);
+
+                } else {
+                    //when drag selection is not copy delete selection from source
+                    dctv.Rtb.Selection.Text = string.Empty;
+
+                    //string dpt = dctv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                    //if (string.IsNullOrWhiteSpace(dpt)) {
+                    //    //when all content is being dropped flag drag source for delete
+                    //    deleteDragItem = true;
+                    //} else {
+                    //    MpMergedDocumentRtfExtension.SaveTextContent(dctv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
+                    //}
+
+                }
+                
             }
 
-            // instead of handling all added text elements uniquely
-            // find all with null tag (which will be added content) and set tag to added content
+            foreach(var dropItem in dropItemSourceItems) {
+                switch (dropItem.ItemType) {
+                    case MpCopyItemType.Text:
+                        if (dropItem.ItemData.IsStringRichTextTable()) {
+                            string csv = MpCsvToRtfTableConverter.GetCsv(dropItem.ItemData);
+                            dropRange.LoadTable(csv);
+                        } else {
+                            string pt = dropItem.ItemData.ToPlainText();
+                            MpConsole.WriteLine("Drop Plain Text: " + pt);
+                            pt = pt.TrimTrailingLineEndings();
 
-            var allTextElements = rtb.Document
-                                        .GetAllTextElements()
-                                        .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
-            var allStrayElements = allTextElements.Where(x => x.Tag == null).ToList();
-            if (allStrayElements.Count > 0) {
-                allStrayElements.ForEach(x => x.Tag = dropItem);
+                            if (pre) {
+                                pt = pt + Environment.NewLine;
+                            } else if (post) {
+                                pt = Environment.NewLine + pt;
+                                var post_tp = dropRange.End.GetLineStartPosition(1);
+                                if (post_tp != null) {
+                                    pt = pt + Environment.NewLine;
+                                }
+                            } else if (split) {
+                                pt = Environment.NewLine + pt + Environment.NewLine;
+                            }
+
+                            if (true) {//pre || post || split) {
+                                dropRange.Text = pt;
+                            } else {
+                                dropRange.Start.InsertTextInRun(pt);
+                            }
+
+                        }
+                        break;
+                    case MpCopyItemType.Image:
+                        dropRange.LoadImage(dropItem.ItemData);
+                        break;
+                    case MpCopyItemType.FileList:
+                        dropRange.LoadFileItem(dropItem.ItemData.Replace(Environment.NewLine, string.Empty), dropItem.IconId);
+                        break;
+                }
+
+                // instead of handling all added text elements uniquely
+                // find all with null tag (which will be added content) and set tag to added content
+
+                var allTextElements = rtb.Document
+                                            .GetAllTextElements()
+                                            .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
+                var allStrayElements = allTextElements.Where(x => x.Tag == null).ToList();
+                if (allStrayElements.Count > 0) {
+                    allStrayElements.ForEach(x => x.Tag = dropItem);
+                }
+
+                dropRange = new TextRange(dropRange.End, dropRange.End);
             }
+
+            
 
             var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
 
@@ -433,7 +448,6 @@ namespace MpWpfApp {
             if (drop_ctvm.IsPinned) {
                 await drop_ctvm.InitializeAsync(encodedItems);
             } else {
-
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
             }
             
@@ -458,49 +472,11 @@ namespace MpWpfApp {
             var rtb = AssociatedObject.Rtb;
 
             // isolate insertion point and account for block drop
-            TextPointer dtp_end = null;
-            
-
-            //var dtp_end = rtb.Document.ContentStart
-            //                .GetTextPositionAtOffset(rtfDropIdx);
-            //.GetPositionAtOffset(rtfDropIdx)
-            //.GetNextInsertionPosition(LogicalDirection.Backward);
-
-
+            TextPointer dtp_end;
             if (pre) {
-                //dtp_end = rtb.Document.ContentStart.GetTextPositionAtOffset(rtfDropIdx);
-                //if (dtp_end == null) {
-                //    dtp_end = rtb.Document.ContentStart;//.GetTextPositionAtOffset(rtfDropIdx);
-                //}
-                //dtp_end = dtp_end.GetLineStartPosition(0);
-
-                //if (dtp_end == null) {
-                //    MpConsole.WriteLine(@"Pre block doc start detected");
-                //    //at start of doc
-                //    dtp_end = rtb.Document.ContentStart.GetLineStartPosition(0);
-                //    //rtb.Document.ContentStart.InsertLineBreak();
-                //} //else {
-                ////    dtp_end = dtp_end.GetLineStartPosition(0);
-                ////    //dtp.InsertLineBreak();
-                ////}
-                //dtp_end = dtp_end.GetTextPositionAtOffset(0);
                 dtp_end = rtb.Document.ContentStart.GetInsertionPosition(LogicalDirection.Forward);
 
             } else if (post) {
-                //dtp_end = rtb.Document.ContentStart.GetTextPositionAtOffset(rtfDropIdx);
-                //if (dtp_end == null) {
-                //    dtp_end = rtb.Document.ContentEnd;
-                //}
-                //dtp_end = dtp_end.GetLineStartPosition(1);
-
-                //if (dtp_end == null) {
-                //    //at end of document
-                //    dtp_end = rtb.Document.ContentEnd;
-                //} //else {
-                //    dtp_end = dtp_end.GetLineStartPosition(1);
-                //}
-                //dtp_end = dtp_end.GetTextPositionAtOffset(0);
-                //dtp = dtp.InsertLineBreak();
                 dtp_end = rtb.Document.ContentStart.GetPositionAtOffset(rtfDropIdx).GetLineStartPosition(1);
                 if(dtp_end == null) {
                     dtp_end = rtb.Document.ContentEnd.GetInsertionPosition(LogicalDirection.Backward);
@@ -508,23 +484,11 @@ namespace MpWpfApp {
                     dtp_end = dtp_end.GetInsertionPosition(LogicalDirection.Forward);
                 }
 
-            } else  {
-                //dtp = dtp.InsertParagraphBreak();
-                //dtp.InsertParagraphBreak();
-                // NOTE adding 1 
+            } else {
                 dtp_end = rtb.Document.ContentStart
                             .GetPositionAtOffset(rtfDropIdx)
                             .GetInsertionPosition(LogicalDirection.Forward);
-                            //.GetTextPositionAtOffset(0);
-                //dtp_end = rtb.Document.ContentStart.GetTextPositionAtOffset(rtfDropIdx + 1);
             }
-            //dtp_end = dtp_end.GetTextPositionAtOffset(0);
-            //var dtp_start = dtp_end;//.GetPositionAtOffset(0, LogicalDirection.Forward);
-
-            //var dtp_context = dtp_end.GetPointerContext(LogicalDirection.Forward);
-            //if (dtp_context != TextPointerContext.Text) {
-            //    Debugger.Break();
-            //}
             return new TextRange(dtp_end, dtp_end);
         }
 
@@ -616,8 +580,11 @@ namespace MpWpfApp {
                 //rtb.FitDocToRtb();
                 var rtb = AssociatedObject.Rtb;
                 rtb.ScrollToHome();
-                rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
+                if(rtb.Document == null) {
+                    return;
+                }
 
+                //rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
                 rtb.FitDocToRtb();
             }
             if (AssociatedObject != null &&

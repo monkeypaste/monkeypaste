@@ -259,9 +259,9 @@ namespace MpWpfApp {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     break;
                 case nameof(IsEnabled):
-                    if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                        return;
-                    }                    
+                    //if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                    //    return;
+                    //}                    
                     MpHelpers.RunOnMainThread(async () => {
                         await ShowUserEnableChangeNotification();
                     });

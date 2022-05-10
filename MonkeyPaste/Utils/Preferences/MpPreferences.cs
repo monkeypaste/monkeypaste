@@ -387,6 +387,15 @@ namespace MonkeyPaste {
             }
         }
 
+        public static int UniqueContentItemIdx {
+            get {
+                return Default.Get(nameof(UniqueContentItemIdx), 0);
+            }
+            set {
+                Default.Set(nameof(UniqueContentItemIdx), value);
+            }
+        }
+
         public static string ThisDeviceGuid {
             get {
                 return Default.Get(nameof(ThisDeviceGuid), string.Empty);

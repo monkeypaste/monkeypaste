@@ -76,6 +76,8 @@ namespace MpWpfApp {
             SearchDropDownButton.ContextMenu.PlacementTarget = SearchDropDownButton;
             SearchDropDownButton.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Top;
             SearchDropDownButton.ContextMenu.IsOpen = true;
+            
+
         }
 
         private void InitContextMenu() {
@@ -85,6 +87,17 @@ namespace MpWpfApp {
                 foreach (var sfvm in BindingContext.Filters) {
                     _searchByContextMenu.Items.Add(CreateSearchByMenuItem(sfvm));
                 }
+
+                _searchByContextMenu.Loaded += (s, e) => {
+                    MpMainWindowViewModel.Instance.IsShowingDialog = true;
+                };
+                _searchByContextMenu.Unloaded += (s, e) => {
+                    MpMainWindowViewModel.Instance.IsShowingDialog = false;
+                };
+
+                _searchByContextMenu.MouseLeftButtonUp += (s, e) => {
+                    SearchDropDownButton.ContextMenu.IsOpen = false;
+                };
             });
         }
 

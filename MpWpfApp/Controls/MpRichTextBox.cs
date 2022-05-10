@@ -16,6 +16,13 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 namespace MpWpfApp {
     public class MpRichTextBox : RichTextBox {
         #region Overrides
+        //public new MpEventEnabledFlowDocument Document { get; set; }
+
+        public MpRichTextBox() : base() {
+            Document = new MpEventEnabledFlowDocument();
+            Document.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+            //Document.IsOptimalParagraphEnabled = true;
+        }
         protected override void OnDragEnter(DragEventArgs e) {
             OnDragOver(e);
         }

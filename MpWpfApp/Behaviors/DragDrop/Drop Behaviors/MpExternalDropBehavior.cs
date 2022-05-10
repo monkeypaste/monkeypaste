@@ -86,7 +86,8 @@ namespace MpWpfApp {
                 var winforms_mp = MpScreenInformation.ConvertWpfScreenPointToWinForms(mp);
                 IntPtr dropHandle = MpProcessHelper.MpProcessManager.GetParentHandleAtPoint(winforms_mp);
                 if(dropHandle == MpProcessHelper.MpProcessManager.ThisAppHandle) {
-                    Debugger.Break();
+                    //Debugger.Break();
+                    return -1;
                 }
 
                 WinApi.SetForegroundWindow(dropHandle);

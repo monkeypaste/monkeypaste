@@ -769,11 +769,11 @@
                 items.Remove(headItem);
                 items.Insert(0, headItem);
             }
-            if( items != null && items.Count > 0 && queryOffset >= 0) {
-                if(MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(items[0].Id) != queryOffset) {
-                    Debugger.Break();
-                }
-            }
+            //if( items != null && items.Count > 0 && queryOffset >= 0) {
+            //    if(MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(items[0].Id) != queryOffset) {
+            //        Debugger.Break();
+            //    }
+            //}
             Items.Clear();
             if (items != null && items.Count > 0 && Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
                 TileBorderWidth = uniqueWidth;
@@ -1109,53 +1109,19 @@
             }
         }
 
-        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+        protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci && Items.Any(x => x.CopyItemId == ci.Id)) {
-                //MpContentItemViewModel itemToRemove = null;
-                //if (Parent.GetClipTileViewModelByGuid(ci.Guid) != this) {
-                //    itemToRemove = Items.FirstOrDefault(x => x.CopyItemId == ci.Id);
-                //}
-                //Items.Remove(itemToRemove);
-
-                //if (Items.Count == 0) {
-                //    OnPropertyChanged(nameof(IsPlaceholder));
-                //    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                //} else {
-                //    RequestListRefresh();
-                //}
+                if (Parent.GetClipTileViewModelByGuid(ci.Guid) != this) {
+                    var itemToRemove = Items.FirstOrDefault(x => x.CopyItemId == ci.Id);
+                    await RemovContentItem(itemToRemove);
+                }
             }
         }
 
         protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if(e is MpCopyItem ci && Items.Any(x=>x.CopyItemId == ci.Id)) {
                 var rcivm = Items.FirstOrDefault(x => x.CopyItemId == ci.Id);
-                Items.Remove(rcivm);
-
-                if (Items.Count == 0) {
-                    int qIdx = Parent.Items.IndexOf(this);
-                    
-                    await MpDataModelProvider.RemoveQueryItem(ci.Id);
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                    while (Parent.IsBusy) {
-                        await Task.Delay(100);
-                    }
-                    if(qIdx < 0) {
-                        //not sure why this happens but it did in drag drop
-                    } else if (qIdx < Parent.Items.Count - 1) {
-                        Parent.Items[qIdx].IsSelected = true;
-                    } else if (Parent.Items.Count > 0) {
-                        Parent.Items[qIdx - 1].IsSelected = true;
-                    }
-
-                    var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.HeadCopyItemId == ci.Id);
-                    if (pctvm != null) {
-                        // Flag QueryOffsetIdx = -1 so it tray doesn't attempt to return it to tray
-                        pctvm.QueryOffsetIdx = -1;
-                        Parent.ToggleTileIsPinnedCommand.Execute(pctvm);
-                    }
-                } else {
-                    RequestListRefresh();
-                }
+                await RemovContentItem(rcivm);
             }
         }
 
@@ -1165,7 +1131,41 @@
         #endregion
 
         #region Private Methods
+        private async Task RemovContentItem(MpContentItemViewModel rcivm) {
+            if(rcivm == null) {
+                return;
+            }
+            Items.Remove(rcivm);
 
+            if (Items.Count == 0) {
+                Parent.Items.Remove(this);
+
+                int qIdx = Parent.Items.IndexOf(this);
+                var ci = rcivm.CopyItem;
+
+                await MpDataModelProvider.RemoveQueryItem(ci.Id);
+                MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                while (Parent.IsBusy) {
+                    await Task.Delay(100);
+                }
+                if (qIdx < 0) {
+                    //not sure why this happens but it did in drag drop
+                } else if (qIdx < Parent.Items.Count - 1) {
+                    Parent.Items[qIdx].IsSelected = true;
+                } else if (Parent.Items.Count > 0) {
+                    Parent.Items[qIdx - 1].IsSelected = true;
+                }
+
+                var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.HeadCopyItemId == ci.Id);
+                if (pctvm != null) {
+                    // Flag QueryOffsetIdx = -1 so it tray doesn't attempt to return it to tray
+                    pctvm.QueryOffsetIdx = -1;
+                    Parent.ToggleTileIsPinnedCommand.Execute(pctvm);
+                }
+            } else {
+                RequestListRefresh();
+            }
+        }
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
                 case nameof(IsAnyBusy):

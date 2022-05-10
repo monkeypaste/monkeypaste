@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -57,11 +58,8 @@ namespace MonkeyPaste {
 
         protected void ReportItemLoading(MpBootstrappedItem item, int index) {
             MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
-            if (!MpNotificationCollectionViewModel.Instance.IsVisible) {
-                return;
-            }
 
-            var lnvm = MpNotificationCollectionViewModel.Instance.CurrentNotificationViewModel as MpLoaderNotificationViewModel;
+            var lnvm = MpNotificationCollectionViewModel.Instance.Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
             if (lnvm == null) {
                 // NOTE this occurs when warnings exist and loader is finished
                 return;

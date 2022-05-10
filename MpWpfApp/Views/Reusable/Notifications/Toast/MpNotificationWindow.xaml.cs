@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,45 +11,66 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public partial class MpNotificationWindow : Window, MpINotificationBalloonView {
-        private static MpNotificationWindow _instance;
-        public static MpNotificationWindow Instance => _instance;
+
+        private static ObservableCollection<MpNotificationWindow> _windows;
+
         
+
         public MpNotificationWindow() {
             InitializeComponent();
 
-            if(_instance == null) {
-                _instance = this;
+            if(_windows == null) {
+                _windows = new ObservableCollection<MpNotificationWindow>();
+                _windows.CollectionChanged += _windows_CollectionChanged;
             }
         }
-        
-        
-        private void SetWindowToBottomRightOfScreen() {
-            Left = SystemParameters.WorkArea.Width - ActualWidth - 10;
-            Top = SystemParameters.WorkArea.Height - ActualHeight - 10;
+
+        private static void _windows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            UpdateWindows();
         }
 
+        private static void UpdateWindows() {
+            _windows.ForEach(x => x.SetWindowToBottomRightOfScreen());
+        }
+        private void SetWindowToBottomRightOfScreen() {
+            if(!_windows.Contains(this)) {
+                return;
+            }
+            Left = SystemParameters.WorkArea.Width - ActualWidth - 10;
+
+            double pad = 10;
+
+            double offsetY = _windows.Where(x => _windows.IndexOf(x) < _windows.IndexOf(this)).Sum(x => x.ActualHeight + pad);
+            offsetY += ActualHeight + pad;
+            Top = SystemParameters.WorkArea.Height - offsetY;
+        }
+
+        
         private void CloseButton_Click(object sender, RoutedEventArgs e) {
-            this.Hide();
+            HideWindow(DataContext as MpNotificationViewModelBase);
         }
 
         private void NotificationWindow_Loaded(object sender, RoutedEventArgs e) {
-            SetWindowToBottomRightOfScreen();
+            UpdateWindows();
         }
 
         private void NotificationWindow_SizeChanged(object sender, SizeChangedEventArgs e) {
-            SetWindowToBottomRightOfScreen();
+            UpdateWindows();
         }
 
-        private void Storyboard_Completed(object sender, EventArgs e) {
-            if(MpBootstrapperViewModelBase.IsLoaded) {
-                Hide();
-            }
-            
+        private void FadeIn_Completed(object sender, EventArgs e) {
+           
+        }
+
+        private void FadeOut_Completed(object sender, EventArgs e) {
+            //var nw = sender as MpNotificationWindow;
+            _windows.Remove(this);
+            this.Close();
         }
 
 
         private void PropertiesButton_Click(object sender, RoutedEventArgs e) {
-            HideWindow();
+            HideWindow(DataContext as MpNotificationViewModelBase);
             MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand.Execute(1);
         }
 
@@ -62,37 +86,37 @@ namespace MpWpfApp {
             mwvm.ShowWindowCommand.Execute(null);
         }
 
-        public void ShowWindow() {
+        public void ShowWindow(object dc) {
             MpHelpers.RunOnMainThread(() => {
-                this.Opacity = 0;
-                this.Show();
+                var nw = new MpNotificationWindow();
+                nw.DataContext = dc;
+                nw.Opacity = 0;
 
-                var fisb = this.Resources["FadeIn"] as Storyboard;
-                Storyboard.SetTarget(fisb, this);
+                if (dc is MpNotificationViewModelBase nvmb && !nvmb.IsVisible) {
+                    nvmb.IsVisible = true;
+                }
+
+                var fisb = nw.Resources["FadeIn"] as Storyboard;
+                Storyboard.SetTarget(fisb, nw);
+
+                //nw.Show();
 
                 fisb.Begin();
-                if (DataContext != null) {
-                    var nwvm = DataContext as MpNotificationCollectionViewModel;
-                    nwvm.IsVisible = true;
-                }
+
+
+                _windows.Add(nw);
             });
-            //tw.Show();
         }
 
-        public void HideWindow() {
+        public void HideWindow(object nvmb) {
             MpHelpers.RunOnMainThread(() => {
-                var fisb = this.Resources["FadeOut"] as Storyboard;
-                Storyboard.SetTarget(fisb, this);
-                fisb.Begin();
-
-                if (DataContext != null && DataContext is MpNotificationCollectionViewModel nwvm) {
-                    nwvm.NotificationQueue.Clear();
-                    nwvm.OnPropertyChanged(nameof(nwvm.CurrentNotificationViewModel));
-                    nwvm.IsVisible = false;
-                    //var tw = this.GetVisualAncestor<Window>();
-                    //tw.Opacity = 1;
-                    //tw.Show();
+                var nw = _windows.FirstOrDefault(x => x.DataContext == nvmb);
+                var fisb = nw.Resources["FadeOut"] as Storyboard;
+                if(nw !=null) {
+                    Storyboard.SetTarget(fisb, nw);
+                    fisb.Begin();
                 }
+                
             });
         }
 
@@ -103,5 +127,14 @@ namespace MpWpfApp {
         private void ContentControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             SetWindowToBottomRightOfScreen();
         }
+
+        public void ShowWindow() {
+            ShowWindow(DataContext as MpNotificationViewModelBase);
+        }
+
+        public void HideWindow() {
+            HideWindow(DataContext as MpNotificationViewModelBase);
+        }
+
     }
 }

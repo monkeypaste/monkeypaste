@@ -14,17 +14,18 @@
         AllowsTransparency="True"
         ResizeMode="NoResize"
         Background="Transparent"
-        Visibility="Visible"
+        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
         Topmost="True"
         BorderThickness="1"
         mc:Ignorable="d"
         SizeChanged="NotificationWindow_SizeChanged"
         SizeToContent="Height"
         Loaded="NotificationWindow_Loaded"
-        d:DataContext="{d:DesignInstance Type=pcl:MpNotificationCollectionViewModel,
+        d:DataContext="{d:DesignInstance Type=pcl:MpNotificationViewModelBase,
                                          IsDesignTimeCreatable=False}">
     <Window.Resources>
-        <Storyboard x:Key="FadeIn">
+        <Storyboard x:Key="FadeIn"
+                    Completed="FadeIn_Completed">
             <DoubleAnimation BeginTime="0:0:0"
                              Storyboard.TargetProperty="Opacity"
                              From="0.00"
@@ -33,7 +34,7 @@
                              Duration="0:0:0.5" />
         </Storyboard>
         <Storyboard x:Key="FadeOut"
-                    Completed="Storyboard_Completed">
+                    Completed="FadeOut_Completed">
             <DoubleAnimation BeginTime="0:0:0"
                              Storyboard.TargetProperty="Opacity"
                              From="1.00"
@@ -67,7 +68,7 @@
                    Grid.RowSpan="3"
                    Width="72"
                    Height="72"
-                   Source="{Binding CurrentNotificationViewModel.IconImageBase64,
+                   Source="{Binding IconImageBase64,
                                     Converter={StaticResource Base64StringToBitmapSourceConverter}}"
                    Stretch="Fill"
                    VerticalAlignment="Top"
@@ -78,9 +79,9 @@
                       VerticalAlignment="Bottom"
                       VerticalContentAlignment="Center"
                       Margin="7,0,0,5"
-                      Visibility="{Binding CurrentNotificationViewModel.CanChooseNotShowAgain,
+                      Visibility="{Binding CanChooseNotShowAgain,
                                            Converter={StaticResource BoolToVisibilityConverter}}"
-                      IsChecked="{Binding CurrentNotificationViewModel.DoNotShowAgain,
+                      IsChecked="{Binding DoNotShowAgain,
                                           Mode=TwoWay}">
                 <CheckBox.Content>
                     <TextBlock MaxWidth="100"
@@ -115,7 +116,7 @@
             </Button>
             <ContentControl Grid.Column="1"
                             Grid.RowSpan="4"
-                            DataContext="{Binding CurrentNotificationViewModel}"
+                            DataContext="{Binding}"
                             DataContextChanged="ContentControl_DataContextChanged"
                             Content="{Binding}"
                             ContentTemplateSelector="{StaticResource NotificationTemplateSelector}" />

@@ -30,6 +30,7 @@ namespace MpWpfApp {
         
         private static readonly double _EDITOR_DEFAULT_WIDTH = 900;
 
+        private static List<RichTextBox> _isChangeBlockRtbs = new List<RichTextBox>();
         //private static double _readOnlyWidth;
 
         #endregion
@@ -251,7 +252,11 @@ namespace MpWpfApp {
                     rootGuid = kvp.Key.Guid;
                 }
             }
-
+            if(!_isChangeBlockRtbs.Contains(rtb)) {
+                rtb.BeginChange();
+            }
+            
+            
             foreach (var kvp in tagGroups.Where(x => x.Key.Guid != rootGuid)) {
                 // loop through all non-root ranges and encode content (substitute range with encoded guid)
 
@@ -269,7 +274,10 @@ namespace MpWpfApp {
                 if (kvp.Key.Guid != rootGuid) {
                     // NOTE only write root after all sub-content is encoded
                     // store non root's rtf before encoding it
-                    kvp.Key.ItemData = fullItemRange.ToRichText();
+                    if(kvp.Key.ItemType == MpCopyItemType.Text) {
+                        kvp.Key.ItemData = fullItemRange.ToRichText();
+                    }
+                    
                 }
                 fullItemRange.Text = "{c{" + kvp.Key.Guid + "}c}";
             }
@@ -285,7 +293,9 @@ namespace MpWpfApp {
                     ci.RootCopyItemGuid = string.Empty;
 
                     //store root rtf
-                    ci.ItemData = rtb.Document.ToRichText();
+                    if(ci.ItemType == MpCopyItemType.Text) {
+                        ci.ItemData = rtb.Document.ToRichText();
+                    }
                 } else {
                     var rci = tagGroups.FirstOrDefault(x => x.Key.Guid == rootGuid).Key;
                     ci.CompositeParentCopyItemId = rci.Id;
@@ -308,62 +318,7 @@ namespace MpWpfApp {
             return orderedItems;
         }
 
-        private static async Task LoadContent(RichTextBox rtb) {
-             if(rtb == null) {
-                return;
-            }
-            var ctvm = rtb.DataContext as MpClipTileViewModel;
-            if(ctvm == null) {
-                return;
-            }
-
-            while(ctvm.IsAnyBusy) {
-                // wait till ctvm finishes initializing 
-                await Task.Delay(100);
-            }
-            if(ctvm.IsPlaceholder && !ctvm.IsPinned) {
-                return;
-            }
-            ctvm.IsBusy = true;
-
-            rtb.Document = await DecodeContentItem(
-                rtb: rtb,
-                itemGuid: ctvm.HeadItem.CopyItemGuid,
-                itemRange: new TextRange(rtb.Document.ContentStart,rtb.Document.ContentEnd),
-                items: ctvm.Items.Select(x=>x.CopyItem).ToList(), 
-                rootDocument: rtb.Document, 
-                decodeAsRootDocument: true);
-
-            if(ctvm == null) {
-                return;
-            }
-            ctvm.IsBusy = false;
-            if(ctvm.HeadItem == null) {
-                return;
-            }
-
-
-            switch (ctvm.HeadItem.CopyItemType) {
-                case MpCopyItemType.Text:
-                case MpCopyItemType.FileList:
-                    rtb.HorizontalAlignment = HorizontalAlignment.Stretch;
-                    rtb.VerticalAlignment = VerticalAlignment.Stretch;
-                    rtb.FitDocToRtb();
-                    break;
-                case MpCopyItemType.Image:
-                    rtb.FitDocToRtb();
-                    break;
-                
-            }
-
-            //wait till full doc is loaded to hook textChanged
-            rtb.TextChanged += Rtb_TextChanged;
-
-            var rtb_a = rtb.GetVisualAncestor<AdornerLayer>();
-            if (rtb_a != null) {
-                rtb_a.Update();
-            }
-        }
+        
 
         private static void Rtb_Unloaded(object sender, RoutedEventArgs e) {
             if(sender is RichTextBox rtb) {
@@ -378,14 +333,80 @@ namespace MpWpfApp {
             rtb.Document.GetAllTextElements().ForEach(x => UnregisterTextElement(x));
         }
 
-        private static async Task<FlowDocument> DecodeContentItem(
+        private static async Task LoadContent(RichTextBox rtb) {
+            if (rtb == null) {
+                return;
+            }
+            var ctvm = rtb.DataContext as MpClipTileViewModel;
+            if (ctvm == null) {
+                return;
+            }
+
+            while (ctvm.IsAnyBusy) {
+                // wait till ctvm finishes initializing 
+                await Task.Delay(100);
+            }
+            if (ctvm.IsPlaceholder && !ctvm.IsPinned) {
+                return;
+            }
+            ctvm.IsBusy = true;
+            
+
+            rtb.Document.Blocks.Clear();
+
+            await LoadContentItem(
+                rtb: rtb,
+                itemGuid: ctvm.HeadItem.CopyItemGuid,
+                itemRange: new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd),
+                items: ctvm.Items.Select(x => x.CopyItem).ToList(),
+                decodeAsRootDocument: true);
+
+            if (ctvm == null) {
+                return;
+            }
+            ctvm.IsBusy = false;
+            if (ctvm.HeadItem == null) {
+                return;
+            }
+
+
+            switch (ctvm.HeadItem.CopyItemType) {
+                case MpCopyItemType.Text:
+                case MpCopyItemType.FileList:
+                    rtb.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    rtb.VerticalAlignment = VerticalAlignment.Stretch;
+                    rtb.FitDocToRtb();
+                    break;
+                case MpCopyItemType.Image:
+                    rtb.FitDocToRtb();
+                    break;
+
+            }
+
+            //wait till full doc is loaded to hook textChanged
+            rtb.TextChanged += Rtb_TextChanged;
+
+            var rtb_a = rtb.GetVisualAncestor<AdornerLayer>();
+            if (rtb_a != null) {
+                rtb_a.Update();
+            }
+
+            // NOTE this EndChange() is only relevant after EncodeContent was called and tile was re-initialized
+
+            if (_isChangeBlockRtbs.Contains(rtb)) {
+                _isChangeBlockRtbs.Remove(rtb);
+                rtb.EndChange();
+            }
+        }
+
+        private static async Task LoadContentItem(
             RichTextBox rtb,
             string itemGuid, 
             TextRange itemRange,
             List<MpCopyItem> items, 
-            FlowDocument rootDocument, 
             bool decodeAsRootDocument = false) {
 
+            var fd = rtb.Document;
             MpCopyItem ci = items.FirstOrDefault(x=>x.Guid == itemGuid);
 
             if (ci == default) {
@@ -399,54 +420,125 @@ namespace MpWpfApp {
             }
 
             // convert itemData to flow document and gather child fragment guid ranges and their content
-            FlowDocument fd = ci.ItemData.ToFlowDocument(ci.IconId);
+            //FlowDocument fd = ci.ItemData.ToFlowDocument(ci.IconId); //
+            itemRange.LoadRtf(ci.ItemData, ci.IconId);
 
-            var childRanges = GetEncodedRanges(fd,"{c{","}c}");
-            var childGuids = childRanges.Select(x => x.Text.Replace("{c{", string.Empty).Replace("}c}", string.Empty)).ToArray();
-            var childCopyItems = items.Where(x => childGuids.Contains(x.Guid)).ToList();
-            if(childCopyItems.Count != childGuids.Length) {
-                var missingGuids = childGuids.Where(x => childCopyItems.All(y => y.Guid != x));
-                var missingItems = await MpDataModelProvider.GetCopyItemsByGuids(missingGuids.ToArray());
-                childCopyItems.AddRange(missingItems);
+            TextRange[] childRanges = null;
+            string[] childGuids = null;
+            List<MpCopyItem> childCopyItems = null;
+
+            if(ci.ItemType == MpCopyItemType.Text) {
+                childRanges = GetEncodedRanges(itemRange, "{c{", "}c}");
+                childGuids = childRanges.Select(x => x.Text.Replace("{c{", string.Empty).Replace("}c}", string.Empty)).ToArray();
+                childCopyItems = items.Where(x => x.CompositeParentCopyItemId == items.FirstOrDefault(y=>y.Guid == itemGuid).Id).ToList();
+
+                if (childCopyItems.Count != childGuids.Length) {
+                    var missingGuids = childGuids.Where(x => childCopyItems.All(y => y.Guid != x));
+                    var missingItems = await MpDataModelProvider.GetCopyItemsByGuids(missingGuids.ToArray());
+                    MpConsole.WriteLine($"{missingGuids.Count()} child items were missing for item {itemGuid}");
+                    missingGuids.ForEach(x => 
+                        MpConsole.WriteLine(x + " : " + (missingItems.Any(y => y.Guid == x) ? "FOUND" : "NOT FOUND")));
+                    childCopyItems.AddRange(missingItems);
+                }
+
+                for (int i = 0; i < childGuids.Length; i++) {
+                    var insertRange = childRanges[i];
+                    string childGuid = childGuids[i];
+                    var childItem = childCopyItems.FirstOrDefault(x => x.Guid == childGuid);
+                    if (childItem == null) {
+                        MpConsole.WriteTraceLine("Missing content child detected, replacing w/ empty string " + childGuid);
+                        insertRange.Text = string.Empty;
+                        continue;
+                    }
+                    await LoadContentItem(rtb, childGuid, insertRange, items);
+
+                    //fd.Combine(cfd, childRange.Start);
+                    //using (MemoryStream stream = new MemoryStream()) {
+                    //    var rangeFrom = new TextRange(cfd.ContentStart, cfd.ContentEnd);
+                    //    if (insertRange.Start.Parent is Inline insertInline) {
+                    //        if (false) {//insertInline.PreviousInline == null) {
+                    //            //insert is at beginning of paragraph so no need to alter child doc
+                    //        } else {
+                    //            rangeFrom = new TextRange(
+                    //                cfd.ContentStart.GetInsertionPosition(LogicalDirection.Forward),
+                    //                cfd.ContentEnd);
+                    //            //remove line ending from text? (alt. change ContentEnd point maybe)
+                    //            rangeFrom.Text = rangeFrom.Text.Replace(Environment.NewLine, string.Empty);
+                    //        }
+                    //    }
+                    //    XamlWriter.Save(rangeFrom, stream);
+                    //    rangeFrom.Save(stream, DataFormats.XamlPackage);
+                    //    var rangeTo = new TextRange(insertRange.Start, insertRange.End);
+                    //    rangeTo.Load(stream, DataFormats.XamlPackage);
+
+                    //    if (decodeAsRootDocument) {
+                    //        var ctel = rangeTo.GetAllTextElements();
+                    //        ctel.Where(x => x is Run).ForEach(x => x.Tag = childItem);
+                    //    }
+                    //}
+                }
+
+            } else if(ci.ItemType == MpCopyItemType.FileList) {
+                if(decodeAsRootDocument) {
+                    var children_start_tp = itemRange.End.GetNextInsertionPosition(LogicalDirection.Forward);
+                    foreach (var cci in items.Where(x => x.Guid != itemGuid && x.CompositeParentCopyItemId == ci.Id).OrderBy(x => x.CompositeSortOrderIdx)) {
+                        //var p = new Paragraph();
+                        //fd.Blocks.Add(p);
+                        var tp = fd.Blocks.Last().ContentEnd.InsertParagraphBreak();
+                        var p = tp.Parent as Paragraph;
+                        await LoadContentItem(rtb, cci.Guid, p.ContentRange(), items);
+                    }
+                } else {
+                    // NOTE by convention file lists are only 1 level deep so root children have no children
+                    childRanges = new TextRange[0];
+                    childGuids = new string[0];
+                    childCopyItems = new List<MpCopyItem>();
+                }                
             }
             
+            //if(childCopyItems.Count != childGuids.Length) {
+            //    var missingGuids = childGuids.Where(x => childCopyItems.All(y => y.Guid != x));
+            //    var missingItems = await MpDataModelProvider.GetCopyItemsByGuids(missingGuids.ToArray());
+            //    childCopyItems.AddRange(missingItems);
+            //}
+            
             // decode fragment and replace its guid range with fragment content
-            for (int i = 0; i < childGuids.Length; i++) {
-                var insertRange = childRanges[i];
-                string childGuid = childGuids[i];
-                var childItem = childCopyItems.FirstOrDefault(x => x.Guid == childGuid);
-                if(childItem == null) {
-                    MpConsole.WriteTraceLine("Missing content child detected, replacing w/ empty string " + childGuid);
-                    insertRange.Text = string.Empty;
-                    continue;
-                }
-                var cfd = await DecodeContentItem(rtb,childGuid,null,items,rootDocument);
+            //for (int i = 0; i < childGuids.Length; i++) {
+            //    var insertRange = childRanges[i];
+            //    string childGuid = childGuids[i];
+            //    var childItem = childCopyItems.FirstOrDefault(x => x.Guid == childGuid);
+            //    if(childItem == null) {
+            //        MpConsole.WriteTraceLine("Missing content child detected, replacing w/ empty string " + childGuid);
+            //        insertRange.Text = string.Empty;
+            //        continue;
+            //    }
+            //    var cfd = await DecodeContentItem(rtb,childGuid,itemRange,items,rootDocument);
 
-                //fd.Combine(cfd, childRange.Start);
-                using (MemoryStream stream = new MemoryStream()) {
-                    var rangeFrom = new TextRange(cfd.ContentStart, cfd.ContentEnd);
-                    if (insertRange.Start.Parent is Inline insertInline) { 
-                        if(false) {//insertInline.PreviousInline == null) {
-                            //insert is at beginning of paragraph so no need to alter child doc
-                        } else {
-                            rangeFrom = new TextRange(
-                                cfd.ContentStart.GetInsertionPosition(LogicalDirection.Forward),
-                                cfd.ContentEnd);
-                            //remove line ending from text? (alt. change ContentEnd point maybe)
-                            rangeFrom.Text = rangeFrom.Text.Replace(Environment.NewLine, string.Empty);
-                        }
-                    }
-                    XamlWriter.Save(rangeFrom, stream);
-                    rangeFrom.Save(stream, DataFormats.XamlPackage);
-                    var rangeTo = new TextRange(insertRange.Start, insertRange.End);
-                    rangeTo.Load(stream, DataFormats.XamlPackage);
+            //    //fd.Combine(cfd, childRange.Start);
+            //    using (MemoryStream stream = new MemoryStream()) {
+            //        var rangeFrom = new TextRange(cfd.ContentStart, cfd.ContentEnd);
+            //        if (insertRange.Start.Parent is Inline insertInline) { 
+            //            if(false) {//insertInline.PreviousInline == null) {
+            //                //insert is at beginning of paragraph so no need to alter child doc
+            //            } else {
+            //                rangeFrom = new TextRange(
+            //                    cfd.ContentStart.GetInsertionPosition(LogicalDirection.Forward),
+            //                    cfd.ContentEnd);
+            //                //remove line ending from text? (alt. change ContentEnd point maybe)
+            //                rangeFrom.Text = rangeFrom.Text.Replace(Environment.NewLine, string.Empty);
+            //            }
+            //        }
+            //        XamlWriter.Save(rangeFrom, stream);
+            //        rangeFrom.Save(stream, DataFormats.XamlPackage);
+            //        var rangeTo = new TextRange(insertRange.Start, insertRange.End);
+            //        rangeTo.Load(stream, DataFormats.XamlPackage);
 
-                    if(decodeAsRootDocument) {
-                        var ctel = rangeTo.GetAllTextElements();
-                        ctel.Where(x => x is Run).ForEach(x => x.Tag = childItem);
-                    }
-                }
-            }
+            //        if(decodeAsRootDocument) {
+            //            var ctel = rangeTo.GetAllTextElements();
+            //            ctel.Where(x => x is Run).ForEach(x => x.Tag = childItem);
+            //        }
+            //    }
+            //}
 
             if(decodeAsRootDocument) {
                 // this should only occur in root document once all children are added to avoid different document error
@@ -465,44 +557,48 @@ namespace MpWpfApp {
 
                 var ctvm = rtb.DataContext as MpClipTileViewModel;
                 if(ctvm == null) {
-                    return fd;
+                    return;
                 }
                 var rcivm = ctvm.HeadItem;
                 if(rcivm == null) {
-                    return fd;
+                    return;
                 }
                 rcivm.UnformattedContentSize = fd.GetDocumentSize();
                 //if(rcivm.CopyItemTitle == "Untitled1942") {
-                    //Debugger.Break();
+                //Debugger.Break();
                 //}
+                fd.Tag = ci;
             }
 
-            var allTextElements = fd.GetAllTextElements();
-            fd.Tag = ci;
+            var allTextElements = itemRange.GetAllTextElements();
             allTextElements.Where(x => x.Tag == null).ForEach(x => x.Tag = ci);
 
 
             if (decodeAsRootDocument) {
                 //only register events on actual text in root document
                 // or containers may supercede precedence
-                allTextElements.Where(x=>x is Run).ForEach(x => RegisterTextElement(x));
+                //allTextElements.Where(x=>x is Run).ForEach(x => RegisterTextElement(x));
             }
-            return fd;
+            return;
         }
 
         private static TextRange[] GetEncodedRanges(FlowDocument fd, string rangeStartText, string rangeEndText) {
+            return GetEncodedRanges(new TextRange(fd.ContentStart, fd.ContentEnd), rangeStartText, rangeEndText);
+        }
+
+        private static TextRange[] GetEncodedRanges(TextRange tr, string rangeStartText, string rangeEndText) {
             List<TextRange> encodedRange = new List<TextRange>();
 
-            var tp = fd.ContentStart;
+            var tp = tr.Start;
             while (true) {
-                var encodedRangeOpenTag = tp.FindText(fd.ContentEnd, rangeStartText);
+                var encodedRangeOpenTag = tp.FindText(tr.End, rangeStartText);
                 if (encodedRangeOpenTag == null) {
                     break;
                 }
-                var encodedRangeCloseTag = encodedRangeOpenTag.End.FindText(fd.ContentEnd, rangeEndText);
+                var encodedRangeCloseTag = encodedRangeOpenTag.End.FindText(tr.End, rangeEndText);
                 if (encodedRangeCloseTag == null) {
                     MpConsole.WriteLine(@"Corrupt text content, missing ending range tag. Item xaml: ");
-                    MpConsole.WriteLine(fd.ToXamlPackage());
+                    MpConsole.WriteLine(tr.Start.Parent.FindParentOfType<FlowDocument>().ToXamlPackage());
                     throw new Exception("Corrupt text content see console");
                 }
                 encodedRange.Add(new TextRange(encodedRangeOpenTag.Start, encodedRangeCloseTag.End));
@@ -513,6 +609,7 @@ namespace MpWpfApp {
         }
 
         private static void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
+            return;
             var rtb = sender as RichTextBox;
 
             var rtb_a = rtb.GetVisualAncestor<AdornerLayer>();
@@ -557,7 +654,6 @@ namespace MpWpfApp {
                 }
             }
             if (ctvm.IsTextItem) {
-                rtb.Document.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
                 rtb.Document.ConfigureLineHeight();
             }
         }
