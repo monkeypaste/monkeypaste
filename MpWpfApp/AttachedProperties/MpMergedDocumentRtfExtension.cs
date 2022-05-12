@@ -252,68 +252,81 @@ namespace MpWpfApp {
                     rootGuid = kvp.Key.Guid;
                 }
             }
-            if(!_isChangeBlockRtbs.Contains(rtb)) {
-                rtb.BeginChange();
-            }
-            
-            
-            foreach (var kvp in tagGroups.Where(x => x.Key.Guid != rootGuid)) {
-                // loop through all non-root ranges and encode content (substitute range with encoded guid)
+            List<MpCopyItem> orderedItems;
 
-                //find min/max text pointers for this content
-                var itemRangeStart = kvp.Value
-                                            .Aggregate((a, b) =>
-                                                rtb.Document.ContentStart.GetOffsetToPosition(a.ContentStart) <
-                                                rtb.Document.ContentStart.GetOffsetToPosition(b.ContentStart) ? a : b).ElementStart;
-                var itemRangeEnd = kvp.Value
-                                            .Aggregate((a, b) =>
-                                                rtb.Document.ContentStart.GetOffsetToPosition(a.ContentEnd) >
-                                                rtb.Document.ContentStart.GetOffsetToPosition(b.ContentEnd) ? a : b).ElementEnd;
-                var fullItemRange = new TextRange(itemRangeStart, itemRangeEnd);
+            //using (rtb.DeclareChangeBlock()) {
+                //if(!_isChangeBlockRtbs.Contains(rtb)) {
+                //    rtb.BeginChange();
+                //    _isChangeBlockRtbs.Add(rtb);
+                //}
+                //var cfd = rtb.Document.Clone();
 
-                if (kvp.Key.Guid != rootGuid) {
-                    // NOTE only write root after all sub-content is encoded
-                    // store non root's rtf before encoding it
-                    if(kvp.Key.ItemType == MpCopyItemType.Text) {
-                        kvp.Key.ItemData = fullItemRange.ToRichText();
+
+                foreach (var kvp in tagGroups.Where(x => x.Key.Guid != rootGuid)) {
+                    // loop through all non-root ranges and encode content (substitute range with encoded guid)
+
+                    //find min/max text pointers for this content
+                    var itemRangeStart = kvp.Value
+                                                .Aggregate((a, b) =>
+                                                    rtb.Document.ContentStart.GetOffsetToPosition(a.ContentStart) <
+                                                    rtb.Document.ContentStart.GetOffsetToPosition(b.ContentStart) ? a : b).ElementStart;
+                    var itemRangeEnd = kvp.Value
+                                                .Aggregate((a, b) =>
+                                                    rtb.Document.ContentStart.GetOffsetToPosition(a.ContentEnd) >
+                                                    rtb.Document.ContentStart.GetOffsetToPosition(b.ContentEnd) ? a : b).ElementEnd;
+                    var fullItemRange = new TextRange(itemRangeStart, itemRangeEnd);
+
+                    if (kvp.Key.Guid != rootGuid) {
+                        // NOTE only write root after all sub-content is encoded
+                        // store non root's rtf before encoding it
+                        if (kvp.Key.ItemType == MpCopyItemType.Text) {
+                            kvp.Key.ItemData = fullItemRange.ToRichText();
+                        }
+
                     }
-                    
-                }
-                fullItemRange.Text = "{c{" + kvp.Key.Guid + "}c}";
-            }
+                    //var cloneRange = cfd.ContentStart.FindText(cfd.ContentEnd, fullItemRange.Text);
+                    //cloneRange.Text = "{c{" + kvp.Key.Guid + "}c}";
 
-
-            // NOTE since sortOrder isn't really used just ensure composites are unique and not zero
-            int dummyIdx = 1;
-            foreach (var tg in tagGroups) {
-                var ci = tg.Key;
-                if (ci.Guid == rootGuid) {
-                    ci.CompositeParentCopyItemId = 0;
-                    ci.CompositeSortOrderIdx = 0;
-                    ci.RootCopyItemGuid = string.Empty;
-
-                    //store root rtf
-                    if(ci.ItemType == MpCopyItemType.Text) {
-                        ci.ItemData = rtb.Document.ToRichText();
-                    }
-                } else {
-                    var rci = tagGroups.FirstOrDefault(x => x.Key.Guid == rootGuid).Key;
-                    ci.CompositeParentCopyItemId = rci.Id;
-                    ci.CompositeSortOrderIdx = dummyIdx;
-                    ci.RootCopyItemGuid = rootGuid;
-                    dummyIdx++;
+                    fullItemRange.Text = "{c{" + kvp.Key.Guid + "}c}";
                 }
 
-                await ci.WriteToDatabaseAsync();
-            }
 
-            // NOTE Not sure if swap interferes w/ pinned/persisted items
-            if (origRootGuid != rootGuid) {
-                int rootId = tagGroups.FirstOrDefault(x => x.Key.Guid == rootGuid).Key.Id;
-                MpDataModelProvider.SwapQueryItem(ctvm.QueryOffsetIdx, rootId);
-            }
+                // NOTE since sortOrder isn't really used just ensure composites are unique and not zero
+                int dummyIdx = 1;
+                foreach (var tg in tagGroups) {
+                    var ci = tg.Key;
+                    if (ci.Guid == rootGuid) {
+                        ci.CompositeParentCopyItemId = 0;
+                        ci.CompositeSortOrderIdx = 0;
+                        ci.RootCopyItemGuid = string.Empty;
 
-            var orderedItems = tagGroups.Select(x => x.Key).OrderBy(x => x.CompositeSortOrderIdx).ToList();
+                        //store root rtf
+                        if (ci.ItemType == MpCopyItemType.Text) {
+                            ci.ItemData = rtb.Document.ToRichText();
+                        }
+                    } else {
+                        var rci = tagGroups.FirstOrDefault(x => x.Key.Guid == rootGuid).Key;
+                        ci.CompositeParentCopyItemId = rci.Id;
+                        ci.CompositeSortOrderIdx = dummyIdx;
+                        ci.RootCopyItemGuid = rootGuid;
+                        dummyIdx++;
+                    }
+
+                    await ci.WriteToDatabaseAsync();
+                }
+
+                // NOTE Not sure if swap interferes w/ pinned/persisted items
+                if (origRootGuid != rootGuid) {
+                    int rootId = tagGroups.FirstOrDefault(x => x.Key.Guid == rootGuid).Key.Id;
+                    MpDataModelProvider.SwapQueryItem(ctvm.QueryOffsetIdx, rootId);
+                }
+
+                orderedItems = tagGroups.Select(x => x.Key).OrderBy(x => x.CompositeSortOrderIdx).ToList();
+
+                //await LoadContent(rtb);
+
+                //rtb.EndChange();
+           // }
             
             return orderedItems;
         }
@@ -350,9 +363,10 @@ namespace MpWpfApp {
                 return;
             }
             ctvm.IsBusy = true;
-            
+
 
             rtb.Document.Blocks.Clear();
+            //rtb.Document = new MpEventEnabledFlowDocument();
 
             await LoadContentItem(
                 rtb: rtb,

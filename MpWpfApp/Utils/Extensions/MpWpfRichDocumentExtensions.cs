@@ -137,14 +137,14 @@ namespace MpWpfApp {
         }
 
         public static void FitDocToRtb(this RichTextBox rtb) {
-            if(!rtb.IsLoaded) {
+            if(!rtb.IsLoaded || rtb.DataContext == null) {
                 return;            
             }
 
             var ctvm = rtb.DataContext as MpClipTileViewModel;
             bool isReadOnly = ctvm.IsContentReadOnly;
             bool isDropping = false;
-            Size ds = new Size(); //ctvm.UnformattedAndDecodedContentSize;
+            Size ds = ctvm.UnformattedAndDecodedContentSize;
 
             if(rtb.GetVisualAncestor<MpContentView>() != null) {
                 isDropping = MpDragDropManager.CurDropTarget == rtb.GetVisualAncestor<MpContentView>().ContentViewDropBehavior;
@@ -154,8 +154,8 @@ namespace MpWpfApp {
                 var fd = rtb.Document;
                 double pad = 15;
                 ds = fd.GetDocumentSize(pad);
-                fd.PageWidth = ds.Width;
-                fd.PageHeight = ds.Height;
+                fd.PageWidth = Math.Max(fd.PageWidth,ds.Width);
+                fd.PageHeight = Math.Max(fd.PageHeight,ds.Height);
 
 
                 var p = rtb.Document.PagePadding;
@@ -316,20 +316,23 @@ namespace MpWpfApp {
                 Stretch = System.Windows.Media.Stretch.Uniform
             };
 
-            
-            double pad = 0;
+            //tr.Text = string.Empty;
 
-            //var vb = new Viewbox() {
-            //    VerticalAlignment = VerticalAlignment.Top,
-            //    Stretch = Stretch.Uniform,
-            //    Width = docSize.Value.Width - pad,
-            //    Height = docSize.Value.Width - pad,
-            //    //Margin = new Thickness(5),
-            //    Child = img
-            //};
+            using (var subStream = new MemoryStream()) {
+                var subDoc = new FlowDocument();
+                //var sub_tr = new TextRange(subDoc.ContentStart, subDoc.ContentEnd);
+                
+                var iuc = new InlineUIContainer(img);
+                var p = new Paragraph(iuc);
+                subDoc.Blocks.Add(p);
+                p.ContentRange().Save(subStream, DataFormats.XamlPackage, true);
+                subStream.Seek(0, SeekOrigin.Begin);
+                tr.Load(subStream, DataFormats.XamlPackage);
+                tr.Start.Parent.FindParentOfType<FlowDocument>().LineStackingStrategy = LineStackingStrategy.MaxHeight;
+                return tr.Start.Parent as InlineUIContainer;
+            }
 
-            tr.Text = string.Empty;
-            return new InlineUIContainer(img,tr.Start);
+            // return new InlineUIContainer(img,tr.Start);
         }
         
         public static FlowDocument ToImageDocument(this string base64Str, Size? docSize = null) {
@@ -360,7 +363,7 @@ namespace MpWpfApp {
         public static Paragraph LoadFileItem(this TextRange tr, string path, int iconId = 0, double iconSize = 16) {
             string iconBase64 = string.Empty;
 
-            if (iconId > 0) {
+            if (iconId > 0 && path.IsFileOrDirectory()) {
                 var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
                 if (ivm == default) {
                     iconBase64 = MpBase64Images.Warning;
@@ -383,7 +386,7 @@ namespace MpWpfApp {
             };
 
             var iuc = new InlineUIContainer(pathIcon) {
-                BaselineAlignment = BaselineAlignment.Bottom                
+                BaselineAlignment = BaselineAlignment.Bottom
             };
 
             Paragraph p = new Paragraph(iuc);
@@ -401,12 +404,11 @@ namespace MpWpfApp {
             p.Inlines.Add(new Run(" "));
             p.Inlines.Add(pathLink);
 
+
+
             double fontSize = 16;
-            //p.LineHeight = fontSize + pad;
             p.FontFamily = new FontFamily(MpPreferences.DefaultFontFamily);
             p.FontSize = fontSize;
-            //fd.Blocks.Clear();
-            //fd.Blocks.Add(p);
 
 
             using (var stream = new MemoryStream()) {
@@ -420,53 +422,95 @@ namespace MpWpfApp {
                 var hl = tr.GetAllTextElements().FirstOrDefault(x => x is Hyperlink) as Hyperlink;
 
                 fileItemParagraph.TextAlignment = TextAlignment.Left;
+                fileItemParagraph.Padding = new Thickness(3);
 
                 RequestNavigateEventHandler hl_nav_handler = (s, e) => {
                     System.Diagnostics.Process.Start(e.Uri.ToString());
                 };
+                MouseButtonEventHandler hl_mouseLeftButtonUp_handler = (s, e) => {
+                    Process.Start(hl.NavigateUri.ToString());
+                };
+
                 RoutedEventHandler hl_Unload_handler = null;
                 hl_Unload_handler = (s, e) => {
                     hl.RequestNavigate -= hl_nav_handler;
                     hl.Unloaded -= hl_Unload_handler;
+                    hl.MouseLeftButtonUp -= hl_mouseLeftButtonUp_handler;
                 };
 
                 MouseEventHandler p_mouseEnter_handler = (s, e) => {
                     fileItemParagraph.Background = Brushes.Gainsboro;
                     fileItemParagraph.BorderBrush = Brushes.Black;
                     fileItemParagraph.BorderThickness = new Thickness(0.5);
-                    fileItemParagraph.Padding = new Thickness(3);
                 };
                 MouseEventHandler p_mouseLeave_handler = (s, e) => {
                     fileItemParagraph.Background = Brushes.Transparent;
                     fileItemParagraph.BorderBrush = Brushes.Transparent;
                     fileItemParagraph.BorderThickness = new Thickness(0);
-                    fileItemParagraph.Padding = new Thickness(0);
                 };
-                MouseButtonEventHandler p_mouseLeftButtonUp_handler = (s, e) => {
-                    Process.Start(hl.NavigateUri.ToString());
-                };
+
                 RoutedEventHandler p_Unload_handler = null;
-                
+
                 p_Unload_handler = (s, e) => {
                     fileItemParagraph.MouseEnter -= p_mouseEnter_handler;
                     fileItemParagraph.MouseLeave -= p_mouseLeave_handler;
-                    fileItemParagraph.MouseLeftButtonUp -= p_mouseLeftButtonUp_handler;
                     fileItemParagraph.Unloaded -= p_Unload_handler;
                 };
 
                 hl.RequestNavigate += hl_nav_handler;
                 hl.Unloaded += hl_Unload_handler;
+                hl.MouseLeftButtonUp += hl_mouseLeftButtonUp_handler;
 
                 fileItemParagraph.MouseEnter += p_mouseEnter_handler;
                 fileItemParagraph.MouseLeave += p_mouseLeave_handler;
-                fileItemParagraph.MouseLeftButtonUp += p_mouseLeftButtonUp_handler;
+
                 fileItemParagraph.Unloaded += p_Unload_handler;
-                //var outDoc = fileItemParagraph.Parent.FindParentOfType<FlowDocument>();
-                //string outXamlPackage = outDoc.ToXamlPackage();
+
+                var outDoc = fileItemParagraph.Parent.FindParentOfType<FlowDocument>();
+                string outXamlPackage = outDoc.ToXamlPackage();
 
                 return fileItemParagraph;
             }
 
+            //MpContentItemViewModel civm = null;
+            //var fce = tr.Start.Parent as FrameworkContentElement;
+            //if (fce.DataContext is MpClipTileViewModel ctvm) {
+            //    civm = ctvm.Items.FirstOrDefault(x => x.CopyItemData == path);
+
+            //    if (civm == null) {
+            //        Debugger.Break();
+            //    }
+            //} else if (fce.DataContext is MpContentItemViewModel) {
+            //    civm = (fce.DataContext as MpContentItemViewModel).Parent.Items.FirstOrDefault(x => x.CopyItemData == path);
+            //} else {
+            //    Debugger.Break();
+            //}
+            //var fileItemParagraph = new MpFileItemParagraph();
+            //fileItemParagraph.DataContext = civm;
+
+
+
+            //var pToReplace = tr.GetAllTextElements().FirstOrDefault(x => x is Paragraph) as Paragraph;
+            //var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
+            //if (pToReplace == null) {
+            //    fd.Blocks.Add(fileItemParagraph);
+            //} 
+            //else {
+            //    //fd.Blocks.InsertAfter(pToReplace, fileItemParagraph);
+            //    //fd.Blocks.Remove(pToReplace);
+            //    pToReplace = fileItemParagraph;
+            //    pToReplace.DataContext = civm;
+            //    return pToReplace;
+            //    //using (var subStream = new MemoryStream()) {
+            //    //    var subDoc = new FlowDocument();
+            //    //    var tfip = new MpFileItemParagraph() { DataContext = civm };
+            //    //    subDoc.Blocks.Add(tfip);
+            //    //    tfip.ContentRange().Save(subStream, DataFormats.XamlPackage, true);
+            //    //    subStream.Seek(0, SeekOrigin.Begin);
+            //    //    tr.Load(subStream, DataFormats.XamlPackage);
+            //    //}
+            //}
+            //return fileItemParagraph;
         }
 
         public static FlowDocument ToFilePathDocument(this string path, int iconId = 0, double iconSize = 16) {
@@ -475,7 +519,7 @@ namespace MpWpfApp {
             return fd;
         }
 
-        public static void LoadRtf(this TextRange tr, string str, int iconId = 0) {
+        public static void LoadRtf(this TextRange tr, string str, int iconId = 0, bool isSubLoad = false) {
             // NOTE iconId is only used to convert file path's to rtf w/ icon 
 
             if (string.IsNullOrEmpty(str)) {
@@ -485,7 +529,26 @@ namespace MpWpfApp {
             if (str.IsStringRichText()) {
                 using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
                     try {
-                        tr.Load(stream, System.Windows.DataFormats.Rtf);
+                        using (var subStream = new MemoryStream()) {
+                            var subDoc = new FlowDocument();
+                            var sub_tr = new TextRange(subDoc.ContentStart, subDoc.ContentEnd);
+                            //sub_tr.LoadRtf(str, iconId,true);
+                            //if(isSubLoad) {
+                            //    return;
+                            //}
+
+                            sub_tr.Load(stream, DataFormats.Rtf);
+                            sub_tr.Save(subStream, DataFormats.Rtf);
+                            subStream.Seek(0, SeekOrigin.Begin);
+                            tr.Load(subStream, DataFormats.Rtf);
+                        }
+                        //try {
+                        //    tr.Load(stream, System.Windows.DataFormats.Rtf);
+                        //} catch(XamlParseException xpe) {
+                        //    MpConsole.WriteTraceLine("Exception loading rtf from str: " + str, xpe);
+                            
+                        //}
+
 
                         var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
                         if (rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
@@ -868,6 +931,10 @@ namespace MpWpfApp {
             //return;
             if (doc == null) {
                 throw new ArgumentNullException("doc");
+            }
+            if(doc.DataContext is MpClipTileViewModel ctvm && ctvm.ItemType == MpCopyItemType.Image) {
+                doc.LineStackingStrategy = LineStackingStrategy.MaxHeight;
+                return;
             }
             doc.LineStackingStrategy = lss;
             foreach (var b in doc.Blocks) {

@@ -29,8 +29,9 @@ namespace MpWpfApp {
 
         private static IntPtr SetHook(LowLevelMouseProc proc) {
             using (Process currentProcess = Process.GetCurrentProcess()) {
-                using (ProcessModule currentModule = currentProcess.MainModule)
+                using (ProcessModule currentModule = currentProcess.MainModule) {
                     return SetWindowsHookEx(WH_MOUSE_LL, proc, GetModuleHandle(currentModule.ModuleName), 0);
+                }
             }
         }
 

@@ -33,15 +33,20 @@ namespace MonkeyPaste {
             if (!IsValidUrl(url)) {
                 return string.Empty;
             }
-
-            using (HttpClient client = new HttpClient()) {
-                using (HttpResponseMessage response = await client.GetAsync(url)) {
-                    using (HttpContent content = response.Content) {
-                        var result = await content.ReadAsStringAsync();
-                        return result;
+            try {
+                using (HttpClient client = new HttpClient()) {
+                    using (HttpResponseMessage response = await client.GetAsync(url)) {
+                        using (HttpContent content = response.Content) {
+                            var result = await content.ReadAsStringAsync();
+                            return result;
+                        }
                     }
                 }
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine("Error scanning for url title at " + url, ex);
+                return string.Empty;
             }
+            
         }
 
         public static bool IsValidUrl(string str) {

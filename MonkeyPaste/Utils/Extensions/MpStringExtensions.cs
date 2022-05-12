@@ -186,17 +186,14 @@ namespace MonkeyPaste {
                 }
                 // move temporary file to processed output file path and delete temporary
                 try {
-                    File.Copy(tfp, ofp, overwrite);
+                    ofp = MpFileIo.CopyFileOrDirectory(tfp, ofp);
                 } catch(Exception ex) {
                     MpConsole.WriteTraceLine($"Error copying temp file '{tfp}' to '{ofp}', returning temporary. Exception: " + ex);
                     return tfp;
                 }
-                try {
-                    File.Delete(tfp);
-                } catch(Exception ex) {
-                    MpConsole.WriteTraceLine($"Error deleting temp file '{tfp}' during swap to '{ofp}', ignoring delete. Exception: " + ex);
-                    return ofp;
-                }                
+                if(MpFileIo.IsUnderTemporaryFolder(tfp)) {
+                    MpTempFileManager.AddTempFilePath(tfp);
+                }
             }
             return ofp;
         }

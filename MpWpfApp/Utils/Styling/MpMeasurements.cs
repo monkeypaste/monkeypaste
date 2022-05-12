@@ -469,6 +469,12 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileFileListItemIconSize {
+            get {
+                return 16;//ClipTileContentDefaultHeight / 16;
+            }
+        }
+
         #endregion
 
         #endregion

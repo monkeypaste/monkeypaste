@@ -222,7 +222,7 @@ namespace MpWpfApp {
             }
             var sv = Rtb.GetVisualDescendent<ScrollViewer>();
             if (sv == null) {
-                MpConsole.WriteTraceLine("Warning, scroll viewer not loaded yet. This may need to be async");
+                //MpConsole.WriteTraceLine("Warning, scroll viewer not loaded yet. This may need to be async");
                 return;
             }
             //MpConsole.WriteLine("pre clamp auto scroll delta: " + e);
@@ -243,7 +243,7 @@ namespace MpWpfApp {
         public void ScrollToPoint(Point p) {
             var sv = Rtb.GetVisualDescendent<ScrollViewer>();
             if (sv == null) {
-                MpConsole.WriteTraceLine("Warning, scroll viewer not loaded yet. This may need to be async");
+                //MpConsole.WriteTraceLine("Warning, scroll viewer not loaded yet. This may need to be async");
                 return;
             }
 

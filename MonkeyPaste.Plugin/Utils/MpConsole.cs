@@ -82,7 +82,7 @@ namespace MonkeyPaste.Plugin {
             }
         }
 
-        public static void WriteTraceLine(object line, object args = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
+        public static void WriteTraceLine(object line, object ex = null, object args = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
             line = line == null ? string.Empty: line;
             if(args != null) {
                 line += args.ToString();
@@ -98,9 +98,17 @@ namespace MonkeyPaste.Plugin {
                 Console.WriteLine("Msg: " + line);
                 Console.WriteLine(@"-----------------------------------------------------------------------");
                 Console.WriteLine("");
+                if(ex != null) {
+                    Console.WriteLine("Exception: ");
+                    Console.WriteLine(ex);
+                }
             }
             if (LogToFile) {
                 WriteLogLine(line);
+                if (ex != null) {
+                    WriteLogLine("Exception: ");
+                    WriteLogLine(ex);
+                }
             }
         }
 

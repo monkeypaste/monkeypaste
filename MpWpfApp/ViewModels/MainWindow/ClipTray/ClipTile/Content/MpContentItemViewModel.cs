@@ -163,6 +163,13 @@ namespace MpWpfApp {
 
         public string ItemBackgroundHexColor {
             get {
+                if(CopyItemType == MpCopyItemType.FileList) {
+                    if(IsHovering) {
+                        return MpSystemColors.gainsboro;
+                    }
+                    return MpSystemColors.Transparent;
+                }
+
                 if(MpDragDropManager.IsDragAndDrop || Parent == null || CopyItem == null) {
                     return MpSystemColors.White;
                 }
@@ -179,11 +186,34 @@ namespace MpWpfApp {
                 return ItemEditorBackgroundHexColor;
             }
         }
-
+        public string ItemBorderBrushHexColor {
+            get {
+                if (CopyItemType == MpCopyItemType.FileList) {
+                    if (IsHovering) {
+                        return MpSystemColors.black;
+                    }
+                    return MpSystemColors.Transparent;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+        public double ItemBorderBrushThickness {
+            get {
+                if (CopyItemType == MpCopyItemType.FileList) {
+                    if (IsHovering) {
+                        return 0.5;
+                    }
+                }
+                return 0;
+            }
+        }
         public string ItemEditorBackgroundHexColor { get; set; } = MpSystemColors.Transparent;
+
+        
 
         public Brush ItemBorderBrush {
             get {
+
                 if(Parent == null || 
                    Parent.Count <= 1 || 
                    !IsSelected || 
@@ -1071,6 +1101,9 @@ namespace MpWpfApp {
                     break;
                 case nameof(IsHovering):
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
+                    OnPropertyChanged(nameof(ItemBorderBrushHexColor));
+                    OnPropertyChanged(nameof(ItemBorderBrushThickness));
+                    OnPropertyChanged(nameof(ItemBackgroundHexColor));
                     break;
                 case nameof(ShortcutKeyString):
                     OnPropertyChanged(nameof(HotkeyIconSource));

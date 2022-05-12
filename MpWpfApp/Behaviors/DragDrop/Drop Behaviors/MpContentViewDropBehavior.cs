@@ -339,7 +339,7 @@ namespace MpWpfApp {
                 if (string.IsNullOrEmpty(dragPlainText)) {
                     // BUG copyItem builder won't create item w/ null data and this shouldn't happen
                     // occurs dropping on pin stage
-                    Debugger.Break();
+                    //Debugger.Break();
                     return;
                 }
                                
@@ -367,13 +367,13 @@ namespace MpWpfApp {
                     //when drag selection is not copy delete selection from source
                     dctv.Rtb.Selection.Text = string.Empty;
 
-                    //string dpt = dctv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                    //if (string.IsNullOrWhiteSpace(dpt)) {
-                    //    //when all content is being dropped flag drag source for delete
-                    //    deleteDragItem = true;
-                    //} else {
-                    //    MpMergedDocumentRtfExtension.SaveTextContent(dctv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
-                    //}
+                    string dpt = dctv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                    if (string.IsNullOrWhiteSpace(dpt)) {
+                        //when all content is being dropped flag drag source for delete
+                        //deleteDragItem = true;
+                    } else {
+                        MpMergedDocumentRtfExtension.SaveTextContent(dctv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
+                    }
 
                 }
                 
@@ -403,7 +403,9 @@ namespace MpWpfApp {
                             }
 
                             if (true) {//pre || post || split) {
+                                var preElements = dropRange.GetAllTextElements();
                                 dropRange.Text = pt;
+                                var postElements = dropRange.GetAllTextElements();
                             } else {
                                 dropRange.Start.InsertTextInRun(pt);
                             }
@@ -432,15 +434,17 @@ namespace MpWpfApp {
                 dropRange = new TextRange(dropRange.End, dropRange.End);
             }
 
-            
 
+
+            //var encodedItems = rtb.Document.GetAllTextElements().Where(x => x.Tag != null && x.Tag is MpCopyItem).Select(x => x.Tag as MpCopyItem).Distinct().ToList();
             var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
+            //await Dispatcher.InvokeAsync(()=>MpMergedDocumentRtfExtension.EncodeContent(rtb),System.Windows.Threading.DispatcherPriority.Normal);
 
             if (deleteDragItem && dropItemSourceItems != null) {
                 foreach (var dri in dropItemSourceItems) {
                     await dri.DeleteFromDatabaseAsync();
                 }
-                while (MpClipTrayViewModel.Instance.IsBusy) {
+                while (MpClipTrayViewModel.Instance.IsAnyBusy) {
                     await Task.Delay(100);
                 }
             }
@@ -452,7 +456,7 @@ namespace MpWpfApp {
             }
             
 
-            while(MpClipTrayViewModel.Instance.IsBusy) {
+            while(MpClipTrayViewModel.Instance.IsAnyBusy) {
                 await Task.Delay(100);
             }
 

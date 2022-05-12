@@ -8,6 +8,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MonkeyPaste.Plugin;
 using System.Diagnostics;
+using System.Net;
+using System.Text;
+using System.Collections.Specialized;
+using System.Threading;
 
 namespace MonkeyPaste {
 
@@ -25,6 +29,12 @@ namespace MonkeyPaste {
 namespace MpWpfApp {
 
     public class MpExternalDropBehavior : MpDropBehaviorBase<FrameworkElement> {
+        #region Private Variables
+
+        private DragDropEffects _dragDropEffects = DragDropEffects.None;
+
+        #endregion
+
         #region Singleton Definition
         private static readonly Lazy<MpExternalDropBehavior> _Lazy = new Lazy<MpExternalDropBehavior>(() => new MpExternalDropBehavior());
         public static MpExternalDropBehavior Instance { get { return _Lazy.Value; } }
@@ -106,30 +116,93 @@ namespace MpWpfApp {
         }
 
         public override async Task StartDrop() {
-
+            var ci = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
             //var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
             var mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(
-                MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem, 
+                ci, 
                 true, 
                 MpProcessHelper.MpProcessManager.LastHandle);
-            var ido = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo);
+            var ido = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo) as DataObject;
 
+            //var startAction = (Action<VirtualFileDataObject>)((vfdo) => {
+            //    MessageBox.Show("ICKY BOOM BOOM DAAYE");
+            //});
+
+            //var endAction = (Action<VirtualFileDataObject>)((vfdo) => {
+            //    MessageBox.Show("Done");
+            //});
+
+            ////var vido = new VirtualFileDataObject(startAction, endAction);
+            //var vido = new VirtualFileDataObject(
+            //    // BeginInvoke ensures UI operations happen on the right thread
+            //    (vfdo) => Dispatcher.BeginInvoke((Action)(() => MessageBox.Show("ICKY BOOM BOOM DAAYE"))),
+            //    (vfdo) => Dispatcher.BeginInvoke((Action)(() => MessageBox.Show("Done"))));
+
+            ////vido.SetData( 
+            ////    (short)DataFormats.GetDataFormat(DataFormats.FileDrop).Id,
+            ////    new List<Byte>(Encoding.Default.GetBytes(ci.ItemData)));
+
+            //vido.SetData(new VirtualFileDataObject.FileDescriptor[] {
+            //    new VirtualFileDataObject.FileDescriptor
+            //    {
+            //        Name = Path.GetFileName(ci.ItemData),
+            //        //StreamContents = stream => new FileStream(ci.ItemData, FileMode.Open)
+            //        StreamContents = (stream) => {
+            //                var data = MpFileIo.ReadBytesFromFile(ci.ItemData);
+            //                stream.Write(data,0,data.Length);
+            //            }
+
+            //        //}
+            //        //stream =>
+            //        //    {
+            //        //        using(var webClient = new FileStream())
+            //        //        {
+            //        //            var data = webClient.DownloadData("http://blogs.msdn.com/delay/rss.xml");
+            //        //            stream.Write(data, 0, data.Length);
+            //        //        }
+            //        //    }
+            //    },
+            // });
+            DragDrop.AddPreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
+            DragDrop.AddPreviewGiveFeedbackHandler(AssociatedObject, OnGiveFeedback);
             DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
+            //VirtualFileDataObject.DoDragDrop(AssociatedObject, vido, DragDropEffects.Copy);
+        }
+        private void OnGiveFeedback(object sender, GiveFeedbackEventArgs e) {
+            MpConsole.WriteLine("Feedback: " + e.Effects);
+
+            if(!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                e.Handled = true;
+
+                //var handle = MpProcessHelper.MpProcessManager.ThisAppHandle;
+                //WinApi.SetForegroundWindow(handle);
+                //WinApi.SetActiveWindow(handle);
+                //MessageBox.Show("ICKY BOOM BOOM DAAYE");
+            }
+        }
+        private async void OnQueryContinueDrag(object sender, QueryContinueDragEventArgs e) {
+            MpConsole.WriteLine("Action: " + e.Action);
+
+            if (!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                //while(true) {
+                //    Thread.Sleep(100);
+                //}
+                e.Handled = true;
+                e.Action = DragAction.Cancel;
+                //var handle = MpProcessHelper.MpProcessManager.ThisAppHandle;
+                //WinApi.SetForegroundWindow(handle);
+                //WinApi.SetActiveWindow(handle);
+                //MessageBox.Show("ICKY BOOM BOOM DAAYE");
+            }
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
             await Task.Delay(1);
         }
 
-        
         public override void AutoScrollByMouse() {
             return;
         }
-                
-
-        
-
-        
     }
 
 }

@@ -14,5 +14,16 @@ namespace MpWpfApp {
             var result = MessageBox.Show(message, title, MessageBoxButton.OKCancel);
             return result == MessageBoxResult.OK;
         }
+
+        public bool? ShowYesNoCancelMessageBox(string title, string message) {
+            var result = MessageBox.Show(message, title, MessageBoxButton.YesNoCancel);
+            if(result == MessageBoxResult.Yes) {
+                return true;
+            }
+            if(result == MessageBoxResult.No) {
+                return false;
+            }
+            return null;
+        }
     }
 }

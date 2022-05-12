@@ -394,7 +394,7 @@ namespace MpWpfApp {
             var sbifvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByImageType));
             var sbffvm = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPreferences.SearchByFileType));
 
-            if(!sbffvm.IsChecked && !sbifvm.IsChecked && !sbffvm.IsChecked) {
+            if(!sbtfvm.IsChecked && !sbifvm.IsChecked && !sbffvm.IsChecked) {
                 sbtfvm.IsChecked = sbifvm.IsChecked = sbffvm.IsChecked = true;
             }
         }

@@ -348,7 +348,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.ShortcutName != value) {
                     Shortcut.ShortcutName = value;
-                    HasModelChanged = true;
+                    HasModelChanged = true; 
                     OnPropertyChanged(nameof(ShortcutDisplayName));
                 }
             }

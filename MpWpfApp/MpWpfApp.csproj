@@ -228,6 +228,7 @@
     <Compile Include="Converters\MpDbImageIdToIconConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpEnumToItemSourceLabelsConverter.cs" />
+    <Compile Include="Converters\MpFileContentItemViewModelToImageSourceConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
     <Compile Include="Converters\MpIsHexColorBrightToBlackOrWhiteBrushConverter.cs" />
     <Compile Include="Converters\MpIsNotNullToVisibilityConverter.cs" />
@@ -287,6 +288,7 @@
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
+    <Compile Include="Utils\System\VirtualFileDataObject.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfMessageBox.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfIconBuilder.cs" />
@@ -400,6 +402,7 @@
     <Compile Include="Views\Base\MpContextMenu.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
     <Compile Include="Views\Base\MpIRectViewModel.cs" />
+    <Compile Include="Views\Base\MpTextElement.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml.cs">
       <DependentUpon>MpClipTileContainerView.xaml</DependentUpon>
     </Compile>
@@ -413,6 +416,9 @@
       <DependentUpon>MpContentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Selector\MpContentListViewSelector.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml.cs">
+      <DependentUpon>MpFileItemParagraph.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Selector\MpTextViewTemplateSelector.cs" />
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml.cs">
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
@@ -771,6 +777,10 @@
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml">
       <SubType>Designer</SubType>

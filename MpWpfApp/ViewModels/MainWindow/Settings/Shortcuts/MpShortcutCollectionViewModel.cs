@@ -498,6 +498,20 @@ namespace MpWpfApp {
             if (e.Button == System.Windows.Forms.MouseButtons.Left) {
                 _globalMouseDownPosition = null;
                 GlobalIsMouseLeftButtonDown = false;
+
+                if(MpDragDropManager.IsDragAndDrop) {
+                    MpHelpers.RunOnMainThread(async () => {
+                        var handle = MpProcessHelper.MpProcessManager.ThisAppHandle;
+                        WinApi.SetForegroundWindow(handle);
+                        WinApi.SetActiveWindow(handle);
+
+                        while(true) {
+                            await Task.Delay(100);
+                        }
+                        //MessageBox.Show("Mouse up");
+                    });
+                }
+                
                 GlobalMouseLeftButtonUp?.Invoke(this, null);
             }
 
@@ -518,7 +532,7 @@ namespace MpWpfApp {
                 MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             }
         }
-
+        
         #endregion
 
         #endregion

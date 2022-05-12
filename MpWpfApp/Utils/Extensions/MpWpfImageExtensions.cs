@@ -133,10 +133,25 @@ namespace MpWpfApp {
             return Convert.ToBase64String(bmpSrc.ToByteArray());
         }
         public static BitmapSource ToBitmapSource(this byte[] bytes) {
+
+
+            //using (var stream = new MemoryStream(bytes)) {
+            //    var frame = new BitmapImage();
+            //    frame.BeginInit();
+            //    frame.CacheOption = BitmapCacheOption.OnLoad;
+            //    frame.StreamSource = stream;
+            //    frame.EndInit();
+            //    frame.Freeze();
+            //    //image newimage = new image() { source = frame };
+            //    return frame;
+            //}
+
+
             var bmpSrc = (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
             bmpSrc.Freeze();
             return bmpSrc;
         }
+
 
         public static BitmapSource ToBitmapSource(this string base64Str) {
             if (string.IsNullOrEmpty(base64Str) || !base64Str.IsStringBase64()) {

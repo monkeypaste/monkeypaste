@@ -7,13 +7,17 @@ using MonkeyPaste;
 namespace MpWpfApp {
     public class MpStringPathToFileOrFolderNameConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if (value is string pathStr && pathStr.IsStringFileOrPathFormat()) {
-                if (Directory.Exists(pathStr)) {
+            if (value is string pathStr) {
+                if(pathStr.IsStringFileOrPathFormat()) {
+                    //if (Directory.Exists(pathStr)) {
+                    //    return Path.GetFileName(pathStr);
+                    //}
+                    //if (File.Exists(pathStr)) {
+                    //    return Path.GetFileName(pathStr);
+                    //}
                     return Path.GetFileName(pathStr);
                 }
-                if (File.Exists(pathStr)) {
-                    return Path.GetFileName(pathStr);
-                }
+                return pathStr;
             }
             return string.Empty;
         }

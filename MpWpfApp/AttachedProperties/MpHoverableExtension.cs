@@ -119,55 +119,78 @@ namespace MpWpfApp {
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (obj, e) => {
                     if(e.NewValue is bool isEnabled) {
-                        var fe = obj as FrameworkElement;
-                        if(fe == null) {
-                            return;
-                        }
-                        if (isEnabled) {
-                            if(fe.IsLoaded) {
-                                Fe_Loaded(obj, null);
-                            } else {
-                                fe.Loaded += Fe_Loaded;
+                        if(isEnabled) {
+                            if (obj is FrameworkElement fe) {
+                                if (fe.IsLoaded) {
+                                    Fe_Loaded(obj, null);
+                                } else {
+                                    fe.Loaded += Fe_Loaded;
+                                }
+                            } else if (obj is FrameworkContentElement fce) {
+                                if (fce.IsLoaded) {
+                                    Fe_Loaded(obj, null);
+                                } else {
+                                    fce.Loaded += Fe_Loaded;
+                                }
                             }
                         } else {
-                            Fe_Unloaded(fe, null);
+                            Fe_Unloaded(obj, null);
                         }
                     }
                 }
             });
 
         private static void Fe_Loaded(object sender, RoutedEventArgs e) {
-            var fe = sender as FrameworkElement;
-            if(fe == null) {
+            if (sender is FrameworkElement fe) {
+                fe.MouseEnter += Fe_MouseEnter;
+                fe.MouseLeave += Fe_MouseLeave;
+                fe.Unloaded += Fe_Unloaded;
+            } else if (sender is FrameworkContentElement fce) {
+                fce.MouseEnter += Fe_MouseEnter;
+                fce.MouseLeave += Fe_MouseLeave;
+                fce.Unloaded += Fe_Unloaded;
                 return;
-            }
-            fe.MouseEnter += Fe_MouseEnter;
-            fe.MouseLeave += Fe_MouseLeave;
-            fe.Unloaded += Fe_Unloaded;
+            } 
         }
         private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
-            var fe = sender as FrameworkElement;
-
-            fe.MouseEnter -= Fe_MouseEnter;
-            fe.MouseLeave -= Fe_MouseLeave;
-            fe.Unloaded -= Fe_Unloaded;
+            if (sender is FrameworkElement fe) {
+                fe.MouseEnter -= Fe_MouseEnter;
+                fe.MouseLeave -= Fe_MouseLeave;
+                fe.Unloaded -= Fe_Unloaded;
+            } else if (sender is FrameworkContentElement fce) {
+                fce.MouseEnter -= Fe_MouseEnter;
+                fce.MouseLeave -= Fe_MouseLeave;
+                fce.Unloaded -= Fe_Unloaded;
+                return;
+            }
         }
 
         #endregion
 
         private static void Fe_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
-            var fe = sender as FrameworkElement;
-            SetIsHovering(fe, true);
-
-            MpCursorType? hoverCursor = GetHoverCursor(fe);
-            if (hoverCursor.HasValue) {
-                MpCursor.SetCursor(fe.DataContext, hoverCursor.Value);
+            DependencyObject dpo = null;
+            object dc;
+            if (sender is FrameworkElement fe) {
+                dpo = fe;
+                dc = fe.DataContext;
+            } else if (sender is FrameworkContentElement fce) {
+                dpo = fce;
+                dc = fce.DataContext;
+            } else {
+                return;
             }
 
-            ImageSource hoverImageSource = GetHoverImageSource(fe);
-            if(hoverImageSource != null && fe is Image i) {
-                if(GetDefaultImageSource(fe) == null) {
-                    SetDefaultImageSource(fe, i.Source);
+            SetIsHovering(dpo, true);
+
+            MpCursorType? hoverCursor = GetHoverCursor(dpo);
+            if (hoverCursor.HasValue) {
+                MpCursor.SetCursor(dc, hoverCursor.Value);
+            }
+
+            ImageSource hoverImageSource = GetHoverImageSource(dpo);
+            if(hoverImageSource != null && dpo is Image i) {
+                if(GetDefaultImageSource(dpo) == null) {
+                    SetDefaultImageSource(dpo, i.Source);
                 }
 
                 i.Source = hoverImageSource;
@@ -175,17 +198,27 @@ namespace MpWpfApp {
         }
 
         private static void Fe_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
-            var fe = sender as FrameworkElement; 
-
-            SetIsHovering(fe, false);
-
-            MpCursorType? hoverCursor = GetHoverCursor(fe);
-            if (hoverCursor.HasValue) {
-                MpCursor.UnsetCursor(fe.DataContext);
+            DependencyObject dpo = null;
+            object dc;
+            if (sender is FrameworkElement fe) {
+                dpo = fe;
+                dc = fe.DataContext;
+            } else if (sender is FrameworkContentElement fce) {
+                dpo = fce;
+                dc = fce.DataContext;
+            } else {
+                return;
             }
 
-            ImageSource defaultImageSource = GetDefaultImageSource(fe);
-            if (GetHoverImageSource(fe) != null && defaultImageSource != null && fe is Image i) {
+            SetIsHovering(dpo, false);
+
+            MpCursorType? hoverCursor = GetHoverCursor(dpo);
+            if (hoverCursor.HasValue) {
+                MpCursor.UnsetCursor(dc);
+            }
+
+            ImageSource defaultImageSource = GetDefaultImageSource(dpo);
+            if (GetHoverImageSource(dpo) != null && defaultImageSource != null && dpo is Image i) {
                 i.Source = defaultImageSource;
             }
         }

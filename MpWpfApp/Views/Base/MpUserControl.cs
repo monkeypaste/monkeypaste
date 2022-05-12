@@ -17,7 +17,7 @@ namespace MpWpfApp {
         public MpUserControl() : base() { }
 
         public void SetDataContext(object dataContext) {
-            DataContext = this;
+            DataContext = dataContext;
         }
     }
     public class MpUserControl<T> : MpUserControl where T: class {
@@ -42,4 +42,5 @@ namespace MpWpfApp {
         }
 
     }
+
 }
