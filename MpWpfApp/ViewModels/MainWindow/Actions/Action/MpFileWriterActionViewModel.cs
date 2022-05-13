@@ -105,7 +105,7 @@ namespace MpWpfApp {
             var actionInput = GetInput(arg);
 
             string fn = string.IsNullOrEmpty(NamePrefix) ? actionInput.CopyItem.Title : NamePrefix;            
-            var fl = MpCopyItemMerger.Instance.GetFileList(actionInput.CopyItem);
+            var fl = MpCopyItemMerger.GetFileList(actionInput.CopyItem);
             string outputData = string.Empty;
             foreach(var fp in fl) {
                 fn = actionInput.CopyItem.ItemType == MpCopyItemType.FileList ? Path.GetFileNameWithoutExtension(fp) : fn;

@@ -296,6 +296,33 @@ namespace MpWpfApp {
             return d;
         }
 
+        public async Task<MpPortableDataObject> GetClipTileDataObjectAsync(MpClipTileViewModel ctvm, bool isDragDrop, object targetHandleObj) {
+            // NOTE this is NOT part of data object interface (which is in MonkeyPaste.Plugin)
+            // because it needs MpCopyItem
+            // and am trying to isolate data object for pluggability
+
+            IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : (IntPtr)targetHandleObj;
+            bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
+
+            MpPortableDataObject d = new MpPortableDataObject();
+            string rtf = string.Empty.ToRichText();
+            string pt = string.Empty;
+            var sctfl = new List<string>();
+
+            foreach(var civm in ctvm.Items.OrderBy(x=>x.CompositeSortOrderIdx)) {
+                var sub_d = await GetCopyItemDataObjectAsync(civm.CopyItem, isDragDrop, targetHandleObj);
+                foreach(var sub_d_kvp in sub_d.DataFormatLookup) {
+                    if(!d.DataFormatLookup.ContainsKey(sub_d_kvp.Key)) {
+                        d.DataFormatLookup.Add(sub_d_kvp.Key, sub_d_kvp.Value);
+                    } else {
+
+                    }
+                }
+            }
+
+            return d;
+        }
+
         public void HandleError(Exception ex) {
             MpConsole.WriteTraceLine(ex);
         }

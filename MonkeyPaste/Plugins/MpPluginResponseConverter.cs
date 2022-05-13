@@ -87,7 +87,7 @@ namespace MonkeyPaste {
             }
 
             var targetCopyItem = await MpCopyItem.Create(
-                source: source,
+                sourceId: source.Id,
                 title: title,
                 data: prf.newContentItem.content.value,
                 copyItemSourceGuid: sourceCopyItem.Guid,

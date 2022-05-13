@@ -344,6 +344,10 @@ namespace MpWpfApp {
         }        
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
+            foreach(var civm in BindingContext.Items) {
+                var civm_pt = civm.CopyItemData.ToPlainText();
+
+            }
             if(MpDragDropManager.IsDragAndDrop) {
                 return;
             }

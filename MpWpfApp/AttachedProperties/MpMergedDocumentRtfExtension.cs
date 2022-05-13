@@ -230,9 +230,10 @@ namespace MpWpfApp {
         public static async Task<List<MpCopyItem>> EncodeContent(RichTextBox rtb) {
             var ctvm = rtb.DataContext as MpClipTileViewModel;
 
-            var allTextElements = rtb.Document
+            var cfd = rtb.Document;//.Clone();
+            var allTextElements = cfd
                                         .GetAllTextElements()
-                                        .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
+                                        .OrderBy(x => cfd.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
 
             var allStrayElements = allTextElements.Where(x => x.Tag == null).ToList();
             if(allStrayElements.Count > 0) {
@@ -248,86 +249,85 @@ namespace MpWpfApp {
             foreach (var kvp in tagGroups) {
                 // find doc start item and update root guid
                 var tagElements = kvp.Value;
-                if (tagElements.Select(x => x.ContentStart).Any(x => x == rtb.Document.ContentStart)) {
+                if (tagElements.Select(x => x.ContentStart).Any(x => x == cfd.ContentStart)) {
                     rootGuid = kvp.Key.Guid;
                 }
             }
             List<MpCopyItem> orderedItems;
 
             //using (rtb.DeclareChangeBlock()) {
-                //if(!_isChangeBlockRtbs.Contains(rtb)) {
-                //    rtb.BeginChange();
-                //    _isChangeBlockRtbs.Add(rtb);
-                //}
-                //var cfd = rtb.Document.Clone();
+            //if(!_isChangeBlockRtbs.Contains(rtb)) {
+            //    rtb.BeginChange();
+            //    _isChangeBlockRtbs.Add(rtb);
+            //}
+            //var cfd = rtb.Document.Clone();
 
-
+            if(ctvm.ItemType == MpCopyItemType.Text) {
                 foreach (var kvp in tagGroups.Where(x => x.Key.Guid != rootGuid)) {
                     // loop through all non-root ranges and encode content (substitute range with encoded guid)
 
                     //find min/max text pointers for this content
-                    var itemRangeStart = kvp.Value
-                                                .Aggregate((a, b) =>
-                                                    rtb.Document.ContentStart.GetOffsetToPosition(a.ContentStart) <
-                                                    rtb.Document.ContentStart.GetOffsetToPosition(b.ContentStart) ? a : b).ElementStart;
-                    var itemRangeEnd = kvp.Value
-                                                .Aggregate((a, b) =>
-                                                    rtb.Document.ContentStart.GetOffsetToPosition(a.ContentEnd) >
-                                                    rtb.Document.ContentStart.GetOffsetToPosition(b.ContentEnd) ? a : b).ElementEnd;
-                    var fullItemRange = new TextRange(itemRangeStart, itemRangeEnd);
+                    //var itemRangeStart = kvp.Value
+                    //                            .Aggregate((a, b) =>
+                    //                                rtb.Document.ContentStart.GetOffsetToPosition(a.ContentStart) <
+                    //                                rtb.Document.ContentStart.GetOffsetToPosition(b.ContentStart) ? a : b).ElementStart;
+                    //var itemRangeEnd = kvp.Value
+                    //                            .Aggregate((a, b) =>
+                    //                                rtb.Document.ContentStart.GetOffsetToPosition(a.ContentEnd) >
+                    //                                rtb.Document.ContentStart.GetOffsetToPosition(b.ContentEnd) ? a : b).ElementEnd;
+                    //var fullItemRange = new TextRange(itemRangeStart, itemRangeEnd);
 
+                    var fullItemRange = kvp.Value.ToTextRange();
                     if (kvp.Key.Guid != rootGuid) {
                         // NOTE only write root after all sub-content is encoded
                         // store non root's rtf before encoding it
                         if (kvp.Key.ItemType == MpCopyItemType.Text) {
                             kvp.Key.ItemData = fullItemRange.ToRichText();
                         }
-
                     }
-                    //var cloneRange = cfd.ContentStart.FindText(cfd.ContentEnd, fullItemRange.Text);
-                    //cloneRange.Text = "{c{" + kvp.Key.Guid + "}c}";
 
                     fullItemRange.Text = "{c{" + kvp.Key.Guid + "}c}";
                 }
+            }
 
 
-                // NOTE since sortOrder isn't really used just ensure composites are unique and not zero
-                int dummyIdx = 1;
-                foreach (var tg in tagGroups) {
-                    var ci = tg.Key;
-                    if (ci.Guid == rootGuid) {
-                        ci.CompositeParentCopyItemId = 0;
-                        ci.CompositeSortOrderIdx = 0;
-                        ci.RootCopyItemGuid = string.Empty;
+            // NOTE since sortOrder isn't really used just ensure composites are unique and not zero
+            for(int i = 0;i < tagGroups.Count;i++) {
+                var tg = tagGroups.ElementAt(i);
+                var ci = tg.Key;
+                if (ci.Guid == rootGuid) {
+                    ci.CompositeParentCopyItemId = 0;
+                    ci.CompositeSortOrderIdx = 0;
+                    ci.RootCopyItemGuid = string.Empty;
 
-                        //store root rtf
-                        if (ci.ItemType == MpCopyItemType.Text) {
-                            ci.ItemData = rtb.Document.ToRichText();
-                        }
-                    } else {
-                        var rci = tagGroups.FirstOrDefault(x => x.Key.Guid == rootGuid).Key;
-                        ci.CompositeParentCopyItemId = rci.Id;
-                        ci.CompositeSortOrderIdx = dummyIdx;
-                        ci.RootCopyItemGuid = rootGuid;
-                        dummyIdx++;
+                    //store root rtf
+                    if (ci.ItemType == MpCopyItemType.Text) {
+                        ci.ItemData = cfd.ToRichText();
                     }
-
-                    await ci.WriteToDatabaseAsync();
+                } else {
+                    var rci = tagGroups.FirstOrDefault(x => x.Key.Guid == rootGuid).Key;
+                    if(rci == null) {
+                        Debugger.Break();
+                    }
+                    ci.CompositeParentCopyItemId = rci.Id;
+                    ci.CompositeSortOrderIdx = tagGroups.Select(x => x.Key).ToList().IndexOf(ci); //dummyIdx;
+                    ci.RootCopyItemGuid = rootGuid;
                 }
 
-                // NOTE Not sure if swap interferes w/ pinned/persisted items
-                if (origRootGuid != rootGuid) {
-                    int rootId = tagGroups.FirstOrDefault(x => x.Key.Guid == rootGuid).Key.Id;
-                    MpDataModelProvider.SwapQueryItem(ctvm.QueryOffsetIdx, rootId);
-                }
+                await ci.WriteToDatabaseAsync();
+            }
 
-                orderedItems = tagGroups.Select(x => x.Key).OrderBy(x => x.CompositeSortOrderIdx).ToList();
+            // NOTE Not sure if swap interferes w/ pinned/persisted items
+            if (origRootGuid != rootGuid) {
+                int rootId = tagGroups.FirstOrDefault(x => x.Key.Guid == rootGuid).Key.Id;
+                MpDataModelProvider.SwapQueryItem(ctvm.QueryOffsetIdx, rootId);
+            }
 
-                //await LoadContent(rtb);
+            orderedItems = tagGroups.Select(x => x.Key).OrderBy(x => x.CompositeSortOrderIdx).ToList();
 
-                //rtb.EndChange();
-           // }
-            
+           // await LoadContent(rtb);
+
+
             return orderedItems;
         }
 
@@ -623,7 +623,7 @@ namespace MpWpfApp {
         }
 
         private static void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
-            return;
+            //return;
             var rtb = sender as RichTextBox;
 
             var rtb_a = rtb.GetVisualAncestor<AdornerLayer>();
@@ -710,6 +710,10 @@ namespace MpWpfApp {
                     break;
                 }
                 ctp = ctp.GetPositionAtOffset(curOffset + 1);
+                if(ctp == null) {
+                    //Debugger.Break();
+                    return (fce.DataContext as MpClipTileViewModel).HeadItem.CopyItem;
+                }
                 var pte = ctp.Parent.FindParentOfType<TextElement>();
                 if (pte != null && pte.Tag != null) {
                     return pte.Tag;

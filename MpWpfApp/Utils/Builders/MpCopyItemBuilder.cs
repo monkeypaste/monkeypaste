@@ -27,21 +27,7 @@ namespace MpWpfApp {
                     return null;
                 }
                 var iData = mpdo.DataFormatLookup as Dictionary<MpClipboardFormatType,string>;
-
-                string processPath, appName, processIconImg64;
-
-                var processHandle = MpProcessManager.LastHandle;
-                if (processHandle == IntPtr.Zero) {
-                    // since source is unknown set to this app
-
-                    processPath = MpPreferences.ThisAppSource.App.AppPath;
-                    appName = MpPreferences.ThisAppSource.App.AppName;
-                    processIconImg64 = MpBase64Images.AppIcon;
-                } else {
-                    processPath = MpProcessManager.GetProcessPath(processHandle);
-                    appName = MpProcessManager.GetProcessApplicationName(processHandle);
-                    processIconImg64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(processPath);
-                }
+                                
                 
                 string itemData = null;
                 string htmlData = string.Empty;
@@ -90,12 +76,41 @@ namespace MpWpfApp {
                     htmlData = iData[MpClipboardFormatType.Html];
                 }
 
+                if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
+                    itemData = itemData.ToPlainText();
+                    if (((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
+                        //item is TOO LARGE so ignore
+                        if (MpPreferences.NotificationShowCopyItemTooLargeToast) {
+                            MpStandardBalloonViewModel.ShowBalloon(
+                            "Item TOO LARGE",
+                            $"Max Item Characters is {MpPreferences.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
+                            MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                        }
+                        return null;
+                    }
+                }
+
                 var dupCheck = await MpDataModelProvider.GetCopyItemByData(itemData);
                 if(dupCheck != null) {
                     MpConsole.WriteLine("Duplicate item detected, flipping id and returning");
                     dupCheck = await MpDb.GetItemAsync<MpCopyItem>(dupCheck.Id);
                     dupCheck.Id *= -1;
                     return dupCheck;
+                }
+
+                string processPath, appName, processIconImg64;
+
+                var processHandle = MpProcessManager.LastHandle;
+                if (processHandle == IntPtr.Zero) {
+                    // since source is unknown set to this app
+
+                    processPath = MpPreferences.ThisAppSource.App.AppPath;
+                    appName = MpPreferences.ThisAppSource.App.AppName;
+                    processIconImg64 = MpBase64Images.AppIcon;
+                } else {
+                    processPath = MpProcessManager.GetProcessPath(processHandle);
+                    appName = MpProcessManager.GetProcessApplicationName(processHandle);
+                    processIconImg64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(processPath);
                 }
 
                 MpApp app = await MpDataModelProvider.GetAppByPath(processPath);
@@ -131,28 +146,7 @@ namespace MpWpfApp {
                         MpConsole.WriteTraceLine(@"Error parsing url from htmlData: " + htmlData, ex);
                     }
                 }
-                //List<int> iconIdList = null;
 
-                if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
-                    itemData = itemData.ToPlainText();
-                    if (((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
-                        //item is TOO LARGE so ignore
-                        if (MpPreferences.NotificationShowCopyItemTooLargeToast) {
-                            MpStandardBalloonViewModel.ShowBalloon(
-                            "Item TOO LARGE",
-                            $"Max Item Characters is {MpPreferences.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
-                            MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-                        }
-                        return null;
-                    }
-                } //else if(itemType == MpCopyItemType.FileList) {
-                    //iconIdList = new List<int>();
-                    //var fl = itemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                    //foreach(var f in fl) {
-                    //    var fi = await MpIcon.Create(iconImgBase64: MpNativeWrapper.Services.IconBuilder.GetApplicationIconBase64(f));
-                    //    iconIdList.Add(fi.Id);
-                    //}
-                //}
 
                 if (app == null) {
                     throw new Exception("Error creating copy item no source discovered");
@@ -162,7 +156,7 @@ namespace MpWpfApp {
                 }
                 var source = await MpSource.Create(app, url);
                 var ci = await MpCopyItem.Create(
-                    source: source,
+                    sourceId: source.Id,
                     data: itemData,
                     itemType: itemType);
 

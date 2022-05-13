@@ -133,7 +133,7 @@
                 DoCommandSelection();
                 var ivml = SelectedItems;
                 var cil = ivml.Select(x => x.CopyItem).ToList();
-                return MpCopyItemMerger.Instance.MergeFilePaths(cil).ToList();
+                return MpCopyItemMerger.MergeFilePaths(cil).ToList();
             }
         }
 
@@ -380,10 +380,31 @@
 
         #region Appearance       
 
+        public string SelectedTextHexColor {
+            get {
+                if (ItemType == MpCopyItemType.Text) {
+                    return MpSystemColors.lightblue;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+
+        public string InactiveSelectedTextHexColor {
+            get {
+                if (ItemType == MpCopyItemType.Text) {
+                    return MpSystemColors.purple;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+
         public string CaretBrushHexColor {
             get {
                 if(IsContentReadOnly) {
-                    return MpSystemColors.Red;
+                    if(IsSubSelectionEnabled) {
+                        return MpSystemColors.Red;
+                    }
+                    return MpSystemColors.Transparent;                    
                 }
                 return MpSystemColors.Black;
             }
@@ -1036,20 +1057,6 @@
             }
         }
 
-        public async Task<MpCopyItem> GetSelectionAsModel(bool isCopy) {
-            if(IsPlaceholder) {
-                return null;
-            }
-            if(SelectionLength == 0) {
-                if(isCopy) {
-                    var cloneItem = await HeadItem.CopyItem.Clone(true) as MpCopyItem;
-                    return cloneItem;
-                }
-                return HeadItem.CopyItem;
-            }
-            return HeadItem.CopyItem;
-        }
-
         public void DeleteTempFiles() {
             foreach (var f in _tempFileList) {
                 if (File.Exists(f)) {
@@ -1119,6 +1126,9 @@
         }
 
         protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if(MpDragDropManager.IsDragAndDrop) {
+                return;
+            }
             if(e is MpCopyItem ci && Items.Any(x=>x.CopyItemId == ci.Id)) {
                 var rcivm = Items.FirstOrDefault(x => x.CopyItemId == ci.Id);
                 await RemovContentItem(rcivm);
@@ -1138,33 +1148,46 @@
             Items.Remove(rcivm);
 
             if (Items.Count == 0) {
-                Parent.Items.Remove(this);
+                //Parent.Items.Remove(this);
 
-                int qIdx = Parent.Items.IndexOf(this);
+                int qOffsetIdx = QueryOffsetIdx;
                 var ci = rcivm.CopyItem;
 
                 await MpDataModelProvider.RemoveQueryItem(ci.Id);
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                while (Parent.IsBusy) {
+                while (Parent.IsAnyBusy) {
                     await Task.Delay(100);
                 }
-                if (qIdx < 0) {
+                MpClipTileViewModel nsctvm = null;
+                if (qOffsetIdx < 0) {
                     //not sure why this happens but it did in drag drop
-                } else if (qIdx < Parent.Items.Count - 1) {
-                    Parent.Items[qIdx].IsSelected = true;
-                } else if (Parent.Items.Count > 0) {
-                    Parent.Items[qIdx - 1].IsSelected = true;
+                } else if (Parent.Items.Any(x=>x.QueryOffsetIdx == qOffsetIdx)) {
+                    nsctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == qOffsetIdx);
+                } else if (Parent.Items.Any(x => x.QueryOffsetIdx == qOffsetIdx + 1)) {
+                    nsctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == qOffsetIdx + 1);
+                } else if (Parent.Items.Any(x => x.QueryOffsetIdx == qOffsetIdx - 1)) {
+                    nsctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == qOffsetIdx - 1);
+                } else if (Parent.Items.Any(x => x.QueryOffsetIdx == Parent.MinClipTrayQueryIdx)) {
+                    nsctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == Parent.MinClipTrayQueryIdx);
+                }
+                if(nsctvm != null) {
+                    nsctvm.IsSelected = true;
                 }
 
                 var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.HeadCopyItemId == ci.Id);
                 if (pctvm != null) {
                     // Flag QueryOffsetIdx = -1 so it tray doesn't attempt to return it to tray
                     pctvm.QueryOffsetIdx = -1;
-                    Parent.ToggleTileIsPinnedCommand.Execute(pctvm);
+                    MpHelpers.RunOnMainThread(() => {
+                        Parent.ToggleTileIsPinnedCommand.Execute(pctvm);
+                    });
                 }
             } else {
-                RequestListRefresh();
+
+                MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                //RequestListRefresh();
             }
+            OnPropertyChanged(nameof(IsPlaceholder));
         }
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
@@ -1250,6 +1273,7 @@
 
                     OnPropertyChanged(nameof(CanVerticallyScroll));
                     IsSubSelectionEnabled = !IsContentReadOnly;
+                    OnPropertyChanged(nameof(IsSubSelectionEnabled));
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(PrimaryItem));

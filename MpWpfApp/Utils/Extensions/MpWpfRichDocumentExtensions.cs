@@ -222,6 +222,14 @@ namespace MpWpfApp {
                 TextRange range2 = new TextRange(clonedDoc.ContentEnd, clonedDoc.ContentEnd);
                 range2.Load(stream, DataFormats.XamlPackage);
 
+                int docLength = doc.ContentStart.GetOffsetToPosition(doc.ContentEnd);
+                for (int i = 0; i <= docLength; i++) {
+                    var doc_tp = doc.ContentStart.GetPositionAtOffset(i);
+                    var clone_tp = clonedDoc.ContentStart.GetPositionAtOffset(i);
+                    if(doc_tp.Parent is TextElement doc_tp_te) {
+                        (clone_tp.Parent as TextElement).Tag = doc_tp_te.Tag;
+                    }
+                }
                 
                 return clonedDoc;
             }
@@ -275,6 +283,22 @@ namespace MpWpfApp {
                 tel.Add(ste);
             }
             return tel;
+        }
+
+        public static TextRange ToTextRange(this IEnumerable<TextElement> tel) {
+            if(tel.Count() == 0) {
+                return null;
+            }
+            var docStart = tel.ElementAt(0).ContentStart.DocumentStart;
+
+            var itemRangeStart = tel.Aggregate((a, b) =>
+                                        docStart.GetOffsetToPosition(a.ContentStart) <
+                                        docStart.GetOffsetToPosition(b.ContentStart) ? a : b).ContentStart;
+            var itemRangeEnd = tel.Aggregate((a, b) =>
+                                        docStart.GetOffsetToPosition(a.ContentEnd) >
+                                        docStart.GetOffsetToPosition(b.ContentEnd) ? a : b).ContentEnd;
+
+            return new TextRange(itemRangeStart, itemRangeEnd);
         }
         public static IEnumerable<TextElement> GetRunsAndParagraphs(this FlowDocument doc) {
             for (TextPointer position = doc.ContentStart;

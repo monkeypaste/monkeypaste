@@ -22,7 +22,7 @@
             x:Name="Rtb"
             DataContext="{Binding}"
             Width="Auto"
-            MinWidth="100" 
+            MinWidth="100"
             Height="Auto"
             Padding="5,0,5,0"
             HorizontalAlignment="Stretch"
@@ -45,6 +45,8 @@
             local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
                                                            Mode=TwoWay}"
             LostFocus="Rtb_LostFocus"
+            SelectionBrush="{Binding SelectedTextHexColor,
+                                     Converter={StaticResource StringHexToBrushConverter}}"
             IsDocumentEnabled="True"
             IsEnabled="True"
             IsReadOnlyCaretVisible="{Binding IsSubSelectionEnabled}"
@@ -71,7 +73,8 @@
             <local:MpRichTextBox.Resources>
                 <SolidColorBrush
                     x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                    Color="Blue" />
+                    Color="{Binding InactiveSelectedTextHexColor,
+                                    Converter={StaticResource StringHexToWinMediaColorConverter}}" />
             </local:MpRichTextBox.Resources>
         </local:MpRichTextBox>
     </AdornerDecorator>

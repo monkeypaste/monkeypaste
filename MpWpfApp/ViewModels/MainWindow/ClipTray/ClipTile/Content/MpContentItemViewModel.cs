@@ -129,7 +129,9 @@ namespace MpWpfApp {
 
         #endregion
 
+
         #region Appearance
+
 
         public Brush DetailTextColor {
             get {
@@ -991,7 +993,7 @@ namespace MpWpfApp {
                     itemSize = new Size(bmp.Width, bmp.Height);
                     break;
                 case MonkeyPaste.MpCopyItemType.FileList:
-                    var fl = MpCopyItemMerger.Instance.GetFileList(CopyItem);
+                    var fl = MpCopyItemMerger.GetFileList(CopyItem);
                     fc = fl.Count;
                     ds = MpHelpers.FileListSize(fl.ToArray());
                     break;

@@ -1865,11 +1865,16 @@ namespace MpWpfApp {
                     await Task.Delay(100);
                 }
 
-                if (!isSubQuery && SelectedItems.Count == 0 && 
-                    PersistentSelectedModels.Count == 0 && 
+                if(isSubQuery) {
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+                } else {
+                    if (SelectedItems.Count == 0 &&
+                    PersistentSelectedModels.Count == 0 &&
                     TotalTilesInQuery > 0) {
-                    ResetClipSelection();
+                        ResetClipSelection();
+                    }
                 }
+                
 
                 OnPropertyChanged(nameof(TotalTilesInQuery));
                 OnPropertyChanged(nameof(ClipTrayTotalWidth));

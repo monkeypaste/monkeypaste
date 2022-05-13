@@ -14,11 +14,9 @@ using System.IO;
 using System.Windows;
 
 namespace MpWpfApp {
-    public class MpCopyItemMerger {
-        private static readonly Lazy<MpCopyItemMerger> _Lazy = new Lazy<MpCopyItemMerger>(() => new MpCopyItemMerger());
-        public static MpCopyItemMerger Instance { get { return _Lazy.Value; } }
+    public static class MpCopyItemMerger {
         
-        public string MergeRtf(List<MpCopyItem> cil) {
+        public static string MergeRtf(List<MpCopyItem> cil) {
             var fd = string.Empty.ToFlowDocument();
             foreach(var ci in cil) {
                 switch(ci.ItemType) {
@@ -37,11 +35,11 @@ namespace MpWpfApp {
             return fd.ToString();
         }
 
-        public string MergePlainText(List<MpCopyItem> cil) {
+        public static string MergePlainText(List<MpCopyItem> cil) {
             return MergeRtf(cil).ToPlainText();
         }
 
-        public BitmapSource MergeBitmaps(List<MpCopyItem> cil) {
+        public static BitmapSource MergeBitmaps(List<MpCopyItem> cil) {
             var bmp = (BitmapSource)new BitmapImage();
             foreach (var ci in cil) {
                 switch (ci.ItemType) {
@@ -63,7 +61,7 @@ namespace MpWpfApp {
             return bmp;
         }
 
-        public string[] MergeFilePaths(List<MpCopyItem> cil) {
+        public static string[] MergeFilePaths(List<MpCopyItem> cil) {
             var fpl = new List<string>();
             foreach(var ci in cil) {
                 var fl = GetFileList(ci);
@@ -72,7 +70,7 @@ namespace MpWpfApp {
             return fpl.ToArray();
         }
 
-        public List<string> GetFileList(MpCopyItem CopyItem,string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
+        public static List<string> GetFileList(MpCopyItem CopyItem,string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
             //returns path of tmp file for rt or img and actual paths of filelist
             bool isTemp = true;
             var fileList = new List<string>();

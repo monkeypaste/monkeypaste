@@ -255,7 +255,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<MpCopyItem> Create(
-            MpSource source = null, 
+            int sourceId = 0,
             string data = "", 
             string copyItemSourceGuid = "",
             string rootCopyItemGuid = "",
@@ -309,9 +309,7 @@ namespace MonkeyPaste {
                         ItemData = pl[i],
                         ItemDescription = description,
                         ItemType = itemType,
-                        SourceId = source.Id,
-
-                        //Source = source,
+                        SourceId = sourceId,
                         IconId = iconId,
                         CopyCount = 1,
                         CompositeSortOrderIdx = i,
@@ -341,7 +339,7 @@ namespace MonkeyPaste {
                 ItemDescription = description,
                 ItemData = data,
                 ItemType = itemType,
-                SourceId = source.Id,
+                SourceId = sourceId,
                 //Source = source,
                 CopyCount = 1,
                 CopyItemSourceGuid = copyItemSourceGuid,
@@ -563,14 +561,13 @@ namespace MonkeyPaste {
                 Title = isReplica ? this.Title + " Copy":this.Title,
                 ItemData = this.ItemData,
                 IconId = this.IconId,
-                //Source = this.Source,
                 SourceId = this.SourceId,
                 CopyCount = 1,
                 CopyDateTime = DateTime.Now,
                 CompositeParentCopyItemId = isReplica ? 0:this.CompositeParentCopyItemId,
                 CompositeSortOrderIdx = isReplica ? 0:this.CompositeSortOrderIdx,
                 Id = isReplica ? 0:this.Id,
-                CopyItemGuid = isReplica ? System.Guid.NewGuid():this.CopyItemGuid
+                CopyItemGuid = isReplica ? System.Guid.NewGuid():this.CopyItemGuid                
             };
 
             if(isReplica) {

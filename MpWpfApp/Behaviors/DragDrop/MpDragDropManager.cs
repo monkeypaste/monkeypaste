@@ -102,11 +102,11 @@ namespace MpWpfApp {
 
         public static void StartDragCheck(object dragData) {
             if(MpMoveBehavior.IsAnyMoving || 
-               MpResizeBehavior.IsAnyResizing) {
+               MpResizeBehavior.IsAnyResizing ||
+               IsCheckingForDrag) {
                 return;
             }
             
-
             DragData = dragData;
             IsCheckingForDrag = true;
 
@@ -214,6 +214,10 @@ namespace MpWpfApp {
         }
 
         private static async Task PerformDrop(object dragData) {
+            if(IsPerformingDrop) {
+                return;
+            }
+
             if (CurDropTarget != null) {
                 IsPerformingDrop = true;
 

@@ -121,7 +121,7 @@ namespace MpWpfApp {
                     case WatcherChangeTypes.Changed:
                     case WatcherChangeTypes.Created:
                         ci = await MpCopyItem.Create(
-                            source: MpPreferences.ThisOsFileManagerSource,
+                            sourceId: MpPreferences.ThisOsFileManagerSource.Id,
                             itemType: MpCopyItemType.FileList,
                             data: e.FullPath,
                             suppressWrite: true);
@@ -131,7 +131,7 @@ namespace MpWpfApp {
                         ci = await MpDataModelProvider.GetCopyItemByData(re.OldFullPath);
                         if(ci == null) {
                             ci = await MpCopyItem.Create(
-                                source: MpPreferences.ThisOsFileManagerSource,
+                                sourceId: MpPreferences.ThisOsFileManagerSource.Id,
                                 itemType: MpCopyItemType.FileList,
                                 data: e.FullPath,
                                 suppressWrite: true);
