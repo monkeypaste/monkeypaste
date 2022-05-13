@@ -841,8 +841,11 @@
             OnPropertyChanged(nameof(TileBorderBrush));
             OnPropertyChanged(nameof(CanVerticallyScroll));
             OnPropertyChanged(nameof(HeadItem));
+            OnPropertyChanged(nameof(IsTextItem));
+            OnPropertyChanged(nameof(IsFileListItem));
             
-            while(Items.Any(x=>x.IsAnyBusy)) {
+
+            while (Items.Any(x=>x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
 

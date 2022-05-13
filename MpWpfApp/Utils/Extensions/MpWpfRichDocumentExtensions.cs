@@ -289,9 +289,20 @@ namespace MpWpfApp {
             if(tel.Count() == 0) {
                 return null;
             }
-            var docStart = tel.ElementAt(0).ContentStart.DocumentStart;
 
-            var itemRangeStart = tel.Aggregate((a, b) =>
+            
+            var docStart = tel.ElementAt(0).ContentStart.DocumentStart;
+            var toRemove = tel.Where(x => !x.ContentStart.IsInSameDocument(docStart) || !x.ContentEnd.IsInSameDocument(docStart));
+            if(toRemove.Count() > 0) {
+                Debugger.Break();
+                tel = tel.Where(x => !toRemove.Contains(x));
+                if(tel.Count() > 0) {
+                    docStart = tel.ElementAt(0).ContentStart.DocumentStart;
+                } else {
+                    Debugger.Break();
+                }
+            }
+            var itemRangeStart = tel.Aggregate((a, b) => 
                                         docStart.GetOffsetToPosition(a.ContentStart) <
                                         docStart.GetOffsetToPosition(b.ContentStart) ? a : b).ContentStart;
             var itemRangeEnd = tel.Aggregate((a, b) =>
@@ -463,14 +474,36 @@ namespace MpWpfApp {
                 };
 
                 MouseEventHandler p_mouseEnter_handler = (s, e) => {
+                    if (MpDragDropManager.IsDragAndDrop) {
+                        return;
+                    }
                     fileItemParagraph.Background = Brushes.Gainsboro;
                     fileItemParagraph.BorderBrush = Brushes.Black;
                     fileItemParagraph.BorderThickness = new Thickness(0.5);
+
+                    
+                    var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById((fileItemParagraph.Tag as MpCopyItem).Id);
+                    if(civm == null) {
+                        Debugger.Break();
+                    } else {
+                        civm.Parent.Items.ForEach(x => x.IsHovering = x.CopyItemData == path);
+
+                        //MpConsole.WriteLine("Hover ItemData: " + civm.Parent.HoverItem.CopyItemData);
+                    }
                 };
                 MouseEventHandler p_mouseLeave_handler = (s, e) => {
+                    if(MpDragDropManager.IsDragAndDrop) {
+                        return;
+                    }
                     fileItemParagraph.Background = Brushes.Transparent;
                     fileItemParagraph.BorderBrush = Brushes.Transparent;
                     fileItemParagraph.BorderThickness = new Thickness(0);
+                    var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById((fileItemParagraph.Tag as MpCopyItem).Id);
+                    if (civm == null) {
+                        Debugger.Break();
+                    } else if(civm.IsHovering) {
+                        civm.Parent.Items.ForEach(x => x.IsHovering = false);
+                    }
                 };
 
                 RoutedEventHandler p_Unload_handler = null;

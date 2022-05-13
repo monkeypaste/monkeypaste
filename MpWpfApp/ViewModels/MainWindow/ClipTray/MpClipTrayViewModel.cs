@@ -528,7 +528,7 @@ namespace MpWpfApp {
         public bool IsArrowSelecting { get; set; } = false;
 
 
-        public bool IsAnyBusy => Items.Any(x => x.IsAnyBusy) || IsBusy;
+        public bool IsAnyBusy => Items.Any(x => x.IsAnyBusy) || PinnedItems.Any(x=>x.IsAnyBusy) || IsBusy;
 
         public bool IsRequery { get; private set; } = false;
 

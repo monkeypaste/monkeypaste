@@ -131,6 +131,12 @@ namespace MpWpfApp {
         }
 
         public static async Task SaveTextContent(RichTextBox rtb) {
+            if(MpClipTrayViewModel.Instance.IsRequery) {
+                return;
+            }
+            await EncodeContent(rtb);
+            return;
+
             if(rtb.DataContext is MpClipTileViewModel ctvm) {
                 var contentLookup = new Dictionary<string, List<TextElement>>();
 
@@ -238,7 +244,8 @@ namespace MpWpfApp {
             var allStrayElements = allTextElements.Where(x => x.Tag == null).ToList();
             if(allStrayElements.Count > 0) {
                 // shouldn't happen, somethings isn't tagged in drop
-                Debugger.Break();
+                //Debugger.Break();
+                allStrayElements.ForEach(x => allTextElements.Remove(x));
             }
             var tagGroups = allTextElements
                                 .GroupBy(x => x.Tag as MpCopyItem)
@@ -444,7 +451,7 @@ namespace MpWpfApp {
             if(ci.ItemType == MpCopyItemType.Text) {
                 childRanges = GetEncodedRanges(itemRange, "{c{", "}c}");
                 childGuids = childRanges.Select(x => x.Text.Replace("{c{", string.Empty).Replace("}c}", string.Empty)).ToArray();
-                childCopyItems = items.Where(x => x.CompositeParentCopyItemId == items.FirstOrDefault(y=>y.Guid == itemGuid).Id).ToList();
+                childCopyItems = items.Where(x => items.FirstOrDefault(y => y.Guid == itemGuid) != null && x.CompositeParentCopyItemId == items.FirstOrDefault(y=>y.Guid == itemGuid).Id).ToList();
 
                 if (childCopyItems.Count != childGuids.Length) {
                     var missingGuids = childGuids.Where(x => childCopyItems.All(y => y.Guid != x));

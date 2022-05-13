@@ -428,6 +428,18 @@ namespace MpWpfApp {
                 }
             }
 
+            if(BindingContext.ItemType == MpCopyItemType.FileList) {
+                BindingContext.Items.ForEach(x => x.IsSelected = x.IsHovering);
+                if(BindingContext.SelectedItem != null) {
+                    BindingContext.SelectedPlainText = BindingContext.SelectedItem.CopyItemData;
+
+                    var sr = Rtb.Document.ContentStart.FindText(Rtb.Document.ContentEnd, BindingContext.SelectedPlainText);
+                    if(sr != null) {
+                        Rtb.Selection.Select(sr.Start, sr.End);
+                    }
+                }
+            }
+
             MpDragDropManager.StartDragCheck(BindingContext);
 
             e.Handled = true;
