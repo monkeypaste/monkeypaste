@@ -189,7 +189,7 @@ namespace MonkeyPaste {
         }
                
         #endregion
-
+         
         #region Private Methods
 
         private void MpContextMenuItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
