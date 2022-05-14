@@ -81,10 +81,11 @@ namespace MpWpfApp {
                     if (((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
                         if (MpPreferences.NotificationShowCopyItemTooLargeToast) {
-                            MpStandardBalloonViewModel.ShowBalloon(
-                            "Item TOO LARGE",
-                            $"Max Item Characters is {MpPreferences.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
-                            MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                            MpNotificationCollectionViewModel.Instance.ShowMessage(
+                                title: "Item TOO LARGE",
+                                msg: $"Max Item Characters is {MpPreferences.MaxRtfCharCount} and copied item is {((string)itemData).Length} characters",
+                                msgType: MpNotificationDialogType.DbError)
+                                    .FireAndForgetSafeAsync(MpClipTrayViewModel.Instance);
                         }
                         return null;
                     }

@@ -295,15 +295,22 @@ namespace MpWpfApp {
 
         public void ResetToDefault() {
             Point curSize = new Point(BoundWidth,BoundHeight);
-            Point defaultSize = new Point(
-                DefaultWidth == default ? curSize.X : DefaultWidth, 
-                DefaultHeight == default ? curSize.Y : DefaultHeight);
-
+            //Point defaultSize = new Point(
+            //    DefaultWidth == default ? curSize.X : DefaultWidth, 
+            //    DefaultHeight == default ? curSize.Y : DefaultHeight);
+            Point defaultSize = new Point(DefaultWidth,DefaultHeight);
+            bool resetToContentSize = false;
+            if(curSize.X == defaultSize.X) {
+                resetToContentSize = true;
+                var ds = (AssociatedObject.DataContext as MpClipTileViewModel).HeadItem.UnformattedContentSize;
+                defaultSize = new Point(ds.Width, ds.Height);
+            }
             Vector delta = curSize - defaultSize;
             Resize(-delta.X, -delta.Y);
             Reset();
 
-            if(AssociatedObject.DataContext is MpClipTileViewModel ctvm && ctvm.HeadItem != null) {
+            if(!resetToContentSize && 
+               AssociatedObject.DataContext is MpClipTileViewModel ctvm && ctvm.HeadItem != null) {
                 MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup.Remove(ctvm.QueryOffsetIdx);
                 
             }

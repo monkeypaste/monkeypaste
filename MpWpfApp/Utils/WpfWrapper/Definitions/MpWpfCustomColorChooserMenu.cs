@@ -38,6 +38,8 @@ namespace MpWpfApp {
                     ucvm.UserHexColor = cd.Color.ToHex();
                 }
 
+                MpContextMenuView.Instance.CloseMenu();
+
                 return cd.Color.ToSolidColorBrush().ToHex();
             }
 

@@ -40,6 +40,7 @@ namespace MonkeyPaste {
                 (Application.Current.MainPage as MpMainPage).GlobalTouchService.Subscribe(OnGlobalTouch);
             } else {
                 OnGlobalTouch -= MpTagTileView_OnGlobalTouch;
+                MpPlatformWrapper.Services.GlobalTouch.Unsubscribe(OnGlobalTouch);
                 (Application.Current.MainPage as MpMainPage).GlobalTouchService.Unsubscribe(OnGlobalTouch);
             }
         }

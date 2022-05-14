@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,12 @@ namespace MpWpfApp {
         MpViewModelBase, 
         MpISingletonViewModel<MpIconCollectionViewModel>,
         MpIUserColorViewModel {
+        #region Private Variables
+
+        private MpIUserIconViewModel _currentIconViewModel;
+
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -42,8 +49,11 @@ namespace MpWpfApp {
 
 
         public MpIconCollectionViewModel() : base(null) {
+            PropertyChanged += MpIconCollectionViewModel_PropertyChanged;
             MpHelpers.RunOnMainThreadAsync(Init);
         }
+
+        
 
         public async Task Init() {
             IsBusy = true;
@@ -99,7 +109,41 @@ namespace MpWpfApp {
 
         #region Private Methods
 
+        private void MpIconCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(UserHexColor):
+                    if(_currentIconViewModel == null) {
+                        // is not a custom color so set in ChangeIconCommand
+                        return;
+                    }
+                    MpHelpers.RunOnMainThread(async () => {
+                        await SetUserIconToCurrentHexColor(UserHexColor, _currentIconViewModel);
 
+                        _currentIconViewModel = null;
+                        UserHexColor = null;
+                    });
+                    break;
+            }
+        }
+
+        private async Task SetUserIconToCurrentHexColor(string hexColor, MpIUserIconViewModel uivm) {
+            var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
+            bmpSrc = MpWpfImagingHelper.TintBitmapSource(bmpSrc, hexColor.ToWinMediaColor());
+
+            MpIcon icon ;
+            if (uivm.IconId == 0) {
+                // likely means its current icon is a default reference to a parent
+                icon = await MpIcon.Create(
+                    iconImgBase64: bmpSrc.ToBase64String(),
+                    createBorder: false);
+                uivm.IconId = icon.Id;
+            } else {
+                icon = await MpDb.GetItemAsync<MpIcon>(uivm.IconId);
+                icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
+                await icon.CreateOrUpdateBorder(forceHexColor: hexColor);
+            }
+            uivm.OnPropertyChanged(nameof(uivm.IconId));
+        }
         #endregion
 
         #region Commands
@@ -144,7 +188,8 @@ namespace MpWpfApp {
 
         public ICommand ChangeIconCommand => new RelayCommand<object>(
              (args) => {
-                 FrameworkElement fe = args as FrameworkElement;
+                 //FrameworkElement fe = args as FrameworkElement;
+                 dynamic fe = args;
                  MpMenuItemViewModel mivm = new MpMenuItemViewModel();
 
                  if(fe.DataContext is MpISelectableViewModel svm) {
@@ -156,6 +201,8 @@ namespace MpWpfApp {
                          MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(ucvm)
                      };
                  } else if (fe.DataContext is MpIUserIconViewModel uivm) {
+                     _currentIconViewModel = uivm;
+
                      mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
                          MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
                          new MpMenuItemViewModel() { IsSeparator = true },
@@ -182,24 +229,15 @@ namespace MpWpfApp {
                          if (string.IsNullOrEmpty(UserHexColor)) {
                              return;
                          }
+                         await SetUserIconToCurrentHexColor(UserHexColor, uivm);
 
-                         var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
-                         bmpSrc = MpWpfImagingHelper.TintBitmapSource(bmpSrc, UserHexColor.ToWinMediaColor());
-
-                         MpIcon icon = null;
-                         if (uivm.IconId == 0) {
-                             // likely means its current icon is a default reference to a parent
-                             icon = await MpIcon.Create(
-                                 iconImgBase64: bmpSrc.ToBase64String(),
-                                 createBorder: false);
-                             uivm.IconId = icon.Id;
-                         } else {
-                             icon = await MpDb.GetItemAsync<MpIcon>(uivm.IconId);
-                             icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
-                             await icon.CreateOrUpdateBorder(forceHexColor: UserHexColor);
-                         }
-                         uivm.OnPropertyChanged(nameof(uivm.IconId));
+                         _currentIconViewModel = null;
+                         UserHexColor = null;
                      });
+                 } else {
+
+                     _currentIconViewModel = null;
+                     UserHexColor = null;
                  }
             },(args)=> {
                 if(args !=  null) {

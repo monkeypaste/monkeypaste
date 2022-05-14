@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
-using Hardcodet.Wpf.TaskbarNotification;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -117,7 +116,7 @@ namespace MpWpfApp {
                 MpPreferences.NotificationBalloonVisibilityTimeMs);            
         }
 
-        public static void ShowBalloon(string title, string content, string bitmapSourcePath = "") {
+        public static async Task ShowBalloon(string title, string content, string bitmapSourcePath = "") {
             if (string.IsNullOrEmpty(bitmapSourcePath)) {
                 bitmapSourcePath = MpPreferences.AbsoluteResourcesPath + "/Images/monkey (2).png";
             }

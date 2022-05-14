@@ -38,7 +38,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpBootstrapperViewModelBase(MpINativeInterfaceWrapper niw) {
+        public MpBootstrapperViewModelBase(MpIPlatformWrapper niw) {
             _items.AddRange(
                 new List<MpBootstrappedItem>() {
                     new MpBootstrappedItem(typeof(MpConsole)),

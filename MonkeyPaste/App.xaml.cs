@@ -13,19 +13,17 @@ namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class App : Application {
         public static bool StoreScreenshot = false;
-        
-        public MpINativeInterfaceWrapper NativeInterfaceWrapper { get; set; }
+
+        public MpIPlatformWrapper NativeInterfaceWrapper => MpPlatformWrapper.Services;
 
         public App() : this(null) { }
 
-        public App(MpINativeInterfaceWrapper niw)  {            
+        public App(MpIPlatformWrapper niw)  {            
             InitializeComponent();
-            NativeInterfaceWrapper = niw;
             //MainPage = new MpMainShell(niw);
             MpMainDisplayInfo.Init();
 
             MainPage = new MpMainPage(niw);
-
             //string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);// @"/storage/emulated/0/Download/"
             //string path = System.IO.Path.Combine(folder, string.Format(@"index.html"));
 

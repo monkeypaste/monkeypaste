@@ -411,9 +411,9 @@ namespace MonkeyPaste {
             if(_connection != null && _connectionAsync != null) {
                 return;
             }
-
+            
             var _connStr = new SQLiteConnectionString(
-                            databasePath: _dbInfo.GetDbFilePath(),
+                            databasePath: MpPlatformWrapper.Services.DbInfo.GetDbFilePath(),
                             storeDateTimeAsTicks: true,
                             openFlags: SQLiteOpenFlags.ReadWrite |
                                        SQLiteOpenFlags.Create |
@@ -571,6 +571,7 @@ namespace MonkeyPaste {
 
             #endregion
 
+            
             #region Shortcuts
 
             var sh1 = new MpShortcut() {

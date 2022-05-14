@@ -64,7 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs">
-      <Version>7.2.0.561</Version>
+      <Version>7.2.0.564</Version>
     </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
@@ -84,8 +84,8 @@
     <PackageReference Include="Xamarin.Android.Support.v4">
       <Version>28.0.0.3</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2244" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="Xamarin.FFImageLoading.Transformations">
       <Version>2.4.11.982</Version>
     </PackageReference>
@@ -106,6 +106,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrapper\MpAndroidBootstrapperViewModel.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MpCopyClipboardNotificationActivity.cs" />
     <Compile Include="MpProcessTextActivity.cs" />
@@ -176,6 +177,10 @@
     <AndroidResource Include="Resources\drawable\icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj">
+      <Project>{faf48e9e-e646-44d0-be02-ad1a9e9dfcd8}</Project>
+      <Name>MonkeyPaste.Plugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
       <Project>{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}</Project>
       <Name>MonkeyPaste</Name>

@@ -14,15 +14,6 @@ using System.Windows.Input;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
-    public interface MpIActionComponent {
-        void Register(MpIActionComponentHandler mvm);
-        void Unregister(MpIActionComponentHandler mvm);
-    }
-
-    public interface MpIActionComponentHandler {
-        void OnActionTriggered(object sender, object args);
-        string Label { get; }
-    }
 
     public abstract class MpActionOutput {
         public MpCopyItem CopyItem { get; set; }
@@ -92,18 +83,21 @@ namespace MpWpfApp {
 
         #region MpIUserIcon Implementation
 
-        public async Task<MpIcon> GetIcon() {
-            var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
-            return icon;
+        public int IconId {
+            get {
+                if (Action == null) {
+                    return 0;
+                }
+                return Action.IconId;
+            }
+            set {
+                if (IconId != value) {
+                    Action.IconId = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IconId));
+                }
+            }
         }
-
-        public ICommand SetIconCommand => new RelayCommand<object>(
-            async (args) => {
-                var icon = args as MpIcon;
-                Action.IconId = icon.Id;
-                await Action.WriteToDatabaseAsync();
-                OnPropertyChanged(nameof(IconId));
-            });
 
         #endregion
 
@@ -617,21 +611,7 @@ namespace MpWpfApp {
             }
         }
 
-        public int IconId {
-            get {
-                if (Action == null) {
-                    return 0;
-                }
-                return Action.IconId;
-            }
-            set {
-                if(IconId != value) {
-                    Action.IconId = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(IconId));
-                }
-            }
-        }
+        
 
 
         public int ParentActionId {

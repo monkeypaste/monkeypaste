@@ -17,6 +17,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtfTest", "RtfTest\RtfTest.csproj", "{5978A5F3-07CD-48B7-B250-4EDA9A70052E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.Android", "MonkeyPaste.Android\MonkeyPaste.Android.csproj", "{8E3CDCB7-18C2-41E6-8D36-B949BF7300DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8} = {FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.iOS.KeyboardExtension", "MonkeyPaste.iOS.KeyboardExtension\MonkeyPaste.iOS.KeyboardExtension.csproj", "{7D6DFA97-AF05-44A5-9C4B-EEC0B107AFC6}"
 EndProject

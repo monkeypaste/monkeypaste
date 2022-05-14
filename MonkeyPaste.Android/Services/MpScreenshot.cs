@@ -9,6 +9,7 @@ using Xamarin.Forms.PlatformConfiguration;
 using System;
 using Android.Views;
 using Xamarin.Forms;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste.Droid {
     public class MpScreenshot : MpIScreenshot {

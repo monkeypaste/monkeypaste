@@ -17,6 +17,7 @@ using MonkeyPaste;
 using MpProcessHelper;
 using MonkeyPaste.Plugin;
 
+
 namespace MpWpfApp {
     public class MpClipTrayViewModel : 
         MpViewModelBase, 
@@ -1465,10 +1466,12 @@ namespace MpWpfApp {
                     if (MpPreferences.NotificationShowAppendBufferToast) {
                         // TODO now composite item doesn't roll up children so the buffer needs to be created here
                         // if I use this at all
-                        MpStandardBalloonViewModel.ShowBalloon(
-                            "Append Buffer",
-                            SelectedItems[0].TailItem.CopyItem.ItemData.ToPlainText(),
-                            MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+
+                        MpNotificationCollectionViewModel.Instance.ShowMessage(
+                            title: "Append Buffer",
+                            msg: SelectedItems[0].TailItem.CopyItem.ItemData.ToPlainText(),
+                            msgType: MpNotificationDialogType.AppendBuffer)
+                            .FireAndForgetSafeAsync(this);
                     }
 
                     if (MpPreferences.NotificationDoCopySound) {
@@ -1482,10 +1485,12 @@ namespace MpWpfApp {
                     MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                 }
                 if (MpPreferences.IsTrialExpired) {
-                    MpStandardBalloonViewModel.ShowBalloon(
-                        "Trial Expired",
-                        "Please update your membership to use Monkey Paste",
-                        MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                    MpNotificationCollectionViewModel.Instance.ShowMessage(
+                        title: "Trial Expired",
+                        msg: "Please update your membership to use Monkey Paste",
+                        msgType: MpNotificationDialogType.TrialExpired,
+                        iconResourcePathOrBase64: MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png")
+                        .FireAndForgetSafeAsync(this);
                 }
             }
             if (isDup) {
@@ -2563,7 +2568,7 @@ namespace MpWpfApp {
             () => {
                 IsAutoCopyMode = !IsAutoCopyMode;
             }, !IsAppPaused);
-
+        
         public ICommand ToggleAppendModeCommand => new RelayCommand(
             () => {
                 IsAppendMode = !IsAppendMode;

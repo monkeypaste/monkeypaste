@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public interface MpINativeInterfaceWrapper {
+    public interface MpIPlatformWrapper {
         MpICursor Cursor { get; }
         MpIDbInfo DbInfo { get; }
         MpIPreferenceIO PreferenceIO { get; }
@@ -28,9 +28,9 @@ namespace MonkeyPaste {
 
 
     public static class MpPlatformWrapper {
-        public static MpINativeInterfaceWrapper Services { get; private set; }
+        public static MpIPlatformWrapper Services { get; private set; }
 
-        public static void Init(MpINativeInterfaceWrapper niw) {
+        public static void Init(MpIPlatformWrapper niw) {
             Services = niw;
         }
 

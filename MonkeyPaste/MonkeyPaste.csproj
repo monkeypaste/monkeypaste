@@ -104,7 +104,9 @@
     <Compile Remove="ViewModels\Bases\MpViewModelBase_old.cs" />
     <Compile Remove="ViewModels\Reusable\Geometry\MpBoxViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
+    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\Clip\MpContentItemViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\Clip\MpCopyItemDetailPageViewModel.cs" />
+    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\MpContentItemCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\Settings\MpChatPageViewModel.cs" />
     <Compile Remove="ViewModels\Shell\MpMainShellViewModel.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\ContextMenu\MpDefaultContextMenuItemView.xaml.cs" />
@@ -282,18 +284,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Acr.UserDialogs" Version="7.2.0.562" />
+    <PackageReference Include="Acr.UserDialogs" Version="7.2.0.564" />
     <PackageReference Include="CsvHelper" Version="27.2.1" />
     <PackageReference Include="Google.Apis.Auth" Version="1.56.0" />
     <PackageReference Include="Google.Apis.Books.v1" Version="1.56.0.2633" />
     <PackageReference Include="Google.Apis.PeopleService.v1" Version="1.56.0.2637" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.40" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" PrivateAssets="All" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.14" />
     <PackageReference Include="SkiaSharp" Version="2.80.3" />
-    <PackageReference Include="SkiaSharp.QrCode" Version="0.4.1" />
+    <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
@@ -301,8 +303,8 @@
     <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="Topten.RichTextKit" Version="0.4.151" />
     <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2291" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
@@ -418,6 +420,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\Clip\MpContentItemViewModel.cs" />
+    <None Include="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\MpContentItemCollectionViewModel.cs" />
     <None Include="Views\Shell\MpMainShell.xaml" />
     <None Include="Views\Shell\MainFlyOut\TagTileCollectionView\MpTagTileCollectionView.xaml" />
     <None Include="Views\Shell\MainFlyOut\TagTileCollectionView\Tag\MpTagTileView.xaml" />

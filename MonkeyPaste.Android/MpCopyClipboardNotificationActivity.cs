@@ -8,6 +8,7 @@ using Android.Support.V4.App;
 using Android.Widget;
 using Xamarin.Essentials;
 using TaskStackBuilder = Android.Support.V4.App.TaskStackBuilder;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste.Droid {
     [Service]

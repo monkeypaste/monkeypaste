@@ -6,8 +6,6 @@ using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Hardcodet.Wpf.TaskbarNotification;
-using System.Windows;
 using MpProcessHelper;
 using MonkeyPaste.Plugin;
 using System.IO;
@@ -16,7 +14,7 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpWpfBootstrapperViewModel : MpBootstrapperViewModelBase {
 
-        public MpWpfBootstrapperViewModel(MpINativeInterfaceWrapper niw) : base(niw) {
+        public MpWpfBootstrapperViewModel(MpIPlatformWrapper niw) : base(niw) {
             if(_items == null) {
                 _items = new List<MpBootstrappedItem>();
             }

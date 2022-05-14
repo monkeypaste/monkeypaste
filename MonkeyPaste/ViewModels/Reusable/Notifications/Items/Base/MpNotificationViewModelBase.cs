@@ -27,7 +27,10 @@ namespace MonkeyPaste {
         AnalyzerUpdated,
         Message,
         UserTriggerEnabled,
-        UserTriggerDisabled
+        UserTriggerDisabled,
+        AppModeChange,
+        AppendBuffer,
+        TrialExpired
     }
 
     public enum MpNotificationExceptionSeverityType {

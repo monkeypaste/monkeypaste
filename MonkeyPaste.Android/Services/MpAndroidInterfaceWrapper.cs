@@ -8,37 +8,35 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste.Droid {
-    public class MpAndroidInterfaceWrapper : MpINativeInterfaceWrapper {
+    public class MpAndroidInterfaceWrapper : MpIPlatformWrapper {
+        public MpICursor Cursor { get; }
+        public MpIDbInfo DbInfo { get; }
+        public MpIPreferenceIO PreferenceIO { get; }
+        public MpIQueryInfo QueryInfo { get; }
+        public MpIIconBuilder IconBuilder { get; }
+        public MpICustomColorChooserMenu CustomColorChooserMenu { get; }
+        public MpIKeyboardInteractionService KeyboardInteractionService { get; }
+        public MpIGlobalTouch GlobalTouch { get; }
+        public MpIUiLocationFetcher LocationFetcher { get; }
+        public MpINativeResource NativeResource { get; }
+        public MpIContextMenuCloser ContextMenuCloser { get; }
+        public MpIMainThreadMarshal MainThreadMarshal { get; }
+        public MpIStringTools StringTools { get; }
+        public MpIOsInfo OsInfo { get; }
+        public MpIPlatformDataObjectHelper DataObjectHelper { get; }
+        public MpINativeMessageBox NativeMessageBox { get; }
+        public MpIClipboardMonitor ClipboardMonitor { get; set; }
 
-        public MpKeyboardInteractionService KeyboardService { private get; set; }
-        public MpGlobalTouch TouchService { private get; set; }
-        public MpUiLocationFetcher UiLocationFetcher { private get; set; }
-        public MpDbFilePath_Android DbInfo { private get; set; }
-
-        public MpIDbInfo GetDbInfo() {
-            return DbInfo;
+        public MpAndroidInterfaceWrapper() {
+            KeyboardInteractionService = new MpKeyboardInteractionService();
+            GlobalTouch = new MpGlobalTouch();
+            LocationFetcher = new MpUiLocationFetcher();
+            DbInfo = new MpDbFilePath_Android();
         }
 
-        public MpIGlobalTouch GetGlobalTouch() {
-            return TouchService;
-        }
-
-        public MpIIconBuilder GetIconBuilder() {
-            throw new NotImplementedException();
-        }
-
-        public MpIKeyboardInteractionService GetKeyboardInteractionService() {
-            return KeyboardService;
-        }
-
-        public MpIUiLocationFetcher GetLocationFetcher() {
-            return UiLocationFetcher;
-        }
-
-        public MpIPhotoGalleryManager GetPhotoGalleryManager() {
-            throw new NotImplementedException();
-        }
     }
 }

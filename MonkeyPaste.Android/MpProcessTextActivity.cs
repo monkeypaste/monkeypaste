@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste.Droid {
     [Activity(Label = "Monkey Copy", NoHistory = true)]
@@ -72,7 +73,10 @@ namespace MonkeyPaste.Droid {
                     var icon = await MpIcon.Create(hostAppIconBase64);
                     var app = await MpApp.Create(hostPackageName,hostAppName,icon);
                     var source = await MpSource.Create(app, null);
-                    await MpCopyItem.Create(source, selectedText,MpCopyItemType.RichText);
+                    await MpCopyItem.Create(
+                        sourceId: source.Id, 
+                        data: selectedText,
+                        itemType: MpCopyItemType.Text);
                         //new object[] { hostPackageName, selectedText, hostAppName, hostIconByteArray, hostAppIconBase64 });
                 }
                 

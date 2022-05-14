@@ -55,11 +55,11 @@ namespace MonkeyPaste.Droid {
             }
 
             rootView.GetWindowVisibleDisplayFrame(screenSizeWithoutKeyboard);
-
+            
             var keyboardHeight = screenSize.Y - screenSizeWithoutKeyboard.Bottom;
-            var keyboardHeightInDip = keyboardHeight / Resources.System?.DisplayMetrics?.Density ?? 1;
+            var keyboardHeightInDip = keyboardHeight / 1;// Resources.System?.DisplayMetrics?.Density ?? 1;
             var keyboardHeight2 = rootView.Height - screenSizeWithoutKeyboard.Bottom + screenSizeWithoutKeyboard.Top;
-            var keyboardHeightInDip2 = keyboardHeight2 / Resources.System?.DisplayMetrics?.Density ?? 1;
+            var keyboardHeightInDip2 = keyboardHeight2 / 1;// Resources.System?.DisplayMetrics?.Density ?? 1;
             //this.KeyboardHeightChanged.OnNext(keyboardHeightInDip);
             KeyboardHeightChanged.Invoke(this, keyboardHeightInDip);
         }

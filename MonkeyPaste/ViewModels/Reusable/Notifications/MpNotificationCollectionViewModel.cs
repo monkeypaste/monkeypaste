@@ -77,12 +77,15 @@ namespace MonkeyPaste {
         public async Task ShowMessage(
             string title = "", 
             string msg = "", 
-            double maxShowTimeMs = 3000) {
+            double maxShowTimeMs = 3000,
+            MpNotificationDialogType msgType = MpNotificationDialogType.Message,
+            object iconResourcePathOrBase64 = null) {
             await ShowUserAction(
-                dialogType: MpNotificationDialogType.Message,
+                dialogType: msgType,
                 title: title,
                 msg: msg,
-                maxShowTimeMs: maxShowTimeMs);
+                maxShowTimeMs: maxShowTimeMs,
+                iconResourcePathOrBase64: iconResourcePathOrBase64);
         }
         public async Task<MpDialogResultType> ShowUserAction(
             MpNotificationDialogType dialogType = MpNotificationDialogType.None,
@@ -91,7 +94,8 @@ namespace MonkeyPaste {
             string msg = "",
             double maxShowTimeMs = -1,
             Action<object> retryAction = null,
-            object retryActionObj = null) {
+            object retryActionObj = null,
+            object iconResourcePathOrBase64 = null) {
 
             MpDialogResultType userActionResult = MpDialogResultType.None;
 
@@ -180,20 +184,20 @@ namespace MonkeyPaste {
             }
         }
 
-        public void ShowBalloon(MpNotificationViewModelBase nvmb) {
-            _nbv.ShowWindow(nvmb);
-            //IsVisible = true;
-        }
-
-        public void HideBalloon(MpNotificationViewModelBase nvmb) {
-            _nbv.HideWindow(nvmb);
-            Notifications.Remove(nvmb);
-            //IsVisible = false;
-        }
         #endregion
 
         #region Private Methods
 
+        private void ShowBalloon(MpNotificationViewModelBase nvmb) {
+            _nbv.ShowWindow(nvmb);
+            //IsVisible = true;
+        }
+
+        private void HideBalloon(MpNotificationViewModelBase nvmb) {
+            _nbv.HideWindow(nvmb);
+            Notifications.Remove(nvmb);
+            //IsVisible = false;
+        }
         private async Task<MpLoaderNotificationViewModel> CreateLoaderViewModel(MpIProgressLoader loader) {
             var lvm = new MpLoaderNotificationViewModel(this);
             await lvm.InitializeAsync(loader);

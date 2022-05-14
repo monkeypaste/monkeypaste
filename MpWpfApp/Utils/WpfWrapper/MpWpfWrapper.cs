@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
-    public class MpWpfWrapper : MpINativeInterfaceWrapper {
+    public class MpWpfWrapper : MpIPlatformWrapper {
         public MpICursor Cursor { get; }
         public MpIDbInfo DbInfo { get; }
         public MpIPreferenceIO PreferenceIO { get; }

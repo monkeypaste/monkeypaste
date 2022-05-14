@@ -18,6 +18,7 @@ using Java.Interop;
 using Android.Views;
 using Xamarin.Forms;
 using Rg.Plugins.Popup.Services;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste.Droid {
     [Activity(
@@ -36,7 +37,7 @@ namespace MonkeyPaste.Droid {
 
         private Point _touchDownLoc;
 
-        public MpINativeInterfaceWrapper AndroidInterfaceWrapper { get; set; }
+        public MpIPlatformWrapper AndroidInterfaceWrapper { get; set; }
 
         public event EventHandler GlobalTouchHandler;
 
@@ -52,7 +53,7 @@ namespace MonkeyPaste.Droid {
         }
 
 
-        protected override void OnCreate(Bundle savedInstanceState) {
+        protected override async void OnCreate(Bundle savedInstanceState) {
             Current = this;
 
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -80,14 +81,17 @@ namespace MonkeyPaste.Droid {
             CachedImageRenderer.Init(true);
             CachedImageRenderer.InitImageViewHandler();
 
-            MpPreferences.Instance.Init(new MpXamPreferences());
+            MpPreferences.Init(new MpXamPreferences());
 
-            AndroidInterfaceWrapper = new MpAndroidInterfaceWrapper() {
-                KeyboardService = new MpKeyboardInteractionService(),
-                TouchService = new MpGlobalTouch(),
-                UiLocationFetcher = new MpUiLocationFetcher(),
-                DbInfo = new MpDbFilePath_Android()
-            };
+            AndroidInterfaceWrapper = new MpAndroidInterfaceWrapper();
+
+            
+            MpPlatformWrapper.Init(AndroidInterfaceWrapper);
+            await MpDb.Init(AndroidInterfaceWrapper.DbInfo);
+
+            //var bootstrapper = new MpAndroidBootstrapperViewModel(AndroidInterfaceWrapper);
+            //await bootstrapper.Init();
+
             //MpNativeWrapper.Instance.Register<MpKeyboardInteractionService>();
             //MpNativeWrapper.Instance.Register<MpLocalStorage_Android>();
             //MpNativeWrapper.Instance.Register<MpGlobalTouch>();

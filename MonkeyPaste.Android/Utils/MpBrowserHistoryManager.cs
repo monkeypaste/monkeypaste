@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MonkeyPaste.Plugin;
 
 namespace MonkeyPaste.Droid {
     public class MpBrowserHistoryManager {

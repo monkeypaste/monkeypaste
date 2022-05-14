@@ -15,18 +15,14 @@ namespace MonkeyPaste {
 
         public MpSettingsPageView SettingsPageView { get; set; }
 
-        public MpIKeyboardInteractionService LayoutService { get; set; }
-        public MpIGlobalTouch GlobalTouchService { get; set; }
-        public static MpINativeInterfaceWrapper NativeWrapper { get; set; }
-        public MpIDbInfo DbInfo { get; set; }
+        public MpIKeyboardInteractionService LayoutService => MpPlatformWrapper.Services.KeyboardInteractionService;
+        public MpIGlobalTouch GlobalTouchService => MpPlatformWrapper.Services.GlobalTouch;
+        public static MpIPlatformWrapper NativeWrapper => MpPlatformWrapper.Services;
+        public MpIDbInfo DbInfo => MpPlatformWrapper.Services.DbInfo;
 
-        public MpMainPage(MpINativeInterfaceWrapper niw) {
+        public MpMainPage(MpIPlatformWrapper niw) {
             IsLoaded = true;
 
-            NativeWrapper = niw;
-            GlobalTouchService = niw.GlobalTouch;
-            LayoutService = niw.KeyboardInteractionService;
-            DbInfo = niw.DbInfo;
 
             InitializeComponent();
 

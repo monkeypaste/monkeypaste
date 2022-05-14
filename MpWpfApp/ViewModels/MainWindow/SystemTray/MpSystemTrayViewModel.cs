@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
-using Hardcodet.Wpf.TaskbarNotification;
 using System;
 using System.Windows;
 using System.Windows.Controls.Primitives;
