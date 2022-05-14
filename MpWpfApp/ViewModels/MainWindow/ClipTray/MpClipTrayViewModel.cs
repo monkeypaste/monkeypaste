@@ -93,7 +93,7 @@ namespace MpWpfApp {
                 }
                 return Items[0];
             }
-        }
+        } 
 
         public MpClipTileViewModel TailItem {
             get {
