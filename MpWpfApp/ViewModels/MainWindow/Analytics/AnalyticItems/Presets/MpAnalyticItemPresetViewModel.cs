@@ -363,16 +363,13 @@ namespace MpWpfApp {
             return naipvm;
         }
 
-        public void Register(MpActionViewModelBase mvm) {
-            if(mvm.ActionId == 597) {
-                Debugger.Break();
-            }
+        public void Register(MpIActionComponentHandler mvm) {
             Parent.OnAnalysisCompleted += mvm.OnActionTriggered;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} Registered {mvm.Label} matcher");
         }
 
 
-        public void Unregister(MpActionViewModelBase mvm) {
+        public void Unregister(MpIActionComponentHandler mvm) {
             Parent.OnAnalysisCompleted -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
         }

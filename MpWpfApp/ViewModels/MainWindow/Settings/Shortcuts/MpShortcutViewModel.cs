@@ -467,14 +467,14 @@ namespace MpWpfApp {
             }
         }
 
-        public void Register(MpActionViewModelBase mvm) {
+        public void Register(MpIActionComponentHandler mvm) {
             //by design this only can occur for shortcuts with a selected item as its context
 
             OnShortcutExecuted += mvm.OnActionTriggered;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void Unregister(MpActionViewModelBase mvm) {
+        public void Unregister(MpIActionComponentHandler mvm) {
             OnShortcutExecuted -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
         }

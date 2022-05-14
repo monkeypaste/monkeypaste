@@ -15,8 +15,13 @@ using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public interface MpIActionComponent {
-        void Register(MpActionViewModelBase mvm);
-        void Unregister(MpActionViewModelBase mvm);
+        void Register(MpIActionComponentHandler mvm);
+        void Unregister(MpIActionComponentHandler mvm);
+    }
+
+    public interface MpIActionComponentHandler {
+        void OnActionTriggered(object sender, object args);
+        string Label { get; }
     }
 
     public abstract class MpActionOutput {
@@ -33,7 +38,8 @@ namespace MpWpfApp {
         MpIUserIconViewModel,
         MpITreeItemViewModel<MpActionViewModelBase>,
         MpIBoxViewModel,
-        MpIMovableViewModel {
+        MpIMovableViewModel,
+        MpIActionComponentHandler {
         #region Private Variables
 
         private double _maxDeltaLocation = 10;

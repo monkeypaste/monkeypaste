@@ -306,11 +306,16 @@ namespace MpWpfApp {
 
             List<MpCopyItem> dropItems = new List<MpCopyItem>();
             List<MpCopyItem> itemsToDelete = new List<MpCopyItem>();
+
+            bool deleteDragItem = false;
+            MpPortableDataObject mpdo = new MpPortableDataObject();
+
             if (drag_ctvm == null) {
-                if (dragData is MpPortableDataObject mpdo) {
+                if (dragData is MpPortableDataObject) {
                     // from external source
-                    var extDropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
-                    dropItems.Add(extDropItem);
+                    mpdo = dragData as MpPortableDataObject;
+                    //var extDropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                    //dropItems.Add(extDropItem);
                 } else {
                     // external data should be pre-processed
                     Debugger.Break();
@@ -319,189 +324,179 @@ namespace MpWpfApp {
                 // from internal content
 
                 //find drag content view
-                var dctv = Application.Current.MainWindow
+                var dcv = Application.Current.MainWindow
                                 .GetVisualDescendents<MpContentView>()
                                 .FirstOrDefault(x =>
                                     x.DataContext is MpClipTileViewModel tctvm &&
                                     tctvm.HeadCopyItemId == drag_ctvm.HeadCopyItemId);
 
-                if (dctv == null) {
+                //if (dctv == null) {
+                //    Debugger.Break();
+                //}
+                //string dragPlainText = drag_ctvm.SelectedPlainText;
+                //List<TextElement> dragSelectionElements = dctv.Rtb.Selection.GetAllTextElements().ToList();
+                //var dragSelectionItems = dragSelectionElements.Select(x => x.Tag as MpCopyItem).Distinct().ToList();
+                //if(drag_ctvm.ItemType == MpCopyItemType.FileList) {
+                //    dragSelectionElements = dragSelectionElements.Where(x => x.Tag == drag_ctvm.HoverItem.CopyItem).ToList();
+                //    dragSelectionItems = new List<MpCopyItem>() { drag_ctvm.HoverItem.CopyItem };
+                //    dragPlainText = drag_ctvm.HoverItem.CopyItemData;
+                //}
+                //int selectionOffset = 0;
+
+                //foreach(var drag_item in dragSelectionItems.OrderBy(x=>x.CompositeSortOrderIdx)) {
+                //    MpCopyItem dropItem = null;
+                //    if(drag_item.ItemType == MpCopyItemType.Text) {
+
+                //    }
+                //    var drag_item_elements = dragSelectionElements.Where(x => (x.Tag as MpCopyItem).Id == drag_item.Id);
+                //    var drag_item_range = drag_item_elements.Where(x=>dragSelectionElements.Contains(x)).ToTextRange();
+
+                //    string drag_item_data = string.Empty;
+                //    switch (drag_item.ItemType) {
+                //        case MpCopyItemType.Text:
+                //            string remaingSelectionPlainText = dragPlainText.Substring(selectionOffset);
+                //            if(drag_item_range.Text.Contains(remaingSelectionPlainText)) {
+                //                drag_item_data = remaingSelectionPlainText;
+                //            } else if(remaingSelectionPlainText.StartsWith(drag_item_range.Text)) {
+                //                drag_item_data = drag_item_range.Text;
+                //                selectionOffset = drag_item_data.Length;
+                //            } else {
+                //                continue;
+                //                //Debugger.Break();
+                //                //drag_item_data = remaingSelectionPlainText;
+                //            }
+
+                //            break;
+                //        case MpCopyItemType.FileList:
+                //            drag_item_data = drag_item.ItemData;
+                //            break;
+                //        case MpCopyItemType.Image:
+                //            drag_item_data = drag_item.ItemData;
+                //            break;
+                //    }
+
+                //    string drag_item_pt = drag_item.ItemData.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                //    string drop_item_pt = drag_item_data.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+
+                //    MpCopyItem drop_item = null;
+                //    if (isCopy || drag_item_pt != drop_item_pt) {
+                //        drop_item = await drag_item.Clone(true) as MpCopyItem;
+                //        drop_item.ItemData = drag_item_data;
+                //        drop_item.CopyItemSourceGuid = string.IsNullOrEmpty(drag_item.CopyItemSourceGuid) ? drag_item.Guid : drag_item.CopyItemSourceGuid;                        
+                //        if(!isCopy && drop_item.ItemType != MpCopyItemType.FileList && drag_ctvm.IsAllSelected) {
+                //            itemsToDelete.Add(drag_item);
+                //        }
+                //    } else {
+                //        drop_item = drag_item;
+                //    }
+                //    dropItems.Add(drop_item);
+                //}
+
+                //if(!isCopy) {
+                //    if(drag_ctvm.ItemType == MpCopyItemType.FileList) {
+                //        dragSelectionElements.ToTextRange().LoadRtf(string.Empty.ToRichText());
+                //    } else {
+                //        dctv.Rtb.Selection.Text = string.Empty;
+                //    }
+
+                //    if(!isSelfDrop) {
+                //        string dpt = dctv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                //        if (string.IsNullOrWhiteSpace(dpt)) {
+                //            //when all content is being dropped flag drag source for delete
+                //            //deleteDragItem = true;
+                //            itemsToDelete = dragSelectionItems;
+                //        } else {
+                //            MpMergedDocumentRtfExtension.SaveTextContent(dctv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
+                //        }
+                //    }
+                //}
+                mpdo = new MpPortableDataObject();
+                if (dropItems.Count == 0) {
+                    Debugger.Break();
+                } else if (dropItems[0].ItemType == MpCopyItemType.Text) {
+                    mpdo.DataFormatLookup.Add(MpClipboardFormatType.Text, dcv.Rtb.Selection.Text);
+                } else if (dropItems[0].ItemType == MpCopyItemType.FileList) {
+                    mpdo.DataFormatLookup.Add(
+                        MpClipboardFormatType.FileDrop,
+                        string.Join(Environment.NewLine, dropItems.Select(x => x.ItemData)));
+                }  else {
                     Debugger.Break();
                 }
-                string dragPlainText = drag_ctvm.SelectedPlainText;
-                List<TextElement> dragSelectionElements = dctv.Rtb.Selection.GetAllTextElements().ToList();
-                var dragSelectionItems = dragSelectionElements.Select(x => x.Tag as MpCopyItem).Distinct().ToList();
-                if(drag_ctvm.ItemType == MpCopyItemType.FileList) {
-                    dragSelectionElements = dragSelectionElements.Where(x => x.Tag == drag_ctvm.HoverItem.CopyItem).ToList();
-                    dragSelectionItems = new List<MpCopyItem>() { drag_ctvm.HoverItem.CopyItem };
-                    dragPlainText = drag_ctvm.HoverItem.CopyItemData;
-                }
-                int selectionOffset = 0;
 
-                foreach(var drag_item in dragSelectionItems.OrderBy(x=>x.CompositeSortOrderIdx)) {
-                    MpCopyItem dropItem = null;
-                    if(drag_item.ItemType == MpCopyItemType.Text) {
-
-                    }
-                    var drag_item_elements = dragSelectionElements.Where(x => (x.Tag as MpCopyItem).Id == drag_item.Id);
-                    var drag_item_range = drag_item_elements.Where(x=>dragSelectionElements.Contains(x)).ToTextRange();
+                if (isCopy) {                    
                     
-                    string drag_item_data = string.Empty;
-                    switch (drag_item.ItemType) {
-                        case MpCopyItemType.Text:
-                            string remaingSelectionPlainText = dragPlainText.Substring(selectionOffset);
-                            if(drag_item_range.Text.Contains(remaingSelectionPlainText)) {
-                                drag_item_data = remaingSelectionPlainText;
-                            } else if(remaingSelectionPlainText.StartsWith(drag_item_range.Text)) {
-                                drag_item_data = drag_item_range.Text;
-                                selectionOffset = drag_item_data.Length;
-                            } else {
-                                continue;
-                                //Debugger.Break();
-                                //drag_item_data = remaingSelectionPlainText;
-                            }
-                            
-                            break;
-                        case MpCopyItemType.FileList:
-                            drag_item_data = drag_item.ItemData;
-                            break;
-                        case MpCopyItemType.Image:
-                            drag_item_data = drag_item.ItemData;
-                            break;
-                    }
+                    //var internalDropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                    //if (dropItems.Count > 0) {
+                    //    internalDropItem.CopyItemSourceGuid = dropItems[0].Guid;
+                    //}
+                    //dropItems.Add(internalDropItem);
 
-                    string drag_item_pt = drag_item.ItemData.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                    string drop_item_pt = drag_item_data.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                } else if(mpdo.DataFormatLookup.Count > 0) {
+                    //when drag selection is not copy delete selection from source
+                    dcv.Rtb.Selection.Text = string.Empty;
 
-                    MpCopyItem drop_item = null;
-                    if (isCopy || drag_item_pt != drop_item_pt) {
-                        drop_item = await drag_item.Clone(true) as MpCopyItem;
-                        drop_item.ItemData = drag_item_data;
-                        drop_item.CopyItemSourceGuid = string.IsNullOrEmpty(drag_item.CopyItemSourceGuid) ? drag_item.Guid : drag_item.CopyItemSourceGuid;                        
-                        if(!isCopy && drop_item.ItemType != MpCopyItemType.FileList && drag_ctvm.IsAllSelected) {
-                            itemsToDelete.Add(drag_item);
-                        }
-                    } else {
-                        drop_item = drag_item;
-                    }
-                    dropItems.Add(drop_item);
+                    string dpt = dcv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                    if (string.IsNullOrWhiteSpace(dpt)) {
+                        //when all content is being dropped flag drag source for delete
+                        deleteDragItem = true;
+                    } //else {
+                        //MpMergedDocumentRtfExtension.SaveTextContent(dcv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
+                    //}
                 }
-                               
-                if(!isCopy) {
-                    if(drag_ctvm.ItemType == MpCopyItemType.FileList) {
-                        dragSelectionElements.ToTextRange().LoadRtf(string.Empty.ToRichText());
-                    } else {
-                        dctv.Rtb.Selection.Text = string.Empty;
-                    }
-                    
-                    if(!isSelfDrop) {
-                        string dpt = dctv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                        if (string.IsNullOrWhiteSpace(dpt)) {
-                            //when all content is being dropped flag drag source for delete
-                            //deleteDragItem = true;
-                            itemsToDelete = dragSelectionItems;
-                        } else {
-                            MpMergedDocumentRtfExtension.SaveTextContent(dctv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
-                        }
-                    }
-                }
-
-                //if(isCopy) {
-                //    var mpdo = new MpPortableDataObject();
-                //    if (dropItems.Count == 0) {
-                //        Debugger.Break();
-                //    } else if (dropItems[0].ItemType == MpCopyItemType.Text) {
-                //        mpdo.DataFormatLookup.Add(MpClipboardFormatType.Text, dragPlainText);
-                //    } else if (dropItems[0].ItemType == MpCopyItemType.FileList) {
-                //        mpdo.DataFormatLookup.Add(
-                //            MpClipboardFormatType.FileDrop,
-                //            string.Join(Environment.NewLine, dropItems.Select(x => x.ItemData)));
-                //    } else {
-                //        Debugger.Break();
-                //    }
-                //    var internalDropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
-                //    if (dropItems.Count > 0) {
-                //        internalDropItem.CopyItemSourceGuid = dropItems[0].Guid;
-                //    }
-                //    dropItems.Add(internalDropItem);
-
-                //} else {
-                //    //when drag selection is not copy delete selection from source
-                //    dctv.Rtb.Selection.Text = string.Empty;
-
-                //    string dpt = dctv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                //    if (string.IsNullOrWhiteSpace(dpt)) {
-                //        //when all content is being dropped flag drag source for delete
-                //        //deleteDragItem = true;
-                //    } else {
-                //        MpMergedDocumentRtfExtension.SaveTextContent(dctv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
-                //    }
-
-                //}
-                
             }
 
-            foreach(var dropItem in dropItems) {
-                switch (dropItem.ItemType) {
-                    case MpCopyItemType.Text:
-                        if (dropItem.ItemData.IsStringRichTextTable()) {
-                            string csv = MpCsvToRtfTableConverter.GetCsv(dropItem.ItemData);
-                            dropRange.LoadTable(csv);
-                        } else {
-                            string pt = dropItem.ItemData.ToPlainText();
-                            MpConsole.WriteLine("Drop Plain Text: " + pt);
-                            pt = pt.TrimTrailingLineEndings();
+            if(mpdo == null || mpdo.DataFormatLookup.Count == 0) {
+                MpConsole.WriteTraceLine("No supported drop data, ignoring");
+                return;
+            }
+            var dropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo, true);
 
-                            if (pre) {
+            switch (dropItem.ItemType) {
+                case MpCopyItemType.Text:
+                    if (dropItem.ItemData.IsStringRichTextTable()) {
+                        string csv = MpCsvToRtfTableConverter.GetCsv(dropItem.ItemData);
+                        dropRange.LoadTable(csv);
+                    } else {
+                        string pt = dropItem.ItemData.ToPlainText();
+                        MpConsole.WriteLine("Drop Plain Text: " + pt);
+                        pt = pt.TrimTrailingLineEndings();
+
+                        if (pre) {
+                            pt = pt + Environment.NewLine;
+                        } else if (post) {
+                            pt = Environment.NewLine + pt;
+                            var post_tp = dropRange.End.GetLineStartPosition(1);
+                            if (post_tp != null) {
                                 pt = pt + Environment.NewLine;
-                            } else if (post) {
-                                pt = Environment.NewLine + pt;
-                                var post_tp = dropRange.End.GetLineStartPosition(1);
-                                if (post_tp != null) {
-                                    pt = pt + Environment.NewLine;
-                                }
-                            } else if (split) {
-                                pt = Environment.NewLine + pt + Environment.NewLine;
                             }
-
-                            if (true) {//pre || post || split) {
-                                var preElements = dropRange.GetAllTextElements();
-                                dropRange.Text = pt;
-                                var postElements = dropRange.GetAllTextElements();
-                                if(preElements.Count() == postElements.Count()) {
-                                    new Span(dropRange.Start, dropRange.End);
-                                }
-                            } else {
-                                dropRange.Start.InsertTextInRun(pt);
-                            }
-
+                        } else if (split) {
+                            pt = Environment.NewLine + pt + Environment.NewLine;
                         }
-                        break;
-                    case MpCopyItemType.Image:
-                        dropRange.LoadImage(dropItem.ItemData);
-                        break;
-                    case MpCopyItemType.FileList:
 
-                        dropRange.LoadFileItem(dropItem.ItemData.Replace(Environment.NewLine, string.Empty), dropItem.IconId);
-                        dropRange.GetAllTextElements().ForEach(x => x.Tag = dropItem);
-                        break;
-                }
+                        if (true) {//pre || post || split) {
+                            //var preElements = dropRange.GetAllTextElements();
+                            dropRange.Text = pt;
+                            //var postElements = dropRange.GetAllTextElements();
+                            //if (preElements.Count() == postElements.Count()) {
+                            //    new Span(dropRange.Start, dropRange.End);
+                            //}
+                        } else {
+                            dropRange.Start.InsertTextInRun(pt);
+                        }
 
-                // instead of handling all added text elements uniquely
-                // find all with null tag (which will be added content) and set tag to added content
-
-                var allTextElements = rtb.Document
-                                            .GetAllTextElements()
-                                            .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart)).ToList();
-                var allStrayElements = allTextElements.Where(x => x.Tag == null).ToList();
-                if (allStrayElements.Count > 0) {
-                    allStrayElements.ForEach(x => x.Tag = dropItem);
-                }
-
-                dropRange = new TextRange(dropRange.End, dropRange.End);
+                    }
+                    break;
+                case MpCopyItemType.Image:
+                    dropRange.LoadImage(dropItem.ItemData);
+                    break;
+                case MpCopyItemType.FileList:
+                    dropRange.LoadFileItem(dropItem.ItemData.Replace(Environment.NewLine, string.Empty), dropItem.IconId);
+                    //dropRange.GetAllTextElements().ForEach(x => x.Tag = dropItem);
+                    break;
             }
 
-            var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
+            await MpMergedDocumentRtfExtension.SaveTextContent(rtb);
+            //var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
 
             foreach (var dri in itemsToDelete) {
                 await dri.DeleteFromDatabaseAsync();
@@ -512,7 +507,7 @@ namespace MpWpfApp {
             }
 
             if (drop_ctvm.IsPinned) {
-                await drop_ctvm.InitializeAsync(encodedItems);
+                await drop_ctvm.InitializeAsync(new List<MpCopyItem>() { drop_ctvm.HeadItem.CopyItem });
             } else {
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
             }

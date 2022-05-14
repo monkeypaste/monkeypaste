@@ -262,10 +262,9 @@ namespace MonkeyPaste {
             MpCopyItemType itemType = MpCopyItemType.None,
             string title = "",
             string description = "",
-            //List<int> iconIdList = null,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
-            if (MpPreferences.IgnoreNewDuplicates && dupCheck != null) {
+            if (MpPreferences.IgnoreNewDuplicates && dupCheck != null && !suppressWrite) {
                 //flipping pk sign notifies AddItemThread item already exists and flips it back
                 dupCheck.Id *= -1;
                 return dupCheck;
@@ -286,52 +285,6 @@ namespace MonkeyPaste {
                     itemType = MpCopyItemType.Text;
                 }
             }
-            if(itemType == MpCopyItemType.FileList) {
-                // NOTE when filedrop is added to clipboard the string collection is broken into file list composite item
-                // sorted by given order
-                MpCopyItem parentItem = null;
-                var pl = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                for (int i = 0; i < pl.Length; i++) {
-                    string iconBase64Str = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(pl[i]);
-
-                    var icon = await MpIcon.Create(iconBase64Str);
-                    int iconId;
-                    if(icon == null) {
-                        iconId = MpPreferences.ThisAppIcon.Id;
-                    } else {
-                        iconId = icon.Id;
-                    }
-                    
-                    var curItem = new MpCopyItem() {
-                        CopyItemGuid = System.Guid.NewGuid(),
-                        CopyDateTime = DateTime.Now,
-                        Title = string.IsNullOrEmpty(title) ? "Untitled" + (++MpPreferences.UniqueContentItemIdx) : title,
-                        ItemData = pl[i],
-                        ItemDescription = description,
-                        ItemType = itemType,
-                        SourceId = sourceId,
-                        IconId = iconId,
-                        CopyCount = 1,
-                        CompositeSortOrderIdx = i,
-                        CompositeParentCopyItemId = 0,
-                        CopyItemSourceGuid = copyItemSourceGuid
-                    };
-                    if(i > 0) {
-                        curItem.CompositeParentCopyItemId = parentItem.Id;
-                        curItem.RootCopyItemGuid = string.IsNullOrEmpty(rootCopyItemGuid) ? parentItem.Guid : rootCopyItemGuid;
-                    } else {
-                        curItem.RootCopyItemGuid = rootCopyItemGuid;
-                    }
-                    if(!suppressWrite) {
-                        await curItem.WriteToDatabaseAsync();
-                    }                    
-
-                    if (i == 0) {
-                        parentItem = curItem;
-                    }
-                }
-                return parentItem;
-            }
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,
@@ -340,7 +293,6 @@ namespace MonkeyPaste {
                 ItemData = data,
                 ItemType = itemType,
                 SourceId = sourceId,
-                //Source = source,
                 CopyCount = 1,
                 CopyItemSourceGuid = copyItemSourceGuid,
                 RootCopyItemGuid = rootCopyItemGuid

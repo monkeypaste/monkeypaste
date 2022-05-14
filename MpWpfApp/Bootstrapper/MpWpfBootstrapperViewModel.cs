@@ -110,35 +110,33 @@ namespace MpWpfApp {
             //MpRtfToHtmlConverter.Test();
 
             //var cil = await MpDb.GetItemsAsync<MpCopyItem>();
-            //foreach (var ci in cil) {
-            //    bool needsWrite = false;
-            //    if (ci.CompositeParentCopyItemId > 0) {
-            //        var rci = cil.FirstOrDefault(x => x.Id == ci.CompositeParentCopyItemId);
-            //        if (rci == null) {
-            //            MpConsole.WriteLine("Bad one: " + ci.Id);
-            //            continue;
+            //foreach (var ci in cil.Where(x=>x.ItemType != MpCopyItemType.Image)) {
+            //    if(ci.ItemType == MpCopyItemType.Text) {
+            //        int cci_sIdx = ci.ItemData.IndexOf(@"\{c\{");
+            //        if(cci_sIdx >= 0) {
+            //            ci.ItemData_rtf = ci.ItemData;
+            //            while(cci_sIdx >= 0) {
+            //                string endToken = @"\}c\}";
+            //                int cci_eIdx = ci.ItemData.IndexOf(endToken);
+            //                if(cci_eIdx < 0) {
+            //                    Debugger.Break();
+            //                }
+            //                string encodeToReplace = ci.ItemData.Substring(cci_sIdx, cci_eIdx - cci_sIdx + endToken.Length);
+            //                ci.ItemData = ci.ItemData.Replace(encodeToReplace, string.Empty);
+            //                cci_sIdx = ci.ItemData.IndexOf(@"\{c\{");
+            //            }
             //        }
-
-            //        ci.RootCopyItemGuid = rci.Guid;
-
-            //        needsWrite = true;
-            //    }
-            //    if (!string.IsNullOrEmpty(ci.ItemData_rtf)) {
-            //        ci.ItemData = ci.ItemData_rtf;
-            //        needsWrite = true;
             //    }
 
-            //    if(ci.ItemData.IsStringQuillText()) {
-            //        ci.ItemData = MpHtmlToRtfConverter.ConvertHtmlToRtf(ci.ItemData);
-            //        needsWrite = true;
-            //    }
-                
-            //    if(needsWrite) {
-            //        await ci.WriteToDatabaseAsync();
-            //    }
+            //    ci.CompositeParentCopyItemId = 0;
+            //    ci.CompositeSortOrderIdx = 0;
+            //    ci.RootCopyItemGuid = string.Empty;
+            //    ci.CopyItemSourceGuid = string.Empty;
+
+            //    await ci.WriteToDatabaseAsync();
             //}
             //Debugger.Break();
-            
+
             IsLoaded = true;
         }
     }

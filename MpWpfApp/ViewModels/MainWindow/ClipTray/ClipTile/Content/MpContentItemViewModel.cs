@@ -92,7 +92,6 @@ namespace MpWpfApp {
             }
         }
 
-
         #endregion
 
         #region MpIShortcutCommand Implementation
@@ -131,7 +130,6 @@ namespace MpWpfApp {
 
 
         #region Appearance
-
 
         public Brush DetailTextColor {
             get {
