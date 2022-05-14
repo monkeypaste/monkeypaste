@@ -25,7 +25,7 @@ namespace MpWpfApp {
         private MpIUserIconViewModel _currentIconViewModel;
 
         #endregion
-
+         
         #region Properties
 
         #region View Models
