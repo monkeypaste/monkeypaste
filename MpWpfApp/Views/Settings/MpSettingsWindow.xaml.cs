@@ -72,5 +72,11 @@ namespace MpWpfApp {
             swvm.CancelSettingsCommand.Execute(null);
             Close();
         }
+
+        private void MpWindow_StateChanged(object sender, EventArgs e) {
+            //if(this.WindowState == WindowState.Minimized) {
+            //    MpMainWindowViewModel.Instance.IsShowingDialog = false;
+            //}
+        }
     }
 }

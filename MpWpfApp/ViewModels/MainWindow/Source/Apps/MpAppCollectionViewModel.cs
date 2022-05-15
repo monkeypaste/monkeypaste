@@ -18,6 +18,7 @@ namespace MpWpfApp {
         #region Private Variables
 
         #endregion
+
         #region Properties
 
         #region View Models
@@ -34,6 +35,11 @@ namespace MpWpfApp {
             //MpHelpers.RunOnMainThreadAsync(Init);
         }
 
+
+
+        #endregion
+
+        #region Public Methods
         public async Task Init() {
             IsBusy = true;
 
@@ -44,6 +50,10 @@ namespace MpWpfApp {
                 Items.Add(avm);
             }
 
+            while(Items.Any(x=>x.IsAnyBusy)) {
+                await Task.Delay(100);
+            }
+
             await RegisterWithProcessesManager();
 
             OnPropertyChanged(nameof(Items));
@@ -51,11 +61,6 @@ namespace MpWpfApp {
 
             IsBusy = false;
         }
-
-
-        #endregion
-
-        #region Public Methods
 
         public async Task<MpAppViewModel> CreateAppViewModel(MpApp app) {
             var avm = new MpAppViewModel(this);
@@ -67,7 +72,13 @@ namespace MpWpfApp {
             return Items.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower() && x.IsRejected) != null;
         }
 
-
+        public MpAppInteropSettingCollectionViewModel GetInteropSettingByAppId(int appId) {
+            var aivm = Items.FirstOrDefault(x => x.AppId == appId);
+            if(aivm == null) {
+                return null;
+            }
+            return aivm.InteropSettings;
+        }
         #endregion
 
         #region Protected Methods

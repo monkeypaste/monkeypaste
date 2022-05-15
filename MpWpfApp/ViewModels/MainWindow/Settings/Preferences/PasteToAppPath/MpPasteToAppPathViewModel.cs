@@ -19,7 +19,8 @@ namespace MpWpfApp {
     public class MpPasteToAppPathViewModel : 
         MpViewModelBase<MpPasteToAppPathViewModelCollection>,
         MpIUserIconViewModel, 
-        MpIMenuItemViewModel {
+        MpIMenuItemViewModel,
+        MpISelectableViewModel {
         #region Private Variables
         #endregion
 
@@ -362,10 +363,6 @@ namespace MpWpfApp {
                 return @"Max length of Commandline args is " + MpPreferences.MaxCommandLineArgumentLength + " this is " + Args.Length;
             }
             return string.Empty;
-        }
-        public async Task DisposeAsync() {
-            base.Dispose();
-            await PasteToAppPath.DeleteFromDatabaseAsync();
         }
 
         #endregion

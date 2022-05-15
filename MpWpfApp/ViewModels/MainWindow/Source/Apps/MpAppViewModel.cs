@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+        public MpAppInteropSettingCollectionViewModel InteropSettings { get; set; }
+
         #endregion
 
         #region MpISourceItemViewModel Implementation
@@ -73,11 +76,7 @@ namespace MpWpfApp {
 
         public bool IsHovering { get; set; }
 
-        //public bool IsNew {
-        //    get {
-        //        return App != null && AppId == 0;
-        //    }
-        //}
+        public bool IsAnyBusy => IsBusy || InteropSettings.IsBusy;
 
         #endregion
 
@@ -164,9 +163,15 @@ namespace MpWpfApp {
             IsBusy = true;
 
             App = app;
-
+            
             OnPropertyChanged(nameof(IconId));
-            await Task.Delay(1);
+            
+            InteropSettings = new MpAppInteropSettingCollectionViewModel(this);
+            await InteropSettings.Init(App.Id);
+
+            while(InteropSettings.IsAnyBusy) {
+                await Task.Delay(100);
+            }
 
             IsBusy = false;
         }

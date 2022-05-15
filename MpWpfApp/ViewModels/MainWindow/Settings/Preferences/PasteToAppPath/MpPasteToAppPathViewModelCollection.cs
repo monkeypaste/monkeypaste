@@ -20,13 +20,15 @@ using MpProcessHelper;
 using System.Web.UI;
 
 namespace MpWpfApp {
-    public class MpPasteToAppPathViewModelCollection : ObservableCollection<MpPasteToAppPathViewModel>, MpIMenuItemViewModel, MpISingletonViewModel<MpPasteToAppPathViewModelCollection>,  INotifyPropertyChanged {
+    public class MpPasteToAppPathViewModelCollection : 
+        MpSelectorViewModelBase<MpPasteToAppPathViewModelCollection,MpPasteToAppPathViewModel>, 
+        MpIMenuItemViewModel, 
+        MpISingletonViewModel<MpPasteToAppPathViewModelCollection>,
+        INotifyPropertyChanged {
 
         #region Private Variables
 
         #endregion
-
-
 
         #region Properties
 
@@ -34,10 +36,10 @@ namespace MpWpfApp {
 
         public MpMenuItemViewModel MenuItemViewModel {
             get {
-                var itemsToRemove = this.Where(x => x.IsRuntime).ToList();
+                var itemsToRemove = Items.Where(x => x.IsRuntime).ToList();
                 for (int i = 0; i < itemsToRemove.Count; i++) {
                     //clear running applications so they aren't duplicated but are current
-                    this.Remove(itemsToRemove[i]);
+                    Items.Remove(itemsToRemove[i]);
                 }
                 var pmivml = new List<MpMenuItemViewModel>();
                 foreach (var kvp in MpProcessManager.CurrentProcessWindowHandleStackDictionary) {
@@ -76,8 +78,8 @@ namespace MpWpfApp {
                 if (pmivml.Count > 0) {
                     pmivml.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
-                foreach (var ptapvm in this) {
-                    pmivml.AddRange(this.Select(x => x.MenuItemViewModel));
+                foreach (var ptapvm in Items) {
+                    pmivml.AddRange(Items.Select(x => x.MenuItemViewModel));
                 }
 
                 pmivml.Add(new MpMenuItemViewModel() { IsSeparator = true });
@@ -146,7 +148,7 @@ namespace MpWpfApp {
 
             var allPasteToAppPaths = await MpDb.GetItemsAsync<MpPasteToAppPath>();
             foreach (var ptap in allPasteToAppPaths) {
-                this.Add(new MpPasteToAppPathViewModel(this, ptap));
+                Items.Add(new MpPasteToAppPathViewModel(this, ptap));
             }
         }
         private MpPasteToAppPathViewModelCollection() : base() {
@@ -155,7 +157,7 @@ namespace MpWpfApp {
         public void PasteToAppPathDataGrid_Loaded(object sender, RoutedEventArgs args) {
             var dg = (DataGrid)sender;
             dg.SelectionChanged += (s, e) => {
-                foreach (var ptapvm in this) {
+                foreach (var ptapvm in Items) {
                     ptapvm.IsSelected = ptapvm == SelectedPasteToAppPathViewModel ? true : false;
                 }
             };
@@ -302,27 +304,27 @@ namespace MpWpfApp {
         //    return cm;
         //}
 
-        public new void Add(MpPasteToAppPathViewModel ptapvm) {
-            base.Add(ptapvm);
-        }
+        //public new void Add(MpPasteToAppPathViewModel ptapvm) {
+        //    base.Add(ptapvm);
+        //}
 
-        public new void Remove(MpPasteToAppPathViewModel ptapvm) {
-            if (this.Contains(ptapvm)) {
-                base.Remove(ptapvm);
-                ptapvm.Dispose();
-            }
-        }
+        //public new void Remove(MpPasteToAppPathViewModel ptapvm) {
+        //    if (this.Contains(ptapvm)) {
+        //        base.Remove(ptapvm);
+        //        ptapvm.Dispose();
+        //    }
+        //}
 
         public MpPasteToAppPathViewModel FindById(int ptapid) {
             
-            return this.Where(x => x.PasteToAppPathId == ptapid).First();
+            return Items.Where(x => x.PasteToAppPathId == ptapid).First();
         }
         #endregion
 
         #region Private Methods
         private bool Validate() {
             ValidationText = string.Empty;
-            foreach (var ptapvm in this) {
+            foreach (var ptapvm in Items) {
                 ValidationText += ptapvm.Validate();
             }
             return string.IsNullOrEmpty(ValidationText);
@@ -340,7 +342,7 @@ namespace MpWpfApp {
             }
         }
         private void DeletePasteToAppPath() {
-            this.Remove(SelectedPasteToAppPathViewModel);
+            Items.Remove(SelectedPasteToAppPathViewModel);
         }
 
         public ICommand AddPasteToAppPathCommand => new RelayCommand<object>(
@@ -386,7 +388,7 @@ namespace MpWpfApp {
                 };
                 await nptap.WriteToDatabaseAsync();
                 var nptapvm = new MpPasteToAppPathViewModel(this,nptap);
-                this.Add(nptapvm);
+                Items.Add(nptapvm);
 
                 SelectedPasteToAppPathViewModel = nptapvm;
                 Validate();
@@ -397,7 +399,7 @@ namespace MpWpfApp {
                 if(!HiddenHandles.Contains(intPtr)) {
                     HiddenHandles.Add(intPtr);
                 }
-                this.ForEach(x => x.OnPropertyChanged(nameof(x.IsHidden)));
+                Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsHidden)));
                 OnPropertyChanged(nameof(MenuItemViewModel));
             },(intPtr)=> { return intPtr != null && intPtr != IntPtr.Zero; });
 
@@ -405,7 +407,7 @@ namespace MpWpfApp {
             (intPtr) => {
                 if (HiddenHandles.Contains(intPtr)) {
                     HiddenHandles.Remove(intPtr); 
-                    this.ForEach(x => x.OnPropertyChanged(nameof(x.IsHidden)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsHidden)));
                     OnPropertyChanged(nameof(MenuItemViewModel));
                 }
             });
@@ -413,34 +415,10 @@ namespace MpWpfApp {
         public ICommand ShowAllHandlesCommand => new RelayCommand(
             () => {
                 HiddenHandles.Clear();
-                this.ForEach(x => x.OnPropertyChanged(nameof(x.IsHidden)));
+                Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsHidden)));
                 OnPropertyChanged(nameof(MenuItemViewModel));
             });
-        #endregion
 
-        #region INotifyPropertyChanged 
-        public bool ThrowOnInvalidPropertyName { get; private set; }
-
-        protected override event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        [Conditional("DEBUG")]
-        [DebuggerStepThrough]
-        public void VerifyPropertyName(string propertyName) {
-            // Verify that the property name matches a real, 
-            // public, instance property on this object. 
-            if (TypeDescriptor.GetProperties(this)[propertyName] == null) {
-                string msg = "Invalid property name: " + propertyName;
-                if (this.ThrowOnInvalidPropertyName) {
-                    throw new Exception(msg);
-                } else {
-                    Debug.Fail(msg);
-                }
-            }
-        }
         #endregion
     }
 }

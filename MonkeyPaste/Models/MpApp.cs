@@ -23,8 +23,6 @@ namespace MonkeyPaste {
         [Column("SourcePath")]
         public string AppPath { get; set; } = string.Empty;
 
-        //public string ProcessName { get; set; } = string.Empty;
-
         public string AppName { get; set; } = string.Empty;
 
         [Column("IsAppRejected")]

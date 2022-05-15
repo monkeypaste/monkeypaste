@@ -392,6 +392,10 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\Base\MpActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\Item\Base\MpAppInteropSettingViewModelBase.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\Item\MpPasteShortcutViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\Item\MpClipboardFormatPriorityViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\MpAppInteropSettingCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Icon\MpIconCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Icon\MpIconViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\MpSourceCollectionViewModel.cs" />
@@ -675,8 +679,17 @@
     <Compile Include="Views\Settings\Help\MpHelpTabPanel.xaml.cs">
       <DependentUpon>MpHelpTabPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\Preferences\AppInterop\AppChooser\MpAppInteropChooserView.xaml.cs">
+      <DependentUpon>MpAppInteropChooserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Preferences\AppInterop\MpAppInteropDataGridView.xaml.cs">
+      <DependentUpon>MpAppInteropDataGridView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\Preferences\MpPreferencesTabPanel.xaml.cs">
       <DependentUpon>MpPreferencesTabPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Preferences\PasteToAppPath\MpPasteToAppPathDataGridView.xaml.cs">
+      <DependentUpon>MpPasteToAppPathDataGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\Security\MpSecurityTabPanel.xaml.cs">
       <DependentUpon>MpSecurityTabPanel.xaml</DependentUpon>
@@ -1058,7 +1071,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Settings\Preferences\AppInterop\AppChooser\MpAppInteropChooserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Preferences\AppInterop\MpAppInteropDataGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Settings\Preferences\MpPreferencesTabPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Preferences\PasteToAppPath\MpPasteToAppPathDataGridView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

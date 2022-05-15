@@ -21,7 +21,7 @@
                   SelectedItem="{Binding SelectedItem,
                                          Mode=TwoWay}"
                   IsSynchronizedWithCurrentItem="False"
-                  HorizontalAlignment="Right"
+                  HorizontalAlignment="Center"
                   MinWidth="80">
             <ComboBox.ItemTemplate>
                 <DataTemplate>

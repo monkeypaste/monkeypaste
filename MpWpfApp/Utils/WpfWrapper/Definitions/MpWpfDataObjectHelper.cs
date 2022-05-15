@@ -226,17 +226,25 @@ namespace MpWpfApp {
 
                     string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
                     var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
-                    List<MpAppInteropSetting> targetInteropSettings = null;
+                    MpAppInteropSettingCollectionViewModel targetInteropSettings = null;
                     if (app != null) {
-                        targetInteropSettings = await MpDataModelProvider.GetInteropSettingsByAppId(app.Id);
+                        targetInteropSettings = MpAppCollectionViewModel.Instance.GetInteropSettingByAppId(app.Id);
                         MpConsole.WriteLine("Dragging over " + targetProcessPath);
                     }
 
+                    bool ignoreFileDrop = false;
                     if (targetInteropSettings != null) {
                         // order and set data object entry by priority (ignoring < 0) and formatInfo 
-                        targetInteropSettings = targetInteropSettings.Where(x => x.Priority >= 0).OrderByDescending(x => x.Priority).ToList();
-                        foreach (var targetSetting in targetInteropSettings.OrderByDescending(x => x.Priority)) {
-                            switch (targetSetting.FormatType) {
+                        var targetFormats = targetInteropSettings.ClipboardFormats
+                                                .Where(x => x.Priority >= 0)
+                                                .OrderByDescending(x => x.Priority).ToList();
+
+                        ignoreFileDrop = targetFormats
+                                            .Where(x => x.ClipboardFormatType == MpClipboardFormatType.FileDrop)
+                                            .All(x => x.Priority < 0);
+
+                        foreach (var targetSetting in targetFormats.OrderByDescending(x => x.Priority)) {
+                            switch (targetSetting.ClipboardFormatType) {
                                 case MpClipboardFormatType.FileDrop:
                                     if (!string.IsNullOrEmpty(targetSetting.FormatInfo)) {
                                         sctfl.Add(ci.ItemData.ToFile(null, ci.Title, targetSetting.FormatInfo));
@@ -254,10 +262,6 @@ namespace MpWpfApp {
                         sctfl.Add(ci.ItemData.ToFile(null, ci.Title));
                     }
 
-                    bool ignoreFileDrop = targetInteropSettings != null &&
-                                            targetInteropSettings
-                                            .Where(x => x.FormatType == MpClipboardFormatType.FileDrop)
-                                            .All(x => x.Priority < 0);
                     if(!ignoreFileDrop) {
                         d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
                     }
