@@ -877,18 +877,6 @@ namespace MonkeyPaste {
         [Column("MpShortcutGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        //[Column("fk_MpCopyItemId")]
-        //[ForeignKey(typeof(MpCopyItem))]
-        //public int CopyItemId { get; set; } = 0;
-
-        //[Column("fk_MpAnalyticItemPresetId")]
-        //[ForeignKey(typeof(MpAnalyticItemPreset))]
-        //public int AnalyticItemPresetId { get; set; } = 0;
-
-        //[Column("fk_MpTagId")]
-        //[ForeignKey(typeof(MpTag))]
-        //public int TagId { get; set; } = 0;
-
         [Column("fk_MpCommandId")]
         public int CommandId { get; set; } = 0;
 
@@ -907,7 +895,6 @@ namespace MonkeyPaste {
         #region Fk Models
 
         #endregion
-
 
         #region Properties
 
@@ -954,25 +941,7 @@ namespace MonkeyPaste {
             }
         }
 
-        [Ignore]
-        public List<List<MpWindowsKey>> KeyList {
-            get {
-                var keyList = new List<List<MpWindowsKey>>();
-                var combos = KeyString.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var c in combos) {
-                    var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
-                    keyList.Add(new List<MpWindowsKey>());
-                    foreach (var k in keys) {
-                        keyList[keyList.Count - 1].Add(ConvertStringToKey(k));
-                    }
-                }
-                return keyList;
-            }
-        }
 
-        #endregion
-
-        #region Private Variables
         #endregion
 
         #region Static Methods
@@ -1008,17 +977,6 @@ namespace MonkeyPaste {
         #region Public Methods
         public MpShortcut() { }
 
-        //public MpShortcut(int comman, int tagId, string keyString, string shortcutName) : this() {
-        //    ShortcutName = shortcutName;
-        //    CopyItemId = copyItemId;
-        //    TagId = tagId;
-        //    KeyString = keyString;
-        //    RoutingType = TagId > 0 ? MpRoutingType.Internal : MpRoutingType.Direct;
-        //}
-
-        public void Reset() {
-            KeyString = DefaultKeyString;
-        }
 
         public override string ToString() {
             string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;
@@ -1027,68 +985,6 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        private string ConvertKeyToString(MpWindowsKey key) {
-            if (key == MpWindowsKey.LeftCtrl || key == MpWindowsKey.RightCtrl) {
-                return "Control";
-            }
-            if (key == MpWindowsKey.LeftAlt || key == MpWindowsKey.RightAlt) {
-                return "Alt";
-            }
-            if (key == MpWindowsKey.LeftShift || key == MpWindowsKey.RightShift) {
-                return "Shift";
-            }
-            return key.ToString();
-        }
-
-        private MpWindowsKey ConvertStringToKey(string keyStr) {
-            string lks = keyStr.ToLower();
-            if (lks == "control") {
-                return MpWindowsKey.LeftCtrl;
-            }
-            if (lks == "alt") {
-                return MpWindowsKey.LeftAlt;
-            }
-            if (lks == "shift") {
-                return MpWindowsKey.LeftShift;
-            }
-            if (lks == ";") {
-                return MpWindowsKey.Oem1;
-            }
-            if (lks == "`") {
-                return MpWindowsKey.Oem3;
-            }
-            if (lks == "'") {
-                return MpWindowsKey.OemQuotes;
-            }
-            if (lks == "-") {
-                return MpWindowsKey.OemMinus;
-            }
-            if (lks == "=") {
-                return MpWindowsKey.OemPlus;
-            }
-            if (lks == ",") {
-                return MpWindowsKey.OemComma;
-            }
-            if (lks == @"/") {
-                return MpWindowsKey.OemQuestion;
-            }
-            if (lks == ".") {
-                return MpWindowsKey.OemPeriod;
-            }
-            if (lks == "[") {
-                return MpWindowsKey.OemOpenBrackets;
-            }
-            if (lks == "]") {
-                return MpWindowsKey.Oem6;
-            }
-            if (lks == "|") {
-                return MpWindowsKey.Oem5;
-            }
-            if (lks == "PageDown") {
-                return MpWindowsKey.Next;
-            }
-            return (MpWindowsKey)Enum.Parse(typeof(MpWindowsKey), keyStr, true);
-        }
     }
     
 }

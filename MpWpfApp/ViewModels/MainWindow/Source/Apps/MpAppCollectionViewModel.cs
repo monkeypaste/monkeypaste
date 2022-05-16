@@ -23,7 +23,13 @@ namespace MpWpfApp {
 
         #region View Models
 
+        public IEnumerable<MpAppViewModel> WindowedItems => 
+                Items
+                    .Where(x => !string.IsNullOrWhiteSpace(x.AppName))
+                    .OrderBy(x => x.AppName);
+
         #endregion
+
         #endregion
 
         #region Constructors
@@ -58,6 +64,10 @@ namespace MpWpfApp {
 
             OnPropertyChanged(nameof(Items));
 
+            if(Items.Count > 0) {
+                Items[0].IsSelected = true;
+            }
+
 
             IsBusy = false;
         }
@@ -72,12 +82,12 @@ namespace MpWpfApp {
             return Items.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower() && x.IsRejected) != null;
         }
 
-        public MpAppInteropSettingCollectionViewModel GetInteropSettingByAppId(int appId) {
+        public MpAppClipboardFormatInfoCollectionViewModel GetInteropSettingByAppId(int appId) {
             var aivm = Items.FirstOrDefault(x => x.AppId == appId);
             if(aivm == null) {
                 return null;
             }
-            return aivm.InteropSettings;
+            return aivm.ClipboardFormatInfos;
         }
         #endregion
 

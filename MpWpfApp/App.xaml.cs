@@ -103,31 +103,31 @@ namespace MpWpfApp {
                     appName: "Notepad",
                     icon: null);
 
-                var notepadSetting1 = await MpAppInteropSetting.Create(
+                var notepadSetting1 = await MpAppClipboardFormatInfo.Create(
                     appId: notepadApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Bitmap).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Bitmap,
+                    priority: -1);
 
-                var notepadSetting2 = await MpAppInteropSetting.Create(
+                var notepadSetting2 = await MpAppClipboardFormatInfo.Create(
                     appId: notepadApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Rtf).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Rtf,
+                    priority: -1);
 
-                var notepadSetting3 = await MpAppInteropSetting.Create(
+                var notepadSetting3 = await MpAppClipboardFormatInfo.Create(
                     appId: notepadApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Text).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Text,
+                    priority: -1);
 
-                var notepadSetting4 = await MpAppInteropSetting.Create(
+                var notepadSetting4 = await MpAppClipboardFormatInfo.Create(
                    appId: notepadApp.Id,
-                   arg1: ((int)MpClipboardFormatType.Csv).ToString(),
-                   arg3: "-1");
+                   format: MpClipboardFormatType.Csv,
+                   priority: -1);
 
-                var notepadSetting5 = await MpAppInteropSetting.Create(
+                var notepadSetting5 = await MpAppClipboardFormatInfo.Create(
                     appId: notepadApp.Id,
-                    arg1: ((int)MpClipboardFormatType.FileDrop).ToString(),
-                    arg2: "txt",
-                    arg3: int.MaxValue.ToString());
+                    format: MpClipboardFormatType.FileDrop,
+                    formatInfo: "txt",
+                    priority: int.MaxValue);
 
                 //EXPLORER
                 var explorerApp = await MpApp.Create(
@@ -136,30 +136,30 @@ namespace MpWpfApp {
                     appName: "Explorer",
                     icon: null);
 
-                var explorerSetting1 = await MpAppInteropSetting.Create(
+                var explorerSetting1 = await MpAppClipboardFormatInfo.Create(
                     appId: explorerApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Bitmap).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Bitmap,
+                    priority: -1);
 
-                var explorerSetting2 = await MpAppInteropSetting.Create(
+                var explorerSetting2 = await MpAppClipboardFormatInfo.Create(
                     appId: explorerApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Rtf).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Rtf,
+                    priority: -1);
 
-                var explorerSetting3 = await MpAppInteropSetting.Create(
+                var explorerSetting3 = await MpAppClipboardFormatInfo.Create(
                     appId: explorerApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Text).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Text,
+                    priority: -1);
 
-                var explorerSetting4 = await MpAppInteropSetting.Create(
+                var explorerSetting4 = await MpAppClipboardFormatInfo.Create(
                     appId: explorerApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Csv).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Csv,
+                    priority: -1);
 
-                var explorerSetting5 = await MpAppInteropSetting.Create(
+                var explorerSetting5 = await MpAppClipboardFormatInfo.Create(
                     appId: explorerApp.Id,
-                    arg1: ((int)MpClipboardFormatType.FileDrop).ToString(),
-                    arg3: int.MaxValue.ToString());
+                    format: MpClipboardFormatType.FileDrop,
+                    priority: int.MaxValue);
 
                 //MSPAINT
                 var paintApp = await MpApp.Create(
@@ -168,31 +168,31 @@ namespace MpWpfApp {
                     appName: "Paint",
                     icon: null);
 
-                var paintSetting1 = await MpAppInteropSetting.Create(
+                var paintSetting1 = await MpAppClipboardFormatInfo.Create(
                     appId: paintApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Bitmap).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Bitmap,
+                    priority: -1);
 
-                var paintSetting2 = await MpAppInteropSetting.Create(
+                var paintSetting2 = await MpAppClipboardFormatInfo.Create(
                     appId: paintApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Rtf).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Rtf,
+                    priority: -1);
 
-                var paintSetting3 = await MpAppInteropSetting.Create(
+                var paintSetting3 = await MpAppClipboardFormatInfo.Create(
                     appId: paintApp.Id,
-                    arg1: ((int)MpClipboardFormatType.Text).ToString(),
-                    arg3: "-1");
+                    format: MpClipboardFormatType.Text,
+                    priority: -1);
 
-                var paintSetting4 = await MpAppInteropSetting.Create(
+                var paintSetting4 = await MpAppClipboardFormatInfo.Create(
                    appId: paintApp.Id,
-                   arg1: ((int)MpClipboardFormatType.Csv).ToString(),
-                   arg3: "-1");
+                   format: MpClipboardFormatType.Csv,
+                   priority: -1);
 
-                var paintSetting5 = await MpAppInteropSetting.Create(
+                var paintSetting5 = await MpAppClipboardFormatInfo.Create(
                     appId: paintApp.Id,
-                    arg1: ((int)MpClipboardFormatType.FileDrop).ToString(),
-                    arg2: "bmp",
-                    arg3: int.MaxValue.ToString());
+                    format: MpClipboardFormatType.FileDrop,
+                    formatInfo: "bmp",
+                    priority: int.MaxValue);
             });            
         }
 

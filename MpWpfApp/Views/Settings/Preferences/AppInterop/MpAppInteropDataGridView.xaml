@@ -4,15 +4,35 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:core="clr-namespace:System;assembly=mscorlib"
     xmlns:local="clr-namespace:MpWpfApp"
+    xmlns:pcl="clr-namespace:MonkeyPaste"
+    xmlns:plugin="clr-namespace:MonkeyPaste.Plugin;assembly=MonkeyPaste.Plugin"
     xmlns:dd="urn:gong-wpf-dragdrop"
-    x:TypeArguments="local:MpAppInteropSettingCollectionViewModel"
+    x:TypeArguments="local:MpAppViewModel"
     mc:Ignorable="d"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance Type=local:MpAppInteropSettingCollectionViewModel,
+    d:DataContext="{d:DesignInstance Type=local:MpAppViewModel,
                                      IsDesignTimeCreatable=False}">
     <StackPanel Orientation="Vertical">
+        <StackPanel.Resources>
+            <ObjectDataProvider
+                x:Key="ClipboardFormatsEnum"
+                MethodName="GetValues"
+                ObjectType="{x:Type core:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="plugin:MpClipboardFormatType" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider x:Key="CopyItemTypeEnum"
+                                MethodName="GetValues"
+                                ObjectType="{x:Type core:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="pcl:MpCopyItemType" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </StackPanel.Resources>
         <TextBlock
             Text="Settings"
             FontSize="22"
@@ -24,12 +44,16 @@
             Background="Transparent"
             Padding="5">
             <StackPanel Orientation="Horizontal">
-                <StackPanel Orientation="Vertical">
+                <StackPanel
+                    Orientation="Vertical"
+                    DataContext="{Binding ClipboardFormatInfos}">
                     <TextBlock
                         Text="Formats"
                         FontSize="20" />
                     <DataGrid
-                        ItemsSource="{Binding ClipboardFormats}"
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        ItemsSource="{Binding Items}"
                         SelectedItem="{Binding SelectedItem,
                                                Mode=TwoWay}"
                         SelectionMode="Single"
@@ -39,26 +63,65 @@
                         CanUserAddRows="False"
                         IsReadOnly="False"
                         AutoGenerateColumns="False">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Visibility" Value="{Binding IsFormatIgnored, Converter={StaticResource BoolToVisibilityFlipConverter}}" />
+                            </Style>
+                        </DataGrid.RowStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn
-                                Width="Auto"
+                            <!--<DataGridTextColumn
+                                IsReadOnly="True"
+                                Width="80"
                                 SortMemberPath="Priority"
                                 Header="Priority"
-                                Binding="{Binding Priority}" />
+                                Binding="{Binding Priority}" />-->
+                            <!--<DataGridTextColumn
+                                Width="Auto"
+                                MinWidth="90"
+                                Header="Type"
+                                Binding="{Binding ClipboardFormatType}" />-->
+                            <!--<DataGridComboBoxColumn
+                                Header="Type" IsReadOnly="False"
+                                SelectedItemBinding="{Binding ClipboardFormatType}"
+                                ItemsSource="{Binding Source={StaticResource ClipboardFormatsEnum}}" />-->
+                            <DataGridTemplateColumn
+                                Header="Type"
+                                MinWidth="90">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource CopyItemTypeEnum}}"
+                                                  SelectedItem="{Binding ClipboardFormatType,
+                                                                   Mode=TwoWay}">
+                                            <ComboBox.ItemContainerStyle>
+                                                <Style TargetType="ComboBoxItem">
+                                                    <Setter Property="HorizontalAlignment"
+                                                            Value="Stretch" />
+                                                </Style>
+                                            </ComboBox.ItemContainerStyle>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn
-                                Width="*"
+                                Width="Auto"
+                                MinWidth="120"
                                 Header="Format"
-                                Binding="{Binding ClipboardFormatType}" />
-
+                                IsReadOnly="False"
+                                Binding="{Binding FormatInfo,
+                                                  Mode=TwoWay,
+                                                  UpdateSourceTrigger=LostFocus,
+                                                  NotifyOnSourceUpdated=True,
+                                                  NotifyOnTargetUpdated=True}" />
                             <DataGridTemplateColumn Width="50">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button
-                                            Background="White"
+                                            Background="Transparent"
                                             BorderThickness="0"
                                             ToolTip="Delete"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},
-                                                              Path=DataContext.DeleteClipboardFormatTypeCommand}">
+                                                              Path=DataContext.DeleteClipboardFormatTypeCommand}"
+                                            CommandParameter="{Binding}">
                                             <Image
                                                 Width="20"
                                                 Height="20"

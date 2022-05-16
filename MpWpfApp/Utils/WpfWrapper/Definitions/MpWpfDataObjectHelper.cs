@@ -79,10 +79,16 @@ namespace MpWpfApp {
         }
 
         public async Task PasteDataObject(MpPortableDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
+            string pasteCmdKeyString = "^V";
+            var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == pi.ProcessPath.ToLower());
+            if(avm != null && avm.PasteShortcutViewModel != null) {
+                pasteCmdKeyString = avm.PasteShortcutViewModel.PasteCmdKeyString;
+            }
             var pasteItem = new MpPasteItem() {
                 PortableDataObject = mpdo,
                 ProcessInfo = pi,
-                FinishWithEnterKey = finishWithEnterKey
+                FinishWithEnterKey = finishWithEnterKey,
+                PasteCmdKeyString = pasteCmdKeyString
             };
             _pasteQueue.Enqueue(pasteItem);
 
@@ -226,7 +232,7 @@ namespace MpWpfApp {
 
                     string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
                     var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
-                    MpAppInteropSettingCollectionViewModel targetInteropSettings = null;
+                    MpAppClipboardFormatInfoCollectionViewModel targetInteropSettings = null;
                     if (app != null) {
                         targetInteropSettings = MpAppCollectionViewModel.Instance.GetInteropSettingByAppId(app.Id);
                         MpConsole.WriteLine("Dragging over " + targetProcessPath);
@@ -235,7 +241,7 @@ namespace MpWpfApp {
                     bool ignoreFileDrop = false;
                     if (targetInteropSettings != null) {
                         // order and set data object entry by priority (ignoring < 0) and formatInfo 
-                        var targetFormats = targetInteropSettings.ClipboardFormats
+                        var targetFormats = targetInteropSettings.Items
                                                 .Where(x => x.Priority >= 0)
                                                 .OrderByDescending(x => x.Priority).ToList();
 
@@ -349,7 +355,7 @@ namespace MpWpfApp {
 
                     SetPlatformClipboard(pasteItem.PortableDataObject, true);
                     Thread.Sleep(100);
-                    System.Windows.Forms.SendKeys.SendWait("^v");
+                    System.Windows.Forms.SendKeys.SendWait(pasteItem.PasteCmdKeyString);
                     Thread.Sleep(100);
                     if (pasteItem.FinishWithEnterKey) {
                         System.Windows.Forms.SendKeys.SendWait("{ENTER}");
@@ -456,6 +462,7 @@ namespace MpWpfApp {
             internal MpPortableDataObject PortableDataObject { get; set; }
             internal MpProcessInfo ProcessInfo { get; set; }
             internal bool FinishWithEnterKey { get; set; }
+            internal string PasteCmdKeyString { get; set; }
         }
 
     }

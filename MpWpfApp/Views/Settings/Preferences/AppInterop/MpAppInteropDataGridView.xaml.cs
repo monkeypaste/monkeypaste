@@ -17,9 +17,14 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAppInteropDataGridView.xaml
     /// </summary>
-    public partial class MpAppInteropDataGridView : MpUserControl<MpAppInteropSettingCollectionViewModel> {
+    public partial class MpAppInteropDataGridView : MpUserControl<MpAppViewModel> {
         public MpAppInteropDataGridView() {
             InitializeComponent();
+        }
+
+        private void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e) {
+             e.Cancel = true;
+
         }
     }
 }

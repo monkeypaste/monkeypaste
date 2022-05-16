@@ -37,7 +37,7 @@ namespace MpWpfApp {
         #region Input
 
         public static string ToString(this Key key) {
-            return MpHelpers.ConvertKeyToString(key);
+            return MpWpfKeyboardInputHelpers.ConvertKeyToString(key);
         }
 
         public static void KillFocus(this Control control) {

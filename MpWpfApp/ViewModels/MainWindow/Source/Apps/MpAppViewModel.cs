@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
@@ -18,8 +19,9 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public MpAppInteropSettingCollectionViewModel InteropSettings { get; set; }
+        public MpAppClipboardFormatInfoCollectionViewModel ClipboardFormatInfos { get; set; }
 
+        public MpPasteShortcutViewModel PasteShortcutViewModel { get; set; }
         #endregion
 
         #region MpISourceItemViewModel Implementation
@@ -76,7 +78,7 @@ namespace MpWpfApp {
 
         public bool IsHovering { get; set; }
 
-        public bool IsAnyBusy => IsBusy || InteropSettings.IsBusy;
+        public bool IsAnyBusy => IsBusy || ClipboardFormatInfos.IsBusy;
 
         #endregion
 
@@ -152,12 +154,16 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Public Methods
+        #region Constructors
         public MpAppViewModel() : base(null) { }
 
         public MpAppViewModel(MpAppCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAppViewModel_PropertyChanged;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public async Task InitializeAsync(MpApp app) {
             IsBusy = true;
@@ -166,10 +172,20 @@ namespace MpWpfApp {
             
             OnPropertyChanged(nameof(IconId));
             
-            InteropSettings = new MpAppInteropSettingCollectionViewModel(this);
-            await InteropSettings.Init(App.Id);
+            ClipboardFormatInfos = new MpAppClipboardFormatInfoCollectionViewModel(this);
+            await ClipboardFormatInfos.Init(AppId);
 
-            while(InteropSettings.IsAnyBusy) {
+            MpAppPasteShortcut aps = await MpDataModelProvider.GetAppPasteShortcut(AppId);
+            if(aps == null) {
+                aps = new MpAppPasteShortcut() {
+                    AppId = AppId
+                };
+            }
+
+            PasteShortcutViewModel = new MpPasteShortcutViewModel(this);
+            await PasteShortcutViewModel.InitializeAsync(aps);
+
+            while (ClipboardFormatInfos.IsAnyBusy || PasteShortcutViewModel.IsBusy) {
                 await Task.Delay(100);
             }
 
@@ -201,6 +217,14 @@ namespace MpWpfApp {
 
         private void MpAppViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
+                case nameof(IsSelected):
+                    if(IsSelected) {
+                        ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
+                        PasteShortcutViewModel.OnPropertyChanged(nameof(PasteShortcutViewModel.PasteCmdKeyString));
+
+                        CollectionViewSource.GetDefaultView(ClipboardFormatInfos.Items).Refresh();
+                    }
+                    break;
                 case nameof(IsRejected):
                     if(IsRejected) {
                         MpHelpers.RunOnMainThread(async()=> { await RejectApp(); });
@@ -208,7 +232,13 @@ namespace MpWpfApp {
                     break;
 
                 case nameof(HasModelChanged):
-                    Task.Run(App.WriteToDatabaseAsync);
+                    if(HasModelChanged) {
+                        Task.Run(async () => {
+                            await App.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
+                    }
+                    
                     break;
             }
         }

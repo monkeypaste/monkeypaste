@@ -16,7 +16,8 @@ namespace MonkeyPaste.Plugin {
         Csv,
         InternalContent,
         UnicodeText,
-        OemText
+        OemText,
+        Custom //when format name doesn't resolve to any previous
     }
     
     public interface MpIClipboardMonitor {

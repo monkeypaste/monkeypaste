@@ -287,6 +287,7 @@
     </Compile>
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
+    <Compile Include="Utils\System\Input\MpWpfKeyboardInputHelpers.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\System\VirtualFileDataObject.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
@@ -392,10 +393,9 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\Base\MpActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\Item\Base\MpAppInteropSettingViewModelBase.cs" />
-    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\Item\MpPasteShortcutViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\Item\MpClipboardFormatPriorityViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\MpAppInteropSettingCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\MpPasteShortcutViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\ClipboardFormatInfo\MpAppClipboardFormatInfoViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\ClipboardFormatInfo\MpAppClipboardFormatInfoCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Icon\MpIconCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Icon\MpIconViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\MpSourceCollectionViewModel.cs" />

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
 using MonkeyPaste;
+using MonkeyPaste.Plugin;
 
 namespace MpWpfApp {
     public class MpEnumToItemSourceLabelsConverter : IValueConverter {
@@ -18,7 +19,15 @@ namespace MpWpfApp {
                 enumTypeName = paramParts[0];
                 noneLabel = paramParts[1];
             }
-            Type enumType = typeof(MpDb).Assembly.GetType(enumTypeName);
+            Type enumType;
+            
+            if(enumTypeName.Contains("MonkeyPaste.Plugin")) {
+                enumType = typeof(MpClipboardFormatType).Assembly.GetType(enumTypeName);
+            } else if(enumTypeName.Contains("MpWpfApp")) {
+                enumType = typeof(MpMainWindow).Assembly.GetType(enumTypeName);
+            } else {
+                enumType = typeof(MpDb).Assembly.GetType(enumTypeName);
+            }
             return new ObservableCollection<string>(enumType.EnumToLabels(noneLabel));
         }
 

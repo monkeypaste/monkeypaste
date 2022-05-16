@@ -35,15 +35,15 @@ namespace MpWpfApp {
                     foreach (var k in kl) {
                         if (kl.Count > 1 && kl.IndexOf(k) < kl.Count - 1) {
                             keyItems.Add(new MpShortcutKeyViewModel(this,
-                                            MpHelpers.GetKeyLiteral(k),
+                                            MpWpfKeyboardInputHelpers.GetKeyLiteral(k),
                                             true, false, seqIdx));
                         } else if (kl.IndexOf(k) == kl.Count - 1 && KeyList.IndexOf(kl) < KeyList.Count - 1) {
                             keyItems.Add(new MpShortcutKeyViewModel(this,
-                                            MpHelpers.GetKeyLiteral(k),
+                                            MpWpfKeyboardInputHelpers.GetKeyLiteral(k),
                                             false, true, seqIdx));
                         } else {
                             keyItems.Add(new MpShortcutKeyViewModel(this,
-                                            MpHelpers.GetKeyLiteral(k),
+                                            MpWpfKeyboardInputHelpers.GetKeyLiteral(k),
                                             false, false, seqIdx));
                         }
 
@@ -113,55 +113,6 @@ namespace MpWpfApp {
 
         public IDisposable KeysObservable { get; set; }
 
-        public List<string> SendKeysKeyStringList {
-            get {
-                var outStrList = new List<string>();
-                var combos = KeyString.Split(',').ToList();
-                foreach (var combo in combos) {
-                    var outStr = string.Empty;
-                    var keys = combo.Split('+').ToList();
-                    foreach (var key in keys) {
-                        switch (key) {
-                            case "Control":
-                                outStr += "^";
-                                break;
-                            case "Shift":
-                                outStr += "+";
-                                break;
-                            case "Alt":
-                                outStr += "%";
-                                break; 
-                            case "Enter":
-                            case "Tab":
-                            case "Left":
-                            case "Right":
-                            case "Up":
-                            case "Down":
-                                outStr += "{" + key.ToUpper() + "}";
-                                break;
-                            default:
-                                if(key.ToUpper().StartsWith(@"F") && key.Length > 1) {
-                                    string fVal = key.Substring(1, key.Length - 1);
-                                    try {
-                                        int val = Convert.ToInt32(fVal);
-                                        outStr += "{F" + val + "}";
-                                    }
-                                    catch(Exception ex) {
-                                        MpConsole.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
-                                        outStr += key.ToUpper();
-                                        break;
-                                    }
-                                } else {
-                                    outStr += key.ToUpper();
-                                }
-                                break;
-                        }
-                    }
-                    outStrList.Add(outStr);
-                }
-                return outStrList;
-            }
-        }
 
         public bool IsRoutable {
             get {
@@ -310,14 +261,15 @@ namespace MpWpfApp {
                 if(Shortcut == null) {
                     return new List<List<Key>>();
                 }
-                var kl = new List<List<Key>>();
-                for (int i = 0; i < Shortcut.KeyList.Count; i++) {
-                    kl.Add(new List<Key>());
-                    for (int j = 0; j < Shortcut.KeyList[i].Count; j++) {
-                        kl[i].Add((Key)Shortcut.KeyList[i][j]);
-                    }
-                }
-                return kl;
+                //var kl = new List<List<Key>>();
+                //for (int i = 0; i < Shortcut.KeyList.Count; i++) {
+                //    kl.Add(new List<Key>());
+                //    for (int j = 0; j < Shortcut.KeyList[i].Count; j++) {
+                //        kl[i].Add((Key)Shortcut.KeyList[i][j]);
+                //    }
+                //}
+                //return kl;
+                return MpWpfKeyboardInputHelpers.ConvertStringToKeySequence(KeyString);
             }
         }
 
@@ -431,8 +383,8 @@ namespace MpWpfApp {
                     }
                     var hook = RoutingType == MpRoutingType.Internal ? Parent.ApplicationHook : Parent.GlobalHook;
 
-                    var cl = MpHelpers.ConvertStringToKeySequence(KeyString);
-                    var wfcl = cl.Select(x => x.Select(y => MpHelpers.WpfKeyToWinformsKey(y)).ToList()).ToList();
+                    var cl = MpWpfKeyboardInputHelpers.ConvertStringToKeySequence(KeyString);
+                    var wfcl = cl.Select(x => x.Select(y => MpWpfKeyboardInputHelpers.WpfKeyToWinformsKey(y)).ToList()).ToList();
                     string keyValStr = string.Join(",", wfcl.Select(x =>
                                                  string.Join("+", x.Select(y =>
                                                     Enum.GetName(typeof(System.Windows.Forms.Keys), y)))));
