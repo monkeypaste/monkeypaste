@@ -27,7 +27,7 @@ namespace MpWpfApp {
                 if (row.Length > maxCols) {
                     maxCols = row.Length;
                 }
-            }
+            } 
             return maxCols;
         }
 

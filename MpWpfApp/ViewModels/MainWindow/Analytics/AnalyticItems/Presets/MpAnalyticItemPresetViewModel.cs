@@ -332,28 +332,28 @@ namespace MpWpfApp {
             MpAnalyticItemParameterViewModelBase naipvm = null;
 
             switch (aipv.ParameterFormat.controlType) {
-                case MpAnalyticItemParameterControlType.List:
-                case MpAnalyticItemParameterControlType.MultiSelectList:
-                case MpAnalyticItemParameterControlType.EditableList:
-                case MpAnalyticItemParameterControlType.ComboBox:
+                case MpPluginParameterControlType.List:
+                case MpPluginParameterControlType.MultiSelectList:
+                case MpPluginParameterControlType.EditableList:
+                case MpPluginParameterControlType.ComboBox:
                     naipvm = new MpEnumerableParameterViewModel(this);
                     break;
-                case MpAnalyticItemParameterControlType.PasswordBox:
-                case MpAnalyticItemParameterControlType.TextBox:
+                case MpPluginParameterControlType.PasswordBox:
+                case MpPluginParameterControlType.TextBox:
                     naipvm = new MpTextBoxParameterViewModel(this);
                     break;
-                case MpAnalyticItemParameterControlType.CheckBox:
+                case MpPluginParameterControlType.CheckBox:
                     naipvm = new MpCheckBoxParameterViewModel(this);
                     break;
-                case MpAnalyticItemParameterControlType.Slider:
+                case MpPluginParameterControlType.Slider:
                     naipvm = new MpSliderParameterViewModel(this);
                     break;
-                case MpAnalyticItemParameterControlType.DirectoryChooser:
-                case MpAnalyticItemParameterControlType.FileChooser:
+                case MpPluginParameterControlType.DirectoryChooser:
+                case MpPluginParameterControlType.FileChooser:
                     naipvm = new MpFileChooserParameterViewModel(this);
                     break;
                 default:
-                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpAnalyticItemParameterControlType), aipv.ParameterFormat.controlType));
+                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), aipv.ParameterFormat.controlType));
             }
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 

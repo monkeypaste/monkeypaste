@@ -39,7 +39,7 @@ namespace MpWpfApp {
 
         public virtual IList<MpEnumerableParameterValueViewModel> SelectedItems {
             get {
-                if(ParameterFormat.controlType == MpAnalyticItemParameterControlType.EditableList) {
+                if(ParameterFormat.controlType == MpPluginParameterControlType.EditableList) {
                     return Items;
                 }
                 return Items.Where(x => x.IsSelected).ToList();

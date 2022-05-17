@@ -116,6 +116,7 @@ namespace MonkeyPaste {
             if(appPath != null) {
                 appPath = appPath.ToLower();
             }
+
             var dupApp = await MpDataModelProvider.GetAppByPath(appPath);
             if (dupApp != null) {
                 dupApp = await MpDb.GetItemAsync<MpApp>(dupApp.Id);

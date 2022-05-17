@@ -82,7 +82,7 @@ namespace ProcessAutomation {
 
                 if(!pi.UseShellExecute) {
                     string pasteStr = string.Join(" ", processArgs);
-                    var mpdo = MpDataObject.Create(
+                    var mpdo = MpPortableDataObject.Create(
                         data: pasteStr,
                         textFormat: ".txt",
                         formats: new List<MpClipboardFormatType>() { MpClipboardFormatType.Text });
@@ -119,7 +119,7 @@ namespace ProcessAutomation {
                 // lil' wait for window switch...
                 await Task.Delay(100);
 
-                var mpdo = MpDataObject.Create(
+                var mpdo = MpPortableDataObject.Create(
                     data: pasteStr,
                     textFormat: ".txt",
                     formats: new List<MpClipboardFormatType>() { MpClipboardFormatType.Text });

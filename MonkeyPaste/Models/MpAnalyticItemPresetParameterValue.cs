@@ -46,7 +46,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpAnalyticItemParameterFormat ParameterFormat { get; set; }
+        public MpPluginParameterFormat ParameterFormat { get; set; }
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace MonkeyPaste {
             int presetId = 0, 
             int paramEnumId = 0, 
             string value = "",
-            MpAnalyticItemParameterFormat format = null) {
+            MpPluginParameterFormat format = null) {
             if (presetId == 0) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }

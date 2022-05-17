@@ -28,6 +28,8 @@ namespace MonkeyPaste.Plugin {
 
         public MpAnalyzerPluginFormat analyzer { get; set; } = null;
 
+        public MpClipboardHandlerFormats clipboardHandler { get; set; }
+
         public string ComponentPath { get; set; }
         public object Component { get; set; } = null;
         

@@ -152,7 +152,7 @@ namespace MpWpfApp {
                 if(Parent == null) {
                     return false;
                 }
-                return Parent.ParameterFormat.controlType != MpAnalyticItemParameterControlType.EditableList;
+                return Parent.ParameterFormat.controlType != MpPluginParameterControlType.EditableList;
             }
         }
 

@@ -28,9 +28,9 @@ namespace MpWpfApp {
                 }
 
                 switch (UnitType) {
-                    case MpAnalyticItemParameterValueUnitType.Integer:
+                    case MpPluginParameterValueUnitType.Integer:
                         return IntValue;
-                    case MpAnalyticItemParameterValueUnitType.Decimal:
+                    case MpPluginParameterValueUnitType.Decimal:
                         return Math.Round(DoubleValue, Precision);
                     default:
                         return DoubleValue;

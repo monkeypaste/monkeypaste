@@ -58,7 +58,7 @@ namespace MpWpfApp {
             "FileList",
             "Custom"
         };
-
+        
         public ObservableCollection<string> AvailableFormatTypes {
             get {
                 ObservableCollection<string> _availableFormatTypes = new ObservableCollection<string>();

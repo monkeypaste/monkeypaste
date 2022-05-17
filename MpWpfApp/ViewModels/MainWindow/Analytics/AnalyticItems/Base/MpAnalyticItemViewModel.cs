@@ -483,7 +483,7 @@ namespace MpWpfApp {
             return uniqueName + uniqueIdx;
         }
 
-        public virtual async Task<MpAnalyticItemParameterFormat> DeferredCreateParameterModel(MpAnalyticItemParameterFormat aip) {
+        public virtual async Task<MpPluginParameterFormat> DeferredCreateParameterModel(MpPluginParameterFormat aip) {
             //used to load remote content and called from CreateParameterViewModel in preset
             await Task.Delay(1);
             return aip;

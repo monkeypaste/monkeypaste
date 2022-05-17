@@ -12,7 +12,7 @@ namespace MpClipboardHelper {
         public static MpWinFormsDataFormatConverter Instance => _instance ?? (_instance = new MpWinFormsDataFormatConverter());
 
 
-        public string GetNativeFormatName(MpClipboardFormatType portableType) {
+        public string GetNativeFormatName(MpClipboardFormatType portableType, string fallbackName = "") {
             switch(portableType) {
                 case MpClipboardFormatType.Text:
                     return DataFormats.Text;
@@ -33,39 +33,9 @@ namespace MpClipboardHelper {
                 case MpClipboardFormatType.OemText:
                     return DataFormats.OemText;
                 default:
-                    throw new Exception("Unknown portable format: " + portableType.ToString());
+                    return fallbackName;
             }
         }
 
-        public MpClipboardFormatType GetPortableFormatType(string nativeFormatName) {
-            if(DataFormats.Text == nativeFormatName) {
-                return MpClipboardFormatType.Text;
-            }
-            if (DataFormats.Html == nativeFormatName) {
-                return MpClipboardFormatType.Html;
-            }
-            if (DataFormats.Rtf == nativeFormatName) {
-                return MpClipboardFormatType.Rtf;
-            }
-            if (DataFormats.Bitmap == nativeFormatName) {
-                return MpClipboardFormatType.Bitmap;
-            }
-            if (DataFormats.FileDrop == nativeFormatName) {
-                return MpClipboardFormatType.FileDrop;
-            }
-            if (DataFormats.CommaSeparatedValue == nativeFormatName) {
-                return MpClipboardFormatType.Csv;
-            }
-            if (DataFormats.OemText == nativeFormatName) {
-                return MpClipboardFormatType.OemText;
-            }
-            if (DataFormats.UnicodeText == nativeFormatName) {
-                return MpClipboardFormatType.UnicodeText;
-            }
-            if (MpPortableDataObject.InternalContentFormat == nativeFormatName) {
-                return MpClipboardFormatType.InternalContent;
-            }
-            throw new Exception("Unknown native format name: " + nativeFormatName);
-        }
     }
 }

@@ -16,7 +16,6 @@ namespace QrCoder
             var reqParts = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString()).items;
             string textToConvert = reqParts.FirstOrDefault(x => x.paramId == 1).value;
 
-
             var qrCode = new QrCode(textToConvert, new Vector2Slim(256, 256), SKEncodedImageFormat.Png);
 
             using (MemoryStream memoryStream = new MemoryStream()) {

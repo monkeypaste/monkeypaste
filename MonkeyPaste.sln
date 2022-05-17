@@ -36,6 +36,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MpWpfApp", "MpWpfApp\MpWpfA
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MpClipboardHelper", "MpClipboardHelper\MpClipboardHelper.csproj", "{E3C8E3F7-3A44-4678-A742-5A6DD971A38C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA} = {EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Plugin", "MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj", "{FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8}"
 EndProject
@@ -53,6 +56,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessAutomation", "Plugin
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrCoder", "Plugins\QrCoder\QrCoder.csproj", "{DF8B97E9-F204-4C3F-8A32-98A37A31DDE4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8} = {FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreClipboardHandler", "Plugins\CoreClipboardHandler\CoreClipboardHandler.csproj", "{97E2D80E-B5AF-4792-A53A-06933F0EA015}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8} = {FAF48E9E-E646-44D0-BE02-AD1A9E9DFCD8}
 	EndProjectSection
@@ -549,6 +557,34 @@ Global
 		{DF8B97E9-F204-4C3F-8A32-98A37A31DDE4}.Release|x64.Build.0 = Release|Any CPU
 		{DF8B97E9-F204-4C3F-8A32-98A37A31DDE4}.Release|x86.ActiveCfg = Release|Any CPU
 		{DF8B97E9-F204-4C3F-8A32-98A37A31DDE4}.Release|x86.Build.0 = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|ARM.Build.0 = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|x64.Build.0 = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Debug|x86.Build.0 = Debug|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|ARM.ActiveCfg = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|ARM.Build.0 = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|ARM64.Build.0 = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|iPhone.Build.0 = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|x64.ActiveCfg = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|x64.Build.0 = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|x86.ActiveCfg = Release|Any CPU
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -558,6 +594,7 @@ Global
 		{099D3F70-56B6-4830-A9BC-A206412A16CE} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 		{0205BF73-755F-45EA-8EDC-9EC4790BBDB2} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 		{DF8B97E9-F204-4C3F-8A32-98A37A31DDE4} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
+		{97E2D80E-B5AF-4792-A53A-06933F0EA015} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}

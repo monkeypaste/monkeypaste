@@ -10,7 +10,7 @@ namespace MpWpfApp {
             if(value == null) {
                 return null;
             }
-            var paramFormat = value as MpAnalyticItemParameterFormat;
+            var paramFormat = value as MpPluginParameterFormat;
 
             return paramFormat.values.Select(x => x.label).ToList();
         }

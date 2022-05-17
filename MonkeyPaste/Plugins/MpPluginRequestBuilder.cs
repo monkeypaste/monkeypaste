@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace MonkeyPaste {
     public static class MpPluginRequestBuilder {
         public static async Task<MpAnalyzerPluginRequestFormat> BuildRequest(
-            List<MpAnalyticItemParameterFormat> paramFormats,
+            List<MpPluginParameterFormat> paramFormats,
             Dictionary<int,string> paramValues,
             MpCopyItem sourceContent) {
             
@@ -28,7 +28,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task<MpAnalyzerPluginRequestItemFormat> BuildRequestItem(
-            MpAnalyticItemParameterFormat paramFormat, 
+            MpPluginParameterFormat paramFormat, 
             string paramValue,
             MpCopyItem sourceContent) {
             return new MpAnalyzerPluginRequestItemFormat() { 
@@ -37,15 +37,15 @@ namespace MonkeyPaste {
             };
         }
 
-        private static async Task<string> GetParameterRequestValue(MpAnalyticItemParameterValueUnitType valueType, string curVal, MpCopyItem ci) {
+        private static async Task<string> GetParameterRequestValue(MpPluginParameterValueUnitType valueType, string curVal, MpCopyItem ci) {
             switch (valueType) {
-                case MpAnalyticItemParameterValueUnitType.ContentQuery:
+                case MpPluginParameterValueUnitType.ContentQuery:
                     curVal = await GetParameterQueryResult(curVal, ci);
                     break;
-                case MpAnalyticItemParameterValueUnitType.Base64Text:
+                case MpPluginParameterValueUnitType.Base64Text:
                     curVal = curVal.ToByteArray().ToBase64String();
                     break;
-                case MpAnalyticItemParameterValueUnitType.FileSystemPath:
+                case MpPluginParameterValueUnitType.FileSystemPath:
                     if (string.IsNullOrWhiteSpace(curVal)) {
                         break;
                     }
@@ -67,7 +67,7 @@ namespace MonkeyPaste {
 
                 if (curVal.Contains(pptToken)) {
                     string contentValue = await MpCopyItem.QueryProperty(ci, ppt) as string;
-                    contentValue = await GetParameterRequestValue(MpAnalyticItemParameterValueUnitType.PlainText, contentValue, ci);
+                    contentValue = await GetParameterRequestValue(MpPluginParameterValueUnitType.PlainText, contentValue, ci);
                     string pptTokenBackup = "{@" + ppt.ToString() + "@}";
                     if (curVal.Contains(pptTokenBackup)) {
                         //this content query token has conflicts so use the backup

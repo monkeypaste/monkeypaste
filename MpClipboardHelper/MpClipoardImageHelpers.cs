@@ -30,6 +30,9 @@ namespace MpClipboardHelper {
         /// <param name="retrievedData">The clipboard data.</param>
         /// <returns>The extracted image, or null if no supported image type was found.</returns>
         public static Bitmap GetClipboardImage(DataObject retrievedData) {
+            if(retrievedData == null) {
+                return null;
+            }
             // from https://stackoverflow.com/a/46424800/105028
             Bitmap clipboardimage = null;
             // Order: try PNG, move on to try 32-bit ARGB DIB, then try the normal Bitmap and Image types.

@@ -306,7 +306,7 @@
     <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
-    <Compile Include="Converters\HtmlToRtf\MpCsvToRtfTableConverter.cs" />
+    <Compile Include="Utils\Extensions\MpCsvToRtfTableConverter.cs" />
     <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCursor.cs" />
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />

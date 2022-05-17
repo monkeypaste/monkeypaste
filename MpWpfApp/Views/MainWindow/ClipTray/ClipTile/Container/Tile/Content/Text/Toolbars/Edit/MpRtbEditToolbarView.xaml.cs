@@ -1,4 +1,5 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using MonkeyPaste.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -103,17 +104,27 @@ namespace MpWpfApp {
             FontFamilyCombo.SelectedItem = fontFamily;
 
             // Set font size combo
-            var fontSize = artb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-            if (fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
-                fontSize = string.Empty;
+            var fontSizeObj = artb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+
+            if (fontSizeObj == null || fontSizeObj.ToString() == "{DependencyProperty.UnsetValue}") {
+                fontSizeObj = string.Empty;
             } else {
-                fontSize = Math.Round((double)fontSize);
+                fontSizeObj = Math.Round((double)fontSizeObj);
             }
-            if(!_defaultFontSizes.Contains((double)fontSize)) {
-                _defaultFontSizes.Add((double)fontSize);
-                _defaultFontSizes = new ObservableCollection<double>(_defaultFontSizes.OrderBy(x => x));
-            }
-            FontSizeCombo.SelectedItem = (double)fontSize;
+            if (fontSizeObj != null) {
+                double fontSize;
+                try {
+                    fontSize = Convert.ToDouble(fontSizeObj);
+                    fontSize = Math.Round(fontSize, 1);
+                    if (!_defaultFontSizes.Contains(fontSize)) {
+                        _defaultFontSizes.Add(fontSize);
+                        _defaultFontSizes = new ObservableCollection<double>(_defaultFontSizes.OrderBy(x => x));
+                    }
+                    FontSizeCombo.SelectedItem = fontSize;
+                }catch(Exception ex) {
+                    MpConsole.WriteTraceLine("Error converting font size to double obj str: " + fontSizeObj.ToString(), ex);
+                }
+            }            
 
             // Set Font buttons
             BoldButton.IsChecked = artb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);

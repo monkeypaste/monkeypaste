@@ -481,8 +481,12 @@ namespace MpWpfApp {
                     fileItemParagraph.BorderBrush = Brushes.Black;
                     fileItemParagraph.BorderThickness = new Thickness(0.5);
 
-                    
-                    var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById((fileItemParagraph.Tag as MpCopyItem).Id);
+
+                    var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.CopyItemData.Contains(path)));
+                    if(ctvm == null) {
+                        return;
+                    }
+                    var civm = ctvm.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
                     if(civm == null) {
                         Debugger.Break();
                     } else {
@@ -498,7 +502,12 @@ namespace MpWpfApp {
                     fileItemParagraph.Background = Brushes.Transparent;
                     fileItemParagraph.BorderBrush = Brushes.Transparent;
                     fileItemParagraph.BorderThickness = new Thickness(0);
-                    var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById((fileItemParagraph.Tag as MpCopyItem).Id);
+
+                    var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.CopyItemData.Contains(path)));
+                    if (ctvm == null) {
+                        return;
+                    }
+                    var civm = ctvm.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
                     if (civm == null) {
                         Debugger.Break();
                     } else if(civm.IsHovering) {
@@ -617,7 +626,7 @@ namespace MpWpfApp {
                     var ctp = tr.Start.GetInsertionPosition(LogicalDirection.Forward);
                     foreach(var fip in str.Split(new string[] {Environment.NewLine},StringSplitOptions.RemoveEmptyEntries)) {
                         ctp = ctp.InsertParagraphBreak();
-                        var p = ctp.Parent as Paragraph;
+                        var p = ctp.Parent.FindParentOfType<Paragraph>();
                         var pcr = p.ContentRange();
                         pcr.LoadFileItem(fip);
                         ctp = pcr.End.GetNextInsertionPosition(LogicalDirection.Forward);

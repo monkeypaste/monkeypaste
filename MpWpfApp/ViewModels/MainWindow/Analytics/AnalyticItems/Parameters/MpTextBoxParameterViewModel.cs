@@ -84,7 +84,7 @@ namespace MpWpfApp {
 
         #region Model
 
-        public bool IsContentQuery => UnitType == MpAnalyticItemParameterValueUnitType.ContentQuery;
+        public bool IsContentQuery => UnitType == MpPluginParameterValueUnitType.ContentQuery;
 
         #endregion
 

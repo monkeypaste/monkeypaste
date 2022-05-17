@@ -163,28 +163,28 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyticItemParameterValueUnitType UnitType {
+        public MpPluginParameterValueUnitType UnitType {
             get {
                 if (ParameterFormat == null) {
-                    return MpAnalyticItemParameterValueUnitType.None;
+                    return MpPluginParameterValueUnitType.None;
                 }
-                if(ParameterFormat.unitType == MpAnalyticItemParameterValueUnitType.None) {
+                if(ParameterFormat.unitType == MpPluginParameterValueUnitType.None) {
                     switch(ParameterFormat.controlType) {
-                        case MpAnalyticItemParameterControlType.CheckBox:
-                            return MpAnalyticItemParameterValueUnitType.Bool;
-                        case MpAnalyticItemParameterControlType.Slider:
-                            return MpAnalyticItemParameterValueUnitType.Decimal;
-                        case MpAnalyticItemParameterControlType.PasswordBox:
-                        case MpAnalyticItemParameterControlType.TextBox:
-                        case MpAnalyticItemParameterControlType.List:
-                        case MpAnalyticItemParameterControlType.ComboBox:
-                            return MpAnalyticItemParameterValueUnitType.PlainText;
-                        case MpAnalyticItemParameterControlType.MultiSelectList:
-                        case MpAnalyticItemParameterControlType.EditableList:
-                            return MpAnalyticItemParameterValueUnitType.DelimitedPlainText;
-                        case MpAnalyticItemParameterControlType.FileChooser:
-                        case MpAnalyticItemParameterControlType.DirectoryChooser:
-                            return MpAnalyticItemParameterValueUnitType.FileSystemPath;
+                        case MpPluginParameterControlType.CheckBox:
+                            return MpPluginParameterValueUnitType.Bool;
+                        case MpPluginParameterControlType.Slider:
+                            return MpPluginParameterValueUnitType.Decimal;
+                        case MpPluginParameterControlType.PasswordBox:
+                        case MpPluginParameterControlType.TextBox:
+                        case MpPluginParameterControlType.List:
+                        case MpPluginParameterControlType.ComboBox:
+                            return MpPluginParameterValueUnitType.PlainText;
+                        case MpPluginParameterControlType.MultiSelectList:
+                        case MpPluginParameterControlType.EditableList:
+                            return MpPluginParameterValueUnitType.DelimitedPlainText;
+                        case MpPluginParameterControlType.FileChooser:
+                        case MpPluginParameterControlType.DirectoryChooser:
+                            return MpPluginParameterValueUnitType.FileSystemPath;
 
                     }
                 }
@@ -305,10 +305,10 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyticItemParameterControlType ControlType {
+        public MpPluginParameterControlType ControlType {
             get {
                 if(ParameterFormat == null) {
-                    return MpAnalyticItemParameterControlType.None;
+                    return MpPluginParameterControlType.None;
                 }
                 return ParameterFormat.controlType;
             }
@@ -332,7 +332,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyticItemParameterFormat ParameterFormat { 
+        public MpPluginParameterFormat ParameterFormat { 
             get {
                 if(PresetValue == null) {
                     return null;

@@ -22,7 +22,7 @@ namespace MpWpfApp {
                 if(ParameterFormat == null) {
                     return false;
                 }
-                return ParameterFormat.controlType == MpAnalyticItemParameterControlType.DirectoryChooser;
+                return ParameterFormat.controlType == MpPluginParameterControlType.DirectoryChooser;
             }
         }
 

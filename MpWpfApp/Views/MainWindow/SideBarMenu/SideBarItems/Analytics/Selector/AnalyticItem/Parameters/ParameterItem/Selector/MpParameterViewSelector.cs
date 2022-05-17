@@ -25,8 +25,8 @@ namespace MpWpfApp {
             }
             string keyStr = aipvm.ControlType.ToString() + "ParameterTemplate";
 
-            if(aipvm.ControlType == MpAnalyticItemParameterControlType.FileChooser ||
-               aipvm.ControlType == MpAnalyticItemParameterControlType.DirectoryChooser) {
+            if(aipvm.ControlType == MpPluginParameterControlType.FileChooser ||
+               aipvm.ControlType == MpPluginParameterControlType.DirectoryChooser) {
                 keyStr = "FileChooserParameterTemplate";
             } 
 

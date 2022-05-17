@@ -11,6 +11,8 @@ using System.Security.Permissions;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using MonkeyPaste;
+using System.Linq;
 
 namespace MpClipboardHelper {
     public class MpClipboardTimer : MpIClipboardMonitor {
@@ -20,6 +22,11 @@ namespace MpClipboardHelper {
         private MpPortableDataObject _lastCbo;
         private Thread _workThread;
 
+        private IEnumerable<MpIClipboardPluginComponent> _clipboardHandlers =>
+            MpPluginManager.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent)
+                                   .Select(x=>x.Value.Component)
+                                   .Cast<MpIClipboardPluginComponent>();
+
         #endregion
 
         #region Properties
@@ -27,6 +34,8 @@ namespace MpClipboardHelper {
         public uint CF_HTML, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15, CF_UNICODE_TEXT,CF_OEM_TEXT;
 
         public bool IgnoreNextClipboardChangeEvent { get; set; } = false;
+
+
 
         #endregion
 
@@ -114,60 +123,60 @@ namespace MpClipboardHelper {
         }
                 
 
-        private string GetClipboardData(string nativeFormatStr) {
-            uint format = GetWin32FormatId(nativeFormatStr);
-            if (format != 0) {
-                if(WinApi.IsClipboardFormatAvailable(format)) {
-                    WinApi.OpenClipboard(MpClipboardManager.ThisAppHandle);
+        //private string GetClipboardData(string nativeFormatStr) {
+        //    uint format = GetWin32FormatId(nativeFormatStr);
+        //    if (format != 0) {
+        //        if(WinApi.IsClipboardFormatAvailable(format)) {
+        //            WinApi.OpenClipboard(MpClipboardManager.ThisAppHandle);
 
-                    //Get pointer to clipboard data in the selected format
-                    IntPtr ClipboardDataPointer = WinApi.GetClipboardData(format);
+        //            //Get pointer to clipboard data in the selected format
+        //            IntPtr ClipboardDataPointer = WinApi.GetClipboardData(format);
 
-                    //Do a bunch of crap necessary to copy the data from the memory
-                    //the above pointer points at to a place we can access it.
-                    UIntPtr Length = WinApi.GlobalSize(ClipboardDataPointer);
-                    IntPtr gLock = WinApi.GlobalLock(ClipboardDataPointer);
-                    if(gLock == IntPtr.Zero) {
-                        return string.Empty;
-                    }
-                    //Init a buffer which will contain the clipboard data
-                    byte[] Buffer = new byte[(int)Length];
+        //            //Do a bunch of crap necessary to copy the data from the memory
+        //            //the above pointer points at to a place we can access it.
+        //            UIntPtr Length = WinApi.GlobalSize(ClipboardDataPointer);
+        //            IntPtr gLock = WinApi.GlobalLock(ClipboardDataPointer);
+        //            if(gLock == IntPtr.Zero) {
+        //                return string.Empty;
+        //            }
+        //            //Init a buffer which will contain the clipboard data
+        //            byte[] Buffer = new byte[(int)Length];
 
-                    //Copy clipboard data to buffer
-                    Marshal.Copy(gLock, Buffer, 0, (int)Length);
+        //            //Copy clipboard data to buffer
+        //            Marshal.Copy(gLock, Buffer, 0, (int)Length);
 
-                    WinApi.GlobalUnlock(gLock); //unlock gLock
+        //            WinApi.GlobalUnlock(gLock); //unlock gLock
 
-                    WinApi.CloseClipboard();
+        //            WinApi.CloseClipboard();
 
-                    return System.Text.Encoding.UTF8.GetString(Buffer);
-                }
-            }
+        //            return System.Text.Encoding.UTF8.GetString(Buffer);
+        //        }
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
-        private uint GetWin32FormatId(string nativeFormatStr) {
-            if(nativeFormatStr == DataFormats.Text) {
-                return CF_TEXT;
-            }
-            if(nativeFormatStr == DataFormats.Bitmap) {
-                return CF_BITMAP;
-            }
-            if(nativeFormatStr == DataFormats.CommaSeparatedValue) {
-                return CF_CSV;
-            }
-            if(nativeFormatStr == DataFormats.FileDrop) {
-                return CF_HDROP;
-            }
-            if(nativeFormatStr == DataFormats.Html) {
-                return CF_HTML;
-            }
-            if(nativeFormatStr == DataFormats.Rtf) {
-                return CF_RTF;
-            }
-            return 0;
-        }
+        //private uint GetWin32FormatId(string nativeFormatStr) {
+        //    if(nativeFormatStr == DataFormats.Text) {
+        //        return CF_TEXT;
+        //    }
+        //    if(nativeFormatStr == DataFormats.Bitmap) {
+        //        return CF_BITMAP;
+        //    }
+        //    if(nativeFormatStr == DataFormats.CommaSeparatedValue) {
+        //        return CF_CSV;
+        //    }
+        //    if(nativeFormatStr == DataFormats.FileDrop) {
+        //        return CF_HDROP;
+        //    }
+        //    if(nativeFormatStr == DataFormats.Html) {
+        //        return CF_HTML;
+        //    }
+        //    if(nativeFormatStr == DataFormats.Rtf) {
+        //        return CF_RTF;
+        //    }
+        //    return 0;
+        //}
 
         private MpPortableDataObject ConvertManagedFormats(IDataObject ido = null, int retryCount = 5) {
             /*
@@ -194,61 +203,96 @@ namespace MpClipboardHelper {
                 return ndo;
             }
             try {
-                bool autoConvert = false;
-                foreach (MpClipboardFormatType supportedType in MpPortableDataObject.SupportedFormats) {
-                    string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
-                    while(IsClipboardOpen()) {
+                bool autoConvert = false; 
+
+                foreach (var supportedType in MpPortableDataObject.SupportedFormats) {
+                    //string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
+                    while (IsClipboardOpen()) {
                         Thread.Sleep(100);
                     }
-                    if(ido != null) {
-                        if (ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
-                            continue;
-                        }
-                    } else {
-                        try {
-                            var curData = GetClipboardData(nativeTypeName); //Clipboard.GetData(nativeTypeName);
-                            if(curData == null) {
-                                continue;
-                            }
-                        } catch(Exception ex) {
-                            MpConsole.WriteTraceLine("Clipboard timer error: " + ex);
-                        }
-                    }
-                    string data = null;
-                    switch (supportedType) {
-                        case MpClipboardFormatType.Bitmap:
-                            Image img = Clipboard.GetImage();
-                            if (img == null) {
-                                img = MpClipoardImageHelpers.GetClipboardImage(ido as DataObject);
-                            }
-                            using (MemoryStream memoryStream = new MemoryStream()) {
-                                img.Save(memoryStream, ImageFormat.Bmp);
-                                byte[] imageBytes = memoryStream.ToArray();
-                                data = Convert.ToBase64String(imageBytes);
-                            }
-                            img.Dispose();
-                            break;
-                        case MpClipboardFormatType.FileDrop:
-                            string[] sa = null;
-                            if(ido == null) {
-                                sa = Clipboard.GetData(nativeTypeName) as string[];
-                            } else {
-                                sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
-                            }
-                            if (sa != null && sa.Length > 0) {
-                                data = string.Join(Environment.NewLine, sa);
-                            }
-                            break;
-                        default:
-                            if(ido == null) {
-                                data = GetClipboardData(nativeTypeName);
-                            } else {
-                                data = ido.GetData(nativeTypeName, autoConvert) as string;
-                            }
-                            break;
-                    }
-                    if (!string.IsNullOrEmpty(data)) {
-                        ndo.DataFormatLookup.Add(supportedType, data);
+                    //if(ido != null) {
+                    //    if (ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
+                    //        continue;
+                    //    }
+                    //} else {
+                    //    try {
+                    //        var curData = GetClipboardData(nativeTypeName); //Clipboard.GetData(nativeTypeName);
+                    //        if(curData == null) {
+                    //            continue;
+                    //        }
+                    //    } catch(Exception ex) {
+                    //        MpConsole.WriteTraceLine("Clipboard timer error: " + ex);
+                    //    }
+                    //}
+                    //string data = null;
+
+                    //if(supportedType == MpClipboardFormatType.Bitmap.ToString()) {
+                    //    Image img = Clipboard.GetImage();
+                    //    if (img == null) {
+                    //        img = MpClipoardImageHelpers.GetClipboardImage(ido as DataObject);
+                    //    }
+                    //    using (MemoryStream memoryStream = new MemoryStream()) {
+                    //        img.Save(memoryStream, ImageFormat.Bmp);
+                    //        byte[] imageBytes = memoryStream.ToArray();
+                    //        data = Convert.ToBase64String(imageBytes);
+                    //    }
+                    //    img.Dispose();
+                    //} else if(supportedType == MpClipboardFormatType.FileDrop.ToString()) {
+                    //    string[] sa = null;
+                    //    if (ido == null) {
+                    //        sa = Clipboard.GetData(nativeTypeName) as string[];
+                    //    } else {
+                    //        sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
+                    //    }
+                    //    if (sa != null && sa.Length > 0) {
+                    //        data = string.Join(Environment.NewLine, sa);
+                    //    }
+                    //} else {
+                    //    if (ido == null) {
+                    //        data = GetClipboardData(nativeTypeName);
+                    //    } else {
+                    //        data = ido.GetData(nativeTypeName, autoConvert) as string;
+                    //    }
+                    //}
+                    //switch (supportedType) {
+                    //    case MpClipboardFormatType.Bitmap:
+                    //        Image img = Clipboard.GetImage();
+                    //        if (img == null) {
+                    //            img = MpClipoardImageHelpers.GetClipboardImage(ido as DataObject);
+                    //        }
+                    //        if(img != null) {
+                    //            using (MemoryStream memoryStream = new MemoryStream()) {
+                    //                img.Save(memoryStream, ImageFormat.Bmp);
+                    //                byte[] imageBytes = memoryStream.ToArray();
+                    //                data = Convert.ToBase64String(imageBytes);
+                    //            }
+                    //            img.Dispose();
+                    //        }
+                    //        break;
+                    //    case MpClipboardFormatType.FileDrop:
+                    //        string[] sa = null;
+                    //        if (ido == null) {
+                    //            sa = Clipboard.GetData(nativeTypeName) as string[];
+                    //        } else {
+                    //            sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
+                    //        }
+                    //        if (sa != null && sa.Length > 0) {
+                    //            data = string.Join(Environment.NewLine, sa);
+                    //        }
+                    //        break;
+                    //    default:
+                    //        //if (ido == null) {
+                    //        //    data = GetClipboardData(nativeTypeName);
+                    //        //} else {
+                    //        //    data = ido.GetData(nativeTypeName, autoConvert) as string;
+                    //        //}
+                    //        break;
+                    //}
+                    //if (!string.IsNullOrEmpty(data)) {
+                    //    ndo.DataFormatLookup.Add(supportedType, data);
+                    //}
+                    foreach (var clipboardHandler in _clipboardHandlers) {
+                        ndo = clipboardHandler.HandleDataObject(ndo);
                     }
                 }
                 return ndo;

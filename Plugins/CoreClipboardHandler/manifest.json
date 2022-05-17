@@ -1,0 +1,210 @@
+{
+  "title": "Core Clipboard Handler",
+  "description": "Handles default clipboard formats",
+  "version": "1.0",
+  "credits": "Somebody",
+  "guid": "a7df5078-8c85-4819-9518-dbf389612298",
+  "url": "https://www.monkeypaste.com",
+  "iconUrl": "https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-clipboard-1024.png",
+  "ioType": {
+    "isDll": true
+  },
+  "clipboardHandler": {
+    "handledFormats": [
+      {
+        "displayName": "Plain Text",
+        "clipboardName": "Text",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramName": "PlainTextMaxCharacterCount",
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Plain Text format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramName": "IgnorePlainText",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Rich Text",
+        "clipboardName": "Rtf",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramName": "RtfMaxCharacterCount",
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Rich Text format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramName": "IgnoreRichText",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Html",
+        "clipboardName": "Html",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramName": "HtmlMaxCharacterCount",
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Html format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramName": "IgnoreHtml",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Bitmap",
+        "clipboardName": "Bitmap",
+        "parameters": [
+          {
+            "label": "Default Export Type",
+            "description": "When pasting or dropping a bitmap this will be the default file type",
+            "controlType": "ComboBox",
+            "unitType": "PlainText",
+            "paramName": "DefaultBitmapExportType",
+            "isRequired": true,
+            "values": [
+              {
+                "label": "bmp",
+                "value": "bmp",
+                "isDefault": false
+              },
+              {
+                "label": "png",
+                "value": "png",
+                "isDefault": true
+              },
+              {
+                "label": "jpg",
+                "value": "jpg",
+                "isDefault": false
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Image format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramName": "IgnoreBitmap",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "File",
+        "clipboardName": "FileDrop",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Files will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramName": "IgnoreAllFiles",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignored File Extensions",
+            "description": "These file types will be ignored",
+            "controlType": "EditableList",
+            "unitType": "PlainText",
+            "paramName": "IgnoredFileExtensions"
+          }
+        ]
+      },
+      {
+        "displayName": "Csv",
+        "clipboardName": "Csv",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Csv will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramName": "IgnoreCsv",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
