@@ -15,15 +15,11 @@ namespace MonkeyPaste.Plugin {
         public int paramId { get; set; } = 0;
         public string value { get; set; } = string.Empty;
     }
-
-    public class MpAnalyzerPluginFormat : MpJsonObject {
+    public class MpAnalyzerPluginFormat : MpPluginComponentBaseFormat {
         public MpHttpTransactionFormat http { get; set; }
 
         public MpAnalyzerPluginInputFormat inputType { get; set; } = null;
         public MpAnalyzerPluginOutputFormat outputType { get; set; } = null;
-
-        public List<MpPluginParameterFormat> parameters { get; set; } = null;
-        public List<MpPluginPresetFormat> presets { get; set; } = null;
     }
 
     public class MpAnalyzerPluginInputFormat : MpJsonObject {

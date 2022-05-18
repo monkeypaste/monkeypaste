@@ -39,7 +39,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task<MpAnalyticItemParameterFormat> DeferredCreateParameterModel(MpAnalyticItemParameterFormat aip) {
+        public override async Task<MpPluginParameterFormat> DeferredCreateParameterModel(MpPluginParameterFormat aip) {
             IsBusy = true;
 
             if (!MpLanguageTranslator.IsLoaded) {

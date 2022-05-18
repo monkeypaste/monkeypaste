@@ -13,7 +13,7 @@ using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
     public class MpAnalyticItemParameterViewModelBase : 
-        MpViewModelBase<MpAnalyticItemPresetViewModel>,
+        MpViewModelBase<MpViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpITooltipInfoViewModel {
@@ -357,7 +357,7 @@ namespace MpWpfApp {
 
         public MpAnalyticItemParameterViewModelBase() : base(null) { }
 
-        public MpAnalyticItemParameterViewModelBase(MpAnalyticItemPresetViewModel parent) : base(parent) {
+        public MpAnalyticItemParameterViewModelBase(MpViewModelBase parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterViewModel_PropertyChanged;
         }
 
@@ -406,7 +406,9 @@ namespace MpWpfApp {
                     break;
                 case nameof(ValidationMessage):
                     if(!string.IsNullOrEmpty(ValidationMessage)) {
-                        MpConsole.WriteLine(Parent.Parent.Title+" "+Parent.Label+" "+ ValidationMessage);
+                        dynamic pp = Parent;
+                        
+                        MpConsole.WriteLine(pp.Parent.Title + " "+pp.Label+" "+ ValidationMessage);
                     }
                     OnPropertyChanged(nameof(IsValid));
                     break;

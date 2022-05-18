@@ -60,7 +60,7 @@ namespace MpWpfApp {
 
         public MpSliderParameterViewModel() : base(null) { }
 
-        public MpSliderParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
+        public MpSliderParameterViewModel(MpViewModelBase parent) : base(parent) { }
 
         #endregion
 

@@ -94,7 +94,7 @@ namespace MpWpfApp {
 
         public MpTextBoxParameterViewModel() : base(null) { }
 
-        public MpTextBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) {
+        public MpTextBoxParameterViewModel(MpViewModelBase parent) : base(parent) {
             PropertyChanged += MpTextBoxParameterViewModel_PropertyChanged;
         }
 

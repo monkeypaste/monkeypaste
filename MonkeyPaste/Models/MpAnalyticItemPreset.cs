@@ -107,6 +107,9 @@ namespace MonkeyPaste {
         [Ignore]
         public MpAnalyzerPluginFormat AnalyzerFormat { get; set; }
 
+        [Ignore]
+        public MpClipboardHandlerFormat ClipboardFormat { get; set; }
+
         #endregion
 
         public static async Task<MpAnalyticItemPreset> Create(
@@ -118,7 +121,7 @@ namespace MonkeyPaste {
             bool isQuickAction = false, 
             int sortOrderIdx = -1, 
             DateTime? manifestLastModifiedDateTime = null,
-            MpAnalyzerPluginFormat format = null,
+            object format = null,
             int existingDefaultPresetId = 0) {
             if(format == null) {
                 throw new Exception("must have format");
@@ -143,7 +146,14 @@ namespace MonkeyPaste {
                 ShortcutId = 0,
                 ManifestLastModifiedDateTime = manifestLastModifiedDateTime.HasValue ? manifestLastModifiedDateTime.Value : DateTime.Now};
             
-            newAnalyticItemPreset.AnalyzerFormat = format;
+            if(format != null) {
+                if(format is MpAnalyzerPluginFormat) {
+                    newAnalyticItemPreset.AnalyzerFormat = format as MpAnalyzerPluginFormat;
+                } else if(format is MpClipboardHandlerFormat) {
+                    newAnalyticItemPreset.ClipboardFormat = format as MpClipboardHandlerFormat;
+                }
+            }
+            
 
             await newAnalyticItemPreset.WriteToDatabaseAsync();
 

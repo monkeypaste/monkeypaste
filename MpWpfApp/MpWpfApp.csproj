@@ -345,6 +345,10 @@
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpAnalyticItemParameterViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\Reports\MpAnalysisReportCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\Reports\Items\MpAnalysisReportViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Clipboard\ClipboardHandlers\HandledClipboardFormats\MpHandledClipboardFormatViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Clipboard\ClipboardHandlers\HandledClipboardFormats\Presets\MpClipboardFormatPresetViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Clipboard\ClipboardHandlers\MpClipboardHandlerItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Clipboard\MpClipboardHandlerCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />

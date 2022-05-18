@@ -76,7 +76,7 @@ namespace MpWpfApp {
 
         public MpEnumerableParameterViewModel() : base () { }
 
-        public MpEnumerableParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) {
+        public MpEnumerableParameterViewModel(MpViewModelBase parent) : base(parent) {
             //PropertyChanged += MpEnumerableParameterViewModel_PropertyChanged;
         }
 

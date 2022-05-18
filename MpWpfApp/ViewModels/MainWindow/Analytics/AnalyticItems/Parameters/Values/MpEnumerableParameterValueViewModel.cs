@@ -212,7 +212,8 @@ namespace MpWpfApp {
                     break;
                 case nameof(Value):
                     Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv();
-                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAllValid));
+                    dynamic pp = Parent.Parent;
+                    Parent.Parent.OnPropertyChanged(nameof(pp.IsAllValid));
                     break;
             }
         }

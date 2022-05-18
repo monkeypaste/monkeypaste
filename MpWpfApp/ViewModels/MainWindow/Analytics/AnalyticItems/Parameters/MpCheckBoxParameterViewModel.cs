@@ -22,7 +22,7 @@ namespace MpWpfApp {
 
         public MpCheckBoxParameterViewModel() : base(null) { }
 
-        public MpCheckBoxParameterViewModel(MpAnalyticItemPresetViewModel parent) : base(parent) { }
+        public MpCheckBoxParameterViewModel(MpViewModelBase parent) : base(parent) { }
 
         public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
             IsBusy = true;
