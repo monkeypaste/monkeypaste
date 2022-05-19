@@ -19,76 +19,51 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpTagTileView.xaml
+    /// Interaction logic for MpSidebarTreeItemView.xaml
     /// </summary>
-    public partial class MpTagTileView : MpUserControl<MpTagTileViewModel> {
-        public bool IsTagTreeTile { get; set; } = false;
+    public partial class MpSidebarTreeItemView : MpUserControl<MpIHierarchialViewModel> {
+        private string _originalLabel;
+        public bool IsPinnedTrayView { get; set; } = false;
 
-        public MpTagTileView() {
+        public MpSidebarTreeItemView() {
             InitializeComponent();
         }
 
-        private void TagTileBorder_Loaded(object sender, RoutedEventArgs e) {
-            var ttvm = DataContext as MpTagTileViewModel;
+        private void TagTileBorder_Loaded(object sender, RoutedEventArgs e) {            
                 //if tag is created at runtime show tbox w/ all selected
-            if (ttvm.IsNew) {
-                ttvm.RenameTagCommand.Execute(null);
+            if (BindingContext.IsNew) {
+                BeginLabelEdit();
             }
 
-            if(!IsTagTreeTile) {
+            if(!IsPinnedTrayView) {
                 AddTagButtonPanel.Visibility = Visibility.Collapsed;
             }
-            ttvm.OnRequestSelectAll += Ttvm_OnRequestSelectAll;
         }
 
-
-        private void TagTileBorder_Unloaded(object sender, RoutedEventArgs e) {
-            if(BindingContext != null) {
-                BindingContext.OnRequestSelectAll -= Ttvm_OnRequestSelectAll;
-            }
-        }
-
-        private void Ttvm_OnRequestSelectAll(object sender, EventArgs e) {
-            TagTextBox.Focus();
-            TagTextBox.SelectAll();
-        }
 
         private void TagTileBorder_LostFocus(object sender, RoutedEventArgs e) {
-            var ttvm = DataContext as MpTagTileViewModel;
-            if (!ttvm.IsSelected) {
-                ttvm.IsEditing = false;
+            if (!BindingContext.IsSelected) {
+                EndLabelEdit();
             }
         }
 
         private void TagTileBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             var ttvm = DataContext as MpTagTileViewModel;
-            if (e.ClickCount == 2) {
-                ttvm.RenameTagCommand.Execute(null);
-            } else {
-               // ttvm.SelectTagCommand.Execute(null);
-            }
-        }
-
-        private void TagTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if(BindingContext.IsEditing) {
-                TagTextBox.Focus();
-                TagTextBox.Focus();
-                TagTextBox.SelectAll();
+            if (BindingContext.IsReadOnly && e.ClickCount == 2) {
+                BeginLabelEdit();
             } 
         }
 
         private void TagTextBox_LostFocus(object sender, RoutedEventArgs e) {
-            var ttvm = DataContext as MpTagTileViewModel;
-            ttvm.IsEditing = false;
+            EndLabelEdit();
         }
 
         private void TagTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
-            var ttvm = DataContext as MpTagTileViewModel;
             if (e.Key == Key.Enter) {
-                ttvm.FinishRenameTagCommand.Execute(null);
+                EndLabelEdit();
                 e.Handled = true;
             } else if (e.Key == Key.Escape) {
-                ttvm.CancelRenameTagCommand.Execute(null);
+                CancelLabelEdit();
                 e.Handled = true;
             }
         }
@@ -109,6 +84,21 @@ namespace MpWpfApp {
             fe.ContextMenu = MpContextMenuView.Instance;
             fe.ContextMenu.PlacementTarget = this;
             fe.ContextMenu.IsOpen = true;
+        }
+
+        private void BeginLabelEdit() {
+            _originalLabel = BindingContext.Label;
+            BindingContext.IsReadOnly = false;
+            BindingContext.IsFocused = true;
+        }
+
+        private void EndLabelEdit() {
+            BindingContext.IsReadOnly = true;
+        }
+
+        private void CancelLabelEdit() {
+            BindingContext.Label = _originalLabel;
+            EndLabelEdit();
         }
     }
 }

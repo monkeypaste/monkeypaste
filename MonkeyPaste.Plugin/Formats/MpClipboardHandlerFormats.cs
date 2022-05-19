@@ -8,6 +8,7 @@ namespace MonkeyPaste.Plugin {
     }
 
     public class MpClipboardHandlerFormat : MpPluginComponentBaseFormat {
+        public string handlerGuid { get; set; }
         public string displayName { get; set; }
         public string clipboardName { get; set; }
 

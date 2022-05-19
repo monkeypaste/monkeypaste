@@ -17,7 +17,9 @@ namespace MpWpfApp {
         MpSelectorViewModelBase<MpTagTrayViewModel, MpTagTileViewModel>, 
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpITreeItemViewModel<MpTagTileViewModel>, 
+        //MpITreeItemViewModel<MpTagTileViewModel>, 
+        MpIHierarchialViewModel,
+        //MpITreeItemViewModel,
         MpIShortcutCommand, 
         MpIHasNotification,
         MpIUserColorViewModel,
@@ -108,7 +110,7 @@ namespace MpWpfApp {
 
         public MpTagTileViewModel ParentTreeItem { get; set; }
 
-        public IList<MpTagTileViewModel> Children => Items;
+        //public IList<MpTagTileViewModel> Children => Items;
 
         #endregion
 
@@ -223,9 +225,9 @@ namespace MpWpfApp {
                 if (_isAssociated != value) {
                     _isAssociated = value;
                     OnPropertyChanged(nameof(IsAssociated));
-                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
-                    OnPropertyChanged(nameof(TagBorderBrush));
-                    OnPropertyChanged(nameof(TagTextColor));
+                    OnPropertyChanged(nameof(TagBorderBackgroundHexColor));
+                    OnPropertyChanged(nameof(TagBorderHexColor));
+                    OnPropertyChanged(nameof(TagTextHexColor));
                 }
             }
         }
@@ -239,45 +241,45 @@ namespace MpWpfApp {
 
         #region Appearance
 
-        public Brush TagBorderBackgroundBrush {
+        public string TagBorderBackgroundHexColor {
             get {
                 if (IsSelected) {
-                    return Brushes.DimGray;
+                    return MpSystemColors.dimgray;
                 }
                 if(IsHovering) {
-                    return Brushes.LightGray;
+                    return MpSystemColors.lightgray;
                 }
-                return Brushes.Transparent;
+                return MpSystemColors.Transparent;
             }
         }
 
-        public Brush TagBorderBrush {
+        public string TagBorderHexColor {
             get {
                 if(IsContextMenuOpened) {
-                    return Brushes.Red;
+                    return MpSystemColors.red1;
                 }
                 if (IsAssociated) {
-                    return TagHexColor.ToBrush();
+                    return TagHexColor;
                 }
-                return Brushes.Transparent;
+                return MpSystemColors.Transparent;
             }
         }
 
-        public Brush TagTextColor {
+        public string TagTextHexColor {
             get {
                 if(IsSelected) {
-                    return Brushes.White;
+                    return MpSystemColors.White;
                 }
                 if(IsHovering) {
-                    return Brushes.Black;
+                    return MpSystemColors.Black;
                 }
-                return Brushes.White;
+                return MpSystemColors.White;
             }
         }
 
-        public Brush TagCountTextColor {
+        public string TagCountTextHexColor {
             get {
-                return MpWpfColorHelpers.IsBright((TagHexColor.ToBrush() as SolidColorBrush).Color) ? Brushes.Black : Brushes.White; ;
+                return MpColorHelpers.IsBright(TagHexColor) ? MpSystemColors.black : MpSystemColors.White; ;
             }
         }
 
@@ -443,6 +445,12 @@ namespace MpWpfApp {
                 var ttvm = await CreateChildTagTileViewModel(ct);
                 Items.Add(ttvm);
             }
+
+            while(Items.Any(x=>x.IsBusy)) {
+                await Task.Delay(100);
+            }
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(Children));
 
             IsBusy = false;
         }
@@ -749,14 +757,23 @@ namespace MpWpfApp {
                 return !IsTagReadOnly;
             });
 
-        public ICommand AddChildTagCommand => new RelayCommand(
-             async () => {
+        public ICommand AddChildTagCommand => new RelayCommand<object>(
+             async (arg) => {
                  //only called in All Tag
-                 MpTag t = await MpTag.Create(
+                 MpTagTileViewModel ttvm = null;
+
+                 if(arg == null) {
+                     MpTag t = await MpTag.Create(
                      parentTagId: Parent.SelectedTagTile.TagId,
                      sortIdx: Parent.SelectedTagTile.Items.Count);
 
-                 var ttvm = await Parent.SelectedTagTile.CreateChildTagTileViewModel(t);
+                     ttvm = await Parent.SelectedTagTile.CreateChildTagTileViewModel(t);
+                 } else if(arg is MpTagTileViewModel) {
+                     ttvm = arg as MpTagTileViewModel;
+                     if(ttvm.ParentTreeItem != null) {
+                         ttvm.ParentTreeItem.Items.Remove(ttvm);
+                     }
+                 }
 
                  Parent.SelectedTagTile.Items.Add(ttvm);
 
@@ -769,7 +786,7 @@ namespace MpWpfApp {
         public ICommand DeleteChildTagCommand => new RelayCommand<object>(
             async (args) => {
                 var ttvm = args as MpTagTileViewModel;
-                var deleteTasks = ttvm.FindAllChildren().Select(x => x.Tag.DeleteFromDatabaseAsync()).ToList();
+                var deleteTasks = ttvm.FindAllChildren().Select(x => (x as MpTagTileViewModel).Tag.DeleteFromDatabaseAsync()).ToList();
                 deleteTasks.Add(ttvm.Tag.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks);
 
@@ -785,8 +802,40 @@ namespace MpWpfApp {
                 ParentTreeItem.DeleteChildTagCommand.Execute(this);
             }, !IsTagReadOnly);
 
-        public bool IsReadOnly { get; }
+        #region MpIHierarchialViewModel Implementation
 
+        public bool IsReadOnly {
+            get => !IsEditing;
+            set => IsEditing = !value;
+        }
+        public string Label {
+            get => TagName;
+            set => TagName = value;
+        }
+
+        public bool IsFocused { get; set; }
+        public double LabelFontSize => TagHeight * 0.5;
+        public string LabelForegroundHexColor => TagTextHexColor;
+        public bool ShowAddButton => IsAllTag;
+        public double ScreenWidth {
+            get => TagTileTrayWidth;
+            set => TagTileTrayWidth = value;
+        } 
+        public double ScreenHeight => TagHeight;
+
+        public string IconHexColor => TagHexColor;
+        public string IconTextOrResourceKey => TagClipCount.ToString();
+        public string IconLabelHexColor => TagCountTextHexColor;
+        public string BackgroundHexColor => TagHexColor;
+        public string BorderHexColor => TagBorderHexColor;
+
+        public ICommand AddChildCommand => AddChildTagCommand;
+
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTreeItem;
+        //ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children => new ObservableCollection<MpITreeItemViewModel>(Children);
+        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
+
+        #endregion
 
         #endregion
     }

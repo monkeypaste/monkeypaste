@@ -12,6 +12,7 @@
   "clipboardHandler": {
     "handledFormats": [
       {
+        "handlerGuid": "676278d9-6c9b-4efd-b5e9-9c5840222c14",
         "displayName": "Plain Text",
         "clipboardName": "Text",
         "parameters": [
@@ -47,6 +48,7 @@
         ]
       },
       {
+        "handlerGuid": "58558048-a275-4377-9108-8fb1bed3cd5e",
         "displayName": "Rich Text",
         "clipboardName": "Rtf",
         "parameters": [
@@ -82,6 +84,7 @@
         ]
       },
       {
+        "handlerGuid": "936e7b68-72c9-4a8a-ada1-a60f21c93b10",
         "displayName": "Html",
         "clipboardName": "Html",
         "parameters": [
@@ -117,6 +120,7 @@
         ]
       },
       {
+        "handlerGuid": "8af77575-fd03-4c39-87c5-688eda230f06",
         "displayName": "Bitmap",
         "clipboardName": "Bitmap",
         "parameters": [
@@ -161,6 +165,7 @@
         ]
       },
       {
+        "handlerGuid": "bb997630-985a-420e-808f-60e31625c06f",
         "displayName": "File",
         "clipboardName": "FileDrop",
         "parameters": [
@@ -187,6 +192,7 @@
         ]
       },
       {
+        "handlerGuid": "34b250a9-c7d4-4290-a15f-bb229867b76b",
         "displayName": "Csv",
         "clipboardName": "Csv",
         "parameters": [

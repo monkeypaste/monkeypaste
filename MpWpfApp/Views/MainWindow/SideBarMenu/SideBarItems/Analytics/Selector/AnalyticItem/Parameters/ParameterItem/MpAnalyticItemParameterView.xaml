@@ -19,8 +19,7 @@
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsValid}"
                                  Value="False">
-                        <Setter Property="BorderBrush"
-                                Value="Red" />
+                        <Setter Property="BorderBrush" Value="Red" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -31,20 +30,13 @@
             <Grid.Resources>
                 <Style x:Key="AnalyzerTextBlockStyle"
                        TargetType="TextBlock">
-                    <Setter Property="HorizontalAlignment"
-                            Value="Left" />
-                    <Setter Property="VerticalAlignment"
-                            Value="Top" />
-                    <Setter Property="FontSize"
-                            Value="13" />
-                    <Setter Property="FontWeight"
-                            Value="SemiBold" />
-                    <Setter Property="Foreground"
-                            Value="White" />
-                    <Setter Property="Margin"
-                            Value="5,5,7,0" />
-                    <Setter Property="DockPanel.Dock"
-                            Value="Left" />
+                    <Setter Property="HorizontalAlignment" Value="Left" />
+                    <Setter Property="VerticalAlignment" Value="Top" />
+                    <Setter Property="FontSize" Value="13" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Margin" Value="5,5,7,0" />
+                    <Setter Property="DockPanel.Dock" Value="Left" />
                 </Style>
                 <!--  MultiSelect ListBox Parameter  -->
 

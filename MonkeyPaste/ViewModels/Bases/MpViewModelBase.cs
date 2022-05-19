@@ -18,7 +18,8 @@ namespace MonkeyPaste {
 
         event PropertyChangedEventHandler PropertyChanged;
     }
-    public abstract class MpViewModelBase : INotifyPropertyChanged, MpIErrorHandler, MpIViewModel {
+    public abstract class MpViewModelBase : 
+        INotifyPropertyChanged, MpIErrorHandler, MpIViewModel {
         
         //public static event EventHandler<bool> OnBusyChanged;
 

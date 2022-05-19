@@ -37,8 +37,10 @@
                 Focusable="False"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Left"
-                Background="{Binding TagBorderBackgroundBrush}"
-                BorderBrush="{Binding TagBorderBrush}"
+                Background="{Binding TagBorderBackgroundHexColor,
+                                     Converter={StaticResource StringHexToBrushConverter}}"
+                BorderBrush="{Binding TagBorderHexColor,
+                                      Converter={StaticResource StringHexToBrushConverter}}"
                 Tag="{Binding DataContext,
                               RelativeSource={RelativeSource Mode=Self}}"
                 BorderThickness="1.5"
@@ -76,7 +78,7 @@
                                 HorizontalAlignment="Center"
                                 Text="{Binding TagClipCount,
                                                Converter={StaticResource IntToStringConverter}}"
-                                Foreground="{Binding TagCountTextColor}" />
+                                Foreground="{Binding TagCountTextHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
                         </local:MpClipBorder>
                         <TextBlock
                             x:Name="TagTextBlock"
@@ -90,7 +92,8 @@
                                                  Converter={StaticResource BoolToVisibilityFlipConverter}}"
                             FontSize="{Binding TagFontSize}"
                             FontWeight="SemiBold"
-                            Foreground="{Binding TagTextColor}"
+                            Foreground="{Binding TagTextHexColor,
+                                                 Converter={StaticResource StringHexToBrushConverter}}"
                             Text="{Binding TagName,
                                            Mode=TwoWay,
                                            UpdateSourceTrigger=PropertyChanged,

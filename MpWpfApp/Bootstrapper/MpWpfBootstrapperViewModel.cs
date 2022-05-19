@@ -44,6 +44,7 @@ namespace MpWpfApp {
                     new MpBootstrappedItem(typeof(MpSearchBoxViewModel)),
 
                     new MpBootstrappedItem(typeof(MpAnalyticItemCollectionViewModel)),
+                    new MpBootstrappedItem(typeof(MpClipboardHandlerCollectionViewModel)),
 
                     new MpBootstrappedItem(typeof(MpClipTrayViewModel)),
 

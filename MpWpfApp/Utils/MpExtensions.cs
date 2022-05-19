@@ -44,7 +44,7 @@ namespace MpWpfApp {
             // Kill logical focus
             FocusManager.SetFocusedElement(FocusManager.GetFocusScope(control), null);
             // Kill keyboard focus
-            Keyboard.ClearFocus();
+            Keyboard.ClearFocus(); 
         }
 
         #endregion

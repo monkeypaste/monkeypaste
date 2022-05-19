@@ -43,9 +43,11 @@ namespace MpWpfApp {
                 }
                 var ttvml = AllTagViewModel.FindAllChildren().ToList();
                 ttvml.Insert(0, AllTagViewModel);
-                return new ObservableCollection<MpTagTileViewModel>(ttvml);
+                return new ObservableCollection<MpTagTileViewModel>(ttvml.Cast<MpTagTileViewModel>());
             }
         }
+
+        //public ObservableCollection<MpITreeItemViewModel> TreeItems => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
 
         public MpTagTileViewModel SelectedTagTile => Items.FirstOrDefault(x => x.IsSelected);
 
@@ -135,7 +137,12 @@ namespace MpWpfApp {
                 AllTagViewModel = new MpTagTileViewModel(this);
                 await AllTagViewModel.InitializeAsync(allTag);
 
-                OnPropertyChanged(nameof(Items));
+                while(AllTagViewModel.IsBusy) {
+                    await Task.Delay(100);
+                }
+
+                //OnPropertyChanged(nameof(Items));
+                //OnPropertyChanged(nameof(TreeItems));
 
                 Items.CollectionChanged += TagTileViewModels_CollectionChanged;
 

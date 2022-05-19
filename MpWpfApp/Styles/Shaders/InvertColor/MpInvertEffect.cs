@@ -29,5 +29,31 @@ namespace MpWpfApp {
                 nameof(Input), 
                 typeof(MpInvertEffect), 0);
 
+        #region IsBright
+
+        public static bool GetIsBright(DependencyObject obj) {
+            return (bool)obj.GetValue(IsBrightProperty);
+        }
+        public static void SetIsBright(DependencyObject obj, bool value) {
+            obj.SetValue(IsBrightProperty, value);
+        }
+        public static readonly DependencyProperty IsBrightProperty =
+          DependencyProperty.RegisterAttached(
+            "IsBright",
+            typeof(bool),
+            typeof(MpInvertEffect),
+            new FrameworkPropertyMetadata() {
+                DefaultValue = false,
+                PropertyChangedCallback = (s,e) => {
+                    if(e.NewValue == null) {
+                        return;
+                    }
+                    bool isBright = (bool)e.NewValue;
+
+                }
+            });
+
+        #endregion
+
     }
 }

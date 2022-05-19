@@ -102,10 +102,10 @@ namespace MpWpfApp {
 
         public string Title {
             get {
-                if (PluginFormat == null) {
+                if (ClipboardPluginFormat == null) {
                     return string.Empty;
                 }
-                return PluginFormat.title;
+                return ClipboardPluginFormat.displayName;
             }
         }
 
@@ -118,7 +118,7 @@ namespace MpWpfApp {
             }
         }
 
-        public string ClipboardPluginGuid => PluginFormat == null ? string.Empty : PluginFormat.guid;
+        public string ClipboardHandlerGuid => ClipboardPluginFormat == null ? string.Empty : ClipboardPluginFormat.handlerGuid;
 
 
         #region  Plugin
@@ -138,9 +138,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
-
-        public event EventHandler<MpCopyItem> OnAnalysisCompleted;
-
         #endregion
 
         #region Constructors
@@ -170,7 +167,7 @@ namespace MpWpfApp {
             }
 
 
-            var presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
+            var presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(ClipboardHandlerGuid);
 
             if (string.IsNullOrEmpty(PluginFormat.iconUrl)) {
                 IconId = MpPreferences.ThisAppIcon.Id;
@@ -283,7 +280,7 @@ namespace MpWpfApp {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpAnalyticItemPreset aip) {
-                if (aip.AnalyzerPluginGuid == ClipboardPluginGuid) {
+                if (aip.AnalyzerPluginGuid == ClipboardHandlerGuid) {
                     var presetVm = Items.FirstOrDefault(x => x.Preset.Id == aip.Id);
                     if (presetVm != null) {
                         int presetIdx = Items.IndexOf(presetVm);
@@ -298,8 +295,6 @@ namespace MpWpfApp {
         }
 
         #endregion
-
-
 
         protected virtual async Task TransformContent() {
             await Task.Delay(1);
@@ -319,7 +314,7 @@ namespace MpWpfApp {
             }
 
             var aip = await MpAnalyticItemPreset.Create(
-                                analyzerPluginGuid: PluginFormat.guid,
+                                analyzerPluginGuid: ClipboardHandlerGuid,
                                 isDefault: true,
                                 label: $"{Title} - Default",
                                 iconId: IconId,
@@ -398,7 +393,7 @@ namespace MpWpfApp {
             //(for now clear all presets and either load predefined presets or create from parameter default values)
 
             // TODO maybe less forceably handle add/remove/update of presets when manifest changes
-            presets = presets == null ? await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid) : presets;
+            presets = presets == null ? await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(ClipboardHandlerGuid) : presets;
             foreach (var preset in presets) {
                 var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
                 await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
@@ -413,7 +408,7 @@ namespace MpWpfApp {
             } else {
                 foreach (var preset in ClipboardPluginFormat.presets) {
                     var aip = await MpAnalyticItemPreset.Create(
-                        analyzerPluginGuid: PluginFormat.guid,
+                        analyzerPluginGuid: ClipboardHandlerGuid,
                         isDefault: preset.isDefault,
                         label: preset.label,
                         iconId: IconId,
@@ -439,7 +434,7 @@ namespace MpWpfApp {
                 IsBusy = true;
 
                 MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
-                        analyzerPluginGuid: ClipboardPluginGuid,
+                        analyzerPluginGuid: ClipboardHandlerGuid,
                         format: ClipboardPluginFormat,
                         iconId: IconId,
                         label: GetUniquePresetName());

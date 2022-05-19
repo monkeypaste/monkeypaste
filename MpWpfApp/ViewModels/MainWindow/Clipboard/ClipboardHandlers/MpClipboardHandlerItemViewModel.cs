@@ -50,6 +50,15 @@ namespace MpWpfApp {
 
         #region Model
 
+        public string HandlerName {
+            get {
+                if(PluginFormat == null) {
+                    return string.Empty;
+                }
+                return PluginFormat.title;
+            }
+        }
+
         public MpPluginFormat PluginFormat { get; set; }
 
         public MpClipboardHandlerFormats ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.clipboardHandler;

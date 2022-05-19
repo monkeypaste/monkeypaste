@@ -16,19 +16,11 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpTagTreeView.xaml
+    /// Interaction logic for MpSidebarTreeView.xaml
     /// </summary>
-    public partial class MpTagTreeView : MpUserControl<MpTagTrayViewModel> {
-        public MpTagTreeView() {
+    public partial class MpSidebarTreeView : MpUserControl<MpIHierarchialViewModel> {
+        public MpSidebarTreeView() {
             InitializeComponent();
-        }
-
-        private void TagTray_Loaded(object sender, RoutedEventArgs e) {
-            TagTray.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
-        }
-
-        private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e) {
-            return;
         }
     }
 }

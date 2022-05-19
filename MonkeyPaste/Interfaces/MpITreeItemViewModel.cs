@@ -3,10 +3,39 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste {
+    public interface MpIHierarchialViewModel : 
+        MpIViewModel,
+        MpITreeItemViewModel,
+        MpIHoverableViewModel,
+        MpIFocusableViewModel,
+        MpISelectableViewModel,
+        MpIEditableViewModel,
+        MpIMenuItemViewModel {
 
-    public interface MpITreeItemViewModel {
+        string Label { get; set; }
+
+        double LabelFontSize { get; }
+        string LabelForegroundHexColor { get; }
+        bool ShowAddButton { get; }
+        double ScreenWidth { get; set; }
+        double ScreenHeight { get; }
+        string BackgroundHexColor { get; }
+        string BorderHexColor { get; }
+        string IconHexColor { get; }
+        string IconTextOrResourceKey { get; }
+        string IconLabelHexColor { get; }
+
+        bool IsNew { get; }
+        
+
+        ICommand AddChildCommand { get; } 
+    }
+
+    public interface MpITreeItemViewModel : MpIViewModel {
         bool IsExpanded { get; set; }
 
         MpITreeItemViewModel ParentTreeItem { get; }
@@ -35,6 +64,18 @@ namespace MonkeyPaste {
             foreach(MpITreeItemViewModel<T> c in tivm.Children) {
                 activml.Add(c as T);
                 activml.AddRange(c.FindAllChildren());
+            }
+            return activml;
+        }
+
+        public static ObservableCollection<MpITreeItemViewModel> FindAllChildren(this MpITreeItemViewModel tivm)  {
+            var activml = new ObservableCollection<MpITreeItemViewModel>();
+            foreach (MpITreeItemViewModel c in tivm.Children) {
+                activml.Add(c);
+                var ccl = c.FindAllChildren();
+                foreach(var cc in ccl) {
+                    activml.Add(cc);
+                }
             }
             return activml;
         }

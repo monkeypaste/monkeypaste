@@ -244,6 +244,7 @@
     <Compile Include="Converters\MpParameterFormatToItemsSourceConverter.cs" />
     <Compile Include="Converters\MpShorcutIdToKeyStringConverter.cs" />
     <Compile Include="Converters\MpSliderValueWidthConverter.cs" />
+    <Compile Include="Converters\MpStringHexColorToIsBrightBrushConverter.cs" />
     <Compile Include="Converters\MpStringHexToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToIconConverter.cs" />
     <Compile Include="Converters\MpIconIdToImageSourceConverter.cs" />
@@ -521,6 +522,13 @@
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
       <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\Item\MpSidebarTreeItemView.xaml.cs">
+      <DependentUpon>MpSidebarTreeItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\Item\Selector\MpSidebarTreeItemIconTemplateSelector.cs" />
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\MpSidebarTreeView.xaml.cs">
+      <DependentUpon>MpSidebarTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\TagTree\MpTagTreeView.xaml.cs">
       <DependentUpon>MpTagTreeView.xaml</DependentUpon>
@@ -1004,6 +1012,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\MpAnalyticItemSelectorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\Item\MpSidebarTreeItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\MpSidebarTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -2862,7 +2878,6 @@
   <ItemGroup>
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Plugins\Google\PeopleApi\" />
-    <Folder Include="ViewModels\MainWindow\TagTray\TagTile\ContextMenu\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FileList\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
