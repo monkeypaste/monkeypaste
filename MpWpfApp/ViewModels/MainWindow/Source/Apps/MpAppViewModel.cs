@@ -76,6 +76,8 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; }
 
+        public DateTime LastSelectedDateTime { get; set; }
+
         public bool IsHovering { get; set; }
 
         public bool IsAnyBusy => IsBusy || ClipboardFormatInfos.IsBusy;

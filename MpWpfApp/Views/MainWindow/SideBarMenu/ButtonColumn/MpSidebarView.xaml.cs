@@ -91,22 +91,6 @@ namespace MpWpfApp {
             }
         }
 
-        private void AnalyzerToggleButton_Click(object sender, RoutedEventArgs e) {
-            MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = !MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible;
-            AnalyzerToggleButton.IsChecked = MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible;
-            TagTreeToggleButton.IsChecked = MpTagTrayViewModel.Instance.IsSidebarVisible;
-        }
-
-        private void TagTreeToggleButton_Click(object sender, RoutedEventArgs e) {
-            MpTagTrayViewModel.Instance.IsSidebarVisible = !MpTagTrayViewModel.Instance.IsSidebarVisible;
-            TagTreeToggleButton.IsChecked = MpTagTrayViewModel.Instance.IsSidebarVisible;
-            AnalyzerToggleButton.IsChecked = MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible;
-        }
-
-        private void MatcherToggleButton_Click(object sender, RoutedEventArgs e) {
-            MpActionCollectionViewModel.Instance.IsSidebarVisible = !MpActionCollectionViewModel.Instance.IsSidebarVisible;
-
-        }
 
         private void AppModeToggleButton_Loaded(object sender, RoutedEventArgs e) {
             var tb = sender as ToggleButton;

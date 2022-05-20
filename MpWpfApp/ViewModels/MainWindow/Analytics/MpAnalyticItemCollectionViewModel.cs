@@ -197,6 +197,7 @@ namespace MpWpfApp {
                     if (IsSidebarVisible) {
                         MpTagTrayViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
+                        MpClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
                     OnPropertyChanged(nameof(SelectedItem));
                     break;

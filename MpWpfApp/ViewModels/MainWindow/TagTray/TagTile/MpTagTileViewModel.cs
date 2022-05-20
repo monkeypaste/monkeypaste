@@ -18,7 +18,7 @@ namespace MpWpfApp {
         MpIHoverableViewModel,
         MpISelectableViewModel,
         //MpITreeItemViewModel<MpTagTileViewModel>, 
-        MpIHierarchialViewModel,
+        MpIHierarchialViewModel<MpTagTileViewModel>,
         //MpITreeItemViewModel,
         MpIShortcutCommand, 
         MpIHasNotification,
@@ -34,6 +34,64 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+        #endregion
+
+        #region MpIHierarchialViewModel Implementation
+
+        public bool IsReadOnly {
+            get => !IsEditing;
+            set => IsEditing = !value;
+        }
+        public string Label {
+            get => TagName;
+            set => TagName = value;
+        }
+
+        public bool IsFocused { get; set; }
+        public double LabelFontSize => TagHeight * 0.5;
+        public string LabelForegroundHexColor => TagTextHexColor;
+        public bool ShowAddButton => IsAllTag;
+        public double ScreenWidth {
+            get => TagTileTrayWidth;
+            set => TagTileTrayWidth = value;
+        }
+        public double ScreenHeight => TagHeight;
+
+        public string IconHexColor => TagHexColor;
+        public string IconTextOrResourceKey => TagClipCount.ToString();
+        public string IconLabelHexColor => TagCountTextHexColor;
+        public string BackgroundHexColor => TagHexColor;
+        public string BorderHexColor => TagBorderHexColor;
+
+        public ICommand AddChildCommand => AddChildTagCommand;
+
+        //MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTreeItem;
+        //ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children => new ObservableCollection<MpITreeItemViewModel>(Children);
+        public ObservableCollection<MpTagTileViewModel> Children => Items;
+
+        #region MpITreeItemViewModel Implementation
+
+        public bool IsExpanded { get; set; }
+
+        public MpTagTileViewModel ParentTreeItem { get; set; }
+
+        //public IList<MpTagTileViewModel> Children => Items;
+
+        #endregion
+
+
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem { get; }
+        ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children { get; }
+
+        #endregion
+
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; }
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+
         #endregion
 
         #region MpIUserColorViewModel Implementation
@@ -104,15 +162,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region MpITreeItemViewModel Implementation
-
-        public bool IsExpanded { get; set; }
-
-        public MpTagTileViewModel ParentTreeItem { get; set; }
-
-        //public IList<MpTagTileViewModel> Children => Items;
-
-        #endregion
 
         #region MpIHoverableViewModel Implementation
 
@@ -120,11 +169,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region MpISelectableViewModel Implementation
-
-        public bool IsSelected { get; set; }
-
-        #endregion
 
         #region MpITriggerActionViewModel Implementation
 
@@ -488,6 +532,8 @@ namespace MpWpfApp {
                     //    });
                     //}
                     if(IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
+
                         if (!IsExpanded) {
                             IsExpanded = true;
                         }
@@ -802,40 +848,8 @@ namespace MpWpfApp {
                 ParentTreeItem.DeleteChildTagCommand.Execute(this);
             }, !IsTagReadOnly);
 
-        #region MpIHierarchialViewModel Implementation
 
-        public bool IsReadOnly {
-            get => !IsEditing;
-            set => IsEditing = !value;
-        }
-        public string Label {
-            get => TagName;
-            set => TagName = value;
-        }
 
-        public bool IsFocused { get; set; }
-        public double LabelFontSize => TagHeight * 0.5;
-        public string LabelForegroundHexColor => TagTextHexColor;
-        public bool ShowAddButton => IsAllTag;
-        public double ScreenWidth {
-            get => TagTileTrayWidth;
-            set => TagTileTrayWidth = value;
-        } 
-        public double ScreenHeight => TagHeight;
-
-        public string IconHexColor => TagHexColor;
-        public string IconTextOrResourceKey => TagClipCount.ToString();
-        public string IconLabelHexColor => TagCountTextHexColor;
-        public string BackgroundHexColor => TagHexColor;
-        public string BorderHexColor => TagBorderHexColor;
-
-        public ICommand AddChildCommand => AddChildTagCommand;
-
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem => ParentTreeItem;
-        //ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children => new ObservableCollection<MpITreeItemViewModel>(Children);
-        public ObservableCollection<MpITreeItemViewModel> Children => new ObservableCollection<MpITreeItemViewModel>(Items.Cast<MpITreeItemViewModel>());
-
-        #endregion
 
         #endregion
     }

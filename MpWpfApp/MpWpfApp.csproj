@@ -398,6 +398,7 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\Base\MpActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Sidebar\MpSidebarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\MpPasteShortcutViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\ClipboardFormatInfo\MpAppClipboardFormatInfoViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Apps\AppInteropSettings\ClipboardFormatInfo\MpAppClipboardFormatInfoCollectionViewModel.cs" />
@@ -433,6 +434,9 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
+    <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileTreeView.xaml.cs">
+      <DependentUpon>MpTagTileTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\ButtonColumn\MpSidebarView.xaml.cs">
       <DependentUpon>MpSidebarView.xaml</DependentUpon>
     </Compile>
@@ -480,6 +484,21 @@
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Designer\MpActionDesignerView.xaml.cs">
       <DependentUpon>MpActionDesignerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\MpAnalyticItemTreeView.xaml.cs">
+      <DependentUpon>MpAnalyticItemTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\ClipboardHandlerItem\MpClipboardHandlerItemView.xaml.cs">
+      <DependentUpon>MpClipboardHandlerItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\ClipboardHandlerItem\Parameters\MpClipboardHandlerItemPresetParameterListBoxView.xaml.cs">
+      <DependentUpon>MpClipboardHandlerItemPresetParameterListBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\ClipboardHandlerItem\Presets\MpHandledClipboardFormatsItemPresetDataGridView.xaml.cs">
+      <DependentUpon>MpHandledClipboardFormatsItemPresetDataGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\MpClipboardHandlerItemSelectorView.xaml.cs">
+      <DependentUpon>MpClipboardHandlerItemSelectorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml.cs">
       <DependentUpon>MpAnalyticItemView.xaml</DependentUpon>
     </Compile>
@@ -522,13 +541,6 @@
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\MpAnalyticItemSelectorView.xaml.cs">
       <DependentUpon>MpAnalyticItemSelectorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\Item\MpSidebarTreeItemView.xaml.cs">
-      <DependentUpon>MpSidebarTreeItemView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\Item\Selector\MpSidebarTreeItemIconTemplateSelector.cs" />
-    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\MpSidebarTreeView.xaml.cs">
-      <DependentUpon>MpSidebarTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\TagTree\MpTagTreeView.xaml.cs">
       <DependentUpon>MpTagTreeView.xaml</DependentUpon>
@@ -891,6 +903,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -959,6 +975,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\MpAnalyticItemTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\ClipboardHandlerItem\MpClipboardHandlerItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\ClipboardHandlerItem\Parameters\MpClipboardHandlerItemPresetParameterListBoxView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\ClipboardHandlerItem\Presets\MpHandledClipboardFormatsItemPresetDataGridView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\MpClipboardHandlerItemSelectorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\AnalyticItem\MpAnalyticItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1012,14 +1048,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Analytics\Selector\MpAnalyticItemSelectorView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\Item\MpSidebarTreeItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Tree\MpSidebarTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

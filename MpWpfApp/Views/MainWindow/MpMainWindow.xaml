@@ -63,64 +63,95 @@
             <!--  Title Menu  -->
             <Grid x:Name="TitleBarDockPanel"
                   Grid.Row="0"
-                  local:MpHoverableExtension.IsEnabled="True"
-                  local:MpHoverableExtension.HoverCursor="ResizeNS"
                   Background="{Binding .,
                                        Converter={StaticResource StringToThemeBrushConverter},
                                        ConverterParameter=Title_Menu_Background_Color}">
 
-                <i:Interaction.Behaviors>
-                    <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
-                                            AffectsContent="True"
-                                            IsEnabled="True"
-                                            BoundElement="{Binding ElementName=MainWindowGrid}"
-                                            IsResizing="{Binding IsResizing,
-                                                                 Mode=TwoWay,
-                                                                 UpdateSourceTrigger=PropertyChanged,
-                                                                 NotifyOnSourceUpdated=True,
-                                                                 NotifyOnTargetUpdated=True}"
-                                            CanResize="{Binding CanResize,
-                                                                Mode=TwoWay,
-                                                                UpdateSourceTrigger=PropertyChanged,
-                                                                NotifyOnSourceUpdated=True,
-                                                                NotifyOnTargetUpdated=True}"
-                                            ResizableEdge1="Top"
-                                            BoundHeight="{Binding MainWindowHeight,
-                                                                  Mode=TwoWay,
-                                                                  UpdateSourceTrigger=PropertyChanged,
-                                                                  NotifyOnSourceUpdated=True,
-                                                                  NotifyOnTargetUpdated=True}"
-                                            DefaultHeight="{Binding MainWindowDefaultHeight,
-                                                                    Source={x:Static local:MpMeasurements.Instance}}"
-                                            MinHeight="{Binding MainWindowMinHeight,
-                                                                Source={x:Static local:MpMeasurements.Instance}}"
-                                            MaxHeight="{Binding MainWindowMaxHeight,
-                                                                Source={x:Static local:MpMeasurements.Instance}}" />
-
-                </i:Interaction.Behaviors>
-                <TextBlock DockPanel.Dock="Left"
-                           Text="{Binding LogText}" />
-                <Button x:Name="FrameGripButton"
-                        Style="{StaticResource FrameGripButton}">
-                    <!--<Grid HorizontalAlignment="Stretch"
-                                      VerticalAlignment="Stretch" Background="Pink">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="0.25*" />
-                                        <RowDefinition Height="0.5*" />
-                                        <RowDefinition Height="0.25*" />
-                                    </Grid.RowDefinitions>
-                                    <Border x:Name="FrameGripTop" Background="Orange"
-                                            Grid.Row="0" />
-                                    <Border x:Name="FrameGripMiddle"
-                                            Grid.Row="1">
-                                        <Border.Background>
-
-                                        </Border.Background>
-                                    </Border>
-                                    <Border x:Name="FrameGripBottom"
-                                            Grid.Row="2" />
-                                </Grid>-->
+                <Button Margin="5,0,0,0"
+                        ToolTip="Settings"
+                        ToolTipService.InitialShowDelay="500"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        local:MpHoverableExtension.IsEnabled="True"
+                        local:MpHoverableExtension.HoverCursor="Default"
+                        PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
+                        Command="{Binding ShowSettingsWindowCommand,
+                                          Source={x:Static local:MpSystemTrayViewModel.Instance}}"
+                        Template="{StaticResource SearchButtonControlTemplate}">
+                    <Image Source="{Binding .,
+                                            Source={StaticResource CogIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Height="12"
+                           Width="12"
+                           Stretch="Fill"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center">
+                        <Image.Effect>
+                            <local:MpInvertEffect />
+                        </Image.Effect>
+                    </Image>
                 </Button>
+                <ToggleButton Margin="0,0,5,0"
+                              ToolTip="Lock"
+                              ToolTipService.InitialShowDelay="500"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Right"
+                              IsChecked="{Binding IsMainWindowLocked,
+                                                  Mode=TwoWay,
+                                                  UpdateSourceTrigger=PropertyChanged,
+                                                  NotifyOnSourceUpdated=True,
+                                                  NotifyOnTargetUpdated=True}"
+                              Command="{Binding ToggleMainWindowLockCommand}"
+                              CommandParameter="{StaticResource True}"
+                              Template="{StaticResource LockToggleButtonControlTemplate}">
+                    <Image Source="{Binding Source={StaticResource LockIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Width="12"
+                           Height="12"
+                           Stretch="Fill"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center">
+                        <Image.Effect>
+                            <local:MpInvertEffect />
+                        </Image.Effect>
+                    </Image>
+                </ToggleButton>
+                <Border Width="100"
+                        Background="Pink"
+                        local:MpHoverableExtension.IsEnabled="True"
+                        local:MpHoverableExtension.HoverCursor="ResizeNS"
+                        VerticalAlignment="Stretch">
+
+                    <i:Interaction.Behaviors>
+                        <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"
+                                                AffectsContent="True"
+                                                IsEnabled="True"
+                                                BoundElement="{Binding ElementName=MainWindowGrid}"
+                                                IsResizing="{Binding IsResizing,
+                                                                     Mode=TwoWay,
+                                                                     UpdateSourceTrigger=PropertyChanged,
+                                                                     NotifyOnSourceUpdated=True,
+                                                                     NotifyOnTargetUpdated=True}"
+                                                CanResize="{Binding CanResize,
+                                                                    Mode=TwoWay,
+                                                                    UpdateSourceTrigger=PropertyChanged,
+                                                                    NotifyOnSourceUpdated=True,
+                                                                    NotifyOnTargetUpdated=True}"
+                                                ResizableEdge1="Top"
+                                                BoundHeight="{Binding MainWindowHeight,
+                                                                      Mode=TwoWay,
+                                                                      UpdateSourceTrigger=PropertyChanged,
+                                                                      NotifyOnSourceUpdated=True,
+                                                                      NotifyOnTargetUpdated=True}"
+                                                DefaultHeight="{Binding MainWindowDefaultHeight,
+                                                                        Source={x:Static local:MpMeasurements.Instance}}"
+                                                MinHeight="{Binding MainWindowMinHeight,
+                                                                    Source={x:Static local:MpMeasurements.Instance}}"
+                                                MaxHeight="{Binding MainWindowMaxHeight,
+                                                                    Source={x:Static local:MpMeasurements.Instance}}" />
+
+                    </i:Interaction.Behaviors>
+                </Border>
             </Grid>
 
             <!--  FilterMenu  -->
@@ -132,44 +163,40 @@
                     <SolidColorBrush Color="DarkViolet" Opacity="0.4"/>
                 </Grid.Background>-->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="0.25*" />
                     <ColumnDefinition Width="1.15*" />
                     <ColumnDefinition Width="5*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal"
+                            DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
                             Grid.Column="0">
-                    <!--  Settings Button  -->
-                    <Button x:Name="SettingsWindowButton"
-                            Width="35"
-                            Height="35"
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            Command="{Binding ShowSettingsWindowCommand,
-                                              Source={x:Static local:MpSystemTrayViewModel.Instance}}"
-                            Template="{StaticResource SearchButtonControlTemplate}">
-                        <Image Source="{Binding .,
-                                                Source={StaticResource CogIcon},
-                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-                    </Button>
-                    <!--  Lock Button  -->
-                    <ToggleButton x:Name="ToggleMainWindowLockButton"
-                                  Width="35"
-                                  Height="35"
-                                  Margin="5,0,0,0"
-                                  VerticalAlignment="Center"
+                    <ToggleButton VerticalAlignment="Top"
                                   HorizontalAlignment="Center"
-                                  IsChecked="{Binding IsMainWindowLocked}"
-                                  Command="{Binding ToggleMainWindowLockCommand}"
-                                  CommandParameter="{StaticResource True}"
-                                  Template="{StaticResource LockToggleButtonControlTemplate}">
-                        <Image Source="{Binding Source={StaticResource LockIcon},
-                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
+                                  ToolTipService.InitialShowDelay="0"
+                                  Template="{StaticResource LockToggleButtonControlTemplate}"
+                                  Padding="10"
+                                  IsChecked="{Binding IsAppPaused,
+                                                      Mode=TwoWay,
+                                                      UpdateSourceTrigger=PropertyChanged,
+                                                      NotifyOnSourceUpdated=True,
+                                                      NotifyOnTargetUpdated=True}">
+                        <Grid>
+                            <Image Source="{Binding Source={StaticResource PauseIcon},
+                                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
+                                   Visibility="{Binding IsAppPaused,
+                                                        Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                   ToolTip="Pause Clipboard Listener"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                            <Image Source="{Binding Source={StaticResource PlayIcon},
+                                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
+                                   Visibility="{Binding IsAppPaused,
+                                                        Converter={StaticResource BoolToVisibilityConverter}}"
+                                   ToolTip="Resume Clipboard Listener"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                        </Grid>
                     </ToggleButton>
                 </StackPanel>
                 <!--  Sort Combobox  -->
@@ -226,6 +253,12 @@
                                      Visibility="{Binding IsSidebarVisible,
                                                           Converter={StaticResource BoolToVisibilityConverter}}"
                                      DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
+                <local:MpClipboardHandlerItemSelectorView x:Name="ManageClipboardHandlerItemsContainerView"
+                                                          Grid.Row="1"
+                                                          Grid.Column="1"
+                                                          DataContext="{x:Static local:MpClipboardHandlerCollectionViewModel.Instance}"
+                                                          Visibility="{Binding IsSidebarVisible,
+                                                                               Converter={StaticResource BoolToVisibilityConverter}}" />
                 <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
                                                   Grid.Row="1"
                                                   Grid.Column="1"

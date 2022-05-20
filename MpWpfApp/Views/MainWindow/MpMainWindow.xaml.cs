@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using MonkeyPaste.Plugin;
+using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
     public partial class MpMainWindow : Window {
@@ -121,6 +122,12 @@ namespace MpWpfApp {
             } else {
                 containerGrid.ColumnDefinitions[1].Width = GridLength.Auto;
             }
+        }
+
+        private void ToggleButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            e.Handled = true;
+            var bb = sender as ButtonBase;
+            bb.Command.Execute(bb.CommandParameter);
         }
     }
 }

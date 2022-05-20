@@ -48,14 +48,10 @@
                   Canvas.Top="1.932"
                   Canvas.Left="1.937">
                 <Path.Fill>
-                    <LinearGradientBrush MappingMode="Absolute"
-                                         StartPoint="399.906,240.414"
-                                         EndPoint="419.903,240.414">
+                    <LinearGradientBrush MappingMode="Absolute" StartPoint="399.906,240.414" EndPoint="419.903,240.414">
                         <LinearGradientBrush.GradientStops>
-                            <GradientStop Offset="0.26"
-                                          Color="#ff7f7f7f" />
-                            <GradientStop Offset="1.00"
-                                          Color="#ff323232" />
+                            <GradientStop Offset="0.26" Color="#ff7f7f7f" />
+                            <GradientStop Offset="1.00" Color="#ff323232" />
                         </LinearGradientBrush.GradientStops>
                         <LinearGradientBrush.Transform>
                             <MatrixTransform Matrix="-1.000,0.000,0.000,-1.000,419.905,245.373" />
@@ -68,14 +64,10 @@
                   Canvas.Top="1.932"
                   Canvas.Left="1.937">
                 <Path.Fill>
-                    <LinearGradientBrush MappingMode="Absolute"
-                                         StartPoint="489.491,230.414"
-                                         EndPoint="509.491,230.414">
+                    <LinearGradientBrush MappingMode="Absolute" StartPoint="489.491,230.414" EndPoint="509.491,230.414">
                         <LinearGradientBrush.GradientStops>
-                            <GradientStop Offset="0.00"
-                                          Color="#ffffffff" />
-                            <GradientStop Offset="0.73"
-                                          Color="#ff7f7f7f" />
+                            <GradientStop Offset="0.00" Color="#ffffffff" />
+                            <GradientStop Offset="0.73" Color="#ff7f7f7f" />
                         </LinearGradientBrush.GradientStops>
                         <LinearGradientBrush.Transform>
                             <MatrixTransform Matrix="1.000,0.000,-0.000,-1.000,-489.491,245.373" />

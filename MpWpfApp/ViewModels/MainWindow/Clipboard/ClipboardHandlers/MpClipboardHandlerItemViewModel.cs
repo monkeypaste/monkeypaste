@@ -34,6 +34,9 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; }
 
+        public DateTime LastSelectedDateTime { get; set; }
+
+
         #endregion
 
         #region MpIHoverableViewModel Implementation
@@ -49,7 +52,14 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
-
+        public int IconId {
+            get {
+                if(Items == null || Items.Count == 0) {
+                    return 0;
+                }
+                return Items[0].IconId;
+            }
+        }
         public string HandlerName {
             get {
                 if(PluginFormat == null) {
@@ -69,7 +79,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpClipboardHandlerItemViewModel(MpClipboardHandlerCollectionViewModel parent) : base(parent) { }
+        public MpClipboardHandlerItemViewModel(MpClipboardHandlerCollectionViewModel parent) : base(parent) {
+            PropertyChanged += MpClipboardHandlerItemViewModel_PropertyChanged;
+        }
 
 
         #endregion
@@ -81,6 +93,8 @@ namespace MpWpfApp {
 
             PluginFormat = pf;
 
+
+
             foreach(var hcf in ClipboardPluginFormat.handledFormats) {
                 var hcfvm = await CreateHandledClipboardFormatViewModel(PluginFormat, ClipboardPluginFormat.handledFormats.IndexOf(hcf));
                 Items.Add(hcfvm);
@@ -90,6 +104,7 @@ namespace MpWpfApp {
             }
 
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(IconId));
             IsBusy = false;
         }
 
@@ -97,6 +112,26 @@ namespace MpWpfApp {
             var hcfvm = new MpHandledClipboardFormatViewModel(this);
             await hcfvm.InitializeAsync(pf,handlerIdx);
             return hcfvm;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpClipboardHandlerItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsSelected):
+                    if(IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
+
+                        if(SelectedItem == null) {
+                            if(Items.Count > 0) {
+                                Items[0].IsSelected = true;
+                            }
+                        }
+                    }
+                    break;
+            }
         }
 
         #endregion

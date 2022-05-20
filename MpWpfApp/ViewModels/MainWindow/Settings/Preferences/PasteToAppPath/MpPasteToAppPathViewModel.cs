@@ -42,6 +42,15 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; }
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+
+        #endregion
+
         #region MpIMatcherTriggerViewModel Implementation
 
         #region MpIUserIcon Implementation
@@ -109,19 +118,6 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isSelected = false;
-        public bool IsSelected {
-            get {
-                return _isSelected;
-            }
-            set {
-                if(_isSelected != value) {
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                    OnPropertyChanged(nameof(IsReadOnly));
-                }
-            }
-        }
 
         public bool IsReadOnly {
             get {
@@ -350,6 +346,11 @@ namespace MpWpfApp {
                             await PasteToAppPath.WriteToDatabaseAsync();
                             HasModelChanged = false;
                         });
+                    }
+                    break;
+                case nameof(IsSelected):
+                    if(IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
                     }
                     break;
             }

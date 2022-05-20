@@ -27,7 +27,7 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <ToggleButton Grid.Row="0"
+        <!--<ToggleButton Grid.Row="0"
                       VerticalAlignment="Top"
                       HorizontalAlignment="Center"
                       ToolTipService.InitialShowDelay="0"
@@ -54,9 +54,9 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
             </Grid>
-        </ToggleButton>
+        </ToggleButton>-->
         <ToggleButton x:Name="TagTreeToggleButton"
-                      Grid.Row="1"
+                      Grid.Row="0"
                       ToolTipService.InitialShowDelay="0"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
@@ -66,6 +66,21 @@
                                           Source={x:Static local:MpTagTrayViewModel.Instance}}"
                       Padding="10">
             <Image Source="{Binding Source={StaticResource PinToCollectionIcon},
+                                    Converter={StaticResource StringResourceToImageSourceConverter}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        </ToggleButton>
+        <ToggleButton x:Name="ClipboardHandlerToggleButton"
+                      Grid.Row="1"
+                      ToolTipService.InitialShowDelay="0"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                      ToolTip="Clipboard Handlers"
+                      IsChecked="{Binding IsSidebarVisible,
+                                          Source={x:Static local:MpClipboardHandlerCollectionViewModel.Instance}}"
+                      Padding="10">
+            <Image Source="{Binding Source={StaticResource ClipboardIcon},
                                     Converter={StaticResource StringResourceToImageSourceConverter}}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />

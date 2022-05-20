@@ -449,6 +449,11 @@ namespace MpWpfApp {
 
         public DateTime LastSubSelectedDateTime { get; set; }
 
+        public DateTime LastSelectedDateTime {
+            get => LastSubSelectedDateTime;
+            set => LastSubSelectedDateTime = value;
+        }
+
         [MpAffectsParent]
         public bool IsSelected {  get; set; }
 

@@ -40,6 +40,8 @@ namespace MpWpfApp {
         #region State
 
         public bool IsSelected { get; set; }
+        public DateTime LastSelectedDateTime { get; set; }
+
         public bool IsHovering { get; set; }
 
         #endregion

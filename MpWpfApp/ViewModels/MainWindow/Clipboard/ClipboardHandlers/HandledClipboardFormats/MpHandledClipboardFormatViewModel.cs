@@ -35,6 +35,15 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; }
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+
+        #endregion
+
         #region Appearance
 
         public string ManageLabel => $"{Title} Preset Manager";
@@ -74,7 +83,6 @@ namespace MpWpfApp {
 
         public bool IsHovering { get; set; } = false;
 
-        public bool IsSelected { get; set; } = false;
 
         public bool IsExpanded { get; set; } = false;
 
@@ -347,9 +355,12 @@ namespace MpWpfApp {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
+
                         if (SelectedItem == null) {
                             SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                         }
+                        CollectionViewSource.GetDefaultView(Items).Refresh();
                         CollectionViewSource.GetDefaultView(SelectedItem.Items).Refresh();
                         //Items.ForEach(x => x.IsEditingParameters = false);
                         //SelectedIt em.IsEditingParameters = true;
@@ -364,7 +375,7 @@ namespace MpWpfApp {
 
                     break;
                 case nameof(IsHovering):
-                    OnPropertyChanged(nameof(ItemBackgroundBrush));
+                    OnPropertyChanged(nameof(ItemBackgroundBrush));`
                     OnPropertyChanged(nameof(ItemTitleForegroundBrush));
                     break;
                 case nameof(SelectedItem):

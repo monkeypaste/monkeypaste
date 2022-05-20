@@ -77,8 +77,11 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpActionViewModelBase> Items { get; set; } = new ObservableCollection<MpActionViewModelBase>();
 
-        public IList<MpActionViewModelBase> Children => Items;
+        public ObservableCollection<MpActionViewModelBase> Children => Items;
 
+
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem { get; }
+        ObservableCollection<MpITreeItemViewModel> MpITreeItemViewModel.Children { get; }
         #endregion
 
         #region MpIUserIcon Implementation
@@ -1141,6 +1144,7 @@ namespace MpWpfApp {
                 await PerformAction(ao);
                 IsPerformingActionFromCommand = false;
             });
+
         #endregion
     }
 }

@@ -34,14 +34,10 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected}" />
-                    <Setter Property="FocusVisualStyle"
-                            Value="{x:Null}" />
-                    <Setter Property="HorizontalContentAlignment"
-                            Value="Left" />
-                    <Setter Property="VerticalContentAlignment"
-                            Value="Top" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="VerticalContentAlignment" Value="Top" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -54,7 +50,6 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <local:MpClipTileContainerView DataContext="{Binding}"
-                                                  
                                                    Visibility="{Binding IsPinned,
                                                                         Converter={StaticResource BoolToVisibilityConverter}}" />
                 </DataTemplate>

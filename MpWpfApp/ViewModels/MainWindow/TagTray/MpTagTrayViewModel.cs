@@ -78,6 +78,9 @@ namespace MpWpfApp {
 
         public bool IsSelected { get; set; }
 
+        public DateTime LastSelectedDateTime { get; set; }
+
+
         #endregion
 
         #region State
@@ -259,6 +262,12 @@ namespace MpWpfApp {
                     if(IsSidebarVisible) {
                         MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
+                        MpClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
+                    }
+                    break;
+                case nameof(IsSelected):
+                    if(IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
                     }
                     break;
             }

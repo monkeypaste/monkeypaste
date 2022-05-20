@@ -27,6 +27,26 @@ namespace MpWpfApp {
 
         #endregion
 
+
+        #region MpITooltipInfoViewModel Implementation
+
+        public object Tooltip => Description;
+
+        #endregion
+
+        #region MpIHoverableViewModel Implementation
+        public bool IsHovering { get; set; } = false;
+
+        #endregion
+
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; } = false;
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+        #endregion
+
         #region Business Logic
 
         public string ValidationMessage { get; set; } = string.Empty;
@@ -63,19 +83,12 @@ namespace MpWpfApp {
 
         public bool HasDescription => !string.IsNullOrEmpty(Description);
 
-        public bool IsHovering { get; set; } = false;
 
         public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
 
-        public bool IsSelected { get; set; } = false;
 
         #endregion
 
-        #region MpITooltipInfoViewModel Implementation
-
-        public object Tooltip => Description;
-
-        #endregion
 
         #region Model
 
@@ -214,8 +227,8 @@ namespace MpWpfApp {
             }
             set {
                 if(CurrentValue != value) {
-                    PresetValue.Value = value;
-                    HasModelChanged = true;
+                    PresetValue.Value = value; 
+                    HasModelChanged = true;      
                     OnPropertyChanged(nameof(CurrentValue));
                 }
             }
@@ -230,7 +243,7 @@ namespace MpWpfApp {
                     return Convert.ToDouble(CurrentValue);
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
+                    MpConsole.WriteTraceLine("Cannot convert "+CurrentValue+" to double ",ex);
                     return 0;
                 }
             }
@@ -252,7 +265,7 @@ namespace MpWpfApp {
                     return Convert.ToInt32(DoubleValue);
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
+                    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to int ", ex);
                     return 0;
                 }
             }
@@ -412,7 +425,11 @@ namespace MpWpfApp {
                     }
                     OnPropertyChanged(nameof(IsValid));
                     break;
-
+                case nameof(IsSelected):
+                    if(IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
+                    }
+                    break;
             }
             //Validate();
         }

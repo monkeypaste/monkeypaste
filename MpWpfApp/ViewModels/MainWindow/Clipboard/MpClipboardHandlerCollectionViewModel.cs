@@ -53,6 +53,13 @@ namespace MpWpfApp {
                 if(SelectedItem == null) {
                     return null;
                 }
+                if(SelectedItem.SelectedItem == null) {
+                    if(SelectedItem.Items.Count > 0) {
+                        SelectedItem.Items[0].IsSelected = true;
+                    } else {
+                        return null;
+                    }
+                }
                 return SelectedItem.SelectedItem.SelectedItem;
             }
         }
@@ -182,6 +189,7 @@ namespace MpWpfApp {
                     if (IsSidebarVisible) {
                         MpTagTrayViewModel.Instance.IsSidebarVisible = false;
                         MpActionCollectionViewModel.Instance.IsSidebarVisible = false;
+                        MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
                     }
                     OnPropertyChanged(nameof(SelectedItem));
                     break;

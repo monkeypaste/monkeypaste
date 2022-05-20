@@ -33,7 +33,8 @@
                     Template="{StaticResource SearchButtonControlTemplate}"
                     ToolTip="{Binding HotkeyIconTooltip}"
                     ToolTipService.InitialShowDelay="0">
-                <Image Source="{Binding HotkeyIconSource, Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                <Image Source="{Binding HotkeyIconSource,
+                                        Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
             </Button>
             <TextBlock x:Name="ClipTileDetailTextBlock"
                        Grid.Column="1"

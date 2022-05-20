@@ -72,6 +72,34 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; } = false;
+
+
+        public DateTime LastSelectedDateTime {
+            get {
+                if (Preset == null) {
+                    return DateTime.MinValue;
+                }
+                return Preset.LastSelectedDateTime;
+            }
+            set {
+                if (LastSelectedDateTime != value) {
+                    Preset.LastSelectedDateTime = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(LastSelectedDateTime));
+                }
+            }
+        }
+
+        #endregion
+
+        #region MpIHoverableViewModel Implementation
+        public bool IsHovering { get; set; } = false;
+
+        #endregion
+
         #region Appearance
 
         public MpCursorType DeleteCursor => IsDefault ? MpCursorType.Invalid : MpCursorType.Default;
@@ -85,12 +113,6 @@ namespace MpWpfApp {
         #region State
 
         public bool IsAllValid => Items.All(x => x.IsValid);
-
-        //public bool IsEditingParameters { get; set; }
-
-        public bool IsSelected { get; set; }
-
-        public bool IsHovering { get; set; }
 
         public bool IsExpanded { get; set; }
 
@@ -222,21 +244,6 @@ namespace MpWpfApp {
             }
         }
 
-        public DateTime LastSelectedDateTime {
-            get {
-                if(Preset == null) {
-                    return DateTime.MinValue;
-                }
-                return Preset.LastSelectedDateTime;
-            }
-            set {
-                if(LastSelectedDateTime != value) {
-                    Preset.LastSelectedDateTime = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(LastSelectedDateTime));
-                }
-            }
-        }
 
         public MpAnalyticItemPreset Preset { get; protected set; }
         

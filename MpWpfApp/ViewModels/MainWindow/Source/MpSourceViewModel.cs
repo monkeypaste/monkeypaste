@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -60,6 +61,7 @@ namespace MpWpfApp {
         public bool IsHovering { get; set; }
 
         public bool IsSelected { get; set; }
+        public DateTime LastSelectedDateTime { get; set; }
 
         #endregion
 

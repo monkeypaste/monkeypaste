@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:core="clr-namespace:System;assembly=mscorlib"
     xmlns:local="clr-namespace:MpWpfApp"
-    xmlns:pcl="clr-namespace:MonkeyPaste"
+    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
     xmlns:plugin="clr-namespace:MonkeyPaste.Plugin;assembly=MonkeyPaste.Plugin"
     xmlns:dd="urn:gong-wpf-dragdrop"
     x:TypeArguments="local:MpAppViewModel"
@@ -25,13 +25,13 @@
                     <x:Type Type="plugin:MpClipboardFormatType" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            <!--<ObjectDataProvider x:Key="CopyItemTypeEnum"
+            <ObjectDataProvider x:Key="CopyItemTypeEnum"
                                 MethodName="GetValues"
                                 ObjectType="{x:Type core:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type Type="pcl:MpCopyItemType" />
                 </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>-->
+            </ObjectDataProvider>
         </StackPanel.Resources>
         <TextBlock
             Text="Settings"

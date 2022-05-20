@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpISelectableViewModel : MpIViewModel {
         bool IsSelected { get; set; }
+        DateTime LastSelectedDateTime { get; set; }
     }
 
     public interface MpISelectorViewModel<T> : MpIViewModel where T : MpViewModelBase {

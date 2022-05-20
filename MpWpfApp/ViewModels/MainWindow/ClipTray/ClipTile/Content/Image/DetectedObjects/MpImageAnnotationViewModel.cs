@@ -25,6 +25,7 @@ namespace MpWpfApp {
         #region MpISelectableViewModel Implementation
 
         public bool IsSelected { get; set; }
+        public DateTime LastSelectedDateTime { get; set; }
 
         #endregion
 

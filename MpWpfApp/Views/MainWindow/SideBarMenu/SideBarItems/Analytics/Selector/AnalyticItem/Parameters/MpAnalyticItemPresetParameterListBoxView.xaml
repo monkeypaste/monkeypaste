@@ -14,7 +14,7 @@
                                                       IsDesignTimeCreatable=False}">
 
     <ListBox x:Name="ConfigurePresetListBox"
-             Grid.Row="1" 
+             Grid.Row="1"
              Background="Transparent"
              Margin="5,10"
              ItemsSource="{Binding Items}"
@@ -31,20 +31,11 @@
         </ListBox.ItemsPanel>
         <ListBox.ItemContainerStyle>
             <Style TargetType="{x:Type ListBoxItem}">
-                <Setter Property="IsSelected"
-                        Value="{Binding IsSelected,
-                                        Mode=TwoWay,
-                                        NotifyOnTargetUpdated=True,
-                                        NotifyOnSourceUpdated=True,
-                                        UpdateSourceTrigger=PropertyChanged}" />
-                <Setter Property="FocusVisualStyle"
-                        Value="{x:Null}" />
-                <Setter Property="HorizontalAlignment"
-                        Value="Stretch" />
-                <Setter Property="HorizontalContentAlignment"
-                        Value="Stretch" />
-                <Setter Property="VerticalContentAlignment"
-                        Value="Top" />
+                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
             </Style>
         </ListBox.ItemContainerStyle>
         <ListBox.ItemTemplate>

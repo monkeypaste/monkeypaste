@@ -48,8 +48,7 @@
                 </DataGrid.Resources>
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
-                        <Setter Property="IsSelected"
-                                Value="{Binding IsSelected}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
@@ -129,7 +128,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Grid Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                                    <Grid Visibility="{Binding Parent.IsBusy,
+                                                               Converter={StaticResource BoolToVisibilityFlipConverter}}">
                                         <Button Background="Transparent"
                                                 BorderThickness="0"
                                                 ToolTip="Analyze"
@@ -191,7 +191,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Grid Visibility="{Binding Parent.IsBusy, Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                                    <Grid Visibility="{Binding Parent.IsBusy,
+                                                               Converter={StaticResource BoolToVisibilityFlipConverter}}">
 
                                         <Button Background="Transparent"
                                                 BorderThickness="0"

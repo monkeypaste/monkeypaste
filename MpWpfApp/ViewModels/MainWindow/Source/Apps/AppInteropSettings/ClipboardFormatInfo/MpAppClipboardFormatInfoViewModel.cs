@@ -93,6 +93,7 @@ namespace MpWpfApp {
         #region MpISelectableViewModel Implementaton
         public bool IsSelected { get; set; }
 
+        public DateTime LastSelectedDateTime { get; set; }
         #endregion
 
         #region Model
@@ -202,6 +203,11 @@ namespace MpWpfApp {
                             await AppClipboardFormatInfo.WriteToDatabaseAsync();
                             HasModelChanged = false;
                         });
+                    }
+                    break;
+                case nameof(IsSelected):
+                    if(IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
                     }
                     break;
             }

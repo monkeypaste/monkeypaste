@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
-    public interface MpIHierarchialViewModel : 
+    public interface MpIHierarchialViewModel<T> : 
         MpIViewModel,
-        MpITreeItemViewModel,
+        MpITreeItemViewModel<T>,
         MpIHoverableViewModel,
         MpIFocusableViewModel,
         MpISelectableViewModel,
         MpIEditableViewModel,
-        MpIMenuItemViewModel {
+        MpIMenuItemViewModel 
+        where T:MpViewModelBase, MpITreeItemViewModel {
 
         string Label { get; set; }
 
@@ -43,23 +44,23 @@ namespace MonkeyPaste {
         ObservableCollection<MpITreeItemViewModel> Children { get; }
     }
 
-    public interface MpITreeItemViewModel<T> where T:MpViewModelBase {
-        bool IsExpanded { get; set; }
+    public interface MpITreeItemViewModel<T> :MpITreeItemViewModel where T:MpViewModelBase {
+        //bool IsExpanded { get; set; }
 
-        T ParentTreeItem { get; }
+        new T ParentTreeItem { get; }
 
-        IList<T> Children { get; }
+        new ObservableCollection<T> Children { get; }
     }
 
     public static class MpITreeItemViewModelExtensions {
-        public static IList<T> ToList<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase {
+        public static IList<T> ToList<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase, MpITreeItemViewModel {
             var activml = new List<T>() { tivm as T };
 
             activml.AddRange(tivm.FindAllChildren());
             return activml;
         }
 
-        public static IEnumerable<T> FindAllChildren<T>(this MpITreeItemViewModel<T> tivm) where T:MpViewModelBase {
+        public static IEnumerable<T> FindAllChildren<T>(this MpITreeItemViewModel<T> tivm) where T:MpViewModelBase, MpITreeItemViewModel {
             var activml = new List<T>();
             foreach(MpITreeItemViewModel<T> c in tivm.Children) {
                 activml.Add(c as T);
@@ -80,7 +81,7 @@ namespace MonkeyPaste {
             return activml;
         }
 
-        public static T FindRootParent<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase {
+        public static T FindRootParent<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase, MpITreeItemViewModel {
             MpITreeItemViewModel<T> rootParent = tivm.ParentTreeItem as MpITreeItemViewModel<T>;
             while (rootParent.ParentTreeItem != null) {
                 rootParent = rootParent.ParentTreeItem as MpITreeItemViewModel<T>;
@@ -88,7 +89,7 @@ namespace MonkeyPaste {
             return rootParent as T;
         }
 
-        public static int FindTreeLevel<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase {
+        public static int FindTreeLevel<T>(this MpITreeItemViewModel<T> tivm) where T : MpViewModelBase, MpITreeItemViewModel {
             int level = 0;
             MpITreeItemViewModel<T> rootParent = tivm.ParentTreeItem as MpITreeItemViewModel<T>;
             while (rootParent.ParentTreeItem != null) {

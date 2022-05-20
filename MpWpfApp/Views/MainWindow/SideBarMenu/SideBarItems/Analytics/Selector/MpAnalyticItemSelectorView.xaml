@@ -16,95 +16,23 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Column="0"
-              Grid.Row="0"
-              Grid.RowSpan="2">
-            <TreeView x:Name="TagTray"
-                      Background="Transparent"
-                      dd:DragDrop.IsDragSource="True"
-                      dd:DragDrop.IsDropTarget="True"
-                      BorderThickness="0"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch">
-                <TreeView.Resources>
-                    <Style x:Key="TreeViewItemStyle"
-                           TargetType="{x:Type TreeViewItem}">
-                        <Style.Resources>
-                            <SolidColorBrush Color="Transparent"
-                                             x:Key="{x:Static SystemColors.HighlightBrushKey}" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
-                                             Color="Transparent" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                             Color="Transparent" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
-                                             Color="Transparent" />
-                        </Style.Resources>
-                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
-                        <Setter Property="Background" Value="Transparent" />
-                    </Style>
-                </TreeView.Resources>
-                <TreeViewItem DataContext="{x:Static local:MpTagTrayViewModel.Instance}"
-                              ItemsSource="{Binding AllTagViewModel, Converter={StaticResource ItemToItemsSourceConverter}}"
-                              ItemContainerStyle="{StaticResource TreeViewItemStyle}"
-                              Header="Collections">
-                    <TreeViewItem.Resources>
-                        <HierarchicalDataTemplate DataType="{x:Type local:MpTagTileViewModel}"
-                                                  ItemsSource="{Binding Items}">
-                            <TextBlock Text="{Binding TagName}" />
-                        </HierarchicalDataTemplate>
-                    </TreeViewItem.Resources>
-                </TreeViewItem>
-                <TreeViewItem DataContext="{x:Static local:MpAnalyticItemCollectionViewModel.Instance}"
-                              ItemsSource="{Binding Items}"
-                              ItemContainerStyle="{StaticResource TreeViewItemStyle}"
-                              Header="Analyzers">
-                    <TreeViewItem.Resources>
-                        <HierarchicalDataTemplate DataType="{x:Type local:MpAnalyticItemViewModel}"
-                                                  ItemsSource="{Binding Items}">
-                            <TextBlock Text="{Binding Title}" />
-                        </HierarchicalDataTemplate>
-                        <DataTemplate DataType="{x:Type local:MpAnalyticItemPresetViewModel}">
-                            <TextBlock Text="{Binding Label}" />
-                        </DataTemplate>
-                    </TreeViewItem.Resources>
-                </TreeViewItem>
-                <TreeViewItem DataContext="{x:Static local:MpClipboardHandlerCollectionViewModel.Instance}"
-                              ItemsSource="{Binding Items}"
-                              ItemContainerStyle="{StaticResource TreeViewItemStyle}"
-                              Header="Clipboard Handlers">
-                    <TreeViewItem.Resources>
-                        <HierarchicalDataTemplate DataType="{x:Type local:MpClipboardHandlerItemViewModel}"
-                                                  ItemsSource="{Binding Items}">
-                            <TextBlock Text="{Binding HandlerName}" />
-                        </HierarchicalDataTemplate>
-                        <HierarchicalDataTemplate DataType="{x:Type local:MpHandledClipboardFormatViewModel}"
-                                                  ItemsSource="{Binding Items}">
-                            <TextBlock Text="{Binding Title}" />
-                        </HierarchicalDataTemplate>
-                        <DataTemplate DataType="{x:Type local:MpClipboardFormatPresetViewModel}">
-                            <TextBlock Text="{Binding Label}" />
-                        </DataTemplate>
-                    </TreeViewItem.Resources>
-                </TreeViewItem>
-            </TreeView>
-        </Grid>
         <Border Grid.Row="0"
-                Grid.Column="1"
+                Grid.Column="0"
                 BorderThickness="0"
                 BorderBrush="Black"
                 Background="Transparent"
                 VerticalAlignment="Top"
                 Margin="10,0">
             <ComboBox x:Name="AnalyticItemChooserComboBox"
-                      MinWidth="60"
+                      MinWidth="150"
                       IsSynchronizedWithCurrentItem="True"
+                      DropDownOpened="AnalyticItemChooserComboBox_DropDownOpened"
+                      DropDownClosed="AnalyticItemChooserComboBox_DropDownClosed"
                       SelectedItem="{Binding SelectedItem}"
                       ItemsSource="{Binding Items}">
                 <ComboBox.ItemContainerStyle>
@@ -120,10 +48,10 @@
             </ComboBox>
         </Border>
         <local:MpAnalyticItemPresetDataGridView Grid.Row="1"
-                                                Grid.Column="2"
+                                                Grid.Column="0"
                                                 VerticalAlignment="Top"
                                                 DataContext="{Binding SelectedItem}" />
-        <local:MpAnalyticItemPresetParameterListBoxView Grid.Column="2"
+        <local:MpAnalyticItemPresetParameterListBoxView Grid.Column="1"
                                                         Grid.Row="0"
                                                         Grid.RowSpan="2"
                                                         HorizontalAlignment="Stretch"

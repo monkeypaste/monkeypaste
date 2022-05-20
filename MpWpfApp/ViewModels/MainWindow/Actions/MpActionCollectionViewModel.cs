@@ -416,6 +416,7 @@ namespace MpWpfApp {
                     if (IsSidebarVisible) {
                         MpAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
                         MpTagTrayViewModel.Instance.IsSidebarVisible = false;
+                        MpClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
 
                     }
                     break;

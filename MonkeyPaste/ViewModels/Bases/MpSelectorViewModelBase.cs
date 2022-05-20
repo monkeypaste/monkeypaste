@@ -27,6 +27,8 @@ namespace MonkeyPaste {
                 }
             }
         }
+
+        public virtual C LastSelectedItem => Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
         public bool HasItems => Items.Count > 0;
 
         public bool IsAnySelected => SelectedItem != null;
