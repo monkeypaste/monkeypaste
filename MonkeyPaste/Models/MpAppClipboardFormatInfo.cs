@@ -28,7 +28,8 @@ namespace MonkeyPaste {
 
         public string FormatInfo { get; set; }
 
-        public int Priority { get; set; }
+        [Column("b_IgnoreFormatValue")]
+        public int IgnoreFormatValue { get; set; }
 
         [Ignore]
         public MpClipboardFormatType FormatType {
@@ -36,6 +37,11 @@ namespace MonkeyPaste {
             set => FormatTypeName = value.ToString();
         }
 
+        [Ignore]
+        public bool IgnoreFormat {
+            get => IgnoreFormatValue == 1;
+            set => IgnoreFormatValue = value ? 1 : 0;
+        }
 
         [Ignore]
         public Guid AppClipboardFormatInfoGuid {
@@ -54,13 +60,13 @@ namespace MonkeyPaste {
             int appId = 0,
             MpClipboardFormatType format = MpClipboardFormatType.None,
             string formatInfo = "",
-            int priority = 0) {
+            bool ignoreFormat = false) {
             var ais = new MpAppClipboardFormatInfo() {
                 AppClipboardFormatInfoGuid = System.Guid.NewGuid(),
                 AppId = appId,
                 FormatType = format,
                 FormatInfo = formatInfo,
-                Priority = priority
+                IgnoreFormat = ignoreFormat
             };
 
             await ais.WriteToDatabaseAsync();

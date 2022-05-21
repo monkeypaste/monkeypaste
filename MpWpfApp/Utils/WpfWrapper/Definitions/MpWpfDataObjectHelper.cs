@@ -242,14 +242,13 @@ namespace MpWpfApp {
                     if (targetInteropSettings != null) {
                         // order and set data object entry by priority (ignoring < 0) and formatInfo 
                         var targetFormats = targetInteropSettings.Items
-                                                .Where(x => x.Priority >= 0)
-                                                .OrderByDescending(x => x.Priority).ToList();
+                                                .Where(x => !x.IgnoreFormat).ToList();
 
-                        ignoreFileDrop = targetFormats
+                        ignoreFileDrop = targetInteropSettings.Items
                                             .Where(x => x.ClipboardFormatType == MpClipboardFormatType.FileDrop)
-                                            .All(x => x.Priority < 0);
+                                            .All(x => x.IgnoreFormat);
 
-                        foreach (var targetSetting in targetFormats.OrderByDescending(x => x.Priority)) {
+                        foreach (var targetSetting in targetFormats.OrderByDescending(x => x.IgnoreFormat)) {
                             switch (targetSetting.ClipboardFormatType) {
                                 case MpClipboardFormatType.FileDrop:
                                     if (!string.IsNullOrEmpty(targetSetting.FormatInfo)) {

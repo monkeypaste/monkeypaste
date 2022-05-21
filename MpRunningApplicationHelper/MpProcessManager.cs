@@ -10,6 +10,7 @@ using System.Linq;
 using System.Management;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
@@ -268,7 +269,15 @@ namespace MpProcessHelper {
         }
 
         public static string GetProcessApplicationName(IntPtr hWnd) {
-            return GetProcessApplicationName(GetProcessMainWindowTitle(hWnd));
+            string appName = GetProcessApplicationName(GetProcessMainWindowTitle(hWnd));
+            
+            if(string.IsNullOrWhiteSpace(appName) || appName.HasSpecialCharacters()) {
+                // NOTE trying to enforce app name to not be empty or end up
+                // being file name when window title is normal pattern
+                string processPath = GetProcessPath(hWnd);
+                return Path.GetFileName(processPath);
+            }
+            return appName;
         }
 
         public static IntPtr GetThisApplicationMainWindowHandle() {
@@ -318,6 +327,9 @@ namespace MpProcessHelper {
 
         #region Private Methods
 
+        public static bool HasSpecialCharacters(this string str) {
+            return Regex.IsMatch(str, "[^a-zA-Z0-9_.]+", RegexOptions.Compiled);
+        }
         private static string GetExecutablePathAboveVista(IntPtr dwProcessId) {
             StringBuilder buffer = new StringBuilder(1024);
             IntPtr hprocess = WinApi.OpenProcess(WinApi.ProcessAccessFlags.QueryLimitedInformation, false, (int)dwProcessId);

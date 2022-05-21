@@ -19,8 +19,11 @@
     <s:Int32 x:Key="SettingsTabShortcuts">
         3
     </s:Int32>
-    <s:Int32 x:Key="SettingsTabHelp">
+    <s:Int32 x:Key="SettingsTabClipboard">
         4
+    </s:Int32>
+    <s:Int32 x:Key="SettingsTabHelp">
+        5
     </s:Int32>
     <!--  Settings Tab Indexes End  -->
 

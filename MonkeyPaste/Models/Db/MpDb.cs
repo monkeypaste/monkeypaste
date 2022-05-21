@@ -31,6 +31,8 @@ namespace MonkeyPaste {
         public static string AccessToken { get; set; }
         public static bool IsLoaded { get; set; } = false;
 
+        public static bool IgnoreLogging { get; set; } = false;
+
         #endregion
 
         #region Events
@@ -320,7 +322,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task LogWrite(MpDbLogActionType actionType, MpDbModelBase item, string sourceClientGuid, bool ignoreTracking) {
-            if(!IsLoaded) {
+            if(!IsLoaded || IgnoreLogging) {
                 return;
             }
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {

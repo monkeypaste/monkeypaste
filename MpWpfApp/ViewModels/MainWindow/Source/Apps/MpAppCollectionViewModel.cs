@@ -10,6 +10,7 @@ using System.Windows.Input;
 using MonkeyPaste;
 using System.IO;
 using MpProcessHelper;
+using System.Windows.Data;
 
 namespace MpWpfApp {
     public class MpAppCollectionViewModel : 
@@ -23,10 +24,7 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public IEnumerable<MpAppViewModel> WindowedItems => 
-                Items
-                    .Where(x => !string.IsNullOrWhiteSpace(x.AppName))
-                    .OrderBy(x => x.AppName);
+        public ObservableCollection<MpAppViewModel> FilteredApps { get; set; }
 
         #endregion
 
@@ -39,9 +37,8 @@ namespace MpWpfApp {
 
         public MpAppCollectionViewModel() : base(null) {
             //MpHelpers.RunOnMainThreadAsync(Init);
+            PropertyChanged += MpAppCollectionViewModel_PropertyChanged;
         }
-
-
 
         #endregion
 
@@ -107,6 +104,17 @@ namespace MpWpfApp {
 
         #region Private Methods
 
+        private void MpAppCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(SelectedItem):
+                    if (SelectedItem != null) {
+                        SelectedItem.OnPropertyChanged(nameof(SelectedItem.IconId));
+
+                        CollectionViewSource.GetDefaultView(SelectedItem.ClipboardFormatInfos.Items).Refresh();
+                    }
+                    break;
+            }
+        }
         private async Task<List<MpApp>> RegisterWithProcessesManager() {
             MpProcessManager.OnAppActivated += MpProcessManager_OnAppActivated;
 

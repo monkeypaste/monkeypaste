@@ -39,6 +39,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
                 <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <!--  Account Tab Button  -->
             <ToggleButton Grid.Column="0"
@@ -108,9 +109,25 @@
                            Content="Shortcuts" />
                 </StackPanel>
             </ToggleButton>
-            <!--  Help tab Button  -->
             <ToggleButton Grid.Column="4"
                           IsChecked="{Binding SettingsPanel5Visibility,
+                                              Converter={StaticResource VisibilityToBoolConverter}}"
+                          Command="{Binding ClickSettingsPanelCommand}"
+                          CommandParameter="{StaticResource SettingsTabClipboard}">
+                <StackPanel Orientation="Vertical">
+                    <Image Stretch="Fill"
+                           Height="50"
+                           Width="50"
+                           Margin="0,10,0,0"
+                           Source="/MpWpfApp;component/Resources/Images/clipboard.png"/>
+                    <Label HorizontalAlignment="Center"
+                           FontSize="16"
+                           Content="Clipboard" />
+                </StackPanel>
+            </ToggleButton>
+            <!--  Help tab Button  -->
+            <ToggleButton Grid.Column="5"
+                          IsChecked="{Binding SettingsPanel6Visibility,
                                               Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanelCommand}"
                           CommandParameter="{StaticResource SettingsTabHelp}">
@@ -119,7 +136,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="/MpWpfApp;component/Resources/Images/info.png" />
+                           Source="/MpWpfApp;component/Resources/Images/question.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Help" />
@@ -145,9 +162,14 @@
         <local:MpShortcutsTabPanel Grid.Row="1"
                                    Visibility="{Binding SettingsPanel4Visibility}"
                                    DataContext="{Binding}" />
+        <Grid Grid.Row="1"
+              Visibility="{Binding SettingsPanel5Visibility}">
+            <local:MpAppInteropChooserView Grid.Row="1"
+                                           DataContext="{x:Static local:MpAppCollectionViewModel.Instance}" />
+        </Grid>
         <!--  Help  -->
         <StackPanel Grid.Row="1"
-                    Visibility="{Binding SettingsPanel5Visibility}">
+                    Visibility="{Binding SettingsPanel6Visibility}">
             <local:MpHelpTabPanel DataContext="{Binding}" />
         </StackPanel>
         <!--  Footer  -->

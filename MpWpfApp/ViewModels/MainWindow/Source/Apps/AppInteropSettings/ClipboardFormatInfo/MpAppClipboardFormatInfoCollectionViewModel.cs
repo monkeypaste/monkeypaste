@@ -76,12 +76,12 @@ namespace MpWpfApp {
                 var defInfo = new MpAppClipboardFormatInfo() {
                     AppId = appId,
                     FormatType = defType,
-                    Priority = aisl.Count
+                    IgnoreFormatValue = aisl.Count
                 };
                 aisl.Add(defInfo);
             }
 
-            foreach (var ais in aisl.OrderBy(x=>x.Priority)) {
+            foreach (var ais in aisl.OrderBy(x=>x.IgnoreFormatValue)) {
                 var aisvm = await CreateAppClipboardFormatViewModel(ais);
                 base.Items.Add(aisvm);
             }

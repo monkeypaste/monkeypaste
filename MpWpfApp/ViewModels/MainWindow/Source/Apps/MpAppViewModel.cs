@@ -223,7 +223,7 @@ namespace MpWpfApp {
                     if(IsSelected) {
                         ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
                         PasteShortcutViewModel.OnPropertyChanged(nameof(PasteShortcutViewModel.PasteCmdKeyString));
-
+                        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                         CollectionViewSource.GetDefaultView(ClipboardFormatInfos.Items).Refresh();
                     }
                     break;

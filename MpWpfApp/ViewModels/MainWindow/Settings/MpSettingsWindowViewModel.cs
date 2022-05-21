@@ -66,108 +66,24 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
-            get {
-                return MpShortcutCollectionViewModel.Instance;
-            }
-        }
+        public MpShortcutCollectionViewModel ShortcutCollectionViewModel => MpShortcutCollectionViewModel.Instance;
 
         public MpAppCollectionViewModel AppCollectionViewModel => MpAppCollectionViewModel.Instance;
 
         public MpUrlCollectionViewModel UrlCollectionViewModel => MpUrlCollectionViewModel.Instance;
 
-        private MpPreferencesViewModel _preferencesViewModel = new MpPreferencesViewModel();
-        public MpPreferencesViewModel PreferencesViewModel {
-            get {
-                return _preferencesViewModel;
-            }
-            set {
-                if (_preferencesViewModel != value) {
-                    _preferencesViewModel = value;
-                    OnPropertyChanged(nameof(PreferencesViewModel));
-                }
-            }
-        }
-
-        //private MpSecurityViewModel _securityViewModel = new MpSecurityViewModel();
-        //public MpSecurityViewModel SecurityViewModel {
-        //    get {
-        //        return _securityViewModel;
-        //    }
-        //    set {
-        //        if (_securityViewModel != value) {
-        //            _securityViewModel = value;
-        //            OnPropertyChanged(nameof(SecurityViewModel));
-        //        }
-        //    }
-        //}
+        public MpPreferencesViewModel PreferencesViewModel { get; set; } =  new MpPreferencesViewModel();
         #endregion
 
         #region Panel Visibility
-        private Visibility _settingsPanel1Visibility = Visibility.Collapsed;
-        public Visibility SettingsPanel1Visibility {
-            get { 
-                return _settingsPanel1Visibility; 
-            }
-            set { 
-                if(_settingsPanel1Visibility != value) {
-                    _settingsPanel1Visibility = value;
-                    OnPropertyChanged(nameof(SettingsPanel1Visibility));
-                }
-            }
-        }
 
-        private Visibility _settingsPanel2Visibility = Visibility.Collapsed;
-        public Visibility SettingsPanel2Visibility {
-            get {
-                return _settingsPanel2Visibility;
-            }
-            set {
-                if (_settingsPanel2Visibility != value) {
-                    _settingsPanel2Visibility = value;
-                    OnPropertyChanged(nameof(SettingsPanel2Visibility));
-                }
-            }
-        }
+        public Visibility SettingsPanel1Visibility { get; set; } = Visibility.Collapsed;
+        public Visibility SettingsPanel2Visibility { get; set; } = Visibility.Collapsed;
+        public Visibility SettingsPanel3Visibility { get; set; } = Visibility.Collapsed;
+        public Visibility SettingsPanel4Visibility { get; set; } = Visibility.Collapsed;
+        public Visibility SettingsPanel5Visibility { get; set; } = Visibility.Collapsed;
+        public Visibility SettingsPanel6Visibility { get; set; } = Visibility.Collapsed;
 
-        private Visibility _settingsPanel3Visibility = Visibility.Collapsed;
-        public Visibility SettingsPanel3Visibility {
-            get {
-                return _settingsPanel3Visibility;
-            }
-            set {
-                if (_settingsPanel3Visibility != value) {
-                    _settingsPanel3Visibility = value;
-                    OnPropertyChanged(nameof(SettingsPanel3Visibility));
-                }
-            }
-        }
-
-        private Visibility _settingsPanel4Visibility = Visibility.Collapsed;
-        public Visibility SettingsPanel4Visibility {
-            get {
-                return _settingsPanel4Visibility;
-            }
-            set {
-                if (_settingsPanel4Visibility != value) {
-                    _settingsPanel4Visibility = value;
-                    OnPropertyChanged(nameof(SettingsPanel4Visibility));
-                }
-            }
-        }
-
-        private Visibility _settingsPanel5Visibility = Visibility.Collapsed;
-        public Visibility SettingsPanel5Visibility {
-            get {
-                return _settingsPanel5Visibility;
-            }
-            set {
-                if (_settingsPanel5Visibility != value) {
-                    _settingsPanel5Visibility = value;
-                    OnPropertyChanged(nameof(SettingsPanel5Visibility));
-                }
-            }
-        }
         #endregion        
                 
         #endregion

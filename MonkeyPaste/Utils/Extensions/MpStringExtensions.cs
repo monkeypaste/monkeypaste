@@ -41,6 +41,10 @@ namespace MonkeyPaste {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
         }
 
+        public static bool HasSpecialCharacters(this string str) {
+            return Regex.IsMatch(str, "[^a-zA-Z0-9_.]+", RegexOptions.Compiled);
+        }
+
         public static string ToPrettyPrintJson(this string jsonStr) {
             JToken jt = JToken.Parse(jsonStr);
             return jt.ToString();

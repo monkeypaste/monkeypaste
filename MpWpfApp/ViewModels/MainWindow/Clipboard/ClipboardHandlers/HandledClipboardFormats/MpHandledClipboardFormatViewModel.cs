@@ -375,7 +375,7 @@ namespace MpWpfApp {
 
                     break;
                 case nameof(IsHovering):
-                    OnPropertyChanged(nameof(ItemBackgroundBrush));`
+                    OnPropertyChanged(nameof(ItemBackgroundBrush));
                     OnPropertyChanged(nameof(ItemTitleForegroundBrush));
                     break;
                 case nameof(SelectedItem):

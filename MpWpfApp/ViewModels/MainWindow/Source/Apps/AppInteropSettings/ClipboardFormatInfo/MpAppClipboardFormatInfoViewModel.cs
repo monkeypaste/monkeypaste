@@ -16,73 +16,46 @@ namespace MpWpfApp {
 
         #region State
 
-        private MpCopyItemType _contentFilerType = MpCopyItemType.Text;
-        public MpCopyItemType ContentTypeFilter {
+        public bool IsCustomFormatSelected => SelectedFormatType == "Custom";
+
+        public bool IsFileListTypeSelected => SelectedClipboardFormatContentType == MpCopyItemType.FileList;
+
+        public bool IsAddNewFileTypeSelected => SelectedFileType == "add new...";
+
+        public string SelectedFormatType { get; set; }
+
+        public string SelectedFileType { get; set; }
+        public ObservableCollection<string> AvailableFileTypes {
             get {
-                switch(ClipboardFormatType) {
-                    case MpClipboardFormatType.Text:
-                    case MpClipboardFormatType.Rtf:
-                    case MpClipboardFormatType.OemText:
-                    case MpClipboardFormatType.UnicodeText:
-                    case MpClipboardFormatType.Html:
-                    case MpClipboardFormatType.Csv:
-                        _contentFilerType = MpCopyItemType.Text;
-                        break;
-                    case MpClipboardFormatType.Custom:
-                    case MpClipboardFormatType.FileDrop:
-                        _contentFilerType = MpCopyItemType.FileList;
-                        break;
-                    case MpClipboardFormatType.Bitmap:
-                        _contentFilerType = MpCopyItemType.Image;
-                        break;
-                    default:
-                        _contentFilerType = MpCopyItemType.None;
-                        break;
-                }
-                return _contentFilerType;
-            }
-            set {
-                if(ContentTypeFilter != value) {
-                    _contentFilerType = value;
-                    ClipboardFormatType = MpClipboardFormatType.None;
-                    OnPropertyChanged(nameof(ContentTypeFilter));
-                }
+                // TODO this should be populated from Clipboard Colllection
+                return new ObservableCollection<string>() {
+                    "",
+                    ".txt",
+                    ".rtf",
+                    ".bmp",
+                    ".png",
+                    "default",
+                    "add new..."
+                };
             }
         }
 
-        public string SelectedContentType { get; set; } = "Text";
-
-        public ObservableCollection<string> ContentTypes { get; set; } = new ObservableCollection<string>() {
-            "Text",
-            "Image",
-            "FileList",
-            "Custom"
-        };
-        
         public ObservableCollection<string> AvailableFormatTypes {
             get {
                 ObservableCollection<string> _availableFormatTypes = new ObservableCollection<string>();
-
-                switch (SelectedContentType) {
-                    case "Text":
-                        _availableFormatTypes.Add("Text");
-                        _availableFormatTypes.Add("Rtf");
-                        _availableFormatTypes.Add("Html");
-                        _availableFormatTypes.Add("Csv");
-                        break;
-                    case "Image":
-                        _availableFormatTypes.Add("Bitmap");
-                        break;
-                    case "FileList":
-                        _availableFormatTypes.Add("Default");
-                        break;
-                    default:
-                        break;
+                for(int i = 0;i < Enum.GetNames(typeof(MpClipboardFormatType)).Length;i++) {
+                    var cft = (MpClipboardFormatType)i;
+                    if(cft == MpClipboardFormatType.Custom) {
+                        // TODO need to query clipboard plugins for custom formats here and have all available
+                        continue;
+                    }
+                    _availableFormatTypes.Add(cft.EnumToLabel());
                 }
-                _availableFormatTypes.Add("Custom");
                 return _availableFormatTypes;
             }
         }
+
+        public MpCopyItemType SelectedClipboardFormatContentType { get; set; }
 
         #endregion
 
@@ -114,6 +87,8 @@ namespace MpWpfApp {
             }
         }
 
+        
+
         public string FormatInfo {
             get {
                 if (AppClipboardFormatInfo == null) {
@@ -130,23 +105,21 @@ namespace MpWpfApp {
             }
         }
 
-        public int Priority {
+        public bool IgnoreFormat {
             get {
                 if (AppClipboardFormatInfo == null) {
-                    return 0;
+                    return false;
                 }
-                return AppClipboardFormatInfo.Priority;
+                return AppClipboardFormatInfo.IgnoreFormat;
             }
             set {
-                if(Priority != value) {
-                    AppClipboardFormatInfo.Priority = value;
+                if(IgnoreFormat != value) {
+                    AppClipboardFormatInfo.IgnoreFormat = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(Priority));
+                    OnPropertyChanged(nameof(IgnoreFormat));
                 }
             }
         }
-
-        public bool IsFormatIgnored => Priority < 0;
 
         public int AppInteropSettingId {
             get {
@@ -210,6 +183,35 @@ namespace MpWpfApp {
                         LastSelectedDateTime = DateTime.Now;
                     }
                     break;
+                case nameof(SelectedClipboardFormatContentType):
+                    OnPropertyChanged(nameof(AvailableFormatTypes));
+                    OnPropertyChanged(nameof(IsFileListTypeSelected));
+                    OnPropertyChanged(nameof(IsCustomFormatSelected));
+                    break;
+                case nameof(SelectedFormatType):
+                    OnPropertyChanged(nameof(IsFileListTypeSelected));
+                    OnPropertyChanged(nameof(IsCustomFormatSelected));
+
+                    break;
+            }
+        }
+
+        private MpCopyItemType GetFormatContentType(MpClipboardFormatType cft) {
+            switch (cft) {
+                case MpClipboardFormatType.Text:
+                case MpClipboardFormatType.Rtf:
+                case MpClipboardFormatType.OemText:
+                case MpClipboardFormatType.UnicodeText:
+                case MpClipboardFormatType.Html:
+                case MpClipboardFormatType.Csv:
+                    return MpCopyItemType.Text;
+                case MpClipboardFormatType.Custom:
+                case MpClipboardFormatType.FileDrop:
+                    return MpCopyItemType.FileList;
+                case MpClipboardFormatType.Bitmap:
+                    return MpCopyItemType.Image;
+                default:
+                    return MpCopyItemType.None;
             }
         }
         #endregion
