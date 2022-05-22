@@ -31,7 +31,7 @@ namespace MpWpfApp {
         public Hyperlink LastEditedHyperlink;
 
         private bool _isNew = true;
-        public ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
+       //ublic ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
 
         public MpContentView() : base() {
             InitializeComponent();
@@ -344,14 +344,15 @@ namespace MpWpfApp {
         }        
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            foreach(var civm in BindingContext.Items) {
-                var civm_pt = civm.CopyItemData.ToPlainText();
-
-            }
+            
             if(MpDragDropManager.IsDragAndDrop) {
                 return;
             }
 
+            var stel = Rtb.Selection.GetAllTextElements();
+            if (!stel.All(x => x.Tag is MpTextTemplate)) {
+                BindingContext.HeadItem.TemplateCollection.Items.ForEach(x => x.IsSelected = false);
+            }
             //if(!Rtb.Selection.IsEmpty && !BindingContext.IsSubSelectionEnabled) {
             //    // NOTE don't 
             //    Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);

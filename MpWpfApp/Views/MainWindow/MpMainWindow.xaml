@@ -67,55 +67,57 @@
                                        Converter={StaticResource StringToThemeBrushConverter},
                                        ConverterParameter=Title_Menu_Background_Color}">
 
-                <Button Margin="5,0,0,0"
-                        ToolTip="Settings"
-                        ToolTipService.InitialShowDelay="500"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        local:MpHoverableExtension.IsEnabled="True"
-                        local:MpHoverableExtension.HoverCursor="Default"
-                        PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
-                        Command="{Binding ShowSettingsWindowCommand,
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="5,0,0,0"
+                            ToolTip="Settings"
+                            ToolTipService.InitialShowDelay="500"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            local:MpHoverableExtension.IsEnabled="True"
+                            local:MpHoverableExtension.HoverCursor="Default"
+                            PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
+                            Command="{Binding ShowSettingsWindowCommand,
                                           Source={x:Static local:MpSystemTrayViewModel.Instance}}"
-                        Template="{StaticResource SearchButtonControlTemplate}">
-                    <Image Source="{Binding .,
+                            Template="{StaticResource SearchButtonControlTemplate}">
+                        <Image Source="{Binding .,
                                             Source={StaticResource CogIcon},
                                             Converter={StaticResource StringResourceToImageSourceConverter}}"
-                           Height="12"
-                           Width="12"
-                           Stretch="Fill"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center">
-                        <Image.Effect>
-                            <local:MpInvertEffect />
-                        </Image.Effect>
-                    </Image>
-                </Button>
-                <ToggleButton Margin="0,0,5,0"
-                              ToolTip="Lock"
-                              ToolTipService.InitialShowDelay="500"
-                              VerticalAlignment="Center"
-                              HorizontalAlignment="Right"
-                              IsChecked="{Binding IsMainWindowLocked,
+                               Height="12"
+                               Width="12"
+                               Stretch="Fill"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center">
+                            <Image.Effect>
+                                <local:MpInvertEffect />
+                            </Image.Effect>
+                        </Image>
+                    </Button>
+                    <ToggleButton Margin="0,0,5,0"
+                                  ToolTip="Lock"
+                                  ToolTipService.InitialShowDelay="500"
+                                  VerticalAlignment="Center"
+                                  IsChecked="{Binding IsMainWindowLocked,
                                                   Mode=TwoWay,
                                                   UpdateSourceTrigger=PropertyChanged,
                                                   NotifyOnSourceUpdated=True,
                                                   NotifyOnTargetUpdated=True}"
-                              Command="{Binding ToggleMainWindowLockCommand}"
-                              CommandParameter="{StaticResource True}"
-                              Template="{StaticResource LockToggleButtonControlTemplate}">
-                    <Image Source="{Binding Source={StaticResource LockIcon},
+                                  Command="{Binding ToggleMainWindowLockCommand}"
+                                  CommandParameter="{StaticResource True}"
+                                  Template="{StaticResource LockToggleButtonControlTemplate}">
+                        <Image Source="{Binding Source={StaticResource LockIcon},
                                             Converter={StaticResource StringResourceToImageSourceConverter}}"
-                           Width="12"
-                           Height="12"
-                           Stretch="Fill"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center">
-                        <Image.Effect>
-                            <local:MpInvertEffect />
-                        </Image.Effect>
-                    </Image>
-                </ToggleButton>
+                               Width="12"
+                               Height="12"
+                               Stretch="Fill"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center">
+                            <Image.Effect>
+                                <local:MpInvertEffect />
+                            </Image.Effect>
+                        </Image>
+                    </ToggleButton>
+                </StackPanel>
+                
                 <Border Width="100"
                         Background="Pink"
                         local:MpHoverableExtension.IsEnabled="True"

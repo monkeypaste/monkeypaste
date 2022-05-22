@@ -25,8 +25,6 @@ namespace MonkeyPaste {
 
     public class MpTextTemplate : MpDbModelBase, MpIClonableDbModel<MpTextTemplate> {
         #region Constants
-        public const string TEMPLATE_PREFIX = "<";
-        public const string TEMPLATE_SUFFIX = ">";
         #endregion
 
         #region Columns
@@ -101,10 +99,7 @@ namespace MonkeyPaste {
         [Ignore]
         public string EncodedTemplate {
             get {
-                return string.Format(@"{0}{1}{2}",
-                        TEMPLATE_PREFIX,
-                        Guid,
-                        TEMPLATE_SUFFIX);
+                return "{t{"+Guid+"}t}";
             }
         }
 
@@ -118,7 +113,6 @@ namespace MonkeyPaste {
             string templateColor = "",
             string templateTypeData = "",
             string formatInfo = "") {
-            int templateId = 0;
             //if(!string.IsNullOrEmpty(guid)) {
             //    var dupCheck = await MpDataModelProvider.GetTextTemplateByGuid(guid);
             //    if (dupCheck != null) {
@@ -128,11 +122,10 @@ namespace MonkeyPaste {
             //}
 
             var newTextTemplate = new MpTextTemplate() {
-                Id = templateId,
                 TextTemplateGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 CopyItemId = copyItemId,
                 TemplateName = templateName,
-                HexColor = string.IsNullOrEmpty(templateColor) ? MpHelpers.GetRandomColor().ToHex() : templateColor,
+                HexColor = string.IsNullOrEmpty(templateColor) ? MpColorHelpers.GetRandomHexColor() : templateColor,
                 TemplateType = templateType,
                 TemplateData = templateTypeData,
                 TemplateDeltaFormat = formatInfo

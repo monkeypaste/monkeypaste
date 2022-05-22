@@ -611,27 +611,38 @@ namespace MpWpfApp {
 
         public static void LoadTextTemplate(this TextRange tr, MpTextTemplate cit) {
             tr.Text = string.Empty;
-            var r = new Run(cit.TemplateName, tr.Start);
-            var thl = new Hyperlink(r) {
+            var r = new Run(cit.TemplateName) {
+                Tag = cit
+            };
+            
+            var thl = new Hyperlink(tr.Start,tr.End) {
                 Tag = cit,
                 TextDecorations = null
-            };
+            }; 
+            thl.Inlines.Clear();
+            thl.Inlines.Add(r);
 
             MpClipTileViewModel ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(cit.CopyItemId);
             if(ctvm == null) {
                 Debugger.Break();
             }
 
-            MpTemplateViewModel tvm = ctvm.HeadItem.TemplateCollection.Items.FirstOrDefault(x => x.TextTokenId == cit.Id);
+            MpTemplateViewModel tvm = ctvm.HeadItem.TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateId == cit.Id);
 
             #region Events
 
             MouseEventHandler thl_mouseEnter_handler = (s, e) => {
                 tvm.IsHovering = true;
+                if(!ctvm.IsContentReadOnly) {
+                    MpCursor.SetCursor(tvm, MpCursorType.Hand);
+                }
             };
 
             MouseEventHandler thl_mouseLeave_handler = (s, e) => {
                 tvm.IsHovering = false;
+                if(!ctvm.IsContentReadOnly) {
+                    MpCursor.UnsetCursor(tvm);
+                }
             };
 
             MouseButtonEventHandler thl_previewMouseLeftButtonDown_handler = (s, e) => {
@@ -656,12 +667,19 @@ namespace MpWpfApp {
                     if (!ctvm.IsAnyPasting) {
                         var origin = tr.Start.GetCharacterRect(LogicalDirection.Forward).Location;
                         origin = thl.FindParentOfType<RichTextBox>().TranslatePoint(origin, Application.Current.MainWindow);
+                        
                         MpContextMenuView.Instance.DataContext = tvm.MenuItemViewModel;
-                        MpContextMenuView.Instance.PlacementRectangle = new Rect(origin,new Size(200,50));
+                        //MpContextMenuView.Instance.PlacementRectangle = new Rect(origin,new Size(200,50));
+
+                        thl.ContextMenu = MpContextMenuView.Instance;
                         MpContextMenuView.Instance.IsOpen = true;
                     }
                     e.Handled = true;
                 }
+            };
+
+            TextCompositionEventHandler thl_textInput_handler = (s, e) => {
+                return;
             };
 
             RoutedEventHandler thl_unloaded_handler = null;
@@ -671,6 +689,7 @@ namespace MpWpfApp {
                 thl.MouseLeave -= thl_mouseLeave_handler;
                 thl.PreviewMouseLeftButtonDown -= thl_previewMouseLeftButtonDown_handler;
                 thl.PreviewMouseRightButtonDown -= thl_previewMouseRightButtonDown_handler;
+                thl.TextInput -= thl_textInput_handler;
             };
 
             thl.Unloaded += thl_unloaded_handler;
@@ -678,7 +697,7 @@ namespace MpWpfApp {
             thl.MouseLeave += thl_mouseLeave_handler;
             thl.PreviewMouseLeftButtonDown += thl_previewMouseLeftButtonDown_handler;
             thl.PreviewMouseRightButtonDown += thl_previewMouseRightButtonDown_handler;
-
+            thl.TextInput += thl_textInput_handler;
             #endregion
 
             #region Bindings
@@ -693,7 +712,7 @@ namespace MpWpfApp {
             MpHelpers.CreateBinding(
                    source: tvm,
                    sourceProperty: new PropertyPath(
-                                        nameof(tvm.TemplateForegroundBrush)),
+                                        nameof(tvm.TemplateForegroundHexColor)),
                    target: r,
                    targetProperty: Run.ForegroundProperty);
 
@@ -708,9 +727,10 @@ namespace MpWpfApp {
             MpHelpers.CreateBinding(
                    source: tvm,
                    sourceProperty: new PropertyPath(
-                                        nameof(tvm.TemplateBackgroundBrush)),
+                                        nameof(tvm.TemplateHexColor)),
                    target: thl,
-                   targetProperty: Hyperlink.BackgroundProperty);
+                   targetProperty: Hyperlink.BackgroundProperty,
+                   converter: new MpStringHexToBrushConverter());
 
             #endregion
         }

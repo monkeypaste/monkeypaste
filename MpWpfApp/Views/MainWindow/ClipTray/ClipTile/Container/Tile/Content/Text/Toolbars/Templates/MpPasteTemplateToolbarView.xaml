@@ -31,7 +31,7 @@
                                 Grid.Column="0"
                                 Margin="0,3,0,3"
                                 HorizontalAlignment="Center"
-                                Background="{Binding SelectedTemplate.TemplateBrush}"
+                                Background="{Binding SelectedItem.TemplateHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                                 CornerRadius="15">
                 <ComboBox x:Name="SelectedTemplateComboBox"
                           MinWidth="100"
@@ -43,7 +43,7 @@
                                               Source={x:Static local:MpClipTrayViewModel.Instance}}"
                           PreviewMouseLeftButtonDown="SelectedTemplateComboBox_PreviewMouseLeftButtonDown"
                           ItemsSource="{Binding Items}"
-                          SelectedIndex="{Binding SelectedTemplateIdx,
+                          SelectedIndex="{Binding SelectedItem,
                                                   Mode=TwoWay,
                                                   NotifyOnTargetUpdated=True,
                                                   NotifyOnSourceUpdated=True,
@@ -54,7 +54,7 @@
                                 <Border Width="15"
                                         Height="15"
                                         Margin="0,0,5,0"
-                                        Background="{Binding TemplateBrush}"
+                                        Background="{Binding SelectedItem.TemplateHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                                         BorderBrush="Black"
                                         BorderThickness="1"
                                         CornerRadius="10"
@@ -112,7 +112,7 @@
                              Foreground="Black"
                              TabIndex="1"
                              PreviewKeyDown="SelectedTemplateTextBox_PreviewKeyDown"
-                             Text="{Binding SelectedTemplate.MatchData,
+                             Text="{Binding SelectedItem.TemplateText,
                                             Mode=TwoWay,
                                             NotifyOnTargetUpdated=True,
                                             NotifyOnSourceUpdated=True,
@@ -123,8 +123,8 @@
                             Height="15"
                             Background="Transparent"
                             BorderThickness="0"
-                            Command="{Binding SelectedTemplate.ClearTemplateCommand}"
-                            Visibility="{Binding SelectedTemplate.HasText,
+                            Command="{Binding SelectedItem.ClearTemplateCommand}"
+                            Visibility="{Binding SelectedItem.HasText,
                                                  Converter={StaticResource BoolToVisibilityConverter}}">
                         <Image x:Name="ClearCurrentTemplateButtonImage"
                                Source="/Resources/Images/close1.png" />

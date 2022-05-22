@@ -19,26 +19,34 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpEditTemplateToolbarView.xaml
     /// </summary>
-    public partial class MpEditTemplateToolbarView : MpUserControl<MpTemplateCollectionViewModel> {
-        private RichTextBox _activeRtb;
+    public partial class MpEditTemplateToolbarView : MpUserControl<MpTemplateViewModel> {
+        private RichTextBox _activeRtb {
+            get {
+                var ctv = this.GetVisualAncestor<MpClipTileView>();
+                if(ctv == null) {
+                    return null;
+                }
+                return ctv.GetVisualDescendent<RichTextBox>();
+            }
+        }
 
         public MpEditTemplateToolbarView() {
             InitializeComponent();
         }
 
         public void SetActiveRtb(RichTextBox trtb) {
-            if (_activeRtb == trtb) {
-                return;
-            }
-            _activeRtb = trtb;
-            _activeRtb.PreviewMouseLeftButtonDown += ActiveRtb_PreviewMouseLeftButtonDown;
+            //if (_activeRtb == trtb) {
+            //    return;
+            //}
+            //_activeRtb = trtb;
+            //_activeRtb.PreviewMouseLeftButtonDown += ActiveRtb_PreviewMouseLeftButtonDown;
         }
 
         public void CancelEdit() {
-            var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedTemplate;
+            //var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedItem;
 
-            thlvm.CancelCommand.Execute(null);
-            if (thlvm.WasNewOnEdit) {
+            BindingContext.CancelCommand.Execute(null);
+            if (BindingContext != null && BindingContext.WasNewOnEdit) {
                 //var selectionStart = SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start;
                 //        SelectedTemplateHyperlinkViewModel.Dispose(false);
                 //        _originalSelection.Text = _originalText;
@@ -50,34 +58,45 @@ namespace MpWpfApp {
                 _activeRtb.Selection.Select(rtbv.NewStartRange.Start, rtbv.NewStartRange.End);
                 _activeRtb.Selection.Text = string.Empty;
                 _activeRtb.Selection.Text = rtbv.NewOriginalText;
-                thlvm.WasNewOnEdit = false;
+                BindingContext.WasNewOnEdit = false;
             }
             //Visibility = Visibility.Collapsed;
         }
 
-        private void ActiveRtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if(Visibility == Visibility.Visible) {
-                var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedTemplate;
-                if (thlvm != null) {
-                    thlvm.OkCommand.Execute(null);
-                }
-            }
-        }
+        //private void ActiveRtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        //    if(Visibility == Visibility.Visible) {
+        //        //var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedItem;
+        //        if (BindingContext != null) {
+        //            BindingContext.OkCommand.Execute(null);
+        //        }
+        //    }
+        //}
 
         private void TemplateNameEditorTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
-            var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedTemplate;
+            //var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedItem;
             if (e.Key == Key.Escape) {
-                thlvm.CancelCommand.Execute(null);
+                BindingContext.CancelCommand.Execute(null);
                 e.Handled = true;
             }
             if (e.Key == Key.Enter) {
-                thlvm.OkCommand.Execute(null);
+                BindingContext.OkCommand.Execute(null);
                 e.Handled = true;
             }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e) {
             CancelEdit();
+        }
+
+        private void TemplateColorButton_Click(object sender, RoutedEventArgs e) {
+            MpContextMenuView.Instance.DataContext = new MpMenuItemViewModel() {
+                SubItems = new List<MpMenuItemViewModel>() {
+                    MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(BindingContext)
+                }
+            };
+            MpContextMenuView.Instance.PlacementTarget = sender as Button;
+            MpContextMenuView.Instance.IsOpen = true;
+            
         }
     }
 }

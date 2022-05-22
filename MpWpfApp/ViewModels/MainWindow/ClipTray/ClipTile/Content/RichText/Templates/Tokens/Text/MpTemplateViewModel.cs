@@ -28,7 +28,8 @@ namespace MpWpfApp {
         MpViewModelBase<MpTemplateCollectionViewModel>, 
         MpISelectableViewModel,
         MpIHoverableViewModel,
-        MpIMenuItemViewModel {
+        MpIMenuItemViewModel,
+        MpIUserColorViewModel {
         #region Private Variables
         private MpTextTemplate _originalModel;
         #endregion
@@ -56,6 +57,14 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region MpIUserColorViewModel 
+
+        public string UserHexColor {
+            get => TemplateHexColor;
+            set => TemplateHexColor = value;
+        }
+        #endregion
+
         #region Layout Properties        
         #endregion
 
@@ -66,25 +75,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Validation
-        private string _validationText = string.Empty;
-        public string ValidationText {
-            get {
-                return _validationText;
-            }
-            set {
-                if (_validationText != value) {
-                    _validationText = value;
-                    OnPropertyChanged(nameof(ValidationText));
-                    OnPropertyChanged(nameof(TemplateNameTextBoxBorderBrush));
-                }
-            }
-        }
+        public string ValidationText { get; set; }
 
-        public bool IsValid {
-            get {
-                return string.IsNullOrEmpty(ValidationText);
-            }
-        }
+        public bool IsValid => string.IsNullOrEmpty(ValidationText);
         #endregion
 
         #region Brush Properties
@@ -92,48 +85,32 @@ namespace MpWpfApp {
             get {
                 return IsValid ? Brushes.Transparent : Brushes.Red;
             }
-        }
+        }        
 
-        
 
-        public Brush TemplateBorderBrush {
+        public Brush TemplateForegroundHexColor {
             get {
-                if(HostClipTileViewModel == null || HostClipTileViewModel.IsContentReadOnly) {
-                    return Brushes.Transparent;
-                }
-                if(IsSelected) {
-                    return Brushes.Red;
-                }
-                if(IsHovering) {
-                    return Brushes.Yellow;
-                }
-                return Brushes.Transparent;
-            }
-        }
-
-        public Brush TemplateForegroundBrush {
-            get {
-                if (MpWpfColorHelpers.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
+                if (MpColorHelpers.IsBright(TemplateBackgroundHexColor)) {
                     return Brushes.Black;
                 }
                 return Brushes.White;
             }
         }
 
-        public Brush TemplateBackgroundBrush {
+        public string TemplateBackgroundHexColor {
             get {
                 if(HostClipTileViewModel == null) {
-                    return TemplateBrush;
+                    return string.Empty;
                 }
                 if(!HostClipTileViewModel.IsContentReadOnly) {
                     if (IsHovering) {
-                        return MpWpfColorHelpers.GetDarkerBrush(TemplateBrush);
+                        return MpColorHelpers.GetDarkerHexColor(TemplateHexColor);
                     }
                     if (IsSelected) {
-                        return MpWpfColorHelpers.GetLighterBrush(TemplateBrush);
+                        return MpColorHelpers.GetLighterHexColor(TemplateHexColor);
                     }
                 }
-                return TemplateBrush;
+                return TemplateHexColor;
             }
         }
         #endregion
@@ -144,47 +121,13 @@ namespace MpWpfApp {
         public bool IsSelected { get; set; }
         public DateTime LastSelectedDateTime { get; set; }
 
-        public bool HasText => !string.IsNullOrEmpty(MatchData);
+        public bool HasText => !string.IsNullOrEmpty(TemplateText);
 
-        private bool _isEditingTemplate = false;
-        public bool IsEditingTemplate {
-            get {
-                return _isEditingTemplate;
-            }
-            set {
-                if (_isEditingTemplate != value) {
-                    _isEditingTemplate = value;
-                    OnPropertyChanged(nameof(IsEditingTemplate));
-                }
-            }
-        }
+        public bool IsEditingTemplate { get; set; }
 
-        private bool _isPastingTemplate = false;
-        public bool IsPastingTemplate {
-            get {
-                return _isPastingTemplate;
-            }
-            set {
-                if (_isPastingTemplate != value) {
-                    _isPastingTemplate = value;
-                    OnPropertyChanged(nameof(IsPastingTemplate));
-                }
-            }
-        }
+        public bool IsPastingTemplate { get; set; }
 
-        private bool _wasVisited = false;
-        public bool WasVisited {
-            get {
-                return _wasVisited;
-            }
-            set {
-                if (_wasVisited != value) {
-                    _wasVisited = value;
-                    OnPropertyChanged(nameof(WasVisited));
-                }
-
-            }
-        }
+        public bool WasVisited { get; set; }
 
         public int InstanceCount { get; set; }
         #endregion
@@ -198,61 +141,49 @@ namespace MpWpfApp {
                 }
                 if(Parent.Parent.IsPastingTemplate &&
                     HasText) {
-                    return MatchData;
+                    return TemplateText;
                 }
-                return TextToken.EncodedTemplate;
+                return TemplateName;
             }
         }
 
-        private string _templateText = string.Empty;
-        public string MatchData {
-            get {
-                return _templateText;
-            }
-            set {
-                if (_templateText != value) {
-                    _templateText = value;
-                    OnPropertyChanged(nameof(MatchData));
-                    OnPropertyChanged(nameof(TemplateDisplayValue));
-                }
-            }
-        }
+        public string TemplateText { get; set; }
 
         #endregion
 
         #region Model Properties
         public bool IsNew {
             get {
-                if(TextToken == null) {
+                if(TextTemplate == null) {
                     return false;
                 }
-                return TextToken.Id == 0;
+                return TextTemplate.Id == 0;
             }
         }
 
         public bool WasNewOnEdit { get; set; } = false;
 
-        public int TextTokenId {
+        public int TextTemplateId {
             get {
-                if (TextToken == null) {
+                if (TextTemplate == null) {
                     return 0;
                 }
-                return TextToken.Id;
+                return TextTemplate.Id;
             }
         }
 
-        public string TextTokenGuid {
+        public string TextTemplateGuid {
             get {
-                if (TextToken == null) {
+                if (TextTemplate == null) {
                     return string.Empty;
                 }
-                return TextToken.Guid;
+                return TextTemplate.Guid;
             }
         }
 
         public int CopyItemId {
             get {
-                if(TextToken == null) {
+                if(TextTemplate == null) {
                     return 0;
                 }
                 return 0;// TextToken.CopyItemId;
@@ -261,77 +192,41 @@ namespace MpWpfApp {
 
         public string TemplateName {
             get {
-                if (TextToken == null) {
-                    return "TEMPLATE UNKNOWN";
+                if (TextTemplate == null) {
+                    return string.Empty;
                 }
                 
-                return TextToken.TemplateName;
+                return TextTemplate.TemplateName;
             }
             set {
-                if (TextToken == null) {
-                    return;
+                if(TemplateName != value) {
+                    TextTemplate.TemplateName = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(TemplateName));
+                    OnPropertyChanged(nameof(TemplateDisplayValue));
+                    OnPropertyChanged(nameof(TextTemplate));
                 }
-                if (TextToken.TemplateName != value) {
-                    TextToken.TemplateName = value;
-                }
-
-                OnPropertyChanged(nameof(TemplateName));
-                OnPropertyChanged(nameof(TemplateDisplayValue));
-                OnPropertyChanged(nameof(TextToken));
             }
         }
 
         public string TemplateHexColor {
             get {
-                if(TextToken == null) {
+                if(TextTemplate == null) {
                     return string.Empty;
                 }
-                return TextToken.HexColor;
+                return TextTemplate.HexColor;
             }
             set {
                 if(TemplateHexColor != value) {
-                    TextToken.HexColor = value;
+                    TextTemplate.HexColor = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(TemplateHexColor));
                 }
             }
         }
 
-        public Brush TemplateBrush {
-            get {
-                if (TextToken == null || string.IsNullOrEmpty(TextToken.HexColor)) {
-                    return Brushes.Pink;
-                }
-                return new SolidColorBrush(TextToken.HexColor.ToWinMediaColor());
-            }
-            set {
-                if (TextToken != null) {
-                    TextToken.HexColor = (value as SolidColorBrush).Color.ToHex();
-                    OnPropertyChanged(nameof(TemplateBrush));
-                    OnPropertyChanged(nameof(TemplateForegroundBrush));
-                    OnPropertyChanged(nameof(TemplateBackgroundBrush));
-                    OnPropertyChanged(nameof(TextToken));
-                }
-            }
-        }
 
-        private MpTextTemplate _copyItemTemplate = null;
-        public MpTextTemplate TextToken {
-            get {
-                return _copyItemTemplate;
-            }
-            set {
-                if (_copyItemTemplate != value) {
-                    _copyItemTemplate = value;
-                    OnPropertyChanged(nameof(TextToken));
-                    OnPropertyChanged(nameof(TemplateBrush));
-                    OnPropertyChanged(nameof(TemplateName)); 
-                    OnPropertyChanged(nameof(TemplateDisplayValue));
-                    OnPropertyChanged(nameof(TextTokenId));
-                    OnPropertyChanged(nameof(CopyItemId));
-                }
-            }
-        }
+        public MpTextTemplate TextTemplate { get; set; }
         #endregion
 
         #endregion
@@ -358,7 +253,7 @@ namespace MpWpfApp {
             IsBusy = true;
 
             await Task.Delay(1);
-            TextToken = cit;
+            TextTemplate = cit;
 
             IsBusy = false;
         }
@@ -382,7 +277,7 @@ namespace MpWpfApp {
 
         public void Reset() {
             IsSelected = false;            
-            MatchData = string.Empty;
+            TemplateText = string.Empty;
             IsEditingTemplate = false;
             WasVisited = false;
         }
@@ -401,13 +296,17 @@ namespace MpWpfApp {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
                         OnTemplateSelected?.Invoke(this, null);
                     } else {
-                        IsEditingTemplate = false;
+                        if(IsEditingTemplate) {
+                            OkCommand.Execute(null);
+                        }
+                        //IsEditingTemplate = false;
                         Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.IsDetailGridVisibile));
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
                     }
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedTemplateIdx));
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     break;
                 case nameof(TemplateName):
                     Validate();
@@ -418,8 +317,19 @@ namespace MpWpfApp {
                     }
                     break;
                 case nameof(IsEditingTemplate):
+                    if(IsEditingTemplate && !IsSelected) {
+                        IsSelected = true;
+                    }
                     Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.IsDetailGridVisibile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
+                    break;
+                case nameof(HasModelChanged):
+                    if(HasModelChanged) {
+                        Task.Run(async () => {
+                            await TextTemplate.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
+                    }
                     break;
             }
             Parent.UpdateCommandsCanExecute();
@@ -431,7 +341,7 @@ namespace MpWpfApp {
 
         public ICommand EditTemplateCommand => new RelayCommand(
             async() => {
-                _originalModel = await TextToken.CloneDbModel();
+                _originalModel = await TextTemplate.CloneDbModel();
                 //Parent.ClearAllEditing();
                 //Parent.ClearSelection();
 
@@ -457,7 +367,7 @@ namespace MpWpfApp {
             get {
                 return new RelayCommand(
                     () => {
-                        MatchData = string.Empty;
+                        TemplateText = string.Empty;
                     },
                     ()=> {
                         return HasText;
@@ -469,16 +379,16 @@ namespace MpWpfApp {
             async() => {
                 IsSelected = false;
                 if (WasNewOnEdit) {
-                    await Parent.RemoveItem(TextToken, false);
+                    await Parent.RemoveItem(TextTemplate, false);
                 }
-                TextToken = _originalModel;
+                TextTemplate = _originalModel;
                 IsEditingTemplate = false;
 
             });
 
         public ICommand OkCommand => new RelayCommand(
             async () => {
-                await TextToken.WriteToDatabaseAsync();
+                await TextTemplate.WriteToDatabaseAsync();
                 //Parent.Parent.RequestSyncModels();
                 WasNewOnEdit = false;
                 IsEditingTemplate = false;
@@ -486,32 +396,13 @@ namespace MpWpfApp {
             },
             Validate());
 
-        public ICommand ChangeTemplateColorCommand => new RelayCommand<object>(
-        (args) => {
-            var templateColorButton = args as Button;
-            var colorMenuItem = new MenuItem();
-            var colorContextMenu = new ContextMenu();
-            colorContextMenu.Items.Add(colorMenuItem);
-            MpHelpers.SetColorChooserMenuItem(
-                colorContextMenu,
-                colorMenuItem,
-                (s1, e1) => {
-                    TemplateBrush = (Brush)((Border)s1).Tag;
-                }
-            );
-            templateColorButton.ContextMenu = colorContextMenu;
-            colorContextMenu.PlacementTarget = templateColorButton;
-            //colorContextMenu.Width = 200;
-            //colorContextMenu.Height = 100;
-            colorContextMenu.IsOpen = true;
-        });
         #endregion
 
         #region Overrides
         public override string ToString() {
             return string.Format(
                 @"Name:{0} Text:{1} Count:{2} IsEditing:{3} IsSelected:{4} WasNew:{5} IsNew:{6}",
-                TemplateName,MatchData,InstanceCount,IsEditingTemplate?"T":"F",IsSelected?"T":"F",WasNewOnEdit ? "T" : "F",IsNew ? "T" : "F");
+                TemplateName,TemplateText,InstanceCount,IsEditingTemplate?"T":"F",IsSelected?"T":"F",WasNewOnEdit ? "T" : "F",IsNew ? "T" : "F");
         }
 
         #endregion

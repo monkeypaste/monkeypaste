@@ -33,68 +33,12 @@ namespace MpWpfApp {
         }
 
 
-        private void AddTemplateContextMenu_Opened(object sender, RoutedEventArgs e) {
-            var tc = (Rtb.DataContext as MpContentItemViewModel).TemplateCollection.Items;
-
-            var mil = new List<MenuItem>();
-            foreach(var thvm in tc) {
-                var mi = new MenuItem() {
-                    Header = thvm.TemplateName,
-                    Icon = new Border() { 
-                        BorderBrush = Brushes.Black,
-                        Background = thvm.TemplateBrush
-                    },
-                    DataContext = thvm
-                };
-                mil.Add(mi);
-            }
-
-            var ami = new MenuItem() {
-                Header = "Add New..."
-            };
-            var icon = new Image();
-            icon.Source = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png"));            
-            ami.Icon = icon;
-
-            mil.Add(ami);
-            foreach (MenuItem mi in mil) {
-                mi.Click += TemplateDropDownItem_Click;
-                mi.Unloaded += Mi_Unloaded;
-            }
-
-            AddButton.ContextMenu.ItemsSource = mil;
-        }
-
         private void Mi_Unloaded(object sender, RoutedEventArgs e) {
             var mi = sender as MenuItem;
             if(mi == null) {
                 return;
             }
-            mi.Click -= TemplateDropDownItem_Click;
             mi.Unloaded -= Mi_Unloaded;
-        }
-
-        private void TemplateDropDownItem_Click(object sender, RoutedEventArgs e) {
-            Rtb.Focus();
-            MpTemplateHyperlink thl = null;
-            var mi = sender as MenuItem;
-            if (mi.DataContext == null) {
-                //when clicking add new
-                thl = MpTemplateHyperlink.Create(Rtb.Selection, null);
-            } else if (mi.DataContext is MpTemplateViewModel thlvm) {
-                //when clicking a pre-existing template
-                thl = MpTemplateHyperlink.Create(Rtb.Selection, thlvm.TextToken);
-            }
-
-            //add trailing run of one space to allow clicking after template
-            //new Run(@" ", thl.ElementEnd);
-
-            var ettbv = Rtb.GetVisualAncestor<MpClipTileView>().GetVisualDescendent<MpEditTemplateToolbarView>();
-            ettbv.SetActiveRtb(Rtb);
-
-            (thl.DataContext as MpTemplateViewModel).WasNewOnEdit = true;
-
-            thl.EditTemplate();
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e) {

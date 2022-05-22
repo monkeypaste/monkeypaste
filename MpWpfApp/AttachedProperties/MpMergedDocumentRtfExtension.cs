@@ -131,59 +131,79 @@ namespace MpWpfApp {
         }
 
         public static async Task SaveTextContent(RichTextBox rtb) {
-            if(MpClipTrayViewModel.Instance.IsRequery) {
+            if(MpClipTrayViewModel.Instance.IsRequery || MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;
             }
             //await EncodeContent(rtb);
-            return;
+            //return;
 
             if(rtb.DataContext is MpClipTileViewModel ctvm) {
                 var contentLookup = new Dictionary<string, List<TextElement>>();
+                var allTemplateHyperlinks = rtb.Document.GetAllTextElements()
+                    .Where(x=>x is Hyperlink && x.Tag is MpTextTemplate)                            
+                    .ToList();
 
-                var allTextElements = rtb.Document.GetAllTextElements().ToList();
-                foreach(var te in allTextElements) {
-                    // fill dictionary w/ all text elements per copy item in doc order
-                    if(te.Tag == null) {
-                        // this should only happen when tile is initially loading which means it doesn't need to be saved
-                        return;
-                        //Debugger.Break();
-                        //throw new Exception("Error all text elements should have a model as their tag (either MpCopyItem or MpTextTemplate)");
-                    }
-                    if(te.Tag is MpCopyItem ci) {                        
-                        if(!contentLookup.ContainsKey(ci.Guid)) {
-                            contentLookup.Add(ci.Guid, new List<TextElement>());
-                        }
-                        contentLookup[ci.Guid].Add(te);
-                        contentLookup[ci.Guid].Sort((a, b) => {
-                            return a.ContentStart.CompareTo(b.ContentStart);
-                        });
-                    }
-                    // TODO should add template reference obj and check here probably
+                foreach (Hyperlink thl in allTemplateHyperlinks) {
+                    var cit = thl.Tag as MpTextTemplate;
+                    var span = new Span(thl.ContentStart, thl.ContentEnd);
+                    span.Inlines.Clear();
+                    span.Inlines.Add(cit.EncodedTemplate);
                 }
 
-                foreach(var ckvp in contentLookup) {
-                    var start = ckvp.Value.Aggregate((a, b) =>
-                        rtb.Document.ContentStart.GetOffsetToPosition(a.ElementStart) < rtb.Document.ContentStart.GetOffsetToPosition(b.ElementStart) ? a : b).ElementStart;
-                    var end = ckvp.Value.Aggregate((a, b) =>
-                        rtb.Document.ContentStart.GetOffsetToPosition(a.ElementEnd) > rtb.Document.ContentStart.GetOffsetToPosition(b.ElementEnd) ? a : b).ElementEnd;
+                var hl_test = rtb.Document.GetAllTextElements()
+                    .Where(x => x is Hyperlink)
+                    .ToList();
 
-                    string itemRtf = new TextRange(start, end).ToRichText();
-                    var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(ckvp.Key);
-                    if(civm == null) {
-                        // NOTE this should proibably not happen
-                        var ci = await MpDataModelProvider.GetCopyItemByGuid(ckvp.Key);
-                        if (ci == null) {
-                            //a new item
+                ctvm.HeadItem.CopyItemData = rtb.Document.ToRichText();
 
-                        } else {
-                            ci.ItemData = itemRtf;
-                            await ci.WriteToDatabaseAsync();
-                        }
-                    } else {
-                        civm.CopyItemData = itemRtf;
-                    }
-                    
+                while(ctvm.IsAnyBusy) {
+                    await Task.Delay(100);
                 }
+                LoadContent(rtb).FireAndForgetSafeAsync(ctvm);
+                //var allTextElements = rtb.Document.GetAllTextElements().ToList();
+                //foreach(var te in allTextElements) {
+                //    // fill dictionary w/ all text elements per copy item in doc order
+                //    if(te.Tag == null) {
+                //        // this should only happen when tile is initially loading which means it doesn't need to be saved
+                //        return;
+                //        //Debugger.Break();
+                //        //throw new Exception("Error all text elements should have a model as their tag (either MpCopyItem or MpTextTemplate)");
+                //    }
+                //    if(te.Tag is MpCopyItem ci) {                        
+                //        if(!contentLookup.ContainsKey(ci.Guid)) {
+                //            contentLookup.Add(ci.Guid, new List<TextElement>());
+                //        }
+                //        contentLookup[ci.Guid].Add(te);
+                //        contentLookup[ci.Guid].Sort((a, b) => {
+                //            return a.ContentStart.CompareTo(b.ContentStart);
+                //        });
+                //    }
+                //    // TODO should add template reference obj and check here probably
+                //}
+
+                //foreach(var ckvp in contentLookup) {
+                //    var start = ckvp.Value.Aggregate((a, b) =>
+                //        rtb.Document.ContentStart.GetOffsetToPosition(a.ElementStart) < rtb.Document.ContentStart.GetOffsetToPosition(b.ElementStart) ? a : b).ElementStart;
+                //    var end = ckvp.Value.Aggregate((a, b) =>
+                //        rtb.Document.ContentStart.GetOffsetToPosition(a.ElementEnd) > rtb.Document.ContentStart.GetOffsetToPosition(b.ElementEnd) ? a : b).ElementEnd;
+
+                //    string itemRtf = new TextRange(start, end).ToRichText();
+                //    var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(ckvp.Key);
+                //    if(civm == null) {
+                //        // NOTE this should proibably not happen
+                //        var ci = await MpDataModelProvider.GetCopyItemByGuid(ckvp.Key);
+                //        if (ci == null) {
+                //            //a new item
+
+                //        } else {
+                //            ci.ItemData = itemRtf;
+                //            await ci.WriteToDatabaseAsync();
+                //        }
+                //    } else {
+                //        civm.CopyItemData = itemRtf;
+                //    }
+
+                //}
             }
         }
 
@@ -278,6 +298,8 @@ namespace MpWpfApp {
 
             ctvm.HeadItem.UnformattedContentSize = rtb.Document.GetDocumentSize();
 
+            await LoadTemplates(rtb);
+
             switch (ctvm.HeadItem.CopyItemType) {
                 case MpCopyItemType.Text:
                 case MpCopyItemType.FileList:
@@ -311,7 +333,7 @@ namespace MpWpfApp {
                     MpConsole.WriteTraceLine("Missing template detected, replacing w/ empty string " + templateGuid + " and notifying collection its gone");
                     templateRanges[i].Text = string.Empty;
 
-                    var templatesToRemove = tcvm.Items.Where(x => x.TextTokenGuid == templateGuid).ToList();
+                    var templatesToRemove = tcvm.Items.Where(x => x.TextTemplateGuid == templateGuid).ToList();
                     for(int j = 0;j < templatesToRemove.Count;j++) {
                         var templateToRemove = templatesToRemove[j];
                         if(!tcvm.Items.Contains(templateToRemove)) {
@@ -321,7 +343,7 @@ namespace MpWpfApp {
                     }
                     continue;
                 }
-                var templateRange = templateRanges.FirstOrDefault(x => x.Text == templateGuid);
+                var templateRange = templateRanges.FirstOrDefault(x => x.Text == "{t{"+templateGuid+"}t}");
                 if(templateRange == null) {
                     Debugger.Break();
                 }
@@ -379,6 +401,7 @@ namespace MpWpfApp {
             //MpConsole.WriteLine(rtb.Document.ToXamlPackage());
 
             if (ctvm.IsTextItem) {
+                
                 rtb.Document.ConfigureLineHeight();
             }
         }

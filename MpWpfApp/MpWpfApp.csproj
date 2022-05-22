@@ -594,9 +594,6 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Hyperlinks\MpTextHyperlink.xaml.cs">
       <DependentUpon>MpTextHyperlink.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Templates\MpTemplateHyperlink.xaml.cs">
-      <DependentUpon>MpTemplateHyperlink.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\Edit\MpRtbEditToolbarView.xaml.cs">
       <DependentUpon>MpRtbEditToolbarView.xaml</DependentUpon>
     </Compile>
@@ -824,10 +821,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Hyperlinks\MpTextHyperlink.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Templates\MpTemplateHyperlink.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

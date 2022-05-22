@@ -33,8 +33,6 @@ namespace MpWpfApp {
             }
         }
 
-        public MpTemplateViewModel SelectedTemplate => Items.Where(x => x.IsSelected).FirstOrDefault();
-
         public MpMenuItemViewModel MenuItemViewModel {
             get {
                 if(Parent == null) {
@@ -68,20 +66,20 @@ namespace MpWpfApp {
 
         public string PasteButtonText => IsAllTemplatesFilled ? "PASTE" : "CONTINUE";
 
-        public int SelectedTemplateIdx {
-            get {
-                return Items.IndexOf(Items.Where(x => x.IsSelected).FirstOrDefault());
-            }
-            set {
-                if(value != SelectedTemplateIdx) {
-                    if(value >= 0 && value < Items.Count) {
-                        ClearSelection();
-                        Items[value].IsSelected = true;
-                    }
+        //public int SelectedTemplateIdx {
+        //    get {
+        //        return Items.IndexOf(Items.Where(x => x.IsSelected).FirstOrDefault());
+        //    }
+        //    set {
+        //        if(value != SelectedTemplateIdx) {
+        //            if(value >= 0 && value < Items.Count) {
+        //                ClearSelection();
+        //                Items[value].IsSelected = true;
+        //            }
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
         #endregion
 
         #region State
@@ -182,7 +180,7 @@ namespace MpWpfApp {
                     if(thlvm.IsSelected) {
                         Items.Where(x => x != thlvm).ForEach(x => x.IsSelected = false);
                     }
-                    OnPropertyChanged(nameof(SelectedTemplate));
+                    OnPropertyChanged(nameof(SelectedItem));
                     HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.IsDetailGridVisibile));
                     break;
                 case nameof(thlvm.IsEditingTemplate):
@@ -209,10 +207,10 @@ namespace MpWpfApp {
         public async Task<bool> RemoveItem(MpTextTemplate cit, bool removeAll) {
             MpConsole.WriteLine("Removing template: " + cit.TemplateName);
             //returns true if this was the last instance of the template
-            var thlvmToRemove = Items.Where(x => x.TextTokenId == cit.Id).FirstOrDefault();
+            var thlvmToRemove = Items.Where(x => x.TextTemplateId == cit.Id).FirstOrDefault();
             if(thlvmToRemove != null) {
                 if(removeAll || thlvmToRemove.InstanceCount == 1) {
-                    await thlvmToRemove.TextToken.DeleteFromDatabaseAsync();
+                    await thlvmToRemove.TextTemplate.DeleteFromDatabaseAsync();
                     Items.Remove(thlvmToRemove);
                 } else {
                     thlvmToRemove.InstanceCount--;
@@ -226,20 +224,16 @@ namespace MpWpfApp {
             int uniqueIdx = 1;
             string uniqueName = $"Template #";
             string testName = string.Format(
-                                        @"{0}{1}{2}{3}",
-                                        MpTextTemplate.TEMPLATE_PREFIX,
+                                        @"{0}{1}",
                                         uniqueName.ToLower(),
-                                        uniqueIdx,
-                                        MpTextTemplate.TEMPLATE_SUFFIX);
+                                        uniqueIdx);
             string pt = Parent.CopyItem.ItemData.ToPlainText().ToLower();
-            while (pt.Contains(testName) || Items.Any(x => x.TemplateDisplayValue.ToLower() == testName)) {
+            while (pt.Contains(testName) || Items.Any(x => x.TemplateName.ToLower() == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
-                                        @"{0}{1}{2}{3}",
-                                        MpTextTemplate.TEMPLATE_PREFIX,
+                                        @"{0}{1}",
                                         uniqueName.ToLower(),
-                                        uniqueIdx,
-                                        MpTextTemplate.TEMPLATE_SUFFIX);
+                                        uniqueIdx);
             }
             return uniqueName + uniqueIdx;
         }
@@ -272,7 +266,7 @@ namespace MpWpfApp {
             if (e is MpCopyItem ci) {
                 if(ci.Id == Parent.CopyItemId && Items != null) {
                     foreach(var cit in Items) {
-                        await MpDb.DeleteItemAsync<MpTextTemplate>(cit.TextToken);
+                        await MpDb.DeleteItemAsync<MpTextTemplate>(cit.TextTemplate);
                     }
                 }
             }
@@ -290,7 +284,7 @@ namespace MpWpfApp {
                     thlvm.IsSelected = false;
                 }
             }
-            OnPropertyChanged(nameof(SelectedTemplate));
+            OnPropertyChanged(nameof(SelectedItem));
             HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.IsDetailGridVisibile));
         }
 
@@ -328,7 +322,7 @@ namespace MpWpfApp {
                     return;
                 }
 
-                Parent.Parent.SelectedPlainText = "{t{"+ntvm.TextTokenGuid+"}t}";
+                Parent.Parent.SelectedPlainText = "{t{"+ntvm.TextTemplateGuid+"}t}";
 
                 var ctvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
                 if(ctvl == null) {
@@ -357,7 +351,7 @@ namespace MpWpfApp {
                 //if (!SelectedTemplate.HasText) {
                 //    SelectedTemplate.MatchData = " ";
                 //}
-                int nextIdx = Items.IndexOf(SelectedTemplate) + 1;
+                int nextIdx = Items.IndexOf(SelectedItem) + 1;
                 if (nextIdx >= Items.Count) {
                     nextIdx = 0;
                 }
@@ -369,7 +363,7 @@ namespace MpWpfApp {
                 //if (!SelectedTemplate.HasText) {
                 //    SelectedTemplate.MatchData = " ";
                 //}
-                int prevIdx = Items.IndexOf(SelectedTemplate) - 1;
+                int prevIdx = Items.IndexOf(SelectedItem) - 1;
                 if (prevIdx < 0) {
                     prevIdx = Items.Count - 1;
                 }
@@ -382,7 +376,7 @@ namespace MpWpfApp {
                 MpConsole.WriteLine("Unmodified item rtf: ");
                 MpConsole.WriteLine(rtf);
                 foreach (var thlvm in Items) {
-                    rtf = rtf.Replace(thlvm.TextToken.EncodedTemplate, thlvm.MatchData);
+                    rtf = rtf.Replace(thlvm.TextTemplate.EncodedTemplate, thlvm.TemplateText);
                 }
                 Parent.TemplateRichText = rtf;
                 MpConsole.WriteLine("Pastable rtf: ");
