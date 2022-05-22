@@ -32,7 +32,7 @@ namespace MpWpfApp {
             var rtbvm = _activeRtb.DataContext as MpContentItemViewModel;
 
             rtbvm.TemplateCollection.UpdateCommandsCanExecute();
-            foreach (var thlvm in rtbvm.TemplateCollection.Templates) {
+            foreach (var thlvm in rtbvm.TemplateCollection.Items) {
                 thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
             }
         }
@@ -49,7 +49,7 @@ namespace MpWpfApp {
                 return;
             }
             foreach (var civm in BindingContext.Parent.Parent.Items) {
-                foreach (var thlvm in civm.TemplateCollection.Templates) {
+                foreach (var thlvm in civm.TemplateCollection.Items) {
                     thlvm.OnTemplateSelected -= Thlvm_OnTemplateSelected;
                 }
             }
@@ -85,7 +85,7 @@ namespace MpWpfApp {
                 return;
             }
             foreach(var civm in BindingContext.Parent.Parent.Items) {
-                foreach (var thlvm in civm.TemplateCollection.Templates) {
+                foreach (var thlvm in civm.TemplateCollection.Items) {
                     thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
                 }
             }

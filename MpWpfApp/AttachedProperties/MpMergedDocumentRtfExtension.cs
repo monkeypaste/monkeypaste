@@ -297,22 +297,39 @@ namespace MpWpfApp {
             if (rtb_a != null) {
                 rtb_a.Update();
             }
-
         }
 
-        private static async Task LoadTemplates(RichTextBox rtb) {
+        public static async Task LoadTemplates(RichTextBox rtb) {
             // this should only occur in root document once all children are added to avoid different document error
             var templateRanges = GetEncodedRanges(rtb.Document, "{t{", "}t}");
-            var templateGuids = templateRanges.Select(x => x.Text.Replace("{c{", string.Empty).Replace("}c}", string.Empty)).ToList();
+            var templateGuids = templateRanges.Select(x => x.Text.Replace("{t{", string.Empty).Replace("}t}", string.Empty)).ToList();
             var templateItems = await MpDataModelProvider.GetTextTemplatesByGuids(templateGuids);
+            var tcvm = (rtb.DataContext as MpClipTileViewModel).HeadItem.TemplateCollection;
             for (int i = 0; i < templateGuids.Count; i++) {
                 string templateGuid = templateGuids[i];
                 if (templateItems.All(x => x.Guid != templateGuid)) {
-                    MpConsole.WriteTraceLine("Missing content child detected, replacing w/ empty string " + templateGuid);
+                    MpConsole.WriteTraceLine("Missing template detected, replacing w/ empty string " + templateGuid + " and notifying collection its gone");
                     templateRanges[i].Text = string.Empty;
+
+                    var templatesToRemove = tcvm.Items.Where(x => x.TextTokenGuid == templateGuid).ToList();
+                    for(int j = 0;j < templatesToRemove.Count;j++) {
+                        var templateToRemove = templatesToRemove[j];
+                        if(!tcvm.Items.Contains(templateToRemove)) {
+                            continue;
+                        }
+                        tcvm.Items.Remove(templateToRemove);
+                    }
                     continue;
                 }
-                MpTemplateHyperlink.Create(templateRanges[i], templateItems[i]);
+                var templateRange = templateRanges.FirstOrDefault(x => x.Text == templateGuid);
+                if(templateRange == null) {
+                    Debugger.Break();
+                }
+                var templateItem = templateItems.FirstOrDefault(x => x.Guid == templateGuid);
+                if(templateItem == null) {
+                    Debugger.Break();
+                }
+                templateRange.LoadTextTemplate(templateItem);
             }
         }
         private static TextRange[] GetEncodedRanges(FlowDocument fd, string rangeStartText, string rangeEndText) {

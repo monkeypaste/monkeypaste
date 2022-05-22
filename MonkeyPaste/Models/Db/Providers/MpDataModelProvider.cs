@@ -652,7 +652,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<List<MpTextTemplate>> GetTextTemplatesByGuids(List<string> guids) {
-            string whereStr = string.Join(" or ", guids.Select(x => string.Format(@"MpTextTemplateGuid={0}", x)));
+            string whereStr = string.Join(" or ", guids.Select(x => string.Format(@"MpTextTemplateGuid='{0}'", x)));
             string query = @"select * from MpTextTemplate where ?";
             var result = await MpDb.QueryAsync<MpTextTemplate>(query, whereStr);
             return result;

@@ -15,7 +15,7 @@ namespace MpWpfApp {
                         
             var civm = item as MpContentItemViewModel;
             string keyStr;
-            if(civm.TemplateCollection == null || civm.TemplateCollection.Templates.Count == 0) {
+            if(civm.TemplateCollection == null || civm.TemplateCollection.Items.Count == 0) {
                 keyStr = "RtbTemplate";
             } else {
                 keyStr = "FlowDocumentScrollViewerTemplate";

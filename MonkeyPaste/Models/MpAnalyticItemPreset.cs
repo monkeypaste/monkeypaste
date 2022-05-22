@@ -43,6 +43,8 @@ namespace MonkeyPaste {
         [Column("IsQuickAction")]
         public int QuickAction { get; set; } = 0;
 
+        public string Arg1 { get; set; } = string.Empty;
+
         public DateTime ManifestLastModifiedDateTime { get; set; } = DateTime.MinValue;
 
         public int Pinned { get; set; } = 0;
@@ -119,6 +121,7 @@ namespace MonkeyPaste {
             int iconId = 0, 
             bool isDefault = false, 
             bool isQuickAction = false, 
+            string arg1 = "",
             int sortOrderIdx = -1, 
             DateTime? manifestLastModifiedDateTime = null,
             object format = null,
@@ -142,6 +145,7 @@ namespace MonkeyPaste {
                 IconId = iconId,
                 IsDefault = isDefault,
                 IsQuickAction = isQuickAction,
+                Arg1 = arg1,
                 SortOrderIdx = sortOrderIdx,
                 ShortcutId = 0,
                 ManifestLastModifiedDateTime = manifestLastModifiedDateTime.HasValue ? manifestLastModifiedDateTime.Value : DateTime.Now};

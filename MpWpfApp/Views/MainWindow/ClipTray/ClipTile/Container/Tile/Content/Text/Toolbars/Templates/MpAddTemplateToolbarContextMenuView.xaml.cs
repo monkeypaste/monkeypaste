@@ -17,22 +17,24 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAddTemplateToolbarContextMenuView.xaml
     /// </summary>
-    public partial class MpAddTemplateToolbarButton : UserControl {
-        RichTextBox Rtb;
+    public partial class MpAddTemplateToolbarButton : MpUserControl<MpTemplateCollectionViewModel> {
+        RichTextBox Rtb {
+            get {
+                var ctv = this.GetVisualAncestor<MpClipTileView>();
+                if(ctv == null) {
+                    return null;
+                }
+                return ctv.GetVisualDescendent<RichTextBox>();
+            }
+        }
+
         public MpAddTemplateToolbarButton() {
             InitializeComponent();
         }
 
-        public MpAddTemplateToolbarButton(RichTextBox rtb) : this() {
-            SetActiveRtb(rtb);            
-        }
-
-        public void SetActiveRtb(RichTextBox rtb) {
-            Rtb = rtb;
-        }
 
         private void AddTemplateContextMenu_Opened(object sender, RoutedEventArgs e) {
-            var tc = (Rtb.DataContext as MpContentItemViewModel).TemplateCollection.Templates;
+            var tc = (Rtb.DataContext as MpContentItemViewModel).TemplateCollection.Items;
 
             var mil = new List<MenuItem>();
             foreach(var thvm in tc) {
@@ -96,24 +98,32 @@ namespace MpWpfApp {
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e) {
-            if(Rtb == null || Rtb.DataContext == null) {
-                MpConsole.WriteTraceLine("No rtb or rtb context");
+            //if(Rtb == null || Rtb.DataContext == null) {
+            //    MpConsole.WriteTraceLine("No rtb or rtb context");
+            //    return;
+            //}
+            //var rtbv = Rtb.GetVisualAncestor<MpContentView>();
+            //rtbv.NewOriginalText = Rtb.Selection.Text;
+            //rtbv.NewStartRange = Rtb.Selection;
+
+            //var ctvm = rtbv.BindingContext;
+            //if (ctvm.HeadItem.TemplateCollection.Items.Count == 0) {
+            //    //when no templates exist create a new default one
+            //    var thl = MpTemplateHyperlink.Create(Rtb.Selection, null);
+            //    var thlvm = thl.DataContext as MpTemplateViewModel;
+            //    thlvm.EditTemplateCommand.Execute(null);
+            //} else {
+            //    //otherwise show template menu
+            //    AddButton.ContextMenu.IsOpen = true;
+            //}
+            if(BindingContext.Items.Count == 0) {
+                BindingContext.CreateTemplateViewModelCommand.Execute(null);
                 return;
             }
-            var rtbv = Rtb.GetVisualAncestor<MpContentView>();
-            rtbv.NewOriginalText = Rtb.Selection.Text;
-            rtbv.NewStartRange = Rtb.Selection;
 
-            var ctvm = rtbv.BindingContext;
-            if (ctvm.HeadItem.TemplateCollection.Templates.Count == 0) {
-                //when no templates exist create a new default one
-                var thl = MpTemplateHyperlink.Create(Rtb.Selection, null);
-                var thlvm = thl.DataContext as MpTemplateViewModel;
-                thlvm.EditTemplateCommand.Execute(null);
-            } else {
-                //otherwise show template menu
-                AddButton.ContextMenu.IsOpen = true;
-            }
+            MpContextMenuView.Instance.DataContext = BindingContext.MenuItemViewModel;
+            MpContextMenuView.Instance.PlacementTarget = this;
+            MpContextMenuView.Instance.IsOpen = true;
         }
 
         private void AddButton_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e) {

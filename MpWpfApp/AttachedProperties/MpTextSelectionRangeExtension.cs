@@ -4,12 +4,14 @@ using MonkeyPaste.Plugin;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Application = System.Windows.Application;
 
 namespace MpWpfApp {
     public class MpTextSelectionRangeExtension : DependencyObject {
@@ -97,7 +99,6 @@ namespace MpWpfApp {
                 if (tsrvm == null) {
                     return;
                 }
-
                 //tsrvm.SelectionStart = rtb.Document.ContentStart.GetOffsetToPosition(rtb.Selection.Start);
                 //tsrvm.SelectionLength = rtb.Selection.Start.GetOffsetToPosition(rtb.Selection.End);
 
@@ -119,6 +120,18 @@ namespace MpWpfApp {
 
         public static void SetTextSelection(DependencyObject dpo, int startIdx,int length) {
 
+        }
+
+        public static void SetSelectionText(MpITextSelectionRange tsr, string text) {
+            var cvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
+            if(cvl == null) {
+                return;
+            }
+            var cv = cvl.FirstOrDefault(x => x.DataContext == tsr);
+            if(cv == null) {
+                Debugger.Break();
+            }
+            cv.Rtb.Selection.Text = text;
         }
     }
 }

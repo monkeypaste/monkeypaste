@@ -7,12 +7,13 @@
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            d:DataContext="{d:DesignInstance Type=local:MpTemplateViewModel,
                                             IsDesignTimeCreatable=False}"
-           IsEnabled="{Binding Parent.Parent.Parent.IsReadOnly,
+           IsEnabled="{Binding Parent.Parent.Parent.IsContentReadOnly,
                                Converter={StaticResource BoolFlipConverter}}"
            MouseEnter="Hyperlink_MouseEnter"
            MouseLeave="Hyperlink_MouseLeave"
            local:MpHoverableExtension.IsEnabled="True"
-           local:MpHoverableExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+           local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                           Mode=TwoWay}"
            PreviewMouseLeftButtonDown="Hyperlink_PreviewMouseLeftButtonDown"
            Background="{Binding TemplateBackgroundBrush}"
            Tag="{StaticResource TemplateHyperlinkTag}"

@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using MonkeyPaste.Plugin;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public enum MpCurrencyType {
@@ -23,7 +24,11 @@ namespace MpWpfApp {
         Euros,
         Yen
     }    
-    public class MpTemplateViewModel : MpViewModelBase<MpTemplateCollectionViewModel>, ICloneable {
+    public class MpTemplateViewModel : 
+        MpViewModelBase<MpTemplateCollectionViewModel>, 
+        MpISelectableViewModel,
+        MpIHoverableViewModel,
+        MpIMenuItemViewModel {
         #region Private Variables
         private MpTextTemplate _originalModel;
         #endregion
@@ -37,6 +42,15 @@ namespace MpWpfApp {
                     return null;
                 }
                 return Parent.HostClipTileViewModel;
+            }
+        }
+
+        public MpMenuItemViewModel MenuItemViewModel {
+            get {
+                return new MpMenuItemViewModel() {
+                    Header = "Delete All",
+                    Command = DeleteAllTemplateInstancesCommand
+                };
             }
         }
 
@@ -125,42 +139,10 @@ namespace MpWpfApp {
         #endregion
 
         #region State Properties
-        private bool _isHovering = false;
-        public bool IsHovering {
-            get {
-                return _isHovering;
-            }
-            set {
-                if (_isHovering != value) {
-                    _isHovering = value;
-                    OnPropertyChanged(nameof(IsHovering));
-                    OnPropertyChanged(nameof(TemplateForegroundBrush));
-                    OnPropertyChanged(nameof(TemplateBorderBrush));
-                    OnPropertyChanged(nameof(TemplateBackgroundBrush));
-                }
-            }
-        }
+        public bool IsHovering { get; set; }
 
-        private bool _isSelected = false;
-        public bool IsSelected {
-            get {
-                return _isSelected;
-            }
-            set {
-                //if (_isSelected != value)  
-                    {
-                    if(_isSelected && value) {
-                        WasVisited = true;
-                    }
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                    OnPropertyChanged(nameof(TemplateForegroundBrush));
-                    OnPropertyChanged(nameof(TemplateBorderBrush));
-                    OnPropertyChanged(nameof(TemplateBackgroundBrush));
-                }
-               
-            }
-        }
+        public bool IsSelected { get; set; }
+        public DateTime LastSelectedDateTime { get; set; }
 
         public bool HasText => !string.IsNullOrEmpty(MatchData);
 
@@ -259,6 +241,15 @@ namespace MpWpfApp {
             }
         }
 
+        public string TextTokenGuid {
+            get {
+                if (TextToken == null) {
+                    return string.Empty;
+                }
+                return TextToken.Guid;
+            }
+        }
+
         public int CopyItemId {
             get {
                 if(TextToken == null) {
@@ -287,6 +278,22 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(TemplateName));
                 OnPropertyChanged(nameof(TemplateDisplayValue));
                 OnPropertyChanged(nameof(TextToken));
+            }
+        }
+
+        public string TemplateHexColor {
+            get {
+                if(TextToken == null) {
+                    return string.Empty;
+                }
+                return TextToken.HexColor;
+            }
+            set {
+                if(TemplateHexColor != value) {
+                    TextToken.HexColor = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(TemplateHexColor));
+                }
             }
         }
 
@@ -339,17 +346,25 @@ namespace MpWpfApp {
 
         public MpTemplateViewModel() : base(null) { }
 
-        public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm, MpTextTemplate cit) : base(thlcvm) {
-            PropertyChanged += MpTemplateViewModel_PropertyChanged;
-            TextToken = cit;
+        public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm) : base(thlcvm) {
+            PropertyChanged += MpTemplateViewModel_PropertyChanged;            
         }
 
         #endregion
 
         #region Public Methods
 
+        public async Task InitializeAsync(MpTextTemplate cit) {
+            IsBusy = true;
+
+            await Task.Delay(1);
+            TextToken = cit;
+
+            IsBusy = false;
+        }
+
         public bool Validate() {
-            if (Parent.Templates.Any(x => x.TemplateName.ToLower() == TemplateName.ToLower() && x != this)) {
+            if (Parent.Items.Any(x => x.TemplateName.ToLower() == TemplateName.ToLower() && x != this)) {
                 ValidationText = $"'{Parent.Parent.CopyItemTitle}' already contains a '{TemplateName}' template";
                 MpConsole.WriteLine($"Template invalidated: {ValidationText}");
                 return false;
@@ -431,9 +446,11 @@ namespace MpWpfApp {
                 return !HostClipTileViewModel.IsContentReadOnly;
             });
 
-        public ICommand DeleteTemplateCommand => new RelayCommand(
+        public ICommand DeleteAllTemplateInstancesCommand => new RelayCommand(
             async() => {
-                await TextToken.DeleteFromDatabaseAsync();
+                //await TextToken.DeleteFromDatabaseAsync();
+                await Task.Delay(1);
+                Debugger.Break();
             });
 
         public ICommand ClearTemplateCommand {
@@ -497,11 +514,6 @@ namespace MpWpfApp {
                 TemplateName,MatchData,InstanceCount,IsEditingTemplate?"T":"F",IsSelected?"T":"F",WasNewOnEdit ? "T" : "F",IsNew ? "T" : "F");
         }
 
-        public object Clone() {
-            var nthlvm = new MpTemplateViewModel(Parent, TextToken);
-            nthlvm.MatchData = MatchData;
-            return nthlvm;
-        }
         #endregion
     }
 }

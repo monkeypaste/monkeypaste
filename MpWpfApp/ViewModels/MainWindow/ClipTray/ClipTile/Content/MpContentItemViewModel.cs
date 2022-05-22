@@ -47,19 +47,7 @@ namespace MpWpfApp {
 
         public MpClipTileTitleSwirlViewModel TitleSwirlViewModel { get; set; }
 
-        private MpTemplateCollectionViewModel _templateCollection;
-        [MpChildViewModel(typeof(MpTemplateCollectionViewModel), false)]
-        public MpTemplateCollectionViewModel TemplateCollection {
-            get {
-                return _templateCollection;
-            }
-            set {
-                if (_templateCollection != value) {
-                    _templateCollection = value;
-                    OnPropertyChanged(nameof(TemplateCollection));
-                }
-            }
-        }
+        public MpTemplateCollectionViewModel TemplateCollection { get; set; }
 
         public MpSourceViewModel SourceViewModel {
             get {
@@ -479,7 +467,7 @@ namespace MpWpfApp {
                     return false;
                 }
 
-                return TemplateCollection.Templates.Any(x => x.IsEditingTemplate);
+                return TemplateCollection.Items.Any(x => x.IsEditingTemplate);
             }
         }
 
@@ -490,7 +478,7 @@ namespace MpWpfApp {
 
         public bool HasTemplates {
             get {
-                return TemplateCollection.Templates.Count > 0;
+                return TemplateCollection.Items.Count > 0;
             }
         }
 

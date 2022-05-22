@@ -217,8 +217,10 @@ namespace MpWpfApp {
             PropertyPath sourceProperty, 
             DependencyObject target, 
             DependencyProperty targetProperty, 
-            BindingMode mode = BindingMode.OneWay) {
+            BindingMode mode = BindingMode.OneWay,
+            IValueConverter converter = null) {
             Binding b = new Binding();
+            b.Converter = converter;
             b.Source = source;
             b.Path = sourceProperty;
             b.Mode = mode;

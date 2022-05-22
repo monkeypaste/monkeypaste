@@ -64,6 +64,8 @@ namespace MpWpfApp {
             }
         }
 
+        public ObservableCollection<MpClipboardFormatPresetViewModel> DefaultFormatPresetViewModels { get; set; } = new ObservableCollection<MpClipboardFormatPresetViewModel>();
+
         #endregion
 
         #region MpISidebarItemViewModel Implementation
@@ -210,6 +212,22 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        public ICommand UpdateDefaultFormatPresetCommand => new RelayCommand<object>(
+            (presetVmArg) => {
+                // TODO need a central view of current handled formats
+                // its too confusing having 'Ignore' parameter and 'IsDefault' when multiple handlers are present
+                var presetVm = presetVmArg as MpClipboardFormatPresetViewModel;
+                if (presetVm == null) {
+                    return;
+                }
+                foreach(var cihvm in Items) {
+                    var hfvm = cihvm.Items.FirstOrDefault(x => x.HandledFormat == presetVm.Parent.HandledFormat);
+                    if(hfvm == null || hfvm == presetVm.Parent) {
+                        continue;
+                    }
+                }
+            });
         #endregion
     }
 }

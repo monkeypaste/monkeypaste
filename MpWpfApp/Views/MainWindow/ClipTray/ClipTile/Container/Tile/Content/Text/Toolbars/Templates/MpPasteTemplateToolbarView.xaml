@@ -42,7 +42,7 @@
                           IsEnabled="{Binding IsAnyPastingTemplate,
                                               Source={x:Static local:MpClipTrayViewModel.Instance}}"
                           PreviewMouseLeftButtonDown="SelectedTemplateComboBox_PreviewMouseLeftButtonDown"
-                          ItemsSource="{Binding Templates}"
+                          ItemsSource="{Binding Items}"
                           SelectedIndex="{Binding SelectedTemplateIdx,
                                                   Mode=TwoWay,
                                                   NotifyOnTargetUpdated=True,

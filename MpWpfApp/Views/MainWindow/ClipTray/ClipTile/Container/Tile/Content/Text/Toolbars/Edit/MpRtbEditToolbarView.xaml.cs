@@ -62,7 +62,7 @@ namespace MpWpfApp {
             if(artb != null) {
                 artb.SelectionChanged -= CurrentRtb_SelectionChanged;
             }
-            AddTemplateButton.SetActiveRtb(trtb);
+            //AddTemplateButton.SetActiveRtb(trtb);
             artb = trtb;
             
             if(buttons == null) {

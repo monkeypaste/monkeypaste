@@ -68,7 +68,17 @@
         public int SelectionStart { get; set; }
         public int SelectionLength { get; set; }
 
-        public string SelectedPlainText { get; set; }
+        private string _selectedPlainText;
+        public string SelectedPlainText {
+            get => _selectedPlainText;
+            set {
+                if(_selectedPlainText != value) {
+                    _selectedPlainText = value;
+                    MpTextSelectionRangeExtension.SetSelectionText(this, _selectedPlainText);
+                    OnPropertyChanged(nameof(SelectedPlainText));
+                }
+            }
+        }
 
         public bool IsAllSelected { get; set; }
 
@@ -1042,11 +1052,11 @@
                         rtbvm.Parent.IsContentReadOnly = false;
                         //rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
                         rtbvm.TemplateCollection.UpdateCommandsCanExecute();
-                        rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.Templates));
+                        rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.Items));
                         rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.HasMultipleTemplates));
                         hasExpanded = true;
                     }
-                    rtbvm.TemplateCollection.Templates[0].IsSelected = true;
+                    rtbvm.TemplateCollection.Items[0].IsSelected = true;
                     rtbvm.TemplateRichText = null;
                     await Task.Run(async() => {
                         while (string.IsNullOrEmpty(rtbvm.TemplateRichText)) {

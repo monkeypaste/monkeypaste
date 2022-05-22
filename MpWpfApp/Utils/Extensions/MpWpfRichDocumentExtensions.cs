@@ -608,6 +608,112 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public static void LoadTextTemplate(this TextRange tr, MpTextTemplate cit) {
+            tr.Text = string.Empty;
+            var r = new Run(cit.TemplateName, tr.Start);
+            var thl = new Hyperlink(r) {
+                Tag = cit,
+                TextDecorations = null
+            };
+
+            MpClipTileViewModel ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(cit.CopyItemId);
+            if(ctvm == null) {
+                Debugger.Break();
+            }
+
+            MpTemplateViewModel tvm = ctvm.HeadItem.TemplateCollection.Items.FirstOrDefault(x => x.TextTokenId == cit.Id);
+
+            #region Events
+
+            MouseEventHandler thl_mouseEnter_handler = (s, e) => {
+                tvm.IsHovering = true;
+            };
+
+            MouseEventHandler thl_mouseLeave_handler = (s, e) => {
+                tvm.IsHovering = false;
+            };
+
+            MouseButtonEventHandler thl_previewMouseLeftButtonDown_handler = (s, e) => {
+                if(!tvm.Parent.Parent.IsSelected) {
+                    tvm.Parent.Parent.IsSelected = true;
+                }
+                if(!ctvm.IsContentReadOnly) {
+                    tvm.IsSelected = true;
+                    if(!ctvm.IsAnyPasting) {
+                        tvm.EditTemplateCommand.Execute(null);
+                        e.Handled = true;
+                    }
+                }
+            };
+
+            MouseButtonEventHandler thl_previewMouseRightButtonDown_handler = (s, e) => {
+                if (!tvm.Parent.Parent.IsSelected) {
+                    tvm.Parent.Parent.IsSelected = true;
+                }
+                if (!ctvm.IsContentReadOnly) {
+                    tvm.IsSelected = true;
+                    if (!ctvm.IsAnyPasting) {
+                        var origin = tr.Start.GetCharacterRect(LogicalDirection.Forward).Location;
+                        origin = thl.FindParentOfType<RichTextBox>().TranslatePoint(origin, Application.Current.MainWindow);
+                        MpContextMenuView.Instance.DataContext = tvm.MenuItemViewModel;
+                        MpContextMenuView.Instance.PlacementRectangle = new Rect(origin,new Size(200,50));
+                        MpContextMenuView.Instance.IsOpen = true;
+                    }
+                    e.Handled = true;
+                }
+            };
+
+            RoutedEventHandler thl_unloaded_handler = null;
+            thl_unloaded_handler = (s, e) => {
+                thl.Unloaded -= thl_unloaded_handler;
+                thl.MouseEnter -= thl_mouseEnter_handler;
+                thl.MouseLeave -= thl_mouseLeave_handler;
+                thl.PreviewMouseLeftButtonDown -= thl_previewMouseLeftButtonDown_handler;
+                thl.PreviewMouseRightButtonDown -= thl_previewMouseRightButtonDown_handler;
+            };
+
+            thl.Unloaded += thl_unloaded_handler;
+            thl.MouseEnter += thl_mouseEnter_handler;
+            thl.MouseLeave += thl_mouseLeave_handler;
+            thl.PreviewMouseLeftButtonDown += thl_previewMouseLeftButtonDown_handler;
+            thl.PreviewMouseRightButtonDown += thl_previewMouseRightButtonDown_handler;
+
+            #endregion
+
+            #region Bindings
+
+            MpHelpers.CreateBinding(
+                   source: tvm,
+                   sourceProperty: new PropertyPath(
+                                        nameof(tvm.TemplateDisplayValue)),
+                   target: r,
+                   targetProperty: Run.TextProperty);
+
+            MpHelpers.CreateBinding(
+                   source: tvm,
+                   sourceProperty: new PropertyPath(
+                                        nameof(tvm.TemplateForegroundBrush)),
+                   target: r,
+                   targetProperty: Run.ForegroundProperty);
+
+            MpHelpers.CreateBinding(
+                   source: ctvm,
+                   sourceProperty: new PropertyPath(
+                                        nameof(ctvm.IsContentReadOnly)),
+                   target: thl, 
+                   targetProperty: Hyperlink.IsEnabledProperty,
+                   converter: new MpBoolFlipConverter());
+
+            MpHelpers.CreateBinding(
+                   source: tvm,
+                   sourceProperty: new PropertyPath(
+                                        nameof(tvm.TemplateBackgroundBrush)),
+                   target: thl,
+                   targetProperty: Hyperlink.BackgroundProperty);
+
+            #endregion
+        }
         public static void LoadItemData(this TextRange tr, string str, MpCopyItemType strItemDataType, int iconId = 0) {
             // NOTE iconId is only used to convert file path's to rtf w/ icon 
 

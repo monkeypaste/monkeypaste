@@ -23,12 +23,13 @@ namespace MpWpfApp {
             var thcvm = rtbvm.TemplateCollection;
             tr.Text = string.Empty;
 
-            MpTemplateViewModel thlvm = thcvm.CreateTemplateViewModel(cit);
+            //MpTemplateViewModel thlvm = thcvm.CreateTemplateViewModel(cit).FireAndForgetSafeAsync(null);
 
-            var nthl = new MpTemplateHyperlink(tr, thlvm);
-            //ensure tag is set so decode document doesn't override
-            nthl.Tag = thlvm;
-            return nthl;
+            //var nthl = new MpTemplateHyperlink(tr, thlvm);
+            ////ensure tag is set so decode document doesn't override
+            //nthl.Tag = thlvm;
+            //return nthl;
+            return null;
         }
 
         public MpTemplateHyperlink() : base() {

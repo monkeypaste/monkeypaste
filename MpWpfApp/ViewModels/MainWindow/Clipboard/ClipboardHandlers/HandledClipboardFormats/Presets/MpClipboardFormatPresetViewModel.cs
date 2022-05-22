@@ -199,7 +199,10 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpClipboardFormatPresetViewModel(MpHandledClipboardFormatViewModel parent) : base(parent) { }
+        public MpClipboardFormatPresetViewModel(MpHandledClipboardFormatViewModel parent) : base(parent) {
+            PropertyChanged += MpClipboardFormatPresetViewModel_PropertyChanged;
+        }
+
 
         #endregion
 
@@ -297,6 +300,18 @@ namespace MpWpfApp {
                 aipvm.ValidationMessage = string.Empty;
             }
             Parent.Validate();
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpClipboardFormatPresetViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsQuickAction):
+
+                    break;
+            }
         }
 
         #endregion

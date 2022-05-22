@@ -119,13 +119,13 @@ namespace MonkeyPaste {
             string templateTypeData = "",
             string formatInfo = "") {
             int templateId = 0;
-            if(!string.IsNullOrEmpty(guid)) {
-                var dupCheck = await MpDataModelProvider.GetTextTemplateByGuid(guid);
-                if (dupCheck != null) {
-                    //if item exists then write will update it
-                    templateId = dupCheck.Id;
-                }
-            }
+            //if(!string.IsNullOrEmpty(guid)) {
+            //    var dupCheck = await MpDataModelProvider.GetTextTemplateByGuid(guid);
+            //    if (dupCheck != null) {
+            //        //if item exists then write will update it
+            //        templateId = dupCheck.Id;
+            //    }
+            //}
 
             var newTextTemplate = new MpTextTemplate() {
                 Id = templateId,
