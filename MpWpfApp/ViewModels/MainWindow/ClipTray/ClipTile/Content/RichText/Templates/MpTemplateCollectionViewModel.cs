@@ -121,18 +121,18 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(int ciid) {
-            IsBusy = true;
+        //public async Task InitializeAsync(int ciid) {
+        //    IsBusy = true;
 
-            var citl = await MpDataModelProvider.GetTextTemplatesAsync(ciid);
-            foreach(var cit in citl) {
-                var citvm = await CreateTemplateViewModel(cit);
-                base.Items.Add(citvm);
-            }
-            base.OnPropertyChanged(nameof(MpSelectorViewModelBase<MpContentItemViewModel, MpTemplateViewModel>.Items));
+        //    var citl = await MpDataModelProvider.GetTextTemplatesAsync(ciid);
+        //    foreach(var cit in citl) {
+        //        var citvm = await CreateTemplateViewModel(cit);
+        //        base.Items.Add(citvm);
+        //    }
+        //    base.OnPropertyChanged(nameof(MpSelectorViewModelBase<MpContentItemViewModel, MpTemplateViewModel>.Items));
 
-            IsBusy = false;
-        }
+        //    IsBusy = false;
+        //}
 
 
         public async Task<MpTemplateViewModel> CreateTemplateViewModel(MpTextTemplate cit) {
@@ -269,7 +269,12 @@ namespace MpWpfApp {
                         await MpDb.DeleteItemAsync<MpTextTemplate>(cit.TextTemplate);
                     }
                 }
-            }
+            } //else if(e is MpTextTemplate cit && Items.Any(x=>x.TextTemplateId == cit.Id)) {
+                // NOTE template model is deleted in LoadTemplates
+            //    var toRemove_tvm = Items.FirstOrDefault(x => x.TextTemplateId == cit.Id);
+            //    Items.Remove(toRemove_tvm);
+            //    OnPropertyChanged(nameof(Items));
+            //}
         }
         #endregion
 
@@ -301,8 +306,7 @@ namespace MpWpfApp {
         #region Commands
         public ICommand CreateTemplateViewModelCommand => new RelayCommand<object>(
             async (templateVmArg) => {
-                MpTemplateViewModel ntvm = null;
-
+                string templateGuid = string.Empty;
                 if(templateVmArg == null) {
                     string templateName = Parent.Parent.SelectedPlainText;
                     if(string.IsNullOrWhiteSpace(templateName)) {
@@ -311,18 +315,14 @@ namespace MpWpfApp {
                     var cit = await MpTextTemplate.Create(
                         copyItemId: Parent.CopyItemId,
                         templateName: templateName);
-
-                    ntvm = await CreateTemplateViewModel(cit);
-                    Items.Add(ntvm);
-
-                    OnPropertyChanged(nameof(Items));
-                } else if (templateVmArg is MpTemplateViewModel) {
-                    ntvm = templateVmArg as MpTemplateViewModel;
+                    templateGuid = cit.Guid;
+                } else if (templateVmArg is MpTemplateViewModel tvm) {
+                    templateGuid = tvm.TextTemplateGuid;
                 } else {
                     return;
                 }
 
-                Parent.Parent.SelectedPlainText = "{t{"+ntvm.TextTemplateGuid+"}t}";
+                Parent.Parent.SelectedPlainText = "{t{"+templateGuid+"}t}";
 
                 var ctvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
                 if(ctvl == null) {
@@ -333,7 +333,17 @@ namespace MpWpfApp {
                     Debugger.Break();
                 }
 
-                MpMergedDocumentRtfExtension.LoadTemplates(ctv.Rtb).FireAndForgetSafeAsync(this);
+                await MpMergedDocumentRtfExtension.LoadTemplates(ctv.Rtb);
+
+                if(templateVmArg == null) {
+                    //for new templates go into edit mode by default
+                    var ntvm = Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
+                    if(ntvm == null) {
+                        Debugger.Break();
+                    }
+                    ntvm.EditTemplateCommand.Execute(null);
+                }
+
             });
 
         public ICommand ClearAllTemplatesCommand => new RelayCommand(

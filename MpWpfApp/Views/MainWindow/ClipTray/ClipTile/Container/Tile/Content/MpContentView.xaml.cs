@@ -25,19 +25,30 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for Mpxaml
     /// </summary>
-    public partial class MpContentView : MpUserControl<MpClipTileViewModel> {      
-        public TextRange NewStartRange;
-        public string NewOriginalText;
-        public Hyperlink LastEditedHyperlink;
+    public partial class MpContentView : MpUserControl<MpClipTileViewModel> {
+        //public TextRange NewStartRange;
+        //public string NewOriginalText;
+        //public Hyperlink LastEditedHyperlink;
 
         private bool _isNew = true;
-       //ublic ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
+        //ublic ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
 
         public MpContentView() : base() {
             InitializeComponent();
             Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.UseSpellCheck;
         }
-        
+
+        public void UpdateAdorners() {
+            if (Rtb == null) {
+                return;
+            }
+            var rtb_a = AdornerLayer.GetAdornerLayer(Rtb);
+            if (rtb_a == null) {
+                return;
+            }
+            rtb_a.Update();
+        }
+
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.IsEditable:
@@ -45,7 +56,7 @@ namespace MpWpfApp {
                     break;
                 case MpMessageType.IsReadOnly:
                     Rtb.FitDocToRtb();
-                    MpHelpers.RunOnMainThread(async()=> {
+                    MpHelpers.RunOnMainThread(async () => {
                         await SyncModelsAsync();
                     });
                     break;
@@ -104,8 +115,8 @@ namespace MpWpfApp {
         private void ReceivedDragDropManagerMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ItemDragBegin:
-                    if(BindingContext != null && BindingContext.IsSelected) {
-                        if(BindingContext.SelectionLength == 0) {
+                    if (BindingContext != null && BindingContext.IsSelected) {
+                        if (BindingContext.SelectionLength == 0) {
                             Rtb.SelectAll();
                         }
                     }
@@ -116,10 +127,10 @@ namespace MpWpfApp {
         #region Event Handlers
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
-            
+
 
             if (BindingContext != null) {
-                if(_isNew) {
+                if (_isNew) {
                     _isNew = false;
 
                     MpMessenger.Register<MpMessageType>(
@@ -143,13 +154,13 @@ namespace MpWpfApp {
                 } else {
                     AttachAllBehaviors();
                 }
-                
-                ScrollToHome(); 
+
+                ScrollToHome();
 
 
 
-                
-                 //
+
+                //
             }
         }
 
@@ -165,7 +176,7 @@ namespace MpWpfApp {
 
             UnregisterViewModelRequests();
 
-            if(BindingContext != null) {
+            if (BindingContext != null) {
                 MpMessenger.Unregister<MpMessageType>(
                     BindingContext,
                     ReceivedClipTileViewModelMessage,
@@ -173,8 +184,8 @@ namespace MpWpfApp {
             }
 
             var mw = Application.Current.MainWindow as MpMainWindow;
-            if(mw != null) {
-                if(mw.MainWindowResizeBehvior != null) {
+            if (mw != null) {
+                if (mw.MainWindowResizeBehvior != null) {
                     MpMessenger.Unregister<MpMessageType>(
                             mw.MainWindowResizeBehvior,
                             ReceivedMainWindowResizeBehviorMessage);
@@ -205,7 +216,7 @@ namespace MpWpfApp {
         }
 
         private void BindingContext_OnFocusRequest(object sender, EventArgs e) {
-           // MpIsFocusedExtension.SetIsFocused()
+            // MpIsFocusedExtension.SetIsFocused()
         }
 
         private void BindingContext_OnPastePortableDataObject(object sender, object portableDataObjectOrCopyItem) {
@@ -217,7 +228,7 @@ namespace MpWpfApp {
         }
 
         public void ScrollByPointDelta(Point e) {
-            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+            if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;
             }
             var sv = Rtb.GetVisualDescendent<ScrollViewer>();
@@ -232,7 +243,7 @@ namespace MpWpfApp {
 
             //MpConsole.WriteLine(string.Format(@"Scrollable Width {0} Extent Width {1} ScrollBar Max {2} Track Max {3}", sv.ScrollableWidth, sv.ExtentWidth, hsb.Maximum, hsb.Track.Maximum));
 
-            double new_x_offset = Math.Max(0,Math.Min(sv.HorizontalOffset + e.X, hsb.Maximum));
+            double new_x_offset = Math.Max(0, Math.Min(sv.HorizontalOffset + e.X, hsb.Maximum));
             double new_y_offset = Math.Max(0, Math.Min(sv.VerticalOffset + e.Y, vsb.Maximum));
             //MpConsole.WriteLine("clamped delta: " + new Point(new_x_offset, new_y_offset));
 
@@ -254,7 +265,7 @@ namespace MpWpfApp {
         }
 
         private void Rtb_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            if(BindingContext.IsContentReadOnly && 
+            if (BindingContext.IsContentReadOnly &&
                !BindingContext.IsSubSelectionEnabled) {
                 e.Handled = true;
                 return;
@@ -292,25 +303,25 @@ namespace MpWpfApp {
             //        }
             //    }
             //}
-            if(e.NewValue is MpClipTileViewModel ctvm) {
+            if (e.NewValue is MpClipTileViewModel ctvm) {
                 ctvm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
             }
         }
         private void Rtb_SizeChanged(object sender, SizeChangedEventArgs e) {
             if (BindingContext != null) {
-                if (e.HeightChanged && 
+                if (e.HeightChanged &&
                     !Rtb.IsReadOnly) {
                     //MpMainWindowResizeBehavior.Instance.Resize(e.NewSize.Height - e.PreviousSize.Height);
                 }
-                if(e.WidthChanged || e.HeightChanged) {
-                    if(!MpDragDropManager.IsDragAndDrop) {
+                if (e.WidthChanged || e.HeightChanged) {
+                    if (!MpDragDropManager.IsDragAndDrop) {
                         // NOTE content drop removes wrapping (changes page size)
                         // and fit will discard that
                         Rtb.FitDocToRtb();
                     }
                 }
 
-                if(BindingContext.IsSelected &&
+                if (BindingContext.IsSelected &&
                    !BindingContext.IsTitleReadOnly) {
                     Rtb.Focus();
                 }
@@ -338,34 +349,59 @@ namespace MpWpfApp {
                 MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
             }
         }
-        
+
         private void Rtb_MouseLeave(object sender, MouseEventArgs e) {
             MpCursor.UnsetCursor(BindingContext);
-        }        
+        }
 
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            
-            if(MpDragDropManager.IsDragAndDrop) {
+            if (MpDragDropManager.IsDragAndDrop || Rtb.IsReadOnly) {
                 return;
             }
-
-            var stel = Rtb.Selection.GetAllTextElements();
-            if (!stel.All(x => x.Tag is MpTextTemplate)) {
-                BindingContext.HeadItem.TemplateCollection.Items.ForEach(x => x.IsSelected = false);
-            }
-            //if(!Rtb.Selection.IsEmpty && !BindingContext.IsSubSelectionEnabled) {
-            //    // NOTE don't 
-            //    Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);
+            //var thll = GetTemplateHyperlinksUnderSelection();
+            //if(thll == null) {
+            //    return;
             //}
-
-            //
+            
+            //if(thll.Count == 1 &&
+            //   thll[0].ContentRange().Contains(Rtb.Selection.Start) &&
+            //   thll[0].ContentRange().Contains(Rtb.Selection.End)) {
+            //    //when selection is entirely within ONE template then select template otherwise
+            //    //treat as normal selection
+            //    var tvm = BindingContext.HeadItem.TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateId == (thll[0].Tag as MpTextTemplate).Id);
+            //    BindingContext.HeadItem.TemplateCollection.SelectedItem = tvm;
+            //} else {
+            //    BindingContext.HeadItem.TemplateCollection.SelectedItem = null;
+            //}
         }
+        private void Rtb_MouseMove(object sender, MouseEventArgs e) {
+            if (BindingContext.IsHovering) {
+                // BUG when sub selection becomes empty the cursor goes back to default
+                // so this ensures it stays ibeam
+                if(!Rtb.IsReadOnly && BindingContext.HeadItem.TemplateCollection.Items.Any(x=>x.IsHovering)) {
+                    //MpCursor.SetCursor(BindingContext, MpCursorType.Hand);
+                    //handled in mouseEnter of LoadTemplate
+                } else if(BindingContext.IsSubSelectionEnabled) {
+                    MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
+                } else {
+                    MpCursor.UnsetCursor(BindingContext);
+                }
+                
+            } else {
+                MpCursor.UnsetCursor(BindingContext);
+            }
+        }
+
+        private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
+            UpdateAdorners();
+        }
+
 
         private void Rtb_LostFocus(object sender, RoutedEventArgs e) {
             if (MpDragDropManager.IsDragAndDrop) {
                 return;
             }
-            if (!BindingContext.IsSelected && 
+            if (!BindingContext.IsSelected &&
                 !BindingContext.IsSubSelectionEnabled && !Rtb.Selection.IsEmpty) {
                 //Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.Start);
                 //ScrollToHome();
@@ -373,8 +409,8 @@ namespace MpWpfApp {
             }
         }
         private void Rtb_PreviewKeyDown(object sender, KeyEventArgs e) {
-            if(e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-                if(!BindingContext.IsSelected) {
+            if (e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+                if (!BindingContext.IsSelected) {
                     BindingContext.IsSelected = true;
                 }
                 MpClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand.Execute(null);
@@ -387,14 +423,14 @@ namespace MpWpfApp {
             if (e.Key == Key.Escape) {
                 //BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
                 BindingContext.ClearEditing();
-            } 
+            }
         }
 
         private void Rtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             BindingContext.IsSelected = true;
             MpIsFocusedExtension.SetIsFocused(Rtb, true);
 
-            if (e.ClickCount >= 2 && 
+            if (e.ClickCount >= 2 &&
                 BindingContext.IsContentReadOnly &&
                 !BindingContext.IsSubSelectionEnabled) {
                 // NOTE only do select all when enabling otherwise default (select word)
@@ -413,15 +449,15 @@ namespace MpWpfApp {
                 e.Handled = false;
                 return;
             }
-            if(BindingContext.IsSubSelectionEnabled) {
+            if (BindingContext.IsSubSelectionEnabled) {
                 // NOTE only check for drag when there is selected text AND
                 // drag is from somewhere in the selection range.
                 // If mouse down isn't in selection range reset selection to down position
-                if(Rtb.Selection.IsEmpty) {
+                if (Rtb.Selection.IsEmpty) {
                     e.Handled = false;
                     return;
                 }
-                if(!Rtb.Selection.IsPointInRange(e.GetPosition(Rtb))) {
+                if (!Rtb.Selection.IsPointInRange(e.GetPosition(Rtb))) {
                     //var mptp = Rtb.GetPositionFromPoint(e.GetPosition(Rtb),true);
                     //Rtb.Selection.Select(mptp, mptp);
                     e.Handled = false;
@@ -429,13 +465,13 @@ namespace MpWpfApp {
                 }
             }
 
-            if(BindingContext.ItemType == MpCopyItemType.FileList) {
+            if (BindingContext.ItemType == MpCopyItemType.FileList) {
                 BindingContext.Items.ForEach(x => x.IsSelected = x.IsHovering);
-                if(BindingContext.SelectedItem != null) {
+                if (BindingContext.SelectedItem != null) {
                     BindingContext.SelectedPlainText = BindingContext.SelectedItem.CopyItemData;
 
                     var sr = Rtb.Document.ContentStart.FindText(Rtb.Document.ContentEnd, BindingContext.SelectedPlainText);
-                    if(sr != null) {
+                    if (sr != null) {
                         Rtb.Selection.Select(sr.Start, sr.End);
                     }
                 }
@@ -467,7 +503,7 @@ namespace MpWpfApp {
             Rtb.UpdateLayout();
             UpdateAdorners();
 
-            if(BindingContext != null && 
+            if (BindingContext != null &&
                !BindingContext.IsSubSelectionEnabled &&
                BindingContext.IsContentReadOnly &&
                !BindingContext.IsAnyItemDragging) {
@@ -491,6 +527,16 @@ namespace MpWpfApp {
 
         #endregion
 
+        public List<Hyperlink> GetTemplateHyperlinksUnderSelection() {
+            if(Rtb.IsReadOnly) {
+                return null;
+            }
+            var thll = Rtb.Selection.GetAllTextElements().Where(x => x is Hyperlink && x.Tag is MpTextTemplate);
+            if(thll.Count() == 0) {
+                return null;
+            }
+            return thll.Distinct().Cast<Hyperlink>().ToList();
+        }
         public void ScrollToHome() {
             Rtb.ScrollToHome();
             ScrollToPoint(new Point());
@@ -890,30 +936,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        private void Rtb_MouseMove(object sender, MouseEventArgs e) {
-            if (BindingContext.IsHovering && BindingContext.IsSubSelectionEnabled) {
-                // BUG when sub selection becomes empty the cursor goes back to default
-                // so this ensures it stays ibeam
-                MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
-            } else {
-                MpCursor.UnsetCursor(BindingContext);
-            }
-        }
-
-        private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
-            UpdateAdorners();
-        }
-
-        public void UpdateAdorners() {
-            if (Rtb == null) {
-                return;
-            }
-            var rtb_a = AdornerLayer.GetAdornerLayer(Rtb);
-            if (rtb_a == null) {
-                return;
-            }
-            rtb_a.Update();
-        }
+        
 
         
     }

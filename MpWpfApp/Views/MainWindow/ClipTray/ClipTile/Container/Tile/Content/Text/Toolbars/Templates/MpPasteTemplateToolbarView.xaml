@@ -43,7 +43,7 @@
                                               Source={x:Static local:MpClipTrayViewModel.Instance}}"
                           PreviewMouseLeftButtonDown="SelectedTemplateComboBox_PreviewMouseLeftButtonDown"
                           ItemsSource="{Binding Items}"
-                          SelectedIndex="{Binding SelectedItem,
+                          SelectedItem="{Binding SelectedItem,
                                                   Mode=TwoWay,
                                                   NotifyOnTargetUpdated=True,
                                                   NotifyOnSourceUpdated=True,

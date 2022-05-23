@@ -13,6 +13,7 @@
                      d:DesignWidth="700">
     <Border x:Name="ClipTileEditTemplateToolbar"
             Width="{Binding HostClipTileViewModel.TileBorderWidth}"
+            IsVisibleChanged="ClipTileEditTemplateToolbar_IsVisibleChanged"
             Height="40"
             HorizontalAlignment="Stretch"
             Background="LightBlue"
@@ -49,7 +50,11 @@
                          HorizontalAlignment="Left"
                          VerticalAlignment="Center"
                          VerticalContentAlignment="Top"
-                         BorderBrush="{Binding TemplateNameTextBoxBorderBrush}"
+                         local:MpIsFocusedExtension.IsEnabled="True"
+                         local:MpIsFocusedExtension.IsFocused="{Binding IsEditTextBoxFocused,
+                                                                        Mode=TwoWay}"
+                         BorderBrush="{Binding TemplateNameTextBoxBorderBrush,
+                                               Converter={StaticResource StringHexToBrushConverter}}"
                          BorderThickness="2"
                          FontSize="14"
                          Foreground="Black"
@@ -93,7 +98,7 @@
                         Margin="10,7,10,7"
                         Padding="5,0,5,0"
                         HorizontalAlignment="Stretch"
-                        Click="CancelButton_Click"
+                        Command="{Binding CancelEditTemplateCommand}"
                         Content="CANCEL"
                         FontSize="14"
                         IsCancel="True" />
@@ -101,7 +106,7 @@
                         Margin="0,7,10,7"
                         Padding="5,0,5,0"
                         HorizontalAlignment="Stretch"
-                        Command="{Binding OkCommand}"
+                        Command="{Binding FinishEditTemplateCommand}"
                         Content="DONE"
                         FontSize="14"
                         IsDefault="True" />

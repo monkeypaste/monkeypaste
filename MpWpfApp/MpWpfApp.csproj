@@ -129,6 +129,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\MpTextTemplateRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpMergedDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />

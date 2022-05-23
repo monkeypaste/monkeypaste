@@ -42,50 +42,17 @@ namespace MpWpfApp {
             //_activeRtb.PreviewMouseLeftButtonDown += ActiveRtb_PreviewMouseLeftButtonDown;
         }
 
-        public void CancelEdit() {
-            //var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedItem;
-
-            BindingContext.CancelCommand.Execute(null);
-            if (BindingContext != null && BindingContext.WasNewOnEdit) {
-                //var selectionStart = SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start;
-                //        SelectedTemplateHyperlinkViewModel.Dispose(false);
-                //        _originalSelection.Text = _originalText;
-                //        var sr = MpHelpers.FindStringRangeFromPosition(selectionStart, _originalText, true);
-                //        SubSelectedRtbViewModel.Rtb.Selection.Select(sr.Start, sr.End); 
-                var rtbv = _activeRtb.GetVisualAncestor<MpContentView>();
-                new TextRange(rtbv.LastEditedHyperlink.ElementStart, rtbv.LastEditedHyperlink.ElementEnd).Text = string.Empty;
-
-                _activeRtb.Selection.Select(rtbv.NewStartRange.Start, rtbv.NewStartRange.End);
-                _activeRtb.Selection.Text = string.Empty;
-                _activeRtb.Selection.Text = rtbv.NewOriginalText;
-                BindingContext.WasNewOnEdit = false;
-            }
-            //Visibility = Visibility.Collapsed;
-        }
-
-        //private void ActiveRtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-        //    if(Visibility == Visibility.Visible) {
-        //        //var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedItem;
-        //        if (BindingContext != null) {
-        //            BindingContext.OkCommand.Execute(null);
-        //        }
-        //    }
-        //}
 
         private void TemplateNameEditorTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
             //var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedItem;
             if (e.Key == Key.Escape) {
-                BindingContext.CancelCommand.Execute(null);
+                BindingContext.CancelEditTemplateCommand.Execute(null);
                 e.Handled = true;
             }
             if (e.Key == Key.Enter) {
-                BindingContext.OkCommand.Execute(null);
+                BindingContext.FinishEditTemplateCommand.Execute(null);
                 e.Handled = true;
             }
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e) {
-            CancelEdit();
         }
 
         private void TemplateColorButton_Click(object sender, RoutedEventArgs e) {
@@ -97,6 +64,13 @@ namespace MpWpfApp {
             MpContextMenuView.Instance.PlacementTarget = sender as Button;
             MpContextMenuView.Instance.IsOpen = true;
             
+        }
+
+        private void ClipTileEditTemplateToolbar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if((bool)e.NewValue) {
+                TemplateNameEditorTextBox.Focus();
+                Keyboard.Focus(TemplateNameEditorTextBox);
+            }
         }
     }
 }

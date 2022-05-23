@@ -166,7 +166,7 @@ namespace MonkeyPaste {
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpAnalyticItemPreset> CloneDbModel() {
+        public async Task<MpAnalyticItemPreset> CloneDbModel(bool suppressWrite = false) {
             // NOTE does not clone ShortcutId,IsDefault or IsQuickAction
 
             var caip = new MpAnalyticItemPreset() {

@@ -152,7 +152,7 @@ namespace MonkeyPaste {
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpIcon> CloneDbModel() {
+        public async Task<MpIcon> CloneDbModel(bool suppressWrite = false) {
             var ci = new MpIcon() {
                 IconGuid = System.Guid.NewGuid(),
                 HexColors = this.HexColors,

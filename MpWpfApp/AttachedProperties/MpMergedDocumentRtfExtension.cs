@@ -140,19 +140,19 @@ namespace MpWpfApp {
             if(rtb.DataContext is MpClipTileViewModel ctvm) {
                 var contentLookup = new Dictionary<string, List<TextElement>>();
                 var allTemplateHyperlinks = rtb.Document.GetAllTextElements()
-                    .Where(x=>x is Hyperlink && x.Tag is MpTextTemplate)                            
+                    .Where(x=>x is InlineUIContainer && x.Tag is MpTextTemplate)                            
                     .ToList();
 
-                foreach (Hyperlink thl in allTemplateHyperlinks) {
+                foreach (InlineUIContainer thl in allTemplateHyperlinks) {
                     var cit = thl.Tag as MpTextTemplate;
                     var span = new Span(thl.ContentStart, thl.ContentEnd);
                     span.Inlines.Clear();
                     span.Inlines.Add(cit.EncodedTemplate);
                 }
 
-                var hl_test = rtb.Document.GetAllTextElements()
-                    .Where(x => x is Hyperlink)
-                    .ToList();
+                //var hl_test = rtb.Document.GetAllTextElements()
+                //    .Where(x => x is Hyperlink)
+                //    .ToList();
 
                 ctvm.HeadItem.CopyItemData = rtb.Document.ToRichText();
 
@@ -291,7 +291,6 @@ namespace MpWpfApp {
             if (ctvm == null) {
                 return;
             }
-            ctvm.IsBusy = false;
             if (ctvm.HeadItem == null) {
                 return;
             }
@@ -299,6 +298,8 @@ namespace MpWpfApp {
             ctvm.HeadItem.UnformattedContentSize = rtb.Document.GetDocumentSize();
 
             await LoadTemplates(rtb);
+
+            ctvm.IsBusy = false;
 
             switch (ctvm.HeadItem.CopyItemType) {
                 case MpCopyItemType.Text:
@@ -319,40 +320,72 @@ namespace MpWpfApp {
             if (rtb_a != null) {
                 rtb_a.Update();
             }
+
+            //if(ctvm.HasTemplates) {
+            //    foreach(var tvm in ctvm.HeadItem.TemplateCollection.Items) {
+            //        var templateRanges = rtb.Document.FindText(tvm.TemplateName);
+            //        Debugger.Break();
+            //    }
+            //}
         }
 
         public static async Task LoadTemplates(RichTextBox rtb) {
+            var ctvm = rtb.DataContext as MpClipTileViewModel;
+            var civm = ctvm.HeadItem;
+            var tcvm = civm.TemplateCollection;
             // this should only occur in root document once all children are added to avoid different document error
             var templateRanges = GetEncodedRanges(rtb.Document, "{t{", "}t}");
             var templateGuids = templateRanges.Select(x => x.Text.Replace("{t{", string.Empty).Replace("}t}", string.Empty)).ToList();
             var templateItems = await MpDataModelProvider.GetTextTemplatesByGuids(templateGuids);
-            var tcvm = (rtb.DataContext as MpClipTileViewModel).HeadItem.TemplateCollection;
+            
+            if(rtb.IsReadOnly && tcvm.Items.Count > templateGuids.Distinct().Count()) {
+                //all instances of at least one template were deleted
+                Debugger.Break();
+                
+            }
             for (int i = 0; i < templateGuids.Count; i++) {
                 string templateGuid = templateGuids[i];
+                MpTextTemplate templateItem = null;
                 if (templateItems.All(x => x.Guid != templateGuid)) {
-                    MpConsole.WriteTraceLine("Missing template detected, replacing w/ empty string " + templateGuid + " and notifying collection its gone");
-                    templateRanges[i].Text = string.Empty;
+                    Debugger.Break();
+                    // when template is encoded in document but not referenced in MpTextTemplate
+                    var missingItem = await MpDataModelProvider.GetTextTemplateByGuid(templateGuid);
+                    if(missingItem == null) {
+                        civm.CopyItemData = civm.CopyItemData.Replace(@"\{t\{" + templateGuid + @"\{t\{", string.Empty);
+                        templateRanges[i].Text = string.Empty;
+                        MpConsole.WriteLine($"CopyItem {civm} item's data had ref to {templateGuid} which is not in the db, is now removed from item data");
 
-                    var templatesToRemove = tcvm.Items.Where(x => x.TextTemplateGuid == templateGuid).ToList();
-                    for(int j = 0;j < templatesToRemove.Count;j++) {
-                        var templateToRemove = templatesToRemove[j];
-                        if(!tcvm.Items.Contains(templateToRemove)) {
-                            continue;
+                        var tvm = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
+                        if(tvm != null) {
+                            tcvm.Items.Remove(tvm);
+                            MpConsole.WriteLine($"Template collection also had ref to item {templateGuid}, which is also now removed");
                         }
-                        tcvm.Items.Remove(templateToRemove);
+                        continue;
                     }
-                    continue;
+                    templateItem = missingItem;
+                } else {
+                    templateItem = templateItems.FirstOrDefault(x => x.Guid == templateGuid);
+                }
+                if(templateItem == null) {
+                    Debugger.Break();
+                } else if(!tcvm.Items.Any(x=>x.TextTemplateGuid == templateGuid)) {
+                    // only add one distinct tvm to tcvm
+                    var tvm = await tcvm.CreateTemplateViewModel(templateItem);
+                    tcvm.Items.Add(tvm);
+
                 }
                 var templateRange = templateRanges.FirstOrDefault(x => x.Text == "{t{"+templateGuid+"}t}");
                 if(templateRange == null) {
                     Debugger.Break();
                 }
-                var templateItem = templateItems.FirstOrDefault(x => x.Guid == templateGuid);
                 if(templateItem == null) {
                     Debugger.Break();
                 }
                 templateRange.LoadTextTemplate(templateItem);
             }
+
+            tcvm.OnPropertyChanged(nameof(tcvm.Items));
+
         }
         private static TextRange[] GetEncodedRanges(FlowDocument fd, string rangeStartText, string rangeEndText) {
             return GetEncodedRanges(new TextRange(fd.ContentStart, fd.ContentEnd), rangeStartText, rangeEndText);

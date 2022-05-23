@@ -139,15 +139,20 @@ namespace MonkeyPaste {
         public MpTextTemplate() : base() { }
 
 
-        public async Task<MpTextTemplate> CloneDbModel() {
+        public async Task<MpTextTemplate> CloneDbModel(bool suppressWrite = false) {
             var ccit = new MpTextTemplate() {
+                Id = suppressWrite ? this.Id : 0,
                 CopyItemId = this.CopyItemId,
                 TemplateName = this.TemplateName,
                 HexColor = this.HexColor,
                 TemplateText = this.TemplateText,
-                TextTemplateGuid = System.Guid.NewGuid(),
+                TemplateData = this.TemplateData,
+                TemplateType = this.TemplateType,                
+                Guid = suppressWrite ? this.Guid : System.Guid.NewGuid().ToString(),
             };
-            await ccit.WriteToDatabaseAsync();
+            if(!suppressWrite) {
+                await ccit.WriteToDatabaseAsync();
+            }
             return ccit;
         }
     }

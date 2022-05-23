@@ -542,25 +542,6 @@ namespace MpWpfApp {
                 return CopyItem.CompositeParentCopyItemId > 0 || base.Parent.Count > 1;
             }
         }
-
-        public DateTime CopyItemCreatedDateTime {
-            get {
-                if (CopyItem == null) {
-                    return DateTime.MinValue;
-                }
-                return CopyItem.CopyDateTime;
-            }
-        }
-
-        public string HotkeyIconTooltip {
-            get {
-                if (string.IsNullOrEmpty(ShortcutKeyString)) {
-                    return @"Assign Shortcut";
-                }
-                return ShortcutKeyString;
-            }
-        }
-
         public int CompositeSortOrderIdx {
             get {
                 if (CopyItem == null) {
@@ -592,6 +573,25 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public DateTime CopyItemCreatedDateTime {
+            get {
+                if (CopyItem == null) {
+                    return DateTime.MinValue;
+                }
+                return CopyItem.CopyDateTime;
+            }
+        }
+
+        public string HotkeyIconTooltip {
+            get {
+                if (string.IsNullOrEmpty(ShortcutKeyString)) {
+                    return @"Assign Shortcut";
+                }
+                return ShortcutKeyString;
+            }
+        }
+
         public string CopyItemTitle {
             get {
                 if(CopyItem == null) {

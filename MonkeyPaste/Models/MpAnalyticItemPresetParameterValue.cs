@@ -90,7 +90,7 @@ namespace MonkeyPaste {
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpAnalyticItemPresetParameterValue> CloneDbModel() {
+        public async Task<MpAnalyticItemPresetParameterValue> CloneDbModel(bool suppressWrite = false) {
             // NOTE if recreating preset must set PresetId after this method
 
             var cppv = new MpAnalyticItemPresetParameterValue() {

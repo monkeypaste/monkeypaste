@@ -752,6 +752,8 @@
         
         #endregion
 
+
+
         #endregion
 
         #region Events
@@ -1306,6 +1308,13 @@
                     //        Parent.LoadMoreClipsCommand.Execute(-1);
                     //    }
                     //}
+                    break;
+                case nameof(IsContentFocused):
+                    if(IsContentFocused) {
+                        if(IsAnyEditingTemplate) {
+                            HeadItem.TemplateCollection.Items.FirstOrDefault(x => x.IsEditingTemplate).FinishEditTemplateCommand.Execute(null);
+                        }
+                    }
                     break;
             }
         }

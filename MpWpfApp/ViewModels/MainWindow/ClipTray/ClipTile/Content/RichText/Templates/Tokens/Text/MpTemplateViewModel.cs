@@ -69,6 +69,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance Properties
+
+        public string TemplateNameTextBoxBorderBrush {
+            get {
+                return IsValid ? MpSystemColors.Transparent : MpSystemColors.Red;
+            }
+        }
         #endregion
 
         #region Visibility Properties
@@ -81,19 +87,30 @@ namespace MpWpfApp {
         #endregion
 
         #region Brush Properties
-        public Brush TemplateNameTextBoxBorderBrush {
-            get {
-                return IsValid ? Brushes.Transparent : Brushes.Red;
-            }
-        }        
 
 
-        public Brush TemplateForegroundHexColor {
+        public string TemplateForegroundHexColor {
             get {
                 if (MpColorHelpers.IsBright(TemplateBackgroundHexColor)) {
-                    return Brushes.Black;
+                    return MpSystemColors.black;
                 }
-                return Brushes.White;
+                return MpSystemColors.White;
+            }
+        }
+
+        public string TemplateBorderHexColor {
+            get {
+                if(HostClipTileViewModel == null ||
+                   HostClipTileViewModel.IsContentReadOnly) {
+                    return MpSystemColors.oldlace;
+                }
+                if(IsSelected) {
+                    return MpSystemColors.Red;
+                }
+                if(IsHovering) {
+                    return MpSystemColors.Yellow;
+                }
+                return MpSystemColors.oldlace;
             }
         }
 
@@ -126,6 +143,8 @@ namespace MpWpfApp {
         public bool IsEditingTemplate { get; set; }
 
         public bool IsPastingTemplate { get; set; }
+
+        public bool IsEditTextBoxFocused { get; set; }
 
         public bool WasVisited { get; set; }
 
@@ -300,7 +319,7 @@ namespace MpWpfApp {
                         OnTemplateSelected?.Invoke(this, null);
                     } else {
                         if(IsEditingTemplate) {
-                            OkCommand.Execute(null);
+                            FinishEditTemplateCommand.Execute(null);
                         }
                         //IsEditingTemplate = false;
                         Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.IsDetailGridVisibile));
@@ -322,6 +341,7 @@ namespace MpWpfApp {
                     }
                     Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.IsDetailGridVisibile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
+
                     break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
@@ -341,13 +361,16 @@ namespace MpWpfApp {
 
         public ICommand EditTemplateCommand => new RelayCommand(
             async() => {
-                _originalModel = await TextTemplate.CloneDbModel();
+                _originalModel = await TextTemplate.CloneDbModel(true);
                 //Parent.ClearAllEditing();
                 //Parent.ClearSelection();
 
-                IsSelected = true;
+                Parent.SelectedItem = this;
                 IsEditingTemplate = true;
+                
                 Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
+                await Task.Delay(50);
+                IsEditTextBoxFocused = true; 
             },
             () => {
                 if (HostClipTileViewModel == null) {
@@ -375,7 +398,7 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand CancelCommand => new RelayCommand(
+        public ICommand CancelEditTemplateCommand => new RelayCommand(
             async() => {
                 IsSelected = false;
                 if (WasNewOnEdit) {
@@ -386,7 +409,7 @@ namespace MpWpfApp {
 
             });
 
-        public ICommand OkCommand => new RelayCommand(
+        public ICommand FinishEditTemplateCommand => new RelayCommand(
             async () => {
                 await TextTemplate.WriteToDatabaseAsync();
                 //Parent.Parent.RequestSyncModels();

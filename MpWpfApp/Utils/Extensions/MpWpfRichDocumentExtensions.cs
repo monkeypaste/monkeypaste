@@ -19,6 +19,7 @@ using MonkeyPaste.Plugin;
 using System.Diagnostics;
 using System.Windows.Navigation;
 using System.Windows.Input;
+using System.Windows.Data;
 
 namespace MpWpfApp {
     public static class MpWpfRichDocumentExtensions {
@@ -610,17 +611,61 @@ namespace MpWpfApp {
         }
 
         public static void LoadTextTemplate(this TextRange tr, MpTextTemplate cit) {
+            // TODO (maybe) when cit is new (and no formatting is stored) need to check font formatting of beginning of tr
+            // and clone (and also switch to FLowDocument if a list or something) here
+            // because as long as this done on initial creation the formatting will persist (or is loaded from cit)
+            var tr_parent_te = tr.Start.Parent as TextElement;
+            var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
+
+            if(tr_parent_te == null) {
+                tr_parent_te = tr.Start.Paragraph;
+            }
+
             tr.Text = string.Empty;
-            var r = new Run(cit.TemplateName) {
+            //var r = new Run(cit.TemplateName) {
+            //    Tag = cit
+            //};
+
+            var tb = new TextBlock() {
+                Text = cit.TemplateName,
+                FontSize = tr_parent_te.FontSize,
+                FontFamily = tr_parent_te.FontFamily,
+                FontStretch = tr_parent_te.FontStretch,
+                FontWeight = tr_parent_te.FontWeight,
+                FontStyle = tr_parent_te.FontStyle,
+                Background = Brushes.Transparent,
+                Tag = cit
+            };
+            var b = new Border() {
+                Child = tb,
+                CornerRadius = new CornerRadius(5),
+                BorderThickness = new Thickness(1),
                 Tag = cit
             };
             
-            var thl = new Hyperlink(tr.Start,tr.End) {
-                Tag = cit,
-                TextDecorations = null
-            }; 
-            thl.Inlines.Clear();
-            thl.Inlines.Add(r);
+            var iuic = new InlineUIContainer(b,tr.Start) {
+                Tag = cit,            
+                BaselineAlignment = BaselineAlignment.Center
+            };
+
+            MpHelpers.RunOnMainThread(async () => {
+                while(!b.IsLoaded) {
+                    await Task.Delay(100);
+                }
+                if (iuic.ContentStart.Paragraph != null) {
+                    if (iuic.ContentStart.Paragraph.LineHeight < b.ActualHeight) {
+                        iuic.ContentStart.Paragraph.LineHeight = b.ActualHeight;
+                    }
+                }
+            });
+            
+
+            //var thl = new Hyperlink(tr.Start,tr.End) {
+            //    Tag = cit,
+            //    TextDecorations = null
+            //}; 
+            //thl.Inlines.Clear();
+            //thl.Inlines.Add(iuic);
 
             MpClipTileViewModel ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(cit.CopyItemId);
             if(ctvm == null) {
@@ -633,14 +678,14 @@ namespace MpWpfApp {
 
             MouseEventHandler thl_mouseEnter_handler = (s, e) => {
                 tvm.IsHovering = true;
-                if(!ctvm.IsContentReadOnly) {
+                if (!ctvm.IsContentReadOnly) {
                     MpCursor.SetCursor(tvm, MpCursorType.Hand);
                 }
             };
 
             MouseEventHandler thl_mouseLeave_handler = (s, e) => {
                 tvm.IsHovering = false;
-                if(!ctvm.IsContentReadOnly) {
+                if (!ctvm.IsContentReadOnly) {
                     MpCursor.UnsetCursor(tvm);
                 }
             };
@@ -650,7 +695,7 @@ namespace MpWpfApp {
                     tvm.Parent.Parent.IsSelected = true;
                 }
                 if(!ctvm.IsContentReadOnly) {
-                    tvm.IsSelected = true;
+                    tvm.Parent.SelectedItem = tvm;
                     if(!ctvm.IsAnyPasting) {
                         tvm.EditTemplateCommand.Execute(null);
                         e.Handled = true;
@@ -663,41 +708,56 @@ namespace MpWpfApp {
                     tvm.Parent.Parent.IsSelected = true;
                 }
                 if (!ctvm.IsContentReadOnly) {
-                    tvm.IsSelected = true;
+                    tvm.Parent.SelectedItem = tvm;
                     if (!ctvm.IsAnyPasting) {
                         var origin = tr.Start.GetCharacterRect(LogicalDirection.Forward).Location;
-                        origin = thl.FindParentOfType<RichTextBox>().TranslatePoint(origin, Application.Current.MainWindow);
+                        origin = iuic.FindParentOfType<RichTextBox>().TranslatePoint(origin, Application.Current.MainWindow);
                         
                         MpContextMenuView.Instance.DataContext = tvm.MenuItemViewModel;
                         //MpContextMenuView.Instance.PlacementRectangle = new Rect(origin,new Size(200,50));
 
-                        thl.ContextMenu = MpContextMenuView.Instance;
+                        iuic.ContextMenu = MpContextMenuView.Instance;
                         MpContextMenuView.Instance.IsOpen = true;
                     }
                     e.Handled = true;
                 }
             };
 
-            TextCompositionEventHandler thl_textInput_handler = (s, e) => {
-                return;
-            };
 
             RoutedEventHandler thl_unloaded_handler = null;
             thl_unloaded_handler = (s, e) => {
-                thl.Unloaded -= thl_unloaded_handler;
-                thl.MouseEnter -= thl_mouseEnter_handler;
-                thl.MouseLeave -= thl_mouseLeave_handler;
-                thl.PreviewMouseLeftButtonDown -= thl_previewMouseLeftButtonDown_handler;
-                thl.PreviewMouseRightButtonDown -= thl_previewMouseRightButtonDown_handler;
-                thl.TextInput -= thl_textInput_handler;
+                MpHelpers.RunOnMainThread(async () => {
+                    if (rtb != null && 
+                        !rtb.IsReadOnly && 
+                        !MpClipTrayViewModel.Instance.HasScrollVelocity && 
+                        !MpClipTrayViewModel.Instance.IsRequery) {
+                        //while editing if template is removed check if its the only one if so remove from db and tcvm
+                        var iuicl = rtb.Document.GetAllTextElements().Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate);
+                        if (iuicl != null && iuicl.All(x => (x.Tag as MpTextTemplate).Id != cit.Id)) {
+                            var tcvm = (rtb.DataContext as MpClipTileViewModel).HeadItem.TemplateCollection;
+                            var toRemove_tvml = tcvm.Items.Where(x => x.TextTemplateGuid == cit.Guid).ToList();
+                            foreach (var toRemove_tvm in toRemove_tvml) {
+                                tcvm.Items.Remove(toRemove_tvm);
+                            }
+                            await Task.WhenAll(toRemove_tvml.Select(x => x.TextTemplate.DeleteFromDatabaseAsync()));
+
+                            tcvm.OnPropertyChanged(nameof(tcvm.Items));
+                        }
+                    } 
+                });
+                
+                iuic.Unloaded -= thl_unloaded_handler;
+                iuic.MouseEnter -= thl_mouseEnter_handler;
+                iuic.MouseLeave -= thl_mouseLeave_handler;
+                iuic.PreviewMouseLeftButtonDown -= thl_previewMouseLeftButtonDown_handler;
+                iuic.PreviewMouseRightButtonDown -= thl_previewMouseRightButtonDown_handler;
             };
 
-            thl.Unloaded += thl_unloaded_handler;
-            thl.MouseEnter += thl_mouseEnter_handler;
-            thl.MouseLeave += thl_mouseLeave_handler;
-            thl.PreviewMouseLeftButtonDown += thl_previewMouseLeftButtonDown_handler;
-            thl.PreviewMouseRightButtonDown += thl_previewMouseRightButtonDown_handler;
-            thl.TextInput += thl_textInput_handler;
+            iuic.Unloaded += thl_unloaded_handler;
+            iuic.MouseEnter += thl_mouseEnter_handler;
+            iuic.MouseLeave += thl_mouseLeave_handler;
+            iuic.PreviewMouseLeftButtonDown += thl_previewMouseLeftButtonDown_handler;
+            iuic.PreviewMouseRightButtonDown += thl_previewMouseRightButtonDown_handler;
             #endregion
 
             #region Bindings
@@ -706,30 +766,31 @@ namespace MpWpfApp {
                    source: tvm,
                    sourceProperty: new PropertyPath(
                                         nameof(tvm.TemplateDisplayValue)),
-                   target: r,
-                   targetProperty: Run.TextProperty);
+                   target: tb,
+                   targetProperty: TextBlock.TextProperty);
 
             MpHelpers.CreateBinding(
                    source: tvm,
                    sourceProperty: new PropertyPath(
                                         nameof(tvm.TemplateForegroundHexColor)),
-                   target: r,
-                   targetProperty: Run.ForegroundProperty);
-
-            MpHelpers.CreateBinding(
-                   source: ctvm,
-                   sourceProperty: new PropertyPath(
-                                        nameof(ctvm.IsContentReadOnly)),
-                   target: thl, 
-                   targetProperty: Hyperlink.IsEnabledProperty,
-                   converter: new MpBoolFlipConverter());
+                   target: tb,
+                   targetProperty: TextBlock.ForegroundProperty,
+                   converter: new MpStringHexToBrushConverter());
 
             MpHelpers.CreateBinding(
                    source: tvm,
                    sourceProperty: new PropertyPath(
-                                        nameof(tvm.TemplateHexColor)),
-                   target: thl,
-                   targetProperty: Hyperlink.BackgroundProperty,
+                                        nameof(tvm.TemplateBackgroundHexColor)),
+                   target: b,
+                   targetProperty: Border.BackgroundProperty,
+                   converter: new MpStringHexToBrushConverter());
+
+            MpHelpers.CreateBinding(
+                   source: tvm,
+                   sourceProperty: new PropertyPath(
+                                        nameof(tvm.TemplateBorderHexColor)),
+                   target: b,
+                   targetProperty: Border.BorderBrushProperty,
                    converter: new MpStringHexToBrushConverter());
 
             #endregion
@@ -1056,6 +1117,38 @@ namespace MpWpfApp {
             }
 
             //return matchRangeList;
+        }
+
+        public static List<TextRange> FindText(
+            this FlowDocument fd,
+            string input,
+            FindFlags flags = FindFlags.MatchCase,
+            CultureInfo cultureInfo = null) {
+            var trl = new List<TextRange>();
+            var tp = fd.ContentStart;
+
+            var inputParts = input.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+            while (tp != null && tp != fd.ContentEnd) {
+                var ctp = tp;
+                int i;
+                for(i = 0;i < inputParts.Length && ctp != null && ctp != fd.ContentEnd;i++) {
+                    string inputPart = inputParts[i];
+                    var tr = ctp.FindText(fd.ContentEnd, inputPart, flags, cultureInfo);
+                    if (tr == null) {
+                        break;
+                    }
+
+                    ctp = tr.End.GetNextInsertionPosition(LogicalDirection.Forward);
+                }
+                if(i != inputParts.Length) {
+                    break;
+                }
+                trl.Add(new TextRange(tp, ctp));
+
+                tp = ctp.GetNextInsertionPosition(LogicalDirection.Forward);
+            }
+            return trl;
         }
 
         public static TextRange FindText(

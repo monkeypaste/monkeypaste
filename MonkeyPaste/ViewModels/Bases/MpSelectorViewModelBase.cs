@@ -20,10 +20,11 @@ namespace MonkeyPaste {
             get => Items.FirstOrDefault(x => x.IsSelected);
             set {
                 if (value != SelectedItem) {
-                    Items.ForEach(x => x.IsSelected = false);
-                    if (value != null) {
-                        value.IsSelected = true;
-                    }
+                    //Items.ForEach(x => x.IsSelected = false);
+                    //if (value != null) {
+                    //    value.IsSelected = true;
+                    //}
+                    Items.ForEach(x => x.IsSelected = x == value);
                 }
             }
         }
