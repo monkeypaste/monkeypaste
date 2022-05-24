@@ -39,6 +39,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructors
+        public MpPasteShortcutViewModel() : base(null) { }
+
         public MpPasteShortcutViewModel(MpAppViewModel parent) : base(parent) {
             PropertyChanged += MpPasteShortcutViewModel_PropertyChanged;
         }

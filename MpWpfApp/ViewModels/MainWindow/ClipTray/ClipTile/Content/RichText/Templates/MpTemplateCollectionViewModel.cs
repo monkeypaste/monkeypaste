@@ -139,7 +139,7 @@ namespace MpWpfApp {
 
         private void HostClipTileViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(Parent.IsAnyPastingTemplate):
+                case nameof(Parent.IsPastingTemplate):
                     //ResetAll();
                     break;
             }
@@ -314,13 +314,13 @@ namespace MpWpfApp {
                     return;
                 }
 
-                Parent.SelectedPlainText = "{t{"+ templateGuid + "}t}";
+                MpTextSelectionRangeExtension.SetSelectionText(Parent, "{t{" + templateGuid + "}t}");
 
                 var ctvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
                 if(ctvl == null) {
                     Debugger.Break();
                 }
-                var ctv = ctvl.FirstOrDefault(x => x.DataContext == base.Parent.Parent);
+                var ctv = ctvl.FirstOrDefault(x => x.DataContext == Parent);
                 if(ctv == null) {
                     Debugger.Break();
                 }
@@ -357,7 +357,7 @@ namespace MpWpfApp {
                 if (nextIdx >= Items.Count) {
                     nextIdx = 0;
                 }
-                Items[nextIdx].IsSelected = true;
+                SelectedItem = Items[nextIdx];
             });
 
         public ICommand SelectPreviousTemplateCommand => new RelayCommand(
@@ -369,18 +369,36 @@ namespace MpWpfApp {
                 if (prevIdx < 0) {
                     prevIdx = Items.Count - 1;
                 }
-                Items[prevIdx].IsSelected = true;
+                SelectedItem = Items[prevIdx];
             });
 
         public ICommand PasteTemplateCommand => new RelayCommand(
             () => {
-                string rtf = base.Parent.CopyItem.ItemData;
+                var cv = Application.Current.MainWindow.GetVisualDescendents<MpContentView>()
+                            .FirstOrDefault(x => x.DataContext == Parent);
+                if(cv == null) {
+                    Debugger.Break();
+                }
+
+                Parent.IsBusy = true;
+                EventHandler hideEvent = null;
+                hideEvent = (s, e) => {
+                    Parent.IsBusy = false;
+                    MpMainWindowViewModel.Instance.OnMainWindowHidden -= hideEvent;
+                };
+
+                MpMainWindowViewModel.Instance.OnMainWindowHidden += hideEvent;
+
+                var rtb = cv.Rtb;
+                string rtf = MpContentDocumentRtfExtension.GetEncodedContent(rtb);
+
                 MpConsole.WriteLine("Unmodified item rtf: ");
                 MpConsole.WriteLine(rtf);
+                //Debugger.Break();
                 foreach (var thlvm in Items) {
-                    rtf = rtf.Replace(thlvm.TextTemplate.EncodedTemplate, thlvm.TemplateText);
+                    rtf = rtf.Replace(thlvm.TextTemplate.EncodedTemplateRtf, thlvm.TemplateText);
                 }
-                base.Parent.TemplateRichText = rtf;
+                Parent.TemplateRichText = rtf;
                 MpConsole.WriteLine("Pastable rtf: ");
                 MpConsole.WriteLine(rtf);
             },

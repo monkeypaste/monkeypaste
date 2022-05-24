@@ -145,6 +145,8 @@ namespace MpWpfApp {
 
         public bool IsEditTextBoxFocused { get; set; }
 
+        public bool IsPasteTextBoxFocused { get; set; }
+
         public bool WasVisited { get; set; }
 
         public int InstanceCount { get; set; }

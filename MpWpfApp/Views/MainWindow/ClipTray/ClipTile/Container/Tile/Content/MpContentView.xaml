@@ -47,6 +47,7 @@
                                                       Converter={StaticResource StringHexToBrushConverter}}"
                              IsDocumentEnabled="True"
                              IsEnabled="True"
+                             GotFocus="Rtb_GotFocus"
                              IsReadOnlyCaretVisible="{Binding IsSubSelectionEnabled}"
                              IsReadOnly="{Binding IsContentReadOnly}"
                              IsInactiveSelectionHighlightEnabled="True"

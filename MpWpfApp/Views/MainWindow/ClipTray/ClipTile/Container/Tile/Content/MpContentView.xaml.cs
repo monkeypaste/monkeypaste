@@ -197,11 +197,6 @@ namespace MpWpfApp {
             BindingContext.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
             BindingContext.OnScrollOffsetRequest += BindingContext_OnScrollOffsetRequest;
             BindingContext.OnPastePortableDataObject += BindingContext_OnPastePortableDataObject;
-            //BindingContext.OnFocusRequest += BindingContext_OnFocusRequest;
-            //BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
-            //BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
-            //BindingContext.OnSyncModels -= Rtbivm_OnSyncModels;
-            //BindingContext.OnFitContenBindingContexttRequest -= Ncivm_OnFitContentRequest;
         }
 
 
@@ -209,10 +204,6 @@ namespace MpWpfApp {
             BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
             BindingContext.OnScrollOffsetRequest -= BindingContext_OnScrollOffsetRequest;
             BindingContext.OnPastePortableDataObject -= BindingContext_OnPastePortableDataObject;
-            //BindingContext.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
-            //BindingContext.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
-            //.OnSyncModels -= Rtbivm_OnSyncModels;
-            //BindingContext.OnFitContentRequest -= Ncivm_OnFitContentRequest;
         }
 
         private void BindingContext_OnFocusRequest(object sender, EventArgs e) {
@@ -323,7 +314,17 @@ namespace MpWpfApp {
 
                 if (BindingContext.IsSelected &&
                    !BindingContext.IsTitleReadOnly) {
-                    Rtb.Focus();
+                    BindingContext.IsContentFocused = true;
+                }
+
+                if (BindingContext.IsPastingTemplate) {
+                    if (BindingContext.TemplateCollection.SelectedItem == null) {
+                        if (BindingContext.TemplateCollection.Items.Count == 0) {
+                            return;
+                        }
+                        BindingContext.TemplateCollection.SelectedItem = BindingContext.TemplateCollection.Items[0];
+                    }
+                    BindingContext.TemplateCollection.SelectedItem.IsPasteTextBoxFocused = true;
                 }
             }
         }
@@ -427,8 +428,11 @@ namespace MpWpfApp {
         }
 
         private void Rtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            BindingContext.IsSelected = true;
-            MpIsFocusedExtension.SetIsFocused(Rtb, true);
+            
+            if(!BindingContext.IsSelected) {
+                BindingContext.IsSelected = true;
+            }
+            //BindingContext.IsContentFocused = true;
 
             if (e.ClickCount >= 2 &&
                 BindingContext.IsContentReadOnly &&
@@ -494,37 +498,13 @@ namespace MpWpfApp {
             if (BindingContext != null &&
                !BindingContext.IsSubSelectionEnabled &&
                BindingContext.IsContentReadOnly &&
-               !BindingContext.IsAnyItemDragging) {
+               !BindingContext.IsItemDragging) {
                 //Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
                 Rtb.CaretPosition = Rtb.Document.ContentStart;
             }
         }
 
-        private void Rtbivm_OnScrollWheelRequest(object sender, double e) {
-            //double vertScrollAmount = BindingContext.UnformattedContentSize.Height * e;
-            //Rtb.ScrollToVerticalOffset(vertScrollAmount);
-        }
-
-        private void Rtbivm_OnRtbResetRequest(object sender, bool focusRtb) {
-            ScrollToHome();
-            Rtb.CaretPosition = Rtb.Document.ContentStart;
-            if (focusRtb) {
-                Rtb.Focus();
-            }
-        }
-
         #endregion
-
-        public List<Hyperlink> GetTemplateHyperlinksUnderSelection() {
-            if(Rtb.IsReadOnly) {
-                return null;
-            }
-            var thll = Rtb.Selection.GetAllTextElements().Where(x => x is Hyperlink && x.Tag is MpTextTemplate);
-            if(thll.Count() == 0) {
-                return null;
-            }
-            return thll.Distinct().Cast<Hyperlink>().ToList();
-        }
         public void ScrollToHome() {
             Rtb.ScrollToHome();
             ScrollToPoint(new Point());
@@ -922,10 +902,17 @@ namespace MpWpfApp {
         }
 
 
+
+
+
         #endregion
 
-        
-
-        
+        private void Rtb_GotFocus(object sender, RoutedEventArgs e) {
+            if(BindingContext.IsPastingTemplate) {
+                var ctv = this.GetVisualAncestor<MpClipTileView>();
+                if(ctv != null) {
+                }
+            }
+        }
     }
 }

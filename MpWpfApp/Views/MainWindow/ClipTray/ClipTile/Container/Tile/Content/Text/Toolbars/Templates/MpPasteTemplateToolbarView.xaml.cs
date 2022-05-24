@@ -89,8 +89,13 @@ namespace MpWpfApp {
                     thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
                 }
             }
-
-            SelectedTemplateTextBox.Focus();
+            if(BindingContext.Items.Count == 0) {
+                return;
+            }
+            if(BindingContext.SelectedItem == null) {
+                BindingContext.SelectedItem = BindingContext.Items[0];                
+            }
+            BindingContext.SelectedItem.IsPasteTextBoxFocused = true;
         }
 
         private void SelectedTemplateTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {

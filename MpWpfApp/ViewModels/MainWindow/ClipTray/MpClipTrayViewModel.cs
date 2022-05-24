@@ -350,7 +350,7 @@ namespace MpWpfApp {
                 if(_isPasting) {
                     return true;
                 }
-                if(Items.Any(x=>x.IsAnyPasting)) {
+                if(Items.Any(x=>x.IsPasting)) {
                     // NOTE since copy items can be pasted from hot key and aren't in tray
                     // IsPasting cannot be auto-property
                     _isPasting = true;
@@ -492,7 +492,7 @@ namespace MpWpfApp {
 
         public bool IsPastingSelected { get; set; } = false;
 
-        public bool IsAnyTileContextMenuOpened => Items.Any(x => x.IsAnyItemContextMenuOpened);
+        public bool IsAnyTileContextMenuOpened => base.Items.Any((Func<MpClipTileViewModel, bool>)(x => (bool)x.IsContextMenuOpen));
 
         public bool IsAnyTileFlipped => Items.Any(x => x.IsFlipped || x.IsFlipping);
 
@@ -535,7 +535,7 @@ namespace MpWpfApp {
 
         public bool IsAnyEditingClipTile => Items.Any(x => x.IsContentReadOnly == false);
 
-        public bool IsAnyPastingTemplate => Items.Any(x => x.IsAnyPastingTemplate);
+        public bool IsAnyPastingTemplate => base.Items.Any((Func<MpClipTileViewModel, bool>)(x => (bool)x.IsPastingTemplate));
 
         //public bool IsPreSelection { get; set; } = false;
         #endregion
@@ -1125,6 +1125,7 @@ namespace MpWpfApp {
         public void ReceivedResizerBehaviorMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ResizingContent:
+                    bool isTileResize = false;
 
                     double oldHeadTrayX = HeadItem == null ? 0 : HeadItem.TrayX;
                     double oldScrollOffset = ScrollOffset;
@@ -1154,27 +1155,17 @@ namespace MpWpfApp {
                         Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
                     } else if(SelectedItem != null) {
                         //tile resize
-
+                        isTileResize = true;
                         PersistentUniqueWidthTileLookup
                             .AddOrReplace(SelectedItem.QueryOffsetIdx, SelectedItem.TileBorderWidth);
-                        //if (PrimaryItem.CanResize) {
-                            Items.
-                                Where(x => x.QueryOffsetIdx > SelectedItem.QueryOffsetIdx).
-                                ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
-                        //}
+                        Items.
+                            Where(x => x.QueryOffsetIdx > SelectedItem.QueryOffsetIdx).
+                            ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));                        
                     }
-
-                    //OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
-                    //OnPropertyChanged(nameof(ClipTrayScreenWidth));
-                    //OnPropertyChanged(nameof(ClipTrayTotalWidth));
-                    //OnPropertyChanged(nameof(MaximumScrollOfset));
                     AdjustScrollOffsetToResize(oldHeadTrayX, oldScrollOffset);
-
-
-                    //OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
-                    //OnPropertyChanged(nameof(ClipTrayScreenWidth));
-                    //OnPropertyChanged(nameof(ClipTrayTotalWidth));
-                    //OnPropertyChanged(nameof(MaximumScrollOfset));
+                    if(isTileResize) {
+                        RequestScrollIntoView(SelectedItem);
+                    }
                     break;
                 case MpMessageType.ResizeContentCompleted:
 

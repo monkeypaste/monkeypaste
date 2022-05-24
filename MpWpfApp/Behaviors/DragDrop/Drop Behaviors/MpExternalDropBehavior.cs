@@ -163,8 +163,12 @@ namespace MpWpfApp {
             //        //    }
             //    },
             // });
-            DragDrop.AddPreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
-            DragDrop.AddPreviewGiveFeedbackHandler(AssociatedObject, OnGiveFeedback);
+            var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ci.Id);
+            if(ctvm != null && ctvm.HasTemplates) {
+                DragDrop.AddPreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
+                DragDrop.AddPreviewGiveFeedbackHandler(AssociatedObject, OnGiveFeedback);
+            }
+            
             DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
             //VirtualFileDataObject.DoDragDrop(AssociatedObject, vido, DragDropEffects.Copy);
         }
@@ -172,6 +176,7 @@ namespace MpWpfApp {
             MpConsole.WriteLine("Feedback: " + e.Effects);
 
             if(!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                // TODO Handle template madness here!!
                 e.Handled = true;
 
                 //var handle = MpProcessHelper.MpProcessManager.ThisAppHandle;
@@ -187,6 +192,7 @@ namespace MpWpfApp {
                 //while(true) {
                 //    Thread.Sleep(100);
                 //}
+                // TODO Handle template madness here!!
                 e.Handled = true;
                 e.Action = DragAction.Cancel;
                 //var handle = MpProcessHelper.MpProcessManager.ThisAppHandle;

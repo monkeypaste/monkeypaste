@@ -79,10 +79,11 @@ namespace MpWpfApp {
         }
 
         public async Task PasteDataObject(MpPortableDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
-            string pasteCmdKeyString = "^V";
+            string pasteCmdKeyString = "^v";
             var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == pi.ProcessPath.ToLower());
             if(avm != null && avm.PasteShortcutViewModel != null) {
-                pasteCmdKeyString = avm.PasteShortcutViewModel.PasteCmdKeyString;
+                pasteCmdKeyString = MpWpfKeyboardInputHelpers.ConvertKeyStringToSendKeysString(
+                                        avm.PasteShortcutViewModel.PasteCmdKeyString);
             }
             var pasteItem = new MpPasteItem() {
                 PortableDataObject = mpdo,
@@ -95,7 +96,7 @@ namespace MpWpfApp {
             if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 MpMainWindowViewModel.Instance.IsMainWindowLocked = false;
 
-                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(mpdo);
             } else {
                 Mwvm_OnMainWindowHide(this, null);
             }
@@ -200,19 +201,23 @@ namespace MpWpfApp {
             bool hasTemplates = templates != null && templates.Count > 0;
 
             if (hasTemplates) {
-                // trigger query change before showing main window may need to tweak...
-                MpDataModelProvider.SetManualQuery(new List<int>() { ci.Id });
-                if (MpMainWindowViewModel.Instance.IsMainWindowOpen == false) {
-                    MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                    while (MpMainWindowViewModel.Instance.IsMainWindowOpen == false) {
+                var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ci.Id);
+                if(ctvm == null) {
+                    // trigger query change before showing main window may need to tweak...
+                    MpDataModelProvider.SetManualQuery(new List<int>() { ci.Id });
+                    if (MpMainWindowViewModel.Instance.IsMainWindowOpen == false) {
+                        MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+                        while (MpMainWindowViewModel.Instance.IsMainWindowOpen == false) {
+                            await Task.Delay(100);
+                        }
+                    }
+                    await Task.Delay(50); //wait for clip tray to get query changed message
+                    while (MpClipTrayViewModel.Instance.IsRequery) {
                         await Task.Delay(100);
                     }
+                    ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ci.Id);
                 }
-                await Task.Delay(50); //wait for clip tray to get query changed message
-                while (MpClipTrayViewModel.Instance.IsRequery) {
-                    await Task.Delay(100);
-                }
-                var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ci.Id);
+                
                 if (ctvm != null) {
                     while (ctvm.IsBusy || ctvm.Parent.IsBusy) {
                         await Task.Delay(100);

@@ -103,6 +103,13 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+        public string EncodedTemplateRtf {
+            get {
+                return @"\{t\{" + Guid + @"\}t\}";
+            }
+        }
+
         #endregion
 
         public static async Task<MpTextTemplate> Create(

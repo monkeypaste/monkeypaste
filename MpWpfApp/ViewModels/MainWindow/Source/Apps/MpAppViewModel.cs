@@ -178,16 +178,14 @@ namespace MpWpfApp {
             await ClipboardFormatInfos.Init(AppId);
 
             MpAppPasteShortcut aps = await MpDataModelProvider.GetAppPasteShortcut(AppId);
-            if(aps == null) {
-                aps = new MpAppPasteShortcut() {
-                    AppId = AppId
-                };
+            if(aps != null) {
+                PasteShortcutViewModel = new MpPasteShortcutViewModel(this);
+                await PasteShortcutViewModel.InitializeAsync(aps);
             }
 
-            PasteShortcutViewModel = new MpPasteShortcutViewModel(this);
-            await PasteShortcutViewModel.InitializeAsync(aps);
+            
 
-            while (ClipboardFormatInfos.IsAnyBusy || PasteShortcutViewModel.IsBusy) {
+            while (ClipboardFormatInfos.IsAnyBusy || (PasteShortcutViewModel != null && PasteShortcutViewModel.IsBusy)) {
                 await Task.Delay(100);
             }
 
@@ -222,7 +220,10 @@ namespace MpWpfApp {
                 case nameof(IsSelected):
                     if(IsSelected) {
                         ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
-                        PasteShortcutViewModel.OnPropertyChanged(nameof(PasteShortcutViewModel.PasteCmdKeyString));
+                        if(PasteShortcutViewModel != null) {
+                            PasteShortcutViewModel.OnPropertyChanged(nameof(PasteShortcutViewModel.PasteCmdKeyString));
+                        }
+                        
                         Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                         CollectionViewSource.GetDefaultView(ClipboardFormatInfos.Items).Refresh();
                     }

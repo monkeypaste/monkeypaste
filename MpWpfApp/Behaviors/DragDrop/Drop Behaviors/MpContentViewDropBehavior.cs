@@ -120,7 +120,7 @@ namespace MpWpfApp {
             }
 
             var this_ctvm = rtb.DataContext as MpClipTileViewModel;
-            if (this_ctvm.IsAnyItemDragging) {
+            if (this_ctvm.IsItemDragging) {
                 //if dropping onto self
                 if (rtb.Selection.IsEmpty ||
                    (rtb.Selection.Start == rtb.Document.ContentStart &&
@@ -636,7 +636,7 @@ namespace MpWpfApp {
 
             
             if (!MpDragDropManager.IsDragAndDrop || 
-               !(AssociatedObject.DataContext as MpClipTileViewModel).IsAnyItemDragging) {
+               !(AssociatedObject.DataContext as MpClipTileViewModel).IsItemDragging) {
                 // these checks make sure selection isn't cleared during self drop
                 //rtb.FitDocToRtb();
                 var rtb = AssociatedObject.Rtb;

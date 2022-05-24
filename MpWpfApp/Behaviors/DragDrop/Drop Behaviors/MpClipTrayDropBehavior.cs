@@ -162,6 +162,7 @@ namespace MpWpfApp {
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
+            return;
             if(AssociatedObject == null) {
                 return;
             }

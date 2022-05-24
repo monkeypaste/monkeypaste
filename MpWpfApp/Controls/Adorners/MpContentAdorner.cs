@@ -60,7 +60,7 @@ namespace MpWpfApp {
                    AdornedElement is RichTextBox rtb &&
                     rtb.DataContext is MpClipTileViewModel ctvm &&
                     ctvm.IsContentReadOnly &&
-                    ctvm.IsAnyHoveringOverItem) {
+                    ctvm.IsHovering) {
                     return true;
                 }
                 return false;

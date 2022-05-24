@@ -79,17 +79,7 @@
         public int SelectionStart { get; set; }
         public int SelectionLength { get; set; }
 
-        private string _selectedPlainText;
-        public string SelectedPlainText {
-            get => _selectedPlainText;
-            set {
-                if(_selectedPlainText != value) {
-                    _selectedPlainText = value;
-                    MpTextSelectionRangeExtension.SetSelectionText(this, _selectedPlainText);
-                    OnPropertyChanged(nameof(SelectedPlainText));
-                }
-            }
-        }
+        public string SelectedPlainText { get; set; }
 
         public bool IsAllSelected { get; set; }
 
@@ -210,8 +200,6 @@
             }
         }
 
-
-        
         public double PasteTemplateToolbarHeight => MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
                       
 
@@ -233,10 +221,10 @@
                 if (!IsContentReadOnly) {
                     ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
                 }
-                if (IsAnyPastingTemplate) {
+                if (IsPastingTemplate) {
                     ch -= MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
                 }
-                if (IsAnyEditingTemplate) {
+                if (IsEditingTemplate) {
                     ch -= MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
                 }
                 cs.Height = ch;
@@ -244,13 +232,9 @@
             }
         }
 
-        public Size ContentSize {
-            get {
-                return new Size(
+        public Size ContentSize => new Size(
                     ContainerSize.Width - MpMeasurements.Instance.ClipTileBorderThickness,
                     ContainerSize.Height - MpMeasurements.Instance.ClipTileBorderThickness);
-            }
-        }
 
         public double ContainerWidth {
             get {
@@ -258,26 +242,14 @@
             }
         }
 
-        public double ContentHeight {
-            get {
-                return ContentSize.Height;
-            }
-        }
+        public double ContentHeight => ContentSize.Height;
 
-        public double ContentWidth {
-            get {
-                return ContentSize.Width;
-            }
-        }
+        public double ContentWidth => ContentSize.Width;
 
 
-        public Size ReadOnlyContentSize {
-            get {
-                return new Size(
+        public Size ReadOnlyContentSize => new Size(
                     MpMeasurements.Instance.ClipTileContentDefaultWidth,
                     MpMeasurements.Instance.ClipTileContentDefaultHeight);
-            }
-        }
 
 
         public double EditorHeight {
@@ -325,7 +297,6 @@
                 return new Size(w, h);
             }
         }
-
 
         public Size CurrentSize {
             get {
@@ -394,21 +365,11 @@
             }
         }
 
-        public Visibility TileDetectedImageItemsVisibility {
-            get {
-                if (IsSelected) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Hidden;
-            }
-        }
-
         public Visibility TrialOverlayVisibility {
             get {
                 return MpPreferences.IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
             }
         }
-
         #endregion
 
         #region Appearance       
@@ -576,7 +537,7 @@
 
         public Rect TileBorderBrushRect {
             get {
-                if (IsAnyItemDragging || IsAnyItemContextMenuOpened) {
+                if (IsItemDragging || IsContextMenuOpen) {
                     return MpMeasurements.Instance.DottedBorderRect;
                 }
                 return MpMeasurements.Instance.SolidBorderRect;
@@ -701,7 +662,6 @@
 
         public bool IsTitleFocused { get; set; } = false;
 
-        //public bool IsEditingContent => IsContentFocused && !IsContentReadOnly;
 
         public bool IsEditingTitle => IsTitleFocused && IsSelected;
 
@@ -738,14 +698,10 @@
         public bool IsPlaceholder => CopyItem == null || IsPinned;
 
         #region Drag & Drop
-        //[MpAffectsParent]
+
         public bool IsItemDragging { get; set; } = false;
+        public bool IsCurrentDropTarget { get; set; } = false;
 
-
-        //public bool IsDragOverItem { get; set; } = false;
-
-        //public Point MouseDownPosition { get; set; }
-        //public IDataObject DragDataObject { get; set; }
         #endregion
         public bool IsSubSelectionEnabled { get; set; } = false;
 
@@ -764,31 +720,12 @@
 
         public bool IsResizing { get; set; } = false;
 
-        //public int QueryOffsetIdx { 
-        //    get {
-        //        if(IsPlaceholder) {
-        //            return -1;
-        //        }
-        //        return MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(HeadItem.CopyItemId);
-        //    }
-        //}
-
         public int QueryOffsetIdx { get; set; } = -1;
 
-
-        public int TileIdx {
-            get {
-                if (Parent == null || IsPlaceholder) {
-                    return -1;
-                }
-                return Parent.Items.IndexOf(this);
-            }
-        }
 
         public bool IsFileListItem => ItemType == MpCopyItemType.FileList;
 
         public bool IsTextItem => ItemType == MpCopyItemType.Text;
-
 
         public bool IsFlipping { get; set; } = false;
 
@@ -801,8 +738,8 @@
                 }
 
                 if (!IsContentReadOnly) {
-                    if (IsAnyEditingTemplate ||
-                        IsAnyPastingTemplate) {
+                    if (IsEditingTemplate ||
+                        IsPastingTemplate) {
                         return false;
                     }
                 } else {
@@ -815,58 +752,16 @@
         }
 
 
-        public bool IsDroppingOntoNotepad { get; set; } = false;
-
-        public Point MouseDownPosition { get; set; } = new Point();
-
-        public IDataObject DragDataObject { get; set; }
-
-        //[MpDependsOnChild("IsItemDragging")]
-        public bool IsAnyItemDragging => IsItemDragging;
-
-        public bool IsCurrentDropTarget { get; set; } = false;
-
-        public bool IsAnyItemContextMenuOpened => IsContextMenuOpen;
-
-        public bool IsAnySelected => IsSelected;
-
-        public bool IsAnyHoveringOverItem => IsHovering;
-
-
         public bool IsContentReadOnly { get; set; } = true;
 
 
         public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
-        //public bool IsAnyEditingContent => Items.Any(x => x.IsEditingContent);
-
-       // public bool IsAnyEditingTitle => Items.Any(x => x.IsEditingTitle);
-
-        public bool IsAnyEditingTemplate => IsEditingTemplate;
-
-        public bool IsAnyPasting => IsPasting;
-        public bool IsAnyPastingTemplate => IsPasting && HasTemplates;
 
         public DateTime LastSelectedDateTime { get; set; }
 
-        private bool _isContextMenuOpened = false;
-        public bool IsContextMenuOpened {
-            get {
-                return _isContextMenuOpened;
-            }
-            set {
-                if (_isContextMenuOpened != value) {
-                    _isContextMenuOpened = value;
-                    OnPropertyChanged(nameof(IsContextMenuOpened));
-                    OnPropertyChanged(nameof(TileBorderBrush));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
-                }
-            }
-        }
+        public bool IsContextMenuOpened { get; set; }
 
         public bool AllowMultiSelect { get; set; } = false;
-
-
-        public bool IsLoadMoreTile { get; set; } = false;
 
         #endregion
 
@@ -896,7 +791,6 @@
         #endregion
 
         #region Model
-
 
         public DateTime CopyItemCreatedDateTime {
             get {
@@ -1344,7 +1238,9 @@
                     TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.HasMultipleTemplates));
                     hasExpanded = true;
                 }
-                TemplateCollection.Items[0].IsSelected = true;
+                TemplateCollection.SelectedItem = TemplateCollection.Items[0];
+                await Task.Delay(300);
+                TemplateCollection.SelectedItem.IsPasteTextBoxFocused = true;
                 TemplateRichText = null;
                 await Task.Run(async () => {
                     while (string.IsNullOrEmpty(TemplateRichText)) {
@@ -1561,7 +1457,7 @@
                     FrontVisibility = IsFlipped ? Visibility.Collapsed : Visibility.Visible;
                     BackVisibility = IsFlipped ? Visibility.Visible : Visibility.Collapsed;
                     break;
-                case nameof(IsAnyEditingTemplate):
+                case nameof(IsEditingTemplate):
                     //OnPropertyChanged(nameof(De))
                     break;
                 case nameof(CanResize):
@@ -1588,13 +1484,10 @@
                     OnPropertyChanged(nameof(CanVerticallyScroll));
                     IsSubSelectionEnabled = !IsContentReadOnly;
                     OnPropertyChanged(nameof(IsSubSelectionEnabled));
-                    if(!IsContentReadOnly) {
-                        Parent.RequestScrollIntoView(this);
-                    }
                     break;
                 case nameof(IsContentFocused):
                     if(IsContentFocused) {
-                        if(IsAnyEditingTemplate) {
+                        if(IsEditingTemplate) {
                             TemplateCollection.Items.FirstOrDefault(x => x.IsEditingTemplate).FinishEditTemplateCommand.Execute(null);
                         }
                     }
@@ -1623,7 +1516,7 @@
                     OnPropertyChanged(nameof(ItemBorderBrushRect));
                     //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
-                    OnPropertyChanged(nameof(IsAnyItemContextMenuOpened));
+                    OnPropertyChanged(nameof(IsContextMenuOpen));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileContextMenuOpened));
                     break;
                 case nameof(IsItemDragging):
@@ -1636,10 +1529,8 @@
                     OnPropertyChanged(nameof(ItemBorderBrushRect));
                     OnPropertyChanged(nameof(ItemBorderBrush));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
-                    OnPropertyChanged(nameof(IsAnyItemDragging));
                     break;
                 case nameof(IsHovering):
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     OnPropertyChanged(nameof(ItemBorderBrushHexColor));
                     OnPropertyChanged(nameof(ItemBorderBrushThickness));
                     OnPropertyChanged(nameof(ItemBackgroundHexColor));

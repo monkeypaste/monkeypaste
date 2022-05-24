@@ -125,7 +125,7 @@ namespace MpWpfApp {
                     ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
                 }
                 (fe as RichTextBox).FitDocToRtb();
-                MpIsFocusedExtension.SetIsFocused(fe, true);
+                //MpIsFocusedExtension.SetIsFocused(fe, true);
             }
 
         }
@@ -136,25 +136,26 @@ namespace MpWpfApp {
             }
 
             if(rtb.DataContext is MpClipTileViewModel ctvm) {
-                var contentLookup = new Dictionary<string, List<TextElement>>();
-                var allTemplateHyperlinks = rtb.Document.GetAllTextElements()
-                    .Where(x=>x is InlineUIContainer && x.Tag is MpTextTemplate)                            
-                    .ToList();
-
-                foreach (InlineUIContainer thl in allTemplateHyperlinks) {
-                    var cit = thl.Tag as MpTextTemplate;                    
-                    var span = new Span(thl.ContentStart, thl.ContentEnd);
-                    span.Inlines.Clear();
-                    span.Inlines.Add(cit.EncodedTemplate);
-                }
-
-                ctvm.CopyItemData = rtb.Document.ToRichText();
-
-                while(ctvm.IsAnyBusy) {
-                    await Task.Delay(100);
-                }
-                LoadContent(rtb).FireAndForgetSafeAsync(ctvm);
+                ctvm.CopyItemData = GetEncodedContent(rtb);
+                await LoadContent(rtb);
             }
+        }
+
+        public static string GetEncodedContent(RichTextBox rtb) {
+            //return rtb.Document.Clone().ToRichText();
+
+            var allTemplateHyperlinks = rtb.Document.GetAllTextElements()
+                .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
+                .ToList();
+
+            foreach (InlineUIContainer thl in allTemplateHyperlinks) {
+                var cit = thl.Tag as MpTextTemplate;
+                var span = new Span(thl.ContentStart, thl.ContentEnd);
+                span.Inlines.Clear();
+                span.Inlines.Add(cit.EncodedTemplate);
+            }
+
+            return rtb.Document.ToRichText();
         }
 
         #endregion
@@ -215,7 +216,7 @@ namespace MpWpfApp {
             rtb.TextChanged -= Rtb_TextChanged;
         }
 
-        private static async Task LoadContent(RichTextBox rtb) {
+        public static async Task LoadContent(RichTextBox rtb) {
             if (rtb == null) {
                 return;
             }
@@ -297,7 +298,7 @@ namespace MpWpfApp {
                 string templateGuid = templateGuids[i];
                 MpTextTemplate templateItem = null;
                 if (templateItems.All(x => x.Guid != templateGuid)) {
-                    Debugger.Break();
+                    //Debugger.Break();
                     // when template is encoded in document but not referenced in MpTextTemplate
                     var missingItem = await MpDataModelProvider.GetTextTemplateByGuid(templateGuid);
                     if(missingItem == null) {

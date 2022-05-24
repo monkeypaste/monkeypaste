@@ -223,14 +223,32 @@ namespace MpWpfApp {
                 TextRange range2 = new TextRange(clonedDoc.ContentEnd, clonedDoc.ContentEnd);
                 range2.Load(stream, DataFormats.XamlPackage);
 
-                int docLength = doc.ContentStart.GetOffsetToPosition(doc.ContentEnd);
-                for (int i = 0; i <= docLength; i++) {
-                    var doc_tp = doc.ContentStart.GetPositionAtOffset(i);
-                    var clone_tp = clonedDoc.ContentStart.GetPositionAtOffset(i);
-                    if(doc_tp.Parent is TextElement doc_tp_te) {
-                        (clone_tp.Parent as TextElement).Tag = doc_tp_te.Tag;
-                    }
-                }
+                //int docLength = doc.ContentStart.GetOffsetToPosition(doc.ContentEnd);
+                //int cdocLength = docLength;
+                //for (int i = 0, ic = 0; i <= docLength && ic <= cdocLength; i++, ic++) {
+                //    var doc_tp = doc.ContentStart.GetPositionAtOffset(i);
+                //    var clone_tp = clonedDoc.ContentStart.GetPositionAtOffset(ic);
+                //    if(doc_tp.Parent is TextElement doc_tp_te) {
+                //        if(doc_tp.Parent is InlineUIContainer iuic && iuic.Tag is MpTextTemplate cit) {
+                //            int sIdx = doc.ContentStart.GetOffsetToPosition(iuic.ContentStart);
+                //            int eIdx = doc.ContentStart.GetOffsetToPosition(iuic.ContentEnd);
+
+                //            var span = new Span(new Run(cit.EncodedTemplate), clone_tp);
+                //            int csIdx = clonedDoc.ContentStart.GetOffsetToPosition(span.ContentStart);
+                //            int ceIdx = clonedDoc.ContentStart.GetOffsetToPosition(span.ContentEnd);
+
+                //            int iuicLength = eIdx - sIdx;
+                //            int spanLength = ceIdx - csIdx;
+
+                //            ic = clonedDoc.ContentStart.GetOffsetToPosition(span.ContentEnd);
+                //            i = doc.ContentStart.GetOffsetToPosition(iuic.ContentEnd);
+
+                //            cdocLength = clonedDoc.ContentStart.GetOffsetToPosition(clonedDoc.ContentEnd);
+                //        } else if(clone_tp.Parent is TextElement) {
+                //            (clone_tp.Parent as TextElement).Tag = doc_tp_te.Tag;
+                //        }                        
+                //    }
+                //}
                 
                 return clonedDoc;
             }
@@ -692,7 +710,7 @@ namespace MpWpfApp {
                 }
                 if(!ctvm.IsContentReadOnly) {
                     tvm.Parent.SelectedItem = tvm;
-                    if(!ctvm.IsAnyPasting) {
+                    if(!ctvm.IsPasting) {
                         tvm.EditTemplateCommand.Execute(null);
                         e.Handled = true;
                     }
@@ -705,7 +723,7 @@ namespace MpWpfApp {
                 }
                 if (!ctvm.IsContentReadOnly) {
                     tvm.Parent.SelectedItem = tvm;
-                    if (!ctvm.IsAnyPasting) {
+                    if (!ctvm.IsPasting) {
                         var origin = tr.Start.GetCharacterRect(LogicalDirection.Forward).Location;
                         origin = iuic.FindParentOfType<RichTextBox>().TranslatePoint(origin, Application.Current.MainWindow);
                         
@@ -725,6 +743,8 @@ namespace MpWpfApp {
                 MpHelpers.RunOnMainThread(async () => {
                     if (rtb != null && 
                         !rtb.IsReadOnly && 
+                        !ctvm.IsPastingTemplate &&
+                        Mouse.LeftButton == MouseButtonState.Released &&
                         !MpClipTrayViewModel.Instance.HasScrollVelocity && 
                         !MpClipTrayViewModel.Instance.IsRequery) {
                         //while editing if template is removed check if its the only one if so remove from db and tcvm
@@ -733,6 +753,7 @@ namespace MpWpfApp {
                             var tcvm = (rtb.DataContext as MpClipTileViewModel).TemplateCollection;
                             var toRemove_tvml = tcvm.Items.Where(x => x.TextTemplateGuid == cit.Guid).ToList();
                             foreach (var toRemove_tvm in toRemove_tvml) {
+                                MpConsole.WriteTraceLine($"Template {toRemove_tvm} unloaded in delete state, so its gone now.");
                                 tcvm.Items.Remove(toRemove_tvm);
                             }
                             await Task.WhenAll(toRemove_tvml.Select(x => x.TextTemplate.DeleteFromDatabaseAsync()));
