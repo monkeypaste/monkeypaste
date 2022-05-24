@@ -181,10 +181,6 @@ namespace MpWpfApp {
                 dragModels = isCopy ? await GetDragDataCopy(dragData) : dragData as List<MpCopyItem>;
             }
             
-            
-            if(!isCopy) {
-                dragModels = await Detach(dragModels);
-            }
 
             int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + dropIdx;
 
@@ -196,7 +192,7 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
-            var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(dragModels[0].Id);
+            var civm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(dragModels[0].Id);
             if(civm != null) {
                 civm.IsSelected = true;
             }

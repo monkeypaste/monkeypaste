@@ -87,8 +87,8 @@ namespace MpWpfApp {
         private void ReceivedMainWindowViewModelMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.MainWindowOpening: 
-                    if(BindingContext.SelectedItems.Count >= 1 && 
-                       BindingContext.SelectedItems[0].ItemIdx > 0) {
+                    if(BindingContext.SelectedItem != null && 
+                       BindingContext.SelectedItem.QueryOffsetIdx > 0) {
                         return;
                     }
                     //var sv = ClipTray.GetScrollViewer();

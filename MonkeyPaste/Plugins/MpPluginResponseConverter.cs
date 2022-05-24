@@ -23,32 +23,32 @@ namespace MonkeyPaste {
             if (suppressWrite == false && targetCopyItem != null) {
                 //create is suppressed when its part of a match expression
                 if (sourceCopyItem.Id != targetCopyItem.Id) {
-                    var pci = await MpDb.GetItemAsync<MpCopyItem>(sourceCopyItem.Id);
+                    //var pci = await MpDb.GetItemAsync<MpCopyItem>(sourceCopyItem.Id);
 
-                    int parentSortOrderIdx = pci.CompositeSortOrderIdx;
-                    List<MpCopyItem> ppccil = null;
+                    //int parentSortOrderIdx = pci.CompositeSortOrderIdx;
+                    //List<MpCopyItem> ppccil = null;
 
-                    if (pci.CompositeParentCopyItemId > 0) {
-                        //when this items parent is a composite child, adjust fk/sort so theres single parent
-                        var ppci = await MpDb.GetItemAsync<MpCopyItem>(pci.CompositeParentCopyItemId);
-                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
-                        ppccil.Insert(0, ppci);
-                    } else {
-                        ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.Id);
-                        ppccil.Insert(0, pci);
-                    }
-                    ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
-                    for (int i = 0; i < ppccil.Count; i++) {
-                        var cci = ppccil[i];
-                        if (cci.Id == sourceCopyItem.Id) {
-                            targetCopyItem.CompositeParentCopyItemId = sourceCopyItem.Id;
-                            targetCopyItem.CompositeSortOrderIdx = i + 1;
-                            await targetCopyItem.WriteToDatabaseAsync();
-                        } else if (i > parentSortOrderIdx) {
-                            ppccil[i].CompositeSortOrderIdx += 1;
-                            await ppccil[i].WriteToDatabaseAsync();
-                        }
-                    }
+                    //if (pci.CompositeParentCopyItemId > 0) {
+                    //    //when this items parent is a composite child, adjust fk/sort so theres single parent
+                    //    var ppci = await MpDb.GetItemAsync<MpCopyItem>(pci.CompositeParentCopyItemId);
+                    //    ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
+                    //    ppccil.Insert(0, ppci);
+                    //} else {
+                    //    ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.Id);
+                    //    ppccil.Insert(0, pci);
+                    //}
+                    //ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
+                    //for (int i = 0; i < ppccil.Count; i++) {
+                    //    var cci = ppccil[i];
+                    //    if (cci.Id == sourceCopyItem.Id) {
+                    //        targetCopyItem.CompositeParentCopyItemId = sourceCopyItem.Id;
+                    //        targetCopyItem.CompositeSortOrderIdx = i + 1;
+                    //        await targetCopyItem.WriteToDatabaseAsync();
+                    //    } else if (i > parentSortOrderIdx) {
+                    //        ppccil[i].CompositeSortOrderIdx += 1;
+                    //        await ppccil[i].WriteToDatabaseAsync();
+                    //    }
+                    //}
                 }
 
                 //var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sourceCopyItem.Id);

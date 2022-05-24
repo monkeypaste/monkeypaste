@@ -711,7 +711,7 @@ namespace MpWpfApp {
                     } else {
                         targetAnalyzer = SelectedItem;
                     }                    
-                    sourceCopyItem = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
+                    sourceCopyItem = MpClipTrayViewModel.Instance.SelectedItem.CopyItem;
                 }
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedItem));
@@ -751,17 +751,15 @@ namespace MpWpfApp {
             MpCopyItem sci = null;
             if(args == null) {
                 spvm = SelectedItem;
-                if(MpClipTrayViewModel.Instance.PrimaryItem != null && 
-                   MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem != null) {
-                    sci = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
+                if(MpClipTrayViewModel.Instance.SelectedItem != null) {
+                    sci = MpClipTrayViewModel.Instance.SelectedItem.CopyItem;
                 }
             } else if(args is MpAnalyticItemPresetViewModel) {
-                if (MpClipTrayViewModel.Instance.PrimaryItem == null || 
-                    MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem == null) {
+                if (MpClipTrayViewModel.Instance.SelectedItem == null) {
                     return false;
                 }
                 spvm = args as MpAnalyticItemPresetViewModel;
-                sci = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
+                sci = MpClipTrayViewModel.Instance.SelectedItem.CopyItem;
             } else if(args is object[] argParts) {
                 spvm = argParts[0] as MpAnalyticItemPresetViewModel;
                 sci = argParts[1] as MpCopyItem;

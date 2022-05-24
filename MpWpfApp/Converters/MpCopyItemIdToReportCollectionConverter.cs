@@ -10,7 +10,7 @@ namespace MpWpfApp {
                 return null;
             }
             int copyItemId = (int)value;
-            var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(copyItemId);
+            var civm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(copyItemId);
             var arcvm = new MpAnalysisReportCollectionViewModel(civm);
             MpHelpers.RunOnMainThread(async () => {
                 await arcvm.InitializeAsync(copyItemId);

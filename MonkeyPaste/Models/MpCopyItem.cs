@@ -112,16 +112,10 @@ namespace MonkeyPaste {
         [Indexed]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        public string RootCopyItemGuid { get; set; }
 
         public string CopyItemSourceGuid { get; set; }
         //public string ParentCopyItemGuid { get; set; }
 
-        //[ForeignKey(typeof(MpCopyItem))]
-        [Column("fk_ParentCopyItemId")]
-        public int CompositeParentCopyItemId { get; set; }
-
-        public int CompositeSortOrderIdx { get; set; }
 
 
         //[ForeignKey(typeof(MpSource))]
@@ -258,7 +252,6 @@ namespace MonkeyPaste {
             int sourceId = 0,
             string data = "", 
             string copyItemSourceGuid = "",
-            string rootCopyItemGuid = "",
             MpCopyItemType itemType = MpCopyItemType.None,
             string title = "",
             string description = "",
@@ -295,7 +288,6 @@ namespace MonkeyPaste {
                 SourceId = sourceId,
                 CopyCount = 1,
                 CopyItemSourceGuid = copyItemSourceGuid,
-                RootCopyItemGuid = rootCopyItemGuid
             };
             if (!suppressWrite) {
                 await newCopyItem.WriteToDatabaseAsync();
@@ -322,13 +314,6 @@ namespace MonkeyPaste {
             if(IgnoreDb) {
                 MpConsole.WriteLine($"Db write for '{ToString()}' was ignored");
                 return;
-            }
-            //if(Source == null) {
-            //    Source = await MpDb.GetItemAsync<MpSource>(SourceId);
-            //}
-            if(CompositeParentCopyItemId == Id && Id > 0) {
-                MpConsole.WriteLine("Warning! circular copy item ref detected, attempting to fix...");
-                CompositeParentCopyItemId = CompositeSortOrderIdx = 0;
             }
             await base.WriteToDatabaseAsync();
         }
@@ -516,8 +501,6 @@ namespace MonkeyPaste {
                 SourceId = this.SourceId,
                 CopyCount = 1,
                 CopyDateTime = DateTime.Now,
-                CompositeParentCopyItemId = isReplica ? 0:this.CompositeParentCopyItemId,
-                CompositeSortOrderIdx = isReplica ? 0:this.CompositeSortOrderIdx,
                 Id = isReplica ? 0:this.Id,
                 CopyItemGuid = isReplica ? System.Guid.NewGuid():this.CopyItemGuid                
             };

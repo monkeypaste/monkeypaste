@@ -150,11 +150,11 @@ namespace MpWpfApp {
 
             if (artb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
                artb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-                MpTemplateViewModel thlvm = null;
-                if (((TextElement)artb.Selection.Start.Parent).DataContext != null && ((TextElement)artb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateViewModel)) {
-                    thlvm = (MpTemplateViewModel)((TextElement)artb.Selection.Start.Parent).DataContext;
-                } else if (((TextElement)artb.Selection.End.Parent).DataContext != null && ((TextElement)artb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateViewModel)) {
-                    thlvm = (MpTemplateViewModel)((TextElement)artb.Selection.End.Parent).DataContext;
+                MpTextTemplateViewModel thlvm = null;
+                if (((TextElement)artb.Selection.Start.Parent).DataContext != null && ((TextElement)artb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModel)) {
+                    thlvm = (MpTextTemplateViewModel)((TextElement)artb.Selection.Start.Parent).DataContext;
+                } else if (((TextElement)artb.Selection.End.Parent).DataContext != null && ((TextElement)artb.Selection.End.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModel)) {
+                    thlvm = (MpTextTemplateViewModel)((TextElement)artb.Selection.End.Parent).DataContext;
                 }
                 canAddTemplate = thlvm == null;
             }

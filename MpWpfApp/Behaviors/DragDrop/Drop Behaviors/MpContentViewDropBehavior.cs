@@ -244,7 +244,7 @@ namespace MpWpfApp {
                 }
                 if(dragData is List<MpCopyItem> ddl) {
                     if (!isCopy &&
-                       ddl.Any(x => x.Id == AssociatedObject.BindingContext.HeadItem.CopyItemId)) {
+                       ddl.Any(x => x.Id == AssociatedObject.BindingContext.CopyItemId)) {
                         return false;
                     }
 
@@ -285,7 +285,7 @@ namespace MpWpfApp {
             bool isSelfDrop = drag_ctvm == drop_ctvm;
 
             MpConsole.WriteLine("Dropping onto " + drop_ctvm + " at idx: " + DropIdx);
-            if (drop_ctvm.HeadItem == null) {
+            if (drop_ctvm == null) {
                 return;
             }
 
@@ -296,7 +296,7 @@ namespace MpWpfApp {
             bool post = _isPostBlockDrop;
             bool split = _isSplitBlockDrop;
 
-            string rootGuid = drop_ctvm.HeadItem.CopyItemGuid;
+            string rootGuid = drop_ctvm.CopyItemGuid;
             bool isNewRoot = rtfDropIdx <= 0;
 
             await base.Drop(isCopy, dragData);
@@ -328,7 +328,7 @@ namespace MpWpfApp {
                                 .GetVisualDescendents<MpContentView>()
                                 .FirstOrDefault(x =>
                                     x.DataContext is MpClipTileViewModel tctvm &&
-                                    tctvm.HeadCopyItemId == drag_ctvm.HeadCopyItemId);
+                                    tctvm.CopyItemId == drag_ctvm.CopyItemId);
 
                 //if (dctv == null) {
                 //    Debugger.Break();
@@ -495,7 +495,7 @@ namespace MpWpfApp {
                     break;
             }
 
-            await MpMergedDocumentRtfExtension.SaveTextContent(rtb);
+            await MpContentDocumentRtfExtension.SaveTextContent(rtb);
             //var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
 
             foreach (var dri in itemsToDelete) {
@@ -507,7 +507,7 @@ namespace MpWpfApp {
             }
 
             if (drop_ctvm.IsPinned) {
-                await drop_ctvm.InitializeAsync(new List<MpCopyItem>() { drop_ctvm.HeadItem.CopyItem });
+                await drop_ctvm.InitializeAsync(drop_ctvm.CopyItem);
             } else {
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
             }
@@ -517,7 +517,7 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
-            var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(rootGuid);
+            var civm = MpClipTrayViewModel.Instance.GetClipTileViewModelByGuid(rootGuid);
             if(civm != null) {
                 civm.IsSelected = true;
             }

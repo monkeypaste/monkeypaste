@@ -259,14 +259,6 @@ namespace MpWpfApp {
                 }
                 return dcil.All(x => x.ItemType == dcil[0].ItemType);
             } 
-
-            if (dragData is List<MpContentItemViewModel> dcivml) {
-                if (dcivml.Count == 0) {
-                    return false;
-                }
-                return dcivml.All(x => x.CopyItemType == dcivml[0].CopyItemType);
-            } 
-
             return false;
         }
 
@@ -304,41 +296,11 @@ namespace MpWpfApp {
             if(dragData is List<MpCopyItem>) {
                 cil = dragData as List<MpCopyItem>;
             } else if(dragData is MpClipTileViewModel ctvm) {
-                cil = ctvm.Items.Select(x => x.CopyItem).ToList();
+                cil = new List<MpCopyItem>() { ctvm.CopyItem };
             }
             var clones = (await Task.WhenAll(cil.Select(x => x.Clone(true)).ToArray())).Cast<MpCopyItem>().ToList();
             MpClipTrayViewModel.Instance.PersistentSelectedModels = clones;
             return clones;
-        }
-
-        protected async Task<List<MpCopyItem>> Detach(List<MpCopyItem> dragModels, bool ignoreOffset = false) {
-            for (int i = 0; i < dragModels.Count; i++) {
-                if (dragModels[i].CompositeParentCopyItemId == 0) {
-                    //if dropping a former composite parent into non-parent idx
-                    var oldTile = MpClipTrayViewModel.Instance.GetClipTileViewModelById(dragModels[i].Id);
-                    int oldIdx = oldTile == null ? -1 : MpClipTrayViewModel.Instance.Items.IndexOf(oldTile);
-
-                    var newHead = await MpDataModelProvider.RemoveQueryItem(dragModels[i].Id);
-                    bool wasRemoved = newHead == null;
-                    if (!wasRemoved && dragModels.Any(x => x.Id == newHead.Id)) {
-                        //if first child was substituted as parent and drag contains
-                        //new parent update dragModels
-                        dragModels[dragModels.IndexOf(dragModels.FirstOrDefault(x => x.Id == newHead.Id))] = newHead;
-                    }
-                    bool needToOffset = !ignoreOffset && wasRemoved && oldIdx < DropIdx;
-                    if (needToOffset) {
-                        DropIdx--;
-                    }
-                }
-                dragModels[i].CompositeSortOrderIdx = i;
-                if (i == 0) {
-                    dragModels[i].CompositeParentCopyItemId = 0;
-                } else {
-                    dragModels[i].CompositeParentCopyItemId = dragModels[0].Id;
-                }
-                await dragModels[i].WriteToDatabaseAsync();
-            }
-            return dragModels;
         }
     }
 

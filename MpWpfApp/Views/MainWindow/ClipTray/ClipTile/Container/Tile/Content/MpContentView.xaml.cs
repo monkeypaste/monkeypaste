@@ -378,7 +378,7 @@ namespace MpWpfApp {
             if (BindingContext.IsHovering) {
                 // BUG when sub selection becomes empty the cursor goes back to default
                 // so this ensures it stays ibeam
-                if(!Rtb.IsReadOnly && BindingContext.HeadItem.TemplateCollection.Items.Any(x=>x.IsHovering)) {
+                if(!Rtb.IsReadOnly && BindingContext.TemplateCollection.Items.Any(x=>x.IsHovering)) {
                     //MpCursor.SetCursor(BindingContext, MpCursorType.Hand);
                     //handled in mouseEnter of LoadTemplate
                 } else if(BindingContext.IsSubSelectionEnabled) {
@@ -462,18 +462,6 @@ namespace MpWpfApp {
                     //Rtb.Selection.Select(mptp, mptp);
                     e.Handled = false;
                     return;
-                }
-            }
-
-            if (BindingContext.ItemType == MpCopyItemType.FileList) {
-                BindingContext.Items.ForEach(x => x.IsSelected = x.IsHovering);
-                if (BindingContext.SelectedItem != null) {
-                    BindingContext.SelectedPlainText = BindingContext.SelectedItem.CopyItemData;
-
-                    var sr = Rtb.Document.ContentStart.FindText(Rtb.Document.ContentEnd, BindingContext.SelectedPlainText);
-                    if (sr != null) {
-                        Rtb.Selection.Select(sr.Start, sr.End);
-                    }
                 }
             }
 

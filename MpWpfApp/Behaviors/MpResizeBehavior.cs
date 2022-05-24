@@ -302,7 +302,7 @@ namespace MpWpfApp {
             bool resetToContentSize = false;
             if(curSize.X == defaultSize.X) {
                 resetToContentSize = true;
-                var ds = (AssociatedObject.DataContext as MpClipTileViewModel).HeadItem.UnformattedContentSize;
+                var ds = (AssociatedObject.DataContext as MpClipTileViewModel).UnformattedContentSize;
                 defaultSize = new Point(ds.Width, ds.Height);
             }
             Vector delta = curSize - defaultSize;
@@ -310,7 +310,7 @@ namespace MpWpfApp {
             Reset();
 
             if(!resetToContentSize && 
-               AssociatedObject.DataContext is MpClipTileViewModel ctvm && ctvm.HeadItem != null) {
+               AssociatedObject.DataContext is MpClipTileViewModel ctvm && !ctvm.IsPlaceholder) {
                 MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup.Remove(ctvm.QueryOffsetIdx);
                 
             }

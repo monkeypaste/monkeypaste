@@ -1,43 +1,39 @@
-﻿<local:MpUserControl
-    x:Class="MpWpfApp.MpImageItemView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:MpWpfApp"
-    x:TypeArguments="local:MpContentItemViewModel"
-    mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
-                                     IsDesignTimeCreatable=False}"
-    d:DesignHeight="450"
-    d:DesignWidth="800">
+﻿<local:MpUserControl x:Class="MpWpfApp.MpImageItemView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:MpWpfApp"
+                     x:TypeArguments="local:MpClipTileViewModel"
+                     mc:Ignorable="d"
+                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
+                                                      IsDesignTimeCreatable=False}"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800">
 
-    <Viewbox
-        Width="{Binding Parent.TileContentWidth}"
-        Height="{Binding EditorHeight}"
-        DataContext="{Binding}"
-        Stretch="Uniform">
+    <Viewbox Width="{Binding TileContentWidth}"
+             Height="{Binding EditorHeight}"
+             DataContext="{Binding}"
+             Stretch="Uniform">
         <Grid>
-            <Image
-                x:Name="ClipTileAppIconImage"
-                Source="{Binding CopyItemData,
-                                 Converter={StaticResource Base64StringToBitmapSourceConverter}}"
-                Stretch="Uniform"
-                Width="{Binding CopyItemData,
-                                Converter={StaticResource StringToSizeConverter},
-                                ConverterParameter=width}"
-                Height="{Binding CopyItemData,
-                                 Converter={StaticResource StringToSizeConverter},
-                                 ConverterParameter=height}" />
-            <local:MpDetectedObjectsCollectionView
-                Width="{Binding Parent.CopyItemData,
-                                Converter={StaticResource StringToSizeConverter},
-                                ConverterParameter=width}"
-                Height="{Binding Parent.CopyItemData,
-                                 Converter={StaticResource StringToSizeConverter},
-                                 ConverterParameter=height}"
-                DataContext="{Binding DetectedImageObjectCollectionViewModel}" />
+            <Image x:Name="ClipTileAppIconImage"
+                   Source="{Binding CopyItemData,
+                                    Converter={StaticResource Base64StringToBitmapSourceConverter}}"
+                   Stretch="Uniform"
+                   Width="{Binding CopyItemData,
+                                   Converter={StaticResource StringToSizeConverter},
+                                   ConverterParameter=width}"
+                   Height="{Binding CopyItemData,
+                                    Converter={StaticResource StringToSizeConverter},
+                                    ConverterParameter=height}" />
+            <local:MpDetectedObjectsCollectionView Width="{Binding CopyItemData,
+                                                                   Converter={StaticResource StringToSizeConverter},
+                                                                   ConverterParameter=width}"
+                                                   Height="{Binding CopyItemData,
+                                                                    Converter={StaticResource StringToSizeConverter},
+                                                                    ConverterParameter=height}"
+                                                   DataContext="{Binding DetectedImageObjectCollectionViewModel}" />
         </Grid>
 
     </Viewbox>

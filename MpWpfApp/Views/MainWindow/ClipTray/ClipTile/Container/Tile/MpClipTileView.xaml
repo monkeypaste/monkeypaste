@@ -96,16 +96,16 @@
                                            MaxHeight="{Binding ClipTileTitleHeight,
                                                                Source={x:Static local:MpMeasurements.Instance},
                                                                Mode=OneWay}"
-                                           DataContext="{Binding PrimaryItem}" />
+                                           DataContext="{Binding}" />
                 <!--  Tile Detail Grid  -->
                 <local:MpClipTileDetailView x:Name="TileDetailView"
                                             DockPanel.Dock="Bottom"
                                             Height="{Binding ClipTileDetailHeight,
                                                              Source={x:Static local:MpMeasurements.Instance},
                                                              Mode=OneWay}"
-                                            Visibility="{Binding Parent.IsDetailGridVisibile,
+                                            Visibility="{Binding IsDetailGridVisibile,
                                                                  Converter={StaticResource BoolToVisibilityConverter}}"
-                                            DataContext="{Binding PrimaryItem}" />
+                                            DataContext="{Binding}" />
                 <!--  Content Container Canvas  -->
 
                 <DockPanel x:Name="ContentListDockPanel"
@@ -122,14 +122,14 @@
                                                                           Converter={StaticResource BoolToVisibilityConverter},
                                                                           TargetNullValue=Collapsed,
                                                                           FallbackValue=Collapsed}"
-                                                     DataContext="{Binding PrimaryItem.TemplateCollection.SelectedItem}" />
+                                                     DataContext="{Binding TemplateCollection.SelectedItem}" />
                     <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
                                                       DockPanel.Dock="Bottom"
                                                       Visibility="{Binding Parent.IsPastingTemplate,
                                                                            Converter={StaticResource BoolToVisibilityConverter},
                                                                            TargetNullValue=Collapsed,
                                                                            FallbackValue=Collapsed}"
-                                                      DataContext="{Binding PrimaryItem.TemplateCollection}" />
+                                                      DataContext="{Binding TemplateCollection}" />
                     <local:MpContentView x:Name="ContentView"
                                          DataContext="{Binding}" />
                 </DockPanel>

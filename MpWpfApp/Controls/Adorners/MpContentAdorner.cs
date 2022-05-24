@@ -59,7 +59,6 @@ namespace MpWpfApp {
                 if (AdornedElement != null &&
                    AdornedElement is RichTextBox rtb &&
                     rtb.DataContext is MpClipTileViewModel ctvm &&
-                    ctvm.Items.Count > 1 &&
                     ctvm.IsContentReadOnly &&
                     ctvm.IsAnyHoveringOverItem) {
                     return true;

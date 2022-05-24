@@ -76,7 +76,7 @@
                    Source="/Resources/Images/MpRichTextBox/separator.png"
                    Stretch="None" />
             <local:MpAddTemplateToolbarButton x:Name="AddTemplateButton"
-                                              DataContext="{Binding HeadItem.TemplateCollection}" />
+                                              DataContext="{Binding TemplateCollection}" />
             <!--<Image Visibility="Collapsed"
                    SnapsToDevicePixels="True"
                    Source="/Resources/Images/MpRichTextBox/separator.png"

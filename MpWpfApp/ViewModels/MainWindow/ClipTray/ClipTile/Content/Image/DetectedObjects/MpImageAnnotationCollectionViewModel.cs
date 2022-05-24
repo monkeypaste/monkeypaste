@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 
 namespace MpWpfApp {
     public class MpImageAnnotationCollectionViewModel : 
-        MpSelectorViewModelBase<MpContentItemViewModel,MpImageAnnotationViewModel> {
+        MpSelectorViewModelBase<MpClipTileViewModel,MpImageAnnotationViewModel> {
         #region Private Variables
         private bool _isEnabled = false;
         #endregion
@@ -36,7 +36,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpImageAnnotationCollectionViewModel() : base(null) {
         }
-        public MpImageAnnotationCollectionViewModel(MpContentItemViewModel parent) : base(parent) {
+        public MpImageAnnotationCollectionViewModel(MpClipTileViewModel parent) : base(parent) {
            
         }
 

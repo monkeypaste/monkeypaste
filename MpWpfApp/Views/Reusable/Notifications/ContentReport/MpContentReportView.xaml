@@ -51,12 +51,12 @@
                Placement="Right"
                HorizontalOffset="3">
             <Grid Background="White">
-                <FlowDocumentScrollViewer VerticalScrollBarVisibility="Auto"
+                <!--<FlowDocumentScrollViewer VerticalScrollBarVisibility="Auto"
                                           Background="White"
                                           HorizontalScrollBarVisibility="Auto"
                                           Margin="0"
                                           Padding="0"
-                                          local:MpDocumentRtfExtension.DocumentRtf="{Binding SelectedItem.ReportRtf}" />
+                                          local:MpDocumentRtfExtension.DocumentRtf="{Binding SelectedItem.ReportRtf}" />-->
                 <!--<local:MpSpinnerSwirl HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Width="30"

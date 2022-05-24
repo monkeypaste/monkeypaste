@@ -19,7 +19,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpEditTemplateToolbarView.xaml
     /// </summary>
-    public partial class MpEditTemplateToolbarView : MpUserControl<MpTemplateViewModel> {
+    public partial class MpEditTemplateToolbarView : MpUserControl<MpTextTemplateViewModel> {
         private RichTextBox _activeRtb {
             get {
                 var ctv = this.GetVisualAncestor<MpClipTileView>();

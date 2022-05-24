@@ -24,9 +24,10 @@ namespace MpWpfApp {
         Euros,
         Yen
     }    
-    public class MpTemplateViewModel : 
+    public class MpTextTemplateViewModel : 
         MpViewModelBase<MpTemplateCollectionViewModel>, 
         MpISelectableViewModel,
+        MpIValidatableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel,
         MpIUserColorViewModel {
@@ -42,7 +43,7 @@ namespace MpWpfApp {
                 if(Parent == null) {
                     return null;
                 }
-                return Parent.HostClipTileViewModel;
+                return Parent.Parent;
             }
         }
 
@@ -77,8 +78,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Visibility Properties
-        #endregion
 
         #region Validation
         public string ValidationText { get; set; }
@@ -258,9 +257,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpTemplateViewModel() : base(null) { }
+        public MpTextTemplateViewModel() : base(null) { }
 
-        public MpTemplateViewModel(MpTemplateCollectionViewModel thlcvm) : base(thlcvm) {
+        public MpTextTemplateViewModel(MpTemplateCollectionViewModel thlcvm) : base(thlcvm) {
             PropertyChanged += MpTemplateViewModel_PropertyChanged;            
         }
 
@@ -322,7 +321,7 @@ namespace MpWpfApp {
                             FinishEditTemplateCommand.Execute(null);
                         }
                         //IsEditingTemplate = false;
-                        Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.IsDetailGridVisibile));
+                        Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsDetailGridVisibile));
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
@@ -339,12 +338,12 @@ namespace MpWpfApp {
                     if(IsEditingTemplate && !IsSelected) {
                         IsSelected = true;
                     }
-                    Parent.Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.Parent.IsDetailGridVisibile));
+                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsDetailGridVisibile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
 
                     break;
                 case nameof(HasModelChanged):
-                    if(HasModelChanged) {
+                    if(HasModelChanged && IsValid) {
                         Task.Run(async () => {
                             await TextTemplate.WriteToDatabaseAsync();
                             HasModelChanged = false;

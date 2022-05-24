@@ -84,7 +84,6 @@
     <local:MpMultiBoolAndConverter x:Key="MultiBoolAndConverter" />
     <local:MpMultiBoolOrConverter x:Key="MultiBoolOrConverter" />
     <local:MpStringPathToFileOrFolderNameConverter x:Key="StringPathToFileOrFolderNameConverter" />
-    <local:MpFileContentItemViewModelToImageSourceConverter x:Key="FileContentItemViewModelToImageSourceConverter" />
     <local:MpStringHexColorToIsBrightBrushConverter x:Key="StringHexColorToIsBrightBrushConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

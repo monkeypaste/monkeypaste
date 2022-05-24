@@ -13,14 +13,14 @@ namespace MpWpfApp {
                 return null;
             }
                         
-            var civm = item as MpContentItemViewModel;
+            var ctvm = item as MpClipTileViewModel;
             string keyStr;
-            if(civm.TemplateCollection == null || civm.TemplateCollection.Items.Count == 0) {
+            if(ctvm.TemplateCollection == null || ctvm.TemplateCollection.Items.Count == 0) {
                 keyStr = "RtbTemplate";
             } else {
                 keyStr = "FlowDocumentScrollViewerTemplate";
             }
-            if (civm == null) {
+            if (ctvm == null) {
                 return null;
             }
 

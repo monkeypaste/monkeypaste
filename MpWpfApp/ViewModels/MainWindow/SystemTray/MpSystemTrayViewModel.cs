@@ -127,12 +127,9 @@ namespace MpWpfApp {
                 if (args is int) {
                     tabIdx = (int)args;
                 } else if (args is MpClipTileViewModel) {
-                    args = (args as MpClipTileViewModel).PrimaryItem.AppViewModel.App;
+                    args = (args as MpClipTileViewModel).AppViewModel.App;
                     tabIdx = 1;
-                } else if (args is MpContentItemViewModel) {
-                    args = (args as MpContentItemViewModel).AppViewModel.App;
-                    tabIdx = 1;
-                }
+                } 
 
                 await MpSettingsWindow.ShowDialog(tabIdx, args);
             });

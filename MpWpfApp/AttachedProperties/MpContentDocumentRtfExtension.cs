@@ -24,7 +24,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpMergedDocumentRtfExtension : DependencyObject {
+    public class MpContentDocumentRtfExtension : DependencyObject {
         #region Private Variables
 
         
@@ -47,7 +47,7 @@ namespace MpWpfApp {
           DependencyProperty.RegisterAttached(
             "IsSelected",
             typeof(bool),
-            typeof(MpMergedDocumentRtfExtension),
+            typeof(MpContentDocumentRtfExtension),
             new FrameworkPropertyMetadata(false));
 
         #endregion
@@ -64,7 +64,7 @@ namespace MpWpfApp {
           DependencyProperty.RegisterAttached(
             "ReadOnlyWidth",
             typeof(double),
-            typeof(MpMergedDocumentRtfExtension),
+            typeof(MpContentDocumentRtfExtension),
             new FrameworkPropertyMetadata(default));
 
         #endregion
@@ -81,7 +81,7 @@ namespace MpWpfApp {
           DependencyProperty.RegisterAttached(
             "IsContentReadOnly",
             typeof(bool),
-            typeof(MpMergedDocumentRtfExtension),
+            typeof(MpContentDocumentRtfExtension),
             new FrameworkPropertyMetadata() {
                 PropertyChangedCallback = (s, e) => {
                     if (e.NewValue == null) {
@@ -134,8 +134,6 @@ namespace MpWpfApp {
             if(MpClipTrayViewModel.Instance.IsRequery || MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;
             }
-            //await EncodeContent(rtb);
-            //return;
 
             if(rtb.DataContext is MpClipTileViewModel ctvm) {
                 var contentLookup = new Dictionary<string, List<TextElement>>();
@@ -144,66 +142,18 @@ namespace MpWpfApp {
                     .ToList();
 
                 foreach (InlineUIContainer thl in allTemplateHyperlinks) {
-                    var cit = thl.Tag as MpTextTemplate;
+                    var cit = thl.Tag as MpTextTemplate;                    
                     var span = new Span(thl.ContentStart, thl.ContentEnd);
                     span.Inlines.Clear();
                     span.Inlines.Add(cit.EncodedTemplate);
                 }
 
-                //var hl_test = rtb.Document.GetAllTextElements()
-                //    .Where(x => x is Hyperlink)
-                //    .ToList();
-
-                ctvm.HeadItem.CopyItemData = rtb.Document.ToRichText();
+                ctvm.CopyItemData = rtb.Document.ToRichText();
 
                 while(ctvm.IsAnyBusy) {
                     await Task.Delay(100);
                 }
                 LoadContent(rtb).FireAndForgetSafeAsync(ctvm);
-                //var allTextElements = rtb.Document.GetAllTextElements().ToList();
-                //foreach(var te in allTextElements) {
-                //    // fill dictionary w/ all text elements per copy item in doc order
-                //    if(te.Tag == null) {
-                //        // this should only happen when tile is initially loading which means it doesn't need to be saved
-                //        return;
-                //        //Debugger.Break();
-                //        //throw new Exception("Error all text elements should have a model as their tag (either MpCopyItem or MpTextTemplate)");
-                //    }
-                //    if(te.Tag is MpCopyItem ci) {                        
-                //        if(!contentLookup.ContainsKey(ci.Guid)) {
-                //            contentLookup.Add(ci.Guid, new List<TextElement>());
-                //        }
-                //        contentLookup[ci.Guid].Add(te);
-                //        contentLookup[ci.Guid].Sort((a, b) => {
-                //            return a.ContentStart.CompareTo(b.ContentStart);
-                //        });
-                //    }
-                //    // TODO should add template reference obj and check here probably
-                //}
-
-                //foreach(var ckvp in contentLookup) {
-                //    var start = ckvp.Value.Aggregate((a, b) =>
-                //        rtb.Document.ContentStart.GetOffsetToPosition(a.ElementStart) < rtb.Document.ContentStart.GetOffsetToPosition(b.ElementStart) ? a : b).ElementStart;
-                //    var end = ckvp.Value.Aggregate((a, b) =>
-                //        rtb.Document.ContentStart.GetOffsetToPosition(a.ElementEnd) > rtb.Document.ContentStart.GetOffsetToPosition(b.ElementEnd) ? a : b).ElementEnd;
-
-                //    string itemRtf = new TextRange(start, end).ToRichText();
-                //    var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelByGuid(ckvp.Key);
-                //    if(civm == null) {
-                //        // NOTE this should proibably not happen
-                //        var ci = await MpDataModelProvider.GetCopyItemByGuid(ckvp.Key);
-                //        if (ci == null) {
-                //            //a new item
-
-                //        } else {
-                //            ci.ItemData = itemRtf;
-                //            await ci.WriteToDatabaseAsync();
-                //        }
-                //    } else {
-                //        civm.CopyItemData = itemRtf;
-                //    }
-
-                //}
             }
         }
 
@@ -211,18 +161,18 @@ namespace MpWpfApp {
 
         #region HeadContentItemViewModel
 
-        public static object GetHeadContentItemViewModel(DependencyObject obj) {
-            return obj.GetValue(HeadContentItemViewModelProperty);
+        public static object GetCopyItem(DependencyObject obj) {
+            return obj.GetValue(CopyItemProperty);
         }
-        public static void SetHeadContentItemViewModel(DependencyObject obj, object value) {
-            obj.SetValue(HeadContentItemViewModelProperty, value);
+        public static void SetCopyItem(DependencyObject obj, object value) {
+            obj.SetValue(CopyItemProperty, value);
         }
 
-        public static readonly DependencyProperty HeadContentItemViewModelProperty =
+        public static readonly DependencyProperty CopyItemProperty =
           DependencyProperty.RegisterAttached(
-            "HeadContentItemViewModel",
+            "CopyItem",
             typeof(object),
-            typeof(MpMergedDocumentRtfExtension),
+            typeof(MpContentDocumentRtfExtension),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (s, e) => {
                     if(e.NewValue == null) {
@@ -285,23 +235,23 @@ namespace MpWpfApp {
 
             rtb.Document.Blocks.Clear();
 
-            MpCopyItem ci = ctvm.HeadItem.CopyItem;
+            MpCopyItem ci = ctvm.CopyItem;
             new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).LoadItemData(ci.ItemData, ci.ItemType, ci.IconId);
 
             if (ctvm == null) {
                 return;
             }
-            if (ctvm.HeadItem == null) {
+            if (ctvm == null) {
                 return;
             }
 
-            ctvm.HeadItem.UnformattedContentSize = rtb.Document.GetDocumentSize();
+            ctvm.UnformattedContentSize = rtb.Document.GetDocumentSize();
 
             await LoadTemplates(rtb);
 
             ctvm.IsBusy = false;
 
-            switch (ctvm.HeadItem.CopyItemType) {
+            switch (ctvm.ItemType) {
                 case MpCopyItemType.Text:
                 case MpCopyItemType.FileList:
                     rtb.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -331,8 +281,8 @@ namespace MpWpfApp {
 
         public static async Task LoadTemplates(RichTextBox rtb) {
             var ctvm = rtb.DataContext as MpClipTileViewModel;
-            var civm = ctvm.HeadItem;
-            var tcvm = civm.TemplateCollection;
+
+            var tcvm = ctvm.TemplateCollection;
             // this should only occur in root document once all children are added to avoid different document error
             var templateRanges = GetEncodedRanges(rtb.Document, "{t{", "}t}");
             var templateGuids = templateRanges.Select(x => x.Text.Replace("{t{", string.Empty).Replace("}t}", string.Empty)).ToList();
@@ -351,9 +301,9 @@ namespace MpWpfApp {
                     // when template is encoded in document but not referenced in MpTextTemplate
                     var missingItem = await MpDataModelProvider.GetTextTemplateByGuid(templateGuid);
                     if(missingItem == null) {
-                        civm.CopyItemData = civm.CopyItemData.Replace(@"\{t\{" + templateGuid + @"\{t\{", string.Empty);
+                        ctvm.CopyItemData = ctvm.CopyItemData.Replace(@"\{t\{" + templateGuid + @"\{t\{", string.Empty);
                         templateRanges[i].Text = string.Empty;
-                        MpConsole.WriteLine($"CopyItem {civm} item's data had ref to {templateGuid} which is not in the db, is now removed from item data");
+                        MpConsole.WriteLine($"CopyItem {ctvm} item's data had ref to {templateGuid} which is not in the db, is now removed from item data");
 
                         var tvm = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
                         if(tvm != null) {
@@ -406,7 +356,7 @@ namespace MpWpfApp {
                     throw new Exception("Corrupt text content see console");
                 }
                 encodedRange.Add(new TextRange(encodedRangeOpenTag.Start, encodedRangeCloseTag.End));
-                tp = encodedRangeCloseTag.End.GetNextContextPosition(LogicalDirection.Forward);
+                tp = encodedRangeCloseTag.End.GetNextInsertionPosition(LogicalDirection.Forward);
             }
 
             return encodedRange.ToArray();

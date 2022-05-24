@@ -101,7 +101,7 @@ namespace MpWpfApp {
 
         private void PerformMainWindowHide() {
             var mwvm = DataContext as MpMainWindowViewModel;
-            if (mwvm.IsResizing || MpDragDropManager.IsDragAndDrop) {
+            if (mwvm.IsResizing || MpDragDropManager.IsDragAndDrop || MpContextMenuView.Instance.IsOpen) {
                 return;
             }
             mwvm.HideWindowCommand.Execute(null);

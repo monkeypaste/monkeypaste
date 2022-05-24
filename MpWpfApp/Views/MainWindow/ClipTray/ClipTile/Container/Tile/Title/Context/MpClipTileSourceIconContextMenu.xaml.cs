@@ -23,7 +23,7 @@ namespace MpWpfApp {
         }
 
         private void ContextMenu_Loaded(object sender, RoutedEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
+            var civm = DataContext as MpClipTileViewModel;
 
             if(civm.UrlViewModel != null) {
                 string domainName = civm.UrlViewModel.UrlDomainPath;

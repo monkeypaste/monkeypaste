@@ -6,11 +6,11 @@
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpContentItemViewModel"
+                     x:TypeArguments="local:MpClipTileViewModel"
                      mc:Ignorable="d PresentationOptions"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
+                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
         <!--<local:MpClipTileTitleHighlightBehavior x:Name="ClipTileTitleHighlightBehavior" />
@@ -26,7 +26,7 @@
         <Viewbox VerticalAlignment="Top"
                  HorizontalAlignment="Left"
                  Stretch="Fill"
-                 Width="{Binding Parent.TileBorderWidth}"
+                 Width="{Binding TileBorderWidth}"
                  Height="{Binding ClipTileTitleHeight,
                                   Source={x:Static local:MpMeasurements.Instance}}"
                  Grid.ColumnSpan="2">
@@ -192,15 +192,15 @@
                     BorderThickness="0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Visibility="{Binding Parent.PinButtonVisibility}"
+                    Visibility="{Binding PinButtonVisibility}"
                     Command="{Binding ToggleTileIsPinnedCommand,
                                       Source={x:Static local:MpClipTrayViewModel.Instance}}"
-                    CommandParameter="{Binding Parent}">
+                    CommandParameter="{Binding}">
                 <Image x:Name="PinButtonImage"
                        Width="15"
                        Height="15"
                        Stretch="Fill"
-                       Source="{Binding Parent.PinIconSourcePath,
+                       Source="{Binding PinIconSourcePath,
                                         Converter={StaticResource StringResourceToImageSourceConverter}}" />
             </Button>
             <Ellipse x:Name="SourceMatchEllipse"

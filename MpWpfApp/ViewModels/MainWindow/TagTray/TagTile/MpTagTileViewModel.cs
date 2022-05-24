@@ -555,7 +555,7 @@ namespace MpWpfApp {
                         while (HasModelChanged) {
                             await Task.Delay(100);
                         }
-                        await Task.WhenAll(MpClipTrayViewModel.Instance.Items.SelectMany(x => x.Items).Select(x => x.TitleSwirlViewModel.InitializeAsync()));
+                        await Task.WhenAll(MpClipTrayViewModel.Instance.Items.Select(x => x.TitleSwirlViewModel.InitializeAsync()));
                     });
                     break;
                 case nameof(TagTileTrayWidth):
@@ -632,19 +632,13 @@ namespace MpWpfApp {
         }
 
         public async Task<bool> IsLinkedAsync(MpClipTileViewModel ctvm) {
-            foreach(var civm in ctvm.Items) {
-                bool isLinked = await IsLinkedAsync(civm);
-                if(isLinked) {
-                    return true;
-                }
+            bool isLinked = await IsLinkedAsync(ctvm.CopyItem);
+            if (isLinked) {
+                return true;
             }
             return false;
         }
 
-        public async Task<bool> IsLinkedAsync(MpContentItemViewModel rtbvm) {
-            var result = await IsLinkedAsync(rtbvm.CopyItem);
-            return result;
-        }
 
         public override void Dispose() {
             base.Dispose();

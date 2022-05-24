@@ -10,7 +10,7 @@ using System.Windows.Media;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpClipTileTitleSwirlViewModel : MpViewModelBase<MpContentItemViewModel> {
+    public class MpClipTileTitleSwirlViewModel : MpViewModelBase<MpClipTileViewModel> {
         #region Private Variables
 
         #endregion
@@ -109,7 +109,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpClipTileTitleSwirlViewModel() : base(null) { }
 
-        public MpClipTileTitleSwirlViewModel(MpContentItemViewModel parent) : base(parent) {
+        public MpClipTileTitleSwirlViewModel(MpClipTileViewModel parent) : base(parent) {
         }
 
         public async Task InitializeAsync() {
@@ -144,6 +144,11 @@ namespace MpWpfApp {
 
                 Swirls.Add(slvm);
             }
+
+            OnPropertyChanged(nameof(SwirlLayer0));
+            OnPropertyChanged(nameof(SwirlLayer1));
+            OnPropertyChanged(nameof(SwirlLayer2));
+            OnPropertyChanged(nameof(SwirlLayer3));
 
             IsBusy = false;
         }

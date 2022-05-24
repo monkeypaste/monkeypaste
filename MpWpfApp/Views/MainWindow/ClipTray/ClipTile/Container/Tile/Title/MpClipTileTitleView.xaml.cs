@@ -19,7 +19,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileTitleView.xaml
     /// </summary>
-    public partial class MpClipTileTitleView : MpUserControl<MpContentItemViewModel> {
+    public partial class MpClipTileTitleView : MpUserControl<MpClipTileViewModel> {
         private bool _isAnimating = false;
 
         public MpClipTileTitleView() : base() {
@@ -161,7 +161,7 @@ namespace MpWpfApp {
         private void AnimateLeave() {
             if (BindingContext == null ||
                 MpClipTrayViewModel.Instance.HasScrollVelocity || 
-                BindingContext.Parent.IsContextMenuOpened) {
+                BindingContext.IsContextMenuOpened) {
                 return;
             }
 
@@ -190,23 +190,6 @@ namespace MpWpfApp {
             //MpHelpers.OpenUrl(CopyItem.Source.App.AppPath);
             MpClipTrayViewModel.Instance.ClearClipSelection();
             BindingContext.IsSelected = true;
-            foreach (var vctvm in MpClipTrayViewModel.Instance.Items) {
-                if (vctvm.Items.Any(x=>x.SourceViewModel.AppViewModel.AppId != BindingContext.SourceViewModel.AppViewModel.AppId)) {
-                    bool hasSubItemWithApp = false;
-                    if (vctvm.Items.Count > 1) {
-                        foreach (var vrtbvm in vctvm.Items) {
-                            if (vrtbvm.SourceViewModel.AppViewModel.AppId != BindingContext.SourceViewModel.AppViewModel.AppId) {
-                               // vrtbvm.ItemVisibility = Visibility.Collapsed;
-                            } else {
-                                hasSubItemWithApp = true;
-                            }
-                        }
-                    }
-                    if (!hasSubItemWithApp) {
-                        //vctvm.ItemVisibility = Visibility.Collapsed;
-                    }
-                }
-            }
             //this triggers clip tray to swap out the app icons for the filtered app
             //MpClipTrayViewModel.Instance.FilterByAppIcon = ctvm.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64.ToBitmapSource();
             MpClipTrayViewModel.Instance.IsFilteringByApp = true;
@@ -221,11 +204,11 @@ namespace MpWpfApp {
         }
 
         private void PinButton_MouseEnter(object sender, MouseEventArgs e) {
-            BindingContext.Parent.IsOverPinButton = true;
+            BindingContext.IsOverPinButton = true;
         }
 
         private void PinButton_MouseLeave(object sender, MouseEventArgs e) {
-            BindingContext.Parent.IsOverPinButton = false;
+            BindingContext.IsOverPinButton = false;
         }
 
     }

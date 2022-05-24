@@ -240,14 +240,8 @@ namespace MpWpfApp {
                 }
                 var ciidl = await MpDataModelProvider.GetCopyItemIdsForTagAsync(ttvm.TagId);
 
-                bool isTagLinkedToAnySelectedClips = false;
-                foreach (var sctvm in MpClipTrayViewModel.Instance.SelectedItems) {
-                    if(sctvm.Items.Select(x=>x.CopyItemId).Any(x=>ciidl.Contains(x))) {
-                        isTagLinkedToAnySelectedClips = true;
-                        break;
-                    }
-                }
-                ttvm.IsAssociated = isTagLinkedToAnySelectedClips && MpClipTrayViewModel.Instance.SelectedItems.Count > 0;
+                ttvm.IsAssociated = MpClipTrayViewModel.Instance.SelectedItem != null &&
+                                                     ciidl.Contains(MpClipTrayViewModel.Instance.SelectedItem.CopyItemId);
 
             }
         }

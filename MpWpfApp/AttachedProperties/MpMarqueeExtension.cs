@@ -457,7 +457,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            string text = (tb.DataContext as MpContentItemViewModel).CopyItemTitle;
+            string text = (tb.DataContext as MpClipTileViewModel).CopyItemTitle;
             tb.LostFocus -= Tb_LostFocus;
             tb.LostFocus += Tb_LostFocus;
             tb.TextChanged -= Tb_TextChanged;

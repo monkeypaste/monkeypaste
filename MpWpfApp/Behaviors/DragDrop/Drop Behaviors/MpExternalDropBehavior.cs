@@ -116,7 +116,7 @@ namespace MpWpfApp {
         }
 
         public override async Task StartDrop() {
-            var ci = MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem;
+            var ci = MpClipTrayViewModel.Instance.SelectedItem.CopyItem;
             //var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
             var mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(
                 ci, 

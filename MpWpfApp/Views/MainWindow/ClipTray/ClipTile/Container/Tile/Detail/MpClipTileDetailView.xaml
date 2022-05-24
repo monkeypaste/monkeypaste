@@ -4,9 +4,9 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpContentItemViewModel"
+                     x:TypeArguments="local:MpClipTileViewModel"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     d:DataContext="{d:DesignInstance Type=local:MpContentItemViewModel,
+                     d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
@@ -46,23 +46,24 @@
                        MouseEnter="ClipTileDetailTextBlock_MouseEnter"
                        MouseLeave="ClipTileDetailTextBlock_MouseLeave"
                        Text="{Binding DetailText}" />
-            <!--<Button x:Name="ClipTileToggleEditButton"
-                    Grid.Column="2"
-                    Width="16"
-                    Height="16"
-                    HorizontalAlignment="Right"
-                    Command="{Binding Parent.ToggleReadOnlyCommand}"
-                    MouseEnter="ClipTileToggleEditButton_MouseEnter"
-                    MouseLeave="ClipTileToggleEditButton_MouseLeave"
-                    Visibility="{Binding Parent.IsTextItem,
-                                         Converter={StaticResource BoolToVisibilityConverter}}"
-                    Style="{StaticResource RoundedButton}">
+            <ToggleButton x:Name="ClipTileToggleEditButton"
+                          Grid.Column="2"
+                          Width="16"
+                          Height="16"
+                          HorizontalAlignment="Right"
+                          IsChecked="{Binding IsContentReadOnly,
+                                              Converter={StaticResource BoolFlipConverter}}"
+                          local:MpHoverableExtension.IsEnabled="True"
+                          local:MpHoverableExtension.HoverCursor="Hand"
+                          Visibility="{Binding IsTextItem,
+                                               Converter={StaticResource BoolToVisibilityConverter}}"
+                          Template="{StaticResource LockToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/edit.png" />
-            </Button>-->
-            <local:MpContentReportView Grid.Column="2"
+            </ToggleButton>
+            <!--<local:MpContentReportView Grid.Column="2"
                                        HorizontalAlignment="Right"
                                        DataContext="{Binding CopyItemId,
-                                                             Converter={StaticResource CopyItemIdToReportCollectionConverter}}" />
+                                                             Converter={StaticResource CopyItemIdToReportCollectionConverter}}" />-->
 
         </Grid>
     </Border>

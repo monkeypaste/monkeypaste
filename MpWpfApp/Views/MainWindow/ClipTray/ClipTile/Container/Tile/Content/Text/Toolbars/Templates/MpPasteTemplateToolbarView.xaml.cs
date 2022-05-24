@@ -29,7 +29,7 @@ namespace MpWpfApp {
                 return;
             }
             _activeRtb = trtb;
-            var rtbvm = _activeRtb.DataContext as MpContentItemViewModel;
+            var rtbvm = _activeRtb.DataContext as MpClipTileViewModel;
 
             rtbvm.TemplateCollection.UpdateCommandsCanExecute();
             foreach (var thlvm in rtbvm.TemplateCollection.Items) {

@@ -432,7 +432,8 @@ namespace MpWpfApp {
                 pathDir = Path.GetDirectoryName(pathDir);
             }
 
-            var pathLink = new Hyperlink(new Run(Path.GetFileName(path))) {
+            var pathRun = new Run(Path.GetFileName(path));
+            var pathLink = new Hyperlink(pathRun) {
                 IsEnabled = true,
                 NavigateUri = new Uri(pathDir, UriKind.Absolute)
             };
@@ -453,6 +454,8 @@ namespace MpWpfApp {
                 p.ContentRange().Save(stream, DataFormats.XamlPackage, true);
                 stream.Seek(0, SeekOrigin.Begin);
                 tr.Load(stream, DataFormats.XamlPackage);
+
+                var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
 
                 var fileItemParagraph = tr.GetAllTextElements().FirstOrDefault(x => x is Paragraph) as Paragraph;
                 var hl = tr.GetAllTextElements().FirstOrDefault(x => x is Hyperlink) as Hyperlink;
@@ -483,16 +486,12 @@ namespace MpWpfApp {
                     fileItemParagraph.BorderThickness = new Thickness(0.5);
 
 
-                    var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.CopyItemData.Contains(path)));
+                    var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
                     if(ctvm == null) {
-                        return;
-                    }
-                    var civm = ctvm.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
-                    if(civm == null) {
                         Debugger.Break();
                     } else {
-                        civm.Parent.Items.ForEach(x => x.IsHovering = x.CopyItemData == path);
-
+                        ctvm.IsHovering = true;
+                        rtb.Selection.Select(pathRun.ContentRange().Start, pathRun.ContentRange().End);
                         //MpConsole.WriteLine("Hover ItemData: " + civm.Parent.HoverItem.CopyItemData);
                     }
                 };
@@ -504,15 +503,12 @@ namespace MpWpfApp {
                     fileItemParagraph.BorderBrush = Brushes.Transparent;
                     fileItemParagraph.BorderThickness = new Thickness(0);
 
-                    var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(y => y.CopyItemData.Contains(path)));
+                    var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
                     if (ctvm == null) {
-                        return;
-                    }
-                    var civm = ctvm.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
-                    if (civm == null) {
                         Debugger.Break();
-                    } else if(civm.IsHovering) {
-                        civm.Parent.Items.ForEach(x => x.IsHovering = false);
+                    } else {
+                        ctvm.IsHovering = false;
+                        rtb.Selection.Select(pathRun.ContentRange().Start, pathRun.ContentRange().Start);
                     }
                 };
 
@@ -672,7 +668,7 @@ namespace MpWpfApp {
                 Debugger.Break();
             }
 
-            MpTemplateViewModel tvm = ctvm.HeadItem.TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateId == cit.Id);
+            MpTextTemplateViewModel tvm = ctvm.TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateId == cit.Id);
 
             #region Events
 
@@ -734,7 +730,7 @@ namespace MpWpfApp {
                         //while editing if template is removed check if its the only one if so remove from db and tcvm
                         var iuicl = rtb.Document.GetAllTextElements().Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate);
                         if (iuicl != null && iuicl.All(x => (x.Tag as MpTextTemplate).Id != cit.Id)) {
-                            var tcvm = (rtb.DataContext as MpClipTileViewModel).HeadItem.TemplateCollection;
+                            var tcvm = (rtb.DataContext as MpClipTileViewModel).TemplateCollection;
                             var toRemove_tvml = tcvm.Items.Where(x => x.TextTemplateGuid == cit.Guid).ToList();
                             foreach (var toRemove_tvm in toRemove_tvml) {
                                 tcvm.Items.Remove(toRemove_tvm);
@@ -1112,7 +1108,7 @@ namespace MpWpfApp {
                     break;
                 }
                 //matchRangeList.Add(matchRange);
-                start = matchRange.End.GetNextContextPosition(LogicalDirection.Forward);
+                start = matchRange.End.GetNextInsertionPosition(LogicalDirection.Forward);
                 yield return matchRange;
             }
 
@@ -1265,7 +1261,12 @@ namespace MpWpfApp {
             return sb.ToString();
         }
 
-        public static FlowDocument CombineFlowDocuments(FlowDocument from, FlowDocument to, TextPointer toInsertPointer = null, bool insertNewLine = false) {
+        public static FlowDocument CombineFlowDocuments(
+            FlowDocument from, 
+            FlowDocument to, 
+            TextPointer toInsertPointer = null, bool insertNewLine = false) {
+            toInsertPointer = toInsertPointer == null ? to.ContentEnd : toInsertPointer;
+
             using (MemoryStream stream = new MemoryStream()) {
                 var rangeFrom = new TextRange(from.ContentStart, from.ContentEnd);
 
@@ -1279,7 +1280,7 @@ namespace MpWpfApp {
                 //    p.Inlines.Add(lb);
                 //}
 
-                var rangeTo = new TextRange(to.ContentEnd, to.ContentEnd);
+                var rangeTo = new TextRange(toInsertPointer, toInsertPointer);
                 rangeTo.Load(stream, DataFormats.XamlPackage);
 
                 var tr = new TextRange(to.ContentStart, to.ContentEnd);
@@ -1296,33 +1297,6 @@ namespace MpWpfApp {
                 return to;
             }
         }
-
-        public static async Task<FlowDocument> CombineFlowDocumentsAsync(FlowDocument from, FlowDocument to, bool insertNewLine = false, DispatcherPriority priority = DispatcherPriority.Background) {
-            FlowDocument fd = null;
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                using (MemoryStream stream = new MemoryStream()) {
-                    var rangeFrom = new TextRange(from.ContentStart, from.ContentEnd);
-
-                    System.Windows.Markup.XamlWriter.Save(rangeFrom, stream);
-                    rangeFrom.Save(stream, DataFormats.XamlPackage);
-
-                    if (insertNewLine) {
-                        var lb = new LineBreak();
-                        var p = (Paragraph)to.Blocks.LastBlock;
-                        p.LineHeight = 1;
-                        p.Inlines.Add(lb);
-                    }
-
-                    var rangeTo = new TextRange(to.ContentEnd, to.ContentEnd);
-                    rangeTo.Load(stream, DataFormats.XamlPackage);
-
-                    fd = to;
-                }
-            }, priority);
-            return fd;
-        }
-
-
 
         public static void AppendBitmapSourceToFlowDocument(FlowDocument flowDocument, BitmapSource bitmapSource) {
             Image image = new Image() {

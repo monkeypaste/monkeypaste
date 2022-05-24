@@ -19,7 +19,9 @@
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 
+        MpIShortcutCommand,
         MpISelectableViewModel,
+        MpIUserColorViewModel,
         MpIHoverableViewModel,
         MpIResizableViewModel,
         MpITextSelectionRange {
@@ -31,7 +33,16 @@
 
         private int _lastQueryOffset = -1;
 
+        private DispatcherTimer _timer;
+
+        Size itemSize;
+        int fc = 0, lc = 0, cc = 0;
+        double ds = 0;
+
+        private int _detailIdx = 0;
+
         #endregion
+        public static bool USING_BROWSER = false;
 
         #region Statics
 
@@ -84,68 +95,64 @@
 
         #endregion
 
+        #region MpIUserColorViewModel Implementation
+
+        public string UserHexColor {
+            get => CopyItemHexColor;
+            set => CopyItemHexColor = value;
+        }
+
+        #endregion
+
         #region View Models
 
-        public ObservableCollection<MpContentItemViewModel> Items { get; private set; } = new ObservableCollection<MpContentItemViewModel>();
-        //below from content container
+        public MpImageAnnotationCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
 
-        public MpContentItemViewModel HeadItem => Items.FirstOrDefault(x => x.CompositeParentCopyItemId == 0);
+        public MpClipTileTitleSwirlViewModel TitleSwirlViewModel { get; set; }
 
-        public MpContentItemViewModel TailItem => Items.OrderByDescending(x => x.CompositeSortOrderIdx).Last();
+        public MpTemplateCollectionViewModel TemplateCollection { get; set; }
 
-        public MpContentItemViewModel LastSubSelectedItem => Items.Aggregate((a, b) => a.LastSubSelectedDateTime > b.LastSubSelectedDateTime ? a : b);
-
-        //[MpDependsOnChild("IsHovering")]
-        public MpContentItemViewModel HoverItem => Items.FirstOrDefault(x => x.IsHovering);
-
-        //[MpDependsOnChild("IsHovering")]
-        public MpContentItemViewModel PrimaryItem {
+        public MpSourceViewModel SourceViewModel {
             get {
-                if (Items == null || Items.Count == 0) {
+                //if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                //    return null;
+                //}
+                var svm = MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
+                if (svm == null) {
+                    return MpSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPreferences.ThisAppSource.Id);
+                }
+                return svm;
+            }
+        }
+
+        public MpAppViewModel AppViewModel => SourceViewModel.AppViewModel;
+
+        public MpUrlViewModel UrlViewModel => SourceViewModel.UrlViewModel;
+
+        #endregion
+
+        #region MpIShortcutCommand Implementation
+
+        public MpShortcutType ShortcutType => MpShortcutType.PasteCopyItem;
+
+        public MpShortcutViewModel ShortcutViewModel {
+            get {
+                if (Parent == null || CopyItem == null) {
                     return null;
                 }
+                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CommandId == CopyItemId && x.ShortcutType == ShortcutType);
 
-                if (SelectedItem != null) {
-                    return SelectedItem;
+                if (scvm == null) {
+                    scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
                 }
 
-                if (HoverItem != null) {
-                    return HoverItem;
-                }
-
-                return LastSubSelectedItem;
+                return scvm;
             }
         }
 
-        public MpContentItemViewModel SelectedItem {
-            get {
-                if (SelectedItems == null || SelectedItems.Count == 0) {
-                    return null;
-                }
-                return SelectedItems[0];
-            }
-        }
+        public string ShortcutKeyString => ShortcutViewModel == null ? string.Empty : ShortcutViewModel.KeyString;
 
-        public List<MpContentItemViewModel> SelectedItems {
-            get {
-                return Items.Where(x => x.IsSelected == true).OrderBy(x => x.LastSubSelectedDateTime).ToList();
-            }
-        }
-
-        public List<MpContentItemViewModel> VisibleItems {
-            get {
-                return Items.Where(x => !x.IsPlaceholder).ToList();
-            }
-        }
-
-        public List<string> FileList {
-            get {
-                DoCommandSelection();
-                var ivml = SelectedItems;
-                var cil = ivml.Select(x => x.CopyItem).ToList();
-                return MpCopyItemMerger.MergeFilePaths(cil).ToList();
-            }
-        }
+        public ICommand AssignCommand => AssignHotkeyCommand;
 
         #endregion
 
@@ -186,7 +193,7 @@
                     //OnPropertyChanged(nameof(TileContentWidth));
                     OnPropertyChanged(nameof(TileContentHeight));
                     //OnPropertyChanged(nameof(TrayX));
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
+                    OnPropertyChanged(nameof(EditorHeight));
                 }
             }
         }        
@@ -196,7 +203,7 @@
 
         public double TrayX {
             get {
-                if(HeadItem == null || IsPinned || Parent == null) {
+                if(IsPinned || Parent == null) {
                     return 0;
                 }
                 return Parent.FindTileOffsetX(QueryOffsetIdx);
@@ -232,12 +239,7 @@
                 if (IsAnyEditingTemplate) {
                     ch -= MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
                 }
-                if (Count == 1) {
-                    cs.Height = ch;
-                } else {
-                    double h = IsContentReadOnly ? ReadOnlyContentSize.Height : EditableContentSize.Height;
-                    cs.Height = Math.Max(MpMeasurements.Instance.ClipTileScrollViewerWidth, Math.Max(ch, h));
-                }
+                cs.Height = ch;
                 return cs;
             }
         }
@@ -268,23 +270,6 @@
             }
         }
 
-        public Size EditableContentSize {
-            get {
-                var ts = new Size(MpMeasurements.Instance.ClipTileEditModeMinWidth,0);
-                foreach (var ivm in Items) {
-                    var ivs = ivm.EditableContentSize;
-                    ts.Width = Math.Max(ts.Width, ivs.Width);
-                    if(Parent.PersistentUniqueWidthTileLookup.ContainsKey(QueryOffsetIdx)) {
-                        if(Parent.PersistentUniqueWidthTileLookup[QueryOffsetIdx] > ts.Width) {
-                            ts.Width = Parent.PersistentUniqueWidthTileLookup[QueryOffsetIdx];
-                        }
-                    }
-                    ts.Height += ivs.Height;
-                }
-                //ts.Height += MpMeasurements.Instance.ClipTileDetailHeight + MpMeasurements.Instance.ClipTileTitleHeight;
-                return ts;
-            }
-        }
 
         public Size ReadOnlyContentSize {
             get {
@@ -293,6 +278,68 @@
                     MpMeasurements.Instance.ClipTileContentDefaultHeight);
             }
         }
+
+
+        public double EditorHeight {
+            get {
+                if (Parent == null || CopyItem == null) {
+                    return 0;
+                }
+                if (USING_BROWSER) {
+                    double h;
+                    if (!IsContentReadOnly) {
+                        //return Parent.TileContentHeight; //quil editor height
+                        h = TileContentHeight;// - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                    } else {
+
+                        h = ReadOnlyContentSize.Height;
+                    }
+                    if (double.IsInfinity(h)) {
+                        return Double.NaN;
+                    }
+                    return h;
+                } else {
+
+                    if (!IsContentReadOnly) {
+                        return TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                    }
+                    return ReadOnlyContentSize.Height;
+                }
+            }
+        }
+
+        public Size EditableContentSize {
+            get {
+                if (Parent == null || CopyItem == null) {
+                    return new Size();
+                }
+                //get contents actual size
+                var ds = UnformattedContentSize;//CopyItemData.ToFlowDocument().GetDocumentSize();
+
+                //if item's content is larger than expanded width make sure it gets that width (will show scroll bars)
+                double w = Math.Max(ds.Width, MpMeasurements.Instance.ClipTileContentMinMaxWidth);
+
+                //let height in expanded mode match content's height
+                double h = ds.Height;
+
+                return new Size(w, h);
+            }
+        }
+
+
+        public Size CurrentSize {
+            get {
+                if (Parent == null) {
+                    return new Size();
+                }
+                if (!IsContentReadOnly) {
+                    return EditableContentSize;
+                }
+                return ReadOnlyContentSize;
+            }
+        }
+
+        public Size UnformattedContentSize { get; set; }
 
         #endregion
 
@@ -340,23 +387,10 @@
 
         public Visibility ToolTipVisibility {
             get {
-                if (HeadItem == null || !MpPreferences.ShowItemPreview) {
+                if (!MpPreferences.ShowItemPreview) {
                     return Visibility.Collapsed;
                 }
                 return (Parent.HasScrollVelocity || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
-        public Visibility ClipTileTitleAppIconImageVisibility {
-            get {
-                if (MpMainWindowViewModel.Instance == null || Parent == null || !IsSelected) {
-                    return Visibility.Visible;
-                }
-                if (Parent.SelectedItems.Count > 1 &&
-                   !IsHovering) {
-                    return Visibility.Hidden;
-                }
-                return Visibility.Visible;
             }
         }
 
@@ -375,20 +409,113 @@
             }
         }
 
-        public Visibility MultiSelectOrderMarkerVisibility {
-            get {
-                if (MpMainWindowViewModel.Instance == null || Parent == null) {
-                    return Visibility.Hidden;
-                }
-                if (IsSelected && Parent.SelectedItems.Count > 1) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
         #endregion
 
         #region Appearance       
+        public Brush DetailTextColor {
+            get {
+                if (IsSelected || IsHovering) {
+                    return Brushes.Black;//Brushes.DimGray;
+                }
+                return Brushes.Transparent;
+            }
+        }
+
+        public Brush TileTitleTextGridBackgroundBrush {
+            get {
+                if (IsHoveringOnTitleTextGrid && !IsEditingTitle) {
+                    return new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
+                }
+                return Brushes.Transparent;
+            }
+        }
+
+        public Brush TitleTextColor {
+            get {
+                if (IsHoveringOnTitleTextGrid) {
+                    return Brushes.DarkGray;
+                }
+                return Brushes.White;
+            }
+        }
+
+        public string ItemBackgroundHexColor {
+            get {
+                if (ItemType == MpCopyItemType.FileList) {
+                    if (IsHovering) {
+                        return MpSystemColors.gainsboro;
+                    }
+                    return MpSystemColors.Transparent;
+                }
+
+                if (MpDragDropManager.IsDragAndDrop || Parent == null || CopyItem == null) {
+                    return MpSystemColors.White;
+                }
+
+                return ItemEditorBackgroundHexColor;
+            }
+        }
+        public string ItemBorderBrushHexColor {
+            get {
+                if (ItemType == MpCopyItemType.FileList) {
+                    if (IsHovering) {
+                        return MpSystemColors.black;
+                    }
+                    return MpSystemColors.Transparent;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+        public double ItemBorderBrushThickness {
+            get {
+                if (ItemType == MpCopyItemType.FileList) {
+                    if (IsHovering) {
+                        return 0.5;
+                    }
+                }
+                return 0;
+            }
+        }
+        public string ItemEditorBackgroundHexColor { get; set; } = MpSystemColors.Transparent;
+
+
+        public Brush ItemBorderBrush {
+            get {
+
+                if (!IsSelected ||
+                   IsItemDragging) {
+                    return Brushes.Transparent;
+                }
+                return Brushes.Red;
+            }
+        }
+
+        public Brush ItemSeparatorBrush {
+            get {
+                if (//MpContentDropManager.Instance.IsDragAndDrop ||
+                    ItemType == MpCopyItemType.FileList ||
+                   //(ItemIdx == Parent.DropIdx + 1 && Parent.IsDroppingOnTile) || // NOTE drop line uses adorner since DropIdx 0 won't have seperator
+                   IsSelected) {
+                    return Brushes.Transparent;
+                }
+                return Brushes.DimGray;
+            }
+        }
+
+        public Rect ItemBorderBrushRect {
+            get {
+                if (IsContextMenuOpen || IsItemDragging) {
+                    return MpMeasurements.Instance.DottedBorderRect;
+                }
+                return MpMeasurements.Instance.SolidBorderRect;
+            }
+        }
+
+        public Rect ItemSeparatorBrushRect {
+            get {
+                return MpMeasurements.Instance.DottedBorderRect;
+            }
+        }
 
         public string SelectedTextHexColor {
             get {
@@ -425,7 +552,7 @@
                 if(IsPlaceholder) {
                     return new Size();
                 }
-                return HeadItem.UnformattedContentSize;
+                return UnformattedContentSize;
             }
         }
 
@@ -464,10 +591,6 @@
                 if(CanResize) {
                     return Brushes.Orange;
                 }
-                if (Parent.PrimaryItem == this &&
-                    Parent.SelectedItems.Count > 1) {
-                    return Brushes.Blue;
-                }
                 if (IsSelected) {
                     return Brushes.Red;
                 }
@@ -485,6 +608,145 @@
 
         #region State 
 
+        public bool IsAnyBusy {
+            get {
+                if (IsBusy) {
+                    return true;
+                }
+                if (TitleSwirlViewModel != null && TitleSwirlViewModel.IsAnyBusy) {
+                    return true;
+                }
+                if (DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.IsAnyBusy) {
+                    return true;
+                }
+                if (TemplateCollection != null && TemplateCollection.IsAnyBusy) {
+                    return true;
+                }
+                if (AppViewModel != null && AppViewModel.IsBusy) {
+                    return true;
+                }
+                if (UrlViewModel != null && UrlViewModel.IsBusy) {
+                    return true;
+                }
+                if (SourceViewModel != null && SourceViewModel.IsBusy) {
+                    return true;
+                }
+                if (ShortcutViewModel != null && ShortcutViewModel.IsBusy) {
+                    return true;
+                }
+                return false;
+            }
+        }
+        public bool HasDetectedObjects => DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.Items.Count > 0;
+
+        public bool IsOverHyperlink { get; set; } = false;
+
+        public MpCopyItemDetailType CurDetailType {
+            get {
+                return (MpCopyItemDetailType)_detailIdx;
+            }
+        }
+
+        public bool IsNewAndFirstLoad { get; set; } = false;
+
+        private bool _isHoveringOnTitleTextGrid = false;
+        public bool IsHoveringOnTitleTextGrid {
+            get {
+                return _isHoveringOnTitleTextGrid;
+            }
+            set {
+                if (_isHoveringOnTitleTextGrid != value) {
+                    _isHoveringOnTitleTextGrid = value;
+                    OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
+                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
+                    OnPropertyChanged(nameof(TitleTextColor));
+                }
+            }
+        }
+
+        public bool HasBeenSeen { get; set; } = false;
+
+        public bool IsVisible {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                double screenX = TrayX - Parent.ScrollOffset;
+                return screenX >= 0 && 
+                       screenX < Parent.ClipTrayScreenWidth && 
+                       screenX + TileBorderWidth <= Parent.ClipTrayScreenWidth;
+            }
+        }
+
+        #region Scroll
+
+        public double NormalizedVerticalScrollOffset { get; set; } = 0;
+
+        public bool IsScrolledToHome => Math.Abs(NormalizedVerticalScrollOffset) <= 0.1;
+
+        public bool IsScrolledToEnd => Math.Abs(NormalizedVerticalScrollOffset) >= 0.9;
+
+        public double KeyboardScrollAmount { get; set; } = 0.2;
+
+        #endregion
+
+
+        public bool IsSelected { get; set; }
+
+        public bool IsHovering { get; set; } = false;
+
+        public bool IsContextMenuOpen { get; set; } = false;
+
+        public bool IsTitleReadOnly { get; set; } = true;
+
+        public bool IsTitleFocused { get; set; } = false;
+
+        //public bool IsEditingContent => IsContentFocused && !IsContentReadOnly;
+
+        public bool IsEditingTitle => IsTitleFocused && IsSelected;
+
+        public bool IsEditingTemplate {
+            get {
+                if (CopyItem == null || TemplateCollection == null) {
+                    return false;
+                }
+
+                return TemplateCollection.Items.Any(x => x.IsEditingTemplate);
+            }
+        }
+
+        public bool IsPasting { get; set; } = false;
+
+        public bool IsPastingTemplate => IsPasting && HasTemplates;
+
+
+        public bool HasTemplates {
+            get {
+                return TemplateCollection.Items.Count > 0;
+            }
+        }
+
+        public int ItemIdx {
+            get {
+                if (Parent == null) {
+                    return -1;
+                }
+                return Parent.Items.IndexOf(this);
+            }
+        }
+
+        public bool IsPlaceholder => CopyItem == null || IsPinned;
+
+        #region Drag & Drop
+        //[MpAffectsParent]
+        public bool IsItemDragging { get; set; } = false;
+
+
+        //public bool IsDragOverItem { get; set; } = false;
+
+        //public Point MouseDownPosition { get; set; }
+        //public IDataObject DragDataObject { get; set; }
+        #endregion
         public bool IsSubSelectionEnabled { get; set; } = false;
 
         public bool IsContentFocused { get; set; } = false;
@@ -492,12 +754,11 @@
         public bool IsOverPinButton { get; set; } = false;
 
         public bool IsPinned => Parent != null && 
-                                HeadItem != null && 
-                                Parent.PinnedItems.Any(x => x.HeadItem != null && x.HeadItem.CopyItemId == HeadItem.CopyItemId);
+                                Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
 
         public bool CanVerticallyScroll => !IsContentReadOnly ?
                                                 EditableContentSize.Height > TileContentHeight :
-                                                Items.Sum(x => x.UnformattedContentSize.Height) > TileContentHeight;
+                                                UnformattedContentSize.Height > TileContentHeight;
 
         public bool CanResize { get; set; } = false;
 
@@ -514,11 +775,6 @@
 
         public int QueryOffsetIdx { get; set; } = -1;
 
-        public bool IsLoading {
-            get {
-                return HeadItem == null || HeadItem.CopyItem.Id == 0;
-            }
-        }
 
         public int TileIdx {
             get {
@@ -529,27 +785,10 @@
             }
         }
 
-        public bool IsFileListItem {
-            get {
-                if (HeadItem == null) {
-                    return false;
-                }
-                return HeadItem.CopyItemType == MpCopyItemType.FileList;
-            }
-        }
+        public bool IsFileListItem => ItemType == MpCopyItemType.FileList;
 
-        public bool IsTextItem {
-            get {
-                if (HeadItem == null) {
-                    return false;
-                }
-                return //HeadItem.CopyItemType == MpCopyItemType.Csv ||
-                        //HeadItem.CopyItemType == MpCopyItemType.Html ||
-                        HeadItem.CopyItemType == MpCopyItemType.Text;
-            }
-        }
+        public bool IsTextItem => ItemType == MpCopyItemType.Text;
 
-        public bool IsAnyBusy => Items.Any(x => x.IsBusy) || IsBusy;
 
         public bool IsFlipping { get; set; } = false;
 
@@ -575,19 +814,6 @@
             }
         }
 
-        public string MultiSelectedOrderIdxDisplayValue {
-            get {
-                if (MpMainWindowViewModel.Instance == null || Parent == null || !IsSelected) {
-                    return string.Empty;
-                }
-                int multiIdx = Parent.GetSelectionOrderIdxForItem(this);
-                if (multiIdx < 0) {
-                    return string.Empty;
-                }
-                multiIdx++;
-                return multiIdx.ToString();
-            }
-        }
 
         public bool IsDroppingOntoNotepad { get; set; } = false;
 
@@ -596,33 +822,29 @@
         public IDataObject DragDataObject { get; set; }
 
         //[MpDependsOnChild("IsItemDragging")]
-        public bool IsAnyItemDragging => Items.Any(x => x.IsItemDragging);
+        public bool IsAnyItemDragging => IsItemDragging;
 
         public bool IsCurrentDropTarget { get; set; } = false;
 
-        [MpDependsOnChild("IsContextMenuOpen")]
-        public bool IsAnyItemContextMenuOpened => Items.Any(x => x.IsContextMenuOpen);
+        public bool IsAnyItemContextMenuOpened => IsContextMenuOpen;
 
-        public bool IsAnySelected => Items.Any(x => x.IsSelected);
+        public bool IsAnySelected => IsSelected;
 
-        public bool IsAnyHoveringOverItem => Items.Any(x => x.IsHovering);
-        public bool HasTemplates => Items.Any(x => x.HasTemplates);
+        public bool IsAnyHoveringOverItem => IsHovering;
 
-        public int Count => Items.Count;
 
         public bool IsContentReadOnly { get; set; } = true;
 
-        public bool IsTitleReadOnly => Items.All(x => x.IsTitleReadOnly);
 
         public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
         //public bool IsAnyEditingContent => Items.Any(x => x.IsEditingContent);
 
        // public bool IsAnyEditingTitle => Items.Any(x => x.IsEditingTitle);
 
-        public bool IsAnyEditingTemplate => Items.Any(x => x.IsEditingTemplate);
+        public bool IsAnyEditingTemplate => IsEditingTemplate;
 
-        public bool IsAnyPasting => Items.Any(x => x.IsPasting);
-        public bool IsAnyPastingTemplate => Items.Any(x => x.IsPasting && x.HasTemplates);
+        public bool IsAnyPasting => IsPasting;
+        public bool IsAnyPastingTemplate => IsPasting && HasTemplates;
 
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -643,116 +865,184 @@
 
         public bool AllowMultiSelect { get; set; } = false;
 
-        [MpAffectsChild]
-        [MpAffectsSibling]
-        [MpDependsOnChild("IsSelected")]
-        public bool IsSelected { //get; set; }
-            get {
-                return Items.Any(x => x.IsSelected);
-            }
-            set {
-                if (value) {
-                    if (!IsSelected) {
-                        if (Parent.IsSelectionReset) {
-                            if (HeadItem != null) {
-                                HeadItem.IsSelected = value;
-                            }
-                        } else {
-                            SubSelectAll();
-                        }
-                    }
-                } else {
-                    SelectedItems.ForEach(x => x.IsSelected = false);
-                }
-                OnPropertyChanged(nameof(TileBorderBrush));
-            }
-        }
-                
-
-        private bool _isHovering = false;
-        [MpDependsOnParent("IsScrolling")]
-        public bool IsHovering {
-            get {
-                return _isHovering;
-            }
-            set {
-                if (_isHovering != value) {
-                    _isHovering = value;
-                    OnPropertyChanged(nameof(IsHovering));
-                    OnPropertyChanged(nameof(TileBorderBrush));
-                    OnPropertyChanged(nameof(HoverItem));
-                    OnPropertyChanged(nameof(PrimaryItem));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
-                    OnPropertyChanged(nameof(IsDetailGridVisibile));
-                }
-            }
-        }
-
-
-        [MpDependsOnChild("IsPlaceholder")]
-        public bool IsPlaceholder {
-            get {
-                if (Parent == null || Items.Count == 0 ||  HeadItem == null || IsPinned) {
-                    return true;
-                }
-                return false;
-                //return RootCopyItem == null;
-            }
-        }
-
-        public int ItemIdx {
-            get {
-                if(Parent == null) {
-                    return 0;
-                }
-                return Parent.Items.IndexOf(this);
-            }
-        }
 
         public bool IsLoadMoreTile { get; set; } = false;
+
+        #endregion
+
+        #region Business Logic
+
+        public Uri QuillEditorUri => new Uri(Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/index.html"));
+
+        public string QuillEditorPath => Path.Combine(Environment.CurrentDirectory, "Resources/Html/Editor/index.html");
+
+        public string TemplateRichText { get; set; }
+
+        public string DetailText { get; set; }
+
+        #endregion
+
+        #region Icons
+
+        public string HotkeyIconSource {
+            get {
+                if (string.IsNullOrEmpty(ShortcutKeyString)) {
+                    return MpBase64Images.JoystickUnset;
+                }
+                return MpBase64Images.JoystickActive;
+            }
+        }
 
         #endregion
 
         #region Model
 
 
-        public MpCopyItemType ItemType {
-            get {
-                if(PrimaryItem == null) {
-                    return MpCopyItemType.None;
-                }
-                return PrimaryItem.CopyItemType;
-            }
-        }
         public DateTime CopyItemCreatedDateTime {
             get {
-                if (PrimaryItem == null) {
+                if (CopyItem == null) {
                     return DateTime.MinValue;
                 }
-                return PrimaryItem.CopyItemCreatedDateTime;
+                return CopyItem.CopyDateTime;
             }
         }
 
-        public string MergedItemData {
+        public string HotkeyIconTooltip {
             get {
-                return "This is a test".ToRichText();
+                if (string.IsNullOrEmpty(ShortcutKeyString)) {
+                    return @"Assign Shortcut";
+                }
+                return ShortcutKeyString;
             }
         }
 
-        public int HeadCopyItemId {
+        public string CopyItemTitle {
             get {
-                if(HeadItem == null) {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.Title;
+            }
+            set {
+                if (CopyItem != null && CopyItem.Title != value) {
+                    CopyItem.Title = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CopyItemTitle));
+                }
+            }
+        }
+
+        public MpCopyItemType ItemType {
+            get {
+                if (CopyItem == null) {
+                    return MpCopyItemType.None;
+                }
+                return CopyItem.ItemType;
+            }
+            set {
+                if (CopyItem != null && CopyItem.ItemType != value) {
+                    CopyItem.ItemType = value;
+                    OnPropertyChanged(nameof(ItemType));
+                }
+            }
+        }
+
+        public string CopyItemGuid {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.Guid;
+            }
+        }
+
+
+        public int CopyItemId {
+            get {
+                if (CopyItem == null) {
                     return 0;
                 }
-                return HeadItem.CopyItemId;
+                return CopyItem.Id;
+            }
+            set {
+                if (CopyItem != null && CopyItem.Id != value) {
+                    CopyItem.Id = value;
+                    OnPropertyChanged(nameof(CopyItemId));
+                }
             }
         }
 
-        //public MpCopyItem RootCopyItem { get; private set; }
-        
+        public int SourceId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.SourceId;
+            }
+        }
+
+        public string CopyItemData {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.ItemData;
+            }
+            set {
+                if (CopyItem != null && CopyItem.ItemData != value) {
+                    CopyItem.ItemData = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CopyItemData));
+                }
+            }
+        }
+
+
+        public int IconId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                if (CopyItem.IconId > 0) {
+                    return CopyItem.IconId;
+                }
+                if (SourceViewModel == null) {
+                    // BUG currently when plugin creates new content it is not setting source info
+                    // so return app icon
+                    return MpPreferences.ThisAppSource.PrimarySource.IconId;
+                }
+                return SourceViewModel.PrimarySource.IconId;
+            }
+            set {
+                if (IconId != value) {
+                    CopyItem.IconId = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IconId));
+                }
+            }
+        }
+
+        public string CopyItemHexColor {
+            get {
+                if (CopyItem == null || string.IsNullOrEmpty(CopyItem.ItemColor)) {
+                    return MpColorHelpers.GetRandomHexColor();
+                }
+                return CopyItem.ItemColor;
+            }
+            set {
+                if (CopyItemHexColor != value) {
+                    CopyItem.ItemColor = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CopyItemHexColor));
+                }
+            }
+        }
+
+
+        public MpCopyItem CopyItem { get; set; }
+
+
         #endregion
-
-
 
         #endregion
 
@@ -765,6 +1055,15 @@
 
         public event EventHandler<Point> OnScrollOffsetRequest;
         public event EventHandler<object> OnPastePortableDataObject;
+
+        public event EventHandler<double> OnScrollWheelRequest;
+        public event EventHandler OnFitContentRequest;
+        //public event EventHandler OnSubSelected;
+
+        public event EventHandler OnMergeRequest;
+        public event EventHandler<bool> OnUiResetRequest;
+        public event EventHandler OnClearTemplatesRequest;
+        public event EventHandler OnCreateTemplatesRequest;
         #endregion
 
         #region Static Builder
@@ -786,78 +1085,63 @@
 
         #region Public Methods
 
-        public async Task InitializeAsync(List<MpCopyItem> items, int queryOffset = -1) {
+        public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1) {
             PropertyChanged -= MpClipTileViewModel_PropertyChanged;
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
 
-            QueryOffsetIdx = queryOffset < 0 && items != null ? QueryOffsetIdx : queryOffset;
+            QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
+            
             IsBusy = true;
 
-            if(items != null && items.Count > 0 && !string.IsNullOrEmpty(items[0].RootCopyItemGuid)) {
-                // NOTE this ensures root item is first so it becomes the head
-                var headItem = items.FirstOrDefault(x => string.IsNullOrEmpty(x.RootCopyItemGuid));
-                if(headItem == null) {
-                    throw new Exception("There should be a root item...");
-                }
-                items.Remove(headItem);
-                items.Insert(0, headItem);
-            }
-            //if( items != null && items.Count > 0 && queryOffset >= 0) {
-            //    if(MpDataModelProvider.AllFetchedAndSortedCopyItemIds.FastIndexOf(items[0].Id) != queryOffset) {
-            //        Debugger.Break();
-            //    }
-            //}
-            Items.Clear();
-            if (items != null && items.Count > 0 && Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
+            if (ci != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
                 TileBorderWidth = uniqueWidth;
             } else {
                 TileBorderWidth = DefaultBorderHeight;
             }
 
-            if (items != null && items.Count > 0) {
-                for (int i = 0; i < items.Count; i++) {
-                    // Composite Sanity Check Start
-                    if(i > 0 && string.IsNullOrEmpty(items[i].RootCopyItemGuid)) {
-                        MpConsole.WriteLine("warning, initializing tile w/ head item " + items[0].CopyItemSourceGuid + " fragment item " + items[i].Guid + " did not have root guid set, fixing...");
-                        items[i].RootCopyItemGuid = items[0].Guid;
-                        await items[i].WriteToDatabaseAsync();
-                    }
-                    if (i > 0 && items[i].CompositeParentCopyItemId == 0 && !string.IsNullOrEmpty(items[i].RootCopyItemGuid)) {
-                        MpConsole.WriteLine("warning, initializing tile w/ head item " + items[0].CopyItemSourceGuid + " fragment item " + items[i].Guid + " did not have parent id set, fixing...");
-                        items[i].CompositeParentCopyItemId = items[0].Id;
-                        await items[i].WriteToDatabaseAsync();
-                    }
-                    if (i > 0 && items[i].CompositeSortOrderIdx == 0) {
-                        MpConsole.WriteLine("warning, initializing tile w/ head item " + items[0].CopyItemSourceGuid + " fragment item " + items[i].Guid + " did not have non-zero sort idx, fixing...");
-                        items[i].CompositeSortOrderIdx = i;
-                        await items[i].WriteToDatabaseAsync();
-                    }
-                    // Composite Sanity Check End
+            MpMessenger.Unregister<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
-                    var civm = await CreateContentItemViewModel(items[i]);
-                    Items.Add(civm);
-                }
-                OnPropertyChanged(nameof(QueryOffsetIdx)); 
-                //RequestUiUpdate();
+            //if (ci != null && ci.Source == null) {
+            //    ci.Source = await MpDb.GetItemAsync<MpSource>(ci.SourceId);
+            //}
+            CopyItem = ci;
 
-                //MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
+            IsNewAndFirstLoad = !MpMainWindowViewModel.Instance.IsMainWindowLoading;
+
+            TemplateCollection = new MpTemplateCollectionViewModel(this);
+            if (TitleSwirlViewModel == null) {
+                TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
             }
 
-            Items.ForEach(y => y.OnPropertyChanged(nameof(y.ItemSeparatorBrush)));
-            Items.ForEach(y => y.OnPropertyChanged(nameof(y.EditorHeight)));
+            await TitleSwirlViewModel.InitializeAsync();
 
-            OnPropertyChanged(nameof(Items));
+            DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
+
+            if (ItemType == MpCopyItemType.Image) {
+                DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
+                await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
+                OnPropertyChanged(nameof(HasDetectedObjects));
+            }
+
+            //RequestUiUpdate();
+            //OnPropertyChanged(nameof(EditorHeight));
+            OnPropertyChanged(nameof(ItemBorderBrush));
+            OnPropertyChanged(nameof(ShortcutKeyString));
+
+            MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
+
+
+            OnPropertyChanged(nameof(ItemSeparatorBrush));
+            OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(IsPlaceholder));
-            OnPropertyChanged(nameof(PrimaryItem));
             OnPropertyChanged(nameof(TrayX));
             OnPropertyChanged(nameof(TileBorderBrush));
             OnPropertyChanged(nameof(CanVerticallyScroll));
-            OnPropertyChanged(nameof(HeadItem));
             OnPropertyChanged(nameof(IsTextItem));
             OnPropertyChanged(nameof(IsFileListItem));
             
 
-            while (Items.Any(x=>x.IsAnyBusy)) {
+            while (TitleSwirlViewModel.IsBusy) {
                 await Task.Delay(100);
             }
 
@@ -865,24 +1149,10 @@
             RequestUiUpdate();
 
             MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
-            
-            if (HeadItem != null) {
-                // BUG titles not updating on load more
-                HeadItem.OnPropertyChanged(nameof(HeadItem.CopyItemTitle));
-            }
+
+            OnPropertyChanged(nameof(CopyItemTitle));
 
             IsBusy = false;
-        }
-
-        public async Task<MpContentItemViewModel> CreateContentItemViewModel(MpCopyItem ci) {
-            var civm = new MpContentItemViewModel(this);
-            await civm.InitializeAsync(ci);
-            return civm; 
-        }
-
-
-        public async Task UserPreparingDynamicPaste() {
-            await Task.Delay(1);
         }
 
         public void ResetSubSelection(bool clearEditing = true, bool reqFocus = false) {
@@ -895,71 +1165,68 @@
             }
         }
 
-        public void ClearSubHovering() {
-            foreach (var ivm in Items) {
-                ivm.IsHovering = false;
-            }
-        }
 
         public void SubSelectAll() {
             AllowMultiSelect = true;
-            foreach (var ivm in Items) {
-                ivm.IsSelected = true;
-            }
+            IsSelected = true;
             AllowMultiSelect = false;
         }
 
-        public void DoCommandSelection() {
-            //called before all commands (assuming passes CanExecute checks)
-            //to select all items if none are selected for tile based commands
-            if (!IsSelected) {
-                IsSelected = true;
-            }
-            if (SelectedItems.Count == 0) {
-                SubSelectAll();
-            }
-        }
-
-        public MpContentItemViewModel GetItemByCopyItemId(int copyItemId) {
-            foreach (var rtbvm in Items) {
-                if (rtbvm.CopyItem.Id == copyItemId) {
-                    return rtbvm;
-                }
-            }
-            return null;
-        }
-
-        public MpContentItemViewModel GetContentItemByCopyItemId(int ciid) {
-            return Items.Where(x => x.CopyItem.Id == ciid).FirstOrDefault();
-        }
 
         public string GetDetailText(MpCopyItemDetailType detailType) {
-            return HeadItem.GetDetailText(detailType);
-        }
-
-        public async Task UpdateSortOrderAsync(bool fromModel = false) {
-            if (fromModel) {
-                Items.Sort(x => x.CompositeSortOrderIdx);
-            } else {
-                for(int i = 0;i < Items.Count;i++) {
-                    var ivm = Items[i];
-                    ivm.CompositeSortOrderIdx = Items.IndexOf(ivm);
-                    if (ivm.CompositeSortOrderIdx == 0) {
-                        ivm.CompositeParentCopyItemId = 0;
-                    } else {
-                        ivm.CompositeParentCopyItemId = Items[0].CopyItemId;
-                    }
-                    await ivm.CopyItem.WriteToDatabaseAsync();
-                }
+            if (CopyItem == null) {
+                return string.Empty;
             }
-            RequestUiUpdate();
+
+            string info = string.Empty;
+            switch (detailType) {
+                //created
+                case MpCopyItemDetailType.DateTimeCreated:
+                    // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
+
+                    info = "Copied " + CopyItemCreatedDateTime.ToReadableTimeSpan();
+                    break;
+                //chars/lines
+                case MpCopyItemDetailType.DataSize:
+                    if (CopyItem.ItemType == MpCopyItemType.Image) {
+                        info = "(" + (int)itemSize.Width + "px) x (" + (int)itemSize.Height + "px)";
+                    } else if (CopyItem.ItemType == MpCopyItemType.Text) {
+                        info = cc + " chars | " + lc + " lines";
+                    } else if (CopyItem.ItemType == MpCopyItemType.FileList) {
+                        info = fc + " files | " + ds + " MB";
+                    }
+                    break;
+                //# copies/# pastes
+                case MpCopyItemDetailType.UsageStats:
+                    info = CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
+                    break;
+                case MpCopyItemDetailType.UrlInfo:
+                    if (SourceViewModel == null || SourceViewModel.UrlViewModel == null) {
+                        _detailIdx++;
+                        info = GetDetailText((MpCopyItemDetailType)_detailIdx);
+                    } else {
+                        info = SourceViewModel.UrlViewModel.UrlPath;
+                    }
+                    break;
+                case MpCopyItemDetailType.AppInfo:
+                    if (SourceViewModel == null || SourceViewModel.AppViewModel == null) {
+                        _detailIdx++;
+                        info = GetDetailText((MpCopyItemDetailType)_detailIdx);
+                    } else {
+                        info = SourceViewModel.AppViewModel.AppPath;
+                    }
+
+                    break;
+                default:
+                    info = "Unknown detailId: " + (int)detailType;
+                    break;
+            }
+
+            return info;
         }
 
         #region View Event Invokers
 
-        public void RequestListRefresh() {
-            CollectionViewSource.GetDefaultView(Items).Refresh();
-        }
 
         public void RequestScrollToHome() {
             OnScrollToHomeRequest?.Invoke(this, null);
@@ -986,6 +1253,31 @@
             OnPastePortableDataObject?.Invoke(this, portableDataObjectOrCopyItem);
         }
 
+        public void RequestFitContent() {
+            OnFitContentRequest?.Invoke(this, null);
+        }
+
+
+        public void RequestMerge() {
+            OnMergeRequest?.Invoke(this, null);
+        }
+        public void RequestUiReset() {
+            OnUiResetRequest?.Invoke(this, IsSelected);
+        }
+
+        public void RequestClearHyperlinks() {
+            OnClearTemplatesRequest?.Invoke(this, null);
+        }
+
+        public void RequestCreateHyperlinks() {
+            OnCreateTemplatesRequest?.Invoke(this, null);
+        }
+
+        public void RequestScrollWheelChange(double delta) {
+            OnScrollWheelRequest?.Invoke(this, delta);
+        }
+
+
         #endregion
 
         public void ClearSelection(bool clearEditing = true) {
@@ -994,24 +1286,22 @@
             if(clearEditing) {
                 ClearEditing();
             }
-            foreach(var civm in Items) {
-                civm.IsSelected = false;
-            }
         }
 
         public void ClearEditing() {
-            Items.ForEach(x => x.ClearEditing());
-            //OnPropertyChanged(nameof(IsContentReadOnly));
+            IsTitleReadOnly = true;
+            IsContentReadOnly = true;
+            TemplateCollection?.ClearAllEditing();
+            if (IsPasting) {
+                IsPasting = false;
+                //Parent.RequestUnexpand();
+            }
         }
 
         public async Task<string> GetSubSelectedPastableRichText(bool isToExternalApp = false) {
             if(IsTextItem) {
-                if (SelectedItems.Count == 0) {
-                    SubSelectAll();
-                }
-                bool isPastingTemplate = SelectedItems.Any(x => x.HasTemplates);
-                if (isPastingTemplate) {
-                    SelectedItems.Where(x => x.HasTemplates).ForEach(y => y.IsPasting = true);
+                if (HasTemplates) {
+                    IsPasting = true;
                     if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                     }
@@ -1021,14 +1311,11 @@
 
                 var sw = new Stopwatch();
                 sw.Start();
-                string rtf = string.Empty.ToRichText();
-                foreach (var rtbvm in SelectedItems) {
-                    if (rtbvm.HasTemplates) {
-                        string rtbvmrtf = rtbvm.TemplateRichText;
-                        rtf = rtf.ToFlowDocument().Combine(rtbvmrtf.ToFlowDocument(),null, true).ToRichText();
-                    } else {
-                        rtf = rtf.ToFlowDocument().Combine(rtbvm.CopyItem.ItemData.ToFlowDocument(),null, true).ToRichText();
-                    }
+                string rtf = string.Empty;
+                if(HasTemplates) {
+                    rtf = TemplateRichText;
+                } else {
+                    rtf = CopyItemData.ToFlowDocument().ToRichText();
                 }
                 sw.Stop();
                 MpConsole.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
@@ -1045,30 +1332,27 @@
 
         public async Task FillAllTemplates() {
             bool hasExpanded = false;
-            foreach (var rtbvm in SelectedItems) {
-                rtbvm.IsPasting = true;
-                if (rtbvm.HasTemplates) {
-                    rtbvm.IsSelected = true;
-                    if (!hasExpanded) {
-                        //tile will be shrunk in on completed of hide window
-                        rtbvm.Parent.IsContentReadOnly = false;
-                        //rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
-                        rtbvm.TemplateCollection.UpdateCommandsCanExecute();
-                        rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.Items));
-                        rtbvm.TemplateCollection.OnPropertyChanged(nameof(rtbvm.TemplateCollection.HasMultipleTemplates));
-                        hasExpanded = true;
-                    }
-                    rtbvm.TemplateCollection.Items[0].IsSelected = true;
-                    rtbvm.TemplateRichText = null;
-                    await Task.Run(async() => {
-                        while (string.IsNullOrEmpty(rtbvm.TemplateRichText)) {
-                            await Task.Delay(100);
-                        }
-                    });
-
-                    rtbvm.TemplateCollection.ClearSelection();
+            IsPasting = true;
+            if (HasTemplates) {
+                IsSelected = true;
+                if (!hasExpanded) {
+                    //tile will be shrunk in on completed of hide window
+                    IsContentReadOnly = false;
+                    //rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
+                    TemplateCollection.UpdateCommandsCanExecute();
+                    TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.Items));
+                    TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.HasMultipleTemplates));
+                    hasExpanded = true;
                 }
+                TemplateCollection.Items[0].IsSelected = true;
+                TemplateRichText = null;
+                await Task.Run(async () => {
+                    while (string.IsNullOrEmpty(TemplateRichText)) {
+                        await Task.Delay(100);
+                    }
+                });
 
+                TemplateCollection.ClearSelection();
             }
         }
 
@@ -1104,18 +1388,12 @@
             base.Dispose();
             PropertyChanged -= MpClipTileViewModel_PropertyChanged;
             ClearSelection();
-            Items.ForEach(x => x.Dispose());
-            Items.Clear();
+            TemplateCollection.Dispose();
+            TitleSwirlViewModel.Dispose();
         }
 
         #endregion
 
-        public override string ToString() {
-            if(IsPlaceholder) {
-                return "PLACEHOLDER";
-            }
-            return $"TILE ({TrayX})" + HeadItem.ToString();
-        }
 
         #endregion
 
@@ -1124,18 +1402,31 @@
         #region DB Overrides
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
-                if(Items.Any(x=>x.CopyItemId == ci.CompositeParentCopyItemId || ci.Id == x.CompositeParentCopyItemId)) {
-
+            if (e is MpShortcut sc) {
+                if (sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
+                    OnPropertyChanged(nameof(ShortcutKeyString));
+                }
+            } else if (e is MpImageAnnotation dio) {
+                if (dio.CopyItemId == CopyItemId) {
+                    MpHelpers.RunOnMainThread(async () => {
+                        if (DetectedImageObjectCollectionViewModel == null) {
+                            DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
+                        }
+                        await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
+                        OnPropertyChanged(nameof(HasDetectedObjects));
+                    });
                 }
             }
         }
 
         protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci && Items.Any(x => x.CopyItemId == ci.Id)) {
-                if (Parent.GetClipTileViewModelByGuid(ci.Guid) != this) {
-                    var itemToRemove = Items.FirstOrDefault(x => x.CopyItemId == ci.Id);
-                    await RemovContentItem(itemToRemove);
+            if (e is MpShortcut sc) {
+                if (sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
+                    OnPropertyChanged(nameof(ShortcutKeyString));
+                }
+            } else if (e is MpCopyItem ci && ci.Id == CopyItemId) {
+                if (ci.Id == CopyItemId) {
+
                 }
             }
         }
@@ -1144,9 +1435,21 @@
             if(MpDragDropManager.IsDragAndDrop) {
                 return;
             }
-            if(e is MpCopyItem ci && Items.Any(x=>x.CopyItemId == ci.Id)) {
-                var rcivm = Items.FirstOrDefault(x => x.CopyItemId == ci.Id);
-                await RemovContentItem(rcivm);
+            if(e is MpCopyItem ci && CopyItemId == ci.Id) {
+                if(IsPinned) {
+                    var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.CopyItemId == ci.Id);
+                    if (pctvm != null) {
+                        // Flag QueryOffsetIdx = -1 so it tray doesn't attempt to return it to tray
+                        pctvm.QueryOffsetIdx = -1;
+                        MpHelpers.RunOnMainThread(() => {
+                            Parent.ToggleTileIsPinnedCommand.Execute(pctvm);
+                        });
+                    }
+                } else {
+                    await MpDataModelProvider.RemoveQueryItem(ci.Id);
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                }
+                OnPropertyChanged(nameof(IsPlaceholder));
             }
         }
 
@@ -1156,54 +1459,40 @@
         #endregion
 
         #region Private Methods
-        private async Task RemovContentItem(MpContentItemViewModel rcivm) {
-            if(rcivm == null) {
-                return;
+
+        private void ReceivedDragDropManagerMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ItemDragBegin:
+                    if (IsSelected) {
+                        IsItemDragging = true;
+                    }
+                    break;
+                case MpMessageType.ItemDragEnd:
+                    IsItemDragging = false;
+                    break;
             }
-            Items.Remove(rcivm);
-
-            if (Items.Count == 0) {
-                //Parent.Items.Remove(this);
-
-                int qOffsetIdx = QueryOffsetIdx;
-                var ci = rcivm.CopyItem;
-
-                await MpDataModelProvider.RemoveQueryItem(ci.Id);
-                MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                while (Parent.IsAnyBusy) {
-                    await Task.Delay(100);
-                }
-                MpClipTileViewModel nsctvm = null;
-                if (qOffsetIdx < 0) {
-                    //not sure why this happens but it did in drag drop
-                } else if (Parent.Items.Any(x=>x.QueryOffsetIdx == qOffsetIdx)) {
-                    nsctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == qOffsetIdx);
-                } else if (Parent.Items.Any(x => x.QueryOffsetIdx == qOffsetIdx + 1)) {
-                    nsctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == qOffsetIdx + 1);
-                } else if (Parent.Items.Any(x => x.QueryOffsetIdx == qOffsetIdx - 1)) {
-                    nsctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == qOffsetIdx - 1);
-                } else if (Parent.Items.Any(x => x.QueryOffsetIdx == Parent.MinClipTrayQueryIdx)) {
-                    nsctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == Parent.MinClipTrayQueryIdx);
-                }
-                if(nsctvm != null) {
-                    nsctvm.IsSelected = true;
-                }
-
-                var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.HeadCopyItemId == ci.Id);
-                if (pctvm != null) {
-                    // Flag QueryOffsetIdx = -1 so it tray doesn't attempt to return it to tray
-                    pctvm.QueryOffsetIdx = -1;
-                    MpHelpers.RunOnMainThread(() => {
-                        Parent.ToggleTileIsPinnedCommand.Execute(pctvm);
-                    });
-                }
-            } else {
-
-                MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                //RequestListRefresh();
-            }
-            OnPropertyChanged(nameof(IsPlaceholder));
         }
+
+        private void UpdateDetails() {
+            _detailIdx = 1;
+            switch (CopyItem.ItemType) {
+                case MonkeyPaste.MpCopyItemType.Image:
+                    var bmp = CopyItem.ItemData.ToBitmapSource();
+                    itemSize = new Size(bmp.Width, bmp.Height);
+                    break;
+                case MonkeyPaste.MpCopyItemType.FileList:
+                    var fl = MpCopyItemMerger.GetFileList(CopyItem);
+                    fc = fl.Count;
+                    ds = MpHelpers.FileListSize(fl.ToArray());
+                    break;
+                case MonkeyPaste.MpCopyItemType.Text:
+                    lc = MpWpfStringExtensions.GetRowCount(CopyItem.ItemData.ToPlainText());
+                    cc = CopyItem.ItemData.ToPlainText().Length;
+                    itemSize = UnformattedContentSize;//CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                    break;
+            }
+        }
+
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
                 case nameof(IsAnyBusy):
@@ -1224,6 +1513,16 @@
                             Parent.ClearPinnedSelection(false);
                             Parent.RequestScrollIntoView(this);
                         }
+                        if(Parent.SelectedItem != this) {
+                            Parent.SelectedItem = this;
+                        }
+
+                        if (!IsTitleFocused) {
+                            IsContentFocused = true;
+                        }
+                        if (!Parent.IsRestoringSelection) {
+                            Parent.StoreSelectionState(this);
+                        }
                     } else {
                         if (IsFlipped) {
                             Parent.FlipTileCommand.Execute(this);
@@ -1237,8 +1536,20 @@
                         //LastSelectedDateTime = DateTime.MinValue;
                         //ClearSelection();
                     }
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.ItemSeparatorBrush)));
+                    
+
+                    Parent.NotifySelectionChanged();
+                    OnPropertyChanged(nameof(ItemSeparatorBrush));
                     OnPropertyChanged(nameof(TileBorderBrush));
+                    break;
+                case nameof(CopyItem):
+                    if (CopyItem == null) {
+                        break;
+                    }
+                    OnPropertyChanged(nameof(CopyItemData));
+                    OnPropertyChanged(nameof(CurrentSize));
+                    UpdateDetails();
+                    RequestUiUpdate();
                     break;
                 case nameof(IsFlipping):
                     if (IsFlipping) {
@@ -1257,7 +1568,7 @@
                     OnPropertyChanged(nameof(TileBorderBrush));
                     break;
                 case nameof(TileBorderWidth):
-                    if (HeadItem != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
+                    if (Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
                         //this occurs when mainwindow is resized and user gives tile unique width
                         Parent.PersistentUniqueWidthTileLookup[QueryOffsetIdx] = TileBorderWidth;
                     }
@@ -1268,52 +1579,89 @@
                     OnPropertyChanged(nameof(IsPlaceholder));
                     break;
                 case nameof(IsContentReadOnly):
-                    //Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsContentReadOnly)));
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
-
-                    //Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsEditingContent)));
-                    //MpClipTrayViewModel.Instance.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlaceholder)));
-                    //OnPropertyChanged(nameof(TileBorderWidth));
-                    //OnPropertyChanged(nameof(PinButtonVisibility));
-
-                    //Parent.OnPropertyChanged(nameof(Parent.IsAnyTileExpanded));
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
 
                     OnPropertyChanged(nameof(HorizontalScrollbarVisibility));
                     OnPropertyChanged(nameof(VerticalScrollbarVisibility));
-                    //if (IsContentReadOnly) {
-                    //    Items.ForEach(x => x.ClearEditing());
-                    //}
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
-
+                    OnPropertyChanged(nameof(EditorHeight));
                     OnPropertyChanged(nameof(CanVerticallyScroll));
                     IsSubSelectionEnabled = !IsContentReadOnly;
                     OnPropertyChanged(nameof(IsSubSelectionEnabled));
-                    break;
-                case nameof(Items):
-                    OnPropertyChanged(nameof(PrimaryItem));
-                    break;
-                case nameof(TrayX):
-                    //if (Parent.IsLoadingMore) {
-                    //    return;
-                    //}
-                    //if (QueryOffsetIdx == Parent.TailQueryIdx) {
-                    //    double screenLeft = TrayX - Parent.ScrollOffset;
-                    //    if (screenLeft < Parent.ClipTrayScreenWidth) {
-                    //        Parent.LoadMoreClipsCommand.Execute(1);
-                    //    }
-                    //} else if (QueryOffsetIdx == Parent.HeadQueryIdx) {
-                    //    double screenRight = TrayX - Parent.ScrollOffset + TileBorderWidth;
-                    //    if (screenRight > 0) {
-                    //        Parent.LoadMoreClipsCommand.Execute(-1);
-                    //    }
-                    //}
+                    if(!IsContentReadOnly) {
+                        Parent.RequestScrollIntoView(this);
+                    }
                     break;
                 case nameof(IsContentFocused):
                     if(IsContentFocused) {
                         if(IsAnyEditingTemplate) {
-                            HeadItem.TemplateCollection.Items.FirstOrDefault(x => x.IsEditingTemplate).FinishEditTemplateCommand.Execute(null);
+                            TemplateCollection.Items.FirstOrDefault(x => x.IsEditingTemplate).FinishEditTemplateCommand.Execute(null);
                         }
+                    }
+                    break;
+
+                case nameof(IsEditingTitle):
+                    if (IsEditingTitle) {
+                        if (!IsSelected) {
+                            IsSelected = true;
+                        }
+                        if (!IsTitleFocused) {
+                            IsTitleFocused = true;
+                        }
+                    } else {
+                        IsTitleFocused = false;
+                    }
+                    break;
+                case nameof(IsTitleFocused):
+                    if (IsTitleFocused) {
+                        if (!IsEditingTitle) {
+
+                        }
+                    }
+                    break;
+                case nameof(IsContextMenuOpen):
+                    OnPropertyChanged(nameof(ItemBorderBrushRect));
+                    //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
+                    OnPropertyChanged(nameof(TileBorderBrushRect));
+                    OnPropertyChanged(nameof(IsAnyItemContextMenuOpened));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyTileContextMenuOpened));
+                    break;
+                case nameof(IsItemDragging):
+                    //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
+                    if (IsItemDragging) {
+                        StartAnimation();
+                    } else {
+                        StopAnimation();
+                    }
+                    OnPropertyChanged(nameof(ItemBorderBrushRect));
+                    OnPropertyChanged(nameof(ItemBorderBrush));
+                    OnPropertyChanged(nameof(TileBorderBrushRect));
+                    OnPropertyChanged(nameof(IsAnyItemDragging));
+                    break;
+                case nameof(IsHovering):
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    OnPropertyChanged(nameof(ItemBorderBrushHexColor));
+                    OnPropertyChanged(nameof(ItemBorderBrushThickness));
+                    OnPropertyChanged(nameof(ItemBackgroundHexColor));
+                    break;
+                case nameof(ShortcutKeyString):
+                    OnPropertyChanged(nameof(HotkeyIconSource));
+                    OnPropertyChanged(nameof(HotkeyIconTooltip));
+                    break;
+                case nameof(HasModelChanged):
+                    if (HasModelChanged) {
+                        Task.Run(async () => {
+                            await CopyItem.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
+                    }
+                    break;
+                case nameof(CopyItemHexColor):
+                    if (TitleSwirlViewModel != null) {
+                        //is null on init when CopyItem is set
+                        MpHelpers.RunOnMainThread(async () => {
+                            await TitleSwirlViewModel.InitializeAsync();
+                        });
                     }
                     break;
             }
@@ -1329,162 +1677,50 @@
                 ClearEditing();
             }
         }
+
+        private void StartAnimation() {
+            return;
+            if (_timer == null) {
+                _timer = new DispatcherTimer();
+                _timer.Interval = TimeSpan.FromMilliseconds(300);
+                _timer.Tick += _timer_Tick;
+            }
+            MpMeasurements.Instance.DottedBorderRect = MpMeasurements.Instance.DottedBorderDefaultRect;
+
+            _timer.Start();
+        }
+
+        private void _timer_Tick(object sender, EventArgs e) {
+            Rect dbr = MpMeasurements.Instance.DottedBorderRect;
+            dbr.Location = new Point(dbr.X + 5, dbr.Y);
+            if (dbr.Location.X >= dbr.Width) {
+                dbr.Location = new Point(0, dbr.Y);
+            }
+            //MpConsole.WriteLine("Border Brush loc: " + dbr.Location);
+            MpMeasurements.Instance.DottedBorderRect = dbr;
+            OnPropertyChanged(nameof(ItemBorderBrushRect));
+            OnPropertyChanged(nameof(ItemBorderBrush));
+        }
+
+        private void StopAnimation() {
+            return;
+            MpMeasurements.Instance.DottedBorderRect = MpMeasurements.Instance.DottedBorderDefaultRect;
+            OnPropertyChanged(nameof(ItemBorderBrushRect));
+            OnPropertyChanged(nameof(ItemBorderBrush));
+            _timer.Stop();
+        }
         #endregion
 
         #region Commands
-
+        public ICommand ChangeColorCommand => new RelayCommand<Brush>(
+            (b) => {
+                CopyItemHexColor = b.ToHex();
+            });
         public ICommand SendSubSelectedToEmailCommand => new RelayCommand(
             () => {
-                MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, HeadItem.CopyItemTitle, HeadItem.CopyItemData.ToPlainText()));
+                MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemData.ToPlainText()));
             });
 
-        public ICommand ScrollUpCommand => new RelayCommand(
-             () => {
-                 if(SelectedItems.Count == 0) {
-                     ResetSubSelection(false);
-                 }
-                 int selectedIdx = Items.IndexOf(SelectedItems[0]);
-                 while(selectedIdx >= 0) {
-                     if (Items[selectedIdx].IsScrolledToHome) {
-                         selectedIdx--;
-                         if(selectedIdx < 0) {
-                             break;
-                         }
-                         Items[selectedIdx].IsSelected = true;
-                         Items[selectedIdx].ScrollToEndCommand.Execute(null);
-                     } else {
-                         break;
-                     }
-                 }
-                 if(selectedIdx >= 0) {
-                     Items[selectedIdx].ScrollUpCommand.Execute(null);
-                 }
-             },
-             ()=>IsSelected);
-
-        public ICommand ScrollDownCommand => new RelayCommand(
-            () => {
-                if (SelectedItems.Count == 0) {
-                    ResetSubSelection(false);
-                }
-                int selectedIdx = Items.IndexOf(SelectedItems[0]);
-                while (selectedIdx >= Items.Count - 1) {
-                    if (Items[selectedIdx].IsScrolledToEnd) {
-                        selectedIdx++;
-                        if (selectedIdx >= Items.Count) {
-                            break;
-                        }
-                        Items[selectedIdx].IsSelected = true;
-                        Items[selectedIdx].ScrollToHomeCommand.Execute(null);
-                    } else {
-                        break;
-                    }
-                }
-                if (selectedIdx < Items.Count) {
-                    Items[selectedIdx].ScrollDownCommand.Execute(null);
-                }
-            }, () => IsSelected);
-
-        //public ICommand ToggleReadOnlyCommand => new RelayCommand(
-        //    () => {
-        //        if(!IsSelected && IsReadOnly) {
-        //            ResetSubSelection(false);
-        //        }
-        //        IsReadOnly = !IsReadOnly;
-        //    });
-
-        private RelayCommand _editTitleCommand;
-        public ICommand EditTitleCommand {
-            get {
-                if (_editTitleCommand == null) {
-                    _editTitleCommand = new RelayCommand(EditTitle, CanEditTitle);
-                }
-                return _editTitleCommand;
-            }
-        }
-        private bool CanEditTitle() {
-            if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                return false;
-            }
-            return Parent.SelectedItems.Count == 1 &&
-                   SelectedItems.Count <= 1;
-        }
-        private void EditTitle() {
-
-            PrimaryItem.EditSubTitleCommand.Execute(null);
-        }
-
-
-        private RelayCommand _selectNextItemCommand;
-        public ICommand SelectNextItemCommand {
-            get {
-                if (_selectNextItemCommand == null) {
-                    _selectNextItemCommand = new RelayCommand(SelectNextItem, CanSelectNextItem);
-                }
-                return _selectNextItemCommand;
-            }
-        }
-        private bool CanSelectNextItem() {
-            return SelectedItems.Count > 0 &&
-                   SelectedItems.Any(x => VisibleItems.IndexOf(x) != VisibleItems.Count - 1);
-        }
-        private void SelectNextItem() {
-            var maxItem = SelectedItems.Max(x => VisibleItems.IndexOf(x));
-            ClearSelection();
-            VisibleItems[maxItem + 1].IsSelected = true;
-        }
-
-        private RelayCommand _selectPreviousItemCommand;
-        public ICommand SelectPreviousItemCommand {
-            get {
-                if (_selectPreviousItemCommand == null) {
-                    _selectPreviousItemCommand = new RelayCommand(SelectPreviousItem, CanSelectPreviousItem);
-                }
-                return _selectPreviousItemCommand;
-            }
-        }
-        private bool CanSelectPreviousItem() {
-            return SelectedItems.Count > 0 && SelectedItems.Any(x => VisibleItems.IndexOf(x) != 0);
-        }
-        private void SelectPreviousItem() {
-            var minItem = SelectedItems.Min(x => VisibleItems.IndexOf(x));
-            ClearSelection();
-            VisibleItems[minItem - 1].IsSelected = true;
-        }
-
-        private RelayCommand<object> _pasteSubSelectedClipsCommand;
-        public ICommand PasteSubSelectedClipsCommand {
-            get {
-                if (_pasteSubSelectedClipsCommand == null) {
-                    _pasteSubSelectedClipsCommand = new RelayCommand<object>(PasteSubSelectedClips, CanPasteSubSelectedClips);
-                }
-                return _pasteSubSelectedClipsCommand;
-            }
-        }
-        private bool CanPasteSubSelectedClips(object ptapId) {
-            return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
-                IsContentReadOnly &&
-                IsTitleReadOnly &&
-                !IsAnyPastingTemplate &&
-                !MpPreferences.IsTrialExpired;
-        }
-        private void PasteSubSelectedClips(object ptapId) {
-            if (ptapId != null && ptapId.GetType() == typeof(int) && (int)ptapId > 0) {
-                //when pasting to a user defined application
-                _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
-                _selectedPasteToAppPathViewModel = MpPasteToAppPathViewModelCollection.Instance.FindById((int)ptapId);
-            } else if (ptapId != null && ptapId.GetType() == typeof(IntPtr) && (IntPtr)ptapId != IntPtr.Zero) {
-                //when pasting to a running application
-                _selectedPasteToAppPathWindowHandle = (IntPtr)ptapId;
-                _selectedPasteToAppPathViewModel = null;
-            } else {
-                _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
-                _selectedPasteToAppPathViewModel = null;
-            }
-            //In order to paste the app must hide first 
-            //this triggers hidewindow to paste selected items
-            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(true);
-        }
 
         
 
@@ -1501,73 +1737,8 @@
             if (args == null || args.GetType() != typeof(string)) {
                 return;
             }
-            MpHelpers.OpenUrl(args.ToString() + System.Uri.EscapeDataString(HeadItem.CopyItem.ItemData.ToPlainText()));
+            MpHelpers.OpenUrl(args.ToString() + System.Uri.EscapeDataString(CopyItem.ItemData.ToPlainText()));
         }
-
-        private RelayCommand _deleteSubSelectedClipsCommand;
-        public ICommand DeleteSubSelectedClipsCommand {
-            get {
-                if (_deleteSubSelectedClipsCommand == null) {
-                    _deleteSubSelectedClipsCommand = new RelayCommand(DeleteSubSelectedClips, CanDeleteSubSelectedClips);
-                }
-                return _deleteSubSelectedClipsCommand;
-            }
-        }
-        private bool CanDeleteSubSelectedClips() {
-            return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
-                IsContentReadOnly &&
-                IsTitleReadOnly &&
-                !IsAnyPastingTemplate;
-        }
-        private void DeleteSubSelectedClips() {
-            int lastSelectedClipTileIdx = -1;
-            foreach (var ct in SelectedItems) {
-                lastSelectedClipTileIdx = VisibleItems.IndexOf(ct);
-                Items.Remove(ct);
-            }
-            ClearSelection();
-            if (VisibleItems.Count > 0) {
-                if (lastSelectedClipTileIdx <= 0) {
-                    VisibleItems[0].IsSelected = true;
-                } else if (lastSelectedClipTileIdx < VisibleItems.Count) {
-                    VisibleItems[lastSelectedClipTileIdx].IsSelected = true;
-                } else {
-                    VisibleItems[lastSelectedClipTileIdx - 1].IsSelected = true;
-                }
-            }
-        }
-
-        //public ICommand LinkTagToSubSelectedClipsCommand => new RelayCommand<MpTagTileViewModel>(
-        //    async (tagToLink) => {
-        //        bool isUnlink = tagToLink.IsLinked(SelectedItems[0].CopyItem);
-        //        foreach (var srtbvm in SelectedItems) {
-        //            if (isUnlink) {
-        //                tagToLink.RemoveClip(srtbvm);
-        //            } else {
-        //                tagToLink.AddClip(srtbvm);
-        //            }
-        //        }
-        //        await MpTagTrayViewModel.Instance.RefreshAllCounts();
-        //        await MpTagTrayViewModel.Instance.UpdateTagAssociation();
-        //    },
-        //    async (tagToLink) => {
-        //        //this checks the selected clips association with tagToLink
-        //        //and only returns if ALL selecteds clips are linked or unlinked 
-        //        if (tagToLink == null || SelectedItems == null || SelectedItems.Count == 0) {
-        //            return false;
-        //        }
-        //        if (SelectedItems.Count == 1) {
-        //            return true;
-        //        }
-        //        bool isLastClipTileLinked = await tagToLink.IsLinked(SelectedItems[0].CopyItem);
-        //        foreach (var srtbvm in SelectedItems) {
-        //            bool isLinked = await tagToLink.IsLinked(srtbvm);
-        //            if (isLinked != isLastClipTileLinked) {
-        //                return false;
-        //            }
-        //        }
-        //        return true;
-        //    });
 
         public ICommand RefreshDocumentCommand {
             get {
@@ -1581,106 +1752,35 @@
                     });
             }
         }
+
         public ICommand AssignHotkeyCommand => new RelayCommand(
-            () => {
-                SelectedItems[0].AssignHotkeyCommand.Execute(null);
-            },
-            () => SelectedItems.Count == 1);
-
-        public ICommand InvertSubSelectionCommand => new RelayCommand(
-            () => {
-                var sctvml = SelectedItems;
-                ClearSelection();
-                foreach (var vctvm in VisibleItems) {
-                    if (!sctvml.Contains(vctvm)) {
-                        vctvm.IsSelected = true;
-                    }
-                }
-            },
-            SelectedItems.Count != VisibleItems.Count);
-
-        public ICommand SpeakSubSelectedClipsAsyncCommand => new RelayCommand(
-            async () => {
-                await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                    var speechSynthesizer = new SpeechSynthesizer();
-                    speechSynthesizer.SetOutputToDefaultAudioDevice();
-                    string voiceName = speechSynthesizer.GetInstalledVoices()[3].VoiceInfo.Name;
-                    if (!string.IsNullOrEmpty(MpPreferences.SpeechSynthVoiceName)) {
-                        var voice = speechSynthesizer.GetInstalledVoices().Where(x => x.VoiceInfo.Name.ToLower().Contains(MpPreferences.SpeechSynthVoiceName.ToLower())).FirstOrDefault();
-                        if (voice != null) {
-                            voiceName = voice.VoiceInfo.Name;
-                        }
-                    }
-                    speechSynthesizer.SelectVoice(voiceName);
-
-                    speechSynthesizer.Rate = 0;
-
-                    EventHandler<SpeakCompletedEventArgs> speakCompleted = null;
-                    speakCompleted = (s, e) => {
-                        speechSynthesizer.SpeakCompleted -= speakCompleted;
-                        speechSynthesizer.Dispose();
-                    };
-                    speechSynthesizer.SpeakCompleted += speakCompleted;
-
-                    // Create a PromptBuilder object and append a text string.
-                    PromptBuilder promptBuilder = new PromptBuilder();
-
-                    foreach (var sctvm in SelectedItems) {
-                        //speechSynthesizer.SpeakAsync(sctvm.CopyItemPlainText);
-                        promptBuilder.AppendText(Environment.NewLine + sctvm.CopyItem.ItemData.ToPlainText());
-                    }
-
-                    // Speak the contents of the prompt asynchronously.
-                    speechSynthesizer.SpeakAsync(promptBuilder);
-
-                }, DispatcherPriority.Background);
-            },
-            () => {
-                return IsTextItem;
+            async() => {
+                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
+                    "Paste " + CopyItem.Title,
+                    MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand,
+                    ShortcutType, CopyItem.Id, ShortcutKeyString);
+                OnPropertyChanged(nameof(ShortcutKeyString));
             });
 
-        public ICommand DuplicateSubSelectedClipsCommand => new RelayCommand(
-            async () => {
-                var tempSubSelectedRtbvml = SelectedItems;
-                ClearSelection();
-                foreach (var srtbvm in tempSubSelectedRtbvml) {
-                    var clonedCopyItem = (MpCopyItem)await srtbvm.CopyItem.Clone(true);
-                    var rtbvm = await CreateContentItemViewModel(clonedCopyItem);
-                    Items.Add(rtbvm);
-                    rtbvm.IsSelected = true;
+        public ICommand CycleDetailCommand => new RelayCommand(
+            () => {
+                _detailIdx++;
+                if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
+                    _detailIdx = 1;
                 }
+
+                // TODO this should aggregate details over all sub items 
+                DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
             });
 
-        public ICommand SelectAllCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        SubSelectAll();
-                    });
-            }
-        }
+        public ICommand ToggleEditContentCommand => new RelayCommand(
+            () => {
+                if(!IsSelected && IsContentReadOnly) {
+                    Parent.SelectedItem = this;
+                }
+                IsContentReadOnly = !IsContentReadOnly;
 
-        public ICommand ChangeColorCommand {
-            get {
-                return new RelayCommand<Brush>(
-                    (b) => {
-                        DoCommandSelection();
-                        Items.ForEach(x => x.ChangeColorCommand.Execute(b));
-                    });
-            }
-        }
-
-        public ICommand CopyCommand {
-            get {
-                return new RelayCommand(
-                    () => {
-                        DoCommandSelection();
-                        var cil = Items.Select(x => x.CopyItem).ToList();
-                        //MpClipboardManager.Instance.CopyItemsToClipboard(cil);
-                    });
-            }
-        }
-
+            }, IsTextItem);
 
         #endregion
     }

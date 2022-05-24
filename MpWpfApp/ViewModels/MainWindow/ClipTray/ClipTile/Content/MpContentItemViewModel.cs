@@ -151,7 +151,7 @@ namespace MpWpfApp {
 
         public string ItemBackgroundHexColor {
             get {
-                if(CopyItemType == MpCopyItemType.FileList) {
+                if(ItemType == MpCopyItemType.FileList) {
                     if(IsHovering) {
                         return MpSystemColors.gainsboro;
                     }
@@ -176,7 +176,7 @@ namespace MpWpfApp {
         }
         public string ItemBorderBrushHexColor {
             get {
-                if (CopyItemType == MpCopyItemType.FileList) {
+                if (ItemType == MpCopyItemType.FileList) {
                     if (IsHovering) {
                         return MpSystemColors.black;
                     }
@@ -187,7 +187,7 @@ namespace MpWpfApp {
         }
         public double ItemBorderBrushThickness {
             get {
-                if (CopyItemType == MpCopyItemType.FileList) {
+                if (ItemType == MpCopyItemType.FileList) {
                     if (IsHovering) {
                         return 0.5;
                     }
@@ -215,7 +215,7 @@ namespace MpWpfApp {
         public Brush ItemSeparatorBrush {
             get {
                 if(//MpContentDropManager.Instance.IsDragAndDrop ||
-                    CopyItemType == MpCopyItemType.FileList ||
+                    ItemType == MpCopyItemType.FileList ||
                    Parent == null ||
                    Parent.Count == 1 ||
                    ItemIdx == Parent.Count - 1 ||
@@ -442,13 +442,10 @@ namespace MpWpfApp {
             set => LastSubSelectedDateTime = value;
         }
 
-        [MpAffectsParent]
         public bool IsSelected {  get; set; }
 
-        [MpAffectsParent]
         public bool IsHovering { get; set; } = false;
 
-        [MpAffectsParent]
         public bool IsContextMenuOpen { get; set; } = false;
 
         public bool IsTitleReadOnly { get; set; } = true;
@@ -608,7 +605,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpCopyItemType CopyItemType {
+        public MpCopyItemType ItemType {
             get {
                 if(CopyItem == null) {
                     return MpCopyItemType.None;
@@ -618,7 +615,7 @@ namespace MpWpfApp {
             set {
                 if(CopyItem != null && CopyItem.ItemType != value) {
                     CopyItem.ItemType = value;
-                    OnPropertyChanged(nameof(CopyItemType));
+                    OnPropertyChanged(nameof(ItemType));
                 }
             }
         }
@@ -782,7 +779,7 @@ namespace MpWpfApp {
 
             DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
 
-            if(CopyItemType == MpCopyItemType.Image) {
+            if(ItemType == MpCopyItemType.Image) {
                 DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
                 await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
                 OnPropertyChanged(nameof(HasDetectedObjects));

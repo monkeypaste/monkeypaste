@@ -212,15 +212,15 @@ namespace MpWpfApp {
                 while (MpClipTrayViewModel.Instance.IsRequery) {
                     await Task.Delay(100);
                 }
-                var civm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id);
-                if (civm != null) {
-                    while (civm.IsBusy || civm.Parent.IsBusy) {
+                var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ci.Id);
+                if (ctvm != null) {
+                    while (ctvm.IsBusy || ctvm.Parent.IsBusy) {
                         await Task.Delay(100);
                     }
-                    civm.Parent.ClearSelection();
-                    civm.IsSelected = true;
+                    ctvm.ClearSelection();
+                    ctvm.IsSelected = true;
 
-                    rtf = await civm.Parent.GetSubSelectedPastableRichText(isToExternalApp);
+                    rtf = await ctvm.GetSubSelectedPastableRichText(isToExternalApp);
                 }
             } else {
                 rtf = ci.ItemData.ToRichText();
@@ -318,14 +318,12 @@ namespace MpWpfApp {
             string pt = string.Empty;
             var sctfl = new List<string>();
 
-            foreach(var civm in ctvm.Items.OrderBy(x=>x.CompositeSortOrderIdx)) {
-                var sub_d = await GetCopyItemDataObjectAsync(civm.CopyItem, isDragDrop, targetHandleObj);
-                foreach(var sub_d_kvp in sub_d.DataFormatLookup) {
-                    if(!d.DataFormatLookup.ContainsKey(sub_d_kvp.Key)) {
-                        d.DataFormatLookup.Add(sub_d_kvp.Key, sub_d_kvp.Value);
-                    } else {
+            var sub_d = await GetCopyItemDataObjectAsync(ctvm.CopyItem, isDragDrop, targetHandleObj);
+            foreach (var sub_d_kvp in sub_d.DataFormatLookup) {
+                if (!d.DataFormatLookup.ContainsKey(sub_d_kvp.Key)) {
+                    d.DataFormatLookup.Add(sub_d_kvp.Key, sub_d_kvp.Value);
+                } else {
 
-                    }
                 }
             }
 

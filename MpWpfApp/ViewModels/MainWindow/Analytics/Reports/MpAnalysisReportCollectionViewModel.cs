@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpAnalysisReportCollectionViewModel : 
-        MpSelectorViewModelBase<MpContentItemViewModel,MpAnalysisReportViewModel> {
+        MpSelectorViewModelBase<MpClipTileViewModel, MpAnalysisReportViewModel> {
         #region Properties
 
         #region View Models
@@ -16,7 +16,7 @@ namespace MpWpfApp {
         #region Constructors
 
         public MpAnalysisReportCollectionViewModel() : base(null) { }
-        public MpAnalysisReportCollectionViewModel(MpContentItemViewModel parent) : base(parent) { }
+        public MpAnalysisReportCollectionViewModel(MpClipTileViewModel parent) : base(parent) { }
 
         #endregion
 

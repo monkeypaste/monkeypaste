@@ -16,7 +16,7 @@ using System.Diagnostics;
 
 namespace MpWpfApp {
     public class MpTemplateCollectionViewModel : 
-        MpSelectorViewModelBase<MpContentItemViewModel,MpTemplateViewModel>,
+        MpSelectorViewModelBase<MpClipTileViewModel,MpTextTemplateViewModel>,
         MpIMenuItemViewModel {
         #region Private Variables
         #endregion
@@ -24,18 +24,10 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public MpClipTileViewModel HostClipTileViewModel {
-            get {
-                if(Parent == null) {
-                    return null;
-                }
-                return Parent.Parent;
-            }
-        }
 
         public MpMenuItemViewModel MenuItemViewModel {
             get {
-                if(Parent == null) {
+                if(base.Parent == null) {
                     return null;
                 }
                 var mivm = new MpMenuItemViewModel();
@@ -112,8 +104,8 @@ namespace MpWpfApp {
         #region Constructors
         public MpTemplateCollectionViewModel() : base(null) { }
 
-        public MpTemplateCollectionViewModel(MpContentItemViewModel rtbvm) : base(rtbvm) {
-            HostClipTileViewModel.PropertyChanged += HostClipTileViewModel_PropertyChanged;
+        public MpTemplateCollectionViewModel(MpClipTileViewModel ctvm) : base(ctvm) {
+            Parent.PropertyChanged += HostClipTileViewModel_PropertyChanged;
             //templates are added in the CreateHyperlinks rtb extension
         }
 
@@ -135,8 +127,8 @@ namespace MpWpfApp {
         //}
 
 
-        public async Task<MpTemplateViewModel> CreateTemplateViewModel(MpTextTemplate cit) {
-            MpTemplateViewModel tvm = new MpTemplateViewModel(this);
+        public async Task<MpTextTemplateViewModel> CreateTemplateViewModel(MpTextTemplate cit) {
+            MpTextTemplateViewModel tvm = new MpTextTemplateViewModel(this);
             await tvm.InitializeAsync(cit);
             return tvm;
         }
@@ -147,7 +139,7 @@ namespace MpWpfApp {
 
         private void HostClipTileViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(HostClipTileViewModel.IsAnyPastingTemplate):
+                case nameof(Parent.IsAnyPastingTemplate):
                     //ResetAll();
                     break;
             }
@@ -174,14 +166,14 @@ namespace MpWpfApp {
 
 
         private void Ntvm_PropertyChanged(object sender, PropertyChangedEventArgs e) {
-            var thlvm = sender as MpTemplateViewModel;
+            var thlvm = sender as MpTextTemplateViewModel;
             switch(e.PropertyName) {
                 case nameof(thlvm.IsSelected):
                     if(thlvm.IsSelected) {
                         Items.Where(x => x != thlvm).ForEach(x => x.IsSelected = false);
                     }
                     OnPropertyChanged(nameof(SelectedItem));
-                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.IsDetailGridVisibile));
+                    Parent.OnPropertyChanged(nameof(Parent.IsDetailGridVisibile));
                     break;
                 case nameof(thlvm.IsEditingTemplate):
                     if(thlvm.IsEditingTemplate) {
@@ -198,7 +190,7 @@ namespace MpWpfApp {
                         thlvm.IsSelected = false;
                     }
                     OnPropertyChanged(nameof(IsAnyEditingTemplate));
-                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.IsDetailGridVisibile));
+                    Parent.OnPropertyChanged(nameof(Parent.IsDetailGridVisibile));
                     break;
             }
             UpdateCommandsCanExecute();
@@ -227,7 +219,7 @@ namespace MpWpfApp {
                                         @"{0}{1}",
                                         uniqueName.ToLower(),
                                         uniqueIdx);
-            string pt = Parent.CopyItem.ItemData.ToPlainText().ToLower();
+            string pt = base.Parent.CopyItem.ItemData.ToPlainText().ToLower();
             while (pt.Contains(testName) || Items.Any(x => x.TemplateName.ToLower() == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
@@ -249,7 +241,7 @@ namespace MpWpfApp {
 
         public override void Dispose() {
             base.Dispose();
-            HostClipTileViewModel.PropertyChanged -= HostClipTileViewModel_PropertyChanged;
+            Parent.PropertyChanged -= HostClipTileViewModel_PropertyChanged;
             foreach (var thlvm in Items) {
                 thlvm.Dispose();
                 thlvm.PropertyChanged -= Ntvm_PropertyChanged;
@@ -264,8 +256,8 @@ namespace MpWpfApp {
         #region Protected Methods
         protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                if(ci.Id == Parent.CopyItemId && Items != null) {
-                    foreach(var cit in Items) {
+                if(ci.Id == base.Parent.CopyItemId && base.Items != null) {
+                    foreach(var cit in base.Items) {
                         await MpDb.DeleteItemAsync<MpTextTemplate>(cit.TextTemplate);
                     }
                 }
@@ -283,14 +275,14 @@ namespace MpWpfApp {
         #region Selection Changed Handlers
 
         private void Ntvm_OnTemplateSelected(object sender, EventArgs e) {
-            var sthlvm = sender as MpTemplateViewModel;
+            var sthlvm = sender as MpTextTemplateViewModel;
             foreach (var thlvm in Items) {
                 if (thlvm != sthlvm) {
                     thlvm.IsSelected = false;
                 }
             }
             OnPropertyChanged(nameof(SelectedItem));
-            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.IsDetailGridVisibile));
+            Parent.OnPropertyChanged(nameof(Parent.IsDetailGridVisibile));
         }
 
         #endregion
@@ -308,32 +300,32 @@ namespace MpWpfApp {
             async (templateVmArg) => {
                 string templateGuid = string.Empty;
                 if(templateVmArg == null) {
-                    string templateName = Parent.Parent.SelectedPlainText;
+                    string templateName = Parent.SelectedPlainText;
                     if(string.IsNullOrWhiteSpace(templateName)) {
                         templateName = GetUniqueTemplateName();
                     }
                     var cit = await MpTextTemplate.Create(
-                        copyItemId: Parent.CopyItemId,
+                        copyItemId: base.Parent.CopyItemId,
                         templateName: templateName);
                     templateGuid = cit.Guid;
-                } else if (templateVmArg is MpTemplateViewModel tvm) {
+                } else if (templateVmArg is MpTextTemplateViewModel tvm) {
                     templateGuid = tvm.TextTemplateGuid;
                 } else {
                     return;
                 }
 
-                Parent.Parent.SelectedPlainText = "{t{"+templateGuid+"}t}";
+                Parent.SelectedPlainText = "{t{"+ templateGuid + "}t}";
 
                 var ctvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
                 if(ctvl == null) {
                     Debugger.Break();
                 }
-                var ctv = ctvl.FirstOrDefault(x => x.DataContext == Parent.Parent);
+                var ctv = ctvl.FirstOrDefault(x => x.DataContext == base.Parent.Parent);
                 if(ctv == null) {
                     Debugger.Break();
                 }
 
-                await MpMergedDocumentRtfExtension.LoadTemplates(ctv.Rtb);
+                await MpContentDocumentRtfExtension.LoadTemplates(ctv.Rtb);
 
                 if(templateVmArg == null) {
                     //for new templates go into edit mode by default
@@ -382,13 +374,13 @@ namespace MpWpfApp {
 
         public ICommand PasteTemplateCommand => new RelayCommand(
             () => {
-                string rtf = Parent.CopyItem.ItemData;
+                string rtf = base.Parent.CopyItem.ItemData;
                 MpConsole.WriteLine("Unmodified item rtf: ");
                 MpConsole.WriteLine(rtf);
                 foreach (var thlvm in Items) {
                     rtf = rtf.Replace(thlvm.TextTemplate.EncodedTemplate, thlvm.TemplateText);
                 }
-                Parent.TemplateRichText = rtf;
+                base.Parent.TemplateRichText = rtf;
                 MpConsole.WriteLine("Pastable rtf: ");
                 MpConsole.WriteLine(rtf);
             },

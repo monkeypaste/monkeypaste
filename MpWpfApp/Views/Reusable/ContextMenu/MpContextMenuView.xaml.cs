@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     
-    public partial class MpContextMenuView : ContextMenu, MpISingleton<MpContextMenu> {
+    public partial class MpContextMenuView : ContextMenu, MpISingleton<MpContextMenuView> {
         private static MpContextMenuView _instance;
         public static MpContextMenuView Instance => _instance ?? (_instance = new MpContextMenuView());
 

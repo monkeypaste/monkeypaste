@@ -9,14 +9,14 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpImageAnalysisCollectionViewModel  : MpViewModelBase<MpContentItemViewModel> {
+    public class MpImageAnalysisCollectionViewModel  : MpViewModelBase<MpClipTileViewModel> {
         public ObservableCollection<MpImageAnalysisViewModel> Items { get; set; } = new ObservableCollection<MpImageAnalysisViewModel>();
 
         public MpImageAnalysisCollectionViewModel() : base(null) {
             Items.Add(new MpImageAnalysisViewModel());
         }
 
-        public MpImageAnalysisCollectionViewModel(MpContentItemViewModel parent, string analysisData) : base (parent) {
+        public MpImageAnalysisCollectionViewModel(MpClipTileViewModel parent, string analysisData) : base (parent) {
             Items.Add(new MpImageAnalysisViewModel(this,analysisData));
         }
     }

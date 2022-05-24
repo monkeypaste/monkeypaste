@@ -56,7 +56,7 @@ namespace MpWpfApp {
 
                     new MpBootstrappedItem(typeof(MpActionCollectionViewModel)),
 
-                    new MpBootstrappedItem(typeof(MpContextMenu)),
+                    new MpBootstrappedItem(typeof(MpContextMenuView)),
 
                     new MpBootstrappedItem(typeof(MpDragDropManager)),
 

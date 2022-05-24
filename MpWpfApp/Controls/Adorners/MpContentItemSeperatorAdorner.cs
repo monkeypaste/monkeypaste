@@ -43,8 +43,6 @@ namespace MpWpfApp {
                 IsShowing = false;
             }
             IsShowing = false;
-            var civm = (AdornedElement as FrameworkElement).DataContext as MpContentItemViewModel;
-
             if (IsShowing) {
                 Visibility = Visibility.Visible;
                 foreach(var l in Lines) {

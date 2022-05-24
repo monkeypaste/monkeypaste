@@ -445,7 +445,9 @@ namespace MpWpfApp {
         private double _MIN_GLOBAL_DRAG_DIST = 20;
 
         private void GlobalHook_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (!MpMainWindowViewModel.Instance.IsMainWindowOpen && !MpMainWindowViewModel.Instance.IsMainWindowOpening && MpBootstrapperViewModelBase.IsLoaded) {
+            if (!MpMainWindowViewModel.Instance.IsMainWindowOpen && 
+                !MpMainWindowViewModel.Instance.IsMainWindowOpening && 
+                MpBootstrapperViewModelBase.IsLoaded) {
                 if (MpPreferences.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
                     if (e.Y <= MpPreferences.ShowMainWindowMouseHitZoneHeight) {
                         MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);

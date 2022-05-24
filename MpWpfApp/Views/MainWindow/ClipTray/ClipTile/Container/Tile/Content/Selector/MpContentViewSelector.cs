@@ -19,15 +19,15 @@ namespace MpWpfApp {
                 return null;
             }
 
-            var civm = item as MpContentItemViewModel;
-            if (civm == null) {
+            var ctvm = item as MpClipTileViewModel;
+            if (ctvm == null) {
                 return null;
             }
 
             string keyStr = "ContentTemplate";
-            switch(civm.CopyItemType) {
+            switch(ctvm.ItemType) {
                 case MpCopyItemType.Text:
-                    if (!MpContentItemViewModel.USING_BROWSER) {
+                    if (!MpClipTileViewModel.USING_BROWSER) {
                         //civm.CopyItemData.IsStringRichText()) {
                         keyStr = "Rtb" + keyStr;
                     } else {
@@ -36,7 +36,7 @@ namespace MpWpfApp {
                     //keyStr = "Rtb" + keyStr;
                     break;
                 default:
-                    keyStr = civm.CopyItemType.EnumToName() + keyStr;
+                    keyStr = ctvm.ItemType.EnumToName() + keyStr;
                     break;
             }
             var result = (container as FrameworkElement).GetVisualAncestor<Border>().Resources[keyStr] as DataTemplate;

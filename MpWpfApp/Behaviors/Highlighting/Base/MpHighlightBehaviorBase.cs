@@ -48,11 +48,11 @@ namespace MpWpfApp {
                 if(AssociatedObject == null) {
                     return int.MaxValue;
                 }
-                if(AssociatedObject.DataContext is MpContentItemViewModel civm) {
+                if(AssociatedObject.DataContext is MpClipTileViewModel civm) {
                     if(HighlightType == MpHighlightType.Content) {
-                        return -(civm.Parent.Items.Count-civm.ItemIdx);
+                        return -1;
                     }
-                    return -Priority - civm.Parent.Items.Count;
+                    return -Priority - 1;
                 }
                 return int.MaxValue;
             }

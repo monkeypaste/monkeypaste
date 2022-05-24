@@ -129,9 +129,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AttachedProperties\MpTextTemplateRtfExtension.cs" />
-    <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
-    <Compile Include="AttachedProperties\MpMergedDocumentRtfExtension.cs" />
+    <Compile Include="AttachedProperties\MpContentDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
     <Compile Include="AttachedProperties\MpEncodedDocumentExtension.cs" />
     <Compile Include="AttachedProperties\MpTextSelectionRangeExtension.cs" />
@@ -229,7 +227,6 @@
     <Compile Include="Converters\MpDbImageIdToIconConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
     <Compile Include="Converters\MpEnumToItemSourceLabelsConverter.cs" />
-    <Compile Include="Converters\MpFileContentItemViewModelToImageSourceConverter.cs" />
     <Compile Include="Converters\MpFilePathToFolderPathConverter.cs" />
     <Compile Include="Converters\MpIsHexColorBrightToBlackOrWhiteBrushConverter.cs" />
     <Compile Include="Converters\MpIsNotNullToVisibilityConverter.cs" />
@@ -390,10 +387,10 @@
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
+    <None Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpContactTemplateViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTemplateViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTextTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Base\MpActionViewModelBase.cs" />
@@ -410,7 +407,6 @@
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\MpThemeColors.cs" />
-    <Compile Include="Views\Base\MpContextMenu.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
     <Compile Include="Views\Base\MpIRectViewModel.cs" />
     <Compile Include="Views\Base\MpTextElement.cs" />
@@ -592,9 +588,6 @@
       <DependentUpon>MpImageItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Selector\MpContentViewSelector.cs" />
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Hyperlinks\MpTextHyperlink.xaml.cs">
-      <DependentUpon>MpTextHyperlink.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\Edit\MpRtbEditToolbarView.xaml.cs">
       <DependentUpon>MpRtbEditToolbarView.xaml</DependentUpon>
     </Compile>
@@ -818,10 +811,6 @@
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\MpImageItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Hyperlinks\MpTextHyperlink.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

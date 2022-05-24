@@ -124,24 +124,24 @@ namespace MonkeyPaste {
             QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
         }
 
-        public static async Task<List<List<MpCopyItem>>> FetchCopyItemRangeAsync(
+        public static async Task<List<MpCopyItem>> FetchCopyItemRangeAsync(
             int startIndex, 
             int count) {
             var fetchRange = AllFetchedAndSortedCopyItemIds.GetRange(startIndex, count);
-            var items = await GetCopyItemsByRootIdList(fetchRange);
+            var items = await GetCopyItemsByIdList(fetchRange);
             if (items.Count == 0 && startIndex + count < AllFetchedAndSortedCopyItemIds.Count) {
                 MpConsole.WriteTraceLine("Bad data detected for ids: " + string.Join(",", fetchRange));
             }
             return items;
         }
 
-        public static async Task<List<List<MpCopyItem>>> FetchCopyItemsByQueryIdxList(
+        public static async Task<List<MpCopyItem>> FetchCopyItemsByQueryIdxList(
             List<int> copyItemQueryIdxList) {
             var fetchRootIds = AllFetchedAndSortedCopyItemIds
                                 .Select((val, idx) => (val, idx))
                                 .Where(x => copyItemQueryIdxList.Contains(x.idx))
                                 .Select(x => x.val).ToList();
-            var items = await GetCopyItemsByRootIdList(fetchRootIds);
+            var items = await GetCopyItemsByIdList(fetchRootIds);
             return items;
         }
 
@@ -544,24 +544,6 @@ namespace MonkeyPaste {
             return result.OrderBy(x=>ciida.IndexOf(x.Id)).ToList();
         }
 
-        public static async Task<List<List<MpCopyItem>>> GetCopyItemsByRootIdList(List<int> ciida) {
-            if(ciida == null || ciida.Count == 0) {
-                return new List<List<MpCopyItem>>();
-            }
-            string whereStr = string.Join(" or ", ciida.Select(x => string.Format(@"pk_MpCopyItemId={0} or fk_ParentCopyItemId={0}", x)));
-            string query = $"select * from MpCopyItem where {whereStr}";
-            var queryResult = await MpDb.QueryAsync<MpCopyItem>(query);
-            var result = queryResult
-                            .Where(x => x.CompositeParentCopyItemId == 0)
-                            .Select(x => queryResult
-                                            .Where(y => y.Id == x.Id || y.CompositeParentCopyItemId == x.Id)
-                                            .OrderBy(x=>x.CompositeSortOrderIdx).ToList()).ToList();
-            if(result.Count != ciida.Count) {
-                var missingRootIds = ciida.Where(x => result.All(y => y.All(z => z.Id != x)));
-                MpConsole.WriteTraceLine("Fetch query mismatch, (ignoring) missing id's: " + string.Join(",", missingRootIds));
-            }
-            return result;
-        }
 
         public static async Task<MpCopyItem> GetCopyItemByGuid(string cig) {
             string query = "select * from MpCopyItem where MpCopyItemGuid=?";
@@ -614,23 +596,6 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<List<MpCopyItem>> GetCompositeChildrenAsync(int ciid) {
-            string query = string.Format(@"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
-            var result = await MpDb.QueryAsync<MpCopyItem>(query);
-            return result;
-        }
-
-        public static List<MpCopyItem> GetCompositeChildren(int ciid) {
-            string query = string.Format(@"select * from MpCopyItem where fk_ParentCopyItemId={0} order by CompositeSortOrderIdx", ciid);
-            var result = MpDb.Query<MpCopyItem>(query);
-            return result;
-        }
-
-        public static async Task<int> GetCompositeChildCountAsync(int ciid) {
-            string query = @"select count(*) from MpCopyItem where fk_ParentCopyItemId=? order by CompositeSortOrderIdx";
-            var result = await MpDb.QueryScalarAsync<int>(query, ciid);
-            return result;
-        }
 
         #endregion MpCopyItem
 
@@ -1121,14 +1086,13 @@ namespace MonkeyPaste {
 
             switch (tagId) {
                 case MpTag.RecentTagId:
-                    result = result.Where(x => x.CompositeParentCopyItemId == 0)
+                    result = result
                                  .OrderByDynamic(isDescending, x => x.CopyDateTime)
                                  .Take(count)
                                  .Skip(start)
                                  .ToList();
                     return result;
                 case MpTag.AllTagId:
-                    result = result.Where(x => x.CompositeParentCopyItemId == 0).ToList();
                     break;
                 default:
                     var citl = await MpDb.GetItemsAsync<MpCopyItemTag>();
@@ -1140,9 +1104,7 @@ namespace MonkeyPaste {
                                          tagId == cit.TagId
                                      select new { ci, cit })
                                   orderby value.cit.CopyItemSortIdx descending
-                                  select value.ci)
-                                                  .Where(x => x.CompositeParentCopyItemId == 0)
-                                                 .ToList();
+                                  select value.ci).ToList();
                     } else {
                         result = (from value in
                                     (from ci in result
@@ -1151,9 +1113,7 @@ namespace MonkeyPaste {
                                          tagId == cit.TagId
                                      select new { ci, cit })
                                   orderby value.cit.CopyItemSortIdx ascending
-                                  select value.ci)
-                                                  .Where(x => x.CompositeParentCopyItemId == 0)
-                                                 .ToList();
+                                  select value.ci).ToList();
                     }
                     break;
             }
@@ -1200,32 +1160,17 @@ namespace MonkeyPaste {
         public static async Task<MpCopyItem> RemoveQueryItem(int copyItemId) {
             //returns first child or null
             //return value is used to adjust dropIdx in ClipTrayDrop
-
+            await Task.Delay(1);
             if (!AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
                 //throw new Exception("Query does not contain item " + copyItemId);
                 return null;
             }
             int itemIdx = AllFetchedAndSortedCopyItemIds.IndexOf(copyItemId);
-            var ccil = await GetCompositeChildrenAsync(copyItemId);
-            if(ccil.Count > 0) {
-                for (int i = 0; i < ccil.OrderBy(x=>x.CompositeSortOrderIdx).Count(); i++) {
-                    if (i == 0) {
-                        ccil[i].CompositeParentCopyItemId = 0;
-                        AllFetchedAndSortedCopyItemIds[itemIdx] = ccil[i].Id;
-                        MpConsole.WriteLine($"QueryItem {copyItemId} at [{itemIdx}] replaced with first child {ccil[i].Id}");
-                    } else {
-                        ccil[i].CompositeParentCopyItemId = ccil[0].Id;
-                    }
-                    ccil[i].CompositeSortOrderIdx = i;
-                    await ccil[i].WriteToDatabaseAsync();
-                }
-            } else {
-                AllFetchedAndSortedCopyItemIds.Remove(copyItemId);
-            }
+            AllFetchedAndSortedCopyItemIds.Remove(copyItemId);
 
             MpConsole.WriteLine($"QueryItem {copyItemId} was removed from [{itemIdx}]");
 
-            return ccil.Count == 0 ? null : ccil[0];
+            return null;
         }
 
         public static void MoveQueryItem(int copyItemId, int newIdx) {

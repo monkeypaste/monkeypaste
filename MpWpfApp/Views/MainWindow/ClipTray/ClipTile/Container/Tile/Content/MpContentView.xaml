@@ -27,10 +27,10 @@
                              VerticalAlignment="Stretch"
                              HorizontalContentAlignment="Stretch"
                              VerticalContentAlignment="Stretch"
-                             local:MpMergedDocumentRtfExtension.HeadContentItemViewModel="{Binding HeadItem}"
-                             local:MpMergedDocumentRtfExtension.IsSelected="{Binding IsSelected,
-                                                                                     Mode=TwoWay}"
-                             local:MpMergedDocumentRtfExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
+                             local:MpContentDocumentRtfExtension.CopyItem="{Binding CopyItem}"
+                             local:MpContentDocumentRtfExtension.IsSelected="{Binding IsSelected,
+                                                                                      Mode=TwoWay}"
+                             local:MpContentDocumentRtfExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
                              local:MpTextSelectionRangeExtension.IsEnabled="{Binding IsTextItem}"
                              local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
                              AutoWordSelection="False"

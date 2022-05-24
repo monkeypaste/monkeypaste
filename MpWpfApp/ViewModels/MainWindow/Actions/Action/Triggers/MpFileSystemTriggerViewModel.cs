@@ -115,7 +115,7 @@ namespace MpWpfApp {
                 // NOTE this check maybe unnecessary. Rtf test was being generated onto desktop during startup and interfering w/ this trigger's lifecycle
                 return;
             }
-            MpHelpers.RunOnMainThread(async () => {
+            MpHelpers.RunOnMainThread((Func<Task>)(async () => {
                 MpCopyItem ci = null;
                 switch (e.ChangeType) {
                     case WatcherChangeTypes.Changed:
@@ -144,7 +144,7 @@ namespace MpWpfApp {
                         if(ci == null) {
                             return;
                         }
-                        bool isVisible = MpClipTrayViewModel.Instance.GetContentItemViewModelById(ci.Id) != null;
+                        bool isVisible = MpClipTrayViewModel.Instance.GetClipTileViewModelById((int)ci.Id) != null;
                         await ci.DeleteFromDatabaseAsync();
                         if(isVisible) {
                             MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
@@ -157,9 +157,9 @@ namespace MpWpfApp {
                         CopyItem = ci,
                         FileSystemChangeType = e.ChangeType
                     };
-                    await PerformAction(ao);
+                    await base.PerformAction(ao);
                 }
-            });
+            }));
         }
 
         #endregion

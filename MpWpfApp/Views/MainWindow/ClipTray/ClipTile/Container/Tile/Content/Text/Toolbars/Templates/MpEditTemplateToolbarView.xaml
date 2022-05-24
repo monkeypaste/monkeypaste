@@ -6,8 +6,8 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      mc:Ignorable="d"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     x:TypeArguments="local:MpTemplateViewModel"
-                     d:DataContext="{d:DesignInstance Type=local:MpTemplateViewModel,
+                     x:TypeArguments="local:MpTextTemplateViewModel"
+                     d:DataContext="{d:DesignInstance Type=local:MpTextTemplateViewModel,
                                                       IsDesignTimeCreatable=False}"
                      d:DesignHeight="50"
                      d:DesignWidth="700">

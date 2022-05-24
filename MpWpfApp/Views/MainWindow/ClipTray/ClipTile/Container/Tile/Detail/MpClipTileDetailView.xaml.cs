@@ -4,24 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.IO;
-using static System.Net.Mime.MediaTypeNames;
 using MonkeyPaste;
-using System.Windows.Media.Animation;
-using System.Globalization;
 
 namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpClipTileDetailView.xaml
     /// </summary>
-    public partial class MpClipTileDetailView : MpUserControl<MpContentItemViewModel> {
+    public partial class MpClipTileDetailView : MpUserControl<MpClipTileViewModel> {
         private Hyperlink h;
         public MpClipTileDetailView() {
             InitializeComponent();
@@ -83,12 +74,5 @@ namespace MpWpfApp {
             e.Handled = true;
         }
 
-        private void ClipTileToggleEditButton_MouseEnter(object sender, MouseEventArgs e) {
-            MpCursor.SetCursor(this,MpCursorType.Hand);
-        }
-
-        private void ClipTileToggleEditButton_MouseLeave(object sender, MouseEventArgs e) {
-            MpCursor.UnsetCursor(this);
-        }
     }
 }

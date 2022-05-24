@@ -449,6 +449,7 @@ namespace MpWpfApp {
                 return ((Application.Current.MainWindow != null &&
                       Application.Current.MainWindow.Visibility == Visibility.Visible &&
                       !IsShowingDialog &&
+                      !MpContextMenuView.Instance.IsOpen &&
                       !IsResizing &&
                       !IsMainWindowClosing &&
                       IsMainWindowOpen &&

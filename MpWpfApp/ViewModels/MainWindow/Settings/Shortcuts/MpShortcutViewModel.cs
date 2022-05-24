@@ -566,7 +566,7 @@ namespace MpWpfApp {
                         });
                     }
                 } else if (ShortcutType == MpShortcutType.PasteCopyItem || ShortcutType == MpShortcutType.PasteSelectedItems) {
-                    OnShortcutExecuted?.Invoke(this, MpClipTrayViewModel.Instance.PrimaryItem.PrimaryItem.CopyItem);
+                    OnShortcutExecuted?.Invoke(this, MpClipTrayViewModel.Instance.SelectedItem.CopyItem);
                 }
             },
             () => {

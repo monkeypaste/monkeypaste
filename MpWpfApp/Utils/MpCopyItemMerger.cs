@@ -102,15 +102,6 @@ namespace MpWpfApp {
                         } else {
                             fileList.Add(MpHelpers.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
                         }
-                        var ccil = MpDataModelProvider.GetCompositeChildren(CopyItem.Id);
-                        foreach (var cci in ccil) {
-                            if (forceType == MpCopyItemType.Image) {
-                                fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
-                            } else {
-                                fileList.Add(MpHelpers.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
-                            }
-                            op = Path.GetTempFileName(); //MpHelpers.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType : forceType), Title, baseDir);
-                        }
                         break;
                     case MpCopyItemType.Image:
                         if (forceType == MpCopyItemType.Text) {
