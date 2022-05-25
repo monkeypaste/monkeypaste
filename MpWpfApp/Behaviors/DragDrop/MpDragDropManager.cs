@@ -46,6 +46,8 @@ namespace MpWpfApp {
         }
 
         public static bool IsDraggingFromExternal { get; set; } = false;
+
+        
         public static object DragData { get; private set; }
 
         public static bool IsDropValid => CurDropTarget != null;
@@ -71,6 +73,8 @@ namespace MpWpfApp {
         public static MpIContentDropTarget CurDropTarget { get; private set; }
 
         public static bool IsDragAndDrop { get; private set; }
+
+        public static bool IsPreExternalTemplateDrop { get; set; }
 
         public static bool IsPerformingDrop { get; private set; }
 
@@ -228,12 +232,17 @@ namespace MpWpfApp {
                 bool wasExternalDrop = CurDropTarget is MpExternalDropBehavior;
 
                 if (wasExternalDrop) {
+                    
                     Application.Current.MainWindow.Activate();
                     Application.Current.MainWindow.Focus();
                     Application.Current.MainWindow.Topmost = true;
-
-                    MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
                     Application.Current.MainWindow.Top = 0;
+
+                    while (IsPreExternalTemplateDrop) {
+                        await Task.Delay(100);
+                    }
+                    MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+                    
                 }
 
                 IsPerformingDrop = false;
@@ -247,7 +256,7 @@ namespace MpWpfApp {
             UpdateCursor();
         }
         private static void Reset() {
-            IsCheckingForDrag = IsDragAndDrop = IsDraggingFromExternal = false;
+            IsCheckingForDrag = IsDragAndDrop = IsDraggingFromExternal = IsPreExternalTemplateDrop = false;
 
             _mouseDragCheckStartPosition = null;
             CurDropTarget = null;

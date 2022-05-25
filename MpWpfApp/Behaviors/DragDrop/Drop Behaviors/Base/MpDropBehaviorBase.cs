@@ -168,7 +168,6 @@ namespace MpWpfApp {
 
         #region External Drop Event Handlers
 
-
         public void OnDrop(object sender, DragEventArgs e) {
             if (e.Handled) {
                 return;

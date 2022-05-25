@@ -7,7 +7,6 @@
                      xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
                      xmlns:pcl="clr-namespace:MonkeyPaste"
                      xmlns:local="clr-namespace:MpWpfApp"
-                     
                      x:TypeArguments="local:MpTagTrayViewModel"
                      mc:Ignorable="d"
                      d:DataContext="{d:DesignInstance Type=local:MpTagTrayViewModel,
@@ -21,15 +20,16 @@
                   dd:DragDrop.IsDragSource="True"
                   dd:DragDrop.IsDropTarget="True"
                   BorderThickness="0"
-                  ItemsSource="{Binding AllTagViewModel, Converter={StaticResource ItemToItemsSourceConverter}}"
+                  ItemsSource="{Binding AllTagViewModel,
+                                        Converter={StaticResource ItemToItemsSourceConverter}}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:MpTagTileViewModel}"
                                           ItemsSource="{Binding Children}">
                     <local:MpTagTileTreeView IsTagTreeTile="True"
-                                                 Background="Transparent"
-                                                 DataContext="{Binding}" />
+                                             Background="Transparent"
+                                             DataContext="{Binding}" />
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
             <TreeView.ItemContainerStyle>

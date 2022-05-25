@@ -651,7 +651,6 @@
 
         #endregion
 
-
         public bool IsSelected { get; set; }
 
         public bool IsHovering { get; set; } = false;
@@ -661,7 +660,6 @@
         public bool IsTitleReadOnly { get; set; } = true;
 
         public bool IsTitleFocused { get; set; } = false;
-
 
         public bool IsEditingTitle => IsTitleFocused && IsSelected;
 

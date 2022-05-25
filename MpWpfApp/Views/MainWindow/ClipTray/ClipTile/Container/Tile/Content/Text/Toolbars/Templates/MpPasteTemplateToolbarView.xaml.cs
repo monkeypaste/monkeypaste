@@ -95,6 +95,12 @@ namespace MpWpfApp {
             if(BindingContext.SelectedItem == null) {
                 BindingContext.SelectedItem = BindingContext.Items[0];                
             }
+
+            var rtb = this.GetVisualAncestor<MpClipTileView>()
+                .GetVisualDescendent<MpContentView>()
+                .GetVisualDescendent<RichTextBox>();
+            rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
+
             BindingContext.SelectedItem.IsPasteTextBoxFocused = true;
         }
 

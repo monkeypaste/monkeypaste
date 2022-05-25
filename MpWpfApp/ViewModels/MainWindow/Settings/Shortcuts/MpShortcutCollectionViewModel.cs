@@ -520,7 +520,7 @@ namespace MpWpfApp {
             if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 if (MpClipTrayViewModel.Instance.IsAutoCopyMode) {
                     if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.ApplicationIsActivated()) {
-                        System.Windows.Forms.SendKeys.SendWait(" ^ c");
+                        System.Windows.Forms.SendKeys.SendWait("^c");
                     }
                 }
                 if (MpClipTrayViewModel.Instance.IsRightClickPasteMode) {
@@ -528,8 +528,9 @@ namespace MpWpfApp {
                         System.Windows.Forms.SendKeys.SendWait("^v");
                     }
                 }
-            } else if(!MpMainWindowViewModel.Instance.IsMainWindowClosing && 
+            } else if (!MpMainWindowViewModel.Instance.IsMainWindowClosing &&
                       !MpMainWindowViewModel.Instance.IsMainWindowLocked &&
+                      !MpDragDropManager.IsPreExternalTemplateDrop &&
                       GlobalMouseLocation.Y < MpMainWindowViewModel.Instance.MainWindowTop) {
                 MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             }

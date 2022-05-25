@@ -116,61 +116,42 @@ namespace MpWpfApp {
         }
 
         public override async Task StartDrop() {
-            var ci = MpClipTrayViewModel.Instance.SelectedItem.CopyItem;
-            //var ido = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(true, true);
-            var mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(
-                ci, 
+            if(MpClipboardHandlerCollectionViewModel.Instance.SelectedItem != null) {
+                MpClipboardHandlerCollectionViewModel.Instance.SelectedItem.IsDraggingToExternal = true;
+            } else {
+                Debugger.Break();
+            }
+
+            var ctvm = MpDragDropManager.DragData as MpClipTileViewModel;
+            if(ctvm == null) {
+                Debugger.Break();
+                return;
+            }
+
+            MpPortableDataObject mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(
+                ctvm.CopyItem, 
                 true, 
-                MpProcessHelper.MpProcessManager.LastHandle);
-            var ido = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo) as DataObject;
+                MpProcessHelper.MpProcessManager.LastHandle,
+                false);
+            DataObject wpfdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo) as DataObject;
 
-            //var startAction = (Action<VirtualFileDataObject>)((vfdo) => {
-            //    MessageBox.Show("ICKY BOOM BOOM DAAYE");
-            //});
-
-            //var endAction = (Action<VirtualFileDataObject>)((vfdo) => {
-            //    MessageBox.Show("Done");
-            //});
-
-            ////var vido = new VirtualFileDataObject(startAction, endAction);
-            //var vido = new VirtualFileDataObject(
-            //    // BeginInvoke ensures UI operations happen on the right thread
-            //    (vfdo) => Dispatcher.BeginInvoke((Action)(() => MessageBox.Show("ICKY BOOM BOOM DAAYE"))),
-            //    (vfdo) => Dispatcher.BeginInvoke((Action)(() => MessageBox.Show("Done"))));
-
-            ////vido.SetData( 
-            ////    (short)DataFormats.GetDataFormat(DataFormats.FileDrop).Id,
-            ////    new List<Byte>(Encoding.Default.GetBytes(ci.ItemData)));
-
-            //vido.SetData(new VirtualFileDataObject.FileDescriptor[] {
-            //    new VirtualFileDataObject.FileDescriptor
-            //    {
-            //        Name = Path.GetFileName(ci.ItemData),
-            //        //StreamContents = stream => new FileStream(ci.ItemData, FileMode.Open)
-            //        StreamContents = (stream) => {
-            //                var data = MpFileIo.ReadBytesFromFile(ci.ItemData);
-            //                stream.Write(data,0,data.Length);
-            //            }
-
-            //        //}
-            //        //stream =>
-            //        //    {
-            //        //        using(var webClient = new FileStream())
-            //        //        {
-            //        //            var data = webClient.DownloadData("http://blogs.msdn.com/delay/rss.xml");
-            //        //            stream.Write(data, 0, data.Length);
-            //        //        }
-            //        //    }
-            //    },
-            // });
-            var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ci.Id);
-            if(ctvm != null && ctvm.HasTemplates) {
+            if (ctvm.HasTemplates) {
+                MpDragDropManager.IsPreExternalTemplateDrop = true;
                 DragDrop.AddPreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
                 DragDrop.AddPreviewGiveFeedbackHandler(AssociatedObject, OnGiveFeedback);
             }
-            
-            DragDrop.DoDragDrop(AssociatedObject, ido, DragDropEffects.Copy);
-            //VirtualFileDataObject.DoDragDrop(AssociatedObject, vido, DragDropEffects.Copy);
+
+            DragDrop.DoDragDrop(AssociatedObject, wpfdo, DragDropEffects.Copy);
+        }
+
+        public override void CancelDrop() {
+            base.CancelDrop();
+            MpDragDropManager.IsPreExternalTemplateDrop = false;
+            if (MpClipboardHandlerCollectionViewModel.Instance.SelectedItem != null) {
+                MpClipboardHandlerCollectionViewModel.Instance.SelectedItem.IsDraggingToExternal = false;
+            } else {
+                Debugger.Break();
+            }
         }
         private void OnGiveFeedback(object sender, GiveFeedbackEventArgs e) {
             MpConsole.WriteLine("Feedback: " + e.Effects);
@@ -185,25 +166,38 @@ namespace MpWpfApp {
                 //MessageBox.Show("ICKY BOOM BOOM DAAYE");
             }
         }
-        private async void OnQueryContinueDrag(object sender, QueryContinueDragEventArgs e) {
+        private void OnQueryContinueDrag(object sender, QueryContinueDragEventArgs e) {
             MpConsole.WriteLine("Action: " + e.Action);
 
             if (!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                //while(true) {
-                //    Thread.Sleep(100);
-                //}
-                // TODO Handle template madness here!!
+                var dropAppHandle = MpProcessHelper.MpProcessManager.LastHandle;
+
                 e.Handled = true;
                 e.Action = DragAction.Cancel;
-                //var handle = MpProcessHelper.MpProcessManager.ThisAppHandle;
-                //WinApi.SetForegroundWindow(handle);
-                //WinApi.SetActiveWindow(handle);
-                //MessageBox.Show("ICKY BOOM BOOM DAAYE");
+
+                var thisAppHandle = MpProcessHelper.MpProcessManager.ThisAppHandle;
+                WinApi.SetForegroundWindow(thisAppHandle);
+                WinApi.SetActiveWindow(thisAppHandle);
+
+                MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(dropAppHandle);
+
+                MpHelpers.RunOnMainThread(async () => {
+                    while(MpClipTrayViewModel.Instance.SelectedItem.IsPasting) {
+                        await Task.Delay(100);
+                    }
+                    MpDragDropManager.IsPreExternalTemplateDrop = false;
+                    Reset();
+                });
             }
         }
 
-        public override async Task Drop(bool isCopy, object dragData) {
+        public override async Task Drop(bool isCopy, object dragData) {            
             await Task.Delay(1);
+            if (MpClipboardHandlerCollectionViewModel.Instance.SelectedItem != null) {
+                MpClipboardHandlerCollectionViewModel.Instance.SelectedItem.IsDraggingToExternal = false;
+            } else {
+                Debugger.Break();
+            }
         }
 
         public override void AutoScrollByMouse() {

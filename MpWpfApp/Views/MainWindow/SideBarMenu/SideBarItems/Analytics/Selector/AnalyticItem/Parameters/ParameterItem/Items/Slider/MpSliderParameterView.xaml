@@ -29,15 +29,11 @@
         <Border.Style>
             <Style TargetType="Border">
                 <Style.Triggers>
-                    <Trigger Property="IsMouseOver"
-                             Value="True">
-                        <Setter Property="BorderBrush"
-                                Value="Yellow" />
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="Yellow" />
                     </Trigger>
-                    <Trigger Property="IsMouseOver"
-                             Value="False">
-                        <Setter Property="BorderBrush"
-                                Value="Black" />
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="BorderBrush" Value="Black" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -74,45 +70,29 @@
                 <TextBox.Style>
                     <Style TargetType="TextBox">
                         <Style.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Background"
-                                        Value="White" />
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="White" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver"
-                                     Value="False">
-                                <Setter Property="Background"
-                                        Value="Transparent" />
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter Property="Background" Value="Transparent" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Foreground"
-                                        Value="Black" />
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Black" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver"
-                                     Value="False">
-                                <Setter Property="Foreground"
-                                        Value="White" />
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter Property="Foreground" Value="White" />
                             </Trigger>
-                            <Trigger Property="IsFocused"
-                                     Value="True">
-                                <Setter Property="Background"
-                                        Value="White" />
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="White" />
                             </Trigger>
-                            <Trigger Property="IsFocused"
-                                     Value="False">
-                                <Setter Property="Background"
-                                        Value="Transparent" />
+                            <Trigger Property="IsFocused" Value="False">
+                                <Setter Property="Background" Value="Transparent" />
                             </Trigger>
-                            <Trigger Property="IsFocused"
-                                     Value="True">
-                                <Setter Property="Foreground"
-                                        Value="Black" />
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Foreground" Value="Black" />
                             </Trigger>
-                            <Trigger Property="IsFocused"
-                                     Value="False">
-                                <Setter Property="Foreground"
-                                        Value="White" />
+                            <Trigger Property="IsFocused" Value="False">
+                                <Setter Property="Foreground" Value="White" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>

@@ -121,6 +121,13 @@ namespace MpWpfApp {
                         }
                     }
                     break;
+                case MpMessageType.ItemDragEnd:
+                    if(BindingContext == null) {
+                        return;
+                    }
+                    Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
+                    BindingContext.IsItemDragging = false;
+                    break;
             }
         }
 

@@ -50,6 +50,16 @@ namespace MonkeyPaste {
             return jt.ToString();
         }
 
+        public static bool HasInvalidFileNameChars(this string filename) {
+            return Path.GetInvalidFileNameChars().Any(x => filename.Contains(x));
+        }
+        public static string RemoveInvalidFileNameChars(this string filename) {
+            return string.Concat(filename.Split(Path.GetInvalidFileNameChars()));
+        }
+        public static string ReplaceInvalidFileNameChars(string filename, string replacementText = "_") {
+            return string.Join(replacementText, filename.Split(Path.GetInvalidFileNameChars()));
+        }
+
         public static string ToPrettyPrintXml(this string xmlStr) {
             try {
                 XDocument doc = XDocument.Parse(xmlStr);
@@ -116,41 +126,43 @@ namespace MonkeyPaste {
             return text;
         }
 
-        public static string ToFile(this string str, string forceDir = "", string forceNamePrefix = "", string forceExt = "", bool overwrite = false) {
+        public static string ToFile(this string fileData, string forceDir = "", string forceNamePrefix = "", string forceExt = "", bool overwrite = false) {
             if(string.IsNullOrEmpty(forceExt)) {
-                if(str.IsStringRichText()) {
+                // when ext is not given infer from content
+                if(fileData.IsStringRichText()) {
                     forceExt = "rtf";
-                } else if(str.IsStringBase64()) {
+                } else if(fileData.IsStringBase64()) {
                     forceExt = "png";
-                } else if(str.IsStringCsv()) {
+                } else if(fileData.IsStringCsv()) {
                     forceExt = "csv";
-                } else if(!str.IsFileOrDirectory()) {
+                } else if(!fileData.IsFileOrDirectory()) {
                     forceExt = "txt";
                 }
             }  else {
                 if (forceExt.ToLower().Contains("rtf")) {
-                    str = MpPlatformWrapper.Services.StringTools.ToRichText(str);
+                    fileData = MpPlatformWrapper.Services.StringTools.ToRichText(fileData);
                 } else if (forceExt.ToLower().Contains("txt")) {
-                    str = MpPlatformWrapper.Services.StringTools.ToPlainText(str);
+                    fileData = MpPlatformWrapper.Services.StringTools.ToPlainText(fileData);
                 } else if (forceExt.ToLower().Contains("csv")) {
-                    str = MpPlatformWrapper.Services.StringTools.ToCsv(str);
+                    fileData = MpPlatformWrapper.Services.StringTools.ToCsv(fileData);
                 }
             }
 
             string tfp;
-            if (str.IsFileOrDirectory()) {
-                tfp = str;
+            if (fileData.IsFileOrDirectory()) {
+                tfp = fileData;
             } else if (forceExt == "png" || 
                        forceExt.ToLower().Contains("bmp") || 
                        forceExt.ToLower().Contains("jpg") || 
                        forceExt.ToLower().Contains("jpeg")) {
-                tfp = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), str.ToByteArray());
+                tfp = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), fileData.ToByteArray());
             } else {
-                tfp = MpFileIo.WriteTextToFile(Path.GetTempFileName(), str);
+                tfp = MpFileIo.WriteTextToFile(Path.GetTempFileName(), fileData);
             }
             string ofp = tfp;
 
             if(!string.IsNullOrEmpty(forceNamePrefix)) {
+                forceNamePrefix = forceNamePrefix.RemoveInvalidFileNameChars();
                 string tfnwe = Path.GetFileName(tfp);
                 string ofnwe = forceNamePrefix + Path.GetExtension(tfp);
                 ofp = ofp.Replace(tfnwe, ofnwe);

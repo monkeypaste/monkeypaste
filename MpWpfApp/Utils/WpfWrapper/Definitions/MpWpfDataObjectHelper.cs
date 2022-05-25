@@ -96,7 +96,7 @@ namespace MpWpfApp {
             if (MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                 MpMainWindowViewModel.Instance.IsMainWindowLocked = false;
 
-                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(mpdo);
+                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             } else {
                 Mwvm_OnMainWindowHide(this, null);
             }
@@ -145,7 +145,8 @@ namespace MpWpfApp {
                     }
                     string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
                     if (ido != null) {
-                        if (ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
+                        if (string.IsNullOrEmpty(nativeTypeName) || 
+                            ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
                             continue;
                         }
                     }
@@ -183,11 +184,14 @@ namespace MpWpfApp {
             }
         }
 
-        public async Task<MpPortableDataObject> GetCopyItemDataObjectAsync(MpCopyItem ci, bool isDragDrop, object targetHandleObj) {
+        public async Task<MpPortableDataObject> GetCopyItemDataObjectAsync(
+            MpCopyItem ci, 
+            bool isDragDrop, 
+            object targetHandleObj, 
+            bool isDropping = false) {
             // NOTE this is NOT part of data object interface (which is in MonkeyPaste.Plugin)
             // because it needs MpCopyItem
             // and am trying to isolate data object for pluggability
-
             IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : (IntPtr)targetHandleObj;
             bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
 
@@ -199,8 +203,14 @@ namespace MpWpfApp {
             //check for model templates
             var templates = await MpDataModelProvider.GetTextTemplatesAsync(ci.Id);
             bool hasTemplates = templates != null && templates.Count > 0;
+            bool needsTemplateData = hasTemplates;
+            if(needsTemplateData) {
+                if(isDragDrop && !isDropping) {
+                    needsTemplateData = false;
+                }
+            }
 
-            if (hasTemplates) {
+            if (needsTemplateData) {
                 var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ci.Id);
                 if(ctvm == null) {
                     // trigger query change before showing main window may need to tweak...
@@ -233,66 +243,88 @@ namespace MpWpfApp {
             pt = rtf.ToPlainText();
 
             if (isToExternalApp) {
-                if (isDragDrop) {
+                //if (isDragDrop) {
 
-                    string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
-                    var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
-                    MpAppClipboardFormatInfoCollectionViewModel targetInteropSettings = null;
-                    if (app != null) {
-                        targetInteropSettings = MpAppCollectionViewModel.Instance.GetInteropSettingByAppId(app.Id);
-                        MpConsole.WriteLine("Dragging over " + targetProcessPath);
-                    }
-
-                    bool ignoreFileDrop = false;
-                    if (targetInteropSettings != null) {
-                        // order and set data object entry by priority (ignoring < 0) and formatInfo 
-                        var targetFormats = targetInteropSettings.Items
-                                                .Where(x => !x.IgnoreFormat).ToList();
-
-                        ignoreFileDrop = targetInteropSettings.Items
-                                            .Where(x => x.ClipboardFormatType == MpClipboardFormatType.FileDrop)
-                                            .All(x => x.IgnoreFormat);
-
-                        foreach (var targetSetting in targetFormats.OrderByDescending(x => x.IgnoreFormat)) {
-                            switch (targetSetting.ClipboardFormatType) {
-                                case MpClipboardFormatType.FileDrop:
-                                    if (!string.IsNullOrEmpty(targetSetting.FormatInfo)) {
-                                        sctfl.Add(ci.ItemData.ToFile(null, ci.Title, targetSetting.FormatInfo));
-                                    } else {
-                                        sctfl.Add(ci.ItemData.ToFile(null, ci.Title));
-                                    }
-                                    break;
-                                default:
-                                    sctfl.Add(ci.ItemData.ToFile(null, ci.Title, targetSetting.FormatInfo));
-                                    break;
-                            }
-                        }
-                    } else {
-                        // NOTE using plain text here for more compatibility
-                        sctfl.Add(ci.ItemData.ToFile(null, ci.Title));
-                    }
-
-                    if(!ignoreFileDrop) {
-                        d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
-                    }
+                string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
+                var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
+                MpAppClipboardFormatInfoCollectionViewModel targetInteropSettings = null;
+                if (app != null) {
+                    targetInteropSettings = MpAppCollectionViewModel.Instance.GetInteropSettingByAppId(app.Id);
+                    MpConsole.WriteLine("Dragging over " + targetProcessPath);
                 }
+
+                bool ignoreFileDrop = false;
+                if (targetInteropSettings != null) {
+                    // order and set data object entry by priority (ignoring < 0) and formatInfo 
+                    var targetFormats = targetInteropSettings.Items
+                                            .Where(x => !x.IgnoreFormat).ToList();
+
+                    ignoreFileDrop = targetInteropSettings.Items
+                                        .Where(x => x.ClipboardFormatType == MpClipboardFormatType.FileDrop)
+                                        .All(x => x.IgnoreFormat);
+
+                    foreach (var targetSetting in targetFormats.OrderByDescending(x => x.IgnoreFormat)) {
+                        switch (targetSetting.ClipboardFormatType) {
+                            case MpClipboardFormatType.FileDrop:
+                                if(ci.ItemType == MpCopyItemType.Text) {
+                                    if(targetSetting.FormatInfo == "txt") {
+                                        sctfl.Add(pt.ToFile(null, ci.Title, targetSetting.FormatInfo));
+                                    } else {
+                                        sctfl.Add(rtf.ToFile(null, ci.Title, targetSetting.FormatInfo));
+                                    }
+                                } else {
+                                    sctfl.Add(ci.ItemData.ToFile(null, ci.Title, targetSetting.FormatInfo));
+                                }
+                                
+                                break;
+                            case MpClipboardFormatType.Rtf:
+                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Rtf, rtf);
+                                break;
+                            case MpClipboardFormatType.Text:
+                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Text, pt);
+                                break;
+                            case MpClipboardFormatType.Bitmap:
+                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Bitmap, ci.ItemData);
+                                break;
+                            case MpClipboardFormatType.Csv:
+                                string sctcsv = string.Join(Environment.NewLine, ci.ItemData.ToCsv());
+                                if (!string.IsNullOrWhiteSpace(sctcsv)) {
+                                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Csv, sctcsv);
+                                }
+                                break;
+                            case MpClipboardFormatType.Custom:
+                                break;
+                            default:
+                                sctfl.Add(ci.ItemData.ToFile(null, ci.Title, targetSetting.FormatInfo));
+                                break;
+                        }
+                    }
+                } else {
+                    // NOTE using plain text here for more compatibility
+                    sctfl.Add(ci.ItemData.ToFile(null, ci.Title));
+                }
+
+                if(!ignoreFileDrop) {
+                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
+                }
+                //}
 
                 //set rtf and text
-                if (!string.IsNullOrEmpty(rtf)) {
-                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Rtf, rtf);
-                }
-                if (!string.IsNullOrEmpty(pt)) {
-                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Text, pt);
-                }
-                //set image
-                if (ci.ItemType == MpCopyItemType.Image) {
-                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Bitmap, ci.ItemData);
-                }
-                //set csv
-                string sctcsv = string.Join(Environment.NewLine, ci.ItemData.ToCsv());
-                if (!string.IsNullOrWhiteSpace(sctcsv)) {
-                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Csv, sctcsv);
-                }
+                //if (!string.IsNullOrEmpty(rtf)) {
+                //    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Rtf, rtf);
+                //}
+                //if (!string.IsNullOrEmpty(pt)) {
+                //    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Text, pt);
+                //}
+                ////set image
+                //if (ci.ItemType == MpCopyItemType.Image) {
+                //    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Bitmap, ci.ItemData);
+                //}
+                ////set csv
+                //string sctcsv = string.Join(Environment.NewLine, ci.ItemData.ToCsv());
+                //if (!string.IsNullOrWhiteSpace(sctcsv)) {
+                //    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Csv, sctcsv);
+                //}
             } 
 
             //set resorting
@@ -306,31 +338,6 @@ namespace MpWpfApp {
             //    }
             //    //d.SetData(MpPreferences.ClipTileDragDropFormatName, SelectedItems.ToList());
             //}
-
-            return d;
-        }
-
-        public async Task<MpPortableDataObject> GetClipTileDataObjectAsync(MpClipTileViewModel ctvm, bool isDragDrop, object targetHandleObj) {
-            // NOTE this is NOT part of data object interface (which is in MonkeyPaste.Plugin)
-            // because it needs MpCopyItem
-            // and am trying to isolate data object for pluggability
-
-            IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : (IntPtr)targetHandleObj;
-            bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
-
-            MpPortableDataObject d = new MpPortableDataObject();
-            string rtf = string.Empty.ToRichText();
-            string pt = string.Empty;
-            var sctfl = new List<string>();
-
-            var sub_d = await GetCopyItemDataObjectAsync(ctvm.CopyItem, isDragDrop, targetHandleObj);
-            foreach (var sub_d_kvp in sub_d.DataFormatLookup) {
-                if (!d.DataFormatLookup.ContainsKey(sub_d_kvp.Key)) {
-                    d.DataFormatLookup.Add(sub_d_kvp.Key, sub_d_kvp.Value);
-                } else {
-
-                }
-            }
 
             return d;
         }

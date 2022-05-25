@@ -492,7 +492,7 @@ namespace MpWpfApp {
 
         public bool IsPastingSelected { get; set; } = false;
 
-        public bool IsAnyTileContextMenuOpened => base.Items.Any((Func<MpClipTileViewModel, bool>)(x => (bool)x.IsContextMenuOpen));
+        public bool IsAnyTileContextMenuOpened => Items.Any(x => x.IsContextMenuOpen);
 
         public bool IsAnyTileFlipped => Items.Any(x => x.IsFlipped || x.IsFlipping);
 
@@ -535,8 +535,9 @@ namespace MpWpfApp {
 
         public bool IsAnyEditingClipTile => Items.Any(x => x.IsContentReadOnly == false);
 
-        public bool IsAnyPastingTemplate => base.Items.Any((Func<MpClipTileViewModel, bool>)(x => (bool)x.IsPastingTemplate));
-
+        public bool IsAnyPastingTemplate => Items.Any(x => x.IsPastingTemplate);
+        
+            
         //public bool IsPreSelection { get; set; } = false;
         #endregion
 
@@ -1101,7 +1102,7 @@ namespace MpWpfApp {
             IsPastingHotKey = IsPastingSelected = IsPasting = false;
             //clean up pasted items state after paste
             var sctvm = SelectedItem;
-            if (sctvm.HasTemplates) {
+            if (sctvm.HasTemplates) {                
                 sctvm.ClearEditing();
                 sctvm.TemplateCollection.ResetAll();
                 sctvm.TemplateRichText = string.Empty;
@@ -1109,6 +1110,8 @@ namespace MpWpfApp {
                 sctvm.RequestUiUpdate();
                 sctvm.RequestScrollToHome();
             }
+
+            sctvm.IsPasting = false;
         }
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
@@ -1973,6 +1976,7 @@ namespace MpWpfApp {
         public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(
             async(args) => {
                 IsPasting = true;
+                SelectedItem.IsPasting = true;
 
                 var pi = new MpProcessInfo() {
                     Handle = MpProcessManager.LastHandle,
@@ -1996,16 +2000,17 @@ namespace MpWpfApp {
                     ptapvm = null;
                 } 
                 
-                //SelectedItems.ForEach(x => x.SubSelectAll());
                 //In order to paste the app must hide first 
                 //this triggers hidewindow to paste selected items
                 IsPastingSelected = true;
-                await MpWpfDataObjectHelper.Instance.PasteCopyItem(SelectedItem.CopyItem, pi, ptapvm == null ? false : ptapvm.PressEnter);
+                await MpWpfDataObjectHelper.Instance.PasteCopyItem(
+                    SelectedItem.CopyItem, pi, ptapvm == null ? false : ptapvm.PressEnter);
                 //MpMainWindowViewModel.Instance.HideWindowCommand.Execute(true);
                 CleanupAfterPasteSelected();
             },
             (args) => {
                 return MpMainWindowViewModel.Instance.IsShowingDialog == false &&
+                        SelectedItem != null &&
                     !IsAnyEditingClipTile &&
                     !IsAnyEditingClipTitle &&
                     !IsAnyPastingTemplate &&

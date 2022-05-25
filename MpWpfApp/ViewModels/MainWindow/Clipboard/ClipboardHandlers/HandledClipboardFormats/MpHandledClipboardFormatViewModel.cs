@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -72,7 +73,22 @@ namespace MpWpfApp {
             }
         }
 
+        public string HandledFormatIconResourceKey {
+            get {
+                return Application.Current.Resources["AppIcon"] as string;
 
+                switch (HandledFormat) {
+                    case MpClipboardFormatType.Bitmap:
+                        return Application.Current.Resources["ImageIcon"] as string;
+                    case MpClipboardFormatType.Html:
+                        return Application.Current.Resources["HtmlIcon"] as string;
+                    case MpClipboardFormatType.Csv:
+                        return Application.Current.Resources["CsvIcon"] as string;
+                    case MpClipboardFormatType.FileDrop:
+                        return Application.Current.Resources["CsvIcon"] as string;
+                }
+            }
+        }
         #endregion
 
         #region State
@@ -101,8 +117,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Models
-
-        
 
         #region MpAnalyticItem
 

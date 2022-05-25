@@ -13,12 +13,21 @@ namespace MpWpfApp {
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel, 
-        MpITreeItemViewModel {
+        MpITreeItemViewModel,
+        MpIBoxViewModel {
 
         #region Properties
 
         #region View Models
 
+
+        #endregion
+
+        #region MpIBoxViewModel Implementation
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Width { get; }
+        public double Height { get; }
 
         #endregion
 
@@ -48,6 +57,15 @@ namespace MpWpfApp {
         #region MpIMenuItemViewModel Implementation
 
         public MpMenuItemViewModel MenuItemViewModel { get; }
+
+        #endregion
+
+        #region State
+
+        #region Drag Drop
+
+        public bool IsDraggingToExternal { get; set; }
+        #endregion
 
         #endregion
 
@@ -133,6 +151,7 @@ namespace MpWpfApp {
                     break;
             }
         }
+
 
         #endregion
     }

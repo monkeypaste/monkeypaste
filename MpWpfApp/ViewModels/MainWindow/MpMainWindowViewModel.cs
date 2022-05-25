@@ -369,35 +369,12 @@ namespace MpWpfApp {
                    !MpMainWindowViewModel.Instance.IsShowingDialog) && !IsMainWindowOpen && !IsMainWindowOpening;
             });
 
-        public ICommand HideWindowCommand => new RelayCommand<object>(
-            async (args) => {
+        public ICommand HideWindowCommand => new RelayCommand(
+            () => {
                 if (IsMainWindowLocked || IsResizing || IsMainWindowClosing || IsShowingDialog) {
                     return;
                 }
 
-                MpPortableDataObject pasteDataObject = null;
-                bool pasteSelected = false;
-                if (args != null) {
-                    if (args is bool) {
-                        pasteSelected = (bool)args;
-                    } else if (args is MpPortableDataObject) {
-                        pasteDataObject = (MpPortableDataObject)args;
-                    }
-                }
-
-                bool wasMainWindowLocked = IsMainWindowLocked;
-                if (pasteSelected) {
-                    if (MpClipTrayViewModel.Instance.IsAnyPastingTemplate) {
-                        IsMainWindowLocked = true;
-                    }
-                    if(pasteDataObject == null) {
-                        
-                        
-                        //pasteDataObject = await MpClipTrayViewModel.Instance.GetDataObjectFromSelectedClips(false, true);
-                    }
-                    //test = pasteDataObject.GetData(DataFormats.Text).ToString();
-                    //MpConsole.WriteLine("Cb Text: " + test);
-                }
 
                 var mw = (MpMainWindow)Application.Current.MainWindow;
 
@@ -417,23 +394,9 @@ namespace MpWpfApp {
                         } else {
                             MainWindowTop = _startMainWindowTop;
                             timer.Stop();
-
-
-                            //MpClipTrayViewModel.Instance.ResetClipSelection();
                             mw.Visibility = Visibility.Collapsed;
-                            if (pasteDataObject != null) {
-                                //await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject);
-                            }// else if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-                            //    MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsExpanded).IsExpanded = false;
-                            //}
 
                             IsMainWindowLocked = false;
-                            if (wasMainWindowLocked) {
-                                ShowWindowCommand.Execute(null);
-                                IsMainWindowLocked = true;
-                            } else {
-                                MpSearchBoxViewModel.Instance.IsTextBoxFocused = false;
-                            }
                             IsMainWindowOpen = false;
                             IsMainWindowClosing = false;
 
@@ -441,19 +404,17 @@ namespace MpWpfApp {
                         }
                     };
                     timer.Start();
-                } else if (pasteDataObject != null) {
-                    //await MpClipTrayViewModel.Instance.PasteDataObject(pasteDataObject, true);
-                }
+                } 
             },
-            (args) => {
-                return ((Application.Current.MainWindow != null &&
+            () => {
+                return Application.Current.MainWindow != null &&
                       Application.Current.MainWindow.Visibility == Visibility.Visible &&
                       !IsShowingDialog &&
                       !MpContextMenuView.Instance.IsOpen &&
                       !IsResizing &&
                       !IsMainWindowClosing &&
                       IsMainWindowOpen &&
-                      !IsMainWindowOpening) || args != null);
+                      !IsMainWindowOpening;
             });
 
         private RelayCommand<object> _toggleMainWindowLockCommand;

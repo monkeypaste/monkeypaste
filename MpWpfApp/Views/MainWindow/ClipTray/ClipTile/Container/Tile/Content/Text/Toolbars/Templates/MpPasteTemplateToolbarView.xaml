@@ -12,7 +12,6 @@
                      d:DataContext="{d:DesignInstance Type=local:MpTemplateCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Border x:Name="ClipTilePasteTemplateToolbar"
-            IsVisibleChanged="ClipTilePasteTemplateToolbar_IsVisibleChanged"
             Unloaded="ClipTilePasteTemplateToolbar_Unloaded"
             Height="40"
             HorizontalAlignment="Stretch"
@@ -101,6 +100,7 @@
                     <TextBox x:Name="SelectedTemplateTextBox"
                              Grid.Column="0"
                              Width="240"
+                             IsVisibleChanged="ClipTilePasteTemplateToolbar_IsVisibleChanged"
                              Height="24"
                              Margin="5,0,0,0"
                              Padding="0,0,0,0"
@@ -141,24 +141,25 @@
                         Visibility="{Binding HasMultipleTemplates,
                                              Converter={StaticResource BoolToVisibilityConverter}}">
                 <Button x:Name="PreviousTemplateButton"
-                        Width="35"
+                        Width="25"
                         Height="25"
-                        Margin="0"
-                        Padding="5"
                         PreviewMouseLeftButtonDown="PreviousTemplateButton_PreviewMouseLeftButtonDown"
                         Command="{Binding SelectPreviousTemplateCommand}"
                         TabIndex="2">
-                    <Image Source="/Resources/Images/back_black.png" />
+                    <Image Margin="5"
+                           Stretch="Fill"
+                           Source="/Resources/Images/back_black.png" />
                 </Button>
                 <Button x:Name="NextTemplateButton"
-                        Width="35"
+                        Width="25"
                         Height="25"
                         Margin="5,0,0,0"
-                        Padding="5"
                         PreviewMouseLeftButtonDown="NextTemplateButton_PreviewMouseLeftButtonDown"
                         Command="{Binding SelectNextTemplateCommand}"
                         TabIndex="3">
-                    <Image Source="/Resources/Images/forward_black.png" />
+                    <Image Margin="5"
+                           Stretch="Fill"
+                           Source="/Resources/Images/forward_black.png" />
                 </Button>
             </StackPanel>
             <Button x:Name="PasteTemplateButton"

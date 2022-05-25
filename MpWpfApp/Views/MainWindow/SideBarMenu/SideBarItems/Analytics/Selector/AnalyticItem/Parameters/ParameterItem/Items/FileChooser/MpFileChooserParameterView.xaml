@@ -28,7 +28,7 @@
                            Visibility="{Binding CurrentValue,
                                                 Converter={StaticResource IsNotNullToVisibilityFlipConverter}}" />
                 <TextBlock local:MpHoverableExtension.IsEnabled="True"
-                           local:MpHoverableExtension.HoverCursor="Hand"                           
+                           local:MpHoverableExtension.HoverCursor="Hand"
                            Visibility="{Binding CurrentValue,
                                                 Converter={StaticResource IsNotNullToVisibilityConverter}}"
                            Text="{Binding CurrentValue,
@@ -38,19 +38,13 @@
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Style.Triggers>
-                                <Trigger Property="IsMouseOver"
-                                         Value="True">
-                                    <Setter Property="Foreground"
-                                            Value="Crimson" />
-                                    <Setter Property="FontWeight"
-                                            Value="Normal" />
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="Crimson" />
+                                    <Setter Property="FontWeight" Value="Normal" />
                                 </Trigger>
-                                <Trigger Property="IsMouseOver"
-                                         Value="False">
-                                    <Setter Property="Foreground"
-                                            Value="Black" />
-                                    <Setter Property="FontWeight"
-                                            Value="Normal" />
+                                <Trigger Property="IsMouseOver" Value="False">
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Setter Property="FontWeight" Value="Normal" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>

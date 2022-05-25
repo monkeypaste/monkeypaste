@@ -30,9 +30,7 @@
             </ComboBox.ItemTemplate>
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected,
-                                            Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                 </Style>
             </ComboBox.ItemContainerStyle>
         </ComboBox>

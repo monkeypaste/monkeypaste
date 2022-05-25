@@ -124,14 +124,10 @@
                         </ComboBox.ItemTemplate>
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
-                                <Setter Property="HorizontalAlignment"
-                                        Value="Stretch" />
-                                <Setter Property="VerticalAlignment"
-                                        Value="Center" />
-                                <Setter Property="VerticalContentAlignment"
-                                        Value="Center" />
-                                <Setter Property="Padding"
-                                        Value="3" />
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="VerticalContentAlignment" Value="Center" />
+                                <Setter Property="Padding" Value="3" />
                             </Style>
                         </ComboBox.ItemContainerStyle>
                     </ComboBox>
