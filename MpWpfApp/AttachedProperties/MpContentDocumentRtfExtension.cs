@@ -405,12 +405,14 @@ namespace MpWpfApp {
         }
 
 
-        public static List<TextRange> FindContent(MpClipTileViewModel ctvm, string matchText, bool isCaseSensitive = false, bool matchWholeWord = false, bool isRegEx = false) {
+        public static List<TextRange> FindContent(MpClipTileViewModel ctvm, string matchText, bool isCaseSensitive = false, bool matchWholeWord = false, bool useRegEx = false) {
             var rtb = FindRtbByViewModel(ctvm);
 
             return rtb.Document.FindText(
                 matchText,
-                isCaseSensitive ? MpWpfRichDocumentExtensions.FindFlags.MatchCase : MpWpfRichDocumentExtensions.FindFlags.None);
+                isCaseSensitive,
+                matchWholeWord,
+                useRegEx);
         }
 
         public static RichTextBox FindRtbByViewModel(MpClipTileViewModel ctvm) {

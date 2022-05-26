@@ -52,8 +52,8 @@
                             Background="Transparent"
                             BorderThickness="0"
                             Click="ClearFindTextButton_Click"
-                            Visibility="{Binding FindText,
-                                                 Converter={StaticResource IsNotNullToVisibilityFlipConverter}}">
+                            Visibility="{Binding HasFindText,
+                                                 Converter={StaticResource BoolToVisibilityConverter}}">
                         <Image Source="/Resources/Images/close1.png" />
                     </Button>
                     <ComboBox x:Name="FindComboBox"
@@ -73,7 +73,10 @@
                               HorizontalAlignment="Left"
                               SelectedItem="{Binding FindText}"
                               Text="{Binding FindText,
-                                             Mode=TwoWay}">
+                                             Mode=TwoWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             NotifyOnSourceUpdated=True,
+                                             NotifyOnTargetUpdated=True}">
 
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
@@ -91,7 +94,9 @@
                                 HorizontalAlignment="Center"
                                 Background="White"
                                 BorderThickness="1"
-                                BorderBrush="Transparent"
+                                BorderBrush="{Binding IsReplaceValid,
+                                                      Converter={StaticResource BoolToBrushConverter},
+                                                      ConverterParameter=Transparent|Red}"
                                 CornerRadius="5">
                 <DockPanel LastChildFill="True">
                     <Button x:Name="ClearReplaceTextButton"
@@ -101,8 +106,8 @@
                             Background="Transparent"
                             BorderThickness="0"
                             Click="ClearReplaceTextButton_Click"
-                            Visibility="{Binding ReplaceText,
-                                                 Converter={StaticResource IsNotNullToVisibilityFlipConverter}}">
+                            Visibility="{Binding HasReplaceText,
+                                                 Converter={StaticResource BoolToVisibilityConverter}}">
                         <Image Source="/Resources/Images/close1.png" />
                     </Button>
                     <ComboBox x:Name="ReplaceComboBox"
@@ -120,7 +125,10 @@
                               GotFocus="ComboBox_GotFocus"
                               LostFocus="ComboBox_LostFocus"
                               Text="{Binding ReplaceText,
-                                             Mode=TwoWay}">
+                                             Mode=TwoWay,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             NotifyOnSourceUpdated=True,
+                                             NotifyOnTargetUpdated=True}">
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -131,23 +139,24 @@
             </local:MpClipBorder>
             <StackPanel Orientation="Vertical"
                         VerticalAlignment="Center"
+                        Margin="5,0,0,0"
                         Grid.Column="3">
                 <CheckBox Grid.Column="3"
                           VerticalAlignment="Center"
                           Content="Case Sensitive"
-                          Command="{Binding PerformInitialFindAndOrReplaceCommand}"
+                          Click="UserClick_UpdateRecents"
                           IsChecked="{Binding MatchCase,
                                               Mode=TwoWay}" />
                 <CheckBox Grid.Column="4"
                           VerticalAlignment="Center"
                           Content="Match Whole Word"
-                          Command="{Binding PerformInitialFindAndOrReplaceCommand}"
+                          Click="UserClick_UpdateRecents"
                           IsChecked="{Binding MatchWholeWord,
                                               Mode=TwoWay}" />
                 <CheckBox Grid.Column="5"
                           VerticalAlignment="Center"
                           Content="RegEx"
-                          Command="{Binding PerformInitialFindAndOrReplaceCommand}"
+                          Click="UserClick_UpdateRecents"
                           IsChecked="{Binding UseRegEx,
                                               Mode=TwoWay}" />
             </StackPanel>
@@ -162,7 +171,8 @@
                             Orientation="Horizontal">
                     <Button Width="25"
                             Height="15"
-                            Command="{Binding FindPreviousCommand}">
+                            Command="{Binding FindPreviousCommand}"
+                            Click="UserClick_UpdateRecents">
                         <Image Margin="1"
                                Stretch="Uniform"
                                Source="/Resources/Images/back_black.png" />
@@ -175,6 +185,7 @@
                            Content="Find" />
                     <Button Width="25"
                             Height="15"
+                            Click="UserClick_UpdateRecents"
                             Command="{Binding FindNextCommand}">
                         <Image Margin="1"
                                Stretch="Uniform"
@@ -187,6 +198,7 @@
                                                  Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button Width="25"
                             Height="15"
+                            Click="UserClick_UpdateRecents"
                             Command="{Binding ReplacePreviousCommand}">
                         <Image Margin="1"
                                Stretch="Uniform"
@@ -199,6 +211,7 @@
                            Content="Replace" />
                     <Button Width="25"
                             Height="15"
+                            Click="UserClick_UpdateRecents"
                             Command="{Binding ReplaceNextCommand}">
                         <Image Margin="1"
                                Stretch="Uniform"
@@ -210,6 +223,7 @@
                     Grid.Column="7"
                     Margin="10"
                     Command="{Binding ReplaceAllCommand}"
+                    Click="UserClick_UpdateRecents"
                     Visibility="{Binding IsReplaceMode,
                                          Converter={StaticResource BoolToVisibilityConverter}}">
                 REPLACE ALL

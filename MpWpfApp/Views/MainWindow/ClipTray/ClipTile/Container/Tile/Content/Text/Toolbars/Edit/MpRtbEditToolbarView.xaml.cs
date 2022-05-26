@@ -111,7 +111,7 @@ namespace MpWpfApp {
             } else {
                 fontSizeObj = Math.Round((double)fontSizeObj);
             }
-            if (fontSizeObj != null) {
+            if (!string.IsNullOrEmpty((string)fontSizeObj)) {
                 double fontSize;
                 try {
                     fontSize = Convert.ToDouble(fontSizeObj);
@@ -138,7 +138,7 @@ namespace MpWpfApp {
 
             AddTemplateButton.IsEnabled = CanAddTemplate(artb.Selection);
 
-            //artb.UpdateLayout();
+            artb.FitDocToRtb();
         }
 
         private bool CanAddTemplate(TextSelection ts) {

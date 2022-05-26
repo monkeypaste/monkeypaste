@@ -139,8 +139,8 @@ using System.Text.RegularExpressions;
             set {
                 if(_replaceText != value && value != ReplacePlaceholderText) {
                     _replaceText = value;
-                    OnPropertyChanged(nameof(ReplaceText));
                 }
+                OnPropertyChanged(nameof(ReplaceText));
             }
         }
 
@@ -174,9 +174,12 @@ using System.Text.RegularExpressions;
             }
         }
 
+        public bool HasFindText => !string.IsNullOrEmpty(FindText) && FindText != FindPlaceholderText;
+        public bool HasReplaceText => !string.IsNullOrEmpty(ReplaceText) && ReplaceText != ReplacePlaceholderText;
+
         public bool IsReplaceMode { get; set; }
         public bool IsFindValid => string.IsNullOrEmpty(_findText) || (!string.IsNullOrEmpty(_findText) && HasMatch);
-
+        public bool IsReplaceValid => !IsReplaceMode || (IsReplaceMode && _replaceText != null);
         public bool HasMatch => _matches != null && _matches.Count > 0;
         public bool MatchCase { get; set; }
         public bool MatchWholeWord { get; set; }
@@ -210,51 +213,54 @@ using System.Text.RegularExpressions;
                 }
                 
             },IsTextItem);
+        public void UpdateFindAndReplaceMatches() {
+            _currentMatchIdx = -1;
+            if(_findText == null) {
+                _matches = new List<TextRange>();
+            } else {
+                _matches = MpContentDocumentRtfExtension.FindContent(this, _findText, MatchCase, MatchWholeWord, UseRegEx);
+            }
+            _rtbHighligher.Reset();
+            if (HasMatch) {
+                _rtbHighligher.InitHighlighting(_matches);
+                FindNextCommand.Execute(null);
+            }
+            OnPropertyChanged(nameof(IsFindValid));
+        }
+        public ICommand UpdateFindAndReplaceRecentsCommand => new RelayCommand(() => {
+            UpdateFindAndReplaceMatches();
 
-        public ICommand PerformInitialFindAndOrReplaceCommand => new RelayCommand(
-            () => {
-                _currentMatchIdx = -1;
-                _matches = MpContentDocumentRtfExtension.FindContent(this, FindText, MatchCase, MatchWholeWord, UseRegEx);
-
+            if (!string.IsNullOrEmpty(_findText)) {
                 var rftl = RecentFindTexts;
-                int recentFindIdx = rftl.IndexOf(FindText);
-                if(recentFindIdx < 0) {
-                    rftl.Insert(0, FindText);
+                int recentFindIdx = rftl.IndexOf(_findText);
+                if (recentFindIdx < 0) {
+                    rftl.Insert(0, _findText);
                     rftl = new ObservableCollection<string>(rftl.Take(MpPreferences.MaxRecentTextsCount));
                 } else {
                     rftl.RemoveAt(recentFindIdx);
-                    rftl.Insert(0, FindText);
+                    rftl.Insert(0, _findText);
                 }
-                this.RecentFindTexts = rftl;
+                RecentFindTexts = rftl;
+            }
 
-                if(IsReplaceMode) {
-                    var rrtl = RecentReplaceTexts.ToList();
-                    int recentReplaceIdx = rrtl.IndexOf(_replaceText);
-                    if (recentReplaceIdx < 0) {
-                        rrtl.Insert(0, _replaceText);
-                    } else {
-                        rrtl.RemoveAt(recentReplaceIdx);
-                        rrtl.Insert(0, _replaceText);
-                    }
-                    RecentReplaceTexts = new ObservableCollection<string>(rrtl.Take(MpPreferences.MaxRecentTextsCount));
+
+            if (IsReplaceMode && _replaceText != null) {
+                var rrtl = RecentReplaceTexts.ToList();
+                int recentReplaceIdx = rrtl.IndexOf(_replaceText);
+                if (recentReplaceIdx < 0) {
+                    rrtl.Insert(0, _replaceText);
+                } else {
+                    rrtl.RemoveAt(recentReplaceIdx);
+                    rrtl.Insert(0, _replaceText);
                 }
-
-                _rtbHighligher.Reset();
-                if(HasMatch) {
-                    _rtbHighligher.InitHighlighting(_matches);
-
-                    if(IsReplaceMode) {
-                        ReplaceNextCommand.Execute(null);
-                    } else {
-                        FindNextCommand.Execute(null);
-                    }
-                }
-                OnPropertyChanged(nameof(IsFindValid));
-
-            }, !string.IsNullOrEmpty(FindText) && FindText != FindPlaceholderText);
-
+                RecentReplaceTexts = new ObservableCollection<string>(rrtl.Take(MpPreferences.MaxRecentTextsCount));
+            }
+        });
         public ICommand FindNextCommand => new RelayCommand(
             () => {
+                if (_matches == null || _matches.Count == 0) {
+                    return;
+                }
                 _currentMatchIdx++;
                 if(_currentMatchIdx >= _matches.Count) {
                     _currentMatchIdx = 0;
@@ -267,6 +273,9 @@ using System.Text.RegularExpressions;
 
         public ICommand FindPreviousCommand => new RelayCommand(
             () => {
+                if (_matches == null || _matches.Count == 0) {
+                    return;
+                }
                 _currentMatchIdx--;
                 if (_currentMatchIdx < 0) {
                     _currentMatchIdx = _matches.Count - 1;
@@ -280,16 +289,16 @@ using System.Text.RegularExpressions;
             () => {
                 FindNextCommand.Execute(null);
 
-                MpTextSelectionRangeExtension.SetSelectionText(this,ReplaceText);
+                MpTextSelectionRangeExtension.SetSelectionText(this,_replaceText);
 
-            }, HasMatch);
+            }, HasMatch && IsReplaceValid);
 
         public ICommand ReplacePreviousCommand => new RelayCommand(
             () => {
                 FindPreviousCommand.Execute(null);
 
-                MpTextSelectionRangeExtension.SetSelectionText(this, ReplaceText);
-            }, HasMatch);
+                MpTextSelectionRangeExtension.SetSelectionText(this, _replaceText);
+            }, HasMatch && IsReplaceValid);
         public ICommand ReplaceAllCommand => new RelayCommand(
             () => {
                 _currentMatchIdx = -1;
@@ -297,7 +306,7 @@ using System.Text.RegularExpressions;
                     ReplaceNextCommand.Execute(null);
                 }
                 
-            }, HasMatch);
+            }, HasMatch && IsReplaceValid);
 
         #endregion
 
@@ -1764,6 +1773,14 @@ using System.Text.RegularExpressions;
                         });
                     }
                     break;
+                case nameof(FindText):
+                case nameof(ReplaceText):
+                case nameof(MatchCase):
+                case nameof(UseRegEx):
+                case nameof(MatchWholeWord):
+                    UpdateFindAndReplaceMatches();
+                    break;
+
             }
         }
 

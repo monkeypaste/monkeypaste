@@ -28,7 +28,6 @@ namespace MonkeyPaste {
         ObservableCollection<string> RecentReplaceTexts { get; set; }
 
         ICommand ToggleFindAndReplaceVisibleCommand { get; }
-        ICommand PerformInitialFindAndOrReplaceCommand { get; }
         ICommand FindNextCommand { get; }
         ICommand FindPreviousCommand { get; }
         ICommand ReplaceNextCommand { get; }

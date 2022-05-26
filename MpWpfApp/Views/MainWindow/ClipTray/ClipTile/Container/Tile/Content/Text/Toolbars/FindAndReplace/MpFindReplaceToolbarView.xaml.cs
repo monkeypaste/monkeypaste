@@ -34,7 +34,8 @@ namespace MpWpfApp {
         private void ComboBox_PreviewKeyUp(object sender, KeyEventArgs e) {
             if(e.Key == Key.Enter) {
                 e.Handled = true;
-                BindingContext.PerformInitialFindAndOrReplaceCommand.Execute(null);
+                UserClick_UpdateRecents(null, null);
+                //BindingContext.PerformInitialFindAndOrReplaceCommand.Execute(null);
             }
         }
 
@@ -81,6 +82,10 @@ namespace MpWpfApp {
             if(!cv.Rtb.Selection.IsEmpty) {
                 BindingContext.FindText = cv.Rtb.Selection.Text;
             }
+        }
+
+        private void UserClick_UpdateRecents(object sender, RoutedEventArgs e) {
+            BindingContext.UpdateFindAndReplaceRecentsCommand.Execute(null);
         }
     }
 }
