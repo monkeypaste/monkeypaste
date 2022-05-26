@@ -469,6 +469,13 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region ComboBox
+
+        public static TextBox GetEditableTextBox(this ComboBox cmb) {
+            return cmb.Template.FindName("PART_EditableTextBox", cmb) as TextBox;
+        }
+        #endregion
+
         #region Visual 
 
         public static double Distance(this Point from, Point to) {
@@ -710,7 +717,6 @@ namespace MpWpfApp {
             return null;
         }
         #endregion
-
 
         #region Documents
 

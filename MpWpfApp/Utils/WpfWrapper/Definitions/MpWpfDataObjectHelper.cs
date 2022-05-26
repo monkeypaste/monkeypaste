@@ -12,8 +12,6 @@ using System.IO;
 using System.Threading;
 using MpClipboardHelper;
 using System.Collections.Specialized;
-using System.Windows.Controls;
-using System.Drawing.Imaging;
 
 namespace MpWpfApp {
     public class MpWpfDataObjectHelper : 
@@ -243,8 +241,6 @@ namespace MpWpfApp {
             pt = rtf.ToPlainText();
 
             if (isToExternalApp) {
-                //if (isDragDrop) {
-
                 string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
                 var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
                 MpAppClipboardFormatInfoCollectionViewModel targetInteropSettings = null;
@@ -255,7 +251,6 @@ namespace MpWpfApp {
 
                 bool ignoreFileDrop = false;
                 if (targetInteropSettings != null) {
-                    // order and set data object entry by priority (ignoring < 0) and formatInfo 
                     var targetFormats = targetInteropSettings.Items
                                             .Where(x => !x.IgnoreFormat).ToList();
 
@@ -307,38 +302,7 @@ namespace MpWpfApp {
                 if(!ignoreFileDrop) {
                     d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
                 }
-                //}
-
-                //set rtf and text
-                //if (!string.IsNullOrEmpty(rtf)) {
-                //    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Rtf, rtf);
-                //}
-                //if (!string.IsNullOrEmpty(pt)) {
-                //    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Text, pt);
-                //}
-                ////set image
-                //if (ci.ItemType == MpCopyItemType.Image) {
-                //    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Bitmap, ci.ItemData);
-                //}
-                ////set csv
-                //string sctcsv = string.Join(Environment.NewLine, ci.ItemData.ToCsv());
-                //if (!string.IsNullOrWhiteSpace(sctcsv)) {
-                //    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Csv, sctcsv);
-                //}
             } 
-
-            //set resorting
-            //if (isDragDrop && SelectedItems != null && SelectedItems.Count > 0) {
-            //    foreach (var dctvm in SelectedItems) {
-            //        if (dctvm.Count == 0 ||
-            //            dctvm.SelectedItems.Count == dctvm.Count ||
-            //            dctvm.SelectedItems.Count == 0) {
-            //            //dctvm.IsClipDragging = true;
-            //        }
-            //    }
-            //    //d.SetData(MpPreferences.ClipTileDragDropFormatName, SelectedItems.ToList());
-            //}
-
             return d;
         }
 

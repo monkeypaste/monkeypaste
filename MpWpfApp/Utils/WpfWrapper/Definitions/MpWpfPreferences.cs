@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
+using MonkeyPaste;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Xamarin.Essentials;
 
 namespace MpWpfApp {
     public class MpWpfPreferences : MonkeyPaste.MpIPreferenceIO {
@@ -76,6 +78,14 @@ namespace MpWpfApp {
 
         public Int32[] Get(string key, Int32[] defValue) {
             return Properties.Settings.Default[key] as int[];
+        }
+
+        public string[] Get(string key, string[] defValue) {
+            object pref = Properties.Settings.Default[key];
+            if (pref == null) {
+                return defValue;
+            }
+            return pref as string[];
         }
 
         public MonkeyPaste.MpUserDeviceType GetDeviceType() {

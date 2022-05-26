@@ -135,6 +135,12 @@ namespace MpWpfApp {
                             IconResourceKey = Application.Current.Resources["ToolsIcon"] as string,
                             SubItems = new List<MpMenuItemViewModel>() {
                                 new MpMenuItemViewModel() {
+                                    Header = @"_Find and Replace",
+                                    IconResourceKey = Application.Current.Resources["SearchIcon"] as string,
+                                    Command = FindAndReplaceSelectedItem,
+                                    ShortcutType = MpShortcutType.FindAndReplaceSelectedItem
+                                },
+                                new MpMenuItemViewModel() {
                                     Header = "_Duplicate",
                                     IconResourceKey = Application.Current.Resources["DuplicateIcon"] as string,
                                     Command = DuplicateSelectedClipsCommand,
@@ -166,7 +172,7 @@ namespace MpWpfApp {
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "To _Web Search",
-                                    IconResourceKey = Application.Current.Resources["SearchIcon"] as string,
+                                    IconResourceKey = Application.Current.Resources["WebIcon"] as string,
                                     SubItems = new List<MpMenuItemViewModel>() {
                                         new MpMenuItemViewModel() {
                                             Header = "_Google",
@@ -2258,7 +2264,10 @@ namespace MpWpfApp {
                 }
             }, !IsAppPaused);
 
-
+        public ICommand FindAndReplaceSelectedItem => new RelayCommand(
+            () => {
+                SelectedItem.ToggleFindAndReplaceVisibleCommand.Execute(null);
+            }, SelectedItem != null && !SelectedItem.IsFindAndReplaceVisible && SelectedItem.IsTextItem);
         #endregion
     }
     public enum MpExportType {

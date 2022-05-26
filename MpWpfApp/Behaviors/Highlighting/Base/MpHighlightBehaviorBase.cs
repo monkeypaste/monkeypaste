@@ -20,7 +20,9 @@ namespace MpWpfApp {
         Content
     }
 
-    public abstract class MpHighlightBehaviorBase<T> : MpBehavior<T>, IComparable<MpHighlightBehaviorBase<T>>, MpIHighlightRegion where T : MpUserControl {
+    public abstract class MpHighlightBehaviorBase<T> : 
+        MpBehavior<T>, 
+        IComparable<MpHighlightBehaviorBase<T>>, MpIHighlightRegion where T : MpUserControl {
         #region Private Variables
 
         protected List<KeyValuePair<TextRange, Brush>> _uniqueContentBackgroundBrushLookup = new List<KeyValuePair<TextRange, Brush>>();
@@ -101,9 +103,9 @@ namespace MpWpfApp {
                 while (AssociatedObject == null) {
                     await Task.Delay(100);
                 }
-                if(!MpSearchBoxViewModel.Instance.HasText) {
-                    return;
-                }
+                //if(!MpSearchBoxViewModel.Instance.HasText) {
+                //    return;
+                //}
                 if(_wasUnloaded) {
                     Reset();
                 }

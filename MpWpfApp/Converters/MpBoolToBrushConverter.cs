@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpBoolToBrushConverter : IValueConverter {
@@ -17,14 +18,31 @@ namespace MpWpfApp {
                 return null;
             }
 
-            string brushHex = brushHexParts[0];
+            string brushHexOrNamedColorStr = brushHexParts[0];
 
             if (brushHexParts.Length == 2) {
-                brushHex = boolVal ? brushHexParts[0] : brushHexParts[1];
+                brushHexOrNamedColorStr = boolVal ? brushHexParts[0] : brushHexParts[1];
+            }
+            
+            return MpSystemColors.ConvertFromString(brushHexOrNamedColorStr).ToWpfBrush();
+
+            
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            return null;
+        }
+    }
+
+    public class MpBoolFlipToBrushConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            if (value == null || parameter == null) {
+                return null;
             }
 
+            bool boolVal = (bool)value;
+            return new MpBoolToBrushConverter().Convert(!boolVal, targetType, parameter, culture);
 
-            return brushHex.ToBrush();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

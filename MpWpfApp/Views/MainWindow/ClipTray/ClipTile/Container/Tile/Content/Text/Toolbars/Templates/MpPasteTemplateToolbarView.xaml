@@ -32,7 +32,7 @@
                                 HorizontalAlignment="Center"
                                 Background="{Binding SelectedItem.TemplateHexColor,
                                                      Converter={StaticResource StringHexToBrushConverter}}"
-                                CornerRadius="15">
+                                CornerRadius="5">
                 <ComboBox x:Name="SelectedTemplateComboBox"
                           MinWidth="100"
                           HorizontalContentAlignment="Left"

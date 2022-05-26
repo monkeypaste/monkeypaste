@@ -11,7 +11,7 @@ namespace MpWpfApp {
         //returns primary source by default but secondary w/ parameter of 'SecondarySource' 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string hexStr && hexStr.IsStringHexColor()) {
-                Brush brush = hexStr.ToBrush();
+                Brush brush = hexStr.ToWpfBrush();
                 var bgBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
                 bgBmp = MpWpfImagingHelper.TintBitmapSource(bgBmp, ((SolidColorBrush)brush).Color, false);
                 var borderBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/textureborder.png"));

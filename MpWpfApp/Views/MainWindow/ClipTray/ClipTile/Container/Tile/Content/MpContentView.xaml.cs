@@ -77,7 +77,7 @@ namespace MpWpfApp {
             //while (BindingContext.IsAnyBusy) {
             //    await Task.Delay(100);
             //}
-            //RtbHighlightBehavior.Attach(this);
+            RtbHighlightBehavior.Attach(this);
             ContentViewDropBehavior.Attach(this);
 
             var ctv = this.GetVisualAncestor<MpClipTileView>();
@@ -91,7 +91,7 @@ namespace MpWpfApp {
         }
 
         private void DetachAllBehaviors() {
-            //RtbHighlightBehavior.Detach();
+            RtbHighlightBehavior.Detach();
             ContentViewDropBehavior.Detach();
 
             //var ctv = this.GetVisualAncestor<MpClipTileView>();

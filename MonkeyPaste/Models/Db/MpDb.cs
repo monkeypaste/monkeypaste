@@ -916,6 +916,16 @@ namespace MonkeyPaste {
                 DefaultKeyString = "PageDown"
             };
             await AddItemAsync<MpShortcut>(sh34);
+
+            var sh35 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("a39ac0cb-41e4-47b5-b963-70e388dc156a"),
+                ShortcutName = "Find and Replace",
+                ShortcutType = MpShortcutType.FindAndReplaceSelectedItem,
+                RouteType = 1,
+                KeyString = "Control+H",
+                DefaultKeyString = "Control+H"
+            };
+            await AddItemAsync<MpShortcut>(sh35);
             #endregion
 
             #region Anayltic Items

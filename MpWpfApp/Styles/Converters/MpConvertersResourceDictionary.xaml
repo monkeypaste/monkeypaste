@@ -36,6 +36,7 @@
     <local:MpBoolToImageSourceConverter x:Key="BoolToImageSourceConverter" />
     <local:MpBoolToIconSourceConverter x:Key="BoolToIconSourceConverter" />
     <local:MpBoolToBrushConverter x:Key="BoolToBrushConverter" />
+    <local:MpBoolFlipToBrushConverter x:Key="BoolToBrushFlipConverter" />
     <local:MpEnumStringToKeyLiteralStringConverter x:Key="EnumStringToKeyLiteralStringConverter" />
     <local:MpBase64StringToBitmapSourceConverter x:Key="Base64ToImageBrushConverter" />
     <local:MpStringToDateTimeConverter x:Key="StringToDateTimeConverter" />

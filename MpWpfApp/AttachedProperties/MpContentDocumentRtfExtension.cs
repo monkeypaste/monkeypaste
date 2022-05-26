@@ -106,15 +106,10 @@ namespace MpWpfApp {
             var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
             if (ctcv != null) {
                 ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(fe));
-            }//.FireAndForgetSafeAsync(fe.DataContext as MpClipTileViewModel);
+            }
         }
 
         private static void DisableReadOnly(FrameworkElement fe) {
-            // when this works:
-            // rtb.IsReadOnly = true
-            // ctvm.IsContentReadOnly = false
-
-            //
             var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
             
             if (ctcv != null) {
@@ -125,11 +120,30 @@ namespace MpWpfApp {
                     ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
                 }
                 (fe as RichTextBox).FitDocToRtb();
-                //MpIsFocusedExtension.SetIsFocused(fe, true);
             }
-
         }
 
+        public static void ExpandContent(MpClipTileViewModel ctvm) {
+            var rtb = FindRtbByViewModel(ctvm);
+            var ctcv = rtb.GetVisualAncestor<MpClipTileContainerView>();
+
+            if (ctcv != null) {
+                SetReadOnlyWidth(rtb, ctcv.ActualWidth);
+
+                if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
+                    ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
+                }
+                rtb.FitDocToRtb();
+            }
+        }
+
+        public static void UnexpandContent(MpClipTileViewModel ctvm) {
+            var rtb = FindRtbByViewModel(ctvm);
+            var ctcv = rtb.GetVisualAncestor<MpClipTileContainerView>();
+            if (ctcv != null) {
+                ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(rtb));
+            }
+        }
         public static async Task SaveTextContent(RichTextBox rtb) {
             if(MpClipTrayViewModel.Instance.IsRequery || MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;
@@ -388,6 +402,30 @@ namespace MpWpfApp {
                 
                 rtb.Document.ConfigureLineHeight();
             }
+        }
+
+
+        public static List<TextRange> FindContent(MpClipTileViewModel ctvm, string matchText, bool isCaseSensitive = false, bool matchWholeWord = false, bool isRegEx = false) {
+            var rtb = FindRtbByViewModel(ctvm);
+
+            return rtb.Document.FindText(
+                matchText,
+                isCaseSensitive ? MpWpfRichDocumentExtensions.FindFlags.MatchCase : MpWpfRichDocumentExtensions.FindFlags.None);
+        }
+
+        public static RichTextBox FindRtbByViewModel(MpClipTileViewModel ctvm) {
+            var cvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
+            if (cvl == null) {
+                Debugger.Break();
+            }
+            var cv = cvl.FirstOrDefault(x => x.DataContext == ctvm);
+            if (cv == null) {
+                Debugger.Break();
+            }
+            if(cv.Rtb == null) {
+                Debugger.Break();
+            }
+            return cv.Rtb;
         }
 
         #endregion

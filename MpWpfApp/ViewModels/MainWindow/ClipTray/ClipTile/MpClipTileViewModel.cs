@@ -16,6 +16,8 @@
     using MonkeyPaste;
     using MonkeyPaste.Plugin;
     using System.Speech.Synthesis;
+    using System.Windows.Documents;
+using System.Text.RegularExpressions;
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 
@@ -24,7 +26,8 @@
         MpIUserColorViewModel,
         MpIHoverableViewModel,
         MpIResizableViewModel,
-        MpITextSelectionRange {
+        MpITextSelectionRange,
+        MpIFindAndReplaceViewModel {
         #region Private Variables
 
         private List<string> _tempFileList = new List<string>();
@@ -91,6 +94,210 @@
             get => CopyItemHexColor;
             set => CopyItemHexColor = value;
         }
+
+        #endregion
+
+        #region MpIFindAndReplaceViewModel Implementation
+
+        private int _currentMatchIdx = 0;
+        private List<TextRange> _matches;
+        private MpRtbHighlightBehavior _rtbHighligher {
+            get {
+                var cv = Application.Current.MainWindow.GetVisualDescendents<MpContentView>().FirstOrDefault(x => x.DataContext == this);
+                if(cv == null) {
+                    return null;
+                }
+                return cv.RtbHighlightBehavior;
+            }
+        }
+        public bool IsFindAndReplaceVisible { get; set; }
+        
+        private string _findText;
+        public string FindText {
+            get {
+                if(string.IsNullOrEmpty(_findText) && !IsFindTextBoxFocused) {
+                    return FindPlaceholderText;
+                }
+                return _findText;
+            }
+            set {
+                if(_findText != value && value != FindPlaceholderText) {
+                    _findText = value;
+                }
+                OnPropertyChanged(nameof(FindText));
+                OnPropertyChanged(nameof(IsFindValid));
+            }
+        }
+        private string _replaceText;
+        public string ReplaceText { 
+            get {
+                if (string.IsNullOrEmpty(_replaceText) && !IsReplaceTextBoxFocused) {
+                    return ReplacePlaceholderText;
+                }
+                return _replaceText;
+            }
+            set {
+                if(_replaceText != value && value != ReplacePlaceholderText) {
+                    _replaceText = value;
+                    OnPropertyChanged(nameof(ReplaceText));
+                }
+            }
+        }
+
+        public string FindPlaceholderText => "Find...";
+        public string ReplacePlaceholderText => "Replace...";
+
+        private bool _isFindTextBoxFocused;
+        public bool IsFindTextBoxFocused {
+            get => _isFindTextBoxFocused;
+            set {
+                if(_isFindTextBoxFocused != value) {                    
+                    _isFindTextBoxFocused = value;
+                    if (IsFindTextBoxFocused && FindText == FindPlaceholderText) {
+                        OnPropertyChanged(nameof(FindText));
+                    }
+                    OnPropertyChanged(nameof(IsFindTextBoxFocused));
+                }
+            }
+        }
+        private bool _isReplaceTextBoxFocused;
+        public bool IsReplaceTextBoxFocused {
+            get => _isReplaceTextBoxFocused;
+            set {
+                if (_isReplaceTextBoxFocused != value) {
+                    _isReplaceTextBoxFocused = value;
+                    if (IsReplaceTextBoxFocused && ReplaceText == ReplacePlaceholderText) {
+                        OnPropertyChanged(nameof(ReplaceText));
+                    }
+                    OnPropertyChanged(nameof(IsReplaceTextBoxFocused));
+                }
+            }
+        }
+
+        public bool IsReplaceMode { get; set; }
+        public bool IsFindValid => string.IsNullOrEmpty(_findText) || (!string.IsNullOrEmpty(_findText) && HasMatch);
+
+        public bool HasMatch => _matches != null && _matches.Count > 0;
+        public bool MatchCase { get; set; }
+        public bool MatchWholeWord { get; set; }
+        public bool UseRegEx { get; set; }
+
+        public ObservableCollection<string> RecentFindTexts {
+            get => new ObservableCollection<string>(MpPreferences.RecentFindTexts.Split(new string[] { MpPreferences.STRING_ARRAY_SPLIT_TOKEN },StringSplitOptions.RemoveEmptyEntries));
+            set => MpPreferences.RecentFindTexts = string.Join(MpPreferences.STRING_ARRAY_SPLIT_TOKEN, value);
+        }
+        public ObservableCollection<string> RecentReplaceTexts {
+            get => new ObservableCollection<string>(MpPreferences.RecentReplaceTexts.Split(new string[] { MpPreferences.STRING_ARRAY_SPLIT_TOKEN }, StringSplitOptions.RemoveEmptyEntries));
+            set => MpPreferences.RecentReplaceTexts = string.Join(MpPreferences.STRING_ARRAY_SPLIT_TOKEN, value);
+        }
+        public ICommand ToggleFindAndReplaceVisibleCommand => new RelayCommand(
+            () => {
+                IsFindAndReplaceVisible = !IsFindAndReplaceVisible;
+
+                if(IsFindAndReplaceVisible) {
+                    if(IsContentReadOnly) {
+                        MpContentDocumentRtfExtension.ExpandContent(this);
+                    }
+                } else {
+                    if (IsContentReadOnly) {
+                        MpContentDocumentRtfExtension.UnexpandContent(this);
+
+                        MpContentDocumentRtfExtension.SaveTextContent(
+                            MpContentDocumentRtfExtension.FindRtbByViewModel(this))
+                        .FireAndForgetSafeAsync(this);
+                    }
+                    _rtbHighligher.Reset();
+                }
+                
+            },IsTextItem);
+
+        public ICommand PerformInitialFindAndOrReplaceCommand => new RelayCommand(
+            () => {
+                _currentMatchIdx = -1;
+                _matches = MpContentDocumentRtfExtension.FindContent(this, FindText, MatchCase, MatchWholeWord, UseRegEx);
+
+                var rftl = RecentFindTexts;
+                int recentFindIdx = rftl.IndexOf(FindText);
+                if(recentFindIdx < 0) {
+                    rftl.Insert(0, FindText);
+                    rftl = new ObservableCollection<string>(rftl.Take(MpPreferences.MaxRecentTextsCount));
+                } else {
+                    rftl.RemoveAt(recentFindIdx);
+                    rftl.Insert(0, FindText);
+                }
+                this.RecentFindTexts = rftl;
+
+                if(IsReplaceMode) {
+                    var rrtl = RecentReplaceTexts.ToList();
+                    int recentReplaceIdx = rrtl.IndexOf(_replaceText);
+                    if (recentReplaceIdx < 0) {
+                        rrtl.Insert(0, _replaceText);
+                    } else {
+                        rrtl.RemoveAt(recentReplaceIdx);
+                        rrtl.Insert(0, _replaceText);
+                    }
+                    RecentReplaceTexts = new ObservableCollection<string>(rrtl.Take(MpPreferences.MaxRecentTextsCount));
+                }
+
+                _rtbHighligher.Reset();
+                if(HasMatch) {
+                    _rtbHighligher.InitHighlighting(_matches);
+
+                    if(IsReplaceMode) {
+                        ReplaceNextCommand.Execute(null);
+                    } else {
+                        FindNextCommand.Execute(null);
+                    }
+                }
+                OnPropertyChanged(nameof(IsFindValid));
+
+            }, !string.IsNullOrEmpty(FindText) && FindText != FindPlaceholderText);
+
+        public ICommand FindNextCommand => new RelayCommand(
+            () => {
+                _currentMatchIdx++;
+                if(_currentMatchIdx >= _matches.Count) {
+                    _currentMatchIdx = 0;
+                }
+                _rtbHighligher.SelectedIdx = _currentMatchIdx;
+                _rtbHighligher.ApplyHighlighting();
+                MpTextSelectionRangeExtension.SetTextSelection(this,_matches[_currentMatchIdx]);
+                
+            }, HasMatch);
+
+        public ICommand FindPreviousCommand => new RelayCommand(
+            () => {
+                _currentMatchIdx--;
+                if (_currentMatchIdx < 0) {
+                    _currentMatchIdx = _matches.Count - 1;
+                }
+                _rtbHighligher.SelectedIdx = _currentMatchIdx; 
+                _rtbHighligher.ApplyHighlighting();
+                MpTextSelectionRangeExtension.SetTextSelection(this, _matches[_currentMatchIdx]);
+            }, HasMatch);
+
+        public ICommand ReplaceNextCommand => new RelayCommand(
+            () => {
+                FindNextCommand.Execute(null);
+
+                MpTextSelectionRangeExtension.SetSelectionText(this,ReplaceText);
+
+            }, HasMatch);
+
+        public ICommand ReplacePreviousCommand => new RelayCommand(
+            () => {
+                FindPreviousCommand.Execute(null);
+
+                MpTextSelectionRangeExtension.SetSelectionText(this, ReplaceText);
+            }, HasMatch);
+        public ICommand ReplaceAllCommand => new RelayCommand(
+            () => {
+                _currentMatchIdx = -1;
+                for(int i = 0;i < _matches.Count;i++) {
+                    ReplaceNextCommand.Execute(null);
+                }
+                
+            }, HasMatch);
 
         #endregion
 
@@ -499,7 +706,7 @@
         public string CaretBrushHexColor {
             get {
                 if(IsContentReadOnly) {
-                    if(IsSubSelectionEnabled) {
+                    if(IsSubSelectionEnabled || IsFindAndReplaceVisible) {
                         return MpSystemColors.Red;
                     }
                     return MpSystemColors.Transparent;                    
@@ -734,6 +941,10 @@
                 if(Parent.HasScrollVelocity) {
                     return false;
                 }
+                if(IsFindAndReplaceVisible) {
+                    return false;
+                }
+
 
                 if (!IsContentReadOnly) {
                     if (IsEditingTemplate ||
@@ -1670,6 +1881,7 @@
                 IsContentReadOnly = !IsContentReadOnly;
 
             }, IsTextItem);
+               
 
         #endregion
     }

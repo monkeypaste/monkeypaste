@@ -122,6 +122,28 @@ namespace MpWpfApp {
 
         }
 
+        public static void SetTextSelection(MpITextSelectionRange tsr, TextRange tr) {
+            var cvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
+            if (cvl == null) {
+                return;
+            }
+            var cv = cvl.FirstOrDefault(x => x.DataContext == tsr);
+            if (cv == null) {
+                Debugger.Break();
+            }
+            var rtb = cv.Rtb;
+
+            if (!rtb.Document.ContentStart.IsInSameDocument(tr.Start) ||
+                !rtb.Document.ContentStart.IsInSameDocument(tr.End)) {
+                return;
+            }
+            rtb.Selection.Select(tr.Start, tr.End);
+            
+            if(tr.Start.Parent is FrameworkContentElement fce) {
+                fce.BringIntoView();
+            }
+        }
+
         public static void SetSelectionText(MpITextSelectionRange tsr, string text) {
             var cvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
             if(cvl == null) {

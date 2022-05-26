@@ -1588,5 +1588,53 @@ namespace MpWpfApp.Properties {
                 this["UniqueContentItemIdx"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RecentFindTexts {
+            get {
+                return ((string)(this["RecentFindTexts"]));
+            }
+            set {
+                this["RecentFindTexts"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RecentReplaceTexts {
+            get {
+                return ((string)(this["RecentReplaceTexts"]));
+            }
+            set {
+                this["RecentReplaceTexts"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RecentSearchTexts {
+            get {
+                return ((string)(this["RecentSearchTexts"]));
+            }
+            set {
+                this["RecentSearchTexts"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int MaxRecentTextsCount {
+            get {
+                return ((int)(this["MaxRecentTextsCount"]));
+            }
+            set {
+                this["MaxRecentTextsCount"] = value;
+            }
+        }
     }
 }

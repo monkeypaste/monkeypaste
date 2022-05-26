@@ -44,6 +44,7 @@ namespace MonkeyPaste {
         PasteHere,
         PreviousPage,
         NextPage,
+        FindAndReplaceSelectedItem,
         //remaining are data (not context) driven using commandId
         PasteCopyItem = 101,
         SelectTag = 102,

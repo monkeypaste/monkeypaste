@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.Windows.Navigation;
 using System.Windows.Input;
 using System.Windows.Data;
+using System.Text.RegularExpressions;
 
 namespace MpWpfApp {
     public static class MpWpfRichDocumentExtensions {
@@ -1135,36 +1136,79 @@ namespace MpWpfApp {
 
             //return matchRangeList;
         }
+        public static List<TextRange> FindText(
+            this FlowDocument fd,
+            string input,
+            bool isCaseSensitive = false,
+            bool matchWholeWord = false,
+            bool useRegEx = false) {
+            
+            input = input.Replace(Environment.NewLine, string.Empty);
+
+
+            if(matchWholeWord || useRegEx) {
+                string pattern;
+                if(useRegEx) {
+                    pattern = input;
+                } else {
+                    pattern = $"\b{input}\b";
+                }
+                string pt = fd.ToPlainText();
+                var mc = Regex.Matches(pt, pattern, isCaseSensitive ? RegexOptions.None:RegexOptions.IgnoreCase);
+
+                var trl = new List<TextRange>();
+                foreach (Match m in mc) {
+                    foreach (Group mg in m.Groups) {
+                        foreach (Capture c in mg.Captures) {
+                            var c_trl = fd.ContentStart.FindAllText(fd.ContentEnd, c.Value);
+                            trl.AddRange(c_trl);
+                        }
+                    }
+                }
+                trl = trl.Distinct().ToList();
+                if(useRegEx && matchWholeWord) {
+                    trl = trl.Where(x => Regex.IsMatch(x.Text, $"\b{x.Text}\b")).ToList();
+                }
+                return trl;
+            }
+
+            return fd.ContentStart.FindAllText(fd.ContentEnd, input, isCaseSensitive).ToList();
+        }
 
         public static List<TextRange> FindText(
             this FlowDocument fd,
             string input,
             FindFlags flags = FindFlags.MatchCase,
             CultureInfo cultureInfo = null) {
+            input = input.Replace(Environment.NewLine, string.Empty);
+            return fd.ContentStart.FindAllText(fd.ContentEnd, input, flags.HasFlag(FindFlags.MatchCase)).ToList();
             var trl = new List<TextRange>();
-            var tp = fd.ContentStart;
+            //var tp = fd.ContentStart;
 
-            var inputParts = input.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            //var inputParts = input.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
-            while (tp != null && tp != fd.ContentEnd) {
-                var ctp = tp;
-                int i;
-                for(i = 0;i < inputParts.Length && ctp != null && ctp != fd.ContentEnd;i++) {
-                    string inputPart = inputParts[i];
-                    var tr = ctp.FindText(fd.ContentEnd, inputPart, flags, cultureInfo);
-                    if (tr == null) {
-                        break;
-                    }
+            //while (tp != null && tp != fd.ContentEnd) {
+            //    var ctp = tp;
+            //    tp = null;
+            //    int i;
+            //    for(i = 0;i < inputParts.Length && ctp != null && ctp != fd.ContentEnd;i++) {
+            //        string inputPart = inputParts[i];
+            //        var tr = ctp.FindText(fd.ContentEnd, inputPart, flags, cultureInfo);
+            //        if (tr == null) {
+            //            break;
+            //        }
+            //        if(tp == null) {
+            //            tp = tr.Start;
+            //        }
+            //        ctp = tr.End.GetNextInsertionPosition(LogicalDirection.Forward);
+            //    }
+            //    if(i != inputParts.Length) {
+            //        break;
+            //    }
+            //    trl.Add(new TextRange(tp, ctp));
 
-                    ctp = tr.End.GetNextInsertionPosition(LogicalDirection.Forward);
-                }
-                if(i != inputParts.Length) {
-                    break;
-                }
-                trl.Add(new TextRange(tp, ctp));
-
-                tp = ctp.GetNextInsertionPosition(LogicalDirection.Forward);
-            }
+            //    tp = ctp.GetNextInsertionPosition(LogicalDirection.Forward);
+            //}
             return trl;
         }
 

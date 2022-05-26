@@ -1,7 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using MonkeyPaste.Plugin;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonkeyPaste {
     public static class MpSystemColors {
+
+        public static string ConvertFromString(string namedColorOrHexStr, string fallBack = "#00000000") {
+            if(string.IsNullOrWhiteSpace(namedColorOrHexStr)) {
+                return fallBack;
+            }
+            if(namedColorOrHexStr.IsStringHexColor()) {
+                return namedColorOrHexStr;
+            }
+            var hexColorPropInfo = typeof(MpSystemColors)
+                .GetProperties()
+                .FirstOrDefault(x => x.Name.ToLower() == namedColorOrHexStr.ToLower());
+
+            if(hexColorPropInfo == null) {
+                hexColorPropInfo = typeof(MpSystemColors)
+                .GetProperties()
+                .FirstOrDefault(x => x.Name.ToLower().StartsWith(namedColorOrHexStr.ToLower()));
+            }
+            if(hexColorPropInfo == null) {
+                MpConsole.WriteTraceLine($"Color named {namedColorOrHexStr} not found, returning {fallBack}");
+                return fallBack;
+            }
+            return hexColorPropInfo.GetValue(null, null) as string;
+        }
+
+
+
         public static string Black => "#FF000000";
         public static string White => "#FFFFFFFF";
         public static string DarkGray => "#FF696969"; //DimGray

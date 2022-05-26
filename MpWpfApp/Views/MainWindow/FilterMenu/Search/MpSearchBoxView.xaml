@@ -102,7 +102,9 @@
                             </ContextMenu.ItemContainerStyle>
                         </ContextMenu>
                     </Button.ContextMenu>-->
-                    <Image Source="/MpWpfApp;component/Resources/Images/search.png"
+                    <Image Source="{Binding .,
+                                            Source={StaticResource SearchIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
                            Stretch="Fill"
                            SnapsToDevicePixels="True" />
                 </Button>

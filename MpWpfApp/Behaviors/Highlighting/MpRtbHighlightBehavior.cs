@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -20,6 +21,8 @@ namespace MpWpfApp {
         }
 
         public override MpHighlightType HighlightType => MpHighlightType.Content;
+
+        
 
         public override void ScrollToSelectedItem() {
             if(AssociatedObject == null ||
@@ -50,6 +53,11 @@ namespace MpWpfApp {
 
             //AssociatedObject.Rtb.BringIntoView(characterRect);
             //AssociatedObject.Rtb.GetVisualDescendent<ScrollViewer>().ScrollToVerticalOffset(characterRect.Top);
+        }
+
+        public void InitHighlighting(List<TextRange> matches) {
+            _matches = matches;
+            SelectedIdx = -1;
         }
     }
 }

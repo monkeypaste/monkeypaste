@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using Xamarin.Essentials;
 
 namespace MonkeyPaste {
     public static class MpPreferences {
@@ -22,6 +23,8 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
+        public static readonly string STRING_ARRAY_SPLIT_TOKEN = "<&>SPLIT</&>";
 
         #region Property Reflection Referencer
 
@@ -332,7 +335,28 @@ namespace MonkeyPaste {
         public static MpIcon ThisAppIcon { get; set; }
 
         public static MpUserDevice ThisUserDevice { get; set; }
-        
+
+        public static string RecentFindTexts {
+            get => Default.Get(nameof(RecentFindTexts), string.Empty);
+            set => Default.Set(nameof(RecentFindTexts), value);
+        }
+
+
+        public static string RecentReplaceTexts {
+            get => Default.Get(nameof(RecentReplaceTexts), string.Empty);
+            set => Default.Set(nameof(RecentReplaceTexts), value);
+        }
+
+        public static string RecentSearchTexts {
+            get => Default.Get(nameof(RecentSearchTexts), string.Empty);
+            set => Default.Set(nameof(RecentSearchTexts), value);
+        }
+
+        public static int MaxRecentTextsCount {
+            get => Default.Get(nameof(MaxRecentTextsCount), 8);
+            set => Default.Set(nameof(MaxRecentTextsCount), value);
+        }
+
         public static string IgnoredProcessNames {
             get {
                 return Default.Get(nameof(IgnoredProcessNames), string.Empty);

@@ -376,6 +376,9 @@ namespace MpWpfApp {
                         case MpShortcutType.NextPage:
                             shortcutCommand = MpClipTrayViewModel.Instance.ScrollToNextPageCommand;
                             break;
+                        case MpShortcutType.FindAndReplaceSelectedItem:
+                            shortcutCommand = MpClipTrayViewModel.Instance.FindAndReplaceSelectedItem;
+                            break;
                         default:
                             if (sc.ShortcutType == MpShortcutType.PasteCopyItem) {
                                 shortcutCommand = MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand;

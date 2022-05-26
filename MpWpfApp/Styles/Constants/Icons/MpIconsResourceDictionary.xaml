@@ -95,8 +95,11 @@
     <s:String x:Key="SpeakIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/speak.png
     </s:String>
-    <s:String x:Key="SearchIcon">
+    <s:String x:Key="WebIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/web.png
+    </s:String>
+    <s:String x:Key="SearchIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/search.png
     </s:String>
     <s:String x:Key="GoogleIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/googleIcon.png

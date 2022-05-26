@@ -427,6 +427,9 @@
       <DependentUpon>MpFileItemParagraph.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Selector\MpTextViewTemplateSelector.cs" />
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\FindAndReplace\MpFindReplaceToolbarView.xaml.cs">
+      <DependentUpon>MpFindReplaceToolbarView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\DropMenu\MpDropMenuView.xaml.cs">
       <DependentUpon>MpDropMenuView.xaml</DependentUpon>
     </Compile>
@@ -806,6 +809,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\FindAndReplace\MpFindReplaceToolbarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
