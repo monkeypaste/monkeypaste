@@ -116,8 +116,10 @@
                 IsHitTestVisible="{Binding HasScrollVelocity,
                                            Source={x:Static local:MpClipTrayViewModel.Instance},
                                            Converter={StaticResource BoolFlipConverter}}"
-                MouseEnter="ClipTileTitleTextGrid_MouseEnter"
-                MouseLeave="ClipTileTitleTextGrid_MouseLeave"
+                local:MpHoverableExtension.IsEnabled="True"
+                local:MpHoverableExtension.IsHovering="{Binding IsHoveringOnTitleTextGrid,
+                                                                Mode=TwoWay}"
+                local:MpHoverableExtension.HoverCursor="IBeam"
                 Margin="10,3,0,0"
                 HorizontalAlignment="Stretch">
             <!--  Clip Title TextBlock  -->
@@ -139,7 +141,7 @@
                 </TextBlock.Effect>
             </TextBlock>
 
-            <Canvas x:Name="ClipTileTitleMarqueeCanvas"
+            <!--<Canvas x:Name="ClipTileTitleMarqueeCanvas"
                     Height="{Binding ActualHeight,
                                      ElementName=ClipTileTitleTextCanvas}"
                     MouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
@@ -148,19 +150,20 @@
                     local:MpMarqueeTextBoxExtension.DropShadowOffset="1 1"
                     local:MpMarqueeTextBoxExtension.MaxVelocity="-10"
                     local:MpMarqueeTextBoxExtension.TailPadding="30"
-                    local:MpMarqueeTextBoxExtension.Text="{Binding Path=Text,
-                                                            ElementName=ClipTileTitleTextBox}"
                     local:MpMarqueeTextBoxExtension.MaxRenderWidth="{Binding ActualWidth,
                                                                       ElementName=ClipTileTitleTextCanvas}"
-                    local:MpMarqueeTextBoxExtension.TextBox="{Binding ElementName=ClipTileTitleTextBox}"
                     Visibility="{Binding IsTitleReadOnly,
-                                         Converter={StaticResource BoolToVisibilityConverter}}" />
+                                         Converter={StaticResource BoolToVisibilityConverter}}" />-->
 
             <TextBox x:Name="ClipTileTitleTextBox"
-                     IsVisibleChanged="ClipTileTitleTextBox_IsVisibleChanged"
-                     LostFocus="ClipTileTitleTextBox_LostFocus"
                      PreviewKeyDown="ClipTileTitleTextBox_PreviewKeyDown"
                      local:MpIsFocusedExtension.IsEnabled="True"
+                     local:MpIsFocusedExtension.IsFocused="{Binding IsTitleFocused,
+                                                                    Mode=TwoWay}"
+                     local:MpIsFocusedExtension.SelectAllOnFocus="True"
+                     local:MpMarqueeTextBoxExtension.IsEnabled="True"
+                     local:MpMarqueeTextBoxExtension.IsReadOnly="{Binding IsTitleReadOnly,
+                                                                          Mode=TwoWay}"
                      MaxWidth="{Binding ActualWidth,
                                         ElementName=ClipTileTitleTextCanvas}"
                      Background="{StaticResource ClipTileTitleTextBoxBackgroundBrush}"
@@ -168,11 +171,8 @@
                      FontSize="{Binding ClipTileTitleFontSize,
                                         Source={x:Static local:MpMeasurements.Instance},
                                         Mode=OneWay}"
-                     IsReadOnly="False"
-                     Tag="{Binding ElementName=ClipTileTitleMarqueeCanvas}"
-                     Visibility="{Binding IsTitleReadOnly,
-                                          Converter={StaticResource BoolToVisibilityFlipConverter},
-                                          ConverterParameter={StaticResource Hide}}"
+                     IsReadOnly="{Binding IsTitleReadOnly,
+                                          Mode=OneWay}"
                      Text="{Binding CopyItemTitle,
                                     Mode=TwoWay,
                                     NotifyOnTargetUpdated=True,

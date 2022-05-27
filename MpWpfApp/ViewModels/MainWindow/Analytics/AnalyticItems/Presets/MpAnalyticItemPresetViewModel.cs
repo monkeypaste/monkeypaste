@@ -112,6 +112,10 @@ namespace MpWpfApp {
 
         #region State
 
+        public bool IsLabelTextBoxFocused { get; set; } = false;
+        public bool IsLabelReadOnly { get; set; } = true;
+
+
         public bool IsAllValid => Items.All(x => x.IsValid);
 
         public bool IsExpanded { get; set; }
@@ -432,8 +436,12 @@ namespace MpWpfApp {
                     if(IsSelected && Parent.Parent.IsSidebarVisible) {
                         LastSelectedDateTime = DateTime.Now;
                     }
+                    //if(!IsSelected) {
+                    //    IsLabelTextBoxFocused = false;
+                    //}
                     Parent.OnPropertyChanged(nameof(Parent.IsSelected));
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    Parent.SelectedItem = this;
+
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedPresetViewModel));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
@@ -454,6 +462,12 @@ namespace MpWpfApp {
                             await Preset.WriteToDatabaseAsync();
                             HasModelChanged = false;
                         });
+                    }
+                    break;
+                case nameof(IsLabelReadOnly):
+                    if(!IsLabelReadOnly) {
+                        IsLabelTextBoxFocused = true;
+                        IsSelected = true;
                     }
                     break;
             } 

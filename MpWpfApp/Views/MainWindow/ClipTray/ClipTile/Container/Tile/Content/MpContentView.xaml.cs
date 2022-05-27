@@ -80,14 +80,14 @@ namespace MpWpfApp {
             RtbHighlightBehavior.Attach(this);
             ContentViewDropBehavior.Attach(this);
 
-            var ctv = this.GetVisualAncestor<MpClipTileView>();
-            if (ctv != null) {
-                var cttv = ctv.TileTitleView;
-                if (cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
-                    MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
-                    MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
-                }
-            }
+            //var ctv = this.GetVisualAncestor<MpClipTileView>();
+            //if (ctv != null) {
+            //    var cttv = ctv.TileTitleView;
+            //    if (cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
+            //        MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+            //        MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+            //    }
+            //}
         }
 
         private void DetachAllBehaviors() {

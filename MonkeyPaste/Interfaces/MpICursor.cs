@@ -23,4 +23,6 @@ namespace MonkeyPaste {
     public interface MpICursor {
         void SetCursor(MpCursorType newCursor);
     }
+
+    
 }

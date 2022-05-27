@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         MpIHoverableViewModel,
         MpIFocusableViewModel,
         MpISelectableViewModel,
-        MpIEditableViewModel,
+        //MpIEditableViewModel,
         MpIMenuItemViewModel 
         where T:MpViewModelBase, MpITreeItemViewModel {
 

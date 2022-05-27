@@ -77,6 +77,26 @@ using System.Text.RegularExpressions;
         //}
         #endregion
 
+        #region MpIConditionalContentReadOnlyViewModel Implementation
+        //bool MpIConditionalContentReadOnlyViewModel.IsReadOnly { 
+        //    get; 
+        //    set; 
+        //}
+
+        //object MpIConditionalContentReadOnlyViewModel.Content { 
+        //    get; 
+        //    set; 
+        //}
+        //object MpIConditionalTitleReadOnlyViewModel.Title { get; set; }
+        //#endregion
+
+        //#region MpIConditionalTitleReadOnlyViewModel Implementation
+        //bool MpIConditionalTitleReadOnlyViewModel.IsReadOnly {
+        //    get;
+        //    set;
+        //}
+        #endregion
+
         #region MpITextSelectionRangeViewModel Implementation 
 
         public int SelectionStart { get; set; }
@@ -594,13 +614,14 @@ using System.Text.RegularExpressions;
                 if (IsSelected || IsHovering) {
                     return Brushes.Black;//Brushes.DimGray;
                 }
+                
                 return Brushes.Transparent;
             }
         }
 
         public Brush TileTitleTextGridBackgroundBrush {
             get {
-                if (IsHoveringOnTitleTextGrid && !IsEditingTitle) {
+                if (IsHoveringOnTitleTextGrid && !IsTitleReadOnly) {
                     return new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
                 }
                 return Brushes.Transparent;
@@ -877,7 +898,6 @@ using System.Text.RegularExpressions;
 
         public bool IsTitleFocused { get; set; } = false;
 
-        public bool IsEditingTitle => IsTitleFocused && IsSelected;
 
         public bool IsEditingTemplate {
             get {
@@ -1273,7 +1293,7 @@ using System.Text.RegularExpressions;
             IsSelected = true;
             Parent.IsSelectionReset = false;
             if(reqFocus) {
-                RequestFocus();
+                IsContentFocused = true;
             }
         }
 
@@ -1348,10 +1368,6 @@ using System.Text.RegularExpressions;
             OnUiUpdateRequest?.Invoke(this, null);
         }
 
-        public void RequestFocus() {
-            //OnFocusRequest?.Invoke(this, null);
-            IsContentFocused = true;
-        }
 
         public void RequestSyncModel() {
             OnSyncModels?.Invoke(this, null);
@@ -1620,7 +1636,6 @@ using System.Text.RegularExpressions;
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
-                        RequestFocus();
                         if (IsPinned) {
                             Parent.ClearClipSelection(false);
                         } else {
@@ -1710,24 +1725,10 @@ using System.Text.RegularExpressions;
                         }
                     }
                     break;
-
-                case nameof(IsEditingTitle):
-                    if (IsEditingTitle) {
-                        if (!IsSelected) {
-                            IsSelected = true;
-                        }
-                        if (!IsTitleFocused) {
-                            IsTitleFocused = true;
-                        }
-                    } else {
-                        IsTitleFocused = false;
-                    }
-                    break;
-                case nameof(IsTitleFocused):
-                    if (IsTitleFocused) {
-                        if (!IsEditingTitle) {
-
-                        }
+                case nameof(IsTitleReadOnly):
+                    if(!IsTitleReadOnly) {
+                        IsTitleFocused = true;
+                        IsSelected = true;
                     }
                     break;
                 case nameof(IsContextMenuOpen):
@@ -1898,7 +1899,9 @@ using System.Text.RegularExpressions;
                 IsContentReadOnly = !IsContentReadOnly;
 
             }, IsTextItem);
-               
+
+
+
 
         #endregion
     }

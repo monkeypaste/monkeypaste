@@ -45,30 +45,14 @@ namespace MpWpfApp {
             //DetachAllBehaviors();
         }
 
-        private void ClipTileTitleTextGrid_MouseEnter(object sender, MouseEventArgs e) {
-            if (BindingContext == null) {
-                return;
-            }
-            Application.Current.MainWindow.Cursor = Cursors.IBeam;
-            BindingContext.IsHoveringOnTitleTextGrid = true;
-        }
-
-        private void ClipTileTitleTextGrid_MouseLeave(object sender, MouseEventArgs e) {
-            if(BindingContext == null) {
-                return;
-            }
-            Application.Current.MainWindow.Cursor = Cursors.Arrow;
-            BindingContext.IsHoveringOnTitleTextGrid = false;
-        }
-
         private void ClipTileTitleTextGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if (BindingContext == null || BindingContext.IsEditingTitle) {
-                return;
-            }
-            if (!BindingContext.IsEditingTitle) {
-                BindingContext.IsTitleReadOnly = false;
-                e.Handled = true;
-            }            
+            //if (BindingContext == null || BindingContext.IsEditingTitle) {
+            //    return;
+            //}
+            //if (!BindingContext.IsEditingTitle) {
+            //    BindingContext.IsTitleReadOnly = false;
+            //    e.Handled = true;
+            //}            
         }
 
         private void ClipTileTitleTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {

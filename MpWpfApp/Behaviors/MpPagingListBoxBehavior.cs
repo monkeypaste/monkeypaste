@@ -226,17 +226,17 @@ namespace MpWpfApp {
                 case MpMessageType.JumpToIdxCompleted:
                     AssociatedObject.UpdateLayout();
                     _velocity = _lastWheelDelta = 0;
-                    var cttvl = AssociatedObject.GetVisualDescendents<MpClipTileTitleView>();
-                    if (cttvl != null) {
-                        foreach (var cttv in cttvl) {
-                            if (cttv.ClipTileTitleMarqueeCanvas != null) {
-                                // BUG this is a workaround because marquee attached property
-                                // doesn't recognize that the data context has changed
-                                MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
-                                MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
-                            }
-                        }
-                    }
+                    //var cttvl = AssociatedObject.GetVisualDescendents<MpClipTileTitleView>();
+                    //if (cttvl != null) {
+                    //    foreach (var cttv in cttvl) {
+                    //        if (cttv.ClipTileTitleMarqueeCanvas != null) {
+                    //            // BUG this is a workaround because marquee attached property
+                    //            // doesn't recognize that the data context has changed
+                    //            MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                    //            MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                    //        }
+                    //    }
+                    //}
                     break;
             }
         }

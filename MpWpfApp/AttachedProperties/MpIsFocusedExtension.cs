@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using MonkeyPaste;
 
 namespace MpWpfApp {
@@ -116,8 +117,7 @@ namespace MpWpfApp {
                             
                             if (descriptor == null) {
                                 return;
-                            }
-
+                            }                            
                             descriptor.AddValueChanged(tbb,Tbb_OnReadOnlyChanged);
                         }
                     } else {
@@ -167,6 +167,7 @@ namespace MpWpfApp {
             if (dpo == null) {
                 return;
             }
+            e.Handled = true;
             GotFocus(dpo);
         }
 
@@ -187,8 +188,8 @@ namespace MpWpfApp {
             var tbb = sender as TextBoxBase;
             if (tbb != null) {
                 bool isFocused = GetIsFocused(tbb);
-                if(isFocused) {
-                    if(tbb.IsReadOnly) {
+                if (isFocused) {
+                    if (tbb.IsReadOnly) {
                         // when focused textbox becomes readonly need to make sure static IsAnyTextBoxFocused is toggled
                         LostFocus(tbb);
                     } else {
@@ -200,32 +201,30 @@ namespace MpWpfApp {
             }
         }
 
-        private static void GotFocus(DependencyObject dpo) {            
+        public static void GotFocus(DependencyObject dpo) {
             SetIsFocused(dpo, true);
-            if(dpo is FrameworkElement fe) {
+            if (dpo is FrameworkElement fe) {
                 Keyboard.Focus(fe);
-                if(fe.DataContext is MpISelectableViewModel svm) {
+                if (fe.DataContext is MpISelectableViewModel svm) {
                     svm.IsSelected = true;
                 }
             }
             if (dpo is TextBoxBase tbb) {
-                if(tbb.IsReadOnly) {
+                if (tbb.IsReadOnly) {
                     IsAnyTextBoxFocused = false;
                 } else {
                     IsAnyTextBoxFocused = true;
-                    Keyboard.Focus(tbb);
-                    if (GetSelectAllOnFocus(dpo)) {
-                        tbb.SelectAll();
-                    } else {
-                        if(tbb is TextBox tb) {
-                            tb.CaretIndex = 0;
-                        } else if(tbb is RichTextBox rtb) {
-                            rtb.CaretPosition = rtb.Document.ContentStart;
-                        }
+                    //Keyboard.Focus(tbb);
+                    if (tbb is TextBox tb) {
+                        tb.CaretIndex = 0;
+                    } else if (tbb is RichTextBox rtb) {
+                        rtb.CaretPosition = rtb.Document.ContentStart;
                     }
-                }  
-            }          
-            
+                    if (GetSelectAllOnFocus(dpo)) {                        
+                        tbb.SelectAll();
+                    }
+                }
+            }
         }
 
         private static void LostFocus(DependencyObject dpo) {
@@ -234,6 +233,67 @@ namespace MpWpfApp {
             }
             
             SetIsFocused(dpo, false);
+        }
+    }
+
+    public class SelectTextOnFocus : DependencyObject {
+        public static readonly DependencyProperty ActiveProperty = DependencyProperty.RegisterAttached(
+            "Active",
+            typeof(bool),
+            typeof(SelectTextOnFocus),
+            new PropertyMetadata(false, ActivePropertyChanged));
+
+        private static void ActivePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (d is TextBox) {
+                TextBox textBox = d as TextBox;
+                if ((e.NewValue as bool?).GetValueOrDefault(false)) {
+                    textBox.GotKeyboardFocus += OnKeyboardFocusSelectText;
+                    textBox.PreviewMouseLeftButtonDown += OnMouseLeftButtonDown;
+                } else {
+                    textBox.GotKeyboardFocus -= OnKeyboardFocusSelectText;
+                    textBox.PreviewMouseLeftButtonDown -= OnMouseLeftButtonDown;
+                }
+            }
+        }
+
+        private static void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            DependencyObject dependencyObject = GetParentFromVisualTree(e.OriginalSource);
+
+            if (dependencyObject == null) {
+                return;
+            }
+
+            var textBox = (TextBox)dependencyObject;
+            if (!textBox.IsKeyboardFocusWithin) {
+                textBox.Focus();
+                e.Handled = true;
+            }
+        }
+
+        private static DependencyObject GetParentFromVisualTree(object source) {
+            DependencyObject parent = source as UIElement;
+            while (parent != null && !(parent is TextBox)) {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+
+            return parent;
+        }
+
+        private static void OnKeyboardFocusSelectText(object sender, KeyboardFocusChangedEventArgs e) {
+            TextBox textBox = e.OriginalSource as TextBox;
+            if (textBox != null) {
+                textBox.SelectAll();
+            }
+        }
+
+        [AttachedPropertyBrowsableForChildrenAttribute(IncludeDescendants = false)]
+        [AttachedPropertyBrowsableForType(typeof(TextBox))]
+        public static bool GetActive(DependencyObject @object) {
+            return (bool)@object.GetValue(ActiveProperty);
+        }
+
+        public static void SetActive(DependencyObject @object, bool value) {
+            @object.SetValue(ActiveProperty, value);
         }
     }
 }

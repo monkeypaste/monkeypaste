@@ -104,27 +104,28 @@ namespace MpWpfApp {
             FontFamilyCombo.SelectedItem = fontFamily;
 
             // Set font size combo
-            var fontSizeObj = artb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+            var fontSize = artb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+            FontSizeCombo.SelectedItem = fontSize;
 
-            if (fontSizeObj == null || fontSizeObj.ToString() == "{DependencyProperty.UnsetValue}") {
-                fontSizeObj = string.Empty;
-            } else {
-                fontSizeObj = Math.Round((double)fontSizeObj);
-            }
-            if (!string.IsNullOrEmpty((string)fontSizeObj)) {
-                double fontSize;
-                try {
-                    fontSize = Convert.ToDouble(fontSizeObj);
-                    fontSize = Math.Round(fontSize, 1);
-                    if (!_defaultFontSizes.Contains(fontSize)) {
-                        _defaultFontSizes.Add(fontSize);
-                        _defaultFontSizes = new ObservableCollection<double>(_defaultFontSizes.OrderBy(x => x));
-                    }
-                    FontSizeCombo.SelectedItem = fontSize;
-                }catch(Exception ex) {
-                    MpConsole.WriteTraceLine("Error converting font size to double obj str: " + fontSizeObj.ToString(), ex);
-                }
-            }            
+            //if (fontSizeObj == null || fontSizeObj.ToString() == "{DependencyProperty.UnsetValue}") {
+            //    fontSizeObj = string.Empty;
+            //} else {
+            //    fontSizeObj = Math.Round((double)fontSizeObj);
+            //}
+            //if (!string.IsNullOrEmpty((string)fontSizeObj)) {
+            //    double fontSize;
+            //    try {
+            //        fontSize = Convert.ToDouble(fontSizeObj);
+            //        fontSize = Math.Round(fontSize, 1);
+            //        if (!_defaultFontSizes.Contains(fontSize)) {
+            //            _defaultFontSizes.Add(fontSize);
+            //            _defaultFontSizes = new ObservableCollection<double>(_defaultFontSizes.OrderBy(x => x));
+            //        }
+            //        FontSizeCombo.SelectedItem = fontSize;
+            //    }catch(Exception ex) {
+            //        MpConsole.WriteTraceLine("Error converting font size to double obj str: " + fontSizeObj.ToString(), ex);
+            //    }
+            //}            
 
             // Set Font buttons
             BoldButton.IsChecked = artb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);

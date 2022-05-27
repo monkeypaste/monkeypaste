@@ -70,15 +70,15 @@ namespace MpWpfApp {
                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset ||
                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace) {
 
-                var cttvl = this.GetVisualDescendents<MpClipTileTitleView>();
-                foreach (var cttv in cttvl) {
-                    if (cttv != null) {
-                        if (cttv.ClipTileTitleMarqueeCanvas != null) {
-                            //MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
-                            //MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
-                        }
-                    }
-                }
+                //var cttvl = this.GetVisualDescendents<MpClipTileTitleView>();
+                //foreach (var cttv in cttvl) {
+                //    if (cttv != null) {
+                //        if (cttv.ClipTileTitleMarqueeCanvas != null) {
+                //            //MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                //            //MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                //        }
+                //    }
+                //}
             }
 
         }

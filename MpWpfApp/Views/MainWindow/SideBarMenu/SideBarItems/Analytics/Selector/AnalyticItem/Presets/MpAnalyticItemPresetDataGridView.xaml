@@ -84,18 +84,28 @@
                                             Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Margin="3"
-                                         FontSize="16"
-                                         Padding="5"
-                                         Background="White"
-                                         BorderThickness="0"
-                                         local:MpIsFocusedExtension.IsEnabled="True"
-                                         Text="{Binding Label,
-                                                        Mode=TwoWay,
-                                                        NotifyOnSourceUpdated=True,
-                                                        NotifyOnTargetUpdated=True,
-                                                        UpdateSourceTrigger=PropertyChanged}"
-                                         VerticalAlignment="Center" />
+                                <Grid ClipToBounds="True"
+                                      Margin="1,0">
+                                    <TextBox FontSize="16"
+                                             Background="White"
+                                             BorderThickness="0"
+                                             local:MpIsFocusedExtension.IsEnabled="True"
+                                             local:MpIsFocusedExtension.IsFocused="{Binding IsLabelTextBoxFocused, Mode=TwoWay}"
+                                             local:MpIsFocusedExtension.SelectAllOnFocus="True"
+                                             Foreground="Black"
+                                             local:MpMarqueeTextBoxExtension.IsEnabled="True"
+                                             local:MpMarqueeTextBoxExtension.IsReadOnly="{Binding IsLabelReadOnly,
+                                                                                                  Mode=TwoWay}"
+                                             IsReadOnly="{Binding IsLabelReadOnly,
+                                                                  Mode=OneWay}"
+                                             MaxWidth="118"
+                                             Text="{Binding Label,
+                                                            Mode=TwoWay,
+                                                            NotifyOnSourceUpdated=True,
+                                                            NotifyOnTargetUpdated=True,
+                                                            UpdateSourceTrigger=PropertyChanged}"
+                                             VerticalAlignment="Center" />
+                                </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
