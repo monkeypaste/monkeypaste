@@ -84,8 +84,8 @@ namespace MpWpfApp {
             if (ctv != null) {
                 var cttv = ctv.TileTitleView;
                 if (cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
-                    MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
-                    MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                    MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                    MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace MpWpfApp {
             //if (ctv != null) {
             //    var cttv = ctv.TileTitleView;
             //    if (cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
-            //        MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+            //        MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
             //    }
             //}
         }

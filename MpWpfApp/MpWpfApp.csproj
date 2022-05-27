@@ -652,9 +652,6 @@
     <Compile Include="Views\Reusable\MpContentQueryTextBoxView.xaml.cs">
       <DependentUpon>MpContentQueryTextBoxView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\MpMarqueeTextBox.xaml.cs">
-      <DependentUpon>MpMarqueeTextBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Reusable\Notifications\Toast\Collection\Items\MpLoaderNotificationView.xaml.cs">
       <DependentUpon>MpLoaderNotificationView.xaml</DependentUpon>
     </Compile>
@@ -1059,10 +1056,6 @@
     <Page Include="Views\Reusable\MpContentQueryTextBoxView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Reusable\MpMarqueeTextBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reusable\Notifications\Toast\Collection\Items\MpLoaderNotificationView.xaml">
       <SubType>Designer</SubType>

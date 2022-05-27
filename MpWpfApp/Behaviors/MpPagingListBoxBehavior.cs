@@ -232,8 +232,8 @@ namespace MpWpfApp {
                             if (cttv.ClipTileTitleMarqueeCanvas != null) {
                                 // BUG this is a workaround because marquee attached property
                                 // doesn't recognize that the data context has changed
-                                MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
-                                MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                                MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                                MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
                             }
                         }
                     }

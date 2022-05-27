@@ -74,8 +74,8 @@ namespace MpWpfApp {
                 foreach (var cttv in cttvl) {
                     if (cttv != null) {
                         if (cttv.ClipTileTitleMarqueeCanvas != null) {
-                            MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
-                            MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
+                            //MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
+                            //MpMarqueeExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
                         }
                     }
                 }

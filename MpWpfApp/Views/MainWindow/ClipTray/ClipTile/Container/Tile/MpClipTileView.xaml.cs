@@ -113,7 +113,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpMarqueeExtension.Init(TileTitleView.ClipTileTitleMarqueeCanvas);
+            //MpMarqueeExtension.Init(TileTitleView.ClipTileTitleMarqueeCanvas);
         }
     }
 }

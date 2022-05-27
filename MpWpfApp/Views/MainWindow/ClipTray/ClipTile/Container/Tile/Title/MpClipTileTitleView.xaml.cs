@@ -76,12 +76,12 @@ namespace MpWpfApp {
                 return;
             }
             if (ClipTileTitleTextBox.Visibility == Visibility.Hidden) {
-                //MpMarqueeExtension.Init(ClipTileTitleMarqueeCanvas);
+                //MpMarqueeTextBoxExtension.Init(ClipTileTitleMarqueeCanvas);
                 return;
             }
 
 
-            //MpMarqueeExtension.Reset(ClipTileTitleMarqueeCanvas);
+            //MpMarqueeTextBoxExtension.Reset(ClipTileTitleMarqueeCanvas);
 
             ClipTileTitleTextBox.Focus();
             ClipTileTitleTextBox.CaretIndex = 0;

@@ -143,16 +143,16 @@
                     Height="{Binding ActualHeight,
                                      ElementName=ClipTileTitleTextCanvas}"
                     MouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
-                    local:MpMarqueeExtension.IsEnabled="True"
-                    local:MpMarqueeExtension.LoopDelayMs="0"
-                    local:MpMarqueeExtension.DropShadowOffset="1 1"
-                    local:MpMarqueeExtension.MaxVelocity="-10"
-                    local:MpMarqueeExtension.TailPadding="30"
-                    local:MpMarqueeExtension.Text="{Binding Path=Text,
+                    local:MpMarqueeTextBoxExtension.IsEnabled="True"
+                    local:MpMarqueeTextBoxExtension.LoopDelayMs="0"
+                    local:MpMarqueeTextBoxExtension.DropShadowOffset="1 1"
+                    local:MpMarqueeTextBoxExtension.MaxVelocity="-10"
+                    local:MpMarqueeTextBoxExtension.TailPadding="30"
+                    local:MpMarqueeTextBoxExtension.Text="{Binding Path=Text,
                                                             ElementName=ClipTileTitleTextBox}"
-                    local:MpMarqueeExtension.MaxRenderWidth="{Binding ActualWidth,
+                    local:MpMarqueeTextBoxExtension.MaxRenderWidth="{Binding ActualWidth,
                                                                       ElementName=ClipTileTitleTextCanvas}"
-                    local:MpMarqueeExtension.TextBox="{Binding ElementName=ClipTileTitleTextBox}"
+                    local:MpMarqueeTextBoxExtension.TextBox="{Binding ElementName=ClipTileTitleTextBox}"
                     Visibility="{Binding IsTitleReadOnly,
                                          Converter={StaticResource BoolToVisibilityConverter}}" />
 
