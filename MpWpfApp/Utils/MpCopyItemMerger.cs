@@ -49,9 +49,7 @@ namespace MpWpfApp {
                         break;
                     default:
                         var fd = ci.ItemData.ToFlowDocument();
-                        var rtfImg = MpHelpers.ConvertFlowDocumentToBitmap(
-                            fd,
-                            fd.GetDocumentSize(), Brushes.White);
+                        var rtfImg = fd.ToBitmapSource();
 
                         bmp = MpWpfImagingHelper.CombineBitmap(
                             new List<BitmapSource> { bmp, rtfImg });

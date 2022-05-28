@@ -905,42 +905,6 @@ namespace MpWpfApp {
 
         #region Converters
         
-        public static BitmapSource ConvertFlowDocumentToBitmap(FlowDocument document, Size size, Brush bgBrush = null) {
-            if (size.Width <= 0) {
-                size.Width = 1;
-            }
-            if (size.Height <= 0) {
-                size.Height = 1;
-            }
-            var dpi = VisualTreeHelper.GetDpi(Application.Current.MainWindow);
-            size.Width *= dpi.DpiScaleX;
-            size.Height *= dpi.DpiScaleY;
-
-            document.PagePadding = new Thickness(0);
-            document.ColumnWidth = size.Width;
-            document.PageWidth = size.Width;
-            document.PageHeight = size.Height;
-
-            var paginator = ((IDocumentPaginatorSource)document).DocumentPaginator;
-            paginator.PageSize = size;
-
-            var visual = new DrawingVisual();
-            using (var drawingContext = visual.RenderOpen()) {
-                // draw white background
-                drawingContext.DrawRectangle(bgBrush ?? Brushes.White, null, new Rect(size));
-            }
-            visual.Children.Add(paginator.GetPage(0).Visual);
-            var bitmap = new RenderTargetBitmap(
-                (int)size.Width, 
-                (int)size.Height,
-                dpi.PixelsPerInchX, 
-                dpi.PixelsPerInchY, 
-                PixelFormats.Pbgra32);
-            
-            bitmap.Render(visual);
-            //RenderOptions.SetBitmapScalingMode(bitmap, BitmapScalingMode.HighQuality);
-            return bitmap;
-        }
 
 
         #endregion

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
@@ -43,6 +44,60 @@ namespace MpWpfApp {
                 "IsSelected", typeof(bool),
                 typeof(MpHoverableExtension),
                 new FrameworkPropertyMetadata(false));
+
+        #endregion
+
+        #region HoverBrush DependencyProperty
+
+        public static Brush GetHoverBrush(DependencyObject obj) {
+            return (Brush)obj.GetValue(HoverBrushProperty);
+        }
+
+        public static void SetHoverBrush(DependencyObject obj, Brush value) {
+            obj.SetValue(HoverBrushProperty, value);
+        }
+
+        public static readonly DependencyProperty HoverBrushProperty =
+            DependencyProperty.Register(
+                "HoverBrush", typeof(Brush),
+                typeof(MpHoverableExtension),
+                new FrameworkPropertyMetadata(null));
+
+        #endregion
+
+        #region SelectedBrush DependencyProperty
+
+        public static Brush GetSelectedBrush(DependencyObject obj) {
+            return (Brush)obj.GetValue(SelectedBrushProperty);
+        }
+
+        public static void SetSelectedBrush(DependencyObject obj, Brush value) {
+            obj.SetValue(SelectedBrushProperty, value);
+        }
+
+        public static readonly DependencyProperty SelectedBrushProperty =
+            DependencyProperty.Register(
+                "SelectedBrush", typeof(Brush),
+                typeof(MpHoverableExtension),
+                new FrameworkPropertyMetadata(null));
+
+        #endregion
+
+        #region DefaultBrush DependencyProperty
+
+        public static Brush GetDefaultBrush(DependencyObject obj) {
+            return (Brush)obj.GetValue(DefaultBrushProperty);
+        }
+
+        public static void SetDefaultBrush(DependencyObject obj, Brush value) {
+            obj.SetValue(DefaultBrushProperty, value);
+        }
+
+        public static readonly DependencyProperty DefaultBrushProperty =
+            DependencyProperty.Register(
+                "DefaultBrush", typeof(Brush),
+                typeof(MpHoverableExtension),
+                new FrameworkPropertyMetadata(null));
 
         #endregion
 
@@ -194,6 +249,18 @@ namespace MpWpfApp {
                 }
 
                 i.Source = hoverImageSource;
+            } else if(GetHoverBrush(dpo) != null) {
+                var hoverBrush = GetHoverBrush(dpo);
+                Image img = null;
+                if(dpo is Image) {
+                    img = dpo as Image;
+                } else if(dpo is FrameworkElement elm) {
+                    img = elm.GetVisualDescendent<Image>();
+                }
+                if(img == null) {
+                    return;
+                }
+                img.Source = (img.Source as BitmapSource).Tint(hoverBrush);
             }
         }
 
@@ -220,6 +287,23 @@ namespace MpWpfApp {
             ImageSource defaultImageSource = GetDefaultImageSource(dpo);
             if (GetHoverImageSource(dpo) != null && defaultImageSource != null && dpo is Image i) {
                 i.Source = defaultImageSource;
+            } else if (GetDefaultBrush(dpo) != null) {
+                var defaultBrush = GetDefaultBrush(dpo);
+                Image img = null;
+                if (dpo is Image) {
+                    img = dpo as Image;
+                } else if (dpo is FrameworkElement elm) {
+                    img = elm.GetVisualDescendent<Image>();
+                }
+                if (img == null) {
+                    return;
+                }
+                if(GetIsSelected(dpo) && GetSelectedBrush(dpo) != null) {
+                    img.Source = (img.Source as BitmapSource).Tint(GetSelectedBrush(dpo));
+                } else {
+                    img.Source = (img.Source as BitmapSource).Tint(defaultBrush);
+                }
+                
             }
         }
     }

@@ -5,12 +5,13 @@ namespace MpWpfApp {
     public class MpClipTileTitleHighlightBehavior : MpHighlightBehaviorBase<MpClipTileTitleView> {        
         protected override TextRange ContentRange {
             get {
-                if(AssociatedObject == null || AssociatedObject.ClipTileTitleTextBlock == null) {
+                if(AssociatedObject == null || AssociatedObject.ClipTileTitleTextBox == null) {
                     return null;
                 }
-                return new TextRange(
-                        AssociatedObject.ClipTileTitleTextBlock.ContentStart,
-                        AssociatedObject.ClipTileTitleTextBlock.ContentEnd);
+                var tb = new TextBlock() {
+                    Text = AssociatedObject.ClipTileTitleTextBox.Text
+                };
+                return new TextRange(tb.ContentStart,tb.ContentEnd);
             }
         }
 

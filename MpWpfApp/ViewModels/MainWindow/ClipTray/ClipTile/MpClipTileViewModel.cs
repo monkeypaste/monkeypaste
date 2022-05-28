@@ -437,9 +437,9 @@ using System.Text.RegularExpressions;
         }
 
         public double PasteTemplateToolbarHeight => MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
-                      
+                     
 
-        public double TileTitleHeight => MpMeasurements.Instance.ClipTileTitleHeight;
+        public double TileTitleHeight => IsTitleVisible ? MpMeasurements.Instance.ClipTileTitleHeight : 0;
                 
         public double TileDetailHeight => MpMeasurements.Instance.ClipTileDetailHeight;
 
@@ -591,6 +591,7 @@ using System.Text.RegularExpressions;
                 return IsSelected || IsHovering ? Visibility.Visible : Visibility.Hidden;
             }
         }
+
 
         public Visibility ToolTipVisibility {
             get {
@@ -772,6 +773,26 @@ using System.Text.RegularExpressions;
             }
         }
 
+        public string HideTitleIconSourcePath {
+            get {
+                string path = "OpenEyeIcon";
+                if (IsTitleVisible) {
+                    if (IsOverHideTitleButton) {
+                        path = "OpenEyeIcon";
+                    } else {
+                        path = "OpenEyeIcon";
+                    }
+                } else {
+                    if (IsOverPinButton) {
+                        path = "ClosedEyeIcon";
+                    } else {
+                        path = "ClosedEyeIcon";
+                    }
+                }
+                return Application.Current.Resources[path] as string;
+            }
+        }
+
         public Rect TileBorderBrushRect {
             get {
                 if (IsItemDragging || IsContextMenuOpen) {
@@ -943,6 +964,8 @@ using System.Text.RegularExpressions;
 
         public bool IsOverPinButton { get; set; } = false;
 
+        public bool IsOverHideTitleButton { get; set; } = false;
+
         public bool IsPinned => Parent != null && 
                                 Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
 
@@ -964,6 +987,8 @@ using System.Text.RegularExpressions;
         public bool IsFlipping { get; set; } = false;
 
         public bool IsFlipped { get; set; } = false;
+
+        public bool IsTitleVisible { get; set; } = true;
 
         public bool IsDetailGridVisibile {
             get {
@@ -1707,6 +1732,13 @@ using System.Text.RegularExpressions;
                     OnPropertyChanged(nameof(PinIconSourcePath));
                     OnPropertyChanged(nameof(IsPlaceholder));
                     break;
+                case nameof(IsOverHideTitleButton):
+                case nameof(IsTitleVisible):
+                    OnPropertyChanged(nameof(HideTitleIconSourcePath));
+                    OnPropertyChanged(nameof(TileTitleHeight));
+                    OnPropertyChanged(nameof(TileBorderHeight));
+                    OnPropertyChanged(nameof(TileContentHeight));
+                    break;
                 case nameof(IsContentReadOnly):
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
@@ -1900,7 +1932,10 @@ using System.Text.RegularExpressions;
 
             }, IsTextItem);
 
-
+        public ICommand ToggleHideTitleCommand => new RelayCommand(
+            () => {
+                IsTitleVisible = !IsTitleVisible;
+            }, !IsPlaceholder);
 
 
         #endregion

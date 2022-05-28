@@ -206,8 +206,9 @@ namespace MpWpfApp {
         }
 
         public void ClearTagEditing() {
+
             foreach(var ttvm in Items) {
-                ttvm.IsEditing = false;
+                ttvm.IsTagNameTrayReadOnly = ttvm.IsTagNameTreeReadOnly = true;
             }
         }
         public void ClearTagSelection() {

@@ -81,6 +81,23 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region SelectViewModelOnFocus
+
+        public static bool GetSelectViewModelOnFocus(DependencyObject obj) {
+            return (bool)obj.GetValue(SelectViewModelOnFocusProperty);
+        }
+        public static void SetSelectViewModelOnFocus(DependencyObject obj, bool value) {
+            obj.SetValue(SelectViewModelOnFocusProperty, value);
+        }
+        public static readonly DependencyProperty SelectViewModelOnFocusProperty =
+          DependencyProperty.RegisterAttached(
+            "SelectViewModelOnFocus",
+            typeof(bool),
+            typeof(MpIsFocusedExtension),
+            new FrameworkPropertyMetadata(true));
+
+        #endregion
+
         #region IsEnabled
 
         public static bool GetIsEnabled(DependencyObject obj) {
@@ -205,7 +222,7 @@ namespace MpWpfApp {
             SetIsFocused(dpo, true);
             if (dpo is FrameworkElement fe) {
                 Keyboard.Focus(fe);
-                if (fe.DataContext is MpISelectableViewModel svm) {
+                if (fe.DataContext is MpISelectableViewModel svm && GetSelectViewModelOnFocus(dpo)) {
                     svm.IsSelected = true;
                 }
             }

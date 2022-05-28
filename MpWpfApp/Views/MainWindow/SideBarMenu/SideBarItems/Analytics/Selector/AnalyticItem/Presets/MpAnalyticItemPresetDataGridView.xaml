@@ -85,13 +85,14 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid ClipToBounds="True"
-                                      Margin="1,0">
+                                      Margin="1,0"
+                                      PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown">
                                     <TextBox FontSize="16"
                                              Background="White"
                                              BorderThickness="0"
                                              local:MpIsFocusedExtension.IsEnabled="True"
-                                             local:MpIsFocusedExtension.IsFocused="{Binding IsLabelTextBoxFocused, Mode=TwoWay}"
-                                             local:MpIsFocusedExtension.SelectAllOnFocus="True"
+                                             local:MpIsFocusedExtension.IsFocused="{Binding IsLabelTextBoxFocused,
+                                                                                            Mode=TwoWay}"
                                              Foreground="Black"
                                              local:MpMarqueeTextBoxExtension.IsEnabled="True"
                                              local:MpMarqueeTextBoxExtension.IsReadOnly="{Binding IsLabelReadOnly,

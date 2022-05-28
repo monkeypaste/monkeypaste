@@ -16,12 +16,11 @@ using System.Windows.Threading;
 using MonkeyPaste.Plugin;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
-
 namespace MpWpfApp {    
     public class MpMarqueeTextBoxExtension : DependencyObject {
         #region Properties
 
-        #region Canvas Property (DependencyObject is TextBox)
+        #region Canvas Property
 
         public static Canvas GetCanvas(DependencyObject obj) {
             return (Canvas)obj.GetValue(CanvasProperty);
@@ -53,21 +52,25 @@ namespace MpWpfApp {
             "IsReadOnly",
             typeof(bool),
             typeof(MpMarqueeTextBoxExtension),
-            new UIPropertyMetadata() {
-                DefaultValue = true,
-                //PropertyChangedCallback = (s,e) => {
-                //    if(s is TextBoxBase tbb) {
-                //        if ((bool)e.NewValue) {
-                //            tbb.Visibility = Visibility.Hidden;
-                //            GetCanvas(tbb).Visibility = Visibility.Visible;
-                //        } else {
-                //            tbb.Visibility = Visibility.Visible;
-                //            GetCanvas(tbb).Visibility = Visibility.Hidden;
-                //        }
-                //    }
-                    
-                //}
-            });
+            new UIPropertyMetadata(true));
+
+        #endregion
+
+        #region EditOnMouseClick Property
+
+        public static bool GetEditOnMouseClick(DependencyObject obj) {
+            return (bool)obj.GetValue(EditOnMouseClickProperty);
+        }
+        public static void SetEditOnMouseClick(DependencyObject obj, bool value) {
+            obj.SetValue(EditOnMouseClickProperty, value);
+        }
+
+        public static readonly DependencyProperty EditOnMouseClickProperty =
+            DependencyProperty.RegisterAttached(
+            "EditOnMouseClick",
+            typeof(bool),
+            typeof(MpMarqueeTextBoxExtension),
+            new UIPropertyMetadata(true));
 
         #endregion
 
@@ -85,7 +88,70 @@ namespace MpWpfApp {
             "DropShadowOffset",
             typeof(Point),
             typeof(MpMarqueeTextBoxExtension),
-            new PropertyMetadata(new Point(1,1)));
+            new PropertyMetadata() {
+                DefaultValue = new Point(1,1),
+                PropertyChangedCallback = (s, e) => {
+                    if (s is TextBoxBase tbb) {
+                        if (GetIsEnabled(tbb)) {
+                            Init(tbb);
+                        }
+                    }
+                }
+            });
+
+        #endregion
+
+        #region MarqueeForegroundBrush Property
+
+        public static Brush GetMarqueeForegroundBrush(DependencyObject obj) {
+            return (Brush)obj.GetValue(MarqueeForegroundBrushProperty);
+        }
+        public static void SetMarqueeForegroundBrush(DependencyObject obj, Brush value) {
+            obj.SetValue(MarqueeForegroundBrushProperty, value);
+        }
+
+        public static readonly DependencyProperty MarqueeForegroundBrushProperty =
+            DependencyProperty.RegisterAttached(
+            "MarqueeForegroundBrush",
+            typeof(Brush),
+            typeof(MpMarqueeTextBoxExtension),
+            new PropertyMetadata() {
+                DefaultValue = Brushes.White,
+                PropertyChangedCallback = (s, e) => {
+                    if (s is TextBoxBase tbb) {
+                        if (GetIsEnabled(tbb)) {
+                            Init(tbb);
+                        }
+                    }
+                }
+            });
+
+        #endregion
+
+        #region DropShadowBrush Property
+
+        public static Brush GetDropShadowBrush(DependencyObject obj) {
+            return (Brush)obj.GetValue(DropShadowBrushProperty);
+        }
+        public static void SetDropShadowBrush(DependencyObject obj, Brush value) {
+            obj.SetValue(DropShadowBrushProperty, value);
+        }
+
+        public static readonly DependencyProperty DropShadowBrushProperty =
+            DependencyProperty.RegisterAttached(
+            "DropShadowBrush",
+            typeof(Brush),
+            typeof(MpMarqueeTextBoxExtension),
+            new PropertyMetadata() {
+                DefaultValue = Brushes.Black,
+                PropertyChangedCallback = (s,e) => {
+                    if(s is TextBoxBase tbb) {
+                        if(GetIsEnabled(tbb)) {
+                            Init(tbb);
+                        }
+                    }
+                }
+            });
 
         #endregion
 
@@ -103,7 +169,16 @@ namespace MpWpfApp {
             "TailPadding",
             typeof(double),
             typeof(MpMarqueeTextBoxExtension),
-            new PropertyMetadata(30.0d));
+            new PropertyMetadata() {
+                DefaultValue = 30.0d,
+                PropertyChangedCallback = (s, e) => {
+                    if (s is TextBoxBase tbb) {
+                        if (GetIsEnabled(tbb)) {
+                            Init(tbb);
+                        }
+                    }
+                }
+            });
 
         #endregion
 
@@ -121,25 +196,16 @@ namespace MpWpfApp {
             "MaxVelocity",
             typeof(double),
             typeof(MpMarqueeTextBoxExtension),
-            new FrameworkPropertyMetadata(-10.0));
-
-        #endregion
-
-        #region LoopDelayMs Property
-
-        public static double GetLoopDelayMs(DependencyObject obj) {
-            return (double)obj.GetValue(LoopDelayMsProperty);
-        }
-        public static void SetLoopDelayMs(DependencyObject obj, double value) {
-            obj.SetValue(LoopDelayMsProperty, value);
-        }
-
-        public static readonly DependencyProperty LoopDelayMsProperty =
-            DependencyProperty.RegisterAttached(
-            "LoopDelayMs",
-            typeof(double),
-            typeof(MpMarqueeTextBoxExtension),
-            new PropertyMetadata(0.0));
+            new PropertyMetadata() {
+                DefaultValue = -10.0d,
+                PropertyChangedCallback = (s, e) => {
+                    if (s is TextBoxBase tbb) {
+                        if (GetIsEnabled(tbb)) {
+                            Init(tbb);
+                        }
+                    }
+                }
+            });
 
         #endregion
 
@@ -189,6 +255,17 @@ namespace MpWpfApp {
             var canvas = new Canvas();
             if (tbb.Parent is Panel) {
                 parentPanel = tbb.Parent as Panel;
+                var childrenToRemove = new List<UIElement>();
+                foreach(UIElement cfe in parentPanel.Children) {
+                    if(cfe == tbb) {
+                        continue;
+                    }
+                    childrenToRemove.Add(cfe);
+                }
+                for (int i = 0; i < childrenToRemove.Count; i++) {
+                    parentPanel.Children.Remove(childrenToRemove[i]);
+                }
+
                 int tbbIdx = parentPanel.Children.IndexOf(tbb);
                 parentPanel.Children.Insert(tbbIdx, canvas);
             } else {
@@ -222,11 +299,13 @@ namespace MpWpfApp {
                 new MpBoolToVisibilityFlipConverter(),
                 Application.Current.Resources["Hide"] as string);
 
-            parentPanel.SizeChanged += ParentPanel_SizeChanged;
+            parentPanel.SizeChanged += ParentPanel_SizeChanged;   
+            parentPanel.PreviewMouseLeftButtonDown += ParentPanel_PreviewMouseLeftButtonDown;
+            parentPanel.Unloaded += ParentPanel_Unloaded;
 
-            canvas.PreviewMouseLeftButtonDown += Canvas_PreviewMouseLeftButtonDown;
             canvas.MouseEnter += Canvas_MouseEnter;                        
             canvas.IsVisibleChanged += Canvas_IsVisibleChanged;
+            canvas.Unloaded += Canvas_Unloaded;
             
             tbb.DataContextChanged += TextBoxBase_DataContextChanged;
             tbb.Loaded += TextBoxBase_Loaded;
@@ -238,41 +317,49 @@ namespace MpWpfApp {
             Init(tbb);
         }
 
+        private static void Canvas_Unloaded(object sender, RoutedEventArgs e) {
+            if(sender is Canvas canvas) {
+                canvas.PreviewMouseLeftButtonDown -= ParentPanel_PreviewMouseLeftButtonDown;
+                canvas.MouseEnter -= Canvas_MouseEnter;
+                canvas.SizeChanged -= ParentPanel_SizeChanged;
+                canvas.IsVisibleChanged -= Canvas_IsVisibleChanged;
+            }
+        }
+
+        private static void ParentPanel_Unloaded(object sender, RoutedEventArgs e) {
+            if(sender is Panel p) {
+                //p.Children.Clear();
+                p.SizeChanged -= ParentPanel_SizeChanged;
+                p.PreviewMouseLeftButtonDown -= ParentPanel_PreviewMouseLeftButtonDown;
+                p.Unloaded -= ParentPanel_Unloaded;
+            }            
+        }
 
         private static void TextBoxBase_Unloaded(object sender, RoutedEventArgs e) {
-            var tbb = sender as TextBoxBase;
-            if(tbb == null) {
-                return;
-            }
-            if(tbb.Parent is Panel p) {
-                p.SizeChanged -= ParentPanel_SizeChanged;
-            }
-
-            tbb.Loaded -= TextBoxBase_Loaded;
-            tbb.Unloaded -= TextBoxBase_Unloaded;
-            tbb.TextChanged -= Tb_TextChanged;
-            tbb.DataContextChanged -= TextBoxBase_DataContextChanged;
-            tbb.LostFocus -= Tbb_LostFocus;
-            tbb.IsVisibleChanged -= Tbb_IsVisibleChanged;
-
-            var canvas = GetCanvas(tbb);
-            if(canvas == null) {
-                return;
-            }
-            canvas.PreviewMouseLeftButtonDown -= Canvas_PreviewMouseLeftButtonDown;
-            canvas.MouseEnter -= Canvas_MouseEnter;
-            canvas.SizeChanged -= ParentPanel_SizeChanged;
-            canvas.IsVisibleChanged -= Canvas_IsVisibleChanged;     
+            if(sender is TextBoxBase tbb) {
+                tbb.Loaded -= TextBoxBase_Loaded;
+                tbb.Unloaded -= TextBoxBase_Unloaded;
+                tbb.TextChanged -= Tb_TextChanged;
+                tbb.DataContextChanged -= TextBoxBase_DataContextChanged;
+                tbb.LostFocus -= Tbb_LostFocus;
+                tbb.IsVisibleChanged -= Tbb_IsVisibleChanged;
+            } 
         }
 
         private static void Tbb_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
+                return;
+            }
             if((bool)e.NewValue) {
                 var tbb = sender as TextBoxBase;
-                tbb.Focus();
-                Keyboard.Focus(tbb);
+                if(!tbb.IsFocused) {
+                    tbb.Focus();
+                }
+                if(!tbb.IsKeyboardFocused) {
+                    Keyboard.Focus(tbb);
+                }
+                
                 tbb.SelectAll();
-                //SetIsReadOnly(tbb, false);
-                //MpIsFocusedExtension.GotFocus(tbb);
             }
         }
 
@@ -284,18 +371,15 @@ namespace MpWpfApp {
             SetIsReadOnly(tbb, true);
         }
 
-        private static void Canvas_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if(sender is FrameworkElement fe && fe.Parent is Panel p) {
+        private static void ParentPanel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if(sender is Panel p) {
                 var tbb = GetTextBoxBaseFromParent(p);
-                if(tbb != null && GetIsReadOnly(tbb)) {
-                    e.Handled = true;
-                    SetIsReadOnly(tbb, false);
-                    
-                    //MpIsFocusedExtension.SetIsFocused(tbb, true);
-                    //SetIsTextBoxFocused(tbb, true);                   
+                if(tbb.IsVisible || !GetEditOnMouseClick(tbb)) {
+                    return;
                 }
-            }
-            
+                e.Handled = true;
+                SetIsReadOnly(tbb, false);
+            }            
         }
 
         private static void Canvas_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
@@ -312,6 +396,7 @@ namespace MpWpfApp {
             }
             Canvas_MouseEnter(sender, null);
         }
+
         private static void ParentPanel_SizeChanged(object sender, SizeChangedEventArgs e) {
             var parentPanel = sender as Panel;
             if(parentPanel == null) {
@@ -339,7 +424,7 @@ namespace MpWpfApp {
         #endregion
 
         public static void Init(TextBoxBase tbb) {
-            if(tbb == null) {
+            if(tbb == null || tbb.DataContext == null) {
                 return;
             }
             Canvas canvas = GetCanvas(tbb);
@@ -350,34 +435,8 @@ namespace MpWpfApp {
                 //TextBoxBase_Loaded(tbb,null);
                 Debugger.Break();
             }
-            var dpiInfo = VisualTreeHelper.GetDpi(Application.Current.MainWindow);
 
-            var ft = new FormattedText(
-                GetText(tbb),
-                CultureInfo.CurrentCulture,
-                tbb.FlowDirection,
-                new Typeface(tbb.FontFamily, tbb.FontStyle, tbb.FontWeight, tbb.FontStretch, new FontFamily("Arial")),
-                tbb.FontSize,
-                Brushes.White,
-                dpiInfo.PixelsPerDip);
-
-            int pad = (int)GetTailPadding(canvas);
-
-            var ftBmpSrc = new RenderTargetBitmap(
-                (int)Math.Max(1.0, ft.Width * dpiInfo.PixelsPerDip) + pad + (int)GetDropShadowOffset(canvas).X,
-                (int)Math.Max(1.0, ft.Height * dpiInfo.PixelsPerDip) + (int)GetDropShadowOffset(canvas).Y,
-                dpiInfo.PixelsPerInchX, dpiInfo.PixelsPerInchY, PixelFormats.Pbgra32);
-
-            var dv = new DrawingVisual();
-            using (var dc = dv.RenderOpen()) {
-                ft.SetForegroundBrush(Brushes.Black);
-                dc.DrawText(ft, GetDropShadowOffset(canvas));
-                ft.SetForegroundBrush(Brushes.White);
-                dc.DrawText(ft, new Point(0, 0));
-            }
-
-            ftBmpSrc.Render(dv);
-            var textBmpSrc = MpWpfImagingHelper.ConvertRenderTargetBitmapToBitmapSource(ftBmpSrc);
+            var textBmpSrc = GetMarqueeBitmapSource(tbb);
 
             var img1 = new Image() {
                 Source = textBmpSrc,
@@ -398,7 +457,7 @@ namespace MpWpfApp {
             if(tbb.Parent is Panel p) {
                 maxRenderWidth = p.ActualWidth;
             }
-            if (textBmpSrc.Width - pad > maxRenderWidth) {
+            if (textBmpSrc.Width > maxRenderWidth) {
                 canvas.Children.Add(img2);
                 canvas.Width = textBmpSrc.Width * 2;
             } else {
@@ -478,7 +537,6 @@ namespace MpWpfApp {
                 await Task.Delay(20);
             }
         }
-
         private static string GetText(TextBoxBase tbb) {
             if(tbb is TextBox tb) {
                 return tb.Text;
@@ -488,6 +546,64 @@ namespace MpWpfApp {
             //Unknown tbb
             Debugger.Break();
             return string.Empty;
+        }
+
+        private static BitmapSource GetMarqueeBitmapSource(TextBoxBase tbb) {
+            var canvas = GetCanvas(tbb);
+            var dpiInfo = VisualTreeHelper.GetDpi(Application.Current.MainWindow);
+            int pad = (int)GetTailPadding(canvas);
+
+            if (tbb is TextBox) {
+                var ft = new FormattedText(
+                    GetText(tbb),
+                    CultureInfo.CurrentCulture,
+                    tbb.FlowDirection,
+                    new Typeface(tbb.FontFamily, tbb.FontStyle, tbb.FontWeight, tbb.FontStretch, new FontFamily("Arial")),
+                    tbb.FontSize,
+                    GetMarqueeForegroundBrush(tbb),
+                    dpiInfo.PixelsPerDip);
+
+
+                var ftBmpSrc = new RenderTargetBitmap(
+                    (int)Math.Max(1.0, ft.Width * dpiInfo.PixelsPerDip) + pad + (int)GetDropShadowOffset(canvas).X,
+                    (int)Math.Max(1.0, ft.Height * dpiInfo.PixelsPerDip) + (int)GetDropShadowOffset(canvas).Y,
+                    dpiInfo.PixelsPerInchX, dpiInfo.PixelsPerInchY, PixelFormats.Pbgra32);
+
+                var dv = new DrawingVisual();
+                using (var dc = dv.RenderOpen()) {
+                    ft.SetForegroundBrush(GetDropShadowBrush(tbb));
+                    dc.DrawText(ft, GetDropShadowOffset(canvas));
+                    ft.SetForegroundBrush(GetMarqueeForegroundBrush(tbb));
+                    dc.DrawText(ft, new Point(0, 0));
+                }
+
+                ftBmpSrc.Render(dv);
+                return MpWpfImagingHelper.ConvertRenderTargetBitmapToBitmapSource(ftBmpSrc);
+            } else if(tbb is RichTextBox rtb) {
+                var fgFd = rtb.Document.Clone();
+                var bgFd = rtb.Document.Clone();
+
+                new TextRange(fgFd.ContentStart, fgFd.ContentEnd).ApplyPropertyValue(TextElement.ForegroundProperty, GetMarqueeForegroundBrush(tbb));
+                new TextRange(bgFd.ContentStart, bgFd.ContentEnd).ApplyPropertyValue(TextElement.ForegroundProperty, GetDropShadowBrush(tbb));
+
+                var fgBmpSrc = fgFd.ToBitmapSource();
+                var bgBmpSrc = bgFd.ToBitmapSource();
+
+                var outBmpSrc = new RenderTargetBitmap(
+                    (int)Math.Max(1.0, rtb.ActualWidth * dpiInfo.PixelsPerDip) + pad + (int)GetDropShadowOffset(canvas).X,
+                    (int)Math.Max(1.0, rtb.ActualHeight * dpiInfo.PixelsPerDip) + (int)GetDropShadowOffset(canvas).Y,
+                    dpiInfo.PixelsPerInchX, dpiInfo.PixelsPerInchY, PixelFormats.Pbgra32);
+
+                var dv = new DrawingVisual();
+                using (var dc = dv.RenderOpen()) {
+                    dc.DrawImage(bgBmpSrc, rtb.Bounds());
+                    dc.DrawImage(fgBmpSrc, rtb.Bounds());
+                }
+
+                outBmpSrc.Render(dv);
+                return MpWpfImagingHelper.ConvertRenderTargetBitmapToBitmapSource(outBmpSrc);
+            }
+            return null;
         }
 
         private static TextBoxBase GetTextBoxBaseFromParent(Panel p) {

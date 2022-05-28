@@ -611,7 +611,7 @@ namespace MpWpfApp {
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if(IsSelected && Parent.IsSidebarVisible) {
                         LastSelectedDateTime = DateTime.Now;
 
                         if(SelectedItem == null) {
@@ -632,6 +632,13 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(ItemTitleForegroundBrush));
                     break;
                 case nameof(SelectedItem):
+                    if(SelectedItem != null) {
+                        if(!SelectedItem.IsSelected) {
+                            SelectedItem.IsSelected = true;
+                        }                        
+                    } else {
+                        Items.ForEach(x => x.IsSelected = false);
+                    }
                     Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
                     break;
             }

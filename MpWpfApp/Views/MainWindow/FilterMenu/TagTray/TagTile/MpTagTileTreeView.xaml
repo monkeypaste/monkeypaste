@@ -19,33 +19,25 @@
                     PreviewMouseRightButtonDown="StackPanel_PreviewMouseRightButtonDown">
             <local:MpClipBorder x:Name="TagTileBorder"
                                 Loaded="TagTileBorder_Loaded"
-                                Unloaded="TagTileBorder_Unloaded"
                                 local:MpSizeObserverExtension.IsEnabled="True"
                                 local:MpSizeObserverExtension.ObservedWidth="{Binding TagTileTrayWidth,
                                                                                       Mode=OneWayToSource}"
                                 local:MpHoverableExtension.IsEnabled="True"
                                 local:MpHoverableExtension.IsHovering="{Binding IsHovering,
                                                                                 Mode=TwoWay}"
-                                LostFocus="TagTileBorder_LostFocus"
                                 PreviewMouseLeftButtonDown="TagTileBorder_PreviewMouseLeftButtonDown"
                                 CornerRadius="10"
                                 Margin="0,0,0,0"
-                                Padding="3,5,5,5"
+                                Padding="3"
                                 Focusable="False"
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Left"
                                 Background="{Binding TagBorderBackgroundHexColor,
                                                      Converter={StaticResource StringHexToBrushConverter}}"
-                                BorderBrush="{Binding TagBorderHexColor,
+                                BorderBrush="{Binding TagTreeBorderHexColor,
                                                       Converter={StaticResource StringHexToBrushConverter}}"
-                                Tag="{Binding DataContext,
-                                              RelativeSource={RelativeSource Mode=Self}}"
                                 BorderThickness="1.5"
                                 Height="33">
-                <local:MpClipBorder.Resources>
-                    <local:MpBindingProxy x:Key="TagTileVmProxy"
-                                          Data="{Binding}" />
-                </local:MpClipBorder.Resources>
                 <StackPanel Orientation="Horizontal">
                     <Grid DockPanel.Dock="Left">
                         <Grid.ColumnDefinitions>
@@ -58,7 +50,7 @@
                                             Grid.Column="0"
                                             Grid.Row="0"
                                             MinWidth="20"
-                                            Margin="3,0,0,0"
+                                            Margin="3"
                                             Padding="5,0,5,0"
                                             BorderThickness="0"
                                             Background="{Binding TagHexColor,
@@ -75,46 +67,34 @@
                                        Foreground="{Binding TagCountTextHexColor,
                                                             Converter={StaticResource StringHexToBrushConverter}}" />
                         </local:MpClipBorder>
-                        <TextBlock x:Name="TagTextBlock"
-                                   Grid.Column="1"
-                                   Grid.Row="0"
-                                   Margin="5,0,0,0"
-                                   Background="Transparent"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Visibility="{Binding IsEditing,
-                                                        Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                   FontSize="13"
-                                   FontWeight="SemiBold"
-                                   Foreground="{Binding TagTextHexColor,
-                                                        Converter={StaticResource StringHexToBrushConverter}}"
-                                   Text="{Binding TagName,
-                                                  Mode=TwoWay,
-                                                  UpdateSourceTrigger=PropertyChanged,
-                                                  NotifyOnTargetUpdated=True,
-                                                  NotifyOnSourceUpdated=True}" />
-                        <TextBox x:Name="TagTextBox"
-                                 IsVisibleChanged="TagTextBox_IsVisibleChanged"
-                                 LostFocus="TagTextBox_LostFocus"
-                                 PreviewKeyDown="TagTextBox_PreviewKeyDown"
-                                 TextChanged="TagTextBox_TextChanged"
-                                 local:MpIsFocusedExtension.IsEnabled="True"
-                                 Grid.Row="0"
-                                 Grid.Column="1"
-                                 Margin="5,0,0,0"
-                                 Background="White"
-                                 Foreground="Black"
-                                 IsReadOnly="False"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 Visibility="{Binding IsEditing,
-                                                      Converter={StaticResource BoolToVisibilityConverter}}"
-                                 FontSize="{Binding TagFontSize}"
-                                 Text="{Binding TagName,
-                                                Mode=TwoWay,
-                                                UpdateSourceTrigger=PropertyChanged,
-                                                NotifyOnTargetUpdated=True,
-                                                NotifyOnSourceUpdated=True}" />
+                        <Grid ClipToBounds="True"
+                              Grid.Column="1"
+                              Margin="5,0,0,0"
+                              MaxWidth="{Binding MaxTagNameScreeWidth,
+                                                 Source={x:Static local:MpMeasurements.Instance}}">
+                            <TextBox x:Name="TagTextBox"
+                                     PreviewKeyDown="TagTextBox_PreviewKeyDown"
+                                     local:MpIsFocusedExtension.IsEnabled="True"
+                                     local:MpIsFocusedExtension.SelectViewModelOnFocus="False"
+                                     local:MpIsFocusedExtension.IsFocused="{Binding IsTagNameTreeTextBoxFocused,
+                                                                                    Mode=TwoWay}"                                     
+                                     local:MpMarqueeTextBoxExtension.IsEnabled="True"
+                                     local:MpMarqueeTextBoxExtension.EditOnMouseClick="False"
+                                     local:MpMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameTreeReadOnly,
+                                                                                          Mode=TwoWay}"
+                                     Background="White"
+                                     Foreground="Black"
+                                     IsReadOnly="{Binding IsTagNameTreeReadOnly,
+                                                          Mode=OneWay}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     FontSize="{Binding TagFontSize}"
+                                     Text="{Binding TagName,
+                                                    Mode=TwoWay,
+                                                    UpdateSourceTrigger=PropertyChanged,
+                                                    NotifyOnTargetUpdated=True,
+                                                    NotifyOnSourceUpdated=True}" />
+                        </Grid>
                     </Grid>
                 </StackPanel>
             </local:MpClipBorder>

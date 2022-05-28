@@ -90,13 +90,68 @@
                        Background="{Binding .,
                                             Converter={StaticResource StringToThemeBrushConverter},
                                             ConverterParameter=Clip_Tile_Content_Item_Background_Color}">
-                <!--  Tile Title Canvas  -->
-                <local:MpClipTileTitleView x:Name="TileTitleView"
-                                           DockPanel.Dock="Top"
-                                           MaxHeight="{Binding ClipTileTitleHeight,
-                                                               Source={x:Static local:MpMeasurements.Instance},
-                                                               Mode=OneWay}"
-                                           DataContext="{Binding}" />
+                <Grid DockPanel.Dock="Top">
+                    <!--  Tile Title Canvas  -->
+                    <local:MpClipTileTitleView x:Name="TileTitleView"
+                                               DockPanel.Dock="Top"
+                                               Visibility="{Binding IsTitleVisible,
+                                                                    Converter={StaticResource BoolToVisibilityConverter}}"
+                                               MaxHeight="{Binding ClipTileTitleHeight,
+                                                                   Source={x:Static local:MpMeasurements.Instance},
+                                                                   Mode=OneWay}"
+                                               DataContext="{Binding}" />
+                    <!--  Hide Title Button  -->
+
+                    <Button x:Name="HideTitleButton"
+                            DockPanel.Dock="Top"
+                            local:MpHoverableExtension.IsEnabled="True"
+                            local:MpHoverableExtension.IsHovering="{Binding IsOverHideTitleButton,
+                                                                            Mode=TwoWay}"
+                            local:MpHoverableExtension.HoverBrush="Yellow"
+                            local:MpHoverableExtension.SelectedBrush="Red"
+                            local:MpHoverableExtension.DefaultBrush="Black"
+                            local:MpHoverableExtension.IsSelected="{Binding IsTitleVisible,
+                                                                            Converter={StaticResource BoolFlipConverter},
+                                                                            Mode=OneWay}"
+                            local:MpHoverableExtension.HoverCursor="Hand"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            BorderThickness="0"
+                            Background="Transparent"
+                            Style="{StaticResource Transparent_Button}"
+                            Margin="2,-1,0,0"
+                            Width="12"
+                            Height="12"
+                            Visibility="{Binding PinButtonVisibility}"
+                            Command="{Binding ToggleHideTitleCommand}">
+                        <Image Source="{Binding HideTitleIconSourcePath,
+                                                Converter={StaticResource StringResourceToImageSourceConverter}}" />
+                    </Button>
+
+
+                    <Button x:Name="PinButton"
+                            local:MpHoverableExtension.IsEnabled="True"
+                            local:MpHoverableExtension.IsHovering="{Binding IsOverPinButton,
+                                                                            Mode=TwoWay}"
+                            Background="Transparent"
+                            Style="{StaticResource Transparent_Button}"
+                            BorderThickness="0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Visibility="{Binding PinButtonVisibility}"
+                            Command="{Binding ToggleTileIsPinnedCommand,
+                                              Source={x:Static local:MpClipTrayViewModel.Instance}}"
+                            CommandParameter="{Binding}">
+                        <Image x:Name="PinButtonImage"
+                               Width="15"
+                               Height="15"
+                               Stretch="Fill"
+                               Source="{Binding PinIconSourcePath,
+                                                Converter={StaticResource StringResourceToImageSourceConverter}}" />
+                    </Button>
+                </Grid>
+
+
                 <!--  Tile Detail Grid  -->
                 <local:MpClipTileDetailView x:Name="TileDetailView"
                                             DockPanel.Dock="Bottom"

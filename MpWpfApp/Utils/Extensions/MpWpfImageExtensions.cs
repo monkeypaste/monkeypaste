@@ -30,12 +30,6 @@ namespace MpWpfApp {
         public static BitmapSource ReadImageFromFile(string filePath) {
             return new BitmapImage(new Uri(filePath));
         }
-        public static BitmapSource ToBitmapSource(this FlowDocument fd, Brush bgBrush = null) {
-            return MpHelpers.ConvertFlowDocumentToBitmap(
-                                fd.Clone(),
-                                fd.GetDocumentSize(),
-                                bgBrush);
-        }
 
         public static BitmapSource Scale(this BitmapSource bmpSrc, Size newScale) {
             try {
@@ -57,6 +51,10 @@ namespace MpWpfApp {
                 return false;
             }
             return image1.ToByteArray().SequenceEqual(image2.ToByteArray());
+        }
+
+        public static BitmapSource Tint(this BitmapSource bmpSrc,Brush b) {
+            return MpWpfImagingHelper.TintBitmapSource(bmpSrc, (b as SolidColorBrush).Color, true);
         }
 
         public static byte[] ToByteArray(this BitmapSource bs) {
@@ -129,6 +127,10 @@ namespace MpWpfApp {
             }
         }
         
+        public static string ToAsciiImage(this BitmapSource bmpSrc) {
+            string ascii = MpWpfImagingHelper.ConvertBitmapSourceToPlainTextAsciiArt(bmpSrc);
+            return ascii;
+        }
         public static string ToBase64String(this BitmapSource bmpSrc) {
             return Convert.ToBase64String(bmpSrc.ToByteArray());
         }

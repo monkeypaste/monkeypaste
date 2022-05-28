@@ -156,6 +156,8 @@ namespace MpWpfApp {
 
         public double DefaultTagTreePanelWidth => 200;
 
+        public double MaxTagNameScreeWidth => 100;
+
         #endregion
 
         #region Analyzers

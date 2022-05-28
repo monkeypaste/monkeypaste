@@ -285,13 +285,6 @@ namespace MpWpfApp {
             if (rtb_a != null) {
                 rtb_a.Update();
             }
-
-            //if(ctvm.HasTemplates) {
-            //    foreach(var tvm in ctvm.HeadItem.TemplateCollection.Items) {
-            //        var templateRanges = rtb.Document.FindText(tvm.TemplateName);
-            //        Debugger.Break();
-            //    }
-            //}
         }
 
         public static async Task LoadTemplates(RichTextBox rtb) {

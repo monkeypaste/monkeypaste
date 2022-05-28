@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -20,6 +21,21 @@ namespace MpWpfApp {
     public partial class MpAnalyticItemPresetDataGridView : MpUserControl<MpAnalyticItemViewModel> {
         public MpAnalyticItemPresetDataGridView() {
             InitializeComponent();
+        }
+
+        private void Grid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if(sender is Panel p) {
+                var tbb = p.GetVisualDescendent<TextBoxBase>();
+                if(tbb.IsVisible) {
+                    return;
+                }
+                e.Handled = true;
+                var aipvm = tbb.DataContext as MpAnalyticItemPresetViewModel;
+                if(aipvm == null) {
+                    return;                
+                }
+                aipvm.IsLabelReadOnly = false;
+            }
         }
 
         //private void Button_MouseEnter(object sender, MouseEventArgs e) {

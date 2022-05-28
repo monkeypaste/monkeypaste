@@ -108,7 +108,6 @@
                 </Path>
             </Canvas>
         </Viewbox>
-
         <Canvas x:Name="ClipTileTitleTextCanvas"
                 DataContext="{Binding}"
                 ClipToBounds="True"
@@ -122,39 +121,6 @@
                 local:MpHoverableExtension.HoverCursor="IBeam"
                 Margin="10,3,0,0"
                 HorizontalAlignment="Stretch">
-            <!--  Clip Title TextBlock  -->
-
-            <TextBlock x:Name="ClipTileTitleTextBlock"
-                       Text="{Binding Path=Text,
-                                      ElementName=ClipTileTitleTextBox}"
-                       Visibility="Hidden"
-                       FontSize="{Binding ClipTileTitleFontSize,
-                                          Source={x:Static local:MpMeasurements.Instance},
-                                          Mode=OneWay}"
-                       Foreground="White">
-                <TextBlock.Effect>
-                    <DropShadowEffect ShadowDepth="0.5"
-                                      Direction="300"
-                                      Color="Black"
-                                      Opacity="0.70"
-                                      BlurRadius="0.1" />
-                </TextBlock.Effect>
-            </TextBlock>
-
-            <!--<Canvas x:Name="ClipTileTitleMarqueeCanvas"
-                    Height="{Binding ActualHeight,
-                                     ElementName=ClipTileTitleTextCanvas}"
-                    MouseLeftButtonDown="ClipTileTitleTextGrid_MouseLeftButtonDown"
-                    local:MpMarqueeTextBoxExtension.IsEnabled="True"
-                    local:MpMarqueeTextBoxExtension.LoopDelayMs="0"
-                    local:MpMarqueeTextBoxExtension.DropShadowOffset="1 1"
-                    local:MpMarqueeTextBoxExtension.MaxVelocity="-10"
-                    local:MpMarqueeTextBoxExtension.TailPadding="30"
-                    local:MpMarqueeTextBoxExtension.MaxRenderWidth="{Binding ActualWidth,
-                                                                      ElementName=ClipTileTitleTextCanvas}"
-                    Visibility="{Binding IsTitleReadOnly,
-                                         Converter={StaticResource BoolToVisibilityConverter}}" />-->
-
             <TextBox x:Name="ClipTileTitleTextBox"
                      PreviewKeyDown="ClipTileTitleTextBox_PreviewKeyDown"
                      local:MpIsFocusedExtension.IsEnabled="True"
@@ -184,25 +150,6 @@
               Margin="0,0,0,0"
               HorizontalAlignment="Right"
               ClipToBounds="False">
-            <Button x:Name="PinButton"
-                    MouseEnter="PinButton_MouseEnter"
-                    MouseLeave="PinButton_MouseLeave"
-                    Background="Transparent"
-                    Style="{StaticResource Transparent_Button}"
-                    BorderThickness="0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Visibility="{Binding PinButtonVisibility}"
-                    Command="{Binding ToggleTileIsPinnedCommand,
-                                      Source={x:Static local:MpClipTrayViewModel.Instance}}"
-                    CommandParameter="{Binding}">
-                <Image x:Name="PinButtonImage"
-                       Width="15"
-                       Height="15"
-                       Stretch="Fill"
-                       Source="{Binding PinIconSourcePath,
-                                        Converter={StaticResource StringResourceToImageSourceConverter}}" />
-            </Button>
             <Ellipse x:Name="SourceMatchEllipse"
                      Visibility="Hidden"
                      StrokeThickness="1"

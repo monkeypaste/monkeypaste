@@ -38,10 +38,6 @@ namespace MpWpfApp {
 
         #region MpIHierarchialViewModel Implementation
 
-        public bool IsReadOnly {
-            get => !IsEditing;
-            set => IsEditing = !value;
-        }
         public string Label {
             get => TagName;
             set => TagName = value;
@@ -61,7 +57,7 @@ namespace MpWpfApp {
         public string IconTextOrResourceKey => TagClipCount.ToString();
         public string IconLabelHexColor => TagCountTextHexColor;
         public string BackgroundHexColor => TagHexColor;
-        public string BorderHexColor => TagBorderHexColor;
+        public string BorderHexColor => TagTrayBorderHexColor;
 
         public ICommand AddChildCommand => AddChildTagCommand;
 
@@ -87,7 +83,19 @@ namespace MpWpfApp {
 
         #region MpISelectableViewModel Implementation
 
-        public bool IsSelected { get; set; }
+        private bool _isSelected = false;
+        public bool IsSelected {
+            get => _isSelected;
+            set {
+                if(IsSelected != value) {
+                    if(!IsSelected && IsEditing) {
+                        return;
+                    }
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
 
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -131,7 +139,8 @@ namespace MpWpfApp {
                         new MpMenuItemViewModel() {
                             Header = "_Rename",
                             IconResourceKey = Application.Current.Resources["RenameIcon"] as string,
-                            Command = RenameTagCommand
+                            Command = RenameTagCommand,
+                            CommandParameter = IsTreeContextMenuOpened
                         },
                         new MpMenuItemViewModel() {
                             Header = "_Assign Hotkey",
@@ -258,7 +267,50 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsEditing { get; set; }
+        public bool IsEditing => !IsTagNameTrayReadOnly || !IsTagNameTreeReadOnly;
+
+        private bool _isTagNameTreeReadOnly = true;
+        public bool IsTagNameTreeReadOnly {
+            get {
+                if(IsTagReadOnly) {
+                    return true;
+                }
+                return _isTagNameTreeReadOnly;
+            }
+            set {
+                if(IsTagReadOnly) {
+                    return;
+                }
+                if (_isTagNameTreeReadOnly != value) {
+                    _isTagNameTreeReadOnly = value;
+                    OnPropertyChanged(nameof(IsTagNameTreeReadOnly));
+                    OnPropertyChanged(nameof(IsEditing));
+                }
+            }
+        }
+        private bool _isTagNameTrayReadOnly = true;
+        public bool IsTagNameTrayReadOnly {
+            get {
+                if (IsTagReadOnly) {
+                    return true;
+                }
+                return _isTagNameTrayReadOnly;
+            }
+            set {
+                if (IsTagReadOnly) {
+                    return;
+                }
+                if (_isTagNameTrayReadOnly != value) {
+                    _isTagNameTrayReadOnly = value;
+                    OnPropertyChanged(nameof(IsTagNameTrayReadOnly));
+                    OnPropertyChanged(nameof(IsEditing));
+                }
+            }
+        }
+
+        public bool IsTagNameTrayTextBoxFocused { get; set; } = false;
+        public bool IsTagNameTreeTextBoxFocused { get; set; } = false;
+
 
         private bool _isAssociated = false;
         public bool IsAssociated {
@@ -270,13 +322,16 @@ namespace MpWpfApp {
                     _isAssociated = value;
                     OnPropertyChanged(nameof(IsAssociated));
                     OnPropertyChanged(nameof(TagBorderBackgroundHexColor));
-                    OnPropertyChanged(nameof(TagBorderHexColor));
+                    OnPropertyChanged(nameof(TagTrayBorderHexColor));
+                    OnPropertyChanged(nameof(TagTreeBorderHexColor));
                     OnPropertyChanged(nameof(TagTextHexColor));
                 }
             }
         }
 
-        public bool IsContextMenuOpened { get; set; } = false;
+        public bool IsTrayContextMenuOpened { get; set; } = false;
+
+        public bool IsTreeContextMenuOpened { get; set; } = false;
 
         #endregion
 
@@ -297,9 +352,21 @@ namespace MpWpfApp {
             }
         }
 
-        public string TagBorderHexColor {
+        public string TagTrayBorderHexColor {
             get {
-                if(IsContextMenuOpened) {
+                if(IsTrayContextMenuOpened) {
+                    return MpSystemColors.red1;
+                }
+                if (IsAssociated) {
+                    return TagHexColor;
+                }
+                return MpSystemColors.Transparent;
+            }
+        }
+
+        public string TagTreeBorderHexColor {
+            get {
+                if (IsTreeContextMenuOpened) {
                     return MpSystemColors.red1;
                 }
                 if (IsAssociated) {
@@ -419,11 +486,15 @@ namespace MpWpfApp {
                 return Tag.TagName;
             }
             set {
-                if (Tag.TagName != value) {
+                if (TagName != value) {
                     Tag.TagName = value;
                     if (Tag.TagName.Trim() == string.Empty) {
                         Tag.TagName = "Untitled";
-                        IsEditing = true;
+                        if(IsTagNameTreeTextBoxFocused) {
+                            IsTagNameTreeReadOnly = false;
+                        } else if(IsTagNameTrayTextBoxFocused) {
+                            IsTagNameTrayReadOnly = false;
+                        }
                     }
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(TagName));
@@ -455,8 +526,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
-
-        public event EventHandler OnRequestSelectAll;
 
         public event EventHandler<MpCopyItem> OnCopyItemLinked;
         public event EventHandler<MpCopyItem> OnCopyItemUnlinked;
@@ -495,6 +564,8 @@ namespace MpWpfApp {
             }
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(Children));
+            OnPropertyChanged(nameof(IsTagNameTrayReadOnly));
+            OnPropertyChanged(nameof(IsTagNameTreeReadOnly));
 
             IsBusy = false;
         }
@@ -523,32 +594,51 @@ namespace MpWpfApp {
                         }
                     }
                     break;
-                case nameof(Tag):
-                    break;
                 case nameof(IsSelected):
-                    //if (IsSelected) {
-                    //    Task.Run(async()=> {
-                    //        await MpClipTrayViewModel.Instance.RefreshTiles(); 
-                    //    });
-                    //}
                     if(IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
 
                         if (!IsExpanded) {
                             IsExpanded = true;
                         }
-                        Parent.SelectTagCommand.Execute(TagId);
+                        Parent.SelectTagCommand.Execute(this);
+                    } else {
+                        IsTagNameTrayReadOnly = true;
+                        IsTagNameTreeReadOnly = true;
                     }
                     //MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayBackgroundBrush));
+                    break;
+                case nameof(IsTagNameTreeReadOnly):
+                    if(!IsTagNameTreeReadOnly) {
+                        IsTagNameTrayTextBoxFocused = false;
+                        IsTagNameTreeTextBoxFocused = true;
+                        //IsSelected = true;
+                    }
+                    break;
+                case nameof(IsTagNameTrayReadOnly):
+                    if (!IsTagNameTrayReadOnly) {
+                        IsTagNameTreeTextBoxFocused = false;
+                        IsTagNameTrayTextBoxFocused = true;
+                        //IsSelected = true;
+                    }
+                    break;
+                case nameof(IsTagNameTrayTextBoxFocused):
+                case nameof(IsTagNameTreeTextBoxFocused):
+                    if(!IsTagNameTreeTextBoxFocused && !IsTagNameTrayTextBoxFocused) {
+                        FinishRenameTagCommand.Execute(null);
+                    }
                     break;
                 case nameof(HasModelChanged):
                     if(IsBusy) {
                         return;
                     }
-                    Task.Run(async () => {
-                        await Tag.WriteToDatabaseAsync();
-                        HasModelChanged = false;
-                    });
+                    if(HasModelChanged) {
+                        Task.Run(async () => {
+                            await Tag.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        });
+                    }
+                    
                     break;
                 case nameof(TagHexColor):
                     MpHelpers.RunOnMainThread(async () => {
@@ -778,22 +868,29 @@ namespace MpWpfApp {
         public ICommand CancelRenameTagCommand => new RelayCommand(
             () => {
                 TagName = _originalTagName;
-                IsEditing = false;
+                IsTagNameTrayReadOnly = true;
+                IsTagNameTreeReadOnly = true;
             });
 
         public ICommand FinishRenameTagCommand => new RelayCommand(
             async() => {
-                IsEditing = false;
+                IsTagNameTrayReadOnly = true;
+                IsTagNameTreeReadOnly = true;
                 await Tag.WriteToDatabaseAsync();
             });
 
-        public ICommand RenameTagCommand => new RelayCommand(
-             () => {
+        public ICommand RenameTagCommand => new RelayCommand<bool>(
+             (isFromTree) => {
                 _originalTagName = TagName;
-                IsEditing = true;
-                OnRequestSelectAll?.Invoke(this, null);
+                if(isFromTree) {
+                     IsTagNameTreeReadOnly = false;
+                     IsTagNameTrayReadOnly = true;
+                 } else {
+                     IsTagNameTrayReadOnly = false;
+                     IsTagNameTreeReadOnly = true;
+                 }
             },
-            () => {
+            (isFromTree) => {
                 return !IsTagReadOnly;
             });
 

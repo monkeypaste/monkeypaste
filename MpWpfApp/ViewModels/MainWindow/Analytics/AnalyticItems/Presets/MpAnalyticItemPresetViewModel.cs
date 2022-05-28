@@ -433,29 +433,19 @@ namespace MpWpfApp {
         private void MpPresetParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected && Parent.Parent.IsSidebarVisible) {
-                        LastSelectedDateTime = DateTime.Now;
-                    }
-                    //if(!IsSelected) {
-                    //    IsLabelTextBoxFocused = false;
-                    //}
-                    Parent.OnPropertyChanged(nameof(Parent.IsSelected));
-                    Parent.SelectedItem = this;
+                    if(IsSelected) {
+                        if(Parent.Parent.IsSidebarVisible) {
+                            LastSelectedDateTime = DateTime.Now;
+                        }                       
 
-                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
-                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedPresetViewModel));
-                    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
-                    CollectionViewSource.GetDefaultView(Items).Refresh();
+                        Parent.OnPropertyChanged(nameof(Parent.IsSelected));
+                        if(Parent.SelectedItem != this) {
+                            Parent.SelectedItem = this;
+                        }
+                    } else {
+                        IsLabelReadOnly = true;
+                    }
                     break;
-                //case nameof(IsEditingParameters):
-                //    if(IsEditingParameters) {
-                //        Parent.Items.Where(x => x != this).ForEach(x => x.IsEditingParameters = false);
-                //        ManagePresetCommand.Execute(null);
-                //    }
-                //    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingParameters));
-                //    Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.NextSidebarItem));
-                //    OnPropertyChanged(nameof(HasModelChanged));
-                //    break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         Task.Run(async () => { 

@@ -187,13 +187,5 @@ namespace MpWpfApp {
             e.Handled = true;
         }
 
-        private void PinButton_MouseEnter(object sender, MouseEventArgs e) {
-            BindingContext.IsOverPinButton = true;
-        }
-
-        private void PinButton_MouseLeave(object sender, MouseEventArgs e) {
-            BindingContext.IsOverPinButton = false;
-        }
-
     }
 }
