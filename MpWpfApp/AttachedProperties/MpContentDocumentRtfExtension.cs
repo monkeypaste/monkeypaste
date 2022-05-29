@@ -10,18 +10,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Markup;
-using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpContentDocumentRtfExtension : DependencyObject {
@@ -156,20 +149,42 @@ namespace MpWpfApp {
         }
 
         public static string GetEncodedContent(RichTextBox rtb) {
-            //return rtb.Document.Clone().ToRichText();
-
-            var allTemplateHyperlinks = rtb.Document.GetAllTextElements()
-                .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
-                .ToList();
-
-            foreach (InlineUIContainer thl in allTemplateHyperlinks) {
-                var cit = thl.Tag as MpTextTemplate;
-                var span = new Span(thl.ContentStart, thl.ContentEnd);
-                span.Inlines.Clear();
-                span.Inlines.Add(cit.EncodedTemplate);
+            var ctvm = rtb.DataContext as MpClipTileViewModel;
+            if(ctvm == null) {
+                Debugger.Break();
             }
 
-            return rtb.Document.ToRichText();
+            switch(ctvm.ItemType) {
+                case MpCopyItemType.FileList:
+                    return string.Join(
+                            Environment.NewLine,
+                            rtb.Document.GetAllTextElements()
+                                        .Where(x => x is Hyperlink)
+                                        .Cast<Hyperlink>()
+                                        .Select(x => x.NavigateUri.LocalPath));
+                case MpCopyItemType.Image:
+                    return rtb.Document.GetAllTextElements()
+                                       .Where(x => x is InlineUIContainer)
+                                       .Cast<InlineUIContainer>()
+                                       .Select(x => x.Child as Image)
+                                       .Select(x => (x.Source as BitmapSource).ToBase64String())
+                                       .FirstOrDefault();
+                case MpCopyItemType.Text:
+                    var thll = rtb.Document.GetAllTextElements()
+                                            .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
+                                            .ToList();
+
+                    foreach (InlineUIContainer thl in thll) {
+                        var cit = thl.Tag as MpTextTemplate;
+                        var span = new Span(thl.ContentStart, thl.ContentEnd);
+                        span.Inlines.Clear();
+                        span.Inlines.Add(cit.EncodedTemplate);
+                    }
+
+                    return rtb.Document.ToRichText();
+            }
+            MpConsole.WriteTraceLine("Unknown item type " + ctvm);
+            return null;            
         }
 
         #endregion

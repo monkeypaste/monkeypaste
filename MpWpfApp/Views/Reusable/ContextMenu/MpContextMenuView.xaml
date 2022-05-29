@@ -9,6 +9,8 @@
              xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
              ItemsSource="{Binding SubItems}"
              UsesItemContainerTemplate="True"
+             Opened="ContextMenuView_Opened"
+             Closed="ContextMenuView_Closed"
              ItemContainerTemplateSelector="{StaticResource MenuItemContainerSelector}"
              d:DataContext="{d:DesignInstance Type=pcl:MpMenuItemViewModel,
                                               IsDesignTimeCreatable=False}" />

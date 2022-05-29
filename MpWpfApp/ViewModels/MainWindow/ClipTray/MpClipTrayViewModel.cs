@@ -228,8 +228,9 @@ namespace MpWpfApp {
                                     CommandParameter = this
                                 },
                                 new MpMenuItemViewModel() {
-                                    Header = string.IsNullOrEmpty(SelectedItem.ShortcutKeyString) ? 
-                                                "To _Shorcut" : $"Paste '{SelectedItem.ShortcutKeyString}'",
+                                    Header = "To _Shorcut",
+                                    ShortcutType = MpShortcutType.PasteCopyItem,
+                                    ShortcutObjId = SelectedItem.CopyItemId,
                                     IconResourceKey = Application.Current.Resources["HotkeyIcon"] as string,
                                     Command = MpSystemTrayViewModel.Instance.ShowSettingsWindowCommand,
                                     CommandParameter = this
@@ -605,12 +606,12 @@ namespace MpWpfApp {
 
         #region MpIMatchTrigger Implementation
 
-        public void Register(MpIActionComponentHandler mvm) {
+        public void RegisterActionComponent(MpIActionComponentHandler mvm) {
             OnCopyItemItemAdd += mvm.OnActionTriggered;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void Unregister(MpIActionComponentHandler mvm) {
+        public void UnregisterActionComponent(MpIActionComponentHandler mvm) {
             OnCopyItemItemAdd -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
         }
@@ -2116,7 +2117,7 @@ namespace MpWpfApp {
 
         public ICommand AssignHotkeyCommand => new RelayCommand(
             () => {
-                SelectedItem.AssignHotkeyCommand.Execute(null);
+                MpShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand.Execute(SelectedItem);
             },
             () => SelectedItem != null);
 

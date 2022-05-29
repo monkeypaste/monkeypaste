@@ -10,7 +10,6 @@ using System.Windows;
 using System.Windows.Annotations;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpContentViewDropBehavior : MpDropBehaviorBase<MpContentView> {
@@ -282,6 +281,8 @@ namespace MpWpfApp {
             var rtb = AssociatedObject.Rtb;
             var drag_ctvm = dragData as MpClipTileViewModel;
             var drop_ctvm = AssociatedObject.DataContext as MpClipTileViewModel;
+            int dropItemId = drop_ctvm.CopyItemId;
+
             bool isSelfDrop = drag_ctvm == drop_ctvm;
 
             MpConsole.WriteLine("Dropping onto " + drop_ctvm + " at idx: " + DropIdx);
@@ -296,26 +297,19 @@ namespace MpWpfApp {
             bool post = _isPostBlockDrop;
             bool split = _isSplitBlockDrop;
 
-            string rootGuid = drop_ctvm.CopyItemGuid;
-            bool isNewRoot = rtfDropIdx <= 0;
-
             await base.Drop(isCopy, dragData);
 
             // get drop range before altering content (if self drop offset may change if selection is before drop so use pointer which is passive ref
             var dropRange = GetDropRange(rtfDropIdx, pre, post, split);
 
-            List<MpCopyItem> dropItems = new List<MpCopyItem>();
-            List<MpCopyItem> itemsToDelete = new List<MpCopyItem>();
-
             bool deleteDragItem = false;
-            MpPortableDataObject mpdo = new MpPortableDataObject();
-
+            MpContentView dragContentView = null;
+            string dropData = string.Empty;
             if (drag_ctvm == null) {
-                if (dragData is MpPortableDataObject) {
+                if (dragData is MpPortableDataObject mpdo) {
                     // from external source
-                    mpdo = dragData as MpPortableDataObject;
-                    //var extDropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
-                    //dropItems.Add(extDropItem);
+                    var tempCopyItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo, true);
+                    dropData = tempCopyItem.ItemData.ToPlainText();
                 } else {
                     // external data should be pre-processed
                     Debugger.Break();
@@ -324,182 +318,80 @@ namespace MpWpfApp {
                 // from internal content
 
                 //find drag content view
-                var dcv = Application.Current.MainWindow
+                dragContentView = Application.Current.MainWindow
                                 .GetVisualDescendents<MpContentView>()
                                 .FirstOrDefault(x =>
                                     x.DataContext is MpClipTileViewModel tctvm &&
                                     tctvm.CopyItemId == drag_ctvm.CopyItemId);
 
-                //if (dctv == null) {
-                //    Debugger.Break();
-                //}
-                //string dragPlainText = drag_ctvm.SelectedPlainText;
-                //List<TextElement> dragSelectionElements = dctv.Rtb.Selection.GetAllTextElements().ToList();
-                //var dragSelectionItems = dragSelectionElements.Select(x => x.Tag as MpCopyItem).Distinct().ToList();
-                //if(drag_ctvm.ItemType == MpCopyItemType.FileList) {
-                //    dragSelectionElements = dragSelectionElements.Where(x => x.Tag == drag_ctvm.HoverItem.CopyItem).ToList();
-                //    dragSelectionItems = new List<MpCopyItem>() { drag_ctvm.HoverItem.CopyItem };
-                //    dragPlainText = drag_ctvm.HoverItem.CopyItemData;
-                //}
-                //int selectionOffset = 0;
-
-                //foreach(var drag_item in dragSelectionItems.OrderBy(x=>x.CompositeSortOrderIdx)) {
-                //    MpCopyItem dropItem = null;
-                //    if(drag_item.ItemType == MpCopyItemType.Text) {
-
-                //    }
-                //    var drag_item_elements = dragSelectionElements.Where(x => (x.Tag as MpCopyItem).Id == drag_item.Id);
-                //    var drag_item_range = drag_item_elements.Where(x=>dragSelectionElements.Contains(x)).ToTextRange();
-
-                //    string drag_item_data = string.Empty;
-                //    switch (drag_item.ItemType) {
-                //        case MpCopyItemType.Text:
-                //            string remaingSelectionPlainText = dragPlainText.Substring(selectionOffset);
-                //            if(drag_item_range.Text.Contains(remaingSelectionPlainText)) {
-                //                drag_item_data = remaingSelectionPlainText;
-                //            } else if(remaingSelectionPlainText.StartsWith(drag_item_range.Text)) {
-                //                drag_item_data = drag_item_range.Text;
-                //                selectionOffset = drag_item_data.Length;
-                //            } else {
-                //                continue;
-                //                //Debugger.Break();
-                //                //drag_item_data = remaingSelectionPlainText;
-                //            }
-
-                //            break;
-                //        case MpCopyItemType.FileList:
-                //            drag_item_data = drag_item.ItemData;
-                //            break;
-                //        case MpCopyItemType.Image:
-                //            drag_item_data = drag_item.ItemData;
-                //            break;
-                //    }
-
-                //    string drag_item_pt = drag_item.ItemData.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                //    string drop_item_pt = drag_item_data.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-
-                //    MpCopyItem drop_item = null;
-                //    if (isCopy || drag_item_pt != drop_item_pt) {
-                //        drop_item = await drag_item.Clone(true) as MpCopyItem;
-                //        drop_item.ItemData = drag_item_data;
-                //        drop_item.CopyItemSourceGuid = string.IsNullOrEmpty(drag_item.CopyItemSourceGuid) ? drag_item.Guid : drag_item.CopyItemSourceGuid;                        
-                //        if(!isCopy && drop_item.ItemType != MpCopyItemType.FileList && drag_ctvm.IsAllSelected) {
-                //            itemsToDelete.Add(drag_item);
-                //        }
-                //    } else {
-                //        drop_item = drag_item;
-                //    }
-                //    dropItems.Add(drop_item);
-                //}
-
-                //if(!isCopy) {
-                //    if(drag_ctvm.ItemType == MpCopyItemType.FileList) {
-                //        dragSelectionElements.ToTextRange().LoadRtf(string.Empty.ToRichText());
-                //    } else {
-                //        dctv.Rtb.Selection.Text = string.Empty;
-                //    }
-
-                //    if(!isSelfDrop) {
-                //        string dpt = dctv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                //        if (string.IsNullOrWhiteSpace(dpt)) {
-                //            //when all content is being dropped flag drag source for delete
-                //            //deleteDragItem = true;
-                //            itemsToDelete = dragSelectionItems;
-                //        } else {
-                //            MpMergedDocumentRtfExtension.SaveTextContent(dctv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
-                //        }
-                //    }
-                //}
-                mpdo = new MpPortableDataObject();
-                if (dropItems.Count == 0) {
-                    Debugger.Break();
-                } else if (dropItems[0].ItemType == MpCopyItemType.Text) {
-                    mpdo.DataFormatLookup.Add(MpClipboardFormatType.Text, dcv.Rtb.Selection.Text);
-                } else if (dropItems[0].ItemType == MpCopyItemType.FileList) {
-                    mpdo.DataFormatLookup.Add(
-                        MpClipboardFormatType.FileDrop,
-                        string.Join(Environment.NewLine, dropItems.Select(x => x.ItemData)));
-                }  else {
-                    Debugger.Break();
+                switch(drag_ctvm.ItemType) {
+                    case MpCopyItemType.Text:
+                        dropData = dragContentView.Rtb.Selection.Text;
+                        break;
+                    case MpCopyItemType.FileList:
+                        dropData = dragContentView.Rtb.Document
+                                                             .GetAllTextElements()
+                                                             .Where(x => x is Hyperlink && x.IsEnabled)
+                                                             .Cast<Hyperlink>()
+                                                             .Select(x => x.NavigateUri.LocalPath)
+                                                             .FirstOrDefault();
+                        if(dropData == null) {
+                            //when dragging from below file list and not hovering over any item, select last
+                            var fil = drag_ctvm.CopyItemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                            if(fil.Count == 0) {
+                                Debugger.Break();
+                            }
+                            dropData = fil[fil.Count - 1];
+                        }
+                        break;
+                    default:
+                        return;
                 }
 
-                if (isCopy) {                    
-                    
-                    //var internalDropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
-                    //if (dropItems.Count > 0) {
-                    //    internalDropItem.CopyItemSourceGuid = dropItems[0].Guid;
-                    //}
-                    //dropItems.Add(internalDropItem);
-
-                } else if(mpdo.DataFormatLookup.Count > 0) {
+                if (!isCopy) {
                     //when drag selection is not copy delete selection from source
-                    dcv.Rtb.Selection.Text = string.Empty;
+                    dragContentView.Rtb.Selection.Text = string.Empty;
 
-                    string dpt = dcv.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                    if (string.IsNullOrWhiteSpace(dpt)) {
+                    string dpt = dragContentView.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                    if (string.IsNullOrWhiteSpace(dpt) && !isSelfDrop) {
                         //when all content is being dropped flag drag source for delete
                         deleteDragItem = true;
-                    } //else {
-                        //MpMergedDocumentRtfExtension.SaveTextContent(dcv.Rtb).FireAndForgetSafeAsync(drag_ctvm);
-                    //}
+                    }
                 }
             }
+            if(dropData.IsStringBase64()) {
+                dropRange.LoadImage(dropData);
+            } else if(dropData.IsStringFileOrPathFormat()) {
+                dropRange = dropRange.End.ToTextRange();
+                dropRange.LoadItemData(dropData, MpCopyItemType.FileList);
+            } else if (dropData.IsStringRichTextTable()) {
+                string csv = MpCsvToRtfTableConverter.GetCsv(dropData);
+                dropRange.LoadTable(csv);
+            } else {
+                MpConsole.WriteLine("Drop Plain Text: " + dropData);
+                dropData = dropData.TrimTrailingLineEndings();
 
-            if(mpdo == null || mpdo.DataFormatLookup.Count == 0) {
-                MpConsole.WriteTraceLine("No supported drop data, ignoring");
-                return;
-            }
-            var dropItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo, true);
-
-            switch (dropItem.ItemType) {
-                case MpCopyItemType.Text:
-                    if (dropItem.ItemData.IsStringRichTextTable()) {
-                        string csv = MpCsvToRtfTableConverter.GetCsv(dropItem.ItemData);
-                        dropRange.LoadTable(csv);
-                    } else {
-                        string pt = dropItem.ItemData.ToPlainText();
-                        MpConsole.WriteLine("Drop Plain Text: " + pt);
-                        pt = pt.TrimTrailingLineEndings();
-
-                        if (pre) {
-                            pt = pt + Environment.NewLine;
-                        } else if (post) {
-                            pt = Environment.NewLine + pt;
-                            var post_tp = dropRange.End.GetLineStartPosition(1);
-                            if (post_tp != null) {
-                                pt = pt + Environment.NewLine;
-                            }
-                        } else if (split) {
-                            pt = Environment.NewLine + pt + Environment.NewLine;
-                        }
-
-                        if (true) {//pre || post || split) {
-                            //var preElements = dropRange.GetAllTextElements();
-                            dropRange.Text = pt;
-                            //var postElements = dropRange.GetAllTextElements();
-                            //if (preElements.Count() == postElements.Count()) {
-                            //    new Span(dropRange.Start, dropRange.End);
-                            //}
-                        } else {
-                            dropRange.Start.InsertTextInRun(pt);
-                        }
-
+                if (pre) {
+                    dropData = dropData + Environment.NewLine;
+                } else if (post) {
+                    dropData = Environment.NewLine + dropData;
+                    var post_tp = dropRange.End.GetLineStartPosition(1);
+                    if (post_tp != null) {
+                        dropData = dropData + Environment.NewLine;
                     }
-                    break;
-                case MpCopyItemType.Image:
-                    dropRange.LoadImage(dropItem.ItemData);
-                    break;
-                case MpCopyItemType.FileList:
-                    dropRange.LoadFileItem(dropItem.ItemData.Replace(Environment.NewLine, string.Empty), dropItem.IconId);
-                    //dropRange.GetAllTextElements().ForEach(x => x.Tag = dropItem);
-                    break;
+                } else if (split) {
+                    dropData = Environment.NewLine + dropData + Environment.NewLine;
+                }
+                dropRange.Text = dropData;
             }
 
             await MpContentDocumentRtfExtension.SaveTextContent(rtb);
             //var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
 
-            foreach (var dri in itemsToDelete) {
-                await dri.DeleteFromDatabaseAsync();
+            if(deleteDragItem) {
+                await drag_ctvm.CopyItem.DeleteFromDatabaseAsync();
+            } else if(dragContentView != null){
+                await MpContentDocumentRtfExtension.SaveTextContent(dragContentView.Rtb);
             }
 
             while (MpClipTrayViewModel.Instance.IsAnyBusy) {
@@ -517,9 +409,13 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
-            var civm = MpClipTrayViewModel.Instance.GetClipTileViewModelByGuid(rootGuid);
-            if(civm != null) {
-                civm.IsSelected = true;
+            // NOTE since drag item was likely deleted this behavior may
+            // not be attached to the same content anymore so use id ref to find/select
+            // drop tile
+
+            var ctvm_toSelect = MpClipTrayViewModel.Instance.GetClipTileViewModelById(dropItemId);
+            if(ctvm_toSelect != null) {
+                ctvm_toSelect.IsSelected = true;
             }
         }
 

@@ -85,31 +85,8 @@ namespace MpWpfApp {
 
         #region State
 
-        private string _menuItemTag = string.Empty;
-        public string MenuItemTag {
-            get {
-                return _menuItemTag;
-            }
-            set {
-                if(_menuItemTag != value) {
-                    _menuItemTag = value;
-                    OnPropertyChanged(nameof(MenuItemTag));
-                }
-            }
-        }
-
-        private ICommand _command = null;
-        public ICommand Command {
-            get {
-                return _command;
-            }
-            set {
-                if (_command != value) {
-                    _command = value;
-                    OnPropertyChanged(nameof(Command));
-                }
-            }
-        }
+        public ICommand Command { get; set; }
+        public object CommandParameter { get; set; }
 
         public IDisposable KeysObservable { get; set; }
 
@@ -362,10 +339,11 @@ namespace MpWpfApp {
         }
 
 
-        public async Task InitializeAsync(MpShortcut s, ICommand command) {
+        public async Task InitializeAsync(MpShortcut s, ICommand command, object commandParameter = null) {
             //only register if non-empty keysstring
             Shortcut = s;
             Command = command;
+            CommandParameter = commandParameter;
 
             OnPropertyChanged(nameof(KeyItems));
             OnPropertyChanged(nameof(IsEmpty));
@@ -419,14 +397,14 @@ namespace MpWpfApp {
             }
         }
 
-        public void Register(MpIActionComponentHandler mvm) {
+        public void RegisterActionComponent(MpIActionComponentHandler mvm) {
             //by design this only can occur for shortcuts with a selected item as its context
 
             OnShortcutExecuted += mvm.OnActionTriggered;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void Unregister(MpIActionComponentHandler mvm) {
+        public void UnregisterActionComponent(MpIActionComponentHandler mvm) {
             OnShortcutExecuted -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
         }

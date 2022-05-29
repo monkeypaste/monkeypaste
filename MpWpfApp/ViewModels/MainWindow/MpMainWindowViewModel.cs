@@ -137,7 +137,6 @@ namespace MpWpfApp {
 
         #endregion
 
-
         #endregion
 
         #region Events

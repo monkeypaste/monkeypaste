@@ -181,12 +181,12 @@ namespace MpWpfApp {
 
         #region MpITriggerActionViewModel Implementation
 
-        public void Register(MpIActionComponentHandler mvm) {
+        public void RegisterActionComponent(MpIActionComponentHandler mvm) {
             OnCopyItemLinked += mvm.OnActionTriggered;
             MpConsole.WriteLine($"TagTile {TagName} Registered {mvm.Label} matcher");
         }
 
-        public void Unregister(MpIActionComponentHandler mvm) {
+        public void UnregisterActionComponent(MpIActionComponentHandler mvm) {
             OnCopyItemLinked -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from {TagName} TagAdd");
         }

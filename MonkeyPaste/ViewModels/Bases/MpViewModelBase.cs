@@ -29,6 +29,8 @@ namespace MonkeyPaste {
 
         public virtual object ParentObj { get; protected set; }
 
+        public virtual MpViewModelBase SelfBindingRef => this;
+
         private bool _isBusy = false;
         public bool IsBusy {
             get => _isBusy;

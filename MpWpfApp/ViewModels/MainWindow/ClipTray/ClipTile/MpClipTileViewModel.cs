@@ -21,13 +21,14 @@ using System.Text.RegularExpressions;
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 
-        MpIShortcutCommand,
+        MpIShortcutCommandViewModel,
         MpISelectableViewModel,
         MpIUserColorViewModel,
         MpIHoverableViewModel,
         MpIResizableViewModel,
         MpITextSelectionRange,
-        MpIFindAndReplaceViewModel {
+        MpIFindAndReplaceViewModel,
+        MpITooltipInfoViewModel {
         #region Private Variables
 
         private List<string> _tempFileList = new List<string>();
@@ -95,6 +96,12 @@ using System.Text.RegularExpressions;
         //    get;
         //    set;
         //}
+        #endregion
+
+        #region MpITooltipInfoViewModel Implementation
+
+        public object Tooltip { get; set; }
+
         #endregion
 
         #region MpITextSelectionRangeViewModel Implementation 
@@ -357,28 +364,39 @@ using System.Text.RegularExpressions;
 
         #endregion
 
-        #region MpIShortcutCommand Implementation
+        //#region MpIShortcutCommand Implementation
+
+        //public MpShortcutType ShortcutType => MpShortcutType.PasteCopyItem;
+
+        //public MpShortcutViewModel ShortcutViewModel {
+        //    get {
+        //        if (Parent == null || CopyItem == null) {
+        //            return null;
+        //        }
+        //        var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CommandId == CopyItemId && x.ShortcutType == ShortcutType);
+
+        //        if (scvm == null) {
+        //            scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
+        //        }
+
+        //        return scvm;
+        //    }
+        //}
+
+        //public string ShortcutKeyString => ShortcutViewModel == null ? string.Empty : ShortcutViewModel.KeyString;
+
+        //public ICommand AssignCommand => AssignHotkeyCommand;
+
+        //#endregion
+
+        #region MpIShortcutCommandViewModel Implementation
 
         public MpShortcutType ShortcutType => MpShortcutType.PasteCopyItem;
 
-        public MpShortcutViewModel ShortcutViewModel {
-            get {
-                if (Parent == null || CopyItem == null) {
-                    return null;
-                }
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CommandId == CopyItemId && x.ShortcutType == ShortcutType);
-
-                if (scvm == null) {
-                    scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
-                }
-
-                return scvm;
-            }
-        }
-
-        public string ShortcutKeyString => ShortcutViewModel == null ? string.Empty : ShortcutViewModel.KeyString;
-
-        public ICommand AssignCommand => AssignHotkeyCommand;
+        public string ShortcutLabel => "Paste " + CopyItemTitle;
+        public int ModelId => CopyItemId;
+        public ICommand ShortcutCommand => Parent == null ? null : Parent.PasteCopyItemByIdCommand;
+        public object ShortcutCommandParameter => CopyItemId;
 
         #endregion
 
@@ -850,9 +868,6 @@ using System.Text.RegularExpressions;
                 if (SourceViewModel != null && SourceViewModel.IsBusy) {
                     return true;
                 }
-                if (ShortcutViewModel != null && ShortcutViewModel.IsBusy) {
-                    return true;
-                }
                 return false;
             }
         }
@@ -1042,14 +1057,6 @@ using System.Text.RegularExpressions;
 
         #region Icons
 
-        public string HotkeyIconSource {
-            get {
-                if (string.IsNullOrEmpty(ShortcutKeyString)) {
-                    return MpBase64Images.JoystickUnset;
-                }
-                return MpBase64Images.JoystickActive;
-            }
-        }
 
         #endregion
 
@@ -1064,14 +1071,6 @@ using System.Text.RegularExpressions;
             }
         }
 
-        public string HotkeyIconTooltip {
-            get {
-                if (string.IsNullOrEmpty(ShortcutKeyString)) {
-                    return @"Assign Shortcut";
-                }
-                return ShortcutKeyString;
-            }
-        }
 
         public string CopyItemTitle {
             get {
@@ -1283,7 +1282,6 @@ using System.Text.RegularExpressions;
             //RequestUiUpdate();
             //OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(ItemBorderBrush));
-            OnPropertyChanged(nameof(ShortcutKeyString));
 
             MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
@@ -1559,7 +1557,7 @@ using System.Text.RegularExpressions;
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(ShortcutKeyString));
+                    OnPropertyChanged(nameof(SelfBindingRef));
                 }
             } else if (e is MpImageAnnotation dio) {
                 if (dio.CopyItemId == CopyItemId) {
@@ -1577,7 +1575,7 @@ using System.Text.RegularExpressions;
         protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CommandId == CopyItemId && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(ShortcutKeyString));
+                    OnPropertyChanged(nameof(SelfBindingRef));
                 }
             } else if (e is MpCopyItem ci && ci.Id == CopyItemId) {
                 if (ci.Id == CopyItemId) {
@@ -1786,10 +1784,6 @@ using System.Text.RegularExpressions;
                     OnPropertyChanged(nameof(ItemBorderBrushThickness));
                     OnPropertyChanged(nameof(ItemBackgroundHexColor));
                     break;
-                case nameof(ShortcutKeyString):
-                    OnPropertyChanged(nameof(HotkeyIconSource));
-                    OnPropertyChanged(nameof(HotkeyIconTooltip));
-                    break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
                         Task.Run(async () => {
@@ -1903,15 +1897,6 @@ using System.Text.RegularExpressions;
             }
         }
 
-        public ICommand AssignHotkeyCommand => new RelayCommand(
-            async() => {
-                await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                    "Paste " + CopyItem.Title,
-                    MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand,
-                    ShortcutType, CopyItem.Id, ShortcutKeyString);
-                OnPropertyChanged(nameof(ShortcutKeyString));
-            });
-
         public ICommand CycleDetailCommand => new RelayCommand(
             () => {
                 _detailIdx++;
@@ -1936,6 +1921,7 @@ using System.Text.RegularExpressions;
             () => {
                 IsTitleVisible = !IsTitleVisible;
             }, !IsPlaceholder);
+
 
 
         #endregion

@@ -12,6 +12,10 @@ namespace MpWpfApp {
 
         public static List<List<Key>> ConvertStringToKeySequence(string keyStr) {
             var keyList = new List<List<Key>>();
+            if(string.IsNullOrEmpty(keyStr)) {
+                return keyList;
+            }
+
             var combos = keyStr.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();
             foreach (var c in combos) {
                 var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();

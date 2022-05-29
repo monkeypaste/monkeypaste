@@ -195,7 +195,6 @@ namespace MpWpfApp {
 
             MpPortableDataObject d = new MpPortableDataObject();
             string rtf = string.Empty.ToRichText();
-            string pt = string.Empty;
             var sctfl = new List<string>();
 
             //check for model templates
@@ -238,7 +237,22 @@ namespace MpWpfApp {
             } else {
                 rtf = ci.ItemData.ToRichText();
             }
-            pt = rtf.ToPlainText();
+            string pt = string.Empty;
+            string bmpBase64 = string.Empty;
+            switch(ci.ItemType) {
+                case MpCopyItemType.Text:
+                    pt = rtf.ToPlainText();
+                    bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
+                    break;
+                case MpCopyItemType.Image:
+                    pt = ci.ItemData.ToBitmapSource().ToAsciiImage();
+                    bmpBase64 = ci.ItemData;
+                    break;
+                case MpCopyItemType.FileList:
+                    pt = ci.ItemData;
+                    bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
+                    break;
+            }
 
             if (isToExternalApp) {
                 string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
@@ -279,7 +293,7 @@ namespace MpWpfApp {
                                 d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Text, pt);
                                 break;
                             case MpClipboardFormatType.Bitmap:
-                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Bitmap, ci.ItemData);
+                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Bitmap, bmpBase64);
                                 break;
                             case MpClipboardFormatType.Csv:
                                 string sctcsv = string.Join(Environment.NewLine, ci.ItemData.ToCsv());
@@ -302,7 +316,9 @@ namespace MpWpfApp {
                 if(!ignoreFileDrop) {
                     d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
                 }
-            } 
+            } else {
+                // TODO set internal data stuff here
+            }
             return d;
         }
 

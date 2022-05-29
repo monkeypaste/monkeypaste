@@ -13,4 +13,18 @@ namespace MpWpfApp{
         MpShortcutViewModel ShortcutViewModel { get; }
         string ShortcutKeyString { get; }
     }
+
+    public interface MpIShortcutCommandViewModel : MpIViewModel {
+        string ShortcutLabel { get; }
+        MpShortcutType ShortcutType { get; }
+
+        int ModelId { get; }
+
+        ICommand ShortcutCommand { get; }
+        object ShortcutCommandParameter { get; }
+    }
+
+    public interface MpIShortcutCommandCollectionViewModel : MpIViewModel {
+        IEnumerable<MpIShortcutCommand> ShortcutCommands { get; }
+    }
 }

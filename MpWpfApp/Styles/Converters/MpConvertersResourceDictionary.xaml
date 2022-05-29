@@ -86,5 +86,7 @@
     <local:MpMultiBoolOrConverter x:Key="MultiBoolOrConverter" />
     <local:MpStringPathToFileOrFolderNameConverter x:Key="StringPathToFileOrFolderNameConverter" />
     <local:MpStringHexColorToIsBrightBrushConverter x:Key="StringHexColorToIsBrightBrushConverter" />
+    <local:MpShortcutCommandViewModelToTooltipConverter x:Key="ShortcutCommandViewModelToTooltipConverter" />
+    <local:MpShortcutCommandViewModelToImageSourceConverter x:Key="ShortcutCommandViewModelToImageSourceConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

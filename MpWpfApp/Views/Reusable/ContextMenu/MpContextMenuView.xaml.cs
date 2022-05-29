@@ -33,5 +33,13 @@ namespace MpWpfApp {
         public MpContextMenuView() {
             InitializeComponent();
         }
+
+        private void ContextMenuView_Opened(object sender, RoutedEventArgs e) {
+            
+        }
+
+        private void ContextMenuView_Closed(object sender, RoutedEventArgs e) {
+
+        }
     }
 }

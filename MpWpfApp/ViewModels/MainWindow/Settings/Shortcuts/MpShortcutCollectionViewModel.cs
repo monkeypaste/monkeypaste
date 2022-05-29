@@ -13,7 +13,9 @@ using MonkeyPaste.Plugin;
 using System.Windows;
 
 namespace MpWpfApp {
-    public class MpShortcutCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpShortcutCollectionViewModel> {
+    public class MpShortcutCollectionViewModel : 
+        MpViewModelBase, 
+        MpISingletonViewModel<MpShortcutCollectionViewModel>{
         #region Private Variables
         #endregion
 
@@ -589,7 +591,7 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ReassignShortcutCommand => new RelayCommand(
+        public ICommand ReassignSelectedShortcutCommand => new RelayCommand(
             async () => {
                 var scvm = Shortcuts[SelectedShortcutIndex];
                 await RegisterViewModelShortcutAsync(
@@ -601,6 +603,21 @@ namespace MpWpfApp {
                 );
             });
 
+        public ICommand ShowAssignShortcutDialogCommand => new RelayCommand<MpIShortcutCommandViewModel>(
+            async (sccvm) => {
+                string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(sccvm.ShortcutType, sccvm.ModelId);
+
+                await RegisterViewModelShortcutAsync(
+                    sccvm.ShortcutLabel,
+                    sccvm.ShortcutCommand,
+                    sccvm.ShortcutType, 
+                    sccvm.ModelId, 
+                    shortcutKeyString);
+
+                if(sccvm is MpViewModelBase vmb) {
+                    vmb.OnPropertyChanged(nameof(vmb.SelfBindingRef));
+                }
+            });
 
         public ICommand DeleteShortcutCommand => new RelayCommand(
             async () => {
@@ -618,6 +635,7 @@ namespace MpWpfApp {
                 await scvm.InitializeAsync(scvm.Shortcut,scvm.Command);
                 await scvm.Shortcut.WriteToDatabaseAsync();
             });
+
         #endregion
     }
 

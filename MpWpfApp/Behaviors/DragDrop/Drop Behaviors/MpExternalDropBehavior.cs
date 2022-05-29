@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MonkeyPaste.Plugin;
 using System.Diagnostics;
+using MpProcessHelper;
 using System.Net;
 using System.Text;
 using System.Collections.Specialized;
@@ -99,9 +100,7 @@ namespace MpWpfApp {
                     //Debugger.Break();
                     return -1;
                 }
-
-                WinApi.SetForegroundWindow(dropHandle);
-                WinApi.SetActiveWindow(dropHandle);
+                MpProcessAutomation.SetActiveProcess(dropHandle);
                 return 0;
             }
             return -1;
@@ -144,26 +143,12 @@ namespace MpWpfApp {
             DragDrop.DoDragDrop(AssociatedObject, wpfdo, DragDropEffects.Copy);
         }
 
-        public override void CancelDrop() {
-            base.CancelDrop();
-            MpDragDropManager.IsPreExternalTemplateDrop = false;
-            if (MpClipboardHandlerCollectionViewModel.Instance.SelectedItem != null) {
-                MpClipboardHandlerCollectionViewModel.Instance.SelectedItem.IsDraggingToExternal = false;
-            } else {
-                Debugger.Break();
-            }
-        }
         private void OnGiveFeedback(object sender, GiveFeedbackEventArgs e) {
             MpConsole.WriteLine("Feedback: " + e.Effects);
 
             if(!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                // TODO Handle template madness here!!
+                // TODO Handle external drag icon here
                 e.Handled = true;
-
-                //var handle = MpProcessHelper.MpProcessManager.ThisAppHandle;
-                //WinApi.SetForegroundWindow(handle);
-                //WinApi.SetActiveWindow(handle);
-                //MessageBox.Show("ICKY BOOM BOOM DAAYE");
             }
         }
         private void OnQueryContinueDrag(object sender, QueryContinueDragEventArgs e) {
@@ -175,9 +160,7 @@ namespace MpWpfApp {
                 e.Handled = true;
                 e.Action = DragAction.Cancel;
 
-                var thisAppHandle = MpProcessHelper.MpProcessManager.ThisAppHandle;
-                WinApi.SetForegroundWindow(thisAppHandle);
-                WinApi.SetActiveWindow(thisAppHandle);
+                MpProcessAutomation.ActivateThisApp();
 
                 MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(dropAppHandle);
 
@@ -185,7 +168,6 @@ namespace MpWpfApp {
                     while(MpClipTrayViewModel.Instance.SelectedItem.IsPasting) {
                         await Task.Delay(100);
                     }
-                    MpDragDropManager.IsPreExternalTemplateDrop = false;
                     Reset();
                 });
             }
@@ -193,15 +175,26 @@ namespace MpWpfApp {
 
         public override async Task Drop(bool isCopy, object dragData) {            
             await Task.Delay(1);
+            Reset();
+        }
+
+        public override void AutoScrollByMouse() {
+            return;
+        }
+
+        public override void Reset() {
+            base.Reset();
+
+            MpDragDropManager.IsPreExternalTemplateDrop = false;
+
             if (MpClipboardHandlerCollectionViewModel.Instance.SelectedItem != null) {
                 MpClipboardHandlerCollectionViewModel.Instance.SelectedItem.IsDraggingToExternal = false;
             } else {
                 Debugger.Break();
             }
-        }
 
-        public override void AutoScrollByMouse() {
-            return;
+            DragDrop.RemovePreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
+            DragDrop.RemovePreviewGiveFeedbackHandler(AssociatedObject, OnGiveFeedback);
         }
     }
 

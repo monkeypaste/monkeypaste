@@ -27,6 +27,7 @@
                              VerticalAlignment="Stretch"
                              HorizontalContentAlignment="Stretch"
                              VerticalContentAlignment="Stretch"
+                             ToolTipService.InitialShowDelay="300"
                              local:MpContentDocumentRtfExtension.CopyItem="{Binding CopyItem}"
                              local:MpContentDocumentRtfExtension.IsSelected="{Binding IsSelected,
                                                                                       Mode=TwoWay}"

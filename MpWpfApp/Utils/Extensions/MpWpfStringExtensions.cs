@@ -66,6 +66,21 @@ namespace MpWpfApp {
         public static string RemoveSpecialCharacters(string str) {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", string.Empty, RegexOptions.Compiled);
         }
+
+        public static bool IsStringRichTextFileItem(this string text) {
+            if(text == null) {
+                return false;
+            }
+            return text.Contains("shppict") && text.Contains("pngblip") && text.Contains("HYPERLINK");
+        }
+
+        public static bool IsStringRichTextImage(this string text) {
+            if (text == null) {
+                return false;
+            }
+            return !text.IsStringRichTextFileItem() && text.Contains("shppict") && text.Contains("pngblip");
+        }
+
         public static bool IsStringRichTextTable(this string text) {
             if (!text.IsStringRichText()) {
                 return false; 
@@ -155,6 +170,9 @@ namespace MpWpfApp {
         public static string ToPlainText(this string str) {
             if (str == null) {
                 return string.Empty;
+            }
+            if(str.IsStringBase64()) {
+                return str.ToBitmapSource().ToAsciiImage();
             }
             if (str.IsStringPlainText()) {
                 // NOTE plain text implies file or directory path

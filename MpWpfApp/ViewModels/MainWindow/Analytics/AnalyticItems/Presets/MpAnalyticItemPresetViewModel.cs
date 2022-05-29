@@ -374,13 +374,13 @@ namespace MpWpfApp {
             return naipvm;
         }
 
-        public void Register(MpIActionComponentHandler mvm) {
+        public void RegisterActionComponent(MpIActionComponentHandler mvm) {
             Parent.OnAnalysisCompleted += mvm.OnActionTriggered;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} Registered {mvm.Label} matcher");
         }
 
 
-        public void Unregister(MpIActionComponentHandler mvm) {
+        public void UnregisterActionComponent(MpIActionComponentHandler mvm) {
             Parent.OnAnalysisCompleted -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
         }

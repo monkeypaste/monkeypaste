@@ -28,13 +28,15 @@
                     Height="16"
                     Margin="0"
                     HorizontalAlignment="Left"
-                    PreviewMouseLeftButtonDown="ClipTileHotkeyButton_PreviewMouseLeftButtonDown"
-                    Command="{Binding AssignHotkeyCommand}"
+                    Command="{Binding ShowAssignShortcutDialogCommand,
+                                      Source={x:Static local:MpShortcutCollectionViewModel.Instance}}"
+                    CommandParameter="{Binding}"
                     Template="{StaticResource SearchButtonControlTemplate}"
-                    ToolTip="{Binding HotkeyIconTooltip}"
+                    ToolTip="{Binding .,
+                                      Converter={StaticResource ShortcutCommandViewModelToTooltipConverter}}"
                     ToolTipService.InitialShowDelay="0">
-                <Image Source="{Binding HotkeyIconSource,
-                                        Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                <Image Source="{Binding .,
+                                        Converter={StaticResource ShortcutCommandViewModelToImageSourceConverter}}" />
             </Button>
             <TextBlock x:Name="ClipTileDetailTextBlock"
                        Grid.Column="1"

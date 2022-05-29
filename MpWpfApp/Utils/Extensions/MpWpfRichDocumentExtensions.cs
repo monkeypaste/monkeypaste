@@ -62,41 +62,6 @@ namespace MpWpfApp {
             return te.ContentEnd.GetAdjacentElement(LogicalDirection.Forward) as TextElement;
         }
 
-        public static TextPointer GetTextPositionAtOffset(this TextPointer position, int offset) {
-            for (TextPointer current = position; 
-                 current != null; 
-                 current = position.GetNextContextPosition(LogicalDirection.Forward)) {
-                position = current;
-                var adjacent = position.GetAdjacentElement(LogicalDirection.Forward);
-                var context = position.GetPointerContext(LogicalDirection.Forward);
-                switch (context) {
-                    case TextPointerContext.Text:
-                        int count = position.GetTextRunLength(LogicalDirection.Forward);
-                        if (offset <= count) {
-                            return position.GetPositionAtOffset(offset);
-                        }
-                        offset -= count;
-                        break;
-                    case TextPointerContext.ElementStart:
-                        if (adjacent is InlineUIContainer) {
-                            offset--;
-                        } else if (adjacent is ListItem lsItem) {
-                            var trange = new TextRange(lsItem.ElementStart, lsItem.ElementEnd);
-                            var index = trange.Text.IndexOf('\t');
-                            if (index >= 0) {
-                                offset -= index + 1;
-                            }
-                        }
-                        break;
-                    case TextPointerContext.ElementEnd:
-                        if (adjacent is Paragraph)
-                            offset -= 2;
-                        break;
-                }
-            }
-            return position;
-        }
-
         public static TextPointer GetLineEndPosition(this TextPointer tp, int count) {
             var next_line_start_tp = tp.GetLineStartPosition(count + 1);
             if (next_line_start_tp == null) {
@@ -112,11 +77,35 @@ namespace MpWpfApp {
             return line_end_tp;
         }
 
+        public static TextRange ToTextRange(this TextPointer tp) {
+            return new TextRange(tp, tp);
+        }
+
+        public static FlowDocument GetFlowDocument(this TextPointer tp) {
+            return tp.Parent.FindParentOfType<FlowDocument>();
+        }
+
+        public static RichTextBox GetRichTextBox(this TextPointer tp) {
+            var fd = tp.GetFlowDocument();
+            if(fd == null) {
+                return null;
+            }
+            return fd.GetVisualAncestor<RichTextBox>();
+        }
         public static TextRange ContentRange(this TextElement te) {
             return new TextRange(te.ContentStart, te.ContentEnd);
         }
         public static TextRange ElementRange(this TextElement te) {
             return new TextRange(te.ElementStart, te.ElementEnd);
+        }
+
+        public static TextRange ContentRange(this FlowDocument fd) {
+            return new TextRange(fd.ContentStart, fd.ContentEnd);
+        }
+
+        public static bool IsRangeInSameDocument(this TextRange tr, TextRange otr) {
+            return tr.Start.IsInSameDocument(otr.Start) &&
+                   tr.End.IsInSameDocument(otr.End);
         }
 
         public static bool IsPointInRange(this TextRange tr, Point p) {
@@ -384,6 +373,7 @@ namespace MpWpfApp {
                 subStream.Seek(0, SeekOrigin.Begin);
                 tr.Load(subStream, DataFormats.XamlPackage);
                 tr.Start.Parent.FindParentOfType<FlowDocument>().LineStackingStrategy = LineStackingStrategy.MaxHeight;
+
                 return tr.Start.Parent as InlineUIContainer;
             }
 
@@ -443,8 +433,13 @@ namespace MpWpfApp {
             var iuc = new InlineUIContainer(pathIcon) {
                 BaselineAlignment = BaselineAlignment.Bottom
             };
+            
+            Paragraph p = new Paragraph(iuc) { 
+                Margin = new Thickness(iconSize, 0, 0, 0),
+                TextIndent = -iconSize
+            };
 
-            Paragraph p = new Paragraph(iuc);
+            ToolTipService.SetInitialShowDelay(p, 300);
 
             string pathDir = path;
             if (File.Exists(pathDir)) {
@@ -460,8 +455,6 @@ namespace MpWpfApp {
             p.Inlines.Add(new Run(" "));
             p.Inlines.Add(pathLink);
 
-
-
             double fontSize = 16;
             p.FontFamily = new FontFamily(MpPreferences.DefaultFontFamily);
             p.FontSize = fontSize;
@@ -476,8 +469,11 @@ namespace MpWpfApp {
 
                 var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
 
+                var hl = tr.GetAllTextElements()
+                           .FirstOrDefault(x => x is Hyperlink) as Hyperlink;
+
                 var fileItemParagraph = tr.GetAllTextElements().FirstOrDefault(x => x is Paragraph) as Paragraph;
-                var hl = tr.GetAllTextElements().FirstOrDefault(x => x is Hyperlink) as Hyperlink;
+                
 
                 fileItemParagraph.TextAlignment = TextAlignment.Left;
                 fileItemParagraph.Padding = new Thickness(3);
@@ -504,13 +500,23 @@ namespace MpWpfApp {
                     fileItemParagraph.BorderBrush = Brushes.Black;
                     fileItemParagraph.BorderThickness = new Thickness(0.5);
 
-
-                    var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
-                    if(ctvm == null) {
+                    //var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
+                    var ctvm = tr.Start.Parent.FindParentOfType<FlowDocument>().DataContext as MpClipTileViewModel;
+                    if (ctvm == null) {
                         Debugger.Break();
                     } else {
                         ctvm.IsHovering = true;
-                        rtb.Selection.Select(pathRun.ContentRange().Start, pathRun.ContentRange().End);
+
+                        hl.IsEnabled = true;
+
+                        rtb.ToolTip = path;
+
+                        var selectionRange = fileItemParagraph.ContentRange();
+                        if(!rtb.Document.ContentRange().IsRangeInSameDocument(selectionRange)) {
+                            Debugger.Break();
+                            return;
+                        }
+                        rtb.Selection.Select(selectionRange.Start, selectionRange.End);
                         //MpConsole.WriteLine("Hover ItemData: " + civm.Parent.HoverItem.CopyItemData);
                     }
                 };
@@ -522,12 +528,22 @@ namespace MpWpfApp {
                     fileItemParagraph.BorderBrush = Brushes.Transparent;
                     fileItemParagraph.BorderThickness = new Thickness(0);
 
-                    var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
+                    //var ctvm = MpClipTrayViewModel.Instance.Items.FirstOrDefault(x => x.CopyItemData.Contains(path));
+                    var ctvm = tr.Start.Parent.FindParentOfType<FlowDocument>().DataContext as MpClipTileViewModel;
                     if (ctvm == null) {
                         Debugger.Break();
                     } else {
                         ctvm.IsHovering = false;
-                        rtb.Selection.Select(pathRun.ContentRange().Start, pathRun.ContentRange().Start);
+                        rtb.ToolTip = null;
+
+                        hl.IsEnabled = false;
+
+                        var selectionRange = fileItemParagraph.ContentStart.ToTextRange();
+                        if (!rtb.Document.ContentRange().IsRangeInSameDocument(selectionRange)) {
+                            Debugger.Break();
+                            return;
+                        }
+                        rtb.Selection.Select(selectionRange.Start, selectionRange.End);
                     }
                 };
 
@@ -547,9 +563,6 @@ namespace MpWpfApp {
                 fileItemParagraph.MouseLeave += p_mouseLeave_handler;
 
                 fileItemParagraph.Unloaded += p_Unload_handler;
-
-                var outDoc = fileItemParagraph.Parent.FindParentOfType<FlowDocument>();
-                string outXamlPackage = outDoc.ToXamlPackage();
 
                 return fileItemParagraph;
             }
@@ -830,11 +843,15 @@ namespace MpWpfApp {
                 case MpCopyItemType.FileList:
                     var ctp = tr.Start.GetInsertionPosition(LogicalDirection.Forward);
                     foreach(var fip in str.Split(new string[] {Environment.NewLine},StringSplitOptions.RemoveEmptyEntries)) {
+                        if(ctp == null) {
+                            ctp = tr.Start.DocumentEnd;
+                        }
                         ctp = ctp.InsertParagraphBreak();
                         var p = ctp.Parent.FindParentOfType<Paragraph>();
                         var pcr = p.ContentRange();
-                        pcr.LoadFileItem(fip);
-                        ctp = pcr.End.GetNextInsertionPosition(LogicalDirection.Forward);
+                        var new_p = pcr.LoadFileItem(fip);
+
+                        ctp = new_p.ContentEnd.GetNextInsertionPosition(LogicalDirection.Forward);
                     }
                     break;
             }

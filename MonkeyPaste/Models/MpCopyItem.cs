@@ -28,14 +28,7 @@ namespace MonkeyPaste {
         LastOutput
     }
 
-    public interface MpICopyItemReference {
-        string Guid { get; set; }
-        string CopyItemSourceGuid { get; set; }
-
-        Task<MpCopyItem> Retarget(MpITextSelectionRange plainTextRange);
-    }
-
-    public class MpCopyItem : MpUserObject, MpISyncableDbObject, MpICopyItemReference {
+    public class MpCopyItem : MpUserObject, MpISyncableDbObject {
         #region Statics
 
         public static string[] PhysicalComparePropertyPaths {
@@ -207,29 +200,6 @@ namespace MonkeyPaste {
 
         #region MpICopyItemReference Implementation
 
-        public async Task<MpCopyItem> Retarget(MpITextSelectionRange plainTextRange) {
-            // this is used when a fragment of a copy item is moved either to become a new tile or part of another document
-            // where only the ORIGINAL item reference is carried to new fragment 
-            // if fragment was already a fragment its info is not tracked
-
-            var rci = await Clone(false) as MpCopyItem;
-            rci.Id = 0;
-            rci.Guid = System.Guid.NewGuid().ToString();
-            string allPlainText = MpPlatformWrapper.Services.StringTools.ToPlainText(ItemData);
-            string selectionPlainText = allPlainText.Substring(plainTextRange.SelectionStart, plainTextRange.SelectionLength);
-            rci.ItemData = MpPlatformWrapper.Services.StringTools.ToRichText(selectionPlainText);
-            if(string.IsNullOrEmpty(CopyItemSourceGuid)) {
-                rci.CopyItemSourceGuid = Guid;
-            } else {
-                rci.CopyItemSourceGuid = CopyItemSourceGuid;
-            }
-            await rci.WriteToDatabaseAsync();
-
-
-
-
-            return rci;
-        }
 
         #endregion
 

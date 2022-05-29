@@ -81,12 +81,12 @@ namespace MpWpfApp {
 
         protected override async Task Enable() {
             await base.Enable();
-            MpFileSystemWatcher.Instance.Register(this);
+            MpFileSystemWatcher.Instance.RegisterActionComponent(this);
         }
 
         protected override async Task Disable() {
             await base.Disable();
-            MpFileSystemWatcher.Instance.Unregister(this);
+            MpFileSystemWatcher.Instance.UnregisterActionComponent(this);
         }
 
         protected override async Task<bool> Validate() {

@@ -7,6 +7,11 @@ using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
+    public interface MpICommand {
+        event EventHandler CanExecuteChanged;
+        bool CanExecute(object parameter);
+        void Execute(object parameter);
+    }
     public class MpCommand<T> : Command where T: new() {
         public MpCommand(Action<object> execute) : base(execute) { }
 
@@ -76,7 +81,6 @@ namespace MonkeyPaste {
         public MpCommand(
             Action execute,
             Func<bool> canExecute) : this(o => execute(), o => canExecute(), null) { }
-
 
         public MpCommand(
             Action execute) : this(o => execute(), o => true, null) { }

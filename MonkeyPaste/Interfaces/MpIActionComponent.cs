@@ -4,8 +4,8 @@ using System.Text;
 
 namespace MonkeyPaste {
     public interface MpIActionComponent {
-        void Register(MpIActionComponentHandler mvm);
-        void Unregister(MpIActionComponentHandler mvm);
+        void RegisterActionComponent(MpIActionComponentHandler mvm);
+        void UnregisterActionComponent(MpIActionComponentHandler mvm);
     }
 
     public interface MpIActionComponentHandler {

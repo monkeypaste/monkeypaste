@@ -202,6 +202,16 @@ namespace MpProcessHelper {
             throw new NotImplementedException();
         }
 
+        public static void ActivateThisApp() {
+            var thisAppHandle = ThisAppHandle;
+            SetActiveProcess(thisAppHandle);
+        }
+
+        public static void SetActiveProcess(IntPtr handle) {
+            WinApi.SetForegroundWindow(handle);
+            WinApi.SetActiveWindow(handle);
+        }
+
         public static MpProcessInfo SetActiveProcess(MpProcessInfo pi, int waitForInputIdleTimeout = 30000) {
             if(pi == null) {
                 return null;

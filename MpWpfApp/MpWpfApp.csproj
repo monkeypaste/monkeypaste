@@ -131,7 +131,7 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpContentDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
-    <Compile Include="AttachedProperties\MpEncodedDocumentExtension.cs" />
+    <Compile Include="AttachedProperties\MpStylizedTooltipExtension.cs" />
     <Compile Include="AttachedProperties\MpTextSelectionRangeExtension.cs" />
     <Compile Include="AttachedProperties\MpImageSourceExtension.cs" />
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
@@ -222,7 +222,8 @@
     <Compile Include="Converters\MpBoolToScrollBarVisibilityFlipConverter.cs" />
     <Compile Include="Converters\MpBrushToColorConverter.cs" />
     <Compile Include="Converters\MpAbsoluteToRelativePathStringConverter.cs" />
-    <Compile Include="Converters\MpCommandToShortcutKeyStringConverter.cs" />
+    <Compile Include="Converters\MpShortcutCommandViewModelToImageSourceConverter.cs" />
+    <Compile Include="Converters\MpShortcutCommandViewModelToTooltipConverter.cs" />
     <Compile Include="Converters\MpDbImageIdToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpDbImageIdToIconConverter.cs" />
     <Compile Include="Converters\MpEnumStringToKeyLiteralStringConverter.cs" />
@@ -313,6 +314,7 @@
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfMainThreadMarshal.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfOsInfo.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfResourceFetcher.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfShortcutManager.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfStringTools.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpFileWriterActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
@@ -788,6 +790,10 @@
     <Page Include="Styles\ListBoxes\MpPagingListBoxResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Tooltips\MpTooltipResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml">
       <SubType>Designer</SubType>

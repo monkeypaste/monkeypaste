@@ -45,7 +45,7 @@
                                 BorderBrush="Black"
                                 BorderThickness="1"
                                 ToolTip="Reassign"
-                                Command="{Binding Parent.ReassignShortcutCommand}">
+                                Command="{Binding Parent.ReassignSelectedShortcutCommand}">
                             <Image Width="15"
                                    Height="15"
                                    Source="{Binding .,
