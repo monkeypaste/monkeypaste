@@ -150,6 +150,19 @@ namespace MpWpfApp {
         public bool WasVisited { get; set; }
 
         public int InstanceCount { get; set; }
+
+        public bool IsEnabled {
+            get {
+                if(Parent == null || Parent.Parent == null) {
+                    return false;
+                }
+                if(Parent.Parent.IsPasting && 
+                   Parent.PastableItems.Any(x=>x.TextTemplateId == TextTemplateId)) {
+                    return true;
+                }
+                return false;
+            }
+        }
         #endregion
 
         #region Business Logic Properties
@@ -252,9 +265,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
-
-        public event EventHandler OnTemplateSelected;
-
         #endregion
 
         #region Constructors
@@ -317,7 +327,6 @@ namespace MpWpfApp {
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
-                        OnTemplateSelected?.Invoke(this, null);
                     } else {
                         if(IsEditingTemplate) {
                             FinishEditTemplateCommand.Execute(null);
@@ -353,7 +362,6 @@ namespace MpWpfApp {
                     }
                     break;
             }
-            Parent.UpdateCommandsCanExecute();
         }
 
         #endregion

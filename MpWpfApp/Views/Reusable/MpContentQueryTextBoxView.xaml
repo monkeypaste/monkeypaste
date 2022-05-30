@@ -25,7 +25,8 @@
                 <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0"
+            <TextBox x:Name="ContentQueryTextBox"
+                     Grid.Column="0"
                      Padding="3"
                      BorderThickness="0"
                      VerticalAlignment="Stretch"
@@ -52,25 +53,20 @@
                           Background="DimGray">
                 <GridSplitter.Style>
                     <Style TargetType="GridSplitter">
-                        <Setter Property="BorderBrush"
-                                Value="Black" />
+                        <Setter Property="BorderBrush" Value="Black" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMouseOver,
                                                            ElementName=QueryItemGrid}"
                                          Value="True">
-                                <Setter Property="Visibility"
-                                        Value="Visible" />
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsMouseOver,
                                                            ElementName=QueryItemGrid}"
                                          Value="False">
-                                <Setter Property="Visibility"
-                                        Value="Hidden" />
+                                <Setter Property="Visibility" Value="Hidden" />
                             </DataTrigger>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Visibility"
-                                        Value="Visible" />
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -83,25 +79,20 @@
                 <Button.Style>
                     <Style TargetType="Button"
                            BasedOn="{StaticResource RoundedButton}">
-                        <Setter Property="BorderBrush"
-                                Value="Black" />
+                        <Setter Property="BorderBrush" Value="Black" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMouseOver,
                                                            ElementName=QueryItemGrid}"
                                          Value="True">
-                                <Setter Property="Visibility"
-                                        Value="Visible" />
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsMouseOver,
                                                            ElementName=QueryItemGrid}"
                                          Value="False">
-                                <Setter Property="Visibility"
-                                        Value="Hidden" />
+                                <Setter Property="Visibility" Value="Hidden" />
                             </DataTrigger>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Visibility"
-                                        Value="Visible" />
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -120,25 +111,20 @@
                 <Button.Style>
                     <Style TargetType="Button"
                            BasedOn="{StaticResource RoundedButton}">
-                        <Setter Property="BorderBrush"
-                                Value="Black" />
+                        <Setter Property="BorderBrush" Value="Black" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMouseOver,
                                                            ElementName=QueryItemGrid}"
                                          Value="True">
-                                <Setter Property="Visibility"
-                                        Value="Visible" />
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsMouseOver,
                                                            ElementName=QueryItemGrid}"
                                          Value="False">
-                                <Setter Property="Visibility"
-                                        Value="Hidden" />
+                                <Setter Property="Visibility" Value="Hidden" />
                             </DataTrigger>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Visibility"
-                                        Value="Visible" />
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>

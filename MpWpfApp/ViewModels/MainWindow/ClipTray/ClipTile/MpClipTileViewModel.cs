@@ -18,6 +18,7 @@
     using System.Speech.Synthesis;
     using System.Windows.Documents;
 using System.Text.RegularExpressions;
+using MpProcessHelper;
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 
@@ -28,7 +29,8 @@ using System.Text.RegularExpressions;
         MpIResizableViewModel,
         MpITextSelectionRange,
         MpIFindAndReplaceViewModel,
-        MpITooltipInfoViewModel {
+        MpITooltipInfoViewModel,
+        MpIPortableContentDataObject {
         #region Private Variables
 
         private List<string> _tempFileList = new List<string>();
@@ -106,12 +108,14 @@ using System.Text.RegularExpressions;
 
         #region MpITextSelectionRangeViewModel Implementation 
 
-        public int SelectionStart { get; set; }
-        public int SelectionLength { get; set; }
+        public int SelectionStart => MpTextSelectionRangeExtension.GetSelectionStart(this);
+        public int SelectionLength => MpTextSelectionRangeExtension.GetSelectionLength(this);
 
-        public string SelectedPlainText { get; set; }
+        public string SelectedPlainText {
+            get => MpTextSelectionRangeExtension.GetSelectedPlainText(this);
+            set => MpTextSelectionRangeExtension.SetSelectionText(this, value);
+        }
 
-        public bool IsAllSelected { get; set; }
 
         #endregion
 
@@ -316,7 +320,9 @@ using System.Text.RegularExpressions;
             () => {
                 FindNextCommand.Execute(null);
 
-                MpTextSelectionRangeExtension.SetSelectionText(this,_replaceText);
+                SelectedPlainText = _replaceText;
+
+                //MpTextSelectionRangeExtension.SetSelectionText(this,_replaceText);
 
             }, HasMatch && IsReplaceValid);
 
@@ -324,7 +330,8 @@ using System.Text.RegularExpressions;
             () => {
                 FindPreviousCommand.Execute(null);
 
-                MpTextSelectionRangeExtension.SetSelectionText(this, _replaceText);
+                SelectedPlainText = _replaceText;
+                //MpTextSelectionRangeExtension.SetSelectionText(this, _replaceText);
             }, HasMatch && IsReplaceValid);
         public ICommand ReplaceAllCommand => new RelayCommand(
             () => {
@@ -595,7 +602,7 @@ using System.Text.RegularExpressions;
                 if (Parent == null) {
                     return ScrollBarVisibility.Hidden;
                 }
-                if (!IsContentReadOnly) {
+                if (!IsContentReadOnly || IsSubSelectionEnabled) {
                     if (EditableContentSize.Height > ContainerSize.Height) {
                         return ScrollBarVisibility.Visible;
                     }
@@ -1449,65 +1456,156 @@ using System.Text.RegularExpressions;
             }
         }
 
-        public async Task<string> GetSubSelectedPastableRichText(bool isToExternalApp = false) {
-            if(IsTextItem) {
-                if (HasTemplates) {
-                    IsPasting = true;
-                    if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
-                        MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+
+        public async Task<MpPortableDataObject> ConvertToPortableDataObject(
+            bool isDragDrop, 
+            object targetHandleObj, 
+            bool ignoreSubSelection = false, 
+            bool isDropping = false) {
+            
+            IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : (IntPtr)targetHandleObj;
+            bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
+
+            MpPortableDataObject d = new MpPortableDataObject();
+            string rtf = string.Empty.ToRichText();
+            var sctfl = new List<string>();
+
+            //check for model templates
+            bool needsTemplateData = HasTemplates;
+
+            IEnumerable<MpTextTemplateViewModel> templatesInSelection = null;
+
+            if (needsTemplateData) {
+                if (isDragDrop && !isDropping) {
+                    // when initially dragging onto external app DragDrop needs DataObject but 
+                    // ignore filling templates until drop is performed
+                    needsTemplateData = false;
+                }
+                if(needsTemplateData) {
+                    templatesInSelection = MpTextSelectionRangeExtension.SelectedTextTemplates(this);
+
+                    if (!ignoreSubSelection && templatesInSelection.Count() == 0) {
+                        // if dropping or pasting and sub-selection doesn't contain templates they don't need to be filled
+                        needsTemplateData = false;
                     }
-                    await FillAllTemplates();
                 }
+                
+            }
 
+            if (needsTemplateData) {
+                //if(!ignoreSubSelection) {
+                //    ClearSelection(false);                    
+                //}                
+                IsSelected = true;
 
-                var sw = new Stopwatch();
-                sw.Start();
-                string rtf = string.Empty;
-                if(HasTemplates) {
-                    rtf = TemplateRichText;
-                } else {
-                    rtf = CopyItemData.ToFlowDocument().ToRichText();
+                if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
+                    MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
                 }
-                sw.Stop();
-                MpConsole.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
-
+                await FillTemplates(templatesInSelection);
+                rtf = TemplateRichText;
+                
                 if (!IsContentReadOnly) {
                     ClearEditing();
                 }
-                return rtf;
-            }
 
-            return string.Empty;
-            //both return to ClipTray.GetDataObjectFromSelectedClips
-        }
-
-        public async Task FillAllTemplates() {
-            bool hasExpanded = false;
-            IsPasting = true;
-            if (HasTemplates) {
-                IsSelected = true;
-                if (!hasExpanded) {
-                    //tile will be shrunk in on completed of hide window
-                    IsContentReadOnly = false;
-                    //rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
-                    TemplateCollection.UpdateCommandsCanExecute();
-                    TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.Items));
-                    TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.HasMultipleTemplates));
-                    hasExpanded = true;
+            } else {
+                bool isInUi = Parent.GetClipTileViewModelById(CopyItemId) != null;
+                if(!isInUi) {
+                    // handle special case when pasting item by id (like from a hotkey)
+                    // and it has no templates (if it did tray would set manual query and show it)
+                    // so since its not in ui need to use model data which is ok because it won't have any modifications
+                    rtf = CopyItemData.ToRichText();
+                } else {
+                    rtf = MpContentDocumentRtfExtension.GetEncodedContent(
+                            MpContentDocumentRtfExtension.FindRtbByViewModel(this),
+                            ignoreSubSelection);
                 }
-                TemplateCollection.SelectedItem = TemplateCollection.Items[0];
-                await Task.Delay(300);
-                TemplateCollection.SelectedItem.IsPasteTextBoxFocused = true;
-                TemplateRichText = null;
-                await Task.Run(async () => {
-                    while (string.IsNullOrEmpty(TemplateRichText)) {
-                        await Task.Delay(100);
-                    }
-                });
-
-                TemplateCollection.ClearSelection();
             }
+            string pt = string.Empty;
+            string bmpBase64 = string.Empty;
+            switch (ItemType) {
+                case MpCopyItemType.Text:
+                    pt = rtf.ToPlainText();
+                    bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
+                    break;
+                case MpCopyItemType.Image:
+                    pt = CopyItemData.ToBitmapSource().ToAsciiImage();
+                    bmpBase64 = CopyItemData;
+                    break;
+                case MpCopyItemType.FileList:
+                    pt = CopyItemData;
+                    bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
+                    break;
+            }
+
+            if (isToExternalApp) {
+                string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
+                var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
+                MpAppClipboardFormatInfoCollectionViewModel targetInteropSettings = null;
+                if (app != null) {
+                    targetInteropSettings = MpAppCollectionViewModel.Instance.GetInteropSettingByAppId(app.Id);
+                    MpConsole.WriteLine("Dragging over " + targetProcessPath);
+                }
+
+                bool ignoreFileDrop = false;
+                if (targetInteropSettings != null) {
+                    var targetFormats = targetInteropSettings.Items
+                                            .Where(x => !x.IgnoreFormat).ToList();
+
+                    ignoreFileDrop = targetInteropSettings.Items
+                                        .Where(x => x.ClipboardFormatType == MpClipboardFormatType.FileDrop)
+                                        .All(x => x.IgnoreFormat);
+
+                    foreach (var targetSetting in targetFormats.OrderByDescending(x => x.IgnoreFormat)) {
+                        switch (targetSetting.ClipboardFormatType) {
+                            case MpClipboardFormatType.FileDrop:
+                                if (ItemType == MpCopyItemType.Text) {
+                                    if (targetSetting.FormatInfo == "txt") {
+                                        sctfl.Add(pt.ToFile(null, CopyItemTitle, targetSetting.FormatInfo));
+                                    } else {
+                                        sctfl.Add(rtf.ToFile(null, CopyItemTitle, targetSetting.FormatInfo));
+                                    }
+                                } else {
+                                    sctfl.Add(CopyItemData.ToFile(null, CopyItemTitle, targetSetting.FormatInfo));
+                                }
+
+                                break;
+                            case MpClipboardFormatType.Rtf:
+                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Rtf, rtf);
+                                break;
+                            case MpClipboardFormatType.Text:
+                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Text, pt);
+                                break;
+                            case MpClipboardFormatType.Bitmap:
+                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Bitmap, bmpBase64);
+                                break;
+                            case MpClipboardFormatType.Csv:
+                                string sctcsv = string.Join(Environment.NewLine, CopyItemData.ToCsv());
+                                if (!string.IsNullOrWhiteSpace(sctcsv)) {
+                                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Csv, sctcsv);
+                                }
+                                break;
+                            case MpClipboardFormatType.Custom:
+                                break;
+                            default:
+                                sctfl.Add(CopyItemData.ToFile(null, CopyItemTitle, targetSetting.FormatInfo));
+                                break;
+                        }
+                    }
+                } else {
+                    // NOTE using plain text here for more compatibility
+                    sctfl.Add(CopyItemData.ToFile(null, CopyItemTitle));
+                }
+
+                if (!ignoreFileDrop) {
+                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
+                }
+            } else {
+                // TODO set internal data stuff here
+            }
+            return d;
         }
+        
 
         public void DeleteTempFiles() {
             foreach (var f in _tempFileList) {
@@ -1626,6 +1724,32 @@ using System.Text.RegularExpressions;
             }
         }
 
+
+        private async Task FillTemplates(IEnumerable<MpTextTemplateViewModel> templatesToFill) {
+            if (HasTemplates) {
+                IsSelected = true;
+                
+                IsContentReadOnly = false;
+                //rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
+                TemplateCollection.PastableItems = new ObservableCollection<MpTextTemplateViewModel>(templatesToFill);
+
+                IsPasting = true;
+                TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.Items));
+                TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.HasMultipleTemplates));
+
+                TemplateCollection.SelectedItem = TemplateCollection.PastableItems[0];
+                
+                await Task.Delay(300);
+                //TemplateCollection.SelectedItem.IsPasteTextBoxFocused = true;
+                TemplateRichText = null;
+                await Task.Run(async () => {
+                    while (string.IsNullOrEmpty(TemplateRichText)) {
+                        await Task.Delay(100);
+                    }
+                });
+
+            }
+        }
         private void UpdateDetails() {
             _detailIdx = 1;
             switch (CopyItem.ItemType) {
@@ -1641,7 +1765,7 @@ using System.Text.RegularExpressions;
                 case MonkeyPaste.MpCopyItemType.Text:
                     lc = MpWpfStringExtensions.GetRowCount(CopyItem.ItemData.ToPlainText());
                     cc = CopyItem.ItemData.ToPlainText().Length;
-                    itemSize = UnformattedContentSize;//CopyItem.ItemData.ToFlowDocument().GetDocumentSize();
+                    itemSize = UnformattedContentSize;
                     break;
             }
         }
@@ -1669,9 +1793,10 @@ using System.Text.RegularExpressions;
                             Parent.SelectedItem = this;
                         }
 
-                        if (!IsTitleFocused) {
-                            IsContentFocused = true;
-                        }
+                        //if (!IsTitleFocused && !Parent.IsPasting) {
+                        //    // NOTE checking Parent.IsPasting because setting focus will clear current selection
+                        //    IsContentFocused = true;
+                        //}
                         if (!Parent.IsRestoringSelection) {
                             Parent.StoreSelectionState(this);
                         }

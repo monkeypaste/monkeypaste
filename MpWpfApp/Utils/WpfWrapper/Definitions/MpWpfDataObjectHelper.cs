@@ -12,10 +12,11 @@ using System.IO;
 using System.Threading;
 using MpClipboardHelper;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace MpWpfApp {
-    public class MpWpfDataObjectHelper : 
-        MpIExternalPasteHandler, 
+    public class MpWpfDataObjectHelper :
+        MpIExternalPasteHandler,
         MpIErrorHandler, 
         MpIPlatformDataObjectHelper {
         #region Private Variables
@@ -31,6 +32,12 @@ namespace MpWpfApp {
         private static MpWpfDataObjectHelper _instance;
         public static MpWpfDataObjectHelper Instance => _instance ?? (_instance = new MpWpfDataObjectHelper());
 
+
+        #endregion
+
+        #region Constructors
+
+        private MpWpfDataObjectHelper() { }
 
         #endregion
 
@@ -55,26 +62,54 @@ namespace MpWpfApp {
             }).FireAndForgetSafeAsync(this);
         }
 
-        public MpPortableDataObject ConvertNativeClipboardObjectToPortableFormat(object nativeClipboardObject) {
-            return ConvertWpfDataObjectToPortableFormat(nativeClipboardObject as IDataObject);
-        }
+        #region MpIExternalPasteHandler Implementation
+        public async Task PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo, bool finishWithEnterKey = false) {
+            if(handleOrProcessInfo == null) {
+                Debugger.Break();
+            }
+            MpProcessInfo pi = null;
+            if(handleOrProcessInfo is IntPtr handle) {
+                pi = new MpProcessInfo(handle);
+            } else if(handleOrProcessInfo is MpProcessInfo) {
+                pi = handleOrProcessInfo as MpProcessInfo;
+            } else {
+                Debugger.Break();
+            }
 
-        public async Task PasteDataObject(MpPortableDataObject mpdo, IntPtr handle, bool finishWithEnterKey = false) {
-            var pi = new MpProcessInfo() {
-                Handle = handle
-            };
             await PasteDataObject(mpdo, pi, finishWithEnterKey);
         }
 
-        public object GetDataObjectWrapper() {
-            var result = Clipboard.GetDataObject();
-            return result;
+        #endregion
+
+
+        #region MpIPlatformDataObjectHelper Implementation
+
+        public MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
+            return ConvertWpfDataObjectToPortableFormat(nativeDataObj as IDataObject, retryCount);
         }
 
-        public async Task PasteCopyItem(MpCopyItem ci, MpProcessInfo pi, bool finishWithEnterKey = false) {
-            MpPortableDataObject cido = await GetCopyItemDataObjectAsync(ci, false, pi.Handle);
-            await PasteDataObject(cido, pi, finishWithEnterKey);
+        public object ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
+            DataObject dobj = new DataObject();
+            foreach (var kvp in mpdo.DataFormatLookup) {
+                SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
+            }
+            return dobj;
         }
+
+
+        public void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreChange) {
+            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreChange;
+
+            DataObject wpfDataObject = ConvertToPlatformClipboardDataObject(portableObj) as DataObject;
+            Clipboard.SetDataObject(wpfDataObject);
+        }
+
+        public MpPortableDataObject GetPlatformClipboardDataObject() {
+            var result = Clipboard.GetDataObject();
+            var mpdo = ConvertToSupportedPortableFormats(result);
+            return mpdo;
+        }
+
 
         public async Task PasteDataObject(MpPortableDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
             string pasteCmdKeyString = "^v";
@@ -104,25 +139,6 @@ namespace MpWpfApp {
         }
 
 
-        #region MpIClipboardInterop Implementation
-        public MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
-            return ConvertWpfDataObjectToPortableFormat(nativeDataObj as IDataObject, retryCount);
-        }
-
-        public object ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
-            DataObject dobj = new DataObject();
-            foreach (var kvp in mpdo.DataFormatLookup) {
-                SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
-            }
-            return dobj;
-        }
-
-        public void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreChange) {
-            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreChange;
-
-            DataObject wpfDataObject = ConvertToPlatformClipboardDataObject(portableObj) as DataObject;
-            Clipboard.SetDataObject(wpfDataObject);
-        }
 
         #endregion
 
@@ -182,145 +198,7 @@ namespace MpWpfApp {
             }
         }
 
-        public async Task<MpPortableDataObject> GetCopyItemDataObjectAsync(
-            MpCopyItem ci, 
-            bool isDragDrop, 
-            object targetHandleObj, 
-            bool isDropping = false) {
-            // NOTE this is NOT part of data object interface (which is in MonkeyPaste.Plugin)
-            // because it needs MpCopyItem
-            // and am trying to isolate data object for pluggability
-            IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : (IntPtr)targetHandleObj;
-            bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
-
-            MpPortableDataObject d = new MpPortableDataObject();
-            string rtf = string.Empty.ToRichText();
-            var sctfl = new List<string>();
-
-            //check for model templates
-            var templates = await MpDataModelProvider.GetTextTemplatesAsync(ci.Id);
-            bool hasTemplates = templates != null && templates.Count > 0;
-            bool needsTemplateData = hasTemplates;
-            if(needsTemplateData) {
-                if(isDragDrop && !isDropping) {
-                    needsTemplateData = false;
-                }
-            }
-
-            if (needsTemplateData) {
-                var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ci.Id);
-                if(ctvm == null) {
-                    // trigger query change before showing main window may need to tweak...
-                    MpDataModelProvider.SetManualQuery(new List<int>() { ci.Id });
-                    if (MpMainWindowViewModel.Instance.IsMainWindowOpen == false) {
-                        MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                        while (MpMainWindowViewModel.Instance.IsMainWindowOpen == false) {
-                            await Task.Delay(100);
-                        }
-                    }
-                    await Task.Delay(50); //wait for clip tray to get query changed message
-                    while (MpClipTrayViewModel.Instance.IsRequery) {
-                        await Task.Delay(100);
-                    }
-                    ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ci.Id);
-                }
-                
-                if (ctvm != null) {
-                    while (ctvm.IsBusy || ctvm.Parent.IsBusy) {
-                        await Task.Delay(100);
-                    }
-                    ctvm.ClearSelection();
-                    ctvm.IsSelected = true;
-
-                    rtf = await ctvm.GetSubSelectedPastableRichText(isToExternalApp);
-                }
-            } else {
-                rtf = ci.ItemData.ToRichText();
-            }
-            string pt = string.Empty;
-            string bmpBase64 = string.Empty;
-            switch(ci.ItemType) {
-                case MpCopyItemType.Text:
-                    pt = rtf.ToPlainText();
-                    bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
-                    break;
-                case MpCopyItemType.Image:
-                    pt = ci.ItemData.ToBitmapSource().ToAsciiImage();
-                    bmpBase64 = ci.ItemData;
-                    break;
-                case MpCopyItemType.FileList:
-                    pt = ci.ItemData;
-                    bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
-                    break;
-            }
-
-            if (isToExternalApp) {
-                string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
-                var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
-                MpAppClipboardFormatInfoCollectionViewModel targetInteropSettings = null;
-                if (app != null) {
-                    targetInteropSettings = MpAppCollectionViewModel.Instance.GetInteropSettingByAppId(app.Id);
-                    MpConsole.WriteLine("Dragging over " + targetProcessPath);
-                }
-
-                bool ignoreFileDrop = false;
-                if (targetInteropSettings != null) {
-                    var targetFormats = targetInteropSettings.Items
-                                            .Where(x => !x.IgnoreFormat).ToList();
-
-                    ignoreFileDrop = targetInteropSettings.Items
-                                        .Where(x => x.ClipboardFormatType == MpClipboardFormatType.FileDrop)
-                                        .All(x => x.IgnoreFormat);
-
-                    foreach (var targetSetting in targetFormats.OrderByDescending(x => x.IgnoreFormat)) {
-                        switch (targetSetting.ClipboardFormatType) {
-                            case MpClipboardFormatType.FileDrop:
-                                if(ci.ItemType == MpCopyItemType.Text) {
-                                    if(targetSetting.FormatInfo == "txt") {
-                                        sctfl.Add(pt.ToFile(null, ci.Title, targetSetting.FormatInfo));
-                                    } else {
-                                        sctfl.Add(rtf.ToFile(null, ci.Title, targetSetting.FormatInfo));
-                                    }
-                                } else {
-                                    sctfl.Add(ci.ItemData.ToFile(null, ci.Title, targetSetting.FormatInfo));
-                                }
-                                
-                                break;
-                            case MpClipboardFormatType.Rtf:
-                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Rtf, rtf);
-                                break;
-                            case MpClipboardFormatType.Text:
-                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Text, pt);
-                                break;
-                            case MpClipboardFormatType.Bitmap:
-                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Bitmap, bmpBase64);
-                                break;
-                            case MpClipboardFormatType.Csv:
-                                string sctcsv = string.Join(Environment.NewLine, ci.ItemData.ToCsv());
-                                if (!string.IsNullOrWhiteSpace(sctcsv)) {
-                                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Csv, sctcsv);
-                                }
-                                break;
-                            case MpClipboardFormatType.Custom:
-                                break;
-                            default:
-                                sctfl.Add(ci.ItemData.ToFile(null, ci.Title, targetSetting.FormatInfo));
-                                break;
-                        }
-                    }
-                } else {
-                    // NOTE using plain text here for more compatibility
-                    sctfl.Add(ci.ItemData.ToFile(null, ci.Title));
-                }
-
-                if(!ignoreFileDrop) {
-                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
-                }
-            } else {
-                // TODO set internal data stuff here
-            }
-            return d;
-        }
+        
 
         public void HandleError(Exception ex) {
             MpConsole.WriteTraceLine(ex);

@@ -258,6 +258,11 @@ namespace MpWpfApp {
                     img = elm.GetVisualDescendent<Image>();
                 }
                 if(img == null) {
+                    if(dpo is Border b) {
+                        if(b.Background is ImageBrush imgBrush) {
+                            imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(hoverBrush);
+                        }
+                    }
                     return;
                 }
                 img.Source = (img.Source as BitmapSource).Tint(hoverBrush);
@@ -296,6 +301,15 @@ namespace MpWpfApp {
                     img = elm.GetVisualDescendent<Image>();
                 }
                 if (img == null) {
+                    if (dpo is Border b) {
+                        if (b.Background is ImageBrush imgBrush) {
+                            if (GetIsSelected(dpo) && GetSelectedBrush(dpo) != null) {
+                                imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(GetSelectedBrush(dpo));
+                            } else {
+                                imgBrush.ImageSource = (imgBrush.ImageSource as BitmapSource).Tint(defaultBrush);
+                            }
+                        }
+                    }
                     return;
                 }
                 if(GetIsSelected(dpo) && GetSelectedBrush(dpo) != null) {

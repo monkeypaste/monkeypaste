@@ -21,7 +21,8 @@
                 <ColumnDefinition Width="0.7*" />
                 <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0"
+            <TextBox x:Name="ParameterTextBox"
+                     Grid.Column="0"
                      Padding="3"
                      BorderThickness="0"
                      MinWidth="100"

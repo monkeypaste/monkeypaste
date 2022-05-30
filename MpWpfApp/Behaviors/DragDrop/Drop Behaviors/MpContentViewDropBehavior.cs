@@ -386,7 +386,6 @@ namespace MpWpfApp {
             }
 
             await MpContentDocumentRtfExtension.SaveTextContent(rtb);
-            //var encodedItems = await MpMergedDocumentRtfExtension.EncodeContent(rtb);
 
             if(deleteDragItem) {
                 await drag_ctvm.CopyItem.DeleteFromDatabaseAsync();

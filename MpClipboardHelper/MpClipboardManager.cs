@@ -18,7 +18,6 @@ namespace MpClipboardHelper {
 
         public static MpIClipboardMonitor MonitorService { get; private set; }
 
-        public static MpIExternalPasteHandler PasteService { get; private set; }
         #endregion
 
         #region Events
@@ -29,12 +28,11 @@ namespace MpClipboardHelper {
 
         #region Public Methods
 
-        public static void Init(MpIExternalPasteHandler pasteHandler) {
+        public static void Init() {
             // NOTE services are abstracted into interfaces because of bug in UCRTBASE.DLL
             // and monitoring window messages (using MpClipboardWatcher) crashes application
             // intermittently when copying rtf from Visual Studio BUT maybe it can be fixed
             MonitorService = new MpClipboardTimer();
-            PasteService = pasteHandler;
             Start();
         }
 

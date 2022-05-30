@@ -127,10 +127,9 @@ namespace MpWpfApp {
                 return;
             }
 
-            MpPortableDataObject mpdo = await MpWpfDataObjectHelper.Instance.GetCopyItemDataObjectAsync(
-                ctvm.CopyItem, 
+            MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(                
                 true, 
-                MpProcessHelper.MpProcessManager.LastHandle,
+                MpProcessManager.LastHandle,
                 false);
             DataObject wpfdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo) as DataObject;
 

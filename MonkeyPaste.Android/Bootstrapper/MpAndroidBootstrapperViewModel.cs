@@ -12,11 +12,11 @@ namespace MonkeyPaste.Droid {
 
         public MpAndroidBootstrapperViewModel(MpIPlatformWrapper niw) : base(niw) {
             if(_items == null) {
-                _items = new List<MpBootstrappedItem>();
+                _items = new List<MpBootstrappedItemViewModel>();
             }
 
             _items.AddRange(
-                new List<MpBootstrappedItem>() {
+                new List<MpBootstrappedItemViewModel>() {
                     //new MpBootstrappedItem(typeof(MpDocumentHtmlExtension)),
                     //new MpBootstrappedItem(typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
                     //new MpBootstrappedItem(typeof(MpProcessAutomation)),
@@ -93,7 +93,7 @@ namespace MonkeyPaste.Droid {
 
             for (int i = 0; i < _items.Count; i++) {
                 //ReportItemLoading(_items[i], i);
-                await _items[i].Register();
+                await _items[i].LoadItem();
             }
 
             //MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardHelper.MpClipboardManager.MonitorService;

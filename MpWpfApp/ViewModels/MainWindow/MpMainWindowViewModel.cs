@@ -365,7 +365,8 @@ namespace MpWpfApp {
                 return (Application.Current.MainWindow != null ||
                    //Application.Current.MainWindow.Visibility != Visibility.Visible ||
                    !MpMainWindowViewModel.Instance.IsMainWindowLoading ||
-                   !MpMainWindowViewModel.Instance.IsShowingDialog) && !IsMainWindowOpen && !IsMainWindowOpening;
+                   !MpMainWindowViewModel.Instance.IsShowingDialog) && 
+                   !IsMainWindowOpen && !IsMainWindowOpening;
             });
 
         public ICommand HideWindowCommand => new RelayCommand(

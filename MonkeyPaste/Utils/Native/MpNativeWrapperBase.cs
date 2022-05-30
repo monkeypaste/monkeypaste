@@ -24,6 +24,8 @@ namespace MonkeyPaste {
         MpINativeMessageBox NativeMessageBox { get; }
 
         MpIClipboardMonitor ClipboardMonitor { get; set; }
+
+        MpIExternalPasteHandler ExternalPasteHandler { get; }
     }
 
 

@@ -12,7 +12,6 @@
                      d:DataContext="{d:DesignInstance Type=local:MpTemplateCollectionViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Border x:Name="ClipTilePasteTemplateToolbar"
-            Unloaded="ClipTilePasteTemplateToolbar_Unloaded"
             Height="40"
             HorizontalAlignment="Stretch"
             Background="LightBlue"
@@ -39,8 +38,7 @@
                           VerticalContentAlignment="Center"
                           Background="Transparent"
                           FontSize="14"
-                          PreviewMouseLeftButtonDown="SelectedTemplateComboBox_PreviewMouseLeftButtonDown"
-                          ItemsSource="{Binding Items}"
+                          ItemsSource="{Binding PastableItems}"
                           SelectedItem="{Binding SelectedItem,
                                                  Mode=TwoWay,
                                                  NotifyOnTargetUpdated=True,
@@ -76,7 +74,6 @@
                     Padding="0,0,0,0"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Top"
-                    PreviewMouseLeftButtonDown="ClearAllTemplatesButton_PreviewMouseLeftButtonDown"
                     Command="{Binding ClearAllTemplatesCommand}"
                     Content="CLEAR ALL"
                     FontSize="12"
@@ -143,7 +140,6 @@
                 <Button x:Name="PreviousTemplateButton"
                         Width="25"
                         Height="25"
-                        PreviewMouseLeftButtonDown="PreviousTemplateButton_PreviewMouseLeftButtonDown"
                         Command="{Binding SelectPreviousTemplateCommand}"
                         TabIndex="2">
                     <Image Margin="5"
@@ -154,7 +150,6 @@
                         Width="25"
                         Height="25"
                         Margin="5,0,0,0"
-                        PreviewMouseLeftButtonDown="NextTemplateButton_PreviewMouseLeftButtonDown"
                         Command="{Binding SelectNextTemplateCommand}"
                         TabIndex="3">
                     <Image Margin="5"

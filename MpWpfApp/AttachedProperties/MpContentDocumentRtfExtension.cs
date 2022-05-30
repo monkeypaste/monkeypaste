@@ -137,6 +137,7 @@ namespace MpWpfApp {
                 ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(rtb));
             }
         }
+
         public static async Task SaveTextContent(RichTextBox rtb) {
             if(MpClipTrayViewModel.Instance.IsRequery || MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;
@@ -148,20 +149,30 @@ namespace MpWpfApp {
             }
         }
 
-        public static string GetEncodedContent(RichTextBox rtb) {
+        public static string GetEncodedContent(RichTextBox rtb, bool ignoreSubSelection = true) {
             var ctvm = rtb.DataContext as MpClipTileViewModel;
             if(ctvm == null) {
                 Debugger.Break();
             }
+            
 
             switch(ctvm.ItemType) {
                 case MpCopyItemType.FileList:
+                    if(!ignoreSubSelection) {
+
+                        var shl = rtb.Document.GetAllTextElements()
+                                    .FirstOrDefault(x => x is Hyperlink && x.IsEnabled) as Hyperlink;
+                        if(shl != null) {
+                            return shl.NavigateUri.LocalPath;
+                        }
+                    }
                     return string.Join(
                             Environment.NewLine,
                             rtb.Document.GetAllTextElements()
-                                        .Where(x => x is Hyperlink)
-                                        .Cast<Hyperlink>()
-                                        .Select(x => x.NavigateUri.LocalPath));
+                                    .Where(x => x is Hyperlink)
+                                    .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart))
+                                    .Cast<Hyperlink>()
+                                    .Select(x => x.NavigateUri.LocalPath));
                 case MpCopyItemType.Image:
                     return rtb.Document.GetAllTextElements()
                                        .Where(x => x is InlineUIContainer)
@@ -170,18 +181,33 @@ namespace MpWpfApp {
                                        .Select(x => (x.Source as BitmapSource).ToBase64String())
                                        .FirstOrDefault();
                 case MpCopyItemType.Text:
-                    var thll = rtb.Document.GetAllTextElements()
+                    List<TextElement> elementsToEncode = new List<TextElement>();
+                    if (!ignoreSubSelection && !rtb.Selection.IsEmpty) {
+                        //if nothing is selected treat full content as selection
+                        bool hasSelectedTemplates = MpTextSelectionRangeExtension.IsSelectionContainTemplate(ctvm);
+                        if(hasSelectedTemplates) {
+                            elementsToEncode = rtb.Selection.GetAllTextElements()
                                             .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
                                             .ToList();
+                        }
+                    } else if(ctvm.HasTemplates) {
+                        elementsToEncode = rtb.Document.GetAllTextElements()
+                                            .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
+                                            .ToList();
+                    }
 
-                    foreach (InlineUIContainer thl in thll) {
+                    foreach (InlineUIContainer thl in elementsToEncode) {
                         var cit = thl.Tag as MpTextTemplate;
                         var span = new Span(thl.ContentStart, thl.ContentEnd);
                         span.Inlines.Clear();
                         span.Inlines.Add(cit.EncodedTemplate);
                     }
 
-                    return rtb.Document.ToRichText();
+                    if(ignoreSubSelection || rtb.Selection.IsEmpty) {
+                        return rtb.Document.ToRichText();
+                    }
+
+                    return rtb.Selection.ToRichText();
             }
             MpConsole.WriteTraceLine("Unknown item type " + ctvm);
             return null;            

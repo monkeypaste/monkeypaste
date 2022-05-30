@@ -33,7 +33,7 @@ namespace MonkeyPaste {
         public int SelectionStart { get; set; }
         public int SelectionLength { get; set; }
         public bool IsAllSelected { get; set; }
-        public string SelectedPlainText { get; set; }
+        public string SelectedPlainText { get; }
 
         #endregion
 

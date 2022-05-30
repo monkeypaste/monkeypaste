@@ -5,6 +5,7 @@ using MonkeyPaste;
 using Xamarin.Forms.PlatformConfiguration;
 using System.Threading.Tasks;
 using MonkeyPaste.Plugin;
+using MpClipboardHelper;
 
 namespace MpWpfApp {
     public class MpWpfWrapper : MpIPlatformWrapper {
@@ -26,6 +27,8 @@ namespace MpWpfApp {
         public MpINativeMessageBox NativeMessageBox { get; }
         
         public MpIClipboardMonitor ClipboardMonitor { get; set; }
+
+        public MpIExternalPasteHandler ExternalPasteHandler { get; }
         public MpWpfWrapper() {
             // NOTE ClipboardMonitor is set after bootstrapping
 
@@ -41,9 +44,9 @@ namespace MpWpfApp {
             StringTools = new MpWpfStringTools();
             OsInfo = new MpWpfOsInfo();
             NativeMessageBox = new MpWpfMessageBox();
-            DataObjectHelper = new MpWpfDataObjectHelper();
+            DataObjectHelper = MpWpfDataObjectHelper.Instance;
+            ExternalPasteHandler = MpWpfDataObjectHelper.Instance;
         }
 
-        
     }
 }

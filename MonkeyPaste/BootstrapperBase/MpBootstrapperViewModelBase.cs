@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public abstract class MpBootstrapperViewModelBase : MpViewModelBase, MpIProgressLoader {
+    public abstract class MpBootstrapperViewModelBase : 
+        MpViewModelBase, 
+        MpIProgressLoader {
         #region Statics
 
         public static bool IsLoaded { get; protected set; } = false;
 
-        protected static List<MpBootstrappedItem> _items = new List<MpBootstrappedItem>();
+        protected static List<MpBootstrappedItemViewModel> _items = new List<MpBootstrappedItemViewModel>();
 
         #endregion
 
@@ -29,34 +31,39 @@ namespace MonkeyPaste {
             set => throw new NotImplementedException();
         }
 
-        public double PercentLoaded { get; set; } = 0.0;
+        public double PercentLoaded => (double)LoadedCount / (double)_items.Count;
+        //public double PercentLoaded { get; set; }
 
         public MpNotificationDialogType DialogType => MpNotificationDialogType.StartupLoader;
 
         #endregion
+
+        public int LoadedCount { get; set; } = 0;
 
 
         #endregion
 
         public MpBootstrapperViewModelBase(MpIPlatformWrapper niw) {
             _items.AddRange(
-                new List<MpBootstrappedItem>() {
-                    new MpBootstrappedItem(typeof(MpConsole)),
-                    new MpBootstrappedItem(typeof(MpPlatformWrapper),niw),
-                    new MpBootstrappedItem(typeof(MpCursor),niw.Cursor),
-                    new MpBootstrappedItem(typeof(MpPreferences),niw.PreferenceIO),
-                    new MpBootstrappedItem(typeof(MpTempFileManager)),
-                    new MpBootstrappedItem(typeof(MpRegEx)),
-                    new MpBootstrappedItem(typeof(MpDb),niw.DbInfo),
-                    new MpBootstrappedItem(typeof(MpDataModelProvider),niw.QueryInfo),
-                    new MpBootstrappedItem(typeof(MpMasterTemplateModelCollection)),
-                    new MpBootstrappedItem(typeof(MpPluginManager))
+                new List<MpBootstrappedItemViewModel>() {
+                    new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpPlatformWrapper),niw),
+                    new MpBootstrappedItemViewModel(this,typeof(MpCursor),niw.Cursor),
+                    new MpBootstrappedItemViewModel(this,typeof(MpPreferences),niw.PreferenceIO),
+                    new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpRegEx)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpDb),niw.DbInfo),
+                    new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider),niw.QueryInfo),
+                    new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollection)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpPluginManager))
                 });
         }
 
         public abstract Task Init();
 
-        protected void ReportItemLoading(MpBootstrappedItem item, int index) {
+        protected async Task LoadItem(MpBootstrappedItemViewModel item, int index) {
+            await item.LoadItem();
+
             MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
 
             var lnvm = MpNotificationCollectionViewModel.Instance.Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
@@ -64,7 +71,11 @@ namespace MonkeyPaste {
                 // NOTE this occurs when warnings exist and loader is finished
                 return;
             }
-            PercentLoaded = (double)(index + 1) / (double)_items.Count;
+
+            //PercentLoaded = (double)(index + 1) / (double)_items.Count;
+
+            LoadedCount++;
+            OnPropertyChanged(nameof(PercentLoaded));
 
             OnPropertyChanged(nameof(Detail));
 
@@ -76,7 +87,6 @@ namespace MonkeyPaste {
                 Title += ".";
             }
         }
-
     }
 }
 

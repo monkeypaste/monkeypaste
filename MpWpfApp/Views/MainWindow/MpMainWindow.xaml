@@ -123,10 +123,21 @@
                 </StackPanel>
 
                 <Border Width="100"
-                        Background="Pink"
                         local:MpHoverableExtension.IsEnabled="True"
                         local:MpHoverableExtension.HoverCursor="ResizeNS"
+                        local:MpHoverableExtension.DefaultBrush="White"
+                        local:MpHoverableExtension.HoverBrush="Yellow"
+                        local:MpHoverableExtension.SelectedBrush="Orange"
+                        local:MpHoverableExtension.IsSelected="{Binding IsResizing}"
                         VerticalAlignment="Stretch">
+                    <Border.Background>
+                        <ImageBrush ImageSource="{Binding .,
+                                                          Source={StaticResource FrameGripTile},
+                                                          Converter={StaticResource StringResourceToImageSourceConverter}}"
+                                    TileMode="Tile"
+                                    Viewport="0 0 5 5"
+                                    ViewportUnits="Absolute" />
+                    </Border.Background>
 
                     <i:Interaction.Behaviors>
                         <local:MpResizeBehavior x:Name="MainWindowResizeBehvior"

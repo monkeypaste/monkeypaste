@@ -320,19 +320,21 @@ namespace MpWpfApp {
                 }
 
                 if (BindingContext.IsSelected &&
+                    !BindingContext.IsPasting &&
+                    !BindingContext.Parent.IsPasting &&
                    !BindingContext.IsTitleReadOnly) {
                     BindingContext.IsContentFocused = true;
                 }
 
-                if (BindingContext.IsPastingTemplate) {
-                    if (BindingContext.TemplateCollection.SelectedItem == null) {
-                        if (BindingContext.TemplateCollection.Items.Count == 0) {
-                            return;
-                        }
-                        BindingContext.TemplateCollection.SelectedItem = BindingContext.TemplateCollection.Items[0];
-                    }
-                    BindingContext.TemplateCollection.SelectedItem.IsPasteTextBoxFocused = true;
-                }
+                //if (BindingContext.IsPastingTemplate) {
+                //    if (BindingContext.TemplateCollection.SelectedItem == null) {
+                //        if (BindingContext.TemplateCollection.Items.Count == 0) {
+                //            return;
+                //        }
+                //        BindingContext.TemplateCollection.SelectedItem = BindingContext.TemplateCollection.Items[0];
+                //    }
+                //    BindingContext.TemplateCollection.SelectedItem.IsPasteTextBoxFocused = true;
+                //}
             }
         }
         private void Rtb_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {

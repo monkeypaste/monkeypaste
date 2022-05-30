@@ -18,7 +18,6 @@
         <Setter Property="VerticalOffset" Value="0" />
         <Setter Property="Padding" Value="8" />
 
-
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>

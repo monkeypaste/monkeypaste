@@ -24,6 +24,11 @@ namespace MpProcessHelper {
         public string StandardError { get; set; } = string.Empty;
 
         public WinApi.ShowWindowCommands WindowState { get; set; }
-        //public DateTime LastActiveDateTime { get; set; }
+
+        public MpProcessInfo() { }
+
+        public MpProcessInfo(IntPtr handle) {
+            Handle = handle;
+        }
     }
 }

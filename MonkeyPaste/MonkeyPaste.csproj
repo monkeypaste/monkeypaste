@@ -420,7 +420,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\Clip\MpContentItemViewModel.cs" />
     <None Include="ViewModels\Shell\MainFlyOut\Pages\ClipTileCollection\MpContentItemCollectionViewModel.cs" />
     <None Include="Views\Shell\MpMainShell.xaml" />
     <None Include="Views\Shell\MainFlyOut\TagTileCollectionView\MpTagTileCollectionView.xaml" />

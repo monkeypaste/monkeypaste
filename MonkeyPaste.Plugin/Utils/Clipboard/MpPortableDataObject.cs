@@ -33,11 +33,18 @@ namespace MonkeyPaste.Plugin {
         MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5);
         object ConvertToPlatformClipboardDataObject(MpPortableDataObject portableObj);
         void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange);
-        object GetDataObjectWrapper();
+        MpPortableDataObject GetPlatformClipboardDataObject();
     }
 
+    public interface MpIPortableContentDataObject {
+        Task<MpPortableDataObject> ConvertToPortableDataObject(
+            bool isDragDrop,
+            object targetHandleOrProcessInfo,
+            bool ignoreSubSelection = false,
+            bool isDropping = false);
+    }
     public interface MpIExternalPasteHandler {
-        Task PasteDataObject(MpPortableDataObject mpdo, IntPtr handle, bool finishWithEnterKey = false);
+        Task PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo, bool finishWithEnterKey = false);
     }
 
 

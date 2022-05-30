@@ -61,7 +61,7 @@ namespace MpWpfApp {
             //    AddButton.ContextMenu.IsOpen = true;
             //}
             if(BindingContext.Items.Count == 0) {
-                BindingContext.CreateTemplateViewModelCommand.Execute(null);
+                BindingContext.CreateTemplateViewModelCommand.Execute(Rtb.Selection.Text);
                 return;
             }
 

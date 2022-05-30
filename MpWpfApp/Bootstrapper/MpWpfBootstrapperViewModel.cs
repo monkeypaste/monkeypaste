@@ -10,64 +10,68 @@ using MpProcessHelper;
 using MonkeyPaste.Plugin;
 using System.IO;
 using System.Windows.Media;
+using MpClipboardHelper;
+using System.Collections;
 
 namespace MpWpfApp {
     public class MpWpfBootstrapperViewModel : MpBootstrapperViewModelBase {
 
         public MpWpfBootstrapperViewModel(MpIPlatformWrapper niw) : base(niw) {
             if(_items == null) {
-                _items = new List<MpBootstrappedItem>();
+                _items = new List<MpBootstrappedItemViewModel>();
             }
 
             _items.AddRange(
-                new List<MpBootstrappedItem>() {
+                new List<MpBootstrappedItemViewModel>() {
                     //new MpBootstrappedItem(typeof(MpDocumentHtmlExtension)),
-                    new MpBootstrappedItem(typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
-                    new MpBootstrappedItem(typeof(MpProcessAutomation)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
+                    new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
 
-                    new MpBootstrappedItem(typeof(MpThemeColors)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpThemeColors)),
 
-                    new MpBootstrappedItem(typeof(MpMeasurements)),
-                    new MpBootstrappedItem(typeof(MpFileSystemWatcher)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpMeasurements)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpFileSystemWatcher)),
 
-                    new MpBootstrappedItem(typeof(MpIconCollectionViewModel)),
-                    new MpBootstrappedItem(typeof(MpAppCollectionViewModel)),
-                    new MpBootstrappedItem(typeof(MpUrlCollectionViewModel)),
-                    new MpBootstrappedItem(typeof(MpSourceCollectionViewModel)),
-
-
-                    new MpBootstrappedItem(typeof(MpSystemTrayViewModel)),
-
-                    new MpBootstrappedItem(typeof(MpSoundPlayerGroupCollectionViewModel)),
-
-                    new MpBootstrappedItem(typeof(MpClipTileSortViewModel)),
-                    new MpBootstrappedItem(typeof(MpSearchBoxViewModel)),
-
-                    new MpBootstrappedItem(typeof(MpAnalyticItemCollectionViewModel)),
-                    new MpBootstrappedItem(typeof(MpClipboardHandlerCollectionViewModel)),
-
-                    new MpBootstrappedItem(typeof(MpClipTrayViewModel)),
-
-                    new MpBootstrappedItem(typeof(MpShortcutCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpIconCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAppCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpUrlCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpSourceCollectionViewModel)),
 
 
-                    new MpBootstrappedItem(typeof(MpTagTrayViewModel)),
-                    new MpBootstrappedItem(typeof(MpMainWindowViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpSystemTrayViewModel)),
 
-                    new MpBootstrappedItem(typeof(MpActionCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpSoundPlayerGroupCollectionViewModel)),
 
-                    new MpBootstrappedItem(typeof(MpContextMenuView)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpClipTileSortViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpSearchBoxViewModel)),
 
-                    new MpBootstrappedItem(typeof(MpDragDropManager)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAnalyticItemCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpClipboardHandlerCollectionViewModel)),
 
-                    new MpBootstrappedItem(typeof(MpClipboardHelper.MpClipboardManager),MpWpfDataObjectHelper.Instance),
+                    new MpBootstrappedItemViewModel(this,typeof(MpClipTrayViewModel)),
 
-                    new MpBootstrappedItem(typeof(MpWpfDataObjectHelper))
+                    new MpBootstrappedItemViewModel(this,typeof(MpShortcutCollectionViewModel)),
+
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpTagTrayViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpMainWindowViewModel)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpActionCollectionViewModel)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpContextMenuView)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpDragDropManager)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
+
+                    new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper))
                     //new MpBootstrappedItem(typeof(MpMouseHook))
                 });
         }
 
         public override async Task Init() {
+            var sw = Stopwatch.StartNew();
+
             // NOTE Move this later (to first load init native data in app.cs) start
             Properties.Settings.Default.DoNotShowAgainNotificationIdCsvStr = string.Empty;
 
@@ -78,7 +82,6 @@ namespace MpWpfApp {
 
 
             Properties.Settings.Default.Save();
-            // NOTE Remove this later finish
 
 
             List<int> doNotShowNotifications = null;
@@ -96,12 +99,26 @@ namespace MpWpfApp {
 
             await MpNotificationCollectionViewModel.Instance.BeginLoader(this);
 
-            for (int i = 0; i < _items.Count; i++) {
-                ReportItemLoading(_items[i], i);
-                await _items[i].Register();
-            }
+            await Task.Delay(300);
+            // Parallel
 
-            MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardHelper.MpClipboardManager.MonitorService;
+            //await Task.Run(
+            //    () => _items
+            //            .AsParallel()
+            //            .WithDegreeOfParallelism(_items.Count)
+            //            .Select(x => x.LoadItem()).ToList());
+
+            // Async
+            await Task.WhenAll(
+                _items.Select(
+                    x => x.LoadItem()));
+
+            // Sequential (58831 ms 05/30/2022)
+            //for (int i = 0; i < _items.Count; i++) {
+            //    await LoadItem(_items[i],i);
+            //}
+
+            MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardManager.MonitorService;
 
             await Task.Delay(500);
             MpNotificationCollectionViewModel.Instance.FinishLoading();
@@ -136,6 +153,8 @@ namespace MpWpfApp {
             //}
             //Debugger.Break();
 
+            sw.Stop();
+            MpConsole.WriteLine($"Bootstrapper loaded in {sw.ElapsedMilliseconds} ms");
 
             IsLoaded = true;
         }

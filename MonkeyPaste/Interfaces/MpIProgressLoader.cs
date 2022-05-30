@@ -14,6 +14,6 @@
     }
 
     public interface MpIProgressLoader : MpINotification {        
-        double PercentLoaded { get; set; }
+        double PercentLoaded { get; }
     }
 }

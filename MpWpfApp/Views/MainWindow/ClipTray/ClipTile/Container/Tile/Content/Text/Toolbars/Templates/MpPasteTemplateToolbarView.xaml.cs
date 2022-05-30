@@ -29,65 +29,12 @@ namespace MpWpfApp {
                 return;
             }
             _activeRtb = trtb;
-            var rtbvm = _activeRtb.DataContext as MpClipTileViewModel;
-
-            rtbvm.TemplateCollection.UpdateCommandsCanExecute();
-            foreach (var thlvm in rtbvm.TemplateCollection.Items) {
-                thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
-            }
         }
 
-        private void Thlvm_OnTemplateSelected(object sender, EventArgs e) {
-            if(BindingContext.Parent.IsPastingTemplate) {
-                //BindingContext.ClearSelection();
-                //(sender as MpTemplateViewModel).IsSelected = true;
-            }
-        }
-
-        private void ClipTilePasteTemplateToolbar_Unloaded(object sender, RoutedEventArgs e) {
-            if(BindingContext == null) {
-                return;
-            }
-            foreach (var civm in BindingContext.Parent.Parent.Items) {
-                foreach (var thlvm in civm.TemplateCollection.Items) {
-                    thlvm.OnTemplateSelected -= Thlvm_OnTemplateSelected;
-                }
-            }
-        }
-
-        private void PreviousTemplateButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            BindingContext.SelectPreviousTemplateCommand.Execute(null);
-            e.Handled = true;
-        }
-
-        private void NextTemplateButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            BindingContext.SelectNextTemplateCommand.Execute(null);
-            e.Handled = true;
-        }
-
-        private void PasteTemplateButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            BindingContext.PasteTemplateCommand.Execute(null);
-            e.Handled = true;
-        }
-
-        private void ClearAllTemplatesButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            BindingContext.ClearAllTemplatesCommand.Execute(null);
-            e.Handled = true;
-        }
-
-        private void SelectedTemplateComboBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            SelectedTemplateComboBox.IsDropDownOpen = true;
-            e.Handled = true;
-        }
 
         private void ClipTilePasteTemplateToolbar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
             if(BindingContext == null || ((bool)e.NewValue) == false) {
                 return;
-            }
-            foreach(var civm in BindingContext.Parent.Parent.Items) {
-                foreach (var thlvm in civm.TemplateCollection.Items) {
-                    thlvm.OnTemplateSelected += Thlvm_OnTemplateSelected;
-                }
             }
             if(BindingContext.Items.Count == 0) {
                 return;
@@ -99,7 +46,7 @@ namespace MpWpfApp {
             var rtb = this.GetVisualAncestor<MpClipTileView>()
                 .GetVisualDescendent<MpContentView>()
                 .GetVisualDescendent<RichTextBox>();
-            rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
+            //rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
 
             BindingContext.SelectedItem.IsPasteTextBoxFocused = true;
         }
