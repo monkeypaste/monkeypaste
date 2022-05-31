@@ -292,6 +292,8 @@ namespace MpWpfApp {
         public double PinTrayScreenWidth { get; set; }
 
         public double PinTrayTotalWidth { get; set; } = 0;
+
+        public double PinTrayMaxDefaultMaxWidth => MpMeasurements.Instance.ClipTrayDefaultWidth / 2;
         //public double ClipTrayScreenHeight => ClipTrayHeight;
 
         // NOTE ClipTrayScreenWidth is only set on initial load but then set by OneWayToSource Binding in MpClipTrayContainerView
@@ -348,6 +350,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
+        public bool HasUserAlteredPinTrayWidth { get; set; } = false;
 
         public bool IsAddingClipboardItem { get; private set; } = false;
 
@@ -526,7 +530,7 @@ namespace MpWpfApp {
                 if(SelectedItem == null) {
                     return true;
                 }
-                if(!SelectedItem.IsContentReadOnly && 
+                if(SelectedItem.IsVerticalScrollbarVisibile &&
                     SelectedItem.IsHovering &&
                     SelectedItem.IsVisible) {
                     return false;
@@ -1170,9 +1174,7 @@ namespace MpWpfApp {
                             ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));                        
                     }
                     AdjustScrollOffsetToResize(oldHeadTrayX, oldScrollOffset);
-                    if(isTileResize) {
-                        RequestScrollIntoView(SelectedItem);
-                    }
+                    RequestScrollIntoView(SelectedItem);
                     break;
                 case MpMessageType.ResizeContentCompleted:
 
@@ -1447,6 +1449,11 @@ namespace MpWpfApp {
 
                 if (!IsAnyTilePinned) {
                     PinTrayTotalWidth = PinTrayScreenWidth = 0;
+                } else if(!HasUserAlteredPinTrayWidth && PinTrayScreenWidth > PinTrayMaxDefaultMaxWidth) {
+                    var pinTrayView = Application.Current.MainWindow
+                                        .GetVisualDescendent<MpClipTrayContainerView>()
+                                        .PinTrayView;
+                    pinTrayView.Width = PinTrayMaxDefaultMaxWidth;
                 }
                 OnPropertyChanged(nameof(IsAnyTilePinned));
                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
@@ -1694,10 +1701,12 @@ namespace MpWpfApp {
                 if(isSubQuery) {
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
                 } else {
+                    HasUserAlteredPinTrayWidth = false;
+
                     if (SelectedItem == null &&
-                    PersistentSelectedModels.Count == 0 &&
-                    TotalTilesInQuery > 0) {
-                        ResetClipSelection();
+                        PersistentSelectedModels.Count == 0 &&
+                        TotalTilesInQuery > 0) {
+                            ResetClipSelection();
                     }
                 }
                 

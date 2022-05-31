@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -13,38 +11,48 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpRtbEditToolbarView.xaml
     /// </summary>
     public partial class MpRtbEditToolbarView : MpUserControl<MpClipTileViewModel> {
+        bool _hasLoaded = false;
+
         ToggleButton selectedAlignmentButton;
         ToggleButton selectedListButton;
-        RichTextBox artb;
-        List<ButtonBase> buttons;
 
-        private ObservableCollection<double> _defaultFontSizes = new ObservableCollection<double>() {
-            8,
-            9,
-            10,
-            12,
-            14,
-            16,
-            18,
-            24,
-            36,
-            48,
-            72
+        RichTextBox Rtb {
+            get {
+                var ctv = this.GetVisualAncestor<MpClipTileView>();
+                if (ctv == null) {
+                    return null;
+                }
+                var cv = ctv.GetVisualDescendent<MpContentView>();
+                if (cv == null) {
+                    return null;
+                }
+                return cv.Rtb;
+            }
+        }
+
+
+        private ObservableCollection<string> _defaultFontSizes = new ObservableCollection<string>() {
+            "8",
+            "9",
+            "10",
+            "12",
+            "14",
+            "16",
+            "18",
+            "24",
+            "36",
+            "48",
+            "72"
         };
 
         public MpRtbEditToolbarView() {
             InitializeComponent();
-
-            FontFamilyCombo.ItemsSource = Fonts.SystemFontFamilies;
             FontSizeCombo.ItemsSource = _defaultFontSizes;
             Visibility = Visibility.Collapsed;
             
@@ -54,92 +62,129 @@ namespace MpWpfApp {
         private void ClipTileEditorToolbar_Loaded(object sender, RoutedEventArgs e) {
             
         }
-
-        public void SetActiveRtb(RichTextBox trtb) {
-            if(artb == trtb) {
-                return;
+        private void ClipTileEditorToolbar_Unloaded(object sender, RoutedEventArgs e) {
+            if (Rtb != null) {
             }
-            if(artb != null) {
-                artb.SelectionChanged -= CurrentRtb_SelectionChanged;
-            }
-            //AddTemplateButton.SetActiveRtb(trtb);
-            artb = trtb;
-            
-            if(buttons == null) {
-                buttons = new List<ButtonBase>() {
-                PrintButton,
-                //CutButton,
-                //CopyButton,
-                //PasteButton,
-                UndoButton,
-                RedoButton,
-                BoldButton,
-                ItalicButton,
-                UnderlineButton,
-                LeftButton,
-                RightButton,
-                CenterButton,
-                NumberingButton,
-                BulletsButton
-            };
-            }
-
-            foreach(var b in buttons) {
-                b.CommandTarget = trtb;
-            }
-            trtb.SelectionChanged += CurrentRtb_SelectionChanged;
-            artb = trtb;
-            artb.IsManipulationEnabled = true;
-            artb.Focus();
-            artb.CaretPosition = artb.Document.ContentStart;
-            artb.Selection.Select(artb.Document.ContentStart, artb.Document.ContentStart);
-            //CurrentRtb_SelectionChanged(this, null);
-            
+            _hasLoaded = false;
         }
+
+        private void ClipTileEditorToolbarBorder_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if ((bool)e.NewValue) {
+                if(!_hasLoaded) {
+                    ClipTileEditorToolbarBorder.Resources["CurrentRtbTarget"] = Rtb;
+
+                    var buttons = new List<ButtonBase>() {
+                                PrintButton,
+                                //CutButton,
+                                //CopyButton,
+                                //PasteButton,
+                                UndoButton,
+                                RedoButton,
+                                BoldButton,
+                                ItalicButton,
+                                UnderlineButton,
+                                LeftButton,
+                                RightButton,
+                                CenterButton,
+                                NumberingButton,
+                                BulletsButton
+                            };
+
+                    foreach (var b in buttons) {
+                        b.CommandTarget = Rtb;
+                    }
+                    _hasLoaded = true;
+                }
+
+                Rtb.SelectionChanged += CurrentRtb_SelectionChanged;
+
+                if(BindingContext != null && !BindingContext.IsPasting && !BindingContext.Parent.IsPasting) {
+                    BindingContext.IsContentFocused = true;
+                }
+                
+            } else {
+                Rtb.SelectionChanged -= CurrentRtb_SelectionChanged;
+            }
+        }
+
 
         #region Toolbar Events
 
         public void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            var fontFamily = artb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
+            var fontFamily = Rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
             FontFamilyCombo.SelectedItem = fontFamily;
 
             // Set font size combo
-            var fontSize = artb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-            FontSizeCombo.SelectedItem = fontSize;
+            var fontSizeObj = Rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+            //FontSizeCombo.SelectedItem = fontSize;
 
-            //if (fontSizeObj == null || fontSizeObj.ToString() == "{DependencyProperty.UnsetValue}") {
-            //    fontSizeObj = string.Empty;
-            //} else {
-            //    fontSizeObj = Math.Round((double)fontSizeObj);
-            //}
-            //if (!string.IsNullOrEmpty((string)fontSizeObj)) {
-            //    double fontSize;
-            //    try {
-            //        fontSize = Convert.ToDouble(fontSizeObj);
-            //        fontSize = Math.Round(fontSize, 1);
-            //        if (!_defaultFontSizes.Contains(fontSize)) {
-            //            _defaultFontSizes.Add(fontSize);
-            //            _defaultFontSizes = new ObservableCollection<double>(_defaultFontSizes.OrderBy(x => x));
-            //        }
-            //        FontSizeCombo.SelectedItem = fontSize;
-            //    }catch(Exception ex) {
-            //        MpConsole.WriteTraceLine("Error converting font size to double obj str: " + fontSizeObj.ToString(), ex);
-            //    }
-            //}            
+            if (fontSizeObj == null || fontSizeObj.ToString() == "{DependencyProperty.UnsetValue}") {
+                fontSizeObj = string.Empty;
+            } else {
+                double fontSize = -1;
+                try {
+                    fontSize = Convert.ToDouble(fontSizeObj);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine("Error converting font size to double obj str: " + fontSizeObj.ToString(), ex);
+                }
+                if (fontSize < 0) {
+                    fontSizeObj = string.Empty;
+                } else {
+                    fontSize = Math.Round(fontSize, 1);
+                    fontSizeObj = fontSize.ToString();
+                }
+            }
+            if(fontSizeObj is string fontSizeStr) {
+                if (fontSizeStr.EndsWith(".")) {
+                    //remove trailing . if is whole number
+                    fontSizeStr = fontSizeStr.Replace(".", string.Empty);
+                }
+                if (!_defaultFontSizes.Contains(fontSizeStr)) {
+
+                    Func<string, double> doubleParser = input => {
+                        double result;
+                        if (!double.TryParse(input, out result))
+                            return double.MinValue;
+
+                        return result;
+                    };
+
+                    _defaultFontSizes = new ObservableCollection<string>(_defaultFontSizes.OrderBy(x => doubleParser(x)));
+                }
+                
+                FontSizeCombo.SelectedItem = fontSizeStr;
+            } else {
+                FontSizeCombo.SelectedItem = null;
+            }
 
             // Set Font buttons
-            BoldButton.IsChecked = artb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-            ItalicButton.IsChecked = artb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-            UnderlineButton.IsChecked = artb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+            BoldButton.IsChecked = Rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+            ItalicButton.IsChecked = Rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+            UnderlineButton.IsChecked = Rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
 
             // Set Alignment buttons
-            LeftButton.IsChecked = artb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
-            CenterButton.IsChecked = artb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
-            RightButton.IsChecked = artb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
+            LeftButton.IsChecked = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
+            CenterButton.IsChecked = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
+            RightButton.IsChecked = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
 
-            AddTemplateButton.IsEnabled = CanAddTemplate(artb.Selection);
+            AddTemplateButton.IsEnabled = CanAddTemplate(Rtb.Selection);
 
-            artb.FitDocToRtb();
+            object bgBrushObj = Rtb.Selection.GetPropertyValue(TextElement.BackgroundProperty);
+            if (bgBrushObj is Brush bgBrush) {
+                BackgroundColorButtonBorder.Background = bgBrush;
+            } else {
+                BackgroundColorButtonBorder.Background = Brushes.Transparent;
+            }
+
+            object fgBrushObj = Rtb.Selection.GetPropertyValue(TextElement.ForegroundProperty);
+            if (fgBrushObj is Brush fgBrush) {
+                ForegroundColorButtonBorder.Background = fgBrush;
+            } else {
+                ForegroundColorButtonBorder.Background = Brushes.Transparent;
+            }
+
+            Rtb.FitDocToRtb();
         }
 
         private bool CanAddTemplate(TextSelection ts) {
@@ -149,13 +194,13 @@ namespace MpWpfApp {
             //-contains more than 10 characters
             bool canAddTemplate = true;
 
-            if (artb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
-               artb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
+            if (Rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
+               Rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
                 MpTextTemplateViewModel thlvm = null;
-                if (((TextElement)artb.Selection.Start.Parent).DataContext != null && ((TextElement)artb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModel)) {
-                    thlvm = (MpTextTemplateViewModel)((TextElement)artb.Selection.Start.Parent).DataContext;
-                } else if (((TextElement)artb.Selection.End.Parent).DataContext != null && ((TextElement)artb.Selection.End.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModel)) {
-                    thlvm = (MpTextTemplateViewModel)((TextElement)artb.Selection.End.Parent).DataContext;
+                if (((TextElement)Rtb.Selection.Start.Parent).DataContext != null && ((TextElement)Rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModel)) {
+                    thlvm = (MpTextTemplateViewModel)((TextElement)Rtb.Selection.Start.Parent).DataContext;
+                } else if (((TextElement)Rtb.Selection.End.Parent).DataContext != null && ((TextElement)Rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModel)) {
+                    thlvm = (MpTextTemplateViewModel)((TextElement)Rtb.Selection.End.Parent).DataContext;
                 }
                 canAddTemplate = thlvm == null;
             }
@@ -177,9 +222,10 @@ namespace MpWpfApp {
             }
             
             var fontFamily = FontFamilyCombo.SelectedItem.ToString();
-            artb.Focus();
-            var textRange = new TextRange(artb.Selection.Start, artb.Selection.End);
-            textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);            
+            var textRange = new TextRange(Rtb.Selection.Start, Rtb.Selection.End);
+            textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
+
+            //BindingContext.IsContentFocused = true;
         }
 
         private void FontSizeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -197,8 +243,12 @@ namespace MpWpfApp {
             
             var pointSize = FontSizeCombo.SelectedItem.ToString();
             var pixelSize = System.Convert.ToDouble(pointSize); // * (96 / 72);
-            var textRange = new TextRange(artb.Selection.Start, artb.Selection.End);
+            var textRange = new TextRange(Rtb.Selection.Start, Rtb.Selection.End);
             textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
+
+            Rtb.Document.ConfigureLineHeight();
+
+            
         }
 
         private void ForegroundColorButton_Click(object sender, RoutedEventArgs e) {
@@ -211,7 +261,7 @@ namespace MpWpfApp {
                 colorContextMenu,
                 colorMenuItem,
                 (s1, e1) => {
-                    artb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, (Brush)((Border)s1).Tag);
+                    Rtb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, (Brush)((Border)s1).Tag);
                 }
             );
             ForegroundColorButton.ContextMenu = colorContextMenu;
@@ -228,8 +278,8 @@ namespace MpWpfApp {
                 colorContextMenu,
                 colorMenuItem,
                 (s1, e1) => {
-                    artb.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)((Border)s1).Tag);
-                    artb.GetVisualAncestor<MpRtbHighlightBehavior>()?.UpdateUniqueBackgrounds();
+                    Rtb.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)((Border)s1).Tag);
+                    Rtb.GetVisualAncestor<MpRtbHighlightBehavior>()?.UpdateUniqueBackgrounds();
                 }
             );
 
@@ -246,7 +296,7 @@ namespace MpWpfApp {
             if (dlg.ShowDialog() == true) {
                 //use either one of the below    
                 // dlg.PrintVisual(RichTextControl as Visual, "printing as visual");
-                dlg.PrintDocument((((IDocumentPaginatorSource)artb.Document).DocumentPaginator), "Printing Clipboard Item");
+                dlg.PrintDocument((((IDocumentPaginatorSource)Rtb.Document).DocumentPaginator), "Printing Clipboard Item");
             }
         }
 
@@ -288,10 +338,5 @@ namespace MpWpfApp {
 
         #endregion
 
-        private void ClipTileEditorToolbar_Unloaded(object sender, RoutedEventArgs e) {
-            if (artb != null) {
-                artb.SelectionChanged -= CurrentRtb_SelectionChanged;
-            }
-        }
     }
 }

@@ -52,7 +52,7 @@
                     <local:MpActionPropertyListBoxItemView BorderThickness="5"
                                                            BorderBrush="{Binding BorderBrushHexColor,
                                                                                  Converter={StaticResource StringHexToBrushConverter}}"
-                                                           Visibility="{Binding IsPropertyListItemVisible,
+                                                           Visibility="{Binding IsSelected,
                                                                                 Converter={StaticResource BoolToVisibilityConverter}}"
                                                            DataContext="{Binding}" />
                 </DataTemplate>

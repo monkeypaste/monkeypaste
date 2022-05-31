@@ -172,23 +172,26 @@ namespace MpWpfApp {
             }
 
 
-            if(isDropping || !isReadOnly) {
-                if (ds.Width > rtb.ActualWidth) {
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                } else {
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                }
+            //if(isDropping || !isReadOnly) {
+            //    if (ds.Width > rtb.ActualWidth) {
+            //        //rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+            //    } else {
+            //        rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //    }
 
-                if (ds.Height > rtb.ActualHeight) {
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                } else {
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                }
+            //    if (ds.Height > rtb.ActualHeight) {
+            //        rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+            //    } else {
+            //        rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //    }
 
-            } else {
-                rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            }
+            //} else {
+            //    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //}
+
+            ctvm.OnPropertyChanged(nameof(ctvm.IsVerticalScrollbarVisibile));
+            ctvm.OnPropertyChanged(nameof(ctvm.IsHorizontalScrollbarVisibile));
 
             rtb.Document.ConfigureLineHeight();
             rtb.UpdateLayout();
@@ -399,7 +402,7 @@ namespace MpWpfApp {
             var p = fd.Blocks.FirstBlock as Paragraph;
             p.ContentRange().LoadImage(base64Str, docSize);
 
-            fd.ConfigureLineHeight(LineStackingStrategy.MaxHeight);
+            fd.ConfigureLineHeight();
             p.ContentRange().ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Center);
 
             return fd;
@@ -1021,7 +1024,7 @@ namespace MpWpfApp {
                         var ps = fd.GetDocumentSize();
                         fd.PageWidth = ps.Width;
                         fd.PageHeight = ps.Height;
-                        fd.ConfigureLineHeight(LineStackingStrategy.BlockLineHeight);
+                        fd.ConfigureLineHeight();
 
                         return fd;
                     }
@@ -1272,23 +1275,37 @@ namespace MpWpfApp {
             return ds;
         }
 
-        public static void ConfigureLineHeight(this FlowDocument doc, LineStackingStrategy lss = LineStackingStrategy.BlockLineHeight) {
-            //return;
-            if (doc == null) {
-                throw new ArgumentNullException("doc");
-            }
+        public static void ConfigureLineHeight2(
+            this FlowDocument doc, 
+            LineStackingStrategy lss = LineStackingStrategy.MaxHeight,
+            double linePad = 2) {
             if(doc.DataContext is MpClipTileViewModel ctvm && ctvm.ItemType == MpCopyItemType.Image) {
                 doc.LineStackingStrategy = LineStackingStrategy.MaxHeight;
                 return;
             }
             doc.LineStackingStrategy = lss;
+
+            var ctp = doc.ContentStart;
             foreach (var b in doc.Blocks) {
                 b.LineStackingStrategy = lss;
                 if (b is Paragraph p) {
                     p.Margin = new Thickness(0);
-                    p.LineHeight = p.FontSize + 1;// (p.FontSize * 0.333);
+                    p.LineHeight = p.FontSize + linePad;// (p.FontSize * 0.333);
                     doc.LineHeight = p.LineHeight; 
                 }
+            }
+        }
+
+        public static void ConfigureLineHeight(
+           this FlowDocument doc) {
+            doc.LineStackingStrategy = LineStackingStrategy.MaxHeight;
+            doc.LineHeight = Double.NaN;
+            foreach (var b in doc.Blocks) {
+                b.LineStackingStrategy = LineStackingStrategy.MaxHeight;
+                b.LineHeight = Double.NaN;
+            }
+            if(doc.Parent is FrameworkElement fe) {
+                fe.UpdateLayout();
             }
         }
 

@@ -11,7 +11,7 @@ namespace MpWpfApp {
             if(value == null) {
                 return ScrollBarVisibility.Hidden;
             }
-            return (bool)value ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden;
+            return (bool)value ? ScrollBarVisibility.Visible : ScrollBarVisibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

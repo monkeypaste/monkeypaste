@@ -2,7 +2,6 @@
                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpClipTileViewModel"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,79 +10,363 @@
                      d:DesignHeight="50"
                      d:DesignWidth="800"
                      mc:Ignorable="d">
-    <Border x:Name="ClipTileEditorToolbar"
+    <Border x:Name="ClipTileEditorToolbarBorder"
+            Loaded="ClipTileEditorToolbar_Loaded"
             Unloaded="ClipTileEditorToolbar_Unloaded"
+            IsVisibleChanged="ClipTileEditorToolbarBorder_IsVisibleChanged"
             HorizontalAlignment="Stretch"
-            Height="{Binding Path=ClipTileEditToolbarHeight,
-                             Source={x:Static local:MpMeasurements.Instance}}"
+            local:MpSizeObserverExtension.IsEnabled="True"
+            local:MpSizeObserverExtension.ObservedHeight="{Binding TileEditToolbarHeight,
+                                                                   Mode=OneWayToSource}"
             Background="OldLace"
             BorderBrush="OldLace"
-            BorderThickness="0,0,0,1"
-            Loaded="ClipTileEditorToolbar_Loaded">
+            BorderThickness="0,0,0,1">
         <Border.Resources>
-            <RichTextBox x:Key="CurrentRtbTarget" />
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Constants/Icons/MpRtbToolbarIconsResourceDictionary.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
         </Border.Resources>
-        <WrapPanel>
-            <Button x:Name="PrintButton"
-                    Margin="10,1,0,1"
-                    Click="PrintButton_Click"
-                    CommandTarget="{StaticResource CurrentRtbTarget}"
-                    Template="{StaticResource FlatButtonControlTemplate}">
+        <ListBox x:Name="RtbEditorToolbarListBox"
+                 MinHeight="{Binding ClipTileEditToolbarDefaultHeight,
+                                     Source={x:Static local:MpMeasurements.Instance}}"
+                 Background="Transparent"
+                 BorderBrush="Transparent"
+                 VerticalAlignment="Stretch"
+                 VerticalContentAlignment="Top"
+                 HorizontalAlignment="Stretch"
+                 HorizontalContentAlignment="Left"
+                 SelectionMode="Single"
+                 ScrollViewer.IsDeferredScrollingEnabled="False"
+                 ScrollViewer.CanContentScroll="False"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.Resources>
+                <RichTextBox x:Key="CurrentRtbTarget" />
+            </ListBox.Resources>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="VerticalContentAlignment" Value="Top" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBoxItem>
+                <Button x:Name="PrintButton"
+                        Margin="10,1,0,1"
+                        Click="PrintButton_Click"
+                        Template="{StaticResource FlatButtonControlTemplate}">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditPrintIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </Button>
+            </ListBoxItem>
+            <ListBoxItem>
                 <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/Print.png"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
                        Stretch="None" />
-            </Button>
-            <Image SnapsToDevicePixels="True"
-                   Source="/Resources/Images/MpRichTextBox/separator.png"
-                   Stretch="None" />
-            <ComboBox x:Name="FontFamilyCombo"
-                      Width="100"
-                      Height="23"
-                      Margin="5,2,0,2"
-                      IsEditable="True"
-                      SelectionChanged="FontFamilyCombo_SelectionChanged">
-                <ComboBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Width="250" />
-                    </ItemsPanelTemplate>
-                </ComboBox.ItemsPanel>
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Height="20"
-                                   Width="240"
-                                   FontFamily="{Binding}"
-                                   FontSize="15"
-                                   Text="{Binding}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <ComboBox x:Name="FontSizeCombo"
-                      Width="40"
-                      Height="23"
-                      Margin="5,2,5,2"
-                      IsEditable="True"
-                      SelectionChanged="FontSizeCombo_SelectionChanged">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Height="20"
-                                   Width="30"
-                                   FontSize="15"
-                                   Text="{Binding}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Image SnapsToDevicePixels="True"
-                   Source="/Resources/Images/MpRichTextBox/separator.png"
-                   Stretch="None" />
-            <local:MpAddTemplateToolbarButton x:Name="AddTemplateButton"
-                                              DataContext="{Binding TemplateCollection}" />
-            <!--<Image Visibility="Collapsed"
+            </ListBoxItem>
+            <ListBoxItem>
+                <ComboBox x:Name="FontFamilyCombo"
+                          Width="100"
+                          Height="23"
+                          Margin="5,2,0,2"
+                          IsEditable="True"
+                          ItemsSource="{x:Static Fonts.SystemFontFamilies}"
+                          SelectionChanged="FontFamilyCombo_SelectionChanged">
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Width="250" />
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Height="20"
+                                       Width="240"
+                                       FontFamily="{Binding}"
+                                       FontSize="15"
+                                       Text="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </ListBoxItem>
+            <ListBoxItem>
+                <ComboBox x:Name="FontSizeCombo"
+                          Width="40"
+                          Height="23"
+                          Margin="5,2,5,2"
+                          IsEditable="True"
+                          SelectionChanged="FontSizeCombo_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Height="20"
+                                       Width="30"
+                                       FontSize="15"
+                                       Text="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Image SnapsToDevicePixels="True"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Stretch="None" />
+            </ListBoxItem>
+            <ListBoxItem>
+                <local:MpAddTemplateToolbarButton x:Name="AddTemplateButton"
+                                                  DataContext="{Binding TemplateCollection}" />
+            </ListBoxItem>
+            <ListBoxItem>
+                <Button x:Name="UndoButton"
+                        Command="ApplicationCommands.Undo"
+                        Template="{StaticResource FlatButtonControlTemplate}"
+                        ToolTip="Undo">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditUndoIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </Button>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Button x:Name="RedoButton"
+                        Command="ApplicationCommands.Redo"
+                        Template="{StaticResource FlatButtonControlTemplate}"
+                        ToolTip="Redo">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditRedoIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </Button>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Image SnapsToDevicePixels="True"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Stretch="None" />
+            </ListBoxItem>
+            <ListBoxItem>
+                <ToggleButton x:Name="BoldButton"
+                              Command="EditingCommands.ToggleBold"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"
+                              ToolTip="Bold">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditFontBoldIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <ToggleButton x:Name="ItalicButton"
+                              Command="EditingCommands.ToggleItalic"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"
+                              ToolTip="Italic">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditFontItalicIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <ToggleButton x:Name="UnderlineButton"
+                              Command="EditingCommands.ToggleUnderline"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"
+                              ToolTip="Underline">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditUnderlineIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Image SnapsToDevicePixels="True"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Stretch="None" />
+            </ListBoxItem>
+            <ListBoxItem>
+                <Button x:Name="ForegroundColorButton"
+                        Click="ForegroundColorButton_Click"
+                        Template="{StaticResource FlatButtonControlTemplate}">
+                    <Border x:Name="ForegroundColorButtonBorder">
+                        <Image Opacity="1"
+                               SnapsToDevicePixels="False"
+                               Source="{Binding .,
+                                                Source={StaticResource EditForegroundColorIcon},
+                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
+                               Stretch="None" />
+                    </Border>
+                </Button>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Button x:Name="BackgroundColorButton"
+                        Click="BackgroundColorButton_Click"
+                        Template="{StaticResource FlatButtonControlTemplate}">
+                    <Border x:Name="BackgroundColorButtonBorder">
+                        <Image SnapsToDevicePixels="True"
+                               Source="{Binding .,
+                                                Source={StaticResource EditBackgroundColorIcon},
+                                                Converter={StaticResource StringResourceToImageSourceConverter}}"
+                               Stretch="None" />
+                    </Border>
+                </Button>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Image SnapsToDevicePixels="True"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Stretch="None" />
+            </ListBoxItem>
+            <ListBoxItem>
+                <ToggleButton x:Name="LeftButton"
+                              Click="AlignmentToggleButton_Click"
+                              Command="EditingCommands.AlignLeft"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"
+                              ToolTip="Align Left">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditAlignLeftIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <ToggleButton x:Name="CenterButton"
+                              Click="AlignmentToggleButton_Click"
+                              Command="EditingCommands.AlignCenter"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"
+                              ToolTip="Align Center">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditAlignCenterIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <ToggleButton x:Name="RightButton"
+                              Click="AlignmentToggleButton_Click"
+                              Command="EditingCommands.AlignRight"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"
+                              ToolTip="Align Right">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditAlignRightIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Image SnapsToDevicePixels="True"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Stretch="None" />
+            </ListBoxItem>
+            <ListBoxItem>
+                <ToggleButton x:Name="BulletsButton"
+                              Click="ListToggleButton_Click"
+                              Command="EditingCommands.ToggleBullets"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"
+                              ToolTip="Bullets">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditListBuilletsIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <ToggleButton x:Name="NumberingButton"
+                              Click="ListToggleButton_Click"
+                              Command="EditingCommands.ToggleNumbering"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"
+                              ToolTip="Numbering">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditListNumbersIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Image SnapsToDevicePixels="True"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Stretch="None" />
+            </ListBoxItem>
+            <ListBoxItem>
+                <ToggleButton x:Name="SpellCheck"
+                              IsChecked="{local:MpSettingBinding Path=UseSpellCheck,
+                                                                 Mode=TwoWay}"
+                              Template="{StaticResource FlatToggleButtonControlTemplate}"
+                              ToolTip="Spell Check?">
+                    <Image Width="16"
+                           Height="16"
+                           SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditSpellCheckIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}" />
+                </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Image SnapsToDevicePixels="True"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Stretch="None" />
+            </ListBoxItem>
+            <ListBoxItem>
+                <Button x:Name="RefreshDocumentButton"
+                        Command="{Binding RefreshDocumentCommand}"
+                        Template="{StaticResource FlatButtonControlTemplate}"
+                        ToolTip="Refresh">
+                    <Image SnapsToDevicePixels="True"
+                           Source="{Binding .,
+                                            Source={StaticResource EditRefreshIcon},
+                                            Converter={StaticResource StringResourceToImageSourceConverter}}"
+                           Stretch="None" />
+                </Button>
+            </ListBoxItem>
+
+        </ListBox>
+
+        <!--
+
+
+        <Image Visibility="Collapsed"
                    SnapsToDevicePixels="True"
                    Source="/Resources/Images/MpRichTextBox/separator.png"
                    Stretch="None" />
             <Button x:Name="CutButton"
                     Command="ApplicationCommands.Cut"
-                    CommandTarget="{StaticResource CurrentRtbTarget}"
+
                     Template="{StaticResource FlatButtonControlTemplate}"
                     ToolTip="Cut">
                 <Image SnapsToDevicePixels="True"
@@ -92,7 +375,7 @@
             </Button>
             <Button x:Name="CopyButton"
                     Command="ApplicationCommands.Copy"
-                    CommandTarget="{StaticResource CurrentRtbTarget}"
+
                     Template="{StaticResource FlatButtonControlTemplate}"
                     ToolTip="Copy">
                 <Image SnapsToDevicePixels="True"
@@ -101,164 +384,16 @@
             </Button>
             <Button x:Name="PasteButton"
                     Command="ApplicationCommands.Paste"
-                    CommandTarget="{StaticResource CurrentRtbTarget}"
+
                     Template="{StaticResource FlatButtonControlTemplate}"
                     ToolTip="Paste">
                 <Image SnapsToDevicePixels="True"
                        Source="/Resources/Images/MpRichTextBox/editpaste.png"
                        Stretch="None" />
             </Button>-->
-            <Button x:Name="UndoButton"
-                    Command="ApplicationCommands.Undo"
-                    CommandTarget="{StaticResource CurrentRtbTarget}"
-                    Template="{StaticResource FlatButtonControlTemplate}"
-                    ToolTip="Undo">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/editundo.png"
-                       Stretch="None" />
-            </Button>
-            <Button x:Name="RedoButton"
-                    Command="ApplicationCommands.Redo"
-                    CommandTarget="{StaticResource CurrentRtbTarget}"
-                    Template="{StaticResource FlatButtonControlTemplate}"
-                    ToolTip="Redo">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/editredo.png"
-                       Stretch="None" />
-            </Button>
-            <Image SnapsToDevicePixels="True"
-                   Source="/Resources/Images/MpRichTextBox/separator.png"
-                   Stretch="None" />
-            <ToggleButton x:Name="BoldButton"
-                          Command="EditingCommands.ToggleBold"
-                          CommandTarget="{StaticResource CurrentRtbTarget}"
-                          Template="{StaticResource FlatToggleButtonControlTemplate}"
-                          ToolTip="Bold">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/fontbold.png"
-                       Stretch="None" />
-            </ToggleButton>
-            <ToggleButton x:Name="ItalicButton"
-                          Command="EditingCommands.ToggleItalic"
-                          CommandTarget="{StaticResource CurrentRtbTarget}"
-                          Template="{StaticResource FlatToggleButtonControlTemplate}"
-                          ToolTip="Italic">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/fontitalic.png"
-                       Stretch="None" />
-            </ToggleButton>
-            <ToggleButton x:Name="UnderlineButton"
-                          Command="EditingCommands.ToggleUnderline"
-                          CommandTarget="{StaticResource CurrentRtbTarget}"
-                          Template="{StaticResource FlatToggleButtonControlTemplate}"
-                          ToolTip="Underline">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/fontunderline.png"
-                       Stretch="None" />
-            </ToggleButton>
-            <Image SnapsToDevicePixels="True"
-                   Source="/Resources/Images/MpRichTextBox/separator.png"
-                   Stretch="None" />
-            <Button x:Name="ForegroundColorButton"
-                    Click="ForegroundColorButton_Click"
-                    Template="{StaticResource FlatButtonControlTemplate}">
-                <Border x:Name="ForegroundColorButtonBorder">
-                    <Image Opacity="1"
-                           SnapsToDevicePixels="False"
-                           Source="/Resources/Images/MpRichTextBox/Textcolor.png"
-                           Stretch="None" />
-                </Border>
-            </Button>
-            <Button x:Name="BackgroundColorButton"
-                    Click="BackgroundColorButton_Click"
-                    Template="{StaticResource FlatButtonControlTemplate}">
-                <Border x:Name="BackgroundColorButtonBorder">
-                    <Image SnapsToDevicePixels="True"
-                           Source="/Resources/Images/MpRichTextBox/Backcolor.png"
-                           Stretch="None" />
-                </Border>
-            </Button>
-            <Image SnapsToDevicePixels="True"
-                   Source="/Resources/Images/MpRichTextBox/separator.png"
-                   Stretch="None" />
-            <ToggleButton x:Name="LeftButton"
-                          Click="AlignmentToggleButton_Click"
-                          Command="EditingCommands.AlignLeft"
-                          CommandTarget="{StaticResource CurrentRtbTarget}"
-                          Template="{StaticResource FlatToggleButtonControlTemplate}"
-                          ToolTip="Align Left">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/alignleft.png"
-                       Stretch="None" />
-            </ToggleButton>
-            <ToggleButton x:Name="CenterButton"
-                          Click="AlignmentToggleButton_Click"
-                          Command="EditingCommands.AlignCenter"
-                          CommandTarget="{StaticResource CurrentRtbTarget}"
-                          Template="{StaticResource FlatToggleButtonControlTemplate}"
-                          ToolTip="Align Center">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/aligncenter.png"
-                       Stretch="None" />
-            </ToggleButton>
-            <ToggleButton x:Name="RightButton"
-                          Click="AlignmentToggleButton_Click"
-                          Command="EditingCommands.AlignRight"
-                          CommandTarget="{StaticResource CurrentRtbTarget}"
-                          Template="{StaticResource FlatToggleButtonControlTemplate}"
-                          ToolTip="Align Right">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/alignright.png"
-                       Stretch="None" />
-            </ToggleButton>
-            <Image SnapsToDevicePixels="True"
-                   Source="/Resources/Images/MpRichTextBox/separator.png"
-                   Stretch="None" />
-            <ToggleButton x:Name="BulletsButton"
-                          Click="ListToggleButton_Click"
-                          Command="EditingCommands.ToggleBullets"
-                          CommandTarget="{StaticResource CurrentRtbTarget}"
-                          Template="{StaticResource FlatToggleButtonControlTemplate}"
-                          ToolTip="Bullets">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/listbullets.png"
-                       Stretch="None" />
-            </ToggleButton>
-            <ToggleButton x:Name="NumberingButton"
-                          Click="ListToggleButton_Click"
-                          Command="EditingCommands.ToggleNumbering"
-                          CommandTarget="{StaticResource CurrentRtbTarget}"
-                          Template="{StaticResource FlatToggleButtonControlTemplate}"
-                          ToolTip="Numbering">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/listnumbers.png"
-                       Stretch="None" />
-            </ToggleButton>
-            <Image SnapsToDevicePixels="True"
-                   Source="/Resources/Images/MpRichTextBox/separator.png"
-                   Stretch="None" />
-            <ToggleButton x:Name="SpellCheck"
-                          IsChecked="{local:MpSettingBinding Path=UseSpellCheck,
-                                                             Mode=TwoWay}"
-                          Template="{StaticResource FlatToggleButtonControlTemplate}"
-                          ToolTip="Spell Check?">
-                <Image Width="16"
-                       Height="16"
-                       SnapsToDevicePixels="True"
-                       Source="/Resources/Images/spellcheck.png" />
-            </ToggleButton>
-            <Image SnapsToDevicePixels="True"
-                   Source="/Resources/Images/MpRichTextBox/separator.png"
-                   Stretch="None" />
-            <Button x:Name="RefreshDocumentButton"
-                    Command="{Binding RefreshDocumentCommand}"
-                    Template="{StaticResource FlatButtonControlTemplate}"
-                    ToolTip="Refresh">
-                <Image SnapsToDevicePixels="True"
-                       Source="/Resources/Images/MpRichTextBox/arrow_refresh.png"
-                       Stretch="None" />
-            </Button>
-            <!--<Button Command="EditingCommands.IncreaseIndentation"
+        <!--
+        -->
+        <!--<Button Command="EditingCommands.IncreaseIndentation"
                                                                 CommandTarget="{Binding ElementName=Rtb}"
                                                                 ToolTip="Increase Indentation"
                                                                 Template="{StaticResource FlatButtonControlTemplate}"
@@ -276,6 +411,7 @@
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </Button>-->
-        </WrapPanel>
+        <!--
+        </WrapPanel>-->
     </Border>
 </local:MpUserControl>

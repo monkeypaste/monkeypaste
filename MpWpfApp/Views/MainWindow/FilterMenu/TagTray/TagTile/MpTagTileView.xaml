@@ -25,6 +25,7 @@
                                 local:MpHoverableExtension.IsEnabled="True"
                                 local:MpHoverableExtension.IsHovering="{Binding IsHovering,
                                                                                 Mode=TwoWay}"
+                                local:MpHoverableExtension.HoverCursor="Hand"
                                 PreviewMouseLeftButtonDown="TagTileBorder_PreviewMouseLeftButtonDown"
                                 CornerRadius="10"
                                 Margin="5,3,0,0"

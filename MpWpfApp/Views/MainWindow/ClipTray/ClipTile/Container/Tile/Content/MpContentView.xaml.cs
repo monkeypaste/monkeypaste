@@ -260,6 +260,7 @@ namespace MpWpfApp {
             sv.ScrollToVerticalOffset(p.Y);
 
             sv.InvalidateScrollInfo();
+            
         }
 
         private void Rtb_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
@@ -269,12 +270,21 @@ namespace MpWpfApp {
                 return;
             }
             double origVertOffset = Rtb.VerticalOffset;
-            if (e.Delta > 0) {
-                Rtb.LineDown();
+            if (e.Delta < 0) {
+                //Rtb.LineDown();
+                origVertOffset += 20;
             } else {
-                Rtb.LineUp();
+                //Rtb.LineUp();
+                origVertOffset -= 20;
             }
-            e.Handled = Rtb.VerticalOffset != origVertOffset;
+            ScrollToPoint(new Point(0, origVertOffset));
+            e.Handled = true;
+        }
+
+
+        private void Rtb_ScrollChanged(object sender, ScrollChangedEventArgs e) {
+            Rtb.InvalidateVisual();
+            UpdateAdorners();
         }
 
         private void Rtb_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
@@ -338,10 +348,6 @@ namespace MpWpfApp {
             }
         }
         private void Rtb_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            //if (MpClipTrayViewModel.Instance.IsAnyTileExpanded) {
-            //    return;
-            //}
-
             if (!BindingContext.IsSelected) {
                 BindingContext.IsSelected = true;
             }
@@ -364,26 +370,6 @@ namespace MpWpfApp {
             MpCursor.UnsetCursor(BindingContext);
         }
 
-        private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            if (MpDragDropManager.IsDragAndDrop || Rtb.IsReadOnly) {
-                return;
-            }
-            //var thll = GetTemplateHyperlinksUnderSelection();
-            //if(thll == null) {
-            //    return;
-            //}
-            
-            //if(thll.Count == 1 &&
-            //   thll[0].ContentRange().Contains(Rtb.Selection.Start) &&
-            //   thll[0].ContentRange().Contains(Rtb.Selection.End)) {
-            //    //when selection is entirely within ONE template then select template otherwise
-            //    //treat as normal selection
-            //    var tvm = BindingContext.HeadItem.TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateId == (thll[0].Tag as MpTextTemplate).Id);
-            //    BindingContext.HeadItem.TemplateCollection.SelectedItem = tvm;
-            //} else {
-            //    BindingContext.HeadItem.TemplateCollection.SelectedItem = null;
-            //}
-        }
         private void Rtb_MouseMove(object sender, MouseEventArgs e) {
             if (BindingContext.IsHovering) {
                 // BUG when sub selection becomes empty the cursor goes back to default
@@ -923,5 +909,6 @@ namespace MpWpfApp {
                 }
             }
         }
+
     }
 }

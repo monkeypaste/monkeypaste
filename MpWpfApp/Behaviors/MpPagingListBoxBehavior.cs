@@ -72,6 +72,7 @@ namespace MpWpfApp {
             base.OnLoad();
             MpHelpers.RunOnMainThread(async () => {
                 AssociatedObject.PreviewMouseWheel += Sv_PreviewMouseWheel;
+                AssociatedObject.PreviewMouseLeftButtonDown += AssociatedObject_PreviewMouseLeftButtonDown;
 
                 var hScrollBar = AssociatedObject.GetScrollBar(Orientation.Horizontal);
                 while (hScrollBar == null) {
@@ -117,6 +118,14 @@ namespace MpWpfApp {
                 _timer.Start();
             });
             
+        }
+
+        private void AssociatedObject_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if(MpClipTrayViewModel.Instance.HasScrollVelocity) {
+                _velocity = 0;
+                MpClipTrayViewModel.Instance.HasScrollVelocity = false;
+                //e.Handled = true;
+            }
         }
 
 

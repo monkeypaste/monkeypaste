@@ -7,20 +7,39 @@ namespace MpWpfApp {
 
         #region ObservedWidth
 
-        public static readonly DependencyProperty ObservedWidthProperty = DependencyProperty.RegisterAttached(
-            "ObservedWidth",
-            typeof(double),
-            typeof(MpSizeObserverExtension));
 
-        public static double GetObservedWidth(FrameworkElement fe) {
-            //fe.AssertNotNull("fe");
-            return (double)fe.GetValue(ObservedWidthProperty);
+        public static double GetObservedWidth(DependencyObject dpo) {
+            return (double)dpo.GetValue(ObservedWidthProperty);
         }
 
-        public static void SetObservedWidth(FrameworkElement fe, double observedWidth) {
-            //fe.AssertNotNull("fe");
-            fe.SetValue(ObservedWidthProperty, observedWidth);
+        public static void SetObservedWidth(DependencyObject dpo, double observedWidth) {
+            dpo.SetValue(ObservedWidthProperty, observedWidth);
         }
+
+        public static readonly DependencyProperty ObservedWidthProperty =
+            DependencyProperty.RegisterAttached(
+                "ObservedWidth",
+                typeof(double),
+                typeof(MpSizeObserverExtension));
+
+        #endregion
+
+        #region ViewModel
+
+        public static object GetViewModel(DependencyObject dpo) {
+            return dpo.GetValue(ViewModelProperty);
+        }
+
+        public static void SetViewModel(DependencyObject dpo, object ViewModel) {
+            dpo.SetValue(ViewModelProperty, ViewModel);
+        }
+
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.RegisterAttached(
+                "ViewModel",
+                typeof(object),
+                typeof(MpSizeObserverExtension),
+                new FrameworkPropertyMetadata(default(object)));
 
         #endregion
 
@@ -99,6 +118,12 @@ namespace MpWpfApp {
         #endregion
 
         #endregion
+
+        public static void SetWidth(DependencyObject dpo, double width) {
+            if(dpo is FrameworkElement fe && GetIsEnabled(fe)) {
+                fe.Width = width;
+            }
+        }
 
 
     }

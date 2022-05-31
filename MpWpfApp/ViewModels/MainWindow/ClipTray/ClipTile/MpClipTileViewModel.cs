@@ -55,6 +55,9 @@ using MpProcessHelper;
         public static double DefaultBorderWidth = MpMeasurements.Instance.ClipTileMinSize - MpMeasurements.Instance.ClipTileMargin;
         public static double DefaultBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
 
+        public static ObservableCollection<string> EditorToolbarIcons => new ObservableCollection<string>() {
+
+        };
         #endregion
 
         #region Properties
@@ -120,7 +123,6 @@ using MpProcessHelper;
         #endregion
 
         #region MpIUserColorViewModel Implementation
-
         public string UserHexColor {
             get => CopyItemHexColor;
             set => CopyItemHexColor = value;
@@ -428,7 +430,36 @@ using MpProcessHelper;
             }
         }
 
-        public double TileContentWidth => TileBorderWidth - MpMeasurements.Instance.ClipTileContentMargin - (MpMeasurements.Instance.ClipTileMargin * 2);
+        public double TileTitleHeight => IsTitleVisible ? MpMeasurements.Instance.ClipTileTitleHeight : 0;
+        public double TileDetailHeight => MpMeasurements.Instance.ClipTileDetailHeight;
+
+        private double _tileEditToolbarHeight = MpMeasurements.Instance.ClipTileEditToolbarDefaultHeight;
+        public double TileEditToolbarHeight {
+            get {
+                if(IsContentReadOnly) {
+                    return 0;
+                }
+                return _tileEditToolbarHeight;
+            }
+            set {
+                if(_tileEditToolbarHeight != value) {
+                    _tileEditToolbarHeight = value;
+                    OnPropertyChanged(nameof(TileEditToolbarHeight));
+                }
+            }
+        }
+
+        public double TileContentWidth => 
+            TileBorderWidth - 
+            MpMeasurements.Instance.ClipTileContentMargin - 
+            (MpMeasurements.Instance.ClipTileMargin * 2);
+
+        public double TileContentHeight =>
+            TileBorderHeight -
+            TileTitleHeight -
+            MpMeasurements.Instance.ClipTileMargin -
+            MpMeasurements.Instance.ClipTileBorderThickness -
+            TileDetailHeight;
 
 
         private double _tileBorderHeight = DefaultBorderHeight;
@@ -449,7 +480,6 @@ using MpProcessHelper;
             }
         }        
 
-        public double TileContentHeight => TileBorderHeight - TileTitleHeight - MpMeasurements.Instance.ClipTileMargin - MpMeasurements.Instance.ClipTileBorderThickness - TileDetailHeight;
 
 
         public double TrayX {
@@ -464,9 +494,6 @@ using MpProcessHelper;
         public double PasteTemplateToolbarHeight => MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
                      
 
-        public double TileTitleHeight => IsTitleVisible ? MpMeasurements.Instance.ClipTileTitleHeight : 0;
-                
-        public double TileDetailHeight => MpMeasurements.Instance.ClipTileDetailHeight;
 
         public double LoadingSpinnerSize => MpMeasurements.Instance.ClipTileLoadingSpinnerSize;
 
@@ -480,7 +507,7 @@ using MpProcessHelper;
                 }
                 double ch = MpMeasurements.Instance.ClipTileContentDefaultHeight;
                 if (!IsContentReadOnly) {
-                    ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
+                    ch -= TileEditToolbarHeight;
                 }
                 if (IsPastingTemplate) {
                     ch -= MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
@@ -534,7 +561,7 @@ using MpProcessHelper;
                 } else {
 
                     if (!IsContentReadOnly) {
-                        return TileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight - 15;
+                        return TileContentHeight - TileEditToolbarHeight - 15;
                     }
                     return ReadOnlyContentSize.Height;
                 }
@@ -583,31 +610,23 @@ using MpProcessHelper;
 
         public Visibility SideVisibility { get; set; } = Visibility.Collapsed;
 
-        public ScrollBarVisibility HorizontalScrollbarVisibility {
+        public bool IsHorizontalScrollbarVisibile {
             get {
-                if (Parent == null) {
-                    return ScrollBarVisibility.Hidden;
+                if(IsContentReadOnly && !IsSubSelectionEnabled) {
+                    return false;
                 }
-                if (!IsContentReadOnly) {
-                     if (EditableContentSize.Width > ContentWidth) {
-                        return ScrollBarVisibility.Visible;
-                    }
-                }
-                return ScrollBarVisibility.Hidden;
+
+                return EditableContentSize.Width > ContentWidth;
             }
         }
 
-        public ScrollBarVisibility VerticalScrollbarVisibility {
+        public bool IsVerticalScrollbarVisibile {
             get {
-                if (Parent == null) {
-                    return ScrollBarVisibility.Hidden;
+                if (IsContentReadOnly && !IsSubSelectionEnabled) {
+                    return false;
                 }
-                if (!IsContentReadOnly || IsSubSelectionEnabled) {
-                    if (EditableContentSize.Height > ContainerSize.Height) {
-                        return ScrollBarVisibility.Visible;
-                    }
-                }
-                return ScrollBarVisibility.Hidden;
+
+                return EditableContentSize.Height > ContentHeight;
             }
         }
 
@@ -1866,12 +1885,16 @@ using MpProcessHelper;
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
 
-                    OnPropertyChanged(nameof(HorizontalScrollbarVisibility));
-                    OnPropertyChanged(nameof(VerticalScrollbarVisibility));
+                    OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
+                    OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
                     OnPropertyChanged(nameof(EditorHeight));
                     OnPropertyChanged(nameof(CanVerticallyScroll));
                     IsSubSelectionEnabled = !IsContentReadOnly;
                     OnPropertyChanged(nameof(IsSubSelectionEnabled));
+                    break;
+                case nameof(IsSubSelectionEnabled):
+                    OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
+                    OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
                     break;
                 case nameof(IsContentFocused):
                     if(IsContentFocused) {

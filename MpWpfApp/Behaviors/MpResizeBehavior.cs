@@ -294,11 +294,22 @@ namespace MpWpfApp {
         #region Public Methods
 
         public void ResetToDefault() {
-            Point curSize = new Point(BoundWidth,BoundHeight);
+            Point curSize = new Point(BoundWidth, BoundHeight);
             //Point defaultSize = new Point(
             //    DefaultWidth == default ? curSize.X : DefaultWidth, 
             //    DefaultHeight == default ? curSize.Y : DefaultHeight);
-            Point defaultSize = new Point(DefaultWidth,DefaultHeight);
+            Point defaultSize = new Point(DefaultWidth, DefaultHeight);
+            if (AssociatedObject.DataContext is MpClipTileViewModel) {
+                if (defaultSize.X != MpClipTileViewModel.DefaultBorderWidth ||
+                   defaultSize.Y != MpClipTileViewModel.DefaultBorderHeight) {
+                    Debugger.Break();
+
+                    defaultSize = new Point(MpClipTileViewModel.DefaultBorderWidth, MpClipTileViewModel.DefaultBorderHeight);
+                }
+            } else if (AssociatedObject.DataContext is MpMainWindowViewModel mwvm) { 
+                
+            }
+
             bool resetToContentSize = false;
             if(curSize.X == defaultSize.X) {
                 resetToContentSize = true;

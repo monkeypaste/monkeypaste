@@ -114,6 +114,8 @@ namespace MpWpfApp {
         #region Overrides
         protected override void OnRender(DrawingContext dc) {
             if (IsShowing) {
+                var rtb = AdornedElement as RichTextBox;
+
                 Visibility = Visibility.Visible;
 
                 if (IsDebugMode) {
@@ -137,13 +139,24 @@ namespace MpWpfApp {
                 if(IsShowingContentBounds) {
 
                 }
+
+                
             } else {
                 Visibility = Visibility.Hidden;
             }
         }
 
         private void DrawShape(DrawingContext dc, MpShape dropShape, Pen pen) {
+            var rtb = AdornedElement as RichTextBox;
+            if (rtb == null) {
+                return;
+            }
+            var rtb_rect = rtb.Bounds();
             if (dropShape is MpLine dl) {
+                if (!rtb_rect.Contains(dl.P1.ToWpfPoint()) || !rtb_rect.Contains(dl.P2.ToWpfPoint())) {
+                    return;
+                }
+
                 dc.DrawLine(
                     pen,
                     dl.P1.ToWpfPoint(),
@@ -173,23 +186,34 @@ namespace MpWpfApp {
             if(rtb == null) {
                 return;
             }
-            //int line = 0;
+            var rtb_rect = rtb.Bounds();
+            var sv = rtb.GetVisualDescendent<ScrollViewer>();
+            var scrollOffset = new Point(sv.HorizontalOffset, sv.VerticalOffset);
+
+            
             var lineStartPointer = rtb.Document.ContentStart.GetLineStartPosition(0);
-            while (lineStartPointer != null) {
+            while (lineStartPointer != null && lineStartPointer != rtb.Document.ContentEnd) {
                 var lineEndPointer = lineStartPointer.GetLineEndPosition(0);
                 Point p1 = lineStartPointer.GetCharacterRect(LogicalDirection.Forward).BottomLeft;
                 Point p2 = lineEndPointer.GetCharacterRect(LogicalDirection.Backward).BottomRight;
-
-                dc.DrawLine(
-                    pen,
-                    p1,
-                    p2);
-
+                
                 lineStartPointer = lineEndPointer.GetLineStartPosition(1);
+
+
+
+                //p1 = new Point(scrollOffset.X + p1.X,scrollOffset.Y + p1.Y);
+                //p2 = new Point(scrollOffset.X + p2.X, scrollOffset.Y + p2.Y);
+                DrawShape(dc, new MpLine(p1.ToMpPoint(), p2.ToMpPoint()), pen);
+
+
+                //dc.DrawLine(
+                //    pen,
+                //    p1,
+                //    p2);
+
 
                 //MpConsole.WriteLine("Line " + (line++) + " " + p1 + " " + p2);
             }
-            //MpConsole.WriteLine("");
         }
 
         private void DrawCaret(DrawingContext dc, Pen pen) {

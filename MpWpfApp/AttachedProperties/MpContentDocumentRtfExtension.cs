@@ -24,7 +24,6 @@ namespace MpWpfApp {
         private static readonly double _EDITOR_DEFAULT_WIDTH = 900;
 
         private static List<RichTextBox> _isChangeBlockRtbs = new List<RichTextBox>();
-        //private static double _readOnlyWidth;
 
         #endregion
 
@@ -58,7 +57,7 @@ namespace MpWpfApp {
             "ReadOnlyWidth",
             typeof(double),
             typeof(MpContentDocumentRtfExtension),
-            new FrameworkPropertyMetadata(default));
+            new FrameworkPropertyMetadata(MpClipTileViewModel.DefaultBorderWidth));
 
         #endregion
 
@@ -107,7 +106,7 @@ namespace MpWpfApp {
             
             if (ctcv != null) {
                 SetReadOnlyWidth(fe,ctcv.ActualWidth);
-                ctcv.GetVisualDescendent<MpRtbEditToolbarView>().SetActiveRtb(fe as RichTextBox);
+                
 
                 if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
                     ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);

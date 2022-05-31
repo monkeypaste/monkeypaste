@@ -12,6 +12,7 @@ namespace MonkeyPaste {
 
         public MpPoint[] P => new MpPoint[] { P1, P2 };
 
+        public override MpPoint[] Points => new MpPoint[] { P1, P2 };
         public MpLine() { }
 
         public MpLine(MpPoint p1, MpPoint p2) {

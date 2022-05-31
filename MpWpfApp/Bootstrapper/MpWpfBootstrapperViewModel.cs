@@ -25,7 +25,7 @@ namespace MpWpfApp {
                 new List<MpBootstrappedItemViewModel>() {
                     //new MpBootstrappedItem(typeof(MpDocumentHtmlExtension)),
                     new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
-                    new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
 
                     new MpBootstrappedItemViewModel(this,typeof(MpThemeColors)),
 
@@ -109,14 +109,14 @@ namespace MpWpfApp {
             //            .Select(x => x.LoadItem()).ToList());
 
             // Async
-            await Task.WhenAll(
-                _items.Select(
-                    x => x.LoadItem()));
+            //await Task.WhenAll(
+            //    _items.Select(
+            //        x => LoadItem(_items[_items.IndexOf(x)],_items.IndexOf(x))));
 
             // Sequential (58831 ms 05/30/2022)
-            //for (int i = 0; i < _items.Count; i++) {
-            //    await LoadItem(_items[i],i);
-            //}
+            for (int i = 0; i < _items.Count; i++) {
+                await LoadItem(_items[i], i);
+            }
 
             MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardManager.MonitorService;
 
@@ -152,7 +152,7 @@ namespace MpWpfApp {
             //    await ci.WriteToDatabaseAsync();
             //}
             //Debugger.Break();
-
+            
             sw.Stop();
             MpConsole.WriteLine($"Bootstrapper loaded in {sw.ElapsedMilliseconds} ms");
 

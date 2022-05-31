@@ -62,7 +62,6 @@ namespace MonkeyPaste {
         public abstract Task Init();
 
         protected async Task LoadItem(MpBootstrappedItemViewModel item, int index) {
-            await item.LoadItem();
 
             MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
 
@@ -86,7 +85,31 @@ namespace MonkeyPaste {
             for (int i = 0; i < dotCount; i++) {
                 Title += ".";
             }
+
+            await item.LoadItem();
         }
+
+        //protected void ReportItemLoading(MpBootstrappedItemViewModel item, int index) {
+        //    MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
+
+        //    var lnvm = MpNotificationCollectionViewModel.Instance.Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
+        //    if (lnvm == null) {
+        //        // NOTE this occurs when warnings exist and loader is finished
+        //        return;
+        //    }
+
+        //    PercentLoaded = (double)(index + 1) / (double)_items.Count;
+
+        //    OnPropertyChanged(nameof(Detail));
+
+        //    Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
+
+        //    int dotCount = index % 4;
+        //    Title = "LOADING";
+        //    for (int i = 0; i < dotCount; i++) {
+        //        Title += ".";
+        //    }
+        //}
     }
 }
 

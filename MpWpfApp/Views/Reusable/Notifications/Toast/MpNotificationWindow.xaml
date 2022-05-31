@@ -14,7 +14,8 @@
         AllowsTransparency="True"
         ResizeMode="NoResize"
         Background="Transparent"
-        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+        Visibility="{Binding IsVisible,
+                             Converter={StaticResource BoolToVisibilityConverter}}"
         Topmost="True"
         BorderThickness="1"
         mc:Ignorable="d"

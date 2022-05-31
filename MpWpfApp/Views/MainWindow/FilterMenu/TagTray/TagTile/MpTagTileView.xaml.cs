@@ -44,6 +44,8 @@ namespace MpWpfApp {
         private void TagTileBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (e.ClickCount == 2) {
                 BindingContext.RenameTagCommand.Execute(false);
+            } else if(BindingContext.IsSelected) {
+                MpDataModelProvider.QueryInfo.NotifyQueryChanged();
             }
         }
 

@@ -518,12 +518,7 @@ namespace MpWpfApp {
         #region Toolbars
 
         #region Edit Content
-        public double ClipTileEditToolbarHeight {
-            get {
-                //return 90; //quill toolbar height
-                return 40; //rtb toolbar height
-            }
-        }
+        public double ClipTileEditToolbarDefaultHeight => 40; //90 for quill 
 
         public double ClipTileEditToolbarIconSize {
             get {

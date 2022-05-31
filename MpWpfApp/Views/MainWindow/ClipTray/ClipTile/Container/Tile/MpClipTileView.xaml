@@ -169,7 +169,9 @@
                     <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                                 DockPanel.Dock="Top"
                                                 Visibility="{Binding IsContentReadOnly,
-                                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                                     Converter={StaticResource BoolToVisibilityFlipConverter},
+                                                                     TargetNullValue=Collapsed,
+                                                                     FallbackValue=Collapsed}"
                                                 DataContext="{Binding}" />
                     <StackPanel Orientation="Vertical"
                                 DockPanel.Dock="Bottom">

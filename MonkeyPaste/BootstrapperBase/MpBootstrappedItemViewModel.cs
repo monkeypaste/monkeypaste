@@ -43,40 +43,48 @@ namespace MonkeyPaste {
         }
 
         public async Task LoadItem() {
-            await Device.InvokeOnMainThreadAsync(async () => {
-                var sw = Stopwatch.StartNew();
-                object itemObj = null;
-                object[] args = ItemArg == null ? null : new[] { ItemArg };
-                MethodInfo initMethodInfo;
-                PropertyInfo propertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
+           // await Device.InvokeOnMainThreadAsync(async () => {
+                
+            var sw = Stopwatch.StartNew();
+            object itemObj = null;
+            object[] args = ItemArg == null ? null : new[] { ItemArg };
+            MethodInfo initMethodInfo;
+            PropertyInfo instancePropertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
 
-                if (propertyInfo == null) {
-                    initMethodInfo = ItemType.GetMethod("Init", BindingFlags.Static | BindingFlags.Public);
-                    if (initMethodInfo == null) {
-                        return;
-                    }
-                } else {
-                    itemObj = propertyInfo.GetValue(null, null);
+            if (instancePropertyInfo == null) {
+                initMethodInfo = ItemType.GetMethod("Init", BindingFlags.Static | BindingFlags.Public);
+                if (initMethodInfo == null) {
+                    return;
+                }
+            } else {
+                itemObj = instancePropertyInfo.GetValue(null, null);
 
-                    initMethodInfo = ItemType.GetMethod("Init");
-                    if (itemObj == null || initMethodInfo == null) {
-                        return;
+                initMethodInfo = ItemType.GetMethod("Init");
+                if (itemObj == null || initMethodInfo == null) {
+                    return;
+                }
+            }
+
+            if (initMethodInfo.ReturnType == typeof(Task)) {
+                MpViewModelBase vm = itemObj as MpViewModelBase;
+                var initTask = (Task)initMethodInfo.Invoke(itemObj, args);
+                await initTask;
+
+                if(vm != null) {
+                    while (vm.IsBusy) {
+                        await Task.Delay(100);
                     }
                 }
+                    
+            } else {
+                initMethodInfo.Invoke(itemObj, args);
+            }
 
-                if (initMethodInfo.ReturnType == typeof(Task)) {
-                    var initTask = (Task)initMethodInfo.Invoke(itemObj, args);
-                    await initTask;
-                } else {
-                    initMethodInfo.Invoke(itemObj, args);
-                }
-
-                sw.Stop();
-                MpConsole.WriteLine($"{ItemType} loaded in {sw.ElapsedMilliseconds} ms");
-
-                ReportLoaded();
-                //await Task.Delay(300);
-            });            
+            sw.Stop();
+            MpConsole.WriteLine($"{ItemType} loaded in {sw.ElapsedMilliseconds} ms");
+           // ReportLoaded();
+            //await Task.Delay(300);
+            //});            
         }
         private void ReportLoaded() {
             var lnvm = MpNotificationCollectionViewModel.Instance.Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);

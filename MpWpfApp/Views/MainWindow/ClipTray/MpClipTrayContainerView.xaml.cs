@@ -43,6 +43,7 @@ namespace MpWpfApp {
         }
 
         private void ClipTraySplitter_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
+            BindingContext.HasUserAlteredPinTrayWidth = true;
             BindingContext.PinTrayTotalWidth =  PinTrayView.PinTrayListBox.GetVisualDescendent<ScrollViewer>().ExtentWidth;
             BindingContext.OnPropertyChanged(nameof(BindingContext.ClipTrayScreenWidth));
         }

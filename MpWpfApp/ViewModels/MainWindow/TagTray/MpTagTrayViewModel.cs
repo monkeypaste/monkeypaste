@@ -157,6 +157,9 @@ namespace MpWpfApp {
 
                 AllTagViewModel.IsExpanded = true;
 
+                OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(PinnedItems));
+
                 //SelectTagCommand.Execute(DefaultTagId);
 
                 IsBusy = false;
