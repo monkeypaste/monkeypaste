@@ -33,7 +33,7 @@ using MonkeyPaste.Plugin;
 using Microsoft.Xaml.Behaviors;
 
 namespace MpWpfApp {
-    public static class MpExtensions {
+    public static class MpWpfExtensions {
         #region Input
 
         public static string ToString(this Key key) {

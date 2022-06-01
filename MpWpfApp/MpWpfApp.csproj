@@ -287,7 +287,7 @@
     </Compile>
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
-    <Compile Include="Utils\System\Input\MpWpfKeyboardInputHelpers.cs" />
+    <Compile Include="Utils\Extensions\MpWpfKeyboardInputHelpers.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\System\VirtualFileDataObject.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
@@ -385,7 +385,7 @@
     <Compile Include="Converters\MpBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpSolidColorBrushToBrushConverter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Utils\MpExtensions.cs" />
+    <Compile Include="Utils\MpWpfExtensions.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />

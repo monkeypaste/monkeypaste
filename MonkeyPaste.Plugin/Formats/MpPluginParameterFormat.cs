@@ -13,7 +13,8 @@ namespace MonkeyPaste.Plugin {
         Slider,
         FileChooser,
         DirectoryChooser,
-        PasswordBox
+        PasswordBox,
+        Radio
     }
 
     public enum MpPluginParameterValueUnitType {

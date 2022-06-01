@@ -10,7 +10,7 @@ namespace MonkeyPaste {
     public interface MpICommandLine {
 
     }
-    public class MpCommandLinePlugin : MpIAnalyzerPluginComponent {
+    public class MpCommandLinePlugin : MpIAnalyzerComponent {
         public string Endpoint { get; set; }
 
         public async Task<object> AnalyzeAsync(object args) {

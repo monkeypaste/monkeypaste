@@ -9,6 +9,20 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Plugin {
     public abstract class MpJsonObject {
+        public static T DeserializeObject<T>(object obj) where T: class{
+            if(obj is string objStr) {
+                return JsonConvert.DeserializeObject<T>(objStr);
+            }
+            return null;
+        }
+
+        public static string SerializeObject(object obj) {
+            if(obj == null) {
+                return string.Empty;
+            }
+            return JsonConvert.SerializeObject(obj);
+        }
+
         public string Serialize() {
             return JsonConvert.SerializeObject(this);
         }
@@ -30,6 +44,7 @@ namespace MonkeyPaste.Plugin {
         }
 
         public override string ToString() {
+            
             return Serialize();
         }
     }

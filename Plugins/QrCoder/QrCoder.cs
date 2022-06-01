@@ -9,7 +9,7 @@ using SkiaSharp;
 
 namespace QrCoder
 {
-    public class QrCoder : MpIAnalyzerPluginComponent {
+    public class QrCoder : MpIAnalyzerComponent {
         public async Task<object> AnalyzeAsync(object args) {
             await Task.Delay(1);
 

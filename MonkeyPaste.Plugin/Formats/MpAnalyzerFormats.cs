@@ -6,9 +6,10 @@ using System.Text;
 
 namespace MonkeyPaste.Plugin {
 
-
     public class MpAnalyzerPluginRequestFormat : MpJsonObject {
         public List<MpAnalyzerPluginRequestItemFormat> items { get; set; } = new List<MpAnalyzerPluginRequestItemFormat>();
+
+        public MpPortableDataObject data { get; set; }
     }
 
     public class MpAnalyzerPluginRequestItemFormat : MpJsonObject {

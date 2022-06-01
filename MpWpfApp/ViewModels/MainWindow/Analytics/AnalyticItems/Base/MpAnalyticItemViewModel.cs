@@ -372,7 +372,7 @@ namespace MpWpfApp {
 
         public MpAnalyzerPluginFormat AnalyzerPluginFormat => PluginFormat == null ? null : PluginFormat.analyzer;
 
-        public MpIAnalyzerPluginComponent AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.Component as MpIAnalyzerPluginComponent;
+        public MpIAnalyzerComponent AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.Component as MpIAnalyzerComponent;
         
         #endregion
 

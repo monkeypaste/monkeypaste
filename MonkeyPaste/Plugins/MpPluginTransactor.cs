@@ -20,7 +20,7 @@ namespace MonkeyPaste {
             object sourceHandler,
             bool suppressWrite = false) { 
 
-            if(pluginComponent is MpIAnalyzerPluginComponent analyzerPlugin) {
+            if(pluginComponent is MpIAnalyzerComponent analyzerPlugin) {
                 MpAnalyzerTransaction at = new MpAnalyzerTransaction() {
                     RequestTime = DateTime.Now,
                 };

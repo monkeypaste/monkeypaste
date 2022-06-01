@@ -10,7 +10,7 @@ using MonkeyPaste.Plugin;
 using Newtonsoft.Json;
 
 namespace CodeClassifier {
-    public class ClassifyPlugin : MpIAnalyzerPluginComponent {
+    public class ClassifyPlugin : MpIAnalyzerComponent {
         public async Task<object> AnalyzeAsync(object args) {
             await Task.Delay(1);
             MpPluginResponseFormat response = null;

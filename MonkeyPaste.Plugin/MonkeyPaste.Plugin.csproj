@@ -3,6 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Utils\Geometry\MpGeometryHelpers.cs" />
+    <Compile Remove="Utils\Geometry\Shapes\Base\MpPoint.cs" />
+    <Compile Remove="Utils\Geometry\Shapes\Base\MpShape.cs" />
+    <Compile Remove="Utils\Geometry\Shapes\Base\MpSize.cs" />
+    <Compile Remove="Utils\Geometry\Shapes\MpEllipse.cs" />
+    <Compile Remove="Utils\Geometry\Shapes\MpLine.cs" />
+    <Compile Remove="Utils\Geometry\Shapes\MpRect.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="27.2.1" />
@@ -11,7 +21,18 @@
   
   <ItemGroup>
     <Folder Include="Formats\Components\Presets\" />
+    <Folder Include="Interfaces\Components\Actions\Command\Base\" />
     <Folder Include="Utils\Clipboard\Interfaces\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="Utils\Geometry\MpGeometryHelpers.cs" />
+    <None Include="Utils\Geometry\Shapes\Base\MpPoint.cs" />
+    <None Include="Utils\Geometry\Shapes\Base\MpShape.cs" />
+    <None Include="Utils\Geometry\Shapes\Base\MpSize.cs" />
+    <None Include="Utils\Geometry\Shapes\MpEllipse.cs" />
+    <None Include="Utils\Geometry\Shapes\MpLine.cs" />
+    <None Include="Utils\Geometry\Shapes\MpRect.cs" />
   </ItemGroup>
 
 </Project>

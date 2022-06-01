@@ -15,7 +15,7 @@ using MonkeyPaste.Plugin;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpHttpPlugin : MpIAnalyzerPluginComponent {
+    public class MpHttpPlugin : MpIAnalyzerComponent {
         #region Private Variables
         private bool _showDebug = true;
 
