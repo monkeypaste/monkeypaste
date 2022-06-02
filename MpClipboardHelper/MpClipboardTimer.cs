@@ -15,7 +15,7 @@ using MonkeyPaste;
 using System.Linq;
 
 namespace MpClipboardHelper {
-    public class MpClipboardTimer : MpIClipboardMonitor {
+    public class MpClipboardTimer : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
         #region Private Varibles
 
         private bool _isStopped = false;
@@ -35,8 +35,6 @@ namespace MpClipboardHelper {
 
         public bool IgnoreNextClipboardChangeEvent { get; set; } = false;
 
-
-
         #endregion
 
         #region Events
@@ -52,6 +50,15 @@ namespace MpClipboardHelper {
         public void StartMonitor() => Start();
 
         public void StopMonitor() => Stop();
+
+        #endregion
+
+        #region MpIPlatfromatDataObjectRegistrar Implmentation
+
+        public int RegisterFormat(string format) {
+            return (int)WinApi.RegisterClipboardFormatA(format);
+
+        }
 
         #endregion
 
@@ -377,6 +384,7 @@ namespace MpClipboardHelper {
         ~MpClipboardTimer() {
             Dispose(false);
         }
+
 
 
         #endregion

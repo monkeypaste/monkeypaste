@@ -13,7 +13,7 @@ using MonkeyPaste.Plugin;
 
 namespace CoreTextAnnotater {
     public class CoreTextAnnotater : MpIAnnotationComponent {
-        public async Task<object> AnnotateAsync(object args) {
+        public object Annotate(object args) {
             var request = MpJsonObject.DeserializeObject<MpAnalyzerPluginRequestFormat>(args);
             if (request == null) {
                 return null;

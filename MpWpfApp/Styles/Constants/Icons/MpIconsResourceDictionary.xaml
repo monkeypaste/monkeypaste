@@ -221,6 +221,9 @@
     <s:String x:Key="ScalesIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/scales.png
     </s:String>
+    <s:String x:Key="HighlighterIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/highlighter.png
+    </s:String>
     <s:String x:Key="FolderEventIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/fileSystemEvent.png
     </s:String>
@@ -232,6 +235,9 @@
     </s:String>
     <s:String x:Key="WhiteCircleIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/whitecircle.png
+    </s:String>
+    <s:String x:Key="DownArrowIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/down_black.png
     </s:String>
     <s:String x:Key="ImageIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/image_icon.png

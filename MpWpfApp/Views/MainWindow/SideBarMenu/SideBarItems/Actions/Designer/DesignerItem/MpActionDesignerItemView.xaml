@@ -291,10 +291,7 @@
                                                     Mode=TwoWay,
                                                     UpdateSourceTrigger=PropertyChanged,
                                                     NotifyOnSourceUpdated=True,
-                                                    NotifyOnTargetUpdated=True}"
-                                  Command="{Binding ShowActionSelectorMenuCommand}"
-                                  CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                            AncestorType=ContentControl}}" />
+                                                    NotifyOnTargetUpdated=True}"/>
         </i:Interaction.Behaviors>
     </ContentControl>
 </local:MpUserControl>

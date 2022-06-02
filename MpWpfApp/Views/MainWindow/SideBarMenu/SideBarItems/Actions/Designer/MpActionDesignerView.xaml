@@ -110,13 +110,13 @@
                                                 HorizontalAlignment="Center">
                                         <ContentPresenter />
                                         <TextBlock HorizontalAlignment="Center"
-                                                   Visibility="{Binding IsLabelVisible,
+                                                   Visibility="{Binding IsSelected,
                                                                         Converter={StaticResource BoolToVisibilityConverter}}"
                                                    Padding="3"
                                                    FontSize="10"
                                                    Foreground="Wheat"
                                                    MaxWidth="{Binding Width}"
-                                                   TextWrapping="Wrap"
+                                                   TextWrapping="WrapWithOverflow"
                                                    Text="{Binding Label}">
                                             <TextBlock.Background>
                                                 <SolidColorBrush Color="Black"

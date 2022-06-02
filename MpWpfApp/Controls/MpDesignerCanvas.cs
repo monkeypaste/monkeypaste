@@ -103,20 +103,15 @@ namespace MpWpfApp {
             avmc.Insert(0, tavm);
             foreach (var avm in avmc) {
                 Point tail = new Point(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
-                Point head;
+                
 
                 var pavm = avm.ParentActionViewModel;
-                if (pavm == null || (avm is MpEmptyActionViewModel eavm && !eavm.IsDesignerVisible)) {
+                if (pavm == null) {
                     continue;
-                } else {
-                    head = new Point(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
                 }
 
-                if(avm is MpEmptyActionViewModel) {
-                    DrawEmptyLine(dc, head, tail, avm.Width / 2);
-                } else {
-                    DrawArrow(dc, head, tail, avm.Width / 2);
-                }
+                Point head = new Point(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
+                DrawArrow(dc, head, tail, avm.Width / 2);
             }
         }
 

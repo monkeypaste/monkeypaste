@@ -612,11 +612,10 @@ using MpProcessHelper;
 
         public bool IsHorizontalScrollbarVisibile {
             get {
-                if(IsContentReadOnly && !IsSubSelectionEnabled) {
-                    return false;
+                if(!IsContentReadOnly) {
+                    return EditableContentSize.Width > ContentWidth;
                 }
-
-                return EditableContentSize.Width > ContentWidth;
+                return false;
             }
         }
 

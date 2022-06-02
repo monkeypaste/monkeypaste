@@ -17,6 +17,7 @@ namespace MpClipboardHelper {
         public static IntPtr ThisAppHandle { get; set; }
 
         public static MpIClipboardMonitor MonitorService { get; private set; }
+        public static MpIPlatformDataObjectRegistrar RegistrarService { get; private set; }
 
         #endregion
 
@@ -32,7 +33,9 @@ namespace MpClipboardHelper {
             // NOTE services are abstracted into interfaces because of bug in UCRTBASE.DLL
             // and monitoring window messages (using MpClipboardWatcher) crashes application
             // intermittently when copying rtf from Visual Studio BUT maybe it can be fixed
-            MonitorService = new MpClipboardTimer();
+            var ct = new MpClipboardTimer();
+            MonitorService = ct;
+            RegistrarService = ct;
             Start();
         }
 

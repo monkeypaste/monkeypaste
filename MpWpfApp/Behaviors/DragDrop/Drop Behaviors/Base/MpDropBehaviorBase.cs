@@ -172,9 +172,6 @@ namespace MpWpfApp {
             if (e.Handled) {
                 return;
             }
-            if (e.Data.GetDataPresent(MpPortableDataObject.InternalContentFormat)) {
-
-            }
         }
 
         public void OnDragOver(object sender, DragEventArgs e) {

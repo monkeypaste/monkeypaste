@@ -19,6 +19,10 @@ namespace MonkeyPaste.Plugin {
         OemText,
         Custom //when format name doesn't resolve to any previous
     }
+
+    public interface MpIPlatformDataObjectRegistrar {
+        int RegisterFormat(string format);
+    }
     
     public interface MpIClipboardMonitor {
         event EventHandler<MpPortableDataObject> OnClipboardChanged;
@@ -50,8 +54,6 @@ namespace MonkeyPaste.Plugin {
 
     public class MpPortableDataObject {
         #region Properties
-
-        public static string InternalContentFormat = "MpInternalContentFormat";
 
         private static ObservableCollection<MpClipboardFormatType> _supportedFormats;
         public static ObservableCollection<MpClipboardFormatType> SupportedFormats {
@@ -122,28 +124,111 @@ namespace MonkeyPaste.Plugin {
         }
         #endregion
 
-    }
+        private Dictionary<MpPortableDataFormat, object> _dataLookup = new Dictionary<MpPortableDataFormat, object>();
 
-    public class MpPortableDataFormats {
+        public object GetData(string format) {
+            var pdf = MpPortableDataFormats.GetDataFormat(format);
+            if(pdf == null) {
+                return null;
+            }
+            _dataLookup.TryGetValue(pdf, out object data);
+            return data;
+        }
+
+        public void SetData(string format, object data) {
+            var pdf = MpPortableDataFormats.GetDataFormat(format);
+            if(pdf == null) {
+                throw new Exception($"Format {format} is not registered");
+            }
+            _dataLookup.AddOrReplace(pdf, data);
+        }
+
+        public MpPortableDataObject() {
+            _dataLookup = new Dictionary<MpPortableDataFormat, object>();
+        }
+        public MpPortableDataObject(string format, object data) : this() {
+            SetData(format, data);
+        }
+
+    }
+    public static class MpPortableDataFormats {
+        private static MpIPlatformDataObjectRegistrar _registrar;
+
+        private static string[] _defaultFormatNames = new string[] {
+            Text,
+            Rtf,
+            Bitmap,
+            Html,
+            FileDrop,
+            Csv,
+            Unicode,
+            OemText
+        };
+
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
 
         public static readonly string Text = "Text";
         public static readonly string Rtf = "Rich Text Format";
         public static readonly string Bitmap = "Bitmap";
+        public static readonly string Html = "HTML Format";
+        public static readonly string FileDrop = "FileDrop";
+        public static readonly string Csv = "CSV";
+        public static readonly string Unicode = "Unicode";
+        public static readonly string OemText = "OEMText";
 
-        public class MpPortableDataFormat {
-            private string _name;
-            public string Name => _name;
+        public static string[] Formats => _formatLookup.Select(x => x.Value.Name).ToArray();
 
-            private int _id;
-            public int Id => _id;
-            public MpPortableDataFormat(string name, int id) {
-                _name = name;
-                _id = id;
+        public static void Init(MpIPlatformDataObjectRegistrar registrar) {
+            _registrar = registrar;
+
+            _formatLookup = new Dictionary<int, MpPortableDataFormat>();
+
+            foreach(string formatName in _defaultFormatNames) {
+                RegisterDataFormat(formatName);
             }
+        }
+        public static MpPortableDataFormat GetDataFormat(int id) {
+            if (id < 0 || id >= _formatLookup.Count) {
+                return null;
+            }
+            return _formatLookup.ToList()[id].Value;
+        }
+
+        public static MpPortableDataFormat GetDataFormat(string format) {
+            int id = GetDataFormatId(format);
+            if (id < 0) {
+                return null;
+            }
+            _formatLookup.TryGetValue(id, out MpPortableDataFormat dataFormat);
+            return dataFormat;
+        }
+
+        public static MpPortableDataFormat RegisterDataFormat(string format) {
+            int id = GetDataFormatId(format);
+            if (id >= 0) {
+                return _formatLookup[id];
+            }
+
+            var pdf = new MpPortableDataFormat(format, _registrar.RegisterFormat(format));
+            _formatLookup.Add(pdf.Id, pdf);
+            return pdf;
+        }
+
+        private static int GetDataFormatId(string format) {
+            var format_kvp = _formatLookup.FirstOrDefault(x => x.Value.Name == format);
+            return format_kvp.Key;
         }
     }
 
 
+    public class MpPortableDataFormat {
+        public string Name { get; private set; }
 
+        public int Id { get; private set; }
+
+        public MpPortableDataFormat(string name, int id) {
+            Name = name;
+            Id = id;
+        }
+    }
 }

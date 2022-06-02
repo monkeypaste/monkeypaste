@@ -167,8 +167,6 @@ namespace CoreClipboardHandler {
                     return DataFormats.FileDrop;
                 case MpClipboardFormatType.Csv:
                     return DataFormats.CommaSeparatedValue;
-                case MpClipboardFormatType.InternalContent:
-                    return MpPortableDataObject.InternalContentFormat;
                 case MpClipboardFormatType.UnicodeText:
                     return DataFormats.UnicodeText;
                 case MpClipboardFormatType.OemText:

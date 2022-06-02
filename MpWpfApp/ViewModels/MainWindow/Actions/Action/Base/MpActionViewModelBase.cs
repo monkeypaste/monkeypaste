@@ -46,7 +46,7 @@ namespace MpWpfApp {
 
         public MpActionViewModelBase ParentActionViewModel { get; set; }
 
-        public MpEmptyActionViewModel AddChildEmptyActionViewModel => Items.FirstOrDefault(x => x is MpEmptyActionViewModel) as MpEmptyActionViewModel;
+        //public MpEmptyActionViewModel AddChildEmptyActionViewModel => Items.FirstOrDefault(x => x is MpEmptyActionViewModel) as MpEmptyActionViewModel;
         
         public MpTriggerActionViewModelBase RootTriggerActionViewModel {
             get {
@@ -140,6 +140,12 @@ namespace MpWpfApp {
                             break;
                         case MpActionType.Timer:
                             resourceKey = "AlarmClockIcon";
+                            break;
+                        case MpActionType.FileWriter:
+                            resourceKey = "FolderEventIcon";
+                            break;
+                        case MpActionType.Annotater:
+                            resourceKey = "HighlighterIcon";
                             break;
                     }
                     bool isVisible = true;
@@ -317,15 +323,6 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool IsLabelVisible {
-            get {
-                if(Parent == null || Parent.PrimaryAction == null) {
-                    return false;
-                }
-                return Parent.PrimaryAction.ActionId == ActionId && !IsEmptyAction;
-            }
-        }
-
         public bool IsPlaceholder => ActionType == MpActionType.None;
 
         public bool HasDescription => !string.IsNullOrEmpty(Description);
@@ -337,8 +334,6 @@ namespace MpWpfApp {
         public bool? IsEnabled { get; set; } = false;
 
         public bool IsEditingDetails { get; set; }
-
-        public bool IsEmptyAction => this is MpEmptyActionViewModel;
 
         public bool IsCompareAction => ActionType == MpActionType.Compare;
 
@@ -357,8 +352,6 @@ namespace MpWpfApp {
         public bool IsLabelFocused { get; set; } = false;
 
         public bool IsAnyChildSelected => this.FindAllChildren().Any(x => x.IsSelected);
-
-        public bool IsPropertyListItemVisible => !(Parent == null || this is MpEmptyActionViewModel);
 
         public Point DefaultEmptyActionLocation => new Point(X, Y - (Height * 2));
 
@@ -689,10 +682,10 @@ namespace MpWpfApp {
 
             Items.Clear();
 
-            if(!IsEmptyAction) {
-                var eavm = await CreateEmptyActionViewModel();
-                Items.Add(eavm);
-            }
+            //if(!IsEmptyAction) {
+            //    var eavm = await CreateEmptyActionViewModel();
+            //    Items.Add(eavm);
+            //}
 
             if(!IsPlaceholder) {
                 var cal = await MpDataModelProvider.GetChildActions(ActionId);
@@ -745,18 +738,18 @@ namespace MpWpfApp {
             return avm;
         }
 
-        public async Task<MpEmptyActionViewModel> CreateEmptyActionViewModel() {
-            MpEmptyActionViewModel eavm = new MpEmptyActionViewModel(Parent);
-            eavm.ParentActionViewModel = this;
+        //public async Task<MpEmptyActionViewModel> CreateEmptyActionViewModel() {
+        //    MpEmptyActionViewModel eavm = new MpEmptyActionViewModel(Parent);
+        //    eavm.ParentActionViewModel = this;
 
-            var emptyAction = await MpAction.Create(
-                location: DefaultEmptyActionLocation.ToMpPoint(),
-                suppressWrite: true);
+        //    var emptyAction = await MpAction.Create(
+        //        location: DefaultEmptyActionLocation.ToMpPoint(),
+        //        suppressWrite: true);
 
-            await eavm.InitializeAsync(emptyAction);
+        //    await eavm.InitializeAsync(emptyAction);
 
-            return eavm;
-        }
+        //    return eavm;
+        //}
 
         public void OnActionTriggered(object sender, object args) {
             if(!IsEnabled.HasValue) {
@@ -847,14 +840,6 @@ namespace MpWpfApp {
             } else {
                 ValidationText = string.Empty;
             }
-
-            if(ActionType == MpActionType.None && !IsEmptyAction) {
-                ValidationText = $"Action '{RootTriggerActionViewModel.Label}/{Label}' must have a type to be enabled";
-                await ShowValidationNotification();
-            } else {
-                ValidationText = string.Empty;
-            }
-
             return IsValid;
         }
 
@@ -913,7 +898,7 @@ namespace MpWpfApp {
 
         private async Task UpdateSortOrder() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
-            await Task.WhenAll(Items.Where(x=>x.GetType() != typeof(MpEmptyActionViewModel)).Select(x => x.Action.WriteToDatabaseAsync()));
+            await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
         }
 
         public string GetUniqueActionName(string prefix) {
@@ -937,33 +922,25 @@ namespace MpWpfApp {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        LastSelectedDateTime = DateTime.Now;
-                        if(Children.Any(x=>x is MpEmptyActionViewModel)) {
-                            Children.Where(x => x is MpEmptyActionViewModel).ForEach(x => (x as MpEmptyActionViewModel).OnPropertyChanged("IsVisible"));
-                        }
+                        LastSelectedDateTime = DateTime.Now;                        
 
-                        if(!IsEmptyAction) {
-                            Parent.AllSelectedTriggerActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
-                        }
-                        
+                        Parent.AllSelectedTriggerActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
+                        IsExpanded = true;
+                    } else {
+                        IsExpanded = false;
                     }
+
                     if(this is MpTriggerActionViewModelBase && Parent.SelectedItem != this) {
                         Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryAction));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedActions));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
-                    OnPropertyChanged(nameof(IsPropertyListItemVisible));
-                    this.FindAllChildren().ForEach(x => x.OnPropertyChanged(nameof(IsPropertyListItemVisible)));
                     OnPropertyChanged(nameof(BorderBrushHexColor));
                     break;
                 case nameof(HasModelChanged):
-                    if (this is MpEmptyActionViewModel) {
-                        return;
-                    }
                     if (HasModelChanged && IsValid) {
                         HasModelChanged = false;
-
 
                         Task.Run(async () => {
                             await Action.WriteToDatabaseAsync();
@@ -985,10 +962,10 @@ namespace MpWpfApp {
                     //    }
                     //}
 
-                    if (AddChildEmptyActionViewModel == null) {
-                        break;
-                    }
-                    AddChildEmptyActionViewModel.Location = DefaultEmptyActionLocation;
+                    //if (AddChildEmptyActionViewModel == null) {
+                    //    break;
+                    //}
+                    //AddChildEmptyActionViewModel.Location = DefaultEmptyActionLocation;
 
                     _lastLocation = Location;
                     break;
@@ -1055,7 +1032,7 @@ namespace MpWpfApp {
                  fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
                  fe.ContextMenu.IsOpen = true;
                  fe.ContextMenu.Closed += ContextMenu_Closed;
-             },(args)=>ActionType == MpActionType.None);
+             });
 
         private void ContextMenu_Closed(object sender, RoutedEventArgs e) {
             return;
@@ -1077,7 +1054,7 @@ namespace MpWpfApp {
                  
                  Items.Add(navm);
 
-                 AddChildEmptyActionViewModel.IsSelected = false;
+                 //AddChildEmptyActionViewModel.IsSelected = false;
                  navm.IsSelected = true;
 
                  //Parent.ClearAllOverlaps();
@@ -1090,8 +1067,8 @@ namespace MpWpfApp {
 
                  navm.OnPropertyChanged(nameof(navm.X));
                  navm.OnPropertyChanged(nameof(navm.Y));
-                 navm.AddChildEmptyActionViewModel.OnPropertyChanged(nameof(navm.AddChildEmptyActionViewModel.X));
-                 navm.AddChildEmptyActionViewModel.OnPropertyChanged(nameof(navm.AddChildEmptyActionViewModel.Y));
+                 //navm.AddChildEmptyActionViewModel.OnPropertyChanged(nameof(navm.AddChildEmptyActionViewModel.X));
+                 //navm.AddChildEmptyActionViewModel.OnPropertyChanged(nameof(navm.AddChildEmptyActionViewModel.Y));
 
                  IsBusy = false;
              }, (args) => ActionType != MpActionType.None);
@@ -1103,7 +1080,7 @@ namespace MpWpfApp {
                 var avm = args as MpActionViewModelBase;
                 await avm.Disable();
 
-                var grandChildren = Parent.AllSelectedTriggerActions.Where(x => x.ParentActionId == avm.ActionId && !x.IsEmptyAction);
+                var grandChildren = Parent.AllSelectedTriggerActions.Where(x => x.ParentActionId == avm.ActionId);
                 grandChildren.ForEach(x => x.ParentActionId = ActionId);
                 grandChildren.ForEach(x => x.ParentActionViewModel = this);
                 await Task.WhenAll(grandChildren.Select(x => x.Action.WriteToDatabaseAsync()));

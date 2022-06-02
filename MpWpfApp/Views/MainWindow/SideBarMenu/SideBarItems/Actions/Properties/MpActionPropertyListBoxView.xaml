@@ -49,11 +49,12 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpActionPropertyListBoxItemView BorderThickness="5"
-                                                           BorderBrush="{Binding BorderBrushHexColor,
-                                                                                 Converter={StaticResource StringHexToBrushConverter}}"
+                    <local:MpActionPropertyListBoxItemView Grid.Row="0"
+                                                           BorderThickness="5"
                                                            Visibility="{Binding IsSelected,
                                                                                 Converter={StaticResource BoolToVisibilityConverter}}"
+                                                           BorderBrush="{Binding BorderBrushHexColor,
+                                                                                 Converter={StaticResource StringHexToBrushConverter}}"
                                                            DataContext="{Binding}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>

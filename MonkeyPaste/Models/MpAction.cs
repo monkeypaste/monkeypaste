@@ -42,7 +42,8 @@ namespace MonkeyPaste {
         Trigger,    //TriggerTypeEnumId 
         Macro,
         Timer,
-        FileWriter
+        FileWriter,
+        Annotater
     }
 
     public class MpAction : MpDbModelBase {

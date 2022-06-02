@@ -119,6 +119,7 @@ namespace MpWpfApp {
             }
 
             MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardManager.MonitorService;
+            MpPlatformWrapper.Services.DataObjectRegistrar = MpClipboardManager.RegistrarService;
 
             await Task.Delay(500);
             MpNotificationCollectionViewModel.Instance.FinishLoading();

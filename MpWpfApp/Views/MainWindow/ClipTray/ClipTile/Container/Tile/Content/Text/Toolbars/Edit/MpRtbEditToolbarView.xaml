@@ -212,7 +212,7 @@
                 <Button x:Name="ForegroundColorButton"
                         Click="ForegroundColorButton_Click"
                         Template="{StaticResource FlatButtonControlTemplate}">
-                    <Border x:Name="ForegroundColorButtonBorder">
+                    <Border x:Name="ForegroundColorButtonBorder" CornerRadius="5" Padding="2">
                         <Image Opacity="1"
                                SnapsToDevicePixels="False"
                                Source="{Binding .,

@@ -444,12 +444,6 @@ namespace MpWpfApp {
                     break;
                 case nameof(PrimaryAction):
                     OnPropertyChanged(nameof(IsAnySelected));
-                    AllSelectedTriggerActions
-                        .Where(x => x is MpEmptyActionViewModel)
-                        .Cast<MpEmptyActionViewModel>()
-                        .ForEach(x => x.OnPropertyChanged(nameof(x.IsDesignerVisible)));
-                    AllSelectedTriggerActions
-                        .ForEach(x => x.OnPropertyChanged(nameof(x.IsLabelVisible)));
                     break;
                 case nameof(HasModelChanged):
                     if(SelectedItem == null) {

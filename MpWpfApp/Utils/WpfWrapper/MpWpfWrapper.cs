@@ -29,8 +29,11 @@ namespace MpWpfApp {
         public MpIClipboardMonitor ClipboardMonitor { get; set; }
 
         public MpIExternalPasteHandler ExternalPasteHandler { get; }
+
+        public MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
         public MpWpfWrapper() {
             // NOTE ClipboardMonitor is set after bootstrapping
+            // NOTE DataObjectRegistrar is set after bootstrapping
 
             Cursor = new MpWpfCursor();
             DbInfo = new MpWpfDbInfo();
@@ -46,6 +49,7 @@ namespace MpWpfApp {
             NativeMessageBox = new MpWpfMessageBox();
             DataObjectHelper = MpWpfDataObjectHelper.Instance;
             ExternalPasteHandler = MpWpfDataObjectHelper.Instance;
+
         }
 
     }

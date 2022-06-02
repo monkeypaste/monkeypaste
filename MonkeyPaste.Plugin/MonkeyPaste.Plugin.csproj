@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\Clipboard\Interfaces\**" />
+    <EmbeddedResource Remove="Utils\Clipboard\Interfaces\**" />
+    <None Remove="Utils\Clipboard\Interfaces\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Utils\Geometry\MpGeometryHelpers.cs" />
     <Compile Remove="Utils\Geometry\Shapes\Base\MpPoint.cs" />
     <Compile Remove="Utils\Geometry\Shapes\Base\MpShape.cs" />
@@ -22,7 +28,6 @@
   <ItemGroup>
     <Folder Include="Formats\Components\Presets\" />
     <Folder Include="Interfaces\Components\Actions\Command\Base\" />
-    <Folder Include="Utils\Clipboard\Interfaces\" />
   </ItemGroup>
   
   <ItemGroup>

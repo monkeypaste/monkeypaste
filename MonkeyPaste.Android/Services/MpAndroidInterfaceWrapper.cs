@@ -31,6 +31,7 @@ namespace MonkeyPaste.Droid {
         public MpINativeMessageBox NativeMessageBox { get; }
         public MpIClipboardMonitor ClipboardMonitor { get; set; }
 
+        public MpIExternalPasteHandler ExternalPasteHandler { get; }
         public MpAndroidInterfaceWrapper() {
             KeyboardInteractionService = new MpKeyboardInteractionService();
             GlobalTouch = new MpGlobalTouch();

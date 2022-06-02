@@ -14,17 +14,39 @@ using System.Windows.Input;
 using MonkeyPaste.Plugin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Windows.Documents;
+using Xamarin.Essentials;
 
 namespace MpWpfApp {
+    public class MpComparisionMatch {
+        public string Text { get; private set; } = string.Empty;
+        public int Offset { get; private set; } = -1;
+
+        public int Length { get; private set; } = 0;
+
+        public MpComparisionMatch(int offset, int length) {
+            Offset = offset;
+            Length = length;
+        }
+
+        public MpComparisionMatch(string text, int offset, int length) : this(offset,length) {
+            Text = text;
+        }
+
+        public override string ToString() {
+            return $"OFFSET: {Offset} LENGTH: {Length} TEXT: {Text}";
+        }
+    }
     public class MpCompareOutput : MpActionOutput {
-        public override object OutputData => MatchValue;
-        public string MatchValue { get; set; }
+        public override object OutputData => Matches;
+        public List<MpComparisionMatch> Matches { get; set; }
+
         public override string ActionDescription {
             get {
-                if(string.IsNullOrEmpty(MatchValue)) {
+                if(Matches == null || Matches.Count == 0) {
                     return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was NOT a match";
                 }
-                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was matched w/ Match Value: {MatchValue}";
+                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was matched w/ Match Value: {string.Join(Environment.NewLine,Matches)}";
             }
         }
     }
@@ -52,7 +74,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic
-
 
         public string PhysicalPropertyPath {
             get {
@@ -283,12 +304,12 @@ namespace MpWpfApp {
                 compareStr = matchVal.ToString();
             }
 
-            string matchStr = PerformMatch(compareStr);
-            if (matchStr != null) {
+            var matches = GetMatches(compareStr);
+            if (matches != null && matches.Count > 0) {
                 await base.PerformAction(new MpCompareOutput() {
                     Previous = ao,
                     CopyItem = ao.CopyItem,
-                    MatchValue = matchStr
+                    Matches = matches
                 });
             }
         }
@@ -297,50 +318,51 @@ namespace MpWpfApp {
 
         #region Protected Overrides
 
-        protected virtual string PerformMatch(string compareStr) {
-            bool isCaseSensitive = IsCaseSensitive;
-            string compareData = CompareData;
-            if(compareData == null) {
-                compareData = string.Empty;
+        protected virtual List<MpComparisionMatch> GetMatches(string compareStr) {
+            object compareObj;
+            if(compareStr.IsStringRichText()) {
+                compareObj = compareStr.ToFlowDocument();
+            } else {
+                compareObj = compareStr;
             }
-            compareData = isCaseSensitive ? compareData : compareData.ToLower();
 
-            string unmodifiedCompareStr = compareStr;
-            compareStr = compareStr == null ? string.Empty : compareStr;
-            compareStr = isCaseSensitive ? compareStr : compareStr.ToLower();
-
+            var matches = new List<MpComparisionMatch>();
+            int idx = 0;
             switch (ComparisonOperatorType) {
                 case MpComparisonOperatorType.Contains:
-                    if (compareStr.Contains(compareData)) {
-                        return unmodifiedCompareStr;
-                    }
-                    break;
                 case MpComparisonOperatorType.Exact:
-                    if (compareStr.Equals(compareData)) {
-                        return unmodifiedCompareStr;
-                    }
-                    break;
                 case MpComparisonOperatorType.BeginsWith:
-                    if (compareStr.StartsWith(compareData)) {
-                        return unmodifiedCompareStr;
-                    }
-                    break;
                 case MpComparisonOperatorType.EndsWith:
-                    if (compareStr.EndsWith(compareData)) {
-                        return unmodifiedCompareStr;
+                    while (true) {
+                        var subMatch = GetNextMatch(compareObj,CompareData, idx);
+                        if (subMatch == null) {
+                            break;
+                        }
+                        matches.Add(subMatch);
+                        idx = subMatch.Offset + subMatch.Length + 1;
                     }
                     break;
                 case MpComparisonOperatorType.Regex:
-                    var regEx = new Regex(compareData, 
-                                            RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
-                    var m = regEx.Match(compareStr);
-                    if(m.Success) {
-                        return m.Value;
+                    Regex regex = new Regex(CompareData, RegexOptions.Compiled | RegexOptions.Multiline);
+                    MatchCollection mc = regex.Matches(compareStr);
+                    
+
+                    foreach (Match m in mc) {
+                        foreach (Group mg in m.Groups) {
+                            foreach (Capture c in mg.Captures) {
+                                var match = GetNextMatch(compareObj,c.Value, idx);
+                                if(match == null) {
+                                    Debugger.Break();
+                                }
+                                matches.Add(match);
+                                idx = match.Offset + match.Length + 1;
+                            }
+                        }
                     }
                     break;
             }
 
-            return null;
+            return matches;
         }
 
 
@@ -362,7 +384,67 @@ namespace MpWpfApp {
                     break;
             }
         }
-        
+
+        protected virtual MpComparisionMatch GetNextMatch(object compareObj,string matchStr, int idx = 0) {
+            bool isCaseSensitive = IsCaseSensitive;
+            string compareData = matchStr;
+            if (compareData == null) {
+                compareData = string.Empty;
+            }
+            compareData = isCaseSensitive ? compareData : compareData.ToLower();
+
+            if (compareObj is string compareStr) {
+                if(idx >= compareStr.Length) {
+                    return null;
+                }
+
+                compareStr = compareStr.Substring(idx);
+
+                string unmodifiedCompareStr = compareStr;
+                compareStr = compareStr == null ? string.Empty : compareStr;
+                compareStr = isCaseSensitive ? compareStr : compareStr.ToLower();
+
+                switch (ComparisonOperatorType) {
+                    case MpComparisonOperatorType.Regex:
+                    case MpComparisonOperatorType.Contains:
+                        if (compareStr.Contains(compareData)) {
+                            return new MpComparisionMatch(compareData, compareStr.IndexOf(compareData) + idx, compareData.Length);
+                        }
+                        break;
+                    case MpComparisonOperatorType.Exact:
+                        if (compareStr.Equals(compareData)) {
+                            return new MpComparisionMatch(compareData, 0, compareData.Length);
+                        }
+                        break;
+                    case MpComparisonOperatorType.BeginsWith:
+                        if (compareStr.StartsWith(compareData)) {
+                            return new MpComparisionMatch(compareData, 0, compareData.Length);
+                        }
+                        break;
+                    case MpComparisonOperatorType.EndsWith:
+                        if (compareStr.EndsWith(compareData)) {
+                            return new MpComparisionMatch(compareData, compareStr.Length - compareData.Length, compareData.Length);
+                        }
+                        break;
+                } 
+            } else if (compareObj is FlowDocument fd) {
+                MpWpfRichDocumentExtensions.FindFlags flags = IsCaseSensitive ? MpWpfRichDocumentExtensions.FindFlags.MatchCase : MpWpfRichDocumentExtensions.FindFlags.None;
+
+                var tp = fd.ContentStart.GetPositionAtOffset(idx);
+
+                var tr = tp.FindText(fd.ContentEnd, compareData, flags);
+
+                if(tr != null) {
+                    int offset = fd.ContentStart.GetOffsetToPosition(tr.Start);
+                    int length = fd.ContentStart.GetOffsetToPosition(tr.End) - offset;
+                    return new MpComparisionMatch(compareData, offset, length);
+                }
+
+            }
+
+            return null;
+        }
+
         #endregion
 
         #region Commands

@@ -26,6 +26,8 @@ namespace MonkeyPaste {
         MpIClipboardMonitor ClipboardMonitor { get; set; }
 
         MpIExternalPasteHandler ExternalPasteHandler { get; }
+
+        MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
     }
 
 

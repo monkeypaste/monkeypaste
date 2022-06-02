@@ -323,7 +323,6 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpClassifyActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpCompareActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\Base\MpTriggerActionViewModelBase.cs" />
-    <Compile Include="ViewModels\MainWindow\Actions\Action\MpEmptyActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentAddTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentTaggedTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpFileSystemTriggerViewModel.cs" />
@@ -1551,6 +1550,9 @@
     </Resource>
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample5.html" />
     <Resource Include="Resources\Images\google_signin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\highlighter.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />

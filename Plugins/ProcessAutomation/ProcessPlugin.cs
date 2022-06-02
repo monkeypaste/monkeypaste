@@ -10,7 +10,7 @@ using MpClipboardHelper;
 using System.Diagnostics;
 
 namespace ProcessAutomation {
-    public class ProcessPlugin : MpIAnalyzerPluginComponent {
+    public class ProcessPlugin : MpIAnalyzerComponent {
         private const int _WAIT_FOR_INPUT_IDLE_MS = 30000;
 
         private static Dictionary<string, IntPtr> _lastRanNonExeProcessLookup = new Dictionary<string, IntPtr>();
@@ -82,12 +82,13 @@ namespace ProcessAutomation {
 
                 if(!pi.UseShellExecute) {
                     string pasteStr = string.Join(" ", processArgs);
-                    var mpdo = MpPortableDataObject.Create(
-                        data: pasteStr,
-                        textFormat: ".txt",
-                        formats: new List<MpClipboardFormatType>() { MpClipboardFormatType.Text });
+                    var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, pasteStr);
+                    //var mpdo = MpPortableDataObject.Create(
+                    //    data: pasteStr,
+                    //    textFormat: ".txt",
+                    //    formats: new List<MpClipboardFormatType>() { MpClipboardFormatType.Text });
 
-                    await MpClipboardManager.PasteService.PasteDataObject(mpdo, pi.Handle, true);
+                    //await MpClipboardManager.PasteService.PasteDataObject(mpdo, pi.Handle, true);
 
                 }
             } else {
@@ -119,12 +120,12 @@ namespace ProcessAutomation {
                 // lil' wait for window switch...
                 await Task.Delay(100);
 
-                var mpdo = MpPortableDataObject.Create(
-                    data: pasteStr,
-                    textFormat: ".txt",
-                    formats: new List<MpClipboardFormatType>() { MpClipboardFormatType.Text });
+                //var mpdo = MpPortableDataObject.Create(
+                //    data: pasteStr,
+                //    textFormat: ".txt",
+                //    formats: new List<MpClipboardFormatType>() { MpClipboardFormatType.Text });
 
-                await MpClipboardManager.PasteService.PasteDataObject(mpdo, pi.Handle, true);
+                //await MpClipboardManager.PasteService.PasteDataObject(mpdo, pi.Handle, true);
 
                 if(p != null) {
                     p.WaitForInputIdle(_WAIT_FOR_INPUT_IDLE_MS);

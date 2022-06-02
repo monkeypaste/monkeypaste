@@ -708,7 +708,7 @@ namespace MpWpfApp {
                 MpAnalyticItemPresetViewModel targetAnalyzer = null;
 
                 if (args != null && args is object[] argParts) {
-                    // when analyzer is triggered from action not user selection
+                    // when analyzer is triggered from action not user selection 
                     //suppressCreateItem = true;
                     targetAnalyzer = argParts[0] as MpAnalyticItemPresetViewModel;
                     sourceCopyItem = argParts[1] as MpCopyItem;

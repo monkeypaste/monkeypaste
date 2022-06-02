@@ -35,6 +35,8 @@ namespace MpWpfApp {
 
         #endregion
 
+
+
         #region Constructors
 
         private MpWpfDataObjectHelper() { }
@@ -316,8 +318,6 @@ namespace MpWpfApp {
                     return DataFormats.FileDrop;
                 case MpClipboardFormatType.Csv:
                     return DataFormats.CommaSeparatedValue;
-                case MpClipboardFormatType.InternalContent:
-                    return MpPortableDataObject.InternalContentFormat;
                 default:
                     throw new Exception("Unknown portable format: " + portableType.ToString());
             }
