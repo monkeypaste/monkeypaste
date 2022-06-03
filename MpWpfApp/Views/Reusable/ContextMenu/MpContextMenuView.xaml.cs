@@ -35,11 +35,11 @@ namespace MpWpfApp {
         }
 
         private void ContextMenuView_Opened(object sender, RoutedEventArgs e) {
-            
+            MpMainWindowViewModel.Instance.IsShowingDialog = true;
         }
 
         private void ContextMenuView_Closed(object sender, RoutedEventArgs e) {
-
+            MpMainWindowViewModel.Instance.IsShowingDialog = false;
         }
     }
 }

@@ -12,7 +12,35 @@ using System.Text.RegularExpressions;
 
 namespace MonkeyPaste {
     public static class MpFileIo {
+        public static string GetAbsolutePath(string path) {
+            return GetAbsolutePath(null, path);
+        }
 
+        public static string GetAbsolutePath(string basePath, string path) {
+            if (path == null) {
+                return null;
+            }
+            if (basePath == null) {
+                basePath = Path.GetFullPath("."); // quick way of getting current working directory
+            } else {
+                basePath = GetAbsolutePath(null, basePath); // to be REALLY sure ;)
+            }
+
+            string finalPath;
+            // specific for windows paths starting on \ - they need the drive added to them.
+            // I constructed this piece like this for possible Mono support.
+            if (!Path.IsPathRooted(path) || "\\".Equals(Path.GetPathRoot(path))) {
+                if (path.StartsWith(Path.DirectorySeparatorChar.ToString())) {
+                    finalPath = Path.Combine(Path.GetPathRoot(basePath), path.TrimStart(Path.DirectorySeparatorChar));
+                } else {
+                    finalPath = Path.Combine(basePath, path);
+                }
+            } else {
+                finalPath = path;
+            }
+            // resolves any internal "..\" to get the true full path.
+            return Path.GetFullPath(finalPath);
+        }
         public static double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f, precision);
         }
@@ -210,19 +238,29 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<byte[]> ReadBytesFromUriAsync(string url, int timeoutMs = 5000) {
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
-                MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
+        public static async Task<byte[]> ReadBytesFromUriAsync(string uri,string baseDir = "", int timeoutMs = 5000) {
+            if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute)) {
+                string fileSystemPath = uri;
+                if (!fileSystemPath.IsFileOrDirectory()) {
+                    fileSystemPath = Path.Combine(baseDir, uri);
+                    if(!fileSystemPath.IsFileOrDirectory()) {
+                        fileSystemPath = GetAbsolutePath(baseDir, uri);
+                    }                    
+                }
+                if(fileSystemPath.IsFileOrDirectory()) {
+                    return ReadBytesFromFile(fileSystemPath);
+                }
+
+                MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + uri+ " baseDir: "+baseDir);
                 return null;
             }
             using (var httpClient = new HttpClient()) {
                 try {
                     httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
-                    byte[] bytes = await httpClient.GetByteArrayAsync(url).TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
+                    byte[] bytes = await httpClient.GetByteArrayAsync(uri).TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
                     using (var fs = new FileStream("favicon.ico", FileMode.Create)) {                    
                         fs.Write(bytes, 0, bytes.Length);
-                        return bytes;
-                    
+                        return bytes;                    
                     }
                 } catch (Exception ex) {
                     MpConsole.WriteTraceLine(ex);

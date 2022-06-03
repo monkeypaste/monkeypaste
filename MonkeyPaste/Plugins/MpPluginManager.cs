@@ -117,6 +117,7 @@ namespace MonkeyPaste {
             if (plugin != null) {
                 try {
                     plugin.Component = GetPluginComponent(manifestPath, plugin);
+                    plugin.RootDirectory = Path.GetDirectoryName(manifestPath);
                 }
                 catch (Exception ex) {
                     var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(

@@ -12,6 +12,12 @@ namespace MonkeyPaste {
         Command
     }
 
+    public enum MpMacroCommandType {
+        None = 0,
+        Local,
+        Remote
+    }
+
     public enum MpComparisonOperatorType {
         None = 0,
         Contains,

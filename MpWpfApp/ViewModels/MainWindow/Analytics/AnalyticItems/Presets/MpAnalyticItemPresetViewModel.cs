@@ -126,6 +126,22 @@ namespace MpWpfApp {
 
         #region Model 
 
+        public bool IsActionPreset {
+            get {
+                if (Preset == null) {
+                    return false;
+                }
+                return Preset.IsActionPreset;
+            }
+            set {
+                if(IsActionPreset != value) {
+                    Preset.IsActionPreset = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IsActionPreset));
+                }
+            }
+        }
+
         public string FullName {
             get {
                 if(Preset == null || Parent == null) {
@@ -236,6 +252,15 @@ namespace MpWpfApp {
                     return string.Empty;
                 }
                 return Preset.AnalyzerPluginGuid;
+            }
+        }
+
+        public string PresetGuid {
+            get {
+                if (Preset == null) {
+                    return string.Empty;
+                }
+                return Preset.Guid;
             }
         }
 

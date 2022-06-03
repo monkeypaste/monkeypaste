@@ -421,8 +421,8 @@ namespace MpWpfApp {
                 presets.FirstOrDefault(x => x.IsDefault) != default &&
                       presets.FirstOrDefault(x => x.IsDefault).IconId > 0) {
                 IconId = presets.FirstOrDefault(x => x.IsDefault).IconId;
-            } else {
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl);
+            } else { 
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl,PluginFormat.RootDirectory);
                 var icon = await MpIcon.Create(
                     iconImgBase64: bytes.ToBase64String(),
                     createBorder: false);
@@ -651,11 +651,6 @@ namespace MpWpfApp {
                 foreach(var aipvm in Items) {
                     aipvm.SortOrderIdx = Items.IndexOf(aipvm);
                 }
-                if(!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    foreach (var pvm in Items) {
-                        await pvm.Preset.WriteToDatabaseAsync();
-                    }
-                }
             }
         }
 
@@ -677,6 +672,7 @@ namespace MpWpfApp {
                 var defualtPreset = await CreateDefaultPresetModel();
                 presets.Add(defualtPreset);
             } else {
+                //when presets are defined in manifest create the preset and its values in the db
                 foreach (var preset in AnalyzerPluginFormat.presets) {
                     var aip = await MpAnalyticItemPreset.Create(
                         analyzerPluginGuid: PluginFormat.guid,
@@ -687,6 +683,16 @@ namespace MpWpfApp {
                         description: preset.description,
                         format: AnalyzerPluginFormat,
                         manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
+
+                    foreach(var presetValue in preset.values) {
+                        // only creat preset values in db, they will then be picked up when the preset vm is initialized
+                        var aipv = await MpAnalyticItemPresetParameterValue.Create(
+                            presetId: aip.Id, 
+                            paramEnumId: presetValue.paramId,
+                            value: presetValue.value,
+                            format: AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.paramId == presetValue.paramId));                        
+                    }
+
                     presets.Add(aip);
                 }
                 if(presets.All(x=>x.IsDefault == false) && presets.Count > 0) {
@@ -703,6 +709,7 @@ namespace MpWpfApp {
         public MpIAsyncCommand<object> ExecuteAnalysisCommand => new MpAsyncCommand<object>(
             async (args) => {
                 IsBusy = true;
+                bool suppressWrite = false;
 
                 MpCopyItem sourceCopyItem = null;
                 MpAnalyticItemPresetViewModel targetAnalyzer = null;
@@ -711,7 +718,16 @@ namespace MpWpfApp {
                     // when analyzer is triggered from action not user selection 
                     //suppressCreateItem = true;
                     targetAnalyzer = argParts[0] as MpAnalyticItemPresetViewModel;
-                    sourceCopyItem = argParts[1] as MpCopyItem;
+                    if(argParts[1] is string) {
+                        suppressWrite = true;
+                        sourceCopyItem = await MpCopyItem.Create(
+                                                            data: argParts[1] as string,
+                                                            suppressWrite: true);
+                    }
+                    else if(argParts[1] is MpCopyItem) {
+                        sourceCopyItem = argParts[1] as MpCopyItem;
+                    }
+                    
                 } else {
                     if (args is MpAnalyticItemPresetViewModel aipvm) {
                         targetAnalyzer = aipvm;
@@ -729,7 +745,8 @@ namespace MpWpfApp {
                                            SelectedItem.ParamLookup
                                                .ToDictionary(k => k.Key, v => v.Value.CurrentValue),
                                            sourceCopyItem,
-                                           SelectedItem.Preset);
+                                           SelectedItem.Preset,
+                                           suppressWrite);
 
                 if(result != null && result.ToString() == MpPluginResponseFormat.RETRY_MESSAGE) {
                     ExecuteAnalysisCommand.Execute(args);
@@ -756,6 +773,7 @@ namespace MpWpfApp {
 
             MpAnalyticItemPresetViewModel spvm = null;
             MpCopyItem sci = null;
+            string sstr = null;
             if(args == null) {
                 spvm = SelectedItem;
                 if(MpClipTrayViewModel.Instance.SelectedItem != null) {
@@ -770,26 +788,37 @@ namespace MpWpfApp {
             } else if(args is object[] argParts) {
                 spvm = argParts[0] as MpAnalyticItemPresetViewModel;
                 sci = argParts[1] as MpCopyItem;
+                if(sci == null) {
+                    sstr = argParts[1] as string;
+                }
             }
 
-            if(sci == null || spvm == null) {
+            if((sci == null && sstr == null) || spvm == null) {
                 return false;
             }
-
-            bool isOkType = IsContentTypeValid(sci.ItemType);
+            bool isOkType = true;
+            if(sci != null) {
+                isOkType = IsContentTypeValid(sci.ItemType);
+            } else {
+                isOkType = IsContentTypeValid(MpCopyItemType.Text);
+            }
 
             spvm.Items.ForEach(x => x.Validate());
             return spvm.IsAllValid && 
                    isOkType;
         }
 
-        public ICommand CreateNewPresetCommand => new RelayCommand(
-            async () => {
+        public ICommand CreateNewPresetCommand => new RelayCommand<object>(
+            async (args) => {
                 IsBusy = true;
-
+                bool isActionPreset = false;
+                if(args != null) {
+                    isActionPreset = (bool)args;
+                }
                 MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
                         analyzerPluginGuid: AnalyzerPluginGuid,
                         format:AnalyzerPluginFormat,
+                        isActionPreset: isActionPreset,
                         iconId: IconId,
                         label: GetUniquePresetName());
 

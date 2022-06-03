@@ -71,7 +71,10 @@ namespace MonkeyPaste {
             return null;
         }
 
-        private static async Task<string> HandleError(Exception ex, MpPluginFormat pluginFormat, MpPluginTransaction at, MpCopyItem sourceCopyItem, object sourceHandler, bool suppressWrite = false) {
+        private static async Task<string> HandleError(
+            Exception ex, 
+            MpPluginFormat pluginFormat, 
+            MpPluginTransaction at, MpCopyItem sourceCopyItem, object sourceHandler, bool suppressWrite = false) {
             MpConsole.WriteTraceLine(ex);
             at.TransactionErrorMessage = ex.ToString();
             await MpPluginLogger.LogTransaction(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite)

@@ -1,0 +1,46 @@
+{
+  "title": "Http Automation",
+  "description": "Sends and receives data using a provided url that can be static or dynamic using content.",
+  "version": "1.0",
+  "credits": "Somebody",
+  "guid": "084abd2e-801d-4637-9054-b42f1b159c32",
+  "iconUrl": "web.png",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "text": true,
+      "image": true,
+      "file": true
+    },
+    "outputType": {
+      "text": true,
+      "image": true,
+      "file": true
+    },
+    "parameters": [
+      {
+        "label": "Url",
+        "description": "The process can be a standard application or batch script",
+        "controlType": "TextBox",
+        "unitType": "ContentQuery",
+        "isRequired": true,
+        "paramId": 1
+      }
+    ],
+    "presets": [
+      {
+        "guid": "6d1dc67b-b119-424c-bc43-e5d58a42eda6",
+        "label": "Google Search",
+        "description": "Searches google with the selected item content",
+        "values": [
+          {
+            "paramId": 1,
+            "value": "https://www.google.com/search?q={ItemData}"
+          }
+        ]
+      }
+    ]
+  }
+}

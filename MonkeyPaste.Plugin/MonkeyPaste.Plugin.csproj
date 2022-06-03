@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Formats\Components\Presets\**" />
     <Compile Remove="Utils\Clipboard\Interfaces\**" />
+    <EmbeddedResource Remove="Formats\Components\Presets\**" />
     <EmbeddedResource Remove="Utils\Clipboard\Interfaces\**" />
+    <None Remove="Formats\Components\Presets\**" />
     <None Remove="Utils\Clipboard\Interfaces\**" />
   </ItemGroup>
 
@@ -26,7 +29,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Formats\Components\Presets\" />
     <Folder Include="Interfaces\Components\Actions\Command\Base\" />
   </ItemGroup>
   

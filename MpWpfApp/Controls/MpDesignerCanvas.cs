@@ -102,8 +102,7 @@ namespace MpWpfApp {
             }
             avmc.Insert(0, tavm);
             foreach (var avm in avmc) {
-                Point tail = new Point(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
-                
+                Point tail = new Point(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));                
 
                 var pavm = avm.ParentActionViewModel;
                 if (pavm == null) {

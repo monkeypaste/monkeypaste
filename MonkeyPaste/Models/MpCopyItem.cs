@@ -233,7 +233,7 @@ namespace MonkeyPaste {
                 return dupCheck;
             }
 
-            if(MpPreferences.UniqueContentItemIdx == 0) {
+            if(MpPreferences.UniqueContentItemIdx == 0 && !suppressWrite) {
                 MpPreferences.UniqueContentItemIdx = await MpDataModelProvider.GetTotalCopyItemCountAsync();
             }
             

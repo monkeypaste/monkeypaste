@@ -249,7 +249,7 @@
 
                 <local:MpSearchCriteriaListBoxView x:Name="SearchDetailView"
                                                    Grid.Row="0"
-                                                   Grid.ColumnSpan="2"
+                                                   Grid.ColumnSpan="3"
                                                    VerticalAlignment="Stretch"
                                                    VerticalContentAlignment="Stretch"
                                                    DataContext="{x:Static local:MpSearchBoxViewModel.Instance}" />

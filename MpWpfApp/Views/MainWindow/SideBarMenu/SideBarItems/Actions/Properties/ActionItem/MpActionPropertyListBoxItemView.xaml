@@ -34,7 +34,7 @@
                     <!--  Triggers  -->
 
                     <!--  Content Add  -->
-                    <DataTemplate x:Key="ContentAddPropertiesTemplate"
+                    <DataTemplate x:Key="ContentAddedPropertiesTemplate"
                                   DataType="{x:Type local:MpContentAddTriggerViewModel}">
                         <local:MpContentAddTriggerPropertyListBoxItemView DataContext="{Binding}" />
                     </DataTemplate>
@@ -46,7 +46,7 @@
                     </DataTemplate>
 
                     <!--  File System Changed  -->
-                    <DataTemplate x:Key="FileSystemPropertiesTemplate"
+                    <DataTemplate x:Key="FileSystemChangePropertiesTemplate"
                                   DataType="{x:Type local:MpFileSystemTriggerViewModel}">
                         <local:MpFileSystemTriggerPropertyListBoxItemView DataContext="{Binding}" />
                     </DataTemplate>
@@ -73,6 +73,12 @@
                     <DataTemplate x:Key="FileWriterPropertiesTemplate"
                                   DataType="{x:Type local:MpFileWriterActionViewModel}">
                         <local:MpFileWriterActionPropertyListBoxItemView DataContext="{Binding}" />
+                    </DataTemplate>
+
+                    <!--  Macro  -->
+                    <DataTemplate x:Key="MacroPropertiesTemplate"
+                                  DataType="{x:Type local:MpMacroActionViewModel}">
+                        <local:MpMacroActionPropertyListBoxItemView DataContext="{Binding}" />
                     </DataTemplate>
                     <local:MpActionItemPropertiesTemplateSelector x:Key="ActionTemplateSelector" />
                 </Border.Resources>

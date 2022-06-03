@@ -21,36 +21,9 @@ namespace MpWpfApp {
                 return null;
             }
 
-            string resourceKeyStr = "PropertiesTemplate";
-
-            switch (aivm.ActionType) {
-                case MpActionType.Trigger:
-                    switch((MpTriggerType)aivm.ActionObjId) {
-                        case MpTriggerType.ContentAdded:
-                            resourceKeyStr = "ContentAdd" + resourceKeyStr;
-                            break;
-                        case MpTriggerType.ContentTagged:
-                            resourceKeyStr = "ContentTagged" + resourceKeyStr;
-                            break;
-                        case MpTriggerType.FileSystemChange:
-                            resourceKeyStr = "FileSystem" + resourceKeyStr;
-                            break;
-                        default:
-                            throw new Exception("Uknown Trigger type: " + aivm.ActionObjId);
-                    }
-                    break;
-                case MpActionType.Compare:
-                    resourceKeyStr = "Compare" + resourceKeyStr;
-                    break;
-                case MpActionType.Analyze:
-                    resourceKeyStr = "Analyze" + resourceKeyStr;
-                    break;
-                case MpActionType.Classify:
-                    resourceKeyStr = "Classify" + resourceKeyStr;
-                    break;
-                case MpActionType.FileWriter:
-                    resourceKeyStr = "FileWriter" + resourceKeyStr;
-                    break;
+            string resourceKeyStr = aivm.ActionType.ToString() + "PropertiesTemplate";
+            if (aivm.ActionType == MpActionType.Trigger) {
+                resourceKeyStr = (aivm as MpTriggerActionViewModelBase).TriggerType.ToString() + "PropertiesTemplate";
             }
 
             var b = container.GetVisualAncestor<Border>();

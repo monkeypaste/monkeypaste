@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 
 namespace MpWpfApp {
     public class MpContentDocumentRtfExtension : DependencyObject {
@@ -296,11 +297,10 @@ namespace MpWpfApp {
             if (ctvm == null) {
                 return;
             }
-            if (ctvm == null) {
-                return;
-            }
 
             ctvm.UnformattedContentSize = rtb.Document.GetDocumentSize();
+
+            LoadHyperlinks(rtb);
 
             await LoadTemplates(rtb);
 
@@ -326,6 +326,8 @@ namespace MpWpfApp {
                 rtb_a.Update();
             }
         }
+
+
 
         public static async Task LoadTemplates(RichTextBox rtb) {
             var ctvm = rtb.DataContext as MpClipTileViewModel;
@@ -461,6 +463,33 @@ namespace MpWpfApp {
                 Debugger.Break();
             }
             return cv.Rtb;
+        }
+
+        private static void LoadHyperlinks(RichTextBox rtb) {
+            var ctvm = rtb.DataContext as MpClipTileViewModel;
+
+            //select system created hyperlinks
+
+            var hll = rtb.Document.GetAllTextElements()
+                                  .Where(x => x is Hyperlink)
+                                  .Cast<Hyperlink>()
+                                  .Where(x => x.NavigateUri.AbsoluteUri.HasGuid());
+
+            foreach(var hl in hll) {
+                RequestNavigateEventHandler hl_Click_handler = (s, e) => {
+                    string presetGuid = hl.NavigateUri.AbsoluteUri.ParseGuid();
+                    var presetVm = MpAnalyticItemCollectionViewModel.Instance.GetPresetViewModelByGuid(presetGuid);
+                    presetVm.Parent.ExecuteAnalysisCommand.Execute(new object[] { presetVm, hl.ContentRange().Text });
+                };
+                RoutedEventHandler hl_Unload_handler = null;
+                hl_Unload_handler = (s, e) => {
+                    hl.RequestNavigate -= hl_Click_handler;
+                    hl.Unloaded -= hl_Unload_handler;
+                };
+
+                hl.RequestNavigate += hl_Click_handler;
+                hl.Unloaded += hl_Unload_handler;
+            }
         }
 
         #endregion

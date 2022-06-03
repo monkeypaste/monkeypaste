@@ -302,7 +302,7 @@ namespace MpWpfApp {
             if (AssociatedObject.DataContext is MpClipTileViewModel) {
                 if (defaultSize.X != MpClipTileViewModel.DefaultBorderWidth ||
                    defaultSize.Y != MpClipTileViewModel.DefaultBorderHeight) {
-                    Debugger.Break();
+                    //Debugger.Break();
 
                     defaultSize = new Point(MpClipTileViewModel.DefaultBorderWidth, MpClipTileViewModel.DefaultBorderHeight);
                 }

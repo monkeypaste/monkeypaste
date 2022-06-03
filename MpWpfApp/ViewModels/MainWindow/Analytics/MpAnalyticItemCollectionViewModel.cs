@@ -29,10 +29,20 @@ namespace MpWpfApp {
         MpIMenuItemViewModel,
         MpISingletonViewModel<MpAnalyticItemCollectionViewModel>, 
         MpITreeItemViewModel,
-        MpISidebarItemViewModel { //
+        MpISidebarItemViewModel {
+        #region Private Variables
+
+        private string _processAutomationGuid = "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e";
+        private string _httpAutomationGuid = "084abd2e-801d-4637-9054-b42f1b159c32";
+
+        #endregion
         #region Properties
 
         #region View Models
+
+        public MpAnalyticItemViewModel ProcessAutomationViewModel => Items.FirstOrDefault(x => x.AnalyzerPluginGuid == _processAutomationGuid);
+
+        public MpAnalyticItemViewModel HttpAutomationViewModel => Items.FirstOrDefault(x => x.AnalyzerPluginGuid == _httpAutomationGuid);
 
         public MpMenuItemViewModel MenuItemViewModel {
             get {
@@ -164,6 +174,11 @@ namespace MpWpfApp {
 
         public MpAnalyticItemPresetViewModel GetPresetViewModelById(int aipid) {
             var aipvm = Items.SelectMany(x => x.Items).FirstOrDefault(x => x.AnalyticItemPresetId == aipid);
+            return aipvm;
+        }
+
+        public MpAnalyticItemPresetViewModel GetPresetViewModelByGuid(string guid) {
+            var aipvm = Items.SelectMany(x => x.Items).FirstOrDefault(x => x.PresetGuid == guid);
             return aipvm;
         }
 

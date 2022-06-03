@@ -24,12 +24,17 @@ namespace MpWpfApp {
 
         #region Properties
 
-        #region MpITextSelectionRangeViewModel Implementation
+        #region MpITextSelectionRangeViewModel Implementation 
 
-        public int SelectionStart { get; set; } = 0;
-        public int SelectionLength { get; set; } = 0;
+        public int SelectionStart => MpTextSelectionRangeExtension.GetSelectionStart(this);
+        public int SelectionLength => MpTextSelectionRangeExtension.GetSelectionLength(this);
 
-        public string SelectedPlainText { get; set; }
+        public string SelectedPlainText {
+            get => MpTextSelectionRangeExtension.GetSelectedPlainText(this);
+            set => MpTextSelectionRangeExtension.SetSelectionText(this, value);
+        }
+
+
         #endregion
 
         #region MpIMenuItemViewModel Implementation

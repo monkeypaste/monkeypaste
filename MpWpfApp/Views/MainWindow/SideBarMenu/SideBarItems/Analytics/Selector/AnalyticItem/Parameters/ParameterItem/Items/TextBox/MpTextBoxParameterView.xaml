@@ -25,6 +25,7 @@
                      Grid.Column="0"
                      Padding="3"
                      BorderThickness="0"
+                     MaxWidth="100"
                      MinWidth="100"
                      local:MpIsFocusedExtension.IsEnabled="True"
                      local:MpTextSelectionRangeExtension.IsEnabled="True"

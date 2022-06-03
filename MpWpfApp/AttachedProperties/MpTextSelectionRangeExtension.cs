@@ -83,8 +83,6 @@ namespace MpWpfApp {
             tbb.Loaded -= Tbb_Loaded;
             tbb.Unloaded -= Tbb_Unloaded;
         }
-
-
         #endregion
 
         public static string GetSelectedPlainText(MpITextSelectionRange tsr) {

@@ -21,7 +21,6 @@ namespace MpWpfApp {
     public class MpComparisionMatch {
         public string Text { get; private set; } = string.Empty;
         public int Offset { get; private set; } = -1;
-
         public int Length { get; private set; } = 0;
 
         public MpComparisionMatch(int offset, int length) {
@@ -119,7 +118,6 @@ namespace MpWpfApp {
 
         #region Model
         //Arg4
-
         public string CompareDataJsonPath {
             get {
                 if (Action == null) {
@@ -137,7 +135,6 @@ namespace MpWpfApp {
         }
 
         //Arg3
-
         public bool IsCaseSensitive {
             get {
                 if(Action == null) {
@@ -158,7 +155,6 @@ namespace MpWpfApp {
         }
 
         //Arg2
-
         public MpCopyItemType ContentItemType {
             get {
                 if (Action == null) {
@@ -170,11 +166,11 @@ namespace MpWpfApp {
                 if (string.IsNullOrWhiteSpace(Arg2)) {
                     return MpCopyItemType.None;
                 }
-                return (MpCopyItemType)Convert.ToInt32(Arg2);
+                return Arg2.ToEnum<MpCopyItemType>();
             }
             set {
                 if (ContentItemType != value) {
-                    Arg2 = ((int)value).ToString();
+                    Arg2 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ContentItemType));
                 }
@@ -201,7 +197,6 @@ namespace MpWpfApp {
         }
 
         // Arg1
-
         public MpCopyItemPropertyPathType ComparePropertyPathType {
             get {
                 if (Action == null) {
@@ -211,11 +206,11 @@ namespace MpWpfApp {
                     return MpCopyItemPropertyPathType.None;
                 }
 
-                return (MpCopyItemPropertyPathType)Convert.ToInt32(Arg1);
+                return Arg1.ToEnum<MpCopyItemPropertyPathType>();
             }
             set {
                 if (ComparePropertyPathType != value) {
-                    Arg1 = ((int)value).ToString();
+                    Arg1 = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ComparePropertyPathType));
                 }
@@ -259,49 +254,11 @@ namespace MpWpfApp {
             if (!CanPerformAction(arg)) {
                 return;
             }
-
             MpActionOutput ao = GetInput(arg);
-            object matchVal = null;
-            if(ComparePropertyPathType == MpCopyItemPropertyPathType.LastOutput) {
-                if(ao != null) {
-                    if(ao.OutputData is MpPluginResponseFormat prf && IsJsonQuery) {
-                        try {
-                            //string prfStr = JsonConvert.SerializeObject(prf);
-                            //JObject jo;
-                            //if (prfStr.StartsWith("[")) {
-                            //    JArray a = JArray.Parse(prfStr);
-                            //    jo = a.Children<JObject>().First();
-                            //} else {
-                            //    jo = JObject.Parse(prfStr);
-                            //}
 
-                            //var matchValPath = new MpJsonPathProperty() {
-                            //    valuePath = CompareDataJsonPath
-                            //};
-                            //matchValPath.SetValue(jo, null);
-                            matchVal = MpJsonPathProperty.Query(prf, CompareDataJsonPath);
-                        } catch(Exception ex) {
-                            matchVal = null;
-                            MpConsole.WriteLine(@"Error parsing/querying json response:");
-                            MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
-                            MpConsole.WriteLine(@"For JSONPath: ");
-                            MpConsole.WriteLine(CompareData);
-                            MpConsole.WriteTraceLine(ex);
-
-                            ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
-                            await ShowValidationNotification();
-                        }
-                    } else {
-                        matchVal = ao.OutputData;
-                    }                    
-                }                
-            } else {
-                matchVal = await MpCopyItem.QueryProperty(ao.CopyItem, ComparePropertyPathType);
-                //matchVal = ao.CopyItem.GetPropertyValue(PhysicalPropertyPath);
-            }
-            string compareStr = string.Empty;
-            if (matchVal != null) {
-                compareStr = matchVal.ToString();
+            string compareStr = await GetCompareStr(ao);
+            if(compareStr == null) {
+                return;
             }
 
             var matches = GetMatches(compareStr);
@@ -317,55 +274,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Overrides
-
-        protected virtual List<MpComparisionMatch> GetMatches(string compareStr) {
-            object compareObj;
-            if(compareStr.IsStringRichText()) {
-                compareObj = compareStr.ToFlowDocument();
-            } else {
-                compareObj = compareStr;
-            }
-
-            var matches = new List<MpComparisionMatch>();
-            int idx = 0;
-            switch (ComparisonOperatorType) {
-                case MpComparisonOperatorType.Contains:
-                case MpComparisonOperatorType.Exact:
-                case MpComparisonOperatorType.BeginsWith:
-                case MpComparisonOperatorType.EndsWith:
-                    while (true) {
-                        var subMatch = GetNextMatch(compareObj,CompareData, idx);
-                        if (subMatch == null) {
-                            break;
-                        }
-                        matches.Add(subMatch);
-                        idx = subMatch.Offset + subMatch.Length + 1;
-                    }
-                    break;
-                case MpComparisonOperatorType.Regex:
-                    Regex regex = new Regex(CompareData, RegexOptions.Compiled | RegexOptions.Multiline);
-                    MatchCollection mc = regex.Matches(compareStr);
-                    
-
-                    foreach (Match m in mc) {
-                        foreach (Group mg in m.Groups) {
-                            foreach (Capture c in mg.Captures) {
-                                var match = GetNextMatch(compareObj,c.Value, idx);
-                                if(match == null) {
-                                    Debugger.Break();
-                                }
-                                matches.Add(match);
-                                idx = match.Offset + match.Length + 1;
-                            }
-                        }
-                    }
-                    break;
-            }
-
-            return matches;
-        }
-
-
         #endregion
 
         #region Private Methods
@@ -385,7 +293,83 @@ namespace MpWpfApp {
             }
         }
 
-        protected virtual MpComparisionMatch GetNextMatch(object compareObj,string matchStr, int idx = 0) {
+        private async Task<string> GetCompareStr(MpActionOutput ao) {
+            if(ao == null) {
+                return null;
+            }
+            if (ComparePropertyPathType == MpCopyItemPropertyPathType.LastOutput) {
+                if (ao != null) {
+                    if (ao.OutputData is MpPluginResponseFormat prf && IsJsonQuery) {
+                        try {
+                            return MpJsonPathProperty.Query(prf, CompareDataJsonPath);
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteLine(@"Error parsing/querying json response:");
+                            MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
+                            MpConsole.WriteLine(@"For JSONPath: ");
+                            MpConsole.WriteLine(CompareData);
+                            MpConsole.WriteTraceLine(ex);
+
+                            ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
+                            await ShowValidationNotification();
+                        }
+                    } else if(ao.OutputData != null) {
+                        return ao.OutputData.ToString();
+                    }
+                }
+            } else {
+                var copyItemPropObj =  await MpCopyItem.QueryProperty(ao.CopyItem, ComparePropertyPathType);
+                if (copyItemPropObj != null) {
+                    return copyItemPropObj.ToString();
+                }
+            }
+            return null;
+        }
+
+        private List<MpComparisionMatch> GetMatches(string compareStr) {
+            object compareObj;
+            if (compareStr.IsStringRichText()) {
+                compareObj = compareStr.ToFlowDocument();
+            } else {
+                compareObj = compareStr;
+            }
+
+            var matches = new List<MpComparisionMatch>();
+            int idx = 0;
+            switch (ComparisonOperatorType) {
+                case MpComparisonOperatorType.Contains:
+                case MpComparisonOperatorType.Exact:
+                case MpComparisonOperatorType.BeginsWith:
+                case MpComparisonOperatorType.EndsWith:
+                    while (true) {
+                        var subMatch = GetMatch(compareObj, CompareData, idx);
+                        if (subMatch == null) {
+                            break;
+                        }
+                        matches.Add(subMatch);
+                        idx = subMatch.Offset + subMatch.Length + 1;
+                    }
+                    break;
+                case MpComparisonOperatorType.Regex:
+                    Regex regex = new Regex(CompareData, RegexOptions.Compiled | RegexOptions.Multiline);
+                    MatchCollection mc = regex.Matches(compareStr);
+
+                    foreach (Match m in mc) {
+                        var match = GetMatch(compareObj, m.Value, idx);
+                        if (match == null) {
+                            Debugger.Break();
+                            break;
+                        }
+                        matches.Add(match);
+                        idx = match.Offset + match.Length + 1;
+                    }
+                    break;
+            }
+
+            return matches;
+        }
+
+        private MpComparisionMatch GetMatch(object compareObj,string matchStr, int idx = 0) {
             bool isCaseSensitive = IsCaseSensitive;
             string compareData = matchStr;
             if (compareData == null) {
@@ -431,6 +415,9 @@ namespace MpWpfApp {
                 MpWpfRichDocumentExtensions.FindFlags flags = IsCaseSensitive ? MpWpfRichDocumentExtensions.FindFlags.MatchCase : MpWpfRichDocumentExtensions.FindFlags.None;
 
                 var tp = fd.ContentStart.GetPositionAtOffset(idx);
+                if(tp == null) {
+                    return null;
+                }
 
                 var tr = tp.FindText(fd.ContentEnd, compareData, flags);
 

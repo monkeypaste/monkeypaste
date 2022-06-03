@@ -225,7 +225,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Public Mehthods
+        #region Public Methods
 
         #endregion
 

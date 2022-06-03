@@ -75,6 +75,18 @@ namespace MonkeyPaste {
             return badString.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace(">", "&gt;").Replace("<", "&lt;");
         }
 
+        public static bool HasGuid(this string str) {
+            return str.ParseGuid() != null;
+        }
+
+        public static string ParseGuid(this string str) {
+            var m = Regex.Match(str, @"[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}");
+            if(m.Success) {
+                return m.Value;
+            }
+            return null;
+        }
+
         public static bool IsFile(this string str) {
             return File.Exists(str);
         }

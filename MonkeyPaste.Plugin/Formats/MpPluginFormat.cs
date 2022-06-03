@@ -32,7 +32,9 @@ namespace MonkeyPaste.Plugin {
 
         public MpAnnotaterPluginFormat annotater { get; set; }
 
+        public string RootDirectory { get; set; }
         public string ComponentPath { get; set; }
+        
         public object Component { get; set; } = null;
         
     }

@@ -317,6 +317,7 @@
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfShortcutManager.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfStringTools.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpFileWriterActionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\MpAnnotateActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpMacroActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpAnalyzeActionViewModel.cs" />
@@ -461,6 +462,9 @@
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\FileWriter\MpFileWriterActionPropertyListBoxItemView.xaml.cs">
       <DependentUpon>MpFileWriterActionPropertyListBoxItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\Macro\MpMacroActionPropertyListBoxItemView.xaml.cs">
+      <DependentUpon>MpMacroActionPropertyListBoxItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\Triggers\MpContentTaggedTriggerPropertyListBoxItemView.xaml.cs">
       <DependentUpon>MpContentTaggedTriggerPropertyListBoxItemView.xaml</DependentUpon>
@@ -943,6 +947,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\FileWriter\MpFileWriterActionPropertyListBoxItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Actions\Properties\ActionItem\Items\Macro\MpMacroActionPropertyListBoxItemView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
