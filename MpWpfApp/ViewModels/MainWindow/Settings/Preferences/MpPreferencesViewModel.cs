@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpPreferencesViewModel : MpViewModelBase<MpSettingsWindowViewModel> {
@@ -88,18 +88,18 @@ namespace MpWpfApp {
             }
         }
 
-        private ObservableCollection<string> _languages = null;
-        public ObservableCollection<string> Languages {
-            get {
-                if (_languages == null) {
-                    _languages = new ObservableCollection<string>();
-                    foreach (var lang in MpLanguageTranslator.LanguageList) {
-                        _languages.Add(lang);
-                    }
-                }
-                return _languages;
-            }
-        }
+        //private ObservableCollection<string> _languages = null;
+        //public ObservableCollection<string> Languages {
+        //    get {
+        //        if (_languages == null) {
+        //            _languages = new ObservableCollection<string>();
+        //            foreach (var lang in MpLanguageTranslator.LanguageList) {
+        //                _languages.Add(lang);
+        //            }
+        //        }
+        //        return _languages;
+        //    }
+        //}
 
         private string _selectedLanguage = MpPreferences.UserLanguage;
         public string SelectedLanguage {
@@ -238,7 +238,7 @@ namespace MpWpfApp {
             foreach (SettingsProperty dsp in Properties.DefaultUiStrings.Default.Properties) {
                 foreach (SettingsProperty usp in Properties.UserUiStrings.Default.Properties) {
                     if (dsp.Name == usp.Name) {
-                        usp.DefaultValue = await MpLanguageTranslator.TranslateAsync((string)dsp.DefaultValue, newLanguage,"");
+                        //usp.DefaultValue = await MpLanguageTranslator.TranslateAsync((string)dsp.DefaultValue, newLanguage,"");
                         MpConsole.WriteLine("Default: " + (string)dsp.DefaultValue + "New: " + (string)usp.DefaultValue);                    }
                 }
             }

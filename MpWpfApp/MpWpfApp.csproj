@@ -323,6 +323,7 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpAnalyzeActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpClassifyActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpCompareActionViewModelBase.cs" />
+    <Compile Include="ViewModels\MainWindow\Actions\Action\Output\Base\MpActionOutputViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\Base\MpTriggerActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentAddTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpContentTaggedTriggerViewModel.cs" />
@@ -330,10 +331,6 @@
     <Compile Include="ViewModels\MainWindow\Actions\Action\Triggers\MpShortcutTriggerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\MpActionCollectionViewModel.cs" />
     <Compile Include="Utils\WpfWrapper\MpWpfWrapper.cs" />
-    <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
-    <Compile Include="Utils\RESTful\MpCountry.cs" />
-    <Compile Include="Utils\RESTful\MpCurrencyHistory.cs" />
-    <Compile Include="Utils\RESTful\MpYoloTransaction.cs" />
     <Compile Include="ViewModels\Base\Interfaces\MpIShortcutCommand.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\Base\MpEnumerableParameterViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Parameters\MpFileChooserParameterViewModel.cs" />
@@ -352,28 +349,17 @@
     <Compile Include="ViewModels\MainWindow\Clipboard\MpClipboardHandlerCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpOutlookContactCollectionViewModel.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfDbInfo.cs" />
-    <Compile Include="Utils\MpBrowserUrlDetector.cs" />
     <Compile Include="Utils\BindingExtensions\MpSettingsBindingExtension.cs" />
     <Compile Include="Utils\MpVisualUtility.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfPreferences.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfQueryInfo.cs" />
-    <Compile Include="Utils\RESTful\MpOpenAi.cs" />
-    <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\Styling\MpMeasurements.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfDataObjectHelper.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
-    <Compile Include="Utils\RESTful\Base\MpRestfulAction.cs" />
-    <Compile Include="Utils\RESTful\MpCurrencyConverter.cs" />
-    <Compile Include="Utils\RESTful\MpImageAnalyzer.cs" />
-    <Compile Include="Utils\RESTful\MpImageOcr.cs" />
-    <Compile Include="Utils\RESTful\MpLanguageTranslator.cs" />
-    <Compile Include="Utils\RESTful\MpMinifyUrl.cs" />
-    <Compile Include="Utils\RESTful\MpWordsApiDictionary.cs" />
     <Compile Include="Utils\System\MpScreenInformation.cs" />
     <Compile Include="Utils\System\WinApi.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
@@ -389,7 +375,6 @@
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
-    <None Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\MpContentItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpContactTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTextTemplateViewModel.cs" />
@@ -1564,7 +1549,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />
-    <Resource Include="Utils\RESTful\RestExample1.xml" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample1.html" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample2.html" />
@@ -2921,9 +2905,13 @@
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj">
-      <Project>{faf48e9e-e646-44d0-be02-ad1a9e9dfcd8}</Project>
-      <Name>MonkeyPaste.Plugin</Name>
+    <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj">
+      <Project>{400473eb-9a5b-4e8d-816d-5bc5b315c542}</Project>
+      <Name>MonkeyPaste.Common.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj">
+      <Project>{e641a0b5-0461-47f3-91bb-340be880a545}</Project>
+      <Name>MonkeyPaste.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
       <Project>{effa9e68-c567-4f5a-ae60-0ba2937cf5fa}</Project>

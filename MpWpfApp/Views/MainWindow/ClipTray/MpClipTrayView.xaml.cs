@@ -1,5 +1,5 @@
 ﻿using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

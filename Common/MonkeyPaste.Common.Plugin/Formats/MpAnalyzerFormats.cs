@@ -3,8 +3,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MonkeyPaste.Common;
 
-namespace MonkeyPaste.Plugin {
+namespace MonkeyPaste.Common.Plugin {
 
     public class MpAnalyzerPluginRequestFormat : MpJsonObject {
         public List<MpAnalyzerPluginRequestItemFormat> items { get; set; } = new List<MpAnalyzerPluginRequestItemFormat>();
@@ -12,7 +13,7 @@ namespace MonkeyPaste.Plugin {
         public MpPortableDataObject data { get; set; }
     }
 
-    public class MpAnalyzerPluginRequestItemFormat : MpJsonObject {
+    public class MpAnalyzerPluginRequestItemFormat : MpJsonObject, MpIParameterKeyValuePair {
         public int paramId { get; set; } = 0;
         public string value { get; set; } = string.Empty;
     }

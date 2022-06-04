@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Xamarin.Forms;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Xamarin.Essentials;
 
 namespace MonkeyPaste {   

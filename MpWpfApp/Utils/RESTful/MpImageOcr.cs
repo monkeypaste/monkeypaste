@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Media.Ocr;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpImageOcr {

@@ -14,7 +14,8 @@
     using System.Windows.Threading;
     using GalaSoft.MvvmLight.CommandWpf;
     using MonkeyPaste;
-    using MonkeyPaste.Plugin;
+    using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+    using MonkeyPaste.Common;
     using System.Speech.Synthesis;
     using System.Windows.Documents;
 using System.Text.RegularExpressions;
@@ -1919,6 +1920,10 @@ using MpProcessHelper;
                     //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
                     if (IsItemDragging) {
                         StartAnimation();
+                        if(SelectionLength == 0) {
+                            IsContentFocused = true;
+                            MpTextSelectionRangeExtension.SelectAll(this);
+                        }
                     } else {
                         StopAnimation();
                     }

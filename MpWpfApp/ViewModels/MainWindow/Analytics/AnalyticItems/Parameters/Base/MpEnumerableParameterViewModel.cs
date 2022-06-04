@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpEnumerableParameterViewModel : MpAnalyticItemParameterViewModelBase {

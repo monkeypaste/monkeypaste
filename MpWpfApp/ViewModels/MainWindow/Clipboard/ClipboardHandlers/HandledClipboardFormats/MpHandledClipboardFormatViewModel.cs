@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpHandledClipboardFormatViewModel :

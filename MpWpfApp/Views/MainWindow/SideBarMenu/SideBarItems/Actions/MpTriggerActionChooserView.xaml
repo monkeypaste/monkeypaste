@@ -46,6 +46,8 @@
                             DockPanel.Dock="Right"
                             MaxHeight="30"
                             Margin="5"
+                            ToolTip="New Trigger"
+                            ToolTipService.InitialShowDelay="300"
                             HorizontalAlignment="Right"
                             Style="{StaticResource RoundedButton}"
                             Visibility="{Binding IsAnySelected,

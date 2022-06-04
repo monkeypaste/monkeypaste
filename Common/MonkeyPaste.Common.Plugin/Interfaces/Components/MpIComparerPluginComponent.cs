@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste.Plugin {
+﻿namespace MonkeyPaste.Common.Plugin {
     public interface MpIComparerPluginComponent : MpIPluginComponentBase {
         bool CompareText(bool text);
         bool CompareImage(string imgBase64);

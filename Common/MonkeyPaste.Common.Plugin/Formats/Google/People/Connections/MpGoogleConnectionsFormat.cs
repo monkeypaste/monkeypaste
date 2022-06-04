@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MonkeyPaste.Common;
 
-namespace MonkeyPaste.Plugin {
+namespace MonkeyPaste.Common.Plugin {
     public class MpGoogleConnectionsFormat : MpJsonObject {
         public List<MpGoogleConnectionFormat> connections { get; set; }
         public int totalPeople { get; set; }

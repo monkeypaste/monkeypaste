@@ -13,8 +13,8 @@
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}">
     <i:Interaction.Behaviors>
-        <!--<local:MpClipTileTitleHighlightBehavior x:Name="ClipTileTitleHighlightBehavior" />
-        <local:MpSourceHighlightBehavior x:Name="SourceHighlightBehavior" />-->
+        <local:MpClipTileTitleHighlightBehavior x:Name="ClipTileTitleHighlightBehavior" />
+        <local:MpSourceHighlightBehavior x:Name="SourceHighlightBehavior" />
     </i:Interaction.Behaviors>
     <Grid x:Name="ClipTileTitleContainerGrid"
           Loaded="ClipTileTitleContainerGrid_Loaded"

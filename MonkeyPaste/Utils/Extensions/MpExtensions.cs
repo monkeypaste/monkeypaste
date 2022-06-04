@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using static Xamarin.Forms.Internals.Profile;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public static class MpExtensions {

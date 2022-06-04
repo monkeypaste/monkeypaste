@@ -37,6 +37,7 @@
     <Compile Remove="Resources\Html\Editor\TestData\**" />
     <Compile Remove="Resources\Html\temp\**" />
     <Compile Remove="Services\**" />
+    <Compile Remove="Utils\NetworkIO\Json\**" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
     <Compile Remove="Views\MainWindow\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
@@ -63,6 +64,7 @@
     <EmbeddedResource Remove="Resources\Html\Editor\TestData\**" />
     <EmbeddedResource Remove="Resources\Html\temp\**" />
     <EmbeddedResource Remove="Services\**" />
+    <EmbeddedResource Remove="Utils\NetworkIO\Json\**" />
     <EmbeddedResource Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
     <EmbeddedResource Remove="Views\MainWindow\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
@@ -89,6 +91,7 @@
     <None Remove="Resources\Html\Editor\TestData\**" />
     <None Remove="Resources\Html\temp\**" />
     <None Remove="Services\**" />
+    <None Remove="Utils\NetworkIO\Json\**" />
     <None Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
     <None Remove="Views\MainWindow\**" />
     <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
@@ -488,7 +491,6 @@
 
   <ItemGroup>
     <Folder Include="Utils\DragDrop\" />
-    <Folder Include="Utils\NetworkIO\Json\Base\" />
     <Folder Include="Utils\Platform\" />
     <Folder Include="Utils\Styling\" />
     <Folder Include="ViewModels\Reusable\Theme\" />
@@ -499,7 +501,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj" />
+    <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

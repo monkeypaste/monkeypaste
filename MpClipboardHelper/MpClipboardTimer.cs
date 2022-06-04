@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using System.IO;
 using System.Collections.Specialized;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Security.Permissions;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;

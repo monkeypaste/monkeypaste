@@ -23,8 +23,8 @@
                             OriginThickness="1.5"
                             GridLineThickness="0.5"
                             GridLineSpacing="50"
-                            OriginBrush="Chartreuse"
-                            GridLineBrush="Chartreuse">
+                            OriginBrush="Chocolate"
+                            GridLineBrush="BurlyWood">
             <local:MpZoomBorder.Background>
                 <SolidColorBrush Color="White"
                                  Opacity="0.0001" />
@@ -45,7 +45,10 @@
                 </ListBox.Background>
                 <ListBox.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform ScaleX="{Binding ScaleX, Mode=OneWayToSource}" ScaleY="{Binding ScaleY, Mode=OneWayToSource}" />
+                        <ScaleTransform ScaleX="{Binding ScaleX,
+                                                         Mode=OneWayToSource}"
+                                        ScaleY="{Binding ScaleY,
+                                                         Mode=OneWayToSource}" />
                         <TranslateTransform />
                     </TransformGroup>
                 </ListBox.RenderTransform>
@@ -60,8 +63,11 @@
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -72,11 +78,10 @@
                                                 ClipToBounds="False"
                                                 ShowVoronoi="True"
                                                 MinDist="100.1"
+                                                TipLength="20"
                                                 TipWidth="10"
                                                 TailWidth="3"
-                                                TransitionLineBorderBrush="White"
                                                 TransitionLineThickness="1"
-                                                EmptyLineBrush="Orange"
                                                 IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
@@ -92,17 +97,40 @@
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
                                              Color="Transparent" />
                         </Style.Resources>
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="HorizontalContentAlignment" Value="Center" />
-                        <Setter Property="VerticalContentAlignment" Value="Center" />
-                        <Setter Property="HorizontalAlignment" Value="Center" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                        <Setter Property="ClipToBounds" Value="False" />
-                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
-                        <Setter Property="Canvas.Left" Value="{Binding X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
-                        <Setter Property="Canvas.Top" Value="{Binding Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+                        <Setter Property="FocusVisualStyle"
+                                Value="{x:Null}" />
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Center" />
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center" />
+                        <Setter Property="HorizontalAlignment"
+                                Value="Center" />
+                        <Setter Property="VerticalAlignment"
+                                Value="Center" />
+                        <Setter Property="ClipToBounds"
+                                Value="False" />
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}" />
+                        <Setter Property="Canvas.Left"
+                                Value="{Binding X,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}" />
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding Y,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnSourceUpdated=True,
+                                                NotifyOnTargetUpdated=True}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -125,9 +153,12 @@
                                         </TextBlock>
                                     </StackPanel>
                                     <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                            <Setter Property="Background" Value="Transparent" />
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="BorderBrush"
+                                                    Value="Transparent" />
+                                            <Setter Property="Background"
+                                                    Value="Transparent" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>

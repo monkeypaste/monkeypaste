@@ -129,13 +129,13 @@ namespace MpWpfApp {
 
         public virtual async Task FindHighlighting() {
             await Task.Delay(5);
-            if(AssociatedObject == null) {
+            if(AssociatedObject == null || ContentRange == null) {
                 // NOTE currently occurs during active search and tag changes
                 return;
             }
             string st = MpDataModelProvider.QueryInfo.SearchText;
 
-            _matches = ContentRange.Start.FindAllText(ContentRange.End, st).ToList();
+            _matches = ContentRange.Start.FindAllText(ContentRange.End, st, MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)).ToList();
             SelectedIdx = -1;
 
             if (_matches.Count > 1) {
@@ -190,7 +190,7 @@ namespace MpWpfApp {
             }
 
             for (TextPointer position = ContentRange.Start;
-              position != null && position.CompareTo(ContentRange.End) <= 0;
+              position != null && position.IsInSameDocument(ContentRange.End) && position.CompareTo(ContentRange.End) <= 0;
               position = position.GetNextContextPosition(LogicalDirection.Forward)) {
                 if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
                     Run run = position.Parent as Run;

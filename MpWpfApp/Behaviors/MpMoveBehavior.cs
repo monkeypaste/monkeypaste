@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Linq;
 using System.Collections.Generic;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
 

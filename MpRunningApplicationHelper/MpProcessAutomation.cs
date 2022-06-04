@@ -6,7 +6,7 @@ using static MpProcessHelper.MpProcessManager;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Linq;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text;

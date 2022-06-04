@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MonkeyPaste.Common;
 
-namespace MonkeyPaste.Plugin {
+namespace MonkeyPaste.Common.Plugin {
     public class MpHttpTransactionFormat : MpJsonObject {
         public string name { get; set; }
 

@@ -13,7 +13,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
 namespace MpWpfApp {    
@@ -197,7 +197,7 @@ namespace MpWpfApp {
             typeof(double),
             typeof(MpMarqueeTextBoxExtension),
             new PropertyMetadata() {
-                DefaultValue = -10.0d,
+                DefaultValue = -5.0d,
                 PropertyChangedCallback = (s, e) => {
                     if (s is TextBoxBase tbb) {
                         if (GetIsEnabled(tbb)) {

@@ -2,5 +2,4 @@
     public interface MpIClipboardRegistrar {
         int RegisterFormat(string format);
     }
-
 }

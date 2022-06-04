@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MonkeyPaste.Plugin {
+namespace MonkeyPaste.Common {
     public enum MpJsonDataTokenType {
         None = 0,
         RequestParam, // @<enumId>

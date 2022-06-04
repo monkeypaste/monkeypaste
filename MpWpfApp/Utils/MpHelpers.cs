@@ -36,7 +36,7 @@ using MonkeyPaste;
 using GalaSoft.MvvmLight.CommandWpf;
 using static MpWpfApp.MpWpfStringExtensions;
 using static MpWpfApp.MpWpfRichDocumentExtensions;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public static class MpHelpers {
@@ -90,19 +90,19 @@ namespace MpWpfApp {
             }
         }
 
-        public static CurrencyType GetCurrencyTypeFromString(string moneyStr) {
-            if (moneyStr == null || moneyStr.Length == 0) {
-                return CurrencyType.USD;
-            }
-            char currencyLet = moneyStr[0];
-            foreach(var c in MpCurrencyConverter.Instance.CurrencyList) {
-                 if(c.CurrencySymbol == currencyLet.ToString()) {
-                    Enum.TryParse(c.Id, out CurrencyType ct);
-                    return ct;
-                }
-            }
-            return CurrencyType.USD;
-        }
+        //public static CurrencyType GetCurrencyTypeFromString(string moneyStr) {
+        //    if (moneyStr == null || moneyStr.Length == 0) {
+        //        return CurrencyType.USD;
+        //    }
+        //    char currencyLet = moneyStr[0];
+        //    foreach(var c in MpCurrencyConverter.Instance.CurrencyList) {
+        //         if(c.CurrencySymbol == currencyLet.ToString()) {
+        //            Enum.TryParse(c.Id, out CurrencyType ct);
+        //            return ct;
+        //        }
+        //    }
+        //    return CurrencyType.USD;
+        //}
 
         public static double GetCurrencyValueFromString(string moneyStr) {
             if(string.IsNullOrEmpty(moneyStr) || moneyStr.Length < 2) {

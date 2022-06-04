@@ -18,7 +18,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
@@ -80,27 +80,32 @@ namespace MpWpfApp {
             RtbHighlightBehavior.Attach(this);
             ContentViewDropBehavior.Attach(this);
 
-            //var ctv = this.GetVisualAncestor<MpClipTileView>();
-            //if (ctv != null) {
-            //    var cttv = ctv.TileTitleView;
-            //    if (cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
-            //        MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, false);
-            //        MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
-            //    }
-            //}
+
+
+            var ctv = this.GetVisualAncestor<MpClipTileView>();
+            if (ctv != null) {
+                ctv.HighlightSelectorBehavior.Attach(ctv);
+                var cttv = ctv.TileTitleView;
+                if (cttv != null) {
+                    cttv.SourceHighlightBehavior.Attach(cttv);
+                    cttv.ClipTileTitleHighlightBehavior.Attach(cttv);
+                }
+            }
         }
 
         private void DetachAllBehaviors() {
             RtbHighlightBehavior.Detach();
             ContentViewDropBehavior.Detach();
 
-            //var ctv = this.GetVisualAncestor<MpClipTileView>();
-            //if (ctv != null) {
-            //    var cttv = ctv.TileTitleView;
-            //    if (cttv != null && cttv.ClipTileTitleMarqueeCanvas != null) {
-            //        MpMarqueeTextBoxExtension.SetIsEnabled(cttv.ClipTileTitleMarqueeCanvas, true);
-            //    }
-            //}
+            var ctv = this.GetVisualAncestor<MpClipTileView>();
+            if (ctv != null) {
+                ctv.HighlightSelectorBehavior.Detach();
+                var cttv = ctv.TileTitleView;
+                if (cttv != null) {
+                    cttv.SourceHighlightBehavior.Detach();
+                    cttv.ClipTileTitleHighlightBehavior.Detach();
+                }
+            }
         }
 
         private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
@@ -432,11 +437,8 @@ namespace MpWpfApp {
             if (e.ClickCount >= 2 &&
                 BindingContext.IsContentReadOnly &&
                 !BindingContext.IsSubSelectionEnabled) {
-                // NOTE only do select all when enabling otherwise default (select word)
                 BindingContext.IsSubSelectionEnabled = true;
                 MpCursor.SetCursor(BindingContext, MpCursorType.IBeam);
-                //Rtb.SelectAll();
-                //ScrollToHome();
                 UpdateAdorners();
                 return;
             }

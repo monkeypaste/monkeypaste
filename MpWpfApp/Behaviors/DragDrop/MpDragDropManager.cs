@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public static class MpDragDropManager {

@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MpProcessHelper;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.IO;
 using System.Windows.Media;
 using MpClipboardHelper;

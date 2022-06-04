@@ -13,7 +13,7 @@ using System.Windows.Media;
 using FFImageLoading.Helpers.Exif;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public enum MpAnalyzerType {
@@ -36,6 +36,7 @@ namespace MpWpfApp {
         private string _httpAutomationGuid = "084abd2e-801d-4637-9054-b42f1b159c32";
 
         #endregion
+
         #region Properties
 
         #region View Models
@@ -143,7 +144,7 @@ namespace MpWpfApp {
 
             Items.Clear();
 
-            var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIAnalyzerComponent);
+            var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIAnalyzeAsyncComponent || x.Value.Component is MpIAnalyzeComponent);
             foreach(var pai in pail) {
                 var paivm = await CreateAnalyticItemViewModel(pai.Value);
                 Items.Add(paivm);

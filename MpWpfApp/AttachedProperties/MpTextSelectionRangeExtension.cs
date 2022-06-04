@@ -1,6 +1,6 @@
 ﻿using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,6 +12,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Application;
 
 namespace MpWpfApp {
@@ -171,6 +172,14 @@ namespace MpWpfApp {
             else if (tbb is RichTextBox rtb) {
                 rtb.Selection.Text = text;
             }
+        }
+
+        public static void SelectAll(MpITextSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if(!tbb.IsFocused) {
+                Debugger.Break();
+            }
+            tbb.SelectAll();
         }
 
         private static TextBoxBase FindTextBoxBase(MpITextSelectionRange tsr) {

@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste.Plugin {
+﻿namespace MonkeyPaste.Common.Plugin {
     public interface MpITransformerPluginComponent : MpIPluginComponentBase {
         string TransformText(string text);
         string TransformImage(string imgBase64);

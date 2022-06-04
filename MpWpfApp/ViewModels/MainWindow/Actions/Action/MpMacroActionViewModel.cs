@@ -12,7 +12,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MpWpfApp {
+    public class MpMacroOutput : MpActionOutput {
+        public override object OutputData => CommandPresetGuid;
 
+        public string CommandPresetGuid { get; set; }
+        public override string ActionDescription {
+            get {
+                if(string.IsNullOrEmpty(CommandPresetGuid)) {
+                    return $"CopyItem({CopyItem.Id},{CopyItem.Title}) did not have criteria for a macro";
+                }
+                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was embedded with Analyzer {CommandPresetGuid} ";
+            }
+        }
+    }
     public class MpMacroActionViewModel : MpActionViewModelBase {
         #region Properties
 
@@ -25,25 +37,11 @@ namespace MpWpfApp {
                 }
                 return MpAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == AnalyticItemPresetId);
             }
-            //set {
-            //    if (SelectedPreset != value) {
-            //        AnalyticItemPresetId = value.AnalyticItemPresetId;
-            //        // NOTE dont understand why but HasModelChanged property change not firing from this
-            //        // so forcing db write for now..
-            //        Task.Run(async () => { await Action.WriteToDatabaseAsync(); });
-            //        OnPropertyChanged(nameof(SelectedPreset));
-            //    }
-            //}
         }
 
         #endregion
 
         #region State 
-
-        public bool IsRemoteCommand => CommandType == MpMacroCommandType.Remote;
-
-        public bool IsLocalCommand => CommandType == MpMacroCommandType.Local;
-
         #endregion
 
         #region Model
@@ -87,29 +85,6 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand MacroCommand { get; set; } 
-
-        public object MacroCommandParameter { get; set; }
-
-        public MpMacroActionType MacroActionType {
-            get {
-                if (Action == null) {
-                    return MpMacroActionType.None;
-                }
-                if (string.IsNullOrWhiteSpace(Action.Arg1)) {
-                    return MpMacroActionType.None;
-                }
-                return (MpMacroActionType)Convert.ToInt32(Action.Arg1);
-            }
-            set {
-                if (MacroActionType != value) {
-                    Action.Arg1 = ((int)value).ToString();
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(MacroActionType));
-                }
-            }
-        }
-
         #endregion
 
         #endregion
@@ -131,39 +106,55 @@ namespace MpWpfApp {
 
             var actionInput = GetInput(arg);
 
+            MpCopyItem outputItem = null;
+
             if (actionInput.CopyItem.ItemType == MpCopyItemType.Text) {
-                if (arg is MpCompareOutput co) {
-                    var fd = co.CopyItem.ItemData.ToFlowDocument();
-                    var matchRanges = co.Matches.Select(x => new TextRange(
-                        fd.ContentStart.GetPositionAtOffset(x.Offset),
-                        fd.ContentStart.GetPositionAtOffset(x.Offset + x.Length)));
+                outputItem = actionInput.CopyItem;
+                var fd = actionInput.CopyItem.ItemData.ToFlowDocument();
+                List<MpComparisionMatch> matches = null;
 
-                    int offset = 0;
-                    foreach(var m in co.Matches) {
-                        int pre_hl_doc_length = fd.ContentStart.GetOffsetToPosition(fd.ContentEnd);
-                        var tr = new TextRange(
-                                    fd.ContentStart.GetPositionAtOffset(m.Offset + offset),
-                                    fd.ContentStart.GetPositionAtOffset(m.Offset + m.Length + offset));
-                        var hl = new Hyperlink(tr.Start, tr.End) {
-                            IsEnabled = true,
-                            NavigateUri = new Uri($"http://{SelectedPreset.PresetGuid}")
-                        };
-                        int post_hl_doc_length = fd.ContentStart.GetOffsetToPosition(fd.ContentEnd);
+                if (actionInput is MpCompareOutput co) {
+                    matches = co.Matches;
+                } else {
+                    matches = new List<MpComparisionMatch>() { new MpComparisionMatch(fd.ContentStart.ToOffset(),fd.ContentEnd.ToOffset()) };
+                }
+                int offset = 0;
+                foreach (var m in matches.OrderBy(x=>x.Offset)) {
+                    // store total doc length before converting range to hyperlink
 
-                        offset += post_hl_doc_length - pre_hl_doc_length;
-                    }
+                    int pre_hl_doc_length = fd.ContentStart.GetOffsetToPosition(fd.ContentEnd);
+                    var tr = new TextRange(
+                                fd.ContentStart.GetPositionAtOffset(m.Offset + offset),
+                                fd.ContentStart.GetPositionAtOffset(m.Offset + m.Length + offset));
+                    var hl = new Hyperlink(tr.Start, tr.End) {
+                        IsEnabled = true,
+                        NavigateUri = new Uri($"http://{SelectedPreset.PresetGuid}")
+                    };
 
-                    var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(co.CopyItem.Id);
-                    if (ctvm == null) {
-                        co.CopyItem.ItemData = fd.ToRichText();
-                        await co.CopyItem.WriteToDatabaseAsync();
+                    // get new doc length after adding link
+                    int post_hl_doc_length = fd.ContentStart.GetOffsetToPosition(fd.ContentEnd);
 
-                        return;
-                    }
+                    // since link will skew match ranges adjust ranges by the difference the link created
+                    offset += post_hl_doc_length - pre_hl_doc_length;
+                }
+                var ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(actionInput.CopyItem.Id);
+                
+                if (ctvm == null) {
+                    actionInput.CopyItem.ItemData = fd.ToRichText();
+                    await actionInput.CopyItem.WriteToDatabaseAsync();
+                    outputItem = actionInput.CopyItem;
+                } else {
                     ctvm.CopyItemData = fd.ToRichText();
+                    outputItem = ctvm.CopyItem;
                 }
             }
-            await Task.Delay(1);
+            var macroOutput = new MpMacroOutput() {
+                Previous = actionInput,
+                CopyItem = outputItem == null ? actionInput.CopyItem : outputItem,
+                CommandPresetGuid = outputItem == null ? null : SelectedPreset.PresetGuid
+            };
+
+            base.PerformAction(macroOutput).FireAndForgetSafeAsync(this);
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {

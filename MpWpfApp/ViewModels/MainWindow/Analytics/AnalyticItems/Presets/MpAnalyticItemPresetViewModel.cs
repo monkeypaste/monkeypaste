@@ -14,7 +14,7 @@ using FFImageLoading.Helpers.Exif;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using Windows.UI.Xaml.Controls.Maps;
 

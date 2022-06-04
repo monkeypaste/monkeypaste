@@ -16,7 +16,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;

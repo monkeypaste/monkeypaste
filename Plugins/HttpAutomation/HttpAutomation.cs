@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Linq;
 using System.Diagnostics;
 
 namespace HttpAutomation {
-    public class HttpAutomation : MpIAnalyzerComponent{
-        public async Task<object> AnalyzeAsync(object args) {
-            await Task.Delay(1);
-
+    public class HttpAutomation : MpIAnalyzeComponent{
+        public object Analyze(object args) {
             var response = new MpPluginResponseFormat();
             
             var request = MpJsonObject.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString());

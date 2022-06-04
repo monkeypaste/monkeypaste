@@ -6,7 +6,7 @@ using SQLiteNetExtensions.Attributes;
 using System.Threading.Tasks;
 using System.Linq;
 using System.IO;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpISourceItem, MpISyncableDbObject {        

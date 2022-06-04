@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ namespace MpWpfApp {
         public override string ActionDescription => $"CopyItem({CopyItem.Id},{CopyItem.Title}) Classified to Tag({TagId})";
     }
 
-    public class MpClassifyActionViewModel : MpActionViewModelBase {
+    public class MpClassifyActionViewModel : MpActionViewModelBase, MpIActionPluginComponent {
         #region Private Variables
 
         #endregion
@@ -60,12 +61,12 @@ namespace MpWpfApp {
         }
 
         #endregion
+
         #endregion
 
         #region Constructors
 
         public MpClassifyActionViewModel(MpActionCollectionViewModel parent) : base(parent) {
-
         }
 
         #endregion

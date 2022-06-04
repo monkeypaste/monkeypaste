@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using SQLiteNetExtensions.Attributes;
 using System.Threading.Tasks;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
 

@@ -49,13 +49,17 @@
     <Compile Include="WinApi.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MonkeyPaste.Plugin\MonkeyPaste.Plugin.csproj">
-      <Project>{faf48e9e-e646-44d0-be02-ad1a9e9dfcd8}</Project>
-      <Name>MonkeyPaste.Plugin</Name>
-    </ProjectReference>
+    <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="manifest.json" />
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj">
+      <Project>{400473eb-9a5b-4e8d-816d-5bc5b315c542}</Project>
+      <Name>MonkeyPaste.Common.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj">
+      <Project>{e641a0b5-0461-47f3-91bb-340be880a545}</Project>
+      <Name>MonkeyPaste.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

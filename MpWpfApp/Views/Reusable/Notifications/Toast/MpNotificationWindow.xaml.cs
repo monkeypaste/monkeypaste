@@ -30,7 +30,9 @@ namespace MpWpfApp {
         }
 
         private static void UpdateWindows() {
-            _windows.ForEach(x => x.SetWindowToBottomRightOfScreen());
+            foreach(var window in _windows.ToList()) {
+                window.SetWindowToBottomRightOfScreen();
+            }
         }
         private void SetWindowToBottomRightOfScreen() {
             if(!_windows.Contains(this)) {

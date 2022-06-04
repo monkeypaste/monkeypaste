@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Linq;
 using Newtonsoft.Json;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public static class MpPluginManager {
@@ -148,7 +148,7 @@ namespace MonkeyPaste {
                 Assembly pluginAssembly = Assembly.LoadFrom(dllPath);
                 for (int i = 0; i < pluginAssembly.GetTypes().Length; i++) {
                     var curType = pluginAssembly.GetTypes()[i];
-                    if (curType.GetInterface("MonkeyPaste.Plugin."+nameof(MpIPluginComponentBase)) != null) {
+                    if (curType.GetInterface("MonkeyPaste.Common.Plugin."+nameof(MpIPluginComponentBase)) != null) {
                         var pluginObj = Activator.CreateInstance(curType);
                         if (pluginObj != null) {
                             return pluginObj;

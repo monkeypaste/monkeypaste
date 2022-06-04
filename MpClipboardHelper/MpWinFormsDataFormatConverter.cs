@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 
 namespace MpClipboardHelper {
     public class MpWinFormsDataFormatConverter : MpINativeDataFormatConverter {
@@ -35,5 +36,8 @@ namespace MpClipboardHelper {
             }
         }
 
+        public string GetNativeFormatName(MpPortableDataFormat portableType, string fallbackName = "") {
+            throw new NotImplementedException();
+        }
     }
 }

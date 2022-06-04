@@ -6,7 +6,7 @@
                      xmlns:core="clr-namespace:System;assembly=mscorlib"
                      xmlns:local="clr-namespace:MpWpfApp"
                      xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                     xmlns:plugin="clr-namespace:MonkeyPaste.Plugin;assembly=MonkeyPaste.Plugin"
+                     xmlns:plugin="clr-namespace:MonkeyPaste.Common;assembly=MonkeyPaste.Common"
                      xmlns:dd="urn:gong-wpf-dragdrop"
                      x:TypeArguments="local:MpAppViewModel"
                      mc:Ignorable="d"
@@ -123,7 +123,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            
+
                             <DataGridTemplateColumn Header="Ignore"
                                                     MinWidth="90">
                                 <DataGridTemplateColumn.CellTemplate>

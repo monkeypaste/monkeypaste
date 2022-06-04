@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Plugin;
+﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

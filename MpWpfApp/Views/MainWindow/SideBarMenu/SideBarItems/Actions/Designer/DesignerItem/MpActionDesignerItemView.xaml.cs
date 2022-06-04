@@ -22,5 +22,15 @@ namespace MpWpfApp {
         public MpActionDesignerItemView() {
             InitializeComponent();
         }
+
+        private void ContentControl_PreviewKeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Delete) {
+                if (BindingContext.IsSelected) {
+                    e.Handled = true;
+                    BindingContext.DeleteThisActionCommand.Execute(null);
+                }
+            }
+            
+        }
     }
 }

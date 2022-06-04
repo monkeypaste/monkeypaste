@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace CoreClipboardHandler {
     public class CoreClipboardHandler : MpIClipboardPluginComponent {

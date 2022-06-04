@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
 using MpProcessHelper;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using static OpenTK.Graphics.OpenGL.GL;
 using System.Windows.Documents;
 
@@ -782,7 +782,7 @@ namespace MpWpfApp {
         }
 
         public void ClearPinnedSelection(bool clearEditing = true) {
-            MpHelpers.RunOnMainThread((Action)(() => {
+           // MpHelpers.RunOnMainThread((Action)(() => {
                 if (clearEditing) {
                     ClearPinnedEditing();
                 }
@@ -793,12 +793,12 @@ namespace MpWpfApp {
                     }
                     ctvm.ClearSelection();
                 }
-            }));
+            //}));
         }
 
         public void ResetClipSelection(bool clearEditing = true) {
             IsSelectionReset = true;
-            MpHelpers.RunOnMainThread(() => {
+           // MpHelpers.RunOnMainThread(() => {
                 ClearClipSelection(clearEditing);
                 ClearPinnedSelection(clearEditing);
 
@@ -811,7 +811,7 @@ namespace MpWpfApp {
                 }
                 RequestScrollToHome();
 
-            });
+            //});
             IsSelectionReset = false;
         }
 
@@ -2214,13 +2214,13 @@ namespace MpWpfApp {
             },
             () => SelectedItem != null);
 
-        public ICommand SummarizeCommand => new RelayCommand(
-            async () => {
-                var result = await MpOpenAi.Instance.Summarize(SelectedModels[0].ItemData.ToPlainText());
-                SelectedModels[0].ItemDescription = result;
-                await SelectedModels[0].WriteToDatabaseAsync();
-            },
-            () => SelectedItem != null && SelectedItem.IsTextItem);
+        //public ICommand SummarizeCommand => new RelayCommand(
+        //    async () => {
+        //        var result = await MpOpenAi.Instance.Summarize(SelectedModels[0].ItemData.ToPlainText());
+        //        SelectedModels[0].ItemDescription = result;
+        //        await SelectedModels[0].WriteToDatabaseAsync();
+        //    },
+        //    () => SelectedItem != null && SelectedItem.IsTextItem);
 
         public ICommand CreateQrCodeFromSelectedClipsCommand => new RelayCommand(
              () => {

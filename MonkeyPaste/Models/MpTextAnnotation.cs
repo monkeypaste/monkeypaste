@@ -9,7 +9,7 @@ using System.Linq;
 using Xamarin.Forms;
 using SQLiteNetExtensions.Extensions.TextBlob;
 using System.Text;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpTextAnnotation : MpDbModelBase, MpIAnnotation {

@@ -18,22 +18,31 @@ using System.Windows.Threading;
 namespace MpWpfApp {
 
     public class MpDesignerCanvas : Canvas {
+        #region Private Variables
+
         private DispatcherTimer _timer;
+
+        #endregion
+
         #region Properties
 
-        public Brush EmptyLineBrush { get; set; } = Brushes.DimGray;
-        public double EmptyLineThickness { get; set; } = 2;
-        public DashStyle EmptyLineDaskStyle { get; set; } = DashStyles.Dash;
+        #region Appearance
 
-        public Brush TransitionLineBorderBrush { get; set; } = Brushes.White;
-        public Brush TransitionLineFillBrush { get; set; } = Brushes.Red;
+        public Brush TransitionLineDefaultBorderBrush { get; set; } = Brushes.White;
+        public Brush TransitionLineHoverBorderBrush { get; set; } = Brushes.Yellow;
+        public Brush TransitionLineDisabledFillBrush { get; set; } = Brushes.Red;
+        public Brush TransitionLineEnabledFillBrush { get; set; } = Brushes.Lime;
+
+        #endregion
+
+        #region Layout
         public double TransitionLineThickness { get; set; } = 1;
-
         public double TipWidth { get; set; } = 10;
-
         public double TipLength { get; set; } = 20;
-
         public double TailWidth { get; set; } = 5;
+        #endregion
+
+        
 
         #region Voronoi
 
@@ -79,12 +88,10 @@ namespace MpWpfApp {
             }
 
             var acvm = DataContext as MpActionCollectionViewModel;
-
             if(acvm == null) {
                 return;
             }
             var tavm = acvm.SelectedItem;
-
             if(tavm == null) {
                 return;
             }
@@ -96,42 +103,40 @@ namespace MpWpfApp {
             }
 
             var avmc = tavm.FindAllChildren().ToList();
-
             if(avmc == null) {
                 return;
             }
             avmc.Insert(0, tavm);
             foreach (var avm in avmc) {
-                Point tail = new Point(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));                
+                Point tail = new Point(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
+
 
                 var pavm = avm.ParentActionViewModel;
                 if (pavm == null) {
                     continue;
                 }
 
+                var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
+                var fillBrush = avm.IsEnabled.HasValue && avm.IsEnabled.Value ? //&&
+                                //(pavm.ParentActionViewModel == null || (pavm.ParentActionViewModel.IsEnabled.HasValue && pavm.ParentActionViewModel.IsEnabled.Value)) ?
+                    TransitionLineEnabledFillBrush : TransitionLineDisabledFillBrush;
+
                 Point head = new Point(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
-                DrawArrow(dc, head, tail, avm.Width / 2);
+
+
+                if(pavm is MpMacroActionViewModel) {
+                    int i = 0;
+                }
+                
+                DrawArrow(dc, head, tail, avm.Width / 2, borderBrush, fillBrush);
             }
         }
 
         private void _timer_Tick(object sender, EventArgs e) {
             InvalidateVisual();
         }
-        private void DrawEmptyLine(DrawingContext dc, Point startPoint, Point endPoint, double dw) {
-            Vector direction = endPoint - startPoint;
 
-            Vector normalizedDirection = direction;
-            normalizedDirection.Normalize();
-
-            startPoint += normalizedDirection * dw;
-            endPoint.Y -= normalizedDirection.Y * (dw / 2);
-
-            var emptyPen = new Pen(EmptyLineBrush, EmptyLineThickness) { DashStyle = EmptyLineDaskStyle };
-
-            dc.DrawLine(emptyPen, startPoint, endPoint);
-        }
-
-        private void DrawArrow(DrawingContext dc, Point startPoint, Point endPoint, double dw) {
+        private void DrawArrow(DrawingContext dc, Point startPoint, Point endPoint, double dw, Brush borderBrush, Brush fillBrush) {
             Vector direction = endPoint - startPoint;
 
             Vector normalizedDirection = direction;
@@ -150,7 +155,7 @@ namespace MpWpfApp {
 
             Point endArrowCenterPosition = endPoint - (normalizedDirection * TipLength);
 
-            //pc.Add(endPoint); // Start with tip of the arrow
+            // Start with tip of the arrow
             pc.Add(endArrowCenterPosition + arrowWidthVector);
             pc.Add(endArrowCenterPosition + lineWidenVector);
             pc.Add(startPoint + lineWidenVector);
@@ -165,13 +170,10 @@ namespace MpWpfApp {
                 geometryContext.PolyLineTo(pc, true, true);
             }
             streamGeometry.Freeze();
-            dc.DrawGeometry(TransitionLineFillBrush, new Pen(TransitionLineBorderBrush, TransitionLineThickness), streamGeometry);
-
-            //for (int i = 0; i < pc.Count; i++) {
-            //    var p1 = pc[i];
-            //    var p2 = i == pc.Count - 1 ? pc[0] : pc[i + 1];
-            //    dc.DrawLine(new Pen(TransitionLineBorderBrush, TransitionLineThickness), p1,p2);
-            //}
+            dc.DrawGeometry(
+                fillBrush,
+                new Pen(borderBrush, TransitionLineThickness),
+                streamGeometry);
         }
 
 

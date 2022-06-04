@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using MonkeyPaste.Common;
 
-namespace MonkeyPaste.Plugin {
+namespace MonkeyPaste.Common.Plugin {
     public class MpPluginPresetFormat : MpJsonObject {
         public string guid { get; set; }
 

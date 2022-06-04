@@ -17,7 +17,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
 using PropertyChanged;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpContentItemViewModel : 

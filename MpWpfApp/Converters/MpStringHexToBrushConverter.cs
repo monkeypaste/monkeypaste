@@ -3,7 +3,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpStringHexToBrushConverter : IValueConverter {

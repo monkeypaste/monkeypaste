@@ -257,6 +257,7 @@
     </local:MpUserControl.Resources>
     <ContentControl Width="{Binding Width}"
                     Height="{Binding Height}"
+                    PreviewKeyDown="ContentControl_PreviewKeyDown"
                     ClipToBounds="False"
                     Background="Transparent"
                     Content="{Binding}"

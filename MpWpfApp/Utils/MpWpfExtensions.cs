@@ -29,7 +29,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Microsoft.Xaml.Behaviors;
 
 namespace MpWpfApp {

@@ -12,7 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Newtonsoft.Json;
 using System.Web;
 using System.Windows;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -59,7 +59,7 @@ namespace MpWpfApp {
 
         public MpMenuItemViewModel MenuItemViewModel {
             get { 
-                var subItems = Items.Select(x => x.MenuItemViewModel).ToList();
+                var subItems = Items.Where(x=>!x.IsActionPreset).Select(x => x.MenuItemViewModel).ToList();
                 if(subItems.Count > 0) {
                     subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
@@ -71,7 +71,7 @@ namespace MpWpfApp {
                         CommandParameter = AnalyzerPluginGuid
                     });
                 return new MpMenuItemViewModel() {
-                    Header = Title,
+                    Header = Title, 
                     IconId = IconId,
                     SubItems = subItems
                 };
@@ -372,7 +372,7 @@ namespace MpWpfApp {
 
         public MpAnalyzerPluginFormat AnalyzerPluginFormat => PluginFormat == null ? null : PluginFormat.analyzer;
 
-        public MpIAnalyzerComponent AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.Component as MpIAnalyzerComponent;
+        public MpIPluginComponentBase AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
         
         #endregion
 

@@ -11,10 +11,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
-
     public abstract class MpActionOutput {
         public MpCopyItem CopyItem { get; set; }
         public MpActionOutput Previous { get; set; }
@@ -28,6 +27,7 @@ namespace MpWpfApp {
         MpISelectableViewModel,
         MpIUserIconViewModel,
         MpITreeItemViewModel<MpActionViewModelBase>,
+        MpITooltipInfoViewModel,
         MpIBoxViewModel,
         MpIMovableViewModel,
         MpIActionComponentHandler {
@@ -66,6 +66,38 @@ namespace MpWpfApp {
         public bool CanMove { get; set; }
 
         public int MovableId => ActionId;
+
+        #endregion
+
+        #region MpITooltipInfoViewModel Implementation
+
+        public object Tooltip {
+            get {
+                string toolTipStr = string.Empty;
+
+                if (this is MpAnalyzeActionViewModel) {
+                    toolTipStr = "Analyzer - Processes triggered content or previous action output using a selected plugin.";
+                } else if (this is MpClassifyActionViewModel) {
+                    toolTipStr = "Classifier - Automatically adds triggered content to the selected collection.";
+                } else if (this is MpCompareActionViewModelBase) {
+                    toolTipStr = "Comparer - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.";
+                } else if (this is MpFileWriterActionViewModel) {
+                    toolTipStr = "File Writer - Saves content to the selected folder.";
+                } else if (this is MpMacroActionViewModel) {
+                    toolTipStr = "Macro - When used after a compare action, embeds a selected local or remote command for onto the text of each match";
+                } else if (this is MpContentAddTriggerViewModel) {
+                    toolTipStr = "Content Added - Triggered when content of the selected type is added";
+                } else if (this is MpContentTaggedTriggerViewModel) {
+                    toolTipStr = "Content Classified - Triggered when content is added to the selected collection";
+                } else if (this is MpFileSystemTriggerViewModel) {
+                    toolTipStr = "Folder Changed - Triggered when a file is added to the selected directory (or subdirectory if checked)";
+                } else if (this is MpShortcutTriggerViewModel) {
+                    toolTipStr = "Shortcut - Triggered when the recorded shortcut is pressed on the currently selected content";
+                }
+                     
+                return toolTipStr;
+            }
+        }
 
         #endregion
 
@@ -1121,6 +1153,7 @@ namespace MpWpfApp {
                 await PerformAction(ao);
                 IsPerformingActionFromCommand = false;
             });
+
 
         #endregion
     }

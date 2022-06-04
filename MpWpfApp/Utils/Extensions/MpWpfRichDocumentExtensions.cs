@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Diagnostics;
 using System.Windows.Navigation;
 using System.Windows.Input;
@@ -92,6 +92,16 @@ namespace MpWpfApp {
             }
             return fd.GetVisualAncestor<RichTextBox>();
         }
+
+        public static int ToOffset(this TextPointer tp, TextPointer refPointer = null) {
+            refPointer = refPointer == null ? tp.DocumentStart : refPointer;
+            return refPointer.GetOffsetToPosition(tp);
+        }
+
+        public static TextPointer ToPointer(this int offset, TextPointer refPointer) {
+            return refPointer.GetPositionAtOffset(offset);
+        }
+
         public static TextRange ContentRange(this TextElement te) {
             return new TextRange(te.ContentStart, te.ContentEnd);
         }

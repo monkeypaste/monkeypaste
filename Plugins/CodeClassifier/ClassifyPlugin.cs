@@ -6,13 +6,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CodeClassifier.StringTokenizer;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Newtonsoft.Json;
 
 namespace CodeClassifier {
-    public class ClassifyPlugin : MpIAnalyzerComponent {
-        public async Task<object> AnalyzeAsync(object args) {
-            await Task.Delay(1);
+    public class ClassifyPlugin : MpIAnalyzeComponent {
+        public object Analyze(object args) {
             MpPluginResponseFormat response = null;
 
             var reqParts = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString()).items;

@@ -4,7 +4,7 @@ using System.Text;
 using MonkeyPaste;
 using Xamarin.Forms.PlatformConfiguration;
 using System.Threading.Tasks;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using MpClipboardHelper;
 
 namespace MpWpfApp {

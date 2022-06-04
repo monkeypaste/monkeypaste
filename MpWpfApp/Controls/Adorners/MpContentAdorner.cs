@@ -10,7 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MonkeyPaste.Plugin {
+namespace MonkeyPaste.Common {
     public static class MpConsole {
         public static double MaxLogFileSizeInMegaBytes = 3.25;
 

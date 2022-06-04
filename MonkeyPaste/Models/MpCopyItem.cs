@@ -5,7 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public enum MpCopyItemPropertyPathType {

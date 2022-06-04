@@ -17,7 +17,7 @@
             BorderThickness="1"
             BorderBrush="Black"
             Background="Transparent">
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Margin="5">
             <TextBlock Text="Formats"
                        FontSize="20"
                        Margin="5,0"

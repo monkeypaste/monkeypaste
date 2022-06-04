@@ -17,7 +17,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.IO;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpCertificateManager {

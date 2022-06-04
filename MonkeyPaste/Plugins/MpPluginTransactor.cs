@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Plugin;
+﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace MonkeyPaste {
             object sourceHandler,
             bool suppressWrite = false) { 
 
-            if(pluginComponent is MpIAnalyzerComponent analyzerPlugin) {
+            if(pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzeComponent) {
                 MpAnalyzerTransaction at = new MpAnalyzerTransaction() {
                     RequestTime = DateTime.Now,
                 };
@@ -47,7 +47,11 @@ namespace MonkeyPaste {
 
                 // GET RESPONSE
                 try {
-                    at.Response = await analyzerPlugin.AnalyzeAsync(JsonConvert.SerializeObject(at.Request));
+                    if(pluginComponent is MpIAnalyzeAsyncComponent analyzeAsyncComponent) {
+                        at.Response = await analyzeAsyncComponent.AnalyzeAsync(JsonConvert.SerializeObject(at.Request));
+                    } else if(pluginComponent is MpIAnalyzeComponent analyzeComponent) {
+                        at.Response = analyzeComponent.Analyze(JsonConvert.SerializeObject(at.Request));
+                    }
                     at.ResponseTime = DateTime.Now;
                 }
                 catch (Exception ex) {

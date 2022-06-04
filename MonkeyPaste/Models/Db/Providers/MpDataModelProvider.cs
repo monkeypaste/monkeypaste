@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public static class MpDataModelProvider {
@@ -187,6 +187,9 @@ namespace MonkeyPaste {
                 if (searchOp == "like" && searchText.Contains('%')) {
                     searchText = searchText.Replace("%", @"\%");
                     escapeClause = @" ESCAPE '\'";
+                }
+                if(searchText.Contains("'")) {
+                    searchText = searchText.Replace("'", "''");
                 }
                 if (qi.FilterFlags.HasFlag(MpContentFilterType.Title)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, searchText, escapeClause));

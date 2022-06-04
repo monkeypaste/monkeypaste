@@ -5,16 +5,15 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 namespace MonkeyPaste {
     public interface MpICommandLine {
 
     }
-    public class MpCommandLinePlugin : MpIAnalyzerComponent {
+    public class MpCommandLinePlugin : MpIAnalyzeComponent {
         public string Endpoint { get; set; }
 
-        public async Task<object> AnalyzeAsync(object args) {
-            await Task.Delay(1);
+        public object Analyze(object args) {
             Process process = new Process();
             process.StartInfo.FileName = Endpoint;
             process.StartInfo.Arguments = Base64EncodeArgs(args.ToString());

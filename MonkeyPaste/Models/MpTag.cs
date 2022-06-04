@@ -6,7 +6,7 @@ using SQLiteNetExtensions;
 using System.Threading.Tasks;
 using System.Linq;
 using SQLiteNetExtensions.Attributes;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     [Table("MpTag")]

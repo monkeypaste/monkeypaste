@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Collections.Specialized;
 using System.Windows;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpWpfPasteObjectB78uilder  {

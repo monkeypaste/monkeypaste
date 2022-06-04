@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using MonkeyPaste.Common;
 
-namespace MonkeyPaste.Plugin {
+namespace MonkeyPaste.Common.Plugin {
 
     public enum MpPluginParameterControlType {
         None = 0,

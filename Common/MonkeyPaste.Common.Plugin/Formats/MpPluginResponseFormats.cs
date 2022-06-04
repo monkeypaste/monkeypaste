@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Text;
+using MonkeyPaste.Common;
 
-namespace MonkeyPaste.Plugin {    
+namespace MonkeyPaste.Common.Plugin {    
     public class MpPluginResponseFormat : MpJsonObject {
         public const string RETRY_MESSAGE = @"RETRY";
         public const string ERROR_MESSAGE = @"ERROR";

@@ -14,7 +14,7 @@ using System.Windows.Media;
 using FFImageLoading.Helpers.Exif;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
 

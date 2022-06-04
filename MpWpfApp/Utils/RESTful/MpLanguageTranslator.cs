@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
 

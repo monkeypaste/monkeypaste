@@ -40,13 +40,12 @@ namespace MpWpfApp {
 
         private void Sbvm_OnSearchTextBoxFocusRequest(object sender, EventArgs e) {
             //SearchBox.Focus(); 
-            SearchBox.CaretIndex = SearchBox.Text.Length - 1;
+            //SearchBox.CaretIndex = SearchBox.Text.Length - 1;
         }
 
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e) {
-            var sbvm = DataContext as MpSearchBoxViewModel;
-            sbvm.IsTextBoxFocused = true;
-
+            BindingContext.IsTextBoxFocused = true;
+            MpIsFocusedExtension.IsAnyTextBoxFocused = true;
             MpHelpers.RunOnMainThread(async () => {
                 while(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                     await Task.Delay(100);
@@ -54,6 +53,11 @@ namespace MpWpfApp {
                 MpShortcutCollectionViewModel.Instance.ApplicationHook.MouseDown += ApplicationHook_MouseDown;
             });
             
+        }
+
+        private void SearchBox_LostFocus(object sender, RoutedEventArgs e) {
+            BindingContext.IsTextBoxFocused = false;
+            MpIsFocusedExtension.IsAnyTextBoxFocused = false;
         }
 
         private void SearchBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
@@ -162,8 +166,14 @@ namespace MpWpfApp {
 
         private void SearchBox_KeyUp(object sender, KeyEventArgs e) {
             if(e.Key == Key.Enter) {
+                e.Handled = true;
                 BindingContext.PerformSearchCommand.Execute(null);
             }
         }
+
+        private void SearchBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+
+        }
+
     }
 }

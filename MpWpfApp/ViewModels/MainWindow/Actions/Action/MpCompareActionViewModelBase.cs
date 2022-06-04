@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Windows.Documents;
@@ -255,19 +255,20 @@ namespace MpWpfApp {
                 return;
             }
             MpActionOutput ao = GetInput(arg);
-
+            
             string compareStr = await GetCompareStr(ao);
             if(compareStr == null) {
                 return;
             }
+            var compareOutput = new MpCompareOutput() {
+                Previous = ao,
+                CopyItem = ao.CopyItem
+            };
 
-            var matches = GetMatches(compareStr);
-            if (matches != null && matches.Count > 0) {
-                await base.PerformAction(new MpCompareOutput() {
-                    Previous = ao,
-                    CopyItem = ao.CopyItem,
-                    Matches = matches
-                });
+            compareOutput.Matches = GetMatches(compareStr);
+
+            if (compareOutput.Matches != null && compareOutput.Matches.Count > 0) {
+                base.PerformAction(compareOutput).FireAndForgetSafeAsync(this);
             }
         }
 
@@ -435,38 +436,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-
-        //public ICommand ShowCompareTypeChooserMenuCommand => new RelayCommand<object>(
-        //     (args) => {
-        //         var fe = args as FrameworkElement;
-        //         var cm = new MpContextMenuView();
-        //         cm.DataContext = CompareTypesMenuItemViewModel;
-        //         fe.ContextMenu = cm;
-        //         fe.ContextMenu.PlacementTarget = fe;
-        //         fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
-        //         fe.ContextMenu.IsOpen = true;
-        //         fe.ContextMenu.Closed += ContextMenu_Closed;
-        //     });
-
-        private void ContextMenu_Closed(object sender, RoutedEventArgs e) {
-            return;
-        }
-
-        public ICommand SetCompareDataContentTypeCommand => new RelayCommand<object>(
-             (args) => {
-                 CompareData = Enum.GetName(typeof(MpCopyItemType), args);
-             });
-
-        public ICommand ChangeCompareTypeCommand => new RelayCommand<object>(
-             (args) => {
-                 ComparisonOperatorType = (MpComparisonOperatorType)args;
-             });
-
-        public ICommand ChangeComparePropertyPathCommand => new RelayCommand<object>(
-              (args) => {
-                 ComparePropertyPathType = (MpCopyItemPropertyPathType)args;
-              });
-
         #endregion
     }
 }

@@ -6,10 +6,10 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using SQLite;
-using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
     public class MpAnalyticItemParameterViewModelBase : 

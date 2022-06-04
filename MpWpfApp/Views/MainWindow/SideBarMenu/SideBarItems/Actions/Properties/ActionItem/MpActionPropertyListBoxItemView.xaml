@@ -19,7 +19,20 @@
               IsExpanded="{Binding IsExpanded,
                                    Mode=TwoWay}">
         <Expander.Header>
-            <local:MpActionPropertyHeaderView DataContext="{Binding}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.8*" />
+                    <ColumnDefinition Width="0.2*" />
+                </Grid.ColumnDefinitions>
+                <local:MpActionPropertyHeaderView Grid.Column="0" 
+                                                  HorizontalAlignment="Left"
+                                                  DataContext="{Binding}" />
+                <local:MpTooltipInfoView HorizontalAlignment="Right"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Center"
+                                         DockPanel.Dock="Right"
+                                         DataContext="{Binding}" />
+            </Grid>
         </Expander.Header>
         <Grid>
             <Border Grid.Row="2"

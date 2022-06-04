@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Plugin;
+﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
@@ -181,7 +181,8 @@ namespace MonkeyPaste {
                 Label = this.Label + " - Copy",
                 Description = this.Description,
                 ManifestLastModifiedDateTime = this.ManifestLastModifiedDateTime,
-                AnalyzerFormat = this.AnalyzerFormat
+                AnalyzerFormat = this.AnalyzerFormat,
+                ClipboardFormat = this.ClipboardFormat                
             };
 
             if(IconId > 0) {
@@ -198,8 +199,6 @@ namespace MonkeyPaste {
                 var cppv = await ppv.CloneDbModel();
                 cppv.AnalyticItemPresetId = caip.Id;
                 await cppv.WriteToDatabaseAsync();
-
-                //caip.PresetParameterValues.Add(cppv);
             }
 
             return caip;

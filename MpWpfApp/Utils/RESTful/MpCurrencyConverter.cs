@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json.Linq;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public enum CurrencyType {

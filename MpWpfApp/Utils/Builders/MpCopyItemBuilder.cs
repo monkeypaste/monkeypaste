@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using MpProcessHelper;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Reflection;
 
 namespace MpWpfApp {

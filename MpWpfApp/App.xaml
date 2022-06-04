@@ -27,39 +27,59 @@
 
             <Style TargetType="GridSplitter">
                 <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="Yellow" />
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="Yellow" />
                     </Trigger>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Background" Value="Cornsilk" />
+                    <Trigger Property="IsMouseOver"
+                             Value="False">
+                        <Setter Property="Background"
+                                Value="Cornsilk" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
 
             <Style TargetType="ComboBoxItem">
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="HorizontalContentAlignment" Value="Left" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Top" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Center" />
             </Style>
 
             <Style TargetType="{x:Type ItemsControl}">
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="HorizontalContentAlignment" Value="Left" />
-                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Top" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
             </Style>
             <Style TargetType="{x:Type ListBoxItem}">
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="HorizontalContentAlignment" Value="Left" />
-                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Top" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
             </Style>
             <Style TargetType="{x:Type TreeViewItem}">
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="HorizontalContentAlignment" Value="Left" />
-                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Top" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
             </Style>
 
             <!--  CONTEXT MENU  -->
@@ -290,10 +310,14 @@
                             </ListBox.ItemsPanel>
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListBoxItem}">
-                                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                    <Setter Property="HorizontalContentAlignment" Value="Left" />
-                                    <Setter Property="VerticalContentAlignment" Value="Top" />
+                                    <Setter Property="IsSelected"
+                                            Value="{Binding IsSelected}" />
+                                    <Setter Property="FocusVisualStyle"
+                                            Value="{x:Null}" />
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Left" />
+                                    <Setter Property="VerticalContentAlignment"
+                                            Value="Top" />
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -448,14 +472,22 @@
             <!--  Color Palletes End  -->
             <Style x:Key="DefaultItemStyle"
                    TargetType="{x:Type MenuItem}">
-                <Setter Property="Header" Value="{Binding Header}" />
-                <Setter Property="Command" Value="{Binding Command}" />
-                <Setter Property="CommandParameter" Value="{Binding CommandParameter}" />
-                <Setter Property="Icon" Value="{Binding Icon}" />
-                <Setter Property="InputGestureText" Value="{Binding InputGestureText}" />
-                <Setter Property="IsCheckable" Value="{Binding IsCheckable}" />
-                <Setter Property="IsChecked" Value="{Binding IsChecked}" />
-                <Setter Property="ItemsSource" Value="{Binding SubItems}" />
+                <Setter Property="Header"
+                        Value="{Binding Header}" />
+                <Setter Property="Command"
+                        Value="{Binding Command}" />
+                <Setter Property="CommandParameter"
+                        Value="{Binding CommandParameter}" />
+                <Setter Property="Icon"
+                        Value="{Binding Icon}" />
+                <Setter Property="InputGestureText"
+                        Value="{Binding InputGestureText}" />
+                <Setter Property="IsCheckable"
+                        Value="{Binding IsCheckable}" />
+                <Setter Property="IsChecked"
+                        Value="{Binding IsChecked}" />
+                <Setter Property="ItemsSource"
+                        Value="{Binding SubItems}" />
                 <!--<Setter Property="ItemContainerStyle"
                     Value="{StaticResource DefaultItemStyle}"/>
             <Setter Property="ItemTemplateSelector"
@@ -485,18 +517,26 @@
                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </Border>
                             <ControlTemplate.Triggers>
-                                <Trigger Property="IsHighlighted" Value="True">
-                                    <Setter TargetName="Bd" Property="Background" Value="#00FFFFFF" />
-                                    <Setter TargetName="Bd" Property="BorderBrush" Value="#00FFFFFF" />
+                                <Trigger Property="IsHighlighted"
+                                         Value="True">
+                                    <Setter TargetName="Bd"
+                                            Property="Background"
+                                            Value="#00FFFFFF" />
+                                    <Setter TargetName="Bd"
+                                            Property="BorderBrush"
+                                            Value="#00FFFFFF" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Background"
+                        Value="Transparent" />
                 <Style.Triggers>
-                    <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" Value="Transparent" />
+                    <Trigger Property="IsHighlighted"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="Transparent" />
                     </Trigger>
                 </Style.Triggers>
             </Style>

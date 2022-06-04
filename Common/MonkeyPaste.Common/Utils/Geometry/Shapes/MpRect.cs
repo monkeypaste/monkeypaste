@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste.Plugin {
+﻿namespace MonkeyPaste.Common {
     public class MpRect : MpShape {
         public MpPoint Location { get; set; } = new MpPoint();
 

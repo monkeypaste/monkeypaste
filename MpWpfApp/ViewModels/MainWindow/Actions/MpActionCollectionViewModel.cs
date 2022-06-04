@@ -14,7 +14,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpActionCollectionViewModel : 
@@ -210,6 +210,11 @@ namespace MpWpfApp {
             PropertyChanged += MpMatcherCollectionViewModel_PropertyChanged;
         }
 
+
+        #endregion
+
+        #region Public Methods
+
         public async Task Init() {
             IsBusy = true;
 
@@ -232,7 +237,7 @@ namespace MpWpfApp {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
             OnPropertyChanged(nameof(Items));
 
-            await RestoreAllEnabled();
+            RestoreAllEnabled().FireAndForgetSafeAsync(this);
 
             // select most recent action
             MpActionViewModelBase actionToSelect = AllActions
@@ -247,11 +252,6 @@ namespace MpWpfApp {
 
             IsBusy = false;
         }
-
-        #endregion
-
-        #region Public Methods
-
         public async Task<MpTriggerActionViewModelBase> CreateTriggerViewModel(MpAction a) {
             
             if(a.ActionType != MpActionType.Trigger || 

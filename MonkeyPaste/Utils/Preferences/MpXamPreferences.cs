@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpXamPreferences : MpIPreferenceIO {

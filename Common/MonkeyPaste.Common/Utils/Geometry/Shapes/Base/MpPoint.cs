@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace MonkeyPaste.Plugin {
+namespace MonkeyPaste.Common {
     public class MpPoint : ICloneable {
         public double X { get; set; } = 0;
         public double Y { get; set; } = 0;

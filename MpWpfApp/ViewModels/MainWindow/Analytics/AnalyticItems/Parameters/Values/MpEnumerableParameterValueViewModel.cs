@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Office.Interop.Outlook;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -11,11 +11,12 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Web;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpHttpPlugin : MpIAnalyzerComponent {
+    public class MpHttpPlugin : MpIAnalyzeAsyncComponent {
         #region Private Variables
         private bool _showDebug = true;
 
@@ -477,7 +478,7 @@ namespace MonkeyPaste {
 		""format"": ""Bmp""
 	}
 }";
-        private List<MpAnalyzerPluginRequestItemFormat> _reqParams;
+        private List<MpIParameterKeyValuePair> _reqParams;
         private MpHttpTransactionFormat _httpTransactionFormat;
         private JToken _rootResponseToken;
 
@@ -514,11 +515,11 @@ namespace MonkeyPaste {
         public async Task<object> AnalyzeAsync(object args) {
             string unalteredHttpFormat = JsonConvert.SerializeObject(_httpTransactionFormat);
 
-            _reqParams = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString()).items;
+            _reqParams = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString()).items.Cast<MpIParameterKeyValuePair>().ToList();
             if(_reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
                 Console.WriteLine($"With args: {args}");
-                _reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
+                _reqParams = new List<MpIParameterKeyValuePair>();
             }
 
             using(var client = new HttpClient()) {
@@ -574,11 +575,11 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private HttpRequestMessage CreateRequestMessage(object args) {
-            _reqParams = JsonConvert.DeserializeObject<List<MpAnalyzerPluginRequestItemFormat>>(args.ToString());
+            _reqParams = JsonConvert.DeserializeObject<List<MpIParameterKeyValuePair>>(args.ToString());
             if (_reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
                 Console.WriteLine($"With args: {args}");
-                _reqParams = new List<MpAnalyzerPluginRequestItemFormat>();
+                _reqParams = new List<MpIParameterKeyValuePair>();
             }
             var request = new HttpRequestMessage();
             request.Method = RequestMethod;

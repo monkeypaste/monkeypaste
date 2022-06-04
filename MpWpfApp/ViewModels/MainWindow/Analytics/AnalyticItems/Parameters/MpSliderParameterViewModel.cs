@@ -1,5 +1,5 @@
 ﻿using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using System;
 using System.Linq;

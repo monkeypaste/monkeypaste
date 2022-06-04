@@ -1,5 +1,5 @@
 ﻿using System;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpXamStringToSyncObjectTypeConverter : MpIStringToSyncObjectTypeConverter {

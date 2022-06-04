@@ -109,7 +109,7 @@
                            SnapsToDevicePixels="True" />
                 </Button>
                 <!--  Search TextBox  -->
-                <TextBox x:Name="SearchBox"
+                <!--<TextBox x:Name="SearchBox"
                          GotFocus="SearchBox_GotFocus"
                          Grid.Column="1"
                          AllowDrop="False"
@@ -127,7 +127,37 @@
                          Text="{Binding SearchText,
                                         Mode=TwoWay,
                                         NotifyOnTargetUpdated=True,
-                                        UpdateSourceTrigger=PropertyChanged}" />
+                                        UpdateSourceTrigger=PropertyChanged}" />-->
+                <ComboBox x:Name="SearchBox"
+                          BorderThickness="0"
+                          IsVisibleChanged="SearchBox_IsVisibleChanged"
+                          Grid.Column="1"
+                          AllowDrop="False"
+                          FontSize="18"
+                          Background="Transparent"
+                          IsEditable="True"
+                          StaysOpenOnEdit="True"
+                          GotFocus="SearchBox_GotFocus"
+                          LostFocus="SearchBox_LostFocus"
+                          local:MpHoverableExtension.IsEnabled="True"
+                          local:MpHoverableExtension.HoverCursor="IBeam"
+                          Foreground="{Binding TextBoxTextBrush}"
+                          FontStyle="{Binding TextBoxFontStyle}"
+                          VerticalContentAlignment="Center"
+                          PreviewKeyUp="SearchBox_KeyUp"
+                          ItemsSource="{Binding RecentSearchTexts}"
+                          IsTextSearchCaseSensitive="True"
+                          Text="{Binding SearchText,
+                                         Mode=TwoWay,
+                                         NotifyOnTargetUpdated=True,
+                                         UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
                 <!--  Placeholder TextBlock  -->
                 <TextBlock x:Name="SearchBoxPlaceholderBlock"
                            Grid.Column="1"

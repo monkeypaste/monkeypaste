@@ -145,6 +145,10 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+        public ObservableCollection<string> RecentSearchTexts {
+            get => new ObservableCollection<string>(MpPreferences.RecentSearchTexts.Split(new string[] { MpPreferences.STRING_ARRAY_SPLIT_TOKEN }, StringSplitOptions.RemoveEmptyEntries));
+            set => MpPreferences.RecentSearchTexts = string.Join(MpPreferences.STRING_ARRAY_SPLIT_TOKEN, value);
+        }
 
         public bool CanDeleteSearch => UserSearch != null && UserSearch.Id > 0;
 
@@ -510,6 +514,21 @@ namespace MpWpfApp {
             }
             return IsTextValid;
         }
+
+        private void UpdateRecentSearchTexts() {
+            if (!string.IsNullOrEmpty(_text)) {
+                var rftl = RecentSearchTexts;
+                int recentFindIdx = rftl.IndexOf(_text);
+                if (recentFindIdx < 0) {
+                    rftl.Insert(0, _text);
+                    rftl = new ObservableCollection<string>(rftl.Take(MpPreferences.MaxRecentTextsCount));
+                } else {
+                    rftl.RemoveAt(recentFindIdx);
+                    rftl.Insert(0, _text);
+                }
+                RecentSearchTexts = rftl;
+            }
+        }
         #endregion
 
         #region Commands
@@ -539,6 +558,7 @@ namespace MpWpfApp {
                 IsMultipleMatches = false;
 
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged();
+                UpdateRecentSearchTexts();
             },!MpMainWindowViewModel.Instance.IsMainWindowLoading);
 
         public ICommand NextMatchCommand => new RelayCommand(

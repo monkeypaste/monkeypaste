@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MonkeyPaste.Common;
 
-namespace MonkeyPaste.Plugin {
+namespace MonkeyPaste.Common.Plugin {
     public enum MpPluginComponentType {
         None = 0,
         Clipboard,
@@ -32,7 +33,9 @@ namespace MonkeyPaste.Plugin {
 
         public MpAnnotaterPluginFormat annotater { get; set; }
 
+        public string RootDirectory { get; set; }
         public string ComponentPath { get; set; }
+        
         public object Component { get; set; } = null;
         
     }

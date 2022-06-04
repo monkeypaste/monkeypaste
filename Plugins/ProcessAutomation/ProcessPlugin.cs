@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using MpProcessHelper;
 using MpClipboardHelper;
 using System.Diagnostics;
 
 namespace ProcessAutomation {
-    public class ProcessPlugin : MpIAnalyzerComponent {
+    public class ProcessPlugin : MpIAnalyzeComponent {
         private const int _WAIT_FOR_INPUT_IDLE_MS = 30000;
 
         private static Dictionary<string, IntPtr> _lastRanNonExeProcessLookup = new Dictionary<string, IntPtr>();
 
-        public async Task<object> AnalyzeAsync(object args) {
-            await Task.Delay(1);
+        public object Analyze(object args) {
 
             var reqParts = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString());
 
@@ -118,7 +117,7 @@ namespace ProcessAutomation {
                 }
 
                 // lil' wait for window switch...
-                await Task.Delay(100);
+                //await Task.Delay(100);
 
                 //var mpdo = MpPortableDataObject.Create(
                 //    data: pasteStr,

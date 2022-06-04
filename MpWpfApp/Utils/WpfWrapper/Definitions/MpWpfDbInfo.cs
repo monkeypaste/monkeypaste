@@ -1,6 +1,6 @@
 ﻿using MonkeyPaste;
 using System.IO;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpWpfDbInfo : MonkeyPaste.MpIDbInfo {
