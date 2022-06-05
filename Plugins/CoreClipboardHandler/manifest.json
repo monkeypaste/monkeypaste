@@ -50,7 +50,7 @@
       {
         "handlerGuid": "58558048-a275-4377-9108-8fb1bed3cd5e",
         "displayName": "Rich Text",
-        "clipboardName": "Rtf",
+        "clipboardName": "Rich Text Format",
         "parameters": [
           {
             "label": "Max Characters",
@@ -86,7 +86,7 @@
       {
         "handlerGuid": "936e7b68-72c9-4a8a-ada1-a60f21c93b10",
         "displayName": "Html",
-        "clipboardName": "Html",
+        "clipboardName": "HTML Format",
         "parameters": [
           {
             "label": "Max Characters",
@@ -194,7 +194,7 @@
       {
         "handlerGuid": "34b250a9-c7d4-4290-a15f-bb229867b76b",
         "displayName": "Csv",
-        "clipboardName": "Csv",
+        "clipboardName": "CSV",
         "parameters": [
           {
             "label": "Ignore",

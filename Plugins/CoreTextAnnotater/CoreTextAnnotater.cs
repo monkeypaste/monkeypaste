@@ -36,8 +36,8 @@ namespace CoreTextAnnotater {
 
             List<CoreTextRange> ranges = new List<CoreTextRange>();
 
-            if(mpdo.DataFormatLookup.ContainsKey(MpClipboardFormatType.Rtf)) {
-                string rtf = mpdo.DataFormatLookup[MpClipboardFormatType.Rtf];
+            if(mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
+                string rtf = mpdo.GetData(MpPortableDataFormats.Rtf).ToString();
                 var fd = rtf.ToFlowDocument();
 
                 if(useRegEx) {
@@ -66,7 +66,7 @@ namespace CoreTextAnnotater {
                     }
                 }
 
-                mpdo.SetCustomData("RtfTextRangeCollection", MpJsonObject.SerializeObject(ranges));
+                mpdo.SetData("RtfTextRangeCollection", MpJsonObject.SerializeObject(ranges));
 
                 return mpdo;
             }

@@ -77,16 +77,16 @@ namespace MpWpfApp {
             get {
                 return Application.Current.Resources["AppIcon"] as string;
 
-                switch (HandledFormat) {
-                    case MpClipboardFormatType.Bitmap:
-                        return Application.Current.Resources["ImageIcon"] as string;
-                    case MpClipboardFormatType.Html:
-                        return Application.Current.Resources["HtmlIcon"] as string;
-                    case MpClipboardFormatType.Csv:
-                        return Application.Current.Resources["CsvIcon"] as string;
-                    case MpClipboardFormatType.FileDrop:
-                        return Application.Current.Resources["CsvIcon"] as string;
-                }
+                //switch (HandledFormat) {
+                //    case MpClipboardFormatType.Bitmap:
+                //        return Application.Current.Resources["ImageIcon"] as string;
+                //    case MpClipboardFormatType.Html:
+                //        return Application.Current.Resources["HtmlIcon"] as string;
+                //    case MpClipboardFormatType.Csv:
+                //        return Application.Current.Resources["CsvIcon"] as string;
+                //    case MpClipboardFormatType.FileDrop:
+                //        return Application.Current.Resources["CsvIcon"] as string;
+                //}
             }
         }
         #endregion
@@ -102,16 +102,17 @@ namespace MpWpfApp {
 
         public bool IsExpanded { get; set; } = false;
 
-        public MpClipboardFormatType HandledFormat {
+        public string HandledFormat {
             get {
                 if(ClipboardPluginFormat == null) {
-                    return MpClipboardFormatType.None;
+                    return null;
                 }
-                MpClipboardFormatType cft = ClipboardPluginFormat.clipboardName.ToEnum<MpClipboardFormatType>();
-                if(cft == default) {
-                    return MpClipboardFormatType.Custom;
-                }
-                return cft;
+                //MpClipboardFormatType cft = ClipboardPluginFormat.clipboardName.ToEnum<MpClipboardFormatType>();
+                //if(cft == default) {
+                //    return MpClipboardFormatType.Custom;
+                //}
+                //return cft;
+                return ClipboardPluginFormat.clipboardName;
             }
         }
         #endregion
@@ -279,13 +280,14 @@ namespace MpWpfApp {
         }
 
         public bool IsDataObjectValid(MpPortableDataObject pdo) {
-            if(pdo.DataFormatLookup.ContainsKey(HandledFormat)) {
-                if(HandledFormat == MpClipboardFormatType.Custom) {
-                    return pdo.GetCustomData(ClipboardPluginFormat.clipboardName) != null;
-                }
-                return true;
-            }
-            return false;
+            //if(pdo.DataFormatLookup.ContainsKey(HandledFormat)) {
+            //    if(HandledFormat == MpClipboardFormatType.Custom) {
+            //        return pdo.GetCustomData(ClipboardPluginFormat.clipboardName) != null;
+            //    }
+            //    return true;
+            //}
+            //return false;
+            return pdo.ContainsData(HandledFormat);
         }
 
         #endregion

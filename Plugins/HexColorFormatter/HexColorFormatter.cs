@@ -9,6 +9,7 @@ using MonkeyPaste.Common.Plugin;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace HexColorFormatter {
     public class HexColorFormatter : MpIAnalyzeComponent {
@@ -31,12 +32,23 @@ namespace HexColorFormatter {
                 }
                 trl.Add(tr);
 
+                tr.Text = string.Empty;
+
                 string hexColor = m.Value.Replace("#", string.Empty);
                 var hl = new Hyperlink(tr.Start, tr.End) {
                     IsEnabled = true,
                     NavigateUri = new Uri($"https://www.hexcolortool.com/{hexColor}"),
-                    Background = hexColor.ToWpfBrush()
+                    Background = m.Value.ToWpfBrush()
                 };
+
+                var run = new Run(m.Value);
+                hl.Inlines.Clear();
+                hl.Inlines.Add(run);
+                var bgBrush = m.Value.ToWpfBrush();
+                var fgBrush = MpWpfColorHelpers.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
+                var rtr = new TextRange(run.ElementStart, run.ElementEnd);
+                rtr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
+                rtr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
 
                 tp = tr.End.GetInsertionPosition(LogicalDirection.Forward);
             }

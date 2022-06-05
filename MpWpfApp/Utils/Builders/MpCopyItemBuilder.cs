@@ -26,40 +26,40 @@ namespace MpWpfApp {
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
                 }
-                var iData = mpdo.DataFormatLookup as Dictionary<MpClipboardFormatType,string>;
+                var iData = mpdo.DataFormatLookup as Dictionary<MpPortableDataFormat,object>;
                                 
                 
                 string itemData = null;
                 string htmlData = string.Empty;
                 MpCopyItemType itemType = MpCopyItemType.None;
-
-                if (iData.ContainsKey(MpClipboardFormatType.FileDrop)) {
+                
+                if (mpdo.ContainsData(MpPortableDataFormats.FileDrop)) {
                     itemType = MpCopyItemType.FileList;
-                    itemData = iData[MpClipboardFormatType.FileDrop];
-                } else if (iData.ContainsKey(MpClipboardFormatType.Csv)) {
+                    itemData = mpdo.GetData(MpPortableDataFormats.FileDrop).ToString();
+                } else if (mpdo.ContainsData(MpPortableDataFormats.Csv)) {
                     itemType = MpCopyItemType.Text;
-                    string csvStr = iData[MpClipboardFormatType.Csv];
+                    string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
                     itemData = csvStr.ToRichTextTable();
                     //itemData = itemData.ToQuillText();
-                } else if (iData.ContainsKey(MpClipboardFormatType.Rtf)) {
+                } else if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
                     itemType = MpCopyItemType.Text;
-                    itemData = iData[MpClipboardFormatType.Rtf].EscapeExtraOfficeRtfFormatting();
+                    itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
                     //itemData = itemData.ToQuillText();
 
-                } else if (iData.ContainsKey(MpClipboardFormatType.Bitmap)) {
+                } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
-                    itemData = iData[MpClipboardFormatType.Bitmap];
-                } else if(iData.ContainsKey(MpClipboardFormatType.Text)) {                    
+                    itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
+                } else if(mpdo.ContainsData(MpPortableDataFormats.Text)) {                    
                     itemType = MpCopyItemType.Text;
-                    itemData = iData[MpClipboardFormatType.Text].ToRichText();
+                    itemData = mpdo.GetData(MpPortableDataFormats.Text).ToString().ToRichText();
                     //itemData = itemData.ToQuillText();
-                } else if (iData.ContainsKey(MpClipboardFormatType.UnicodeText)) {
+                } else if (mpdo.ContainsData(MpPortableDataFormats.Unicode)) {
                     itemType = MpCopyItemType.Text;
-                    itemData = iData[MpClipboardFormatType.UnicodeText].ToRichText();
+                    itemData = mpdo.GetData(MpPortableDataFormats.Unicode).ToString().ToRichText();
                     //itemData = itemData.ToQuillText();
-                } else if (iData.ContainsKey(MpClipboardFormatType.OemText)) {
+                } else if (mpdo.ContainsData(MpPortableDataFormats.OemText)) {
                     itemType = MpCopyItemType.Text;
-                    itemData = iData[MpClipboardFormatType.OemText].ToRichText();
+                    itemData = mpdo.GetData(MpPortableDataFormats.OemText).ToString().ToRichText();
                     //itemData = itemData.ToQuillText();
                 } else {
                     MpConsole.WriteTraceLine("clipboard data is not known format");
@@ -72,8 +72,8 @@ namespace MpWpfApp {
                     return null;
                 }
 
-                if (iData.ContainsKey(MpClipboardFormatType.Html)) {
-                    htmlData = iData[MpClipboardFormatType.Html];
+                if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
+                    htmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
                 }
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {

@@ -212,7 +212,7 @@ namespace MpClipboardHelper {
             try {
                 bool autoConvert = false; 
 
-                foreach (var supportedType in MpPortableDataObject.SupportedFormats) {
+                foreach (var supportedType in MpPortableDataFormats.Formats) {
                     //string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
                     while (IsClipboardOpen()) {
                         Thread.Sleep(100);

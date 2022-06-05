@@ -93,7 +93,7 @@ namespace MpWpfApp {
         public object ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
             DataObject dobj = new DataObject();
             foreach (var kvp in mpdo.DataFormatLookup) {
-                SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
+                SetDataWrapper(ref dobj, kvp.Key.Name, kvp.Value);
             }
             return dobj;
         }
@@ -155,11 +155,7 @@ namespace MpWpfApp {
             var ndo = new MpPortableDataObject();
             try {
                 bool autoConvert = false;
-                foreach (MpClipboardFormatType supportedType in MpPortableDataObject.SupportedFormats) {
-                    if(supportedType == MpClipboardFormatType.UnicodeText) {
-                        int b = 5;
-                    }
-                    string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);
+                foreach (var nativeTypeName in MpPortableDataFormats.Formats) {
                     if (ido != null) {
                         if (string.IsNullOrEmpty(nativeTypeName) || 
                             ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
@@ -167,14 +163,14 @@ namespace MpWpfApp {
                         }
                     }
                     string data = null;
-                    switch (supportedType) {
-                        case MpClipboardFormatType.Bitmap:
+                    switch (nativeTypeName) {
+                        case MpPortableDataFormats.Bitmap:
                             var bmpSrc = Clipboard.GetImage();
                             if (bmpSrc != null) {
                                 data = bmpSrc.ToBase64String();
                             }
                             break;
-                        case MpClipboardFormatType.FileDrop:
+                        case MpPortableDataFormats.FileDrop:
                             string[] sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
                             if (sa != null && sa.Length > 0) {
                                 data = string.Join(Environment.NewLine, sa);
@@ -185,7 +181,7 @@ namespace MpWpfApp {
                             break;
                     }
                     if (!string.IsNullOrEmpty(data)) {
-                        ndo.DataFormatLookup.Add(supportedType, data);
+                        ndo.SetData(nativeTypeName, data);
                     }
                 }
                 if(ndo.DataFormatLookup.Count == 0) {
@@ -282,23 +278,23 @@ namespace MpWpfApp {
             }
         }
 
-        private void SetDataWrapper(ref DataObject dobj, MpClipboardFormatType format, string dataStr) {
-            if(string.IsNullOrEmpty(dataStr)) {
+        private void SetDataWrapper(ref DataObject dobj, string format, object data) {
+            if(data == null) {
                 return;
             }
-            string nativeTypeName = GetWpfFormatName(format);
+            
             switch (format) {
-                case MpClipboardFormatType.Bitmap:
-                    dobj.SetImage(dataStr.ToBitmapSource());
+                case MpPortableDataFormats.Bitmap:
+                    dobj.SetImage(data.ToString().ToBitmapSource());
                     break;
-                case MpClipboardFormatType.FileDrop:
-                    var fl = dataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                case MpPortableDataFormats.FileDrop:
+                    var fl = data.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     var sc = new StringCollection();
                     sc.AddRange(fl);
                     dobj.SetFileDropList(sc);
                     break;
                 default:
-                    dobj.SetData(nativeTypeName, dataStr);
+                    dobj.SetData(format, data);
                     break;
             }
         }

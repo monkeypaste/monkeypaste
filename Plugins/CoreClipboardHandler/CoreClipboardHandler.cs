@@ -30,12 +30,11 @@ namespace CoreClipboardHandler {
                 return pdo;
             }
 
-            foreach(var supportedType in MpPortableDataObject.SupportedFormats) {
-                string nativeTypeName = GetNativeFormatName(supportedType);
+            foreach(var nativeTypeName in MpPortableDataFormats.Formats) {
                 var data = GetClipboardData(nativeTypeName);
 
                 if (!string.IsNullOrEmpty(data)) {
-                    pdo.DataFormatLookup.AddOrReplace(supportedType, data);
+                    pdo.SetData(nativeTypeName, data);
                 }
             }
             return pdo;

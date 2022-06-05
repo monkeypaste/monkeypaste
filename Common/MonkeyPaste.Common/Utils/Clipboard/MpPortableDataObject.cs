@@ -55,83 +55,87 @@ namespace MonkeyPaste.Common {
     public class MpPortableDataObject {
         #region Properties
 
-        private static ObservableCollection<MpClipboardFormatType> _supportedFormats;
-        public static ObservableCollection<MpClipboardFormatType> SupportedFormats {
-            get {
-                if(_supportedFormats == null) {
-                    _supportedFormats = new ObservableCollection<MpClipboardFormatType>() {
-                        MpClipboardFormatType.Text,
-                        MpClipboardFormatType.Html,
-                        MpClipboardFormatType.Rtf,
-                        MpClipboardFormatType.Bitmap,
-                        MpClipboardFormatType.FileDrop,
-                        MpClipboardFormatType.Csv,
-                        MpClipboardFormatType.InternalContent,
-                        MpClipboardFormatType.UnicodeText,
-                        MpClipboardFormatType.OemText,
-                        MpClipboardFormatType.Custom
-                    };
-                }
-                return _supportedFormats;
-            }
-            set {
-                _supportedFormats = value;
-            }
-        }
+        //private static ObservableCollection<MpClipboardFormatType> _supportedFormats;
+        //public static ObservableCollection<MpClipboardFormatType> SupportedFormats {
+        //    get {
+        //        if(_supportedFormats == null) {
+        //            _supportedFormats = new ObservableCollection<MpClipboardFormatType>() {
+        //                MpClipboardFormatType.Text,
+        //                MpClipboardFormatType.Html,
+        //                MpClipboardFormatType.Rtf,
+        //                MpClipboardFormatType.Bitmap,
+        //                MpClipboardFormatType.FileDrop,
+        //                MpClipboardFormatType.Csv,
+        //                MpClipboardFormatType.InternalContent,
+        //                MpClipboardFormatType.UnicodeText,
+        //                MpClipboardFormatType.OemText,
+        //                MpClipboardFormatType.Custom
+        //            };
+        //        }
+        //        return _supportedFormats;
+        //    }
+        //    set {
+        //        _supportedFormats = value;
+        //    }
+        //}
 
-        private static List<object> _customDataLookup;
-        public static List<object> CustomDataLookup {
-            get {
-                if (_customDataLookup == null) {
-                    _customDataLookup = new List<object>();
-                }
-                return _customDataLookup;
-            }
-        }        
+        //private static List<object> _customDataLookup;
+        //public static List<object> CustomDataLookup {
+        //    get {
+        //        if (_customDataLookup == null) {
+        //            _customDataLookup = new List<object>();
+        //        }
+        //        return _customDataLookup;
+        //    }
+        //}        
 
-        public Dictionary<MpClipboardFormatType,string> DataFormatLookup { get; set; } = new Dictionary<MpClipboardFormatType, string>();
+        //public Dictionary<MpClipboardFormatType,string> DataFormatLookup { get; set; } = new Dictionary<MpClipboardFormatType, string>();
 
-        public object GetCustomData(string customDataFormatName) {
-            int cdfIdx = GetCustomDataFormatId(customDataFormatName);
-            if(cdfIdx < 0) {
-                return null;
-            }
-            return CustomDataLookup[cdfIdx];
-        }
+        //public object GetCustomData(string customDataFormatName) {
+        //    int cdfIdx = GetCustomDataFormatId(customDataFormatName);
+        //    if(cdfIdx < 0) {
+        //        return null;
+        //    }
+        //    return CustomDataLookup[cdfIdx];
+        //}
 
-        public void SetCustomData(string customDataFormatName, object customData) {
-            if (!DataFormatLookup.ContainsKey(MpClipboardFormatType.Custom)) {
-                DataFormatLookup.Add(MpClipboardFormatType.Custom, customDataFormatName);
-                CustomDataLookup.Add(customData);
-                return;
+        //public void SetCustomData(string customDataFormatName, object customData) {
+        //    if (!DataFormatLookup.ContainsKey(MpClipboardFormatType.Custom)) {
+        //        DataFormatLookup.Add(MpClipboardFormatType.Custom, customDataFormatName);
+        //        CustomDataLookup.Add(customData);
+        //        return;
 
-            }
-            int cdfIdx = GetCustomDataFormatId(customDataFormatName);
-            if (cdfIdx < 0) {
-                DataFormatLookup[MpClipboardFormatType.Custom] += "," + customDataFormatName;
-                CustomDataLookup.Add(customData);
-                return;
-            }
-            CustomDataLookup[cdfIdx] = customData;
-        }
+        //    }
+        //    int cdfIdx = GetCustomDataFormatId(customDataFormatName);
+        //    if (cdfIdx < 0) {
+        //        DataFormatLookup[MpClipboardFormatType.Custom] += "," + customDataFormatName;
+        //        CustomDataLookup.Add(customData);
+        //        return;
+        //    }
+        //    CustomDataLookup[cdfIdx] = customData;
+        //}
 
-        private int GetCustomDataFormatId(string customDataFormatName) {
-            if (!DataFormatLookup.ContainsKey(MpClipboardFormatType.Custom)) {
-                return -1;
-            }
-            var availableCustomFormats = DataFormatLookup[MpClipboardFormatType.Custom].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            return availableCustomFormats.IndexOf(customDataFormatName);
-        }
+        //private int GetCustomDataFormatId(string customDataFormatName) {
+        //    if (!DataFormatLookup.ContainsKey(MpClipboardFormatType.Custom)) {
+        //        return -1;
+        //    }
+        //    var availableCustomFormats = DataFormatLookup[MpClipboardFormatType.Custom].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        //    return availableCustomFormats.IndexOf(customDataFormatName);
+        //}
         #endregion
 
-        private Dictionary<MpPortableDataFormat, object> _dataLookup = new Dictionary<MpPortableDataFormat, object>();
+        public Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; private set; } = new Dictionary<MpPortableDataFormat, object>();
+
+        public bool ContainsData(string format) {
+            return GetData(format) != null;
+        }
 
         public object GetData(string format) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             if(pdf == null) {
                 return null;
             }
-            _dataLookup.TryGetValue(pdf, out object data);
+            DataFormatLookup.TryGetValue(pdf, out object data);
             return data;
         }
 
@@ -140,11 +144,11 @@ namespace MonkeyPaste.Common {
             if(pdf == null) {
                 throw new Exception($"Format {format} is not registered");
             }
-            _dataLookup.AddOrReplace(pdf, data);
+            DataFormatLookup.AddOrReplace(pdf, data);
         }
 
         public MpPortableDataObject() {
-            _dataLookup = new Dictionary<MpPortableDataFormat, object>();
+            DataFormatLookup = new Dictionary<MpPortableDataFormat, object>();
         }
         public MpPortableDataObject(string format, object data) : this() {
             SetData(format, data);
@@ -167,14 +171,14 @@ namespace MonkeyPaste.Common {
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
 
-        public static readonly string Text = "Text";
-        public static readonly string Rtf = "Rich Text Format";
-        public static readonly string Bitmap = "Bitmap";
-        public static readonly string Html = "HTML Format";
-        public static readonly string FileDrop = "FileDrop";
-        public static readonly string Csv = "CSV";
-        public static readonly string Unicode = "Unicode";
-        public static readonly string OemText = "OEMText";
+        public const string Text = "Text";
+        public const string Rtf = "Rich Text Format";
+        public const string Bitmap = "Bitmap";
+        public const string Html = "HTML Format";
+        public const string FileDrop = "FileDrop";
+        public const string Csv = "CSV";
+        public const string Unicode = "Unicode";
+        public const string OemText = "OEMText";
 
         public static string[] Formats => _formatLookup.Select(x => x.Value.Name).ToArray();
 
@@ -215,8 +219,12 @@ namespace MonkeyPaste.Common {
         }
 
         private static int GetDataFormatId(string format) {
-            var format_kvp = _formatLookup.FirstOrDefault(x => x.Value.Name == format);
-            return format_kvp.Key;
+            foreach(var kvp in _formatLookup) {
+                if(kvp.Value.Name == format) {
+                    return kvp.Key;
+                }
+            }
+            return -1;
         }
     }
 

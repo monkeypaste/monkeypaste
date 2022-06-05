@@ -1589,18 +1589,18 @@ using MpProcessHelper;
 
                                 break;
                             case MpClipboardFormatType.Rtf:
-                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Rtf, rtf);
+                                d.SetData(MpPortableDataFormats.Rtf, rtf);
                                 break;
                             case MpClipboardFormatType.Text:
-                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Text, pt);
+                                d.SetData(MpPortableDataFormats.Text, pt);
                                 break;
                             case MpClipboardFormatType.Bitmap:
-                                d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Bitmap, bmpBase64);
+                                d.SetData(MpPortableDataFormats.Bitmap, bmpBase64);
                                 break;
                             case MpClipboardFormatType.Csv:
                                 string sctcsv = string.Join(Environment.NewLine, CopyItemData.ToCsv());
                                 if (!string.IsNullOrWhiteSpace(sctcsv)) {
-                                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.Csv, sctcsv);
+                                    d.SetData(MpPortableDataFormats.Csv, sctcsv);
                                 }
                                 break;
                             case MpClipboardFormatType.Custom:
@@ -1616,7 +1616,7 @@ using MpProcessHelper;
                 }
 
                 if (!ignoreFileDrop) {
-                    d.DataFormatLookup.AddOrReplace(MpClipboardFormatType.FileDrop, string.Join(Environment.NewLine, sctfl));
+                    d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
                 }
             } else {
                 // TODO set internal data stuff here
