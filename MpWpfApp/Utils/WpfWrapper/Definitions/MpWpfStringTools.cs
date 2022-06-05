@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpWpfStringTools : MpIStringTools {

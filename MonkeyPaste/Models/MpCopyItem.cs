@@ -206,18 +206,18 @@ namespace MonkeyPaste {
 
         #region Static Methods
 
-        public static async Task<ObservableCollection<MpCopyItem>> SearchAsync(int tagId, string searchString) {
-            var allCopyItems = await MpDb.GetItemsAsync<MpCopyItem>();
-            var allCopyItemTags = await MpDb.GetItemsAsync<MpCopyItemTag>();
+        //public static async Task<ObservableCollection<MpCopyItem>> SearchAsync(int tagId, string searchString) {
+        //    var allCopyItems = await MpDb.GetItemsAsync<MpCopyItem>();
+        //    var allCopyItemTags = await MpDb.GetItemsAsync<MpCopyItemTag>();
 
-            var searchResult = (from ci in allCopyItems
-                                join cit in allCopyItemTags on
-                                tagId equals cit.TagId
-                                where ci.ItemData.ContainsByCaseOrRegexSetting(searchString)
-                                select ci);//.Skip(2).Take(2);
+        //    var searchResult = (from ci in allCopyItems
+        //                        join cit in allCopyItemTags on
+        //                        tagId equals cit.TagId
+        //                        where ci.ItemData.ContainsByCaseOrRegexSetting(searchString)
+        //                        select ci);//.Skip(2).Take(2);
 
-            return new ObservableCollection<MpCopyItem>(searchResult);
-        }
+        //    return new ObservableCollection<MpCopyItem>(searchResult);
+        //}
 
         public static async Task<MpCopyItem> Create(
             int sourceId = 0,

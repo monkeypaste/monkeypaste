@@ -4,7 +4,8 @@ using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using System.Windows.Media;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpStringResourceToImageBrushConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {

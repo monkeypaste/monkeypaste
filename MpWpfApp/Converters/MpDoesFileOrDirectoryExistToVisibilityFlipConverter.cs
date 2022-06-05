@@ -3,7 +3,8 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using MonkeyPaste;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpDoesFileOrDirectoryExistToVisibilityFlipConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {

@@ -10,6 +10,7 @@ using Xamarin.Forms;
 using SQLiteNetExtensions.Extensions.TextBlob;
 using System.Text;
 using Newtonsoft.Json;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public enum MpTextTemplateType {

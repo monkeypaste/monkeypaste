@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpIsHexColorBrightToBlackOrWhiteBrushConverter : IValueConverter {

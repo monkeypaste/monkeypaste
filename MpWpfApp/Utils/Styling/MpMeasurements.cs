@@ -4,13 +4,6 @@ using System.Windows;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public enum MpTaskbarLocation {
-        None,
-        Bottom,
-        Right,
-        Top,
-        Left
-    }
 
     public class MpMeasurements : MpViewModelBase, MpISingletonViewModel<MpMeasurements> {    
         private static MpMeasurements _instance;

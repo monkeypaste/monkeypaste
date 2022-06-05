@@ -20,46 +20,15 @@ namespace MonkeyPaste {
             }
             await ProcessAnnotations(trans, targetCopyItem, transSourceId, suppressWrite);
 
+            await ProcessDataObject(trans, targetCopyItem, transSourceId, suppressWrite);
+
             if (suppressWrite == false && targetCopyItem != null) {
-                //create is suppressed when its part of a match expression
-                if (sourceCopyItem.Id != targetCopyItem.Id) {
-                    //var pci = await MpDb.GetItemAsync<MpCopyItem>(sourceCopyItem.Id);
+                // NOTE when target is in tray it will get notified from db uppdate and re-initialize
+                await targetCopyItem.WriteToDatabaseAsync();
 
-                    //int parentSortOrderIdx = pci.CompositeSortOrderIdx;
-                    //List<MpCopyItem> ppccil = null;
-
-                    //if (pci.CompositeParentCopyItemId > 0) {
-                    //    //when this items parent is a composite child, adjust fk/sort so theres single parent
-                    //    var ppci = await MpDb.GetItemAsync<MpCopyItem>(pci.CompositeParentCopyItemId);
-                    //    ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.CompositeParentCopyItemId);
-                    //    ppccil.Insert(0, ppci);
-                    //} else {
-                    //    ppccil = await MpDataModelProvider.GetCompositeChildrenAsync(pci.Id);
-                    //    ppccil.Insert(0, pci);
-                    //}
-                    //ppccil = ppccil.OrderBy(x => x.CompositeSortOrderIdx).ToList();
-                    //for (int i = 0; i < ppccil.Count; i++) {
-                    //    var cci = ppccil[i];
-                    //    if (cci.Id == sourceCopyItem.Id) {
-                    //        targetCopyItem.CompositeParentCopyItemId = sourceCopyItem.Id;
-                    //        targetCopyItem.CompositeSortOrderIdx = i + 1;
-                    //        await targetCopyItem.WriteToDatabaseAsync();
-                    //    } else if (i > parentSortOrderIdx) {
-                    //        ppccil[i].CompositeSortOrderIdx += 1;
-                    //        await ppccil[i].WriteToDatabaseAsync();
-                    //    }
-                    //}
+                if(sourceCopyItem.Id != targetCopyItem.Id) {
+                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
                 }
-
-                //var scivm = MpClipTrayViewModel.Instance.GetContentItemViewModelById(sourceCopyItem.Id);
-                //if (scivm != null) {
-                //    await MpHelpers.RunOnMainThreadAsync(async () => {
-                //        //analysis content is  linked with visible item in tray
-                //        await scivm.Parent.InitializeAsync(scivm.Parent.HeadItem.CopyItem, scivm.Parent.QueryOffsetIdx);
-                //        MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                //    });
-                //}
-                MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
             }
 
             if (targetCopyItem == null) {
@@ -82,7 +51,7 @@ namespace MonkeyPaste {
             var source = await MpDb.GetItemAsync<MpSource>(transSourceId);
 
             string title = sourceCopyItem.Title + " Analysis";
-            if(prf.newContentItem.label != null) {
+            if (prf.newContentItem.label != null) {
                 title = prf.newContentItem.label.value;
             }
 
@@ -134,9 +103,9 @@ namespace MonkeyPaste {
             if (copyItemType == MpCopyItemType.Image && a.box != null) {
                 MpSize boxSize = new MpSize();
                 if (a.box != null) {
-                //    var bmpSrc = reqContent.ToString().ToBitmapSource();
-                //    boxSize = new MpSize(bmpSrc.PixelWidth, bmpSrc.PixelHeight);
-                //} else {
+                    //    var bmpSrc = reqContent.ToString().ToBitmapSource();
+                    //    boxSize = new MpSize(bmpSrc.PixelWidth, bmpSrc.PixelHeight);
+                    //} else {
                     boxSize.Width = a.box.width.value;
                     boxSize.Height = a.box.height.value;
                 }
@@ -175,6 +144,16 @@ namespace MonkeyPaste {
 
             if (a.children != null) {
                 await Task.WhenAll(a.children.Select(x => ProcesseAnnotation(x, copyItemId, copyItemType, reqContent, transSourceId, suppressWrite)));
+            }
+        }
+
+        private static async Task ProcessDataObject(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int transSourceId, bool suppressWrite = false) {
+            if (trans == null || trans.Response == null) {
+                return;
+            }
+            if (trans.Response is MpPluginResponseFormat prf && prf.dataObject != null) {
+                var pdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.Create(prf.dataObject,true);
+                sourceCopyItem.ItemData = pdo_ci.ItemData;
             }
         }
     }

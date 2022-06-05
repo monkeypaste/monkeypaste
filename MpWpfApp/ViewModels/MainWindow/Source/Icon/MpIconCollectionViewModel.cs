@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using MonkeyPaste;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpIconCollectionViewModel : 
@@ -128,7 +130,7 @@ namespace MpWpfApp {
 
         private async Task SetUserIconToCurrentHexColor(string hexColor, MpIUserIconViewModel uivm) {
             var bmpSrc = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
-            bmpSrc = MpWpfImagingHelper.TintBitmapSource(bmpSrc, hexColor.ToWinMediaColor());
+            bmpSrc = bmpSrc.Tint(hexColor.ToWinMediaColor());
 
             MpIcon icon ;
             if (uivm.IconId == 0) {

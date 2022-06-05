@@ -29,9 +29,9 @@ namespace MonkeyPaste.Common.Plugin {
         Image,
         Base64Text,
         FileSystemPath,
-        ContentQuery,
-        DelimitedPlainText,
-        DelimitedContentQuery
+        PlainTextContentQuery,
+        RawDataContentQuery,
+        DelimitedPlainText
     }
 
     public class MpPluginParameterFormat : MpJsonObject {

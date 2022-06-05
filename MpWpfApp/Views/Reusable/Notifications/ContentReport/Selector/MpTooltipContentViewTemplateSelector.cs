@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpTooltipContentViewTemplateSelector : DataTemplateSelector {
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {

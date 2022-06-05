@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MonkeyPaste;
 using MpProcessHelper;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using static OpenTK.Graphics.OpenGL.GL;
 using System.Windows.Documents;
 
@@ -1320,10 +1320,8 @@ namespace MpWpfApp {
                     var am_ctvm = GetClipTileViewModelById(_appendModeCopyItem.Id);
                     var am_cv = Application.Current.MainWindow.GetVisualDescendents<MpContentView>().FirstOrDefault(x => x.DataContext == am_ctvm);
                    
-                    am_cv.Rtb.Document = (MpEventEnabledFlowDocument)MpWpfRichDocumentExtensions.CombineFlowDocuments(
-                        from: newCopyItem.ItemData.ToFlowDocument(),
-                        to: am_cv.Rtb.Document,
-                        insertNewLine: IsAppendLineMode);
+                    am_cv.Rtb.Document = (MpEventEnabledFlowDocument)am_cv.Rtb.Document.Combine(
+                        newCopyItem.ItemData.ToFlowDocument(), null, IsAppendLineMode);
 
                     MpContentDocumentRtfExtension.SaveTextContent(am_cv.Rtb).FireAndForgetSafeAsync(am_ctvm);
 

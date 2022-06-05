@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public interface MpIContentDropTarget {

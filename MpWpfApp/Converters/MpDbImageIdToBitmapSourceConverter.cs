@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpDbImageIdToBitmapSourceConverter : IValueConverter {

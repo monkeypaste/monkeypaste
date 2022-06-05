@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public abstract class MpActionOutput {
@@ -841,7 +841,12 @@ namespace MpWpfApp {
 
 
             if (userAction == MpDialogResultType.Retry) {
-                await Validate();
+                if(ParentActionViewModel == null) {
+                    // NOTE parent vm is nulled when invalid action was deleted so is no longer an issue
+                    wasBusy = false;
+                } else {
+                    await Validate();
+                }
             } else if (userAction == MpDialogResultType.Ignore) {
                 wasBusy = false;
             }
@@ -1121,6 +1126,8 @@ namespace MpWpfApp {
                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
                 Parent.AllSelectedTriggerActions.Remove(avm);
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
+                
+                avm.ParentActionViewModel = null;
 
                 Parent.SelectedItem = RootTriggerActionViewModel;
                 IsSelected = true;

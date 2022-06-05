@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "MonkeyPaste.Common": {
+      "commandName": "Project",
+      "sqlDebugging": false,
+      "nativeDebugging": true
+    }
+  }
+}

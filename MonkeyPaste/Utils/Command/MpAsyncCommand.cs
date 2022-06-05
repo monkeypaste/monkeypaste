@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpAsyncCommand<T> : MpIAsyncCommand<T> {

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using MonkeyPaste;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpNotificationTemplateSelector : DataTemplateSelector {
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {

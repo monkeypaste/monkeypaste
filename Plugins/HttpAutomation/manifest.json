@@ -24,7 +24,7 @@
         "label": "Url",
         "description": "The process can be a standard application or batch script",
         "controlType": "TextBox",
-        "unitType": "ContentQuery",
+        "unitType": "PlainTextContentQuery",
         "isRequired": true,
         "paramId": 1
       }

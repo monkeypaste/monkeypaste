@@ -5,7 +5,8 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpStringHexToImageSourceConverter : IValueConverter {
         //returns primary source by default but secondary w/ parameter of 'SecondarySource' 
@@ -13,10 +14,10 @@ namespace MpWpfApp {
             if (value is string hexStr && hexStr.IsStringHexColor()) {
                 Brush brush = hexStr.ToWpfBrush();
                 var bgBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
-                bgBmp = MpWpfImagingHelper.TintBitmapSource(bgBmp, ((SolidColorBrush)brush).Color, false);
+                bgBmp = bgBmp.Tint(((SolidColorBrush)brush).Color, false);
                 var borderBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/textureborder.png"));
                 if (!MpWpfColorHelpers.IsBright((brush as SolidColorBrush).Color)) {
-                    borderBmp = MpWpfImagingHelper.TintBitmapSource(borderBmp, Colors.White, false);
+                    borderBmp = borderBmp.Tint(Colors.White, false);
                 }
 
                 var outputBmpSrc = MpWpfImagingHelper.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
@@ -31,7 +32,7 @@ namespace MpWpfApp {
                         var checkBmp = (BitmapSource)new BitmapImage(new Uri(MpPreferences.AbsoluteResourcesPath + checkPath));
                         if (!MpWpfColorHelpers.IsBright((brush as SolidColorBrush).Color)) {
                             //on dark backgrounds convert black check to white check for better visualization
-                            checkBmp = MpWpfImagingHelper.TintBitmapSource(checkBmp, Colors.White, false);
+                            checkBmp = checkBmp.Tint(Colors.White, false);
                         }
                         outputBmpSrc = MpWpfImagingHelper.MergeImages(
                             new List<BitmapSource> { outputBmpSrc, checkBmp });

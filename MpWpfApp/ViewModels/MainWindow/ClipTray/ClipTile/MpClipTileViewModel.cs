@@ -14,8 +14,8 @@
     using System.Windows.Threading;
     using GalaSoft.MvvmLight.CommandWpf;
     using MonkeyPaste;
-    using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-    using MonkeyPaste.Common;
+    using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+    using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
     using System.Speech.Synthesis;
     using System.Windows.Documents;
 using System.Text.RegularExpressions;
@@ -245,7 +245,6 @@ using MpProcessHelper;
                     }
                     _rtbHighligher.Reset();
                 }
-                
             },IsTextItem);
         public void UpdateFindAndReplaceMatches() {
             _currentMatchIdx = -1;
@@ -1696,7 +1695,11 @@ using MpProcessHelper;
                 }
             } else if (e is MpCopyItem ci && ci.Id == CopyItemId) {
                 if (ci.Id == CopyItemId) {
-
+                    if(HasModelChanged) {
+                        // this means the model has been updated from the view model so ignore
+                    } else {
+                        await InitializeAsync(ci);
+                    }
                 }
             }
         }

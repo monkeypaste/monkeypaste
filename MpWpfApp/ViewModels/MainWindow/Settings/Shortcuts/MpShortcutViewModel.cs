@@ -13,7 +13,7 @@ using MouseKeyHook.Rx;
 using WindowsInput;
 using MonkeyPaste;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public interface MpIShortcutCommandViewModel<T> where T:struct,Enum {

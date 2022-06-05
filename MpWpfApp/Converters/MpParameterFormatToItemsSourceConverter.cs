@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Linq;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpParameterFormatToItemsSourceConverter : IValueConverter {

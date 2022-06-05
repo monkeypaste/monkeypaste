@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpMacroOutput : MpActionOutput {
         public override object OutputData => CommandPresetGuid;

@@ -11,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Linq;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public enum MpHighlightType {

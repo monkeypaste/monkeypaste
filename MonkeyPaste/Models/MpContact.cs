@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpContact {

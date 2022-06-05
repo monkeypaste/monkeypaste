@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Linq;
 using System.Collections.ObjectModel;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     /// <summary>

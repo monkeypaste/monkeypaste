@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using MpProcessHelper;
 using System.Web.UI;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpPasteToAppPathViewModelCollection : 

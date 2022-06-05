@@ -1,4 +1,5 @@
 using MonkeyPaste;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;

@@ -37,10 +37,16 @@ namespace MonkeyPaste {
             };
         }
 
-        private static async Task<string> GetParameterRequestValue(MpPluginParameterValueUnitType valueType, string curVal, MpCopyItem ci) {
+        private static async Task<string> GetParameterRequestValue(
+            MpPluginParameterValueUnitType valueType, 
+            string curVal, 
+            MpCopyItem ci) {
             switch (valueType) {
-                case MpPluginParameterValueUnitType.ContentQuery:
-                    curVal = await GetParameterQueryResult(curVal, ci);
+                case MpPluginParameterValueUnitType.PlainTextContentQuery:
+                    curVal = await GetParameterQueryResult(curVal, ci, false);
+                    break;
+                case MpPluginParameterValueUnitType.RawDataContentQuery:
+                    curVal = await GetParameterQueryResult(curVal, ci, true);
                     break;
                 case MpPluginParameterValueUnitType.Base64Text:
                     curVal = curVal.ToByteArray().ToBase64String();
@@ -58,7 +64,7 @@ namespace MonkeyPaste {
             return curVal;
         }
 
-        private static async Task<string> GetParameterQueryResult(string curVal, MpCopyItem ci) {
+        private static async Task<string> GetParameterQueryResult(string curVal, MpCopyItem ci, bool asRawData) {
             for (int i = 1; i < Enum.GetNames(typeof(MpCopyItemPropertyPathType)).Length; i++) {
                 // example content query: '{Title} is a story about {ItemData}'
                 var ppt = (MpCopyItemPropertyPathType)i;
@@ -67,7 +73,9 @@ namespace MonkeyPaste {
 
                 if (curVal.Contains(pptToken)) {
                     string contentValue = await MpCopyItem.QueryProperty(ci, ppt) as string;
-                    contentValue = await GetParameterRequestValue(MpPluginParameterValueUnitType.PlainText, contentValue, ci);
+                    if(!asRawData) {
+                        contentValue = await GetParameterRequestValue(MpPluginParameterValueUnitType.PlainText, contentValue, ci);
+                    }
                     string pptTokenBackup = "{@" + ppt.ToString() + "@}";
                     if (curVal.Contains(pptTokenBackup)) {
                         //this content query token has conflicts so use the backup

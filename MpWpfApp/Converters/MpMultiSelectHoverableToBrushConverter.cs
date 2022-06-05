@@ -4,6 +4,8 @@ using System.Windows.Data;
 using System.Windows.Media;
 using MonkeyPaste;
 using Newtonsoft.Json.Linq;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpMultiSelectHoverableToBrushConverter : IMultiValueConverter {

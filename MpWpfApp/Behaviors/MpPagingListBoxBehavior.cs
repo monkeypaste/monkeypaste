@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpPagingListBoxBehavior : MpBehavior<ScrollViewer> {

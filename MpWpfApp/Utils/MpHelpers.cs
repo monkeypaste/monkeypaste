@@ -34,9 +34,7 @@ using System.Speech.Synthesis;
 using WindowsInput;
 using MonkeyPaste;
 using GalaSoft.MvvmLight.CommandWpf;
-using static MpWpfApp.MpWpfStringExtensions;
-using static MpWpfApp.MpWpfRichDocumentExtensions;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public static class MpHelpers {

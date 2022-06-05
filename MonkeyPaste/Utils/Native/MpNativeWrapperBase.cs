@@ -28,6 +28,8 @@ namespace MonkeyPaste {
         MpIExternalPasteHandler ExternalPasteHandler { get; }
 
         MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
+
+        MpICopyItemBuilder CopyItemBuilder { get; }
     }
 
 

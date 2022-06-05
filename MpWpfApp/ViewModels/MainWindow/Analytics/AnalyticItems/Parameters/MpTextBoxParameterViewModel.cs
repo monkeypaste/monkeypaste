@@ -1,5 +1,5 @@
 ﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -88,7 +88,7 @@ namespace MpWpfApp {
 
         #region Model
 
-        public bool IsContentQuery => UnitType == MpPluginParameterValueUnitType.ContentQuery;
+        public bool IsContentQuery => UnitType == MpPluginParameterValueUnitType.PlainTextContentQuery;
 
         #endregion
 

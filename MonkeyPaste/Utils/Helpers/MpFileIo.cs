@@ -41,6 +41,95 @@ namespace MonkeyPaste {
             // resolves any internal "..\" to get the true full path.
             return Path.GetFullPath(finalPath);
         }
+
+        public static string ToFile(this string fileData, string forceDir = "", string forceNamePrefix = "", string forceExt = "", bool overwrite = false) {
+            if (string.IsNullOrEmpty(forceExt)) {
+                // when ext is not given infer from content
+                if (fileData.IsStringRichText()) {
+                    forceExt = "rtf";
+                } else if (fileData.IsStringBase64()) {
+                    forceExt = "png";
+                } else if (fileData.IsStringCsv()) {
+                    forceExt = "csv";
+                } else if (!fileData.IsFileOrDirectory()) {
+                    forceExt = "txt";
+                }
+            } else {
+                if (forceExt.ToLower().Contains("rtf")) {
+                    fileData = MpPlatformWrapper.Services.StringTools.ToRichText(fileData);
+                } else if (forceExt.ToLower().Contains("txt")) {
+                    fileData = MpPlatformWrapper.Services.StringTools.ToPlainText(fileData);
+                } else if (forceExt.ToLower().Contains("csv")) {
+                    fileData = MpPlatformWrapper.Services.StringTools.ToCsv(fileData);
+                }
+            }
+
+            string tfp;
+            if (fileData.IsFileOrDirectory()) {
+                tfp = fileData;
+            } else if (forceExt == "png" ||
+                       forceExt.ToLower().Contains("bmp") ||
+                       forceExt.ToLower().Contains("jpg") ||
+                       forceExt.ToLower().Contains("jpeg")) {
+                tfp = WriteByteArrayToFile(Path.GetTempFileName(), fileData.ToByteArray());
+            } else {
+                tfp = WriteTextToFile(Path.GetTempFileName(), fileData);
+            }
+            string ofp = tfp;
+
+            if (!string.IsNullOrEmpty(forceNamePrefix)) {
+                forceNamePrefix = forceNamePrefix.RemoveInvalidFileNameChars();
+                string tfnwe = Path.GetFileName(tfp);
+                string ofnwe = forceNamePrefix + Path.GetExtension(tfp);
+                ofp = ofp.Replace(tfnwe, ofnwe);
+            }
+
+            if (!string.IsNullOrEmpty(forceExt)) {
+                forceExt = forceExt.Contains(".") ? forceExt : "." + forceExt;
+                string tfe = Path.GetExtension(tfp);
+                ofp = ofp.Replace("." + tfe, forceExt);
+            }
+
+            if (!string.IsNullOrEmpty(forceDir)) {
+                if (!Directory.Exists(forceDir)) {
+                    throw new Exception("Directory not found: " + forceDir);
+                }
+                string tfd = Path.GetDirectoryName(tfp);
+                ofp = ofp.Replace(tfd, forceDir);
+            }
+            if (ofp.ToLower() != tfp.ToLower()) {
+                if (ofp.IsFileOrDirectory() && !overwrite) {
+                    if (string.IsNullOrEmpty(forceDir)) {
+                        // this means file is going to write to temp folder and to avoid IO or name issues preserve name
+                        // but put in random subdirectory of temp folder
+                        string randomSubDirPath = Path.Combine(Path.GetDirectoryName(ofp), Path.GetRandomFileName());
+                        try {
+                            Directory.CreateDirectory(randomSubDirPath);
+                            ofp = Path.Combine(randomSubDirPath, Path.GetFileName(ofp));
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine("Error creating random temp subdirectory: " + ex);
+                            ofp = GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileName(ofp));
+                        }
+                    } else {
+                        ofp = GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileName(ofp));
+                    }
+
+                }
+                // move temporary file to processed output file path and delete temporary
+                try {
+                    ofp = CopyFileOrDirectory(tfp, ofp);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error copying temp file '{tfp}' to '{ofp}', returning temporary. Exception: " + ex);
+                    return tfp;
+                }
+                if (IsUnderTemporaryFolder(tfp)) {
+                    MpTempFileManager.AddTempFilePath(tfp);
+                }
+            }
+            return ofp;
+        }
         public static double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f, precision);
         }
@@ -371,5 +460,6 @@ namespace MonkeyPaste {
                 return null;
             }
         }
+
     }
 }

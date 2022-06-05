@@ -12,7 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Newtonsoft.Json;
 using System.Web;
 using System.Windows;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;

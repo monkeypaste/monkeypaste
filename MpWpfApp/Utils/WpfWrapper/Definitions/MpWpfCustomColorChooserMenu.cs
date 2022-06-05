@@ -7,7 +7,8 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpWpfCustomColorChooserMenu : MpICustomColorChooserMenu {
         public ICommand SelectCustomColorCommand => new RelayCommand<object>(

@@ -17,7 +17,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MonkeyPaste;
 using System.Windows.Controls.Primitives;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpTagTileView.xaml

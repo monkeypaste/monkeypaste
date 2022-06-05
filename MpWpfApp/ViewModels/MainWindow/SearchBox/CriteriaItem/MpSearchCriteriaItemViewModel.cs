@@ -9,7 +9,8 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using MonkeyPaste;
 using Windows.UI.Xaml.Controls.Primitives;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public enum MpSearchCriteriaPropertyType {
         Content = 0,

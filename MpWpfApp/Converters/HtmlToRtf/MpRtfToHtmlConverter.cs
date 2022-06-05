@@ -11,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using HtmlAgilityPack;
 using System.Diagnostics;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public static class MpRtfToHtmlConverter {

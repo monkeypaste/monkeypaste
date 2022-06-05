@@ -12,6 +12,8 @@ namespace MonkeyPaste.Common.Plugin {
 
         public MpPluginResponseNewContentFormat newContentItem { get; set; }
         public List<MpPluginResponseAnnotationFormat> annotations { get; set; } = new List<MpPluginResponseAnnotationFormat>();
+
+        public MpPortableDataObject dataObject { get; set; }
     }
 
     public class MpPluginResponseItemBaseFormat : MpJsonObject {

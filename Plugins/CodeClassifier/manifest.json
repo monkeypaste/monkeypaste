@@ -87,7 +87,7 @@
         "label": "Content for Detection",
         "description": "The Snippet to detect",
         "controlType": "TextBox",
-        "unitType": "ContentQuery",
+        "unitType": "PlainTextContentQuery",
         "isVisible": false,
         "paramId": 3,
         "values": [

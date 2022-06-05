@@ -51,7 +51,7 @@
         "label": "Arguments",
         "description": "Execute arguments for the process. Content Paths will be pre-processed into selected (or action input) values. If there are any conflicts to property path then pad the conflicting path with '@' symbols ie. '{@ItemData@}'",
         "controlType": "EditableList",
-        "unitType": "ContentQuery",
+        "unitType": "PlainTextContentQuery",
         "paramId": 2
       },
       {

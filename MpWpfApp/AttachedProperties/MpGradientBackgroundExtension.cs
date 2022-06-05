@@ -2,6 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using MonkeyPaste;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpGradientBackgroundExtension : DependencyObject {

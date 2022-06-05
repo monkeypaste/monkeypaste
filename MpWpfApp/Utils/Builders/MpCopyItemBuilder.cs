@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using MpProcessHelper;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System.Reflection;
 
 namespace MpWpfApp {
@@ -169,10 +169,11 @@ namespace MpWpfApp {
             }
         }
 
-        public async Task<MpCopyItem> Create() {
-            var ci = await MpCopyItemBuilder.CreateFromDataObject(null);
+        public async Task<MpCopyItem> Create(MpPortableDataObject pdo, bool suppressWrite = false) {
+            var ci = await CreateFromDataObject(pdo,suppressWrite);
             return ci;
         }
+
         #endregion
 
         #region Private Methods

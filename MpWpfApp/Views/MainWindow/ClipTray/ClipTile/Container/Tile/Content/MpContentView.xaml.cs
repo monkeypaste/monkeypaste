@@ -1,5 +1,4 @@
-﻿using GongSolutions.Wpf.DragDrop.Utilities;
-using MonkeyPaste;
+﻿using MonkeyPaste;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
@@ -351,6 +350,13 @@ namespace MpWpfApp {
                 //    BindingContext.TemplateCollection.SelectedItem.IsPasteTextBoxFocused = true;
                 //}
             }
+
+
+            if(BindingContext != null) {
+                BindingContext.OnPropertyChanged(nameof(BindingContext.IsVerticalScrollbarVisibile));
+                BindingContext.OnPropertyChanged(nameof(BindingContext.IsHorizontalScrollbarVisibile));
+            }
+            
         }
         private void Rtb_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
             if (!BindingContext.IsSelected) {

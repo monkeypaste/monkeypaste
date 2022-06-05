@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using Xamarin.Essentials;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public static class MpPreferences {

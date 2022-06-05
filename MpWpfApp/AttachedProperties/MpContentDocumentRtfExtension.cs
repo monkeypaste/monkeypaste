@@ -2,7 +2,7 @@
 //using CefSharp.JavascriptBinding;
 //using CefSharp.Wpf;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using Newtonsoft.Json;
 using SQLite;
 using System;
@@ -300,7 +300,7 @@ namespace MpWpfApp {
 
             ctvm.UnformattedContentSize = rtb.Document.GetDocumentSize();
 
-            LoadHyperlinks(rtb);
+            //LoadHyperlinks(rtb);
 
             await LoadTemplates(rtb);
 

@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 using MonkeyPaste;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpBoolToBrushConverter : IValueConverter {

@@ -13,9 +13,6 @@ namespace MpWpfApp {
     public partial class MpNotificationWindow : Window, MpINotificationBalloonView {
 
         private static ObservableCollection<MpNotificationWindow> _windows;
-
-        
-
         public MpNotificationWindow() {
             InitializeComponent();
 
@@ -23,6 +20,7 @@ namespace MpWpfApp {
                 _windows = new ObservableCollection<MpNotificationWindow>();
                 _windows.CollectionChanged += _windows_CollectionChanged;
             }
+
         }
 
         private static void _windows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
@@ -138,5 +136,14 @@ namespace MpWpfApp {
             HideWindow(DataContext as MpNotificationViewModelBase);
         }
 
+        private void NotificationWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if((bool)e.NewValue) {
+                var mw = Application.Current.MainWindow;
+                if(mw.Topmost) {
+                    // give notifications precedence
+                    mw.Topmost = false;
+                }
+            }
+        }
     }
 }

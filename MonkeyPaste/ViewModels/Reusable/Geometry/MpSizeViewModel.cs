@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using MonkeyPaste;
+using MonkeyPaste.Common;
 namespace MonkeyPaste {
     public class MpSizeViewModel : MpViewModelBase {
         #region Properties

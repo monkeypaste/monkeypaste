@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Linq;
 using System.Collections.Generic;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System.Diagnostics;
 using System.Windows.Controls;
 

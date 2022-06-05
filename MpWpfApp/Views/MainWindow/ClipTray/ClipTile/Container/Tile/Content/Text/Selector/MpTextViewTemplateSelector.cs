@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpTextViewTemplateSelector : DataTemplateSelector {
 

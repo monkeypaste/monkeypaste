@@ -1,5 +1,4 @@
-﻿using GongSolutions.Wpf.DragDrop.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +9,9 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Wpf;
 using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {

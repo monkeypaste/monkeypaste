@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Input;
 using MonkeyPaste;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     /// <summary>
@@ -43,7 +45,7 @@ namespace MpWpfApp {
 
             _notifyIcon.TargetNotifyIcon.ContextMenuStrip.Items.Add(
                 "Exit",
-                MpWpfImagingHelper.TintBitmapSource(MpBase64Images.SignOutIcon.ToBitmapSource(),System.Windows.Media.Colors.MidnightBlue,true).ToBitmap(),
+                MpBase64Images.SignOutIcon.ToBitmapSource().Tint(System.Windows.Media.Colors.MidnightBlue,true).ToBitmap(),
                 ExitMenuItem_Click);
 
             //foreach(var mi in _notifyIcon.TargetNotifyIcon.ContextMenuStrip.Items) {

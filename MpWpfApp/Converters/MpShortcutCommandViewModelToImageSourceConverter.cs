@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using MonkeyPaste;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpShortcutCommandViewModelToImageSourceConverter : IValueConverter {

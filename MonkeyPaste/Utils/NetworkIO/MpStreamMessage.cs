@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public enum MpSyncMesageType {

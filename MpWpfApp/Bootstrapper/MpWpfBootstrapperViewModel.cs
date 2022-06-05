@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MpProcessHelper;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System.IO;
 using System.Windows.Media;
 using MpClipboardHelper;
@@ -26,7 +26,7 @@ namespace MpWpfApp {
                     //new MpBootstrappedItem(typeof(MpDocumentHtmlExtension)),
                     new MpBootstrappedItemViewModel(this,typeof(MpProcessManager), Properties.Settings.Default.IgnoredProcessNames),
                     //new MpBootstrappedItemViewModel(this,typeof(MpProcessAutomation)),
-
+                    new MpBootstrappedItemViewModel(this,typeof(MpScreenInformation)),
                     new MpBootstrappedItemViewModel(this,typeof(MpThemeColors)),
 
                     new MpBootstrappedItemViewModel(this,typeof(MpMeasurements)),
@@ -120,6 +120,7 @@ namespace MpWpfApp {
 
             MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardManager.MonitorService;
             MpPlatformWrapper.Services.DataObjectRegistrar = MpClipboardManager.RegistrarService;
+            MpPortableDataFormats.Init(MpPlatformWrapper.Services.DataObjectRegistrar);
 
             await Task.Delay(500);
             MpNotificationCollectionViewModel.Instance.FinishLoading();

@@ -4,16 +4,16 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
-using static MpWpfApp.MpWpfImagingHelper;
-using static MpWpfApp.MpWpfColorHelpers;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpWpfIconBuilder : MpIIconBuilder {
 
         public BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
-            var borderBmpSrc = TintBitmapSource(img, bgColor, true);
+            var borderBmpSrc = img.Tint(bgColor, true);
             //var borderSize = new Size(borderBmpSrc.Width * scale, bordherBmpSrc.Height * scale);
-            return ScaleBitmapSource(borderBmpSrc, new Size(scale, scale));
+            return borderBmpSrc.Scale(new Size(scale, scale));
         }
 
         public string CreateBorder(string iconBase64, double scale, string hexColor) {
@@ -41,15 +41,15 @@ namespace MpWpfApp {
 
                 //0-255 0 is black
                 var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
-                var relativeDist = primaryIconColorList.Count == 0 ? 1 : ColorDistance(ConvertHexToColor(primaryIconColorList[primaryIconColorList.Count - 1]), c);
+                var relativeDist = primaryIconColorList.Count == 0 ? 1 : primaryIconColorList[primaryIconColorList.Count - 1].ToWinMediaColor().ColorDistance(c);
                 if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
-                    primaryIconColorList.Add(ConvertColorToHex(c));
+                    primaryIconColorList.Add(c.ToHex());
                 }
             }
 
             //if only 1 color found within threshold make random list
             for (int i = primaryIconColorList.Count; i < palleteSize; i++) {
-                primaryIconColorList.Add(ConvertColorToHex(GetRandomColor()));
+                primaryIconColorList.Add(MpColorHelpers.GetRandomHexColor());
             }
             //sw.Stop();
             //MpConsole.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");

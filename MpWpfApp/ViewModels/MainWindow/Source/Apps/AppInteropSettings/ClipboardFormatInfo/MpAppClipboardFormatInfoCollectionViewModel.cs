@@ -18,7 +18,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using MpProcessHelper;
 using System.Web.UI;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpAppClipboardFormatInfoCollectionViewModel : 

@@ -287,7 +287,7 @@
     </Compile>
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
-    <Compile Include="Utils\Extensions\MpWpfKeyboardInputHelpers.cs" />
+    <Compile Include="Utils\Documents\MpContentDocumentExtensions.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\System\VirtualFileDataObject.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
@@ -296,18 +296,11 @@
     <Compile Include="Utils\Builders\MpWpfPasteObjectBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
     <Compile Include="Utils\Documents\MpHyperlinkHelper.cs" />
-    <Compile Include="Utils\Extensions\MpWpfColorExtensions.cs" />
-    <Compile Include="Utils\Graphics\Color\MpWpfColorHelpers.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCustomColorChooserMenu.cs" />
-    <Compile Include="Utils\Extensions\MpWpfImageExtensions.cs" />
-    <Compile Include="Utils\Graphics\Imaging\MpWpfImagingHelper.cs" />
-    <Compile Include="Utils\Extensions\MpWpfRichDocumentExtensions.cs" />
     <Compile Include="Utils\MpContentColors.cs" />
     <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
-    <Compile Include="Utils\Extensions\MpCsvToRtfTableConverter.cs" />
-    <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCursor.cs" />
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\System\MpFileSystemWatcher.cs" />
@@ -360,7 +353,6 @@
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
-    <Compile Include="Utils\System\MpScreenInformation.cs" />
     <Compile Include="Utils\System\WinApi.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
@@ -371,7 +363,6 @@
     <Compile Include="Converters\MpBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpSolidColorBrushToBrushConverter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Utils\MpWpfExtensions.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
@@ -2900,6 +2891,7 @@
   <ItemGroup>
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Plugins\Google\PeopleApi\" />
+    <Folder Include="Utils\Extensions\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FileList\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
@@ -2908,6 +2900,10 @@
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj">
       <Project>{400473eb-9a5b-4e8d-816d-5bc5b315c542}</Project>
       <Name>MonkeyPaste.Common.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj">
+      <Project>{595efb8d-2b22-4d04-9fed-1608492edb02}</Project>
+      <Name>MonkeyPaste.Common.Wpf</Name>
     </ProjectReference>
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj">
       <Project>{e641a0b5-0461-47f3-91bb-340be880a545}</Project>

@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.IO;
 using System.Windows;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public static class MpCopyItemMerger {
@@ -21,14 +23,12 @@ namespace MpWpfApp {
             foreach(var ci in cil) {
                 switch(ci.ItemType) {
                     case MpCopyItemType.Image:
-                        fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(
-                                ci.ItemDescription.ToFlowDocument(),
-                                fd, null,true);
+                        fd = fd.Combine(
+                                ci.ItemDescription.ToFlowDocument(),null,true);
                         break;
                     default:
-                        fd = MpWpfRichDocumentExtensions.CombineFlowDocuments(
-                                ci.ItemData.ToFlowDocument(),
-                                fd,null, true);
+                        fd = fd.Combine(
+                                ci.ItemData.ToFlowDocument(),null, true);
                         break;
                 }
             }

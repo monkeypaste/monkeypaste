@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste;
 using System.IO;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpWpfOsInfo : MpIOsInfo {

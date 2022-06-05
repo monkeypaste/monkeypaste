@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     //public enum MpNotifierType {

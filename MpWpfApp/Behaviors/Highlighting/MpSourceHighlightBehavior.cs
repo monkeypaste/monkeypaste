@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using MonkeyPaste;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpSourceHighlightBehavior : MpHighlightBehaviorBase<MpClipTileTitleView> {
@@ -26,8 +28,7 @@ namespace MpWpfApp {
             HideSourceHighlight();
         }
 
-        public override async Task FindHighlighting() {
-            
+        public override async Task FindHighlighting() {            
             await Task.Delay(1);
 
             _matches.Clear();
@@ -37,22 +38,37 @@ namespace MpWpfApp {
 
             var civm = AssociatedObject.BindingContext;
             var qi = MpDataModelProvider.QueryInfo;
-            string st = qi.SearchText;
-            if(qi.FilterFlags.HasFlag(MpContentFilterType.Url) && 
-               civm.UrlViewModel != null &&
-               civm.UrlViewModel.UrlPath.ContainsByCaseOrRegexSetting(qi.SearchText)) {
-                _matches.Add(null);
-            } else if (qi.FilterFlags.HasFlag(MpContentFilterType.UrlTitle) &&
-                       civm.UrlViewModel != null &&
-                       civm.UrlViewModel.UrlTitle.ContainsByCaseOrRegexSetting(qi.SearchText)) {
-                _matches.Add(null);
-            } else if (qi.FilterFlags.HasFlag(MpContentFilterType.AppName) &&
-               civm.AppViewModel.AppName.ContainsByCaseOrRegexSetting(qi.SearchText)) {
-                _matches.Add(null);
-            } else if (qi.FilterFlags.HasFlag(MpContentFilterType.AppPath) &&
-                civm.AppViewModel.AppPath.ContainsByCaseOrRegexSetting(qi.SearchText)) {
-                _matches.Add(null);
+            string st = MpPreferences.SearchByIsCaseSensitive ? qi.SearchText : qi.SearchText.ToLower();
+            if(civm.UrlViewModel != null) {                
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.Url)) {
+                    string urlPath = MpPreferences.SearchByIsCaseSensitive ? civm.UrlViewModel.UrlPath : civm.UrlViewModel.UrlPath.ToLower();
+                    if (urlPath.Contains(st)) {
+                        _matches.Add(null);
+                    }                    
+                }
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.UrlTitle)) {
+                    string urlTitle = MpPreferences.SearchByIsCaseSensitive ? civm.UrlViewModel.UrlTitle : civm.UrlViewModel.UrlTitle.ToLower();
+                    if (urlTitle.Contains(st)) {
+                        _matches.Add(null);
+                    }
+                }
             }
+
+            if (civm.AppViewModel != null) {
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.AppName)) {
+                    string appName = MpPreferences.SearchByIsCaseSensitive ? civm.AppViewModel.AppName : civm.AppViewModel.AppName.ToLower();
+                    if (appName.Contains(st)) {
+                        _matches.Add(null);
+                    }
+                }
+                if (qi.FilterFlags.HasFlag(MpContentFilterType.AppPath)) {
+                    string appPath = MpPreferences.SearchByIsCaseSensitive ? civm.AppViewModel.AppPath : civm.AppViewModel.AppPath.ToLower();
+                    if (appPath.Contains(st)) {
+                        _matches.Add(null);
+                    }
+                }
+            }
+            _matches = _matches.Distinct().ToList();
 
             SelectedIdx = -1;
         }

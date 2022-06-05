@@ -14,7 +14,8 @@ using System.Windows.Media;
 using MonkeyPaste;
 using System.Windows.Forms;
 using Microsoft.Office.Interop.Outlook;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
 
     public class MpTagTrayViewModel : 

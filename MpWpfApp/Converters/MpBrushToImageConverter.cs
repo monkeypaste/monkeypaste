@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpBrushToImageConverter : IValueConverter {
@@ -13,7 +14,7 @@ namespace MpWpfApp {
             if (value is Brush brush) {
                 var bmpSrc = (BitmapSource)new BitmapImage(
                     new Uri(MpPreferences.AbsoluteResourcesPath + @"/Images/texture.png"));
-               return MpWpfImagingHelper.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
+               return bmpSrc.Tint(brush);
             }
             return new Image();
         }

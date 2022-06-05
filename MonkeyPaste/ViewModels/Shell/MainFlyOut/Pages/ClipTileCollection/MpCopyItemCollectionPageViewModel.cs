@@ -217,7 +217,7 @@ namespace MonkeyPaste {
                 searchResult = CopyItemViewModels;
             } else {
                 searchResult = from civm in CopyItemViewModels
-                               where civm.CopyItem.ItemData.ContainsByCaseOrRegexSetting(query)
+                               where civm.CopyItem.ItemData.ToLower().Contains(query.ToLower())
                                select civm;//.Skip(2).Take(2);
             }
             foreach(var civm in CopyItemViewModels) {

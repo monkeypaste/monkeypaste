@@ -16,6 +16,8 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
 
     public class MpAssignShortcutModalWindowViewModel : MpViewModelBase {

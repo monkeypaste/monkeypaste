@@ -4,7 +4,8 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpFileSystemTriggerOutput : MpActionOutput {
         public override object OutputData { get; }

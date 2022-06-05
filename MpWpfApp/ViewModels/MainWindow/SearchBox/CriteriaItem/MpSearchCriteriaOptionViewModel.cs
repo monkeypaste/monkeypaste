@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
 
     public class MpSearchCriteriaOptionViewModel : MpViewModelBase<MpSearchCriteriaOptionViewModel> {

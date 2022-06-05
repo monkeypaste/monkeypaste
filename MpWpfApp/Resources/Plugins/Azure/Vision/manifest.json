@@ -394,7 +394,7 @@
         "label": "Source Content",
         "description": "The image to describe",
         "controlType": "TextBox",
-        "unitType": "ContentQuery",
+        "unitType": "PlainTextContentQuery",
         "isRequired": true,
         "isVisible": false,
         "paramId": 4,

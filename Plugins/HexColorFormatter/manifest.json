@@ -1,0 +1,47 @@
+{
+  "title": "Hex Color Formatter",
+  "description": "Scans content for hex colors (3 and/or 4 channels) and highlights background with a link to an editor",
+  "version": "1.0",
+  "credits": "Somebody",
+  "guid": "f7e66100-ea62-4209-ab58-b2915bcedcad",
+  "iconUrl": "color-palette.png",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "textToken": true
+    },
+    "parameters": [
+      {
+        "label": "Highlight Background",
+        "description": "When checked, the background of the hex color is the actual color",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "values": [
+          {
+            "value": "true",
+            "isDefault": true
+          }
+        ],
+        "paramId": 1
+      },
+      {
+        "label": "Content for Detection",
+        "description": "The Snippet to detect",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "{ItemData}"
+          }
+        ]
+      }
+    ]
+  }
+}

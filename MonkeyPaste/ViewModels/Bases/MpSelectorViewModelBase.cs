@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public abstract class MpSelectorViewModelBase<P,C> : 

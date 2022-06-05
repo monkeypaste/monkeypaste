@@ -8,6 +8,7 @@ using System.Windows;
 using MonkeyPaste;
 using System.Windows.Threading;
 using System.Diagnostics;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpImageObjectRecognitionBehavior : MpBehavior<FrameworkElement> {

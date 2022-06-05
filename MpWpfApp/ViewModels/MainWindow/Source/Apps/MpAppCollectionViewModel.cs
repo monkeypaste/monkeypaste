@@ -11,7 +11,8 @@ using MonkeyPaste;
 using System.IO;
 using MpProcessHelper;
 using System.Windows.Data;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpAppCollectionViewModel : 
         MpSelectorViewModelBase<object,MpAppViewModel>, 

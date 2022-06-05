@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpObjectToImageSourceOrIconConverter : IValueConverter {

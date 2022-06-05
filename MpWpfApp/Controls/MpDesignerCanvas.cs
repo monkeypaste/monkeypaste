@@ -1,5 +1,7 @@
-﻿using GongSolutions.Wpf.DragDrop.Utilities;
+﻿
 using MonkeyPaste;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -1,5 +1,6 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
 using MonkeyPaste;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;

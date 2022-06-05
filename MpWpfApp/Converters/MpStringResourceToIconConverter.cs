@@ -6,7 +6,8 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
-
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpStringResourceToIconConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
@@ -20,7 +21,7 @@ namespace MpWpfApp {
                     if(string.IsNullOrEmpty(paramStr)) {
                         //do nothing
                     } else if(!paramStr.IsStringHexColor()) {
-                        bmpSrc = MpWpfImagingHelper.TintBitmapSource(bmpSrc, paramStr.ToWinMediaColor(), true);
+                        bmpSrc = bmpSrc.Tint(paramStr.ToWinMediaColor(), true);
                     }
                 }
                 var icon = new Image();

@@ -214,7 +214,7 @@
         "label": "Source Content",
         "description": "The text to translate",
         "controlType": "TextBox",
-        "unitType": "ContentQuery",
+        "unitType": "PlainTextContentQuery",
         "isRequired": true,
         "isVisible": false,
         "paramId": 8,

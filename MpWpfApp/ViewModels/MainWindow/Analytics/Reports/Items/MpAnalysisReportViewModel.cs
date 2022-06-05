@@ -7,7 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using Newtonsoft.Json;
 using System.Windows.Controls;
 using System.IO;

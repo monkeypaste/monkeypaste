@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

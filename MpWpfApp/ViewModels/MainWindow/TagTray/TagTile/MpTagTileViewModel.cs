@@ -10,7 +10,7 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 using System.IO;
 using System.Collections.ObjectModel;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : 

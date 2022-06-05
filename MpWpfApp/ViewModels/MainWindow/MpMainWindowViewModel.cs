@@ -16,7 +16,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : 
@@ -326,9 +326,14 @@ namespace MpWpfApp {
                     mw = (MpMainWindow)Application.Current.MainWindow;
                 }
                 mw.Show();
-                mw.Activate();
                 mw.Visibility = Visibility.Visible;
-                mw.Topmost = true;
+                mw.Activate();
+                if (MpNotificationCollectionViewModel.Instance.Notifications.Count == 0) {
+                    mw.Topmost = true;
+                } else {
+                    mw.Topmost = false;
+                }
+                
 
                 if (IsMainWindowInitiallyOpening) {
                     //await MpMainWindowResizeBehavior.Instance.ResizeForInitialLoad();

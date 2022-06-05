@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public interface MpIModelBuilder {
@@ -12,7 +13,7 @@ namespace MonkeyPaste {
     }
 
     public interface MpICopyItemBuilder {
-        Task<MpCopyItem> Create();
+        Task<MpCopyItem> Create(MpPortableDataObject pdo, bool suppressWrite = false);
     }
 
     public interface MpIUrlBuilder {
