@@ -160,19 +160,21 @@ namespace MpWpfApp {
                 case MpCopyItemType.FileList:
                     if(!ignoreSubSelection) {
 
-                        var shl = rtb.Document.GetAllTextElements()
-                                    .FirstOrDefault(x => x is Hyperlink && x.IsEnabled) as Hyperlink;
-                        if(shl != null) {
-                            return shl.NavigateUri.LocalPath;
-                        }
+                        //var shl = rtb.Document.GetAllTextElements()
+                        //            .FirstOrDefault(x => x is Hyperlink && x.IsEnabled) as Hyperlink;
+                        //if(shl != null) {
+                        //    return shl.NavigateUri.LocalPath;
+                        //}
+                        return string.Join(Environment.NewLine, ctvm.FileItems.Where(x => x.IsSelected).Select(x => x.Path));
                     }
-                    return string.Join(
-                            Environment.NewLine,
-                            rtb.Document.GetAllTextElements()
-                                    .Where(x => x is Hyperlink)
-                                    .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart))
-                                    .Cast<Hyperlink>()
-                                    .Select(x => x.NavigateUri.LocalPath));
+                    return string.Join(Environment.NewLine, ctvm.FileItems.Select(x => x.Path));
+                //return string.Join(
+                //        Environment.NewLine,
+                //        rtb.Document.GetAllTextElements()
+                //                .Where(x => x is Hyperlink)
+                //                .OrderBy(x => rtb.Document.ContentStart.GetOffsetToPosition(x.ContentStart))
+                //                .Cast<Hyperlink>()
+                //                .Select(x => x.NavigateUri.LocalPath));
                 case MpCopyItemType.Image:
                     return rtb.Document.GetAllTextElements()
                                        .Where(x => x is InlineUIContainer)

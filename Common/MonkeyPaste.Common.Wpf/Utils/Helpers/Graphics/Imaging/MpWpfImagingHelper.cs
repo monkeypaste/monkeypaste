@@ -25,7 +25,7 @@ namespace MonkeyPaste.Common.Wpf {
         public static string ConvertBitmapSourceToPlainTextAsciiArt(BitmapSource bmpSource, Size? docSize = null) {
             Size size = docSize.HasValue ? docSize.Value : new Size(250, 250);
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
-            bmpSource.Scale(size);
+            bmpSource = bmpSource.Resize(size);
             using (System.Drawing.Bitmap image = bmpSource.ToBitmap()) {
                 string outStr = string.Empty;
                 for (int h = 0; h < image.Height; h++) {

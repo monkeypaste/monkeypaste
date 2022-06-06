@@ -74,7 +74,8 @@ namespace MpWpfApp {
             if(MpDragDropManager.IsDraggingFromExternal) {
                 return false;
             }
-            return base.IsDragDataValid(isCopy, dragData);            
+            //return base.IsDragDataValid(isCopy, dragData);            
+            return dragData != null;
         }
 
         public override List<Rect> GetDropTargetRects() {

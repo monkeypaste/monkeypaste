@@ -293,7 +293,6 @@
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfMessageBox.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfIconBuilder.cs" />
-    <Compile Include="Utils\Builders\MpWpfPasteObjectBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
     <Compile Include="Utils\Documents\MpHyperlinkHelper.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCustomColorChooserMenu.cs" />
@@ -340,6 +339,7 @@
     <Compile Include="ViewModels\MainWindow\Clipboard\ClipboardHandlers\HandledClipboardFormats\Presets\MpClipboardFormatPresetViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Clipboard\ClipboardHandlers\MpClipboardHandlerItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Clipboard\MpClipboardHandlerCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileDrop\MpFileItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpOutlookContactCollectionViewModel.cs" />

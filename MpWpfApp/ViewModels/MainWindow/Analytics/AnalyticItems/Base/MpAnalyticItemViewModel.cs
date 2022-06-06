@@ -604,8 +604,8 @@ namespace MpWpfApp {
             }
         }
 
-        private async void PresetViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            await UpdatePresetSortOrder();
+        private void PresetViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            UpdatePresetSortOrder();
         }
 
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -644,7 +644,7 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task UpdatePresetSortOrder(bool fromModel = false) {
+        private void UpdatePresetSortOrder(bool fromModel = false) {
             if(fromModel) {
                 Items.Sort(x => x.SortOrderIdx);
             } else {

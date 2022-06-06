@@ -55,6 +55,10 @@
       <Project>{400473eb-9a5b-4e8d-816d-5bc5b315c542}</Project>
       <Name>MonkeyPaste.Common.Plugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj">
+      <Project>{595efb8d-2b22-4d04-9fed-1608492edb02}</Project>
+      <Name>MonkeyPaste.Common.Wpf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj">
       <Project>{e641a0b5-0461-47f3-91bb-340be880a545}</Project>
       <Name>MonkeyPaste.Common</Name>

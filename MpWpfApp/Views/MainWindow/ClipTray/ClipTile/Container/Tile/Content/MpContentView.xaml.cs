@@ -55,9 +55,9 @@ namespace MpWpfApp {
                     break;
                 case MpMessageType.IsReadOnly:
                     Rtb.FitDocToRtb();
-                    MpHelpers.RunOnMainThread(async () => {
-                        await SyncModelsAsync();
-                    });
+                    //MpHelpers.RunOnMainThread(async () => {
+                    //    await SyncModelsAsync();
+                    //});
                     break;
                 case MpMessageType.ContentItemsChanged:
                     ReattachAllBehaviors();
@@ -403,7 +403,13 @@ namespace MpWpfApp {
             UpdateAdorners();
         }
 
-
+        private void Rtb_GotFocus(object sender, RoutedEventArgs e) {
+            if (BindingContext.IsPastingTemplate) {
+                var ctv = this.GetVisualAncestor<MpClipTileView>();
+                if (ctv != null) {
+                }
+            }
+        }
         private void Rtb_LostFocus(object sender, RoutedEventArgs e) {
             if (MpDragDropManager.IsDragAndDrop) {
                 return;
@@ -481,30 +487,25 @@ namespace MpWpfApp {
 
         #region View Model Callbacks
 
-        private void Ncivm_OnFitContentRequest(object sender, EventArgs e) {
-            Rtb.FitDocToRtb();
-        }
-
-        private async void Rtbivm_OnSyncModels(object sender, EventArgs e) {
-            await SyncModelsAsync();
-        }
 
         private void Rtbivm_OnUiUpdateRequest(object sender, EventArgs e) {
-            if (!Rtb.IsLoaded) {
-                // likely during startup
-                return;
-            }
-            ScrollToHome();
-            Rtb.UpdateLayout();
-            UpdateAdorners();
+            MpHelpers.RunOnMainThread(() => {
+                if (!Rtb.IsLoaded) {
+                    // likely during startup
+                    return;
+                }
+                ScrollToHome();
+                Rtb.UpdateLayout();
+                UpdateAdorners();
 
-            if (BindingContext != null &&
-               !BindingContext.IsSubSelectionEnabled &&
-               BindingContext.IsContentReadOnly &&
-               !BindingContext.IsItemDragging) {
-                //Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
-                Rtb.CaretPosition = Rtb.Document.ContentStart;
-            }
+                if (BindingContext != null &&
+                   !BindingContext.IsSubSelectionEnabled &&
+                   BindingContext.IsContentReadOnly &&
+                   !BindingContext.IsItemDragging) {
+                    //Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
+                    Rtb.CaretPosition = Rtb.Document.ContentStart;
+                }
+            });
         }
 
         #endregion
@@ -520,7 +521,7 @@ namespace MpWpfApp {
 
         #region Template/Hyperlinks
 
-        public async Task SyncModelsAsync() {
+        //public async Task SyncModelsAsync() {
             //var rtbvm = DataContext as MpContentItemViewModel;
             //rtbvm.IsBusy = true;
             ////clear any search highlighting when saving the document then restore after save
@@ -548,9 +549,9 @@ namespace MpWpfApp {
 
             ////MpHelpers.RunOnMainThread(UpdateLayout);
             ////rtbvm.Parent.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
-        }
+        //}
 
-        public async Task ClearHyperlinks() {
+        //public async Task ClearHyperlinks() {
             //var rtbvm = Rtb.DataContext as MpContentItemViewModel;
             //var tvm_ToRemove = new List<MpTemplateViewModel>();
             //if(rtbvm.TemplateCollection.Templates.Count != TemplateViews.Count) {
@@ -587,9 +588,9 @@ namespace MpWpfApp {
             ////        new Span(new Run(linkText), hl.ElementStart);
             ////    }
             ////}
-        }
+       // }
 
-        public async Task CreateHyperlinksAsync(CancellationToken ct, DispatcherPriority dp = DispatcherPriority.Normal) {
+        //public async Task CreateHyperlinksAsync(CancellationToken ct, DispatcherPriority dp = DispatcherPriority.Normal) {
 //            var rtbvm = BindingContext;
 //            rtbvm.IsBusy = true;
 
@@ -902,7 +903,7 @@ namespace MpWpfApp {
 //            InitCaretAdorner();
 
 //            BindingContext.IsBusy = false;
-        }
+       // }
 
 
 
@@ -910,13 +911,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        private void Rtb_GotFocus(object sender, RoutedEventArgs e) {
-            if(BindingContext.IsPastingTemplate) {
-                var ctv = this.GetVisualAncestor<MpClipTileView>();
-                if(ctv != null) {
-                }
-            }
-        }
 
     }
 }

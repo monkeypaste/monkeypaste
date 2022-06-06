@@ -19,6 +19,7 @@
         <local:MpPinTrayView x:Name="PinTrayView"
                              Grid.Column="0"
                              DataContext="{Binding}"
+                             MaxWidth="{Binding PinTrayMaxDefaultMaxWidth}"
                              local:MpSizeObserverExtension.IsEnabled="True"
                              local:MpSizeObserverExtension.ObservedWidth="{Binding PinTrayScreenWidth,
                                                                                    Mode=OneWayToSource}"

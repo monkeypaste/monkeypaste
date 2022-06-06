@@ -14,8 +14,9 @@
     using System.Windows.Threading;
     using GalaSoft.MvvmLight.CommandWpf;
     using MonkeyPaste;
-    using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
-    using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+    using MonkeyPaste.Common.Plugin; 
+    using MonkeyPaste.Common; 
+    using MonkeyPaste.Common.Wpf;
     using System.Speech.Synthesis;
     using System.Windows.Documents;
 using System.Text.RegularExpressions;
@@ -348,6 +349,7 @@ using MpProcessHelper;
 
         #region View Models
 
+        public ObservableCollection<MpFileItemViewModel> FileItems { get; set; } = new ObservableCollection<MpFileItemViewModel>();
         public MpImageAnnotationCollectionViewModel DetectedImageObjectCollectionViewModel { get; set; }
 
         public MpClipTileTitleSwirlViewModel TitleSwirlViewModel { get; set; }
@@ -678,84 +680,6 @@ using MpProcessHelper;
                     return Brushes.DarkGray;
                 }
                 return Brushes.White;
-            }
-        }
-
-        public string ItemBackgroundHexColor {
-            get {
-                if (ItemType == MpCopyItemType.FileList) {
-                    if (IsHovering) {
-                        return MpSystemColors.gainsboro;
-                    }
-                    return MpSystemColors.Transparent;
-                }
-
-                if (MpDragDropManager.IsDragAndDrop || Parent == null || CopyItem == null) {
-                    return MpSystemColors.White;
-                }
-
-                return ItemEditorBackgroundHexColor;
-            }
-        }
-        public string ItemBorderBrushHexColor {
-            get {
-                if (ItemType == MpCopyItemType.FileList) {
-                    if (IsHovering) {
-                        return MpSystemColors.black;
-                    }
-                    return MpSystemColors.Transparent;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-        public double ItemBorderBrushThickness {
-            get {
-                if (ItemType == MpCopyItemType.FileList) {
-                    if (IsHovering) {
-                        return 0.5;
-                    }
-                }
-                return 0;
-            }
-        }
-        public string ItemEditorBackgroundHexColor { get; set; } = MpSystemColors.Transparent;
-
-
-        public Brush ItemBorderBrush {
-            get {
-
-                if (!IsSelected ||
-                   IsItemDragging) {
-                    return Brushes.Transparent;
-                }
-                return Brushes.Red;
-            }
-        }
-
-        public Brush ItemSeparatorBrush {
-            get {
-                if (//MpContentDropManager.Instance.IsDragAndDrop ||
-                    ItemType == MpCopyItemType.FileList ||
-                   //(ItemIdx == Parent.DropIdx + 1 && Parent.IsDroppingOnTile) || // NOTE drop line uses adorner since DropIdx 0 won't have seperator
-                   IsSelected) {
-                    return Brushes.Transparent;
-                }
-                return Brushes.DimGray;
-            }
-        }
-
-        public Rect ItemBorderBrushRect {
-            get {
-                if (IsContextMenuOpen || IsItemDragging) {
-                    return MpMeasurements.Instance.DottedBorderRect;
-                }
-                return MpMeasurements.Instance.SolidBorderRect;
-            }
-        }
-
-        public Rect ItemSeparatorBrushRect {
-            get {
-                return MpMeasurements.Instance.DottedBorderRect;
             }
         }
 
@@ -1288,7 +1212,8 @@ using MpProcessHelper;
             CopyItem = ci;
 
             IsNewAndFirstLoad = !MpMainWindowViewModel.Instance.IsMainWindowLoading;
-
+            
+            FileItems.Clear();
             TemplateCollection = new MpTemplateCollectionViewModel(this);
             if (TitleSwirlViewModel == null) {
                 TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
@@ -1306,12 +1231,11 @@ using MpProcessHelper;
 
             //RequestUiUpdate();
             //OnPropertyChanged(nameof(EditorHeight));
-            OnPropertyChanged(nameof(ItemBorderBrush));
+            OnPropertyChanged(nameof(TileBorderBrush));
+            OnPropertyChanged(nameof(TileBorderBrushRect));
 
             MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
-
-            OnPropertyChanged(nameof(ItemSeparatorBrush));
             OnPropertyChanged(nameof(EditorHeight));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(TrayX));
@@ -1485,8 +1409,7 @@ using MpProcessHelper;
             bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
 
             MpPortableDataObject d = new MpPortableDataObject();
-            string rtf = string.Empty.ToRichText();
-            var sctfl = new List<string>();
+            string rtf = string.Empty;
 
             //check for model templates
             bool needsTemplateData = HasTemplates;
@@ -1501,13 +1424,11 @@ using MpProcessHelper;
                 }
                 if(needsTemplateData) {
                     templatesInSelection = MpTextSelectionRangeExtension.SelectedTextTemplates(this);
-
                     if (!ignoreSubSelection && templatesInSelection.Count() == 0) {
                         // if dropping or pasting and sub-selection doesn't contain templates they don't need to be filled
                         needsTemplateData = false;
                     }
-                }
-                
+                }                
             }
 
             if (needsTemplateData) {
@@ -1526,7 +1447,7 @@ using MpProcessHelper;
                     ClearEditing();
                 }
 
-            } else {
+            } else if(ItemType == MpCopyItemType.Text) {
                 bool isInUi = Parent.GetClipTileViewModelById(CopyItemId) != null;
                 if(!isInUi) {
                     // handle special case when pasting item by id (like from a hotkey)
@@ -1541,83 +1462,69 @@ using MpProcessHelper;
             }
             string pt = string.Empty;
             string bmpBase64 = string.Empty;
+            var sctfl = new List<string>();
             switch (ItemType) {
                 case MpCopyItemType.Text:
                     pt = rtf.ToPlainText();
                     bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
                     break;
                 case MpCopyItemType.Image:
-                    pt = CopyItemData.ToBitmapSource().ToAsciiImage();
+                    pt = string.Empty;//CopyItemData.ToBitmapSource().ToAsciiImage();
                     bmpBase64 = CopyItemData;
                     break;
                 case MpCopyItemType.FileList:
-                    pt = CopyItemData;
+                    if(FileItems.All(x => x.IsSelected == false)) {
+                        FileItems.ForEach(x => x.IsSelected = true);
+                    }
+                    pt = string.Join(Environment.NewLine,FileItems.Select(x=>x.Path));
+                    rtf = pt.ToRichText();
                     bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
                     break;
             }
 
             if (isToExternalApp) {
-                string targetProcessPath = MpProcessManager.GetProcessPath(targetHandle);
-                var app = await MpDataModelProvider.GetAppByPath(targetProcessPath);
-                MpAppClipboardFormatInfoCollectionViewModel targetInteropSettings = null;
-                if (app != null) {
-                    targetInteropSettings = MpAppCollectionViewModel.Instance.GetInteropSettingByAppId(app.Id);
-                    MpConsole.WriteLine("Dragging over " + targetProcessPath);
-                }
-
-                bool ignoreFileDrop = false;
-                if (targetInteropSettings != null) {
-                    var targetFormats = targetInteropSettings.Items
-                                            .Where(x => !x.IgnoreFormat).ToList();
-
-                    ignoreFileDrop = targetInteropSettings.Items
-                                        .Where(x => x.ClipboardFormatType == MpClipboardFormatType.FileDrop)
-                                        .All(x => x.IgnoreFormat);
-
-                    foreach (var targetSetting in targetFormats.OrderByDescending(x => x.IgnoreFormat)) {
-                        switch (targetSetting.ClipboardFormatType) {
-                            case MpClipboardFormatType.FileDrop:
-                                if (ItemType == MpCopyItemType.Text) {
-                                    if (targetSetting.FormatInfo == "txt") {
-                                        sctfl.Add(pt.ToFile(null, CopyItemTitle, targetSetting.FormatInfo));
-                                    } else {
-                                        sctfl.Add(rtf.ToFile(null, CopyItemTitle, targetSetting.FormatInfo));
-                                    }
-                                } else {
-                                    sctfl.Add(CopyItemData.ToFile(null, CopyItemTitle, targetSetting.FormatInfo));
+                foreach (string format in MpPortableDataFormats.Formats) {
+                    switch (format) {
+                        case MpPortableDataFormats.FileDrop:
+                            if (ItemType == MpCopyItemType.FileList) {
+                                foreach(var fp in FileItems.Where(x=>x.IsSelected).Select(x=>x.Path)) {
+                                    if(fp.IsFileOrDirectory()) {
+                                        sctfl.Add(fp);
+                                    }                                    
                                 }
-
-                                break;
-                            case MpClipboardFormatType.Rtf:
-                                d.SetData(MpPortableDataFormats.Rtf, rtf);
-                                break;
-                            case MpClipboardFormatType.Text:
-                                d.SetData(MpPortableDataFormats.Text, pt);
-                                break;
-                            case MpClipboardFormatType.Bitmap:
-                                d.SetData(MpPortableDataFormats.Bitmap, bmpBase64);
-                                break;
-                            case MpClipboardFormatType.Csv:
-                                string sctcsv = string.Join(Environment.NewLine, CopyItemData.ToCsv());
-                                if (!string.IsNullOrWhiteSpace(sctcsv)) {
-                                    d.SetData(MpPortableDataFormats.Csv, sctcsv);
-                                }
-                                break;
-                            case MpClipboardFormatType.Custom:
-                                break;
-                            default:
-                                sctfl.Add(CopyItemData.ToFile(null, CopyItemTitle, targetSetting.FormatInfo));
-                                break;
-                        }
+                            } else {
+                                sctfl.Add(CopyItemData.ToFile(null, CopyItemTitle));
+                            }
+                            d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
+                            break;
+                        case MpPortableDataFormats.Rtf:
+                            d.SetData(MpPortableDataFormats.Rtf, rtf);
+                            break;
+                        case MpPortableDataFormats.Text:
+                            d.SetData(MpPortableDataFormats.Text, pt);
+                            break;
+                        case MpPortableDataFormats.Bitmap:
+                            d.SetData(MpPortableDataFormats.Bitmap, bmpBase64);
+                            break;
+                        case MpPortableDataFormats.Csv:
+                            if(ItemType == MpCopyItemType.Image) {
+                                continue;
+                            }
+                            if(ItemType == MpCopyItemType.FileList) {
+                                d.SetData
+                                    (MpPortableDataFormats.Csv, 
+                                    string.Join(
+                                        ",",
+                                        FileItems.Where(x => x.IsSelected).Select(x => x.Path)));
+                            } else {
+                                d.SetData(MpPortableDataFormats.Csv, CopyItemData.ToCsv());
+                            }
+                            break;
+                        default:
+                            continue;
                     }
-                } else {
-                    // NOTE using plain text here for more compatibility
-                    sctfl.Add(CopyItemData.ToFile(null, CopyItemTitle));
                 }
 
-                if (!ignoreFileDrop) {
-                    d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
-                }
             } else {
                 // TODO set internal data stuff here
             }
@@ -1832,13 +1739,13 @@ using MpProcessHelper;
                                 RequestUiUpdate();
                             }
                         }
+                        FileItems.ForEach(x => x.IsSelected = false);
                         //LastSelectedDateTime = DateTime.MinValue;
                         //ClearSelection();
                     }
                     
 
                     Parent.NotifySelectionChanged();
-                    OnPropertyChanged(nameof(ItemSeparatorBrush));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     break;
                 case nameof(CopyItem):
@@ -1913,7 +1820,7 @@ using MpProcessHelper;
                     }
                     break;
                 case nameof(IsContextMenuOpen):
-                    OnPropertyChanged(nameof(ItemBorderBrushRect));
+                    OnPropertyChanged(nameof(TileBorderBrush));
                     //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
                     OnPropertyChanged(nameof(IsContextMenuOpen));
@@ -1930,14 +1837,10 @@ using MpProcessHelper;
                     } else {
                         StopAnimation();
                     }
-                    OnPropertyChanged(nameof(ItemBorderBrushRect));
-                    OnPropertyChanged(nameof(ItemBorderBrush));
+                    OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
                     break;
                 case nameof(IsHovering):
-                    OnPropertyChanged(nameof(ItemBorderBrushHexColor));
-                    OnPropertyChanged(nameof(ItemBorderBrushThickness));
-                    OnPropertyChanged(nameof(ItemBackgroundHexColor));
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
@@ -1978,7 +1881,7 @@ using MpProcessHelper;
         }
 
         private void StartAnimation() {
-            return;
+            //return;
             if (_timer == null) {
                 _timer = new DispatcherTimer();
                 _timer.Interval = TimeSpan.FromMilliseconds(300);
@@ -1997,15 +1900,15 @@ using MpProcessHelper;
             }
             //MpConsole.WriteLine("Border Brush loc: " + dbr.Location);
             MpMeasurements.Instance.DottedBorderRect = dbr;
-            OnPropertyChanged(nameof(ItemBorderBrushRect));
-            OnPropertyChanged(nameof(ItemBorderBrush));
+            OnPropertyChanged(nameof(TileBorderBrush));
+            OnPropertyChanged(nameof(TileBorderBrushRect));
         }
 
         private void StopAnimation() {
-            return;
+            //return;
             MpMeasurements.Instance.DottedBorderRect = MpMeasurements.Instance.DottedBorderDefaultRect;
-            OnPropertyChanged(nameof(ItemBorderBrushRect));
-            OnPropertyChanged(nameof(ItemBorderBrush));
+            OnPropertyChanged(nameof(TileBorderBrush));
+            OnPropertyChanged(nameof(TileBorderBrushRect));
             _timer.Stop();
         }
         #endregion

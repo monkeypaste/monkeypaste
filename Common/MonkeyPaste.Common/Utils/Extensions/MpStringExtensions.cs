@@ -369,7 +369,7 @@ namespace MonkeyPaste.Common {
         }
 
         private static Regex _IsNotBase64RegEx;
-        public static bool IsStringBase64(this string str) {
+        public static bool IsStringBase642(this string str) {
             // Check that the length is a multiple of 4 characters
             //Check that every character is in the set A - Z, a - z, 0 - 9, +, / except for padding at the end which is 0, 1 or 2 '=' characters
 
@@ -380,12 +380,30 @@ namespace MonkeyPaste.Common {
                 return false;
             }
             if(_IsNotBase64RegEx == null) {
-                _IsNotBase64RegEx = new Regex(@"[^a-zA-Z0-9+/=]",RegexOptions.Compiled);
+                //_IsNotBase64RegEx = new Regex(@"[^a-zA-Z0-9+/=]",RegexOptions.Compiled);
+                _IsNotBase64RegEx = new Regex(@"([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)", RegexOptions.Compiled);
             }
-            if(_IsNotBase64RegEx.IsMatch(str)) {
+            if(!_IsNotBase64RegEx.IsMatch(str)) {
                 return false;
             }
             return true;
+        }
+
+        public static bool IsStringBase64(this string str) {
+            if(string.IsNullOrWhiteSpace(str)) {
+                return false;
+            }
+            try {
+                // If no exception is caught, then it is possibly a base64 encoded string
+                byte[] data = Convert.FromBase64String(str);
+                // The part that checks if the string was properly padded to the
+                // correct length was borrowed from d@anish's solution
+                return (str.Replace(" ", "").Length % 4 == 0);
+            }
+            catch {
+                // If exception is caught, then it is not a base64 encoded string
+                return false;
+            }
         }
 
         public static bool IsStringFileOrPathFormat(this string path) {

@@ -393,7 +393,7 @@ namespace MpWpfApp {
                     var timer = new DispatcherTimer(DispatcherPriority.Render);
                     timer.Interval = TimeSpan.FromMilliseconds(fps);
 
-                    timer.Tick += async (s, e32) => {
+                    timer.Tick += (s, e32) => {
                         if (MainWindowTop < _startMainWindowTop) {
                             MainWindowTop -= dt;
                         } else {

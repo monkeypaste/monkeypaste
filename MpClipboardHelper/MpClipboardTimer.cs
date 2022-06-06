@@ -45,8 +45,6 @@ namespace MpClipboardHelper {
 
         #region MpIClipboardMonitor Implementation
 
-        public event EventHandler<MpPortableDataObject> OnClipboardChange;
-
         public void StartMonitor() => Start();
 
         public void StopMonitor() => Stop();
@@ -210,7 +208,7 @@ namespace MpClipboardHelper {
                 return ndo;
             }
             try {
-                bool autoConvert = false; 
+                //bool autoConvert = false; 
 
                 foreach (var supportedType in MpPortableDataFormats.Formats) {
                     //string nativeTypeName = MpWinFormsDataFormatConverter.Instance.GetNativeFormatName(supportedType);

@@ -23,13 +23,23 @@
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
                             <!--  Hover image  -->
-                            <Setter TargetName="image" Property="Source" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=(local:MpImageSourceExtension.HoverImage)}" />
+                            <Setter TargetName="image"
+                                    Property="Source"
+                                    Value="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                                   AncestorType=Button},
+                                                    Path=(local:MpImageSourceExtension.HoverImage)}" />
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
+                        <Trigger Property="IsEnabled"
+                                 Value="False">
                             <!--  Disabled image  -->
-                            <Setter TargetName="image" Property="Source" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=(local:MpImageSourceExtension.DisabledImage)}" />
+                            <Setter TargetName="image"
+                                    Property="Source"
+                                    Value="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                                   AncestorType=Button},
+                                                    Path=(local:MpImageSourceExtension.DisabledImage)}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -92,15 +102,29 @@
             </Border>
         </Grid>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
+            <Trigger Property="IsMouseOver"
+                     Value="True">
                 <Trigger.Setters>
-                    <Setter Property="Foreground" TargetName="ContentPresenterLabel" Value="White" />
-                    <Setter Property="FontWeight" TargetName="ContentPresenterLabel" Value="Normal" />
-                    <Setter Property="Opacity" TargetName="ContentPresenterLabel" Value="1" />
-                    <Setter Property="Opacity" TargetName="ButtonBorderFill" Value="1" />
-                    <Setter Property="Opacity" TargetName="ButtonBorder" Value="1" />
-                    <Setter Property="BorderBrush" TargetName="ButtonBorder" Value="Black" />
-                    <Setter Property="Button.BitmapEffect" TargetName="ButtonBorder">
+                    <Setter Property="Foreground"
+                            TargetName="ContentPresenterLabel"
+                            Value="White" />
+                    <Setter Property="FontWeight"
+                            TargetName="ContentPresenterLabel"
+                            Value="Normal" />
+                    <Setter Property="Opacity"
+                            TargetName="ContentPresenterLabel"
+                            Value="1" />
+                    <Setter Property="Opacity"
+                            TargetName="ButtonBorderFill"
+                            Value="1" />
+                    <Setter Property="Opacity"
+                            TargetName="ButtonBorder"
+                            Value="1" />
+                    <Setter Property="BorderBrush"
+                            TargetName="ButtonBorder"
+                            Value="Black" />
+                    <Setter Property="Button.BitmapEffect"
+                            TargetName="ButtonBorder">
                         <Setter.Value>
                             <OuterGlowBitmapEffect GlowColor="Gray"
                                                    GlowSize="2"
@@ -117,7 +141,8 @@
     </ControlTemplate>
     <Style x:Key="BouncyButton"
            TargetType="{x:Type Button}">
-        <Setter Property="Template" Value="{StaticResource BouncyButtonTemplate}" />
+        <Setter Property="Template"
+                Value="{StaticResource BouncyButtonTemplate}" />
     </Style>
 
     <ControlTemplate x:Key="SlickToggleButtonTemplate"
@@ -156,28 +181,39 @@
             </Border>
         </Grid>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
+            <Trigger Property="IsMouseOver"
+                     Value="True">
                 <Trigger.Setters>
-                    <Setter Property="Opacity" TargetName="ButtonBackgroundBorder" Value="1" />
+                    <Setter Property="Opacity"
+                            TargetName="ButtonBackgroundBorder"
+                            Value="1" />
                 </Trigger.Setters>
             </Trigger>
-            <Trigger Property="IsChecked" Value="True">
+            <Trigger Property="IsChecked"
+                     Value="True">
                 <Trigger.Setters>
-                    <Setter Property="Opacity" TargetName="ButtonBackgroundBorder" Value="1" />
-                    <Setter Property="Background" TargetName="ButtonBackgroundBorder" Value="{Binding Path=PressedBackground, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Setter Property="Opacity"
+                            TargetName="ButtonBackgroundBorder"
+                            Value="1" />
+                    <Setter Property="Background"
+                            TargetName="ButtonBackgroundBorder"
+                            Value="{Binding Path=PressedBackground,
+                                            RelativeSource={RelativeSource TemplatedParent}}" />
                 </Trigger.Setters>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <Style x:Key="SlickToggleButton"
            TargetType="{x:Type ToggleButton}">
-        <Setter Property="Template" Value="{StaticResource SlickToggleButtonTemplate}" />
+        <Setter Property="Template"
+                Value="{StaticResource SlickToggleButtonTemplate}" />
     </Style>
     <!--  Button Templates Start  -->
     <!--  Button Colors  -->
     <Style x:Key="RoundedButton"
            TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background"
+                Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -190,11 +226,17 @@
                                           VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" TargetName="border" Value="Yellow" />
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    TargetName="border"
+                                    Value="Yellow" />
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="BorderBrush" TargetName="border" Value="HotPink" />
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    TargetName="border"
+                                    Value="HotPink" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -204,7 +246,8 @@
 
     <Style x:Key="RoundedButton_NoOutline"
            TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background"
+                Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -217,11 +260,17 @@
                                           VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" TargetName="border" Value="Yellow" />
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    TargetName="border"
+                                    Value="Yellow" />
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="BorderBrush" TargetName="border" Value="HotPink" />
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    TargetName="border"
+                                    Value="HotPink" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -230,7 +279,8 @@
     </Style>
     <Style x:Key="FrameGripButton"
            TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background"
+                Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -249,11 +299,17 @@
                                           VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" TargetName="border" Value="Yellow" />
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    TargetName="border"
+                                    Value="Yellow" />
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="BorderBrush" TargetName="border" Value="HotPink" />
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    TargetName="border"
+                                    Value="HotPink" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -264,7 +320,8 @@
     <!--  Button Styles  -->
     <Style x:Key="Transparent_Button_With_Custom_Border"
            TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background"
+                Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -276,8 +333,10 @@
                                           VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="Transparent" />
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -286,7 +345,8 @@
     </Style>
     <Style x:Key="Transparent_Button"
            TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background"
+                Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -298,8 +358,10 @@
                                           VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="Transparent" />
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -324,15 +386,29 @@
             </Border>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF7CA0CC" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FFE4EFFD" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FFDAE7F5" />
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF7CA0CC" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FFE4EFFD" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FFDAE7F5" />
             </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF2E4E76" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FF116EE4" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FF3272B8" />
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF2E4E76" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FF116EE4" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FF3272B8" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -354,20 +430,41 @@
             </Border>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF7CA0CC" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FFE4EFFD" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FFDAE7F5" />
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF7CA0CC" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FFE4EFFD" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FFDAE7F5" />
             </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF2E4E76" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FF116EE4" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FF3272B8" />
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF2E4E76" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FF116EE4" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FF3272B8" />
             </Trigger>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FFFFC00A" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FFFFDE7F" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FFFFD458" />
+            <Trigger Property="IsChecked"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FFFFC00A" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FFFFDE7F" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FFFFD458" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -435,12 +532,20 @@
                 </Setter.Value>
             </Setter>
         </Style>-->
-    <RadialGradientBrush x:Key="ToggleButtonCheckedBackground" Center="0.5 0.5" GradientOrigin="0.5 0.5" RadiusX="3.5" RadiusY="3.5">
+    <RadialGradientBrush x:Key="ToggleButtonCheckedBackground"
+                         Center="0.5 0.5"
+                         GradientOrigin="0.5 0.5"
+                         RadiusX="3.5"
+                         RadiusY="3.5">
         <RadialGradientBrush.GradientStops>
-            <GradientStop Offset="0" Color="Red" />
-            <GradientStop Offset="0.1" Color="Yellow" />
-            <GradientStop Offset="0.9" Color="Green" />
-            <GradientStop Offset="5" Color="Blue" />
+            <GradientStop Offset="0"
+                          Color="Red" />
+            <GradientStop Offset="0.1"
+                          Color="Yellow" />
+            <GradientStop Offset="0.9"
+                          Color="Green" />
+            <GradientStop Offset="5"
+                          Color="Blue" />
         </RadialGradientBrush.GradientStops>
     </RadialGradientBrush>
     <ControlTemplate x:Key="AppModeToggleButtonControlTemplate"
@@ -459,34 +564,139 @@
             </Border>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="AMTB_OuterBorder" Property="BorderBrush" Value="#FF7CA0CC" />
-                <Setter TargetName="AMTB_InnerBorder" Property="BorderBrush" Value="Yellow" />
-                <Setter TargetName="AMTB_InnerBorder" Property="Background" Value="Transparent" />
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter TargetName="AMTB_OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF7CA0CC" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="BorderBrush"
+                        Value="Yellow" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="Transparent" />
             </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="AMTB_OuterBorder" Property="BorderBrush" Value="Transparent" />
-                <Setter TargetName="AMTB_InnerBorder" Property="BorderBrush" Value="Transparent" />
-                <Setter TargetName="AMTB_InnerBorder" Property="Background" Value="DimGray" />
+            <Trigger Property="IsEnabled"
+                     Value="False">
+                <Setter TargetName="AMTB_OuterBorder"
+                        Property="BorderBrush"
+                        Value="Transparent" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="BorderBrush"
+                        Value="Transparent" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="DimGray" />
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
-                    <Condition Property="IsEnabled" Value="True" />
-                    <Condition Property="IsChecked" Value="True" />
+                    <Condition Property="IsEnabled"
+                               Value="True" />
+                    <Condition Property="IsChecked"
+                               Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter TargetName="AMTB_InnerBorder" Property="Background" Value="Lime" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="Lime" />
             </MultiTrigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
-                    <Condition Property="IsEnabled" Value="True" />
-                    <Condition Property="IsChecked" Value="False" />
+                    <Condition Property="IsEnabled"
+                               Value="True" />
+                    <Condition Property="IsChecked"
+                               Value="False" />
                 </MultiTrigger.Conditions>
-                <Setter TargetName="AMTB_InnerBorder" Property="Background" Value="LightGray" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="LightGray" />
             </MultiTrigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="AMTB_OuterBorder" Property="BorderBrush" Value="#FF2E4E76" />
-                <Setter TargetName="AMTB_InnerBorder" Property="BorderBrush" Value="#FF116EE4" />
-                <Setter TargetName="AMTB_InnerBorder" Property="Background" Value="#FF3272B8" />
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter TargetName="AMTB_OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF2E4E76" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FF116EE4" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="#FF3272B8" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate x:Key="AppModeToggleButtonControlTemplate_NOCHECKED_STYLE"
+                     TargetType="{x:Type ToggleButton}">
+        <Border x:Name="AMTB_OuterBorder"
+                BorderThickness="1"
+                Margin="0,0,2,0"
+                CornerRadius="5">
+            <Border x:Name="AMTB_InnerBorder"
+                    BorderThickness="1"
+                    CornerRadius="2">
+                <ContentPresenter Margin="{TemplateBinding Padding}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  RecognizesAccessKey="True" />
+            </Border>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter TargetName="AMTB_OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF7CA0CC" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="BorderBrush"
+                        Value="Yellow" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="Transparent" />
+            </Trigger>
+            <Trigger Property="IsEnabled"
+                     Value="False">
+                <Setter TargetName="AMTB_OuterBorder"
+                        Property="BorderBrush"
+                        Value="Transparent" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="BorderBrush"
+                        Value="Transparent" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="DimGray" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsEnabled"
+                               Value="True" />
+                    <Condition Property="IsChecked"
+                               Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="LightGray" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsEnabled"
+                               Value="True" />
+                    <Condition Property="IsChecked"
+                               Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="LightGray" />
+            </MultiTrigger>
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter TargetName="AMTB_OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF2E4E76" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FF116EE4" />
+                <Setter TargetName="AMTB_InnerBorder"
+                        Property="Background"
+                        Value="#FF3272B8" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -510,15 +720,29 @@
             </Border>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF7CA0CC" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FFE4EFFD" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FFDAE7F5" />
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF7CA0CC" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FFE4EFFD" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FFDAE7F5" />
             </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF2E4E76" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FF116EE4" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FF3272B8" />
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF2E4E76" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FF116EE4" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FF3272B8" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -542,20 +766,41 @@
             </Border>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF7CA0CC" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FFE4EFFD" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FFDAE7F5" />
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF7CA0CC" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FFE4EFFD" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FFDAE7F5" />
             </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF2E4E76" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FF116EE4" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FF3272B8" />
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF2E4E76" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FF116EE4" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FF3272B8" />
             </Trigger>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FFFFC00A" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FFFFDE7F" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FFFFD458" />
+            <Trigger Property="IsChecked"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FFFFC00A" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FFFFDE7F" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FFFFD458" />
 
             </Trigger>
         </ControlTemplate.Triggers>
@@ -580,15 +825,29 @@
             </Border>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF7CA0CC" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FFE4EFFD" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FFDAE7F5" />
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF7CA0CC" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FFE4EFFD" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FFDAE7F5" />
             </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="OuterBorder" Property="BorderBrush" Value="#FF2E4E76" />
-                <Setter TargetName="InnerBorder" Property="BorderBrush" Value="#FF116EE4" />
-                <Setter TargetName="InnerBorder" Property="Background" Value="#FF3272B8" />
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter TargetName="OuterBorder"
+                        Property="BorderBrush"
+                        Value="#FF2E4E76" />
+                <Setter TargetName="InnerBorder"
+                        Property="BorderBrush"
+                        Value="#FF116EE4" />
+                <Setter TargetName="InnerBorder"
+                        Property="Background"
+                        Value="#FF3272B8" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -598,8 +857,10 @@
     <!--  Semi-Transparent Button  -->
     <Style x:Key="SemiTransparentButton"
            TargetType="Button">
-        <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -611,8 +872,10 @@
                                           VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.8" />
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Opacity"
+                                    Value="0.8" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

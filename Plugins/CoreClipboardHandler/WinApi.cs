@@ -88,8 +88,8 @@ namespace CoreClipboardHandler {
         [DllImport("User32.dll", SetLastError = true)]
         public static extern uint RegisterClipboardFormatA(string lpszFormat);
 
-        [DllImport(@"User32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true)]
+        //[return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsClipboardFormatAvailable(uint format);
     }
 }

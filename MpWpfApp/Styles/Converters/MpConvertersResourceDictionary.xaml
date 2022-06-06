@@ -88,5 +88,6 @@
     <local:MpStringHexColorToIsBrightBrushConverter x:Key="StringHexColorToIsBrightBrushConverter" />
     <local:MpShortcutCommandViewModelToTooltipConverter x:Key="ShortcutCommandViewModelToTooltipConverter" />
     <local:MpShortcutCommandViewModelToImageSourceConverter x:Key="ShortcutCommandViewModelToImageSourceConverter" />
+    <local:MpShortcutTypeToStringConverter x:Key="ShortcutTypeToStringConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

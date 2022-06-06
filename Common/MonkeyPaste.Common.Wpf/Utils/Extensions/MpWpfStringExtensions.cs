@@ -52,24 +52,6 @@ namespace MonkeyPaste.Common.Wpf {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", string.Empty, RegexOptions.Compiled);
         }
 
-
-        //public static bool IsStringCsv(this string text) {
-        //    if (string.IsNullOrEmpty(text) || IsStringRichText(text)) {
-        //        return false;
-        //    }
-        //    return text.Contains(",");
-        //}
-
-        //public static bool IsStringRichText(this string text) {
-        //    if (string.IsNullOrEmpty(text)) {
-        //        return false;
-        //    }
-        //    return text.StartsWith(@"{\rtf");
-        //}
-
-
-        
-
         public static string ToCsv(this string str) {
             if (string.IsNullOrWhiteSpace(str)) {
                 return str == null ? string.Empty : str;

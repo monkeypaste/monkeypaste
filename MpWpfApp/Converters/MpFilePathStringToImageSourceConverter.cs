@@ -23,20 +23,15 @@ namespace MpWpfApp {
             if (value is string pathStr) {
                 if(!string.IsNullOrEmpty(pathStr)) {
                     try {
-                        string filePath = pathStr;
-                        if (File.Exists(pathStr) || Directory.Exists(pathStr)) {
-                            using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(pathStr)) {
-                                bmpSrc = Imaging.CreateBitmapSourceFromHIcon(
-                                                    icon.Handle,
-                                                    new Int32Rect(0, 0, s, s),
-                                                    BitmapSizeOptions.FromEmptyOptions());
-                            }
+                        if (pathStr.IsFileOrDirectory()) {
+                            bmpSrc = MpShellEx.GetBitmapFromPath(pathStr, MpIconSize.SmallIcon16);
 
                         }
                         //string iconBase64Str = MpProcessHelper.MpProcessIconBuilder.GetBase64BitmapFromPath(pathStr);
                         //return new MpBase64StringToBitmapSourceConverter().Convert(iconBase64Str,targetType,parameter,culture);
                     }
                     catch (Exception ex) {
+                        bmpSrc = null;
                         MpConsole.WriteTraceLine(ex);
                     }
                 }

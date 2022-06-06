@@ -101,7 +101,14 @@
                                              NotifyOnTargetUpdated=True,
                                              NotifyOnSourceUpdated=True}" />
         </StackPanel>
-
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Show Append Buffer" />
+            <CheckBox IsChecked="{local:MpSettingBinding Path=NotificationShowAppendBufferToast,
+                                                         Mode=TwoWay,
+                                                         UpdateSourceTrigger=PropertyChanged,
+                                                         NotifyOnTargetUpdated=True,
+                                                         NotifyOnSourceUpdated=True}" />
+        </StackPanel>
 
         <local:MpPasteToAppPathDataGridView DataContext="{Binding PasteToAppPathViewModelCollection}" />
 

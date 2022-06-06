@@ -218,7 +218,7 @@ namespace MonkeyPaste.Common {
             return pdf;
         }
 
-        private static int GetDataFormatId(string format) {
+        public static int GetDataFormatId(string format) {
             foreach(var kvp in _formatLookup) {
                 if(kvp.Value.Name == format) {
                     return kvp.Key;

@@ -439,44 +439,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
 
             return fd.ContentStart.FindAllText(fd.ContentEnd, input, isCaseSensitive).ToList();
-        }
-
-        public static List<TextRange> FindText(
-            this FlowDocument fd,
-            string input,
-            FindFlags flags = FindFlags.MatchCase,
-            CultureInfo cultureInfo = null) {
-            input = input.Replace(Environment.NewLine, string.Empty);
-            return fd.ContentStart.FindAllText(fd.ContentEnd, input, flags.HasFlag(FindFlags.MatchCase)).ToList();
-            var trl = new List<TextRange>();
-            //var tp = fd.ContentStart;
-
-            //var inputParts = input.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
-            //while (tp != null && tp != fd.ContentEnd) {
-            //    var ctp = tp;
-            //    tp = null;
-            //    int i;
-            //    for(i = 0;i < inputParts.Length && ctp != null && ctp != fd.ContentEnd;i++) {
-            //        string inputPart = inputParts[i];
-            //        var tr = ctp.FindText(fd.ContentEnd, inputPart, flags, cultureInfo);
-            //        if (tr == null) {
-            //            break;
-            //        }
-            //        if(tp == null) {
-            //            tp = tr.Start;
-            //        }
-            //        ctp = tr.End.GetNextInsertionPosition(LogicalDirection.Forward);
-            //    }
-            //    if(i != inputParts.Length) {
-            //        break;
-            //    }
-            //    trl.Add(new TextRange(tp, ctp));
-
-            //    tp = ctp.GetNextInsertionPosition(LogicalDirection.Forward);
-            //}
-            return trl;
-        }
+        }        
 
         public static TextRange FindText(
             this TextPointer start, 

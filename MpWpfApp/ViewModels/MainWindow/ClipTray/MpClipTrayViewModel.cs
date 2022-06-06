@@ -33,7 +33,7 @@ namespace MpWpfApp {
 
         private List<MpCopyItem> _newModels = new List<MpCopyItem>();
 
-        private MpCopyItem _appendModeCopyItem = null;
+        private MpCopyItem _appendModeCopyItem;
 
         private int _pageSize = 0;
 
@@ -1271,9 +1271,6 @@ namespace MpWpfApp {
                     }
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
                     break;
-                case nameof(IsAppendMode):
-                    MpNotificationCollectionViewModel.Instance.ShowMessage(string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
-                    break;
             }
         }
 
@@ -1285,7 +1282,9 @@ namespace MpWpfApp {
 
             var createItemSw = new Stopwatch();
             createItemSw.Start();
-            var newCopyItem = await MpCopyItemBuilder.CreateFromDataObject(cd, IsAppendMode || IsAppendLineMode);
+
+
+            var newCopyItem = await MpCopyItemBuilder.CreateFromDataObject(cd, IsAnyAppendMode && _appendModeCopyItem != null);
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 
@@ -1305,42 +1304,66 @@ namespace MpWpfApp {
                     isDup = false;
                     newCopyItem.Id = 0;
                     newCopyItem.CopyDateTime = DateTime.Now;
-                    await newCopyItem.WriteToDatabaseAsync();
+                    //await newCopyItem.WriteToDatabaseAsync();
+                }
+                if(_appendModeCopyItem != null && newCopyItem.Id > 0) {
+                    Debugger.Break();
                 }
                 //when in append mode just append the new items text to selecteditem
                 if (_appendModeCopyItem == null) {
-                    if (SelectedItem == null) {
+                    if(_newModels != null && 
+                       _newModels.Where(x=>x.ItemType == MpCopyItemType.Text).Count() > 0 &&
+                       (SelectedItem == null || SelectedItem.ItemType != MpCopyItemType.Text || 
+                       (SelectedItem != null && _newModels.Where(x=>x.ItemType == MpCopyItemType.Text).Max(x=>x.CopyDateTime) > SelectedItem.LastSelectedDateTime))) {
+                        // when new models are pending (to be added to pin tray) check if they are more
+                        // recent then last selected item and prefer newest model when append is enabled
+                        _appendModeCopyItem = _newModels.Where(x => x.ItemType == MpCopyItemType.Text).Aggregate((a, b) => a.CopyDateTime > b.CopyDateTime ? a : b);
+
+                    } else if ((SelectedItem == null || (SelectedItem != null && (SelectedItem.ItemType != MpCopyItemType.Text || SelectedItem.LastSelectedDateTime < newCopyItem.CopyDateTime))) && newCopyItem.ItemType == MpCopyItemType.Text) {
                         _appendModeCopyItem = newCopyItem;
-                    } else {
+                    } else if(SelectedItem.ItemType == MpCopyItemType.Text) {
                         _appendModeCopyItem = SelectedItem.CopyItem;
                     }
                 }
+                if(_appendModeCopyItem != null && newCopyItem.ItemType == MpCopyItemType.Text) {
+                    if (_appendModeCopyItem != newCopyItem) {
+                        
+                        var am_ctvm = GetClipTileViewModelById(_appendModeCopyItem.Id);
+                        if (am_ctvm != null) {
+                            var am_cv = Application.Current.MainWindow.GetVisualDescendents<MpContentView>().FirstOrDefault(x => x.DataContext == am_ctvm);
 
-                if (_appendModeCopyItem != newCopyItem) {                    
-                    var am_ctvm = GetClipTileViewModelById(_appendModeCopyItem.Id);
-                    var am_cv = Application.Current.MainWindow.GetVisualDescendents<MpContentView>().FirstOrDefault(x => x.DataContext == am_ctvm);
-                   
-                    am_cv.Rtb.Document = (MpEventEnabledFlowDocument)am_cv.Rtb.Document.Combine(
-                        newCopyItem.ItemData.ToFlowDocument(), null, IsAppendLineMode);
+                            if (am_cv != null) {
+                                am_cv.Rtb.Document = (MpEventEnabledFlowDocument)am_cv.Rtb.Document.Combine(
+                                newCopyItem.ItemData.ToFlowDocument(), null, IsAppendLineMode);
 
-                    MpContentDocumentRtfExtension.SaveTextContent(am_cv.Rtb).FireAndForgetSafeAsync(am_ctvm);
+                                await MpContentDocumentRtfExtension.SaveTextContent(am_cv.Rtb);
+                            }
+                        } else {
+                            var cfd = _appendModeCopyItem.ItemData.ToFlowDocument().Combine(newCopyItem.ItemData.ToFlowDocument(), null, IsAppendLineMode);
+                            _appendModeCopyItem.ItemData = cfd.ToRichText();
+                            await _appendModeCopyItem.WriteToDatabaseAsync();
 
-                    if (MpPreferences.NotificationShowAppendBufferToast) {
-                        // TODO now composite item doesn't roll up children so the buffer needs to be created here
-                        // if I use this at all
+                            int newIdx = _newModels.IndexOf(_newModels.FirstOrDefault(x => x.Id == _appendModeCopyItem.Id));
+                            _newModels.RemoveAt(newIdx);
+                            _newModels.Insert(newIdx, _appendModeCopyItem);
+                        }
 
-                        MpNotificationCollectionViewModel.Instance.ShowMessage(
-                            title: "Append Buffer",
-                            msg: SelectedItem.CopyItem.ItemData.ToPlainText(),
-                            msgType: MpNotificationDialogType.AppendBuffer)
-                            .FireAndForgetSafeAsync(this);
-                    }
+                        if (MpPreferences.NotificationShowAppendBufferToast) {
+                            // TODO now composite item doesn't roll up children so the buffer needs to be created here
+                            // if I use this at all
 
-                    if (MpPreferences.NotificationDoCopySound) {
-                        MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
+                            MpNotificationCollectionViewModel.Instance.ShowMessage(
+                                title: "Append Buffer",
+                                msg: _appendModeCopyItem.ItemData.ToPlainText(),
+                                msgType: MpNotificationDialogType.AppendBuffer)
+                                .FireAndForgetSafeAsync(this);
+                        }
+
+                        if (MpPreferences.NotificationDoCopySound) {
+                            MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
+                        }
                     }
                 }
-
             } else {
                 _appendModeCopyItem = null;
                 if (MpPreferences.NotificationDoCopySound) {
@@ -1363,7 +1386,9 @@ namespace MpWpfApp {
                 newCopyItem.CopyDateTime = DateTime.Now;
                 await newCopyItem.WriteToDatabaseAsync();
             } else if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                _newModels.Add(newCopyItem);
+                if(newCopyItem.Id != 0) {
+                    _newModels.Add(newCopyItem);
+                }
 
                 MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount++;
 
@@ -2289,27 +2314,31 @@ namespace MpWpfApp {
         public ICommand ToggleRightClickPasteCommand => new RelayCommand(
             () => {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
+                MpNotificationCollectionViewModel.Instance.ShowMessage("MODE CHANGED", string.Format("RIGHT CLICK PASTE MODE: {0}", IsRightClickPasteMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, !IsAppPaused);
 
         public ICommand ToggleAutoCopyModeCommand => new RelayCommand(
             () => {
                 IsAutoCopyMode = !IsAutoCopyMode;
+                MpNotificationCollectionViewModel.Instance.ShowMessage("MODE CHANGED", string.Format("AUTO-COPY SELECTION MODE: {0}", IsAutoCopyMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, !IsAppPaused);
         
         public ICommand ToggleAppendModeCommand => new RelayCommand(
             () => {
                 IsAppendMode = !IsAppendMode;
                 if (IsAppendMode && IsAppendLineMode) {
-                    IsAppendLineMode = false;
+                    ToggleAppendLineModeCommand.Execute(null);
                 }
+                MpNotificationCollectionViewModel.Instance.ShowMessage("MODE CHANGED",string.Format("APPEND MODE: {0}", IsAppendMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, !IsAppPaused);
 
         public ICommand ToggleAppendLineModeCommand => new RelayCommand(
             () => {
                 IsAppendLineMode = !IsAppendLineMode;
                 if (IsAppendLineMode && IsAppendMode) {
-                    IsAppendMode = false;
+                    ToggleAppendModeCommand.Execute(null);
                 }
+                MpNotificationCollectionViewModel.Instance.ShowMessage("MODE CHANGED", string.Format("APPEND LINE MODE: {0}", IsAppendLineMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
             }, !IsAppPaused);
 
         public ICommand FindAndReplaceSelectedItem => new RelayCommand(

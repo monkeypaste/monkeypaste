@@ -47,12 +47,16 @@ namespace CoreClipboardHandler {
             }
             if(nativeFormatStr == DataFormats.FileDrop &&
                 WinApi.IsClipboardFormatAvailable(CF_HDROP)) {
+
+                WinApi.OpenClipboard(_mainWindowHandle);
                 string[] sa = Clipboard.GetData(nativeFormatStr) as string[];                
                 if (sa != null && sa.Length > 0) {
                     return string.Join(Environment.NewLine, sa);
                 }
             } else if(nativeFormatStr == DataFormats.Bitmap &&
                       WinApi.IsClipboardFormatAvailable(CF_BITMAP)) {
+
+                WinApi.OpenClipboard(_mainWindowHandle);
                 var bmpSrc = Clipboard.GetImage();
                 if (bmpSrc != null) {
                     byte[] bytes = null;

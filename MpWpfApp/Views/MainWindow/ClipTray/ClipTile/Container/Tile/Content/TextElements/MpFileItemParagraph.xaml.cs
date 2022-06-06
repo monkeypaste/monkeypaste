@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     /// <summary>
@@ -21,6 +22,21 @@ namespace MpWpfApp {
         public MpFileItemParagraph() {
             InitializeComponent();
         }
-        
+
+        private void Paragraph_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            var fivm = DataContext as MpFileItemViewModel;
+            if(fivm == null) {
+                return;
+            }
+            var ctvm = fivm.Parent;
+
+            fivm.IsSelected = true;
+            if(!ctvm.IsSelected) {
+                ctvm.IsSelected = true;
+            }
+            if(!MpShortcutCollectionViewModel.Instance.IsMultiSelectKeyDown) {
+                ctvm.FileItems.Where(x => x != fivm).ForEach(x => x.IsSelected = false);
+            }
+        }
     }
 }

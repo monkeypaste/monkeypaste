@@ -5,6 +5,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                      x:TypeArguments="local:MpClipTrayViewModel"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
@@ -13,6 +14,7 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid Loaded="Grid_Loaded"
           Panel.ZIndex="100"
+          ClipToBounds="False"
           Background="{Binding .,
                                Converter={StaticResource StringToThemeBrushConverter},
                                ConverterParameter=App_Mode_Grid_Background_Color}">
@@ -117,6 +119,7 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
         </ToggleButton>
+
         <ToggleButton x:Name="AppModeToggleButton"
                       Loaded="AppModeToggleButton_Loaded"
                       Grid.Row="4"
@@ -133,20 +136,26 @@
                 <StackPanel x:Key="AppModeToggleButtonStackPanel"
                             Orientation="Horizontal">
                     <ToggleButton x:Name="AppendModeToggleButton"
+                                  Loaded="AppendModeToggleButton_Loaded"
                                   Grid.Row="4"
                                   Padding="10"
                                   ToolTipService.InitialShowDelay="0"
                                   VerticalAlignment="Bottom"
                                   HorizontalAlignment="Center"
-                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                  Template="{StaticResource AppModeToggleButtonControlTemplate_NOCHECKED_STYLE}"
+                                  DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
                                   ToolTip="Append to Clipboard"
                                   IsEnabled="{Binding IsAppPaused,
                                                       Converter={StaticResource BoolFlipConverter}}"
                                   PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown">
                         <Grid>
-                            <Popup IsOpen="False">
-                                <StackPanel Orientation="Vertical">
-                                    <ToggleButton Width="{Binding AppStateButtonPanelWidth,
+                            <Popup IsOpen="False" AllowsTransparency="True">
+                                <StackPanel Orientation="Vertical" Background="Transparent">
+                                    <ToggleButton x:Name="AppendToggleButton"
+                                                  Loaded="AppendToggleButton_Loaded"
+                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
+                                                  DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
+                                                  Width="{Binding AppStateButtonPanelWidth,
                                                                   Source={x:Static local:MpMeasurements.Instance}}"
                                                   Height="{Binding AppStateButtonPanelWidth,
                                                                    Source={x:Static local:MpMeasurements.Instance}}"
@@ -154,18 +163,13 @@
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                                  IsChecked="{Binding IsAppendMode,
-                                                                      Mode=TwoWay,
-                                                                      UpdateSourceTrigger=PropertyChanged,
-                                                                      NotifyOnSourceUpdated=True,
-                                                                      NotifyOnTargetUpdated=True}"
                                                   Padding="10">
                                         <ToggleButton.ToolTip>
                                             <TextBlock>
                                                 <Run Text="Append Cut/Copy " />
                                                 <Run Text="{Binding .,
-                                                                    Converter={StaticResource ShorcutIdToKeyStringConverter},
-                                                                    ConverterParameter=3}" />
+                                                                    Converter={StaticResource ShortcutTypeToStringConverter},
+                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleAppendMode}}" />
                                             </TextBlock>
                                         </ToggleButton.ToolTip>
                                         <Image Source="{Binding Source={StaticResource AppendRunIcon},
@@ -173,7 +177,11 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
-                                    <ToggleButton Width="{Binding AppStateButtonPanelWidth,
+                                    <ToggleButton x:Name="AppendLineToggleButton" 
+                                                  Loaded="AppendLineToggleButton_Loaded"
+                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"                                                  
+                                                  DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
+                                                  Width="{Binding AppStateButtonPanelWidth,
                                                                   Source={x:Static local:MpMeasurements.Instance}}"
                                                   Height="{Binding AppStateButtonPanelWidth,
                                                                    Source={x:Static local:MpMeasurements.Instance}}"
@@ -181,18 +189,13 @@
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                                  IsChecked="{Binding IsAppendLineMode,
-                                                                      Mode=TwoWay,
-                                                                      UpdateSourceTrigger=PropertyChanged,
-                                                                      NotifyOnSourceUpdated=True,
-                                                                      NotifyOnTargetUpdated=True}"
                                                   Padding="10">
                                         <ToggleButton.ToolTip>
                                             <TextBlock>
                                                 <Run Text="Append Line Cut/Copy " />
                                                 <Run Text="{Binding .,
-                                                                    Converter={StaticResource ShorcutIdToKeyStringConverter},
-                                                                    ConverterParameter=25}" />
+                                                                    Converter={StaticResource ShortcutTypeToStringConverter},
+                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleAppendLineMode}}" />
                                             </TextBlock>
                                         </ToggleButton.ToolTip>
                                         <Image Source="{Binding Source={StaticResource AppendLineIcon},
@@ -209,20 +212,23 @@
                         </Grid>
                     </ToggleButton>
                     <ToggleButton x:Name="MouseModeToggleButton"
+                                  Loaded="MouseModeToggleButton_Loaded"
                                   Grid.Row="3"
                                   ToolTipService.InitialShowDelay="0"
                                   ToolTip="Mouse Modes"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Left"
-                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                  Template="{StaticResource AppModeToggleButtonControlTemplate_NOCHECKED_STYLE}"
                                   IsEnabled="{Binding IsAppPaused,
                                                       Converter={StaticResource BoolFlipConverter}}"
                                   PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
                                   Padding="10">
                         <Grid>
-                            <Popup IsOpen="False">
-                                <StackPanel Orientation="Vertical">
-                                    <ToggleButton Width="{Binding AppStateButtonPanelWidth,
+                            <Popup IsOpen="False" AllowsTransparency="True">
+                                <StackPanel Orientation="Vertical" Background="Transparent">
+                                    <ToggleButton x:Name="AutoCopyToggleButton"
+                                                  Loaded="AutoCopyToggleButton_Loaded"
+                                                  Width="{Binding AppStateButtonPanelWidth,
                                                                   Source={x:Static local:MpMeasurements.Instance}}"
                                                   Height="{Binding AppStateButtonPanelWidth,
                                                                    Source={x:Static local:MpMeasurements.Instance}}"
@@ -232,14 +238,15 @@
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
                                                   IsEnabled="{Binding IsAppPaused,
                                                                       Converter={StaticResource BoolFlipConverter}}"
-                                                  IsChecked="{Binding IsAutoCopyMode}"
+                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
                                                   Padding="10">
                                         <ToggleButton.ToolTip>
                                             <TextBlock>
                                                 <Run Text="Auto-Copy Selection " />
+
                                                 <Run Text="{Binding .,
-                                                                    Converter={StaticResource ShorcutIdToKeyStringConverter},
-                                                                    ConverterParameter=4}" />
+                                                                    Converter={StaticResource ShortcutTypeToStringConverter},
+                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleAutoCopyMode}}" />
                                             </TextBlock>
                                         </ToggleButton.ToolTip>
                                         <Image Source="{Binding Source={StaticResource LeftClickIcon},
@@ -247,7 +254,9 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
-                                    <ToggleButton Width="{Binding AppStateButtonPanelWidth,
+                                    <ToggleButton x:Name="RightClickPasteToggleButton"
+                                                  Loaded="RightClickPasteToggleButton_Loaded"
+                                                  Width="{Binding AppStateButtonPanelWidth,
                                                                   Source={x:Static local:MpMeasurements.Instance}}"
                                                   Height="{Binding AppStateButtonPanelWidth,
                                                                    Source={x:Static local:MpMeasurements.Instance}}"
@@ -257,14 +266,14 @@
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
                                                   IsEnabled="{Binding IsAppPaused,
                                                                       Converter={StaticResource BoolFlipConverter}}"
-                                                  IsChecked="{Binding IsRightClickPasteMode}"
+                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
                                                   Padding="10">
                                         <ToggleButton.ToolTip>
                                             <TextBlock>
                                                 <Run Text="Right-Click Paste " />
                                                 <Run Text="{Binding .,
-                                                                    Converter={StaticResource ShorcutIdToKeyStringConverter},
-                                                                    ConverterParameter=5}" />
+                                                                    Converter={StaticResource ShortcutTypeToStringConverter},
+                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleRightClickPasteMode}}" />
                                             </TextBlock>
                                         </ToggleButton.ToolTip>
                                         <Image Source="{Binding Source={StaticResource RightClickIcon},

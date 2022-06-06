@@ -329,12 +329,7 @@ namespace MpWpfApp {
                         dropData = dragContentView.Rtb.Selection.Text;
                         break;
                     case MpCopyItemType.FileList:
-                        dropData = dragContentView.Rtb.Document
-                                                             .GetAllTextElements()
-                                                             .Where(x => x is Hyperlink && x.IsEnabled)
-                                                             .Cast<Hyperlink>()
-                                                             .Select(x => x.NavigateUri.LocalPath)
-                                                             .FirstOrDefault();
+                        dropData = MpContentDocumentRtfExtension.GetEncodedContent(dragContentView.Rtb, false);
                         if(dropData == null) {
                             //when dragging from below file list and not hovering over any item, select last
                             var fil = drag_ctvm.CopyItemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();

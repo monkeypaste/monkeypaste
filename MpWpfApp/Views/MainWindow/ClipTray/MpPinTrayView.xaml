@@ -15,6 +15,7 @@
         <ListBox x:Name="PinTrayListBox"
                  Grid.Column="0"
                  Background="Salmon"
+                 Loaded="PinTrayListBox_Loaded"
                  ItemsSource="{Binding PinnedItems}"
                  IsSynchronizedWithCurrentItem="True"
                  Margin="0,0,0,0"

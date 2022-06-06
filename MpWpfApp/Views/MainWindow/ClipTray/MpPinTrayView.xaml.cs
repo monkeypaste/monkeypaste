@@ -21,5 +21,16 @@ namespace MpWpfApp {
         public MpPinTrayView() {
             InitializeComponent();
         }
+
+        private void PinTrayListBox_Loaded(object sender, RoutedEventArgs e) {
+            if(BindingContext == null) {
+                return;
+            }
+            BindingContext.OnScrollIntoViewRequest += BindingContext_OnScrollIntoViewRequest;
+        }
+
+        private void BindingContext_OnScrollIntoViewRequest(object sender, object e) {
+            PinTrayListBox.ScrollIntoView(e);
+        }
     }
 }
