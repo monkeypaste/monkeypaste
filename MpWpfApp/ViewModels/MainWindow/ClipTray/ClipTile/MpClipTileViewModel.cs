@@ -760,6 +760,8 @@ using MpProcessHelper;
             }
         }
 
+        public double TileBorderBrushTranslateOffsetX { get;set; }
+
         public Rect TileBorderBrushRect {
             get {
                 if (IsItemDragging || IsContextMenuOpen) {
@@ -1772,6 +1774,10 @@ using MpProcessHelper;
                     break;
                 case nameof(CanResize):
                     OnPropertyChanged(nameof(TileBorderBrush));
+                    Parent.OnPropertyChanged(nameof(Parent.CanAnyResize));
+                    break;
+                case nameof(IsResizing):
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyResizing));
                     break;
                 case nameof(TileBorderWidth):
                     if (Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
@@ -1791,17 +1797,6 @@ using MpProcessHelper;
                     OnPropertyChanged(nameof(TileBorderHeight));
                     OnPropertyChanged(nameof(TileContentHeight));
                     break;
-                case nameof(IsContentReadOnly):
-                    MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
-                    Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
-
-                    OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
-                    OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
-                    OnPropertyChanged(nameof(EditorHeight));
-                    OnPropertyChanged(nameof(CanVerticallyScroll));
-                    IsSubSelectionEnabled = !IsContentReadOnly;
-                    OnPropertyChanged(nameof(IsSubSelectionEnabled));
-                    break;
                 case nameof(IsSubSelectionEnabled):
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
@@ -1818,6 +1813,23 @@ using MpProcessHelper;
                         IsTitleFocused = true;
                         IsSelected = true;
                     }
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTitle));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
+                    break;
+
+                case nameof(IsContentReadOnly):
+                    MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
+                    Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
+
+                    OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
+                    OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
+                    OnPropertyChanged(nameof(EditorHeight));
+                    OnPropertyChanged(nameof(CanVerticallyScroll));
+                    IsSubSelectionEnabled = !IsContentReadOnly;
+                    OnPropertyChanged(nameof(IsSubSelectionEnabled));
+
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     break;
                 case nameof(IsContextMenuOpen):
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -1830,7 +1842,11 @@ using MpProcessHelper;
                     //Parent.OnPropertyChanged(nameof(Parent.TileBorderBrush));
                     if (IsItemDragging) {
                         StartAnimation();
-                        if(SelectionLength == 0) {
+                        if(!IsSubSelectionEnabled) {
+                            // BUG checking selection length here (when IsSubSelectionEnabled=false)
+                            // to see if partial selection always returns some size when
+                            // none is actually selected. So force it to select all and 
+                            // make sure selection extension updates ui of selection
                             IsContentFocused = true;
                             MpTextSelectionRangeExtension.SelectAll(this);
                         }
@@ -1839,8 +1855,10 @@ using MpProcessHelper;
                     }
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyItemDragging));
                     break;
                 case nameof(IsHovering):
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
@@ -1883,31 +1901,26 @@ using MpProcessHelper;
         private void StartAnimation() {
             //return;
             if (_timer == null) {
-                _timer = new DispatcherTimer();
-                _timer.Interval = TimeSpan.FromMilliseconds(300);
+                _timer = new DispatcherTimer(DispatcherPriority.Render);                
+                _timer.Interval = TimeSpan.FromMilliseconds(30);
                 _timer.Tick += _timer_Tick;
             }
-            MpMeasurements.Instance.DottedBorderRect = MpMeasurements.Instance.DottedBorderDefaultRect;
-
             _timer.Start();
         }
 
         private void _timer_Tick(object sender, EventArgs e) {
-            Rect dbr = MpMeasurements.Instance.DottedBorderRect;
-            dbr.Location = new Point(dbr.X + 5, dbr.Y);
-            if (dbr.Location.X >= dbr.Width) {
-                dbr.Location = new Point(0, dbr.Y);
+            if(!IsItemDragging) {
+                StopAnimation();
+                return;
             }
-            //MpConsole.WriteLine("Border Brush loc: " + dbr.Location);
-            MpMeasurements.Instance.DottedBorderRect = dbr;
-            OnPropertyChanged(nameof(TileBorderBrush));
-            OnPropertyChanged(nameof(TileBorderBrushRect));
+            if(TileBorderBrushTranslateOffsetX > 50) {
+                TileBorderBrushTranslateOffsetX = 0;
+            }
+            TileBorderBrushTranslateOffsetX += 0.01d;
         }
 
         private void StopAnimation() {
-            //return;
-            MpMeasurements.Instance.DottedBorderRect = MpMeasurements.Instance.DottedBorderDefaultRect;
-            OnPropertyChanged(nameof(TileBorderBrush));
+            TileBorderBrushTranslateOffsetX = 0.0d;
             OnPropertyChanged(nameof(TileBorderBrushRect));
             _timer.Stop();
         }

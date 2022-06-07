@@ -31,6 +31,9 @@
                 Grid.Column="1"
                 Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
             <ComboBox x:Name="CommandTypeChooserComboBox"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                   Mode=OneWayToSource}"
                       Style="{StaticResource ActionPropertyComboBoxStyle}"
                       ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
                       SelectedIndex="{Binding CommandType,

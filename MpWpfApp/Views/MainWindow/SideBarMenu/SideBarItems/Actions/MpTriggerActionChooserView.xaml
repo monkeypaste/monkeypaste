@@ -64,11 +64,9 @@
                     <ComboBox x:Name="RootActionChooserComboBox"
                               DockPanel.Dock="Left"
                               VerticalAlignment="Top"
-                              IsDropDownOpen="{Binding IsChooserDropDownOpen,
-                                                       Mode=TwoWay,
-                                                       UpdateSourceTrigger=PropertyChanged,
-                                                       NotifyOnSourceUpdated=True,
-                                                       NotifyOnTargetUpdated=True}"
+                              IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                       Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                       Mode=OneWayToSource}"
                               MinWidth="200"
                               MaxHeight="40"
                               ItemsSource="{Binding Items,
@@ -126,10 +124,14 @@
                         </ComboBox.ItemTemplate>
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
-                                <Setter Property="HorizontalAlignment" Value="Stretch" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="VerticalContentAlignment" Value="Center" />
-                                <Setter Property="Padding" Value="3" />
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Stretch" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                                <Setter Property="VerticalContentAlignment"
+                                        Value="Center" />
+                                <Setter Property="Padding"
+                                        Value="3" />
                             </Style>
                         </ComboBox.ItemContainerStyle>
                     </ComboBox>

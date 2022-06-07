@@ -65,6 +65,9 @@
                               IsTextSearchEnabled="True"
                               StaysOpenOnEdit="True"
                               PreviewKeyUp="ComboBox_PreviewKeyUp"
+                              IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                       Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                       Mode=OneWayToSource}"
                               IsTextSearchCaseSensitive="{Binding MatchCase}"
                               ItemsSource="{Binding RecentFindTexts}"
                               Width="100"
@@ -80,7 +83,8 @@
 
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
-                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Stretch" />
                             </Style>
                         </ComboBox.ItemContainerStyle>
                     </ComboBox>
@@ -121,6 +125,9 @@
                               IsTextSearchEnabled="True"
                               StaysOpenOnEdit="True"
                               PreviewKeyUp="ComboBox_PreviewKeyUp"
+                              IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                       Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                       Mode=OneWayToSource}"
                               ItemsSource="{Binding RecentReplaceTexts}"
                               GotFocus="ComboBox_GotFocus"
                               LostFocus="ComboBox_LostFocus"
@@ -131,7 +138,8 @@
                                              NotifyOnTargetUpdated=True}">
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
-                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Stretch" />
                             </Style>
                         </ComboBox.ItemContainerStyle>
                     </ComboBox>

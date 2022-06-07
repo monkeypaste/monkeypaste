@@ -38,6 +38,9 @@
                           VerticalContentAlignment="Center"
                           Background="Transparent"
                           FontSize="14"
+                          IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                   Mode=OneWayToSource}"
                           ItemsSource="{Binding PastableItems}"
                           SelectedItem="{Binding SelectedItem,
                                                  Mode=TwoWay,
@@ -63,7 +66,12 @@
                     </ComboBox.ItemTemplate>
                     <ComboBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ComboBoxItem}">
-                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="IsSelected"
+                                    Value="{Binding IsSelected,
+                                                    Mode=TwoWay,
+                                                    NotifyOnTargetUpdated=True,
+                                                    NotifyOnSourceUpdated=True,
+                                                    UpdateSourceTrigger=PropertyChanged}" />
                         </Style>
                     </ComboBox.ItemContainerStyle>
                 </ComboBox>

@@ -13,7 +13,10 @@
                 Grid.Column="0">
         <StackPanel Orientation="Horizontal">
             <Label Content="Monitor" />
-            <ComboBox SelectedIndex="{local:MpSettingBinding MainWindowMonitorIdx}">
+            <ComboBox SelectedIndex="{local:MpSettingBinding MainWindowMonitorIdx}"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                               Source={x:Static local:MpMainWindowViewModel.Instance},
+                                               Mode=OneWayToSource}">
                 <ComboBoxItem Content="Primary" />
                 <ComboBoxItem Content="Focused" />
                 <ComboBoxItem Content="Mouse" />

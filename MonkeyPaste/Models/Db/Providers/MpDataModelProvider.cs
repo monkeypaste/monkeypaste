@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using System.Text.RegularExpressions;
 
 namespace MonkeyPaste {
     public static class MpDataModelProvider {
@@ -603,10 +604,27 @@ namespace MonkeyPaste {
         #endregion MpCopyItem
 
         #region MpTextToken
+        public static async Task<List<string>> ParseTextTemplateGuidsByCopyItemId(int ciid) {
+            var textTemplateGuids = new List<string>();
+            var ci = await GetCopyItemById(ciid);
+            if (ci == null) {
+                return textTemplateGuids;
+            }
+            var encodedTemplateGuids = MpRegEx.GetRegExForTokenType(MpSubTextTokenType.EncodedTextTemplate).Matches(ci.ItemData);
+            if (encodedTemplateGuids.Count == 0) {
+                return textTemplateGuids;
+            }
+            foreach (Match encodedTemplateGuid in encodedTemplateGuids) {
+                var guidMatch = MpRegEx.GetRegExForTokenType(MpSubTextTokenType.Guid).Match(encodedTemplateGuid.Value);
+                textTemplateGuids.Add(guidMatch.Value);
+            }
+            textTemplateGuids = textTemplateGuids.Distinct().ToList();
+            return textTemplateGuids;
+        }
 
-        public static async Task<List<MpTextTemplate>> GetTextTemplatesAsync(int ciid) {
-            string query = @"select * from MpTextTemplate where fk_MpCopyItemId=?";
-            var result = await MpDb.QueryAsync<MpTextTemplate>(query,ciid);
+        public static async Task<List<MpTextTemplate>> ParseTextTemplatesByCopyItemId(int ciid) {
+            var templateGuids = await ParseTextTemplateGuidsByCopyItemId(ciid);
+            var result = await GetTextTemplatesByGuids(templateGuids);
             return result;
         }
 

@@ -270,7 +270,7 @@
                                      Visibility="{Binding IsSidebarVisible,
                                                           Converter={StaticResource BoolToVisibilityConverter}}"
                                      DataContext="{x:Static local:MpTagTrayViewModel.Instance}" />
-                
+
                 <local:MpClipboardHandlerItemSelectorView x:Name="ManageClipboardHandlerItemsContainerView"
                                                           Grid.Row="1"
                                                           Grid.Column="1"
@@ -300,7 +300,7 @@
                               IsVisibleChanged="SidebarGridSplitter_IsVisibleChanged">
                     <GridSplitter.Visibility>
                         <MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}"
-                                      ConverterParameter="OR">
+                                      ConverterParameter="{StaticResource OrTypeMultiBinding}">
                             <Binding Path="IsSidebarVisible"
                                      Source="{x:Static local:MpTagTrayViewModel.Instance}" />
                             <Binding Path="IsSidebarVisible"

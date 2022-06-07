@@ -20,6 +20,9 @@
         <ComboBox ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem,
                                          Mode=TwoWay}"
+                  IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                   Mode=OneWayToSource}"
                   IsSynchronizedWithCurrentItem="False"
                   HorizontalAlignment="Center"
                   MinWidth="80">

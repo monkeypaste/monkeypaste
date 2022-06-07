@@ -225,7 +225,9 @@ namespace MpWpfApp {
             var textRange = new TextRange(Rtb.Selection.Start, Rtb.Selection.End);
             textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
 
-            //BindingContext.IsContentFocused = true;
+            Rtb.Document.ConfigureLineHeight();
+            // NOTE re-selecting text because selection doesn't resize to new typeface
+            Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.End);
         }
 
         private void FontSizeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -247,8 +249,8 @@ namespace MpWpfApp {
             textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
 
             Rtb.Document.ConfigureLineHeight();
-
-            
+            // NOTE re-selecting text because selection doesn't resize to new typeface
+            Rtb.Selection.Select(Rtb.Selection.Start, Rtb.Selection.End);
         }
 
         private void ForegroundColorButton_Click(object sender, RoutedEventArgs e) {

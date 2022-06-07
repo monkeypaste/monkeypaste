@@ -46,7 +46,7 @@ namespace MpWpfApp {
 
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e) {
             BindingContext.IsTextBoxFocused = true;
-            MpIsFocusedExtension.IsAnyTextBoxFocused = true;
+            MpMainWindowViewModel.Instance.IsAnyTextBoxFocused = true;
             MpHelpers.RunOnMainThread(async () => {
                 while(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                     await Task.Delay(100);
@@ -58,7 +58,7 @@ namespace MpWpfApp {
 
         private void SearchBox_LostFocus(object sender, RoutedEventArgs e) {
             BindingContext.IsTextBoxFocused = false;
-            MpIsFocusedExtension.IsAnyTextBoxFocused = false;
+            MpMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
         }
 
         private void SearchBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {

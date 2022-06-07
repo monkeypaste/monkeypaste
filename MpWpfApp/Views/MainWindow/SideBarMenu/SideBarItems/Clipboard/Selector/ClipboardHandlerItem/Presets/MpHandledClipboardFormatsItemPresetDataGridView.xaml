@@ -30,6 +30,9 @@
                       ScrollViewer.CanContentScroll="False"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       IsSynchronizedWithCurrentItem="True"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                   Mode=OneWayToSource}"
                       ItemsSource="{Binding Items}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ComboBoxItem}">

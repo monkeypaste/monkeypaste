@@ -52,7 +52,7 @@ namespace MpWpfApp {
 
             if (BindingContext.IsFindTextBoxFocused || BindingContext.IsReplaceTextBoxFocused) {
                 //Keyboard.Focus(sender as IInputElement);
-                MpIsFocusedExtension.IsAnyTextBoxFocused = true;
+                MpMainWindowViewModel.Instance.IsAnyTextBoxFocused = true;
             }
         }
 
@@ -67,7 +67,7 @@ namespace MpWpfApp {
             }
 
             if (BindingContext.IsFindTextBoxFocused && BindingContext.IsReplaceTextBoxFocused) {
-                MpIsFocusedExtension.IsAnyTextBoxFocused = false;
+                MpMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
             }
         }
 

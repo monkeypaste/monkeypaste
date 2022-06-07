@@ -57,8 +57,14 @@
     <s:String x:Key="Hide">
         Hide
     </s:String>
+    <s:String x:Key="OrTypeMultiBinding">
+        Or
+    </s:String>
     <s:String x:Key="Collapse">
         Collapse
+    </s:String>
+    <s:String x:Key="AutoInsteadOfVisible">
+        Auto
     </s:String>
     <s:String x:Key="TemplateHyperlinkTag">
         TemplateHyperlink

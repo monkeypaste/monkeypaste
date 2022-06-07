@@ -47,8 +47,10 @@
             </ListBox.Resources>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="HorizontalContentAlignment" Value="Left" />
-                    <Setter Property="VerticalContentAlignment" Value="Top" />
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Left" />
+                    <Setter Property="VerticalContentAlignment"
+                            Value="Top" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -88,6 +90,9 @@
                           Height="23"
                           Margin="5,2,0,2"
                           IsEditable="True"
+                          IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                   Mode=OneWayToSource}"
                           ItemsSource="{x:Static Fonts.SystemFontFamilies}"
                           SelectionChanged="FontFamilyCombo_SelectionChanged">
                     <ComboBox.ItemsPanel>
@@ -112,6 +117,9 @@
                           Height="23"
                           Margin="5,2,5,2"
                           IsEditable="True"
+                          IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                   Mode=OneWayToSource}"
                           SelectionChanged="FontSizeCombo_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -212,7 +220,9 @@
                 <Button x:Name="ForegroundColorButton"
                         Click="ForegroundColorButton_Click"
                         Template="{StaticResource FlatButtonControlTemplate}">
-                    <Border x:Name="ForegroundColorButtonBorder" CornerRadius="5" Padding="2">
+                    <Border x:Name="ForegroundColorButtonBorder"
+                            CornerRadius="5"
+                            Padding="2">
                         <Image Opacity="1"
                                SnapsToDevicePixels="False"
                                Source="{Binding .,

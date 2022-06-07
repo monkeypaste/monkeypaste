@@ -141,6 +141,9 @@
                           LostFocus="SearchBox_LostFocus"
                           local:MpHoverableExtension.IsEnabled="True"
                           local:MpHoverableExtension.HoverCursor="IBeam"
+                          IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                   Mode=OneWayToSource}"
                           Foreground="{Binding TextBoxTextBrush}"
                           FontStyle="{Binding TextBoxFontStyle}"
                           VerticalContentAlignment="Center"

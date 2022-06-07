@@ -385,7 +385,7 @@ namespace MpWpfApp {
 
         private void DoubleClickFrameworkElement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (MpDragDropManager.IsDragAndDrop || 
-                AssociatedObject == null || !IsEnabled || MpIsFocusedExtension.IsAnyTextBoxFocused) {
+                AssociatedObject == null || !IsEnabled || MpMainWindowViewModel.Instance.IsAnyTextBoxFocused) {
                 return;
             }
             if (AssociatedObject.DataContext is MpISelectableViewModel svm) {

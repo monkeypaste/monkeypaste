@@ -13,18 +13,29 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid x:Name="ClipTrayContainerGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto"
+                              MaxWidth="{Binding MaxPinTrayWidth}" />
+            <ColumnDefinition Width="*"
+                              MinWidth="{Binding MinClipOrPinTrayScreenWidth}" />
         </Grid.ColumnDefinitions>
         <local:MpPinTrayView x:Name="PinTrayView"
                              Grid.Column="0"
                              DataContext="{Binding}"
-                             MaxWidth="{Binding PinTrayMaxDefaultMaxWidth}"
+                             MinWidth="{Binding MinClipOrPinTrayScreenWidth}" 
+                             Margin="0,0,10,0"
                              local:MpSizeObserverExtension.IsEnabled="True"
                              local:MpSizeObserverExtension.ObservedWidth="{Binding PinTrayScreenWidth,
-                                                                                   Mode=OneWayToSource}"
-                             Visibility="{Binding IsAnyTilePinned,
-                                                  Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                                                   Mode=OneWayToSource}">
+            <local:MpPinTrayView.Visibility>
+                <MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}"
+                              ConverterParameter="{StaticResource OrTypeMultiBinding}">
+                    <Binding Source="{x:Static local:MpClipTrayViewModel.Instance}"
+                             Path="IsAnyTilePinned" />
+                    <Binding Source="{x:Static local:MpClipTrayViewModel.Instance}"
+                             Path="IsAnyItemDragging" />
+                </MultiBinding>
+            </local:MpPinTrayView.Visibility>
+        </local:MpPinTrayView>
         <GridSplitter x:Name="ClipTraySplitter"
                       DragDelta="ClipTraySplitter_DragDelta"
                       Grid.Column="0"
@@ -36,9 +47,9 @@
                       local:MpHoverableExtension.HoverCursor="ResizeWE"
                       MouseDoubleClick="ClipTraySplitter_MouseDoubleClick"
                       HorizontalAlignment="Right"
-                      VerticalAlignment="Stretch"
+                      VerticalAlignment="Stretch" Margin="0,0,5,0"
                       Width="5"
-                      Background="Orange" />
+                      Background="Magenta" />
         <local:MpClipTrayView x:Name="ClipTrayView"
                               local:MpSizeObserverExtension.IsEnabled="True"
                               local:MpSizeObserverExtension.ObservedWidth="{Binding ClipTrayScreenWidth,

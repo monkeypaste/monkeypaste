@@ -18,7 +18,10 @@
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal">
             <Label Content="Show Window With Mouse" />
-            <ComboBox SelectedIndex="{local:MpSettingBinding DoShowMainWIndowWithMouseEdgeIndex}">
+            <ComboBox IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                               Source={x:Static local:MpMainWindowViewModel.Instance},
+                                               Mode=OneWayToSource}"
+                      SelectedIndex="{local:MpSettingBinding DoShowMainWIndowWithMouseEdgeIndex}">
                 <ComboBoxItem Content="Left" />
                 <ComboBoxItem Content="Top" />
                 <ComboBoxItem Content="Right" />

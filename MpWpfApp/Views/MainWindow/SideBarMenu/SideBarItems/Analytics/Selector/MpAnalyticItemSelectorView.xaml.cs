@@ -22,12 +22,5 @@ namespace MpWpfApp {
             InitializeComponent();
         }
 
-        private void AnalyticItemChooserComboBox_DropDownOpened(object sender, EventArgs e) {
-            MpMainWindowViewModel.Instance.IsShowingDialog = true;
-        }
-
-        private void AnalyticItemChooserComboBox_DropDownClosed(object sender, EventArgs e) {
-            MpMainWindowViewModel.Instance.IsShowingDialog = false;
-        }
     }
 }

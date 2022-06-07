@@ -16,7 +16,8 @@ namespace MonkeyPaste.Common {
         HexColor,
         StreetAddress,
         //TemplateSegment,
-        Guid
+        Guid,
+        EncodedTextTemplate
        // HtmlTag
     }
 
@@ -43,9 +44,12 @@ namespace MonkeyPaste.Common {
             @"#([0-9]|[a-fA-F]){8}|#([0-9]|[a-fA-F]){6}",
             //StreetAddress
             @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
-            //Text Template (dynamically matching from TextToken.TemplateName)
-            //CopyItem.TemplateRegExMatchString,
-            @"[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}"
+            //Guid
+            @"[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}",
+            //EncodedTextTemplate 
+            // NOTE would be better if this only matched the internal guid
+            // For now using \\{t\\{.*\\}t\\} and replacing .* with Guid regex
+            @"\\{t\\{[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}\\}t\\}"
         };
 
         public static void Init() {

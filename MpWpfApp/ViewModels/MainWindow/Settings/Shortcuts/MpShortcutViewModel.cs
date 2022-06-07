@@ -548,7 +548,7 @@ namespace MpWpfApp {
                 }
             },
             () => {
-                if(MpIsFocusedExtension.IsAnyTextBoxFocused) {
+                if(MpMainWindowViewModel.Instance.IsAnyTextBoxFocused) {
                     return false;
                 }
                 var mwvm = MpMainWindowViewModel.Instance;

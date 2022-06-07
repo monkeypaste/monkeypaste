@@ -33,6 +33,9 @@
                   Grid.Column="1"
                   MinWidth="150"
                   IsSynchronizedWithCurrentItem="True"
+                  IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                           Source={x:Static local:MpMainWindowViewModel.Instance},
+                                           Mode=OneWayToSource}"
                   SelectedItem="{Binding SelectedPreset,
                                          Mode=TwoWay}"
                   ItemsSource="{Binding AllPresets,
@@ -84,10 +87,14 @@
 
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
-                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="Padding" Value="3" />
+                    <Setter Property="HorizontalAlignment"
+                            Value="Stretch" />
+                    <Setter Property="VerticalAlignment"
+                            Value="Center" />
+                    <Setter Property="VerticalContentAlignment"
+                            Value="Center" />
+                    <Setter Property="Padding"
+                            Value="3" />
                 </Style>
             </ComboBox.ItemContainerStyle>
         </ComboBox>

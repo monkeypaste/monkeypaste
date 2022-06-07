@@ -190,12 +190,6 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-
-        public bool IsChooserDropDownOpen { get; set; } = false;
-
-        public bool IsUnselectedChooserItemHidden => IsChooserDropDownOpen || Items.Count == 0;
-
-
         #endregion
 
         #endregion

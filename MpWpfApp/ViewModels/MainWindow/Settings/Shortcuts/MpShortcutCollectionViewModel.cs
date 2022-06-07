@@ -400,7 +400,7 @@ namespace MpWpfApp {
         private void AutoSearchOnKeyPress(char keyChar) {
             var sbvm = MpSearchBoxViewModel.Instance;
 
-            if (MpIsFocusedExtension.IsAnyTextBoxFocused) {
+            if (MpMainWindowViewModel.Instance.IsAnyTextBoxFocused) {
                 return;
             }
             if (sbvm != null && sbvm.IsTextBoxFocused) {

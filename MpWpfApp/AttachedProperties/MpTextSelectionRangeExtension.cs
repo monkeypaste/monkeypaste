@@ -176,10 +176,21 @@ namespace MpWpfApp {
 
         public static void SelectAll(MpITextSelectionRange tsr) {
             var tbb = FindTextBoxBase(tsr);
-            if(!tbb.IsFocused) {
+            if(tbb == null || !tbb.IsFocused) {
                 Debugger.Break();
             }
             tbb.SelectAll();
+        }
+
+        public static bool IsAllSelected(MpITextSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if(tbb is TextBox tb) {
+                return tb.Text.Length == tb.SelectionLength;
+            } else if(tbb is RichTextBox rtb) {
+                return rtb.Document.ContentStart == rtb.Selection.Start &&
+                       rtb.Document.ContentEnd == rtb.Selection.End;
+            }
+            return false;
         }
 
         private static TextBoxBase FindTextBoxBase(MpITextSelectionRange tsr) {
@@ -187,10 +198,10 @@ namespace MpWpfApp {
             
 
             // first look for content tile rtb
-            if(tsr is MpClipTileViewModel ctvm) {
+            if(tsr is MpClipTileViewModel ctvm) { 
                 var cv = Application.Current.MainWindow
                                             .GetVisualDescendents<MpContentView>()
-                                            .FirstOrDefault(x => x.DataContext == ctvm);
+                                            .FirstOrDefault(x => (x.DataContext as MpClipTileViewModel).CopyItemId == ctvm.CopyItemId);
                 if(cv == null) {
                     return null;
                 }

@@ -24,7 +24,7 @@ namespace MpWpfApp {
 
         public override bool IsDropEnabled { get; set; } = false;
 
-        public override MpDropType DropType => MpDropType.Tray;
+        public override MpDropType DropType => MpDropType.ClipTray;
 
         public override UIElement RelativeToElement => AssociatedObject.ClipTray.GetVisualDescendent<ScrollViewer>();
 
@@ -158,46 +158,10 @@ namespace MpWpfApp {
         }
 
         public override async Task StartDrop() { 
+            // NOTE no clip tray drop (IsDropDisabled = true) its only used for auto scroll 
             await Task.Delay(1);
         }
 
-        public override async Task Drop(bool isCopy, object dragData) {
-            return;
-            if(AssociatedObject == null) {
-                return;
-            }
-            // BUG storing dropIdx because somehow it gets lost after calling base
-            int dropIdx = DropIdx;
-
-            await base.Drop(isCopy, dragData);
-
-            MpClipTileSortViewModel.Instance.SetToManualSort();
-
-            List<MpCopyItem> dragModels;
-            
-            if(dragData is MpPortableDataObject mpdo) {
-                var ci = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
-                dragModels = new List<MpCopyItem>() { ci };
-            } else {
-                dragModels = isCopy ? await GetDragDataCopy(dragData) : dragData as List<MpCopyItem>;
-            }
-            
-
-            int queryDropIdx = MpClipTrayViewModel.Instance.HeadQueryIdx + dropIdx;
-
-            MpDataModelProvider.InsertQueryItem(dragModels[0].Id, queryDropIdx);
-
-            MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-
-            while (MpClipTrayViewModel.Instance.IsAnyBusy) {
-                await Task.Delay(100);
-            }
-
-            var civm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(dragModels[0].Id);
-            if(civm != null) {
-                civm.IsSelected = true;
-            }
-        }
 
         public override void Reset() {
             base.Reset();

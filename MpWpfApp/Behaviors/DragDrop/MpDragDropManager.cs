@@ -36,6 +36,7 @@ namespace MpWpfApp {
 
                 dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().ClipTrayDropBehavior);
 
+                dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpPinTrayView>().PinTrayDropBehavior);
                 //var adivl = Application.Current.MainWindow.GetVisualDescendents<MpActionDesignerItemView>();
                 //dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
@@ -103,6 +104,7 @@ namespace MpWpfApp {
         #endregion
 
         #region public static Methods
+
 
         public static void StartDragCheck(object dragData) {
             if(MpMoveBehavior.IsAnyMoving || 

@@ -54,8 +54,6 @@ namespace MpWpfApp {
                 AssociatedObject.DataContext);
 
             //IsDebugEnabled = true;
-            //AssociatedObject.Rtb.DragOver += Rtb_DragOver;
-            //AssociatedObject.Rtb.Drop += Rtb_Drop;
         }
 
         public override void OnUnloaded() {
@@ -117,7 +115,7 @@ namespace MpWpfApp {
                 //MpConsole.WriteLine("rtb mp (no hit): " + mp);
                 return -1;
             }
-
+            
             var this_ctvm = rtb.DataContext as MpClipTileViewModel;
             if (this_ctvm.IsItemDragging) {
                 //if dropping onto self
@@ -125,6 +123,10 @@ namespace MpWpfApp {
                    (rtb.Selection.Start == rtb.Document.ContentStart &&
                     rtb.Selection.End == rtb.Document.ContentEnd)) {
                     //only allow self drop for partial selection
+                    return -1;
+                }
+                if(!this_ctvm.IsSubSelectionEnabled) {
+                    //implies all is selected
                     return -1;
                 }
                 var rtb_mp = Application.Current.MainWindow.TranslatePoint(MpShortcutCollectionViewModel.Instance.GlobalMouseLocation, rtb);
@@ -316,44 +318,46 @@ namespace MpWpfApp {
                 }
             } else {
                 // from internal content
-
+                dropData = MpContentDocumentRtfExtension.ExchangeDragDataWithDropTarget(drag_ctvm, isCopy, isSelfDrop);
                 //find drag content view
-                dragContentView = Application.Current.MainWindow
-                                .GetVisualDescendents<MpContentView>()
-                                .FirstOrDefault(x =>
-                                    x.DataContext is MpClipTileViewModel tctvm &&
-                                    tctvm.CopyItemId == drag_ctvm.CopyItemId);
+                //dragContentView = Application.Current.MainWindow
+                //                .GetVisualDescendents<MpContentView>()
+                //                .FirstOrDefault(x =>
+                //                    x.DataContext is MpClipTileViewModel tctvm &&
+                //                    tctvm.CopyItemId == drag_ctvm.CopyItemId);
 
-                switch(drag_ctvm.ItemType) {
-                    case MpCopyItemType.Text:
-                        dropData = dragContentView.Rtb.Selection.Text;
-                        break;
-                    case MpCopyItemType.FileList:
-                        dropData = MpContentDocumentRtfExtension.GetEncodedContent(dragContentView.Rtb, false);
-                        if(dropData == null) {
-                            //when dragging from below file list and not hovering over any item, select last
-                            var fil = drag_ctvm.CopyItemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                            if(fil.Count == 0) {
-                                Debugger.Break();
-                            }
-                            dropData = fil[fil.Count - 1];
-                        }
-                        break;
-                    default:
-                        return;
-                }
+                //switch(drag_ctvm.ItemType) {
+                //    case MpCopyItemType.Text:
+                //        dropData = dragContentView.Rtb.Selection.Text;
+                //        break;
+                //    case MpCopyItemType.FileList:
+                //        dropData = MpContentDocumentRtfExtension.GetEncodedContent(dragContentView.Rtb, false);
+                //        if(dropData == null) {
+                //            //when dragging from below file list and not hovering over any item, select last
+                //            var fil = drag_ctvm.CopyItemData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                //            if(fil.Count == 0) {
+                //                Debugger.Break();
+                //            }
+                //            dropData = fil[fil.Count - 1];
+                //        }
+                //        break;
+                //    default:
+                //        return;
+                //}
 
-                if (!isCopy) {
-                    //when drag selection is not copy delete selection from source
-                    dragContentView.Rtb.Selection.Text = string.Empty;
+                //if (!isCopy) {
+                //    //when drag selection is not copy delete selection from source
+                //    dragContentView.Rtb.Selection.Text = string.Empty;
 
-                    string dpt = dragContentView.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                    if (string.IsNullOrWhiteSpace(dpt) && !isSelfDrop) {
-                        //when all content is being dropped flag drag source for delete
-                        deleteDragItem = true;
-                    }
-                }
+                //    string dpt = dragContentView.Rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                //    if (string.IsNullOrWhiteSpace(dpt) && !isSelfDrop) {
+                //        //when all content is being dropped flag drag source for delete
+                //        deleteDragItem = true;
+                //    }
+                //}
             }
+
+
             if(dropData.IsStringBase64()) {
                 dropRange.LoadImage(dropData);
             } else if(dropData.IsStringFileOrPathFormat()) {
@@ -385,7 +389,7 @@ namespace MpWpfApp {
             if(deleteDragItem) {
                 await drag_ctvm.CopyItem.DeleteFromDatabaseAsync();
             } else if(dragContentView != null){
-                await MpContentDocumentRtfExtension.SaveTextContent(dragContentView.Rtb);
+                //await MpContentDocumentRtfExtension.SaveTextContent(dragContentView.Rtb);
             }
 
             while (MpClipTrayViewModel.Instance.IsAnyBusy) {

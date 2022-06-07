@@ -38,9 +38,9 @@ namespace MonkeyPaste {
         [JsonProperty("templateGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [Column("fk_MpCopyItemId")]
-        [ForeignKey(typeof(MpCopyItem))]
-        public int CopyItemId { get; set; }
+        //[Column("fk_MpCopyItemId")]
+        //[ForeignKey(typeof(MpCopyItem))]
+        //public int CopyItemId { get; set; }
 
         [JsonProperty("templateType")]
         public string TemplateTypeStr { get; set; }
@@ -131,7 +131,7 @@ namespace MonkeyPaste {
 
             var newTextTemplate = new MpTextTemplate() {
                 TextTemplateGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
-                CopyItemId = copyItemId,
+                //CopyItemId = copyItemId,
                 TemplateName = templateName,
                 HexColor = string.IsNullOrEmpty(templateColor) ? MpColorHelpers.GetRandomHexColor() : templateColor,
                 TemplateType = templateType,
@@ -150,7 +150,7 @@ namespace MonkeyPaste {
         public async Task<MpTextTemplate> CloneDbModel(bool suppressWrite = false) {
             var ccit = new MpTextTemplate() {
                 Id = suppressWrite ? this.Id : 0,
-                CopyItemId = this.CopyItemId,
+                //CopyItemId = this.CopyItemId,
                 TemplateName = this.TemplateName,
                 HexColor = this.HexColor,
                 TemplateText = this.TemplateText,

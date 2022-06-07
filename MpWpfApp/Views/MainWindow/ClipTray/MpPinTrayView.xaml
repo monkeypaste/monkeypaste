@@ -11,50 +11,63 @@
                                                       IsDesignTimeCreatable=False}"
                      d:DesignHeight="450"
                      d:DesignWidth="800">
+    <i:Interaction.Behaviors>
+        <local:MpPinTrayDropBehavior x:Name="PinTrayDropBehavior" />
+    </i:Interaction.Behaviors>
     <Grid>
-        <ListBox x:Name="PinTrayListBox"
-                 Grid.Column="0"
-                 Background="Salmon"
-                 Loaded="PinTrayListBox_Loaded"
-                 ItemsSource="{Binding PinnedItems}"
-                 IsSynchronizedWithCurrentItem="True"
-                 Margin="0,0,0,0"
-                 Focusable="True"
-                 BorderThickness="0"
-                 VerticalAlignment="Stretch"
-                 VerticalContentAlignment="Top"
-                 HorizontalAlignment="Stretch"
-                 HorizontalContentAlignment="Left"
-                 SelectionMode="Single"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                    <Setter Property="HorizontalContentAlignment" Value="Left" />
-                    <Setter Property="VerticalContentAlignment" Value="Top" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                <ContentPresenter />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <local:MpClipTileContainerView DataContext="{Binding}"
-                                                   Visibility="{Binding IsPinned,
-                                                                        Converter={StaticResource BoolToVisibilityConverter}}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <AdornerDecorator>
+            <local:MpListBox x:Name="PinTrayListBox"
+                             Background="Transparent"
+                             Grid.Column="0"
+                             Loaded="PinTrayListBox_Loaded"
+                             ItemsSource="{Binding PinnedItems}"
+                             IsSynchronizedWithCurrentItem="True"
+                             Focusable="True"
+                             BorderThickness="0"
+                             VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Top"
+                             HorizontalAlignment="Stretch"
+                             HorizontalContentAlignment="Left"
+                             SelectionMode="Single"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <local:MpListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True">
+                            <WrapPanel.Background>
+                                <SolidColorBrush Color="Salmon"
+                                                 Opacity=".7" />
+                            </WrapPanel.Background>
+                        </WrapPanel>
+                    </ItemsPanelTemplate>
+                </local:MpListBox.ItemsPanel>
+                <local:MpListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected}" />
+                        <Setter Property="FocusVisualStyle"
+                                Value="{x:Null}" />
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Left" />
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Top" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </local:MpListBox.ItemContainerStyle>
+                <local:MpListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpClipTileContainerView DataContext="{Binding}"
+                                                       Visibility="{Binding IsPinned,
+                                                                            Converter={StaticResource BoolToVisibilityConverter}}" />
+                    </DataTemplate>
+                </local:MpListBox.ItemTemplate>
+            </local:MpListBox>
+        </AdornerDecorator>
     </Grid>
 </local:MpUserControl>

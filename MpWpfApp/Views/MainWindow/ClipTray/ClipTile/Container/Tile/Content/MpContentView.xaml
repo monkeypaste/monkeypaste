@@ -60,7 +60,8 @@
                              PreviewKeyDown="Rtb_PreviewKeyDown"
                              PreviewKeyUp="Rtb_PreviewKeyUp"
                              ScrollViewer.HorizontalScrollBarVisibility="{Binding IsHorizontalScrollbarVisibile,
-                                                                                  Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
+                                                                                  Converter={StaticResource BoolToScrollBarVisibilityConverter},
+                                                                                  ConverterParameter={StaticResource AutoInsteadOfVisible}}"
                              ScrollViewer.VerticalScrollBarVisibility="{Binding IsVerticalScrollbarVisibile,
                                                                                 Converter={StaticResource BoolToScrollBarVisibilityConverter}}"
                              DataContextChanged="Rtb_DataContextChanged"
@@ -69,6 +70,7 @@
                              MouseEnter="Rtb_MouseEnter"
                              MouseMove="Rtb_MouseMove"
                              AllowDrop="True"
+                             SelectionChanged="Rtb_SelectionChanged"
                              TextChanged="Rtb_TextChanged"
                              PreviewMouseWheel="Rtb_PreviewMouseWheel"
                              PreviewMouseLeftButtonDown="Rtb_PreviewMouseLeftButtonDown"

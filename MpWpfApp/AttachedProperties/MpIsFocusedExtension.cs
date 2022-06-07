@@ -12,7 +12,6 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpIsFocusedExtension : DependencyObject {
-        public static bool IsAnyTextBoxFocused = false;
 
         #region IsFocused
 
@@ -125,18 +124,7 @@ namespace MpWpfApp {
                             fe.Loaded += Fe_Loaded;
                         } else {
                             Fe_Loaded(fe, null);
-                        }
-
-                        if(fe.GetType().IsSubclassOf(typeof(TextBoxBase))) {
-                            var tbb = fe as TextBoxBase;
-
-                            var descriptor = DependencyPropertyDescriptor.FromProperty(TextBoxBase.IsReadOnlyProperty,fe.GetType());
-                            
-                            if (descriptor == null) {
-                                return;
-                            }                            
-                            descriptor.AddValueChanged(tbb,Tbb_OnReadOnlyChanged);
-                        }
+                        }                        
                     } else {
                         Fe_Unloaded(fe, null);
                     }
@@ -144,6 +132,19 @@ namespace MpWpfApp {
             });
 
         #endregion
+        private static void Fe_Loaded(object sender, RoutedEventArgs e) {
+            var fe = sender as FrameworkElement;
+            fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
+            fe.GotFocus += Fe_GotFocus;
+            fe.LostFocus += Fe_LostFocus;
+            if (fe is TextBoxBase tbb) {
+                var descriptor = DependencyPropertyDescriptor.FromProperty(TextBoxBase.IsReadOnlyProperty, fe.GetType());
+                if (descriptor == null) {
+                    return;
+                }
+                descriptor.AddValueChanged(tbb, Tbb_OnReadOnlyChanged);
+            } 
+        }
 
         private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
             var fe = sender as FrameworkElement;
@@ -164,13 +165,7 @@ namespace MpWpfApp {
             }
         }
 
-        private static void Fe_Loaded(object sender, RoutedEventArgs e) {
-            var fe = sender as FrameworkElement;
-            fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
-            fe.GotFocus += Fe_GotFocus;
-            fe.LostFocus += Fe_LostFocus;
-        }
-
+        
         private static void Fe_LostFocus(object sender, RoutedEventArgs e) {
             var dpo = (DependencyObject)sender;
             if (dpo == null) {
@@ -202,8 +197,7 @@ namespace MpWpfApp {
         }
 
         private static void Tbb_OnReadOnlyChanged(object sender, EventArgs e) {
-            var tbb = sender as TextBoxBase;
-            if (tbb != null) {
+            if (sender is TextBoxBase tbb) {
                 bool isFocused = GetIsFocused(tbb);
                 if (isFocused) {
                     if (tbb.IsReadOnly) {
@@ -220,17 +214,20 @@ namespace MpWpfApp {
 
         public static void GotFocus(DependencyObject dpo) {
             SetIsFocused(dpo, true);
+
             if (dpo is FrameworkElement fe) {
                 Keyboard.Focus(fe);
-                if (fe.DataContext is MpISelectableViewModel svm && GetSelectViewModelOnFocus(dpo)) {
+                if (fe.DataContext is MpISelectableViewModel svm && 
+                    GetSelectViewModelOnFocus(dpo)) {
                     svm.IsSelected = true;
                 }
             }
+            
             if (dpo is TextBoxBase tbb) {
                 if (tbb.IsReadOnly) {
-                    IsAnyTextBoxFocused = false;
+                    MpMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
                 } else {
-                    IsAnyTextBoxFocused = true;
+                    MpMainWindowViewModel.Instance.IsAnyTextBoxFocused = true;
                     //Keyboard.Focus(tbb);
                     if (tbb is TextBox tb) {
                         tb.CaretIndex = 0;
@@ -246,7 +243,7 @@ namespace MpWpfApp {
 
         private static void LostFocus(DependencyObject dpo) {
             if (dpo is TextBoxBase tbb) {
-                IsAnyTextBoxFocused = false;
+                MpMainWindowViewModel.Instance.IsAnyTextBoxFocused = false;
             }
             
             SetIsFocused(dpo, false);

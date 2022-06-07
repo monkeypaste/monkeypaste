@@ -135,11 +135,23 @@ namespace MpWpfApp {
             }
         }
 
+        private void RegisterViewModelRequests() {
+            BindingContext.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
+            BindingContext.OnScrollOffsetRequest += BindingContext_OnScrollOffsetRequest;
+            BindingContext.OnPastePortableDataObject += BindingContext_OnPastePortableDataObject;
+        }
+
+
+        private void UnregisterViewModelRequests() {
+            BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
+            BindingContext.OnScrollOffsetRequest -= BindingContext_OnScrollOffsetRequest;
+            BindingContext.OnPastePortableDataObject -= BindingContext_OnPastePortableDataObject;
+        }
+
+
         #region Event Handlers
 
         private void Rtb_Loaded(object sender, RoutedEventArgs e) {
-
-
             if (BindingContext != null) {
                 if (_isNew) {
                     _isNew = false;
@@ -203,18 +215,11 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        private void RegisterViewModelRequests() {
-            BindingContext.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
-            BindingContext.OnScrollOffsetRequest += BindingContext_OnScrollOffsetRequest;
-            BindingContext.OnPastePortableDataObject += BindingContext_OnPastePortableDataObject;
-        }
-
-
-        private void UnregisterViewModelRequests() {
-            BindingContext.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
-            BindingContext.OnScrollOffsetRequest -= BindingContext_OnScrollOffsetRequest;
-            BindingContext.OnPastePortableDataObject -= BindingContext_OnPastePortableDataObject;
+        
+        private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
+            if(BindingContext != null) {
+                BindingContext.OnPropertyChanged(nameof(BindingContext.SelectedTextHexColor));
+            }
         }
 
         private void BindingContext_OnFocusRequest(object sender, EventArgs e) {
@@ -519,398 +524,398 @@ namespace MpWpfApp {
         }
 
 
+
         #region Template/Hyperlinks
 
         //public async Task SyncModelsAsync() {
-            //var rtbvm = DataContext as MpContentItemViewModel;
-            //rtbvm.IsBusy = true;
-            ////clear any search highlighting when saving the document then restore after save
-            ////rtbvm.Parent.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
+        //var rtbvm = DataContext as MpContentItemViewModel;
+        //rtbvm.IsBusy = true;
+        ////clear any search highlighting when saving the document then restore after save
+        ////rtbvm.Parent.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(rtbvm);
 
-            ////rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
-            ////Rtb.UpdateLayout();
-            ////string test = Rtb.Document.ToRichText();
-            ////RtbHighlightBehavior.HideHighlighting();
+        ////rtbvm.Parent.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
+        ////Rtb.UpdateLayout();
+        ////string test = Rtb.Document.ToRichText();
+        ////RtbHighlightBehavior.HideHighlighting();
 
-            //await ClearHyperlinks();
+        //await ClearHyperlinks();
 
-            //rtbvm.CopyItem.ItemData = Rtb.Document.ToRichText();
+        //rtbvm.CopyItem.ItemData = Rtb.Document.ToRichText();
 
-            //await rtbvm.CopyItem.WriteToDatabaseAsync();
+        //await rtbvm.CopyItem.WriteToDatabaseAsync();
 
-            //rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemData));
+        //rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemData));
 
-            //await CreateHyperlinksAsync(CTS.Token);
+        //await CreateHyperlinksAsync(CTS.Token);
 
-            ////Rtb.UpdateLayout();
+        ////Rtb.UpdateLayout();
 
-            ////MpConsole.WriteLine("Item syncd w/ data: " + rtbvm.CopyItemData);
-            ////MpRtbTemplateCollection.CreateTemplateViews(Rtb);
+        ////MpConsole.WriteLine("Item syncd w/ data: " + rtbvm.CopyItemData);
+        ////MpRtbTemplateCollection.CreateTemplateViews(Rtb);
 
-            ////MpHelpers.RunOnMainThread(UpdateLayout);
-            ////rtbvm.Parent.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
+        ////MpHelpers.RunOnMainThread(UpdateLayout);
+        ////rtbvm.Parent.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(rtbvm);
         //}
 
         //public async Task ClearHyperlinks() {
-            //var rtbvm = Rtb.DataContext as MpContentItemViewModel;
-            //var tvm_ToRemove = new List<MpTemplateViewModel>();
-            //if(rtbvm.TemplateCollection.Templates.Count != TemplateViews.Count) {
-            //    // means user deleted template in view
-            //    foreach(var tvm in rtbvm.TemplateCollection.Templates) {
-            //        //if there are no views for a template then it all instances were deleted
-            //        if(!TemplateViews.Any(x=>x.TemplateTextBlock.Text == tvm.TemplateDisplayValue)) {
-            //            tvm_ToRemove.Add(tvm);
-            //        }
-            //    }
-            //    foreach(var tvm2r in tvm_ToRemove) {
-            //        rtbvm.TemplateCollection.Templates.Remove(tvm2r);
-            //    }
-            //    await Task.WhenAll(tvm_ToRemove.Select(x => x.TextToken.DeleteFromDatabaseAsync()));
-            //}
-            //foreach (var hl in TemplateViews) {
-            //    hl.Clear();
-            //}
-            //TemplateViews.Clear();
-            //if (rtbvm.TemplateCollection != null) {
-            //    rtbvm.TemplateCollection.Templates.Clear();
-            //}
-            ////var hll = new List<Hyperlink>();
-            ////foreach (var p in Rtb.Document.Blocks.OfType<Paragraph>()) {
-            ////    foreach (var hl in p.Inlines.OfType<Hyperlink>()) {
-            ////        hll.Add(hl);
-            ////    }
-            ////}
-            ////foreach (var hl in hll) {
-            ////    string linkText;
-            ////    if (hl.DataContext == null || hl.DataContext is MpContentItemViewModel) {
-            ////        linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
-            ////        hl.Inlines.Clear();
-            ////        new Span(new Run(linkText), hl.ElementStart);
-            ////    }
-            ////}
-       // }
+        //var rtbvm = Rtb.DataContext as MpContentItemViewModel;
+        //var tvm_ToRemove = new List<MpTemplateViewModel>();
+        //if(rtbvm.TemplateCollection.Templates.Count != TemplateViews.Count) {
+        //    // means user deleted template in view
+        //    foreach(var tvm in rtbvm.TemplateCollection.Templates) {
+        //        //if there are no views for a template then it all instances were deleted
+        //        if(!TemplateViews.Any(x=>x.TemplateTextBlock.Text == tvm.TemplateDisplayValue)) {
+        //            tvm_ToRemove.Add(tvm);
+        //        }
+        //    }
+        //    foreach(var tvm2r in tvm_ToRemove) {
+        //        rtbvm.TemplateCollection.Templates.Remove(tvm2r);
+        //    }
+        //    await Task.WhenAll(tvm_ToRemove.Select(x => x.TextToken.DeleteFromDatabaseAsync()));
+        //}
+        //foreach (var hl in TemplateViews) {
+        //    hl.Clear();
+        //}
+        //TemplateViews.Clear();
+        //if (rtbvm.TemplateCollection != null) {
+        //    rtbvm.TemplateCollection.Templates.Clear();
+        //}
+        ////var hll = new List<Hyperlink>();
+        ////foreach (var p in Rtb.Document.Blocks.OfType<Paragraph>()) {
+        ////    foreach (var hl in p.Inlines.OfType<Hyperlink>()) {
+        ////        hll.Add(hl);
+        ////    }
+        ////}
+        ////foreach (var hl in hll) {
+        ////    string linkText;
+        ////    if (hl.DataContext == null || hl.DataContext is MpContentItemViewModel) {
+        ////        linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
+        ////        hl.Inlines.Clear();
+        ////        new Span(new Run(linkText), hl.ElementStart);
+        ////    }
+        ////}
+        // }
 
         //public async Task CreateHyperlinksAsync(CancellationToken ct, DispatcherPriority dp = DispatcherPriority.Normal) {
-//            var rtbvm = BindingContext;
-//            rtbvm.IsBusy = true;
+        //            var rtbvm = BindingContext;
+        //            rtbvm.IsBusy = true;
 
-//            if (Rtb == null || rtbvm.CopyItem == null) {
-//                return;
-//            }
-//            var rtbSelection = Rtb?.Selection;
-//            var templateModels = await MpDataModelProvider.GetTextTemplatesAsync(rtbvm.CopyItemId);
-//            string templateRegEx = string.Join("|", templateModels.Select(x => x.EncodedTemplate));
-//            string pt = rtbvm.CopyItem.ItemData.ToPlainText(); //Rtb.Document.ToPlainText();
-//            for (int i = 1; i < MpRegEx.RegExList.Count; i++) {
-//                var linkType = (MpSubTextTokenType)i;
-//                if (linkType == MpSubTextTokenType.StreetAddress) {
-//                    //doesn't consistently work and presents bugs so disabling for now
-//                    continue;
-//                }
-//                var lastRangeEnd = Rtb.Document.ContentStart;
-//                Regex regEx = MpRegEx.GetRegExForTokenType(linkType);
-//                if (linkType == MpSubTextTokenType.TemplateSegment) {
-//                    if (string.IsNullOrEmpty(templateRegEx)) {
-//                        //this occurs for templates when copyitem has no templates
-//                        continue;
-//                    }
-//                    regEx = new Regex(templateRegEx, RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-//                }
-                
-//                var mc = regEx.Matches(pt);
-//                foreach (Match m in mc) {
-//                    foreach (Group mg in m.Groups) {
-//                        foreach (Capture c in mg.Captures) {
-//                            Hyperlink hl = null;
-//                            var matchRange = await MpHelpers.FindStringRangeFromPositionAsync(lastRangeEnd, c.Value, ct, dp, true);
-//                            if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
-//                                continue;
-//                            }
-//                            lastRangeEnd = matchRange.End;
-//                            if (linkType == MpSubTextTokenType.TemplateSegment) {
-//                                var copyItemTemplate = templateModels.Where(x => x.EncodedTemplate == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().TextToken;
-//                                var thl = await MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
-//                            } else {
-//                                var hlCheck1 = matchRange.Start.Parent.FindParentOfType<Hyperlink>();
-//                                var hlCheck2 = matchRange.End.Parent.FindParentOfType<Hyperlink>();
-//                                if(hlCheck1 != null || hlCheck2 != null) {
-//                                    //matched text is already a hyperlink (likely from html)
-//                                    continue;
-//                                }
-//                                var matchRun = new Run(matchRange.Text);
-//                                matchRange.Text = "";
+        //            if (Rtb == null || rtbvm.CopyItem == null) {
+        //                return;
+        //            }
+        //            var rtbSelection = Rtb?.Selection;
+        //            var templateModels = await MpDataModelProvider.GetTextTemplatesAsync(rtbvm.CopyItemId);
+        //            string templateRegEx = string.Join("|", templateModels.Select(x => x.EncodedTemplate));
+        //            string pt = rtbvm.CopyItem.ItemData.ToPlainText(); //Rtb.Document.ToPlainText();
+        //            for (int i = 1; i < MpRegEx.RegExList.Count; i++) {
+        //                var linkType = (MpSubTextTokenType)i;
+        //                if (linkType == MpSubTextTokenType.StreetAddress) {
+        //                    //doesn't consistently work and presents bugs so disabling for now
+        //                    continue;
+        //                }
+        //                var lastRangeEnd = Rtb.Document.ContentStart;
+        //                Regex regEx = MpRegEx.GetRegExForTokenType(linkType);
+        //                if (linkType == MpSubTextTokenType.TemplateSegment) {
+        //                    if (string.IsNullOrEmpty(templateRegEx)) {
+        //                        //this occurs for templates when copyitem has no templates
+        //                        continue;
+        //                    }
+        //                    regEx = new Regex(templateRegEx, RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+        //                }
 
-//                                // DO NOT REMOVE this extra link ensures selection is retained!
-//                                var hlink = new Hyperlink(matchRun, matchRange.Start);
-//                                hl = new Hyperlink(matchRange.Start, matchRange.End);
-//                                hl = hlink;
-//                                hl.ToolTip = @"[Ctrl + Click to follow link]";
-//                                var linkText = c.Value;
-//                                hl.Tag = linkType;
-//                                //if (linkText == @"DragAction.Cancel") {
-//                                //    linkText = linkText;
-//                                //}
-//                                //MpHelpers.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
+        //                var mc = regEx.Matches(pt);
+        //                foreach (Match m in mc) {
+        //                    foreach (Group mg in m.Groups) {
+        //                        foreach (Capture c in mg.Captures) {
+        //                            Hyperlink hl = null;
+        //                            var matchRange = await MpHelpers.FindStringRangeFromPositionAsync(lastRangeEnd, c.Value, ct, dp, true);
+        //                            if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
+        //                                continue;
+        //                            }
+        //                            lastRangeEnd = matchRange.End;
+        //                            if (linkType == MpSubTextTokenType.TemplateSegment) {
+        //                                var copyItemTemplate = templateModels.Where(x => x.EncodedTemplate == matchRange.Text).FirstOrDefault(); //TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == matchRange.Text).FirstOrDefault().TextToken;
+        //                                var thl = await MpTemplateHyperlink.Create(matchRange, copyItemTemplate);
+        //                            } else {
+        //                                var hlCheck1 = matchRange.Start.Parent.FindParentOfType<Hyperlink>();
+        //                                var hlCheck2 = matchRange.End.Parent.FindParentOfType<Hyperlink>();
+        //                                if(hlCheck1 != null || hlCheck2 != null) {
+        //                                    //matched text is already a hyperlink (likely from html)
+        //                                    continue;
+        //                                }
+        //                                var matchRun = new Run(matchRange.Text);
+        //                                matchRange.Text = "";
 
-//                                KeyEventHandler hlKeyDown = (object o, KeyEventArgs e) => {
-//                                    // This gives user feedback so if they see the 'ctrl + click to follow'
-//                                    // and they aren't holding ctrl until they see the message it will change cursor while
-//                                    // over link
-//                                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-//                                        MpCursor.SetCursor(hl, MpCursorType.Hand);                                        
-//                                    } else {
-//                                        MpCursor.UnsetCursor(hl);
-//                                    }
-//                                };
-//                                MouseEventHandler hlMouseEnter = (object o, MouseEventArgs e) => {
-//                                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-//                                        MpCursor.SetCursor(hl, MpCursorType.Hand);
-//                                    } else {
-//                                        MpCursor.UnsetCursor(hl);
-//                                    }
-//                                    hl.IsEnabled = true;
-//                                    //Keyboard.AddKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
-//                                    rtbvm.IsOverHyperlink = true;
-//                                };
-//                                MouseEventHandler hlMouseLeave = (object o, MouseEventArgs e) => {
-//                                    //if (rtbvm.Parent.IsAnyEditingContent) {
-//                                    //    MpCursorStack.PushCursor(hl, MpCursorType.IBeam);
-//                                    //} else {
-                                        
-//                                    //}
-//                                    MpCursor.UnsetCursor(hl);
-//                                    hl.IsEnabled = false;
-//                                    //Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
-//                                    rtbvm.IsOverHyperlink = false;
-//                                };
-//                                MouseButtonEventHandler hlMouseLeftButtonDown = (object o, MouseButtonEventArgs e) => {
-//                                    if (hl.NavigateUri != null && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-//                                        MpHelpers.OpenUrl(hl.NavigateUri.ToString());
-//                                    }
-//                                };
-//                                RoutedEventHandler hlUnload = null;
-//                                hlUnload = (object o, RoutedEventArgs e) =>{
-//                                    hl.MouseEnter -= hlMouseEnter;
-//                                    hl.MouseLeave -= hlMouseLeave;
-//                                    hl.MouseLeftButtonDown -= hlMouseLeftButtonDown;
-//                                    hl.Unloaded -= hlUnload;
-//                                };
-//                                hl.MouseEnter += hlMouseEnter;
-//                                hl.MouseLeave += hlMouseLeave;
-//                                hl.MouseLeftButtonDown += hlMouseLeftButtonDown;
-//                                hl.Unloaded += hlUnload;
+        //                                // DO NOT REMOVE this extra link ensures selection is retained!
+        //                                var hlink = new Hyperlink(matchRun, matchRange.Start);
+        //                                hl = new Hyperlink(matchRange.Start, matchRange.End);
+        //                                hl = hlink;
+        //                                hl.ToolTip = @"[Ctrl + Click to follow link]";
+        //                                var linkText = c.Value;
+        //                                hl.Tag = linkType;
+        //                                //if (linkText == @"DragAction.Cancel") {
+        //                                //    linkText = linkText;
+        //                                //}
+        //                                //MpHelpers.CreateBinding(rtbvm, new PropertyPath(nameof(rtbvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
 
-//                                var convertToQrCodeMenuItem = new MenuItem();
-//                                convertToQrCodeMenuItem.Header = "Convert to QR Code";
-//                                RoutedEventHandler qrItemClick = (object o, RoutedEventArgs e) => {
-//                                    var hyperLink = (Hyperlink)((MenuItem)o).Tag;
-//                                    var bmpSrc = MpHelpers.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
-//                                    MpClipboardHelper.MpClipboardManager.InteropService.SetDataObjectWrapper(
-//                                        new MpDataObject() {
-//                                            DataFormatLookup = new Dictionary<MpClipboardFormatType, string>() {
-//                                                {
-//                                                    MpClipboardFormatType.Bitmap,
-//                                                    bmpSrc.ToBase64String()
-//                                                }
-//                                            }
-//                                        });
-//                                };
-//                                convertToQrCodeMenuItem.Click += qrItemClick;
-//                                RoutedEventHandler qrUnload = null;
-//                                qrUnload = (object o, RoutedEventArgs e) => {
-//                                    convertToQrCodeMenuItem.Click -= qrItemClick;
-//                                    convertToQrCodeMenuItem.Unloaded -= qrUnload;
-//                                };
-//                                convertToQrCodeMenuItem.Unloaded += qrUnload;
+        //                                KeyEventHandler hlKeyDown = (object o, KeyEventArgs e) => {
+        //                                    // This gives user feedback so if they see the 'ctrl + click to follow'
+        //                                    // and they aren't holding ctrl until they see the message it will change cursor while
+        //                                    // over link
+        //                                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+        //                                        MpCursor.SetCursor(hl, MpCursorType.Hand);                                        
+        //                                    } else {
+        //                                        MpCursor.UnsetCursor(hl);
+        //                                    }
+        //                                };
+        //                                MouseEventHandler hlMouseEnter = (object o, MouseEventArgs e) => {
+        //                                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+        //                                        MpCursor.SetCursor(hl, MpCursorType.Hand);
+        //                                    } else {
+        //                                        MpCursor.UnsetCursor(hl);
+        //                                    }
+        //                                    hl.IsEnabled = true;
+        //                                    //Keyboard.AddKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
+        //                                    rtbvm.IsOverHyperlink = true;
+        //                                };
+        //                                MouseEventHandler hlMouseLeave = (object o, MouseEventArgs e) => {
+        //                                    //if (rtbvm.Parent.IsAnyEditingContent) {
+        //                                    //    MpCursorStack.PushCursor(hl, MpCursorType.IBeam);
+        //                                    //} else {
 
-//                                convertToQrCodeMenuItem.Tag = hl;
-//                                hl.ContextMenu = new ContextMenu();
-//                                hl.ContextMenu.Items.Add(convertToQrCodeMenuItem);
+        //                                    //}
+        //                                    MpCursor.UnsetCursor(hl);
+        //                                    hl.IsEnabled = false;
+        //                                    //Keyboard.RemoveKeyDownHandler(Application.Current.MainWindow, hlKeyDown);
+        //                                    rtbvm.IsOverHyperlink = false;
+        //                                };
+        //                                MouseButtonEventHandler hlMouseLeftButtonDown = (object o, MouseButtonEventArgs e) => {
+        //                                    if (hl.NavigateUri != null && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+        //                                        MpHelpers.OpenUrl(hl.NavigateUri.ToString());
+        //                                    }
+        //                                };
+        //                                RoutedEventHandler hlUnload = null;
+        //                                hlUnload = (object o, RoutedEventArgs e) =>{
+        //                                    hl.MouseEnter -= hlMouseEnter;
+        //                                    hl.MouseLeave -= hlMouseLeave;
+        //                                    hl.MouseLeftButtonDown -= hlMouseLeftButtonDown;
+        //                                    hl.Unloaded -= hlUnload;
+        //                                };
+        //                                hl.MouseEnter += hlMouseEnter;
+        //                                hl.MouseLeave += hlMouseLeave;
+        //                                hl.MouseLeftButtonDown += hlMouseLeftButtonDown;
+        //                                hl.Unloaded += hlUnload;
 
-//                                switch ((MpSubTextTokenType)hl.Tag) {
-//                                    case MpSubTextTokenType.StreetAddress:
-//                                        hl.NavigateUri = new Uri("https://google.com/maps/place/" + linkText.Replace(' ', '+'));
-//                                        break;
-//                                    case MpSubTextTokenType.Uri:
-//                                        try {
-//                                            string urlText = MonkeyPaste.MpUrlHelpers.GetFullyFormattedUrl(linkText);
-//                                            if (MpUrlHelpers.IsValidUrl(urlText) /*&&
-//                                                   Uri.IsWellFormedUriString(urlText, UriKind.RelativeOrAbsolute)*/) {
-//                                                hl.NavigateUri = new Uri(urlText);
-//                                            } else {
-//                                                MpConsole.WriteLine(@"Rejected Url: " + urlText + @" link text: " + linkText);
-//                                                var par = hl.Parent.FindParentOfType<Paragraph>();
-//                                                var s = new Span();
-//                                                s.Inlines.AddRange(hl.Inlines.ToArray());
-//                                                par.Inlines.InsertAfter(hl, s);
-//                                                par.Inlines.Remove(hl);
-//                                            }
-//                                        }
-//                                        catch (Exception ex) {
-//                                            MpConsole.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring with exception: " + ex);
-//                                            var par = hl.Parent.FindParentOfType<Paragraph>();
-//                                            var s = new Span();
-//                                            s.Inlines.AddRange(hl.Inlines.ToArray());
-//                                            par.Inlines.InsertAfter(hl, s);
-//                                            par.Inlines.Remove(hl);
-//                                            par.Inlines.Remove(hlink);
-//                                            break;
+        //                                var convertToQrCodeMenuItem = new MenuItem();
+        //                                convertToQrCodeMenuItem.Header = "Convert to QR Code";
+        //                                RoutedEventHandler qrItemClick = (object o, RoutedEventArgs e) => {
+        //                                    var hyperLink = (Hyperlink)((MenuItem)o).Tag;
+        //                                    var bmpSrc = MpHelpers.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
+        //                                    MpClipboardHelper.MpClipboardManager.InteropService.SetDataObjectWrapper(
+        //                                        new MpDataObject() {
+        //                                            DataFormatLookup = new Dictionary<MpClipboardFormatType, string>() {
+        //                                                {
+        //                                                    MpClipboardFormatType.Bitmap,
+        //                                                    bmpSrc.ToBase64String()
+        //                                                }
+        //                                            }
+        //                                        });
+        //                                };
+        //                                convertToQrCodeMenuItem.Click += qrItemClick;
+        //                                RoutedEventHandler qrUnload = null;
+        //                                qrUnload = (object o, RoutedEventArgs e) => {
+        //                                    convertToQrCodeMenuItem.Click -= qrItemClick;
+        //                                    convertToQrCodeMenuItem.Unloaded -= qrUnload;
+        //                                };
+        //                                convertToQrCodeMenuItem.Unloaded += qrUnload;
 
-//                                        }
-//                                        MenuItem minifyUrl = new MenuItem();
-//                                        minifyUrl.Header = "Minify with bit.ly";
-//                                        RoutedEventHandler minItemClick = async (object o, RoutedEventArgs e) => {
-//                                            Hyperlink link = (Hyperlink)((MenuItem)o).Tag;
-//                                            string minifiedLink = await MpMinifyUrl.Instance.ShortenUrl(link.NavigateUri.ToString());
-//                                            if (!string.IsNullOrEmpty(minifiedLink)) {
-//                                                matchRange.Text = minifiedLink;
-//                                                // ClearHyperlinks();
-//                                                // CreateHyperlinks();
-//                                            }
-//                                            //Clipboard.SetText(minifiedLink);
-//                                        };
-//                                        minifyUrl.Click += minItemClick;
+        //                                convertToQrCodeMenuItem.Tag = hl;
+        //                                hl.ContextMenu = new ContextMenu();
+        //                                hl.ContextMenu.Items.Add(convertToQrCodeMenuItem);
 
-//                                        RoutedEventHandler minUnload = null;
-//                                        minUnload = (object o, RoutedEventArgs e) => {
-//                                            minifyUrl.Click -= minItemClick;
-//                                            minifyUrl.Unloaded -= minUnload;
-//                                        };
-//                                        minifyUrl.Unloaded += minUnload;
+        //                                switch ((MpSubTextTokenType)hl.Tag) {
+        //                                    case MpSubTextTokenType.StreetAddress:
+        //                                        hl.NavigateUri = new Uri("https://google.com/maps/place/" + linkText.Replace(' ', '+'));
+        //                                        break;
+        //                                    case MpSubTextTokenType.Uri:
+        //                                        try {
+        //                                            string urlText = MonkeyPaste.MpUrlHelpers.GetFullyFormattedUrl(linkText);
+        //                                            if (MpUrlHelpers.IsValidUrl(urlText) /*&&
+        //                                                   Uri.IsWellFormedUriString(urlText, UriKind.RelativeOrAbsolute)*/) {
+        //                                                hl.NavigateUri = new Uri(urlText);
+        //                                            } else {
+        //                                                MpConsole.WriteLine(@"Rejected Url: " + urlText + @" link text: " + linkText);
+        //                                                var par = hl.Parent.FindParentOfType<Paragraph>();
+        //                                                var s = new Span();
+        //                                                s.Inlines.AddRange(hl.Inlines.ToArray());
+        //                                                par.Inlines.InsertAfter(hl, s);
+        //                                                par.Inlines.Remove(hl);
+        //                                            }
+        //                                        }
+        //                                        catch (Exception ex) {
+        //                                            MpConsole.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring with exception: " + ex);
+        //                                            var par = hl.Parent.FindParentOfType<Paragraph>();
+        //                                            var s = new Span();
+        //                                            s.Inlines.AddRange(hl.Inlines.ToArray());
+        //                                            par.Inlines.InsertAfter(hl, s);
+        //                                            par.Inlines.Remove(hl);
+        //                                            par.Inlines.Remove(hlink);
+        //                                            break;
 
-//                                        minifyUrl.Tag = hl;
-//                                        hl.ContextMenu.Items.Add(minifyUrl);
-//                                        break;
-//                                    case MpSubTextTokenType.Email:
-//                                        hl.NavigateUri = new Uri("mailto:" + linkText);
-//                                        break;
-//                                    case MpSubTextTokenType.PhoneNumber:
-//                                        hl.NavigateUri = new Uri("tel:" + linkText);
-//                                        break;
-//                                    case MpSubTextTokenType.Currency:
-//                                        try {
-//                                            //"https://www.google.com/search?q=%24500.80+to+yen"
-//                                            MenuItem convertCurrencyMenuItem = new MenuItem();
-//                                            convertCurrencyMenuItem.Header = "Convert Currency To";
-//                                            var fromCurrencyType = MpHelpers.GetCurrencyTypeFromString(linkText);
-//                                            foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
-//                                                if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
-//                                                    continue;
-//                                                }
-//                                                MenuItem subItem = new MenuItem();
-//                                                subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
-//                                                RoutedEventHandler subItemClick = async (object o, RoutedEventArgs e) => {
-//                                                    Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
-//                                                    var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
-//                                                        MpHelpers.GetCurrencyValueFromString(linkText),
-//                                                        fromCurrencyType,
-//                                                        toCurrencyType);
-//                                                    convertedValue = Math.Round(convertedValue, 2);
-//                                                    if (Rtb.Tag != null && ((List<Hyperlink>)Rtb.Tag).Contains(hl)) {
-//                                                        ((List<Hyperlink>)Rtb.Tag).Remove(hl);
-//                                                    }
-//                                                    Run run = new Run(currency.CurrencySymbol + convertedValue);
-//                                                    hl.Inlines.Clear();
-//                                                    hl.Inlines.Add(run);
-//                                                };
-//                                                subItem.Click += subItemClick;
-//                                                RoutedEventHandler subUnload = null;
-//                                                subUnload = (object o, RoutedEventArgs e) => {
-//                                                    subItem.Click -= subItemClick;
-//                                                    subItem.Unloaded -= subUnload;
-//                                                };
-//                                                subItem.Unloaded += subUnload;
-//                                                convertCurrencyMenuItem.Items.Add(subItem);
-//                                            }
+        //                                        }
+        //                                        MenuItem minifyUrl = new MenuItem();
+        //                                        minifyUrl.Header = "Minify with bit.ly";
+        //                                        RoutedEventHandler minItemClick = async (object o, RoutedEventArgs e) => {
+        //                                            Hyperlink link = (Hyperlink)((MenuItem)o).Tag;
+        //                                            string minifiedLink = await MpMinifyUrl.Instance.ShortenUrl(link.NavigateUri.ToString());
+        //                                            if (!string.IsNullOrEmpty(minifiedLink)) {
+        //                                                matchRange.Text = minifiedLink;
+        //                                                // ClearHyperlinks();
+        //                                                // CreateHyperlinks();
+        //                                            }
+        //                                            //Clipboard.SetText(minifiedLink);
+        //                                        };
+        //                                        minifyUrl.Click += minItemClick;
 
-//                                            hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
-//                                        }
-//                                        catch (Exception ex) {
-//                                            MpConsole.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
-//                                        }
-//                                        break;
-//                                    case MpSubTextTokenType.HexColor:
-//                                        var rgbColorStr = linkText;
-//                                        if (rgbColorStr.Length > 7) {
-//                                            rgbColorStr = rgbColorStr.Substring(0, 7);
-//                                        }
-//                                        hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
-//                                        hl.IsEnabled = true;
-//                                        Action showChangeColorDialog = () => {
-//                                            var result = new MpWpfCustomColorChooserMenu().ShowCustomColorMenu(linkText,null);
-//                                            if (result != null) {
-//                                                var run = new Run(result.ToString());
-//                                                hl.Inlines.Clear();
-//                                                hl.Inlines.Add(run);
-//                                                var bgBrush = result.ToBrush();
-//                                                var fgBrush = MpWpfColorHelpers.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
-//                                                var tr = new TextRange(run.ElementStart, run.ElementEnd);
-//                                                tr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
-//                                                tr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
-//                                            }
-//                                        };
-//                                        //hl.MouseLeftButtonDown -= hlMouseLeftButtonDown;
-//                                        hl.Click += (s, e) => {
-//                                            if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-//                                                showChangeColorDialog.Invoke();
-//                                            }
-//                                        };
-//                                        MouseButtonEventHandler hexColorMouseLeftButtonDown = (object o, MouseButtonEventArgs e) => {
-//                                            showChangeColorDialog.Invoke();
-//                                        };
-//                                        hl.MouseLeftButtonDown += hexColorMouseLeftButtonDown;
+        //                                        RoutedEventHandler minUnload = null;
+        //                                        minUnload = (object o, RoutedEventArgs e) => {
+        //                                            minifyUrl.Click -= minItemClick;
+        //                                            minifyUrl.Unloaded -= minUnload;
+        //                                        };
+        //                                        minifyUrl.Unloaded += minUnload;
+
+        //                                        minifyUrl.Tag = hl;
+        //                                        hl.ContextMenu.Items.Add(minifyUrl);
+        //                                        break;
+        //                                    case MpSubTextTokenType.Email:
+        //                                        hl.NavigateUri = new Uri("mailto:" + linkText);
+        //                                        break;
+        //                                    case MpSubTextTokenType.PhoneNumber:
+        //                                        hl.NavigateUri = new Uri("tel:" + linkText);
+        //                                        break;
+        //                                    case MpSubTextTokenType.Currency:
+        //                                        try {
+        //                                            //"https://www.google.com/search?q=%24500.80+to+yen"
+        //                                            MenuItem convertCurrencyMenuItem = new MenuItem();
+        //                                            convertCurrencyMenuItem.Header = "Convert Currency To";
+        //                                            var fromCurrencyType = MpHelpers.GetCurrencyTypeFromString(linkText);
+        //                                            foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
+        //                                                if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
+        //                                                    continue;
+        //                                                }
+        //                                                MenuItem subItem = new MenuItem();
+        //                                                subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
+        //                                                RoutedEventHandler subItemClick = async (object o, RoutedEventArgs e) => {
+        //                                                    Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
+        //                                                    var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
+        //                                                        MpHelpers.GetCurrencyValueFromString(linkText),
+        //                                                        fromCurrencyType,
+        //                                                        toCurrencyType);
+        //                                                    convertedValue = Math.Round(convertedValue, 2);
+        //                                                    if (Rtb.Tag != null && ((List<Hyperlink>)Rtb.Tag).Contains(hl)) {
+        //                                                        ((List<Hyperlink>)Rtb.Tag).Remove(hl);
+        //                                                    }
+        //                                                    Run run = new Run(currency.CurrencySymbol + convertedValue);
+        //                                                    hl.Inlines.Clear();
+        //                                                    hl.Inlines.Add(run);
+        //                                                };
+        //                                                subItem.Click += subItemClick;
+        //                                                RoutedEventHandler subUnload = null;
+        //                                                subUnload = (object o, RoutedEventArgs e) => {
+        //                                                    subItem.Click -= subItemClick;
+        //                                                    subItem.Unloaded -= subUnload;
+        //                                                };
+        //                                                subItem.Unloaded += subUnload;
+        //                                                convertCurrencyMenuItem.Items.Add(subItem);
+        //                                            }
+
+        //                                            hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
+        //                                        }
+        //                                        catch (Exception ex) {
+        //                                            MpConsole.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
+        //                                        }
+        //                                        break;
+        //                                    case MpSubTextTokenType.HexColor:
+        //                                        var rgbColorStr = linkText;
+        //                                        if (rgbColorStr.Length > 7) {
+        //                                            rgbColorStr = rgbColorStr.Substring(0, 7);
+        //                                        }
+        //                                        hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
+        //                                        hl.IsEnabled = true;
+        //                                        Action showChangeColorDialog = () => {
+        //                                            var result = new MpWpfCustomColorChooserMenu().ShowCustomColorMenu(linkText,null);
+        //                                            if (result != null) {
+        //                                                var run = new Run(result.ToString());
+        //                                                hl.Inlines.Clear();
+        //                                                hl.Inlines.Add(run);
+        //                                                var bgBrush = result.ToBrush();
+        //                                                var fgBrush = MpWpfColorHelpers.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
+        //                                                var tr = new TextRange(run.ElementStart, run.ElementEnd);
+        //                                                tr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
+        //                                                tr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
+        //                                            }
+        //                                        };
+        //                                        //hl.MouseLeftButtonDown -= hlMouseLeftButtonDown;
+        //                                        hl.Click += (s, e) => {
+        //                                            if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+        //                                                showChangeColorDialog.Invoke();
+        //                                            }
+        //                                        };
+        //                                        MouseButtonEventHandler hexColorMouseLeftButtonDown = (object o, MouseButtonEventArgs e) => {
+        //                                            showChangeColorDialog.Invoke();
+        //                                        };
+        //                                        hl.MouseLeftButtonDown += hexColorMouseLeftButtonDown;
 
 
-//                                        RoutedEventHandler hexColorUnload = null;
-//                                        hexColorUnload = (object o, RoutedEventArgs e) => {
-//                                            hl.MouseLeftButtonDown -= hexColorMouseLeftButtonDown;
-//                                            hl.Unloaded -= hexColorUnload;
-//                                        };
+        //                                        RoutedEventHandler hexColorUnload = null;
+        //                                        hexColorUnload = (object o, RoutedEventArgs e) => {
+        //                                            hl.MouseLeftButtonDown -= hexColorMouseLeftButtonDown;
+        //                                            hl.Unloaded -= hexColorUnload;
+        //                                        };
 
-//                                        hl.Unloaded += hexColorUnload;
-//                                        MenuItem changeColorItem = new MenuItem();
-//                                        changeColorItem.Header = "Change Color";
-//                                        RoutedEventHandler changeColorClick = (object o, RoutedEventArgs e) => {
-//                                            showChangeColorDialog.Invoke();
-//                                        };
-//                                        changeColorItem.Click += changeColorClick;
+        //                                        hl.Unloaded += hexColorUnload;
+        //                                        MenuItem changeColorItem = new MenuItem();
+        //                                        changeColorItem.Header = "Change Color";
+        //                                        RoutedEventHandler changeColorClick = (object o, RoutedEventArgs e) => {
+        //                                            showChangeColorDialog.Invoke();
+        //                                        };
+        //                                        changeColorItem.Click += changeColorClick;
 
-//                                        RoutedEventHandler changeColorUnload = null;
-//                                        changeColorUnload = (object o, RoutedEventArgs e) => {
-//                                            changeColorItem.Click -= changeColorClick;
-//                                            changeColorItem.Unloaded -= changeColorUnload;
-//};
-//                                        changeColorItem.Unloaded += changeColorUnload;
-//                                        hl.ContextMenu.Items.Add(changeColorItem);
+        //                                        RoutedEventHandler changeColorUnload = null;
+        //                                        changeColorUnload = (object o, RoutedEventArgs e) => {
+        //                                            changeColorItem.Click -= changeColorClick;
+        //                                            changeColorItem.Unloaded -= changeColorUnload;
+        //};
+        //                                        changeColorItem.Unloaded += changeColorUnload;
+        //                                        hl.ContextMenu.Items.Add(changeColorItem);
 
-//                                        hl.Background = (Brush)new BrushConverter().ConvertFromString(linkText);
-//                                        hl.Foreground = MpWpfColorHelpers.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
-//                                        break;
-//                                    default:
-//                                        MpConsole.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
-//                                        break;
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+        //                                        hl.Background = (Brush)new BrushConverter().ConvertFromString(linkText);
+        //                                        hl.Foreground = MpWpfColorHelpers.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
+        //                                        break;
+        //                                    default:
+        //                                        MpConsole.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
+        //                                        break;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
 
-//            if(rtbSelection != null) {
-//                Rtb.Selection.Select(rtbSelection.Start,rtbSelection.End);
-//            }
+        //            if(rtbSelection != null) {
+        //                Rtb.Selection.Select(rtbSelection.Start,rtbSelection.End);
+        //            }
 
-//            InitCaretAdorner();
+        //            InitCaretAdorner();
 
-//            BindingContext.IsBusy = false;
-       // }
+        //            BindingContext.IsBusy = false;
+        // }
 
 
 
 
 
         #endregion
-
 
     }
 }

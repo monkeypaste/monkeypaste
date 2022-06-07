@@ -131,15 +131,10 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpContentDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
-    <Compile Include="AttachedProperties\MpStylizedTooltipExtension.cs" />
     <Compile Include="AttachedProperties\MpTextSelectionRangeExtension.cs" />
-    <Compile Include="AttachedProperties\MpImageSourceExtension.cs" />
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
-    <Compile Include="AttachedProperties\MpGradientBackgroundExtension.cs" />
     <Compile Include="AttachedProperties\MpIsFocusedExtension.cs" />
-    <Compile Include="AttachedProperties\MpPopupMenuExtension.cs" />
     <Compile Include="AttachedProperties\MpHoverableExtension.cs" />
-    <Compile Include="AttachedProperties\MpScrollViewerExtension.cs" />
     <Compile Include="AttachedProperties\MpSizeObserverExtension.cs" />
     <Compile Include="Attributes\Affects\Base\MpAffectsBaseAttribute.cs" />
     <Compile Include="Attributes\Affects\MpAffectsThisAttribute.cs" />
@@ -155,6 +150,7 @@
     <Compile Include="Attributes\DependsOn\MpDependsOnParentAttribute.cs" />
     <Compile Include="Behaviors\Base\MpBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drag Behaviors\Base\MpDragBehaviorBase.cs" />
+    <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpPinTrayDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpClipTrayDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpExternalDropBehavior.cs" />
     <Compile Include="Behaviors\DragDrop\Drop Behaviors\MpActionDesignerItemDropBehavior.cs" />

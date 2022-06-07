@@ -27,6 +27,17 @@ namespace MpWpfApp {
 
         #region Properties
 
+        public Brush DropShapeBrush {
+            get {
+                if(_dropBehavior == null) {
+                    return Brushes.Transparent;
+                }
+                if(_dropBehavior is MpPinTrayDropBehavior) {
+                    return Brushes.OldLace;
+                }
+                return Brushes.Red;
+            }
+        }
         public bool IsShowingDropShape => DropIdx >= 0;
 
         public bool IsShowingCaret {
@@ -126,7 +137,7 @@ namespace MpWpfApp {
                 if (IsShowingDropShape) {
                     DrawDropShapes(
                         dc,
-                        new Pen(Brushes.Red, 1.5) { DashStyle = _isDash ? DashStyles.Dash : DashStyles.Solid });
+                        new Pen(DropShapeBrush, 1.5) { DashStyle = _isDash ? DashStyles.Dash : DashStyles.Solid });
                 }
                 if (IsShowingCaret) {
                     DrawCaret(dc, new Pen(Brushes.Red, 1));
@@ -148,11 +159,11 @@ namespace MpWpfApp {
         }
 
         private void DrawShape(DrawingContext dc, MpShape dropShape, Pen pen) {
-            var rtb = AdornedElement as RichTextBox;
-            if (rtb == null) {
+            var fe = AdornedElement as FrameworkElement;
+            if (fe == null) {
                 return;
             }
-            var rtb_rect = rtb.Bounds();
+            var rtb_rect = fe.Bounds();
             if (dropShape is MpLine dl) {
                 if (!rtb_rect.Contains(dl.P1.ToWpfPoint()) || !rtb_rect.Contains(dl.P2.ToWpfPoint())) {
                     return;

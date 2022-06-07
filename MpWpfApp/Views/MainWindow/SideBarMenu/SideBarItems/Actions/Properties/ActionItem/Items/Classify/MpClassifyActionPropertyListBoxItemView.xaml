@@ -33,6 +33,9 @@
                       Grid.Row="0"
                       Grid.Column="1"
                       Style="{StaticResource ActionPropertyComboBoxStyle}"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                   Mode=OneWayToSource}"
                       MinWidth="150"
                       IsSynchronizedWithCurrentItem="False"
                       SelectedItem="{Binding SelectedTag,

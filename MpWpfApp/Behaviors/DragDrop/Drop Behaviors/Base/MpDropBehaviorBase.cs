@@ -19,7 +19,8 @@ namespace MpWpfApp {
         None,
         Content,
         Tile,
-        Tray,
+        ClipTray,
+        PinTray,
         External,
         Resize,
         Move,
@@ -196,6 +197,7 @@ namespace MpWpfApp {
 
                 if (!MpDragDropManager.IsCheckingForDrag) {
                     MpDragDropManager.StartDragCheck(MpDragDropManager.DragData);
+                    MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.IsAnyItemDragging));
                 }
             }
             e.Handled = true;
@@ -226,6 +228,7 @@ namespace MpWpfApp {
         public virtual void Reset() {
             DropIdx = -1;
             UpdateAdorner();
+            MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.IsAnyItemDragging));
         }
 
         public abstract Task StartDrop(); 
@@ -287,17 +290,6 @@ namespace MpWpfApp {
             UpdateAdorner();
         }
 
-        protected async Task<List<MpCopyItem>> GetDragDataCopy(object dragData) {
-            List<MpCopyItem> cil = null;
-            if(dragData is List<MpCopyItem>) {
-                cil = dragData as List<MpCopyItem>;
-            } else if(dragData is MpClipTileViewModel ctvm) {
-                cil = new List<MpCopyItem>() { ctvm.CopyItem };
-            }
-            var clones = (await Task.WhenAll(cil.Select(x => x.Clone(true)).ToArray())).Cast<MpCopyItem>().ToList();
-            MpClipTrayViewModel.Instance.PersistentSelectedModels = clones;
-            return clones;
-        }
     }
 
 }

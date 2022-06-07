@@ -59,8 +59,9 @@ namespace MpWpfApp {
             }
         }
 
-        public Rect DottedBorderRect { get; set; } = new Rect(0, 0, 50, 50);
 
+        public Rect DottedBorderRect { get; set; } = new Rect(0, 0, 50, 50);
+        
         public Rect SolidBorderRect {
             get {
                 return new Rect(50, 0, 50, 50);

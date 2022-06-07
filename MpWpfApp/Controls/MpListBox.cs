@@ -23,15 +23,42 @@ namespace MpWpfApp {
         }
 
         protected override void OnDragOver(DragEventArgs e) {
-            this.GetVisualAncestor<MpClipTrayView>().ClipTrayDropBehavior.OnDragOver(this, e);
+            var ctdb = this.GetVisualAncestor<MpClipTrayView>();
+            if(ctdb != null) {
+                ctdb.ClipTrayDropBehavior.OnDragOver(this, e);
+                return;
+            }
+            var ptdb = this.GetVisualAncestor<MpPinTrayView>();
+            if (ptdb != null) {
+                ptdb.PinTrayDropBehavior.OnDragOver(this, e);
+                return;
+            }
         }
 
         protected override void OnDragLeave(DragEventArgs e) {
-            this.GetVisualAncestor<MpClipTrayView>().ClipTrayDropBehavior.OnDragLeave(this, e);
+            var ctdb = this.GetVisualAncestor<MpClipTrayView>();
+            if (ctdb != null) {
+                ctdb.ClipTrayDropBehavior.OnDragLeave(this, e);
+                return;
+            }
+            var ptdb = this.GetVisualAncestor<MpPinTrayView>();
+            if (ptdb != null) {
+                ptdb.PinTrayDropBehavior.OnDragLeave(this, e);
+                return;
+            }
         }
 
         protected override void OnDrop(DragEventArgs e) {            
-            this.GetVisualAncestor<MpClipTrayView>().ClipTrayDropBehavior.OnDrop(this, e);
+            var ctdb = this.GetVisualAncestor<MpClipTrayView>();
+            if (ctdb != null) {
+                ctdb.ClipTrayDropBehavior.OnDrop(this, e);
+                return;
+            }
+            var ptdb = this.GetVisualAncestor<MpPinTrayView>();
+            if (ptdb != null) {
+                ptdb.PinTrayDropBehavior.OnDrop(this, e);
+                return;
+            }
         }
 
         #endregion

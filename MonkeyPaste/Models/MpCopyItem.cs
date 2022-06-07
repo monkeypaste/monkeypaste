@@ -296,7 +296,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var citml = await MpDataModelProvider.GetTextTemplatesAsync(Id);
+            var citml = await MpDataModelProvider.ParseTextTemplatesByCopyItemId(Id);
             await Task.WhenAll(citml.Select(x => x.DeleteFromDatabaseAsync()));
 
             var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
@@ -457,7 +457,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public async Task<object> Clone(bool isReplica) {
+        public async Task<object> Clone(bool isDeepClone) {
             // NOTE isReplica is used when duplicating item which retains tag associations but not shortcuts
 
             //if(Source == null) {
@@ -466,17 +466,17 @@ namespace MonkeyPaste {
 
             var newItem = new MpCopyItem() {
                 ItemType = this.ItemType,
-                Title = isReplica ? this.Title + " Copy":this.Title,
+                Title = this.Title,
                 ItemData = this.ItemData,
                 IconId = this.IconId,
                 SourceId = this.SourceId,
                 CopyCount = 1,
                 CopyDateTime = DateTime.Now,
-                Id = isReplica ? 0:this.Id,
-                CopyItemGuid = isReplica ? System.Guid.NewGuid():this.CopyItemGuid                
+                Id = 0,
+                CopyItemGuid = System.Guid.NewGuid()                
             };
 
-            if(isReplica) {
+            if(isDeepClone) {
                 await newItem.WriteToDatabaseAsync();
 
                 var tags = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(this.Id);

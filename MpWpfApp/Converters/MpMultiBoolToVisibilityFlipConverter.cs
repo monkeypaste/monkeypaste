@@ -7,8 +7,8 @@ namespace MpWpfApp {
     public class MpMultiBoolToVisibilityFlipConverter : IMultiValueConverter {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
             string op = "AND";
-            if(parameter != null && parameter.ToString() == "OR") {
-                op = "OR";
+            if(parameter != null && parameter.ToString() == "Or") {
+                op = "Or";
             }
 
             bool visible = true;
@@ -18,16 +18,16 @@ namespace MpWpfApp {
                         case "AND":
                             visible = visible && (bool)value;
                             break;
-                        case "OR":
+                        case "Or":
                             visible = visible || (bool)value;
                             break;
                     }
                 }
             }
 
-            if (parameter != null) {
-                return !visible ? Visibility.Visible : Visibility.Hidden;
-            }
+            //if (parameter != null) {
+            //    return !visible ? Visibility.Visible : Visibility.Hidden;
+            //}
             return !visible ? Visibility.Visible : Visibility.Collapsed;
         }
 

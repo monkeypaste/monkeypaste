@@ -463,6 +463,26 @@ namespace MonkeyPaste.Common.Wpf {
 
         #endregion
 
+        #region ScrollViewer
+
+        public static void ScrollByPointDelta(this ScrollViewer sv, Point deltaOffset) {
+            var hsb = sv.GetScrollBar(Orientation.Horizontal);
+            var vsb = sv.GetScrollBar(Orientation.Vertical);
+
+            double new_x_offset = Math.Max(0, Math.Min(sv.HorizontalOffset + deltaOffset.X, hsb.Maximum));
+            double new_y_offset = Math.Max(0, Math.Min(sv.VerticalOffset + deltaOffset.Y, vsb.Maximum));
+
+            sv.ScrollToPoint(new Point(new_x_offset, new_y_offset));
+        }
+
+        public static void ScrollToPoint(this ScrollViewer sv, Point p) {
+            sv.ScrollToHorizontalOffset(p.X);
+            sv.ScrollToVerticalOffset(p.Y);
+
+            sv.InvalidateScrollInfo();
+        }
+        #endregion
+
         #region ComboBox
 
         public static TextBox GetEditableTextBox(this ComboBox cmb) {

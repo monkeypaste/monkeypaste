@@ -89,8 +89,9 @@ namespace CoreClipboardHandler {
 
                         //Do a bunch of crap necessary to copy the data from the memory
                         //the above pointer points at to a place we can access it.
-                        UIntPtr byteCount = WinApi.GlobalSize(ClipboardDataPointer);
                         IntPtr gLock = WinApi.GlobalLock(ClipboardDataPointer);
+                        UIntPtr byteCount = WinApi.GlobalSize(ClipboardDataPointer);
+                        
                         if (gLock == IntPtr.Zero) {
                             return string.Empty;
                         }

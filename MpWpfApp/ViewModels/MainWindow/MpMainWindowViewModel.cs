@@ -48,7 +48,7 @@ namespace MpWpfApp {
 
         #region Public Variables
 
-        public bool IsShowingDialog = false;
+        
 
         #endregion
 
@@ -86,8 +86,6 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsMainWindowLocked_silent { get; set; } = false;
-
         public string LogText { get; set; }
 
         public BitmapSource Ss { get; set; }
@@ -104,6 +102,14 @@ namespace MpWpfApp {
         public bool IsResizing { get; set; } = false;
 
         public bool CanResize { get; set; } = false;
+
+        public bool IsAnyTextBoxFocused { get; set; }
+
+        public bool IsAnyDropDownOpen { get; set; }
+
+        public bool IsShowingDialog { get; set; } = false;
+
+
 
         #endregion
 
@@ -414,6 +420,7 @@ namespace MpWpfApp {
             () => {
                 return Application.Current.MainWindow != null &&
                       Application.Current.MainWindow.Visibility == Visibility.Visible &&
+                      !IsAnyDropDownOpen &&
                       !IsShowingDialog &&
                       !MpContextMenuView.Instance.IsOpen &&
                       !IsResizing &&

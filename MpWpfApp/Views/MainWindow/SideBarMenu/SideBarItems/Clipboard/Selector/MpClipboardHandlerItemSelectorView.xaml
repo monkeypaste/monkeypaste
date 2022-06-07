@@ -31,13 +31,19 @@
             <ComboBox x:Name="AnalyticItemChooserComboBox"
                       MinWidth="150"
                       IsSynchronizedWithCurrentItem="True"
-                      DropDownOpened="AnalyticItemChooserComboBox_DropDownOpened"
-                      DropDownClosed="AnalyticItemChooserComboBox_DropDownClosed"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                               Source={x:Static local:MpMainWindowViewModel.Instance},
+                                               Mode=OneWayToSource}"
                       SelectedItem="{Binding SelectedItem}"
                       ItemsSource="{Binding Items}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                        <Setter Property="IsSelected"
+                                Value="{Binding IsSelected,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                NotifyOnTargetUpdated=True,
+                                                NotifyOnSourceUpdated=True}" />
                     </Style>
                 </ComboBox.ItemContainerStyle>
                 <ComboBox.ItemTemplate>

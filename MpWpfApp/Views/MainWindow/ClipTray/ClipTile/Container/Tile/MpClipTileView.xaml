@@ -69,17 +69,19 @@
             </Style>
         </local:MpClipBorder.Style>
         <local:MpClipBorder.BorderBrush>
-            <DrawingBrush Viewport="0,0,8,8"
-                          ViewportUnits="Absolute"
+            <DrawingBrush Viewport="0,0,50,50"
+                          ViewportUnits="Absolute" 
                           TileMode="Tile">
+                <DrawingBrush.RelativeTransform>
+                    <TranslateTransform X="{Binding TileBorderBrushTranslateOffsetX}"/>
+                </DrawingBrush.RelativeTransform>
                 <DrawingBrush.Drawing>
                     <DrawingGroup>
                         <GeometryDrawing Brush="{Binding TileBorderBrush}">
                             <GeometryDrawing.Geometry>
                                 <GeometryGroup>
-                                    <RectangleGeometry Rect="{Binding TileBorderBrushRect,
-                                                                      NotifyOnSourceUpdated=True}" />
-                                    <RectangleGeometry Rect="50,50,50,50" />
+                                    <RectangleGeometry Rect="{Binding TileBorderBrushRect}" />
+                                    <RectangleGeometry Rect="50 50 50 50" />
                                 </GeometryGroup>
                             </GeometryDrawing.Geometry>
                         </GeometryDrawing>

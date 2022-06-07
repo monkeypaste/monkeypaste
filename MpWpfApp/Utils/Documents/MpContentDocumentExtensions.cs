@@ -391,7 +391,7 @@ namespace MpWpfApp {
             //thl.Inlines.Clear();
             //thl.Inlines.Add(iuic);
 
-            MpClipTileViewModel ctvm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(cit.CopyItemId);
+            MpClipTileViewModel ctvm = rtb.DataContext as MpClipTileViewModel;
             if (ctvm == null) {
                 Debugger.Break();
             }
@@ -536,25 +536,6 @@ namespace MpWpfApp {
                 case MpCopyItemType.Image:
                     tr.LoadImage(str);
                     break;
-                //case MpCopyItemType.FileList:
-                //    var ctp = tr.Start.GetInsertionPosition(LogicalDirection.Forward);
-                //    var fpl = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                //    for (int i = 0; i < fpl.Length; i++) {
-                //        if (ctp == null) {
-                //            ctp = tr.Start.DocumentEnd;
-                //        }
-                //        ctp = ctp.InsertParagraphBreak();
-                //        var p = ctp.Parent.FindParentOfType<Paragraph>();
-                //        var pcr = p.ContentRange();
-                //        var new_p = pcr.LoadFileItem(fpl[i]);
-
-                //        ctp = new_p.ContentEnd.GetNextInsertionPosition(LogicalDirection.Forward);
-                //    }
-                //    var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
-                //    fd.Blocks.Remove(fd.Blocks.FirstBlock);
-                //    //string xaml = fd.ToXamlPackage();
-                //    //Debugger.Break();
-                //    break;
                 case MpCopyItemType.FileList:
                     var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
                     fd.Blocks.Clear();
@@ -568,17 +549,6 @@ namespace MpWpfApp {
                             DataContext = fivm
                         };
                         fd.Blocks.Add(fip);
-                        //if (ctp == null) {
-                        //    ctp = tr.Start.DocumentEnd;
-                        //}
-                        //ctp = ctp.InsertParagraphBreak();
-                        //var p = ctp.Parent.FindParentOfType<Paragraph>();
-                        //var pcr = p.ContentRange();
-                        //var new_p = pcr.LoadFileItem(fpl[i]);
-
-                        //ctp = new_p.ContentEnd.GetNextInsertionPosition(LogicalDirection.Forward);
-
-
                     }
                     break;
             }
@@ -872,5 +842,7 @@ namespace MpWpfApp {
             }
             return MpRtfToHtmlConverter.ConvertRtfToHtml(text.ToRichText());
         }
+
+        
     }
 }

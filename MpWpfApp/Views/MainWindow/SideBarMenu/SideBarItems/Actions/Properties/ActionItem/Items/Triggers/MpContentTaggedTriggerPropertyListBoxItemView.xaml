@@ -32,6 +32,9 @@
             <ComboBox x:Name="TagChooserComboBox"
                       Grid.Row="0"
                       Grid.Column="1"
+                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                               Source={x:Static local:MpMainWindowViewModel.Instance},
+                                               Mode=OneWayToSource}"
                       Style="{StaticResource ActionPropertyComboBoxStyle}"
                       MinWidth="150"
                       IsSynchronizedWithCurrentItem="False"

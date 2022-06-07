@@ -19,6 +19,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpClipTrayContainerView.xaml
     /// </summary>
     public partial class MpClipTrayContainerView : MpUserControl<MpClipTrayViewModel> {
+        private bool _isUserResizingPinTray = false;
         public MpClipTrayContainerView() {
             InitializeComponent();
         }
@@ -48,5 +49,6 @@ namespace MpWpfApp {
             BindingContext.PinTrayTotalWidth =  PinTrayView.PinTrayListBox.GetVisualDescendent<ScrollViewer>().ExtentWidth;
             BindingContext.OnPropertyChanged(nameof(BindingContext.ClipTrayScreenWidth));
         }
+
     }
 }
