@@ -2,7 +2,8 @@
 using CefSharp.Enums;
 using CefSharp.Wpf;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,8 @@ namespace MpWpfApp {
 
         
 
-        public async Task<string> GetClipboardContent() {
-            var result = await MpNativeWrapper.Services.ClipboardContentDataProvider.GetClipboardContentData();
+        public MpPortableDataObject GetClipboardContent() {
+            var result = MpPlatformWrapper.Services.DataObjectHelper.GetPlatformClipboardDataObject();
             return result;
         }
     }

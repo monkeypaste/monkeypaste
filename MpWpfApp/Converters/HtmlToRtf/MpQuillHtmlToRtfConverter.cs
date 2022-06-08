@@ -12,9 +12,13 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using HtmlAgilityPack;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using SQLite;
+using System.Threading.Tasks;
+using CefSharp;
+using MonkeyPaste;
 
 namespace MpWpfApp {
-    public static class MpHtmlToRtfConverter {
+    public static class MpQuillHtmlToRtfConverter {
         #region private static Variables
         private static double _indentCharCount = 5;
         #endregion
@@ -23,7 +27,47 @@ namespace MpWpfApp {
 
         #endregion
 
-        public static string ConvertHtmlToRtf(string html) {
+        public static async Task<string> ConvertStandardHtmlToRtf(string html) {
+            
+
+            
+            string quillHtml = null;
+
+            var qev = new MpQuillEditorView() {
+                Visibility = Visibility.Hidden,
+                DataContext = new MpClipTileViewModel(MpClipTrayViewModel.Instance)
+            };
+
+            qev.Loaded += (s, e) => {
+                qev.QuillWebView.FrameLoadEnd += async (sender, args) => {
+                    if (args.Frame.IsMain) {
+                        var qlrm = new MpQuillLoadRequestMessage() {
+                            envName = "wpf",
+                            itemEncodedHtmlData = html,
+                            usedTextTemplates = new List<MpTextTemplate>(),
+                            isPasteRequest = false,
+                            isReadOnlyEnabled = true
+                        };
+                        var initCmd = $"init('{qlrm.SerializeToByteString()}')";
+                        var result = await qev.QuillWebView.EvaluateScriptAsync(initCmd);
+                        //html = Convert.ToBase64String(Encoding.Default.GetBytes(html));
+                        //var result2 = await qev.QuillWebView.E($"setHtmlFromBase64('{html}')");
+
+                        var result2 = await qev.QuillWebView.EvaluateScriptAsync("getHtmlBase64()");
+                        quillHtml = Encoding.Default.GetString(Convert.FromBase64String(result2.Result.ToString()));
+                    }
+                };
+                qev.QuillWebView.LoadUrl("localfolder://cefsharp/");
+            };
+            (Application.Current.MainWindow as MpMainWindow).MainWindowCanvas.Children.Add(qev);
+            
+
+            while (quillHtml == null) {
+                await Task.Delay(100);
+            }
+            return ConvertQuillHtmlToRtf(quillHtml);
+        }
+        public static string ConvertQuillHtmlToRtf(string html) {
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
             var fd = string.Empty.ToFlowDocument();
@@ -392,11 +436,11 @@ namespace MpWpfApp {
         }
 
         public static void Test() {
-            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpHtmlToRtfConverter)).Assembly;
+            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpQuillHtmlToRtfConverter)).Assembly;
             var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample5.html");
             using (var reader = new System.IO.StreamReader(stream)) {
                 var html = reader.ReadToEnd();
-                string rtf = ConvertHtmlToRtf(html);
+                string rtf = ConvertQuillHtmlToRtf(html);
                 MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtftest.rtf", rtf, false);
             }
         }

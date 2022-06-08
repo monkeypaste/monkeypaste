@@ -1613,10 +1613,10 @@ using MpProcessHelper;
             }
         }
 
-        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(MpDragDropManager.IsDragAndDrop) {
-                return;
-            }
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            //if(MpDragDropManager.IsDragAndDrop) {
+            //    return;
+            //}
             if(e is MpCopyItem ci && CopyItemId == ci.Id) {
                 if(IsPinned) {
                     var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.CopyItemId == ci.Id);
@@ -1628,8 +1628,17 @@ using MpProcessHelper;
                         });
                     }
                 } else {
-                    await MpDataModelProvider.RemoveQueryItem(ci.Id);
-                    MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+                    //MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
+
+                    foreach(var ctvm in Parent.Items.Where(x => x.QueryOffsetIdx > QueryOffsetIdx)) {
+                        ctvm.QueryOffsetIdx--;
+                        ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
+                    }
+                    
+                    MpDataModelProvider.RemoveQueryItem(ci.Id).FireAndForgetSafeAsync(Parent);
+                    //InitializeAsync(null).FireAndForgetSafeAsync(this);
+                    CopyItem = null;
+
                 }
                 OnPropertyChanged(nameof(IsPlaceholder));
             }

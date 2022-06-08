@@ -112,7 +112,7 @@ namespace MpWpfApp {
                 if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
                     ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
                 }
-                (fe as RichTextBox).FitDocToRtb();
+                //(fe as RichTextBox).FitDocToRtb();
             }
         }
 
@@ -126,7 +126,7 @@ namespace MpWpfApp {
                 if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
                     ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
                 }
-                rtb.FitDocToRtb();
+                //rtb.FitDocToRtb();
             }
         }
 
@@ -149,7 +149,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static string GetEncodedContent(RichTextBox rtb, bool ignoreSubSelection = true) {
+        public static string GetEncodedContent(RichTextBox rtb, bool ignoreSubSelection = true, bool asPlainText = false) {
             var ctvm = rtb.DataContext as MpClipTileViewModel;
             if(ctvm == null) {
                 Debugger.Break();
@@ -192,7 +192,13 @@ namespace MpWpfApp {
                     }
 
                     if(ignoreSubSelection || rtb.Selection.IsEmpty) {
+                        if(asPlainText) {
+                            return rtb.Document.ToPlainText();
+                        }
                         return rtb.Document.ToRichText();
+                    }
+                    if (asPlainText) {
+                        return rtb.Selection.ToRichText().ToPlainText();
                     }
 
                     return rtb.Selection.ToRichText();

@@ -51,10 +51,10 @@ namespace MpWpfApp {
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.IsEditable:
-                    Rtb.FitDocToRtb();
+                    //Rtb.FitDocToRtb();
                     break;
                 case MpMessageType.IsReadOnly:
-                    Rtb.FitDocToRtb();
+                    //Rtb.FitDocToRtb();
                     //MpHelpers.RunOnMainThread(async () => {
                     //    await SyncModelsAsync();
                     //});
@@ -111,7 +111,7 @@ namespace MpWpfApp {
             switch (msg) {
                 case MpMessageType.ResizingContent:
                 case MpMessageType.ResizeContentCompleted:
-                    Rtb.FitDocToRtb();
+                    //Rtb.FitDocToRtb();
                     break;
             }
         }
@@ -334,7 +334,7 @@ namespace MpWpfApp {
                     if (!MpDragDropManager.IsDragAndDrop) {
                         // NOTE content drop removes wrapping (changes page size)
                         // and fit will discard that
-                        Rtb.FitDocToRtb();
+                        Rtb.FitDocToRtb(null,BindingContext.IsCurrentDropTarget);
                     }
                 }
 

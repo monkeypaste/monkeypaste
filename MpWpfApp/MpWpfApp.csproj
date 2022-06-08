@@ -130,6 +130,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpContentDocumentRtfExtension.cs" />
+    <Compile Include="AttachedProperties\MpDocumentHtmlExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
     <Compile Include="AttachedProperties\MpTextSelectionRangeExtension.cs" />
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
@@ -192,7 +193,7 @@
     <Compile Include="Converters\HtmlToRtf\MpQuillFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
-    <Compile Include="Converters\HtmlToRtf\MpHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\HtmlToRtf\MpQuillHtmlToRtfConverter.cs" />
     <Compile Include="Converters\MpActionIdToThicknessConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemGuidToIconSourceConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemGuidToTitleConverter.cs" />
@@ -284,6 +285,8 @@
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
     <Compile Include="Utils\Documents\MpContentDocumentExtensions.cs" />
+    <Compile Include="Utils\Extensions\MpWebView2Extensions.cs" />
+    <Compile Include="Utils\MpJsComAdapter.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\System\VirtualFileDataObject.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
@@ -399,6 +402,9 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Selector\MpContentListViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml.cs">
       <DependentUpon>MpFileItemParagraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpQuillEditorView.xaml.cs">
+      <DependentUpon>MpQuillEditorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Selector\MpTextViewTemplateSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\FindAndReplace\MpFindReplaceToolbarView.xaml.cs">
@@ -793,6 +799,10 @@
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpQuillEditorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\FindAndReplace\MpFindReplaceToolbarView.xaml">
       <SubType>Designer</SubType>
@@ -1432,6 +1442,9 @@
     </PackageReference>
     <PackageReference Include="Azure.AI.TextAnalytics">
       <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="CefSharp.Wpf">
+      <Version>102.0.90</Version>
     </PackageReference>
     <PackageReference Include="CsvHelper">
       <Version>27.2.1</Version>
@@ -2887,7 +2900,6 @@
   <ItemGroup>
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Plugins\Google\PeopleApi\" />
-    <Folder Include="Utils\Extensions\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FileList\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />

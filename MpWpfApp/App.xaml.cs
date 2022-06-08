@@ -48,6 +48,7 @@ namespace MpWpfApp {
                 //await MpWpfBootstrapperViewModel.Init();
 
                 Xamarin.Forms.Forms.Init();
+                
 
                 var bootstrapper = new MpWpfBootstrapperViewModel(new MpWpfWrapper());
                 await bootstrapper.Init();

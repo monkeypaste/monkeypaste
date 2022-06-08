@@ -95,7 +95,6 @@ namespace MpWpfApp {
         public override int GetDropTargetRectIdx() {
             var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             var mp = Application.Current.MainWindow.TranslatePoint(gmp, AssociatedObject.PinTrayListBox);
-            //MpConsole.WriteLine("Global mp in tray coords: " + mp);
             var tray_rect = new Rect(0, 0, AssociatedObject.PinTrayListBox.ActualWidth, AssociatedObject.PinTrayListBox.ActualHeight);
             if (!tray_rect.Contains(mp)) {
                 return -1;

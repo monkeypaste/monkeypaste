@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public static class MpWebView2Extensions {
 
         public static void FitDocToWebView(this ChromiumWebBrowser wv2) {
             bool isReadOnly = false;
-            if (wv2.DataContext is MpContentItemViewModel civm) {
+            if (wv2.DataContext is MpClipTileViewModel civm) {
                 isReadOnly = civm.IsContentReadOnly;
             }
             if (!isReadOnly) {
-                var clv = wv2.GetVisualAncestor<MpContentListView>();
+                var clv = wv2.GetVisualAncestor<MpContentView>();
                 double w = clv == null ? wv2.ActualWidth : clv.ActualWidth;
                 double h = clv == null ? wv2.ActualHeight : clv.ActualHeight;
                 wv2.Width = Math.Max(0, w - wv2.Margin.Left - wv2.Margin.Right/* - wv2.Padding.Left - wv2.Padding.Right*/);

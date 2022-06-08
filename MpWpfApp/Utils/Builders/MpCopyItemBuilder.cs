@@ -45,7 +45,13 @@ namespace MpWpfApp {
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
                     //itemData = itemData.ToQuillText();
-
+                } else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
+                    itemType = MpCopyItemType.Text;                    
+                    htmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
+                    int sIdx = htmlData.IndexOf("<html>");
+                    htmlData = htmlData.Substring(sIdx);
+                    itemData = await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(htmlData);
+                    //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
                     itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
@@ -70,10 +76,6 @@ namespace MpWpfApp {
                     itemType == MpCopyItemType.Text &&
                     string.IsNullOrWhiteSpace((itemData).ToPlainText().Replace(Environment.NewLine, ""))) {
                     return null;
-                }
-
-                if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
-                    htmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
                 }
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {

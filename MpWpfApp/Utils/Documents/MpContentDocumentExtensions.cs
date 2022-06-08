@@ -305,7 +305,7 @@ namespace MpWpfApp {
         }
 
         public static FlowDocument ToFilePathDocument(this string path, int iconId = 0, double iconSize = 16) {
-            var fd = string.Empty.ToFlowDocument();
+            var fd = string.Empty.ToFlowDocument(); 
             fd.Blocks.FirstBlock.ContentRange().LoadFileItem(path, iconId, iconSize);
             return fd;
         }
@@ -609,7 +609,7 @@ namespace MpWpfApp {
                 return str;
             }
             if (str.IsStringQuillText()) {
-                return MpHtmlToRtfConverter.ConvertHtmlToRtf(str);
+                return MpQuillHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
             }
             if (str.IsStringXaml()) {
                 using (var stringReader = new StringReader(str)) {

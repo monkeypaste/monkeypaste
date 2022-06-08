@@ -4,7 +4,9 @@ using CefSharp.JavascriptBinding;
 using CefSharp.SchemeHandler;
 using CefSharp.Wpf;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using MpWpfApp.Properties;
 using Newtonsoft.Json;
 using SQLite;
@@ -182,27 +184,27 @@ namespace MpWpfApp {
         #region Messages
 
         private static MpQuillLoadRequestMessage CreateLoadRequestMessage(FrameworkElement fe, object newValue) {
-            if (fe.DataContext is MpContentItemViewModel civm) {
+            if (fe.DataContext is MpClipTileViewModel ctvm) {
 
-                MpConsole.WriteLine($"Tile Content Item '{(fe.DataContext as MpContentItemViewModel).CopyItemTitle}' is loaded");
+                MpConsole.WriteLine($"Tile Content Item '{(fe.DataContext as MpClipTileViewModel).CopyItemTitle}' is loaded");
 
                 string itemData = newValue == null ? string.Empty : (string)newValue;
 
                 return new MpQuillLoadRequestMessage() {
                     envName = "wpf",
-                    itemEncodedHtmlData = GetEncodedHtml(itemData,civm.CopyItemGuid),
+                    itemEncodedHtmlData = GetEncodedHtml(itemData,ctvm.CopyItemGuid),
                     usedTextTemplates = GetTextTemplates(itemData),
-                    isPasteRequest = civm.IsPasting,
-                    isReadOnlyEnabled = civm.IsContentReadOnly
+                    isPasteRequest = ctvm.IsPasting,
+                    isReadOnlyEnabled = ctvm.IsContentReadOnly
                 };
             }
             return null;
         }
 
         private static void ProcessEnableReadOnlyResponse(FrameworkElement fe, JavascriptResponse enableReadOnlyResponse) {
-            if (fe.DataContext is MpContentItemViewModel civm) {
+            if (fe.DataContext is MpClipTileViewModel ctvm) {
                 if (enableReadOnlyResponse.Result != null && enableReadOnlyResponse.Result is string resultStr) {
-                    MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is readonly");
+                    MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is readonly");
 
                     var qrm = JsonConvert.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(resultStr.ToStringFromBase64());
 
@@ -212,26 +214,26 @@ namespace MpWpfApp {
 
                     var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
                     if (ctcv != null) {
-                        ctcv.TileResizeBehvior.Resize(_readOnlyWidth - ctcv.ActualWidth, 0);
+                        ctcv.TileResizeBehavior.Resize(_readOnlyWidth - ctcv.ActualWidth, 0);
                     }
 
-                    MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(civm);
+                    MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
                 }
             }
         }
 
         private static MpQuillDisableReadOnlyRequestMessage CreateDisableReadOnlyMessage(FrameworkElement fe) {
-            MpConsole.WriteLine($"Tile content item '{(fe.DataContext as MpContentItemViewModel).CopyItemTitle}' is editable");
+            MpConsole.WriteLine($"Tile content item '{(fe.DataContext as MpClipTileViewModel).CopyItemTitle}' is editable");
 
             MpQuillDisableReadOnlyRequestMessage drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
                 allAvailableTextTemplates = MpMasterTemplateModelCollection.AllTemplates.ToList(),
-                editorHeight = fe.GetVisualAncestor<MpContentItemView>().ActualHeight
+                editorHeight = fe.GetVisualAncestor<MpContentView>().ActualHeight
             };
             return drorMsg;
         }
 
         private static void ProcessDisableReadOnlyResponse(FrameworkElement fe, JavascriptResponse disableReadOnlyResponse) {
-            if (fe.DataContext is MpContentItemViewModel civm) {
+            if (fe.DataContext is MpClipTileViewModel civm) {
                 if (disableReadOnlyResponse.Result != null && disableReadOnlyResponse.Result is string resultStr) {
                     MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is editable");
 
@@ -241,7 +243,7 @@ namespace MpWpfApp {
                     if (ctcv != null) {
                         _readOnlyWidth = ctcv.ActualWidth;
                         if (qrm.editorWidth > ctcv.ActualWidth) {
-                            ctcv.TileResizeBehvior.Resize(qrm.editorWidth - ctcv.ActualWidth, 0);
+                            ctcv.TileResizeBehavior.Resize(qrm.editorWidth - ctcv.ActualWidth, 0);
 
                             fe.Focus();
                         }
@@ -315,7 +317,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            CefSharpSettings.ConcurrentTaskExecution = true;
+           //CefSharpSettings.ConcurrentTaskExecution = true;
 
             var settings = new CefSettings();
             settings.CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache");

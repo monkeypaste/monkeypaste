@@ -279,6 +279,11 @@ function updateAllSizeAndPositions() {
     }
 
 }
+function loadClipboard() {
+    init(null);
+
+    setHtml()
+}
 
 function onWindowScroll(e) {
     if (IsReadOnly()) {
@@ -294,6 +299,17 @@ function setText(text) {
 
 function setHtml(html) {
     quill.root.innerHTML = html;
+}
+
+function setHtmlFromBase64(base64Html) {
+    console.log('base64: '+base64Html);
+    let html = atob(base64Html);
+    console.log('html: '+html);
+
+    quill.root.innerHTML = html;
+
+    var output = getHtmlBase64();
+    return output;
 }
 
 function setContents(jsonStr) {
@@ -318,6 +334,15 @@ function getHtml() {
     clearTemplateFocus();
     var val = quill.root.innerHTML;
     return unescape(val);
+}
+
+function getHtmlBase64() {
+
+    var val = quill.root.innerHTML;
+    console.log('quill html: '+val);
+    val = btoa(val);
+    console.log('quill html64: '+val);
+    return btoa(val);
 }
 
 function getEncodedHtml() {

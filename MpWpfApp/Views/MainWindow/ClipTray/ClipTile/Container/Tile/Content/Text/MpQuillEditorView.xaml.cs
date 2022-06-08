@@ -2,7 +2,9 @@
 using CefSharp;
 using CefSharp.Enums;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +28,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpQuillEditorView.xaml
     /// </summary>
-    public partial class MpQuillEditorView : MpContentUserControl<MpContentItemViewModel> {
+    public partial class MpQuillEditorView : MpUserControl<MpClipTileViewModel> {
         private DispatcherTimer timer;
         public bool IsDomContentLoaded { get; private set; }
 
@@ -35,8 +37,7 @@ namespace MpWpfApp {
         }
 
         private void EditorBrowser_Loaded(object sender, RoutedEventArgs e) {
-            var civm = DataContext as MpContentItemViewModel;
-            if(civm == null || civm.IsPlaceholder) {
+            if(BindingContext == null || BindingContext.IsPlaceholder) {
                 return;
             }
 
@@ -113,9 +114,9 @@ namespace MpWpfApp {
         }
 
         private void QuillWebView_PreviewKeyUp(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Escape && BindingContext.IsEditingContent) {
+            if (e.Key == Key.Escape && !BindingContext.IsContentReadOnly) {
                 //BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
-                BindingContext.Parent.ClearEditing();
+                BindingContext.ClearEditing();
             }
         }
 
