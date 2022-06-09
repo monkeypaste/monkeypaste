@@ -22,8 +22,8 @@
 }
 
 .ql-snow .ql-formats {
-    /*display: inline-flex;*/
-    display: inline-block;
+    display: inline-flex;
+    /* display: inline-block; */
 }
 
 .ql-toolbar.ql-snow 

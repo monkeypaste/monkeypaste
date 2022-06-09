@@ -284,6 +284,7 @@
     </Compile>
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
+    <Compile Include="Utils\Builders\MpHtmlClipboardData.cs" />
     <Compile Include="Utils\Documents\MpContentDocumentExtensions.cs" />
     <Compile Include="Utils\Extensions\MpWebView2Extensions.cs" />
     <Compile Include="Utils\MpJsComAdapter.cs" />

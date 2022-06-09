@@ -18,31 +18,33 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public static async Task<MpUrl> CreateFromHtmlData(string htmlDataStr) {
-            string sourceTag = "SourceURL:";
-            string sourceUrlLine = string.Empty;
+        public static async Task<MpUrl> CreateFromSourceUrl(string sourceUrl) {
+            //string sourceTag = "SourceURL:";
+            //string sourceUrlLine = string.Empty;
 
-            if (!htmlDataStr.ToLower().Contains(sourceTag)) {
-                // NOTE this occurs when copying images
-                var m = MpRegEx.GetRegExForTokenType(MpSubTextTokenType.Uri).Match(htmlDataStr);
-                if(m.Success) {
-                    sourceUrlLine = m.ToString();
-                    if(sourceUrlLine.EndsWith("\"")) {
-                        // removes trailing " from <img src>
-                        sourceUrlLine = sourceUrlLine.Substring(0, sourceUrlLine.Length - 1);
-                    }
-                }
-            } else {
-                var htmlParts = htmlDataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            //if (!htmlDataStr.ToLower().Contains(sourceTag)) {
+            //    // NOTE this occurs when copying images
+            //    var m = MpRegEx.GetRegExForTokenType(MpSubTextTokenType.Uri).Match(htmlDataStr);
+            //    if(m.Success) {
+            //        sourceUrlLine = m.ToString();
+            //        if(sourceUrlLine.EndsWith("\"")) {
+            //            // removes trailing " from <img src>
+            //            sourceUrlLine = sourceUrlLine.Substring(0, sourceUrlLine.Length - 1);
+            //        }
+            //    }
+            //} else {
+            //    var htmlParts = htmlDataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
-                sourceUrlLine = htmlParts.Where(x => x.StartsWith(sourceTag)).FirstOrDefault();
-            }
-            if(string.IsNullOrWhiteSpace(sourceUrlLine)) {
+            //    sourceUrlLine = htmlParts.Where(x => x.StartsWith(sourceTag)).FirstOrDefault();
+            //}
+            //if(string.IsNullOrWhiteSpace(sourceUrlLine)) {
+            //    return null;
+            //}
+
+            //string sourceUrl = sourceUrlLine.Replace(sourceTag, string.Empty).Replace(Environment.NewLine, string.Empty);
+            if(string.IsNullOrWhiteSpace(sourceUrl)) {
                 return null;
             }
-
-            string sourceUrl = sourceUrlLine.Replace(sourceTag, string.Empty).Replace(Environment.NewLine, string.Empty);
-
             string sourceUrlTitle = await MpUrlHelpers.GetUrlTitle(sourceUrl);
 
             var result = await MpUrl.Create(sourceUrl, sourceUrlTitle);

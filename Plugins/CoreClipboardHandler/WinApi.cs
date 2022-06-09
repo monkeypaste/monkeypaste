@@ -69,20 +69,25 @@ namespace CoreClipboardHandler {
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool CloseClipboard();
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         public static extern bool EmptyClipboard();
 
-        [DllImport("kernel32.dll")]
-        public static extern UIntPtr GlobalSize(IntPtr hMem);
+        //[DllImport("kernel32.dll")]
+        //public static extern UIntPtr GlobalSize(IntPtr hMem);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", SetLastError= true)]
+        public static extern uint GlobalSize(IntPtr hMem);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr GlobalLock(IntPtr hMem);
 
-        [DllImport("kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GlobalUnlock(IntPtr hMem);
+        //[DllImport("kernel32.dll")]
+        //[return: MarshalAs(UnmanagedType.Bool)]
+        //public static extern bool GlobalUnlock(IntPtr hMem);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr GlobalUnlock(IntPtr hMem);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr GetClipboardData(uint uFormat);
 
         [DllImport("User32.dll", SetLastError = true)]

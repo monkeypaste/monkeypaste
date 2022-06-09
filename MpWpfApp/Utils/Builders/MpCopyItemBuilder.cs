@@ -10,6 +10,7 @@ using MonkeyPaste;
 using MpProcessHelper;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System.Reflection;
+using System.Web.UI.HtmlControls;
 
 namespace MpWpfApp {
     public class MpCopyItemBuilder : MpICopyItemBuilder {
@@ -30,7 +31,8 @@ namespace MpWpfApp {
                                 
                 
                 string itemData = null;
-                string htmlData = string.Empty;
+                //string htmlData = string.Empty;
+                MpHtmlClipboardData htmlClipboardData = new MpHtmlClipboardData();
                 MpCopyItemType itemType = MpCopyItemType.None;
                 
                 if (mpdo.ContainsData(MpPortableDataFormats.FileDrop)) {
@@ -47,10 +49,9 @@ namespace MpWpfApp {
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
                     itemType = MpCopyItemType.Text;                    
-                    htmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
-                    int sIdx = htmlData.IndexOf("<html>");
-                    htmlData = htmlData.Substring(sIdx);
-                    itemData = await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(htmlData);
+                    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
+                    htmlClipboardData = MpHtmlClipboardData.Parse(rawHtmlData);
+                    itemData = await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(htmlClipboardData.Html);
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
@@ -127,26 +128,18 @@ namespace MpWpfApp {
                     app = await MpApp.Create(processPath, appName, icon);
                 } else {
                     app = await MpDb.GetItemAsync<MpApp>(app.Id);
-                }
+}
 
-                MpUrl url = null;
+                MpUrl url = await MpUrlBuilder.CreateFromSourceUrl(htmlClipboardData.SourceUrl);
 
-                if(!string.IsNullOrEmpty(htmlData)) {
-                    try {
-                        url = await MpUrlBuilder.CreateFromHtmlData(htmlData);
-                        if(url != null) {                            
-                            if (MpUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
-                                MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlDomainPath);
-                                return null;
-                            }
-                            if (MpUrlCollectionViewModel.Instance.IsUrlRejected(url.UrlPath)) {
-                                MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlPath);
-                                return null;
-                            }
-                        }
+                if (url != null) {
+                    if (MpUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
+                        MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlDomainPath);
+                        return null;
                     }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine(@"Error parsing url from htmlData: " + htmlData, ex);
+                    if (MpUrlCollectionViewModel.Instance.IsUrlRejected(url.UrlPath)) {
+                        MpConsole.WriteLine("Clipboard Monitor: Ignoring url domain '" + url.UrlPath);
+                        return null;
                     }
                 }
 

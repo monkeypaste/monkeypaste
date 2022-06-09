@@ -82,38 +82,54 @@ namespace CoreClipboardHandler {
                 uint format = GetWin32FormatId(nativeFormatStr);
                 if (format != 0) {
                     if (WinApi.IsClipboardFormatAvailable(format)) {
-                        WinApi.OpenClipboard(_mainWindowHandle);
+                        //WinApi.OpenClipboard(_mainWindowHandle);
 
-                        //Get pointer to clipboard data in the selected format
-                        IntPtr ClipboardDataPointer = WinApi.GetClipboardData(format);
+                        ////Get pointer to clipboard data in the selected format
+                        //IntPtr ClipboardDataPointer = WinApi.GetClipboardData(format);
 
-                        //Do a bunch of crap necessary to copy the data from the memory
-                        //the above pointer points at to a place we can access it.
-                        IntPtr gLock = WinApi.GlobalLock(ClipboardDataPointer);
-                        UIntPtr byteCount = WinApi.GlobalSize(ClipboardDataPointer);
+                        ////Do a bunch of crap necessary to copy the data from the memory
+                        ////the above pointer points at to a place we can access it.
+                        //IntPtr gLock = WinApi.GlobalLock(ClipboardDataPointer);
+                        //UIntPtr byteCount = WinApi.GlobalSize(ClipboardDataPointer);
                         
-                        if (gLock == IntPtr.Zero) {
-                            return string.Empty;
+                        //if (gLock == IntPtr.Zero) {
+                        //    return string.Empty;
+                        //}
+                        ////Init a buffer which will contain the clipboard data
+                        //byte[] bytes = new byte[(int)byteCount];
+
+                        ////Copy clipboard data to buffer
+                        //Marshal.Copy(gLock, bytes, 0, (int)byteCount);
+
+                        //WinApi.GlobalUnlock(gLock); //unlock gLock
+
+                        //WinApi.CloseClipboard();
+
+                        //if (format == CF_BITMAP) {
+                        //    Debugger.Break();
+                        //}
+                        //if (nativeFormatStr == DataFormats.FileDrop) {
+                        //    var test = Encoding.ASCII.GetString(bytes);
+                        //    Debugger.Break();
+                        //}
+
+                        //return System.Text.Encoding.UTF8.GetString(bytes);
+
+                        if (WinApi.IsClipboardFormatAvailable(format)) {
+                            if (WinApi.OpenClipboard(_mainWindowHandle)) {
+                                IntPtr hGMem = WinApi.GetClipboardData(format);
+                                IntPtr pMFP = WinApi.GlobalLock(hGMem);
+                                uint len = WinApi.GlobalSize(hGMem);
+                                byte[] bytes = new byte[len];
+                                Marshal.Copy(pMFP, bytes, 0, (int)len);
+
+                                string strMFP = System.Text.Encoding.UTF8.GetString(bytes);
+                                WinApi.GlobalUnlock(hGMem);
+                                WinApi.CloseClipboard();
+
+                                return strMFP;
+                            }
                         }
-                        //Init a buffer which will contain the clipboard data
-                        byte[] bytes = new byte[(int)byteCount];
-
-                        //Copy clipboard data to buffer
-                        Marshal.Copy(gLock, bytes, 0, (int)byteCount);
-
-                        WinApi.GlobalUnlock(gLock); //unlock gLock
-
-                        WinApi.CloseClipboard();
-
-                        if (format == CF_BITMAP) {
-                            Debugger.Break();
-                        }
-                        if (nativeFormatStr == DataFormats.FileDrop) {
-                            var test = Encoding.ASCII.GetString(bytes);
-                            Debugger.Break();
-                        }
-
-                        return System.Text.Encoding.UTF8.GetString(bytes);
                     }
                 }
             }

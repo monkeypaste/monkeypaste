@@ -317,9 +317,11 @@ namespace MpWpfApp {
                 return;
             }
 
-           //CefSharpSettings.ConcurrentTaskExecution = true;
+            CefSharpSettings.ConcurrentTaskExecution = true;
 
-            var settings = new CefSettings();
+            var settings = new CefSettings() {
+                LogSeverity = LogSeverity.Verbose
+            };
             settings.CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache");
             settings.CefCommandLineArgs.Add(@"--disable-component-update");
             settings.RemoteDebuggingPort = 8080;

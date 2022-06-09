@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>Editor</title>
     <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+
     <link href="lib/jquery-context-menus/dist/context-menu.min.css" rel="stylesheet" />
-    <link href="lib/Quill/quill.snow.css" rel="stylesheet" />
+    <!--<link href="lib/Quill/quill.snow.css" rel="stylesheet" />-->
     <link href="lib/HighlightJs/github.min.css" rel="stylesheet" />
     <link href="lib/Quill-Better-Table/quill-better-table.css" rel="stylesheet" type="text/css" />
     <link href="lib/katex/katex.min.css" rel="stylesheet" />
@@ -21,7 +22,11 @@
     <link href="src/components/content/content-style.css" rel="stylesheet" />
 
 
-    <script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.js"></script>
+    <script src="lib/HighlightJs/highlight.min.js"></script>
+    <script src="lib/HighlightJs/xml.min.js"></script>
+    
+    <!--<script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.js"></script>-->
+    <script src="lib/Quill/quill.min.js"></script>
     <script src="lib/Quill-Better-Table/quill-better-table.min.js"></script>
     <script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/DynamicQuillTools/DynamicQuillTools.js"></script>
@@ -31,10 +36,8 @@
     <script src="lib/jquery-context-menus/src/context-menu.js"></script>
 
     <script src="lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js"></script>
-    <script src="lib/HighlightJs/highlight.min.js"></script>
-    <script src="lib/HighlightJs/xml.min.js"></script>
 
-    <!--<script src="lib/Quill/quill.min.js"></script>-->
+    
     <script>
         // globals
         var quill;

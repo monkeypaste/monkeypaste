@@ -11,56 +11,85 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using HtmlAgilityPack;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Wpf;
 using SQLite;
 using System.Threading.Tasks;
 using CefSharp;
 using MonkeyPaste;
+using CefSharp.Wpf;
+using Newtonsoft.Json;
+using System.Web;
 
 namespace MpWpfApp {
     public static class MpQuillHtmlToRtfConverter {
         #region private static Variables
         private static double _indentCharCount = 5;
+
+       // private static ChromiumWebBrowser cwb;
         #endregion
 
         #region Properties
 
         #endregion
 
-        public static async Task<string> ConvertStandardHtmlToRtf(string html) {
-            
-
-            
+        public static async Task<string> ConvertStandardHtmlToRtf(string html) {       
             string quillHtml = null;
 
-            var qev = new MpQuillEditorView() {
+            var cwb = new ChromiumWebBrowser() {
                 Visibility = Visibility.Hidden,
-                DataContext = new MpClipTileViewModel(MpClipTrayViewModel.Instance)
+                Width = 1000,
+                Height = 1000,
+                IsEnabled = true
             };
 
-            qev.Loaded += (s, e) => {
-                qev.QuillWebView.FrameLoadEnd += async (sender, args) => {
+            cwb.Loaded += (s, e) => {
+                cwb.FrameLoadEnd += async (sender, args) => {
                     if (args.Frame.IsMain) {
+                        string decodedHtml = HttpUtility.HtmlDecode(html);
+                        MpConsole.WriteLine("Html from clipboard: ");
+                        MpConsole.WriteLine(html);
+                        MpConsole.WriteLine("Decoded Html from clipboard (before sent to quill): ");
+                        MpConsole.WriteLine(decodedHtml);
                         var qlrm = new MpQuillLoadRequestMessage() {
                             envName = "wpf",
-                            itemEncodedHtmlData = html,
-                            usedTextTemplates = new List<MpTextTemplate>(),
-                            isPasteRequest = false,
+                            isConvertPlainHtmlRequest = true,
+                            itemEncodedHtmlData = decodedHtml,
                             isReadOnlyEnabled = true
                         };
-                        var initCmd = $"init('{qlrm.SerializeToByteString()}')";
-                        var result = await qev.QuillWebView.EvaluateScriptAsync(initCmd);
-                        //html = Convert.ToBase64String(Encoding.Default.GetBytes(html));
-                        //var result2 = await qev.QuillWebView.E($"setHtmlFromBase64('{html}')");
+                        await cwb.EvaluateScriptAsync(null, "init", qlrm);
+                        while(true) {
+                            var isReadyResponse = await cwb.EvaluateScriptAsync("getIsClipboardReady()");
+                            if(isReadyResponse.Success) {
+                                if(isReadyResponse.Result.ToString().ToLower().Contains("yes")) {
+                                    var htmlResponse = await cwb.EvaluateScriptAsync("getHtml()");
+                                    if(htmlResponse.Success) {
+                                        quillHtml = HttpUtility.HtmlDecode(htmlResponse.Result.ToString());
+                                        return;
+                                    }
+                                }
+                            }
+                        }
 
-                        var result2 = await qev.QuillWebView.EvaluateScriptAsync("getHtmlBase64()");
-                        quillHtml = Encoding.Default.GetString(Convert.FromBase64String(result2.Result.ToString()));
+                        //var response = await cwb.EvaluateScriptAsync(null,"init",qlrm);
+                        //if(!response.Success) {
+                        //    Debugger.Break();
+                        //}
+                        //string resultStr = response.Result.ToString();
+                        //MpConsole.WriteLine("Raw json from quill");
+                        //MpConsole.WriteLine(resultStr);
+                        //var qrm = JsonConvert.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(resultStr);
+                        //MpConsole.WriteLine("Deserialized html from quill");
+                        //MpConsole.WriteLine(qrm.itemEncodedHtmlData);
+                        //quillHtml = HttpUtility.HtmlDecode(qrm.itemEncodedHtmlData);
+                        //MpConsole.WriteLine("Decoded html (after deserialized) from quill");
+                        //MpConsole.WriteLine(quillHtml);
                     }
                 };
-                qev.QuillWebView.LoadUrl("localfolder://cefsharp/");
+               cwb.LoadUrl("localfolder://cefsharp/");
             };
-            (Application.Current.MainWindow as MpMainWindow).MainWindowCanvas.Children.Add(qev);
-            
+            (Application.Current.MainWindow as MpMainWindow).MainWindowCanvas.Children.Add(cwb);
 
             while (quillHtml == null) {
                 await Task.Delay(100);
@@ -70,13 +99,23 @@ namespace MpWpfApp {
         public static string ConvertQuillHtmlToRtf(string html) {
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
-            var fd = string.Empty.ToFlowDocument();
+            var fd = new FlowDocument {
+                FontFamily = new FontFamily("Arial"),
+
+            };
             fd.Blocks.Clear();
             foreach (var htmlBlockNode in htmlDoc.DocumentNode.ChildNodes) {
                 var docNode = htmlBlockNode;
                 if(docNode.Name == "div") {
                     docNode = htmlBlockNode.FirstChild;
                 }
+                //var te = ConvertHtmlNode(docNode);
+                //if(te is Block b) {
+                //    fd.Blocks.Add(b);
+                //} else if (te is Inline i) {
+                //    fd.Blocks.Add(new Paragraph(i));
+                //}
+
                 fd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
             }
             return fd.ToRichText();
@@ -127,6 +166,7 @@ namespace MpWpfApp {
                     te = new Italic();
                     break;
                 case "span":
+                case "code":
                     te = new Span();
                     break;
                 case "strong":
@@ -142,7 +182,15 @@ namespace MpWpfApp {
                     te = new Hyperlink();
                     break;
                 case "p":
-                    te = new Paragraph();
+                case "h1":
+                case "h2":
+                case "h3":
+                case "h4":
+                case "h5":
+                case "h6":
+                    te = new Paragraph() {
+                        TextAlignment = TextAlignment.Left
+                    };
                     break;
                 case "li":
                     te = new ListItem();
@@ -331,7 +379,7 @@ namespace MpWpfApp {
                 var itemColorBrush = ParseRgb(sv);
                 te.Background = itemColorBrush;
             } else if(sv.StartsWith("font-size")) {
-                te.FontSize = GetFontSize(sv);
+                te.FontSize = GetFontSize(sv,te);
             }
             return te;
         }
@@ -362,11 +410,26 @@ namespace MpWpfApp {
         }
 
         public static Brush ParseRgb(string text) {
-            Brush defaultBrush = Brushes.Black;
+            Brush defaultBrush = Brushes.Transparent;
 
             int rgbOpenIdx = text.IndexOf("(");
             if(rgbOpenIdx < 0) {
-                return defaultBrush;
+                int preNameIdx = text.IndexOf(":");
+                if(preNameIdx >= 0 && text.Contains(" ")) {
+                    string colorName = text.Substring(preNameIdx + 1)
+                                        .Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)
+                                        .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x) && !x.StartsWith("!"));
+                    if(string.IsNullOrWhiteSpace(colorName)) {
+                        return defaultBrush;
+                    }
+                    string hex = MpSystemColors.ConvertFromString(colorName.Trim(), defaultBrush.ToHex());
+                    if (string.IsNullOrWhiteSpace(hex) || !hex.IsStringHexColor()) {
+                        return defaultBrush;
+                    }
+                    return hex.ToWpfBrush();
+                }
+                
+                
             }
 
             string commaReplacement = string.Empty;
@@ -387,15 +450,31 @@ namespace MpWpfApp {
             return new SolidColorBrush(color);
         }
 
-        public static double GetFontSize(string styleValue) {
+        public static double GetFontSize(string styleValue, TextElement te) {
             //for some reason wpf will not accept px values and converts to 3/4 size (for 96DPI)
             //but giving pt will use the displays DIP
             //string fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px","pt");
             //double fs = (double)new FontSizeConverter().ConvertFrom(fontSizeStr);
-            string fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px", string.Empty);
+
+            // NOTE non px types may need adjustment when DPI is not 96
+            string fontSizeStr = string.Empty;
             double fs = 12;
+            if(styleValue.Contains("px")) {
+                fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px", string.Empty);
+            } else if(styleValue.Contains("rem")) {
+                fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("rem", string.Empty);
+            } else if(styleValue.Contains("em")) {
+                fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("em", string.Empty);
+            } else if (styleValue.Contains("pt")) {
+                fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("pt", string.Empty);
+            }
             try {
                 fs = (double)Convert.ToDouble(fontSizeStr);
+                if(styleValue.Contains("rem") || styleValue.Contains("em")) {
+                    fs = te.FontSize * fs;
+                } else if (styleValue.Contains("pt")) {
+                    fs = fs * 1.333;
+                }
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine(ex);
             }
@@ -436,13 +515,17 @@ namespace MpWpfApp {
         }
 
         public static void Test() {
-            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpQuillHtmlToRtfConverter)).Assembly;
-            var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample5.html");
-            using (var reader = new System.IO.StreamReader(stream)) {
-                var html = reader.ReadToEnd();
-                string rtf = ConvertQuillHtmlToRtf(html);
-                MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtftest.rtf", rtf, false);
-            }
+            string html = "<p style='color: rgb(76, 85, 90); font-family: Lato, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>MvvmCross uses<span>&nbsp;</span><code class='language-plaintext highlighter-rouge'	style='font-family: Menlo, Monaco, Consolas, &quot;DejaVu Sans Mono&quot;, &quot;Lucida Console&quot;, monospace; font-size: 0.9375rem; background-color: rgb(242, 242, 242) !important; border: 1px solid rgb(230, 230, 230); border-radius: 4px; overflow-x: auto; padding: 1px 5px;'>ViewModel first navigation</code>. Meaning that we navigate from ViewModel to ViewModel and not from View to View. In MvvmCross the ViewModel will lookup its corresponding View. By doing so we don’t have to write platform specific navigation and we can manage everything from within our core.</p><h1 id='introducing-the-mvxnavigationservice'	style='font-size: 2em; margin: 0.67em 0px; font-weight: 400; color: rgb(76, 85, 90); font-family: Lato, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>Introducing the MvxNavigationService<a class='anchorjs-link '	href='https://www.mvvmcross.com/documentation/fundamentals/navigation#introducing-the-mvxnavigationservice'	aria-label='Anchor link for: introducing the mvxnavigationservice'	data-anchorjs-icon=''	style='background-color: transparent; opacity: 0; text-decoration: none; -webkit-font-smoothing: antialiased; color: rgb(47, 182, 129); font: 1em / 1 anchorjs-icons; padding-left: 0.375em;'/></h1><p style='color: rgb(76, 85, 90); font-family: Lato, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>The navigation enables you to inject it into your ViewModels, which makes it more testable, and gives you the ability to implement your own navigation! Other main features are that it is fully async and type safe. For more details see<span>&nbsp;</span><a href='https://github.com/MvvmCross/MvvmCross/issues/1634'	style='background-color: transparent; color: rgb(47, 182, 129); text-decoration: none;'>#1634</a></p><p style='color: rgb(76, 85, 90); font-family: Lato, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;'>The following Api is available to use. (See<span>&nbsp;</span><a href='https://github.com/MvvmCross/MvvmCross/blob/develop/MvvmCross/Navigation/IMvxNavigationService.cs'	style='background-color: transparent; color: rgb(47, 182, 129); text-decoration: none;'>IMvxNavigationService code for latest definition</a>):</p>";
+            html = HttpUtility.HtmlDecode(html);
+            string rtf = ConvertQuillHtmlToRtf(html);
+            MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtftest.rtf", rtf, false);
+            //var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpQuillHtmlToRtfConverter)).Assembly;
+            //var stream = assembly.GetManifestResourceStream("MpWpfApp.Resources.TestData.quillFormattedTextSample5.html");
+            //using (var reader = new System.IO.StreamReader(stream)) {
+            //    var html = reader.ReadToEnd();
+            //    string rtf = ConvertQuillHtmlToRtf(html);
+            //    MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtftest.rtf", rtf, false);
+            //}
         }
     }
 }

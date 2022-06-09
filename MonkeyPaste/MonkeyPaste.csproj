@@ -151,6 +151,7 @@
     <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
     <None Remove="Resources\Html\Editor\src\components\clipboard\clipboard.js" />
     <None Remove="Resources\Html\Editor\src\components\content\content.js" />
+    <None Remove="Resources\Html\Editor\src\components\content\content_with_source_attributes.js" />
     <None Remove="Resources\Html\Editor\src\components\dragdrop\dragdrop.js" />
     <None Remove="Resources\Html\Editor\src\components\editor\editor.js" />
     <None Remove="Resources\Html\Editor\src\components\font\font.js" />

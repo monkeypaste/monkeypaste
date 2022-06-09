@@ -10,6 +10,7 @@ namespace MonkeyPaste {
 
         public bool isPasteRequest { get; set; } = false; //request should ONLY happen if encoded w/ templates
 
+        public bool isConvertPlainHtmlRequest { get; set; }
         public bool isReadOnlyEnabled { get; set; } = true;
 
         public string itemEncodedHtmlData { get; set; }

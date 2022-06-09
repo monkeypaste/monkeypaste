@@ -35,17 +35,24 @@ namespace MonkeyPaste {
             }
             try {
                 using (HttpClient client = new HttpClient()) {
-                    using (HttpResponseMessage response = await client.GetAsync(url)) {
-                        using (HttpContent content = response.Content) {
-                            var result = await content.ReadAsStringAsync();
-                            return result;
+                    try {
+                        using (HttpResponseMessage response = await client.GetAsync(url)) {
+                            using (HttpContent content = response.Content) {
+                                var result = await content.ReadAsStringAsync();
+                                return result;
+                            }
                         }
                     }
+                    catch (HttpRequestException) {
+                        return string.Empty;
+                    }
+                    
                 }
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine("Error scanning for url title at " + url, ex);
                 return string.Empty;
-            }
+            } 
             
         }
 
