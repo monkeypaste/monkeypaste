@@ -43,6 +43,7 @@
                        HorizontalAlignment="Center"
                        ToolTipService.InitialShowDelay="0"
                        Background="Transparent"
+                       MinWidth="50"
                        FontSize="10"
                        Foreground="{Binding DetailTextColor}"
                        MouseEnter="ClipTileDetailTextBlock_MouseEnter"

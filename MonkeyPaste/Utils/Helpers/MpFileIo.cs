@@ -9,9 +9,50 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace MonkeyPaste {
     public static class MpFileIo {
+        public static double FileListSize(string[] paths) {
+            long total = 0;
+            foreach (string path in paths) {
+                if (Directory.Exists(path)) {
+                    total += CalcDirSize(path, true);
+                } else if (File.Exists(path)) {
+                    total += new FileInfo(path).Length;
+                }
+            }
+            return ConvertBytesToMegabytes(total);
+        }
+
+        private static long CalcDirSize(string sourceDir, bool recurse = true) {
+            return CalcDirSizeHelper(new DirectoryInfo(sourceDir), recurse);
+        }
+
+        private static long CalcDirSizeHelper(DirectoryInfo di, bool recurse = true) {
+            long size = 0;
+            FileInfo[] fiEntries = di.GetFiles();
+            foreach (var fiEntry in fiEntries) {
+                Interlocked.Add(ref size, fiEntry.Length);
+            }
+
+            if (recurse) {
+                DirectoryInfo[] diEntries = di.GetDirectories("*.*", SearchOption.TopDirectoryOnly);
+                System.Threading.Tasks.Parallel.For<long>(
+                    0,
+                    diEntries.Length,
+                    () => 0,
+                    (i, loop, subtotal) => {
+                        if ((diEntries[i].Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint) {
+                            return 0;
+                        }
+                        subtotal += CalcDirSizeHelper(diEntries[i], true);
+                        return subtotal;
+                    },
+                    (x) => Interlocked.Add(ref size, x));
+            }
+            return size;
+        }
         public static string GetAbsolutePath(string path) {
             return GetAbsolutePath(null, path);
         }

@@ -51,7 +51,6 @@ namespace MonkeyPaste {
                     new MpBootstrappedItemViewModel(this,typeof(MpCursor),niw.Cursor),
                     new MpBootstrappedItemViewModel(this,typeof(MpPreferences),niw.PreferenceIO),
                     new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpRegEx)),
                     new MpBootstrappedItemViewModel(this,typeof(MpDb),niw.DbInfo),
                     new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider),niw.QueryInfo),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollection)),

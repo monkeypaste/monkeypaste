@@ -137,21 +137,24 @@ namespace MonkeyPaste.Common.Wpf {
             return rtb.Document.Blocks.Any(x => x is Table);
         }
 
-        public static void FitDocToRtb(this RichTextBox rtb, Size? unformattedDocSize = null, bool needsDragDropPadding = false) {
+        public static void FitDocToRtb(this RichTextBox rtb, bool needsDragDropPadding = false) {
             if(!rtb.IsLoaded || rtb.DataContext == null) {
                 return;            
             }
 
             bool isReadOnly = rtb.IsReadOnly;
-            Size ds = unformattedDocSize.HasValue ? unformattedDocSize.Value : rtb.Document.GetDocumentSize();
+            Size ds = rtb.DataContext is MpISizeViewModel ? 
+                        new Size((rtb.DataContext as MpISizeViewModel).Width,
+                                 (rtb.DataContext as MpISizeViewModel).Height) 
+                        : rtb.Document.GetDocumentSize();
 
 
             if (needsDragDropPadding) {
                 var fd = rtb.Document;
                 double pad = 15;
-                ds = fd.GetDocumentSize(pad);
-                fd.PageWidth = Math.Max(fd.PageWidth,ds.Width);
-                fd.PageHeight = Math.Max(fd.PageHeight,ds.Height);
+                
+                fd.PageWidth = Math.Max(fd.PageWidth,ds.Width + pad);
+                fd.PageHeight = Math.Max(fd.PageHeight,ds.Height + pad);
 
 
                 var p = rtb.Document.PagePadding;
@@ -164,8 +167,6 @@ namespace MonkeyPaste.Common.Wpf {
 
 
             } else if (!isReadOnly) {
-                ds = rtb.Document.GetDocumentSize();
-
                 var cv = rtb.GetVisualAncestor<UserControl>();
                 double w = cv == null ? rtb.ActualWidth : cv.ActualWidth;
                 double h = cv == null ? rtb.ActualHeight : cv.ActualHeight;
@@ -175,25 +176,6 @@ namespace MonkeyPaste.Common.Wpf {
                 rtb.Document.PageWidth = Math.Max(0, rtb.ActualWidth - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
                 rtb.Document.PageHeight = Math.Max(0, rtb.ActualHeight - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
             }
-
-
-            //if(isDropping || !isReadOnly) {
-            //    if (ds.Width > rtb.ActualWidth) {
-            //        //rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-            //    } else {
-            //        rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    }
-
-            //    if (ds.Height > rtb.ActualHeight) {
-            //        rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-            //    } else {
-            //        rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    }
-
-            //} else {
-            //    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //}
 
             rtb.Document.ConfigureLineHeight();
             rtb.UpdateLayout();

@@ -69,6 +69,9 @@ namespace MpWpfApp {
         }
 
         private void ClipTileEditorToolbarBorder_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if(Rtb == null) {
+                return;
+            }
             if ((bool)e.NewValue) {
                 if(!_hasLoaded) {
                     ClipTileEditorToolbarBorder.Resources["CurrentRtbTarget"] = Rtb;
@@ -118,7 +121,7 @@ namespace MpWpfApp {
             var fontSizeObj = Rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
             //FontSizeCombo.SelectedItem = fontSize;
 
-            if (fontSizeObj == null || fontSizeObj.ToString() == "{DependencyProperty.UnsetValue}") {
+            if (fontSizeObj == null || fontSizeObj.IsUnsetValue()) {
                 fontSizeObj = string.Empty;
             } else {
                 double fontSize = -1;
@@ -131,7 +134,7 @@ namespace MpWpfApp {
                 if (fontSize < 0) {
                     fontSizeObj = string.Empty;
                 } else {
-                    fontSize = Math.Round(fontSize, 1);
+                    fontSize = Math.Round(fontSize, 0);
                     fontSizeObj = fontSize.ToString();
                 }
             }
@@ -151,6 +154,7 @@ namespace MpWpfApp {
                     };
 
                     _defaultFontSizes = new ObservableCollection<string>(_defaultFontSizes.OrderBy(x => doubleParser(x)));
+                    FontSizeCombo.ItemsSource = _defaultFontSizes;
                 }
                 
                 FontSizeCombo.SelectedItem = fontSizeStr;
@@ -188,6 +192,9 @@ namespace MpWpfApp {
         }
 
         private bool CanAddTemplate(TextSelection ts) {
+            if (Rtb == null) {
+                return false;
+            }
             //disable add template button if:
             //-current selection intersects with a template
             //-contains a space

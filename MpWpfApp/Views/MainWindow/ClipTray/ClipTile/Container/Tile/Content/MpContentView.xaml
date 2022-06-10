@@ -15,7 +15,6 @@
         <local:MpContentViewDropBehavior x:Name="ContentViewDropBehavior" />
         <local:MpRtbHighlightBehavior x:Name="RtbHighlightBehavior" />
     </i:Interaction.Behaviors>
-
     <AdornerDecorator>
         <local:MpRichTextBox x:Name="Rtb"
                              DataContext="{Binding}"

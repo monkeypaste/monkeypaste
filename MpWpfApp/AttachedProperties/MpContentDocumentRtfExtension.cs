@@ -144,7 +144,9 @@ namespace MpWpfApp {
             }
 
             if(rtb.DataContext is MpClipTileViewModel ctvm) {
+                // flags detail info to reload in ctvm propertychanged
                 ctvm.CopyItemData = GetEncodedContent(rtb);
+
                 await LoadContent(rtb);
             }
         }
@@ -341,7 +343,9 @@ namespace MpWpfApp {
             rtb.Document.Blocks.Clear();
 
             MpCopyItem ci = ctvm.CopyItem;
-            new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).LoadItemData(ci.ItemData, ci.ItemType, ci.IconId);
+            new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd)
+                .LoadItemData(ci.ItemData, ci.ItemType, out Size rawDimensions);
+            ctvm.UnformattedContentSize = rawDimensions;
 
             if (ctvm == null) {
                 return;
@@ -483,6 +487,8 @@ namespace MpWpfApp {
             if (ctvm.IsTextItem) {
                 
                 rtb.Document.ConfigureLineHeight();
+                ctvm.ResetExpensiveDetails();
+                
             }
         }
 
@@ -537,6 +543,18 @@ namespace MpWpfApp {
                 hl.RequestNavigate += hl_Click_handler;
                 hl.Unloaded += hl_Unload_handler;
             }
+        }
+
+        public static Tuple<int, int> GetLineAndCharCount(MpClipTileViewModel ctvm) {
+            var rtb = FindRtbByViewModel(ctvm);
+            if(rtb == null) {
+                return new Tuple<int, int>(0, 0);
+            }
+        
+            string pt = rtb.Document.ToPlainText();
+            return new Tuple<int, int>(
+                pt.IndexListOfAll(Environment.NewLine).Count + 1,
+                pt.Length);
         }
 
         #endregion

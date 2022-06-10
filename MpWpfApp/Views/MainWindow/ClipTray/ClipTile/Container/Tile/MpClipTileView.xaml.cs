@@ -81,7 +81,16 @@ namespace MpWpfApp {
         }
 
         private void Rtbcvm_OnScrollToHomeRequest(object sender, EventArgs e) {
-            ContentView.ScrollToHome();
+            var cv = this.GetVisualDescendent<MpContentView>();
+            if(cv == null) {
+                var qcv = this.GetVisualDescendent<MpQuillEditorView>();
+                if(qcv == null) {
+                    return;
+                }
+                // TODO add js scroll to home and/or find out how to scroll to home w/ chromium
+                return;
+            }
+            cv.ScrollToHome();
         }
 
         private void ClipTileClipBorder_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {

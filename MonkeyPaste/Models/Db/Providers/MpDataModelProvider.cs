@@ -610,12 +610,12 @@ namespace MonkeyPaste {
             if (ci == null) {
                 return textTemplateGuids;
             }
-            var encodedTemplateGuids = MpRegEx.GetRegExForTokenType(MpSubTextTokenType.EncodedTextTemplate).Matches(ci.ItemData);
+            var encodedTemplateGuids = MpRegEx.RegExLookup[MpRegExType.EncodedTextTemplate].Matches(ci.ItemData);
             if (encodedTemplateGuids.Count == 0) {
                 return textTemplateGuids;
             }
             foreach (Match encodedTemplateGuid in encodedTemplateGuids) {
-                var guidMatch = MpRegEx.GetRegExForTokenType(MpSubTextTokenType.Guid).Match(encodedTemplateGuid.Value);
+                var guidMatch = MpRegEx.RegExLookup[MpRegExType.Guid].Match(encodedTemplateGuid.Value);
                 textTemplateGuids.Add(guidMatch.Value);
             }
             textTemplateGuids = textTemplateGuids.Distinct().ToList();

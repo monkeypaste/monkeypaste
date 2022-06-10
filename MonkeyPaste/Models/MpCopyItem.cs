@@ -92,6 +92,18 @@ namespace MonkeyPaste {
 
             }
         }
+
+        public static MpPortableDataFormat GetDefaultFormatForItemType(MpCopyItemType itemType) {
+            switch(itemType) {                
+                case MpCopyItemType.Text:
+                    return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Rtf);
+                case MpCopyItemType.Image:
+                    return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.Bitmap);
+                case MpCopyItemType.FileList:
+                    return MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.FileDrop);
+            }
+            return null;
+        }
              
         #endregion
 
@@ -145,6 +157,9 @@ namespace MonkeyPaste {
         [Column("HexColor")]
         public string ItemColor { get; set; } = string.Empty;
 
+        [Column("e_")]
+        public string PrefferedFormatName { get; set; } = string.Empty;
+
         #endregion
 
         #region Fk Models
@@ -197,6 +212,13 @@ namespace MonkeyPaste {
                 }
             }
         }
+
+        [Ignore]
+        public MpPortableDataFormat PreferredFormat {
+            get => MpPortableDataFormats.GetDataFormat(PrefferedFormatName);
+            set => PrefferedFormatName = value == null ? null : value.Name;
+        }
+
         #endregion
 
         #region MpICopyItemReference Implementation
@@ -222,6 +244,7 @@ namespace MonkeyPaste {
         public static async Task<MpCopyItem> Create(
             int sourceId = 0,
             string data = "", 
+            string preferredFormatName = null,
             string copyItemSourceGuid = "",
             MpCopyItemType itemType = MpCopyItemType.None,
             string title = "",
@@ -249,6 +272,11 @@ namespace MonkeyPaste {
                     itemType = MpCopyItemType.Text;
                 }
             }
+
+            preferredFormatName = string.IsNullOrEmpty(preferredFormatName) ?
+                                    GetDefaultFormatForItemType(itemType).Name :
+                                    preferredFormatName;
+
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,
@@ -256,6 +284,7 @@ namespace MonkeyPaste {
                 ItemDescription = description,
                 ItemData = data,
                 ItemType = itemType,
+                PrefferedFormatName = preferredFormatName,                                        
                 SourceId = sourceId,
                 CopyCount = 1,
                 CopyItemSourceGuid = copyItemSourceGuid,
@@ -518,4 +547,5 @@ namespace MonkeyPaste {
         Image,
         FileList
     }
+
 }

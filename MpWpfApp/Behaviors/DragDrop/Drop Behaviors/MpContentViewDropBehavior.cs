@@ -368,10 +368,10 @@ namespace MpWpfApp {
 
 
             if(dropData.IsStringBase64()) {
-                dropRange.LoadImage(dropData);
+                dropRange.LoadImage(dropData, out Size dummySize);
             } else if(dropData.IsStringFileOrPathFormat()) {
                 dropRange = dropRange.End.ToTextRange();
-                dropRange.LoadItemData(dropData, MpCopyItemType.FileList);
+                dropRange.LoadItemData(dropData, MpCopyItemType.FileList, out Size dummySize);
             } else if (dropData.IsStringRichTextTable()) {
                 string csv = MpCsvToRtfTableConverter.GetCsv(dropData);
                 dropRange.LoadTable(csv);
@@ -512,7 +512,7 @@ namespace MpWpfApp {
                 return;
             }
             var rtb = AssociatedObject.Rtb;
-            rtb.FitDocToRtb(null,true);
+            rtb.FitDocToRtb(true);
             _autoScrollVelocity = _baseAutoScrollVelocity;
             if(rtb.DataContext is MpClipTileViewModel ctvm) {
                 ctvm.IsCurrentDropTarget = true;

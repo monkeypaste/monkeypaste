@@ -243,7 +243,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static string ParseGuid(this string str) {
-            var m = MpRegEx.GetRegExForTokenType(MpSubTextTokenType.Guid).Match(str);
+            var m = MpRegEx.RegExLookup[MpRegExType.Guid].Match(str);
             if(m.Success) {
                 return m.Value;
             }
@@ -350,7 +350,7 @@ namespace MonkeyPaste.Common {
             if(string.IsNullOrWhiteSpace(str)) {
                 return false;
             }
-            return MpRegEx.IsMatch(MpSubTextTokenType.HexColor, str);
+            return MpRegEx.RegExLookup[MpRegExType.HexColor].IsMatch(str);
         }
 
         public static bool IsStringNamedColor(this string str) {
@@ -369,7 +369,7 @@ namespace MonkeyPaste.Common {
         }
 
         private static Regex _IsNotBase64RegEx;
-        public static bool IsStringBase642(this string str) {
+        public static bool IsStringBase64(this string str) {
             // Check that the length is a multiple of 4 characters
             //Check that every character is in the set A - Z, a - z, 0 - 9, +, / except for padding at the end which is 0, 1 or 2 '=' characters
 
@@ -379,17 +379,10 @@ namespace MonkeyPaste.Common {
             if (str.Length % 4 != 0 || str.Length < 100) {
                 return false;
             }
-            if(_IsNotBase64RegEx == null) {
-                //_IsNotBase64RegEx = new Regex(@"[^a-zA-Z0-9+/=]",RegexOptions.Compiled);
-                _IsNotBase64RegEx = new Regex(@"([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)", RegexOptions.Compiled);
-            }
-            if(!_IsNotBase64RegEx.IsMatch(str)) {
-                return false;
-            }
-            return true;
+            return !MpRegEx.RegExLookup[MpRegExType.Is_NOT_Base64Str].IsMatch(str);
         }
 
-        public static bool IsStringBase64(this string str) {
+        public static bool IsStringBase64_FromException(this string str) {
             if(string.IsNullOrWhiteSpace(str)) {
                 return false;
             }

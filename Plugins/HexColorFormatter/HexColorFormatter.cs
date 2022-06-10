@@ -21,7 +21,7 @@ namespace HexColorFormatter {
             var fd = rtf.ToFlowDocument();
             string pt = fd.ToPlainText();
 
-            var mc = MpRegEx.GetRegExForTokenType(MpSubTextTokenType.HexColor).Matches(pt);
+            var mc = MpRegEx.RegExLookup[MpRegExType.HexColor].Matches(pt);
             var tp = fd.ContentStart;
             var trl = new List<TextRange>();
 

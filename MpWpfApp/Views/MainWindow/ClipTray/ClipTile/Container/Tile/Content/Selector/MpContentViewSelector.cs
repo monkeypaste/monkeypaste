@@ -24,23 +24,23 @@ namespace MpWpfApp {
             if (ctvm == null) {
                 return null;
             }
-
-            string keyStr = "ContentTemplate";
-            switch(ctvm.ItemType) {
-                case MpCopyItemType.Text:
-                    if (!MpClipTileViewModel.USING_BROWSER) {
-                        //civm.CopyItemData.IsStringRichText()) {
-                        keyStr = "Rtb" + keyStr;
-                    } else {
-                        keyStr = "Quill" + keyStr;
-                    }
-                    //keyStr = "Rtb" + keyStr;
-                    break;
-                default:
-                    keyStr = ctvm.ItemType.EnumToName() + keyStr;
-                    break;
+                        
+            string keyStr;
+            if (ctvm.IsChromiumEditor) {
+                keyStr = "QuillViewTemplate";
+            } else {
+                keyStr = "ContentViewTemplate";
             }
-            var result = (container as FrameworkElement).GetVisualAncestor<Border>().Resources[keyStr] as DataTemplate;
+            var fe = container as FrameworkElement;
+            if(fe == null) {
+                return null;
+            }
+            var pfe = fe.GetVisualAncestor<DockPanel>();
+            if(pfe == null) {
+                return null;
+            }
+
+            var result = pfe.Resources[keyStr] as DataTemplate;
             return result;
         }
     }

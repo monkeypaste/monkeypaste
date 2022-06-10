@@ -285,7 +285,7 @@
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
     <Compile Include="Utils\Builders\MpHtmlClipboardData.cs" />
-    <Compile Include="Utils\Documents\MpContentDocumentExtensions.cs" />
+    <Compile Include="Utils\Documents\MpRtbContentExtensions.cs" />
     <Compile Include="Utils\Extensions\MpWebView2Extensions.cs" />
     <Compile Include="Utils\MpJsComAdapter.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
@@ -400,14 +400,12 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentView.xaml.cs">
       <DependentUpon>MpContentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Selector\MpContentListViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml.cs">
       <DependentUpon>MpFileItemParagraph.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\MpQuillEditorView.xaml.cs">
       <DependentUpon>MpQuillEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Selector\MpTextViewTemplateSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\FindAndReplace\MpFindReplaceToolbarView.xaml.cs">
       <DependentUpon>MpFindReplaceToolbarView.xaml</DependentUpon>
     </Compile>

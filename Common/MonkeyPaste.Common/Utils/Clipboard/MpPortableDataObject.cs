@@ -180,6 +180,8 @@ namespace MonkeyPaste.Common {
         public const string Unicode = "Unicode";
         public const string OemText = "OEMText";
 
+
+
         public static string[] Formats => _formatLookup.Select(x => x.Value.Name).ToArray();
 
         public static void Init(MpIPlatformDataObjectRegistrar registrar) {

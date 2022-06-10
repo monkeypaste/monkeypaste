@@ -12,6 +12,7 @@ using System.Windows.Media;
 using HtmlAgilityPack;
 using System.Diagnostics;
 using MonkeyPaste.Common.Wpf;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public static class MpRtfToHtmlConverter {
@@ -363,7 +364,7 @@ namespace MpWpfApp {
             //}
             string itemGuid = System.Guid.NewGuid().ToString();
             string html = MpRtfToHtmlConverter.ConvertRtfToHtml(
-                MpHelpers.ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtfTableSample.rtf"),
+                MpFileIo.ReadTextFromFile(@"C:\Users\tkefauver\Desktop\rtfTableSample.rtf"),
                 new Dictionary<string, string>() { { "copyItemBlockGuid", itemGuid } },
                     new Dictionary<string, string>() { { "copyItemInlineGuid", itemGuid } });
             MpHelpers.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtf2html2.html", html, false);

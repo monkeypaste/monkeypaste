@@ -190,25 +190,11 @@ namespace MpWpfApp {
 
         #region Clip Tray
 
-        public int MaxRecentClipTiles {
-            get {
-                return DefaultTotalVisibleClipTiles;
-            }
-        }
+        public int MaxRecentClipTiles => DefaultTotalVisibleClipTiles;
 
-        public int DefaultTotalVisibleClipTiles {
-            get {
-                return 6;// (int)(ClipTrayDefaultWidth / ClipTileMinSize) + 1;
-            }
-        }
+        public int DefaultTotalVisibleClipTiles => 6;// (int)(ClipTrayDefaultWidth / ClipTileMinSize) + 1;
 
-        public double ClipTrayDefaultWidth {
-            get {
-                return ScreenWidth - AppStateButtonPanelWidth;
-            }
-        }
-
-        
+        public double ClipTrayDefaultWidth => ScreenWidth - AppStateButtonPanelWidth;
 
         #region Clip Tile
 
@@ -226,11 +212,7 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileDefaultMinSize {
-            get {
-                return ClipTrayDefaultWidth / DefaultTotalVisibleClipTiles; 
-            }
-        }
+        public double ClipTileDefaultMinSize => ClipTrayDefaultWidth / DefaultTotalVisibleClipTiles;
 
         private double _clipTileMinSize = 0;
         public double ClipTileMinSize {
@@ -446,7 +428,7 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileContentItemMinHeight {
+        public double ClipTileContentDefaultMinHeight {
             get {
                 return ClipTileContentDefaultHeight / 5;
             }
@@ -455,7 +437,7 @@ namespace MpWpfApp {
 
         public double ClipTileContentItemDragButtonSize {
             get {
-                return ClipTileContentItemMinHeight * 0.5;
+                return ClipTileContentDefaultMinHeight * 0.5;
             }
         }
 

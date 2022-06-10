@@ -334,7 +334,7 @@ namespace MpWpfApp {
                     if (!MpDragDropManager.IsDragAndDrop) {
                         // NOTE content drop removes wrapping (changes page size)
                         // and fit will discard that
-                        Rtb.FitDocToRtb(null,BindingContext.IsCurrentDropTarget);
+                        Rtb.FitDocToRtb(BindingContext.IsCurrentDropTarget);
                     }
                 }
 

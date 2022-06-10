@@ -79,8 +79,7 @@ namespace MpWpfApp {
         #region Constructors
         public MpTemplateCollectionViewModel() : base(null) { }
 
-        public MpTemplateCollectionViewModel(MpClipTileViewModel ctvm) : base(ctvm) {
-        }
+        public MpTemplateCollectionViewModel(MpClipTileViewModel ctvm) : base(ctvm) { }
 
         #endregion
 

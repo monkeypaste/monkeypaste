@@ -53,7 +53,7 @@ namespace MpWpfApp {
             if(rtb == null) {
                 return;
             }
-            rtb.FitDocToRtb(null,BindingContext.IsCurrentDropTarget);
+            rtb.FitDocToRtb(BindingContext.IsCurrentDropTarget);
         }
     }
 }

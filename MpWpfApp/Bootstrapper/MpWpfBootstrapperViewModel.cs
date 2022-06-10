@@ -128,29 +128,8 @@ namespace MpWpfApp {
             //MpRtfToHtmlConverter.Test();
 
             //var cil = await MpDb.GetItemsAsync<MpCopyItem>();
-            //foreach (var ci in cil.Where(x=>x.ItemType != MpCopyItemType.Image)) {
-            //    if(ci.ItemType == MpCopyItemType.Text) {
-            //        int cci_sIdx = ci.ItemData.IndexOf(@"\{c\{");
-            //        if(cci_sIdx >= 0) {
-            //            ci.ItemData_rtf = ci.ItemData;
-            //            while(cci_sIdx >= 0) {
-            //                string endToken = @"\}c\}";
-            //                int cci_eIdx = ci.ItemData.IndexOf(endToken);
-            //                if(cci_eIdx < 0) {
-            //                    Debugger.Break();
-            //                }
-            //                string encodeToReplace = ci.ItemData.Substring(cci_sIdx, cci_eIdx - cci_sIdx + endToken.Length);
-            //                ci.ItemData = ci.ItemData.Replace(encodeToReplace, string.Empty);
-            //                cci_sIdx = ci.ItemData.IndexOf(@"\{c\{");
-            //            }
-            //        }
-            //    }
-
-            //    ci.CompositeParentCopyItemId = 0;
-            //    ci.CompositeSortOrderIdx = 0;
-            //    ci.RootCopyItemGuid = string.Empty;
-            //    ci.CopyItemSourceGuid = string.Empty;
-
+            //foreach (var ci in cil) {
+            //    ci.PreferredFormat = MpCopyItem.GetDefaultFormatForItemType(ci.ItemType);
             //    await ci.WriteToDatabaseAsync();
             //}
             //Debugger.Break();
@@ -161,7 +140,7 @@ namespace MpWpfApp {
 
             //MpFileIo.WriteTextToFile(@"C:\Users\tkefauver\Desktop\quillHtmlToRtfTest.rtf", rtf);
             //Debugger.Break();
-            MpQuillHtmlToRtfConverter.Test();
+            //MpQuillHtmlToRtfConverter.Test();
             sw.Stop();
             MpConsole.WriteLine($"Bootstrapper loaded in {sw.ElapsedMilliseconds} ms");
 

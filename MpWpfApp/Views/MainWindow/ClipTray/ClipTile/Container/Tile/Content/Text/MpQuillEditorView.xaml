@@ -30,7 +30,7 @@
                                 local:MpIsFocusedExtension.IsEnabled="True"
                                 local:MpIsFocusedExtension.IsFocused="{Binding IsContentFocused,
                                                                                Mode=TwoWay}"
-                                local:MpDocumentHtmlExtension.DocumentRtf="{Binding CopyItemData}"
+                                local:MpDocumentHtmlExtension.DocumentHtml="{Binding CopyItemData}"
                                 local:MpDocumentHtmlExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
                                 local:MpDocumentHtmlExtension.IsSelected="{Binding IsSelected,
                                                                                    Mode=TwoWay}"

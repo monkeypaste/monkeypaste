@@ -32,7 +32,6 @@ namespace MpWpfApp {
     public class MpDocumentHtmlExtension : DependencyObject {
         #region Private Variables
 
-        private static double _readOnlyWidth;
         #endregion
         public const string ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
         public const string ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
@@ -44,6 +43,24 @@ namespace MpWpfApp {
             ENCODED_TEMPLATE_CLOSE_TOKEN);
 
         private static Regex _encodedTemplateRegEx;
+
+
+        #region ReadOnlyWidth
+
+        public static double GetReadOnlyWidth(DependencyObject obj) {
+            return (double)obj.GetValue(ReadOnlyWidthProperty);
+        }
+        public static void SetReadOnlyWidth(DependencyObject obj, double value) {
+            obj.SetValue(ReadOnlyWidthProperty, value);
+        }
+        public static readonly DependencyProperty ReadOnlyWidthProperty =
+          DependencyProperty.RegisterAttached(
+            "ReadOnlyWidth",
+            typeof(double),
+            typeof(MpDocumentHtmlExtension),
+            new FrameworkPropertyMetadata(MpClipTileViewModel.DefaultBorderWidth));
+
+        #endregion
 
         #region IsSelected
 
@@ -151,17 +168,17 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region DocumentRtf
+        #region DocumentHtml
 
-        public static string GetDocumentRtf(DependencyObject obj) {
-            return (string)obj.GetValue(DocumentRtfProperty);
+        public static string GetDocumentHtml(DependencyObject obj) {
+            return (string)obj.GetValue(DocumentHtmlProperty);
         }
-        public static void SetDocumentRtf(DependencyObject obj, string value) {
-            obj.SetValue(DocumentRtfProperty, value);
+        public static void SetDocumentHtml(DependencyObject obj, string value) {
+            obj.SetValue(DocumentHtmlProperty, value);
         }
-        public static readonly DependencyProperty DocumentRtfProperty =
+        public static readonly DependencyProperty DocumentHtmlProperty =
           DependencyProperty.RegisterAttached(
-            "DocumentRtf",
+            "DocumentHtml",
             typeof(string),
             typeof(MpDocumentHtmlExtension),
             new FrameworkPropertyMetadata {
@@ -171,8 +188,10 @@ namespace MpWpfApp {
                         var lrm = CreateLoadRequestMessage(cwb, e.NewValue);
                         cwb.FrameLoadEnd += async (sender, args) => {
                             if (args.Frame.IsMain) {
-                                var initCmd = $"init('{lrm.SerializeToByteString()}')";
-                                var result = await cwb.EvaluateScriptAsync(initCmd);
+                                //var initCmd = $"init('{lrm.SerializeToByteString()}')";
+                                //var result = await cwb.EvaluateScriptAsync(initCmd);
+
+                                await cwb.EvaluateScriptAsync(null, "init", lrm);
                             }
                         };
                     }
@@ -214,7 +233,7 @@ namespace MpWpfApp {
 
                     var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
                     if (ctcv != null) {
-                        ctcv.TileResizeBehavior.Resize(_readOnlyWidth - ctcv.ActualWidth, 0);
+                        ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(fe));
                     }
 
                     MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
@@ -223,11 +242,12 @@ namespace MpWpfApp {
         }
 
         private static MpQuillDisableReadOnlyRequestMessage CreateDisableReadOnlyMessage(FrameworkElement fe) {
-            MpConsole.WriteLine($"Tile content item '{(fe.DataContext as MpClipTileViewModel).CopyItemTitle}' is editable");
+            var ctvm = fe.DataContext as MpClipTileViewModel;
+            MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is editable");
 
             MpQuillDisableReadOnlyRequestMessage drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
                 allAvailableTextTemplates = MpMasterTemplateModelCollection.AllTemplates.ToList(),
-                editorHeight = fe.GetVisualAncestor<MpContentView>().ActualHeight
+                editorHeight = ctvm.EditorHeight//fe.GetVisualAncestor<MpContentView>().ActualHeight
             };
             return drorMsg;
         }
@@ -241,14 +261,13 @@ namespace MpWpfApp {
 
                     var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
                     if (ctcv != null) {
-                        _readOnlyWidth = ctcv.ActualWidth;
-                        if (qrm.editorWidth > ctcv.ActualWidth) {
-                            ctcv.TileResizeBehavior.Resize(qrm.editorWidth - ctcv.ActualWidth, 0);
+                        SetReadOnlyWidth(fe, ctcv.ActualWidth);
 
-                            fe.Focus();
+                        if (ctcv.ActualWidth < 900) {
+                            ctcv.TileResizeBehavior.ResizeWidth(900);// qrm.editorWidth - ctcv.ActualWidth, 0);
                         }
                     } else {
-                        _readOnlyWidth = MpClipTileViewModel.DefaultBorderWidth;
+                        SetReadOnlyWidth(fe,MpClipTileViewModel.DefaultBorderWidth);
                     }
                 }
             }

@@ -19,6 +19,7 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Com
 using static OpenTK.Graphics.OpenGL.GL;
 using System.Windows.Documents;
 using System.Web.UI.WebControls;
+using System.Runtime.CompilerServices;
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel : 
@@ -48,10 +49,19 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        //public ObservableCollection<MpClipTileViewModel> Items { get; set; } = new ObservableCollection<MpClipTileViewModel>();
-
+        
         public ObservableCollection<MpClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpClipTileViewModel>();
 
+        public IEnumerable<MpClipTileViewModel> AllItems { 
+            get {
+                foreach(var ctvm in Items) {
+                    yield return ctvm;
+                }
+                foreach(var pctvm in PinnedItems) {
+                    yield return pctvm;
+                }
+            }
+        }
         public MpClipTileViewModel HeadItem => Items.Count > 0 ? Items[0] : null;
 
         public MpClipTileViewModel TailItem => Items.Count > 0 ? Items[Items.Count - 1] : null;
@@ -1172,8 +1182,6 @@ namespace MpWpfApp {
         public void ReceivedResizerBehaviorMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ResizingContent:
-                    bool isTileResize = false;
-
                     double oldHeadTrayX = HeadItem == null ? 0 : HeadItem.TrayX;
                     double oldScrollOffset = ScrollOffset;
 
@@ -1187,12 +1195,11 @@ namespace MpWpfApp {
                         MpMeasurements.Instance.ClipTileMinSize += deltaHeight;
                         MpMeasurements.Instance.OnPropertyChanged(nameof(MpMeasurements.Instance.ClipTileTitleHeight));
 
-                        MpClipTileViewModel.DefaultBorderWidth += deltaHeight;
+                        MpClipTileViewModel.DefaultBorderWidth += deltaHeight;                        
                         MpClipTileViewModel.DefaultBorderHeight += deltaHeight;
 
-
-                        Items.ForEach(x => x.TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize);
-                        Items.ForEach(x => x.TileBorderWidth += deltaHeight);
+                        AllItems.ForEach(x => x.TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize);
+                        AllItems.ForEach(x => x.TileBorderWidth += deltaHeight);
 
                         OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
                         OnPropertyChanged(nameof(ClipTrayScreenWidth));
@@ -1202,7 +1209,6 @@ namespace MpWpfApp {
                         Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
                     } else if(SelectedItem != null) {
                         //tile resize
-                        isTileResize = true;
                         PersistentUniqueWidthTileLookup
                             .AddOrReplace(SelectedItem.QueryOffsetIdx, SelectedItem.TileBorderWidth);
                         Items.
@@ -1456,96 +1462,86 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ToggleTileIsPinnedCommand => new RelayCommand<object>(
-            async(args) => {
-                bool wasBusy = IsBusy;
-                IsBusy = true;
-
+        public ICommand PinTileCommand => new RelayCommand<object>(
+            async (args) => {
                 var pctvm = args as MpClipTileViewModel;
-                MpClipTileViewModel resultTile = null;
-                bool needsRequery = false;
-                bool wasPinned = false;
-                if (pctvm.IsPinned) {
-                    PinnedItems.Remove(pctvm);
-                    if (pctvm.QueryOffsetIdx >= 0) {
-                        needsRequery = true;
-                        resultTile = pctvm;
-                        //resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x => x.CopyItem).ToList(), pctvm.QueryOffsetIdx);
-                        if(pctvm.QueryOffsetIdx >= HeadQueryIdx && pctvm.QueryOffsetIdx <= TailQueryIdx) {
-                            var insertBeforeItem = Items.Aggregate((a, b) => a.QueryOffsetIdx > b.QueryOffsetIdx && a.QueryOffsetIdx < pctvm.QueryOffsetIdx ? a : b);
-                            if(insertBeforeItem == null) {
-                                Items.Add(pctvm);
-                            } else {
-                                int insertIdx = Items.IndexOf(insertBeforeItem);
-                                Items.Insert(insertIdx, pctvm);
-                            }
-                        }
-                        
-                    }
-                     
-                } else {
-                    if (pctvm.QueryOffsetIdx >= 0) {
-                        // only recreate tiles that are already in the tray (they won't be if new)
-                        resultTile = await CreateClipTileViewModel(pctvm.CopyItem, pctvm.QueryOffsetIdx);
-                    } else {
-                        resultTile = pctvm;
-                    }
-                    PinnedItems.Add(resultTile);
-                    if (Items.Contains(pctvm)) {
-                        //swap to-be-pinned item w/ a new placeholder
-                        Items.Remove(pctvm);
-                        //int oldIdx = Items.IndexOf(pctvm);
-                        pctvm = await CreateClipTileViewModel(null);
-                        //Items.Move(oldIdx, Items.Count - 1);
-                        Items.Add(pctvm);
-                    }
-                    wasPinned = true;
+                if (pctvm.QueryOffsetIdx >= 0) {
+                    // only recreate tiles that are already in the tray (they won't be if new)
+                    pctvm = await CreateClipTileViewModel(pctvm.CopyItem, pctvm.QueryOffsetIdx);
                 }
-                
-                if(resultTile != null && wasPinned) {
-                    //ClearClipSelection(false);
-                    resultTile.IsSelected = true;
-                    resultTile.OnPropertyChanged(nameof(resultTile.IsPinned));
-                    resultTile.OnPropertyChanged(nameof(resultTile.IsPlaceholder));
-                }
-
-                if (needsRequery) {
-                    //MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                    QueryCommand.Execute(ScrollOffset);
-                    await Task.Delay(100);
-                    while(IsRequery) {
-                        await Task.Delay(100);
-                    }
-                    if(resultTile != null) {
-                        var ctvm = Items.Where(x => !x.IsPlaceholder).FirstOrDefault(x => x.CopyItemId == resultTile.CopyItemId);
-                        if(ctvm != null) {
-                            int idx = Items.IndexOf(ctvm);
-                            ClearClipSelection(false);
-                            Items[idx].ResetSubSelection();
-                            StoreSelectionState(Items[idx]);
-                        }
-                    }
+                PinnedItems.Add(pctvm);
+                if (Items.Contains(pctvm)) {
+                    //swap to-be-pinned item w/ a new placeholder
+                    Items.Remove(pctvm);
+                    //int oldIdx = Items.IndexOf(pctvm);
+                    pctvm = await CreateClipTileViewModel(null);
+                    //Items.Move(oldIdx, Items.Count - 1);
+                    Items.Add(pctvm);
                 }
                 pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
+                pctvm.OnPropertyChanged(nameof(pctvm.IsPlaceholder));
+                
                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
 
-
-                if (!IsAnyTilePinned) {
-                    PinTrayTotalWidth = PinTrayScreenWidth = 0;
-                } 
                 OnPropertyChanged(nameof(IsAnyTilePinned));
                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
-
                 OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
                 OnPropertyChanged(nameof(ClipTrayTotalWidth));
                 OnPropertyChanged(nameof(MaximumScrollOfset));
 
-                IsBusy = wasBusy;
+                SelectedItem = pctvm;
             },
-            (args) => args != null && 
-                      (args is MpClipTileViewModel || 
-                       args is List<MpClipTileViewModel>));
+            (args) => args != null && args is MpClipTileViewModel ctvm && !ctvm.IsPinned && !ctvm.IsPlaceholder);
+
+        public ICommand UnpinTileCommand => new RelayCommand<object>(
+             (args) => {
+                var upctvm = args as MpClipTileViewModel;
+
+                PinnedItems.Remove(upctvm);
+                if (upctvm.QueryOffsetIdx >= 0) {
+                    //resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x => x.CopyItem).ToList(), pctvm.QueryOffsetIdx);
+                    if (upctvm.QueryOffsetIdx >= HeadQueryIdx && upctvm.QueryOffsetIdx <= TailQueryIdx) {
+                        var insertBeforeItem = Items.Aggregate((a, b) => a.QueryOffsetIdx > b.QueryOffsetIdx && a.QueryOffsetIdx < upctvm.QueryOffsetIdx ? a : b);
+                        if (insertBeforeItem == null) {
+                            Items.Add(upctvm);
+                        } else {
+                            int insertIdx = Items.IndexOf(insertBeforeItem);
+                            Items.Insert(insertIdx, upctvm);
+                        }
+                    }
+                }
+
+                upctvm.OnPropertyChanged(nameof(upctvm.IsPinned));
+                upctvm.OnPropertyChanged(nameof(upctvm.IsPlaceholder));
+                
+                if (!IsAnyTilePinned) {
+                    PinTrayTotalWidth = PinTrayScreenWidth = 0;
+                }
+
+                Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
+
+                OnPropertyChanged(nameof(IsAnyTilePinned));
+                OnPropertyChanged(nameof(ClipTrayScreenWidth));
+                OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
+                OnPropertyChanged(nameof(ClipTrayScreenWidth));
+                OnPropertyChanged(nameof(ClipTrayTotalWidth));
+                OnPropertyChanged(nameof(MaximumScrollOfset));
+
+                SelectedItem = upctvm;
+            },
+            (args) => args != null && args is MpClipTileViewModel ctvm && ctvm.IsPinned);
+
+        public ICommand ToggleTileIsPinnedCommand => new RelayCommand<object>(
+            (args) => {
+                var pctvm = args as MpClipTileViewModel;
+                if (pctvm.IsPinned) {
+                    UnpinTileCommand.Execute(args);                     
+                } else {
+                    PinTileCommand.Execute(args);
+                }
+            },
+            (args) => args != null && args is MpClipTileViewModel);
 
 
         public ICommand DuplicateSelectedClipsCommand => new RelayCommand(

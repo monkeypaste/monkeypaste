@@ -68,7 +68,7 @@ namespace MonkeyPaste {
             if (!hasValidExtension) {
                 return false;
             }
-            return MpRegEx.IsMatch(MpSubTextTokenType.Uri, lstr);
+            return MpRegEx.RegExLookup[MpRegExType.Uri].IsMatch(lstr);
         }
 
         public static string GetXmlElementContent(string xml, string element) {

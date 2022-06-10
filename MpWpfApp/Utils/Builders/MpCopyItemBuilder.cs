@@ -51,7 +51,7 @@ namespace MpWpfApp {
                     itemType = MpCopyItemType.Text;                    
                     string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
                     htmlClipboardData = MpHtmlClipboardData.Parse(rawHtmlData);
-                    itemData = await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(htmlClipboardData.Html);
+                    itemData = htmlClipboardData.Html;
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
@@ -153,6 +153,7 @@ namespace MpWpfApp {
                 var source = await MpSource.Create(app, url);
                 var ci = await MpCopyItem.Create(
                     sourceId: source.Id,
+                    preferredFormatName: htmlClipboardData == null ? null : MpPortableDataFormats.Html,
                     data: itemData,
                     itemType: itemType,
                     suppressWrite: suppressWrite);

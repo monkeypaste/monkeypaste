@@ -21,20 +21,23 @@ using System.Windows.Markup;
 using System.ComponentModel;
 
 namespace MpWpfApp {
-    public static class MpContentDocumentExtensions {
-        public static InlineUIContainer LoadImage(this TextRange tr, string base64Str, Size? docSize = null) {
+    public static class MpRtbContentExtensions {
+        public static InlineUIContainer LoadImage(
+            this TextRange tr, 
+            string base64Str, 
+            out Size unformattedContentSize) {
             if (!base64Str.IsStringBase64()) {
-                Debugger.Break();
+                unformattedContentSize = new Size();
                 return null;
             }
 
-            docSize = docSize.HasValue ? docSize : MpMeasurements.Instance.ClipTileContentDefaultSize;
             BitmapSource bmpSrc = base64Str.ToBitmapSource();//.Resize(docSize.Value);
-
+            unformattedContentSize = new Size(bmpSrc.PixelWidth, bmpSrc.PixelHeight);
+            
             var img = new Image() {
                 Source = bmpSrc,
-                Width = docSize.Value.Width,
-                Height = docSize.Value.Height,
+                Width = MpMeasurements.Instance.ClipTileContentDefaultSize.Width,
+                Height = MpMeasurements.Instance.ClipTileContentDefaultSize.Height,
                 Stretch = System.Windows.Media.Stretch.Uniform
             };
 
@@ -58,9 +61,9 @@ namespace MpWpfApp {
             // return new InlineUIContainer(img,tr.Start);
         }
 
-        public static FlowDocument ToImageDocument(this string base64Str, Size? docSize = null) {
+        public static FlowDocument ToImageDocument(this string base64Str, out Size unformattedContentSize) {
             if (!base64Str.IsStringBase64()) {
-                Debugger.Break();
+                unformattedContentSize = new Size();
                 return string.Empty.ToFlowDocument();
             }
 
@@ -75,7 +78,8 @@ namespace MpWpfApp {
 
             var fd = string.Empty.ToFlowDocument();
             var p = fd.Blocks.FirstBlock as Paragraph;
-            p.ContentRange().LoadImage(base64Str, docSize);
+            p.ContentRange().LoadImage(base64Str, out Size imgSize);
+            unformattedContentSize = imgSize;
 
             fd.ConfigureLineHeight();
             p.ContentRange().ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Center);
@@ -309,13 +313,17 @@ namespace MpWpfApp {
             fd.Blocks.FirstBlock.ContentRange().LoadFileItem(path, iconId, iconSize);
             return fd;
         }
-        public static void LoadRtf(this TextRange tr, string str) {
+        public static void LoadRtf(this TextRange tr, string str, out Size unformattedContentSize) {
             using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
                 try {
                     using (var subStream = new MemoryStream()) {
                         var subDoc = new FlowDocument();
                         var sub_tr = new TextRange(subDoc.ContentStart, subDoc.ContentEnd);
                         sub_tr.Load(stream, DataFormats.Rtf);
+                        var ds = new Size(subDoc.PageWidth, subDoc.PageHeight);
+                        ds = subDoc.GetDocumentSize();
+                        unformattedContentSize = ds;
+
                         sub_tr.Save(subStream, DataFormats.Rtf);
                         subStream.Seek(0, SeekOrigin.Begin);
                         tr.Load(subStream, DataFormats.Rtf);
@@ -329,6 +337,7 @@ namespace MpWpfApp {
                 }
                 catch (Exception ex) {
                     MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...", ex);
+                    unformattedContentSize = new Size();
                     return;
                 }
             }
@@ -522,19 +531,24 @@ namespace MpWpfApp {
 
             #endregion
         }
-        public static void LoadItemData(this TextRange tr, string str, MpCopyItemType strItemDataType, int iconId = 0) {
+        public static void LoadItemData(
+            this TextRange tr, 
+            string str, 
+            MpCopyItemType strItemDataType, 
+            out Size unformattedContentSize) {
             // NOTE iconId is only used to convert file path's to rtf w/ icon 
 
+            unformattedContentSize = new Size();
             if (string.IsNullOrEmpty(str)) {
                 tr.Text = str;
                 return;
             }
             switch (strItemDataType) {
                 case MpCopyItemType.Text:
-                    tr.LoadRtf(str);
+                    tr.LoadRtf(str, out unformattedContentSize);
                     break;
                 case MpCopyItemType.Image:
-                    tr.LoadImage(str);
+                    tr.LoadImage(str, out unformattedContentSize);
                     break;
                 case MpCopyItemType.FileList:
                     var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
@@ -590,7 +604,10 @@ namespace MpWpfApp {
                 }
             }
             if (str.IsStringBase64()) {
-                return str.ToImageDocument();
+                var img_fd = str.ToImageDocument(out Size imgSize);
+                img_fd.PageWidth = imgSize.Width;
+                img_fd.PageHeight = imgSize.Height;
+                return img_fd;
             }
             if (str.IsStringFileOrPathFormat()) {
                 return str.ToFilePathDocument();
@@ -673,7 +690,7 @@ namespace MpWpfApp {
                 }
             }
             if (str.IsStringBase64()) {
-                return str.ToImageDocument().ToRichText();
+                return str.ToImageDocument(out Size imgSize).ToRichText();
             }
             if (str.IsStringFileOrPathFormat()) {
                 return str.ToFilePathDocument(iconId).ToRichText();

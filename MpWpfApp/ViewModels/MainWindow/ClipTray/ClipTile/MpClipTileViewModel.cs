@@ -32,7 +32,8 @@ using MpProcessHelper;
         MpITextSelectionRange,
         MpIFindAndReplaceViewModel,
         MpITooltipInfoViewModel,
-        MpIPortableContentDataObject {
+        MpIPortableContentDataObject, 
+        MpISizeViewModel{
         #region Private Variables
 
         private List<string> _tempFileList = new List<string>();
@@ -43,14 +44,9 @@ using MpProcessHelper;
 
         private DispatcherTimer _timer;
 
-        Size itemSize;
-        int fc = 0, lc = 0, cc = 0;
-        double ds = 0;
-
         private int _detailIdx = 0;
 
         #endregion
-        public static bool USING_BROWSER = false;
 
         #region Statics
 
@@ -108,6 +104,13 @@ using MpProcessHelper;
         #region MpITooltipInfoViewModel Implementation
 
         public object Tooltip { get; set; }
+
+        #endregion
+
+        #region MpISizeViewModel Implementation
+
+        double MpISizeViewModel.Width => UnformattedContentSize.Width;
+        double MpISizeViewModel.Height => UnformattedContentSize.Height;
 
         #endregion
 
@@ -413,9 +416,6 @@ using MpProcessHelper;
 
         #region Layout
 
-        //public double TileBorderWidth => IsExpanded ? 
-        //                    MpMainWindowViewModel.Instance.MainWindowWidth - (MpMeasurements.Instance.AppStateButtonPanelWidth * 2) :
-        //                    TileBorderHeight - (MpMeasurements.Instance.ClipTileMargin * 2);
         private double _tileBorderWidth = DefaultBorderWidth;
         public double TileBorderWidth {
             get {
@@ -426,8 +426,6 @@ using MpProcessHelper;
                     _tileBorderWidth = Math.Max(0, value);
                     OnPropertyChanged(nameof(TileContentWidth));
                     OnPropertyChanged(nameof(TileBorderWidth));
-                    //OnPropertyChanged(nameof(TrayX));
-                    //Items.ForEach(x => x.OnPropertyChanged(nameof(x.EditorHeight)));
                 }
             }
         }
@@ -547,7 +545,7 @@ using MpProcessHelper;
                 if (Parent == null || CopyItem == null) {
                     return 0;
                 }
-                if (USING_BROWSER) {
+                if (IsChromiumEditor) {
                     double h;
                     if (!IsContentReadOnly) {
                         //return Parent.TileContentHeight; //quil editor height
@@ -713,14 +711,6 @@ using MpProcessHelper;
             }
         }
 
-        public Size UnformattedAndDecodedContentSize {
-            get {
-                if(IsPlaceholder) {
-                    return new Size();
-                }
-                return UnformattedContentSize;
-            }
-        }
 
         public string PinIconSourcePath {
             get {
@@ -796,6 +786,11 @@ using MpProcessHelper;
 
         #region State 
 
+        public bool IsChromiumEditor => PreferredFormat != null && PreferredFormat.Name == MpPortableDataFormats.Html;
+
+        public int LineCount { get; private set; } = -1;
+        public int CharCount { get; private set; } = -1;
+
         public bool IsAnyBusy {
             get {
                 if (IsBusy) {
@@ -832,7 +827,6 @@ using MpProcessHelper;
             }
         }
 
-        public bool IsNewAndFirstLoad { get; set; } = false;
 
         private bool _isHoveringOnTitleTextGrid = false;
         public bool IsHoveringOnTitleTextGrid {
@@ -1039,6 +1033,22 @@ using MpProcessHelper;
             }
         }
 
+        public MpPortableDataFormat PreferredFormat {
+            get {
+                if (CopyItem == null) {
+                    return null;
+                }
+                return CopyItem.PreferredFormat;
+            }
+            set {
+                if (CopyItem != null && CopyItem.PreferredFormat != value) {
+                    CopyItem.PreferredFormat = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(PreferredFormat));
+                }
+            }
+        }
+
         public MpCopyItemType ItemType {
             get {
                 if (CopyItem == null) {
@@ -1205,15 +1215,11 @@ using MpProcessHelper;
             } else {
                 TileBorderWidth = DefaultBorderHeight;
             }
+            TileBorderHeight = DefaultBorderHeight;
 
             MpMessenger.Unregister<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
-            //if (ci != null && ci.Source == null) {
-            //    ci.Source = await MpDb.GetItemAsync<MpSource>(ci.SourceId);
-            //}
             CopyItem = ci;
-
-            IsNewAndFirstLoad = !MpMainWindowViewModel.Instance.IsMainWindowLoading;
             
             FileItems.Clear();
             TemplateCollection = new MpTemplateCollectionViewModel(this);
@@ -1223,7 +1229,9 @@ using MpProcessHelper;
 
             await TitleSwirlViewModel.InitializeAsync();
 
-            DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
+            _detailIdx = 0;
+            DetailText = string.Empty;
+            
 
             if (ItemType == MpCopyItemType.Image) {
                 DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
@@ -1278,57 +1286,56 @@ using MpProcessHelper;
             AllowMultiSelect = false;
         }
 
+        public void ResetExpensiveDetails() {
+            LineCount = CharCount = -1;
+        }
 
-        public string GetDetailText(MpCopyItemDetailType detailType) {
+        private string GetDetailText(MpCopyItemDetailType detailType) {
             if (CopyItem == null) {
                 return string.Empty;
             }
 
-            string info = string.Empty;
             switch (detailType) {
                 //created
                 case MpCopyItemDetailType.DateTimeCreated:
                     // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
 
-                    info = "Copied " + CopyItemCreatedDateTime.ToReadableTimeSpan();
-                    break;
+                    return "Copied " + CopyItemCreatedDateTime.ToReadableTimeSpan();
                 //chars/lines
                 case MpCopyItemDetailType.DataSize:
                     if (CopyItem.ItemType == MpCopyItemType.Image) {
-                        info = "(" + (int)itemSize.Width + "px) x (" + (int)itemSize.Height + "px)";
+                        return "(" + (int)UnformattedContentSize.Width + "px) x (" + (int)UnformattedContentSize.Height + "px)";
                     } else if (CopyItem.ItemType == MpCopyItemType.Text) {
-                        info = cc + " chars | " + lc + " lines";
+                        if(LineCount < 0 && CharCount < 0) {
+                            //Line and Char count are set to -1 when initialized so they're lazy loaded
+                            var textTuple = MpContentDocumentRtfExtension.GetLineAndCharCount(this);
+                            LineCount = textTuple.Item1;
+                            CharCount = textTuple.Item2;
+                        }                        
+                        
+                        return CharCount + " chars | " + LineCount + " lines";
                     } else if (CopyItem.ItemType == MpCopyItemType.FileList) {
-                        info = fc + " files | " + ds + " MB";
+                        break;// return GetDetailText((MpCopyItemDetailType)(++_detailIdx));
                     }
                     break;
                 //# copies/# pastes
                 case MpCopyItemDetailType.UsageStats:
-                    info = CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
-                    break;
+                    return CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
                 case MpCopyItemDetailType.UrlInfo:
-                    if (SourceViewModel == null || SourceViewModel.UrlViewModel == null) {
-                        _detailIdx++;
-                        info = GetDetailText((MpCopyItemDetailType)_detailIdx);
-                    } else {
-                        info = SourceViewModel.UrlViewModel.UrlPath;
+                    if (UrlViewModel == null) {
+                        break;// return GetDetailText((MpCopyItemDetailType)(++_detailIdx));
                     }
-                    break;
-                case MpCopyItemDetailType.AppInfo:
-                    if (SourceViewModel == null || SourceViewModel.AppViewModel == null) {
-                        _detailIdx++;
-                        info = GetDetailText((MpCopyItemDetailType)_detailIdx);
-                    } else {
-                        info = SourceViewModel.AppViewModel.AppPath;
-                    }
-
-                    break;
+                    return UrlViewModel.UrlPath;
+                //case MpCopyItemDetailType.AppInfo:
+                //    if (AppViewModel == null) {
+                //        return GetDetailText((MpCopyItemDetailType)(++_detailIdx));
+                //    }
+                //    return AppViewModel.AppPath;
                 default:
-                    info = "Unknown detailId: " + (int)detailType;
                     break;
             }
 
-            return info;
+            return string.Empty;
         }
 
         #region View Event Invokers
@@ -1690,25 +1697,6 @@ using MpProcessHelper;
 
             }
         }
-        private void UpdateDetails() {
-            _detailIdx = 1;
-            switch (CopyItem.ItemType) {
-                case MonkeyPaste.MpCopyItemType.Image:
-                    var bmp = CopyItem.ItemData.ToBitmapSource();
-                    itemSize = new Size(bmp.Width, bmp.Height);
-                    break;
-                case MonkeyPaste.MpCopyItemType.FileList:
-                    var fl = MpCopyItemMerger.GetFileList(CopyItem);
-                    fc = fl.Count;
-                    ds = MpHelpers.FileListSize(fl.ToArray());
-                    break;
-                case MonkeyPaste.MpCopyItemType.Text:
-                    lc = MpWpfStringExtensions.GetRowCount(CopyItem.ItemData.ToPlainText());
-                    cc = CopyItem.ItemData.ToPlainText().Length;
-                    itemSize = UnformattedContentSize;
-                    break;
-            }
-        }
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
@@ -1765,7 +1753,7 @@ using MpProcessHelper;
                     }
                     OnPropertyChanged(nameof(CopyItemData));
                     OnPropertyChanged(nameof(CurrentSize));
-                    UpdateDetails();
+                    //UpdateDetails();
                     RequestUiUpdate();
                     break;
                 case nameof(IsFlipping):
@@ -1885,6 +1873,9 @@ using MpProcessHelper;
                         });
                     }
                     break;
+                case nameof(CopyItemData):
+                    ResetExpensiveDetails();
+                    break;
                 case nameof(FindText):
                 case nameof(ReplaceText):
                 case nameof(MatchCase):
@@ -1979,13 +1970,15 @@ using MpProcessHelper;
 
         public ICommand CycleDetailCommand => new RelayCommand(
             () => {
-                _detailIdx++;
-                if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
-                    _detailIdx = 1;
-                }
+                do {
+                    _detailIdx++;
+                    if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
+                        _detailIdx = 1;
+                    }
 
-                // TODO this should aggregate details over all sub items 
-                DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
+                    // TODO this should aggregate details over all sub items 
+                    DetailText = GetDetailText((MpCopyItemDetailType)_detailIdx);
+                } while (string.IsNullOrEmpty(DetailText));                
             });
 
         public ICommand ToggleEditContentCommand => new RelayCommand(
@@ -2001,6 +1994,7 @@ using MpProcessHelper;
             () => {
                 IsTitleVisible = !IsTitleVisible;
             }, !IsPlaceholder);
+
 
 
 
