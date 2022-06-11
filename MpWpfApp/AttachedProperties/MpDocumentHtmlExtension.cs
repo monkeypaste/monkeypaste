@@ -27,6 +27,7 @@ using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Windows.Media;
 using Xamarin.Essentials;
+using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {
     public class MpDocumentHtmlExtension : DependencyObject {
@@ -145,7 +146,7 @@ namespace MpWpfApp {
                             cwb.JavascriptObjectRepository.ObjectBoundInJavascript += JavascriptObjectRepository_ObjectBoundInJavascript;
 
                             MpQuillDisableReadOnlyRequestMessage drorMsg = CreateDisableReadOnlyMessage(fe);
-                            var disableReadOnlyResponse = await cwb.EvaluateScriptAsync($"disableReadOnly('{drorMsg.SerializeToByteString()}')");
+                            var disableReadOnlyResponse = await cwb.EvaluateScriptAsync(null,$"disableReadOnly", drorMsg.Serialize());
                             ProcessDisableReadOnlyResponse(fe, disableReadOnlyResponse);
 
                             SetIsContentFocused(fe, true);
@@ -188,9 +189,6 @@ namespace MpWpfApp {
                         var lrm = CreateLoadRequestMessage(cwb, e.NewValue);
                         cwb.FrameLoadEnd += async (sender, args) => {
                             if (args.Frame.IsMain) {
-                                //var initCmd = $"init('{lrm.SerializeToByteString()}')";
-                                //var result = await cwb.EvaluateScriptAsync(initCmd);
-
                                 await cwb.EvaluateScriptAsync(null, "init", lrm);
                             }
                         };
@@ -225,7 +223,7 @@ namespace MpWpfApp {
                 if (enableReadOnlyResponse.Result != null && enableReadOnlyResponse.Result is string resultStr) {
                     MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is readonly");
 
-                    var qrm = JsonConvert.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(resultStr.ToStringFromBase64());
+                    var qrm = JsonConvert.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(resultStr);//.ToStringFromBase64());
 
                     //civm.CopyItemData = qrm.itemEncodedHtmlData;
                     MpConsole.WriteLine("Skipping writing updated item data: ");
@@ -247,7 +245,7 @@ namespace MpWpfApp {
 
             MpQuillDisableReadOnlyRequestMessage drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
                 allAvailableTextTemplates = MpMasterTemplateModelCollection.AllTemplates.ToList(),
-                editorHeight = ctvm.EditorHeight//fe.GetVisualAncestor<MpContentView>().ActualHeight
+                editorHeight = ctvm.EditorHeight//fe.GetVisualAncestor<MpRtbContentView>().ActualHeight
             };
             return drorMsg;
         }
@@ -257,7 +255,7 @@ namespace MpWpfApp {
                 if (disableReadOnlyResponse.Result != null && disableReadOnlyResponse.Result is string resultStr) {
                     MpConsole.WriteLine($"Tile content item '{civm.CopyItemTitle}' is editable");
 
-                    var qrm = JsonConvert.DeserializeObject<MpQuillDisableReadOnlyResponseMessage>(resultStr.ToStringFromBase64());
+                    var qrm = JsonConvert.DeserializeObject<MpQuillDisableReadOnlyResponseMessage>(resultStr);
 
                     var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
                     if (ctcv != null) {
@@ -316,7 +314,6 @@ namespace MpWpfApp {
             return etgl.ToArray();
         }
 
-        
         public static void Init() {
             //called in bootstrap
             InitCef();

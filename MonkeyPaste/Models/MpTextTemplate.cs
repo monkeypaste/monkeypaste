@@ -26,6 +26,8 @@ namespace MonkeyPaste {
 
     public class MpTextTemplate : MpDbModelBase, MpIClonableDbModel<MpTextTemplate> {
         #region Constants
+        public const string TextTemplateOpenToken = @"\{t\{";
+        public const string TextTemplateCloseToken = @"\}t\}";
         #endregion
 
         #region Columns
@@ -107,7 +109,7 @@ namespace MonkeyPaste {
         [Ignore]
         public string EncodedTemplateRtf {
             get {
-                return @"\{t\{" + Guid + @"\}t\}";
+                return TextTemplateOpenToken + Guid + TextTemplateCloseToken;
             }
         }
 

@@ -1,7 +1,8 @@
 ﻿var IsBoundToHost = false;
 
 async function bindJsComAdapter() {
-	if (EnvName == 'web') {
+	if (EnvName == 'web' || typeof CefSharp == 'undefined') {
+		IsBoundToHost = false;
 		return;
 	}
 	await CefSharp.BindObjectAsync("jsComAdapter");
@@ -20,7 +21,8 @@ async function bindJsComAdapter() {
 }
 
 function deleteJsComAdapter() {
-	if (EnvName == 'web') {
+	if (EnvName == 'web' || typeof CefSharp == 'undefined') {
+		IsBoundToHost = false;
 		return;
 	}
 	IsBoundToHost = !CefSharp.DeleteBoundObject("jsComAdapter");

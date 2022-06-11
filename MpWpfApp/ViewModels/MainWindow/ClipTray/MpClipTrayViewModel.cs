@@ -22,10 +22,10 @@ using System.Web.UI.WebControls;
 using System.Runtime.CompilerServices;
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : 
-        MpSelectorViewModelBase<object,MpClipTileViewModel>, 
-        MpISingletonViewModel<MpClipTrayViewModel>, 
-        MpIActionComponent, 
+    public class MpClipTrayViewModel :
+        MpSelectorViewModelBase<object, MpClipTileViewModel>,
+        MpISingletonViewModel<MpClipTrayViewModel>,
+        MpIActionComponent,
         MpIMenuItemViewModel {
         #region Private Variables      
 
@@ -40,7 +40,7 @@ namespace MpWpfApp {
         private int _pageSize = 0;
 
         private Dictionary<int, int> _manualSortOrderLookup = null;
-                
+
 
         private MpCopyItem _currentClipboardItem;
 
@@ -49,15 +49,15 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        
+
         public ObservableCollection<MpClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpClipTileViewModel>();
 
-        public IEnumerable<MpClipTileViewModel> AllItems { 
+        public IEnumerable<MpClipTileViewModel> AllItems {
             get {
-                foreach(var ctvm in Items) {
+                foreach (var ctvm in Items) {
                     yield return ctvm;
                 }
-                foreach(var pctvm in PinnedItems) {
+                foreach (var pctvm in PinnedItems) {
                     yield return pctvm;
                 }
             }
@@ -68,14 +68,14 @@ namespace MpWpfApp {
 
         public override MpClipTileViewModel SelectedItem {
             get {
-                if(PinnedItems.Any(x=>x.IsSelected)) {
+                if (PinnedItems.Any(x => x.IsSelected)) {
                     return PinnedItems.FirstOrDefault(x => x.IsSelected);
                 }
                 return Items.FirstOrDefault(x => x.IsSelected);
             }
             set {
-                if(SelectedItem != value) {
-                    if(value != null && PinnedItems.Any(x=>x.CopyItemId == value.CopyItemId)) {
+                if (SelectedItem != value && value != null) {
+                    if (value != null && PinnedItems.Any(x => x.CopyItemId == value.CopyItemId)) {
                         PinnedItems.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
                         Items.ForEach(x => x.IsSelected = false);
                     } else if (value != null && Items.Any(x => x.CopyItemId == value.CopyItemId)) {
@@ -84,26 +84,27 @@ namespace MpWpfApp {
                     } else {
                         SelectedItem = null;
                     }
-                    OnPropertyChanged(nameof(SelectedItem));
+                    
                 }
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
         public List<MpCopyItem> SelectedModels {
             get {
-                if(SelectedItem == null) {
+                if (SelectedItem == null) {
                     return new List<MpCopyItem>();
                 }
                 return new List<MpCopyItem>() {
                     SelectedItem.CopyItem
                 };
             }
-        }        
+        }
 
         public MpClipTileViewModel DragItem {
             get {
                 var dragItem = Items.FirstOrDefault(x => x.IsItemDragging);
-                if(dragItem == null) {
+                if (dragItem == null) {
                     return PinnedItems.FirstOrDefault(x => x.IsItemDragging);
                 }
                 return dragItem;
@@ -112,9 +113,9 @@ namespace MpWpfApp {
 
         #region MpIContextMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel MenuItemViewModel { 
+        public MpMenuItemViewModel MenuItemViewModel {
             get {
-                if(SelectedItem == null) {
+                if (SelectedItem == null) {
                     return new MpMenuItemViewModel();
                 }
                 var tagItems = MpTagTrayViewModel.Instance.AllTagViewModel.ContentMenuItemViewModel.SubItems;
@@ -248,7 +249,7 @@ namespace MpWpfApp {
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = SelectedItem.SourceViewModel == null ||
-                                             SelectedItem.UrlViewModel == null? 
+                                             SelectedItem.UrlViewModel == null?
                                                 null :
                                                 $"'{SelectedItem.UrlViewModel.UrlDomainPath}' to _Excluded Domain",
                                     IconId = SelectedItem.UrlViewModel == null ?
@@ -341,11 +342,11 @@ namespace MpWpfApp {
         public double ClipTrayTotalTileWidth {
             get {
                 int lastTrayTileIdx = MaxClipTrayQueryIdx;
-                if(TotalTilesInQuery == 0 || lastTrayTileIdx < 0) {
+                if (TotalTilesInQuery == 0 || lastTrayTileIdx < 0) {
                     return 0;
                 }
                 double lastTileWidth = PersistentUniqueWidthTileLookup.ContainsKey(MaxClipTrayQueryIdx) ?
-                                                PersistentUniqueWidthTileLookup[MaxClipTrayQueryIdx] : 
+                                                PersistentUniqueWidthTileLookup[MaxClipTrayQueryIdx] :
                                                 MpMeasurements.Instance.ClipTileMinSize;
                 // subtract last tile width so at max last tile is fully visible at left
                 return FindTileOffsetX(lastTrayTileIdx) + lastTileWidth + (MpMeasurements.Instance.ClipTileMargin * 2);// + ClipTrayScreenWidth;
@@ -366,6 +367,7 @@ namespace MpWpfApp {
 
         #region Appearance
 
+        public string PinTrayDropForegroundHexColor => IsDragOverPinTray ? MpSystemColors.Yellow : MpSystemColors.oldlace;
         public int MaxTotalVisibleClipTiles {
             get {
                 return (int)Math.Ceiling(ClipTrayScreenWidth / MpMeasurements.Instance.ClipTileBorderMinWidth);
@@ -393,12 +395,12 @@ namespace MpWpfApp {
         public bool IsAddingClipboardItem { get; private set; } = false;
 
         private bool _isPasting = false;
-        public bool IsPasting { 
+        public bool IsPasting {
             get {
-                if(_isPasting) {
+                if (_isPasting) {
                     return true;
                 }
-                if(Items.Any(x=>x.IsPasting)) {
+                if (Items.Any(x => x.IsPasting)) {
                     // NOTE since copy items can be pasted from hot key and aren't in tray
                     // IsPasting cannot be auto-property
                     _isPasting = true;
@@ -406,7 +408,7 @@ namespace MpWpfApp {
                 return _isPasting;
             }
             set {
-                if(IsPasting != value) {
+                if (IsPasting != value) {
                     _isPasting = value;
                     OnPropertyChanged(nameof(IsPasting));
                 }
@@ -509,18 +511,18 @@ namespace MpWpfApp {
 
         public bool IsThumbDragging { get; set; } = false;
 
-        
+
 
         public bool IsScrollingIntoView { get; set; } = false;
         public bool HasScrollVelocity { get; set; }
 
-        public bool IsRestoringSelection { get; private set; } = false;        
+        public bool IsRestoringSelection { get; private set; } = false;
 
         public double LastScrollOffset { get; set; } = 0;
 
         private double _scrollOffset = 0;
         public double ScrollOffset {
-            get { 
+            get {
                 return _scrollOffset;
             }
             set {
@@ -534,13 +536,13 @@ namespace MpWpfApp {
 
         public bool IsHorizontalScrollBarVisible => ClipTrayTotalTileWidth > ClipTrayScreenWidth; //TotalTilesInQuery > MpMeasurements.Instance.DefaultTotalVisibleClipTiles;
 
-        
+
         public bool IsArrowSelecting { get; set; } = false;
-               
+
 
         public bool IsRequery { get; private set; } = false;
 
-        public bool IsTrayEmpty => Items.Count == 0 && 
+        public bool IsTrayEmpty => Items.Count == 0 &&
                                    !IsRequery && !MpMainWindowViewModel.Instance.IsMainWindowLoading;// || Items.All(x => x.IsPlaceholder);
 
         public bool IsSelectionReset { get; set; } = false;
@@ -548,7 +550,7 @@ namespace MpWpfApp {
         public bool IgnoreSelectionReset { get; set; } = false;
 
 
-        
+
         private bool _isFilteringByApp = false;
         public bool IsFilteringByApp {
             get {
@@ -584,11 +586,14 @@ namespace MpWpfApp {
 
         public bool IsAnyPastingTemplate => Items.Any(x => x.IsPastingTemplate) || PinnedItems.Any(x => x.IsPastingTemplate);
 
-        public bool IsAnyItemDragging => Items.Any(x => x.IsItemDragging) || 
+        public bool IsAnyItemDragging => Items.Any(x => x.IsItemDragging) ||
                                          PinnedItems.Any(x => x.IsItemDragging) ||
                                          MpDragDropManager.IsDraggingFromExternal;
 
         public bool IsAnyTilePinned => PinnedItems.Count > 0;
+
+        public bool IsDragOverPinTray {get;set;}
+
         #endregion
 
         #endregion
@@ -1086,7 +1091,7 @@ namespace MpWpfApp {
                 if(isAssociated) {
                     return;
                 }
-                await MpDataModelProvider.RemoveQueryItem(cit.CopyItemId);
+                MpDataModelProvider.RemoveQueryItem(cit.CopyItemId);
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);                
             }
         }
@@ -1368,7 +1373,7 @@ namespace MpWpfApp {
                         
                         var am_ctvm = GetClipTileViewModelById(_appendModeCopyItem.Id);
                         if (am_ctvm != null) {
-                            var am_cv = Application.Current.MainWindow.GetVisualDescendents<MpContentView>().FirstOrDefault(x => x.DataContext == am_ctvm);
+                            var am_cv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>().FirstOrDefault(x => x.DataContext == am_ctvm);
 
                             if (am_cv != null) {
                                 am_cv.Rtb.Document = (MpEventEnabledFlowDocument)am_cv.Rtb.Document.Combine(
@@ -1463,26 +1468,30 @@ namespace MpWpfApp {
         #region Commands
 
         public ICommand PinTileCommand => new RelayCommand<object>(
-            async (args) => {
+             async (args) => {
                 var pctvm = args as MpClipTileViewModel;
-                if (pctvm.QueryOffsetIdx >= 0) {
-                    // only recreate tiles that are already in the tray (they won't be if new)
-                    pctvm = await CreateClipTileViewModel(pctvm.CopyItem, pctvm.QueryOffsetIdx);
-                }
-                PinnedItems.Add(pctvm);
-                if (Items.Contains(pctvm)) {
+
+                var trayItemToRemove = Items.FirstOrDefault(x => x.CopyItemId == pctvm.CopyItemId);
+                if (trayItemToRemove != null) {
                     //swap to-be-pinned item w/ a new placeholder
-                    Items.Remove(pctvm);
-                    //int oldIdx = Items.IndexOf(pctvm);
-                    pctvm = await CreateClipTileViewModel(null);
-                    //Items.Move(oldIdx, Items.Count - 1);
-                    Items.Add(pctvm);
+                    Items.Remove(trayItemToRemove);
+                    var sub_tray_ctvm = await CreateClipTileViewModel(null);
+                    Items.Add(sub_tray_ctvm);
+
                 }
+                 if (pctvm.QueryOffsetIdx >= 0) {
+                     // only recreate tiles that are already in the tray (they won't be if new)
+                     pctvm = await CreateClipTileViewModel(pctvm.CopyItem, pctvm.QueryOffsetIdx);
+                 }
+                 PinnedItems.Add(pctvm);
+                
                 pctvm.OnPropertyChanged(nameof(pctvm.IsPinned));
                 pctvm.OnPropertyChanged(nameof(pctvm.IsPlaceholder));
                 
                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
 
+                OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(IsAnyTilePinned));
                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
                 OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
@@ -1490,9 +1499,14 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(ClipTrayTotalWidth));
                 OnPropertyChanged(nameof(MaximumScrollOfset));
 
-                SelectedItem = pctvm;
+                 //SelectedItem = pctvm;
+                 pctvm.IsSelected = true;
             },
-            (args) => args != null && args is MpClipTileViewModel ctvm && !ctvm.IsPinned && !ctvm.IsPlaceholder);
+            (args) => 
+            args != null && 
+            args is MpClipTileViewModel ctvm && 
+            !ctvm.IsPinned && 
+            !ctvm.IsPlaceholder);
 
         public ICommand UnpinTileCommand => new RelayCommand<object>(
              (args) => {
@@ -1528,7 +1542,8 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(ClipTrayTotalWidth));
                 OnPropertyChanged(nameof(MaximumScrollOfset));
 
-                SelectedItem = upctvm;
+                 //SelectedItem = upctvm;
+                 upctvm.IsSelected = true;
             },
             (args) => args != null && args is MpClipTileViewModel ctvm && ctvm.IsPinned);
 
@@ -2134,7 +2149,8 @@ namespace MpWpfApp {
 
                     MpClipTileViewModel ctvm = GetClipTileViewModelById(ciid);
                     if (ctvm == null) {
-                        var templates = await MpDataModelProvider.ParseTextTemplatesByCopyItemId(ciid);
+                        var ci = await MpDataModelProvider.GetCopyItemById(ciid);
+                        var templates = await MpDataModelProvider.ParseTextTemplatesByCopyItemId(ci);
                         if(templates != null && templates.Count > 0) {
                             // this item needs to be loaded into ui in order to paste it
                             // trigger query change before showing main window may need to tweak...
@@ -2151,8 +2167,7 @@ namespace MpWpfApp {
                                 await Task.Delay(100);
                             }
                             ctvm = GetClipTileViewModelById(ciid);
-                        } else {
-                            var ci = await MpDataModelProvider.GetCopyItemById(ciid);
+                        } else {                            
                             ctvm = await CreateClipTileViewModel(ci);
                         }                        
                     }

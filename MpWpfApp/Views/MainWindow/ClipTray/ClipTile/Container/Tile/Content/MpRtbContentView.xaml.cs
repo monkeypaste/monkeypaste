@@ -24,7 +24,7 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for Mpxaml
     /// </summary>
-    public partial class MpContentView : MpUserControl<MpClipTileViewModel> {
+    public partial class MpRtbContentView : MpUserControl<MpClipTileViewModel> {
         //public TextRange NewStartRange;
         //public string NewOriginalText;
         //public Hyperlink LastEditedHyperlink;
@@ -32,7 +32,7 @@ namespace MpWpfApp {
         private bool _isNew = true;
         //ublic ObservableCollection<MpTemplateHyperlink> TemplateViews = new ObservableCollection<MpTemplateHyperlink>();
 
-        public MpContentView() : base() {
+        public MpRtbContentView() : base() {
             InitializeComponent();
             Rtb.SpellCheck.IsEnabled = MonkeyPaste.MpPreferences.UseSpellCheck;
         }

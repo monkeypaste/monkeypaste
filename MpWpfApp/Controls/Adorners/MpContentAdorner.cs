@@ -22,7 +22,7 @@ namespace MpWpfApp {
         private Color _debugColor;
 
         private MpIContentDropTarget _dropBehavior;
-
+        
         #endregion
 
         #region Properties
@@ -80,6 +80,7 @@ namespace MpWpfApp {
         }
 
         public bool IsShowing => MpMainWindowViewModel.Instance.IsMainWindowOpen &&
+                                _dropBehavior.GetType() != typeof(MpPinTrayDropBehavior) &&
                                  (IsShowingDropShape || 
                                  IsShowingCaret || 
                                  IsDebugMode || 
@@ -146,7 +147,7 @@ namespace MpWpfApp {
 
                 if (IsShowingContentLines) {
                     DrawUnderlines(dc, new Pen(Brushes.DimGray, 1));
-                }
+                } 
 
                 if(IsShowingContentBounds) {
 
@@ -198,33 +199,17 @@ namespace MpWpfApp {
             if(rtb == null) {
                 return;
             }
-            var rtb_rect = rtb.Bounds();
             var sv = rtb.GetVisualDescendent<ScrollViewer>();
-            var scrollOffset = new Point(sv.HorizontalOffset, sv.VerticalOffset);
-
-            
             var lineStartPointer = rtb.Document.ContentStart.GetLineStartPosition(0);
             while (lineStartPointer != null && lineStartPointer != rtb.Document.ContentEnd) {
                 var lineEndPointer = lineStartPointer.GetLineEndPosition(0);
                 Point p1 = lineStartPointer.GetCharacterRect(LogicalDirection.Forward).BottomLeft;
                 Point p2 = lineEndPointer.GetCharacterRect(LogicalDirection.Backward).BottomRight;
-                
+
+                // this ensures the line doesn't jump when run is wrapped
+                p2.Y = p1.Y;
                 lineStartPointer = lineEndPointer.GetLineStartPosition(1);
-
-
-
-                //p1 = new Point(scrollOffset.X + p1.X,scrollOffset.Y + p1.Y);
-                //p2 = new Point(scrollOffset.X + p2.X, scrollOffset.Y + p2.Y);
                 DrawShape(dc, new MpLine(p1.ToMpPoint(), p2.ToMpPoint()), pen);
-
-
-                //dc.DrawLine(
-                //    pen,
-                //    p1,
-                //    p2);
-
-
-                //MpConsole.WriteLine("Line " + (line++) + " " + p1 + " " + p2);
             }
         }
 

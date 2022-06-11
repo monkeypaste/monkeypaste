@@ -47,13 +47,15 @@ namespace MpWpfApp {
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
                     //itemData = itemData.ToQuillText();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
-                    itemType = MpCopyItemType.Text;                    
-                    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
-                    htmlClipboardData = MpHtmlClipboardData.Parse(rawHtmlData);
-                    itemData = htmlClipboardData.Html;
-                    //itemData = itemData.ToQuillText();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
+                } 
+                //else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
+                //    itemType = MpCopyItemType.Text;                    
+                //    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
+                //    htmlClipboardData = MpHtmlClipboardData.Parse(rawHtmlData);
+                //    itemData = htmlClipboardData.Html;
+                //    //itemData = itemData.ToQuillText();
+                //} 
+                else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
                     itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
                 } else if(mpdo.ContainsData(MpPortableDataFormats.Text)) {                    
@@ -77,6 +79,12 @@ namespace MpWpfApp {
                     itemType == MpCopyItemType.Text &&
                     string.IsNullOrWhiteSpace((itemData).ToPlainText().Replace(Environment.NewLine, ""))) {
                     return null;
+                }
+
+                if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
+                    string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
+                    htmlClipboardData = MpHtmlClipboardData.Parse(rawHtmlData);
+                    //htmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
                 }
 
                 if (itemType == MpCopyItemType.Text && ((string)itemData).Length > MpPreferences.MaxRtfCharCount) {
@@ -130,7 +138,8 @@ namespace MpWpfApp {
                     app = await MpDb.GetItemAsync<MpApp>(app.Id);
 }
 
-                MpUrl url = await MpUrlBuilder.CreateFromSourceUrl(htmlClipboardData.SourceUrl);
+                MpUrl url = htmlClipboardData == null ?
+                    null : await MpUrlBuilder.CreateFromSourceUrl(htmlClipboardData.SourceUrl);
 
                 if (url != null) {
                     if (MpUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {
@@ -153,7 +162,7 @@ namespace MpWpfApp {
                 var source = await MpSource.Create(app, url);
                 var ci = await MpCopyItem.Create(
                     sourceId: source.Id,
-                    preferredFormatName: htmlClipboardData == null ? null : MpPortableDataFormats.Html,
+                    //preferredFormatName: htmlClipboardData == null ? null : MpPortableDataFormats.Html,
                     data: itemData,
                     itemType: itemType,
                     suppressWrite: suppressWrite);

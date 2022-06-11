@@ -220,7 +220,7 @@ namespace MpWpfApp {
 
                 MpTextSelectionRangeExtension.SetSelectionText(Parent, "{t{" + templateGuid + "}t}");
 
-                var ctvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
+                var ctvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>();
                 if(ctvl == null) {
                     Debugger.Break();
                 }
@@ -290,7 +290,7 @@ namespace MpWpfApp {
 
         public ICommand PasteTemplateCommand => new RelayCommand(
             () => {
-                var cv = Application.Current.MainWindow.GetVisualDescendents<MpContentView>()
+                var cv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>()
                             .FirstOrDefault(x => x.DataContext == Parent);
                 if(cv == null) {
                     Debugger.Break();

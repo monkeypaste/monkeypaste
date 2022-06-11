@@ -79,7 +79,7 @@ namespace MpWpfApp {
             cmb.Focus();
 
             var ctv = this.GetVisualAncestor<MpClipTileView>();
-            var cv = ctv.GetVisualDescendent<MpContentView>();
+            var cv = ctv.GetVisualDescendent<MpRtbContentView>();
             if(!cv.Rtb.Selection.IsEmpty) {
                 BindingContext.FindText = cv.Rtb.Selection.Text;
             }

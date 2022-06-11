@@ -16,10 +16,6 @@ namespace MpWpfApp {
                 return null;
             }
 
-            if (item == null) {
-                return null;
-            }
-
             var ctvm = item as MpClipTileViewModel;
             if (ctvm == null) {
                 return null;
@@ -29,7 +25,7 @@ namespace MpWpfApp {
             if (ctvm.IsChromiumEditor) {
                 keyStr = "QuillViewTemplate";
             } else {
-                keyStr = "ContentViewTemplate";
+                keyStr = "RtbContentContainerViewTemplate";
             }
             var fe = container as FrameworkElement;
             if(fe == null) {

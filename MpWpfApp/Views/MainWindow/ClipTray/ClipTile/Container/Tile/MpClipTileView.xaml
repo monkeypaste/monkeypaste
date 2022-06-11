@@ -94,8 +94,19 @@
                        Background="{Binding .,
                                             Converter={StaticResource StringToThemeBrushConverter},
                                             ConverterParameter=Clip_Tile_Content_Item_Background_Color}">
+                <DockPanel.Resources>
+                    <DataTemplate x:Key="RtbContentContainerViewTemplate">
+                        <local:MpRtbContentContainerView DataContext="{Binding}" />
+                    </DataTemplate>
+                    <DataTemplate x:Key="QuillViewTemplate">
+                        <local:MpQuillEditorView DataContext="{Binding}" />
+                    </DataTemplate>
+                    <local:MpContentViewSelector x:Key="ContentViewSelector" />
+                </DockPanel.Resources>
+
+                <!--  Title -->
+                
                 <Grid DockPanel.Dock="Top">
-                    <!--  Tile Title Canvas  -->
                     <local:MpClipTileTitleView x:Name="TileTitleView"
                                                DockPanel.Dock="Top"
                                                Visibility="{Binding IsTitleVisible,
@@ -156,7 +167,7 @@
                 </Grid>
 
 
-                <!--  Tile Detail Grid  -->
+                <!--  Detail  -->
                 <local:MpClipTileDetailView x:Name="TileDetailView"
                                             DockPanel.Dock="Bottom"
                                             Height="{Binding ClipTileDetailHeight,
@@ -165,92 +176,10 @@
                                             Visibility="{Binding IsDetailGridVisibile,
                                                                  Converter={StaticResource BoolToVisibilityConverter}}"
                                             DataContext="{Binding}" />
-                <!--  Content Container Canvas  -->
-
-                <DockPanel x:Name="ContentListDockPanel"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch">
-                    <DockPanel.Resources>
-                        <DataTemplate x:Key="ContentViewTemplate">
-                            <local:MpContentView DataContext="{Binding}" />
-                        </DataTemplate>
-                        <DataTemplate x:Key="QuillViewTemplate">
-                            <local:MpQuillEditorView DataContext="{Binding}" />
-                        </DataTemplate>
-
-
-                        <local:MpContentViewSelector x:Key="ContentViewSelector" />
-                    </DockPanel.Resources>
-                    <local:MpRtbEditToolbarView x:Name="EditToolbarView"
-                                                DockPanel.Dock="Top"
-                                                DataContext="{Binding}">
-                        <local:MpRtbEditToolbarView.Visibility>
-                            <MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}"
-                                          FallbackValue="Collapsed"
-                                          TargetNullValue="Collapsed">
-                                <Binding Path="DataContext.IsContentReadOnly"
-                                         RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                         AncestorType=DockPanel}" />
-                                <Binding Path="DataContext.IsChromiumEditor"
-                                         RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                         AncestorType=DockPanel}" />
-                            </MultiBinding>
-                        </local:MpRtbEditToolbarView.Visibility>
-                    </local:MpRtbEditToolbarView>
-                    <StackPanel Orientation="Vertical"
-                                DockPanel.Dock="Bottom">
-                        <local:MpFindReplaceToolbarView x:Name="FindAndReplaceView"
-                                                        DataContext="{Binding}">
-                            <local:MpFindReplaceToolbarView.Visibility>
-                                <MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}"
-                                              FallbackValue="Collapsed"
-                                              TargetNullValue="Collapsed">
-                                    <Binding Path="DataContext.IsFindAndReplaceVisible"
-                                             RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                             AncestorType=UserControl}" />
-                                    <Binding Path="DataContext.IsChromiumEditor"
-                                             Converter="{StaticResource BoolFlipConverter}"
-                                             RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                             AncestorType=UserControl}" />
-                                </MultiBinding>
-                            </local:MpFindReplaceToolbarView.Visibility>
-                        </local:MpFindReplaceToolbarView>
-                        <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
-                                                         DataContext="{Binding TemplateCollection.SelectedItem}">
-                            <local:MpEditTemplateToolbarView.Visibility>
-                                <MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}"
-                                              FallbackValue="Collapsed"
-                                              TargetNullValue="Collapsed">
-                                    <Binding Path="DataContext.IsEditingTemplate"
-                                             RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                             AncestorType=UserControl}" />
-                                    <Binding Path="DataContext.IsChromiumEditor"
-                                             Converter="{StaticResource BoolFlipConverter}"
-                                             RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                             AncestorType=UserControl}" />
-                                </MultiBinding>
-                            </local:MpEditTemplateToolbarView.Visibility>
-                        </local:MpEditTemplateToolbarView>
-                        <local:MpPasteTemplateToolbarView x:Name="PasteTemplateView"
-                                                          DataContext="{Binding TemplateCollection}">
-                            <local:MpPasteTemplateToolbarView.Visibility>
-                                <MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}"
-                                              FallbackValue="Collapsed"
-                                              TargetNullValue="Collapsed">
-                                    <Binding Path="DataContext.IsPastingTemplate"
-                                             RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                             AncestorType=UserControl}" />
-                                    <Binding Path="DataContext.IsChromiumEditor"
-                                             Converter="{StaticResource BoolFlipConverter}"
-                                             RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                             AncestorType=UserControl}" />
-                                </MultiBinding>
-                            </local:MpPasteTemplateToolbarView.Visibility>
-                        </local:MpPasteTemplateToolbarView>
-                    </StackPanel>
-                    <ContentControl Content="{Binding}"
-                                    ContentTemplateSelector="{StaticResource ContentViewSelector}" />
-                </DockPanel>
+                
+                <!--  Content   -->
+                <ContentControl Content="{Binding}"
+                                ContentTemplateSelector="{StaticResource ContentViewSelector}" />
 
             </DockPanel>
             <!--  Overlays  -->

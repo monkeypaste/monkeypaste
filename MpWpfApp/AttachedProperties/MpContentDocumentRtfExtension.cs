@@ -212,25 +212,18 @@ namespace MpWpfApp {
         public static string ExchangeDragDataWithDropTarget(MpClipTileViewModel drag_ctvm, bool isCopy, bool isSelfDrop) {            
             string dropData = null;
             var drag_rtb = FindRtbByViewModel(drag_ctvm);
-            bool delete_drag_item = false;
+
             switch (drag_ctvm.ItemType) {
                 case MpCopyItemType.Text:
                     if(MpTextSelectionRangeExtension.IsSelectionContainTemplate(drag_ctvm)) {
                         dropData = GetEncodedContent(drag_rtb, false);
                     } else {
                         dropData = drag_rtb.Selection.Text;
-                    }
-                    
+                    }                    
 
                     if(!isCopy) {
                         //when drag selection is not copy delete selection from source
-                        drag_rtb.Selection.Text = string.Empty;
-
-                        string dpt = drag_rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                        if (string.IsNullOrWhiteSpace(dpt) && !isSelfDrop) {
-                            //when all content is being dropped flag drag source for delete
-                            delete_drag_item = true;
-                        } 
+                        drag_rtb.Selection.Text = string.Empty;                        
                     }
                     break;
                 case MpCopyItemType.FileList:
@@ -244,12 +237,14 @@ namespace MpWpfApp {
                         var fileItemsToRemove = drag_ctvm.FileItems.Where(x => x.IsSelected).ToList();
                         for(int i = 0; i < fileItemsToRemove.Count;i++) {
                             drag_ctvm.FileItems.Remove(fileItemsToRemove[i]);
-                        }
 
-                        if (drag_ctvm.FileItems.Count == 0) {
-                            //when all content is being dropped flag drag source for delete
-                            delete_drag_item = true;
-                        } 
+                            
+                        }
+                        var paragraphsToRemove = drag_rtb.Document.GetAllTextElements()
+                           .Where(x => x is MpFileItemParagraph).Cast<MpFileItemParagraph>()
+                               .Where(x => fileItemsToRemove.Any(y => y == x.DataContext));
+
+                        paragraphsToRemove.ForEach(x => drag_rtb.Document.Blocks.Remove(x));
                     }
                     break;
                 case MpCopyItemType.Image:
@@ -257,13 +252,36 @@ namespace MpWpfApp {
                     Debugger.Break();
                     break;
             }
-            if(delete_drag_item) {
-                drag_ctvm.CopyItem.DeleteFromDatabaseAsync().FireAndForgetSafeAsync(MpClipTrayViewModel.Instance);
-            } else {
-                SaveTextContent(drag_rtb).FireAndForgetSafeAsync(drag_ctvm);
-            }
+
             return dropData;
         }
+
+        public static async Task CleanupDragItemAfterDrop(MpClipTileViewModel drag_ctvm, bool isSelfDrop) {
+            var drag_rtb = FindRtbByViewModel(drag_ctvm);
+            if(drag_rtb == null) {
+                return;
+            }
+            bool delete_item = false;
+            if(drag_ctvm.ItemType == MpCopyItemType.Text) {
+                string dpt = drag_rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                if (string.IsNullOrWhiteSpace(dpt) && !isSelfDrop) {
+                    delete_item = true;
+                }
+            } else if(drag_ctvm.ItemType == MpCopyItemType.FileList) {
+                if(drag_ctvm.FileItems.Count == 0) {
+                    delete_item = true;
+                }
+            } else {
+                return;
+            }
+            
+            if(delete_item) {
+                await drag_ctvm.CopyItem.DeleteFromDatabaseAsync();
+            } else {
+                await SaveTextContent(drag_rtb);
+            }            
+        }
+
         #endregion
 
         #region HeadContentItemViewModel
@@ -504,7 +522,7 @@ namespace MpWpfApp {
         }
 
         public static RichTextBox FindRtbByViewModel(MpClipTileViewModel ctvm) {
-            var cvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
+            var cvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>();
             if (cvl == null) {
                 Debugger.Break();
             }

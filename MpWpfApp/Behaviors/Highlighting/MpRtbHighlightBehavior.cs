@@ -7,7 +7,7 @@ using System.Windows.Documents;
 
 namespace MpWpfApp {
 
-    public class MpRtbHighlightBehavior : MpHighlightBehaviorBase<MpContentView> {
+    public class MpRtbHighlightBehavior : MpHighlightBehaviorBase<MpRtbContentView> {
         protected override TextRange ContentRange {
             get {
                 if(AssociatedObject == null || 

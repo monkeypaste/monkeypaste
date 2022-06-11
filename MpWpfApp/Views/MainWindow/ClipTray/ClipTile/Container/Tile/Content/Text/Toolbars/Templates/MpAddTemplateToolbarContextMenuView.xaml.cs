@@ -46,7 +46,7 @@ namespace MpWpfApp {
             //    MpConsole.WriteTraceLine("No rtb or rtb context");
             //    return;
             //}
-            //var rtbv = Rtb.GetVisualAncestor<MpContentView>();
+            //var rtbv = Rtb.GetVisualAncestor<MpRtbContentView>();
             //rtbv.NewOriginalText = Rtb.Selection.Text;
             //rtbv.NewStartRange = Rtb.Selection;
 

@@ -81,7 +81,7 @@ namespace MpWpfApp {
         }
 
         private void Rtbcvm_OnScrollToHomeRequest(object sender, EventArgs e) {
-            var cv = this.GetVisualDescendent<MpContentView>();
+            var cv = this.GetVisualDescendent<MpRtbContentView>();
             if(cv == null) {
                 var qcv = this.GetVisualDescendent<MpQuillEditorView>();
                 if(qcv == null) {

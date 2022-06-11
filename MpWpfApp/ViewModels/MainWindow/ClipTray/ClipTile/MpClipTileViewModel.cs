@@ -141,7 +141,7 @@ using MpProcessHelper;
         private List<TextRange> _matches;
         private MpRtbHighlightBehavior _rtbHighligher {
             get {
-                var cv = Application.Current.MainWindow.GetVisualDescendents<MpContentView>().FirstOrDefault(x => x.DataContext == this);
+                var cv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>().FirstOrDefault(x => x.DataContext == this);
                 if(cv == null) {
                     return null;
                 }
@@ -487,7 +487,7 @@ using MpProcessHelper;
                 if(IsPinned || Parent == null) {
                     return 0;
                 }
-                return Parent.FindTileOffsetX(QueryOffsetIdx);
+                return Parent.FindTileOffsetX2(QueryOffsetIdx);
             }
         }
 
@@ -1625,6 +1625,10 @@ using MpProcessHelper;
             //    return;
             //}
             if(e is MpCopyItem ci && CopyItemId == ci.Id) {
+
+                int queryIdx = QueryOffsetIdx;
+                QueryOffsetIdx = -1;
+
                 if(IsPinned) {
                     var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.CopyItemId == ci.Id);
                     if (pctvm != null) {
@@ -1636,14 +1640,15 @@ using MpProcessHelper;
                     }
                 } else {
                     //MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-
-                    foreach(var ctvm in Parent.Items.Where(x => x.QueryOffsetIdx > QueryOffsetIdx)) {
-                        ctvm.QueryOffsetIdx--;
-                        ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
+                    MpDataModelProvider.RemoveQueryItem(ci.Id);
+                    for (int i = 0; i < Parent.Items.Count; i++) {
+                        var ctvm = Parent.Items[i];
+                        if(ctvm.QueryOffsetIdx >= queryIdx && 
+                           ctvm.CopyItemId != CopyItemId) {
+                            ctvm.QueryOffsetIdx--;
+                            ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
+                        }
                     }
-                    
-                    MpDataModelProvider.RemoveQueryItem(ci.Id).FireAndForgetSafeAsync(Parent);
-                    //InitializeAsync(null).FireAndForgetSafeAsync(this);
                     CopyItem = null;
 
                 }
@@ -1711,16 +1716,19 @@ using MpProcessHelper;
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
+
+                        
+
                         if (IsPinned) {
                             Parent.ClearClipSelection(false);
                         } else {
                             Parent.ClearPinnedSelection(false);
-                            Parent.RequestScrollIntoView(this);
                         }
                         if(Parent.SelectedItem != this) {
                             Parent.SelectedItem = this;
                         }
 
+                        Parent.RequestScrollIntoView(this);
                         //if (!IsTitleFocused && !Parent.IsPasting) {
                         //    // NOTE checking Parent.IsPasting because setting focus will clear current selection
                         //    IsContentFocused = true;

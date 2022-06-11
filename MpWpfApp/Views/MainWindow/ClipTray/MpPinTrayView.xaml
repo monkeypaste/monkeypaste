@@ -15,6 +15,10 @@
         <local:MpPinTrayDropBehavior x:Name="PinTrayDropBehavior" />
     </i:Interaction.Behaviors>
     <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="Salmon"
+                             Opacity=".7" />
+        </Grid.Background>
         <AdornerDecorator>
             <local:MpListBox x:Name="PinTrayListBox"
                              Background="Transparent"
@@ -33,12 +37,7 @@
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <local:MpListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True">
-                            <WrapPanel.Background>
-                                <SolidColorBrush Color="Salmon"
-                                                 Opacity=".7" />
-                            </WrapPanel.Background>
-                        </WrapPanel>
+                        <WrapPanel IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </local:MpListBox.ItemsPanel>
                 <local:MpListBox.ItemContainerStyle>
@@ -68,6 +67,49 @@
                     </DataTemplate>
                 </local:MpListBox.ItemTemplate>
             </local:MpListBox>
+
+
         </AdornerDecorator>
+        <!--
+        -->
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              Visibility="{Binding IsDragOverPinTray,
+                                   Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid.Background>
+                <SolidColorBrush Color="Gray"
+                                 Opacity="0.7" />
+            </Grid.Background>
+
+            <Ellipse Fill="Transparent"
+                     Stroke="{Binding PinTrayDropForegroundHexColor,
+                                      Converter={StaticResource StringHexToWinMediaColorConverter}}"
+                     StrokeThickness="3"
+                     Width="50"
+                     Height="50" />
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="{Binding PinTrayDropForegroundHexColor,
+                                         Converter={StaticResource StringHexToBrushConverter}}"
+                    CornerRadius="5"
+                    Height="30"
+                    Width="3" />
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="{Binding PinTrayDropForegroundHexColor,
+                                         Converter={StaticResource StringHexToBrushConverter}}"
+                    CornerRadius="5"
+                    Height="3"
+                    Width="30" />
+            <TextBlock Foreground="{Binding PinTrayDropForegroundHexColor,
+                                            Converter={StaticResource StringHexToBrushConverter}}"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0,76,0,0">
+                Drop Here
+            </TextBlock>
+        </Grid>
     </Grid>
 </local:MpUserControl>

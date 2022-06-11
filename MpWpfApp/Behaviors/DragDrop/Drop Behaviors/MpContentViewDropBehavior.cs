@@ -12,7 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 
 namespace MpWpfApp {
-    public class MpContentViewDropBehavior : MpDropBehaviorBase<MpContentView> {
+    public class MpContentViewDropBehavior : MpDropBehaviorBase<MpRtbContentView> {
         #region Privates              
         private double _autoScrollMinScrollDist = 15;
 
@@ -305,12 +305,16 @@ namespace MpWpfApp {
             var dropRange = GetDropRange(rtfDropIdx, pre, post, split);
 
             bool deleteDragItem = false;
-            MpContentView dragContentView = null;
+            MpRtbContentView dragContentView = null;
             string dropData = string.Empty;
             if (drag_ctvm == null) {
                 if (dragData is MpPortableDataObject mpdo) {
                     // from external source
                     var tempCopyItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo, true);
+                    if(tempCopyItem == null) {
+                        //empty item ignore (or was a bug and unnecessary check here
+                        return;
+                    }
                     dropData = tempCopyItem.ItemData.ToPlainText();
                 } else {
                     // external data should be pre-processed
@@ -322,7 +326,7 @@ namespace MpWpfApp {
 
                 //find drag content view
                 dragContentView = Application.Current.MainWindow
-                                .GetVisualDescendents<MpContentView>()
+                                .GetVisualDescendents<MpRtbContentView>()
                                 .FirstOrDefault(x =>
                                     x.DataContext is MpClipTileViewModel tctvm &&
                                     tctvm.CopyItemId == drag_ctvm.CopyItemId);
@@ -500,7 +504,7 @@ namespace MpWpfApp {
 
             if(rtbScrollOffsetDelta.X != 0 || rtbScrollOffsetDelta.Y != 0) {
                 _autoScrollVelocity += _autoScrollAccumulator;
-                var cv = rtb.GetVisualAncestor<MpContentView>();
+                var cv = rtb.GetVisualAncestor<MpRtbContentView>();
                 cv.ScrollByPointDelta(rtbScrollOffsetDelta);
             }
 

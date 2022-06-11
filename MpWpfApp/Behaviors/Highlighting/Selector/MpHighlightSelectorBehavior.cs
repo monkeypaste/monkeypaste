@@ -76,7 +76,7 @@ namespace MpWpfApp {
                 await Task.Delay(50);
             }
 
-            var rtbvl = AssociatedObject.GetVisualDescendents<MpContentView>();
+            var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbContentView>();
             dtl.AddRange(rtbvl.Select(x => x.RtbHighlightBehavior).ToList());
 
             dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);

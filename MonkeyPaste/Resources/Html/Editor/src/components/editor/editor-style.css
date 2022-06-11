@@ -9,12 +9,11 @@ body {
     width: 100%;
     font-family: Arial;
     overflow: hidden;
-    white-space: pre-wrap;
+    /*white-space: pre-wrap;*/
 }
 
 .btn {
-    
-
+}
     /* On mouse-over */
     .btn:hover {
         background: #eee;

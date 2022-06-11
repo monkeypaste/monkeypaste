@@ -604,9 +604,8 @@ namespace MonkeyPaste {
         #endregion MpCopyItem
 
         #region MpTextToken
-        public static async Task<List<string>> ParseTextTemplateGuidsByCopyItemId(int ciid) {
+        public static async Task<List<string>> ParseTextTemplateGuidsByCopyItemId(MpCopyItem ci) {
             var textTemplateGuids = new List<string>();
-            var ci = await GetCopyItemById(ciid);
             if (ci == null) {
                 return textTemplateGuids;
             }
@@ -622,8 +621,13 @@ namespace MonkeyPaste {
             return textTemplateGuids;
         }
 
-        public static async Task<List<MpTextTemplate>> ParseTextTemplatesByCopyItemId(int ciid) {
-            var templateGuids = await ParseTextTemplateGuidsByCopyItemId(ciid);
+        public static async Task<List<MpTextTemplate>> ParseTextTemplatesByCopyItemId(MpCopyItem ci) {
+            if(!ci.ItemData.Contains(MpTextTemplate.TextTemplateOpenToken)) {
+                // pre-pass data because this may be a bottle neck
+                return new List<MpTextTemplate>();
+            }
+
+            var templateGuids = await ParseTextTemplateGuidsByCopyItemId(ci);
             var result = await GetTextTemplatesByGuids(templateGuids);
             return result;
         }
@@ -1178,10 +1182,9 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<MpCopyItem> RemoveQueryItem(int copyItemId) {
+        public static MpCopyItem RemoveQueryItem(int copyItemId) {
             //returns first child or null
             //return value is used to adjust dropIdx in ClipTrayDrop
-            await Task.Delay(1);
             if (!AllFetchedAndSortedCopyItemIds.Contains(copyItemId)) {
                 //throw new Exception("Query does not contain item " + copyItemId);
                 return null;

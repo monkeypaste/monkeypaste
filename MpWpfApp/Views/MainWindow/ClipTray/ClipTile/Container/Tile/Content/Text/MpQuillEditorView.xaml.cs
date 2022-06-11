@@ -136,5 +136,9 @@ namespace MpWpfApp {
         public void Dispose() {
             throw new NotImplementedException();
         }
+
+        private void QuillWebView_SizeChanged(object sender, SizeChangedEventArgs e) {
+            QuillWebView.FitDocToWebView();
+        }
     }
 }

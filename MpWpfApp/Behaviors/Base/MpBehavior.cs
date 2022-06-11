@@ -46,7 +46,7 @@ namespace MpWpfApp {
             //if(AssociatedObject == null && _dataContext != null) {
             //    AssociatedObject = Application.Current.MainWindow
             //                        .GetVisualDescendent<MpClipTrayContainerView>()
-            //                        .GetVisualDescendents<MpContentView>()
+            //                        .GetVisualDescendents<MpRtbContentView>()
             //                        .FirstOrDefault(x => x.DataContext == _dataContext) as T;
             //}
             var assocObj = AssociatedObject;

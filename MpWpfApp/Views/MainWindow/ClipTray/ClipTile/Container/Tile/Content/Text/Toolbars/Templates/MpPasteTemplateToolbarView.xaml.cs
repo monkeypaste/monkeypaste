@@ -45,7 +45,7 @@ namespace MpWpfApp {
             }
 
             var rtb = this.GetVisualAncestor<MpClipTileView>()
-                .GetVisualDescendent<MpContentView>()
+                .GetVisualDescendent<MpRtbContentView>()
                 .GetVisualDescendent<RichTextBox>();
             //rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
 

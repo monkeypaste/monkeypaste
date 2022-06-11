@@ -31,7 +31,7 @@ namespace MpWpfApp {
                 //var clvl = Application.Current.MainWindow.GetVisualDescendents<MpContentListView>();
                 //dtl.AddRange(clvl.Select(x => x.ContentListDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
-                var rtbvl = Application.Current.MainWindow.GetVisualDescendents<MpContentView>();
+                var rtbvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>();
                 dtl.AddRange(rtbvl.Select(x => x.ContentViewDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
                 dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().ClipTrayDropBehavior);
@@ -143,7 +143,7 @@ namespace MpWpfApp {
 
         private static MpIContentDropTarget SelectDropTarget(object dragData) {
             MpIContentDropTarget selectedTarget = null;
-            foreach (var dt in DropTargets.Where(x => x.IsDropEnabled)) {
+            foreach (var dt in DropTargets.Where(x => x.IsDropEnabled).OrderByDescending(x=>(int)x.DropType)) {
                 if (!dt.IsDragDataValid(MpShortcutCollectionViewModel.Instance.GlobalIsCtrlDown, dragData)) {
                     continue;
                 }

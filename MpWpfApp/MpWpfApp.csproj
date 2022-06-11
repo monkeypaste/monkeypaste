@@ -397,8 +397,11 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\MpDetectedObjectsCollectionView.xaml.cs">
       <DependentUpon>MpDetectedObjectsCollectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentView.xaml.cs">
-      <DependentUpon>MpContentView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpRtbContentView.xaml.cs">
+      <DependentUpon>MpRtbContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Rtf\MpRtbContentContainerView.xaml.cs">
+      <DependentUpon>MpRtbContentContainerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml.cs">
       <DependentUpon>MpFileItemParagraph.xaml</DependentUpon>
@@ -791,9 +794,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpContentView.xaml">
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\MpRtbContentView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Rtf\MpRtbContentContainerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml">
       <SubType>Designer</SubType>
@@ -2899,8 +2906,7 @@
   <ItemGroup>
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Plugins\Google\PeopleApi\" />
-    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Base\" />
-    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FileList\" />
+    <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Html\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>
   <ItemGroup>

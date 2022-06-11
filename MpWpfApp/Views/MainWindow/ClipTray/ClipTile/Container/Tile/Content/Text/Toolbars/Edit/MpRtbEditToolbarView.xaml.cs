@@ -28,7 +28,7 @@ namespace MpWpfApp {
                 if (ctv == null) {
                     return null;
                 }
-                var cv = ctv.GetVisualDescendent<MpContentView>();
+                var cv = ctv.GetVisualDescendent<MpRtbContentView>();
                 if (cv == null) {
                     return null;
                 }

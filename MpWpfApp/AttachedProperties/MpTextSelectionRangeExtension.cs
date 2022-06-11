@@ -187,8 +187,10 @@ namespace MpWpfApp {
             if(tbb is TextBox tb) {
                 return tb.Text.Length == tb.SelectionLength;
             } else if(tbb is RichTextBox rtb) {
-                return rtb.Document.ContentStart == rtb.Selection.Start &&
-                       rtb.Document.ContentEnd == rtb.Selection.End;
+                //return rtb.Document.ContentStart == rtb.Selection.Start &&
+                //       rtb.Document.ContentEnd == rtb.Selection.End;
+                return rtb.Document.ContentRange().Text.Length ==
+                       rtb.Selection.Text.Length;
             }
             return false;
         }
@@ -200,7 +202,7 @@ namespace MpWpfApp {
             // first look for content tile rtb
             if(tsr is MpClipTileViewModel ctvm) { 
                 var cv = Application.Current.MainWindow
-                                            .GetVisualDescendents<MpContentView>()
+                                            .GetVisualDescendents<MpRtbContentView>()
                                             .FirstOrDefault(x => (x.DataContext as MpClipTileViewModel).CopyItemId == ctvm.CopyItemId);
                 if(cv == null) {
                     return null;

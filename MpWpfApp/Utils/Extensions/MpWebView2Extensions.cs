@@ -15,7 +15,7 @@ namespace MpWpfApp {
                 isReadOnly = civm.IsContentReadOnly;
             }
             if (!isReadOnly) {
-                var clv = wv2.GetVisualAncestor<MpContentView>();
+                var clv = wv2.GetVisualAncestor<MpClipTileView>();
                 double w = clv == null ? wv2.ActualWidth : clv.ActualWidth;
                 double h = clv == null ? wv2.ActualHeight : clv.ActualHeight;
                 wv2.Width = Math.Max(0, w - wv2.Margin.Left - wv2.Margin.Right/* - wv2.Padding.Left - wv2.Padding.Right*/);
