@@ -84,6 +84,8 @@ namespace MpWpfApp {
                 if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
                     string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
                     htmlClipboardData = MpHtmlClipboardData.Parse(rawHtmlData);
+
+
                     //htmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
                 }
 

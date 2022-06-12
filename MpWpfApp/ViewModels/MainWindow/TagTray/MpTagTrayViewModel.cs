@@ -96,6 +96,8 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
+
         #endregion
 
         #region Appearance

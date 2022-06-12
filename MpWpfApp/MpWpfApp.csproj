@@ -194,6 +194,16 @@
     <Compile Include="Converters\HtmlToRtf\MpRichTextFormatProperties.cs" />
     <Compile Include="Converters\HtmlToRtf\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\HtmlToRtf\MpQuillHtmlToRtfConverter.cs" />
+    <Compile Include="Converters\HtmlToXaml\CssStylesheet.cs" />
+    <Compile Include="Converters\HtmlToXaml\HtmlCSSParser.cs" />
+    <Compile Include="Converters\HtmlToXaml\HtmlEncodedTextWriter.cs" />
+    <Compile Include="Converters\HtmlToXaml\HtmlFromXamlConverter.cs" />
+    <Compile Include="Converters\HtmlToXaml\HtmlLexicalAnalyzer.cs" />
+    <Compile Include="Converters\HtmlToXaml\HtmlParser.cs" />
+    <Compile Include="Converters\HtmlToXaml\HtmlSchema.cs" />
+    <Compile Include="Converters\HtmlToXaml\HtmlTokenType.cs" />
+    <Compile Include="Converters\HtmlToXaml\HtmlToXamlConverter.cs" />
+    <Compile Include="Converters\HtmlToXaml\MainWindow.xaml.cs" />
     <Compile Include="Converters\MpActionIdToThicknessConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemGuidToIconSourceConverter.cs" />
     <Compile Include="Converters\MpAnalyticItemGuidToTitleConverter.cs" />
@@ -733,6 +743,10 @@
     <Page Include="Controls\MultiSelectComboBox\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Converters\HtmlToXaml\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
     <Page Include="Styles\Buttons\MpButtonResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>

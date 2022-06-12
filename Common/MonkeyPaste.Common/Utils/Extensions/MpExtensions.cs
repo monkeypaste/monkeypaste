@@ -210,14 +210,19 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Strings
-       
+
         #endregion
 
         #region Visual
-        
+
         #endregion
 
         #region Streams
+        public static string ReadToEnd(this MemoryStream BASE) {
+            BASE.Position = 0;
+            StreamReader R = new StreamReader(BASE);
+            return R.ReadToEnd();
+        }
 
         public static Stream ToStream(this string value) {
             return value.ToStream(Encoding.UTF8);

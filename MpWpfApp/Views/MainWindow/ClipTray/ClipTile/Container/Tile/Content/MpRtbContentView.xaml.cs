@@ -217,9 +217,16 @@ namespace MpWpfApp {
         }
         
         private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
+            UpdateAdorners();
+
             if(BindingContext != null) {
                 BindingContext.OnPropertyChanged(nameof(BindingContext.SelectedTextHexColor));
             }
+
+            MpConsole.WriteLine(BindingContext.ToString() + " Selection Changed");
+            MpConsole.WriteLine($"Selection Start: {BindingContext.SelectionStart} Length: {BindingContext.SelectionLength}");
+            MpConsole.WriteLine($"Selected Plain Text: '{BindingContext.SelectedPlainText}'");
+            MpConsole.WriteLine("");
         }
 
         private void BindingContext_OnFocusRequest(object sender, EventArgs e) {
@@ -484,7 +491,7 @@ namespace MpWpfApp {
             }
 
             MpDragDropManager.StartDragCheck(BindingContext);
-
+            
             e.Handled = true;
         }
 

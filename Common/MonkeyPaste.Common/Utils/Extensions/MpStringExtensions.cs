@@ -415,7 +415,7 @@ namespace MonkeyPaste.Common {
             return true;
         }
 
-        public static bool IsStringQuillText(this string str) {
+        public static bool IsStringHtmlText(this string str) {
             if (string.IsNullOrEmpty(str)) {
                 return false;
             }

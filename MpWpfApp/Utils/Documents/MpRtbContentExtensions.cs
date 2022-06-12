@@ -19,6 +19,8 @@ using System.Reflection;
 using System.Xml;
 using System.Windows.Markup;
 using System.ComponentModel;
+using System.Xml.Serialization;
+using System.Xml.Linq;
 
 namespace MpWpfApp {
     public static class MpRtbContentExtensions {
@@ -434,6 +436,9 @@ namespace MpWpfApp {
                         e.Handled = true;
                     }
                 }
+                if(ctvm.IsSubSelectionEnabled || !ctvm.IsContentReadOnly) {
+                    MpDragDropManager.StartDragCheck(ctvm);
+                }
             };
 
             MouseButtonEventHandler thl_previewMouseRightButtonDown_handler = (s, e) => {
@@ -625,8 +630,10 @@ namespace MpWpfApp {
             if (str.IsStringRichText() || str.IsStringRichTextTable()) {
                 return str;
             }
-            if (str.IsStringQuillText()) {
-                return MpQuillHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
+            if (str.IsStringHtmlText()) {
+                //return MpQuillHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
+                string xaml = HtmlToXamlDemo.HtmlToXamlConverter.ConvertHtmlToXaml(str, true);
+                return xaml.ToRichText(iconId);                
             }
             if (str.IsStringXaml()) {
                 using (var stringReader = new StringReader(str)) {
@@ -818,7 +825,7 @@ namespace MpWpfApp {
             if (string.IsNullOrEmpty(str)) {
                 return string.Empty.ToRichText().ToXamlPackage();
             }
-            if (str.IsStringQuillText()) {
+            if (str.IsStringHtmlText()) {
                 return str.ToRichText().ToXamlPackage();
             }
             if (str.IsStringPlainText()) {
@@ -836,13 +843,61 @@ namespace MpWpfApp {
         }
 
         public static string ToXamlPackage(this FlowDocument fd) {
-            //TextRange range = new TextRange(fd.ContentStart, fd.ContentEnd);
-            //using (MemoryStream stream = new MemoryStream()) {
-            //    range.Save(stream, DataFormats.Xaml);
-            //    //return ASCIIEncoding.Default.GetString(stream.ToArray());
-            //    return UTF8Encoding.Default.GetString(stream.ToArray());
-            //}
-            return fd.ToRichText().ToXamlPackage();
+            
+            return XamlWriter.Save(fd);
+        }
+
+        public static string ToXamlPackage(this TextRange tr) {
+            using(var ms = new MemoryStream()) {
+                tr.Save(ms, DataFormats.XamlPackage);
+                return XamlWriter.Save(ms);
+            }
+        }
+
+        public static string ToEncodedPlainText(this TextRange tr) {
+            if(tr.IsEmpty) {
+                return string.Empty;
+            }
+            var templatesToEncode = tr.GetAllTextElements()
+                                                .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
+                                                .OrderBy(x => tr.Start.GetOffsetToPosition(x.ContentStart))
+                                                .ToList();
+            if(templatesToEncode.Count() == 0) {
+                return tr.Text;
+            }
+
+            var sb = new StringBuilder();
+            var ctp = tr.Start;
+            foreach (var te in templatesToEncode) {
+                var ntp = te.ElementStart;
+                sb.Append(new TextRange(ctp, ntp).Text);
+                sb.Append((te.Tag as MpTextTemplate).EncodedTemplate);
+                ctp = te.ElementEnd;
+                if (te == templatesToEncode.Last()) {
+                    sb.Append(new TextRange(ctp, tr.End).Text);
+                }
+            }
+            return sb.ToString();
+        }
+
+        public static string ToEncodedRichText(this TextRange tr) {
+            if (tr.IsEmpty) {
+                return string.Empty;
+            }
+            var templatesToEncode = tr.GetAllTextElements()
+                                                .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
+                                                .OrderBy(x => tr.Start.GetOffsetToPosition(x.ContentStart))
+                                                .Cast<InlineUIContainer>()
+                                                .ToList();
+
+            foreach (InlineUIContainer thl in templatesToEncode) {
+                var cit = thl.Tag as MpTextTemplate;
+                var span = new Span(thl.ContentStart, thl.ContentEnd);
+                span.Inlines.Clear();
+                span.Inlines.Add(cit.EncodedTemplate);
+            }
+
+            return tr.ToRichText();
         }
 
         public static string ToRichTextTable(this string csvStr) {
@@ -854,7 +909,7 @@ namespace MpWpfApp {
         }
 
         public static string ToQuillText(this string text) {
-            if (text.IsStringQuillText()) {
+            if (text.IsStringHtmlText()) {
                 return text;
             }
             return MpRtfToHtmlConverter.ConvertRtfToHtml(text.ToRichText());

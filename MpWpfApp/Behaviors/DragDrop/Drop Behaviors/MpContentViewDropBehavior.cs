@@ -309,6 +309,11 @@ namespace MpWpfApp {
             string dropData = string.Empty;
             if (drag_ctvm == null) {
                 if (dragData is MpPortableDataObject mpdo) {
+                    if(MpRichTextBox.DraggingRtb != null) {
+                        //var internalObj = mpdo.GetData(MpPortableDataFormats.InternalContent);
+                        await Drop(isCopy, MpRichTextBox.DraggingRtb.DataContext);
+                        return;
+                    }
                     // from external source
                     var tempCopyItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo, true);
                     if(tempCopyItem == null) {

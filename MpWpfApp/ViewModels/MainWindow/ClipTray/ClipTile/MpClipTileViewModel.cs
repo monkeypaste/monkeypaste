@@ -487,7 +487,7 @@ using MpProcessHelper;
                 if(IsPinned || Parent == null) {
                     return 0;
                 }
-                return Parent.FindTileOffsetX2(QueryOffsetIdx);
+                return Parent.FindTileOffsetX(QueryOffsetIdx);
             }
         }
 
@@ -1210,7 +1210,7 @@ using MpProcessHelper;
             
             IsBusy = true;
 
-            if (ci != null && Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
+            if (ci != null && Parent.TryGetByPersistentWidthById(ci.Id, out double uniqueWidth)) {
                 TileBorderWidth = uniqueWidth;
             } else {
                 TileBorderWidth = DefaultBorderHeight;
@@ -1537,6 +1537,8 @@ using MpProcessHelper;
             } else {
                 // TODO set internal data stuff here
             }
+
+            d.SetData(MpPortableDataFormats.InternalContent, this);
             return d;
         }
         
@@ -1620,39 +1622,12 @@ using MpProcessHelper;
             }
         }
 
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             //if(MpDragDropManager.IsDragAndDrop) {
             //    return;
             //}
             if(e is MpCopyItem ci && CopyItemId == ci.Id) {
 
-                int queryIdx = QueryOffsetIdx;
-                QueryOffsetIdx = -1;
-
-                if(IsPinned) {
-                    var pctvm = Parent.PinnedItems.FirstOrDefault(x => x.CopyItemId == ci.Id);
-                    if (pctvm != null) {
-                        // Flag QueryOffsetIdx = -1 so it tray doesn't attempt to return it to tray
-                        pctvm.QueryOffsetIdx = -1;
-                        MpHelpers.RunOnMainThread(() => {
-                            Parent.ToggleTileIsPinnedCommand.Execute(pctvm);
-                        });
-                    }
-                } else {
-                    //MpDataModelProvider.QueryInfo.NotifyQueryChanged(false);
-                    MpDataModelProvider.RemoveQueryItem(ci.Id);
-                    for (int i = 0; i < Parent.Items.Count; i++) {
-                        var ctvm = Parent.Items[i];
-                        if(ctvm.QueryOffsetIdx >= queryIdx && 
-                           ctvm.CopyItemId != CopyItemId) {
-                            ctvm.QueryOffsetIdx--;
-                            ctvm.OnPropertyChanged(nameof(ctvm.TrayX));
-                        }
-                    }
-                    CopyItem = null;
-
-                }
-                OnPropertyChanged(nameof(IsPlaceholder));
             }
         }
 
@@ -1716,9 +1691,6 @@ using MpProcessHelper;
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
-
-                        
-
                         if (IsPinned) {
                             Parent.ClearClipSelection(false);
                         } else {
@@ -1785,9 +1757,9 @@ using MpProcessHelper;
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyResizing));
                     break;
                 case nameof(TileBorderWidth):
-                    if (Parent.PersistentUniqueWidthTileLookup.TryGetValue(QueryOffsetIdx, out double uniqueWidth)) {
+                    if (Parent.TryGetByPersistentWidthById(CopyItemId, out double uniqueWidth)) {
                         //this occurs when mainwindow is resized and user gives tile unique width
-                        Parent.PersistentUniqueWidthTileLookup[QueryOffsetIdx] = TileBorderWidth;
+                        Parent.AddOrReplacePersistentWidthById(CopyItemId, TileBorderWidth);
                     }
                     break;
                 case nameof(IsOverPinButton):
@@ -1855,6 +1827,10 @@ using MpProcessHelper;
                             IsContentFocused = true;
                             MpTextSelectionRangeExtension.SelectAll(this);
                         }
+
+                        if(MpTextSelectionRangeExtension.IsSelectionContainTemplate(this)) {
+                            TemplateCollection.ClearAllEditing();
+                        }
                     } else {
                         StopAnimation();
                     }
@@ -1883,6 +1859,11 @@ using MpProcessHelper;
                     break;
                 case nameof(CopyItemData):
                     ResetExpensiveDetails();
+                    break;
+                case nameof(TrayX):
+                    //if(QueryOffsetIdx == Parent.TailQueryIdx) {
+
+                    //}
                     break;
                 case nameof(FindText):
                 case nameof(ReplaceText):

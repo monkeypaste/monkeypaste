@@ -15,6 +15,8 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace MpWpfApp {
     public class MpRichTextBox : RichTextBox {
+        public static MpRichTextBox DraggingRtb { get; private set; } = null;
+
         #region Overrides
         //public new MpEventEnabledFlowDocument Document { get; set; }
 
@@ -23,12 +25,16 @@ namespace MpWpfApp {
             Document.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
             //Document.IsOptimalParagraphEnabled = true;
         }
+
+        protected override void OnPreviewQueryContinueDrag(QueryContinueDragEventArgs e) {
+            base.OnPreviewQueryContinueDrag(e);
+            DraggingRtb = this;
+        }
         protected override void OnDragEnter(DragEventArgs e) {
             OnDragOver(e);
         }
 
         protected override void OnDragOver(DragEventArgs e) {
-
             this.GetVisualAncestor<MpRtbContentView>().ContentViewDropBehavior.OnDragOver(this, e);
         }
 
@@ -38,8 +44,22 @@ namespace MpWpfApp {
 
         protected override void OnDrop(DragEventArgs e) {            
             this.GetVisualAncestor<MpRtbContentView>().ContentViewDropBehavior.OnDrop(this, e);
+            DraggingRtb = null;
         }
 
+        
+
+        protected override void OnSelectionChanged(RoutedEventArgs e) {
+            base.OnSelectionChanged(e);
+
+            
+        }
+
+        public new TextSelection Selection {
+            get {
+                return base.Selection;
+            }
+        }
         #endregion
     }
 }

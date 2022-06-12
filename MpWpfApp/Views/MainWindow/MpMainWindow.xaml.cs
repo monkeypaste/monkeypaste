@@ -21,6 +21,9 @@ namespace MpWpfApp {
 
         private  void MainWindow_Loaded(object sender, RoutedEventArgs e) {
             LoadMainWindow();
+
+            //var test_window = new HtmlToXamlDemo.MainWindow();
+            //test_window.Show();
         }
 
         private void LoadMainWindow() {

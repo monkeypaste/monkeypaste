@@ -92,7 +92,7 @@ namespace MpWpfApp {
                 return tb.SelectedText;
             }
             if(tbb is RichTextBox rtb) {
-                return rtb.Selection.Text;
+                return MpContentDocumentRtfExtension.GetEncodedContent(rtb, false, true);
             }
             return null;
         }

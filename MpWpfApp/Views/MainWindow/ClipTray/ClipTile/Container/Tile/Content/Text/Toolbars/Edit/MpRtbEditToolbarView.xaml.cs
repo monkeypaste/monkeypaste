@@ -144,6 +144,7 @@ namespace MpWpfApp {
                     fontSizeStr = fontSizeStr.Replace(".", string.Empty);
                 }
                 if (!_defaultFontSizes.Contains(fontSizeStr)) {
+                    _defaultFontSizes.Add(fontSizeStr);
 
                     Func<string, double> doubleParser = input => {
                         double result;

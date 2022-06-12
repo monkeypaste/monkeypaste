@@ -122,6 +122,10 @@ namespace MpWpfApp {
             MpShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonUp += GlobalHook_MouseUp;
         }
 
+        public static void SetDragData(object data) {
+            DragData = data;
+        }
+
         public static bool PrepareDropDataFromExternalSource(IDataObject extDragData) {
             //bool isValid = MpWpfDataObjectHelper.Instance.IsContentDropDragDataValid((DataObject)extDragData);
             //if (isValid) {

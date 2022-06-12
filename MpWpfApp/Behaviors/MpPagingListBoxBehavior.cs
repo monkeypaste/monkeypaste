@@ -135,56 +135,58 @@ namespace MpWpfApp {
 
 
         public void ScrollIntoView(object obj) {
-            MpHelpers.RunOnMainThread(() => {
-                var ctrvm = AssociatedObject.DataContext as MpClipTrayViewModel;
-                if (ctrvm.IsScrollingIntoView || ctrvm.IsAnyBusy) {
+            if(!Application.Current.Dispatcher.CheckAccess()) {
+                MpHelpers.RunOnMainThread(() => ScrollIntoView(obj));
+                return;
+            }
+            var ctrvm = AssociatedObject.DataContext as MpClipTrayViewModel;
+            if (ctrvm.IsScrollingIntoView || ctrvm.IsAnyBusy) {
+                return;
+            }
+
+            if (obj is MpClipTileViewModel ctvm) {
+                if (!ctrvm.Items.Contains(ctvm) || ctvm.IsPinned) {
                     return;
                 }
+                ctrvm.IsScrollingIntoView = true;
+                _velocity = 0;
+                ctrvm.ScrollOffset += GetScrollIntoViewDeltaOffset(ctvm); ;
+                ctrvm.IsScrollingIntoView = false;
+                return;
 
-                if (obj is MpClipTileViewModel ctvm) {
-                    if (!ctrvm.Items.Contains(ctvm) || ctvm.IsPinned) {
-                        return;
-                    }
-                    ctrvm.IsScrollingIntoView = true;
-                    _velocity = 0;
-                    ctrvm.ScrollOffset += GetScrollIntoViewDeltaOffset(ctvm); ;
-                    ctrvm.IsScrollingIntoView = false;
-                    return;
+                //while (true) {
+                //    ctrvm.IsScrollingIntoView = true;
+                //    double deltaScrollOffset = GetScrollIntoViewDeltaOffset(ctvm);
+                //    MpConsole.WriteLine("Delta offset: " + deltaScrollOffset);
+                //    double targetScrollOffset = ctrvm.ScrollOffset + deltaScrollOffset;
+                //    double vel = 30;
 
-                    //while (true) {
-                    //    ctrvm.IsScrollingIntoView = true;
-                    //    double deltaScrollOffset = GetScrollIntoViewDeltaOffset(ctvm);
-                    //    MpConsole.WriteLine("Delta offset: " + deltaScrollOffset);
-                    //    double targetScrollOffset = ctrvm.ScrollOffset + deltaScrollOffset;
-                    //    double vel = 30;
+                //    if (Math.Abs(deltaScrollOffset) < 1) {
+                //        ctrvm.ScrollOffset = targetScrollOffset;
+                //        _velocity = 0;
+                //        break;
+                //    }
 
-                    //    if (Math.Abs(deltaScrollOffset) < 1) {
-                    //        ctrvm.ScrollOffset = targetScrollOffset;
-                    //        _velocity = 0;
-                    //        break;
-                    //    }
+                //    if (deltaScrollOffset > 0) {
+                //        if (ctrvm.ScrollOffset > targetScrollOffset) {
+                //            ctrvm.ScrollOffset = targetScrollOffset;
+                //            _velocity = 0;
+                //            break;
+                //        }
+                //        _velocity = vel;
+                //    } else {
+                //        if (ctrvm.ScrollOffset < targetScrollOffset) {
+                //            ctrvm.ScrollOffset = targetScrollOffset;
+                //            _velocity = 0;
+                //            break;
+                //        }
+                //        _velocity = -vel;
+                //    }
+                //    await Task.Delay(1000 / 30);
+                //}
 
-                    //    if (deltaScrollOffset > 0) {
-                    //        if (ctrvm.ScrollOffset > targetScrollOffset) {
-                    //            ctrvm.ScrollOffset = targetScrollOffset;
-                    //            _velocity = 0;
-                    //            break;
-                    //        }
-                    //        _velocity = vel;
-                    //    } else {
-                    //        if (ctrvm.ScrollOffset < targetScrollOffset) {
-                    //            ctrvm.ScrollOffset = targetScrollOffset;
-                    //            _velocity = 0;
-                    //            break;
-                    //        }
-                    //        _velocity = -vel;
-                    //    }
-                    //    await Task.Delay(1000 / 30);
-                    //}
-
-                    //ctrvm.IsScrollingIntoView = false;
-                }
-            });
+                //ctrvm.IsScrollingIntoView = false;
+            }
         }
 
         #endregion

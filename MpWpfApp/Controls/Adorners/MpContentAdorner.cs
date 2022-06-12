@@ -79,7 +79,7 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsShowing => MpMainWindowViewModel.Instance.IsMainWindowOpen &&
+        public bool IsShowing => //MpMainWindowViewModel.Instance.IsMainWindowOpen &&
                                 _dropBehavior.GetType() != typeof(MpPinTrayDropBehavior) &&
                                  (IsShowingDropShape || 
                                  IsShowingCaret || 

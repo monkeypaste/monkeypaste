@@ -231,7 +231,7 @@ namespace MpWpfApp {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.Children)));
             OnPropertyChanged(nameof(Items));
 
-            RestoreAllEnabled().FireAndForgetSafeAsync(this);
+            await RestoreAllEnabled();//.FireAndForgetSafeAsync(this);
 
             // select most recent action
             MpActionViewModelBase actionToSelect = AllActions
@@ -277,6 +277,10 @@ namespace MpWpfApp {
         }
 
         public async Task RestoreAllEnabled() {
+            // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
+
+            //while(MpTagTrayViewModel.Instance.IsBusy)
+
             foreach(var avm in AllActions) {
                 // TODO this could be optimized by toggling enabled in parallel
                 if(avm.IsEnabledDb) {

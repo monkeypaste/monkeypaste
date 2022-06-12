@@ -166,7 +166,8 @@ namespace MonkeyPaste.Common {
             FileDrop,
             Csv,
             Unicode,
-            OemText
+            OemText,
+            InternalContent
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
@@ -180,6 +181,7 @@ namespace MonkeyPaste.Common {
         public const string Unicode = "Unicode";
         public const string OemText = "OEMText";
 
+        public const string InternalContent = "Mp Internal Content";
 
 
         public static string[] Formats => _formatLookup.Select(x => x.Value.Name).ToArray();

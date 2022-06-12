@@ -16,6 +16,8 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Xml.Linq;
+using System.Runtime.Serialization;
 
 namespace MpWpfApp {
     public class MpContentDocumentRtfExtension : DependencyObject {
@@ -139,7 +141,8 @@ namespace MpWpfApp {
         }
 
         public static async Task SaveTextContent(RichTextBox rtb) {
-            if(MpClipTrayViewModel.Instance.IsRequery || MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+            if(MpClipTrayViewModel.Instance.IsRequery || 
+                MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;
             }
 
@@ -171,39 +174,8 @@ namespace MpWpfApp {
                                        .Select(x => (x.Source as BitmapSource).ToBase64String())
                                        .FirstOrDefault();
                 case MpCopyItemType.Text:
-                    List<TextElement> elementsToEncode = new List<TextElement>();
-                    if (!ignoreSubSelection && !rtb.Selection.IsEmpty) {
-                        //if nothing is selected treat full content as selection
-                        bool hasSelectedTemplates = MpTextSelectionRangeExtension.IsSelectionContainTemplate(ctvm);
-                        if(hasSelectedTemplates) {
-                            elementsToEncode = rtb.Selection.GetAllTextElements()
-                                            .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
-                                            .ToList();
-                        }
-                    } else if(ctvm.HasTemplates) {
-                        elementsToEncode = rtb.Document.GetAllTextElements()
-                                            .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
-                                            .ToList();
-                    }
-                    
-                    foreach (InlineUIContainer thl in elementsToEncode) {
-                        var cit = thl.Tag as MpTextTemplate;
-                        var span = new Span(thl.ContentStart, thl.ContentEnd);
-                        span.Inlines.Clear();
-                        span.Inlines.Add(cit.EncodedTemplate);
-                    }
-
-                    if(ignoreSubSelection || rtb.Selection.IsEmpty) {
-                        if(asPlainText) {
-                            return rtb.Document.ToPlainText();
-                        }
-                        return rtb.Document.ToRichText();
-                    }
-                    if (asPlainText) {
-                        return rtb.Selection.ToRichText().ToPlainText();
-                    }
-
-                    return rtb.Selection.ToRichText();
+                    TextRange tr = ignoreSubSelection ? rtb.Document.ContentRange() : rtb.Selection;
+                    return asPlainText ? tr.ToEncodedPlainText() : tr.ToEncodedRichText();
             }
             MpConsole.WriteTraceLine("Unknown item type " + ctvm);
             return null;            

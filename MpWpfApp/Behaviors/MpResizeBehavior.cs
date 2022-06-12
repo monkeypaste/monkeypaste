@@ -322,8 +322,8 @@ namespace MpWpfApp {
 
             if(!resetToContentSize && 
                AssociatedObject.DataContext is MpClipTileViewModel ctvm && !ctvm.IsPlaceholder) {
-                MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup.Remove(ctvm.QueryOffsetIdx);
-                
+                //MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup.Remove(ctvm.CopyItemId);
+                MpClipTrayViewModel.Instance.RemovePersistentWidthById(ctvm.CopyItemId);
             }
         }
 

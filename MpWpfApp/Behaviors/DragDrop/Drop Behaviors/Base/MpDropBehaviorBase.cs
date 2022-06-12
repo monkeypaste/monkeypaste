@@ -183,7 +183,12 @@ namespace MpWpfApp {
 
             bool isValid = true;
             if (MpDragDropManager.DragData == null) {
-                isValid = MpDragDropManager.PrepareDropDataFromExternalSource(e.Data);
+                if (MpRichTextBox.DraggingRtb != null) {
+                    MpDragDropManager.IsDraggingFromExternal = false;
+                    MpDragDropManager.SetDragData(MpRichTextBox.DraggingRtb.DataContext);
+                } else {
+                    isValid = MpDragDropManager.PrepareDropDataFromExternalSource(e.Data);
+                }                
             }
 
             if (isValid) {

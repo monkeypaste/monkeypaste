@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Text;
 
 namespace MpWpfApp {
@@ -24,8 +25,11 @@ namespace MpWpfApp {
 
             int html_start_idx = htmlClipboardData.IndexOf(htmlStartToken) + htmlStartToken.Length;
             if(html_start_idx >= 0) {
-                int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
-                hcd.Html = htmlClipboardData.Substring(html_start_idx,html_end_idx - html_start_idx);
+                hcd.Html = HtmlToXamlDemo.HtmlParser.ExtractHtmlFromClipboardData(htmlClipboardData);
+                MpConsole.WriteLine("Extracted Html: ");
+                MpConsole.WriteLine(hcd.Html);
+                //int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
+                //hcd.Html = htmlClipboardData.Substring(html_start_idx,html_end_idx - html_start_idx);
             }
             string sourceUrlToken = "SourceURL:";
             int source_url_start_idx = htmlClipboardData.IndexOf(sourceUrlToken) + sourceUrlToken.Length;
