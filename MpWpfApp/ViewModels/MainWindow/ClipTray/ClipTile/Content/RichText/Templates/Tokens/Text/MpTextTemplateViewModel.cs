@@ -223,6 +223,23 @@ namespace MpWpfApp {
             }
         }
 
+        public MpRichTextFormatInfoFormat RichTextFormat {
+            get {
+                if (TextTemplate == null) {
+                    return null;                    
+                }
+
+                return TextTemplate.RichTextFormat;
+            }
+            set {
+                if (RichTextFormat != value) {
+                    TextTemplate.RichTextFormat = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(RichTextFormat));
+                }
+            }
+        }
+
         public string TemplateName {
             get {
                 if (TextTemplate == null) {
@@ -254,10 +271,10 @@ namespace MpWpfApp {
                     TextTemplate.HexColor = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(TemplateHexColor));
+                    OnPropertyChanged(nameof(RichTextFormat));
                 }
             }
         }
-
 
         public MpTextTemplate TextTemplate { get; set; }
         #endregion

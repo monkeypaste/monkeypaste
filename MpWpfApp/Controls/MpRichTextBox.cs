@@ -11,19 +11,40 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Documents;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace MpWpfApp {
     public class MpRichTextBox : RichTextBox {
         public static MpRichTextBox DraggingRtb { get; private set; } = null;
+
 
         #region Overrides
         //public new MpEventEnabledFlowDocument Document { get; set; }
 
         public MpRichTextBox() : base() {
             Document = new MpEventEnabledFlowDocument();
-            Document.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+            //Document.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
             //Document.IsOptimalParagraphEnabled = true;
+
+            CommandManager.RegisterClassCommandBinding(
+                typeof(MpRichTextBox),
+                new CommandBinding(
+                    ApplicationCommands.Copy, 
+                    OnCopy, 
+                    OnCanExecuteClipboardCommand));
+
+            CommandManager.RegisterClassCommandBinding(
+                typeof(MpRichTextBox),
+                new CommandBinding(
+                    ApplicationCommands.Cut,
+                    OnCut,
+                    OnCanExecuteClipboardCommand));
+
+            CommandManager.RegisterClassCommandBinding(
+                typeof(MpRichTextBox),
+                new CommandBinding(
+                    ApplicationCommands.Paste,
+                    OnPaste,
+                    OnCanExecuteClipboardCommand));
         }
 
         protected override void OnPreviewQueryContinueDrag(QueryContinueDragEventArgs e) {
@@ -45,21 +66,58 @@ namespace MpWpfApp {
         protected override void OnDrop(DragEventArgs e) {            
             this.GetVisualAncestor<MpRtbContentView>().ContentViewDropBehavior.OnDrop(this, e);
             DraggingRtb = null;
+        }        
+
+        #endregion
+
+        #region Application Commands
+
+        private static void OnCanExecuteClipboardCommand(object target, CanExecuteRoutedEventArgs args) {
+            MpRichTextBox rtb = (MpRichTextBox)target;
+            args.CanExecute = rtb.IsEnabled;
         }
 
-        
-
-        protected override void OnSelectionChanged(RoutedEventArgs e) {
-            base.OnSelectionChanged(e);
-
-            
+        private static void OnCopy(object sender, ExecutedRoutedEventArgs e) {
+            MpRichTextBox rtb = (MpRichTextBox)sender;
+            rtb.SetClipboardData(true);
+            e.Handled = true;
         }
 
-        public new TextSelection Selection {
-            get {
-                return base.Selection;
+        private static void OnCut(object sender, ExecutedRoutedEventArgs e) {
+            MpRichTextBox rtb = (MpRichTextBox)sender;
+            rtb.SetClipboardData(false);
+            e.Handled = true;
+        }
+
+        private static void OnPaste(object sender, ExecutedRoutedEventArgs e) {
+            MpRichTextBox rtb = (MpRichTextBox)sender;
+
+            rtb.Selection.Text = Clipboard.GetText();
+
+
+            if(rtb.DataContext is MpClipTileViewModel ctvm) {
+                MpContentDocumentRtfExtension.SaveTextContent(rtb)
+                    .FireAndForgetSafeAsync(ctvm);
+            }
+            e.Handled = true;
+        }
+
+        #endregion
+
+        protected void SetClipboardData(bool isCopy) {
+            var ctvm = DataContext as MpClipTileViewModel;
+            if(Selection.IsEmpty) {
+                MpTextSelectionRangeExtension.SelectAll(ctvm);
+            }
+            string selectedText = MpContentDocumentRtfExtension.GetEncodedContent(this, false, true);
+
+            MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = true;
+            Clipboard.SetText(selectedText);
+
+            if (!isCopy) {
+                MpContentDocumentRtfExtension.FinishContentCut(ctvm)
+                    .FireAndForgetSafeAsync(ctvm);
             }
         }
-        #endregion
     }
 }

@@ -345,7 +345,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static void LoadTextTemplate(this TextRange tr, MpTextTemplate cit) {
+        public static void LoadTextTemplate_FromCode(this TextRange tr, MpTextTemplate cit) {
             // TODO (maybe) when cit is new (and no formatting is stored) need to check font formatting of beginning of tr
             // and clone (and also switch to FLowDocument if a list or something) here
             // because as long as this done on initial creation the formatting will persist (or is loaded from cit)

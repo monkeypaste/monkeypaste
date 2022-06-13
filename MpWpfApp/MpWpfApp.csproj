@@ -132,6 +132,7 @@
     <Compile Include="AttachedProperties\MpContentDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentHtmlExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
+    <Compile Include="AttachedProperties\MpRichTextFormatExtension.cs" />
     <Compile Include="AttachedProperties\MpTextSelectionRangeExtension.cs" />
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpIsFocusedExtension.cs" />
@@ -412,6 +413,9 @@
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Rtf\MpRtbContentContainerView.xaml.cs">
       <DependentUpon>MpRtbContentContainerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpTextTemplateInlineUIContainer.xaml.cs">
+      <DependentUpon>MpTextTemplateInlineUIContainer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml.cs">
       <DependentUpon>MpFileItemParagraph.xaml</DependentUpon>
@@ -815,6 +819,10 @@
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Rtf\MpRtbContentContainerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpTextTemplateInlineUIContainer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpFileItemParagraph.xaml">
       <SubType>Designer</SubType>

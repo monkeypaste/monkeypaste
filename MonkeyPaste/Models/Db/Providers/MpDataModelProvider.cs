@@ -622,7 +622,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<List<MpTextTemplate>> ParseTextTemplatesByCopyItemId(MpCopyItem ci) {
-            if(!ci.ItemData.Contains(MpTextTemplate.TextTemplateOpenToken)) {
+            if(!ci.ItemData.Contains(MpTextTemplate.TextTemplateOpenTokenRtf)) {
                 // pre-pass data because this may be a bottle neck
                 return new List<MpTextTemplate>();
             }

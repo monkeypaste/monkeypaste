@@ -26,8 +26,28 @@ namespace MonkeyPaste {
 
     public class MpTextTemplate : MpDbModelBase, MpIClonableDbModel<MpTextTemplate> {
         #region Constants
-        public const string TextTemplateOpenToken = @"\{t\{";
-        public const string TextTemplateCloseToken = @"\}t\}";
+        public const string TextTemplateOpenToken = @"{t{";
+        public const string TextTemplateCloseToken = @"}t}";
+
+        public const string TextTemplateOpenTokenRtf = @"\{t\{";
+        public const string TextTemplateCloseTokenRtf = @"\}t\}";
+        #endregion
+
+        #region Statics
+
+        public static MpRichTextFormatInfoFormat DefaultRichTextFormat {
+            get {
+                string randColor = MpColorHelpers.GetRandomHexColor();
+                return new MpRichTextFormatInfoFormat() {
+                    inlineFormat = new MpInlineTextFormatInfoFormat() {
+                        background = randColor,
+                        color = MpColorHelpers.IsBright(randColor) ? MpSystemColors.black : MpSystemColors.white,
+                        font = "Consolas",
+                        size = 12
+                    }
+                };
+            }
+        }
         #endregion
 
         #region Columns
@@ -51,25 +71,31 @@ namespace MonkeyPaste {
 
         [JsonProperty("templateName")]
         public string TemplateName { get; set; }
-        [JsonProperty("templateColor")]
+        
+        //[JsonProperty("templateColor")]
         public string HexColor { get; set; }
 
 
         [JsonProperty("templateDeltaFormat")]
         public string TemplateDeltaFormat { get; set; } = string.Empty;
+
         [JsonProperty("templateHtmlFormat")]
         public string TemplateHtmlFormat { get; set; } = string.Empty;
+
+        public string RichTextFormatJson { get; set; } = string.Empty;
   
         #endregion
 
         #region Fk Models
-
-        //[ManyToOne]
-        //public MpCopyItem CopyItem { get; set; }
         #endregion
 
         #region Properties
 
+        [Ignore]
+        public MpRichTextFormatInfoFormat RichTextFormat {
+            get => JsonConvert.DeserializeObject<MpRichTextFormatInfoFormat>(RichTextFormatJson);
+            set => RichTextFormatJson = JsonConvert.SerializeObject(value);
+        }
 
         //[Ignore]
         //public MpQuillEditorFormats TemplateFormatInfo {
@@ -102,27 +128,27 @@ namespace MonkeyPaste {
         [Ignore]
         public string EncodedTemplate {
             get {
-                return "{t{"+Guid+"}t}";
+                return TextTemplateOpenToken+Guid+TextTemplateCloseToken;
             }
         }
 
         [Ignore]
         public string EncodedTemplateRtf {
             get {
-                return TextTemplateOpenToken + Guid + TextTemplateCloseToken;
+                return TextTemplateOpenTokenRtf + Guid + TextTemplateCloseTokenRtf;
             }
         }
 
         #endregion
 
         public static async Task<MpTextTemplate> Create(
-            int copyItemId = 0,
             string guid = "",
             MpTextTemplateType templateType = MpTextTemplateType.Dynamic,
             string templateName = "", 
             string templateColor = "",
             string templateTypeData = "",
-            string formatInfo = "") {
+            string rtfFormatJson = "",
+            string deltaFormatJson = "") {
             //if(!string.IsNullOrEmpty(guid)) {
             //    var dupCheck = await MpDataModelProvider.GetTextTemplateByGuid(guid);
             //    if (dupCheck != null) {
@@ -138,7 +164,9 @@ namespace MonkeyPaste {
                 HexColor = string.IsNullOrEmpty(templateColor) ? MpColorHelpers.GetRandomHexColor() : templateColor,
                 TemplateType = templateType,
                 TemplateData = templateTypeData,
-                TemplateDeltaFormat = formatInfo
+                RichTextFormatJson = string.IsNullOrWhiteSpace(rtfFormatJson) ? 
+                                        DefaultRichTextFormat.Serialize() : rtfFormatJson,
+                TemplateDeltaFormat = deltaFormatJson
             };
 
             await newTextTemplate.WriteToDatabaseAsync();
@@ -154,7 +182,8 @@ namespace MonkeyPaste {
                 Id = suppressWrite ? this.Id : 0,
                 //CopyItemId = this.CopyItemId,
                 TemplateName = this.TemplateName,
-                HexColor = this.HexColor,
+                //HexColor = this.HexColor,
+                RichTextFormatJson = this.RichTextFormatJson,
                 TemplateText = this.TemplateText,
                 TemplateData = this.TemplateData,
                 TemplateType = this.TemplateType,                

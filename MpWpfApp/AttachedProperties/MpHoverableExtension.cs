@@ -13,6 +13,24 @@ using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpHoverableExtension : DependencyObject {
+        #region CanHover DependencyProperty
+
+        public static bool GetCanHover(DependencyObject obj) {
+            return (bool)obj.GetValue(CanHoverProperty);
+        }
+
+        public static void SetCanHover(DependencyObject obj, bool value) {
+            obj.SetValue(CanHoverProperty, value);
+        }
+
+        public static readonly DependencyProperty CanHoverProperty =
+            DependencyProperty.Register(
+                "CanHover", typeof(bool),
+                typeof(MpHoverableExtension),
+                new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        #endregion
+
         #region IsHovering DependencyProperty
 
         public static bool GetIsHovering(DependencyObject obj) {
@@ -25,9 +43,11 @@ namespace MpWpfApp {
 
         public static readonly DependencyProperty IsHoveringProperty =
             DependencyProperty.Register(
-                "IsHovering", typeof(bool), 
+                "IsHovering", 
+                typeof(bool), 
                 typeof(MpHoverableExtension), 
-                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                new FrameworkPropertyMetadata(
+                    false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         #endregion
 
@@ -161,7 +181,6 @@ namespace MpWpfApp {
         #endregion
 
         #region IsEnabled DependencyProperty
-
         public static bool GetIsEnabled(DependencyObject obj) {
             return (bool)obj.GetValue(IsEnabledProperty);
         }
@@ -234,6 +253,9 @@ namespace MpWpfApp {
                 dpo = fce;
                 dc = fce.DataContext;
             } else {
+                return;
+            }
+            if(!GetCanHover(dpo)) {
                 return;
             }
 

@@ -154,7 +154,10 @@ namespace MpWpfApp {
             }
         }
 
-        public static string GetEncodedContent(RichTextBox rtb, bool ignoreSubSelection = true, bool asPlainText = false) {
+        public static string GetEncodedContent(
+            RichTextBox rtb, 
+            bool ignoreSubSelection = true, 
+            bool asPlainText = false) {
             var ctvm = rtb.DataContext as MpClipTileViewModel;
             if(ctvm == null) {
                 Debugger.Break();
@@ -181,17 +184,13 @@ namespace MpWpfApp {
             return null;            
         }
 
-        public static string ExchangeDragDataWithDropTarget(MpClipTileViewModel drag_ctvm, bool isCopy, bool isSelfDrop) {            
+        public static string ExchangeDataWithTarget(MpClipTileViewModel drag_ctvm, bool isCopy) {            
             string dropData = null;
             var drag_rtb = FindRtbByViewModel(drag_ctvm);
 
             switch (drag_ctvm.ItemType) {
                 case MpCopyItemType.Text:
-                    if(MpTextSelectionRangeExtension.IsSelectionContainTemplate(drag_ctvm)) {
-                        dropData = GetEncodedContent(drag_rtb, false);
-                    } else {
-                        dropData = drag_rtb.Selection.Text;
-                    }                    
+                    dropData = GetEncodedContent(drag_rtb, false, true);                   
 
                     if(!isCopy) {
                         //when drag selection is not copy delete selection from source
@@ -228,20 +227,32 @@ namespace MpWpfApp {
             return dropData;
         }
 
-        public static async Task CleanupDragItemAfterDrop(MpClipTileViewModel drag_ctvm, bool isSelfDrop) {
-            var drag_rtb = FindRtbByViewModel(drag_ctvm);
-            if(drag_rtb == null) {
+        public static async Task FinishContentCut(MpClipTileViewModel drag_ctvm) {
+            var rtb = FindRtbByViewModel(drag_ctvm);
+            if(rtb == null) {
                 return;
             }
             bool delete_item = false;
             if(drag_ctvm.ItemType == MpCopyItemType.Text) {
-                string dpt = drag_rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
-                if (string.IsNullOrWhiteSpace(dpt) && !isSelfDrop) {
+                rtb.Selection.Text = string.Empty;
+
+                string dpt = rtb.Document.ToPlainText().Trim().Replace(Environment.NewLine, string.Empty);
+                if (string.IsNullOrWhiteSpace(dpt)) {
                     delete_item = true;
                 }
             } else if(drag_ctvm.ItemType == MpCopyItemType.FileList) {
                 if(drag_ctvm.FileItems.Count == 0) {
                     delete_item = true;
+                } else {
+                    var fileItemsToRemove = drag_ctvm.FileItems.Where(x => x.IsSelected).ToList();
+                    for (int i = 0; i < fileItemsToRemove.Count; i++) {
+                        drag_ctvm.FileItems.Remove(fileItemsToRemove[i]);
+                    }
+                    var paragraphsToRemove = rtb.Document.GetAllTextElements()
+                       .Where(x => x is MpFileItemParagraph).Cast<MpFileItemParagraph>()
+                           .Where(x => fileItemsToRemove.Any(y => y == x.DataContext));
+
+                    paragraphsToRemove.ForEach(x => rtb.Document.Blocks.Remove(x));
                 }
             } else {
                 return;
@@ -250,7 +261,7 @@ namespace MpWpfApp {
             if(delete_item) {
                 await drag_ctvm.CopyItem.DeleteFromDatabaseAsync();
             } else {
-                await SaveTextContent(drag_rtb);
+                await SaveTextContent(rtb);
             }            
         }
 
@@ -272,21 +283,20 @@ namespace MpWpfApp {
             typeof(MpContentDocumentRtfExtension),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (s, e) => {
-                    if(e.NewValue == null) {
-                        //occurs when tile is placeholder
-                        return;
-                    }
-                    var rtb = s as RichTextBox;
-                    if (rtb == null) {
-                        return;
-                    }
-                    rtb.Loaded += Rtb_Loaded;
-                    rtb.Unloaded += Rtb_Unloaded;
-                    if (rtb.IsLoaded) {
-                        Rtb_Loaded(rtb, null);
+                    if(e.NewValue != null) {
+                        var rtb = s as RichTextBox;
+                        if (rtb == null) {
+                            return;
+                        }
+                        if (rtb.IsLoaded) {
+                            Rtb_Loaded(rtb, null);
+                        } else {
+                            rtb.Loaded += Rtb_Loaded;
+                        }                        
                     } else {
-                        
+                        Rtb_Unloaded(s, null);
                     }
+                    
                 }
             });
 
@@ -296,6 +306,11 @@ namespace MpWpfApp {
             if(rtb == null) {
                 return;
             }
+            if(e == null) {
+                rtb.Loaded += Rtb_Loaded;
+            }
+
+            rtb.Unloaded += Rtb_Unloaded;
 
             LoadContent(rtb).FireAndForgetSafeAsync(rtb.DataContext as MpClipTileViewModel);
         }        
@@ -381,9 +396,9 @@ namespace MpWpfApp {
             
             if(rtb.IsReadOnly && tcvm.Items.Count > templateGuids.Distinct().Count()) {
                 //all instances of at least one template were deleted
-                Debugger.Break();
-                
+                //Debugger.Break();                
             }
+
             for (int i = 0; i < templateGuids.Count; i++) {
                 string templateGuid = templateGuids[i];
                 MpTextTemplate templateItem = null;
@@ -396,9 +411,9 @@ namespace MpWpfApp {
                         templateRanges[i].Text = string.Empty;
                         MpConsole.WriteLine($"CopyItem {ctvm} item's data had ref to {templateGuid} which is not in the db, is now removed from item data");
 
-                        var tvm = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
-                        if(tvm != null) {
-                            tcvm.Items.Remove(tvm);
+                        var tvm_ToRemove = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
+                        if(tvm_ToRemove != null) {
+                            tcvm.Items.Remove(tvm_ToRemove);
                             MpConsole.WriteLine($"Template collection also had ref to item {templateGuid}, which is also now removed");
                         }
                         continue;
@@ -407,11 +422,15 @@ namespace MpWpfApp {
                 } else {
                     templateItem = templateItems.FirstOrDefault(x => x.Guid == templateGuid);
                 }
+                
+
                 if(templateItem == null) {
                     Debugger.Break();
-                } else if(!tcvm.Items.Any(x=>x.TextTemplateGuid == templateGuid)) {
+                }
+                MpTextTemplateViewModel tvm = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
+                if (tvm == null) {
                     // only add one distinct tvm to tcvm
-                    var tvm = await tcvm.CreateTemplateViewModel(templateItem);
+                    tvm = await tcvm.CreateTemplateViewModel(templateItem);
                     tcvm.Items.Add(tvm);
 
                 }
@@ -422,7 +441,9 @@ namespace MpWpfApp {
                 if(templateItem == null) {
                     Debugger.Break();
                 }
-                templateRange.LoadTextTemplate(templateItem);
+
+                //templateRange.LoadTextTemplate(templateItem);
+                MpTextTemplateInlineUIContainer.Create(templateRange, tvm);
             }
 
             tcvm.OnPropertyChanged(nameof(tcvm.Items));

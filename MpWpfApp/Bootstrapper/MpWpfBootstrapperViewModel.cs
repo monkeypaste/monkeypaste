@@ -109,19 +109,19 @@ namespace MpWpfApp {
             //            .Select(x => x.LoadItem()).ToList());
 
             // Async
-            Task.WhenAll(
-                _items.Select(
-                    x => LoadItem(_items[_items.IndexOf(x)], _items.IndexOf(x)))).FireAndForgetSafeAsync(this);
+            //Task.WhenAll(
+            //    _items.Select(
+            //        x => LoadItem(_items[_items.IndexOf(x)], _items.IndexOf(x)))).FireAndForgetSafeAsync(this);
 
-            while(PercentLoaded < 1.0d) {
-                await Task.Delay(100);
-            }
+            //while(PercentLoaded < 1.0d) {
+            //    await Task.Delay(100);
+            //}
 
             // Sequential (58831 ms 05/30/2022)
             // Sequential (35649 06/12/2022)
-            //for (int i = 0; i < _items.Count; i++) {
-            //    await LoadItem(_items[i], i);
-            //}
+            for (int i = 0; i < _items.Count; i++) {
+                await LoadItem(_items[i], i);
+            }
 
             MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardManager.MonitorService;
             MpPlatformWrapper.Services.DataObjectRegistrar = MpClipboardManager.RegistrarService;
@@ -145,6 +145,7 @@ namespace MpWpfApp {
 
             //MpFileIo.WriteTextToFile(@"C:\Users\tkefauver\Desktop\quillHtmlToRtfTest.rtf", rtf);
             //Debugger.Break();
+
             //MpQuillHtmlToRtfConverter.Test();
             sw.Stop();
             MpConsole.WriteLine($"Bootstrapper loaded in {sw.ElapsedMilliseconds} ms");

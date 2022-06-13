@@ -76,6 +76,9 @@ namespace MpWpfApp {
 
         private static void Tbb_Loaded(object sender, RoutedEventArgs e) {
             var tbb = sender as TextBoxBase;
+            if(e == null) {
+                tbb.Loaded += Tbb_Loaded;
+            }
             tbb.Unloaded += Tbb_Unloaded;
         }
 
@@ -85,6 +88,48 @@ namespace MpWpfApp {
             tbb.Unloaded -= Tbb_Unloaded;
         }
         #endregion
+
+        public static MpRichTextFormatInfoFormat GetSelectionFormat(MpITextSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is TextBox tb) {
+                return null;
+            }
+            if (tbb is RichTextBox rtb) {
+                var rtfFormat = new MpRichTextFormatInfoFormat() {
+                    inlineFormat = GetSelectedInlineFormat(rtb),
+                    blockFormat = GetSelectedBlockFormat(rtb)
+                };
+                return rtfFormat;
+            }
+            return null;
+        }
+
+        public static MpInlineTextFormatInfoFormat GetSelectedInlineFormat(RichTextBox rtb) {
+            if (rtb.Selection.Start.Parent is TextElement te) {
+                if (te is Inline inline) {
+                    var inlineFormat = new MpInlineTextFormatInfoFormat() {
+                        background = inline.Background.ToHex(),
+                        color = inline.Foreground.ToHex(),
+                        bold = inline is Bold ||
+                                rtb.Selection.Start.Parent.FindParentOfType<Bold>() != null,
+                        italic = inline is Italic || inline.FontStyle == FontStyles.Italic ||
+                                rtb.Selection.Start.Parent.FindParentOfType<Italic>() != null,
+                        strike = inline.TextDecorations == TextDecorations.Strikethrough,
+                        underline = inline is Underline ||
+                                    rtb.Selection.Start.Parent.FindParentOfType<Underline>() != null,
+                        font = inline.FontFamily.Source,
+                        size = inline.FontSize,
+                        script = inline.BaselineAlignment.ToString()
+                    };
+                    return inlineFormat;
+                }
+            }
+            return null;
+        }
+
+        public static MpBlockTextFormatInfoFormat GetSelectedBlockFormat(RichTextBox rtb) {
+            return null;
+        }
 
         public static string GetSelectedPlainText(MpITextSelectionRange tsr) {
             var tbb = FindTextBoxBase(tsr);

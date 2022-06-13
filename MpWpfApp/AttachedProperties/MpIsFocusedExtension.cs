@@ -118,13 +118,11 @@ namespace MpWpfApp {
                     }
 
                     if ((bool)e.NewValue == true) {
-                        fe.Unloaded += Fe_Unloaded;
-                        fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
-                        if (!fe.IsLoaded) {
-                            fe.Loaded += Fe_Loaded;
-                        } else {
+                        if(fe.IsLoaded) {
                             Fe_Loaded(fe, null);
-                        }                        
+                        } else {
+                            fe.Loaded += Fe_Loaded;
+                        }               
                     } else {
                         Fe_Unloaded(fe, null);
                     }
@@ -137,6 +135,10 @@ namespace MpWpfApp {
             fe.IsKeyboardFocusedChanged += MpIsFocusedExtension_IsKeyboardFocusedChanged;
             fe.GotFocus += Fe_GotFocus;
             fe.LostFocus += Fe_LostFocus;
+            fe.Unloaded += Fe_Unloaded;
+            if(e == null) {
+                fe.Loaded += Fe_Loaded;
+            }
             if (fe is TextBoxBase tbb) {
                 var descriptor = DependencyPropertyDescriptor.FromProperty(TextBoxBase.IsReadOnlyProperty, fe.GetType());
                 if (descriptor == null) {
@@ -149,6 +151,8 @@ namespace MpWpfApp {
         private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
             var fe = sender as FrameworkElement;
             fe.IsKeyboardFocusedChanged -= MpIsFocusedExtension_IsKeyboardFocusedChanged;
+            fe.GotFocus -= Fe_GotFocus;
+            fe.LostFocus -= Fe_LostFocus;
             fe.Loaded -= Fe_Loaded;
             fe.Unloaded -= Fe_Unloaded;
 

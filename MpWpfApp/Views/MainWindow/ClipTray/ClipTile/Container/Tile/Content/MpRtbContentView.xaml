@@ -22,6 +22,7 @@
                              MinWidth="100"
                              Height="Auto"
                              Padding="5,0,5,0"
+                             
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              HorizontalContentAlignment="Stretch"
@@ -34,6 +35,7 @@
                              local:MpTextSelectionRangeExtension.IsEnabled="{Binding IsTextItem}"
                              local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
                              AutoWordSelection="False"
+                             
                              Background="White"
                              Foreground="Black"
                              BorderThickness="0"

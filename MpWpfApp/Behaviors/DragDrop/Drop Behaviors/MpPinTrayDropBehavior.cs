@@ -49,7 +49,6 @@ namespace MpWpfApp {
             }
         }
 
-
         public override void AutoScrollByMouse() {
             var pt_lb = AssociatedObject.PinTrayListBox;
             var sv = pt_lb.GetVisualDescendent<ScrollViewer>();
@@ -92,6 +91,18 @@ namespace MpWpfApp {
                 _autoScrollVelocity += _autoScrollAccumulator;                
                 sv.ScrollByPointDelta(pinTrayScrollOffsetDelta);
             }
+        }
+
+        public override bool IsDragDataValid(bool isCopy, object dragData) {
+            if(!base.IsDragDataValid(isCopy, dragData)) {
+                return false;
+            }
+            if(dragData is MpClipTileViewModel ctvm) {
+                if(ctvm.IsPinned && MpTextSelectionRangeExtension.IsAllSelected(ctvm)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public override int GetDropTargetRectIdx() {
@@ -140,22 +151,21 @@ namespace MpWpfApp {
             MpClipTileViewModel drag_ctvm = null;
             MpClipTileViewModel drop_ctvm = null;
 
-            bool delete_drag_item = false;
             if(dragData is MpPortableDataObject mpdo) {
                 // from external source
                 var dragModel = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
 
                 drop_ctvm = await ctrvm.CreateClipTileViewModel(dragModel);                
             } else if(dragData is MpClipTileViewModel) {
+                // either a partial pinned or tray selection or tray item
+
                 drag_ctvm = dragData as MpClipTileViewModel;
                 bool isPartialDrop = !MpTextSelectionRangeExtension.IsAllSelected(drag_ctvm);
                 if(isPartialDrop) {
-                    string drop_data = MpContentDocumentRtfExtension.ExchangeDragDataWithDropTarget(drag_ctvm, isCopy, false);
+                    string drop_data = drag_ctvm.SelectedPlainText; //MpContentDocumentRtfExtension.ExchangeDataWithTarget(drag_ctvm, isCopy);
 
                     var dragModel = await drag_ctvm.CopyItem.Clone(false) as MpCopyItem;
-
                     dragModel.ItemData = drop_data;
-
                     await dragModel.WriteToDatabaseAsync();
 
                     drop_ctvm = await ctrvm.CreateClipTileViewModel(dragModel);
@@ -172,8 +182,8 @@ namespace MpWpfApp {
             }
 
             
-            if(drag_ctvm != null) {
-                await MpContentDocumentRtfExtension.CleanupDragItemAfterDrop(drag_ctvm,false);
+            if(drag_ctvm != null && !isCopy) {
+                await MpContentDocumentRtfExtension.FinishContentCut(drag_ctvm);
 
                 //// only need to update drag source if not from external
                 //if (delete_drag_item) {

@@ -167,7 +167,7 @@ namespace MonkeyPaste.Common {
             Csv,
             Unicode,
             OemText,
-            InternalContent
+            //InternalContent
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;

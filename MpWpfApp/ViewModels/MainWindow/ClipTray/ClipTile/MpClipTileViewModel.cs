@@ -124,6 +124,10 @@ using MpProcessHelper;
             set => MpTextSelectionRangeExtension.SetSelectionText(this, value);
         }
 
+        public MpRichTextFormatInfoFormat SelectedRichTextFormat {
+            get => MpTextSelectionRangeExtension.GetSelectionFormat(this);
+        }
+
 
         #endregion
 
@@ -416,6 +420,15 @@ using MpProcessHelper;
 
         #region Layout
 
+        public Thickness ContentMarginThickness {
+            get {
+                if(IsTitleVisible) {
+                    return new Thickness();
+                }
+                return new Thickness(10, 3, 10, 3);
+            }
+        }
+
         private double _tileBorderWidth = DefaultBorderWidth;
         public double TileBorderWidth {
             get {
@@ -652,7 +665,15 @@ using MpProcessHelper;
         }
         #endregion
 
-        #region Appearance       
+        #region Appearance      
+        public string TileBackgroundHexColor {
+            get {
+                if(IsTitleVisible) {
+                    return MpSystemColors.White;
+                }
+                return CopyItemHexColor;
+            }
+        }
         public Brush DetailTextColor {
             get {
                 if (IsSelected || IsHovering) {
@@ -1139,10 +1160,14 @@ using MpProcessHelper;
             }
         }
 
+        private string _curItemRandomHexColor;
         public string CopyItemHexColor {
             get {
                 if (CopyItem == null || string.IsNullOrEmpty(CopyItem.ItemColor)) {
-                    return MpColorHelpers.GetRandomHexColor();
+                    if(string.IsNullOrEmpty(_curItemRandomHexColor)) {
+                        _curItemRandomHexColor = MpColorHelpers.GetRandomHexColor();
+                    }
+                    return _curItemRandomHexColor;
                 }
                 return CopyItem.ItemColor;
             }
@@ -1205,6 +1230,7 @@ using MpProcessHelper;
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1) {
             PropertyChanged -= MpClipTileViewModel_PropertyChanged;
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
+            _curItemRandomHexColor = string.Empty;
 
             QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
             
@@ -1253,7 +1279,8 @@ using MpProcessHelper;
             OnPropertyChanged(nameof(CanVerticallyScroll));
             OnPropertyChanged(nameof(IsTextItem));
             OnPropertyChanged(nameof(IsFileListItem));
-            
+            OnPropertyChanged(nameof(TileBackgroundHexColor));
+            OnPropertyChanged(nameof(ContentMarginThickness));
 
             while (TitleSwirlViewModel.IsBusy) {
                 await Task.Delay(100);
@@ -1408,13 +1435,15 @@ using MpProcessHelper;
         }
 
 
-        public async Task<MpPortableDataObject> ConvertToPortableDataObject(
+        public async Task<MpPortableDataObject>  ConvertToPortableDataObject(
             bool isDragDrop, 
             object targetHandleObj, 
             bool ignoreSubSelection = false, 
             bool isDropping = false) {
             
-            IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : (IntPtr)targetHandleObj;
+            IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : 
+                                    targetHandleObj is MpProcessInfo ? 
+                                        (targetHandleObj as MpProcessInfo).Handle : (IntPtr)targetHandleObj;
             bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
 
             MpPortableDataObject d = new MpPortableDataObject();
@@ -1426,9 +1455,13 @@ using MpProcessHelper;
             IEnumerable<MpTextTemplateViewModel> templatesInSelection = null;
 
             if (needsTemplateData) {
-                if (isDragDrop && !isDropping) {
+                if ((isDragDrop && !isDropping) || !isToExternalApp) {
+                    // Drag Drop:
                     // when initially dragging onto external app DragDrop needs DataObject but 
                     // ignore filling templates until drop is performed
+                    
+                    // CopySelectedClipsCommand:
+                    // Templates are passed as templates internally
                     needsTemplateData = false;
                 }
                 if(needsTemplateData) {
@@ -1538,7 +1571,7 @@ using MpProcessHelper;
                 // TODO set internal data stuff here
             }
 
-            d.SetData(MpPortableDataFormats.InternalContent, this);
+            //d.SetData(MpPortableDataFormats.InternalContent, this);
             return d;
         }
         
@@ -1795,6 +1828,9 @@ using MpProcessHelper;
                     break;
 
                 case nameof(IsContentReadOnly):
+                    if(!IsContentReadOnly && !IsSelected) {
+                        IsSelected = true;
+                    }
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
                     Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
 
@@ -1864,6 +1900,10 @@ using MpProcessHelper;
                     //if(QueryOffsetIdx == Parent.TailQueryIdx) {
 
                     //}
+                    if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                        return;
+                    }
+                    Parent.ValidateItemsTrayX();
                     break;
                 case nameof(FindText):
                 case nameof(ReplaceText):

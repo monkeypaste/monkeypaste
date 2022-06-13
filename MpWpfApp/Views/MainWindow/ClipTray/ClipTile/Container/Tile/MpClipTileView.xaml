@@ -17,6 +17,7 @@
     </i:Interaction.Behaviors>
     <local:MpClipBorder x:Name="ClipTileClipBorder"
                         DataContext="{Binding}"
+                        Background="Pink"
                         Margin="{Binding ClipTileMargin,
                                          Source={x:Static local:MpMeasurements.Instance}}"
                         BorderThickness="{Binding ClipTileBorderThickness,
@@ -91,9 +92,8 @@
         </local:MpClipBorder.BorderBrush>
         <Grid x:Name="ClipTileBorderGrid">
             <DockPanel x:Name="ClipTileDockPanel"
-                       Background="{Binding .,
-                                            Converter={StaticResource StringToThemeBrushConverter},
-                                            ConverterParameter=Clip_Tile_Content_Item_Background_Color}">
+                       Background="{Binding TileBackgroundHexColor,
+                                            Converter={StaticResource StringHexToBrushConverter}}">
                 <DockPanel.Resources>
                     <DataTemplate x:Key="RtbContentContainerViewTemplate">
                         <local:MpRtbContentContainerView DataContext="{Binding}" />
@@ -104,8 +104,8 @@
                     <local:MpContentViewSelector x:Key="ContentViewSelector" />
                 </DockPanel.Resources>
 
-                <!--  Title -->
-                
+                <!--  Title  -->
+
                 <Grid DockPanel.Dock="Top">
                     <local:MpClipTileTitleView x:Name="TileTitleView"
                                                DockPanel.Dock="Top"
@@ -176,8 +176,8 @@
                                             Visibility="{Binding IsDetailGridVisibile,
                                                                  Converter={StaticResource BoolToVisibilityConverter}}"
                                             DataContext="{Binding}" />
-                
-                <!--  Content   -->
+
+                <!--  Content  -->
                 <ContentControl Content="{Binding}"
                                 ContentTemplateSelector="{StaticResource ContentViewSelector}" />
 

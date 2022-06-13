@@ -1,0 +1,41 @@
+﻿<InlineUIContainer x:Class="MpWpfApp.MpTextTemplateInlineUIContainer"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:local="clr-namespace:MpWpfApp"
+                   mc:Ignorable="d"
+                   PreviewMouseLeftButtonDown="InlineUIContainer_PreviewMouseLeftButtonDown"
+                   PreviewMouseRightButtonDown="InlineUIContainer_PreviewMouseRightButtonDown"
+                   Unloaded="TextTemplateBorder_Unloaded"
+                   BaselineAlignment="Center"
+                   Tag="{Binding TextTemplate}"
+                   local:MpHoverableExtension.IsEnabled="True"
+                   local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                   Mode=TwoWay}"
+                   local:MpHoverableExtension.CanHover="{Binding Path=DataContext.IsContentReadOnly,
+                                                                 RelativeSource={RelativeSource AncestorType={x:Type local:MpClipTileView}},
+                                                                 Converter={StaticResource BoolFlipConverter}}"
+                   local:MpHoverableExtension.HoverCursor="Hand"
+                   d:DataContext="{d:DesignInstance Type=local:MpTextTemplateViewModel,
+                                                    IsDesignTimeCreatable=False}">
+    <Border x:Name="TextTemplateBorder"
+            Loaded="Border_Loaded"
+            CornerRadius="5"
+            BorderThickness="1"
+            Background="{Binding TemplateBackgroundHexColor,
+                                 Converter={StaticResource StringHexToBrushConverter}}"
+            BorderBrush="{Binding TemplateBorderHexColor,
+                                  Converter={StaticResource StringHexToBrushConverter}}"
+            Tag="{Binding TextTemplate}">
+        <TextBlock x:Name="TextTemplateTextBlock"
+                   Text="{Binding TemplateDisplayValue}"
+                   Tag="{Binding TextTemplate}"
+                   Background="Transparent"
+                   Foreground="{Binding TemplateForegroundHexColor,
+                                        Converter={StaticResource StringHexToBrushConverter}}"
+                   local:MpRichTextFormatExtension.IsEnabled="False"
+                   local:MpRichTextFormatExtension.RichTextFormat="{Binding RichTextFormat}" />
+
+    </Border>
+</InlineUIContainer>

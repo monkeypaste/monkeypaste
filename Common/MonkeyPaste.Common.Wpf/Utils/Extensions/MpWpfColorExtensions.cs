@@ -62,18 +62,22 @@ namespace MonkeyPaste.Common.Wpf {
             return new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
         }
 
-        public static string ToHex(this Brush b) {
+        public static string ToHex(this Brush b, bool omitAlpha = false) {
             if (b is SolidColorBrush scb) {
-                return scb.Color.ToHex();
+                return scb.Color.ToHex(omitAlpha: omitAlpha);
             }
             return MpSystemColors.Transparent;
         }
-        public static string ToHex(this Color c, byte forceAlpha = 255) {
+        public static string ToHex(this Color c, byte forceAlpha = 255, bool omitAlpha = false) {
             if (c == null) {
                 return "#FF0000";
             }
             c.A = forceAlpha;
-            return c.ToString();
+            string hex = c.ToString();
+            if (omitAlpha && hex.Length == 9) {
+                hex = "#" + c.ToString().Substring(3);
+            }
+            return hex;
         }
     }
 }

@@ -44,8 +44,7 @@ namespace MpWpfApp {
                 var ntvm_mi = new MpMenuItemViewModel() {
                     Header = "Add New",
                     IconResourceKey = Application.Current.Resources["AddIcon"] as string,
-                    Command = CreateTemplateViewModelCommand,
-                    CommandParameter = Parent.SelectedPlainText
+                    Command = CreateTemplateViewModelCommand
                 };
                 mivm.SubItems.Add(ntvm_mi);
                 return mivm;
@@ -200,17 +199,20 @@ namespace MpWpfApp {
         public ICommand CreateTemplateViewModelCommand => new RelayCommand<object>(
             async (templateVmOrSelectedTextArg) => {
                 string templateGuid = string.Empty;
-                if(templateVmOrSelectedTextArg == null || templateVmOrSelectedTextArg is string) {
-                    string templateName = string.Empty;
-                    if(templateVmOrSelectedTextArg is string) {
-                        templateName = templateVmOrSelectedTextArg as string;
-                    }
+                if(templateVmOrSelectedTextArg == null) {
+                    string templateName = Parent.SelectedPlainText;
                     if(string.IsNullOrWhiteSpace(templateName)) {
                         templateName = GetUniqueTemplateName();
                     }
+                    string initialFormat = string.Empty;
+                    var selectionFormat = Parent.SelectedRichTextFormat;
+                    if(selectionFormat != null && selectionFormat.inlineFormat != null) {
+                        initialFormat = selectionFormat.Serialize();
+                    }
                     var cit = await MpTextTemplate.Create(
-                        copyItemId: Parent.CopyItemId,
-                        templateName: templateName);
+                        templateName: templateName,
+                        rtfFormatJson: initialFormat);
+
                     templateGuid = cit.Guid;
                 } else if (templateVmOrSelectedTextArg is MpTextTemplateViewModel tvm) {
                     templateGuid = tvm.TextTemplateGuid;

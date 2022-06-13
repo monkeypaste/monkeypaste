@@ -49,9 +49,11 @@ namespace MpWpfApp {
             //                        .GetVisualDescendents<MpRtbContentView>()
             //                        .FirstOrDefault(x => x.DataContext == _dataContext) as T;
             //}
-            var assocObj = AssociatedObject;
-            Detach();
-            Attach(assocObj);
+            MpHelpers.RunOnMainThread(() => {
+                var assocObj = AssociatedObject;
+                Detach();
+                Attach(assocObj);
+            });            
         }
 
         protected override void OnAttached() {

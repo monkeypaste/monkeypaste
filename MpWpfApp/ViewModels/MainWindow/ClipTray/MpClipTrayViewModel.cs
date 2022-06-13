@@ -426,8 +426,8 @@ namespace MpWpfApp {
         public List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
 
 
-        private Dictionary<int, double> _persistentUniqueWidthTileLookup = new Dictionary<int, double>();
-        private Dictionary<int, double> _persistentUniqueWidthQueryOffsetLookup = new Dictionary<int, double>();
+        private Dictionary<int, double> _persistentUniqueWidthTileLookup { get; set; } = new Dictionary<int, double>();
+        private Dictionary<int, double> _persistentUniqueWidthQueryOffsetLookup { get; set; } = new Dictionary<int, double>();
         //<CopyItemId, Unique ItemWidth> unique is != to MpMeausrements.Instance.ClipTileMinSize
         //public Dictionary<int, double> PersistentUniqueWidthTileLookup => _persistentUniqueWidthTileLookup;
 
@@ -1022,9 +1022,7 @@ namespace MpWpfApp {
             }
 
             var item = Items.FirstOrDefault(x => x.QueryOffsetIdx == queryOffsetIdx && x.CopyItemTitle == "Untitled2636");
-            if (item != null) {
-                item = item;
-            }
+            
             // ensure the check is clamped to within the count
             queryOffsetIdx = Math.Max(0, Math.Min(queryOffsetIdx, totalTileCount-1));
 
@@ -1349,7 +1347,17 @@ namespace MpWpfApp {
             }
         }
 
-
+        public void ValidateItemsTrayX() {
+            var orderedItems = Items.OrderBy(x => x.QueryOffsetIdx).ToList();
+            for (int i = 0; i < Items.Count; i++) {
+                if (i == 0) {
+                    continue;
+                }
+                if(orderedItems[i].TrayX < orderedItems[i-1].TrayX) {
+                    Debugger.Break();
+                }
+            }
+        }
 
         private async Task OnPostMainWindowLoaded() {
             while (IsBusy || MpTagTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
@@ -2181,10 +2189,10 @@ namespace MpWpfApp {
             });
 
         public ICommand CopySelectedClipsCommand => new RelayCommand(
-            async () => {
+            async () => { 
                 var mpdo = await SelectedItem.ConvertToPortableDataObject(false, null, false, false);
                 MpPlatformWrapper.Services.DataObjectHelper.SetPlatformClipboard(mpdo, true);
-            },()=>SelectedItem != null);
+            }, SelectedItem != null);
 
         public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(
             async(args) => {
