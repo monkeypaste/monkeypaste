@@ -37,7 +37,7 @@ function initDragDropOverrides() {
 }
 
 function onDragEnter(e) {
-    debugger;
+    //debugger;
 }
 
 function onDragStart(e) {

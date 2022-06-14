@@ -22,7 +22,7 @@ namespace MpWpfApp {
 
         public override bool IsDropEnabled { get; set; } = true;
 
-        public override MpDropType DropType => MpDropType.Content;
+        public override MpDropType DropType => MpDropType.Action;
 
         public override UIElement RelativeToElement => AssociatedObject;
 
@@ -35,7 +35,7 @@ namespace MpWpfApp {
 
         public override void OnLoaded() {
             base.OnLoaded();
-
+            //IsDebugEnabled = true;
             _dataContext = AssociatedObject.DataContext;
 
             MpMessenger.Register<MpMessageType>(
@@ -66,19 +66,24 @@ namespace MpWpfApp {
         }
 
         public override int GetDropTargetRectIdx() {
-            var mp = Mouse.GetPosition(AssociatedObject);
+            var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            var mp = Application.Current.MainWindow.TranslatePoint(gmp, AssociatedObject);
             if (GetDropTargetRects()[0].Contains(mp)) {
                 return 0;
             }
             return -1;
         }
         public override MpShape[] GetDropTargetAdornerShape() {
-            var drl = GetDropTargetRects();
-            if (DropIdx < 0 || DropIdx >= drl.Count) {
-                return null;
-            }
-            var s = new MpSize(AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);
-            return  new MpEllipse(new MpPoint(s.Width / 2, s.Height / 2), s).ToArray<MpShape>();
+            // NOTE since actions only have 1 drop rect the cursor change is sufficient
+
+            return new MpShape[] { };
+
+            //var drl = GetDropTargetRects();
+            //if (DropIdx < 0 || DropIdx >= drl.Count) {
+            //    return null;
+            //}
+            //var s = new MpSize(AssociatedObject.ActualWidth, AssociatedObject.ActualHeight);
+            //return  new MpEllipse(new MpPoint(s.Width / 2, s.Height / 2), s).ToArray<MpShape>();
         }
 
         public override bool IsDragDataValid(bool isCopy,object dragData) {
@@ -86,18 +91,39 @@ namespace MpWpfApp {
                 return false;
             }
 
-            var cil = dragData as List<MpCopyItem>;
-            return cil != null && cil.Count >= 1;
+            if(base.IsDragDataValid(isCopy, dragData)) {
+                return true;
+            }
+            if(dragData is MpTagTileViewModel) {
+                return true;
+            }
+            return false;
         }
 
         public override async Task Drop(bool isCopy, object dragData) {
             await base.Drop(isCopy, dragData);
 
-            List<MpCopyItem> dragModels = dragData as List<MpCopyItem>;
+            List<MpCopyItem> dragModels = new List<MpCopyItem>();
+            if(dragData is MpPortableDataObject mpdo) {
+                if (MpRichTextBox.DraggingRtb != null) {
+                    await Drop(isCopy, MpRichTextBox.DraggingRtb.DataContext);
+                    return;
+                }
+                // from external source
+                var tempCopyItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo, true);
+                if (tempCopyItem == null) {
+                    return;
+                }
+                dragModels.Add(tempCopyItem);
+            } else if(dragData is MpClipTileViewModel ctvm) {
+                dragModels.Add(ctvm.CopyItem);
+            } else if(dragData is MpTagTileViewModel ttvm) {
+                dragModels = await MpDataModelProvider.GetCopyItemsForTagAsync(ttvm.TagId);
+            }
 
             var avm = AssociatedObject.DataContext as MpActionViewModelBase;
 
-            await avm.PerformAction(dragModels[0]);
+            await Task.WhenAll(dragModels.Select(x => avm.PerformAction(x)));
         }
 
 

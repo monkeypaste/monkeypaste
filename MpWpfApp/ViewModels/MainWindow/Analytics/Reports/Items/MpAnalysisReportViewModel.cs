@@ -100,7 +100,7 @@ namespace MpWpfApp {
             fd.LineStackingStrategy = LineStackingStrategy.MaxHeight;
             fd.TextAlignment = TextAlignment.Justify;
             fd.Background = Brushes.White;
-            MpFileIo.WriteTextToFile(Path.Combine(Directory.GetCurrentDirectory(), "test.rtf"), fd.ToRichText());
+            MpFileIo.WriteTextToFile(Path.Combine(Directory.GetCurrentDirectory(), "test.rtf"), fd.ToRichText(),false);
             return fd;
         }
 

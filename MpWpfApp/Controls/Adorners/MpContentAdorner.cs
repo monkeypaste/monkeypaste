@@ -35,6 +35,9 @@ namespace MpWpfApp {
                 if(_dropBehavior is MpPinTrayDropBehavior) {
                     return Brushes.OldLace;
                 }
+                if (_dropBehavior is MpActionDesignerItemDropBehavior) {
+                    return Brushes.LightBlue;
+                }
                 return Brushes.Red;
             }
         }
@@ -118,6 +121,9 @@ namespace MpWpfApp {
         #region Public Methods
         public MpContentAdorner(UIElement uie, MpIContentDropTarget dropBehavior) : base(uie) {
             _dropBehavior = dropBehavior;
+            
+            _isDash = _dropBehavior.GetType() != typeof(MpActionDesignerItemDropBehavior);
+
             _debugColor = MpWpfColorHelpers.GetRandomColor();
             _debugColor.A = 50;
             
@@ -127,8 +133,6 @@ namespace MpWpfApp {
         #region Overrides
         protected override void OnRender(DrawingContext dc) {
             if (IsShowing) {
-                var rtb = AdornedElement as RichTextBox;
-
                 Visibility = Visibility.Visible;
 
                 if (IsDebugMode) {

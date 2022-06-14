@@ -27,7 +27,7 @@
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:MpTagTileViewModel}"
                                           ItemsSource="{Binding Children}">
-                    <local:MpTagTileTreeView IsTagTreeTile="True"
+                    <local:MpTagTileView IsTagTreeTile="True"
                                              Background="Transparent"
                                              DataContext="{Binding}" />
                 </HierarchicalDataTemplate>

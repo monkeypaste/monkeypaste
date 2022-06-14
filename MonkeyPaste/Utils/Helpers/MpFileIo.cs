@@ -83,7 +83,7 @@ namespace MonkeyPaste {
             return Path.GetFullPath(finalPath);
         }
 
-        public static string ToFile(this string fileData, string forceDir = "", string forceNamePrefix = "", string forceExt = "", bool overwrite = false) {
+        public static string ToFile(this string fileData, string forceDir = "", string forceNamePrefix = "", string forceExt = "", bool overwrite = false, bool isTemporary = true) {
             if (string.IsNullOrEmpty(forceExt)) {
                 // when ext is not given infer from content
                 if (fileData.IsStringRichText()) {
@@ -112,9 +112,9 @@ namespace MonkeyPaste {
                        forceExt.ToLower().Contains("bmp") ||
                        forceExt.ToLower().Contains("jpg") ||
                        forceExt.ToLower().Contains("jpeg")) {
-                tfp = WriteByteArrayToFile(Path.GetTempFileName(), fileData.ToByteArray());
+                tfp = WriteByteArrayToFile(Path.GetTempFileName(), fileData.ToByteArray(), isTemporary);
             } else {
-                tfp = WriteTextToFile(Path.GetTempFileName(), fileData);
+                tfp = WriteTextToFile(Path.GetTempFileName(), fileData, isTemporary);
             }
             string ofp = tfp;
 
@@ -146,6 +146,10 @@ namespace MonkeyPaste {
                         string randomSubDirPath = Path.Combine(Path.GetDirectoryName(ofp), Path.GetRandomFileName());
                         try {
                             Directory.CreateDirectory(randomSubDirPath);
+                            if (isTemporary && randomSubDirPath.IsUnderTemporaryFolder()) {
+                                MpTempFileManager.AddTempFilePath(randomSubDirPath);
+                            }
+
                             ofp = Path.Combine(randomSubDirPath, Path.GetFileName(ofp));
                         }
                         catch (Exception ex) {
@@ -159,13 +163,13 @@ namespace MonkeyPaste {
                 }
                 // move temporary file to processed output file path and delete temporary
                 try {
-                    ofp = CopyFileOrDirectory(tfp, ofp);
+                    ofp = CopyFileOrDirectory(tfp, ofp,isTemporary);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error copying temp file '{tfp}' to '{ofp}', returning temporary. Exception: " + ex);
                     return tfp;
                 }
-                if (IsUnderTemporaryFolder(tfp)) {
+                if (tfp.IsUnderTemporaryFolder()) {
                     MpTempFileManager.AddTempFilePath(tfp);
                 }
             }
@@ -192,7 +196,7 @@ namespace MonkeyPaste {
             return -1;
         }
 
-        public static string CopyFileOrDirectory(string sourcePath, string targetPath, bool recursive = true) {
+        public static string CopyFileOrDirectory(string sourcePath, string targetPath, bool recursive = true, bool isTemporary = false) {
             bool overwrite = false;
             if(targetPath.IsFileOrDirectory()) {
                 var result = MpPlatformWrapper.Services.NativeMessageBox.ShowYesNoCancelMessageBox("Overwrite?", $"Destination '{targetPath}' already exists, would you like to overwrite it?");
@@ -206,17 +210,20 @@ namespace MonkeyPaste {
             }
             if(File.Exists(sourcePath)) {
                 File.Copy(sourcePath, targetPath, overwrite);
+                if(isTemporary && targetPath.IsUnderTemporaryFolder()) {
+                    MpTempFileManager.AddTempFilePath(targetPath);
+                }
                 return targetPath;
             }
             if(Directory.Exists(sourcePath)) {
-                CopyDirectory(sourcePath, targetPath, recursive);
+                CopyDirectory(sourcePath, targetPath, recursive,isTemporary);
                 return targetPath;
             }
             MpConsole.WriteTraceLine($"Source directory not found '{sourcePath}'");
             return null;
         }
 
-        public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive) {
+        public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive, bool isTemporary = false) {
             // Get information about the source directory
             var dir = new DirectoryInfo(sourceDir);
 
@@ -229,18 +236,24 @@ namespace MonkeyPaste {
 
             // Create the destination directory
             Directory.CreateDirectory(destinationDir);
+            if (isTemporary && destinationDir.IsUnderTemporaryFolder()) {
+                MpTempFileManager.AddTempFilePath(destinationDir);
+            }
 
             // Get the files in the source directory and copy to the destination directory
             foreach (FileInfo file in dir.GetFiles()) {
                 string targetFilePath = Path.Combine(destinationDir, file.Name);
                 file.CopyTo(targetFilePath);
+                if (isTemporary && targetFilePath.IsUnderTemporaryFolder()) {
+                    MpTempFileManager.AddTempFilePath(targetFilePath);
+                }
             }
 
             // If recursive and copying subdirectories, recursively call this method
             if (recursive) {
                 foreach (DirectoryInfo subDir in dirs) {
                     string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
-                    CopyDirectory(subDir.FullName, newDestinationDir, true);
+                    CopyDirectory(subDir.FullName, newDestinationDir, true,isTemporary);
                 }
             }
         }
@@ -268,7 +281,7 @@ namespace MonkeyPaste {
             return false;
         }
 
-        public static bool IsUnderTemporaryFolder(string path) { 
+        public static bool IsUnderTemporaryFolder(this string path) { 
             if(string.IsNullOrWhiteSpace(path) || !path.IsFileOrDirectory()) {
                 return false;
             }
@@ -460,7 +473,7 @@ namespace MonkeyPaste {
             return true;
         }
 
-        public static string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
+        public static string WriteTextToFile(string filePath, string text, bool isTemporary) {
             try {
                 if (filePath.ToLower().Contains(@".tmp")) {
                     string extension = string.Empty;
@@ -476,7 +489,7 @@ namespace MonkeyPaste {
                 using (var of = new StreamWriter(filePath)) {
                     of.Write(text);
                     of.Close();
-                    if (isTemporary) {
+                    if (isTemporary && filePath.IsUnderTemporaryFolder()) {
                         MpTempFileManager.AddTempFilePath(filePath);
                     }
                     return filePath;
@@ -488,12 +501,15 @@ namespace MonkeyPaste {
             }
         }
 
-        public static string WriteByteArrayToFile(string filePath, byte[] byteArray, bool isTemporary = false) {
+        public static string WriteByteArrayToFile(string filePath, byte[] byteArray, bool isTemporary) {
             try {
                 if (filePath.ToLower().Contains(@".tmp")) {
                     filePath = filePath.ToLower().Replace(@".tmp", @".png");
                 }
                 File.WriteAllBytes(filePath, byteArray);
+                if (isTemporary && filePath.IsUnderTemporaryFolder()) {
+                    MpTempFileManager.AddTempFilePath(filePath);
+                }
                 return filePath;
             }
             catch (Exception ex) {

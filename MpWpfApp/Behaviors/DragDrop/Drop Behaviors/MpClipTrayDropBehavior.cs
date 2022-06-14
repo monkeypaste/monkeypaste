@@ -24,7 +24,7 @@ namespace MpWpfApp {
 
         public override bool IsDropEnabled { get; set; } = false;
 
-        public override MpDropType DropType => MpDropType.ClipTray;
+        public override MpDropType DropType => MpDropType.None;
 
         public override UIElement RelativeToElement => AssociatedObject.ClipTray.GetVisualDescendent<ScrollViewer>();
 

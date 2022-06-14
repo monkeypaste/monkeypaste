@@ -1626,11 +1626,16 @@ namespace MpWpfApp {
             !ctvm.IsPlaceholder);
 
         public ICommand UnpinTileCommand => new RelayCommand<object>(
-             (args) => {
+             async (args) => {
                 var upctvm = args as MpClipTileViewModel;
+                 int unpinnedId = upctvm.CopyItemId;
 
                 PinnedItems.Remove(upctvm);
-                if (upctvm.QueryOffsetIdx >= 0) {
+
+                 upctvm.OnPropertyChanged(nameof(upctvm.IsPinned));
+                 upctvm.OnPropertyChanged(nameof(upctvm.IsPlaceholder));
+
+                 if (upctvm.QueryOffsetIdx >= 0) {
                     //resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x => x.CopyItem).ToList(), pctvm.QueryOffsetIdx);
                     if (upctvm.QueryOffsetIdx >= HeadQueryIdx && upctvm.QueryOffsetIdx <= TailQueryIdx) {
                         var insertBeforeItem = Items.Aggregate((a, b) => a.QueryOffsetIdx > b.QueryOffsetIdx && a.QueryOffsetIdx < upctvm.QueryOffsetIdx ? a : b);
@@ -1641,10 +1646,15 @@ namespace MpWpfApp {
                             Items.Insert(insertIdx, upctvm);
                         }
                     }
-                }
+                } else {
+                     // either the pinned tile is not part of this query or its new or was added to query while pinned
+                     // so for now requery because unpinning seems to mismatch view/view model...
+                     QueryCommand.Execute(ScrollOffset);
+                     while(IsAnyBusy) {
+                         await Task.Delay(100);
+                     }
+                 }
 
-                upctvm.OnPropertyChanged(nameof(upctvm.IsPinned));
-                upctvm.OnPropertyChanged(nameof(upctvm.IsPlaceholder));
                 
                 if (!IsAnyTilePinned) {
                     PinTrayTotalWidth = PinTrayScreenWidth = 0;
@@ -1660,7 +1670,10 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(MaximumScrollOfset));
 
                  //SelectedItem = upctvm;
-                 upctvm.IsSelected = true;
+                 upctvm = GetClipTileViewModelById(unpinnedId);
+                 if(upctvm != null) {
+                     upctvm.IsSelected = true;
+                 }
             },
             (args) => args != null && args is MpClipTileViewModel ctvm && ctvm.IsPinned);
 

@@ -295,7 +295,7 @@
     </Compile>
     <Compile Include="Styles\Shaders\InvertColor\MpInvertEffect.cs" />
     <Compile Include="Utils\Builders\MpAnalyzerTransactionMessenger.cs" />
-    <Compile Include="Utils\Builders\MpHtmlClipboardData.cs" />
+    <Compile Include="Utils\Builders\MpHtmlClipboardDataConverter.cs" />
     <Compile Include="Utils\Documents\MpRtbContentExtensions.cs" />
     <Compile Include="Utils\Extensions\MpWebView2Extensions.cs" />
     <Compile Include="Utils\MpJsComAdapter.cs" />
@@ -433,9 +433,6 @@
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\Selector\MpSearchCriteriaOptionViewSelector.cs" />
-    <Compile Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileTreeView.xaml.cs">
-      <DependentUpon>MpTagTileTreeView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\ButtonColumn\MpSidebarView.xaml.cs">
       <DependentUpon>MpSidebarView.xaml</DependentUpon>
     </Compile>
@@ -919,10 +916,6 @@
     <Page Include="Views\MainWindow\FilterMenu\TagTray\MpTagTrayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileTreeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\FilterMenu\TagTray\TagTile\MpTagTileView.xaml">
       <SubType>Designer</SubType>

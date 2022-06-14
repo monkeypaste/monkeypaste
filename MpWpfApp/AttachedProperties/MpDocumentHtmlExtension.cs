@@ -200,7 +200,14 @@ namespace MpWpfApp {
 
         #region Messages
 
-        private static MpQuillLoadRequestMessage CreateLoadRequestMessage(FrameworkElement fe, object newValue) {
+        public static MpQuillLoadRequestMessage CreateConvertStandardHtmlMessage(string standardHtml) {
+            return new MpQuillLoadRequestMessage() {
+                envName = "wpf",
+                itemEncodedHtmlData = standardHtml
+            };
+        }
+
+        public static MpQuillLoadRequestMessage CreateLoadRequestMessage(FrameworkElement fe, object newValue) {
             if (fe.DataContext is MpClipTileViewModel ctvm) {
 
                 MpConsole.WriteLine($"Tile Content Item '{(fe.DataContext as MpClipTileViewModel).CopyItemTitle}' is loaded");
@@ -218,7 +225,7 @@ namespace MpWpfApp {
             return null;
         }
 
-        private static void ProcessEnableReadOnlyResponse(FrameworkElement fe, JavascriptResponse enableReadOnlyResponse) {
+        public static string ProcessEnableReadOnlyResponse(FrameworkElement fe, JavascriptResponse enableReadOnlyResponse) {
             if (fe.DataContext is MpClipTileViewModel ctvm) {
                 if (enableReadOnlyResponse.Result != null && enableReadOnlyResponse.Result is string resultStr) {
                     MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is readonly");
@@ -235,8 +242,11 @@ namespace MpWpfApp {
                     }
 
                     MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
+                    
+                    return qrm.itemEncodedHtmlData;
                 }
             }
+            return null;
         }
 
         private static MpQuillDisableReadOnlyRequestMessage CreateDisableReadOnlyMessage(FrameworkElement fe) {

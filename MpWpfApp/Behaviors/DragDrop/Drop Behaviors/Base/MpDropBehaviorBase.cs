@@ -18,12 +18,8 @@ namespace MpWpfApp {
     public enum MpDropType {
         None,
         Content,
-        Tile,
-        ClipTray,
         PinTray,
         External,
-        Resize,
-        Move,
         Action
     }
 
@@ -256,13 +252,7 @@ namespace MpWpfApp {
             }
             if(dragData is MpClipTileViewModel ctvm) {
                 return ctvm.ItemType != MpCopyItemType.Image;
-            }
-            if (dragData is List<MpCopyItem> dcil) {
-                if (dcil.Count == 0) {
-                    return false;
-                }
-                return dcil.All(x => x.ItemType == dcil[0].ItemType);
-            } 
+            }            
             return false;
         }
 

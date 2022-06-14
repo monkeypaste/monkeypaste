@@ -14,10 +14,12 @@
           MouseLeave="Grid_MouseLeave">
         <ListBox x:Name="ShortcutListBox"
                  DataContext="{Binding ShortcutViewModel}"
+                 Background="Transparent"
                  IsEnabled="False"
                  IsHitTestVisible="False"
                  BorderThickness="0"
                  HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  Visibility="{Binding IsEmpty,
@@ -27,21 +29,28 @@
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel Orientation="Horizontal"
                                             IsItemsHost="True"
+                                            Background="Transparent"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Center" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="FocusVisualStyle"
+                            Value="{x:Null}" />
+                    <Setter Property="Background"
+                            Value="Transparent" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                 <ContentPresenter />
                                 <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="Background" Value="Transparent" />
+                                    <Trigger Property="IsSelected"
+                                             Value="True">
+                                        <Setter Property="BorderBrush"
+                                                Value="Transparent" />
+                                        <Setter Property="Background"
+                                                Value="Transparent" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -97,11 +106,14 @@
                 <GroupStyle>
                     <GroupStyle.Panel>
                         <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Horizontal" />
+                            <VirtualizingStackPanel Background="Transparent"
+                                                    Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </GroupStyle.Panel>
                     <GroupStyle.ContainerStyle>
                         <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate>

@@ -45,11 +45,13 @@
                 HorizontalAlignment="Center"
                 Padding="10"
                 Visibility="{Binding IsEmpty,
-                                     Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                     Converter={StaticResource BoolToVisibilityFlipConverter},
+                                     ConverterParameter={StaticResource Hide}}"
                 Margin="20,10"
                 MinHeight="65">
             <ListBox x:Name="ShortcutListBox"
                      Grid.Row="2"
+                     MinHeight="65"
                      IsEnabled="False"
                      Background="Transparent"
                      BorderThickness="0"
@@ -157,6 +159,7 @@
         </Border>
         <TextBlock Grid.Row="3"
                    FontSize="10"
+                   MinHeight="30"
                    Visibility="Collapsed"
                    FontStyle="Oblique"
                    TextWrapping="Wrap"
@@ -165,10 +168,10 @@
                    Text="{Binding KeyString}" />
         <Border Background="{Binding WarningBorderBrush}"
                 Visibility="{Binding HasWarning,
-                                     Converter={StaticResource BoolToVisibilityConverter},
-                                     ConverterParameter={StaticResource Hide}}"
+                                     Converter={StaticResource BoolToVisibilityConverter}}"
                 Margin="10"
                 CornerRadius="10"
+                MaxWidth="350"
                 Grid.Row="3"
                 BorderThickness="1"
                 BorderBrush="AntiqueWhite">
@@ -178,7 +181,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Image Source="{Binding WarningBmp}"
-                       Margin="20,7,0,7"
+                       Margin="10,7,0,7"
                        Width="25"
                        Height="25"
                        Grid.Column="0"

@@ -27,74 +27,60 @@ namespace MpWpfApp {
         #region private static Variables
         private static double _indentCharCount = 5;
 
-       // private static ChromiumWebBrowser cwb;
+        private static ChromiumWebBrowser _browser = null;
+        private static string _plainHtmlToConvert = null;
+        private static string _quillHtml = null;
         #endregion
 
         #region Properties
 
         #endregion
 
-        public static async Task<string> ConvertStandardHtmlToRtf(string html) {       
-            string quillHtml = null;
-
-            var cwb = new ChromiumWebBrowser() {
-                Visibility = Visibility.Hidden,
-                Width = 1000,
-                Height = 1000,
-                IsEnabled = true
+        public static void Init() {
+            var quillWindow = new Window() {
+                Width = 300,
+                Height = 300,
+                ShowInTaskbar = false,
+                Visibility = Visibility.Hidden
             };
+            _browser = new ChromiumWebBrowser() {
+                Address = @"localfolder://cefsharp/"
+            };
+            quillWindow.Content = _browser;
 
-            cwb.Loaded += (s, e) => {
-                cwb.FrameLoadEnd += async (sender, args) => {
-                    if (args.Frame.IsMain) {
-                        string decodedHtml = HttpUtility.HtmlDecode(html);
-                        MpConsole.WriteLine("Html from clipboard: ");
-                        MpConsole.WriteLine(html);
-                        MpConsole.WriteLine("Decoded Html from clipboard (before sent to quill): ");
-                        MpConsole.WriteLine(decodedHtml);
-                        var qlrm = new MpQuillLoadRequestMessage() {
-                            envName = "wpf",
-                            isConvertPlainHtmlRequest = true,
-                            itemEncodedHtmlData = decodedHtml,
-                            isReadOnlyEnabled = true
-                        };
-                        await cwb.EvaluateScriptAsync(null, "init", qlrm);
-                        while(true) {
-                            var isReadyResponse = await cwb.EvaluateScriptAsync("getIsClipboardReady()");
-                            if(isReadyResponse.Success) {
-                                if(isReadyResponse.Result.ToString().ToLower().Contains("yes")) {
-                                    var htmlResponse = await cwb.EvaluateScriptAsync("getHtml()");
-                                    if(htmlResponse.Success) {
-                                        quillHtml = HttpUtility.HtmlDecode(htmlResponse.Result.ToString());
-                                        return;
-                                    }
+            _browser.FrameLoadEnd += (sender, args) => {
+                if (args.Frame.IsMain) {
+                    _browser.EvaluateScriptAsync("initConverter()");
+
+                    MpHelpers.RunOnMainThread(async () => {
+                        while (true) {
+                            if (_plainHtmlToConvert == null) {
+                                await Task.Delay(100);
+                            } else {
+                                var convertPlainHtmlResponse = await _browser.EvaluateScriptAsync(null, "convertPlainHtml", _plainHtmlToConvert);
+                                if (convertPlainHtmlResponse.Success) {
+                                    _plainHtmlToConvert = null;
+                                    _quillHtml = convertPlainHtmlResponse.Result.ToString();
+
                                 }
                             }
+
                         }
-
-                        //var response = await cwb.EvaluateScriptAsync(null,"init",qlrm);
-                        //if(!response.Success) {
-                        //    Debugger.Break();
-                        //}
-                        //string resultStr = response.Result.ToString();
-                        //MpConsole.WriteLine("Raw json from quill");
-                        //MpConsole.WriteLine(resultStr);
-                        //var qrm = JsonConvert.DeserializeObject<MpQuillEnableReadOnlyResponseMessage>(resultStr);
-                        //MpConsole.WriteLine("Deserialized html from quill");
-                        //MpConsole.WriteLine(qrm.itemEncodedHtmlData);
-                        //quillHtml = HttpUtility.HtmlDecode(qrm.itemEncodedHtmlData);
-                        //MpConsole.WriteLine("Decoded html (after deserialized) from quill");
-                        //MpConsole.WriteLine(quillHtml);
-                    }
-                };
-               cwb.LoadUrl("localfolder://cefsharp/");
+                    });
+                }
             };
-            (Application.Current.MainWindow as MpMainWindow).MainWindowCanvas.Children.Add(cwb);
 
-            while (quillHtml == null) {
+            quillWindow.Show();
+        }
+
+        public static async Task<string> ConvertStandardHtmlToRtf(string html) {
+            _quillHtml = null;
+            _plainHtmlToConvert = html;
+
+            while (_quillHtml == null) {
                 await Task.Delay(100);
             }
-            return ConvertQuillHtmlToRtf(quillHtml);
+            return ConvertQuillHtmlToRtf(_quillHtml);
         }
         public static string ConvertQuillHtmlToRtf(string html) {
             var htmlDoc = new HtmlDocument();
@@ -107,15 +93,15 @@ namespace MpWpfApp {
             foreach (var htmlBlockNode in htmlDoc.DocumentNode.ChildNodes) {
                 var docNode = htmlBlockNode;
                 if(docNode.Name == "div") {
+                    // this occurs for table parent and code-block 
+                    // and for code-block, i'm not sure but there maybe multiple blocks so process all 1st level children
                     docNode = htmlBlockNode.FirstChild;
+                    while(docNode != null) {
+                        fd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
+                        docNode = docNode.NextSibling;
+                    }
+                    continue;
                 }
-                //var te = ConvertHtmlNode(docNode);
-                //if(te is Block b) {
-                //    fd.Blocks.Add(b);
-                //} else if (te is Inline i) {
-                //    fd.Blocks.Add(new Paragraph(i));
-                //}
-
                 fd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
             }
             return fd.ToRichText();
@@ -182,6 +168,8 @@ namespace MpWpfApp {
                     te = new Hyperlink();
                     break;
                 case "p":
+                    te = new Paragraph();
+                    break;
                 case "h1":
                 case "h2":
                 case "h3":
@@ -189,7 +177,7 @@ namespace MpWpfApp {
                 case "h5":
                 case "h6":
                     te = new Paragraph() {
-                        TextAlignment = TextAlignment.Left
+                        FontSize = GetHeaderFontSize(n.Name)
                     };
                     break;
                 case "li":
@@ -226,15 +214,19 @@ namespace MpWpfApp {
                 //    te = new TableRowGroup();
                 //    break;
 
-                //case "div":
-                //    // should only occur for tables
-                //    if(n.HasClass("quill-better-table-wrapper")) {
-                //        n = n.FirstChild;
-                //        te = new Table();
-                //    } else {
-                //        throw new Exception("Unhanlded html doc element: " + n.ToString());
-                //    }
-                //    break;
+                case "div":
+                    // should only occur for code-block
+                    if (n.HasClass("ql-code-block")) {
+                        te = new Paragraph() {
+                            Padding = new Thickness(3),
+                            Background = Brushes.LightGray,
+                            Foreground = Brushes.DimGray,
+                            FontFamily = new FontFamily("Consolas")
+                        };
+                    } else {
+                        throw new Exception("Unhanlded html doc element: " + n.ToString());
+                    }
+                    break;
                 default:
                     throw new Exception("Unhanlded html doc element: " + n.Name);
             }
@@ -412,14 +404,21 @@ namespace MpWpfApp {
         public static Brush ParseRgb(string text) {
             Brush defaultBrush = Brushes.Transparent;
 
+            var color = new Color();
+            if(text.Contains("var")) {
+                // occured where color: var(--color-accent-fg)'
+                //no idea how to handle this so just return black
+                return Brushes.Black;
+            }
+
             int rgbOpenIdx = text.IndexOf("(");
-            if(rgbOpenIdx < 0) {
+            if (rgbOpenIdx < 0) {
                 int preNameIdx = text.IndexOf(":");
-                if(preNameIdx >= 0 && text.Contains(" ")) {
+                if (preNameIdx >= 0 && text.Contains(" ")) {
                     string colorName = text.Substring(preNameIdx + 1)
                                         .Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)
                                         .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x) && !x.StartsWith("!"));
-                    if(string.IsNullOrWhiteSpace(colorName)) {
+                    if (string.IsNullOrWhiteSpace(colorName)) {
                         return defaultBrush;
                     }
                     string hex = MpSystemColors.ConvertFromString(colorName.Trim(), defaultBrush.ToHex());
@@ -428,18 +427,17 @@ namespace MpWpfApp {
                     }
                     return hex.ToWpfBrush();
                 }
-                
-                
+
+
             }
 
             string commaReplacement = string.Empty;
-            if(!text.Substring(rgbOpenIdx + 1).Contains(" ")) {
+            if (!text.Substring(rgbOpenIdx + 1).Contains(" ")) {
                 commaReplacement = " ";
             }
-            string rgbColors = text.Substring(rgbOpenIdx + 1).Replace(",", commaReplacement).Replace(")", string.Empty).Replace(";",string.Empty);
+            string rgbColors = text.Substring(rgbOpenIdx + 1).Replace(",", commaReplacement).Replace(")", string.Empty).Replace(";", string.Empty);
             var rgbItemList = rgbColors.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-            
-            var color = new Color();
+
             color.A = 255;
             color.R = Convert.ToByte(rgbItemList[0]);
             color.G = Convert.ToByte(rgbItemList[1]);
@@ -450,6 +448,23 @@ namespace MpWpfApp {
             return new SolidColorBrush(color);
         }
 
+        public static double GetHeaderFontSize(string headerTag) {
+            switch(headerTag) {
+                case "h1":
+                    return 32;
+                case "h2":
+                    return 24;
+                case "h3":
+                    return 18.72;
+                case "h4":
+                    return 16;
+                case "h5":
+                    return 13.28;
+                case "h6":
+                    return 10.72;
+            }
+            throw new Exception("Unknown header tag: " + headerTag);
+        }
         public static double GetFontSize(string styleValue, TextElement te) {
             //for some reason wpf will not accept px values and converts to 3/4 size (for 96DPI)
             //but giving pt will use the displays DIP

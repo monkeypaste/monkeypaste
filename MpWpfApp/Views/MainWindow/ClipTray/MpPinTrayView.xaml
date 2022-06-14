@@ -74,13 +74,13 @@
         -->
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
+              IsHitTestVisible="False"
               Visibility="{Binding IsDragOverPinTray,
                                    Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.Background>
                 <SolidColorBrush Color="Gray"
                                  Opacity="0.7" />
             </Grid.Background>
-
             <Ellipse Fill="Transparent"
                      Stroke="{Binding PinTrayDropForegroundHexColor,
                                       Converter={StaticResource StringHexToWinMediaColorConverter}}"
@@ -91,14 +91,14 @@
                     VerticalAlignment="Center"
                     Background="{Binding PinTrayDropForegroundHexColor,
                                          Converter={StaticResource StringHexToBrushConverter}}"
-                    CornerRadius="5"
+                    CornerRadius="2"
                     Height="30"
                     Width="3" />
             <Border HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Background="{Binding PinTrayDropForegroundHexColor,
                                          Converter={StaticResource StringHexToBrushConverter}}"
-                    CornerRadius="5"
+                    CornerRadius="2"
                     Height="3"
                     Width="30" />
             <TextBlock Foreground="{Binding PinTrayDropForegroundHexColor,
@@ -107,7 +107,7 @@
                        FontWeight="SemiBold"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Margin="0,76,0,0">
+                       Margin="30,76,30,0">
                 Drop Here
             </TextBlock>
         </Grid>

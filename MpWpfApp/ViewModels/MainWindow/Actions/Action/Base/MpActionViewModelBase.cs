@@ -210,6 +210,9 @@ namespace MpWpfApp {
         public string BorderBrushHexColor {
             get {
                 if(Parent != null && Parent.PrimaryAction != null && Parent.PrimaryAction.ActionId == ActionId) {
+                    if(IsEnabled.HasValue && IsEnabled.Value) {
+                        return MpSystemColors.limegreen;
+                    }
                     return MpSystemColors.IsSelectedBorderColor;
                 }
                 if(IsHovering) {

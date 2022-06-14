@@ -30,7 +30,12 @@ namespace MpWpfApp {
     /// </summary>
     public partial class MpQuillEditorView : MpUserControl<MpClipTileViewModel> {
         private DispatcherTimer timer;
+        private string _standardHtmlConvertedToQuillHtml = null;
         public bool IsDomContentLoaded { get; private set; }
+
+        public bool IsConverterInstance { get; set; } = false;
+        public MpClipTileViewModel ViewModelToConvert { get; set; } = null;
+
 
         public MpQuillEditorView() {
             InitializeComponent();
@@ -82,7 +87,7 @@ namespace MpWpfApp {
 
 
         private void QuillWebView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-
+            //QuillWebView.Reload();
         }
 
         private void ReceivedClipTileViewModelMessage(MpMessageType msg) {
@@ -110,6 +115,25 @@ namespace MpWpfApp {
         private void Browser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e) {
             if(e.IsLoading == false) {
                 IsDomContentLoaded = true;
+                if(IsConverterInstance) {
+                    MpHelpers.RunOnMainThread(async () => {
+                        while(true) {
+                            if(ViewModelToConvert == null) {
+                                await Task.Delay(100);
+                            } else {
+                                var lrm = MpDocumentHtmlExtension.CreateLoadRequestMessage(QuillWebView, ViewModelToConvert.CopyItemData);
+                                var loadRequestResponse = await QuillWebView.EvaluateScriptAsync(null, "init", lrm);
+                                if(loadRequestResponse.Success) {
+                                    var enableReadOnlyResp = await QuillWebView.EvaluateScriptAsync("enableReadOnly()");
+                                    _standardHtmlConvertedToQuillHtml = MpDocumentHtmlExtension.ProcessEnableReadOnlyResponse(QuillWebView, enableReadOnlyResp);
+                                    _standardHtmlConvertedToQuillHtml = HttpUtility.HtmlDecode(_standardHtmlConvertedToQuillHtml);
+                                    ViewModelToConvert = null;
+                                }
+                            }
+
+                        }
+                    });
+                }
             }
         }
 
@@ -118,6 +142,19 @@ namespace MpWpfApp {
                 //BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
                 BindingContext.ClearEditing();
             }
+        }
+
+        public string GetConvertedHtml() {
+            if(!IsConverterInstance) {
+                return null;
+            }
+
+            if(_standardHtmlConvertedToQuillHtml == null) {
+                return null;
+            }
+            string outHtml = _standardHtmlConvertedToQuillHtml;
+            _standardHtmlConvertedToQuillHtml = null;
+            return outHtml;
         }
 
         public bool OnDragEnter(IWebBrowser chromiumWebBrowser, IBrowser browser, IDragData dragData, DragOperationsMask mask) {

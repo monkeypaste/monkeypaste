@@ -106,10 +106,12 @@ namespace MpWpfApp {
         }
 
         public override int GetDropTargetRectIdx() {
+            var ctrvm = MpClipTrayViewModel.Instance;
             var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             var mp = Application.Current.MainWindow.TranslatePoint(gmp, AssociatedObject.PinTrayListBox);
-            bool isOverPinnedItem = MpClipTrayViewModel.Instance.PinnedItems.Any(x => x.IsHovering);
-            return DropRects[0].Contains(mp) && !isOverPinnedItem ? 0 : -1;
+            bool isOverPinnedItem = ctrvm.PinnedItems.Any(x => x.IsHovering);
+            ctrvm.IsDragOverPinTray = DropRects[0].Contains(mp) && !isOverPinnedItem;
+            return ctrvm.IsDragOverPinTray ? 0 : -1;
         }
         public override List<Rect> GetDropTargetRects() {
             var rl = new List<Rect>();
@@ -202,7 +204,7 @@ namespace MpWpfApp {
             drop_ctvm = ctrvm.PinnedItems.FirstOrDefault(x => x.CopyItemId == drop_ctvm.CopyItemId);
 
             if(drop_ctvm == null) {
-                Debugger.Break();
+                //Debugger.Break();
                 return;
             }
             ////int curIdx = ctrvm.PinnedItems.IndexOf(drop_ctvm);

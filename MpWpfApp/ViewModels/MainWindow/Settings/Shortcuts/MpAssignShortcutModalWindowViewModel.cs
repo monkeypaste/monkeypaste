@@ -31,7 +31,7 @@ namespace MpWpfApp {
 
 
         private ICommand _assigningCommand = null;
-
+        private int _commandId;
         #endregion
 
         #region Properties
@@ -171,10 +171,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Methods
-        public static string ShowAssignShortcutWindow(string shortcutName,string keys,ICommand command) {
+        public static string ShowAssignShortcutWindow(string shortcutName,string keys,ICommand command, int commandId) {
             MpMainWindowViewModel.Instance.IsShowingDialog = true;
             var ascw = new MpAssignHotkeyModalWindow();
-            var ascwvm = new MpAssignShortcutModalWindowViewModel(shortcutName,keys,command);
+            var ascwvm = new MpAssignShortcutModalWindowViewModel(shortcutName,keys,command, commandId);
             ascw.DataContext = ascwvm;
             ascw.Loaded += ascwvm.Ascw_Loaded;
             ascw.Unloaded += ascwvm.Ascw_Unloaded;
@@ -200,9 +200,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructors
-        public MpAssignShortcutModalWindowViewModel() : this(string.Empty,string.Empty,null) { }
+        public MpAssignShortcutModalWindowViewModel() : this(string.Empty,string.Empty,null,0) { }
 
-        private MpAssignShortcutModalWindowViewModel(string shortcutName, string keyString, ICommand command) : base(null) {
+        private MpAssignShortcutModalWindowViewModel(string shortcutName, string keyString, ICommand command,int commandId) : base(null) {
             PropertyChanged += MpAssignShortcutModalWindowViewModel_PropertyChanged;
 
             if (!string.IsNullOrEmpty(keyString) && keyString.Contains(@",")) {
@@ -211,6 +211,7 @@ namespace MpWpfApp {
             }
             KeyList = MpWpfKeyboardInputHelpers.ConvertStringToKeySequence(keyString);
             _assigningCommand = command;
+            _commandId = commandId;
             ShortcutDisplayName = shortcutName;
 
             OnPropertyChanged(nameof(KeyString));
@@ -276,7 +277,7 @@ namespace MpWpfApp {
                 //    }
                 //    klIdx++;
                 //}
-                if (_isReplacingShortcut && KeyString != string.Empty) {
+                if (_isReplacingShortcut && KeyString != string.Empty && scvm.Command != _assigningCommand && scvm.CommandId != _commandId) {
                     DuplicatedShortcutViewModel = scvm;
                     WarningString = "This combination conflicts with '" + scvm.ShortcutDisplayName + "' which will be cleared if saved";
                     return false;

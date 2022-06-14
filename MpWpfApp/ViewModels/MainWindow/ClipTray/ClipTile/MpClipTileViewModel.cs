@@ -425,7 +425,8 @@ using MpProcessHelper;
                 if(IsTitleVisible) {
                     return new Thickness();
                 }
-                return new Thickness(10, 3, 10, 3);
+                double bottomMargin = IsDetailGridVisibile ? 0 : 10;
+                return new Thickness(5, 0, 5, bottomMargin);
             }
         }
 

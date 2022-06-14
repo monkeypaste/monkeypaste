@@ -82,9 +82,15 @@ namespace MpWpfApp {
             int commandId,
             string keys) {
             MpMainWindowViewModel.Instance.IsShowingDialog = true;
-            string shortcutKeyString = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command);
+            string shortcutKeyString = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command, commandId);
 
-            MpShortcutViewModel scvm = Shortcuts.FirstOrDefault(x => x.CommandId == (int)commandId && x.ShortcutType == shortcutType && x.Command == command);
+            MpShortcutViewModel scvm = null;
+            if(commandId == 0) {
+                // for non-custom shortcuts check shortcut type
+                scvm = Shortcuts.FirstOrDefault(x => x.ShortcutType == shortcutType);
+            } else {
+                scvm = Shortcuts.FirstOrDefault(x => x.CommandId == (int)commandId && x.ShortcutType == shortcutType);
+            }
             //if ((int)shortcutType < (int)MpShortcutType.CustomMinimum) {
             //    scvm = Shortcuts.FirstOrDefault(x => x.Command == command && (int)x.CommandId == commandId);
             //} else {

@@ -10,6 +10,49 @@ var IsClipboardDataReady = false;
 
 var isPastingTemplate = false;
 
+function initConverter() {
+	reqMsg = {
+		envName: 'wpf',
+		isReadOnlyEnabled: true,
+		usedTextTemplates: {},
+		isPasteRequest: false,
+		itemEncodedHtmlData: ''
+	}
+
+	EnvName = reqMsg.envName;
+
+	loadQuill(reqMsg);
+
+	document.getElementsByClassName("ql-toolbar")[0].classList.add("env-wpf");
+	disableReadOnly();
+	//hideEditorToolbar();
+	window.addEventListener(
+		"resize",
+		function (event) {
+			updateAllSizeAndPositions();
+		},
+		true
+	);
+
+	updateAllSizeAndPositions();
+
+	IsLoaded = true;
+	return "CONVERTER LOADED";
+}
+
+function convertPlainHtml(plainHtml) {
+	//log("Converting This Plain Html:");
+	//log(plainHtml);
+	//setHtml(plainHtml);
+	quill.deleteText(0, quill.getLength());
+	quill.clipboard.dangerouslyPasteHTML(plainHtml);
+	quill.update();
+	return getHtml();
+	//
+
+	//
+}
+
 function init(reqMsgStr) {
 	//drag/drop notes:
 	// quill.root.removeEventListener('dragstart',getEventListeners(quill.root).dragstart[0].listener)
@@ -48,15 +91,6 @@ function init(reqMsgStr) {
 
 	loadQuill(reqMsg);
 
-	if (reqMsg.isConvertPlainHtmlRequest) {
-		log("Converting This Plain Html:");
-		log(reqMsg.itemEncodedHtmlData);
-		//log("Decoded:");
-		//reqMsg.itemEncodedHtmlData = decodeURI(regMsg.itemEncodedHtmlData);
-		//log(reqMsg.itemEncodedHtmlData);
-		quill.clipboard.dangerouslyPasteHTML(reqMsg.itemEncodedHtmlData);
-	}
-
 	if (reqMsg.envName == "web") {
 		//for testing in browser
 		document.getElementsByClassName("ql-toolbar")[0].classList.add("env-web");
@@ -90,11 +124,10 @@ function loadQuill(reqMsg) {
 	Quill.register("modules/htmlEditButton", htmlEditButton);
 	Quill.register({ "modules/better-table": quillBetterTable }, true);
 
-	if (!reqMsg.isConvertPlainHtmlRequest) {
-		//registerContentBlots();
-		registerContentGuidAttribute();
-		registerTemplateSpan();
-	}
+
+	//registerContentBlots();
+	registerContentGuidAttribute();
+	registerTemplateSpan();
 
 	// Append the CSS stylesheet to the page
 	var node = document.createElement("style");
@@ -131,10 +164,6 @@ function loadQuill(reqMsg) {
 	});
 
 	quill.root.setAttribute("spellcheck", "false");
-
-	if (reqMsg.isConvertPlainHtmlRequest) {
-		//return;
-	}
 
 	//quill.root.removeEventListener('drag', quill.root.ondrag);
 	//quill.root.removeEventListener('dragend', quill.root.ondragend);
@@ -215,15 +244,6 @@ function loadQuill(reqMsg) {
 	});
 
 	quill.on("text-change", function (delta, oldDelta, source) {
-
-		if (reqMsg.isConvertPlainHtmlRequest && quill.getLength() > 0) {
-			log('text change html: ');
-			log(getHtml());
-
-			IsClipboardDataReady = true;
-		}
-
-
 		updateAllSizeAndPositions();
 		if (!IsLoaded) {
 			return;
@@ -571,6 +591,8 @@ function enableReadOnly() {
 	$(".ql-editor").attr("contenteditable", false);
 	$(".ql-editor").css("caret-color", "transparent");
 
+	quill.update();
+
 	hideEditorToolbar();
 
 	scrollToHome();
@@ -586,8 +608,8 @@ function enableReadOnly() {
 	};
 	let qrmJsonStr = JSON.stringify(qrmObj);
 
-	log("enableReadOnly() response msg:");
-	log(qrmJsonStr);
+	//log("enableReadOnly() response msg:");
+	//log(qrmJsonStr);
 
 	return qrmJsonStr; //btoa(qrmJsonStr);
 }

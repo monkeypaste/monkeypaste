@@ -64,7 +64,8 @@ namespace MpWpfApp {
 
                     new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
 
-                    new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper))
+                    new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpQuillHtmlToRtfConverter))
                     //new MpBootstrappedItem(typeof(MpMouseHook))
                 });
         }

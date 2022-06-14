@@ -14,6 +14,7 @@
     <Grid x:Name="ClipTrayContainerGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"
+                              MinWidth="{Binding MinClipOrPinTrayScreenWidth}"
                               MaxWidth="{Binding MaxPinTrayWidth}" />
             <ColumnDefinition Width="*"
                               MinWidth="{Binding MinClipOrPinTrayScreenWidth}" />

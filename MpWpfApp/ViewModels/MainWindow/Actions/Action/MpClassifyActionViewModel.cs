@@ -110,7 +110,7 @@ namespace MpWpfApp {
 
                 }
                 // TODO This occurs when parent action is File watcher. Probably need option to store item or just acknowledge the change
-                MpConsole.WriteLine("Classify child action of file watcher called for " + actionInput.CopyItem.ItemData + " with change type " + (actionInput as MpFileSystemTriggerOutput).FileSystemChangeType + ", no id so ignoring...");
+                //MpConsole.WriteLine("Classify child action of file watcher called for " + actionInput.CopyItem.ItemData + " with change type " + (actionInput as MpFileSystemTriggerOutput).FileSystemChangeType + ", no id so ignoring...");
                 //await actionInput.CopyItem.WriteToDatabaseAsync();
                 //return;
             } else {

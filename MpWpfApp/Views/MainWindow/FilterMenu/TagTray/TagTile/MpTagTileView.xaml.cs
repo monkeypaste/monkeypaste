@@ -48,6 +48,7 @@ namespace MpWpfApp {
             } else if(BindingContext.IsSelected) {
                 MpDataModelProvider.QueryInfo.NotifyQueryChanged();
             }
+            MpDragDropManager.StartDragCheck(BindingContext);
         }
 
 

@@ -1,19 +1,26 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Documents;
+using System.Windows.Markup;
 
 namespace MpWpfApp {
-    public class MpHtmlClipboardData {
+    public class MpHtmlClipboardDataConverter {
         public string Version { get; private set; }
         public string SourceUrl { get; private set; }
         public string Html { get; private set; }
 
-        public static MpHtmlClipboardData Parse(string htmlClipboardData) {
+        public string Rtf { get; private set; }
+
+        public static async Task<MpHtmlClipboardDataConverter> Parse(string htmlClipboardData) {
             if(string.IsNullOrWhiteSpace(htmlClipboardData)) {
                 return null;
             }
 
-            var hcd = new MpHtmlClipboardData();
+            var hcd = new MpHtmlClipboardDataConverter();
 
             string versionToken = @"Version:";
             string startHtmlToken = @"StartHTML:";
@@ -25,11 +32,24 @@ namespace MpWpfApp {
 
             int html_start_idx = htmlClipboardData.IndexOf(htmlStartToken) + htmlStartToken.Length;
             if(html_start_idx >= 0) {
-                hcd.Html = HtmlToXamlDemo.HtmlParser.ExtractHtmlFromClipboardData(htmlClipboardData);
-                MpConsole.WriteLine("Extracted Html: ");
-                MpConsole.WriteLine(hcd.Html);
-                //int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
-                //hcd.Html = htmlClipboardData.Substring(html_start_idx,html_end_idx - html_start_idx);
+                //hcd.Html = HtmlToXamlDemo.HtmlParser.ExtractHtmlFromClipboardData(htmlClipboardData);
+                int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
+                hcd.Html = htmlClipboardData.Substring(html_start_idx, html_end_idx - html_start_idx);
+                hcd.Rtf = await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(hcd.Html);
+
+
+                //string xaml = HtmlToXamlDemo.HtmlToXamlConverter.ConvertHtmlToXaml(hcd.Html, true);                
+                //using (StringReader stringReader = new StringReader(xaml.ToRichText())) {
+                //    System.Xml.XmlReader xmlReader = System.Xml.XmlReader.Create(stringReader);
+                //    var fd = XamlReader.Load(xmlReader) as FlowDocument;
+                //    hcd.Rtf = fd.ToRichText();
+                //}                    
+
+                //MpConsole.WriteLine("Extracted Html: ");
+                //MpConsole.WriteLine(hcd.Html);
+
+
+
             }
             string sourceUrlToken = "SourceURL:";
             int source_url_start_idx = htmlClipboardData.IndexOf(sourceUrlToken) + sourceUrlToken.Length;

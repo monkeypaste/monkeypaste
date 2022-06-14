@@ -228,7 +228,8 @@ function formatContentChange(delta, oldDelta, source) {
         //new content doesn't have a content guid so find first previous
         srange.index--;
         if (srange.index < 0) {
-            debugger;
+            //debugger;
+            return;
         }
         domNode = getElementAtIdx(srange.index);
         contentBlot = getContentItemFromDomNode(domNode);

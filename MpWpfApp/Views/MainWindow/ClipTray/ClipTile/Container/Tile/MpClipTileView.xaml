@@ -134,7 +134,7 @@
                             BorderThickness="0"
                             Background="Transparent"
                             Style="{StaticResource Transparent_Button}"
-                            Margin="2,-1,0,0"
+                            Margin="5,2,0,0"
                             Width="12"
                             Height="12"
                             Visibility="{Binding PinButtonVisibility}"
@@ -178,9 +178,11 @@
                                             DataContext="{Binding}" />
 
                 <!--  Content  -->
-                <ContentControl Content="{Binding}"
-                                ContentTemplateSelector="{StaticResource ContentViewSelector}" />
-
+                <local:MpClipBorder CornerRadius="10">
+                    <ContentControl Content="{Binding}"
+                                    Margin="{Binding ContentMarginThickness}"
+                                    ContentTemplateSelector="{StaticResource ContentViewSelector}" />
+                </local:MpClipBorder>
             </DockPanel>
             <!--  Overlays  -->
             <!--  Loading Spinner  -->

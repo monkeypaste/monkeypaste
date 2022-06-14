@@ -43,6 +43,11 @@
                               Visibility="{Binding IsDraggingToExternal,
                                                    Converter={StaticResource BoolToVisibilityConverter},
                                                    FallbackValue=Collapsed}" />
+
+        <!--<local:MpQuillEditorView x:Name="QuillConverterView"
+                                 IsConverterInstance="True"
+                                 Visibility="Collapsed"
+                                 DataContext="{x:Null}"/>-->
         <!--<AdornerDecorator>-->
         <Grid x:Name="MainWindowGrid"
               Height="{Binding MainWindowHeight,
