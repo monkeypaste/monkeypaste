@@ -149,7 +149,7 @@ namespace MonkeyPaste {
                     //occurs for new/synced copy items
                     bool isLinked = await MpDataModelProvider.IsTagLinkedWithCopyItemAsync(Tag.Id, nci.Id);
                     if (!isLinked) {
-                        isLinked = Tag.Id == MpTag.RecentTagId || Tag.Id == MpTag.AllTagId;
+                        isLinked = Tag.Id == MpTag.AllTagId;
                     } 
                     if (isLinked) {// && !Tag.CopyItemList.Any(x => x.CopyItemGuid == nci.CopyItemGuid)) {
                         Tag.CopyItems.Add(nci);

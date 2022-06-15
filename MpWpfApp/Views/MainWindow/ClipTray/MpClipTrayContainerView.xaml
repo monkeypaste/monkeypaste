@@ -14,16 +14,16 @@
     <Grid x:Name="ClipTrayContainerGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"
-                              MinWidth="{Binding MinClipOrPinTrayScreenWidth}"
+                              MinWidth="{Binding MinPinTrayScreenWidth}"
                               MaxWidth="{Binding MaxPinTrayWidth}" />
             <ColumnDefinition Width="*"
-                              MinWidth="{Binding MinClipOrPinTrayScreenWidth}" />
+                              MinWidth="{Binding MinClipTrayScreenWidth}" />
         </Grid.ColumnDefinitions>
         <local:MpPinTrayView x:Name="PinTrayView"
                              Grid.Column="0"
                              DataContext="{Binding}"
-                             MinWidth="{Binding MinClipOrPinTrayScreenWidth}" 
-                             Margin="0,0,10,0"
+                             MinWidth="{Binding MinClipTrayScreenWidth}"
+                             Margin="0,0,5,0"
                              local:MpSizeObserverExtension.IsEnabled="True"
                              local:MpSizeObserverExtension.ObservedWidth="{Binding PinTrayScreenWidth,
                                                                                    Mode=OneWayToSource}">
@@ -48,7 +48,8 @@
                       local:MpHoverableExtension.HoverCursor="ResizeWE"
                       MouseDoubleClick="ClipTraySplitter_MouseDoubleClick"
                       HorizontalAlignment="Right"
-                      VerticalAlignment="Stretch" Margin="0,0,5,0"
+                      VerticalAlignment="Stretch"
+                      Margin="0,0,0,0"
                       Width="5"
                       Background="Magenta" />
         <local:MpClipTrayView x:Name="ClipTrayView"

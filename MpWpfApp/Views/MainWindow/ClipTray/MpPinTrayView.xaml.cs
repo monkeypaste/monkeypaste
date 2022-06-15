@@ -39,7 +39,7 @@ namespace MpWpfApp {
                 case MpMessageType.ItemDragBegin:
                     if(_preDragWidth < 0) {
                         _preDragWidth = PinTrayListBox.ActualWidth;
-                        PinTrayListBox.MinWidth = _preDragWidth + BindingContext.MinClipOrPinTrayScreenWidth;
+                        PinTrayListBox.MinWidth = _preDragWidth + BindingContext.MinClipTrayScreenWidth;
 
                         PinTrayListBox.InvalidateMeasure();
                         UpdateLayout();
@@ -48,7 +48,7 @@ namespace MpWpfApp {
                     break;
                 case MpMessageType.ItemDragEnd:
                     if(_preDragWidth > 0) {
-                        PinTrayListBox.MinWidth = BindingContext.MinClipOrPinTrayScreenWidth;
+                        PinTrayListBox.MinWidth = BindingContext.MinClipTrayScreenWidth;
                         //BindingContext.PinTrayBoundWidth = _preDragWidth;
                         _preDragWidth = -1;
 

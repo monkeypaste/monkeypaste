@@ -197,7 +197,7 @@ namespace MonkeyPaste {
                     _ = Task.Run(() => Initialize(TagId));
                 }                
             } else if(e is MpCopyItem ci) {
-                if(TagId == MpTag.RecentTagId || TagId == MpTag.AllTagId) {
+                if(TagId == MpTag.AllTagId) {
                     _ = Task.Run(() => Initialize(TagId));
                 }
             }

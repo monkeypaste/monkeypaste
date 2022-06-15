@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public enum MpCopyItemPropertyPathType {
@@ -138,15 +137,15 @@ namespace MonkeyPaste {
         [Indexed]
         public string ItemData { get; set; } = string.Empty;
 
-        public string ItemData_rtf { get; set; } = string.Empty;
+        //public string ItemData_rtf { get; set; } = string.Empty;
 
         //[ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
         //[ForeignKey(typeof(MpDbImage))]
-        [Column("fk_SsMpDbImageId")]
-        public int SsDbImageId { get; set; }
+        //[Column("fk_SsMpDbImageId")]
+        //public int SsDbImageId { get; set; }
 
         public string ItemDescription { get; set; } = string.Empty;
 
@@ -157,8 +156,11 @@ namespace MonkeyPaste {
         [Column("HexColor")]
         public string ItemColor { get; set; } = string.Empty;
 
-        [Column("e_")]
         public string PrefferedFormatName { get; set; } = string.Empty;
+
+        public double ItemWidth { get; set; }
+
+        public double ItemHeight { get; set; }
 
         #endregion
 
@@ -219,6 +221,19 @@ namespace MonkeyPaste {
             set => PrefferedFormatName = value == null ? null : value.Name;
         }
 
+        [Ignore]
+        public MpSize ItemSize {
+            get => new MpSize(ItemWidth, ItemHeight);
+            set {
+                if(value == null) {
+                    ItemWidth = 0;
+                    ItemHeight = 0;
+                } else {
+                    ItemWidth = value.Width;
+                    ItemHeight = value.Height;
+                }
+            }
+        }
         #endregion
 
         #region MpICopyItemReference Implementation
@@ -249,6 +264,8 @@ namespace MonkeyPaste {
             MpCopyItemType itemType = MpCopyItemType.None,
             string title = "",
             string description = "",
+            double w = 0,
+            double h = 0,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
             if (MpPreferences.IgnoreNewDuplicates && dupCheck != null && !suppressWrite) {
@@ -287,6 +304,7 @@ namespace MonkeyPaste {
                 PrefferedFormatName = preferredFormatName,                                        
                 SourceId = sourceId,
                 CopyCount = 1,
+                ItemSize = new MpSize(w,h),
                 CopyItemSourceGuid = copyItemSourceGuid,
             };
             if (!suppressWrite) {

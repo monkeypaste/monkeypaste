@@ -243,20 +243,12 @@ namespace MpWpfApp {
                 if(Tag == null) {
                     return false;
                 }
-                return Tag.Id == MpTag.AllTagId || Tag.Id == MpTag.RecentTagId;
+                return Tag.Id == MpTag.AllTagId;
             }
         }
 
         public bool IsUserTag => !IsSudoTag;
 
-        public bool IsRecentTag {
-            get {
-                if(Tag == null) {
-                    return false;
-                }
-                return Tag.Id == MpTag.RecentTagId;
-            }
-        }
 
         public bool IsAllTag {
             get {
@@ -695,8 +687,6 @@ namespace MpWpfApp {
 
             if (IsAllTag) {
                 isLinked = true;
-            } else if (IsRecentTag) {
-                isLinked = false;
             } else {
                 isLinked = MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, ci.Id);
             }
@@ -712,8 +702,6 @@ namespace MpWpfApp {
 
             if (IsAllTag) {
                 isLinked = true;
-            } else if (IsRecentTag) {
-                isLinked = await MpDataModelProvider.IsCopyItemInRecentTag(ci.Id);
             } else {
                 isLinked = await MpDataModelProvider.IsTagLinkedWithCopyItemAsync(Tag.Id, ci.Id);
             }

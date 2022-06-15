@@ -350,6 +350,7 @@ namespace MpWpfApp {
             MpCopyItem ci = ctvm.CopyItem;
             new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd)
                 .LoadItemData(ci.ItemData, ci.ItemType, out Size rawDimensions);
+
             ctvm.UnformattedContentSize = rawDimensions;
 
             if (ctvm == null) {

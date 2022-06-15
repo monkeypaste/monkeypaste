@@ -488,17 +488,12 @@ namespace MonkeyPaste {
         private static async Task CreateViews() {
             await _connectionAsync.ExecuteAsync(@"CREATE VIEW MpSortableCopyItem_View as
                                                     SELECT 
-	                                                    case fk_ParentCopyItemId
-		                                                    when 0
-			                                                    then pk_MpCopyItemId
-		                                                    ELSE
-			                                                    fk_ParentCopyItemId
-	                                                    end as RootId,
-	                                                    pk_MpCopyItemId,
+	                                                    pk_MpCopyItemId as RootId,
 	                                                    fk_MpCopyItemTypeId,
-	                                                    CompositeSortOrderIdx,
 	                                                    Title,
 	                                                    ItemData,
+	                                                    ItemWidth,
+	                                                    ItemHeight,
 	                                                    ItemDescription,
 	                                                    CopyDateTime,
 	                                                    (select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
@@ -527,9 +522,53 @@ namespace MonkeyPaste {
                                                     INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
                                                     INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
                                                     LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
+
+            //await _connectionAsync.ExecuteAsync(@"CREATE VIEW MpSortableCopyItem_View as
+            //                                        SELECT 
+	           //                                         case fk_ParentCopyItemId
+		          //                                          when 0
+			         //                                           then pk_MpCopyItemId
+		          //                                          ELSE
+			         //                                           fk_ParentCopyItemId
+	           //                                         end as RootId,
+	           //                                         pk_MpCopyItemId as RootId,
+	           //                                         fk_MpCopyItemTypeId,
+	           //                                         CompositeSortOrderIdx,
+	           //                                         Title,
+	           //                                         ItemData,
+	           //                                         ItemDescription,
+	           //                                         CopyDateTime,
+	           //                                         (select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
+	           //                                         CopyCount,
+	           //                                         PasteCount,
+	           //                                         CopyCount + PasteCount as UsageScore,
+	           //                                         MpSource.pk_MpSourceId AS SourceId,
+	           //                                         case MpSource.fk_MpUrlId
+		          //                                          when 0
+			         //                                           then MpApp.SourcePath
+		          //                                          ELSE
+			         //                                           MpUrl.UrlPath
+	           //                                         end as SourcePath,
+	           //                                         MpApp.AppName,
+	           //                                         MpApp.SourcePath as AppPath,
+	           //                                         MpApp.pk_MpAppId AS AppId,
+	           //                                         MpUrl.pk_MpUrlId AS UrlId,
+	           //                                         MpUrl.UrlPath,
+	           //                                         MpUrl.UrlDomainPath,
+	           //                                         MpUrl.UrlTitle,
+	           //                                         MpUserDevice.MachineName AS SourceDeviceName,
+	           //                                         MpUserDevice.PlatformTypeId AS SourceDeviceType
+            //                                        FROM
+	           //                                         MpCopyItem
+            //                                        INNER JOIN MpUserDevice ON MpUserDevice.pk_MpUserDeviceId = MpApp.fk_MpUserDeviceId
+            //                                        INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
+            //                                        INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
+            //                                        LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
         }
         
         private static async Task InitDefaultPortableData() {
+            // NOTE! MpTag.AllTagId needs to be changed to 1 not 2 since recent was removed
+
             #region User Device
 
             MpPreferences.ThisDeviceGuid = Guid.NewGuid().ToString();
@@ -544,12 +583,6 @@ namespace MonkeyPaste {
 
             #region Tags
 
-            await AddItemAsync<MpTag>(new MpTag() {
-                TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
-                TagName = "Recent",
-                HexColor = Color.Green.ToHex(),
-                TagSortIdx = 0
-            }, "", true, true);
             await AddItemAsync<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                 TagName = "All",
@@ -1031,289 +1064,6 @@ namespace MonkeyPaste {
             }
         }
 
-        private static string GetCreateString() {
-            return @"                    
-                    CREATE TABLE MpSyncHistory (
-                      pk_MpSyncHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , OtherClientGuid text not null
-                    , SyncDateTime datetime not null
-                    );
-                    
-                    CREATE TABLE MpDbLog (
-                      pk_MpDbLogId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , DbObjectGuid text not null
-                    , DbTableName text not null
-                    , AffectedColumnName text not null
-                    , AffectedColumnValue text not null default ''
-                    , LogActionType integer default 0
-                    , LogActionDateTime datetime not null
-                    , SourceClientGuid text not null
-                    );
-                    
-                    CREATE TABLE MpDbImage (
-                      pk_MpDbImageId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpDbImageGuid text not null
-                    , ImageBase64 text not null
-                    );
-                                        
-                    CREATE TABLE MpTag (
-                      pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpTagGuid text not null
-                    , fk_ParentTagId integer default 0
-                    , TagName text
-                    , SortIdx integer
-                    , HexColor text not null default '#FFFF0000'
-                    );
-                    
-                    CREATE TABLE MpIcon (
-                      pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpIconGuid text not null
-                    , fk_IconDbImageId integer not null
-                    , fk_IconBorderDbImageId integer 
-                    , fk_IconSelectedHighlightBorderDbImageId integer
-                    , fk_IconHighlightBorderDbImageId integer 
-                    , HexColor1 text 
-                    , HexColor2 text 
-                    , HexColor3 text 
-                    , HexColor4 text
-                    , HexColor5 text);                                       
-                    
-                    
-                    CREATE TABLE MpPasteToAppPath (
-                      pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpPasteToAppPathGuid text not null
-                    , AppPath text NOT NULL
-                    , AppName text default ''
-                    , Args text default ''
-                    , Label text default ''
-                    , fk_MpDbImageId integer 
-                    , WindowState integer default 1
-                    , IsSilent integer NOT NULL default 0
-                    , IsAdmin integer NOT NULL default 0
-                    , PressEnter integer NOT NULL default 0
-                    );
-                    INSERT INTO MpPasteToAppPath(AppName,MpPasteToAppPathGuid,AppPath,IsAdmin) VALUES ('Command Prompt','0b9d1b30-abce-4407-b745-95f9cde57135','%windir%\System32\cmd.exe',0);
-                    
-                    CREATE TABLE MpUserDevice (
-                      pk_MpUserDeviceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpUserDeviceGuid text not null
-                    , PlatformTypeId integer NOT NULL
-                    );
-                    
-                    CREATE TABLE MpApp (
-                      pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAppGuid text not null
-                    , SourcePath text NOT NULL 
-                    , ProcessName text
-                    , AppName text 
-                    , IsAppRejected integer NOT NULL   
-                    , fk_MpUserDeviceId integer not null
-                    , fk_MpIconId integer);   
-                    
-                    CREATE TABLE MpUrl (
-                      pk_MpUrlId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpUrlGuid text not null
-                    , UrlPath text NOT NULL 
-                    , UrlDomainPath text 
-                    , UrlTitle text
-                    , fk_MpUrlDomainId int 
-                    ); 
-                    
-                    CREATE TABLE MpSource (
-                      pk_MpSourceId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpSourceGuid text not null
-                    , fk_MpUrlId integer default 0
-                    , fk_MpAppId integer NOT NULL
-                    ); 
-
-                    CREATE TABLE MpCopyItem (
-                      pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpCopyItemGuid text not null
-                    , fk_ParentCopyItemId integer default 0
-                    , fk_MpCopyItemTypeId integer NOT NULL default 0
-                    , fk_MpSourceId integer NOT NULL
-                    , CompositeSortOrderIdx integer default 0
-                    , HexColor text 
-                    , Title text NULL default ''
-                    , CopyCount integer not null default 1
-                    , PasteCount integer not null default 0
-                    , fk_MpDbImageId integer
-                    , fk_SsMpDbImageId integer
-                    , ItemData text default ''
-                    , ItemDescription text default ''
-                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL  
-                    , ModifiedDateTime datetime DEFAULT (current_timestamp) NOT NULL  
-                    );
-                    
-                    CREATE TABLE MpCopyItemContent (
-                      pk_MpCopyItemContentId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpCopyItemContentGuid text not null
-                    , fk_MpCopyItemId integer not null
-                    , ContentText text
-                    , ContentTypeId integer default 0
-                    , CONSTRAINT FK_MpCopyItemContent_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)   
-                    );
-
-                    CREATE TABLE MpCopyItemTag (
-                      pk_MpCopyItemTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpCopyItemTagGuid text not null
-                    , fk_MpCopyItemId integer NOT NULL
-                    , fk_MpTagId integer NOT NULL
-                    , CopyItemSortIdx integer default -1
-                    );
-
-                    CREATE TABLE MpShortcut (
-                      pk_MpShortcutId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpShortcutGuid text not null
-                    , fk_MpCopyItemId INTEGER DEFAULT 0
-                    , fk_MpTagId INTEGER DEFAULT 0
-                    , fk_MpAnalyticItemPresetId INTEGER DEFAULT 0
-                    , ShortcutName text NOT NULL                    
-                    , KeyString text NULL       
-                    , DefaultKeyString text NULL
-                    , RoutingType integer NOT NULL DEFAULT 0 
-                    );
-                    INSERT INTO MpShortcut(MpShortcutGuid,ShortcutName,RoutingType,KeyString,DefaultKeyString) VALUES
-                    ('5dff238e-770e-4665-93f5-419e48326f01','Show Window',2,'Control+Shift+D','Control+Shift+D')
-                    ,('cb807500-9121-4e41-80d3-8c3682ce90d9','Hide Window',1,'Escape','Escape')
-                    ,('a41aeed8-d4f3-47de-86c5-f9ca296fb103','Append Mode',2,'Control+Shift+A','Control+Shift+A')
-                    ,('892bf7d7-ba8e-4db1-b2ca-62b41ff6614c','Auto-Copy Mode',2,'Control+Shift+C','Control+Shift+C')
-                    ,('a12c4211-ab1f-4b97-98ff-fbeb514e9a1c','Right-Click Paste Mode',2,'Control+Shift+R','Control+Shift+R')
-                    ,('1d212ca5-fb2a-4962-8f58-24ed9a5d007d','Paste Selected Clip',1,'Enter','Enter')
-                    ,('e94ca4f3-4c6e-40dc-8941-c476a81543c7','Delete Selected Clip',1,'Delete','Delete')
-                    ,('7fe24929-6c9e-49c0-a880-2f49780dfb3a','Select Next',1,'Right','Right')
-                    ,('ee657845-f1dc-40cf-848d-6768c0081670','Select Previous',1,'Left','Left')
-                    ,('5480f103-eabd-4e40-983c-ebae81645a10','Select All',1,'Control+A','Control+A')
-                    ,('39a6b8b5-a585-455b-af83-015fd97ac3fa','Invert Selection',1,'Control+Shift+Alt+A','Control+Shift+Alt+A')
-                    ,('166abd7e-7295-47f2-bbae-c96c03aa6082','Bring to front',1,'Control+Home','Control+Home')
-                    ,('84c11b86-3acc-4d22-b8e9-3bd785446f72','Send to back',1,'Control+End','Control+End')
-                    ,('6487f6ff-da0c-475b-a2ae-ef1484233de0','Assign Hotkey',1,'Control+Shift+H','Control+Shift+H')
-                    ,('837e0c20-04b8-4211-ada0-3b4236da0821','Change Color',1,'Control+Shift+Alt+C','Control+Shift+Alt+C')
-                    ,('4a567aff-33a8-4a1f-8484-038196812849','Say',1,'Control+Shift+S','Control+Shift+S')
-                    ,('330afa20-25c3-425c-8e18-f1423eda9066','Merge',1,'Control+Shift+M','Control+Shift+M')
-                    ,('118a2ca6-7021-47a0-8458-7ebc31094329','Undo',1,'Control+Z','Control+Z')
-                    ,('3980efcc-933b-423f-9cad-09e455c6824a','Redo',1,'Control+Y','Control+Y')
-                    ,('7a7580d1-4129-432d-a623-2fff0dc21408','Edit',1,'Control+E','Control+E')
-                    ,('085338fb-f297-497a-abb7-eeb7310dc6f3','Rename',1,'F2','F2')
-                    ,('e22faafd-4313-441a-b361-16910fc7e9d3','Duplicate',1,'Control+D','Control+D')
-                    ,('4906a01e-b2f7-43f0-af1e-fb99d55c9778','Email',1,'Control+E','Control+E')
-                    ,('c7248087-2031-406d-b4ab-a9007fbd4bc4','Qr Code',1,'Control+Shift+Q','Control+Shift+Q')
-                    ,('777367e6-c161-4e93-93e0-9bf12221f7ff','Toggle Auto-Analyze Mode',2,'Control+Shift+B','Control+Shift+B')
-                    ,('97e29b06-0ec4-4c55-a393-8442d7695038','Toggle Is App Paused',2,'Control+Shift+P','Control+Shift+P')
-                    ,('ee74dd92-d18b-46cf-91b7-3946ab55427c','Copy Selection',1,'Control+C','Control+C');
-                    
-                    CREATE TABLE MpImageAnnotation (
-                      pk_MpImageAnnotationId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpImageAnnotationGuid text not null
-                    , fk_MpCopyItemId integer NOT NULL
-                    , Confidence real NOT NULL
-                    , X real NOT NULL
-                    , Y real NOT NULL
-                    , Width real NOT NULL
-                    , Height real NOT NULL                    
-                    , Label text
-                    );
-                    
-                    CREATE TABLE MpTextToken (
-                      pk_MpTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpTextTokenGuid text not null
-                    , fk_MpCopyItemId integer NOT NULL
-                    , HexColor text default '#0000FF'
-                    , TemplateName text NOT NULL 
-                    );       
-                    
-                    CREATE TABLE MpPasteHistory (
-                      pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpPasteHistoryGuid text not null
-                    , fk_MpCopyItemId integer NOT NULL
-                    , fk_MpUserDeviceId integer NOT NULL
-                    , fk_MpAppId integer default 0                    
-                    , fk_MpUrlId integer default 0
-                    , PasteDateTime datetime NOT NULL
-                    );
-
-                    CREATE TABLE MpAnalyticItem (
-                      pk_MpAnalyticItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAnalyticItemGuid text not null
-                    , fk_MpIconId integer                    
-                    , InputFormatTypeId integer NOT NULL default 0
-                    , Title text NOT NULL 
-                    , Description text
-                    , SortOrderIdx integer
-                    , ApiKey text 
-                    , EndPoint text);   
-
-                    CREATE TABLE MpAnalyticItemParameter (
-                      pk_MpAnalyticItemParameterId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAnalyticItemParameterGuid text not null
-                    , fk_MpAnalyticItemId integer not null
-                    , ParameterTypeId integer not null default 0
-                    , ParameterValueTypeId integer not null default 0
-                    , Label text
-                    , EnumId integer default 0
-                    , SortOrderIdx integer
-                    , Description text
-                    , IsRequired integer not null default 0
-                    , IsReadOnly integer not null default 0
-                    , FormatInfo text); 
-
-                    CREATE TABLE MpAnalyticItemParameterValue (
-                      pk_MpAnalyticItemParameterValueId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAnalyticItemParameterValueGuid text not null
-                    , fk_MpAnalyticItemParameterId integer not null
-                    , Value text
-                    , Label text
-                    , Description text
-                    , IsDefault integer not null default 0   
-                    , IsMinimum integer not null default 0
-                    , IsMaximum integer not null default 0); 
-                    
-                    CREATE TABLE MpAnalyticItemPreset (
-                      pk_MpAnalyticItemPresetId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAnalyticItemPresetGuid text not null
-                    , fk_MpAnalyticItemId integer not null
-                    , fk_MpIconId integer              
-                    , Label text
-                    , Description text
-                    , SortOrderIdx integer
-                    , IsReadOnly integer not null default 0                    
-                    , IsQuickAction integer not null default 0); 
-
-                    CREATE TABLE MpAnalyticItemPresetParameterValue (
-                      pk_MpAnalyticItemPresetParameterValueId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , MpAnalyticItemPresetParameterValueGuid text not null
-                    , fk_MpAnalyticItemPresetId integer not null
-                    , ParameterEnumId integer
-                    , Value text
-                    , DefaultValue text); 
-
-                    CREATE VIEW MpSortableCopyItem_View
-                    AS 
-                    SELECT
-	                    pk_MpCopyItemId,
-	                    fk_ParentCopyItemId,
-	                    fk_MpCopyItemTypeId,
-	                    CompositeSortOrderIdx,
-	                    Title,
-	                    ItemData,
-	                    ItemDescription,
-	                    CopyDateTime,
-	                    CopyCount,
-	                    PasteCount,
-	                    MpSource.pk_MpSourceId AS SourceId,
-	                    MpApp.AppName,
-	                    MpApp.SourcePath as AppPath,
-	                    MpApp.pk_MpAppId AS AppId,
-	                    MpUrl.pk_MpUrlId AS UrlId,
-	                    MpUrl.UrlPath,
-	                    MpUrl.UrlTitle
-                    FROM
-	                    MpCopyItem
-                    INNER JOIN MpSource ON MpSource.pk_MpSourceId = MpCopyItem.fk_MpSourceId
-                    INNER JOIN MpApp ON MpApp.pk_MpAppId = MpSource.fk_MpAppId
-                    LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId;
-            ";
-        }
         #endregion
 
         #region Sync Data

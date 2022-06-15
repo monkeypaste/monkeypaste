@@ -106,7 +106,13 @@ namespace MpWpfApp {
                 }
             }
         }
-
+        private void ReceivedClipTrayViewModelMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.RequeryCompleted:
+                    ReattachAllBehaviors();
+                    break;
+            }
+        }
         private void ReceivedMainWindowResizeBehviorMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ResizingContent:
@@ -179,10 +185,6 @@ namespace MpWpfApp {
                 }
 
                 ScrollToHome();
-
-
-
-
                 //
             }
         }
@@ -223,10 +225,10 @@ namespace MpWpfApp {
                 BindingContext.OnPropertyChanged(nameof(BindingContext.SelectedTextHexColor));
             }
 
-            MpConsole.WriteLine(BindingContext.ToString() + " Selection Changed");
-            MpConsole.WriteLine($"Selection Start: {BindingContext.SelectionStart} Length: {BindingContext.SelectionLength}");
-            MpConsole.WriteLine($"Selected Plain Text: '{BindingContext.SelectedPlainText}'");
-            MpConsole.WriteLine("");
+            //MpConsole.WriteLine(BindingContext.ToString() + " Selection Changed");
+            //MpConsole.WriteLine($"Selection Start: {BindingContext.SelectionStart} Length: {BindingContext.SelectionLength}");
+            //MpConsole.WriteLine($"Selected Plain Text: '{BindingContext.SelectedPlainText}'");
+            //MpConsole.WriteLine("");
         }
 
         private void BindingContext_OnFocusRequest(object sender, EventArgs e) {

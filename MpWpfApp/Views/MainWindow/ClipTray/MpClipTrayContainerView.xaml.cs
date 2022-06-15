@@ -30,7 +30,8 @@ namespace MpWpfApp {
                 GridLength pinColWidth = ClipTrayContainerGrid.ColumnDefinitions[0].Width;
                 if(pinColWidth.IsAuto) {
                     //is default, collapsed so pop it out to show one item
-                    pinColWidth = new GridLength(MpClipTileViewModel.DefaultBorderWidth, GridUnitType.Pixel);
+                    //pinColWidth = new GridLength(MpClipTileViewModel.DefaultBorderWidth, GridUnitType.Pixel);
+                    pinColWidth = new GridLength(MpMeasurements.Instance.ClipTileDefaultMinSize, GridUnitType.Pixel);
                 } else {
                     pinColWidth = new GridLength(ClipTraySplitter.ActualWidth, GridUnitType.Pixel);
                 }

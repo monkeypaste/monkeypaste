@@ -35,6 +35,14 @@
                     ToolTip="{Binding .,
                                       Converter={StaticResource ShortcutCommandViewModelToTooltipConverter}}"
                     ToolTipService.InitialShowDelay="0">
+                <!--<Button.ToolTip>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <Run Text="Assign Shorcut " />
+                            <Run Text="{Binding Short}"
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Button.ToolTip>-->
                 <Image Source="{Binding .,
                                         Converter={StaticResource ShortcutCommandViewModelToImageSourceConverter}}" />
             </Button>

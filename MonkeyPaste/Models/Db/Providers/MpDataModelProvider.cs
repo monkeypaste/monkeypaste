@@ -9,11 +9,13 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Text.RegularExpressions;
 
 namespace MonkeyPaste {
+    
     public static class MpDataModelProvider {
         #region Private Variables
         private static IList<MpCopyItem> _lastResult;
 
         private static List<int> _manualQueryIds;
+        private static List<MpSize> _manualQuerySizes;
 
         #endregion
 
@@ -31,9 +33,11 @@ namespace MonkeyPaste {
 
         public static ObservableCollection<int> AllFetchedAndSortedCopyItemIds { get; private set; } = new ObservableCollection<int>();
 
+        public static ObservableCollection<double> AllFetchedAndSortedTileOffsets { get; private set; } = new ObservableCollection<double>();
+
         public static int TotalTilesInQuery => AllFetchedAndSortedCopyItemIds.Count;
 
-        public static int TotalItemCount { get; set; } = 0;
+        public static double TotalTileWidth_WithoutMargins { get; set; }
 
         #endregion
 
@@ -51,11 +55,14 @@ namespace MonkeyPaste {
 
         public static void ResetQuery() {
             AllFetchedAndSortedCopyItemIds.Clear();
+            AllFetchedAndSortedTileOffsets.Clear();
+
             _lastResult = new List<MpCopyItem>();
         }
 
         public static void SetManualQuery(List<int> copyItemIds) {
             _manualQueryIds = copyItemIds;
+
             QueryInfo.NotifyQueryChanged();
         }
 
@@ -64,9 +71,50 @@ namespace MonkeyPaste {
             QueryInfo.NotifyQueryChanged();
         }
 
-        #region MpQueryInfo Fetch Methods                
+        #region MpQueryInfo Fetch Methods      
+        
+        public static async Task<double> Requery(double minWidth, double maxWidth, double marginWidth) {
+            string viewQueryStr = await QueryForTotalCount();
+            //double totalWidth = await QueryForOffsetPositions(viewQueryStr, minWidth, maxWidth, marginWidth);
+            //return totalWidth;
+            return 0;
+        }
 
-        public static async Task QueryForTotalCount() {
+        public static async Task<double> QueryForOffsetPositions(string viewQueryStr, double minWidth, double maxWidth, double marginWidth) {
+            AllFetchedAndSortedTileOffsets.Clear();
+
+            string minWhenStr = $"when ItemWidth < {minWidth} then {minWidth} + {marginWidth}";
+            string maxWhenStr = $"when ItemWidth > {maxWidth} then {maxWidth} + {marginWidth}";
+            string elseStr = $"else ItemWidth + {marginWidth}";
+
+            string caseStr = $"case {minWhenStr} {maxWhenStr} {elseStr} END";
+
+            int rootIdStartIdx = viewQueryStr.IndexOf("RootId");
+            string pre = viewQueryStr.Substring(0, rootIdStartIdx);
+            string post = viewQueryStr.Substring(rootIdStartIdx + "RootId".Length);
+            string itemWidthQueryStr = pre + caseStr + post;
+
+            var widths = await MpDb.QueryScalarsAsync<double>(itemWidthQueryStr);
+
+            double curOffset = 0.0d;
+            for (int i = 0; i < widths.Count; i++) {
+                if(i == 0) {
+                    AllFetchedAndSortedTileOffsets.Add(0);
+                    continue;
+                }
+                curOffset += widths[i - 1];
+                AllFetchedAndSortedTileOffsets.Add(curOffset);
+            }
+
+            //string totalWidthQueryStr = pre + $"SUM({caseStr})" + post;
+
+            //double totalWidth = await MpDb.QueryScalarAsync<double>(totalWidthQueryStr);
+            //return totalWidth;
+            return AllFetchedAndSortedTileOffsets[AllFetchedAndSortedTileOffsets.Count - 1] + widths[widths.Count - 1];
+        }
+
+        public static async Task<string> QueryForTotalCount() {
+            string viewQueryStr = string.Empty;
             AllFetchedAndSortedCopyItemIds.Clear();
 
             if (_manualQueryIds != null) {
@@ -74,7 +122,7 @@ namespace MonkeyPaste {
                     AllFetchedAndSortedCopyItemIds.Add(copyItemId);
                 }
                 QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
-                return;
+                return viewQueryStr;
             }
             MpLogicalFilterFlagType lastLogicFlag = MpLogicalFilterFlagType.None;
 
@@ -97,7 +145,11 @@ namespace MonkeyPaste {
                     continue;
                 }
                 string allRootIdQuery = GetQueryForCount(i);
+                viewQueryStr = allRootIdQuery;
+                string totalWidthQuery = allRootIdQuery.Replace("RootId", "SUM(ItemWidth)");
+
                 MpConsole.WriteTraceLine("Current DataModel Query: " + allRootIdQuery);
+                
                 var idl = await MpDb.QueryScalarsAsync<int>(allRootIdQuery);
                 var curIds = new ObservableCollection<int>(idl.Distinct());
 
@@ -123,6 +175,7 @@ namespace MonkeyPaste {
             }
             
             QueryInfo.TotalItemsInQuery = AllFetchedAndSortedCopyItemIds.Count;
+            return viewQueryStr;
         }
 
         public static async Task<List<MpCopyItem>> FetchCopyItemRangeAsync(
@@ -150,6 +203,7 @@ namespace MonkeyPaste {
 
         #region View Queries
 
+
         public static string GetQueryForCount(int qiIdx = 0) {
             var qi = QueryInfos[qiIdx];
             string query = "select RootId from MpSortableCopyItem_View";
@@ -161,14 +215,7 @@ namespace MonkeyPaste {
             if (qi.TagId != MpTag.AllTagId) {
                 tagClause = string.Format(
                     @"RootId in 
-                    (select 
-		                case fk_ParentCopyItemId
-			                when 0
-				                then pk_MpCopyItemId
-			                ELSE
-				                fk_ParentCopyItemId
-		                end
-		                from MpCopyItem where pk_MpCopyItemId in 
+                    (select pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
 		                (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={0}))",
                     qi.TagId);
             }
@@ -594,12 +641,6 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<int> GetRecentCopyItemCountAsync() {
-            string query = GetFetchQuery(0, 0, true, MpTag.RecentTagId, true);
-            var result = await MpDb.QueryScalarAsync<int>(query);
-            return result;
-        }
-
 
         #endregion MpCopyItem
 
@@ -756,12 +797,6 @@ namespace MonkeyPaste {
             string query = string.Format(@"select * from MpCopyItemTag where fk_MpCopyItemId={0}", ciid);
             var result = await MpDb.QueryAsync<MpCopyItemTag>(query);
             return result;
-        }
-
-        public static async Task<bool> IsCopyItemInRecentTag(int copyItemId) {
-            string query = GetFetchQuery(0, 0, true, MpTag.RecentTagId, true, copyItemId);
-            var result = await MpDb.QueryScalarAsync<int>(query);
-            return result > 0;
         }
 
         public static async Task<bool> IsTagLinkedWithCopyItemAsync(int tagId, int copyItemId) {
@@ -1030,68 +1065,23 @@ namespace MonkeyPaste {
                 selectToken = "count(pk_MpCopyItemId)";
             }
 
-            if (tagId == MpTag.RecentTagId) {
-                startIndex = 0;
-                count = MpPreferences.MaxRecentClipItems;
-            }
-
-
             string query;
 
             switch (tagId) {
-                case MpTag.RecentTagId:
-                    if (queryForTotalCount) {
-                        query = string.Format(@"select count(*) from MpCopyItem 
-                                                    where (pk_MpCopyItemId in
-	                                                    (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-	                                                    select pci.pk_MpCopyItemId from MpCopyItem aci
-	                                                    inner join MpCopyItem pci 
-	                                                    ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-	                                                    order by aci.CopyDateTime) limit {0})
-                                                    or fk_ParentCopyItemId in 
-	                                                    (select pk_MpCopyItemId from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-	                                                    select pci.pk_MpCopyItemId from MpCopyItem aci
-	                                                    inner join MpCopyItem pci 
-	                                                    ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-	                                                    order by aci.CopyDateTime) limit {0})){1}", count, checkCopyItemToken);
-                    } else {
-                        query = string.Format(@"select {4} from MpCopyItem where fk_ParentCopyItemId = 0 and pk_MpCopyItemId in (
-                                            select pci.pk_MpCopyItemId from MpCopyItem aci
-                                            inner join MpCopyItem pci  
-                                            ON pci.pk_MpCopyItemId = aci.fk_ParentCopyItemId or aci.fk_ParentCopyItemId = 0
-                                            order by aci.{0} {1}) order by {0} {1} limit {2} offset {3}",
-                                           sortStr, descStr, count, startIndex, selectToken);
-                    }
-                    break;
                 case MpTag.AllTagId:
                     if (searchStr == null) {
-                        query = string.Format(@"select {4} from MpCopyItem where fk_ParentCopyItemId = 0 
-                                            order by {0} {1} limit {2} offset {3}",
+                        query = string.Format(@"select {4} from MpCopyItem order by {0} {1} limit {2} offset {3}",
                                           sortStr, descStr, count, startIndex, selectToken);
                     } else {
                         query = string.Format(@"select {4} from MpCopyItem where pk_MpCopyItemId in 
-                                            (select distinct
-                                                case fk_ParentCopyItemId
-                                                    when 0
-                                                        then pk_MpCopyItemId
-                                                    ELSE
-                                                        fk_ParentCopyItemId
-                                                end
-                                                from MpCopyItem where ItemData like '%{5}%')
+                                            (select distinct pk_MpCopyItemId from MpCopyItem where ItemData like '%{5}%')
                                             order by {0} {1} limit {2} offset {3}",
                                             sortStr, descStr, count, startIndex, selectToken, searchStr);
                     }
                     break;
                 default:
                     query = string.Format(@"select {5} from MpCopyItem where pk_MpCopyItemId in 
-                                            (select distinct
-	                                            case fk_ParentCopyItemId
-		                                            when 0
-			                                            then pk_MpCopyItemId
-		                                            ELSE
-			                                            fk_ParentCopyItemId
-	                                            end
-	                                            from MpCopyItem where pk_MpCopyItemId in 
+                                            (select distinct pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
                                                 (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId={4}))
                                            order by {0} {1} limit {2} offset {3}",
                                            sortStr, descStr, count, startIndex, tagId, selectToken);
@@ -1110,13 +1100,6 @@ namespace MonkeyPaste {
             List<MpCopyItem> result = await MpDb.GetItemsAsync<MpCopyItem>();
 
             switch (tagId) {
-                case MpTag.RecentTagId:
-                    result = result
-                                 .OrderByDynamic(isDescending, x => x.CopyDateTime)
-                                 .Take(count)
-                                 .Skip(start)
-                                 .ToList();
-                    return result;
                 case MpTag.AllTagId:
                     break;
                 default:

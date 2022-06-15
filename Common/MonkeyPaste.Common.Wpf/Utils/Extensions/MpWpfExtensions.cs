@@ -72,17 +72,6 @@ namespace MonkeyPaste.Common.Wpf {
 
         #region Graphics
 
-        public static Point ToWpfPoint(this MpPoint p) {
-            return new Point() { X = p.X, Y = p.Y };
-        }
-
-        public static Size ToWpfSize(this MpSize s) {
-            return new Size() { Width = s.Width, Height = s.Height };
-        }
-
-        public static Rect ToWpfRect(this MpRect rect) {
-            return new Rect(rect.Location.ToWpfPoint(), rect.Size.ToWpfSize());
-        }
         #endregion
 
         #region Collections

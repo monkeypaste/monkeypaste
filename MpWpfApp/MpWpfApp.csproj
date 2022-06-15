@@ -402,6 +402,9 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\MpClipTileContainerView.xaml.cs">
       <DependentUpon>MpClipTileContainerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FlowDocuments\MpFileItemsFlowDocument.xaml.cs">
+      <DependentUpon>MpFileItemsFlowDocument.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\DetectedObjectItem\MpDetectedObjectItemView.xaml.cs">
       <DependentUpon>MpDetectedObjectItemView.xaml</DependentUpon>
     </Compile>
@@ -413,6 +416,9 @@
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Rtf\MpRtbContentContainerView.xaml.cs">
       <DependentUpon>MpRtbContentContainerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpImageParagraph.xaml.cs">
+      <DependentUpon>MpImageParagraph.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpTextTemplateInlineUIContainer.xaml.cs">
       <DependentUpon>MpTextTemplateInlineUIContainer.xaml</DependentUpon>
@@ -801,6 +807,10 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\FlowDocuments\MpFileItemsFlowDocument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Image\Overlays\DetectedObjects\DetectedObjectItem\MpDetectedObjectItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -816,6 +826,10 @@
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Rtf\MpRtbContentContainerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpImageParagraph.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpTextTemplateInlineUIContainer.xaml">
       <Generator>MSBuild:Compile</Generator>

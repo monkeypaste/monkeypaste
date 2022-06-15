@@ -9,9 +9,8 @@ using SQLiteNetExtensions.Attributes;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
-    [Table("MpTag")]
     public class MpTag : MpDbModelBase, MpISyncableDbObject {
-        public const int RecentTagId = 1;
+        //public const int RecentTagId = 1;
         public const int AllTagId = 2;
         public const int FavoritesTagId = 3;
         //public const int HelpTagId = 4;

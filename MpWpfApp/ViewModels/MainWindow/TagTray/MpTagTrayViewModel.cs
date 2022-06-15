@@ -54,8 +54,6 @@ namespace MpWpfApp {
 
         public MpTagTileViewModel AllTagViewModel { get; set; }
 
-        public MpTagTileViewModel RecentTagViewModel => Items.FirstOrDefault(tt => tt.Tag.Id == MpTag.RecentTagId);
-
         #endregion
 
         #region MpISidebarItemViewModel Implementation
@@ -193,8 +191,6 @@ namespace MpWpfApp {
             foreach (var ttvm in Items) {
                 if (ttvm.IsAllTag) {
                     countTasks.Add(ttvm.TagId, MpDataModelProvider.GetTotalCopyItemCountAsync());
-                } else if (ttvm.IsRecentTag) {
-                    //countTasks.Add(ttvm.TagId, MpDataModelProvider.GetRecentCopyItemCountAsync());
                 } else {
                     countTasks.Add(ttvm.TagId, MpDataModelProvider.GetCopyItemCountForTagAsync(ttvm.TagId));
                 }

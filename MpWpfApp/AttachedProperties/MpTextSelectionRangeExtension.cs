@@ -28,11 +28,11 @@ namespace MpWpfApp {
         }
 
         public static readonly DependencyProperty TextSelectionRangeProperty =
-            DependencyProperty.Register(
+            DependencyProperty.RegisterAttached(
                 "TextSelectionRange", 
                 typeof(MpITextSelectionRange), 
                 typeof(MpTextSelectionRangeExtension), 
-                new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                new FrameworkPropertyMetadata(null));
 
         #endregion
 
@@ -221,7 +221,7 @@ namespace MpWpfApp {
 
         public static void SelectAll(MpITextSelectionRange tsr) {
             var tbb = FindTextBoxBase(tsr);
-            if(tbb == null || !tbb.IsFocused) {
+            if(tbb == null) {
                 Debugger.Break();
             }
             tbb.SelectAll();

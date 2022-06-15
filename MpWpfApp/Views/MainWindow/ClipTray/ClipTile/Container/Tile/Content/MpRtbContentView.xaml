@@ -38,7 +38,7 @@
                              
                              Background="White"
                              Foreground="Black"
-                             BorderThickness="0"
+                             BorderThickness="0" 
                              CaretBrush="{Binding CaretBrushHexColor,
                                                   Converter={StaticResource StringHexToBrushConverter}}"
                              local:MpIsFocusedExtension.IsEnabled="True"

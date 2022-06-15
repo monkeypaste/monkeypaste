@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
     public static class MpFileIo {
@@ -287,7 +288,12 @@ namespace MonkeyPaste {
             }
             string tempDir = Path.GetDirectoryName(Path.GetTempPath());
 
-            return path.ToLower().StartsWith(tempDir.ToLower());
+            bool isTempPath = path.ToLower().StartsWith(tempDir.ToLower());
+            if(isTempPath) {
+                return true;
+            }
+            Debugger.Break();
+            return false;
         }
         public static string GetUniqueFileOrDirectoryName(string dir, string fileOrDirectoryName, string instanceSeparator = "_") {
             //only support Image and RichText fileTypes

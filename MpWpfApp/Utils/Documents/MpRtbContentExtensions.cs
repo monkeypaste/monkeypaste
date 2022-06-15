@@ -543,6 +543,7 @@ namespace MpWpfApp {
             out Size unformattedContentSize) {
             // NOTE iconId is only used to convert file path's to rtf w/ icon 
 
+            var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
             unformattedContentSize = new Size();
             if (string.IsNullOrEmpty(str)) {
                 tr.Text = str;
@@ -553,10 +554,15 @@ namespace MpWpfApp {
                     tr.LoadRtf(str, out unformattedContentSize);
                     break;
                 case MpCopyItemType.Image:
-                    tr.LoadImage(str, out unformattedContentSize);
+                    //tr.LoadImage(str, out unformattedContentSize);
+                    fd.Blocks.Clear();
+                    var ip = new MpImageParagraph() {
+                        DataContext = fd.DataContext
+                    };
+                    fd.Blocks.Add(ip);
+                    unformattedContentSize = ip.ContentImage.Source.PixelSize();
                     break;
                 case MpCopyItemType.FileList:
-                    var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
                     fd.Blocks.Clear();
                     var ctvm = fd.DataContext as MpClipTileViewModel;
                     var fpl = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
@@ -568,6 +574,10 @@ namespace MpWpfApp {
                             DataContext = fivm
                         };
                         fd.Blocks.Add(fip);
+
+                        double width = ((Path.GetFileName(fivm.Path).Length + 1) * 16) + 6 + 2 + 16;
+                        unformattedContentSize.Height += (16 + 6 + 2);
+                        unformattedContentSize.Width = Math.Max(unformattedContentSize.Width, width);
                     }
                     break;
             }

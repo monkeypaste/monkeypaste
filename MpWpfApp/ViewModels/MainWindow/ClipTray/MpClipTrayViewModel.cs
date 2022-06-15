@@ -330,33 +330,53 @@ namespace MpWpfApp {
 
         public double PinTrayTotalWidth { get; set; } = 0;
 
-        public double MinClipOrPinTrayScreenWidth => 30;
+        public double MinPinTrayScreenWidth => IsAnyTilePinned ? MinClipTrayScreenWidth : 0;
+        public double MinClipTrayScreenWidth => 30;
 
-        public double MaxPinTrayWidth => MpMeasurements.Instance.ClipTrayDefaultWidth - MinClipOrPinTrayScreenWidth;
+        public double MaxPinTrayWidth => MpMeasurements.Instance.ClipTrayDefaultWidth - MinClipTrayScreenWidth;
 
         // NOTE ClipTrayScreenWidth is only set on initial load but then set by OneWayToSource Binding in MpClipTrayContainerView
         public double ClipTrayScreenWidth { get; set; } = MpMeasurements.Instance.ClipTrayDefaultWidth;
 
         public double MaxTileWidth => ClipTrayScreenWidth - (MpMeasurements.Instance.ClipTileMaxWidthPadding * 2);
 
-        public double ClipTrayTotalTileWidth {
-            get {
-                int lastTrayTileIdx = MaxClipTrayQueryIdx;
-                if (TotalTilesInQuery == 0 || lastTrayTileIdx < 0) {
-                    return 0;
-                }
-                int lastTrayTileId = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.ElementAt(lastTrayTileIdx);
-                //double lastTileWidth = PersistentUniqueWidthTileLookup.ContainsKey(lastTrayTileId) ?
-                //                                PersistentUniqueWidthTileLookup[lastTrayTileId] :
-                //                                MpMeasurements.Instance.ClipTileMinSize;
-                double lastTileWidth = MpMeasurements.Instance.ClipTileMinSize;
-                if(TryGetByPersistentWidthById(lastTrayTileId, out double uniqueWidth)) {
-                    lastTileWidth = uniqueWidth;
-                }
-                // subtract last tile width so at max last tile is fully visible at left
-                return FindTileOffsetX(lastTrayTileIdx) + lastTileWidth + (MpMeasurements.Instance.ClipTileMargin * 2);// + ClipTrayScreenWidth;
+        //public double ClipTrayTotalTileWidth {
+        //    get {
+        //        int lastTrayTileIdx = MaxClipTrayQueryIdx;
+        //        if (TotalTilesInQuery == 0 || lastTrayTileIdx < 0) {
+        //            return 0;
+        //        }
+        //        int lastTrayTileId = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.ElementAt(lastTrayTileIdx);
+        //        //double lastTileWidth = PersistentUniqueWidthTileLookup.ContainsKey(lastTrayTileId) ?
+        //        //                                PersistentUniqueWidthTileLookup[lastTrayTileId] :
+        //        //                                MpMeasurements.Instance.ClipTileMinSize;
+        //        double lastTileWidth = MpMeasurements.Instance.ClipTileMinSize;
+        //        if(TryGetByPersistentWidthById(lastTrayTileId, out double uniqueWidth)) {
+        //            lastTileWidth = uniqueWidth;
+        //        }
+        //        // subtract last tile width so at max last tile is fully visible at left
+        //        return FindTileOffsetX(lastTrayTileIdx) + lastTileWidth + (MpMeasurements.Instance.ClipTileMargin * 2);// + ClipTrayScreenWidth;
+        //    }
+        //}
+
+        public void UpdateTotalTileWidth() {
+            int lastTrayTileIdx = MaxClipTrayQueryIdx;
+            if (TotalTilesInQuery == 0 || lastTrayTileIdx < 0) {
+                ClipTrayTotalTileWidth = 0;
+                return;
             }
+            int lastTrayTileId = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.ElementAt(lastTrayTileIdx);
+            //double lastTileWidth = PersistentUniqueWidthTileLookup.ContainsKey(lastTrayTileId) ?
+            //                                PersistentUniqueWidthTileLookup[lastTrayTileId] :
+            //                                MpMeasurements.Instance.ClipTileMinSize;
+            double lastTileWidth = MpMeasurements.Instance.ClipTileMinSize;
+            if (TryGetByPersistentWidthById(lastTrayTileId, out double uniqueWidth)) {
+                lastTileWidth = uniqueWidth;
+            }
+            // subtract last tile width so at max last tile is fully visible at left
+            ClipTrayTotalTileWidth = FindTileOffsetX(lastTrayTileIdx) + lastTileWidth + (MpMeasurements.Instance.ClipTileMargin * 2);// + ClipTrayScreenWidth;
         }
+        public double ClipTrayTotalTileWidth { get; private set; }
 
         public double ClipTrayTotalWidth => Math.Max(ClipTrayScreenWidth, ClipTrayTotalTileWidth);
 
@@ -673,6 +693,9 @@ namespace MpWpfApp {
 
                 PropertyChanged += MpClipTrayViewModel_PropertyChanged;
                 Items.CollectionChanged += Items_CollectionChanged;
+
+                MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
+
                 MpDb.SyncAdd += MpDbObject_SyncAdd;
                 MpDb.SyncUpdate += MpDbObject_SyncUpdate;
                 MpDb.SyncDelete += MpDbObject_SyncDelete;
@@ -693,6 +716,20 @@ namespace MpWpfApp {
 
                 IsBusy = false;
             });
+        }
+
+        private void AllFetchedAndSortedCopyItemIds_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            MpConsole.WriteLine("Query Ids Changed:");
+            MpConsole.WriteLine("ACTION: " + e.Action);
+            MpConsole.WriteLine("NEW ITEMS: " + string.Join(",", e.NewItems));
+            MpConsole.WriteLine("OLD ITEMS: " + string.Join(",", e.OldItems));
+            MpConsole.WriteLine("NEW START IDX: " + e.NewStartingIndex);
+            MpConsole.WriteLine("OLD START IDX: " + e.OldStartingIndex);
+            switch (e.Action) {
+                case NotifyCollectionChangedAction.Add:
+                    
+                    break;
+            }
         }
 
         #endregion
@@ -774,7 +811,7 @@ namespace MpWpfApp {
                 int tagId = MpDataModelProvider.QueryInfo.TagId;
                 var citl = await MpDataModelProvider.GetCopyItemTagsForTagAsync(tagId);
 
-                if (tagId == MpTag.AllTagId || tagId == MpTag.RecentTagId) {
+                if (tagId == MpTag.AllTagId) {
                     //ignore sorting for sudo tags
                     return;
                 }
@@ -1009,6 +1046,7 @@ namespace MpWpfApp {
                     offsetX += uniqueWidth;
                 } else {
                     offsetX += MpClipTileViewModel.DefaultBorderWidth;
+                 
                 }
             }
             return offsetX;
@@ -1039,7 +1077,7 @@ namespace MpWpfApp {
 
             int defaultWidthCount = Math.Max(0, queryOffsetIdx - uniqueWidthCount - relevantPinnedDefaultWidthCount);
 
-            double defaultItemWidthWithMargin = (MpMeasurements.Instance.ClipTileMargin * 2) + MpClipTileViewModel.DefaultBorderWidth;
+            double defaultItemWidthWithMargin = (MpMeasurements.Instance.ClipTileMargin * 2) +MpClipTileViewModel.DefaultBorderWidth;
             double defaultWidthSum = defaultWidthCount * defaultItemWidthWithMargin;
 
             double offsetX = uniqueWidthSum + defaultWidthSum;
@@ -1048,6 +1086,7 @@ namespace MpWpfApp {
 
 
         public int FindJumpTileIdx(double trackValue) {
+
             int totalTileCount = MpDataModelProvider.AllFetchedAndSortedCopyItemIds.Count;
             var headItemIds = MpDataModelProvider.AllFetchedAndSortedCopyItemIds;
 
@@ -1061,7 +1100,6 @@ namespace MpWpfApp {
 
                 if (_persistentUniqueWidthQueryOffsetLookup.TryGetValue(i,out double uniqueWidth)) {
                     offsetX += uniqueWidth;
-                    //offsetX -= MpMeasurements.Instance.ClipTileMargin * 2;
                 } else {
                     offsetX += MpClipTileViewModel.DefaultBorderWidth;
                 }
@@ -1184,7 +1222,6 @@ namespace MpWpfApp {
                     }
                 }
 
-                MpDataModelProvider.TotalItemCount--;
                 OnPropertyChanged(nameof(TotalTilesInQuery));                
             } else if (e is MpCopyItemTag cit && Items.Any(x=>x.CopyItemId == cit.CopyItemId)) {
                 var ctvm = Items.FirstOrDefault(x => x.CopyItemId == cit.CopyItemId);
@@ -1308,7 +1345,7 @@ namespace MpWpfApp {
                         MpMeasurements.Instance.ClipTileMinSize += deltaHeight;
                         MpMeasurements.Instance.OnPropertyChanged(nameof(MpMeasurements.Instance.ClipTileTitleHeight));
 
-                        MpClipTileViewModel.DefaultBorderWidth += deltaHeight;                        
+                        MpClipTileViewModel.DefaultBorderWidth += deltaHeight;
                         MpClipTileViewModel.DefaultBorderHeight += deltaHeight;
 
                         AllItems.ForEach(x => x.TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize);
@@ -1343,6 +1380,7 @@ namespace MpWpfApp {
                     //OnPropertyChanged(nameof(MaximumScrollOfset));
 
                     //MpDragDropManager.DropTargets.ForEach(x => x.Reset());
+                    UpdateTotalTileWidth();
                     break;
             }
         }
@@ -1424,9 +1462,9 @@ namespace MpWpfApp {
                     if (IsThumbDragging) {
                         break;
                     }
-                    foreach (MpClipTileViewModel nctvm in Items) {
-                        nctvm.OnPropertyChanged(nameof(nctvm.TrayX));
-                    }
+                    //foreach (MpClipTileViewModel nctvm in Items) {
+                    //    nctvm.OnPropertyChanged(nameof(nctvm.TrayX));
+                    //}
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
                     break;
             }
@@ -1635,28 +1673,32 @@ namespace MpWpfApp {
                  upctvm.OnPropertyChanged(nameof(upctvm.IsPinned));
                  upctvm.OnPropertyChanged(nameof(upctvm.IsPlaceholder));
 
-                 if (upctvm.QueryOffsetIdx >= 0) {
-                    //resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x => x.CopyItem).ToList(), pctvm.QueryOffsetIdx);
-                    if (upctvm.QueryOffsetIdx >= HeadQueryIdx && upctvm.QueryOffsetIdx <= TailQueryIdx) {
-                        var insertBeforeItem = Items.Aggregate((a, b) => a.QueryOffsetIdx > b.QueryOffsetIdx && a.QueryOffsetIdx < upctvm.QueryOffsetIdx ? a : b);
-                        if (insertBeforeItem == null) {
-                            Items.Add(upctvm);
-                        } else {
-                            int insertIdx = Items.IndexOf(insertBeforeItem);
-                            Items.Insert(insertIdx, upctvm);
-                        }
-                    }
-                } else {
-                     // either the pinned tile is not part of this query or its new or was added to query while pinned
-                     // so for now requery because unpinning seems to mismatch view/view model...
-                     QueryCommand.Execute(ScrollOffset);
-                     while(IsAnyBusy) {
-                         await Task.Delay(100);
-                     }
+                 // if (upctvm.QueryOffsetIdx >= 0) {
+                 //    //resultTile = await CreateClipTileViewModel(pctvm.Items.Select(x => x.CopyItem).ToList(), pctvm.QueryOffsetIdx);
+                 //    if (upctvm.QueryOffsetIdx >= HeadQueryIdx && upctvm.QueryOffsetIdx <= TailQueryIdx) {
+                 //        var insertBeforeItem = Items.Aggregate((a, b) => a.QueryOffsetIdx > b.QueryOffsetIdx && a.QueryOffsetIdx < upctvm.QueryOffsetIdx ? a : b);
+                 //        if (insertBeforeItem == null) {
+                 //            Items.Add(upctvm);
+                 //        } else {
+                 //            int insertIdx = Items.IndexOf(insertBeforeItem);
+                 //            Items.Insert(insertIdx, upctvm);
+                 //        }
+                 //    }
+                 //} else {
+                 //     // either the pinned tile is not part of this query or its new or was added to query while pinned
+                 //     // so for now requery because unpinning seems to mismatch view/view model...
+                 //     QueryCommand.Execute(ScrollOffset);
+                 //     while(IsAnyBusy) {
+                 //         await Task.Delay(100);
+                 //     }
+                 // }
+                 QueryCommand.Execute(ScrollOffset);
+                 while (IsAnyBusy) {
+                     await Task.Delay(100);
                  }
 
-                
-                if (!IsAnyTilePinned) {
+
+                 if (!IsAnyTilePinned) {
                     PinTrayTotalWidth = PinTrayScreenWidth = 0;
                 }
 
@@ -1805,7 +1847,13 @@ namespace MpWpfApp {
                     newScrollOffset = 0;
                     ClearClipSelection();
                     MpDataModelProvider.ResetQuery();
-                    await MpDataModelProvider.QueryForTotalCount();
+
+                    await MpDataModelProvider.Requery(
+                        0,
+                        MaxTileWidth,
+                        MpMeasurements.Instance.ClipTileMargin * 2);
+
+                    UpdateTotalTileWidth();
 
                     Items.Clear();
                     ClearPersistentWidths();

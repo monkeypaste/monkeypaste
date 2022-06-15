@@ -169,7 +169,7 @@ namespace MonkeyPaste {
         public MpCopyItemTag() { }
 
         public bool IsSudoTag() {
-            return Id != MpTag.AllTagId && Id != MpTag.RecentTagId;
+            return Id != MpTag.AllTagId;
         }
         #endregion
     }

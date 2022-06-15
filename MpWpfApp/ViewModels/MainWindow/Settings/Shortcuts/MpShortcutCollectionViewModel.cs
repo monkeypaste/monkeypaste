@@ -569,7 +569,6 @@ namespace MpWpfApp {
         }
 
         private void GlobalHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-            
             if(e.KeyCode == System.Windows.Forms.Keys.Alt || 
                 e.Alt || 
                e.KeyCode == System.Windows.Forms.Keys.LMenu ||

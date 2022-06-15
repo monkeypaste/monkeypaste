@@ -21,7 +21,7 @@ namespace MonkeyPaste {
                     return false;
                 }
 
-                return Tag.Id != MpTag.AllTagId && Tag.Id != MpTag.RecentTagId;
+                return Tag.Id != MpTag.AllTagId;
             }
         }
 

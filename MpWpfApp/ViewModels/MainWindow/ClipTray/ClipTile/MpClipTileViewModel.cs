@@ -380,6 +380,32 @@ using MpProcessHelper;
 
         public MpUrlViewModel UrlViewModel => SourceViewModel.UrlViewModel;
 
+        public MpClipTileViewModel Next {
+            get {
+                if(IsPlaceholder || Parent == null) {
+                    return null;
+                }
+                if(IsPinned) {
+                    int pinIdx = Parent.PinnedItems.IndexOf(this);
+                    return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx + 1);
+                }
+                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx + 1);
+            }
+        }
+
+        public MpClipTileViewModel Prev {
+            get {
+                if (IsPlaceholder || Parent == null || QueryOffsetIdx == 0) {
+                    return null;
+                }
+                if (IsPinned) {
+                    int pinIdx = Parent.PinnedItems.IndexOf(this);
+                    return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx - 1);
+                }
+                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx - 1);
+            }
+        }
+
         #endregion
 
         //#region MpIShortcutCommand Implementation
@@ -492,18 +518,40 @@ using MpProcessHelper;
                     OnPropertyChanged(nameof(EditorHeight));
                 }
             }
-        }        
+        }
 
-
+        //public double TrayX {
+        //    get {
+        //        if (IsPlaceholder) {
+        //            return 0;
+        //        }
+        //        if(Prev == null) {
+        //            return 0;
+        //        }
+        //        return Prev.TrayX + Prev.TileBorderWidth + (MpMeasurements.Instance.ClipTileMargin * 2);
+        //        //return MpDataModelProvider.AllFetchedAndSortedTileOffsets[QueryOffsetIdx];
+        //    }
+        //}
 
         public double TrayX {
             get {
-                if(IsPinned || Parent == null) {
+                if (IsPinned || Parent == null) {
                     return 0;
                 }
                 return Parent.FindTileOffsetX(QueryOffsetIdx);
             }
         }
+
+        //private double _trayX;
+        //public double TrayX {
+        //    get => _trayX;
+        //    set {
+        //        if(_trayX != value) {
+        //            _trayX = value;
+        //            OnPropertyChanged(nameof(TrayX));
+        //        }
+        //    }
+        //}
 
         public double PasteTemplateToolbarHeight => MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
                      
@@ -612,7 +660,7 @@ using MpProcessHelper;
             }
         }
 
-        public Size UnformattedContentSize { get; set; }
+        
 
         #endregion
 
@@ -1029,6 +1077,22 @@ using MpProcessHelper;
 
         #region Model
 
+        public Size UnformattedContentSize {
+            get {
+                if (CopyItem == null) {
+                    return new Size();
+                }
+                return CopyItem.ItemSize.ToWpfSize();
+            }
+            set {
+                if (UnformattedContentSize != value) {
+                    CopyItem.ItemSize = value.ToPortableSize();
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(UnformattedContentSize));
+                }
+            }
+        }
+
         public DateTime CopyItemCreatedDateTime {
             get {
                 if (CopyItem == null) {
@@ -1233,16 +1297,26 @@ using MpProcessHelper;
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
             _curItemRandomHexColor = string.Empty;
 
-            QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
             
             IsBusy = true;
 
             if (ci != null && Parent.TryGetByPersistentWidthById(ci.Id, out double uniqueWidth)) {
                 TileBorderWidth = uniqueWidth;
-            } else {
+            } //else if(ci != null) {
+                //TileBorderWidth = Math.Min(
+                //    Math.Max(
+                //        MpMeasurements.Instance.ClipTileBorderMinWidth, ci.ItemWidth),
+                //    Parent.MaxTileWidth);//DefaultBorderHeight;
+                //TileBorderWidth = MpMeasurements.Instance.ClipTileMinSize;
+                //TileBorderWidth += (MpMeasurements.Instance.ClipTileMargin * 2);
+        //    } 
+        else {
                 TileBorderWidth = DefaultBorderHeight;
             }
-            TileBorderHeight = DefaultBorderHeight;
+            TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize;//DefaultBorderHeight;
+
+            QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
+
 
             MpMessenger.Unregister<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
@@ -1282,7 +1356,8 @@ using MpProcessHelper;
             OnPropertyChanged(nameof(IsFileListItem));
             OnPropertyChanged(nameof(TileBackgroundHexColor));
             OnPropertyChanged(nameof(ContentMarginThickness));
-
+            OnPropertyChanged(nameof(Next));
+            OnPropertyChanged(nameof(Prev));
             while (TitleSwirlViewModel.IsBusy) {
                 await Task.Delay(100);
             }
@@ -1790,12 +1865,6 @@ using MpProcessHelper;
                 case nameof(IsResizing):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyResizing));
                     break;
-                case nameof(TileBorderWidth):
-                    if (Parent.TryGetByPersistentWidthById(CopyItemId, out double uniqueWidth)) {
-                        //this occurs when mainwindow is resized and user gives tile unique width
-                        Parent.AddOrReplacePersistentWidthById(CopyItemId, TileBorderWidth);
-                    }
-                    break;
                 case nameof(IsOverPinButton):
                 case nameof(IsPinned):
                     OnPropertyChanged(nameof(PinIconSourcePath));
@@ -1897,15 +1966,36 @@ using MpProcessHelper;
                 case nameof(CopyItemData):
                     ResetExpensiveDetails();
                     break;
-                case nameof(TrayX):
-                    //if(QueryOffsetIdx == Parent.TailQueryIdx) {
 
-                    //}
-                    if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                        return;
+                case nameof(TileBorderWidth):
+                    if (Parent.TryGetByPersistentWidthById(CopyItemId, out double uniqueWidth)) {
+                        //this occurs when mainwindow is resized and user gives tile unique width
+                        Parent.AddOrReplacePersistentWidthById(CopyItemId, TileBorderWidth);
                     }
-                    Parent.ValidateItemsTrayX();
+                    //if (Next == null) {
+                    //    break;
+                    //}
+                    //Next.TrayX = TrayX + TileBorderWidth + (MpMeasurements.Instance.ClipTileMargin * 2);
+                    //NexOnPropertyChanged(nameof(Next.TrayX));                    
                     break;
+                //case nameof(TrayX):
+                //    if (Next == null) {
+                //        break;
+                //    }
+                //    //Next.TrayX = TrayX + TileBorderWidth + (MpMeasurements.Instance.ClipTileMargin * 2);
+                //    Next.OnPropertyChanged(nameof(Next.TrayX));
+                //    break;
+                //case nameof(QueryOffsetIdx):
+                //    //if(IsPlaceholder) {
+                //    //    break;
+                //    //}
+                //    //if (Prev == null) {
+                //    //    TrayX = 0;
+                //    //} else {
+                //    //    TrayX = Prev.TrayX + Prev.TileBorderWidth + (MpMeasurements.Instance.ClipTileMargin * 2);
+                //    //}
+                //    OnPropertyChanged(nameof(TrayX));
+                //    break;
                 case nameof(FindText):
                 case nameof(ReplaceText):
                 case nameof(MatchCase):

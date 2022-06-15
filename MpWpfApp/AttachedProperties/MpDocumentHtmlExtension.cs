@@ -275,7 +275,7 @@ namespace MpWpfApp {
                             ctcv.TileResizeBehavior.ResizeWidth(900);// qrm.editorWidth - ctcv.ActualWidth, 0);
                         }
                     } else {
-                        SetReadOnlyWidth(fe,MpClipTileViewModel.DefaultBorderWidth);
+                        SetReadOnlyWidth(fe,  MpClipTileViewModel.DefaultBorderWidth);
                     }
                 }
             }
@@ -346,7 +346,7 @@ namespace MpWpfApp {
             CefSharpSettings.ConcurrentTaskExecution = true;
 
             var settings = new CefSettings() {
-                LogSeverity = LogSeverity.Verbose
+                LogSeverity = LogSeverity.Fatal
             };
             settings.CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache");
             settings.CefCommandLineArgs.Add(@"--disable-component-update");

@@ -8,9 +8,44 @@ using System.Windows.Media.Imaging;
 using System.Windows.Resources;
 using MonkeyPaste.Common.Plugin; 
 using MonkeyPaste.Common;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfImageExtensions {
+
+        public static Point ToWpfPoint(this MpPoint p) {
+            return new Point() { X = p.X, Y = p.Y };
+        }
+
+        public static Size ToWpfSize(this MpSize s) {
+            return new Size() { Width = s.Width, Height = s.Height };
+        }
+
+        public static Rect ToWpfRect(this MpRect rect) {
+            return new Rect(rect.Location.ToWpfPoint(), rect.Size.ToWpfSize());
+        }
+
+        public static MpSize ToPortableSize(this Size size) {
+            return new MpSize(size.Width, size.Height);
+        }
+
+        public static Size PixelSize(this BitmapSource bmpSrc) {
+            if(bmpSrc == null) {
+                return new Size();
+            }
+            return new Size(bmpSrc.PixelWidth, bmpSrc.PixelHeight);
+        }
+
+        public static Size PixelSize(this ImageSource imgSrc) {
+            if(imgSrc == null) {
+                return new Size();
+            }
+            if(imgSrc is BitmapSource bmpSrc) {
+                return bmpSrc.PixelSize();
+            }
+            Debugger.Break();
+            return new Size();
+        }
         //faster version but needs unsafe thing
         //public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset) {
         //    fixed (PixelColor* buffer = &pixels[0, 0])
