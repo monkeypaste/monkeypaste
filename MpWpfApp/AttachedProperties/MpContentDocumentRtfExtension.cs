@@ -345,11 +345,14 @@ namespace MpWpfApp {
             }
             ctvm.IsBusy = true;
 
-            rtb.Document.Blocks.Clear();
+            //rtb.IsUndoEnabled = false;
+            //rtb.Document.Blocks.Clear();
+            //rtb.IsUndoEnabled = true;
 
             MpCopyItem ci = ctvm.CopyItem;
-            new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd)
-                .LoadItemData(ci.ItemData, ci.ItemType, out Size rawDimensions);
+            //new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd)
+            //    .LoadItemData(ci.ItemData, ci.ItemType, out Size rawDimensions);
+            rtb.Document = MpRtbContentExtensions.LoadContent(ctvm,ci.ItemData, ci.ItemType, out Size rawDimensions);
 
             ctvm.UnformattedContentSize = rawDimensions;
 

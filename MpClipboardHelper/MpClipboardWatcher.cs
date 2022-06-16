@@ -6,13 +6,24 @@ using System.Drawing;
 using System.IO;
 using System.Collections.Specialized;
 using System.Runtime.Serialization.Formatters.Binary;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+
 using System.Threading.Tasks;
 using static MpClipboardHelper.WinApi;
+using MonkeyPaste;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MpClipboardHelper {
-    public class MpClipboardWatcher : Form, MpIClipboardMonitor, MpIClipboardInterop {
+    public class MpClipboardWatcher : Form, 
+        MpIClipboardMonitor, 
+        MpIPlatformDataObjectRegistrar {
         #region Private Variables
+        private IEnumerable<MpIClipboardPluginComponent> _clipboardHandlers =>
+            MpPluginManager.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent)
+                                   .Select(x => x.Value.Component)
+                                   .Cast<MpIClipboardPluginComponent>();
 
         private readonly string[] _managedDataFormats = {
                 //DataFormats.UnicodeText,
@@ -25,8 +36,8 @@ namespace MpClipboardHelper {
             };
 
 
-        private MpDataObject _LastDataObject = null;
-        private MpDataObject _TempDataObject = null; // used when restoring clipboard
+        private MpPortableDataObject _LastDataObject = null;
+        private MpPortableDataObject _TempDataObject = null; // used when restoring clipboard
 
         private bool _resetClipboardAfterPaste = false;
         // needed to dispose this form
@@ -34,15 +45,20 @@ namespace MpClipboardHelper {
 
         #endregion
 
-        #region Events
+        #region MpIPlatfromatDataObjectRegistrar Implmentation
+
+        public int RegisterFormat(string format) {
+            return (int)WinApi.RegisterClipboardFormatA(format);
+
+        }
 
         #endregion
 
         #region MpIClipboardMonitor Implementation
 
-        public event EventHandler<MpDataObject> OnClipboardChanged;
+        public event EventHandler<MpPortableDataObject> OnClipboardChanged;
 
-        public bool IgnoreClipboardChangeEvent { get; set; } = false;
+        public bool IgnoreNextClipboardChangeEvent { get; set; } = false;
 
         public void StartMonitor() => Start();
 
@@ -50,24 +66,11 @@ namespace MpClipboardHelper {
 
         #endregion
 
-        #region MpIClipboardInterop Implementation
-
-        public MpDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
-            throw new NotImplementedException();
-        }
-
-        public object ConvertToNativeFormat(MpDataObject portableObj) => 
-            ConvertToOleDataObject(portableObj);
-
-        #endregion
-
         #region Public Methods
 
         public void Start() {
-            // we can only have one instance if this class
-            
-
-            var t = new Thread(new ParameterizedThreadStart(x => Application.Run(new MpClipboardWatcher())));
+            var t = new Thread(
+                new ParameterizedThreadStart(x => Application.Run(this)));
             t.SetApartmentState(ApartmentState.STA); // give the [STAThread] attribute
             t.Start();
         }
@@ -83,13 +86,13 @@ namespace MpClipboardHelper {
 
         }
 
-        public void SetDataObjectWrapper(MpDataObject mpdo) {
+        public void SetDataObjectWrapper(MpPortableDataObject mpdo) {
             Clipboard.SetDataObject(ConvertToOleDataObject(mpdo));
         }
 
-        public async Task PasteDataObject(MpDataObject dataObject, IntPtr handle) {
+        public async Task PasteDataObject(MpPortableDataObject dataObject, IntPtr handle) {
             //to prevent cb listener thread from thinking there's a new item
-            IgnoreClipboardChangeEvent = true;
+            IgnoreNextClipboardChangeEvent = true;
             try {
                 if (_resetClipboardAfterPaste) {
                     _TempDataObject = _LastDataObject;
@@ -109,7 +112,7 @@ namespace MpClipboardHelper {
                     clipboardThread.SetApartmentState(ApartmentState.STA);
                     clipboardThread.Start();
                 }
-                IgnoreClipboardChangeEvent = false;
+                IgnoreNextClipboardChangeEvent = false;
             }
             catch (Exception e) {
                 MpConsole.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
@@ -133,8 +136,10 @@ namespace MpClipboardHelper {
         protected override void WndProc(ref System.Windows.Forms.Message m) {
             switch (m.Msg) {
                 case WM_DRAWCLIPBOARD:
-                    if (IgnoreClipboardChangeEvent) {
+                    if (IgnoreNextClipboardChangeEvent) {
                         MpConsole.WriteLine("Ignoring clipboard changed event");
+
+                        SendMessage(_nextClipboardViewer, m.Msg, m.WParam, m.LParam);
                         return;
                     }
                     ClipChanged();
@@ -159,12 +164,21 @@ namespace MpClipboardHelper {
         #region Private Methods
 
         private void ClipChanged() {
-            IDataObject iData = Clipboard.GetDataObject();
-            _LastDataObject = ConvertManagedFormats(iData);
-            OnClipboardChanged?.Invoke(this, _LastDataObject);
+            //IDataObject iData = Clipboard.GetDataObject();
+            //_LastDataObject = ConvertManagedFormats(iData);
+            //OnClipboardChanged?.Invoke(this, _LastDataObject);
+            var ndo = new MpPortableDataObject();
+
+            foreach (var clipboardHandler in _clipboardHandlers) {
+                ndo = clipboardHandler.HandleDataObject(ndo);
+            }
+            if(ndo.DataFormatLookup.Where(x=>x.Value != null).Count() > 0) {
+                MpConsole.WriteLine("CB Changed: " + DateTime.Now);
+                OnClipboardChanged?.Invoke(typeof(MpClipboardWatcher).ToString(), ndo);
+            }
         }
 
-        private MpDataObject ConvertManagedFormats(object ido, int retryCount = 5) {
+        private MpPortableDataObject ConvertManagedFormats(object ido, int retryCount = 5) {
             /*
             from: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.dataobject?view=windowsdesktop-6.0&viewFallbackFrom=net-5.0
             Special considerations may be necessary when using the metafile format with the Clipboard. 
@@ -179,7 +193,7 @@ namespace MpClipboardHelper {
             recognizing your data. To preserve your data format, add your data as a Byte array 
             to a MemoryStream and pass the MemoryStream to the SetData method.
             */
-            var cbDict = new MpDataObject();
+            var cbDict = new MpPortableDataObject();
             if (retryCount == 0) {
                 Console.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
                 return cbDict;
@@ -245,7 +259,7 @@ namespace MpClipboardHelper {
                             data = dobj.GetData(af, true);
                         }
                         if (data != null) {
-                            cbDict.DataFormatLookup.Add(cf, data.ToString());
+                            cbDict.DataFormatLookup.Add(MpPortableDataFormats.GetDataFormat(cf.ToString()), data.ToString());
                         }
                     }
                 }
@@ -259,17 +273,17 @@ namespace MpClipboardHelper {
             }
         }
 
-        private IDataObject ConvertToOleDataObject(MpDataObject mpdo) {
+        private IDataObject ConvertToOleDataObject(MpPortableDataObject mpdo) {
             DataObject dobj = new DataObject();
             foreach (var kvp in mpdo.DataFormatLookup) {
-                SetDataWrapper(ref dobj, kvp.Key, kvp.Value);
+                SetDataWrapper(ref dobj, kvp.Key.Name, kvp.Value.ToString());
             }
             return dobj;
         }
 
-        private void SetDataWrapper(ref DataObject dobj, MpClipboardFormatType format, string dataStr) {
+        private void SetDataWrapper(ref DataObject dobj, string format, string dataStr) {
             switch (format) {
-                case MpClipboardFormatType.Bitmap:
+                case MpPortableDataFormats.Bitmap:
                     byte[] bytes = Convert.FromBase64String(dataStr);
                     Image image;
                     using (MemoryStream ms = new MemoryStream(bytes)) {
@@ -278,17 +292,16 @@ namespace MpClipboardHelper {
                     }
 
                     break;
-                case MpClipboardFormatType.FileDrop:
+                case MpPortableDataFormats.FileDrop:
                     var fl = dataStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     var sc = new StringCollection();
                     sc.AddRange(fl);
                     dobj.SetFileDropList(sc);
                     break;
-                case MpClipboardFormatType.Rtf:
+                case MpPortableDataFormats.Rtf:
                     dobj.SetData(DataFormats.Rtf, dataStr);
                     break;
-                case MpClipboardFormatType.UnicodeText:
-                case MpClipboardFormatType.Text:
+                case MpPortableDataFormats.Text:
                     dobj.SetData(DataFormats.Text, dataStr);
                     break;
                 default:
@@ -304,20 +317,6 @@ namespace MpClipboardHelper {
             Clipboard.SetDataObject(ConvertToOleDataObject(_TempDataObject));
         }
 
-        private bool IsClipboardOpen() {
-            var hwnd = GetOpenClipboardWindow();
-            return hwnd != IntPtr.Zero;
-
-            //if (hwnd == IntPtr.Zero) {
-            //    return "Unknown";
-            //}
-            //Debugger.Break();
-            //var int32Handle = hwnd.ToInt32();
-            //var len = GetWindowTextLength(int32Handle);
-            //var sb = new StringBuilder(len);
-            //GetWindowText(int32Handle, sb, len);
-            //return sb.ToString();
-        }
 
         #endregion
 

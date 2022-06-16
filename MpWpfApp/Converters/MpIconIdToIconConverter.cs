@@ -21,7 +21,10 @@ namespace MpWpfApp {
                         bmpSrc = (BitmapSource)new MpBase64StringToBitmapSourceConverter().Convert(ivm.Icon.IconBorderImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
                     } 
                 }
-                bmpSrc = (BitmapSource)new MpBase64StringToBitmapSourceConverter().Convert(ivm.Icon.IconImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
+                if(ivm != null) {
+                    bmpSrc = (BitmapSource)new MpBase64StringToBitmapSourceConverter().Convert(ivm.Icon.IconImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
+                }
+                
             }
             return new Image() { 
                 Source = bmpSrc 

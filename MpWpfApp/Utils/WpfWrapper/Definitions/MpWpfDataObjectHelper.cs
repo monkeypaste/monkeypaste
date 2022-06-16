@@ -13,6 +13,7 @@ using System.Threading;
 using MpClipboardHelper;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace MpWpfApp {
     public class MpWpfDataObjectHelper :
@@ -103,7 +104,14 @@ namespace MpWpfApp {
             MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreChange;
 
             DataObject wpfDataObject = ConvertToPlatformClipboardDataObject(portableObj) as DataObject;
-            Clipboard.SetDataObject(wpfDataObject);
+
+            MpHelpers.RunOnMainThread(async () => {
+                while(MonkeyPaste.Common.Wpf.WinApi.IsClipboardOpen()) {
+                    await Task.Delay(100);
+                }
+
+                Clipboard.SetDataObject(wpfDataObject);
+            });
         }
 
         public MpPortableDataObject GetPlatformClipboardDataObject() {
@@ -111,7 +119,6 @@ namespace MpWpfApp {
             var mpdo = ConvertToSupportedPortableFormats(result);
             return mpdo;
         }
-
 
         public async Task PasteDataObject(MpPortableDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
             string pasteCmdKeyString = "^v";
@@ -139,8 +146,6 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
         }
-
-
 
         #endregion
 
@@ -196,8 +201,6 @@ namespace MpWpfApp {
             }
         }
 
-        
-
         public void HandleError(Exception ex) {
             MpConsole.WriteTraceLine(ex);
         }
@@ -230,54 +233,6 @@ namespace MpWpfApp {
             }
         }
 
-        private bool IsProcessLikeNotepad(string processPath) {
-            if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
-                return false;
-            }
-
-            try {
-                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
-                if (processName == null) {
-                    return false;
-                }
-                switch (processName) {
-                    case "notepad":
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-            catch (Exception ex) {
-                MpConsole.WriteLine("IsProcessLikeNotepad GetFileName exception: " + ex);
-                return false;
-            }
-        }
-
-        private bool IsProcessNeedFileDrop(string processPath) {
-            if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
-                return false;
-            }
-
-            try {
-                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
-                if (processName == null) {
-                    return false;
-                }
-                switch (processName) {
-                    case "explorer":
-                    case "mspaint":
-                    case "notepad":
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-            catch (Exception ex) {
-                MpConsole.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
-                return false;
-            }
-        }
-
         private void SetDataWrapper(ref DataObject dobj, string format, object data) {
             if(data == null) {
                 return;
@@ -285,7 +240,24 @@ namespace MpWpfApp {
             
             switch (format) {
                 case MpPortableDataFormats.Bitmap:
-                    dobj.SetImage(data.ToString().ToBitmapSource());
+                    var bmpSrc = data.ToString().ToBitmapSource(false);
+
+                    var winforms_dataobject = MpClipboardHelper.MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
+
+                    //Clipboard.SetData(DataFormats.Bitmap, bmpSrc);
+                    //Clipboard.SetData("PNG", winforms_dataobject.GetData("PNG"));
+                    //Clipboard.SetData(DataFormats.Dib, winforms_dataobject.GetData(DataFormats.Dib));
+                    //dobj.SetImage(data.ToString().ToBitmapSource());
+
+                    //IDataObject ido = new DataObject();
+                    //ido.SetData(DataFormats.Bitmap, new Image() { Source = bmpSrc },true); // true means autoconvert
+
+                    //dobj.SetData(DataFormats.Bitmap, ido.GetData(DataFormats.Bitmap));
+                    var pngData = winforms_dataobject.GetData("PNG");
+                    var dibData = winforms_dataobject.GetData(DataFormats.Dib);
+                    dobj.SetImage(bmpSrc);
+                    dobj.SetData("PNG", pngData);
+                    dobj.SetData(DataFormats.Dib, dibData);
                     break;
                 case MpPortableDataFormats.FileDrop:
                     var fl = data.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);

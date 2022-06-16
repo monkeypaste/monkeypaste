@@ -59,6 +59,7 @@
     <Compile Include="Utils\Helpers\Graphics\Color\MpWpfColorHelpers.cs" />
     <Compile Include="Utils\Helpers\Graphics\Imaging\MpWpfImagingHelper.cs" />
     <Compile Include="Utils\Helpers\Graphics\MpScreenInformation.cs" />
+    <Compile Include="Utils\PInvoke\WinApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj">

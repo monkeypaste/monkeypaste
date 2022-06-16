@@ -21,6 +21,7 @@ using System.Windows.Markup;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Xml.Linq;
+using System.Windows.Data;
 
 namespace MpWpfApp {
     public static class MpRtbContentExtensions {
@@ -317,33 +318,46 @@ namespace MpWpfApp {
         }
         public static void LoadRtf(this TextRange tr, string str, out Size unformattedContentSize) {
             using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
-                try {
-                    using (var subStream = new MemoryStream()) {
-                        var subDoc = new FlowDocument();
-                        var sub_tr = new TextRange(subDoc.ContentStart, subDoc.ContentEnd);
-                        sub_tr.Load(stream, DataFormats.Rtf);
-                        var ds = new Size(subDoc.PageWidth, subDoc.PageHeight);
-                        ds = subDoc.GetDocumentSize();
-                        unformattedContentSize = ds;
-
-                        sub_tr.Save(subStream, DataFormats.Rtf);
-                        subStream.Seek(0, SeekOrigin.Begin);
-                        tr.Load(subStream, DataFormats.Rtf);
-                    }
-                    var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
-                    if (rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
-                        //ignore to tr
-                    } else if ((TextAlignment)rtbAlignment == TextAlignment.Justify) {
-                        tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-                    }
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...", ex);
-                    unformattedContentSize = new Size();
-                    return;
-                }
+                tr.Load(stream, DataFormats.Rtf);
+                var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
+                var ds = fd.GetDocumentSize();
+                unformattedContentSize = ds;
+                var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
+                if (rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
+                    //ignore to tr
+                } else if ((TextAlignment)rtbAlignment == TextAlignment.Justify) {
+                    tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                }                
             }
+            //using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
+            //    try {
+            //        using (var subStream = new MemoryStream()) {
+            //            var subDoc = new FlowDocument();
+            //            var sub_tr = new TextRange(subDoc.ContentStart, subDoc.ContentEnd);
+            //            sub_tr.Load(stream, DataFormats.Rtf);
+            //            var ds = new Size(subDoc.PageWidth, subDoc.PageHeight);
+            //            ds = subDoc.GetDocumentSize();
+            //            unformattedContentSize = ds;
+
+            //            sub_tr.Save(subStream, DataFormats.Rtf);
+            //            subStream.Seek(0, SeekOrigin.Begin);
+            //            tr.Load(subStream, DataFormats.Rtf);
+            //        }
+            //        var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
+            //        if (rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
+            //            //ignore to tr
+            //        } else if ((TextAlignment)rtbAlignment == TextAlignment.Justify) {
+            //            tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+            //        }
+            //    }
+            //    catch (Exception ex) {
+            //        MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...", ex);
+            //        unformattedContentSize = new Size();
+            //        return;
+            //    }
+            //}
         }
+
 
         public static void LoadTextTemplate_FromCode(this TextRange tr, MpTextTemplate cit) {
             // TODO (maybe) when cit is new (and no formatting is stored) need to check font formatting of beginning of tr
@@ -536,18 +550,18 @@ namespace MpWpfApp {
 
             #endregion
         }
-        public static void LoadItemData(
-            this TextRange tr, 
-            string str, 
-            MpCopyItemType strItemDataType, 
-            out Size unformattedContentSize) {
-            // NOTE iconId is only used to convert file path's to rtf w/ icon 
 
-            var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
+        public static FlowDocument LoadContent(object dc, string str, MpCopyItemType strItemDataType, out Size unformattedContentSize) {
+            var fd = new FlowDocument() {
+                DataContext = dc
+            };
+            var tr = fd.ContentRange();
+
             unformattedContentSize = new Size();
             if (string.IsNullOrEmpty(str)) {
                 tr.Text = str;
-                return;
+                // rtb.IsUndoEnabled = wasUndoEnabled;
+                return fd;
             }
             switch (strItemDataType) {
                 case MpCopyItemType.Text:
@@ -555,7 +569,7 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Image:
                     //tr.LoadImage(str, out unformattedContentSize);
-                    fd.Blocks.Clear();
+                    //fd.Blocks.Clear();
                     var ip = new MpImageParagraph() {
                         DataContext = fd.DataContext
                     };
@@ -563,7 +577,7 @@ namespace MpWpfApp {
                     unformattedContentSize = ip.ContentImage.Source.PixelSize();
                     break;
                 case MpCopyItemType.FileList:
-                    fd.Blocks.Clear();
+                    //fd.Blocks.Clear();
                     var ctvm = fd.DataContext as MpClipTileViewModel;
                     var fpl = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     for (int i = 0; i < fpl.Length; i++) {
@@ -581,6 +595,59 @@ namespace MpWpfApp {
                     }
                     break;
             }
+            return fd;
+        }
+        public static void LoadItemData(
+            this TextRange tr, 
+            string str, 
+            MpCopyItemType strItemDataType, 
+            out Size unformattedContentSize) {
+            // NOTE iconId is only used to convert file path's to rtf w/ icon 
+
+            var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
+            //var rtb = fd.FindParentOfType<RichTextBox>();
+            //bool wasUndoEnabled = rtb.IsUndoEnabled;
+            //rtb.IsUndoEnabled = false;
+
+            unformattedContentSize = new Size();
+            if (string.IsNullOrEmpty(str)) {
+                tr.Text = str;
+               // rtb.IsUndoEnabled = wasUndoEnabled;
+                return;
+            }
+            switch (strItemDataType) {
+                case MpCopyItemType.Text:
+                    tr.LoadRtf(str, out unformattedContentSize);
+                    break;
+                case MpCopyItemType.Image:
+                    //tr.LoadImage(str, out unformattedContentSize);
+                    //fd.Blocks.Clear();
+                    var ip = new MpImageParagraph() {
+                        DataContext = fd.DataContext
+                    };
+                    fd.Blocks.Add(ip);
+                    unformattedContentSize = ip.ContentImage.Source.PixelSize();
+                    break;
+                case MpCopyItemType.FileList:
+                    //fd.Blocks.Clear();
+                    var ctvm = fd.DataContext as MpClipTileViewModel;
+                    var fpl = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < fpl.Length; i++) {
+                        var fivm = new MpFileItemViewModel(ctvm);
+                        fivm.Path = fpl[i];
+                        ctvm.FileItems.Add(fivm);
+                        var fip = new MpFileItemParagraph() {
+                            DataContext = fivm
+                        };
+                        fd.Blocks.Add(fip);
+
+                        double width = ((Path.GetFileName(fivm.Path).Length + 1) * 16) + 6 + 2 + 16;
+                        unformattedContentSize.Height += (16 + 6 + 2);
+                        unformattedContentSize.Width = Math.Max(unformattedContentSize.Width, width);
+                    }
+                    break;
+            }
+            //rtb.IsUndoEnabled = wasUndoEnabled;
         }
 
         public static FlowDocument ToFlowDocument(this string str, int iconId = 0) {

@@ -32,13 +32,13 @@ namespace MpWpfApp {
         #region MpIActionComponent Implementation
 
 
-        public void RegisterActionComponent(MpIActionComponentHandler mvm) {
+        public void RegisterActionComponent(MpIActionTrigger mvm) {
             var fstvm = mvm as MpFileSystemTriggerViewModel;
             AddWatcher(fstvm.FileSystemPath, fstvm);
             MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterActionComponent(MpIActionComponentHandler mvm) {
+        public void UnregisterActionComponent(MpIActionTrigger mvm) {
             var fstvm = mvm as MpFileSystemTriggerViewModel;
             RemoveWatcher(fstvm.FileSystemPath);
             MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Label} matcher");

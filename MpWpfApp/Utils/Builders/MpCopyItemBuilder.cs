@@ -47,15 +47,15 @@ namespace MpWpfApp {
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
                     //itemData = itemData.ToQuillText();
+                } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
+                    itemType = MpCopyItemType.Image;
+                    itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Html)) {
                     itemType = MpCopyItemType.Text;
                     string rawHtmlData = mpdo.GetData(MpPortableDataFormats.Html).ToString();
                     htmlClipboardData = await MpHtmlClipboardDataConverter.Parse(rawHtmlData);
                     itemData = htmlClipboardData.Rtf;
                     //itemData = itemData.ToQuillText();
-                } else if (mpdo.ContainsData(MpPortableDataFormats.Bitmap)) {
-                    itemType = MpCopyItemType.Image;
-                    itemData = mpdo.GetData(MpPortableDataFormats.Bitmap).ToString();
                 } else if(mpdo.ContainsData(MpPortableDataFormats.Text)) {                    
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Text).ToString().ToRichText();

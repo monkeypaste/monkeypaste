@@ -20,6 +20,15 @@ namespace MonkeyPaste {
             object sourceHandler,
             bool suppressWrite = false) { 
 
+            // This method:
+            // 0. checks data between each step and returns error info or retry message to calling analyzer if there's a problem
+            // 1. prepares plugin parameters using sourceCopyItem and given param values
+            // 2. sends request to the plugin
+            // 3. checks response from the plugin to ensure it was successful
+            // 4. logs the transaction (needed for restful api call auditing or  yet to be implemented more detailed source information) 
+            // 5. Converts the response to new content and/or updates source content (since from another, potentially 3rd party module)
+            // 6. Returns new or updated content
+
             if(pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzeComponent) {
                 MpAnalyzerTransaction at = new MpAnalyzerTransaction() {
                     RequestTime = DateTime.Now,
@@ -32,8 +41,8 @@ namespace MonkeyPaste {
                                         paramValues,
                                         sourceCopyItem);
                 } catch(Exception ex) {
-                    var errorActionResult = await HandleError(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
-                    return errorActionResult;
+                    var errorOrRetryActionResult = await HandleError(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+                    return errorOrRetryActionResult;
                 }
 
                 // FIND CONTENT
@@ -55,21 +64,23 @@ namespace MonkeyPaste {
                     at.ResponseTime = DateTime.Now;
                 }
                 catch (Exception ex) {
-                    var errorActionResult = await HandleError(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
-                    return errorActionResult;
+                    var errorOrRetryActionResult = await HandleError(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+                    return errorOrRetryActionResult;
                 }
+
+                // LOG TRANSACTION
 
                 int sourceId = await MpPluginLogger.LogTransaction(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
 
+                // PROCESS RESPONSE
                 try {
                     at.ResponseContent = await MpPluginResponseConverter.Convert(at, sourceCopyItem, sourceId, suppressWrite);
+                    return at;
                 }
                 catch (Exception ex) {
-                    var errorActionResult = await HandleError(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
-                    return errorActionResult;
+                    var errorOrRetryActionResult = await HandleError(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+                    return errorOrRetryActionResult;
                 }
-
-                return at;
             }
 
             return null;

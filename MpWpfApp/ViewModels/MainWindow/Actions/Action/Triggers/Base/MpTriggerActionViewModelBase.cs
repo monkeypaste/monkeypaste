@@ -273,7 +273,6 @@ namespace MpWpfApp {
 
         #region Commands
 
-
         public ICommand SelectTriggerTypeCommand => new RelayCommand<object>(
             (args) => {
                 ///IsDropDownOpen = false;

@@ -163,8 +163,6 @@ namespace MpWpfApp {
 
         public MpAnalyzerTransaction LastTransaction { get; private set; } = null;
 
-        public MpCopyItem LastResultContentItem { get; set; } = null;
-
         public bool CanAnalyzerExecute => CanExecuteAnalysis(null);
 
 
@@ -708,34 +706,37 @@ namespace MpWpfApp {
 
         public MpIAsyncCommand<object> ExecuteAnalysisCommand => new MpAsyncCommand<object>(
             async (args) => {
+
                 IsBusy = true;
                 bool suppressWrite = false;
 
                 MpCopyItem sourceCopyItem = null;
                 MpAnalyticItemPresetViewModel targetAnalyzer = null;
+                bool isUserExecutedAnalysis = true;
 
                 if (args != null && args is object[] argParts) {
+                    isUserExecutedAnalysis = false;
                     // when analyzer is triggered from action not user selection 
                     //suppressCreateItem = true;
                     targetAnalyzer = argParts[0] as MpAnalyticItemPresetViewModel;
-                    if(argParts[1] is string) {
+                    if (argParts[1] is string) {
                         suppressWrite = true;
                         sourceCopyItem = await MpCopyItem.Create(
                                                             data: argParts[1] as string,
                                                             suppressWrite: true);
-                    }
-                    else if(argParts[1] is MpCopyItem) {
+                    } else if (argParts[1] is MpCopyItem) {
                         sourceCopyItem = argParts[1] as MpCopyItem;
                     }
-                    
+
                 } else {
                     if (args is MpAnalyticItemPresetViewModel aipvm) {
                         targetAnalyzer = aipvm;
                     } else {
                         targetAnalyzer = SelectedItem;
-                    }                    
+                    }
                     sourceCopyItem = MpClipTrayViewModel.Instance.SelectedItem.CopyItem;
                 }
+
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedItem));
 
@@ -747,24 +748,35 @@ namespace MpWpfApp {
                                            sourceCopyItem,
                                            SelectedItem.Preset,
                                            suppressWrite);
-
-                if(result != null && result.ToString() == MpPluginResponseFormat.RETRY_MESSAGE) {
-                    ExecuteAnalysisCommand.Execute(args);
-                    return;
-                }
-                if(result != null && result.ToString() == MpPluginResponseFormat.ERROR_MESSAGE) {
-                    OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
+                if (result == null) {
                     IsBusy = false;
                     return;
                 }
+                if (result is string errorOrRetryStr) {
+                    if (errorOrRetryStr == MpPluginResponseFormat.RETRY_MESSAGE) {
+                        ExecuteAnalysisCommand.Execute(args);
+                        return;
+                    } else if (errorOrRetryStr == MpPluginResponseFormat.ERROR_MESSAGE) {
+                        OnAnalysisCompleted?.Invoke(SelectedItem, null);
+                        IsBusy = false;
+                        return;
+                    } else {
+                        throw new Exception("Unhandled transaction response: " + errorOrRetryStr);
+                    }
+                }
 
-                LastTransaction = result as MpAnalyzerTransaction;
-                OnAnalysisCompleted?.Invoke(SelectedItem, LastResultContentItem);
+                if (result is MpAnalyzerTransaction) {
+                    LastTransaction = result as MpAnalyzerTransaction;
+                    //OnAnalysisCompleted?.Invoke(SelectedItem, LastTransaction.ResponseContent);
+
+                    if(isUserExecutedAnalysis) {
+
+                    }
+                }
+                                
 
                 IsBusy = false;
             },(args)=>CanExecuteAnalysis(args));
-
-        protected virtual Task<MpAnalyzerTransaction> ExecuteAnalysis(object obj) { return null; }
 
         public virtual bool CanExecuteAnalysis(object args) {
             if(IsBusy) {
@@ -775,17 +787,23 @@ namespace MpWpfApp {
             MpCopyItem sci = null;
             string sstr = null;
             if(args == null) {
+                // analyzer request from MpClipTrayViewModel.Instance.AnalyzeSelectedItemCommand
+
                 spvm = SelectedItem;
                 if(MpClipTrayViewModel.Instance.SelectedItem != null) {
                     sci = MpClipTrayViewModel.Instance.SelectedItem.CopyItem;
                 }
             } else if(args is MpAnalyticItemPresetViewModel) {
+                // analyzer request from MpAnalyticItemPresetDataGridView
+
                 if (MpClipTrayViewModel.Instance.SelectedItem == null) {
                     return false;
                 }
                 spvm = args as MpAnalyticItemPresetViewModel;
                 sci = MpClipTrayViewModel.Instance.SelectedItem.CopyItem;
             } else if(args is object[] argParts) {
+                // analyzer request from MpAnalyzerActionViewModel
+                
                 spvm = argParts[0] as MpAnalyticItemPresetViewModel;
                 sci = argParts[1] as MpCopyItem;
                 if(sci == null) {

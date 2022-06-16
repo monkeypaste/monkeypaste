@@ -27,6 +27,9 @@ namespace MpWpfApp {
         }
 
         private void ContentImage_Loaded(object sender, RoutedEventArgs e) {
+            if(DataContext == null) {
+                return;
+            }
             var ctvm = DataContext as MpClipTileViewModel;
 
             ctvm.UnformattedContentSize =

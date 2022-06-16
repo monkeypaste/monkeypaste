@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreClipboardHandler {
+namespace MonkeyPaste.Common.Wpf {
     public static class WinApi {
         public const int WM_DRAWCLIPBOARD = 0x308;
         public const int WM_CHANGECBCHAIN = 0x030D;
@@ -33,6 +33,25 @@ namespace CoreClipboardHandler {
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern int GetWindowTextLength(int hwnd);
+
+        public static bool IsClipboardOpen(bool showOpenWindowName = false) {
+            var hwnd = WinApi.GetOpenClipboardWindow();
+
+            if (hwnd == IntPtr.Zero) {
+                return false;
+            }
+            if(showOpenWindowName) {
+                var int32Handle = hwnd.ToInt32();
+                var len = GetWindowTextLength(int32Handle);
+                var sb = new StringBuilder(len);
+                GetWindowText(int32Handle, sb, len);
+                MpConsole.WriteLine("Clipboard is open by window: " + sb.ToString());
+            }
+            
+            
+
+            return true;
+        }
 
 
         [StructLayout(LayoutKind.Sequential)]

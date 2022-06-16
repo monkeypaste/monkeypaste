@@ -202,7 +202,7 @@ namespace MonkeyPaste.Common.Wpf {
         public static string ToBase64String(this BitmapSource bmpSrc) {
             return Convert.ToBase64String(bmpSrc.ToByteArray());
         }
-        public static BitmapSource ToBitmapSource(this byte[] bytes) {
+        public static BitmapSource ToBitmapSource(this byte[] bytes, bool freeze = true) {
 
 
             //using (var stream = new MemoryStream(bytes)) {
@@ -218,12 +218,14 @@ namespace MonkeyPaste.Common.Wpf {
 
 
             var bmpSrc = (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
-            bmpSrc.Freeze();
+            if(freeze) {
+                bmpSrc.Freeze();
+            }
             return bmpSrc;
         }
 
 
-        public static BitmapSource ToBitmapSource(this string base64Str) {
+        public static BitmapSource ToBitmapSource(this string base64Str, bool freeze = true) {
             if (string.IsNullOrEmpty(base64Str) || !base64Str.IsStringBase64()) {
                 return new BitmapImage();
             }

@@ -21,6 +21,7 @@ using MonkeyPaste;
 using CefSharp.Wpf;
 using Newtonsoft.Json;
 using System.Web;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public static class MpQuillHtmlToRtfConverter {
@@ -331,18 +332,29 @@ namespace MpWpfApp {
         }
 
         private static TextElement ApplyImgSrcFormatting(TextElement te, string sv) {
-            var srcvl = sv.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            string imgStr = srcvl[1];//.Replace(@"\", string.Empty);
-            int mod4 = imgStr.Length % 4;
-            if (mod4 > 0) {
-                imgStr += new string('=', 4 - mod4);
+            BitmapSource bmpSrc = null;
+            if(Uri.IsWellFormedUriString(sv,UriKind.Absolute)) {
+                bmpSrc = (BitmapSource)new BitmapImage(new Uri(sv));
+            }else if(sv.Contains(",")) {
+                var srcvl = sv.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                if(srcvl.Length > 1) {
+                    string imgStr = srcvl[1];//.Replace(@"\", string.Empty);
+                    int mod4 = imgStr.Length % 4;
+                    if (mod4 > 0) {
+                        imgStr += new string('=', 4 - mod4);
+                    }
+                    bmpSrc = imgStr.ToBitmapSource();
+                } 
             }
-            var img = te.FindChildren<Image>().FirstOrDefault();
-            //byte[] data = Convert.FromBase64String(imgStr);
-            //string decodedString = Encoding.UTF8.GetString(data);
-            img.Source = imgStr.ToBitmapSource();
-            img.Height = 100;
-            img.Width = 100;
+            
+            if(bmpSrc != null) {
+                var img = te.FindChildren<Image>().FirstOrDefault();
+                //byte[] data = Convert.FromBase64String(imgStr);
+                //string decodedString = Encoding.UTF8.GetString(data);
+                img.Source = bmpSrc;
+                img.Height = 100;
+                img.Width = 100;
+            }
             return te;
         }
 

@@ -268,15 +268,16 @@ namespace MpWpfApp {
                     adornerLayer.Add(DropLineAdorner);
                     RefreshDropRects();
                 }
-            }            
-
+            }
         }
 
         public void UpdateAdorner() {
-            if (adornerLayer == null) {
-                InitAdorner();
-            }
-            adornerLayer?.Update();
+            MpHelpers.RunOnMainThread(() => {
+                if (adornerLayer == null) {
+                    InitAdorner();
+                }
+                adornerLayer?.Update();
+            });
         }
 
         #endregion

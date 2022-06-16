@@ -52,6 +52,8 @@ namespace MpWpfApp {
             DataObjectHelper = MpWpfDataObjectHelper.Instance;
             ExternalPasteHandler = MpWpfDataObjectHelper.Instance;
             CopyItemBuilder = new MpCopyItemBuilder();
+            ClipboardMonitor = new MpClipboardWatcher();
+            DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
         }
 
     }

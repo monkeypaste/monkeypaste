@@ -75,9 +75,7 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpAnalyzeActionViewModel(MpActionCollectionViewModel parent) : base(parent) {
-
-        }
+        public MpAnalyzeActionViewModel(MpActionCollectionViewModel parent) : base(parent) { }
 
         #endregion
 

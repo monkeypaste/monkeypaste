@@ -397,14 +397,14 @@ namespace MpWpfApp {
             }
         }
 
-        public void RegisterActionComponent(MpIActionComponentHandler mvm) {
+        public void RegisterActionComponent(MpIActionTrigger mvm) {
             //by design this only can occur for shortcuts with a selected item as its context
 
             OnShortcutExecuted += mvm.OnActionTriggered;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterActionComponent(MpIActionComponentHandler mvm) {
+        public void UnregisterActionComponent(MpIActionTrigger mvm) {
             OnShortcutExecuted -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
         }
@@ -540,7 +540,7 @@ namespace MpWpfApp {
                             await Task.Delay(300);
                             while (aipvm.IsBusy) { await Task.Delay(100); }
 
-                            OnShortcutExecuted?.Invoke(this, aipvm.Parent.LastResultContentItem);
+                            OnShortcutExecuted?.Invoke(this, aipvm.Parent.LastTransaction == null ? null : aipvm.Parent.LastTransaction.ResponseContent);
                         });
                     }
                 } else if (ShortcutType == MpShortcutType.PasteCopyItem || ShortcutType == MpShortcutType.PasteSelectedItems) {

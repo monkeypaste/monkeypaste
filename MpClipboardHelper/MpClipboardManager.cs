@@ -23,7 +23,7 @@ namespace MpClipboardHelper {
 
         #region Events
 
-        public static event EventHandler<MpPortableDataObject> OnClipboardChange;
+        //public static event EventHandler<MpPortableDataObject> OnClipboardChange;
 
         #endregion
 
@@ -33,7 +33,7 @@ namespace MpClipboardHelper {
             // NOTE services are abstracted into interfaces because of bug in UCRTBASE.DLL
             // and monitoring window messages (using MpClipboardWatcher) crashes application
             // intermittently when copying rtf from Visual Studio BUT maybe it can be fixed
-            var ct = new MpClipboardTimer();
+            var ct = new MpClipboardWatcher();
             MonitorService = ct;
             RegistrarService = ct;
             Start();
@@ -43,7 +43,7 @@ namespace MpClipboardHelper {
             if(MonitorService == null) {
                 throw new Exception("Must call init");
             }
-            MonitorService.OnClipboardChanged += MpClipboardWatcher_OnClipboardChange;
+            //MonitorService.OnClipboardChanged += MpClipboardWatcher_OnClipboardChange;
 
             MonitorService.StartMonitor();
         }
@@ -51,16 +51,16 @@ namespace MpClipboardHelper {
             if(MonitorService == null) {
                 return;
             }
-            MonitorService.OnClipboardChanged -= MpClipboardWatcher_OnClipboardChange;
+            //MonitorService.OnClipboardChanged -= MpClipboardWatcher_OnClipboardChange;
             MonitorService.StopMonitor();
         }
         #endregion
 
         #region Private Methods
 
-        private static void MpClipboardWatcher_OnClipboardChange(object sender, MpPortableDataObject e) {
-            OnClipboardChange?.Invoke(sender, e);
-        }
+        //private static void MpClipboardWatcher_OnClipboardChange(object sender, MpPortableDataObject e) {
+        //    OnClipboardChange?.Invoke(sender, e);
+        //}
 
         #endregion
     }

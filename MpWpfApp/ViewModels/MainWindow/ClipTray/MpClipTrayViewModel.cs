@@ -675,7 +675,7 @@ namespace MpWpfApp {
         public event EventHandler<double> OnScrollToXRequest;
         public event EventHandler OnScrollToHomeRequest;
 
-        public event EventHandler<MpCopyItem> OnCopyItemItemAdd;
+        public event EventHandler<MpCopyItem> OnCopyItemAdd;
 
         #endregion
 
@@ -711,8 +711,8 @@ namespace MpWpfApp {
                 MpMessenger.Register<MpMessageType>(
                     nameof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
-                MpClipboardHelper.MpClipboardManager.OnClipboardChange += ClipboardChanged;
-
+                MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
+                MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
 
                 IsBusy = false;
             });
@@ -738,13 +738,13 @@ namespace MpWpfApp {
 
         #region MpIMatchTrigger Implementation
 
-        public void RegisterActionComponent(MpIActionComponentHandler mvm) {
-            OnCopyItemItemAdd += mvm.OnActionTriggered;
+        public void RegisterActionComponent(MpIActionTrigger mvm) {
+            OnCopyItemAdd += mvm.OnActionTriggered;
             MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
         }
 
-        public void UnregisterActionComponent(MpIActionComponentHandler mvm) {
-            OnCopyItemItemAdd -= mvm.OnActionTriggered;
+        public void UnregisterActionComponent(MpIActionTrigger mvm) {
+            OnCopyItemAdd -= mvm.OnActionTriggered;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
         }
 
@@ -1471,6 +1471,10 @@ namespace MpWpfApp {
         }
 
         private async Task AddItemFromClipboard(MpPortableDataObject cd) {
+            if(IsAddingClipboardItem) {
+                MpConsole.WriteLine("Warning! New Clipboard item detected while already adding one (seems to only occur internally). Ignoring this one.");
+                return;
+            }
             IsAddingClipboardItem = true;
 
             var totalAddSw = new Stopwatch();
@@ -1607,7 +1611,7 @@ namespace MpWpfApp {
             }
             IsAddingClipboardItem = false;
 
-            OnCopyItemItemAdd?.Invoke(this, newCopyItem);
+            OnCopyItemAdd?.Invoke(this, newCopyItem);
             totalAddSw.Stop();
             MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
 
@@ -1669,6 +1673,11 @@ namespace MpWpfApp {
                  int unpinnedId = upctvm.CopyItemId;
 
                 PinnedItems.Remove(upctvm);
+                 OnPropertyChanged(nameof(IsAnyTilePinned));
+
+                 if (!IsAnyTilePinned) {
+                     PinTrayTotalWidth = PinTrayScreenWidth = 0;
+                 }
 
                  upctvm.OnPropertyChanged(nameof(upctvm.IsPinned));
                  upctvm.OnPropertyChanged(nameof(upctvm.IsPlaceholder));
@@ -1698,13 +1707,11 @@ namespace MpWpfApp {
                  }
 
 
-                 if (!IsAnyTilePinned) {
-                    PinTrayTotalWidth = PinTrayScreenWidth = 0;
-                }
+                 
 
                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrayX)));
 
-                OnPropertyChanged(nameof(IsAnyTilePinned));
+                
                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
                 OnPropertyChanged(nameof(ClipTrayTotalTileWidth));
                 OnPropertyChanged(nameof(ClipTrayScreenWidth));
@@ -1760,9 +1767,10 @@ namespace MpWpfApp {
         public ICommand AddNewItemsCommand => new RelayCommand(
             async () => {
                 IsBusy = MpMainWindowViewModel.Instance.IsMainWindowOpen;
-                foreach (var ci in _newModels) {
+                for (int i = 0; i < _newModels.Count; i++) {
+                    var ci = _newModels[i];
                     var nctvm = await CreateClipTileViewModel(ci);
-                    while(nctvm.IsAnyBusy) {
+                    while (nctvm.IsAnyBusy) {
                         await Task.Delay(100);
                     }
                     ToggleTileIsPinnedCommand.Execute(nctvm);
@@ -1929,11 +1937,6 @@ namespace MpWpfApp {
                     var cil = await MpDataModelProvider.FetchCopyItemsByQueryIdxList(fetchQueryIdxList);
 
                     for (int i = 0; i < cil.Count; i++) {
-                        //if (isSubQuery && Items[i].IsSelected) {
-                        //    StoreSelectionState(Items[i]);
-                        //    Items[i].ClearSelection();
-                        //}
-
                         if (isLoadMore) {
                             int loadMoreSwapIdx_from = fetchQueryIdxList[i] > TailQueryIdx ? 0 : Items.Count - 1;
                             int loadMoreSwapIdx_to = fetchQueryIdxList[i] > TailQueryIdx ? Items.Count - 1 : 0;
@@ -1942,15 +1945,10 @@ namespace MpWpfApp {
                                 StoreSelectionState(Items[loadMoreSwapIdx_from]);
                                 Items[loadMoreSwapIdx_from].ClearSelection();
                             }
-                            //if (Items[loadMoreSwapIdx_to].IsSelected) {
-                            //    StoreSelectionState(Items[loadMoreSwapIdx_to]);
-                            //    Items[loadMoreSwapIdx_to].ClearSelection();
-                            //}
                             Items.Move(loadMoreSwapIdx_from, loadMoreSwapIdx_to);
                             await Items[loadMoreSwapIdx_to].InitializeAsync(cil[i], fetchQueryIdxList[i]);
 
                             RestoreSelectionState(Items[loadMoreSwapIdx_to]);
-                            //RestoreSelectionState(Items[loadMoreSwapIdx_from]);
                         } else {
 
                             await Items[i].InitializeAsync(cil[i], fetchQueryIdxList[i]);

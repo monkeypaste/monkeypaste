@@ -1721,12 +1721,10 @@ using MpProcessHelper;
                     OnPropertyChanged(nameof(SelfBindingRef));
                 }
             } else if (e is MpCopyItem ci && ci.Id == CopyItemId) {
-                if (ci.Id == CopyItemId) {
-                    if(HasModelChanged) {
-                        // this means the model has been updated from the view model so ignore
-                    } else {
-                        await InitializeAsync(ci);
-                    }
+                if (HasModelChanged) {
+                    // this means the model has been updated from the view model so ignore
+                } else {
+                    await InitializeAsync(ci);
                 }
             }
         }

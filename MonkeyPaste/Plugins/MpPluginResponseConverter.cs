@@ -11,7 +11,7 @@ namespace MonkeyPaste {
             MpCopyItem sourceCopyItem,
             int transSourceId,
             bool suppressWrite) {
-            MpCopyItem targetCopyItem = null;
+            MpCopyItem targetCopyItem;
 
             if (trans.Response is MpPluginResponseFormat prf) {
                 targetCopyItem = await ProcessNewContentItem(prf, sourceCopyItem, transSourceId, suppressWrite);
@@ -23,7 +23,7 @@ namespace MonkeyPaste {
             await ProcessDataObject(trans, targetCopyItem, transSourceId, suppressWrite);
 
             if (suppressWrite == false && targetCopyItem != null) {
-                // NOTE when target is in tray it will get notified from db uppdate and re-initialize
+                // NOTE when target is in tray it will get notified from db update and re-initialize
                 await targetCopyItem.WriteToDatabaseAsync();
 
                 if(sourceCopyItem.Id != targetCopyItem.Id) {
@@ -151,9 +151,13 @@ namespace MonkeyPaste {
             if (trans == null || trans.Response == null) {
                 return;
             }
+            await Task.Delay(1);
+
             if (trans.Response is MpPluginResponseFormat prf && prf.dataObject != null) {
-                var pdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.Create(prf.dataObject,true);
-                sourceCopyItem.ItemData = pdo_ci.ItemData;
+                //var pdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.Create(prf.dataObject,suppressWrite);
+                //sourceCopyItem.ItemData = pdo_ci.ItemData;
+
+                MpPlatformWrapper.Services.DataObjectHelper.SetPlatformClipboard(prf.dataObject, false);
             }
         }
     }

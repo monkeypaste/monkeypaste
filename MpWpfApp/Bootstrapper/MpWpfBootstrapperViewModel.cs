@@ -48,6 +48,8 @@ namespace MpWpfApp {
                     new MpBootstrappedItemViewModel(this,typeof(MpAnalyticItemCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpClipboardHandlerCollectionViewModel)),
 
+                    //new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
+
                     new MpBootstrappedItemViewModel(this,typeof(MpClipTrayViewModel)),
 
                     new MpBootstrappedItemViewModel(this,typeof(MpShortcutCollectionViewModel)),
@@ -62,7 +64,6 @@ namespace MpWpfApp {
 
                     new MpBootstrappedItemViewModel(this,typeof(MpDragDropManager)),
 
-                    new MpBootstrappedItemViewModel(this,typeof(MpClipboardManager)),
 
                     new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper)),
                     new MpBootstrappedItemViewModel(this,typeof(MpQuillHtmlToRtfConverter))
@@ -124,9 +125,9 @@ namespace MpWpfApp {
             //    await LoadItem(_items[i], i);
             //}
 
-            MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardManager.MonitorService;
-            MpPlatformWrapper.Services.DataObjectRegistrar = MpClipboardManager.RegistrarService;
-            MpPortableDataFormats.Init(MpPlatformWrapper.Services.DataObjectRegistrar);
+            //MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardManager.MonitorService;
+            //MpPlatformWrapper.Services.DataObjectRegistrar = MpClipboardManager.RegistrarService;
+            //MpPortableDataFormats.Init(MpPlatformWrapper.Services.DataObjectRegistrar);
 
             await Task.Delay(500);
             MpNotificationCollectionViewModel.Instance.FinishLoading();

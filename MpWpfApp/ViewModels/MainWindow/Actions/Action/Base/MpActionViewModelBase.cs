@@ -30,7 +30,7 @@ namespace MpWpfApp {
         MpITooltipInfoViewModel,
         MpIBoxViewModel,
         MpIMovableViewModel,
-        MpIActionComponentHandler {
+        MpIActionTrigger {
         #region Private Variables
 
         private double _maxDeltaLocation = 10;
@@ -815,10 +815,10 @@ namespace MpWpfApp {
             OnActionComplete?.Invoke(this, arg);
         }
 
-        
+
         #endregion
 
-        #region MpIMatchTrigger Implementation
+        #region MpIActionComponentHandler Implementation
 
         public void RegisterTrigger(MpActionViewModelBase mvm) {
             OnActionComplete += mvm.OnActionComplete;

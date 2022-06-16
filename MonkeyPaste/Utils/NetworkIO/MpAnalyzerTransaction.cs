@@ -14,7 +14,7 @@ namespace MonkeyPaste {
         public object Response { get; set; }
 
         public object RequestContent { get; set; }
-        public object ResponseContent { get; set; }
+        public MpCopyItem ResponseContent { get; set; }
 
     }
 }

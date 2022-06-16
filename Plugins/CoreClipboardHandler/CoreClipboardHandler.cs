@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 
 namespace CoreClipboardHandler {
     public class CoreClipboardHandler : MpIClipboardPluginComponent {
@@ -42,21 +44,22 @@ namespace CoreClipboardHandler {
 
 
         private string GetClipboardData(string nativeFormatStr) {
-            while(IsClipboardOpen()) {
-                Thread.Sleep(10);
+            while(WinApi.IsClipboardOpen(true)) {
+                Thread.Sleep(100);
             }
             if(nativeFormatStr == DataFormats.FileDrop &&
                 WinApi.IsClipboardFormatAvailable(CF_HDROP)) {
 
-                WinApi.OpenClipboard(_mainWindowHandle);
+                //WinApi.OpenClipboard(_mainWindowHandle);
                 string[] sa = Clipboard.GetData(nativeFormatStr) as string[];                
                 if (sa != null && sa.Length > 0) {
                     return string.Join(Environment.NewLine, sa);
                 }
-            } else if(nativeFormatStr == DataFormats.Bitmap &&
-                      WinApi.IsClipboardFormatAvailable(CF_BITMAP)) {
+                //WinApi.CloseClipboard();
 
-                WinApi.OpenClipboard(_mainWindowHandle);
+            } else if(nativeFormatStr == DataFormats.Bitmap &&
+                      //WinApi.IsClipboardFormatAvailable(CF_BITMAP)
+                      Clipboard.ContainsImage()) {
                 var bmpSrc = Clipboard.GetImage();
                 if (bmpSrc != null) {
                     byte[] bytes = null;
@@ -68,13 +71,15 @@ namespace CoreClipboardHandler {
                             encoder.Save(stream);
                             bytes = stream.ToArray();
                             stream.Close();
+                            // WinApi.CloseClipboard();
                         }
                         catch (Exception ex) {
                             MpConsole.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
+                            //WinApi.CloseClipboard();
                             return null;
                         }
                     }
-                    if(bytes != null) {
+                    if (bytes != null) {
                         return Convert.ToBase64String(bytes);
                     }
                 }
@@ -82,39 +87,6 @@ namespace CoreClipboardHandler {
                 uint format = GetWin32FormatId(nativeFormatStr);
                 if (format != 0) {
                     if (WinApi.IsClipboardFormatAvailable(format)) {
-                        //WinApi.OpenClipboard(_mainWindowHandle);
-
-                        ////Get pointer to clipboard data in the selected format
-                        //IntPtr ClipboardDataPointer = WinApi.GetClipboardData(format);
-
-                        ////Do a bunch of crap necessary to copy the data from the memory
-                        ////the above pointer points at to a place we can access it.
-                        //IntPtr gLock = WinApi.GlobalLock(ClipboardDataPointer);
-                        //UIntPtr byteCount = WinApi.GlobalSize(ClipboardDataPointer);
-                        
-                        //if (gLock == IntPtr.Zero) {
-                        //    return string.Empty;
-                        //}
-                        ////Init a buffer which will contain the clipboard data
-                        //byte[] bytes = new byte[(int)byteCount];
-
-                        ////Copy clipboard data to buffer
-                        //Marshal.Copy(gLock, bytes, 0, (int)byteCount);
-
-                        //WinApi.GlobalUnlock(gLock); //unlock gLock
-
-                        //WinApi.CloseClipboard();
-
-                        //if (format == CF_BITMAP) {
-                        //    Debugger.Break();
-                        //}
-                        //if (nativeFormatStr == DataFormats.FileDrop) {
-                        //    var test = Encoding.ASCII.GetString(bytes);
-                        //    Debugger.Break();
-                        //}
-
-                        //return System.Text.Encoding.UTF8.GetString(bytes);
-
                         if (WinApi.IsClipboardFormatAvailable(format)) {
                             if (WinApi.OpenClipboard(_mainWindowHandle)) {
                                 IntPtr hGMem = WinApi.GetClipboardData(format);
@@ -158,21 +130,8 @@ namespace CoreClipboardHandler {
             return 0;
         }
 
-        private bool IsClipboardOpen() {
-            var hwnd = WinApi.GetOpenClipboardWindow();
-            return hwnd != IntPtr.Zero;
-
-            //if (hwnd == IntPtr.Zero) {
-            //    return "Unknown";
-            //}
-            //Debugger.Break();
-            //var int32Handle = hwnd.ToInt32();
-            //var len = GetWindowTextLength(int32Handle);
-            //var sb = new StringBuilder(len);
-            //GetWindowText(int32Handle, sb, len);
-            //return sb.ToString();
-        }
-
+        
+        
         private string GetNativeFormatName(MpClipboardFormatType portableType, string fallbackName = "") {
             switch (portableType) {
                 case MpClipboardFormatType.Text:
