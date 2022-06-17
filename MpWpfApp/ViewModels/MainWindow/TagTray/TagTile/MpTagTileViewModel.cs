@@ -658,7 +658,7 @@ namespace MpWpfApp {
                 var ncit = await MpCopyItemTag.Create(TagId, ciid);
                 await ncit.WriteToDatabaseAsync();
             }
-            if(ParentTreeItem != null) {
+            if(ParentTreeItem != null && ParentTreeItem.TagId != MpTag.AllTagId) {
                 await ParentTreeItem.AddContentItem(ciid);
             }
         }

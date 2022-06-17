@@ -9,7 +9,6 @@
            d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                             IsDesignTimeCreatable=False}">
     <Image x:Name="ContentImage"
-           Loaded="ContentImage_Loaded"
            Source="{Binding CopyItemData,
                             Converter={StaticResource Base64StringToBitmapSourceConverter}}"
            Width="{Binding ClipTileContentDefaultWidth,

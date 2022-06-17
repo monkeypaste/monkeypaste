@@ -170,7 +170,7 @@ namespace MpClipboardHelper {
             var ndo = new MpPortableDataObject();
 
             foreach (var clipboardHandler in _clipboardHandlers) {
-                ndo = clipboardHandler.HandleDataObject(ndo);
+                ndo = clipboardHandler.GetClipboardData();
             }
             if(ndo.DataFormatLookup.Where(x=>x.Value != null).Count() > 0) {
                 MpConsole.WriteLine("CB Changed: " + DateTime.Now);

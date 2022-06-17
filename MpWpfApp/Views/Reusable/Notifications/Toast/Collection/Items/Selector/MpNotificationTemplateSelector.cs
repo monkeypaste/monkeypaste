@@ -18,7 +18,9 @@ namespace MpWpfApp {
             
             if(item is MpUserActionNotificationViewModel) {
                 keyString = @"UserActionNotificationTemplate";
-            } else if(item is MpLoaderNotificationViewModel) {
+            } else if (item is MpMessageNotificationViewModel) {
+                keyString = @"MessageNotificationTemplate";
+            } else if (item is MpLoaderNotificationViewModel) {
                 keyString = @"LoaderNotificationTemplate";
             } else {
                 throw new Exception("Unknown notification template");

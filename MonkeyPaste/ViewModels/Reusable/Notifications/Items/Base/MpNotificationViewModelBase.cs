@@ -87,10 +87,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public bool HasUserOptions => DialogType != MpNotificationDialogType.Message && 
-                                     (ExceptionType == MpNotificationExceptionSeverityType.WarningWithOption ||
-                                      ExceptionType == MpNotificationExceptionSeverityType.ErrorWithOption);
-
         public bool IsStartupNotification => DialogType == MpNotificationDialogType.StartupLoader;
 
         public bool IsLoaderNotification => DialogType == MpNotificationDialogType.Loader;

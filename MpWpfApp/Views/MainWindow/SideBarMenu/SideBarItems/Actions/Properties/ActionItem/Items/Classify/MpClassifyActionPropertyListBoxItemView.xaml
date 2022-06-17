@@ -34,8 +34,8 @@
                       Grid.Column="1"
                       Style="{StaticResource ActionPropertyComboBoxStyle}"
                       IsDropDownOpen="{Binding IsAnyDropDownOpen,
-                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
-                                                   Mode=OneWayToSource}"
+                                               Source={x:Static local:MpMainWindowViewModel.Instance},
+                                               Mode=OneWayToSource}"
                       MinWidth="150"
                       IsSynchronizedWithCurrentItem="False"
                       SelectedItem="{Binding SelectedTag,
@@ -45,14 +45,19 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="3"
+                                    Visibility="{Binding DataContext.SelectedTag,
+                                                         RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                        AncestorType=ComboBox},
+                                                         Converter={StaticResource IsNotNullToVisibilityConverter}}"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Stretch">
-                            <Border BorderThickness="0.7" CornerRadius="5"
-                                   BorderBrush="LightGray" 
-                                   Background="{Binding TagHexColor,
-                                                        Converter={StaticResource StringHexToBrushConverter}}"
-                                   Width="15"
-                                   Height="15">
+                            <Border BorderThickness="0.7"
+                                    CornerRadius="5"
+                                    BorderBrush="LightGray"
+                                    Background="{Binding TagHexColor,
+                                                         Converter={StaticResource StringHexToBrushConverter}}"
+                                    Width="15"
+                                    Height="15">
                                 <Border.Margin>
                                     <MultiBinding Converter="{StaticResource TagIdToThicknessNameConverter}">
                                         <Binding Path="DataContext.TagId"

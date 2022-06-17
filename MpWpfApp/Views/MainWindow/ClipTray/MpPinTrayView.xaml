@@ -5,6 +5,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
                      x:TypeArguments="local:MpClipTrayViewModel"
                      mc:Ignorable="d"
                      d:DataContext="{d:DesignInstance Type=local:MpClipTrayViewModel,
@@ -37,7 +38,7 @@
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <local:MpListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" />
+                        <wpftk:VirtualizingWrapPanel IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </local:MpListBox.ItemsPanel>
                 <local:MpListBox.ItemContainerStyle>

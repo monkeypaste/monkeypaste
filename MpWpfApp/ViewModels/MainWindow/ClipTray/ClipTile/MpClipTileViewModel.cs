@@ -875,14 +875,16 @@ using MpProcessHelper;
                 if (TemplateCollection != null && TemplateCollection.IsAnyBusy) {
                     return true;
                 }
-                if (AppViewModel != null && AppViewModel.IsBusy) {
-                    return true;
-                }
-                if (UrlViewModel != null && UrlViewModel.IsBusy) {
-                    return true;
-                }
-                if (SourceViewModel != null && SourceViewModel.IsBusy) {
-                    return true;
+                if(SourceViewModel != null) {
+                    if (AppViewModel != null && AppViewModel.IsBusy) {
+                        return true;
+                    }
+                    if (UrlViewModel != null && UrlViewModel.IsBusy) {
+                        return true;
+                    }
+                    if (SourceViewModel != null && SourceViewModel.IsBusy) {
+                        return true;
+                    }
                 }
                 return false;
             }

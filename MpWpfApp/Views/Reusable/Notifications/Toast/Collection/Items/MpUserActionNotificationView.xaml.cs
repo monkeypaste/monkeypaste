@@ -22,5 +22,11 @@ namespace MpWpfApp {
         public MpUserActionNotificationView() {
             InitializeComponent();
         }
+
+        
+
+        private void FixButton_Click(object sender, RoutedEventArgs e) {
+            BindingContext.IsFixing = true;
+        }
     }
 }

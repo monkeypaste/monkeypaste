@@ -135,7 +135,7 @@ namespace MpWpfApp {
             //    return true;
             //}
             //return false;
-            DragData = MpWpfDataObjectHelper.Instance.ConvertToSupportedPortableFormats(extDragData);
+            DragData = MpPlatformWrapper.Services.DataObjectHelper.ConvertToSupportedPortableFormats(extDragData);
             //if(DragData != null) {
             //    MpConsole.WriteLine((DragData as MpPortableDataObject).ToJson().ToPrettyPrintJson());
             //}

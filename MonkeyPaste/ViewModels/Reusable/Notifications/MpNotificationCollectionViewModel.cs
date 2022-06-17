@@ -80,14 +80,14 @@ namespace MonkeyPaste {
             double maxShowTimeMs = 3000,
             MpNotificationDialogType msgType = MpNotificationDialogType.Message,
             object iconResourcePathOrBase64 = null) {
-            await ShowUserAction(
+            await ShowNotification(
                 dialogType: msgType,
                 title: title,
                 msg: msg,
                 maxShowTimeMs: maxShowTimeMs,
                 iconResourcePathOrBase64: iconResourcePathOrBase64);
         }
-        public async Task<MpDialogResultType> ShowUserAction(
+        public async Task<MpDialogResultType> ShowNotification(
             MpNotificationDialogType dialogType = MpNotificationDialogType.None,
             MpNotificationExceptionSeverityType exceptionType = MpNotificationExceptionSeverityType.None,
             string title = "",
@@ -95,13 +95,14 @@ namespace MonkeyPaste {
             double maxShowTimeMs = -1,
             Action<object> retryAction = null,
             object retryActionObj = null,
-            object iconResourcePathOrBase64 = null) {
-
-            MpDialogResultType userActionResult = MpDialogResultType.None;
+            object iconResourcePathOrBase64 = null,
+            ICommand fixCommand = null,
+            object fixCommandArgs = null) {
+                        
 
             if (DoNotShowNotificationIds.Contains((int)dialogType)) {
                 MpConsole.WriteTraceLine($"Notification: {dialogType.ToString()} marked as hidden");
-                userActionResult = MpDialogResultType.Ignore;
+                return MpDialogResultType.Ignore;
             }
 
             if (string.IsNullOrEmpty(title)) {
@@ -115,20 +116,32 @@ namespace MonkeyPaste {
                 title += dialogType.EnumToLabel();
             }
 
-            var unvm = new MpUserActionNotificationViewModel(this) {
-                DialogType = dialogType,
-                ExceptionType = exceptionType,
-                Title = title,
-                Body = msg
-            };
-
-            Notifications.Add(unvm);
-            //OnPropertyChanged(nameof(CurrentNotificationViewModel));
-
-            //if (!IsVisible) 
-            {
-                ShowBalloon(unvm);
+            MpNotificationViewModelBase nvm;
+            switch(dialogType) {
+                case MpNotificationDialogType.Message:
+                    nvm = new MpMessageNotificationViewModel(this) {
+                        DialogType = dialogType,
+                        ExceptionType = exceptionType,
+                        Title = title,
+                        Body = msg
+                    };
+                    break;
+                default:
+                    nvm = new MpUserActionNotificationViewModel(this) {
+                        DialogType = dialogType,
+                        ExceptionType = exceptionType,
+                        Title = title,
+                        Body = msg,
+                        FixCommand = fixCommand,
+                        FixCommandArgs = fixCommandArgs
+                    };
+                    break;
             }
+
+
+            Notifications.Add(nvm);
+
+            ShowBalloon(nvm);
 
             MpConsole.WriteLines(
                 $"Notification balloon set to:",
@@ -136,31 +149,30 @@ namespace MonkeyPaste {
                 $"type: '{dialogType.ToString()}'",
                 $"severity: '{exceptionType.ToString()}'");
 
-            if (maxShowTimeMs > 0) {
-                DateTime startTime = DateTime.Now;
-                while (unvm.DialogResult == MpDialogResultType.None &&
-                        DateTime.Now - startTime <= TimeSpan.FromMilliseconds(maxShowTimeMs)) {
-                    await Task.Delay(100);
-
-                    while(unvm.IsHovering) {
+            MpDialogResultType result = MpDialogResultType.None;
+            if(nvm is MpMessageNotificationViewModel) {
+                if (maxShowTimeMs > 0) {
+                    DateTime startTime = DateTime.Now;
+                    while (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(maxShowTimeMs)) {
                         await Task.Delay(100);
+
+                        while (nvm.IsHovering) {
+                            await Task.Delay(100);
+                        }
                     }
                 }
-            } else {
-                while (unvm.DialogResult == MpDialogResultType.None) {
+            } else if(nvm is MpUserActionNotificationViewModel uanvm) {
+                while (uanvm.DialogResult == MpDialogResultType.None) {
                     await Task.Delay(100);
+                }
+                if (uanvm.DialogResult == MpDialogResultType.Retry &&
+                   retryAction != null) {
+                    retryAction.Invoke(retryActionObj);
                 }
             }
 
-            RemoveNotificationCommand.Execute(unvm);
-
-            if (unvm.DialogResult == MpDialogResultType.Retry &&
-               retryAction != null) {
-                retryAction.Invoke(retryActionObj);
-            }
-            userActionResult = unvm.DialogResult;
-
-            return userActionResult;
+            RemoveNotificationCommand.Execute(nvm);
+            return result;
         }
 
         public async Task BeginLoader(MpIProgressLoader loader) {

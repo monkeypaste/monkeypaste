@@ -107,6 +107,9 @@ namespace MpWpfApp {
 
         #region Selection
         private async void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                return;
+            }
             BindingContext.RefreshAllCommands();
             if(!MpResizeBehavior.IsAnyResizing) {
                 // BUG when reseting tile size this throws a collection changed while enumerating error

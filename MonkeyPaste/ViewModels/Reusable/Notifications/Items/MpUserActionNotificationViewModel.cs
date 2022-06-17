@@ -12,26 +12,32 @@ namespace MonkeyPaste {
         Cancel,
         Ignore,
         Retry,
+        Fix,
         Shutdown
     }
-
     public class MpUserActionNotificationViewModel : MpNotificationViewModelBase {
         #region Properties
 
         #region State
 
-        public bool ShowIgnoreButton => HasUserOptions;
+        public bool IsFixing { get; set; } = false;
 
-        public bool ShowRetryButton => HasUserOptions;
+        public bool CanFix => FixCommand != null && FixCommandArgs != null;
 
-        public bool ShowShutdownButton => HasUserOptions;
+        public bool ShowFixButton => CanFix && !IsFixing;
 
+        public bool ShowRetryButton => IsFixing;
+
+        public bool ShowShutdownButton => !CanFix;
         public MpDialogResultType DialogResult { get; private set; }
 
         #endregion
 
         #region Model
 
+        public object FixCommandArgs { get; set; }
+
+        public ICommand FixCommand { get; set; }
         #endregion
 
         #endregion
@@ -62,12 +68,15 @@ namespace MonkeyPaste {
                 DialogResult = MpDialogResultType.Retry;
             });
 
+
         public ICommand ShutdownCommand => new MpCommand(
             () => {
                 DialogResult = MpDialogResultType.Shutdown;
                 // TODO should have global shutdown workflow instead of just shutting down maybe
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             });
+
+
 
         #endregion
     }

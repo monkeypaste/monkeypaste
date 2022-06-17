@@ -99,20 +99,13 @@ namespace MpWpfApp {
         }
 
         private void MainWindow_Deactivated(object sender, EventArgs e) {
-            PerformMainWindowHide();
+            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
         }
 
-        private void PerformMainWindowHide() {
-            var mwvm = DataContext as MpMainWindowViewModel;
-            if (mwvm.IsResizing || MpDragDropManager.IsDragAndDrop || MpContextMenuView.Instance.IsOpen) {
-                return;
-            }
-            mwvm.HideWindowCommand.Execute(null);
-        }
 
         private void MainWindowCanvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             if (Mouse.GetPosition(this).Y < 0) {
-                PerformMainWindowHide();
+                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             }
         }
 

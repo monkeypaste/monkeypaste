@@ -44,8 +44,9 @@
                                             Converter={StaticResource BoolToVisibilityFlipConverter}}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Source="{Binding Source={x:Static pcl:MpBase64Images.Warning},
-                                        Converter={StaticResource Base64StringToBitmapSourceConverter}}" />
+                       Source="{Binding .,
+                                        Converter={StaticResource StringResourceToImageSourceConverter},
+                                        ConverterParameter={StaticResource WarningIcon}}" />
             </Grid>
         </local:MpOneWayToggleButton>
         <Image Margin="5,0,0,0"

@@ -401,6 +401,7 @@ namespace MpWpfApp {
         
 
         #endregion
+
         #region Private Methods
 
         private async Task UpdateSortOrder() {
@@ -532,6 +533,25 @@ namespace MpWpfApp {
 
                 IsBusy = false;
             });
+
+        public ICommand SelectActionCommand => new RelayCommand<object>(
+            (args) => {
+                if(args == null) {
+                    return;
+                }
+                if(args is int actionId) {
+                    var actionToSelect = AllActions.FirstOrDefault(x => x.ActionId == actionId);
+                    if(actionToSelect == null) {
+                        return;
+                    }
+                    if (!IsSidebarVisible) {
+                        IsSidebarVisible = true;
+                    }
+                    SelectedItem = actionToSelect.RootTriggerActionViewModel;
+                    SelectedItem.AllChildren.ForEach(x => x.IsSelected = x.ActionId == actionId);
+                }
+            });
+
 
         #endregion
     }

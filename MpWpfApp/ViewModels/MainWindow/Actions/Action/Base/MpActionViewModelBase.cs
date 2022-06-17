@@ -1,17 +1,14 @@
-﻿using Azure;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public abstract class MpActionOutput {
@@ -36,7 +33,7 @@ namespace MpWpfApp {
         private double _maxDeltaLocation = 10;
 
         private Point _lastLocation;
-        
+
 
         #endregion
 
@@ -47,11 +44,11 @@ namespace MpWpfApp {
         public MpActionViewModelBase ParentActionViewModel { get; set; }
 
         //public MpEmptyActionViewModel AddChildEmptyActionViewModel => Items.FirstOrDefault(x => x is MpEmptyActionViewModel) as MpEmptyActionViewModel;
-        
+
         public MpTriggerActionViewModelBase RootTriggerActionViewModel {
             get {
                 var rtavm = this;
-                while(rtavm.ParentActionViewModel != null) {
+                while (rtavm.ParentActionViewModel != null) {
                     rtavm = rtavm.ParentActionViewModel;
                 }
                 return rtavm as MpTriggerActionViewModelBase;
@@ -94,7 +91,7 @@ namespace MpWpfApp {
                 } else if (this is MpShortcutTriggerViewModel) {
                     toolTipStr = "Shortcut - Triggered when the recorded shortcut is pressed on the currently selected content";
                 }
-                     
+
                 return toolTipStr;
             }
         }
@@ -143,7 +140,7 @@ namespace MpWpfApp {
         #endregion
 
         #region MpISelectableViewModel Implementation
-        
+
         public bool IsSelected { get; set; } = false;
 
         #endregion
@@ -181,11 +178,11 @@ namespace MpWpfApp {
                             break;
                     }
                     bool isVisible = true;
-                    if(at == MpActionType.None || at == MpActionType.Trigger) {
+                    if (at == MpActionType.None || at == MpActionType.Trigger) {
                         isVisible = false;
                     }
-                    if(GetType().IsSubclassOf(typeof(MpTriggerActionViewModelBase)) && 
-                       GetType() != typeof(MpCompareActionViewModelBase) && 
+                    if (GetType().IsSubclassOf(typeof(MpTriggerActionViewModelBase)) &&
+                       GetType() != typeof(MpCompareActionViewModelBase) &&
                        at == MpActionType.Macro) {
                         isVisible = false;
                     }
@@ -209,13 +206,15 @@ namespace MpWpfApp {
 
         public string BorderBrushHexColor {
             get {
-                if(Parent != null && Parent.PrimaryAction != null && Parent.PrimaryAction.ActionId == ActionId) {
-                    if(IsEnabled.HasValue && IsEnabled.Value) {
+                if (Parent != null &&
+                   Parent.PrimaryAction != null &&
+                   Parent.PrimaryAction.ActionId == ActionId) {
+                    if (IsEnabled.HasValue && IsEnabled.Value) {
                         return MpSystemColors.limegreen;
                     }
                     return MpSystemColors.IsSelectedBorderColor;
                 }
-                if(IsHovering) {
+                if (IsHovering) {
                     return MpSystemColors.IsHoveringBorderColor;
                 }
                 return MpSystemColors.Transparent;
@@ -224,7 +223,7 @@ namespace MpWpfApp {
 
         public string LabelBorderBrushHexColor {
             get {
-                if(IsHoveringOverLabel || IsLabelFocused) {
+                if (IsHoveringOverLabel || IsLabelFocused) {
                     return MpSystemColors.White;
                 }
                 return MpSystemColors.Transparent;
@@ -251,62 +250,64 @@ namespace MpWpfApp {
 
         public string IconResourceKeyStr {
             get {
-                if(!IsValid) {
-                    return "WarningIcon";
-                }
                 string resourceKey = string.Empty;
-                switch (ActionType) {
-                    case MpActionType.Trigger:
-                        switch ((MpTriggerType)ActionObjId) {
-                            case MpTriggerType.ContentAdded:
-                                resourceKey = "ClipboardIcon";
-                                break;
-                            case MpTriggerType.ContentTagged:
-                                resourceKey = "PinToCollectionIcon";
-                                break;
-                            case MpTriggerType.FileSystemChange:
-                                resourceKey = "FolderEventIcon";
-                                break;
-                            case MpTriggerType.Shortcut:
-                                resourceKey = "HotkeyIcon";
-                                break;
-                            case MpTriggerType.ParentOutput:
-                                resourceKey = "ChainIcon";
-                                break;
-                        }
-                        break;
-                    case MpActionType.Analyze:
-                        resourceKey = "BrainIcon";
-                        break;
-                    case MpActionType.Classify:
-                        resourceKey = "PinToCollectionIcon";
-                        break;
-                    case MpActionType.Compare:
-                        resourceKey = "ScalesIcon";
-                        break;
-                    case MpActionType.Macro:
-                        resourceKey = "HotkeyIcon";
-                        break;
-                    case MpActionType.Timer:
-                        resourceKey = "AlarmClockIcon";
-                        break;
-                    case MpActionType.FileWriter:
-                        resourceKey = "WandIcon";
-                        break;
-                    case MpActionType.None:
-                        resourceKey = "QuestionMarkIcon";
-                        break;
+                if (IsValid) {
+                    switch (ActionType) {
+                        case MpActionType.Trigger:
+                            switch ((MpTriggerType)ActionObjId) {
+                                case MpTriggerType.ContentAdded:
+                                    resourceKey = "ClipboardIcon";
+                                    break;
+                                case MpTriggerType.ContentTagged:
+                                    resourceKey = "PinToCollectionIcon";
+                                    break;
+                                case MpTriggerType.FileSystemChange:
+                                    resourceKey = "FolderEventIcon";
+                                    break;
+                                case MpTriggerType.Shortcut:
+                                    resourceKey = "HotkeyIcon";
+                                    break;
+                                case MpTriggerType.ParentOutput:
+                                    resourceKey = "ChainIcon";
+                                    break;
+                            }
+                            break;
+                        case MpActionType.Analyze:
+                            resourceKey = "BrainIcon";
+                            break;
+                        case MpActionType.Classify:
+                            resourceKey = "PinToCollectionIcon";
+                            break;
+                        case MpActionType.Compare:
+                            resourceKey = "ScalesIcon";
+                            break;
+                        case MpActionType.Macro:
+                            resourceKey = "HotkeyIcon";
+                            break;
+                        case MpActionType.Timer:
+                            resourceKey = "AlarmClockIcon";
+                            break;
+                        case MpActionType.FileWriter:
+                            resourceKey = "WandIcon";
+                            break;
+                        case MpActionType.None:
+                            resourceKey = "QuestionMarkIcon";
+                            break;
+                    }
+                } else {
+                    resourceKey = "WarningIcon";
                 }
+
                 return Application.Current.Resources[resourceKey] as string;
             }
         }
 
         public string FullName {
             get {
-                if(Action == null) {
+                if (Action == null) {
                     return null;
                 }
-                if(ParentActionViewModel == null) {
+                if (ParentActionViewModel == null) {
                     return Label;
                 }
 
@@ -316,7 +317,7 @@ namespace MpWpfApp {
 
         public string EnableToggleButtonShapeHexColor {
             get {
-                if(!IsEnabled.HasValue) {
+                if (!IsEnabled.HasValue) {
                     return MpSystemColors.Yellow;
                 }
                 return IsEnabled.Value ? MpSystemColors.limegreen : MpSystemColors.Red;
@@ -363,9 +364,9 @@ namespace MpWpfApp {
         public bool HasDescription => !string.IsNullOrEmpty(Description);
 
         public bool IsRootAction => ParentActionId == 0 && this is MpTriggerActionViewModelBase;
-        
+
         public bool LastIsEnabledState { get; set; } = false;
-       
+
         public bool? IsEnabled { get; set; } = false;
 
         public bool IsEditingDetails { get; set; }
@@ -405,7 +406,7 @@ namespace MpWpfApp {
                 return new Point(X, Y);
             }
             set {
-                if(Location != value) {
+                if (Location != value) {
                     X = value.X;
                     Y = value.Y;
                     OnPropertyChanged(nameof(Location));
@@ -456,13 +457,13 @@ namespace MpWpfApp {
 
         public string Arg1 {
             get {
-                if(Action == null) {
+                if (Action == null) {
                     return string.Empty;
                 }
                 return Action.Arg1;
             }
             set {
-                if(Arg1 != value) {
+                if (Arg1 != value) {
                     Action.Arg1 = value; // NOTE no HasModelChanged for abstract fields
                     OnPropertyChanged(nameof(Arg1));
                 }
@@ -612,7 +613,7 @@ namespace MpWpfApp {
                 if (Action == null) {
                     return null;
                 }
-                if(string.IsNullOrEmpty(Action.Label)) {
+                if (string.IsNullOrEmpty(Action.Label)) {
                     return ActionType.EnumToLabel();
                 }
                 return Action.Label;
@@ -642,7 +643,7 @@ namespace MpWpfApp {
             }
         }
 
-        
+
 
 
         public int ParentActionId {
@@ -653,7 +654,7 @@ namespace MpWpfApp {
                 return Action.ParentActionId;
             }
             set {
-                if(ParentActionId != value) {
+                if (ParentActionId != value) {
                     Action.ParentActionId = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ParentActionId));
@@ -663,7 +664,7 @@ namespace MpWpfApp {
 
         public int ActionId {
             get {
-                if(Action == null) {
+                if (Action == null) {
                     return 0;
                 }
                 return Action.Id;
@@ -722,7 +723,7 @@ namespace MpWpfApp {
             //    Items.Add(eavm);
             //}
 
-            if(!IsPlaceholder) {
+            if (!IsPlaceholder) {
                 var cal = await MpDataModelProvider.GetChildActions(ActionId);
 
                 foreach (var ca in cal.OrderBy(x => x.SortOrderIdx)) {
@@ -787,16 +788,16 @@ namespace MpWpfApp {
         //}
 
         public void OnActionTriggered(object sender, object args) {
-            if(!IsEnabled.HasValue) {
+            if (!IsEnabled.HasValue) {
                 //if action has errors halt 
                 return;
             }
-            if(!IsEnabled.Value) {
+            if (!IsEnabled.Value) {
                 //if action is disabled pass parent output to child
                 OnActionComplete?.Invoke(this, args);
                 return;
             }
-            Task.Run(()=>PerformAction(args).FireAndForgetSafeAsync(this));
+            Task.Run(() => PerformAction(args).FireAndForgetSafeAsync(this));
         }
 
 
@@ -805,7 +806,7 @@ namespace MpWpfApp {
                 return;
             }
 
-            if(arg is MpActionOutput ao) {
+            if (arg is MpActionOutput ao) {
                 MpConsole.WriteLine("");
                 MpConsole.WriteLine($"Action({ActionId}) '{Label}' Completed Successfully");
                 MpConsole.WriteLine(ao.ActionDescription);
@@ -835,25 +836,42 @@ namespace MpWpfApp {
         #region Protected Methods
 
         protected async Task ShowValidationNotification() {
-            bool wasBusy = IsBusy;
-            IsBusy = true;
-            var userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
+            //bool wasBusy = IsBusy;
+            //IsBusy = true;
+            //MpDialogResultType userAction = MpDialogResultType.None;
+
+            //await MpHelpers.RunOnMainThreadAsync(async () => {
+            //    userAction = await MpNotificationCollectionViewModel.Instance.ShowUserAction(
+            //        dialogType: MpNotificationDialogType.InvalidAction,
+            //        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
+            //        msg: ValidationText,
+            //        retryAction: async(args)=> { await Validate(); },
+            //        fixCommand: Parent.SelectActionCommand,
+            //        fixCommandArgs: ActionId);
+            //});
+            await Task.Delay(1);
+            MpHelpers.RunOnMainThread(() => {
+                MpNotificationCollectionViewModel.Instance.ShowNotification(
                     dialogType: MpNotificationDialogType.InvalidAction,
                     exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                    msg: ValidationText);
+                    msg: ValidationText,
+                    retryAction: async (args) => { await Validate(); },
+                    fixCommand: Parent.SelectActionCommand,
+                    fixCommandArgs: ActionId).FireAndForgetSafeAsync(this);
+            });
 
 
-            if (userAction == MpDialogResultType.Retry) {
-                if(ParentActionViewModel == null) {
-                    // NOTE parent vm is nulled when invalid action was deleted so is no longer an issue
-                    wasBusy = false;
-                } else {
-                    await Validate();
-                }
-            } else if (userAction == MpDialogResultType.Ignore) {
-                wasBusy = false;
-            }
-            IsBusy = wasBusy;
+            //if (userAction == MpDialogResultType.Retry) {
+            //    if(ParentActionViewModel == null) {
+            //        // NOTE parent vm is nulled when invalid action was deleted so is no longer an issue
+            //        wasBusy = false;
+            //    } else {
+            //        await Validate();
+            //    }
+            //} else if (userAction == MpDialogResultType.Ignore) {
+            //    wasBusy = false;
+            //}
+            //IsBusy = wasBusy;
         }
 
         protected void FinishPerformingAction(object arg) {
@@ -865,7 +883,7 @@ namespace MpWpfApp {
                 // NOTE this should only happen for triggers
                 return new MpTriggerInput() {
                     CopyItem = ci
-                };                
+                };
             } else if (arg is MpActionOutput ao) {
                 return ao;
             }
@@ -873,7 +891,7 @@ namespace MpWpfApp {
         }
 
         protected virtual async Task<bool> Validate() {
-            if(!IsRootAction && ParentActionViewModel == null) {
+            if (!IsRootAction && ParentActionViewModel == null) {
                 // this shouldn't happen...
                 ValidationText = $"Action '{RootTriggerActionViewModel.Label}/{Label}' must be linked to a trigger";
                 await ShowValidationNotification();
@@ -883,8 +901,8 @@ namespace MpWpfApp {
             return IsValid;
         }
 
-        protected virtual async Task Enable() { 
-            await Task.Delay(1); 
+        protected virtual async Task Enable() {
+            await Task.Delay(1);
         }
 
         protected virtual async Task Disable() { await Task.Delay(1); }
@@ -900,12 +918,12 @@ namespace MpWpfApp {
 
 
         protected void ResetArgs(params object[] argNums) {
-            if(argNums == null) {
+            if (argNums == null) {
                 Arg1 = Arg2 = Arg3 = Arg4 = Arg5 = null;
                 return;
             }
             var argNumVals = argNums.Cast<int>().ToArray();
-            if(argNumVals.Contains(1)) {
+            if (argNumVals.Contains(1)) {
                 Arg1 = null;
             }
             if (argNumVals.Contains(2)) {
@@ -959,10 +977,10 @@ namespace MpWpfApp {
         }
 
         private void MpActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        LastSelectedDateTime = DateTime.Now;                        
+                        LastSelectedDateTime = DateTime.Now;
 
                         Parent.AllSelectedTriggerActions.ForEach(x => x.IsExpanded = x.ActionId == ActionId);
                         IsExpanded = true;
@@ -970,7 +988,7 @@ namespace MpWpfApp {
                         IsExpanded = false;
                     }
 
-                    if(this is MpTriggerActionViewModelBase && Parent.SelectedItem != this) {
+                    if (this is MpTriggerActionViewModelBase && Parent.SelectedItem != this) {
                         Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     }
                     Parent.OnPropertyChanged(nameof(Parent.PrimaryAction));
@@ -1010,7 +1028,7 @@ namespace MpWpfApp {
                     _lastLocation = Location;
                     break;
                 case nameof(IsEnabled):
-                    if(!IsEnabled.HasValue) {
+                    if (!IsEnabled.HasValue) {
                         return;
                     }
                     IsEnabledDb = IsEnabled.Value;
@@ -1028,12 +1046,12 @@ namespace MpWpfApp {
                 IsBusy = true;
 
                 bool newIsEnabledState = false;
-                if(parentToggledState != null) {
-                    newIsEnabledState = (bool)parentToggledState;                    
+                if (parentToggledState != null) {
+                    newIsEnabledState = (bool)parentToggledState;
                 } else {
                     newIsEnabledState = !LastIsEnabledState;
                 }
-                
+
                 if (newIsEnabledState) {
                     await Validate();
                     if (!IsValid) {
@@ -1055,7 +1073,7 @@ namespace MpWpfApp {
                 //while(Children.Any(x=>x.IsBusy)) {
                 //    await Task.Delay(100);
                 //}
-                
+
                 IsBusy = false;
             });
 
@@ -1091,7 +1109,7 @@ namespace MpWpfApp {
                                          location: Parent.FindOpenDesignerLocation(Location).ToMpPoint());
 
                  var navm = await CreateActionViewModel(na);
-                 
+
                  Items.Add(navm);
 
                  //AddChildEmptyActionViewModel.IsSelected = false;
@@ -1129,7 +1147,7 @@ namespace MpWpfApp {
                 Parent.OnPropertyChanged(nameof(Parent.AllSelectedTriggerActions));
                 Parent.AllSelectedTriggerActions.Remove(avm);
                 await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
-                
+
                 avm.ParentActionViewModel = null;
 
                 Parent.SelectedItem = RootTriggerActionViewModel;
@@ -1141,7 +1159,7 @@ namespace MpWpfApp {
 
         public ICommand DeleteThisActionCommand => new RelayCommand(
             () => {
-                if(IsRootAction) {
+                if (IsRootAction) {
                     Parent.DeleteTriggerCommand.Execute(this);
                     return;
                 }
@@ -1153,9 +1171,9 @@ namespace MpWpfApp {
             });
 
         public MpIAsyncCommand PerformActionOnSelectedContentCommand => new MpAsyncCommand(
-            async() => {
+            async () => {
                 var cil = MpClipTrayViewModel.Instance.SelectedModels;
-                if(cil == null || cil.Count == 0) {
+                if (cil == null || cil.Count == 0) {
                     return;
                 }
                 IsPerformingActionFromCommand = true;

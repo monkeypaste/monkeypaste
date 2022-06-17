@@ -40,6 +40,8 @@ namespace MonkeyPaste.Common {
         MpPortableDataObject GetPlatformClipboardDataObject();
     }
 
+    
+
     public interface MpIPortableContentDataObject {
         Task<MpPortableDataObject> ConvertToPortableDataObject(
             bool isDragDrop,

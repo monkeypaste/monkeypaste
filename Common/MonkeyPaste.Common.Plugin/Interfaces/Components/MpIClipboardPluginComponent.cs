@@ -2,6 +2,7 @@
 
 namespace MonkeyPaste.Common.Plugin {
     public interface MpIClipboardPluginComponent : MpIPluginComponentBase {
-        MpPortableDataObject HandleDataObject(MpPortableDataObject pdo);
+        MpPortableDataObject GetClipboardData();
+        void SetClipboardData(MpPortableDataObject pdo);
     }
 }

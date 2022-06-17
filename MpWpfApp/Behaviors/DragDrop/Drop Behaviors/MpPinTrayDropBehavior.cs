@@ -183,7 +183,6 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
-            
             if(drag_ctvm != null && !isCopy) {
                 await MpContentDocumentRtfExtension.FinishContentCut(drag_ctvm);
 

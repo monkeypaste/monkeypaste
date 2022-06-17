@@ -25,18 +25,5 @@ namespace MpWpfApp {
         public MpImageParagraph() : base() {
             InitializeComponent();
         }
-
-        private void ContentImage_Loaded(object sender, RoutedEventArgs e) {
-            if(DataContext == null) {
-                return;
-            }
-            var ctvm = DataContext as MpClipTileViewModel;
-
-            ctvm.UnformattedContentSize =
-                new Size(
-                    (ContentImage.Source as BitmapSource).PixelWidth,
-                    (ContentImage.Source as BitmapSource).PixelHeight);
-
-        }
     }
 }

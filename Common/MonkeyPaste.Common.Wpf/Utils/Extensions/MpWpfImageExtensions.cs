@@ -174,6 +174,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
             RenderTargetBitmap bmp = new RenderTargetBitmap((int)source.Width, (int)source.Height, 96, 96, PixelFormats.Pbgra32);
             bmp.Render(drawingVisual);
+            
             return bmp;
         }
 
@@ -220,6 +221,8 @@ namespace MonkeyPaste.Common.Wpf {
             var bmpSrc = (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
             if(freeze) {
                 bmpSrc.Freeze();
+            } else {
+                Debugger.Break();
             }
             return bmpSrc;
         }
@@ -230,8 +233,9 @@ namespace MonkeyPaste.Common.Wpf {
                 return new BitmapImage();
             }
             var bytes = System.Convert.FromBase64String(base64Str);
-            return bytes.ToBitmapSource();
+            return bytes.ToBitmapSource(freeze);
         }
+
         public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset, bool dummy) {
             var height = source.PixelHeight;
             var width = source.PixelWidth;

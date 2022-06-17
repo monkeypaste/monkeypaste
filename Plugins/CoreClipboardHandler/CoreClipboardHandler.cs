@@ -14,33 +14,104 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste.Common.Plugin; 
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
+using System.Collections.Specialized;
 
 namespace CoreClipboardHandler {
-    public class CoreClipboardHandler : MpIClipboardPluginComponent {
+    public class CoreClipboardHandler : 
+        MpIClipboardPluginComponent,
+        MpIPlatformDataObjectHelper {
         #region Private Variables
 
         private IntPtr _mainWindowHandle;
 
         private uint CF_HTML, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15, CF_UNICODE_TEXT, CF_OEM_TEXT;
         #endregion
-        public MpPortableDataObject HandleDataObject(MpPortableDataObject pdo) {
-            if(pdo == null) {
-                return null;
-            }
+
+        #region MpIPlatformDataObjectHelper
+        
+        public MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
+            throw new NotImplementedException();
+        }
+
+        public object ConvertToPlatformClipboardDataObject(MpPortableDataObject portableObj) {
+            throw new NotImplementedException();
+        }
+
+        public void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
+            throw new NotImplementedException();
+        }
+
+        public MpPortableDataObject GetPlatformClipboardDataObject() {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region MpIClipboardPluginComponent
+
+        public MpPortableDataObject GetClipboardData() {
+            var currentOutput = new MpPortableDataObject();
             
             if(!CanHandleDataObject()) {
-                return pdo;
+                return currentOutput;
             }
 
             foreach(var nativeTypeName in MpPortableDataFormats.Formats) {
                 var data = GetClipboardData(nativeTypeName);
 
                 if (!string.IsNullOrEmpty(data)) {
-                    pdo.SetData(nativeTypeName, data);
+                    currentOutput.SetData(nativeTypeName, data);
                 }
             }
-            return pdo;
+            return currentOutput;
         }
+
+        public void SetClipboardData(MpPortableDataObject input) {
+            if(input == null) {
+                return;
+            }
+
+            DataObject dataObj = null;
+            foreach(var kvp in input.DataFormatLookup) {
+                string format = kvp.Key.Name;
+                object data = kvp.Value;
+                switch (format) {
+                    case MpPortableDataFormats.Bitmap:
+                        var bmpSrc = data.ToString().ToBitmapSource(false);
+
+                        var winforms_dataobject = MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
+
+                        //Clipboard.SetData(DataFormats.Bitmap, bmpSrc);
+                        //Clipboard.SetData("PNG", winforms_dataobject.GetData("PNG"));
+                        //Clipboard.SetData(DataFormats.Dib, winforms_dataobject.GetData(DataFormats.Dib));
+                        //dobj.SetImage(data.ToString().ToBitmapSource());
+
+                        //IDataObject ido = new DataObject();
+                        //ido.SetData(DataFormats.Bitmap, new Image() { Source = bmpSrc },true); // true means autoconvert
+
+                        //dobj.SetData(DataFormats.Bitmap, ido.GetData(DataFormats.Bitmap));
+                        var pngData = winforms_dataobject.GetData("PNG");
+                        var dibData = winforms_dataobject.GetData(DataFormats.Dib);
+                        dataObj.SetImage(bmpSrc);
+                        dataObj.SetData("PNG", pngData);
+                        dataObj.SetData(DataFormats.Dib, dibData);
+                        break;
+                    case MpPortableDataFormats.FileDrop:
+                        var fl = data.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                        var sc = new StringCollection();
+                        sc.AddRange(fl);
+                        dataObj.SetFileDropList(sc);
+                        break;
+                    default:
+                        dataObj.SetData(format, data);
+                        break;
+                }
+            }
+
+            Clipboard.SetDataObject(dataObj, true);
+        }
+
+        #endregion
 
 
         private string GetClipboardData(string nativeFormatStr) {
@@ -48,7 +119,8 @@ namespace CoreClipboardHandler {
                 Thread.Sleep(100);
             }
             if(nativeFormatStr == DataFormats.FileDrop &&
-                WinApi.IsClipboardFormatAvailable(CF_HDROP)) {
+                //WinApi.IsClipboardFormatAvailable(CF_HDROP)
+                Clipboard.ContainsFileDropList()) {
 
                 //WinApi.OpenClipboard(_mainWindowHandle);
                 string[] sa = Clipboard.GetData(nativeFormatStr) as string[];                
@@ -178,5 +250,7 @@ namespace CoreClipboardHandler {
             }
             return true;
         }
+
+        
     }
 }

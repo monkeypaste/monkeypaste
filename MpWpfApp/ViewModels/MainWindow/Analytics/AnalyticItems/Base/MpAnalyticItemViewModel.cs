@@ -431,7 +431,7 @@ namespace MpWpfApp {
             bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
             bool needsReset = isNew || isManifestModified;
             if (needsReset) {
-                MpNotificationCollectionViewModel.Instance.ShowUserAction(
+                MpNotificationCollectionViewModel.Instance.ShowNotification(
                     MpNotificationDialogType.AnalyzerUpdated,
                     MpNotificationExceptionSeverityType.Warning,
                     $"Analyzer '{Title}' Updated",

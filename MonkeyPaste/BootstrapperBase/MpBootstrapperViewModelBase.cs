@@ -44,10 +44,10 @@ namespace MonkeyPaste {
         #endregion
 
         public MpBootstrapperViewModelBase(MpIPlatformWrapper niw) {
+            MpPlatformWrapper.Init(niw);
             _items.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpPlatformWrapper),niw),
                     new MpBootstrappedItemViewModel(this,typeof(MpCursor),niw.Cursor),
                     new MpBootstrappedItemViewModel(this,typeof(MpPreferences),niw.PreferenceIO),
                     new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
@@ -62,31 +62,32 @@ namespace MonkeyPaste {
         public abstract Task Init();
 
         protected async Task LoadItem(MpBootstrappedItemViewModel item, int index) {
+            await MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(async() => {
+                MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
 
-            MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
+                var lnvm = MpNotificationCollectionViewModel.Instance.Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
+                if (lnvm == null) {
+                    // NOTE this occurs when warnings exist and loader is finished
+                    return;
+                }
 
-            var lnvm = MpNotificationCollectionViewModel.Instance.Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
-            if (lnvm == null) {
-                // NOTE this occurs when warnings exist and loader is finished
-                return;
-            }
+                //PercentLoaded = (double)(index + 1) / (double)_items.Count;
 
-            //PercentLoaded = (double)(index + 1) / (double)_items.Count;
+                LoadedCount++;
+                OnPropertyChanged(nameof(PercentLoaded));
 
-            LoadedCount++;
-            OnPropertyChanged(nameof(PercentLoaded));
+                OnPropertyChanged(nameof(Detail));
 
-            OnPropertyChanged(nameof(Detail));
+                Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
 
-            Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
+                int dotCount = index % 4;
+                Title = "LOADING";
+                for (int i = 0; i < dotCount; i++) {
+                    Title += ".";
+                }
 
-            int dotCount = index % 4;
-            Title = "LOADING";
-            for (int i = 0; i < dotCount; i++) {
-                Title += ".";
-            }
-
-            await item.LoadItem();
+                await item.LoadItem();
+            });
         }
 
         //protected void ReportItemLoading(MpBootstrappedItemViewModel item, int index) {

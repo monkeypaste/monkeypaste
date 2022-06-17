@@ -7,7 +7,7 @@
         x:Class="MpWpfApp.MpNotificationWindow"
         x:Name="NotificationWindow"
         Title=""
-        MinHeight="125" 
+        MinHeight="125"
         Width="350"
         ShowInTaskbar="False"
         IsVisibleChanged="NotificationWindow_IsVisibleChanged"
@@ -46,6 +46,9 @@
         </Storyboard>
         <DataTemplate x:Key="UserActionNotificationTemplate">
             <local:MpUserActionNotificationView DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="MessageNotificationTemplate">
+            <local:MpMessageNotificationView DataContext="{Binding}" />
         </DataTemplate>
         <DataTemplate x:Key="LoaderNotificationTemplate">
             <local:MpLoaderNotificationView DataContext="{Binding}" />

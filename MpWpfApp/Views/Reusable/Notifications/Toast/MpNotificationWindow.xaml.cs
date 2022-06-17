@@ -59,11 +59,11 @@ namespace MpWpfApp {
         }
 
         private void FadeIn_Completed(object sender, EventArgs e) {
-           
+            MpMainWindowViewModel.Instance.IsShowingDialog = true;
         }
 
         private void FadeOut_Completed(object sender, EventArgs e) {
-            //var nw = sender as MpNotificationWindow;
+            MpMainWindowViewModel.Instance.IsShowingDialog = false;
             _windows.Remove(this);
             this.Close();
         }
@@ -96,6 +96,8 @@ namespace MpWpfApp {
                     nvmb.IsVisible = true;
                 }
 
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
+
                 var fisb = nw.Resources["FadeIn"] as Storyboard;
                 Storyboard.SetTarget(fisb, nw);
 
@@ -112,11 +114,11 @@ namespace MpWpfApp {
             MpHelpers.RunOnMainThread(() => {
                 var nw = _windows.FirstOrDefault(x => x.DataContext == nvmb);
                 var fisb = nw.Resources["FadeOut"] as Storyboard;
-                if(nw !=null) {
+                if(nw != null) {
                     Storyboard.SetTarget(fisb, nw);
                     fisb.Begin();
                 }
-                
+                MpMainWindowViewModel.Instance.IsShowingDialog = false;
             });
         }
 
@@ -143,6 +145,9 @@ namespace MpWpfApp {
                     // give notifications precedence
                     mw.Topmost = false;
                 }
+                
+            } else {
+                
             }
         }
     }
