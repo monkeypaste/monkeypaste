@@ -22,7 +22,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpFileItemParagraph.xaml
     /// </summary>
     public partial class MpTextTemplateInlineUIContainer : InlineUIContainer {
-        public static MpTextTemplateInlineUIContainer Create(TextRange tr, MpTextTemplateViewModel tvm) {
+        public static MpTextTemplateInlineUIContainer Create(TextRange tr, MpTextTemplateViewModelBase tvm) {
             tr.Text = string.Empty;
             var ttiuic = new MpTextTemplateInlineUIContainer(tr, tvm);
             return ttiuic;
@@ -30,7 +30,7 @@ namespace MpWpfApp {
         public MpTextTemplateInlineUIContainer() : base() {
             InitializeComponent();
         }
-        private MpTextTemplateInlineUIContainer(TextRange tr, MpTextTemplateViewModel tvm) : base(null, tr.Start) {
+        private MpTextTemplateInlineUIContainer(TextRange tr, MpTextTemplateViewModelBase tvm) : base(null, tr.Start) {
             DataContext = tvm;
             InitializeComponent();
             //Child = TextTemplateBorder;
@@ -44,7 +44,7 @@ namespace MpWpfApp {
         }
 
         private void InlineUIContainer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            var tvm = DataContext as MpTextTemplateViewModel;
+            var tvm = DataContext as MpTextTemplateViewModelBase;
             if(tvm == null) {
                 Debugger.Break();
                 return;
@@ -70,7 +70,7 @@ namespace MpWpfApp {
         }
 
         private void InlineUIContainer_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            var tvm = DataContext as MpTextTemplateViewModel;
+            var tvm = DataContext as MpTextTemplateViewModelBase;
             if (tvm == null) {
                 Debugger.Break();
                 return;
@@ -135,7 +135,7 @@ namespace MpWpfApp {
         }
 
         private void TextTemplateTextBlock_Loaded(object sender, RoutedEventArgs e) {
-            var tvm = DataContext as MpTextTemplateViewModel;
+            var tvm = DataContext as MpTextTemplateViewModelBase;
 
             MpHelpers.CreateBinding(
                    source: tvm,

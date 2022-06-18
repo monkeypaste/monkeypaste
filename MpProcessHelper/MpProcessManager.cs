@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -26,7 +28,7 @@ namespace MpProcessHelper {
         #region Private Variables
         private static System.Timers.Timer _timer;
 
-        public static IntPtr ThisAppHandle;
+        public static IntPtr ThisAppHandle { get; set; }
 
         //private static string thisAppExe = Path.Combine(System.Windows.Forms.Application.StartupPath, "MpWpfApp.exe");
         //private static MpIconBuilder _ib;
@@ -240,6 +242,28 @@ namespace MpProcessHelper {
             }
         }
 
+        public static bool IsHandleChildOfMainWindow(IntPtr handle) {
+            if(handle == IntPtr.Zero) {
+                return false;
+            }
+            if(handle == ThisAppHandle) {
+                return true;
+            }
+
+            var childProcess = GetProcessByHandle(handle);
+            if(childProcess == null) {
+                return false;
+            }
+            IntPtr parentHandle = WinApi.GetParent(handle);
+            while(parentHandle != null && parentHandle != IntPtr.Zero) {
+                if(parentHandle == ThisAppHandle) {
+                    return true;
+                }
+                parentHandle = WinApi.GetParent(parentHandle);
+            }
+            return false;
+        }
+
         public static string GetMainModuleFilepath(int processId) {
             string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
             using (var searcher = new ManagementObjectSearcher(wmiQueryString)) {
@@ -323,6 +347,8 @@ namespace MpProcessHelper {
             return !isWow64;
         }
 
+
+
         #endregion
 
         #region Private Methods
@@ -363,7 +389,7 @@ namespace MpProcessHelper {
             string processPath = GetProcessPath(LastHandle);
 
             if (hasChanged) {
-                MpConsole.WriteLine(string.Format(@"Last Window: {0} ({1})", LastTitle, LastHandle));
+                MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", LastTitle,LastProcessPath, LastHandle));
                 
                 OnAppActivated?.Invoke(
                     nameof(MpProcessManager), 

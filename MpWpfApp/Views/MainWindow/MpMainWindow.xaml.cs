@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System.Windows.Controls.Primitives;
+using MpProcessHelper;
 
 namespace MpWpfApp {
     public partial class MpMainWindow : Window {
@@ -38,7 +39,6 @@ namespace MpWpfApp {
             SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
 
             var mwvm = DataContext as MpMainWindowViewModel;
-
             
             mwvm.OnMainWindowShow += Mwvm_OnMainWindowShow;
             mwvm.OnMainWindowHidden += Mwvm_OnMainWindowHide;
@@ -99,7 +99,9 @@ namespace MpWpfApp {
         }
 
         private void MainWindow_Deactivated(object sender, EventArgs e) {
-            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+          if(!MpProcessManager.IsHandleChildOfMainWindow(MpProcessManager.LastHandle)) {
+                MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+          }            
         }
 
 

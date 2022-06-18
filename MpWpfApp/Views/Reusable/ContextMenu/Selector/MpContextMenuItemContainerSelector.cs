@@ -33,7 +33,7 @@ namespace MpWpfApp {
             } else {
                 keyStr = "MenuItem";
             }
-            var result = (DataTemplate)Application.Current.Resources[keyStr];
+            var result = (DataTemplate)MpContextMenuView.Instance.Resources[keyStr];
             return result;
         }
     }

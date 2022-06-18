@@ -204,11 +204,11 @@ namespace MpWpfApp {
 
             if (Rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
                Rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-                MpTextTemplateViewModel thlvm = null;
-                if (((TextElement)Rtb.Selection.Start.Parent).DataContext != null && ((TextElement)Rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModel)) {
-                    thlvm = (MpTextTemplateViewModel)((TextElement)Rtb.Selection.Start.Parent).DataContext;
-                } else if (((TextElement)Rtb.Selection.End.Parent).DataContext != null && ((TextElement)Rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModel)) {
-                    thlvm = (MpTextTemplateViewModel)((TextElement)Rtb.Selection.End.Parent).DataContext;
+                MpTextTemplateViewModelBase thlvm = null;
+                if (((TextElement)Rtb.Selection.Start.Parent).DataContext != null && ((TextElement)Rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModelBase)) {
+                    thlvm = (MpTextTemplateViewModelBase)((TextElement)Rtb.Selection.Start.Parent).DataContext;
+                } else if (((TextElement)Rtb.Selection.End.Parent).DataContext != null && ((TextElement)Rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModelBase)) {
+                    thlvm = (MpTextTemplateViewModelBase)((TextElement)Rtb.Selection.End.Parent).DataContext;
                 }
                 canAddTemplate = thlvm == null;
             }
@@ -303,7 +303,12 @@ namespace MpWpfApp {
             dlg.PageRangeSelection = PageRangeSelection.AllPages;
             dlg.UserPageRangeEnabled = true;
             // Show and process save file dialog box results
-            if (dlg.ShowDialog() == true) {
+            MpMainWindowViewModel.Instance.IsShowingDialog = true;
+
+            var result = dlg.ShowDialog();
+
+            MpMainWindowViewModel.Instance.IsShowingDialog = false;
+            if (result.HasValue && result.Value == true) {
                 //use either one of the below    
                 // dlg.PrintVisual(RichTextControl as Visual, "printing as visual");
                 dlg.PrintDocument((((IDocumentPaginatorSource)Rtb.Document).DocumentPaginator), "Printing Clipboard Item");

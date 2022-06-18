@@ -544,10 +544,8 @@ namespace MonkeyPaste.Common.Wpf {
 
         public static BitmapSource ToBitmapSource(
             this FlowDocument document, 
-            Size? docSize = null, 
-            Brush bgBrush = null) {
+            Size? docSize = null) {
             var size = docSize.HasValue ? docSize.Value : document.GetDocumentSize();
-            bgBrush = bgBrush == null ? Brushes.White : bgBrush;
 
             if (size.Width <= 0) {
                 size.Width = 1;
@@ -563,6 +561,7 @@ namespace MonkeyPaste.Common.Wpf {
             document.ColumnWidth = size.Width;
             document.PageWidth = size.Width;
             document.PageHeight = size.Height;
+            document.Background = document.Background == null ? Brushes.White : document.Background;
 
             var paginator = ((IDocumentPaginatorSource)document).DocumentPaginator;
             paginator.PageSize = size;
@@ -570,7 +569,7 @@ namespace MonkeyPaste.Common.Wpf {
             var visual = new DrawingVisual();
             using (var drawingContext = visual.RenderOpen()) {
                 // draw white background
-                drawingContext.DrawRectangle(bgBrush ?? Brushes.White, null, new Rect(size));
+                drawingContext.DrawRectangle(document.Background, null, new Rect(size));
             }
             visual.Children.Add(paginator.GetPage(0).Visual);
             var bitmap = new RenderTargetBitmap(

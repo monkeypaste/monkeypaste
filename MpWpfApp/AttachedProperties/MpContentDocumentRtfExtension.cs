@@ -177,7 +177,13 @@ namespace MpWpfApp {
                                        .Select(x => (x.Source as BitmapSource).ToBase64String())
                                        .FirstOrDefault();
                 case MpCopyItemType.Text:
-                    TextRange tr = ignoreSubSelection ? rtb.Document.ContentRange() : rtb.Selection;
+                    TextRange tr = null;
+                    if(ignoreSubSelection || rtb.Selection.IsEmpty) {
+                        tr = rtb.Document.ContentRange();
+                    } else {
+                        tr = rtb.Selection;
+                    }
+                    //ignoreSubSelection ? rtb.Document.ContentRange() : rtb.Selection;
                     return asPlainText ? tr.ToEncodedPlainText() : tr.ToEncodedRichText();
             }
             MpConsole.WriteTraceLine("Unknown item type " + ctvm);
@@ -431,7 +437,7 @@ namespace MpWpfApp {
                 if(templateItem == null) {
                     Debugger.Break();
                 }
-                MpTextTemplateViewModel tvm = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
+                MpTextTemplateViewModelBase tvm = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
                 if (tvm == null) {
                     // only add one distinct tvm to tcvm
                     tvm = await tcvm.CreateTemplateViewModel(templateItem);

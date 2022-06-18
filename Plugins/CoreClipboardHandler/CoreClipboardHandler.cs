@@ -71,7 +71,7 @@ namespace CoreClipboardHandler {
                 return;
             }
 
-            DataObject dataObj = null;
+            DataObject dataObj = new DataObject();
             foreach(var kvp in input.DataFormatLookup) {
                 string format = kvp.Key.Name;
                 object data = kvp.Value;
@@ -80,16 +80,6 @@ namespace CoreClipboardHandler {
                         var bmpSrc = data.ToString().ToBitmapSource(false);
 
                         var winforms_dataobject = MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
-
-                        //Clipboard.SetData(DataFormats.Bitmap, bmpSrc);
-                        //Clipboard.SetData("PNG", winforms_dataobject.GetData("PNG"));
-                        //Clipboard.SetData(DataFormats.Dib, winforms_dataobject.GetData(DataFormats.Dib));
-                        //dobj.SetImage(data.ToString().ToBitmapSource());
-
-                        //IDataObject ido = new DataObject();
-                        //ido.SetData(DataFormats.Bitmap, new Image() { Source = bmpSrc },true); // true means autoconvert
-
-                        //dobj.SetData(DataFormats.Bitmap, ido.GetData(DataFormats.Bitmap));
                         var pngData = winforms_dataobject.GetData("PNG");
                         var dibData = winforms_dataobject.GetData(DataFormats.Dib);
                         dataObj.SetImage(bmpSrc);

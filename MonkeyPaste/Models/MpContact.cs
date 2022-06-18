@@ -5,6 +5,13 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
+    public enum MpContactFieldType {
+        None = 0,
+        FirstName,
+        LastName,
+        Email
+    }
+
     public class MpContact {
         public string FirstName { get; set; }
         public string LastName { get; set; }

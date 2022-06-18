@@ -178,14 +178,15 @@ namespace MonkeyPaste.Common.Wpf {
             return bmp;
         }
 
-        public static System.Drawing.Bitmap ToBitmap(this BitmapSource bitmapsource) {
+        public static System.Drawing.Bitmap ToBitmap(this BitmapSource bitmapsource, System.Drawing.Color? transColor = null) {
+            transColor = !transColor.HasValue ? System.Drawing.Color.Black : transColor.Value;
             using (MemoryStream outStream = new MemoryStream()) {
                 System.Windows.Media.Imaging.BitmapEncoder enc = new BmpBitmapEncoder();
                 enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bitmapsource));
                 enc.Save(outStream);
                 var bmp = new System.Drawing.Bitmap(outStream);
 
-                bmp.MakeTransparent();
+                bmp.MakeTransparent(transColor.Value);
 
                 double dpiX = MpScreenInformation.DpiX;
                 double dpiY = MpScreenInformation.DpiY;
@@ -221,9 +222,7 @@ namespace MonkeyPaste.Common.Wpf {
             var bmpSrc = (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
             if(freeze) {
                 bmpSrc.Freeze();
-            } else {
-                Debugger.Break();
-            }
+            } 
             return bmpSrc;
         }
 

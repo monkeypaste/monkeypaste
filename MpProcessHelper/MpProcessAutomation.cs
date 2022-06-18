@@ -6,10 +6,13 @@ using static MpProcessHelper.MpProcessManager;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Linq;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text;
+
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace MpProcessHelper {

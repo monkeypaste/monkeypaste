@@ -178,7 +178,7 @@ namespace MpWpfApp {
 
                  IsActionParameter = fe.GetVisualAncestor<MpTriggerActionChooserView>() != null;
 
-                 var cm = new MpContextMenuView();
+                 var cm = MpContextMenuView.Instance;
                  cm.DataContext = MenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;

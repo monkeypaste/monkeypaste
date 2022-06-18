@@ -16,7 +16,7 @@ using System.Diagnostics;
 
 namespace MpWpfApp {
     public class MpTemplateCollectionViewModel : 
-        MpSelectorViewModelBase<MpClipTileViewModel,MpTextTemplateViewModel>,
+        MpSelectorViewModelBase<MpClipTileViewModel,MpTextTemplateViewModelBase>,
         MpIMenuItemViewModel {
         #region Private Variables
         #endregion
@@ -51,7 +51,7 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<MpTextTemplateViewModel> PastableItems { get; set; } = new ObservableCollection<MpTextTemplateViewModel>();
+        public ObservableCollection<MpTextTemplateViewModelBase> PastableItems { get; set; } = new ObservableCollection<MpTextTemplateViewModelBase>();
 
         #endregion
 
@@ -84,8 +84,8 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task<MpTextTemplateViewModel> CreateTemplateViewModel(MpTextTemplate cit) {
-            MpTextTemplateViewModel tvm = new MpTextTemplateViewModel(this);
+        public async Task<MpTextTemplateViewModelBase> CreateTemplateViewModel(MpTextTemplate cit) {
+            MpTextTemplateViewModelBase tvm = new MpTextTemplateViewModelBase(this);
             await tvm.InitializeAsync(cit);
             return tvm;
         }
@@ -175,7 +175,7 @@ namespace MpWpfApp {
         #region Selection Changed Handlers
 
         private void Ntvm_OnTemplateSelected(object sender, EventArgs e) {
-            var sthlvm = sender as MpTextTemplateViewModel;
+            var sthlvm = sender as MpTextTemplateViewModelBase;
             foreach (var thlvm in Items) {
                 if (thlvm != sthlvm) {
                     thlvm.IsSelected = false;
@@ -214,7 +214,7 @@ namespace MpWpfApp {
                         rtfFormatJson: initialFormat);
 
                     templateGuid = cit.Guid;
-                } else if (templateVmOrSelectedTextArg is MpTextTemplateViewModel tvm) {
+                } else if (templateVmOrSelectedTextArg is MpTextTemplateViewModelBase tvm) {
                     templateGuid = tvm.TextTemplateGuid;
                 } else {
                     return;

@@ -137,8 +137,13 @@ namespace MonkeyPaste {
 
         public bool HasTooltip => Tooltip != null;
 
-        #endregion        
+        #endregion
 
+        #endregion
+
+        #region Constructors
+
+        public MpMenuItemViewModel() : base(null) { }
         #endregion
 
         #region Public Methods
@@ -184,10 +189,7 @@ namespace MonkeyPaste {
             };
         }
 
-        public MpMenuItemViewModel() : base(null)  {
-            //PropertyChanged += MpContextMenuItemViewModel_PropertyChanged;
-            //IsSeparator = true;
-        }
+        
                
         #endregion
          

@@ -470,7 +470,7 @@ namespace MpWpfApp {
         public ICommand ShowTriggerSelectorMenuCommand => new RelayCommand<object>(
              (args) => {
                  var fe = args as FrameworkElement;
-                 var cm = new MpContextMenuView();
+                 var cm = MpContextMenuView.Instance;
                  cm.DataContext = MenuItemViewModel;
                  fe.ContextMenu = cm;
                  fe.ContextMenu.PlacementTarget = fe;

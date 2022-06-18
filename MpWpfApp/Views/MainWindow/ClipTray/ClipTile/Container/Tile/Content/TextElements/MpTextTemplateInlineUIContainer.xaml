@@ -17,7 +17,7 @@
                                                                  RelativeSource={RelativeSource AncestorType={x:Type local:MpClipTileView}},
                                                                  Converter={StaticResource BoolFlipConverter}}"
                    local:MpHoverableExtension.HoverCursor="Hand"
-                   d:DataContext="{d:DesignInstance Type=local:MpTextTemplateViewModel,
+                   d:DataContext="{d:DesignInstance Type=local:MpTextTemplateViewModelBase,
                                                     IsDesignTimeCreatable=False}">
     <Border x:Name="TextTemplateBorder"
             Loaded="Border_Loaded"

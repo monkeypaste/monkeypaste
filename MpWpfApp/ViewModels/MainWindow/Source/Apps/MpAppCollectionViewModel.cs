@@ -165,8 +165,11 @@ namespace MpWpfApp {
                     Title = "Select application path",
                     InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
                 };
+                MpMainWindowViewModel.Instance.IsShowingDialog = true;
 
                 var openResult = openFileDialog.ShowDialog();
+
+                MpMainWindowViewModel.Instance.IsShowingDialog = false;
                 if (openResult == System.Windows.Forms.DialogResult.Cancel) {
                     return;
                 }

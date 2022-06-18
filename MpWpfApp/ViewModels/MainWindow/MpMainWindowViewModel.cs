@@ -109,8 +109,6 @@ namespace MpWpfApp {
 
         public bool IsShowingDialog { get; set; } = false;
 
-
-
         #endregion
 
         #region Layout
@@ -375,8 +373,8 @@ namespace MpWpfApp {
             () => {
                 return (Application.Current.MainWindow != null ||
                    //Application.Current.MainWindow.Visibility != Visibility.Visible ||
-                   !MpMainWindowViewModel.Instance.IsMainWindowLoading ||
-                   !MpMainWindowViewModel.Instance.IsShowingDialog) && 
+                   !IsMainWindowLoading ||
+                   !IsShowingDialog) && 
                    !IsMainWindowOpen && !IsMainWindowOpening;
             });
 

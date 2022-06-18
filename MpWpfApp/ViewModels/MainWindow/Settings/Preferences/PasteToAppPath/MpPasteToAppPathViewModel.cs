@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using System.Collections.ObjectModel;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using static MonkeyPaste.Common.Wpf.WinApi;
 
 namespace MpWpfApp {
     public class MpPasteToAppPathViewModel : 
@@ -112,7 +113,7 @@ namespace MpWpfApp {
             set {
                 if(_selectedWindowState != value) {
                     _selectedWindowState = value;
-                    WindowState = (MpProcessHelper.WinApi.ShowWindowCommands)_selectedWindowState;
+                    WindowState = (ShowWindowCommands)_selectedWindowState;
                     OnPropertyChanged(nameof(SelectedWindowState));
                 }
             }
@@ -164,12 +165,12 @@ namespace MpWpfApp {
             }
         }
 
-        public MpProcessHelper.WinApi.ShowWindowCommands WindowState {
+        public ShowWindowCommands WindowState {
             get {
                 if(PasteToAppPath == null) {
-                    return MpProcessHelper.WinApi.ShowWindowCommands.Normal;
+                    return ShowWindowCommands.Normal;
                 }
-                return (MpProcessHelper.WinApi.ShowWindowCommands)PasteToAppPath.WindowState;
+                return (ShowWindowCommands)PasteToAppPath.WindowState;
             }
             set {
                 if (PasteToAppPath.WindowState != (int)value) {

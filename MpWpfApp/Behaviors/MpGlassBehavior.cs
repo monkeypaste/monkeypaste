@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Shapes;
-using static MpWpfApp.WinApi;
 
 namespace MpWpfApp {
     public class MpGlassBehavior : MpBehavior<Window> {

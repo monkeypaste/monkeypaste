@@ -169,8 +169,8 @@ namespace MpWpfApp {
             return SelectedTextTemplates(tsr).Count() > 0;
         }
 
-        public static ObservableCollection<MpTextTemplateViewModel> SelectedTextTemplates(MpITextSelectionRange tsr) {
-            var sttl = new ObservableCollection<MpTextTemplateViewModel>();
+        public static ObservableCollection<MpTextTemplateViewModelBase> SelectedTextTemplates(MpITextSelectionRange tsr) {
+            var sttl = new ObservableCollection<MpTextTemplateViewModelBase>();
             if (tsr is MpClipTileViewModel ctvm) {
                 var tbb = FindTextBoxBase(tsr);
                 if (tbb == null) {
@@ -187,7 +187,7 @@ namespace MpWpfApp {
                                             .Where(x => x is InlineUIContainer)
                                             .Select(x => x.Tag as MpTextTemplate);
                     }
-                    return new ObservableCollection<MpTextTemplateViewModel>(ctvm.TemplateCollection.Items.Where(x => citl.Any(y => y.Id == x.TextTemplateId)));
+                    return new ObservableCollection<MpTextTemplateViewModelBase>(ctvm.TemplateCollection.Items.Where(x => citl.Any(y => y.Id == x.TextTemplateId)));
                 }
             }
             return sttl;

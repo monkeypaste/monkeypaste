@@ -9,7 +9,7 @@ namespace MpWpfApp {
             if(values == null || values.Length == 0) {
                 return false;
             }
-            return values.All(x => (bool)x);
+            return values.All(x => x.GetType() == typeof(bool) && (bool)x);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {

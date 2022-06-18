@@ -91,13 +91,13 @@ namespace MpWpfApp {
 
         public object ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
             DataObject dobj = new DataObject();
-
-            foreach (var handler in MpClipboardHandlerCollectionViewModel.Instance.Items.SelectMany(x => x.Items.Select(y => y.ClipboardPluginComponent))) {
-                handler.SetClipboardData(mpdo);
-            }
-            //foreach (var kvp in mpdo.DataFormatLookup) {
-            //    SetDataWrapper(ref dobj, kvp.Key.Name, kvp.Value);
+            //var handlers = MpClipboardHandlerCollectionViewModel.Instance.Items.SelectMany(x => x.Items.Select(y => y.ClipboardPluginComponent)).Distinct().ToList();
+            //foreach (var handler in handlers) {
+            //    handler.SetClipboardData(mpdo);
             //}
+            foreach (var kvp in mpdo.DataFormatLookup) {
+                SetDataWrapper(ref dobj, kvp.Key.Name, kvp.Value);
+            }
             return dobj;
         }
 
@@ -235,7 +235,43 @@ namespace MpWpfApp {
                 pasteCount--;
             }
         }
+        private void SetDataWrapper(ref DataObject dobj, string format, object data) {
+            if (data == null) {
+                return;
+            }
 
+            switch (format) {
+                case MpPortableDataFormats.Bitmap:
+                    var bmpSrc = data.ToString().ToBitmapSource(false);
+
+                    var winforms_dataobject = MpClipboardHelper.MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
+
+                    //Clipboard.SetData(DataFormats.Bitmap, bmpSrc);
+                    //Clipboard.SetData("PNG", winforms_dataobject.GetData("PNG"));
+                    //Clipboard.SetData(DataFormats.Dib, winforms_dataobject.GetData(DataFormats.Dib));
+                    //dobj.SetImage(data.ToString().ToBitmapSource());
+
+                    //IDataObject ido = new DataObject();
+                    //ido.SetData(DataFormats.Bitmap, new Image() { Source = bmpSrc },true); // true means autoconvert
+
+                    //dobj.SetData(DataFormats.Bitmap, ido.GetData(DataFormats.Bitmap));
+                    var pngData = winforms_dataobject.GetData("PNG");
+                    var dibData = winforms_dataobject.GetData(DataFormats.Dib);
+                    dobj.SetImage(bmpSrc);
+                    dobj.SetData("PNG", pngData);
+                    dobj.SetData(DataFormats.Dib, dibData);
+                    break;
+                case MpPortableDataFormats.FileDrop:
+                    var fl = data.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    var sc = new StringCollection();
+                    sc.AddRange(fl);
+                    dobj.SetFileDropList(sc);
+                    break;
+                default:
+                    dobj.SetData(format, data);
+                    break;
+            }
+        }
 
         #endregion
 

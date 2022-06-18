@@ -353,6 +353,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileDrop\MpFileItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Base\MpTextTemplateViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpOutlookContactCollectionViewModel.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfDbInfo.cs" />
     <Compile Include="Utils\BindingExtensions\MpSettingsBindingExtension.cs" />
@@ -364,7 +365,6 @@
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
-    <Compile Include="Utils\System\WinApi.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
     <Compile Include="Converters\MpStringRtfToFlowDocumentConverter.cs" />
@@ -379,7 +379,6 @@
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpContactTemplateViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Text\MpTextTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Base\MpActionViewModelBase.cs" />
@@ -417,6 +416,7 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Rtf\MpRtbContentContainerView.xaml.cs">
       <DependentUpon>MpRtbContentContainerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\Templates\Selector\MpEditTemplateDetailViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpImageParagraph.xaml.cs">
       <DependentUpon>MpImageParagraph.xaml</DependentUpon>
     </Compile>
@@ -2962,7 +2962,7 @@
       <Project>{e3c8e3f7-3a44-4678-a742-5a6dd971a38c}</Project>
       <Name>MpClipboardHelper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MpRunningApplicationHelper\MpProcessHelper.csproj">
+    <ProjectReference Include="..\MpProcessHelper\MpProcessHelper.csproj">
       <Project>{56e5faad-0c31-400f-b95f-d83517c07ed3}</Project>
       <Name>MpProcessHelper</Name>
     </ProjectReference>

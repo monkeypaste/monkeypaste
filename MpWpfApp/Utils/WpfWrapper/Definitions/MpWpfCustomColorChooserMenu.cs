@@ -21,6 +21,7 @@ namespace MpWpfApp {
         public string ShowCustomColorMenu(string selectedColorHexStr, MpIUserColorViewModel ucvm = null) {
             var mw = (MpMainWindow)Application.Current.MainWindow;
             MpMainWindowViewModel.Instance.IsShowingDialog = true;
+            MpContextMenuView.Instance.IsShowingChildDialog = true;
 
             System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
             cd.AllowFullOpen = true;
@@ -28,24 +29,24 @@ namespace MpWpfApp {
             cd.Color = selectedColorHexStr.ToWinFormsColor();
             cd.CustomColors = MpPreferences.UserCustomColorIdxArray.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x)).ToArray();
             cd.FullOpen = cd.CustomColors.Length > 0;
-            // Update the text box color if the user clicks OK 
-            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 
-                MpMainWindowViewModel.Instance.IsShowingDialog = false;
+            string selectedCustomColor = string.Empty;
+            var result = cd.ShowDialog();            
 
+            if (result == System.Windows.Forms.DialogResult.OK) {
                 MpPreferences.UserCustomColorIdxArray = string.Join(",", cd.CustomColors);
 
                 if (ucvm != null) {
                     ucvm.UserHexColor = cd.Color.ToHex();
-                }
+                }                
 
-                MpContextMenuView.Instance.CloseMenu();
-
-                return cd.Color.ToSolidColorBrush().ToHex();
+                selectedCustomColor = cd.Color.ToSolidColorBrush().ToHex();
             }
 
+            MpContextMenuView.Instance.IsShowingChildDialog = false;
             MpMainWindowViewModel.Instance.IsShowingDialog = false;
-            return string.Empty;
+
+            return selectedCustomColor;
         }
     }
 }

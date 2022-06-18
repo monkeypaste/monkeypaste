@@ -941,6 +941,8 @@ using MpProcessHelper;
 
         #endregion
 
+        public bool CanEdit => IsSelected && IsTextItem;
+
         public bool IsSelected { get; set; }
 
         public bool IsHovering { get; set; } = false;
@@ -1530,7 +1532,7 @@ using MpProcessHelper;
             //check for model templates
             bool needsTemplateData = HasTemplates;
 
-            IEnumerable<MpTextTemplateViewModel> templatesInSelection = null;
+            IEnumerable<MpTextTemplateViewModelBase> templatesInSelection = null;
 
             if (needsTemplateData) {
                 if ((isDragDrop && !isDropping) || !isToExternalApp) {
@@ -1586,7 +1588,8 @@ using MpProcessHelper;
             switch (ItemType) {
                 case MpCopyItemType.Text:
                     pt = rtf.ToPlainText();
-                    bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
+                    var imgFd = rtf.ToFlowDocument();
+                    bmpBase64 = imgFd.ToBitmapSource().ToBase64String();
                     break;
                 case MpCopyItemType.Image:
                     pt = string.Empty;//CopyItemData.ToBitmapSource().ToAsciiImage();
@@ -1761,13 +1764,13 @@ using MpProcessHelper;
         }
 
 
-        private async Task FillTemplates(IEnumerable<MpTextTemplateViewModel> templatesToFill) {
+        private async Task FillTemplates(IEnumerable<MpTextTemplateViewModelBase> templatesToFill) {
             if (HasTemplates) {
                 IsSelected = true;
                 
                 IsContentReadOnly = false;
                 //rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
-                TemplateCollection.PastableItems = new ObservableCollection<MpTextTemplateViewModel>(templatesToFill);
+                TemplateCollection.PastableItems = new ObservableCollection<MpTextTemplateViewModelBase>(templatesToFill);
 
                 IsPasting = true;
                 TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.Items));

@@ -15,6 +15,9 @@ using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System.Diagnostics;
+using static QRCoder.PayloadGenerator;
+using System.Windows.Forms;
+using Xamarin.Forms;
 
 namespace MpWpfApp {
     public enum MpCurrencyType {
@@ -24,13 +27,42 @@ namespace MpWpfApp {
         Euros,
         Yen
     }    
-    public class MpTextTemplateViewModel : 
+
+    public class MpDateTimeFormatInfoViewModel : MpViewModelBase, MpITooltipInfoViewModel {
+        public object Tooltip => string.Join(
+            Environment.NewLine,
+            new string[]{
+                "yy = short year",
+                        "yyyy = long year",
+                        "M = month(1 - 12) ",
+                        "MM = month(01 - 12) ",
+                        "MMM = month abbreviation (Jan, Feb...Dec)",
+                        "MMMM = long month (January, February...December)",
+                        "d = day(1 - 31) ",
+                        "dd = day(01 - 31) ",
+                        "ddd = day of the week in words (Monday, Tuesday...Sunday)",
+                        "E = short day of the week in words (Mon, Tue...Sun)",
+                        "D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)",
+                        "h = hour in am/pm(0-12)",
+                        "hh = hour in am/pm(00-12)",
+                        "H = hour in day(0-23)",
+                        "HH = hour in day(00-23)",
+                        "mm = minute",
+                        "ss = second",
+                        "SSS = milliseconds",
+                        "a = AM/PM marker",
+                        "p = a.m./ p.m.marker "});
+    }
+
+    public class MpTextTemplateViewModelBase
+        : 
         MpViewModelBase<MpTemplateCollectionViewModel>, 
         MpISelectableViewModel,
         MpIValidatableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel,
         MpIUserColorViewModel {
+
         #region Private Variables
         private MpTextTemplate _originalModel;
         #endregion
@@ -38,6 +70,9 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+
+        public MpDateTimeFormatInfoViewModel DateTimeFormatInfoViewModel => new MpDateTimeFormatInfoViewModel();
+
         public MpClipTileViewModel HostClipTileViewModel {
             get {
                 if(Parent == null) {
@@ -77,7 +112,6 @@ namespace MpWpfApp {
             }
         }
         #endregion
-
 
         #region Validation
         public string ValidationText { get; set; }
@@ -214,15 +248,6 @@ namespace MpWpfApp {
             }
         }
 
-        public int CopyItemId {
-            get {
-                if(TextTemplate == null) {
-                    return 0;
-                }
-                return 0;// TextToken.CopyItemId;
-            }
-        }
-
         public MpRichTextFormatInfoFormat RichTextFormat {
             get {
                 if (TextTemplate == null) {
@@ -259,6 +284,23 @@ namespace MpWpfApp {
             }
         }
 
+        public string TemplateData {
+            get {
+                if (TextTemplate == null) {
+                    return string.Empty;
+                }
+
+                return TextTemplate.TemplateData;
+            }
+            set {
+                if (TemplateData != value) {
+                    TextTemplate.TemplateData = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(TemplateData));
+                }
+            }
+        }
+
         public string TemplateHexColor {
             get {
                 if(TextTemplate == null) {
@@ -276,6 +318,23 @@ namespace MpWpfApp {
             }
         }
 
+        public MpTextTemplateType TextTemplateType {
+            get {
+                if (TextTemplate == null) {
+                    return MpTextTemplateType.None;
+                }
+                return TextTemplate.TemplateType;
+            }
+            set {
+                if (TextTemplateType != value) {
+                    TextTemplate.TemplateType = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(TextTemplateType));
+                }
+            }
+        }
+
+
         public MpTextTemplate TextTemplate { get; set; }
         #endregion
 
@@ -286,9 +345,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpTextTemplateViewModel() : base(null) { }
+        public MpTextTemplateViewModelBase() : base(null) { }
 
-        public MpTextTemplateViewModel(MpTemplateCollectionViewModel thlcvm) : base(thlcvm) {
+        public MpTextTemplateViewModelBase(MpTemplateCollectionViewModel thlcvm) : base(thlcvm) {
             PropertyChanged += MpTemplateViewModel_PropertyChanged;            
         }
 

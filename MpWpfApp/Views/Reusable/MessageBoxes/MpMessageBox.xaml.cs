@@ -20,7 +20,10 @@ namespace MpWpfApp {
             mb.DataContext = mbvm;
             mb.Topmost = true;
             mb.WindowState = WindowState.Maximized;
+            MpMainWindowViewModel.Instance.IsShowingDialog = true;
+
             mb.ShowDialog();
+            MpMainWindowViewModel.Instance.IsShowingDialog = false;
 
             return mbvm.Result;
         }

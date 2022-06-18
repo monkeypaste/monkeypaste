@@ -17,9 +17,9 @@ namespace MonkeyPaste {
         None = 0,
         Dynamic,
         Static,
-        Content,
-        Analyzer,
-        Action,
+        //Content,
+        //Analyzer,
+        //Action,
         Contact,
         DateTime
     }
@@ -182,7 +182,7 @@ namespace MonkeyPaste {
                 Id = suppressWrite ? this.Id : 0,
                 //CopyItemId = this.CopyItemId,
                 TemplateName = this.TemplateName,
-                //HexColor = this.HexColor,
+                HexColor = this.HexColor,
                 RichTextFormatJson = this.RichTextFormatJson,
                 TemplateText = this.TemplateText,
                 TemplateData = this.TemplateData,

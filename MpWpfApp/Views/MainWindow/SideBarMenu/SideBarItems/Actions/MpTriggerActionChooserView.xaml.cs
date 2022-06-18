@@ -25,7 +25,7 @@ namespace MpWpfApp {
         private void Button_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             e.Handled = true;
             var fe = sender as FrameworkElement;
-            var cm = new MpContextMenuView();
+            var cm = MpContextMenuView.Instance;
             cm.DataContext = BindingContext.MenuItemViewModel;
             fe.ContextMenu = cm;
             fe.ContextMenu.PlacementTarget = this;

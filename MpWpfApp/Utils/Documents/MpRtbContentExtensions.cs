@@ -80,6 +80,7 @@ namespace MpWpfApp {
             //};
 
             var fd = string.Empty.ToFlowDocument();
+            
             var p = fd.Blocks.FirstBlock as Paragraph;
             p.ContentRange().LoadImage(base64Str, out Size imgSize);
             unformattedContentSize = imgSize;
@@ -421,7 +422,7 @@ namespace MpWpfApp {
                 Debugger.Break();
             }
 
-            MpTextTemplateViewModel tvm = ctvm.TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateId == cit.Id);
+            MpTextTemplateViewModelBase tvm = ctvm.TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateId == cit.Id);
 
             #region Events
 

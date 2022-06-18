@@ -15,18 +15,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MpWpfApp {
-    
+namespace MpWpfApp {    
     public partial class MpContextMenuView : ContextMenu, MpISingleton<MpContextMenuView> {
         private static MpContextMenuView _instance;
         public static MpContextMenuView Instance => _instance ?? (_instance = new MpContextMenuView());
+
+        public bool IsShowingChildDialog { get; set; } = false;
 
         public async Task Init() {
             await Task.Delay(1);
         }
 
         public void CloseMenu() {
-            if(IsLoaded) {
+            if(IsLoaded && !IsShowingChildDialog) {
                 IsOpen = false;
             }
         }
@@ -39,7 +40,18 @@ namespace MpWpfApp {
         }
 
         private void ContextMenuView_Closed(object sender, RoutedEventArgs e) {
+            if(IsShowingChildDialog) {
+                return;
+            }
             MpMainWindowViewModel.Instance.IsShowingDialog = false;
+        }
+        private void Button_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            var mivm = (sender as FrameworkElement).DataContext as MpMenuItemViewModel;
+            mivm.Command.Execute(mivm.CommandParameter);
+
+            if (mivm.Command != MpPlatformWrapper.Services.CustomColorChooserMenu.SelectCustomColorCommand) {
+                CloseMenu();
+            }
         }
     }
 }

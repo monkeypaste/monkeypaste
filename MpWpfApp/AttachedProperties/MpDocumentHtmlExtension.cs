@@ -241,7 +241,7 @@ namespace MpWpfApp {
                         ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(fe));
                     }
 
-                    MpMasterTemplateModelCollection.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
+                    MpMasterTemplateModelCollectionViewModel.Instance.Update(qrm.updatedAllAvailableTextTemplates, qrm.userDeletedTemplateGuids).FireAndForgetSafeAsync(ctvm);
                     
                     return qrm.itemEncodedHtmlData;
                 }
@@ -254,7 +254,7 @@ namespace MpWpfApp {
             MpConsole.WriteLine($"Tile content item '{ctvm.CopyItemTitle}' is editable");
 
             MpQuillDisableReadOnlyRequestMessage drorMsg = new MpQuillDisableReadOnlyRequestMessage() {
-                allAvailableTextTemplates = MpMasterTemplateModelCollection.AllTemplates.ToList(),
+                allAvailableTextTemplates = MpMasterTemplateModelCollectionViewModel.Instance.AllTemplates.ToList(),
                 editorHeight = ctvm.EditorHeight//fe.GetVisualAncestor<MpRtbContentView>().ActualHeight
             };
             return drorMsg;
@@ -295,7 +295,7 @@ namespace MpWpfApp {
         private static List<MpTextTemplate> GetTextTemplates(string itemData) {
             string[] itemTemplateGuids = GetTextTemplateGuids(itemData).Select(x => x.ToLower()).ToArray();
 
-            return MpMasterTemplateModelCollection.AllTemplates
+            return MpMasterTemplateModelCollectionViewModel.Instance.AllTemplates
                                     .Where(x => itemTemplateGuids.Contains(x.Guid.ToLower()))
                                     .ToList();
         }

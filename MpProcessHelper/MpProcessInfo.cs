@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpProcessHelper {
     public class MpProcessInfo {

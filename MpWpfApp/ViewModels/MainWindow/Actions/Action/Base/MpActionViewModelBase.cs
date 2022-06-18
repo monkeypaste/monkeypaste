@@ -1080,7 +1080,7 @@ namespace MpWpfApp {
         public ICommand ShowActionSelectorMenuCommand => new RelayCommand<object>(
              (args) => {
                  var fe = args as FrameworkElement;
-                 var cm = new MpContextMenuView();
+                 var cm = MpContextMenuView.Instance;
                  //LastSelectedDateTime = DateTime.Now;
                  IsSelected = true;
 

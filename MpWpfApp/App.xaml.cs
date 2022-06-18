@@ -222,14 +222,7 @@ namespace MpWpfApp {
             }
         }
 
-        private void Button_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            var mivm = (sender as FrameworkElement).DataContext as MpMenuItemViewModel;
-            mivm.Command.Execute(mivm.CommandParameter);
-            
-            if(mivm.Command != MpPlatformWrapper.Services.CustomColorChooserMenu.SelectCustomColorCommand) {
-                MpContextMenuView.Instance.CloseMenu();
-            }
-        }
+        
     }
 
     public class Win32 {

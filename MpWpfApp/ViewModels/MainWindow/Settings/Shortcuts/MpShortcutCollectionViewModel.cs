@@ -9,7 +9,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Wpf;
 using System.Windows;
 
 namespace MpWpfApp {

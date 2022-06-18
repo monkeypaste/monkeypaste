@@ -53,7 +53,7 @@ namespace MonkeyPaste {
                     new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
                     new MpBootstrappedItemViewModel(this,typeof(MpDb),niw.DbInfo),
                     new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider),niw.QueryInfo),
-                    new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollection)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpPluginManager)),
                     new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),niw.DataObjectRegistrar)
                 });

@@ -37,7 +37,6 @@ namespace MpWpfApp {
             if (iuic != null) {
                 var rhl = iuic.Parent.FindParentOfType<Hyperlink>();
                 if (rhl != null) {
-                    //characterRect = rhl.ContentEnd.GetCharacterRect(LogicalDirection.Backward);
                     tr = new TextRange(rhl.ContentStart, rhl.ContentEnd);
                 }
             }
@@ -47,7 +46,11 @@ namespace MpWpfApp {
             var sv = AssociatedObject.Rtb.GetVisualDescendent<ScrollViewer>();
             var start = tr.Start.GetCharacterRect(LogicalDirection.Forward);
             var end = tr.End.GetCharacterRect(LogicalDirection.Forward);
-            sv.ScrollToVerticalOffset((start.Top + end.Bottom - sv.ViewportHeight) / 2 + sv.VerticalOffset);
+            double offset = (start.Top + end.Bottom - sv.ViewportHeight) / 2 + sv.VerticalOffset;
+            if(double.IsNaN(offset) || double.IsInfinity(offset)) {
+                offset = 0;
+            }
+            sv.ScrollToVerticalOffset(offset);
 
 
             //Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(delegate { }));
