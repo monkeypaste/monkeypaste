@@ -51,12 +51,6 @@ namespace MpWpfApp {
                 offset = 0;
             }
             sv.ScrollToVerticalOffset(offset);
-
-
-            //Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(delegate { }));
-
-            //AssociatedObject.Rtb.BringIntoView(characterRect);
-            //AssociatedObject.Rtb.GetVisualDescendent<ScrollViewer>().ScrollToVerticalOffset(characterRect.Top);
         }
 
         public void InitHighlighting(List<TextRange> matches) {

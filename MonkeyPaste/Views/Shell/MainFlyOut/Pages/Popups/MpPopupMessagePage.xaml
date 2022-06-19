@@ -17,7 +17,8 @@
     </rg:PopupPage.Animation>
     <StackLayout VerticalOptions="End"
                  BackgroundColor="#43A047">
-        <BoxView HeightRequest="{Binding Source={x:Reference ThisPage}, Path=SystemPadding.Top}" />
+        <BoxView HeightRequest="{Binding Source={x:Reference ThisPage},
+                                         Path=SystemPadding.Top}" />
         <Label x:Name="MessageLabel"
                Margin="10,0,0,5"
                TextColor="White"

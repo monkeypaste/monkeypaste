@@ -8,9 +8,8 @@ using System.Collections.Specialized;
 using System.Runtime.Serialization.Formatters.Binary;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
-
+using MonkeyPaste.Common.Wpf;
 using System.Threading.Tasks;
-using static MpClipboardHelper.WinApi;
 using MonkeyPaste;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +77,7 @@ namespace MpClipboardHelper {
         // stop listening (dispose form)
         public void Stop() {
             Invoke(new System.Windows.Forms.MethodInvoker(() => {
-                ChangeClipboardChain(Handle, _nextClipboardViewer);
+                WinApi.ChangeClipboardChain(Handle, _nextClipboardViewer);
             }));
             Invoke(new System.Windows.Forms.MethodInvoker(Close));
 
@@ -100,8 +99,8 @@ namespace MpClipboardHelper {
 
                 var ido = ConvertToOleDataObject(dataObject);
                 Clipboard.SetDataObject(ido);
-                SetForegroundWindow(handle);
-                SetActiveWindow(handle);
+                WinApi.SetForegroundWindow(handle);
+                WinApi.SetActiveWindow(handle);
 
                 await Task.Delay(300);
                 System.Windows.Forms.SendKeys.SendWait("^v");
@@ -128,29 +127,29 @@ namespace MpClipboardHelper {
             // on load: (hide this window)
             CreateHandle();
 
-            _nextClipboardViewer = SetClipboardViewer(Handle);
+            _nextClipboardViewer = WinApi.SetClipboardViewer(Handle);
 
             base.SetVisibleCore(false);
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m) {
             switch (m.Msg) {
-                case WM_DRAWCLIPBOARD:
+                case WinApi.WM_DRAWCLIPBOARD:
                     if (IgnoreNextClipboardChangeEvent) {
                         MpConsole.WriteLine("Ignoring clipboard changed event");
 
-                        SendMessage(_nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+                        WinApi.SendMessage(_nextClipboardViewer, m.Msg, m.WParam, m.LParam);
                         return;
                     }
                     ClipChanged();
-                    SendMessage(_nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+                    WinApi.SendMessage(_nextClipboardViewer, m.Msg, m.WParam, m.LParam);
                     break;
 
-                case WM_CHANGECBCHAIN:
+                case WinApi.WM_CHANGECBCHAIN:
                     if (m.WParam == _nextClipboardViewer)
                         _nextClipboardViewer = m.LParam;
                     else
-                        SendMessage(_nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+                        WinApi.SendMessage(_nextClipboardViewer, m.Msg, m.WParam, m.LParam);
                     break;
 
                 default:

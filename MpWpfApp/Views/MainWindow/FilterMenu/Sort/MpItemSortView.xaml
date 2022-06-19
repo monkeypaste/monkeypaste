@@ -29,8 +29,8 @@
                       HorizontalContentAlignment="Left"
                       VerticalContentAlignment="Center"
                       IsDropDownOpen="{Binding IsAnyDropDownOpen,
-                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
-                                                   Mode=OneWayToSource}"
+                                               Source={x:Static local:MpMainWindowViewModel.Instance},
+                                               Mode=OneWayToSource}"
                       SelectedItem="{Binding SelectedSortType}"
                       ItemsSource="{Binding SortTypes}">
                 <ComboBox.ItemTemplate>

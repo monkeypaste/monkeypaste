@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpClipboardHelper {
     public static class MpClipoardImageHelpers {

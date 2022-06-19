@@ -173,8 +173,7 @@ namespace MonkeyPaste.Common.Wpf {
                 drawingContext.Close();
             }
             RenderTargetBitmap bmp = new RenderTargetBitmap((int)source.Width, (int)source.Height, 96, 96, PixelFormats.Pbgra32);
-            bmp.Render(drawingVisual);
-            
+            bmp.Render(drawingVisual);            
             return bmp;
         }
 

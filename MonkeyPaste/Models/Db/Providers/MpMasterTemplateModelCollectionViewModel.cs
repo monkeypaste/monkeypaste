@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste;
+using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,9 @@ namespace MonkeyPaste {
         MpViewModelBase, 
         MpIMenuItemViewModel,
         MpISingletonViewModel<MpMasterTemplateModelCollectionViewModel> {
+        #region Private Variables
+
+        #endregion
         #region Statics
 
         private static MpMasterTemplateModelCollectionViewModel _instance;
@@ -74,6 +78,7 @@ namespace MonkeyPaste {
         public async Task Init() {
             var ttl = await MpDb.GetItemsAsync<MpTextTemplate>();
             AllTemplates = new ObservableCollection<MpTextTemplate>(ttl);
+
         }
 
         public async Task Update(List<MpTextTemplate> updatedTemplates, List<string> removedGuids) {            
@@ -89,6 +94,21 @@ namespace MonkeyPaste {
                 // NOTE not sure how to handle this..
                 await Init();
             }
+        }
+
+        public async Task<IEnumerable<MpContact>> GetContacts() {
+            var contacts = new List<MpIContact>(); 
+
+            var fetchers = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x=>x.Value.Component).Distinct();
+            foreach(var fetcher in fetchers) {
+                if(fetcher is MpIContactFetcherComponent cfc) {
+                    contacts.AddRange(cfc.FetchContacts(null));
+                } else if(fetcher is MpIContactFetcherComponentAsync cfac) {
+                    var results = await cfac.FetchContactsAsync(null);
+                    contacts.AddRange(results);
+                }
+            }
+            return contacts.Select(x=>new MpContact(x));
         }
 
         #endregion

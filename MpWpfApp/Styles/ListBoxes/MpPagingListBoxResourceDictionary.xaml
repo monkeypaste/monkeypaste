@@ -98,19 +98,30 @@
         #FF3843C4
     </Color>
 
-    <LinearGradientBrush x:Key="MenuPopupBrush" EndPoint="0.5,1" StartPoint="0.5,0">
-        <GradientStop Color="{DynamicResource ControlLightColor}" Offset="0" />
-        <GradientStop Color="{DynamicResource ControlMediumColor}" Offset="0.5" />
-        <GradientStop Color="{DynamicResource ControlLightColor}" Offset="1" />
+    <LinearGradientBrush x:Key="MenuPopupBrush"
+                         EndPoint="0.5,1"
+                         StartPoint="0.5,0">
+        <GradientStop Color="{DynamicResource ControlLightColor}"
+                      Offset="0" />
+        <GradientStop Color="{DynamicResource ControlMediumColor}"
+                      Offset="0.5" />
+        <GradientStop Color="{DynamicResource ControlLightColor}"
+                      Offset="1" />
     </LinearGradientBrush>
 
-    <LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill" StartPoint="0,0" EndPoint="1,0">
+    <LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill"
+                         StartPoint="0,0"
+                         EndPoint="1,0">
         <LinearGradientBrush.GradientStops>
             <GradientStopCollection>
-                <GradientStop Color="#000000FF" Offset="0" />
-                <GradientStop Color="#600000FF" Offset="0.4" />
-                <GradientStop Color="#600000FF" Offset="0.6" />
-                <GradientStop Color="#000000FF" Offset="1" />
+                <GradientStop Color="#000000FF"
+                              Offset="0" />
+                <GradientStop Color="#600000FF"
+                              Offset="0.4" />
+                <GradientStop Color="#600000FF"
+                              Offset="0.6" />
+                <GradientStop Color="#000000FF"
+                              Offset="1" />
             </GradientStopCollection>
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
@@ -119,7 +130,8 @@
     <!--  BEGIN ScrollViewer  -->
     <Style x:Key="PagingScrollViewerStyle"
            TargetType="{x:Type ScrollViewer}">
-        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -171,13 +183,20 @@
     <!--  BEGIN ListBox  -->
     <Style x:Key="PagingListBoxStyle"
            TargetType="ListBox">
-        <Setter Property="SnapsToDevicePixels" Value="False" />
-        <Setter Property="OverridesDefaultStyle" Value="true" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
-        <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
-        <Setter Property="MinWidth" Value="120" />
-        <Setter Property="MinHeight" Value="95" />
+        <Setter Property="SnapsToDevicePixels"
+                Value="False" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="true" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                Value="Hidden" />
+        <Setter Property="ScrollViewer.CanContentScroll"
+                Value="False" />
+        <Setter Property="MinWidth"
+                Value="120" />
+        <Setter Property="MinHeight"
+                Value="95" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBox">
@@ -199,20 +218,25 @@
                         </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="Border" Property="Background">
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter TargetName="Border"
+                                    Property="Background">
                                 <Setter.Value>
                                     <SolidColorBrush Color="{StaticResource DisabledControlLightColor}" />
                                 </Setter.Value>
                             </Setter>
-                            <Setter TargetName="Border" Property="BorderBrush">
+                            <Setter TargetName="Border"
+                                    Property="BorderBrush">
                                 <Setter.Value>
                                     <SolidColorBrush Color="{DynamicResource DisabledBorderLightColor}" />
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
-                        <Trigger Property="IsGrouping" Value="true">
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                        <Trigger Property="IsGrouping"
+                                 Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll"
+                                    Value="false" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -224,8 +248,10 @@
     <!--  BEGIN ListBoxItem  -->
     <Style x:Key="{x:Type ListBoxItem}"
            TargetType="ListBoxItem">
-        <Setter Property="SnapsToDevicePixels" Value="true" />
-        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="SnapsToDevicePixels"
+                Value="true" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="true" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">

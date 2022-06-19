@@ -30,8 +30,8 @@
                 Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
             <ComboBox Style="{StaticResource ActionPropertyComboBoxStyle}"
                       IsDropDownOpen="{Binding IsAnyDropDownOpen,
-                                                   Source={x:Static local:MpMainWindowViewModel.Instance},
-                                                   Mode=OneWayToSource}"
+                                               Source={x:Static local:MpMainWindowViewModel.Instance},
+                                               Mode=OneWayToSource}"
                       ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
                       SelectedIndex="{Binding AddedContentType,
                                               Converter={StaticResource EnumToIntConverter},

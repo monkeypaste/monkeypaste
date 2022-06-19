@@ -354,7 +354,6 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Base\MpTextTemplateViewModelBase.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpOutlookContactCollectionViewModel.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfDbInfo.cs" />
     <Compile Include="Utils\BindingExtensions\MpSettingsBindingExtension.cs" />
     <Compile Include="Utils\MpVisualUtility.cs" />
@@ -416,6 +415,7 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Rtf\MpRtbContentContainerView.xaml.cs">
       <DependentUpon>MpRtbContentContainerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\Templates\Selector\MpPasteTemplateDetailViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\Templates\Selector\MpEditTemplateDetailViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\TextElements\MpImageParagraph.xaml.cs">
       <DependentUpon>MpImageParagraph.xaml</DependentUpon>

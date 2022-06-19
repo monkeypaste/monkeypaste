@@ -33,6 +33,8 @@ namespace MonkeyPaste.Common.Plugin {
 
         public MpAnnotaterPluginFormat annotater { get; set; }
 
+        public MpContactFetcherFormat contactFetcher { get; set; }
+
         public string RootDirectory { get; set; }
         public string ComponentPath { get; set; }
         

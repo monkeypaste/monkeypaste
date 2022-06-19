@@ -149,8 +149,10 @@
                                                       Converter={StaticResource BoolFlipConverter}}"
                                   PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown">
                         <Grid>
-                            <Popup IsOpen="False" AllowsTransparency="True">
-                                <StackPanel Orientation="Vertical" Background="Transparent">
+                            <Popup IsOpen="False"
+                                   AllowsTransparency="True">
+                                <StackPanel Orientation="Vertical"
+                                            Background="Transparent">
                                     <ToggleButton x:Name="AppendToggleButton"
                                                   Loaded="AppendToggleButton_Loaded"
                                                   PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
@@ -177,9 +179,9 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </ToggleButton>
-                                    <ToggleButton x:Name="AppendLineToggleButton" 
+                                    <ToggleButton x:Name="AppendLineToggleButton"
                                                   Loaded="AppendLineToggleButton_Loaded"
-                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"                                                  
+                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
                                                   DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
                                                   Width="{Binding AppStateButtonPanelWidth,
                                                                   Source={x:Static local:MpMeasurements.Instance}}"
@@ -224,8 +226,10 @@
                                   PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
                                   Padding="10">
                         <Grid>
-                            <Popup IsOpen="False" AllowsTransparency="True">
-                                <StackPanel Orientation="Vertical" Background="Transparent">
+                            <Popup IsOpen="False"
+                                   AllowsTransparency="True">
+                                <StackPanel Orientation="Vertical"
+                                            Background="Transparent">
                                     <ToggleButton x:Name="AutoCopyToggleButton"
                                                   Loaded="AutoCopyToggleButton_Loaded"
                                                   Width="{Binding AppStateButtonPanelWidth,

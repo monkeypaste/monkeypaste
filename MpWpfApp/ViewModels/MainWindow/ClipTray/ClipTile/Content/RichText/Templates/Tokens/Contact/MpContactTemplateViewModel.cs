@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpContactTemplateViewModel : MpViewModelBase<MpOutlookContactCollectionViewModel> {
+    public class MpContactTemplateViewModel : MpViewModelBase<MpTemplateCollectionViewModel> {
         #region Properties
 
         #region Model
@@ -19,7 +19,7 @@ namespace MpWpfApp {
 
         #region Constructor
 
-        public MpContactTemplateViewModel(MpOutlookContactCollectionViewModel parent) : base(parent) {
+        public MpContactTemplateViewModel(MpTemplateCollectionViewModel parent) : base(parent) {
         }
 
         #endregion

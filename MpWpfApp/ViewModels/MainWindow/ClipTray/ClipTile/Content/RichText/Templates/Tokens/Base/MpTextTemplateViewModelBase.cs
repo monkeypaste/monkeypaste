@@ -197,6 +197,43 @@ namespace MpWpfApp {
                 return false;
             }
         }
+
+        public int SelectedContactFieldIdx {
+            get {
+                if(TextTemplate == null || TextTemplateType != MpTextTemplateType.Contact) {
+                    return 0;
+                }
+                if(Enum.TryParse(TemplateData, out MpContactFieldType fieldType)) {
+                    return (int)fieldType;
+                }
+                return 0;
+            }
+            set {
+                if(TextTemplateType != MpTextTemplateType.Contact) {
+                    return;
+                }
+                TemplateData = ((MpContactFieldType)value).ToString();
+                OnPropertyChanged(nameof(SelectedContactFieldIdx));                
+            }
+        }
+
+        public string SelectedContactPasteDisplayValue { get; set; }
+
+        public int SelectedTemplateTypeIdx {
+            get {
+                if (TextTemplate == null) {
+                    return 0;
+                }
+                return (int)TextTemplateType;
+            }
+            set {
+                if((int)TextTemplateType != value) {
+                    TextTemplateType = (MpTextTemplateType)value;
+                    TemplateData = null;
+                    OnPropertyChanged(nameof(SelectedContactFieldIdx));
+                }
+            }
+        }
         #endregion
 
         #region Business Logic Properties
@@ -330,6 +367,7 @@ namespace MpWpfApp {
                     TextTemplate.TemplateType = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(TextTemplateType));
+                    OnPropertyChanged(nameof(SelectedContactFieldIdx));
                 }
             }
         }
@@ -403,6 +441,16 @@ namespace MpWpfApp {
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
+
+                        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+
+                        //if(HostClipTileViewModel.IsPasting) {
+                        //    if (TextTemplateType == MpTextTemplateType.DateTime ||
+                        //        TextTemplateType == MpTextTemplateType.Static) {
+                        //        Parent.SelectNextTemplateCommand.Execute(null);
+                        //    }
+                        //}
+
                     } else {
                         if(IsEditingTemplate) {
                             FinishEditTemplateCommand.Execute(null);
@@ -410,11 +458,18 @@ namespace MpWpfApp {
                         //IsEditingTemplate = false;
                         Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsDetailGridVisibile));
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingTemplate));
+
+                        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     }
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     break;
                 case nameof(TemplateName):
                     Validate();
+                    break;
+                case nameof(TemplateText):
+                    OnPropertyChanged(nameof(TemplateDisplayValue));
+                    break;
+                case nameof(SelectedContactPasteDisplayValue):
+                    TemplateText = SelectedContactPasteDisplayValue;
                     break;
                 case nameof(ValidationText):
                     if (!string.IsNullOrEmpty(ValidationText)) {

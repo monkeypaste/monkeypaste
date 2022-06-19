@@ -18,6 +18,104 @@
             BorderThickness="0"
             CornerRadius="5">
         <Grid x:Name="PasteTemplateToolbarGrid">
+            <Grid.Resources>
+                <DataTemplate x:Key="DynamicTemplate"
+                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
+                    <local:MpClipBorder Grid.Column="2"
+                                        Margin="1"
+                                        Padding="0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        Background="White"
+                                        BorderBrush="DimGray"
+                                        BorderThickness="0.5"
+                                        CornerRadius="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="0.1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="SelectedTemplateTextBox"
+                                     Grid.Column="0"
+                                     Width="240"
+                                     IsVisibleChanged="ClipTilePasteTemplateToolbar_IsVisibleChanged"
+                                     Height="24"
+                                     Margin="5,0,0,0"
+                                     Padding="0,0,0,0"
+                                     HorizontalAlignment="Left"
+                                     VerticalAlignment="Top"
+                                     VerticalContentAlignment="Top"
+                                     BorderThickness="0"
+                                     FontSize="16"
+                                     Foreground="Black"
+                                     TabIndex="1"
+                                     PreviewKeyDown="SelectedTemplateTextBox_PreviewKeyDown"
+                                     local:MpIsFocusedExtension.IsEnabled="True"
+                                     local:MpIsFocusedExtension.IsFocused="{Binding IsPasteTextBoxFocused,
+                                                                                    Mode=TwoWay}"
+                                     Text="{Binding TemplateText,
+                                                    Mode=TwoWay,
+                                                    NotifyOnTargetUpdated=True,
+                                                    NotifyOnSourceUpdated=True,
+                                                    UpdateSourceTrigger=PropertyChanged}" />
+                            <Button x:Name="ClearCurrentTemplateButton"
+                                    Grid.Column="1"
+                                    Width="15"
+                                    Height="15"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Command="{Binding ClearTemplateCommand}"
+                                    Visibility="{Binding HasText,
+                                                         Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Image x:Name="ClearCurrentTemplateButtonImage"
+                                       Source="/Resources/Images/close1.png" />
+                            </Button>
+                        </Grid>
+                    </local:MpClipBorder>
+                </DataTemplate>
+
+                <DataTemplate x:Key="StaticTemplate"
+                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
+                    <TextBox x:Name="StaticTextBox"
+                             IsVisibleChanged="StaticTextBox_IsVisibleChanged"
+                             Visibility="Collapsed" />
+                </DataTemplate>
+
+                <DataTemplate x:Key="DateTimeTemplate"
+                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
+                    <TextBox x:Name="DateTimeTextBox"
+                             IsVisibleChanged="DateTimeTextBox_IsVisibleChanged"
+                             Visibility="Collapsed" />
+                </DataTemplate>
+                <DataTemplate x:Key="ContactTemplate"
+                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Contact"
+                                   Margin="10,0,10,0"
+                                   VerticalAlignment="Center"
+                                   FontWeight="SemiBold" />
+                        <local:MpSpinnerApple VerticalAlignment="Center"
+                                              Margin="0,0,5,0"
+                                              Visibility="{Binding IsBusy,
+                                                                   Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Border Style="{StaticResource ActionPropertyComboBoxStyle_Border}"
+                                Visibility="{Binding IsBusy,
+                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                            <ComboBox x:Name="ContactComboBox"
+                                      Style="{StaticResource ActionPropertyComboBoxStyle}"
+                                      IsSynchronizedWithCurrentItem="False"
+                                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                               Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                               Mode=OneWayToSource}"
+                                      Loaded="ContactComboBox_Loaded"
+                                      IsVisibleChanged="ContactComboBox_IsVisibleChanged"
+                                      SelectionChanged="ContactComboBox_SelectionChanged" />
+                        </Border>
+                    </StackPanel>
+                </DataTemplate>
+                <local:MpPasteTemplateDetailViewSelector x:Key="PasteTemplateDetailViewSelector" />
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="*" />
@@ -88,57 +186,9 @@
                     TabIndex="0"
                     Visibility="{Binding IsAnyTemplateHasText,
                                          Converter={StaticResource BoolToVisibilityConverter}}" />
-            <local:MpClipBorder Grid.Column="2"
-                                Margin="1"
-                                Padding="0"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                Background="White"
-                                BorderBrush="DimGray"
-                                BorderThickness="0.5"
-                                CornerRadius="10">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="0.1*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="SelectedTemplateTextBox"
-                             Grid.Column="0"
-                             Width="240"
-                             IsVisibleChanged="ClipTilePasteTemplateToolbar_IsVisibleChanged"
-                             Height="24"
-                             Margin="5,0,0,0"
-                             Padding="0,0,0,0"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top"
-                             VerticalContentAlignment="Top"
-                             BorderThickness="0"
-                             FontSize="16"
-                             Foreground="Black"
-                             TabIndex="1"
-                             PreviewKeyDown="SelectedTemplateTextBox_PreviewKeyDown"
-                             local:MpIsFocusedExtension.IsEnabled="True"
-                             local:MpIsFocusedExtension.IsFocused="{Binding SelectedItem.IsPasteTextBoxFocused,
-                                                                            Mode=TwoWay}"
-                             Text="{Binding SelectedItem.TemplateText,
-                                            Mode=TwoWay,
-                                            NotifyOnTargetUpdated=True,
-                                            NotifyOnSourceUpdated=True,
-                                            UpdateSourceTrigger=PropertyChanged}" />
-                    <Button x:Name="ClearCurrentTemplateButton"
-                            Grid.Column="1"
-                            Width="15"
-                            Height="15"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Command="{Binding SelectedItem.ClearTemplateCommand}"
-                            Visibility="{Binding SelectedItem.HasText,
-                                                 Converter={StaticResource BoolToVisibilityConverter}}">
-                        <Image x:Name="ClearCurrentTemplateButtonImage"
-                               Source="/Resources/Images/close1.png" />
-                    </Button>
-                </Grid>
-            </local:MpClipBorder>
+            <ContentControl Grid.Column="2"
+                            Content="{Binding SelectedItem}"
+                            ContentTemplateSelector="{StaticResource PasteTemplateDetailViewSelector}" />
             <StackPanel Grid.Column="3"
                         Margin="8,0,0,0"
                         HorizontalAlignment="Center"

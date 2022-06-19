@@ -80,6 +80,7 @@ namespace MpWpfApp {
 
         public MpTemplateCollectionViewModel(MpClipTileViewModel ctvm) : base(ctvm) { }
 
+
         #endregion
 
         #region Public Methods
@@ -90,9 +91,6 @@ namespace MpWpfApp {
             return tvm;
         }
 
-        #endregion
-
-        #region Private Methods
 
 
         public void ClearAllEditing() {
@@ -174,24 +172,12 @@ namespace MpWpfApp {
 
         #region Selection Changed Handlers
 
-        private void Ntvm_OnTemplateSelected(object sender, EventArgs e) {
-            var sthlvm = sender as MpTextTemplateViewModelBase;
-            foreach (var thlvm in Items) {
-                if (thlvm != sthlvm) {
-                    thlvm.IsSelected = false;
-                }
-            }
-            OnPropertyChanged(nameof(SelectedItem));
-            Parent.OnPropertyChanged(nameof(Parent.IsDetailGridVisibile));
-        }
 
         #endregion
 
         #region Db Event Handlers
 
         #endregion
-
-
 
         #endregion
 
@@ -256,9 +242,6 @@ namespace MpWpfApp {
 
         public ICommand SelectNextTemplateCommand => new RelayCommand(
             () => {
-                //if (!SelectedTemplate.HasText) {
-                //    SelectedTemplate.MatchData = " ";
-                //}
                 int nextIdx = Items.IndexOf(SelectedItem) + 1;
                 if (nextIdx >= Items.Count) {
                     nextIdx = 0;
@@ -274,9 +257,6 @@ namespace MpWpfApp {
 
         public ICommand SelectPreviousTemplateCommand => new RelayCommand(
             () => {
-                //if (!SelectedTemplate.HasText) {
-                //    SelectedTemplate.MatchData = " ";
-                //}
                 int prevIdx = Items.IndexOf(SelectedItem) - 1;
                 if (prevIdx < 0) {
                     prevIdx = Items.Count - 1;
@@ -308,6 +288,11 @@ namespace MpWpfApp {
                 MpMainWindowViewModel.Instance.OnMainWindowHidden += hideEvent;
 
                 var rtb = cv.Rtb;
+                bool wasAllSelected = false;
+                if(rtb.Selection.IsEmpty) {
+                    rtb.SelectAll();
+                    wasAllSelected = true;
+                }
                 string rtf = MpContentDocumentRtfExtension.GetEncodedContent(rtb,false);
 
                 MpConsole.WriteLine("Unmodified item rtf: ");
@@ -316,7 +301,13 @@ namespace MpWpfApp {
                 foreach (var thlvm in Items) {
                     rtf = rtf.Replace(thlvm.TextTemplate.EncodedTemplateRtf, thlvm.TemplateText);
                 }
+                if(wasAllSelected) {
+                    rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
+                }
+
                 Parent.TemplateRichText = rtf;
+
+                
                 MpConsole.WriteLine("Pastable rtf: ");
                 MpConsole.WriteLine(rtf);
             },

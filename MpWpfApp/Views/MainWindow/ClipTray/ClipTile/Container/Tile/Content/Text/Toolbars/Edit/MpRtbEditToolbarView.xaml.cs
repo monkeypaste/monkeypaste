@@ -252,9 +252,13 @@ namespace MpWpfApp {
             // Process selection
             
             var pointSize = FontSizeCombo.SelectedItem.ToString();
-            var pixelSize = System.Convert.ToDouble(pointSize); // * (96 / 72);
-            var textRange = new TextRange(Rtb.Selection.Start, Rtb.Selection.End);
-            textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
+            if(!string.IsNullOrWhiteSpace(pointSize)) {
+                try {
+                    double pixelSize = System.Convert.ToDouble(pointSize); // * (96 / 72);
+                    var textRange = new TextRange(Rtb.Selection.Start, Rtb.Selection.End);
+                    textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
+                } catch { }
+            }
 
             Rtb.Document.ConfigureLineHeight();
             // NOTE re-selecting text because selection doesn't resize to new typeface

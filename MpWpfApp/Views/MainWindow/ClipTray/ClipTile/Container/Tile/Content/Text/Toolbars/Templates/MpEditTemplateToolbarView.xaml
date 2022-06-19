@@ -56,8 +56,8 @@
                                       IsDropDownOpen="{Binding IsAnyDropDownOpen,
                                                                Source={x:Static local:MpMainWindowViewModel.Instance},
                                                                Mode=OneWayToSource}"
-                                      Loaded="ContactFieldComboBox_Loaded"
-                                      SelectionChanged="ContactFieldComboBox_SelectionChanged"
+                                      SelectedIndex="{Binding SelectedContactFieldIdx,
+                                                              Mode=TwoWay}"
                                       ItemsSource="{Binding .,
                                                             Converter={StaticResource EnumToItemSourceLabelsConverter},
                                                             ConverterParameter=MonkeyPaste.MpContactFieldType}" />
@@ -67,18 +67,20 @@
                 <DataTemplate x:Key="DateTimeTemplate"
                               DataType="{x:Type local:MpTextTemplateViewModelBase}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Format" Margin="10"
+                        <TextBlock Text="Format"
+                                   Margin="10"
                                    VerticalAlignment="Center"
                                    FontWeight="SemiBold" />
                         <Border Style="{StaticResource ActionPropertyComboBoxStyle_Border}"
                                 Background="White">
                             <TextBox Width="120"
                                      BorderThickness="0"
-                                     Text="{Binding TemplateText,
+                                     Text="{Binding TemplateData,
                                                     Mode=TwoWay,
                                                     UpdateSourceTrigger=LostFocus}" />
                         </Border>
-                        <local:MpTooltipInfoView HorizontalAlignment="Right" Margin="5,2"
+                        <local:MpTooltipInfoView HorizontalAlignment="Right"
+                                                 Margin="5,2"
                                                  DataContext="{Binding DateTimeFormatInfoViewModel}" />
                     </StackPanel>
                 </DataTemplate>
@@ -158,7 +160,7 @@
                 </Border>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal"                        
+            <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center">
                 <TextBlock Margin="0,0,10,0"
@@ -177,7 +179,7 @@
                               IsDropDownOpen="{Binding IsAnyDropDownOpen,
                                                        Source={x:Static local:MpMainWindowViewModel.Instance},
                                                        Mode=OneWayToSource}"
-                              SelectedIndex="{Binding TextTemplateType,
+                              SelectedIndex="{Binding SelectedTemplateTypeIdx,
                                                       Converter={StaticResource EnumToIntConverter},
                                                       ConverterParameter=MonkeyPaste.MpTextTemplateType,
                                                       Mode=TwoWay}"
@@ -188,7 +190,7 @@
                 <ContentControl x:Name="TemplateDetailContentControl"
                                 Margin="0,0,0,0"
                                 Background="Orange"
-                                Content="{Binding .}"
+                                Content="{Binding}"
                                 ContentTemplateSelector="{StaticResource EditTemplateDetailViewSelector}" />
 
                 <Button x:Name="CancelButton"
@@ -206,7 +208,7 @@
                         Command="{Binding FinishEditTemplateCommand}"
                         Content="DONE"
                         FontSize="14"
-                        IsDefault="True" /> 
+                        IsDefault="True" />
             </StackPanel>
         </Grid>
     </Border>

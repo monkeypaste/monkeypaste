@@ -55,22 +55,6 @@ namespace MpWpfApp {
             }
         }
 
-        private void ContactFieldComboBox_Loaded(object sender, RoutedEventArgs e) {
-            if (BindingContext == null) {
-                return;
-            }
-            var cfcmb = sender as ComboBox;
-            if (string.IsNullOrEmpty(BindingContext.TemplateData)) {
-                cfcmb.SelectedIndex = 0;
-            } else if(Enum.TryParse(BindingContext.TemplateData, out MpContactFieldType fieldType)) {
-                cfcmb.SelectedIndex = (int)fieldType;
-            } else {
-                BindingContext.TemplateData = null;
-                cfcmb.SelectedIndex = 0;
-            }
-
-        }
-
         private void ContactFieldComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (BindingContext == null) {
                 return;
@@ -79,24 +63,37 @@ namespace MpWpfApp {
             BindingContext.TemplateData = ((MpContactFieldType)cfcmb.SelectedIndex).ToString();
         }
 
-        private void StaticTemplateStackPanelContainer_Loaded(object sender, RoutedEventArgs e) {
-
-        }
-
         private void TemplateTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { 
-            if (BindingContext == null) {
-                return;
-            }
-            if(e.RemovedItems != null && e.RemovedItems.Count > 0) {
-                // only clear template data when user changes selection not when loading
-                BindingContext.TemplateData = null;
-            }
+            //if (BindingContext == null) {
+            //    return;
+            //}
+            //if(e.RemovedItems != null && e.RemovedItems.Count > 0) {
+            //    // only clear template data when user changes selection not when loading
+            //    BindingContext.TemplateData = null;
+            //}
 
             //BindingContext.TemplateData = null;
             var templateSelector = EditTemplateContainerGrid.Resources["EditTemplateDetailViewSelector"] as MpEditTemplateDetailViewSelector;
             TemplateDetailContentControl.ContentTemplate = templateSelector.SelectTemplate(BindingContext, TemplateDetailContentControl);
 
             //BindingContext.OnPropertyChanged(nameof(BindingContext.SelfBindingRef));
+        }
+
+        private void ContactFieldComboBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+            if((bool)e.NewValue) {
+                if (BindingContext == null) {
+                    return;
+                }
+                var cfcmb = sender as ComboBox;
+                if (string.IsNullOrEmpty(BindingContext.TemplateData)) {
+                    cfcmb.SelectedIndex = 0;
+                } else if (Enum.TryParse(BindingContext.TemplateData, out MpContactFieldType fieldType)) {
+                    cfcmb.SelectedIndex = (int)fieldType;
+                } else {
+                    BindingContext.TemplateData = null;
+                    cfcmb.SelectedIndex = 0;
+                }
+            }
         }
     }
 }

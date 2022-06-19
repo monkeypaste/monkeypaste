@@ -178,7 +178,7 @@ namespace MpWpfApp {
                                        .FirstOrDefault();
                 case MpCopyItemType.Text:
                     TextRange tr = null;
-                    if(ignoreSubSelection || rtb.Selection.IsEmpty) {
+                    if(ignoreSubSelection) {
                         tr = rtb.Document.ContentRange();
                     } else {
                         tr = rtb.Selection;

@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonkeyPaste.Common {
-    public interface MpIContactModel {
+namespace MonkeyPaste.Common.Plugin {
+    public interface MpIContact {
+        object Source { get; }
+
+        string SourceName { get; }
+
         string FirstName { get; }
         string LastName { get; }
         string FullName { get; }

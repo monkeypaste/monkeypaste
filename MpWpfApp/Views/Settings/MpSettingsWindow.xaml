@@ -119,7 +119,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="/MpWpfApp;component/Resources/Images/clipboard.png"/>
+                           Source="/MpWpfApp;component/Resources/Images/clipboard.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Clipboard" />

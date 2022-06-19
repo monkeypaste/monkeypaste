@@ -167,6 +167,21 @@ namespace MpWpfApp {
             sw.Stop();
             MpConsole.WriteLine($"Bootstrapper loaded in {sw.ElapsedMilliseconds} ms");
 
+            //var contacts = await MpMasterTemplateModelCollectionViewModel.Instance.GetContacts();
+
+            var contacts = new List<MpIContact>();
+
+            var fetchers = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x => x.Value.Component).Distinct();
+            foreach (var fetcher in fetchers) {
+                if (fetcher is MpIContactFetcherComponent cfc) {
+                    contacts.AddRange(cfc.FetchContacts(null));
+                } else if (fetcher is MpIContactFetcherComponentAsync cfac) {
+                    var results = await cfac.FetchContactsAsync(null);
+                    contacts.AddRange(results);
+                }
+            }
+            
+
             IsLoaded = true;
         }
     }
