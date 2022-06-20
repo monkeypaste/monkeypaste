@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
 using System;
@@ -13,7 +14,7 @@ namespace MonkeyPaste {
     public class MpMasterTemplateModelCollectionViewModel : 
         MpViewModelBase, 
         MpIMenuItemViewModel,
-        MpISingletonViewModel<MpMasterTemplateModelCollectionViewModel> {
+        MpIAsyncSingletonViewModel<MpMasterTemplateModelCollectionViewModel> {
         #region Private Variables
 
         #endregion
@@ -29,16 +30,10 @@ namespace MonkeyPaste {
 
         public MpMenuItemViewModel MenuItemViewModel {
             get {
-                var mivm = new MpMenuItemViewModel();
-                //mivm.SubItems = new List<MpMenuItemViewModel>() {
-                //    new MpMenuItemViewModel() {
-                //        Header = "Date & Time",
-                //        SubItems = new List<MpMenuItemViewModel>() {
-
-                //        }
-                //    }
-                //};
-                //foreach (var tvm in Items) {
+                var mivm = new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>()
+                };
+                //foreach (var tvm in AllTemplates) {
                 //    var tvm_mi = new MpMenuItemViewModel() {
                 //        Header = tvm.TemplateName,
                 //        IconHexStr = tvm.TemplateHexColor,
@@ -59,7 +54,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region Model
+        #region Models
 
         public ObservableCollection<MpTextTemplate> AllTemplates { get; set; } = new ObservableCollection<MpTextTemplate>();
 
@@ -109,6 +104,20 @@ namespace MonkeyPaste {
                 }
             }
             return contacts.Select(x=>new MpContact(x));
+        }
+
+        public string GetTemplateTypeIconResourceStr(MpTextTemplateType templateType) {
+            switch(templateType) {
+                case MpTextTemplateType.Contact:
+                    return "ContactIcon";
+                case MpTextTemplateType.DateTime:
+                    return "AlarmClockIcon";
+                case MpTextTemplateType.Dynamic:
+                    return "YinYangIcon";
+                case MpTextTemplateType.Static:
+                    return "IceCubeIcon";
+            }
+            return string.Empty;
         }
 
         #endregion

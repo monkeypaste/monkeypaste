@@ -66,7 +66,8 @@ namespace MpWpfApp {
 
 
                     new MpBootstrappedItemViewModel(this,typeof(MpWpfDataObjectHelper)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpQuillHtmlToRtfConverter))
+                    new MpBootstrappedItemViewModel(this,typeof(MpQuillHtmlToRtfConverter)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpTooltipInfoCollectionViewModel))
                     //new MpBootstrappedItem(typeof(MpMouseHook))
                 });
         }
@@ -169,17 +170,17 @@ namespace MpWpfApp {
 
             //var contacts = await MpMasterTemplateModelCollectionViewModel.Instance.GetContacts();
 
-            var contacts = new List<MpIContact>();
+            //var contacts = new List<MpIContact>();
 
-            var fetchers = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x => x.Value.Component).Distinct();
-            foreach (var fetcher in fetchers) {
-                if (fetcher is MpIContactFetcherComponent cfc) {
-                    contacts.AddRange(cfc.FetchContacts(null));
-                } else if (fetcher is MpIContactFetcherComponentAsync cfac) {
-                    var results = await cfac.FetchContactsAsync(null);
-                    contacts.AddRange(results);
-                }
-            }
+            //var fetchers = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x => x.Value.Component).Distinct();
+            //foreach (var fetcher in fetchers) {
+            //    if (fetcher is MpIContactFetcherComponent cfc) {
+            //        contacts.AddRange(cfc.FetchContacts(null));
+            //    } else if (fetcher is MpIContactFetcherComponentAsync cfac) {
+            //        var results = await cfac.FetchContactsAsync(null);
+            //        contacts.AddRange(results);
+            //    }
+            //}
             
 
             IsLoaded = true;

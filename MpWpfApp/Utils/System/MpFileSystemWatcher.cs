@@ -17,7 +17,7 @@ namespace MpWpfApp {
     }
 
     public class MpFileSystemWatcher : 
-        MpISingletonViewModel<MpFileSystemWatcher>, 
+        MpIAsyncSingletonViewModel<MpFileSystemWatcher>, 
         IDisposable, 
         MpIActionComponent {
         #region Private Variables

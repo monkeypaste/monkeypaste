@@ -10,7 +10,7 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpClipTileSortViewModel : MpViewModelBase, MpISingletonViewModel<MpClipTileSortViewModel> {
+    public class MpClipTileSortViewModel : MpViewModelBase, MpIAsyncSingletonViewModel<MpClipTileSortViewModel> {
         #region View Models
         private ObservableCollection<MpSortTypeComboBoxItemViewModel> _sortTypes = new ObservableCollection<MpSortTypeComboBoxItemViewModel>();
         public ObservableCollection<MpSortTypeComboBoxItemViewModel> SortTypes {

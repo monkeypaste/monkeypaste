@@ -27,7 +27,7 @@ namespace MpWpfApp {
     public class MpAnalyticItemCollectionViewModel : 
         MpSelectorViewModelBase<object,MpAnalyticItemViewModel>,
         MpIMenuItemViewModel,
-        MpISingletonViewModel<MpAnalyticItemCollectionViewModel>, 
+        MpIAsyncSingletonViewModel<MpAnalyticItemCollectionViewModel>, 
         MpITreeItemViewModel,
         MpISidebarItemViewModel {
         #region Private Variables

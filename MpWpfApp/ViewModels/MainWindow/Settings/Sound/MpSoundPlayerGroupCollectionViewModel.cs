@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpSoundPlayerGroupCollectionViewModel : MpViewModelBase, MpISingletonViewModel<MpSoundPlayerGroupCollectionViewModel> {
+    public class MpSoundPlayerGroupCollectionViewModel : MpViewModelBase, MpIAsyncSingletonViewModel<MpSoundPlayerGroupCollectionViewModel> {
         #region Properties
 
         #region View Models

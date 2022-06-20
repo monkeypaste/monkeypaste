@@ -1515,12 +1515,16 @@ using MpProcessHelper;
         }
 
 
-        public async Task<MpPortableDataObject>  ConvertToPortableDataObject(
+        public async Task<MpPortableDataObject> ConvertToPortableDataObject(
             bool isDragDrop, 
             object targetHandleObj, 
             bool ignoreSubSelection = false, 
             bool isDropping = false) {
             
+            if(!ignoreSubSelection && string.IsNullOrEmpty(SelectedPlainText)) {
+                MpTextSelectionRangeExtension.SelectAll(this);
+            }
+
             IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : 
                                     targetHandleObj is MpProcessInfo ? 
                                         (targetHandleObj as MpProcessInfo).Handle : (IntPtr)targetHandleObj;
@@ -1535,6 +1539,9 @@ using MpProcessHelper;
             IEnumerable<MpTextTemplateViewModelBase> templatesInSelection = null;
 
             if (needsTemplateData) {
+                if(isDropping) {
+                    Debugger.Break();
+                }
                 if ((isDragDrop && !isDropping) || !isToExternalApp) {
                     // Drag Drop:
                     // when initially dragging onto external app DragDrop needs DataObject but 
@@ -1545,7 +1552,7 @@ using MpProcessHelper;
                     needsTemplateData = false;
                 }
                 if(needsTemplateData) {
-                    templatesInSelection = MpTextSelectionRangeExtension.SelectedTextTemplates(this);
+                    templatesInSelection = GetSelectedTextTemplateViewModels();
                     if (!ignoreSubSelection && templatesInSelection.Count() == 0) {
                         // if dropping or pasting and sub-selection doesn't contain templates they don't need to be filled
                         needsTemplateData = false;
@@ -1695,7 +1702,25 @@ using MpProcessHelper;
 
         #endregion
 
+        
+        public IEnumerable<MpTextTemplateViewModelBase> GetSelectedTextTemplateViewModels() {
+            var tvml = new List<MpTextTemplateViewModelBase>();
+            string spt = SelectedPlainText;
+            if(spt.Contains(MpTextTemplate.TextTemplateOpenToken) && spt.Contains(MpTextTemplate.TextTemplateCloseToken)) {
+                var openIdxList = spt.IndexListOfAll(MpTextTemplate.TextTemplateOpenToken);
 
+                for (int i = 0; i < openIdxList.Count; i++) {
+                    string sub_spt = spt.Substring(openIdxList[i]);
+                    int closeIdx = sub_spt.IndexOf(MpTextTemplate.TextTemplateCloseToken);
+                    string guid = sub_spt.Substring(MpTextTemplate.TextTemplateOpenToken.Length, closeIdx);
+                    var tvm = TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateGuid == guid);
+                    if(tvm != null)
+                    tvml.Add(tvm);
+                }
+                return tvml.Distinct();
+            }
+            return tvml;
+        }
         #endregion
 
         #region Protected Methods
@@ -1770,13 +1795,15 @@ using MpProcessHelper;
                 
                 IsContentReadOnly = false;
                 //rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
-                TemplateCollection.PastableItems = new ObservableCollection<MpTextTemplateViewModelBase>(templatesToFill);
+                //TemplateCollection.PastableItems = new ObservableCollection<MpTextTemplateViewModelBase>(templatesToFill);
 
                 IsPasting = true;
-                TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.Items));
-                TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.HasMultipleTemplates));
+                //TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.Items));
+                //TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.HasMultipleTemplates));
 
-                TemplateCollection.SelectedItem = TemplateCollection.PastableItems[0];
+                //TemplateCollection.SelectedItem = TemplateCollection.PastableItems[0];
+
+                TemplateCollection.BeginPasteTemplateCommand.Execute(templatesToFill);
                 
                 await Task.Delay(300);
                 //TemplateCollection.SelectedItem.IsPasteTextBoxFocused = true;
@@ -1937,7 +1964,7 @@ using MpProcessHelper;
                             MpTextSelectionRangeExtension.SelectAll(this);
                         }
 
-                        if(MpTextSelectionRangeExtension.IsSelectionContainTemplate(this)) {
+                        if(GetSelectedTextTemplateViewModels() != null) {
                             TemplateCollection.ClearAllEditing();
                         }
                     } else {

@@ -13,11 +13,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System.Diagnostics;
 using static QRCoder.PayloadGenerator;
 using System.Windows.Forms;
 using Xamarin.Forms;
+using Microsoft.Office.Interop.Outlook;
 
 namespace MpWpfApp {
     public enum MpCurrencyType {
@@ -28,35 +31,7 @@ namespace MpWpfApp {
         Yen
     }    
 
-    public class MpDateTimeFormatInfoViewModel : MpViewModelBase, MpITooltipInfoViewModel {
-        public object Tooltip => string.Join(
-            Environment.NewLine,
-            new string[]{
-                "yy = short year",
-                        "yyyy = long year",
-                        "M = month(1 - 12) ",
-                        "MM = month(01 - 12) ",
-                        "MMM = month abbreviation (Jan, Feb...Dec)",
-                        "MMMM = long month (January, February...December)",
-                        "d = day(1 - 31) ",
-                        "dd = day(01 - 31) ",
-                        "ddd = day of the week in words (Monday, Tuesday...Sunday)",
-                        "E = short day of the week in words (Mon, Tue...Sun)",
-                        "D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)",
-                        "h = hour in am/pm(0-12)",
-                        "hh = hour in am/pm(00-12)",
-                        "H = hour in day(0-23)",
-                        "HH = hour in day(00-23)",
-                        "mm = minute",
-                        "ss = second",
-                        "SSS = milliseconds",
-                        "a = AM/PM marker",
-                        "p = a.m./ p.m.marker "});
-    }
-
-    public class MpTextTemplateViewModelBase
-        : 
-        MpViewModelBase<MpTemplateCollectionViewModel>, 
+    public abstract class MpTextTemplateViewModelBase : MpViewModelBase<MpTemplateCollectionViewModel>, 
         MpISelectableViewModel,
         MpIValidatableViewModel,
         MpIHoverableViewModel,
@@ -71,7 +46,6 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpDateTimeFormatInfoViewModel DateTimeFormatInfoViewModel => new MpDateTimeFormatInfoViewModel();
 
         public MpClipTileViewModel HostClipTileViewModel {
             get {
@@ -183,8 +157,6 @@ namespace MpWpfApp {
 
         public bool WasVisited { get; set; }
 
-        public int InstanceCount { get; set; }
-
         public bool IsEnabled {
             get {
                 if(Parent == null || Parent.Parent == null) {
@@ -198,47 +170,12 @@ namespace MpWpfApp {
             }
         }
 
-        public int SelectedContactFieldIdx {
-            get {
-                if(TextTemplate == null || TextTemplateType != MpTextTemplateType.Contact) {
-                    return 0;
-                }
-                if(Enum.TryParse(TemplateData, out MpContactFieldType fieldType)) {
-                    return (int)fieldType;
-                }
-                return 0;
-            }
-            set {
-                if(TextTemplateType != MpTextTemplateType.Contact) {
-                    return;
-                }
-                TemplateData = ((MpContactFieldType)value).ToString();
-                OnPropertyChanged(nameof(SelectedContactFieldIdx));                
-            }
-        }
 
-        public string SelectedContactPasteDisplayValue { get; set; }
-
-        public int SelectedTemplateTypeIdx {
-            get {
-                if (TextTemplate == null) {
-                    return 0;
-                }
-                return (int)TextTemplateType;
-            }
-            set {
-                if((int)TextTemplateType != value) {
-                    TextTemplateType = (MpTextTemplateType)value;
-                    TemplateData = null;
-                    OnPropertyChanged(nameof(SelectedContactFieldIdx));
-                }
-            }
-        }
         #endregion
 
         #region Business Logic Properties
 
-        public string TemplateDisplayValue {
+        public virtual string TemplateDisplayValue {
             get {
                 if(Parent == null) {
                     return string.Empty;
@@ -253,19 +190,19 @@ namespace MpWpfApp {
 
         public string TemplateText { get; set; }
 
-        #endregion
-
-        #region Model Properties
-        public bool IsNew {
+        public bool IsInputRequiredForPaste {
             get {
-                if(TextTemplate == null) {
-                    return false;
+                if(this is MpDynamicTextTemplateViewModel ||
+                   this is MpContactTextTemplateViewModel) {
+                    return true;
                 }
-                return TextTemplate.Id == 0;
+                return false;
             }
         }
 
-        public bool WasNewOnEdit { get; set; } = false;
+        #endregion
+
+        #region Model Properties
 
         public int TextTemplateId {
             get {
@@ -367,7 +304,6 @@ namespace MpWpfApp {
                     TextTemplate.TemplateType = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(TextTemplateType));
-                    OnPropertyChanged(nameof(SelectedContactFieldIdx));
                 }
             }
         }
@@ -432,6 +368,22 @@ namespace MpWpfApp {
             base.Dispose();
         }
 
+        public virtual void FillAutoTemplate() { }
+        #endregion
+
+        #region Protected Methods
+
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpTextTemplate cit && TextTemplateId == cit.Id) {
+                if(HasModelChanged) {
+                    //change is from this template instance so ignore
+                    return;
+                }
+                TextTemplate = cit;
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -467,9 +419,6 @@ namespace MpWpfApp {
                     break;
                 case nameof(TemplateText):
                     OnPropertyChanged(nameof(TemplateDisplayValue));
-                    break;
-                case nameof(SelectedContactPasteDisplayValue):
-                    TemplateText = SelectedContactPasteDisplayValue;
                     break;
                 case nameof(ValidationText):
                     if (!string.IsNullOrEmpty(ValidationText)) {
@@ -521,9 +470,8 @@ namespace MpWpfApp {
 
         public ICommand DeleteAllTemplateInstancesCommand => new RelayCommand(
             async() => {
-                //await TextToken.DeleteFromDatabaseAsync();
-                await Task.Delay(1);
-                Debugger.Break();
+                IsEditingTemplate = false;
+                await TextTemplate.DeleteFromDatabaseAsync();
             });
 
         public ICommand ClearTemplateCommand {
@@ -541,9 +489,6 @@ namespace MpWpfApp {
         public ICommand CancelEditTemplateCommand => new RelayCommand(
             async() => {
                 IsSelected = false;
-                if (WasNewOnEdit) {
-                    await Parent.RemoveItem(TextTemplate, false);
-                }
                 TextTemplate = _originalModel;
                 IsEditingTemplate = false;
 
@@ -552,8 +497,6 @@ namespace MpWpfApp {
         public ICommand FinishEditTemplateCommand => new RelayCommand(
             async () => {
                 await TextTemplate.WriteToDatabaseAsync();
-                //Parent.Parent.RequestSyncModels();
-                WasNewOnEdit = false;
                 IsEditingTemplate = false;
                 IsSelected = false;
             },
@@ -564,8 +507,8 @@ namespace MpWpfApp {
         #region Overrides
         public override string ToString() {
             return string.Format(
-                @"Name:{0} Text:{1} Count:{2} IsEditing:{3} IsSelected:{4} WasNew:{5} IsNew:{6}",
-                TemplateName,TemplateText,InstanceCount,IsEditingTemplate?"T":"F",IsSelected?"T":"F",WasNewOnEdit ? "T" : "F",IsNew ? "T" : "F");
+                @"Name:{0} Text:{1} Type:{2} Data:{3}",
+                TemplateName,TemplateText,TextTemplateType,TemplateData);
         }
 
         #endregion

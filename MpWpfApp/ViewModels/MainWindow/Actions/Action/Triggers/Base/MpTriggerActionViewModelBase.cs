@@ -56,24 +56,9 @@ namespace MpWpfApp {
                 var tmivml = new List<MpMenuItemViewModel>();
                 var triggerLabels = typeof(MpTriggerType).EnumToLabels();
                 for (int i = 0; i < triggerLabels.Length; i++) {
-                    string resourceKey = string.Empty;
-                    switch ((MpTriggerType)i) {
-                        case MpTriggerType.ContentAdded:
-                            resourceKey = "ClipboardIcon";
-                            break;
-                        case MpTriggerType.ContentTagged:
-                            resourceKey = "PinToCollectionIcon";
-                            break;
-                        case MpTriggerType.FileSystemChange:
-                            resourceKey = "FolderEventIcon";
-                            break;
-                        case MpTriggerType.Shortcut:
-                            resourceKey = "HotkeyIcon";
-                            break;
-                        case MpTriggerType.ParentOutput:
-                            resourceKey = "ChainIcon";
-                            break;
-                    }
+                    string resourceKey = new MpEnumToImageResourceKeyConverter()
+                        .Convert((MpTriggerType)i, null, null, null) as string;
+
                     var tt = (MpTriggerType)i;
                     tmivml.Add(new MpMenuItemViewModel() {
                         IsSelected = tt == TriggerType,
@@ -243,6 +228,7 @@ namespace MpWpfApp {
             MpMainWindowViewModel.Instance.IsShowingDialog = MpMainWindowViewModel.Instance.IsMainWindowOpen;
 
             await MpNotificationCollectionViewModel.Instance.ShowMessage(
+                iconResourceKey: IconResourceKeyStr,
                 title: "ACTION STATUS",
                 msg: notificationText);
 

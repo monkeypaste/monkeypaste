@@ -6,6 +6,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      mc:Ignorable="d"
                      xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                      x:TypeArguments="local:MpTemplateCollectionViewModel"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
@@ -19,8 +20,21 @@
             CornerRadius="5">
         <Grid x:Name="PasteTemplateToolbarGrid">
             <Grid.Resources>
+                <!--<DataTemplate x:Key="StaticTemplate"
+                              DataType="{x:Type local:MpStaticTextTemplateViewModel}">
+                    <TextBox x:Name="StaticTextBox"
+                             IsVisibleChanged="StaticTextBox_IsVisibleChanged"
+                             Visibility="Collapsed" />
+                </DataTemplate>
+
+                <DataTemplate x:Key="DateTimeTemplate"
+                              DataType="{x:Type local:MpDateTimeTextTemplateViewModel}">
+                    <TextBox x:Name="DateTimeTextBox"
+                             IsVisibleChanged="DateTimeTextBox_IsVisibleChanged"
+                             Visibility="Collapsed" />
+                </DataTemplate>-->
                 <DataTemplate x:Key="DynamicTemplate"
-                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
+                              DataType="{x:Type local:MpDynamicTextTemplateViewModel}">
                     <local:MpClipBorder Grid.Column="2"
                                         Margin="1"
                                         Padding="0"
@@ -35,7 +49,6 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="0.1*" />
                             </Grid.ColumnDefinitions>
-
                             <TextBox x:Name="SelectedTemplateTextBox"
                                      Grid.Column="0"
                                      Width="240"
@@ -69,27 +82,15 @@
                                     Visibility="{Binding HasText,
                                                          Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Image x:Name="ClearCurrentTemplateButtonImage"
-                                       Source="/Resources/Images/close1.png" />
+                                       Source="{Binding .,
+                                                        Converter={StaticResource StringResourceToImageSourceConverter},
+                                                        ConverterParameter={StaticResource CloseOverIcon}}" />
                             </Button>
                         </Grid>
                     </local:MpClipBorder>
                 </DataTemplate>
-
-                <DataTemplate x:Key="StaticTemplate"
-                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
-                    <TextBox x:Name="StaticTextBox"
-                             IsVisibleChanged="StaticTextBox_IsVisibleChanged"
-                             Visibility="Collapsed" />
-                </DataTemplate>
-
-                <DataTemplate x:Key="DateTimeTemplate"
-                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
-                    <TextBox x:Name="DateTimeTextBox"
-                             IsVisibleChanged="DateTimeTextBox_IsVisibleChanged"
-                             Visibility="Collapsed" />
-                </DataTemplate>
                 <DataTemplate x:Key="ContactTemplate"
-                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
+                              DataType="{x:Type local:MpContactTextTemplateViewModel}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Contact"
                                    Margin="10,0,10,0"
@@ -97,20 +98,37 @@
                                    FontWeight="SemiBold" />
                         <local:MpSpinnerApple VerticalAlignment="Center"
                                               Margin="0,0,5,0"
+                                              Width="15"
+                                              Height="15"
                                               Visibility="{Binding IsBusy,
-                                                                   Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                                   Converter={StaticResource BoolToVisibilityConverter},
+                                                                   Source={x:Static pcl:MpContactCollectionViewModel.Instance}}" />
                         <Border Style="{StaticResource ActionPropertyComboBoxStyle_Border}"
                                 Visibility="{Binding IsBusy,
-                                                     Converter={StaticResource BoolToVisibilityFlipConverter}}">
+                                                     Converter={StaticResource BoolToVisibilityFlipConverter},
+                                                     Source={x:Static pcl:MpContactCollectionViewModel.Instance}}">
                             <ComboBox x:Name="ContactComboBox"
                                       Style="{StaticResource ActionPropertyComboBoxStyle}"
                                       IsSynchronizedWithCurrentItem="False"
                                       IsDropDownOpen="{Binding IsAnyDropDownOpen,
                                                                Source={x:Static local:MpMainWindowViewModel.Instance},
                                                                Mode=OneWayToSource}"
-                                      Loaded="ContactComboBox_Loaded"
-                                      IsVisibleChanged="ContactComboBox_IsVisibleChanged"
-                                      SelectionChanged="ContactComboBox_SelectionChanged" />
+                                      ItemsSource="{Binding Items,
+                                                            Source={x:Static pcl:MpContactCollectionViewModel.Instance}}"
+                                      SelectedItem="{Binding SelectedContact,
+                                                             Mode=TwoWay}">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ComboBoxItem}">
+                                        <Setter Property="HorizontalAlignment"
+                                                Value="Stretch" />
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DisplayValue}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </Border>
                     </StackPanel>
                 </DataTemplate>
@@ -139,7 +157,7 @@
                           IsDropDownOpen="{Binding IsAnyDropDownOpen,
                                                    Source={x:Static local:MpMainWindowViewModel.Instance},
                                                    Mode=OneWayToSource}"
-                          ItemsSource="{Binding PastableItems}"
+                          ItemsSource="{Binding PastableItemsNeedingInput}"
                           SelectedItem="{Binding SelectedItem,
                                                  Mode=TwoWay,
                                                  NotifyOnTargetUpdated=True,

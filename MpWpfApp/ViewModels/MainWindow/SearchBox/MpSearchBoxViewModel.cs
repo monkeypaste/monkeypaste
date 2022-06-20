@@ -19,7 +19,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
 
-    public class MpSearchBoxViewModel : MpViewModelBase, MpISingletonViewModel<MpSearchBoxViewModel> {
+    public class MpSearchBoxViewModel : MpViewModelBase, MpIAsyncSingletonViewModel<MpSearchBoxViewModel> {
         #region Private Variables
         #endregion
 

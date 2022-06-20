@@ -14,16 +14,16 @@
     <Border x:Name="ClipTileEditTemplateToolbar"
             Width="{Binding HostClipTileViewModel.TileBorderWidth}"
             IsVisibleChanged="ClipTileEditTemplateToolbar_IsVisibleChanged"
-            Height="40"
-            HorizontalAlignment="Stretch"
+            MinHeight="40"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"            
             Background="LightBlue"
-            BorderThickness="0"
-            CornerRadius="10,0,0,10">
-        <Grid x:Name="EditTemplateContainerGrid">
-            <Grid.Resources>
+            BorderThickness="0">
+        <DockPanel LastChildFill="True">
+            <DockPanel.Resources>
                 <DataTemplate x:Key="DynamicTemplate" />
                 <DataTemplate x:Key="StaticTemplate"
-                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
+                              DataType="{x:Type local:MpStaticTextTemplateViewModel}">
                     <StackPanel x:Name="StaticTemplateStackPanelContainer"
                                 Orientation="Horizontal">
                         <TextBlock Margin="10,0,10,0"
@@ -35,14 +35,15 @@
                             <TextBox Width="120"
                                      BorderThickness="0"
                                      VerticalContentAlignment="Center"
+                                     PreviewKeyDown="TemplateNameEditorTextBox_PreviewKeyDown"
                                      Text="{Binding TemplateData,
                                                     Mode=TwoWay,
-                                                    UpdateSourceTrigger=LostFocus}" />
+                                                    UpdateSourceTrigger=PropertyChanged}" />
                         </Border>
                     </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="ContactTemplate"
-                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
+                              DataType="{x:Type local:MpContactTextTemplateViewModel}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Field"
                                    Margin="10,0,10,0"
@@ -52,71 +53,115 @@
                             <ComboBox x:Name="ContactFieldComboBox"
                                       Style="{StaticResource ActionPropertyComboBoxStyle}"
                                       ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
-                                      IsSynchronizedWithCurrentItem="True"
+                                      IsSynchronizedWithCurrentItem="False"
                                       IsDropDownOpen="{Binding IsAnyDropDownOpen,
                                                                Source={x:Static local:MpMainWindowViewModel.Instance},
                                                                Mode=OneWayToSource}"
-                                      SelectedIndex="{Binding SelectedContactFieldIdx,
+                                      SelectedIndex="{Binding SelectedContactFieldTypeIdx,
                                                               Mode=TwoWay}"
-                                      ItemsSource="{Binding .,
-                                                            Converter={StaticResource EnumToItemSourceLabelsConverter},
-                                                            ConverterParameter=MonkeyPaste.MpContactFieldType}" />
+                                      ItemsSource="{Binding ContactFieldTypes}" />
                         </Border>
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding IsCustomFieldSelected,
+                                                         Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Border Background="White"
+                                    BorderThickness="0"
+                                    CornerRadius="5"
+                                    Margin="7"
+                                    Padding="5">
+                                <TextBox Width="120"
+                                         BorderThickness="0"
+                                         PreviewKeyDown="TemplateNameEditorTextBox_PreviewKeyDown"
+                                         Text="{Binding TemplateData,
+                                                        Mode=TwoWay,
+                                                        UpdateSourceTrigger=LostFocus}" />
+                            </Border>
+                            <local:MpTooltipInfoView HorizontalAlignment="Right"
+                                                     Margin="0,5"
+                                                     DataContext="{Binding ContactFieldInfoViewModel,
+                                                                           Source={x:Static local:MpTooltipInfoCollectionViewModel.Instance}}" />
+                        </StackPanel>
                     </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="DateTimeTemplate"
-                              DataType="{x:Type local:MpTextTemplateViewModelBase}">
+                              DataType="{x:Type local:MpDateTimeTextTemplateViewModel}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Format"
                                    Margin="10"
                                    VerticalAlignment="Center"
                                    FontWeight="SemiBold" />
-                        <Border Style="{StaticResource ActionPropertyComboBoxStyle_Border}"
-                                Background="White">
-                            <TextBox Width="120"
-                                     BorderThickness="0"
-                                     Text="{Binding TemplateData,
-                                                    Mode=TwoWay,
-                                                    UpdateSourceTrigger=LostFocus}" />
+                        <Border Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
+                            <ComboBox x:Name="DateTimeFormatComboBox"
+                                      Style="{StaticResource ActionPropertyComboBoxStyle}"
+                                      ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
+                                      IsSynchronizedWithCurrentItem="False"
+                                      IsDropDownOpen="{Binding IsAnyDropDownOpen,
+                                                               Source={x:Static local:MpMainWindowViewModel.Instance},
+                                                               Mode=OneWayToSource}"
+                                      SelectedIndex="{Binding SelectedDateTimeFormatIdx,
+                                                              Mode=TwoWay}"
+                                      ItemsSource="{Binding DateTimeFormatItems}" />
                         </Border>
-                        <local:MpTooltipInfoView HorizontalAlignment="Right"
-                                                 Margin="5,2"
-                                                 DataContext="{Binding DateTimeFormatInfoViewModel}" />
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding IsCustomFormatSelected,
+                                                         Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Border Background="White"
+                                    BorderThickness="0"
+                                    CornerRadius="5"
+                                    Margin="7"
+                                    Padding="5">
+                                <TextBox Width="120"
+                                         BorderThickness="0"
+                                         PreviewKeyDown="TemplateNameEditorTextBox_PreviewKeyDown"
+                                         Text="{Binding TemplateData,
+                                                        Mode=TwoWay,
+                                                        UpdateSourceTrigger=LostFocus}" />
+                            </Border>
+                            <local:MpTooltipInfoView HorizontalAlignment="Right"
+                                                     Margin="0,5"
+                                                     DataContext="{Binding DateTimeFormatInfoViewModel,
+                                                                           Source={x:Static local:MpTooltipInfoCollectionViewModel.Instance}}" />
+                        </StackPanel>
                     </StackPanel>
                 </DataTemplate>
                 <local:MpEditTemplateDetailViewSelector x:Key="EditTemplateDetailViewSelector" />
-            </Grid.Resources>
-            <Button x:Name="TemplateColorButton"
-                    Width="20"
-                    Height="20"
-                    Margin="10,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Background="{Binding TemplateHexColor,
-                                         Mode=TwoWay,
-                                         NotifyOnTargetUpdated=True,
-                                         NotifyOnSourceUpdated=True,
-                                         UpdateSourceTrigger=PropertyChanged,
-                                         Converter={StaticResource StringHexToBrushConverter}}"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    Click="TemplateColorButton_Click" />
+            </DockPanel.Resources>
             <StackPanel Orientation="Horizontal"
                         Margin="10,0,0,0"
+                        DockPanel.Dock="Left"
+                        VerticalAlignment="Top"
                         HorizontalAlignment="Left">
+
+                <Button x:Name="TemplateColorButton"
+                        Width="20"
+                        Height="20"
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Background="{Binding TemplateHexColor,
+                                             Mode=TwoWay,
+                                             NotifyOnTargetUpdated=True,
+                                             NotifyOnSourceUpdated=True,
+                                             UpdateSourceTrigger=PropertyChanged,
+                                             Converter={StaticResource StringHexToBrushConverter}}"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Click="TemplateColorButton_Click" />
                 <Border CornerRadius="5"
-                        Margin="30,7,0,7"
+                        Margin="10,7,0,7"
                         Background="White"
                         BorderThickness="0"
+                        VerticalAlignment="Stretch"
+                        
                         BorderBrush="{Binding TemplateBorderHexColor,
                                               Converter={StaticResource StringHexToBrushConverter}}">
                     <TextBox x:Name="TemplateNameEditorTextBox"
-                             Height="25"
+                             MinHeight="25"
                              MinWidth="150"
                              Padding="0,0,0,0"
                              HorizontalAlignment="Left"
-                             VerticalAlignment="Center"
-                             VerticalContentAlignment="Top"
+                             VerticalAlignment="Stretch" TextWrapping="WrapWithOverflow"
+                             VerticalContentAlignment="Stretch"
                              local:MpIsFocusedExtension.IsEnabled="True"
                              local:MpIsFocusedExtension.IsFocused="{Binding IsEditTextBoxFocused,
                                                                             Mode=TwoWay}"
@@ -159,39 +204,20 @@
                     </DockPanel>
                 </Border>
             </StackPanel>
-
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
-                        VerticalAlignment="Center">
-                <TextBlock Margin="0,0,10,0"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Center"
-                           FontWeight="SemiBold"
-                           Text="Type" />
-                <Border Margin="0,0,0,0"
-                        HorizontalAlignment="Right"
-                        Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
-                    <ComboBox x:Name="TemplateTypeComboBox"
-                              Style="{StaticResource ActionPropertyComboBoxStyle}"
-                              ItemContainerStyle="{StaticResource ActionPropertyComboBoxItemStyle}"
-                              IsSynchronizedWithCurrentItem="False"
-                              SelectionChanged="TemplateTypeComboBox_SelectionChanged"
-                              IsDropDownOpen="{Binding IsAnyDropDownOpen,
-                                                       Source={x:Static local:MpMainWindowViewModel.Instance},
-                                                       Mode=OneWayToSource}"
-                              SelectedIndex="{Binding SelectedTemplateTypeIdx,
-                                                      Converter={StaticResource EnumToIntConverter},
-                                                      ConverterParameter=MonkeyPaste.MpTextTemplateType,
-                                                      Mode=TwoWay}"
-                              ItemsSource="{Binding .,
-                                                    Converter={StaticResource EnumToItemSourceLabelsConverter},
-                                                    ConverterParameter=MonkeyPaste.MpTextTemplateType}" />
-                </Border>
-                <ContentControl x:Name="TemplateDetailContentControl"
-                                Margin="0,0,0,0"
-                                Background="Orange"
-                                Content="{Binding}"
-                                ContentTemplateSelector="{StaticResource EditTemplateDetailViewSelector}" />
+                        VerticalAlignment="Top"
+                        DockPanel.Dock="Right">
+                <Button x:Name="DeleteAllButton"
+                        Margin="5,7,15,7"
+                        Background="Crimson"
+                        Foreground="Wheat"
+                        Padding="3"
+                        Width="80"
+                        Command="{Binding DeleteAllTemplateInstancesCommand}"
+                        Content="DELETE ALL"
+                        FontSize="14"
+                        IsCancel="True" />
 
                 <Button x:Name="CancelButton"
                         Margin="5,7"
@@ -210,6 +236,13 @@
                         FontSize="14"
                         IsDefault="True" />
             </StackPanel>
-        </Grid>
+
+            <ContentControl x:Name="TemplateDetailContentControl"
+                            Margin="0,7,0,0"
+                            VerticalAlignment="Top"
+                            Background="Orange"
+                            Content="{Binding}"
+                            ContentTemplateSelector="{StaticResource EditTemplateDetailViewSelector}" />
+        </DockPanel>
     </Border>
 </local:MpUserControl>

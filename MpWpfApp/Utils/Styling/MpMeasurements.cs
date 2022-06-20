@@ -5,7 +5,7 @@ using MonkeyPaste;
 
 namespace MpWpfApp {
 
-    public class MpMeasurements : MpViewModelBase, MpISingletonViewModel<MpMeasurements> {    
+    public class MpMeasurements : MpViewModelBase, MpIAsyncSingletonViewModel<MpMeasurements> {    
         private static MpMeasurements _instance;
         public static MpMeasurements Instance => _instance ?? (_instance = new MpMeasurements());
 

@@ -15,7 +15,7 @@ using MonkeyPaste;
 namespace MpWpfApp {
     public class MpUrlCollectionViewModel : 
         MpSelectorViewModelBase<object,MpUrlViewModel>, 
-        MpISingletonViewModel<MpUrlCollectionViewModel> {
+        MpIAsyncSingletonViewModel<MpUrlCollectionViewModel> {
         #region Properties
 
         #region View Models

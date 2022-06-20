@@ -15,7 +15,13 @@ namespace MpWpfApp {
                 if(string.IsNullOrEmpty(valueStr)) {
                     return new Image();
                 }
-                var bmpSrc = (BitmapSource)new BitmapImage(new Uri(value.ToString()));
+                if(!valueStr.IsStringResourcePath()) {
+                    if(!Application.Current.Resources.Contains(valueStr)) {
+                        valueStr = "QuestionMarkIcon";
+                    }
+                    valueStr = Application.Current.Resources[valueStr] as string;
+                }
+                var bmpSrc = (BitmapSource)new BitmapImage(new Uri(valueStr));
                 
                 if(parameter is string paramStr) {
                     if(string.IsNullOrEmpty(paramStr)) {

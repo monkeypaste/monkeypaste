@@ -40,18 +40,6 @@ namespace MonkeyPaste {
 
         public virtual string Address { get; set; }        
 
-        public string DisplayValue {
-            get {
-                if(string.IsNullOrWhiteSpace(FullName)) {
-                    if(string.IsNullOrWhiteSpace(Email)) {
-                        return "No Display Data";
-                    }
-                    return Email;
-                }
-                return FullName;
-            }
-        }
-
         public MpContact() { }
 
         public MpContact(MpIContact contact) {
@@ -70,7 +58,7 @@ namespace MonkeyPaste {
 
         public object GetField(string propertyPath, object[] index = null) {
             if(_contactSource == null) {
-                return string.Empty;
+                return this.GetPropertyValue(propertyPath);
             }
 
             return _contactSource.GetPropertyValue(propertyPath, index);

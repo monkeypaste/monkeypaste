@@ -17,7 +17,7 @@ using System.Windows;
 namespace MpWpfApp {
     public class MpShortcutCollectionViewModel : 
         MpViewModelBase, 
-        MpISingletonViewModel<MpShortcutCollectionViewModel>{
+        MpIAsyncSingletonViewModel<MpShortcutCollectionViewModel>{
         #region Private Variables
         #endregion
 

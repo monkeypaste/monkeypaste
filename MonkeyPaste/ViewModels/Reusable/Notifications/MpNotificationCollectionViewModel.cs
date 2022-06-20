@@ -79,13 +79,15 @@ namespace MonkeyPaste {
             string msg = "", 
             double maxShowTimeMs = 3000,
             MpNotificationDialogType msgType = MpNotificationDialogType.Message,
-            object iconResourcePathOrBase64 = null) {
+            string iconResourceKey = null,
+            string iconBase64Str = null) {
             await ShowNotification(
                 dialogType: msgType,
                 title: title,
                 msg: msg,
                 maxShowTimeMs: maxShowTimeMs,
-                iconResourcePathOrBase64: iconResourcePathOrBase64);
+                iconResourceKey: iconResourceKey,
+                iconBase64Str: iconBase64Str);
         }
         public async Task<MpDialogResultType> ShowNotification(
             MpNotificationDialogType dialogType = MpNotificationDialogType.None,
@@ -95,7 +97,8 @@ namespace MonkeyPaste {
             double maxShowTimeMs = -1,
             Action<object> retryAction = null,
             object retryActionObj = null,
-            object iconResourcePathOrBase64 = null,
+            string iconResourceKey = null,
+            string iconBase64Str = null,
             ICommand fixCommand = null,
             object fixCommandArgs = null) {
                         
@@ -123,7 +126,9 @@ namespace MonkeyPaste {
                         DialogType = dialogType,
                         ExceptionType = exceptionType,
                         Title = title,
-                        Body = msg
+                        Body = msg,
+                        IconImageBase64 = iconBase64Str,
+                        IconResourceKey = iconResourceKey
                     };
                     break;
                 default:
@@ -133,7 +138,9 @@ namespace MonkeyPaste {
                         Title = title,
                         Body = msg,
                         FixCommand = fixCommand,
-                        FixCommandArgs = fixCommandArgs
+                        FixCommandArgs = fixCommandArgs,
+                        IconImageBase64 = iconBase64Str,
+                        IconResourceKey = iconResourceKey
                     };
                     break;
             }

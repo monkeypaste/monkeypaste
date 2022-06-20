@@ -16,6 +16,10 @@ namespace MpWpfApp {
                 return null;
             }
 
+            if(!tvm.IsInputRequiredForPaste) {
+                return null;
+            }
+
             string keyStr = tvm.TextTemplateType.ToString() + "Template";
             var fe = container as FrameworkElement;
             if (fe == null) {

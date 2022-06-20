@@ -7,7 +7,7 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSystemTrayViewModel : MpViewModelBase, MpISingletonViewModel<MpSystemTrayViewModel> {
+    public class MpSystemTrayViewModel : MpViewModelBase, MpIAsyncSingletonViewModel<MpSystemTrayViewModel> {
 
 
         #region Private Variables

@@ -20,7 +20,7 @@ using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpIconCollectionViewModel : 
         MpViewModelBase, 
-        MpISingletonViewModel<MpIconCollectionViewModel>,
+        MpIAsyncSingletonViewModel<MpIconCollectionViewModel>,
         MpIUserColorViewModel {
         #region Private Variables
 

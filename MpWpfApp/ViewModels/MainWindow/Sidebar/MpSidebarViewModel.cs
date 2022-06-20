@@ -9,7 +9,7 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Com
 namespace MpWpfApp {
     public class MpSidebarViewModel : 
         MpViewModelBase, 
-        MpISingletonViewModel<MpSidebarViewModel> {
+        MpIAsyncSingletonViewModel<MpSidebarViewModel> {
         #region Properties
 
         #region View Models

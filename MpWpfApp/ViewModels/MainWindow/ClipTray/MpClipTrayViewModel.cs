@@ -24,7 +24,7 @@ using System.Runtime.CompilerServices;
 namespace MpWpfApp {
     public class MpClipTrayViewModel :
         MpSelectorViewModelBase<object, MpClipTileViewModel>,
-        MpISingletonViewModel<MpClipTrayViewModel>,
+        MpIAsyncSingletonViewModel<MpClipTrayViewModel>,
         MpIActionComponent,
         MpIMenuItemViewModel {
         #region Private Variables      
@@ -862,6 +862,11 @@ namespace MpWpfApp {
             }
         }
 
+        public void ClearAllEditing() {
+            ClearClipEditing();
+            ClearPinnedEditing();
+        }
+
         public void ClearClipSelection(bool clearEditing = true) {
             MpHelpers.RunOnMainThread((Action)(() => {
                 if (clearEditing) {
@@ -1558,7 +1563,7 @@ namespace MpWpfApp {
                         title: "Trial Expired",
                         msg: "Please update your membership to use Monkey Paste",
                         msgType: MpNotificationDialogType.TrialExpired,
-                        iconResourcePathOrBase64: MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png")
+                        iconResourceKey: MpPreferences.AbsoluteResourcesPath + @"/Images/monkey (2).png")
                         .FireAndForgetSafeAsync(this);
                 }
             }
@@ -1743,7 +1748,10 @@ namespace MpWpfApp {
 
         public ICommand AddNewItemsCommand => new RelayCommand(
             async () => {
-                IsBusy = MpMainWindowViewModel.Instance.IsMainWindowOpen;
+                int selectedId = -1;
+                if(MpMainWindowViewModel.Instance.IsMainWindowLocked) {
+                    selectedId = SelectedItem.CopyItemId;
+                }
                 for (int i = 0; i < _newModels.Count; i++) {
                     var ci = _newModels[i];
                     var nctvm = await CreateClipTileViewModel(ci);
@@ -1754,8 +1762,15 @@ namespace MpWpfApp {
                 }
 
                 _newModels.Clear();
-
-                IsBusy = false;
+                if(selectedId >= 0) {
+                    while(IsAnyBusy) {
+                        await Task.Delay(100);
+                    }
+                    var selectedVm = AllItems.FirstOrDefault(x => x.CopyItemId == selectedId);
+                    if(selectedVm != null) {
+                        selectedVm.IsSelected = true;
+                    }
+                }
 
                 //using tray scroll changed so tile drop behaviors update their drop rects
                 //MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayScrollChanged);
@@ -2230,11 +2245,12 @@ namespace MpWpfApp {
         public ICommand PasteSelectedClipsCommand => new RelayCommand<object>(
             async(args) => {
                 IsPasting = true;
-
                 var pi = new MpProcessInfo() {
                     Handle = MpProcessManager.LastHandle,
                     ProcessPath = MpProcessManager.LastProcessPath
                 };
+                MpPortableDataObject mpdo = null;
+
                 MpPasteToAppPathViewModel ptapvm = null;
                 if (args != null && args is int appId && appId > 0) {
                     //when pasting to a user defined application
@@ -2248,15 +2264,24 @@ namespace MpWpfApp {
                         pi.WindowState = ptapvm.WindowState;
                     }
                 } else if (args != null && args is IntPtr handle && handle != IntPtr.Zero) {
+                    // TODO Currently only place passing handle to this command is external drop
+                    // should probably either alter procesInfo object and add IsDragDrop or make another command for it
+                    // but for now just flagging that this is drag drop
+
                     //when pasting to a running application
                     pi.Handle = handle;
                     ptapvm = null;
+                } else if(args is MpPortableDataObject) {
+                    mpdo = args as MpPortableDataObject;
                 }
 
                 //In order to paste the app must hide first 
                 //this triggers hidewindow to paste selected items
 
-                var mpdo = await SelectedItem.ConvertToPortableDataObject(false, pi.Handle);
+                if(mpdo == null) {
+                    //is non-null for external template drop
+                    mpdo = await SelectedItem.ConvertToPortableDataObject(false, pi.Handle);
+                }
 
                 await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
                     mpdo, pi, ptapvm == null ? false : ptapvm.PressEnter);
@@ -2413,6 +2438,7 @@ namespace MpWpfApp {
 
         public ICommand EditSelectedContentCommand => new RelayCommand(
             () => {
+                ClearAllEditing();
                 SelectedItem.ToggleEditContentCommand.Execute(null);
             },
             () => SelectedItem != null && SelectedItem.IsContentReadOnly);

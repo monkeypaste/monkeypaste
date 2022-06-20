@@ -20,7 +20,7 @@ namespace MpWpfApp {
     public class MpActionCollectionViewModel : 
         MpSelectorViewModelBase<object,MpTriggerActionViewModelBase>, 
         MpIMenuItemViewModel,
-        MpISingletonViewModel<MpActionCollectionViewModel>,
+        MpIAsyncSingletonViewModel<MpActionCollectionViewModel>,
         MpIHoverableViewModel,
         MpIResizableViewModel,
         MpISidebarItemViewModel,

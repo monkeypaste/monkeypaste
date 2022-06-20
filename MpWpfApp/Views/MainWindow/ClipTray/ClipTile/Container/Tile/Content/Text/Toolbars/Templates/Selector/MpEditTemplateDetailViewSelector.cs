@@ -21,7 +21,7 @@ namespace MpWpfApp {
             if (fe == null) {
                 return null;
             }
-            var pfe = fe.GetVisualAncestor<Grid>();
+            var pfe = fe.GetVisualAncestor<DockPanel>();
             if (pfe == null) {
                 return null;
             }

@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:MpWpfApp"
+                    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <FontFamily x:Key="FontAwesomeRegular">
+        /Resources/Icons/FontAwesome/Fonts/FontAwesome5Regular.otf#Font Awesome 5 Free Regular
+    </FontFamily>
+</ResourceDictionary>

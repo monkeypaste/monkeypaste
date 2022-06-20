@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
+
     public static class MpUrlHelpers {
         public static string GetFullyFormattedUrl(string str) {
             //returns url so it has protocol prefix

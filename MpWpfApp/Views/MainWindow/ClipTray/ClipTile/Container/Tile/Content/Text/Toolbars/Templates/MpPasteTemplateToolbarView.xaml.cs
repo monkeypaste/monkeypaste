@@ -96,75 +96,42 @@ namespace MpWpfApp {
             tvm.TemplateText = selected_contact.GetField(tvm.TemplateData) as string;
         }
 
-        private void DateTimeTextBox_Loaded(object sender, RoutedEventArgs e) {
-            var tb = sender as TextBox;
-            var tvm = tb.DataContext as MpTextTemplateViewModelBase;
-            if (tvm == null) {
-                return;
-            }
-            string templateText;
-            try {
-                templateText = DateTime.Now.ToString(tvm.TemplateData);
-             }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error converting date time format '{tvm.TemplateData}', using default", ex);
-                templateText = DateTime.Now.ToString();
-            }
-            tvm.TemplateText = templateText;
-
-            BindingContext.SelectNextTemplateCommand.Execute(null);
-        }
-
-        private void StaticTextBox_Loaded(object sender, RoutedEventArgs e) {
-            var tb = sender as TextBox;
-            var tvm = tb.DataContext as MpTextTemplateViewModelBase;
-            if (tvm == null) {
-                return;
-            }
-            tvm.TemplateText = tvm.TemplateData;
-
-            BindingContext.SelectNextTemplateCommand.Execute(null);
-        }
-
-        private void StaticTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            var tb = sender as TextBox;
-            var tvm = tb.DataContext as MpTextTemplateViewModelBase;
-            if (tvm == null) {
-                return;
-            }
-            tvm.TemplateText = tvm.TemplateData;
-        }
-
-        private void DateTimeTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            var tb = sender as TextBox;
-            var tvm = tb.DataContext as MpTextTemplateViewModelBase;
-            if (tvm == null) {
-                return;
-            }
-            string templateText;
-            try {
-                templateText = DateTime.Now.ToString(tvm.TemplateData);
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error converting date time format '{tvm.TemplateData}', using default", ex);
-                templateText = DateTime.Now.ToString();
-            }
-            tvm.TemplateText = templateText;
-        }
 
         private void ContactComboBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            var contact_cmb = sender as ComboBox;
-            var tvm = contact_cmb.DataContext as MpTextTemplateViewModelBase;
-            MpHelpers.RunOnMainThread(async () => {
-                tvm.IsBusy = true;
+            if((bool)e.NewValue) {
+                var contact_cmb = sender as ComboBox;
+                var tvm = contact_cmb.DataContext as MpTextTemplateViewModelBase;
+                MpHelpers.RunOnMainThread(async () => {
+                    tvm.IsBusy = true;
 
-                contact_cmb.ItemsSource = await MpMasterTemplateModelCollectionViewModel.Instance.GetContacts();
+                    await Task.Delay(3000);
 
-                if (contact_cmb.Items.Count == 0) {
-                    contact_cmb.Items.Add(MpContact.EmptyContact);
-                }
-                tvm.IsBusy = false;
-            });
+                    //contact_cmb.ItemsSource = await MpMasterTemplateModelCollectionViewModel.Instance.GetContacts();
+                    contact_cmb.ItemsSource = new List<MpContact>() {
+                        new MpContact() {
+                            FirstName = "Mikey",
+                            LastName = "Underwood",
+                            FullName = "Mikey Underwood",
+                            Email = "munderwood@yahoo.com",
+                            Address = "12312 Hot dog Rd, Clement Georgia 12234",
+                            PhoneNumber = "802-234-5132"
+                        },
+                        new MpContact() {
+                            FirstName = "Nina",
+                            LastName = "Jacobson",
+                            FullName = "Nina Jacobson",
+                            Email = "ninaaaaaaa@yahoo.com",
+                            Address = "123 Fort Hunt St, Lake Patunia Mississippi 41207",
+                            PhoneNumber = "213-542-5223"
+                        }
+                    };
+
+                    if (contact_cmb.Items.Count == 0) {
+                        contact_cmb.Items.Add(MpContact.EmptyContact);
+                    }
+                    tvm.IsBusy = false;
+                });
+            }
         }
     }
 }

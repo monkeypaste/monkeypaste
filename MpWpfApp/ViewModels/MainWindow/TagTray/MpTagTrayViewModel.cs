@@ -20,7 +20,7 @@ namespace MpWpfApp {
 
     public class MpTagTrayViewModel : 
         MpSelectorViewModelBase<object,MpTagTileViewModel>, 
-        MpISingletonViewModel<MpTagTrayViewModel>,
+        MpIAsyncSingletonViewModel<MpTagTrayViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpISidebarItemViewModel {

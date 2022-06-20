@@ -21,7 +21,7 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Com
 namespace MpWpfApp {
     public class MpMainWindowViewModel : 
         MpViewModelBase,
-        MpISingletonViewModel<MpMainWindowViewModel>,
+        MpIAsyncSingletonViewModel<MpMainWindowViewModel>,
         MpIResizableViewModel {
         #region Statics
 

@@ -16,7 +16,7 @@ using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpAppCollectionViewModel : 
         MpSelectorViewModelBase<object,MpAppViewModel>, 
-        MpISingletonViewModel<MpAppCollectionViewModel> {
+        MpIAsyncSingletonViewModel<MpAppCollectionViewModel> {
         #region Private Variables
 
         #endregion

@@ -152,19 +152,35 @@ namespace MpWpfApp {
             }
         }
         private void OnQueryContinueDrag(object sender, QueryContinueDragEventArgs e) {
+
             MpConsole.WriteLine("Action: " + e.Action);
 
             if (!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                var dropAppHandle = MpProcessHelper.MpProcessManager.LastHandle;
-
-                e.Handled = true;
-                e.Action = DragAction.Cancel;
-
-                MpProcessAutomation.ActivateThisApp();
-
-                MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(dropAppHandle);
 
                 MpHelpers.RunOnMainThread(async () => {
+                    var dropAppHandle = MpProcessHelper.MpProcessManager.LastHandle;
+
+                    e.Handled = true;
+                    e.Action = DragAction.Cancel;
+
+                    MpProcessAutomation.ActivateThisApp();
+
+                    var ctvm = MpClipTrayViewModel.Instance.SelectedItem;
+                    
+                    if(ctvm == null) {
+                        var dd = MpDragDropManager.DragData;
+                        Debugger.Break();
+                    }
+                    //MpDragDropManager.DragData as MpClipTileViewModel;
+
+                    MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(
+                        isDragDrop: true,
+                        targetHandleObj: dropAppHandle,
+                        ignoreSubSelection: false,
+                        isDropping: true);
+
+                    MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(dropAppHandle);
+
                     while(MpClipTrayViewModel.Instance.SelectedItem.IsPasting) {
                         await Task.Delay(100);
                     }

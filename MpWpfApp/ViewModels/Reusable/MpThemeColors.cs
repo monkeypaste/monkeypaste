@@ -37,7 +37,7 @@ namespace MpWpfApp {
         Custom
     }
 
-    public class MpThemeColors : MpViewModelBase, MpISingletonViewModel<MpThemeColors> {
+    public class MpThemeColors : MpViewModelBase, MpIAsyncSingletonViewModel<MpThemeColors> {
 
         #region Private Variables
 

@@ -175,6 +175,7 @@
     <Compile Include="Behaviors\MpMoveBehavior.cs" />
     <Compile Include="Behaviors\MpResizeBehavior.cs" />
     <Compile Include="Bootstrapper\MpWpfBootstrapperViewModel.cs" />
+    <Compile Include="Controls\DockPanelSplitter.cs" />
     <Compile Include="Controls\MpListBox.cs" />
     <Compile Include="Controls\MpRichTextBox.cs" />
     <Compile Include="Controls\MpSlickToggleButton.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Converters\MpBase64ToImageBrushConverter.cs" />
     <Compile Include="Converters\MpBoolToSelectionModeConverter.cs" />
     <Compile Include="Converters\MpCopyItemIdToReportCollectionConverter.cs" />
+    <Compile Include="Converters\MpDateTimeFormatToStringConverter.cs" />
     <Compile Include="Converters\MpDiameterToStartPointConverter.cs" />
     <Compile Include="Converters\MpCollectionToGroupedCollectionConverter.cs" />
     <Compile Include="Converters\MpDoesFileOrDirectoryExistToVisibilityConverter.cs" />
@@ -353,6 +355,8 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileDrop\MpFileItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Tooltips\MpContactFieldInfoViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Tooltips\MpDateTimeFormatInfoViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Base\MpTextTemplateViewModelBase.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfDbInfo.cs" />
     <Compile Include="Utils\BindingExtensions\MpSettingsBindingExtension.cs" />
@@ -377,7 +381,10 @@
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\MainWindow\Analytics\AnalyticItems\Base\MpAnalyticItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateCollectionViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Contact\MpContactTemplateViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\MpContactTextTemplateViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\MpDateTimeTextTemplateViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\MpDynamicTextTemplateViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\MpStaticTextTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Base\MpActionViewModelBase.cs" />
@@ -394,6 +401,7 @@
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Source\Url\MpUrlCollectionViewModel.cs" />
     <Compile Include="ViewModels\Reusable\MpThemeColors.cs" />
+    <Compile Include="ViewModels\Reusable\Tooltips\Collection\MpTooltipInfoCollectionViewModel.cs" />
     <Compile Include="Views\Base\MpIChildWindow.cs" />
     <Compile Include="Views\Base\MpIRectViewModel.cs" />
     <Compile Include="Views\Base\MpTextElement.cs" />
@@ -776,6 +784,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Designer\MpDesignerResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Fonts\MpFontsResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1584,6 +1596,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\highlighter.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\contact.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\icecube.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\keyboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\yinyang.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />

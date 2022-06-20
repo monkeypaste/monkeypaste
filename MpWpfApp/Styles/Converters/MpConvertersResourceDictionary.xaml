@@ -89,6 +89,6 @@
     <local:MpShortcutCommandViewModelToTooltipConverter x:Key="ShortcutCommandViewModelToTooltipConverter" />
     <local:MpShortcutCommandViewModelToImageSourceConverter x:Key="ShortcutCommandViewModelToImageSourceConverter" />
     <local:MpShortcutTypeToStringConverter x:Key="ShortcutTypeToStringConverter" />
-
+    <local:MpDateTimeFormatToStringConverter x:Key="DateTimeFormatToStringConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

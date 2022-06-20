@@ -250,48 +250,14 @@ namespace MpWpfApp {
 
         public string IconResourceKeyStr {
             get {
-                string resourceKey = string.Empty;
+                string resourceKey;
                 if (IsValid) {
                     switch (ActionType) {
                         case MpActionType.Trigger:
-                            switch ((MpTriggerType)ActionObjId) {
-                                case MpTriggerType.ContentAdded:
-                                    resourceKey = "ClipboardIcon";
-                                    break;
-                                case MpTriggerType.ContentTagged:
-                                    resourceKey = "PinToCollectionIcon";
-                                    break;
-                                case MpTriggerType.FileSystemChange:
-                                    resourceKey = "FolderEventIcon";
-                                    break;
-                                case MpTriggerType.Shortcut:
-                                    resourceKey = "HotkeyIcon";
-                                    break;
-                                case MpTriggerType.ParentOutput:
-                                    resourceKey = "ChainIcon";
-                                    break;
-                            }
+                            resourceKey = new MpEnumToImageResourceKeyConverter().Convert((MpTriggerType)ActionObjId, null, null, null) as string;
                             break;
-                        case MpActionType.Analyze:
-                            resourceKey = "BrainIcon";
-                            break;
-                        case MpActionType.Classify:
-                            resourceKey = "PinToCollectionIcon";
-                            break;
-                        case MpActionType.Compare:
-                            resourceKey = "ScalesIcon";
-                            break;
-                        case MpActionType.Macro:
-                            resourceKey = "HotkeyIcon";
-                            break;
-                        case MpActionType.Timer:
-                            resourceKey = "AlarmClockIcon";
-                            break;
-                        case MpActionType.FileWriter:
-                            resourceKey = "WandIcon";
-                            break;
-                        case MpActionType.None:
-                            resourceKey = "QuestionMarkIcon";
+                        default:
+                            resourceKey = new MpEnumToImageResourceKeyConverter().Convert(ActionType, null, null, null) as string;
                             break;
                     }
                 } else {

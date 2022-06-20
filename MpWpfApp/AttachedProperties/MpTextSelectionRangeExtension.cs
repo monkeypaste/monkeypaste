@@ -165,34 +165,6 @@ namespace MpWpfApp {
             return 0;
         }
 
-        public static bool IsSelectionContainTemplate(MpITextSelectionRange tsr) {
-            return SelectedTextTemplates(tsr).Count() > 0;
-        }
-
-        public static ObservableCollection<MpTextTemplateViewModelBase> SelectedTextTemplates(MpITextSelectionRange tsr) {
-            var sttl = new ObservableCollection<MpTextTemplateViewModelBase>();
-            if (tsr is MpClipTileViewModel ctvm) {
-                var tbb = FindTextBoxBase(tsr);
-                if (tbb == null) {
-                    return sttl;
-                }
-                if (tbb is RichTextBox rtb) {
-                    IEnumerable<MpTextTemplate> citl = null;
-                    if(rtb.Selection.IsEmpty) {
-                        citl = rtb.Document.GetAllTextElements()
-                                            .Where(x => x is InlineUIContainer)
-                                            .Select(x => x.Tag as MpTextTemplate);
-                    } else {
-                        citl = rtb.Selection.GetAllTextElements()
-                                            .Where(x => x is InlineUIContainer)
-                                            .Select(x => x.Tag as MpTextTemplate);
-                    }
-                    return new ObservableCollection<MpTextTemplateViewModelBase>(ctvm.TemplateCollection.Items.Where(x => citl.Any(y => y.Id == x.TextTemplateId)));
-                }
-            }
-            return sttl;
-        }
-
 
         public static void SetTextSelection(MpITextSelectionRange tsr, TextRange tr) {
             var tbb = FindTextBoxBase(tsr);

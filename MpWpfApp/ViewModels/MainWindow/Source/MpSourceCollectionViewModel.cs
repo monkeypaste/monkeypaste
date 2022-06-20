@@ -11,7 +11,7 @@ namespace MpWpfApp {
 
     public class MpSourceCollectionViewModel : 
         MpSelectorViewModelBase<object,MpSourceViewModel>, 
-        MpISingletonViewModel<MpSourceCollectionViewModel> {
+        MpIAsyncSingletonViewModel<MpSourceCollectionViewModel> {
         #region Properties
 
         #region View Models

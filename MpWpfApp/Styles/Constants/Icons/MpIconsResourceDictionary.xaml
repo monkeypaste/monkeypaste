@@ -290,6 +290,17 @@
     <s:String x:Key="JigsawIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/jigsaw.png
     </s:String>
-
+    <s:String x:Key="KeyboardIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/keyboard.png
+    </s:String>
+    <s:String x:Key="IceCubeIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/icecube.png
+    </s:String>
+    <s:String x:Key="YinYangIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/yinyang.png
+    </s:String>
+    <s:String x:Key="ContactIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/contact.png
+    </s:String>
     <!--  Icon/Image Source Paths End  -->
 </ResourceDictionary>

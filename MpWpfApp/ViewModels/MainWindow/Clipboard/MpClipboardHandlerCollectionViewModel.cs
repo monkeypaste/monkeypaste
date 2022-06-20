@@ -21,7 +21,7 @@ namespace MpWpfApp {
     public class MpClipboardHandlerCollectionViewModel : 
         MpSelectorViewModelBase<object,MpClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
-        MpISingletonViewModel<MpClipboardHandlerCollectionViewModel>, 
+        MpIAsyncSingletonViewModel<MpClipboardHandlerCollectionViewModel>, 
         MpITreeItemViewModel,
         MpISidebarItemViewModel { //
         #region Properties

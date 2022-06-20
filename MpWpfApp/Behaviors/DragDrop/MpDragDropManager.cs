@@ -238,8 +238,7 @@ namespace MpWpfApp {
 
                 bool wasExternalDrop = CurDropTarget is MpExternalDropBehavior;
 
-                if (wasExternalDrop) {
-                    
+                if (wasExternalDrop) {                    
                     Application.Current.MainWindow.Activate();
                     Application.Current.MainWindow.Focus();
                     Application.Current.MainWindow.Topmost = true;
@@ -267,6 +266,7 @@ namespace MpWpfApp {
 
             _mouseDragCheckStartPosition = null;
             CurDropTarget = null;
+            
             DragData = null;
             _timer.Stop();
             //DropTargets.ForEach(x => x.Reset());

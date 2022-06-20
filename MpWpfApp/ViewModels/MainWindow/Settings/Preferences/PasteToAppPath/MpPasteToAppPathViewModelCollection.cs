@@ -24,7 +24,7 @@ namespace MpWpfApp {
     public class MpPasteToAppPathViewModelCollection : 
         MpSelectorViewModelBase<MpPasteToAppPathViewModelCollection,MpPasteToAppPathViewModel>, 
         MpIMenuItemViewModel, 
-        MpISingletonViewModel<MpPasteToAppPathViewModelCollection>,
+        MpIAsyncSingletonViewModel<MpPasteToAppPathViewModelCollection>,
         INotifyPropertyChanged {
 
         #region Private Variables

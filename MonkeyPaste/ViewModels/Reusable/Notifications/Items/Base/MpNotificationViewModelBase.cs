@@ -91,6 +91,7 @@ namespace MonkeyPaste {
 
         public bool IsLoaderNotification => DialogType == MpNotificationDialogType.Loader;
 
+        public bool IsIconBase64 => string.IsNullOrEmpty(IconResourceKey);
 
         public bool IsHovering { get; set; } = false;
 
@@ -101,17 +102,29 @@ namespace MonkeyPaste {
 
         public bool DoNotShowAgain { get; set; } = false;
 
+        private string _iconImageBase64;
         public string IconImageBase64 { 
             get {
-                if(IsErrorNotification) {
-                    return MpBase64Images.Error;
+                if(string.IsNullOrEmpty(_iconImageBase64)) {
+                    if (IsErrorNotification) {
+                        return MpBase64Images.Error;
+                    }
+                    if (IsWarningNotification) {
+                        return MpBase64Images.Warning;
+                    }
+                    return MpBase64Images.AppIcon;
                 }
-                if (IsWarningNotification) {
-                    return MpBase64Images.Warning;
+                return _iconImageBase64;
+            }
+            set {
+                if(IconImageBase64 != value) {
+                    _iconImageBase64 = value;
+                    OnPropertyChanged(nameof(IconImageBase64));
                 }
-                return MpBase64Images.AppIcon;
             }
         }
+
+        public string IconResourceKey { get; set; }
 
         public virtual string Title { get; set; }
 

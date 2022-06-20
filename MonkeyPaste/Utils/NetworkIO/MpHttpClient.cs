@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpHttpClient : MpISingletonViewModel<MpHttpClient> {
+    public class MpHttpClient : MpIAsyncSingletonViewModel<MpHttpClient> {
         #region Properties
 
         public HttpClient HttpClient { get; private set; }

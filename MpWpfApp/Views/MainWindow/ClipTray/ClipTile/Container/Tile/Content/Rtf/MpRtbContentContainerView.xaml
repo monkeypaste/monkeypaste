@@ -12,22 +12,29 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid>
         <DockPanel x:Name="ContentListDockPanel"
-                   HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch">
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <!--<Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>-->
             <local:MpRtbEditToolbarView x:Name="EditToolbarView"
                                         DockPanel.Dock="Top"
+                                        Grid.Row="0"
                                         Visibility="{Binding IsContentReadOnly,
                                                              Converter={StaticResource BoolToVisibilityFlipConverter},
                                                              TargetNullValue=Collapsed,
                                                              FallbackValue=Collapsed}"
                                         DataContext="{Binding}" />
-            <StackPanel Orientation="Vertical"
-                        DockPanel.Dock="Bottom">
+            <StackPanel Grid.Row="2" 
+                  DockPanel.Dock="Bottom">
                 <local:MpFindReplaceToolbarView x:Name="FindAndReplaceView"
                                                 Visibility="{Binding IsFindAndReplaceVisible,
                                                                      Converter={StaticResource BoolToVisibilityConverter}}"
                                                 DataContext="{Binding}" />
                 <local:MpEditTemplateToolbarView x:Name="EditTemplateView"
+                                                 VerticalAlignment="Stretch"
                                                  Visibility="{Binding IsEditingTemplate,
                                                                       Converter={StaticResource BoolToVisibilityConverter},
                                                                       TargetNullValue=Collapsed,
@@ -40,7 +47,15 @@
                                                                        FallbackValue=Collapsed}"
                                                   DataContext="{Binding TemplateCollection}" />
             </StackPanel>
+            <!--<GridSplitter DockPanel.Dock="Top"
+                          Grid.Row="2" VerticalAlignment="Top"
+                          HorizontalAlignment="Stretch"
+                          local:MpHoverableExtension.IsEnabled="True"
+                          local:MpHoverableExtension.HoverCursor="ResizeNS"
+                          Background="Pink"
+                          Height="3" />-->
             <local:MpRtbContentView x:Name="ContentView"
+                                    Grid.Row="1"
                                     DataContext="{Binding}" />
         </DockPanel>
     </Grid>

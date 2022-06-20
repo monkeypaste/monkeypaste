@@ -27,7 +27,7 @@ namespace MpWpfApp {
 
         private void TemplateNameEditorTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
             //var thlvm = (DataContext as MpTemplateCollectionViewModel).SelectedItem;
-            if (e.Key == Key.Escape) {
+           if (e.Key == Key.Escape) {
                 BindingContext.CancelEditTemplateCommand.Execute(null);
                 e.Handled = true;
             }
@@ -73,8 +73,8 @@ namespace MpWpfApp {
             //}
 
             //BindingContext.TemplateData = null;
-            var templateSelector = EditTemplateContainerGrid.Resources["EditTemplateDetailViewSelector"] as MpEditTemplateDetailViewSelector;
-            TemplateDetailContentControl.ContentTemplate = templateSelector.SelectTemplate(BindingContext, TemplateDetailContentControl);
+            //var templateSelector = EditTemplateContainerGrid.Resources["EditTemplateDetailViewSelector"] as MpEditTemplateDetailViewSelector;
+            //TemplateDetailContentControl.ContentTemplate = templateSelector.SelectTemplate(BindingContext, TemplateDetailContentControl);
 
             //BindingContext.OnPropertyChanged(nameof(BindingContext.SelfBindingRef));
         }

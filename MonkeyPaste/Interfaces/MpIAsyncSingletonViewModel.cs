@@ -8,8 +8,12 @@ namespace MonkeyPaste {
         //static T Instance { get; }
         Task Init();
     }
+    public interface MpISingletonViewModel<T> where T : class {
+        //static T Instance { get; }
+        void Init();
+    }
 
-    public interface MpISingletonViewModel<T> where T:class {
+    public interface MpIAsyncSingletonViewModel<T> where T:class {
         //static T Instance { get; }
         Task Init();
     }

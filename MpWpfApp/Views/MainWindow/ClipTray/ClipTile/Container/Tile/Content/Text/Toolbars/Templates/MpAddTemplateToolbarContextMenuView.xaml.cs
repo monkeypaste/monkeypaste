@@ -42,32 +42,11 @@ namespace MpWpfApp {
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e) {
-            //if(Rtb == null || Rtb.DataContext == null) {
-            //    MpConsole.WriteTraceLine("No rtb or rtb context");
-            //    return;
-            //}
-            //var rtbv = Rtb.GetVisualAncestor<MpRtbContentView>();
-            //rtbv.NewOriginalText = Rtb.Selection.Text;
-            //rtbv.NewStartRange = Rtb.Selection;
-
-            //var ctvm = rtbv.BindingContext;
-            //if (ctvm.HeadItem.TemplateCollection.Items.Count == 0) {
-            //    //when no templates exist create a new default one
-            //    var thl = MpTemplateHyperlink.Create(Rtb.Selection, null);
-            //    var thlvm = thl.DataContext as MpTemplateViewModel;
-            //    thlvm.EditTemplateCommand.Execute(null);
-            //} else {
-            //    //otherwise show template menu
-            //    AddButton.ContextMenu.IsOpen = true;
-            //}
-            if(BindingContext.Items.Count == 0) {
-                BindingContext.CreateTemplateViewModelCommand.Execute(null);
-                return;
-            }
-
-            MpContextMenuView.Instance.DataContext = BindingContext.MenuItemViewModel;
-            MpContextMenuView.Instance.PlacementTarget = this;
-            MpContextMenuView.Instance.IsOpen = true;
+            MpHelpers.RunOnMainThread(async () => {
+                MpContextMenuView.Instance.DataContext = await BindingContext.GetAddTemplateMenuItemViewModel();
+                MpContextMenuView.Instance.PlacementTarget = this;
+                MpContextMenuView.Instance.IsOpen = true;
+            });
         }
 
         private void AddButton_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e) {

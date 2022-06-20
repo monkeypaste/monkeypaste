@@ -10,49 +10,59 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Input;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Wpf;
 using System.Windows;
 using System.Diagnostics;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace MpWpfApp {
     public class MpTemplateCollectionViewModel : 
-        MpSelectorViewModelBase<MpClipTileViewModel,MpTextTemplateViewModelBase>,
-        MpIMenuItemViewModel {
+        MpSelectorViewModelBase<MpClipTileViewModel,MpTextTemplateViewModelBase> {
         #region Private Variables
+
+        #endregion
+
+        #region Statics
+        public static ObservableCollection<MpContact> Contacts { get; set; }
         #endregion
 
         #region Properties
 
         #region View Models
 
-        public MpMenuItemViewModel MenuItemViewModel {
-            get {
-                if(Parent == null) {
-                    return null;
-                }
-                var mivm = new MpMenuItemViewModel();
-                mivm.SubItems = new List<MpMenuItemViewModel>();
-                foreach(var tvm in Items) {
-                    var tvm_mi = new MpMenuItemViewModel() {
-                        Header = tvm.TemplateName,
-                        IconHexStr = tvm.TemplateHexColor,
-                        Command = CreateTemplateViewModelCommand,
-                        CommandParameter = tvm
-                    };
-                    mivm.SubItems.Add(tvm_mi);
-                }
-                var ntvm_mi = new MpMenuItemViewModel() {
-                    Header = "Add New",
-                    IconResourceKey = Application.Current.Resources["AddIcon"] as string,
-                    Command = CreateTemplateViewModelCommand
-                };
-                mivm.SubItems.Add(ntvm_mi);
-                return mivm;
-            }
-        }
+        //public MpMenuItemViewModel MenuItemViewModel {
+        //    get {
+        //        if(Parent == null) {
+        //            return null;
+        //        }
+        //        var mivm = new MpMenuItemViewModel();
+        //        mivm.SubItems = new List<MpMenuItemViewModel>();
+        //        foreach(var tvm in Items) {
+        //            var tvm_mi = new MpMenuItemViewModel() {
+        //                Header = tvm.TemplateName,
+        //                IconHexStr = tvm.TemplateHexColor,
+        //                Command = CreateTemplateViewModelCommand,
+        //                CommandParameter = tvm
+        //            };
+        //            mivm.SubItems.Add(tvm_mi);
+        //        }
+        //        var ntvm_mi = new MpMenuItemViewModel() {
+        //            Header = "Add New",
+        //            IconResourceKey = Application.Current.Resources["AddIcon"] as string,
+        //            Command = CreateTemplateViewModelCommand
+        //        };
+        //        mivm.SubItems.Add(ntvm_mi);
+        //        return mivm;
+        //    }
+        //}
+
+
 
         public ObservableCollection<MpTextTemplateViewModelBase> PastableItems { get; set; } = new ObservableCollection<MpTextTemplateViewModelBase>();
 
+        public IEnumerable<MpTextTemplateViewModelBase> PastableItemsNeedingInput => PastableItems.Where(x => x.IsInputRequiredForPaste);
         #endregion
 
         #region Business Logic Properties
@@ -80,18 +90,30 @@ namespace MpWpfApp {
 
         public MpTemplateCollectionViewModel(MpClipTileViewModel ctvm) : base(ctvm) { }
 
-
         #endregion
 
         #region Public Methods
 
         public async Task<MpTextTemplateViewModelBase> CreateTemplateViewModel(MpTextTemplate cit) {
-            MpTextTemplateViewModelBase tvm = new MpTextTemplateViewModelBase(this);
+            MpTextTemplateViewModelBase tvm = null;
+            switch(cit.TemplateType) {
+                case MpTextTemplateType.Contact:
+                    tvm = new MpContactTextTemplateViewModel(this);
+                    break;
+                case MpTextTemplateType.DateTime:
+                    tvm = new MpDateTimeTextTemplateViewModel(this);
+                    break;
+                case MpTextTemplateType.Dynamic:
+                    tvm = new MpDynamicTextTemplateViewModel(this);
+                    break;
+                case MpTextTemplateType.Static:
+                    tvm = new MpStaticTextTemplateViewModel(this);
+                    break;
+            }
+
             await tvm.InitializeAsync(cit);
             return tvm;
         }
-
-
 
         public void ClearAllEditing() {
             foreach(var thlvm in Items) {
@@ -114,25 +136,46 @@ namespace MpWpfApp {
         }
 
 
-        public async Task<bool> RemoveItem(MpTextTemplate cit, bool removeAll) {
-            MpConsole.WriteLine("Removing template: " + cit.TemplateName);
-            //returns true if this was the last instance of the template
-            var thlvmToRemove = Items.Where(x => x.TextTemplateId == cit.Id).FirstOrDefault();
-            if(thlvmToRemove != null) {
-                if(removeAll || thlvmToRemove.InstanceCount == 1) {
-                    await thlvmToRemove.TextTemplate.DeleteFromDatabaseAsync();
-                    Items.Remove(thlvmToRemove);
-                } else {
-                    thlvmToRemove.InstanceCount--;
+        public async Task<MpMenuItemViewModel> GetAddTemplateMenuItemViewModel() {
+            var ttl = await MpDb.GetItemsAsync<MpTextTemplate>();
+            var mivm = new MpMenuItemViewModel() {
+                SubItems = new List<MpMenuItemViewModel>()
+            };
+            for (int i = 0; i < Enum.GetValues(typeof(MpTextTemplateType)).Length; i++) {
+                if (i == 0) {
+                    continue;
                 }
-                return thlvmToRemove.InstanceCount == 0;
+                MpTextTemplateType templateType = (MpTextTemplateType)i;
+                var templatesForType = ttl.Where(x => x.TemplateType == templateType);
+                var subItem = new MpMenuItemViewModel() {
+                    Header = templateType.ToString().ToLabel(),
+                    IconResourceKey = GetTemplateTypeIconResourceStr(templateType),
+                    SubItems = templatesForType
+                                  .Select(x => new MpMenuItemViewModel() {
+                                        Header = x.TemplateName,
+                                        IconHexStr = x.HexColor,
+                                        Command = CreateTemplateViewModelCommand,
+                                        CommandParameter = x
+                                    }).ToList()
+                };
+                if(templatesForType.Count() > 0) {
+                    subItem.SubItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
+                }
+                
+                subItem.SubItems.Add(new MpMenuItemViewModel() {
+                    Header = $"New {templateType.ToString().ToLabel()} Template...",
+                    IconResourceKey = "PlusIcon",
+                    Command = CreateTemplateViewModelCommand,
+                    CommandParameter = templateType
+                });
+                mivm.SubItems.Add(subItem);
             }
-            return false;
+            return mivm;
         }
 
-        public string GetUniqueTemplateName() {
+        public string GetUniqueTemplateName(string prefix = "Template") {
             int uniqueIdx = 1;
-            string uniqueName = $"Template #";
+            string uniqueName = $"{prefix} #";
             string testName = string.Format(
                                         @"{0}{1}",
                                         uniqueName.ToLower(),
@@ -152,30 +195,44 @@ namespace MpWpfApp {
         #endregion
 
         #region Protected Methods
-        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
-                if(ci.Id == Parent.CopyItemId && base.Items != null) {
-                    foreach(var cit in base.Items) {
-                        await MpDb.DeleteItemAsync<MpTextTemplate>(cit.TextTemplate);
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpTextTemplate cit && Items.Any(x => x.TextTemplateId == cit.Id)) {
+                //NOTE template model is deleted in LoadTemplates
+                //var toRemove_tvm = Items.FirstOrDefault(x => x.TextTemplateId == cit.Id);
+                //Items.Remove(toRemove_tvm);
+                //OnPropertyChanged(nameof(Items));
+
+                MpHelpers.RunOnMainThread(async () => {
+                    var ctv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>()
+                                                            .FirstOrDefault(x => x.DataContext == Parent);
+                    if (ctv == null) {
+                        Debugger.Break();
                     }
-                }
-            } //else if(e is MpTextTemplate cit && Items.Any(x=>x.TextTemplateId == cit.Id)) {
-                // NOTE template model is deleted in LoadTemplates
-            //    var toRemove_tvm = Items.FirstOrDefault(x => x.TextTemplateId == cit.Id);
-            //    Items.Remove(toRemove_tvm);
-            //    OnPropertyChanged(nameof(Items));
-            //}
+
+                    await MpContentDocumentRtfExtension.LoadTemplates(ctv.Rtb);
+                });
+            }
         }
+
         #endregion
 
         #region Private Methods
-
+        public string GetTemplateTypeIconResourceStr(MpTextTemplateType templateType) {
+            switch (templateType) {
+                case MpTextTemplateType.Contact:
+                    return "ContactIcon";
+                case MpTextTemplateType.DateTime:
+                    return "AlarmClockIcon";
+                case MpTextTemplateType.Dynamic:
+                    return "YinYangIcon";
+                case MpTextTemplateType.Static:
+                    return "IceCubeIcon";
+            }
+            return string.Empty;
+        }
         #region Selection Changed Handlers
 
-
-        #endregion
-
-        #region Db Event Handlers
 
         #endregion
 
@@ -183,13 +240,19 @@ namespace MpWpfApp {
 
         #region Commands
         public ICommand CreateTemplateViewModelCommand => new RelayCommand<object>(
-            async (templateVmOrSelectedTextArg) => {
+            async (templateModelOrTemplateTypeArg) => {
+                if(templateModelOrTemplateTypeArg == null) {
+                    Debugger.Break();
+                }
+
                 string templateGuid = string.Empty;
-                if(templateVmOrSelectedTextArg == null) {
+                if(templateModelOrTemplateTypeArg is MpTextTemplateType templateType) {
                     string templateName = Parent.SelectedPlainText;
-                    if(string.IsNullOrWhiteSpace(templateName)) {
-                        templateName = GetUniqueTemplateName();
+
+                    if (string.IsNullOrWhiteSpace(templateName)) {
+                        templateName = GetUniqueTemplateName(templateType.ToString());
                     }
+
                     string initialFormat = string.Empty;
                     var selectionFormat = Parent.SelectedRichTextFormat;
                     if(selectionFormat != null && selectionFormat.inlineFormat != null) {
@@ -197,11 +260,12 @@ namespace MpWpfApp {
                     }
                     var cit = await MpTextTemplate.Create(
                         templateName: templateName,
+                        templateType: templateType,
                         rtfFormatJson: initialFormat);
 
                     templateGuid = cit.Guid;
-                } else if (templateVmOrSelectedTextArg is MpTextTemplateViewModelBase tvm) {
-                    templateGuid = tvm.TextTemplateGuid;
+                } else if (templateModelOrTemplateTypeArg is MpTextTemplate cit) {
+                    templateGuid = cit.Guid;
                 } else {
                     return;
                 }
@@ -217,17 +281,18 @@ namespace MpWpfApp {
                     Debugger.Break();
                 }
 
-                await MpContentDocumentRtfExtension.LoadTemplates(ctv.Rtb);
+                MpContentDocumentRtfExtension.LoadTemplates(ctv.Rtb).FireAndForgetSafeAsync(this);
+                await Task.Delay(10);
 
-                if(templateVmOrSelectedTextArg == null) {
-                    //for new templates go into edit mode by default
-                    var ntvm = Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
-                    if(ntvm == null) {
-                        Debugger.Break();
-                    }
-                    ntvm.EditTemplateCommand.Execute(null);
+                while(IsBusy) {
+                    await Task.Delay(100);
                 }
 
+                var ntvm = Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
+                if (ntvm == null) {
+                    Debugger.Break();
+                }
+                ntvm.EditTemplateCommand.Execute(null);
             });
 
         public ICommand ClearAllTemplatesCommand => new RelayCommand(
@@ -246,7 +311,7 @@ namespace MpWpfApp {
                 if (nextIdx >= Items.Count) {
                     nextIdx = 0;
                 }
-                while(!Items[nextIdx].IsEnabled) {
+                while(!Items[nextIdx].IsEnabled || !Items[nextIdx].IsInputRequiredForPaste) {
                     nextIdx++;
                     if (nextIdx >= Items.Count) {
                         nextIdx = 0;
@@ -261,13 +326,39 @@ namespace MpWpfApp {
                 if (prevIdx < 0) {
                     prevIdx = Items.Count - 1;
                 }
-                while (!Items[prevIdx].IsEnabled) {
+                while (!Items[prevIdx].IsEnabled || !Items[prevIdx].IsInputRequiredForPaste) {
                     prevIdx--;
                     if (prevIdx < 0) {
                         prevIdx = Items.Count - 1;
                     }
                 }
                 SelectedItem = Items[prevIdx];
+            });
+
+        public ICommand BeginPasteTemplateCommand => new RelayCommand<object>(
+            (args) => {
+                if(args is IEnumerable<MpTextTemplateViewModelBase> pastableItems) {
+                    PastableItems = new ObservableCollection<MpTextTemplateViewModelBase>(pastableItems);
+                    OnPropertyChanged(nameof(PastableItemsNeedingInput));
+                    OnPropertyChanged(nameof(Items));
+                    OnPropertyChanged(nameof(HasMultipleTemplates));
+
+                    MpTextTemplateViewModelBase templateToSelect = null;
+                    foreach(var tvm in PastableItems) {
+                        if (tvm.IsInputRequiredForPaste) {
+                            if (templateToSelect == null) {
+                                templateToSelect = tvm;
+                            }
+                            continue;
+                        }
+                        tvm.FillAutoTemplate();
+
+                    }
+                    if(templateToSelect != null) {
+                        SelectedItem = templateToSelect;
+                    }
+                }
+                
             });
 
         public ICommand PasteTemplateCommand => new RelayCommand(
