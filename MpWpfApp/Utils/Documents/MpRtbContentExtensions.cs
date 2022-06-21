@@ -963,19 +963,14 @@ namespace MpWpfApp {
                 return string.Empty;
             }
             var templatesToEncode = tr.GetAllTextElements()
-                                                .Where(x => x is InlineUIContainer && x.Tag is MpTextTemplate)
+                                                .Where(x => x is MpTextTemplateInlineUIContainer && x.Tag is MpTextTemplate)
                                                 .OrderBy(x => tr.Start.GetOffsetToPosition(x.ContentStart))
-                                                .Cast<InlineUIContainer>()
+                                                .Cast<MpTextTemplateInlineUIContainer>()
                                                 .ToList();
+            var doc = tr.Start.Parent.FindParentOfType<FlowDocument>();
+            var clonedDoc = doc.Clone(tr, out TextRange encodedRange);
 
-            foreach (InlineUIContainer thl in templatesToEncode) {
-                var cit = thl.Tag as MpTextTemplate;
-                var span = new Span(thl.ContentStart, thl.ContentEnd);
-                span.Inlines.Clear();
-                span.Inlines.Add(cit.EncodedTemplate);
-            }
-
-            return tr.ToRichText();
+            return encodedRange.ToRichText();
         }
 
         public static string ToRichTextTable(this string csvStr) {

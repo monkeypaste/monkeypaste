@@ -16,7 +16,7 @@ using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Application;
 
 namespace MpWpfApp {
-    public class MpTextSelectionRangeExtension : DependencyObject {
+    public class MpTextBoxSelectionRangeExtension : DependencyObject {
         #region TextSelectionRange DependencyProperty
 
         public static MpITextSelectionRange GetTextSelectionRange(DependencyObject obj) {
@@ -31,7 +31,7 @@ namespace MpWpfApp {
             DependencyProperty.RegisterAttached(
                 "TextSelectionRange", 
                 typeof(MpITextSelectionRange), 
-                typeof(MpTextSelectionRangeExtension), 
+                typeof(MpTextBoxSelectionRangeExtension), 
                 new FrameworkPropertyMetadata(null));
 
         #endregion
@@ -48,7 +48,7 @@ namespace MpWpfApp {
           DependencyProperty.RegisterAttached(
             "IsEnabled",
             typeof(bool),
-            typeof(MpTextSelectionRangeExtension),
+            typeof(MpTextBoxSelectionRangeExtension),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (obj, e) => {
                     if(e.NewValue is bool isEnabled) {
@@ -89,55 +89,18 @@ namespace MpWpfApp {
         }
         #endregion
 
-        public static MpRichTextFormatInfoFormat GetSelectionFormat(MpITextSelectionRange tsr) {
-            var tbb = FindTextBoxBase(tsr);
-            if (tbb is TextBox tb) {
-                return null;
-            }
-            if (tbb is RichTextBox rtb) {
-                var rtfFormat = new MpRichTextFormatInfoFormat() {
-                    inlineFormat = GetSelectedInlineFormat(rtb),
-                    blockFormat = GetSelectedBlockFormat(rtb)
-                };
-                return rtfFormat;
-            }
-            return null;
-        }
-
-        public static MpInlineTextFormatInfoFormat GetSelectedInlineFormat(RichTextBox rtb) {
-            if (rtb.Selection.Start.Parent is TextElement te) {
-                if (te is Inline inline) {
-                    var inlineFormat = new MpInlineTextFormatInfoFormat() {
-                        background = inline.Background.ToHex(),
-                        color = inline.Foreground.ToHex(),
-                        bold = inline is Bold ||
-                                rtb.Selection.Start.Parent.FindParentOfType<Bold>() != null,
-                        italic = inline is Italic || inline.FontStyle == FontStyles.Italic ||
-                                rtb.Selection.Start.Parent.FindParentOfType<Italic>() != null,
-                        strike = inline.TextDecorations == TextDecorations.Strikethrough,
-                        underline = inline is Underline ||
-                                    rtb.Selection.Start.Parent.FindParentOfType<Underline>() != null,
-                        font = inline.FontFamily.Source,
-                        size = inline.FontSize,
-                        script = inline.BaselineAlignment.ToString()
-                    };
-                    return inlineFormat;
-                }
-            }
-            return null;
-        }
-
-        public static MpBlockTextFormatInfoFormat GetSelectedBlockFormat(RichTextBox rtb) {
-            return null;
-        }
-
         public static string GetSelectedPlainText(MpITextSelectionRange tsr) {
             var tbb = FindTextBoxBase(tsr);
             if(tbb is TextBox tb) {
                 return tb.SelectedText;
             }
-            if(tbb is RichTextBox rtb) {
-                return MpContentDocumentRtfExtension.GetEncodedContent(rtb, false, true);
+            return null;
+        }
+
+        public static string GetSelectedRichText(MpITextSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is TextBox tb) {
+                return tb.SelectedText;
             }
             return null;
         }
@@ -147,10 +110,6 @@ namespace MpWpfApp {
             if (tbb is TextBox tb) {
                 return tb.SelectionStart;
             }
-            if (tbb is RichTextBox rtb) {
-                TextRange start = new TextRange(rtb.Document.ContentStart, rtb.Selection.Start);
-                return start.Text.Length;
-            }
             return 0;
         }
 
@@ -159,26 +118,7 @@ namespace MpWpfApp {
             if (tbb is TextBox tb) {
                 return tb.SelectionLength;
             }
-            if (tbb is RichTextBox rtb) {
-                return rtb.Selection.Text.Length;
-            }
             return 0;
-        }
-
-
-        public static void SetTextSelection(MpITextSelectionRange tsr, TextRange tr) {
-            var tbb = FindTextBoxBase(tsr);
-            if(tbb is RichTextBox rtb) {
-                if (!rtb.Document.ContentStart.IsInSameDocument(tr.Start) ||
-                !rtb.Document.ContentStart.IsInSameDocument(tr.End)) {
-                    return;
-                }
-                rtb.Selection.Select(tr.Start, tr.End);
-
-                if (tr.Start.Parent is FrameworkContentElement fce) {
-                    fce.BringIntoView();
-                }
-            }            
         }
 
         public static void SetSelectionText(MpITextSelectionRange tsr, string text) {
@@ -186,14 +126,17 @@ namespace MpWpfApp {
             if(tbb is TextBox tb) {
                 tb.SelectedText = text;
             }
-            else if (tbb is RichTextBox rtb) {
-                rtb.Selection.Text = text;
-            }
         }
 
         public static void SelectAll(MpITextSelectionRange tsr) {
             var tbb = FindTextBoxBase(tsr);
             if(tbb == null) {
+                Debugger.Break();
+            }
+            if(!tbb.IsFocused) {
+                tbb.Focus();
+            }
+            if(!tbb.IsFocused) {
                 Debugger.Break();
             }
             tbb.SelectAll();
@@ -203,30 +146,11 @@ namespace MpWpfApp {
             var tbb = FindTextBoxBase(tsr);
             if(tbb is TextBox tb) {
                 return tb.Text.Length == tb.SelectionLength;
-            } else if(tbb is RichTextBox rtb) {
-                //return rtb.Document.ContentStart == rtb.Selection.Start &&
-                //       rtb.Document.ContentEnd == rtb.Selection.End;
-                return rtb.Document.ContentRange().Text.Length ==
-                       rtb.Selection.Text.Length;
-            }
+            } 
             return false;
         }
 
         private static TextBoxBase FindTextBoxBase(MpITextSelectionRange tsr) {
-            // NOTE for performance this needs to be updated if new view's use this extension
-            
-
-            // first look for content tile rtb
-            if(tsr is MpClipTileViewModel ctvm) { 
-                var cv = Application.Current.MainWindow
-                                            .GetVisualDescendents<MpRtbContentView>()
-                                            .FirstOrDefault(x => (x.DataContext as MpClipTileViewModel).CopyItemId == ctvm.CopyItemId);
-                if(cv == null) {
-                    return null;
-                }
-                return cv.Rtb;
-            }
-
             // next look for TextBox Param
             var textBoxParamView = Application.Current.MainWindow
                                                .GetVisualDescendents<MpAnalyticItemParameterView>()

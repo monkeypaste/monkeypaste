@@ -61,7 +61,7 @@ namespace MpWpfApp {
         private void SelectedTemplateTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
             if(e.Key == Key.Enter) {
                 if(BindingContext.IsAllTemplatesFilled) {
-                    BindingContext.PasteTemplateCommand.Execute(null);
+                    BindingContext.FinishPasteTemplateCommand.Execute(null);
                 } else {
                     BindingContext.SelectNextTemplateCommand.Execute(null);
                 }

@@ -21,6 +21,7 @@
     using System.Windows.Documents;
 using System.Text.RegularExpressions;
 using MpProcessHelper;
+using stdole;
 
     public class MpClipTileViewModel : 
         MpViewModelBase<MpClipTrayViewModel>, 
@@ -29,7 +30,7 @@ using MpProcessHelper;
         MpIUserColorViewModel,
         MpIHoverableViewModel,
         MpIResizableViewModel,
-        MpITextSelectionRange,
+        MpIRtfSelectionRange,
         MpIFindAndReplaceViewModel,
         MpITooltipInfoViewModel,
         MpIPortableContentDataObject, 
@@ -114,20 +115,21 @@ using MpProcessHelper;
 
         #endregion
 
-        #region MpITextSelectionRangeViewModel Implementation 
+        #region MpIRtfSelectionRangeViewModel Implementation 
 
-        public int SelectionStart => MpTextSelectionRangeExtension.GetSelectionStart(this);
-        public int SelectionLength => MpTextSelectionRangeExtension.GetSelectionLength(this);
+        public int SelectionStart => MpContentDocumentRtfExtension.GetSelectionStart(this);
+        public int SelectionLength => MpContentDocumentRtfExtension.GetSelectionLength(this);
 
         public string SelectedPlainText {
-            get => MpTextSelectionRangeExtension.GetSelectedPlainText(this);
-            set => MpTextSelectionRangeExtension.SetSelectionText(this, value);
+            get => MpContentDocumentRtfExtension.GetSelectedPlainText(this);
+            set => MpContentDocumentRtfExtension.SetSelectionText(this,value);
         }
+
+        public string SelectedRichText => MpContentDocumentRtfExtension.GetSelectedRichText(this);
 
         public MpRichTextFormatInfoFormat SelectedRichTextFormat {
-            get => MpTextSelectionRangeExtension.GetSelectionFormat(this);
+            get => MpContentDocumentRtfExtension.GetSelectionFormat(this);
         }
-
 
         #endregion
 
@@ -308,7 +310,7 @@ using MpProcessHelper;
                 }
                 _rtbHighligher.SelectedIdx = _currentMatchIdx;
                 _rtbHighligher.ApplyHighlighting();
-                MpTextSelectionRangeExtension.SetTextSelection(this,_matches[_currentMatchIdx]);
+                MpContentDocumentRtfExtension.SetTextSelection(this,_matches[_currentMatchIdx]);
                 
             }, HasMatch);
 
@@ -323,7 +325,7 @@ using MpProcessHelper;
                 }
                 _rtbHighligher.SelectedIdx = _currentMatchIdx; 
                 _rtbHighligher.ApplyHighlighting();
-                MpTextSelectionRangeExtension.SetTextSelection(this, _matches[_currentMatchIdx]);
+                MpContentDocumentRtfExtension.SetTextSelection(this, _matches[_currentMatchIdx]);
             }, HasMatch);
 
         public ICommand ReplaceNextCommand => new RelayCommand(
@@ -1313,8 +1315,8 @@ using MpProcessHelper;
                 //    Parent.MaxTileWidth);//DefaultBorderHeight;
                 //TileBorderWidth = MpMeasurements.Instance.ClipTileMinSize;
                 //TileBorderWidth += (MpMeasurements.Instance.ClipTileMargin * 2);
-        //    } 
-        else {
+            //    } 
+            else {
                 TileBorderWidth = DefaultBorderHeight;
             }
             TileBorderHeight = MpMeasurements.Instance.ClipTileMinSize;//DefaultBorderHeight;
@@ -1322,7 +1324,7 @@ using MpProcessHelper;
             QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
 
 
-            MpMessenger.Unregister<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
+            //MpMessenger.Unregister<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
 
             CopyItem = ci;
             
@@ -1515,61 +1517,53 @@ using MpProcessHelper;
         }
 
 
-        public async Task<MpPortableDataObject> ConvertToPortableDataObject(
-            bool isDragDrop, 
-            object targetHandleObj, 
-            bool ignoreSubSelection = false, 
-            bool isDropping = false) {
-            
-            if(!ignoreSubSelection && string.IsNullOrEmpty(SelectedPlainText)) {
-                MpTextSelectionRangeExtension.SelectAll(this);
-            }
-
-            IntPtr targetHandle = targetHandleObj == null ? IntPtr.Zero : 
-                                    targetHandleObj is MpProcessInfo ? 
-                                        (targetHandleObj as MpProcessInfo).Handle : (IntPtr)targetHandleObj;
-            bool isToExternalApp = targetHandle != IntPtr.Zero && targetHandle != MpProcessManager.GetThisApplicationMainWindowHandle();
-
+        public async Task<MpPortableDataObject> ConvertToPortableDataObject(bool fillTempalates) {          
             MpPortableDataObject d = new MpPortableDataObject();
             string rtf = string.Empty;
+            string pt = string.Empty;
+            string bmpBase64 = string.Empty;
+            var sctfl = new List<string>();
+            IEnumerable<MpTextTemplateViewModelBase> templatesToFill = null;
 
-            //check for model templates
-            bool needsTemplateData = HasTemplates;
-
-            IEnumerable<MpTextTemplateViewModelBase> templatesInSelection = null;
-
-            if (needsTemplateData) {
-                if(isDropping) {
-                    Debugger.Break();
+            bool isSelectionEmpty = string.IsNullOrEmpty(SelectedPlainText);
+            bool needsTemplateData = fillTempalates && HasTemplates;
+            if(needsTemplateData) {
+                if (isSelectionEmpty) {
+                    templatesToFill = TemplateCollection.Items;
+                } else {
+                    templatesToFill = GetSelectedTextTemplateViewModels();
                 }
-                if ((isDragDrop && !isDropping) || !isToExternalApp) {
-                    // Drag Drop:
-                    // when initially dragging onto external app DragDrop needs DataObject but 
-                    // ignore filling templates until drop is performed
-                    
-                    // CopySelectedClipsCommand:
-                    // Templates are passed as templates internally
-                    needsTemplateData = false;
-                }
-                if(needsTemplateData) {
-                    templatesInSelection = GetSelectedTextTemplateViewModels();
-                    if (!ignoreSubSelection && templatesInSelection.Count() == 0) {
-                        // if dropping or pasting and sub-selection doesn't contain templates they don't need to be filled
-                        needsTemplateData = false;
-                    }
-                }                
+                needsTemplateData = templatesToFill != null && templatesToFill.Count() > 0;
             }
-
             if (needsTemplateData) {
-                //if(!ignoreSubSelection) {
-                //    ClearSelection(false);                    
-                //}                
                 IsSelected = true;
 
                 if (!MpMainWindowViewModel.Instance.IsMainWindowOpen) {
                     MpMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+
+                    while (MpMainWindowViewModel.Instance.IsMainWindowOpening) {
+                        await Task.Delay(100);
+                    }
+                } else {
+                    Application.Current.MainWindow.Activate();
+                    Application.Current.MainWindow.Focus();
+                    Application.Current.MainWindow.Topmost = true;
+                    Application.Current.MainWindow.Top = 0;
                 }
-                await FillTemplates(templatesInSelection);
+                IsSelected = true;
+                IsContentReadOnly = false;
+                IsPasting = true;
+
+                TemplateRichText = null;
+                
+                            
+                TemplateCollection.BeginPasteTemplateCommand.Execute(templatesToFill);
+                await Task.Run(async () => {
+                    while (string.IsNullOrEmpty(TemplateRichText)) {
+                        await Task.Delay(100);
+                    }
+                });
+
                 rtf = TemplateRichText;
                 
                 if (!IsContentReadOnly) {
@@ -1578,28 +1572,34 @@ using MpProcessHelper;
 
             } else if(ItemType == MpCopyItemType.Text) {
                 bool isInUi = Parent.GetClipTileViewModelById(CopyItemId) != null;
-                if(!isInUi) {
+                if(isInUi) {
+                    if (isSelectionEmpty) {
+                        rtf = MpContentDocumentRtfExtension.GetEncodedContent(
+                                MpContentDocumentRtfExtension.FindRtbByViewModel(this),
+                                ignoreSubSelection: true);
+                    } else {
+                        rtf = SelectedRichText;
+                    }
+                } else {
                     // handle special case when pasting item by id (like from a hotkey)
                     // and it has no templates (if it did tray would set manual query and show it)
                     // so since its not in ui need to use model data which is ok because it won't have any modifications
                     rtf = CopyItemData.ToRichText();
-                } else {
-                    rtf = MpContentDocumentRtfExtension.GetEncodedContent(
-                            MpContentDocumentRtfExtension.FindRtbByViewModel(this),
-                            ignoreSubSelection);
-                }
+                } 
             }
-            string pt = string.Empty;
-            string bmpBase64 = string.Empty;
-            var sctfl = new List<string>();
             switch (ItemType) {
                 case MpCopyItemType.Text:
+                    // NOTE must use rtf here which already is based on selection and any templated input
                     pt = rtf.ToPlainText();
-                    var imgFd = rtf.ToFlowDocument();
-                    bmpBase64 = imgFd.ToBitmapSource().ToBase64String();
+                    bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
                     break;
                 case MpCopyItemType.Image:
-                    pt = string.Empty;//CopyItemData.ToBitmapSource().ToAsciiImage();
+                    await Task.Run(() => {
+                        var bmpSrc = CopyItemData.ToBitmapSource();
+                        pt = bmpSrc.ToAsciiImage();
+                        rtf = bmpSrc.ToRtfImage();
+                    });
+                    
                     bmpBase64 = CopyItemData;
                     break;
                 case MpCopyItemType.FileList:
@@ -1607,59 +1607,70 @@ using MpProcessHelper;
                         FileItems.ForEach(x => x.IsSelected = true);
                     }
                     pt = string.Join(Environment.NewLine,FileItems.Select(x=>x.Path));
-                    rtf = pt.ToRichText();
-                    bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
+                    //rtf = pt.ToRichText();
+                    //bmpBase64 = rtf.ToFlowDocument().ToBitmapSource().ToBase64String();
                     break;
             }
 
-            if (isToExternalApp) {
-                foreach (string format in MpPortableDataFormats.Formats) {
-                    switch (format) {
-                        case MpPortableDataFormats.FileDrop:
-                            if (ItemType == MpCopyItemType.FileList) {
-                                foreach(var fp in FileItems.Where(x=>x.IsSelected).Select(x=>x.Path)) {
-                                    if(fp.IsFileOrDirectory()) {
+            foreach (string format in MpPortableDataFormats.Formats) {
+                switch (format) {
+                    case MpPortableDataFormats.FileDrop:
+                        switch(ItemType) {
+                            case MpCopyItemType.Text:
+                                sctfl.Add(rtf.ToFile(null, CopyItemTitle));
+                                break;
+                            case MpCopyItemType.Image:
+                                sctfl.Add(bmpBase64.ToFile(null, CopyItemTitle));
+                                break;
+                            case MpCopyItemType.FileList:
+                                foreach (var fp in FileItems.Where(x => x.IsSelected).Select(x => x.Path)) {
+                                    if (fp.IsFileOrDirectory()) {
                                         sctfl.Add(fp);
-                                    }                                    
+                                    }
                                 }
-                            } else {
-                                sctfl.Add(CopyItemData.ToFile(null, CopyItemTitle));
-                            }
-                            d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
+                                break;
+                        }
+                        d.SetData(MpPortableDataFormats.FileDrop, string.Join(Environment.NewLine, sctfl));
+                        break;
+                    case MpPortableDataFormats.Rtf:
+                        if(string.IsNullOrEmpty(rtf)) {
                             break;
-                        case MpPortableDataFormats.Rtf:
-                            d.SetData(MpPortableDataFormats.Rtf, rtf);
+                        }
+                        d.SetData(MpPortableDataFormats.Rtf, rtf);
+                        break;
+                    case MpPortableDataFormats.Text:
+                        if (string.IsNullOrEmpty(pt)) {
                             break;
-                        case MpPortableDataFormats.Text:
-                            d.SetData(MpPortableDataFormats.Text, pt);
+                        }
+                        d.SetData(MpPortableDataFormats.Text, pt);
+                        break;
+                    case MpPortableDataFormats.Bitmap:
+                        if (string.IsNullOrEmpty(bmpBase64)) {
                             break;
-                        case MpPortableDataFormats.Bitmap:
-                            d.SetData(MpPortableDataFormats.Bitmap, bmpBase64);
-                            break;
-                        case MpPortableDataFormats.Csv:
-                            if(ItemType == MpCopyItemType.Image) {
-                                continue;
-                            }
-                            if(ItemType == MpCopyItemType.FileList) {
-                                d.SetData
-                                    (MpPortableDataFormats.Csv, 
+                        }
+                        d.SetData(MpPortableDataFormats.Bitmap, bmpBase64);
+                        break;
+                    case MpPortableDataFormats.Csv:
+                        switch(ItemType) {
+                            case MpCopyItemType.Text:
+                                d.SetData(MpPortableDataFormats.Csv, CopyItemData.ToCsv());
+                                break;
+                            case MpCopyItemType.Image:
+
+                                break;
+                            case MpCopyItemType.FileList:
+                                d.SetData(
+                                    MpPortableDataFormats.Csv,
                                     string.Join(
                                         ",",
                                         FileItems.Where(x => x.IsSelected).Select(x => x.Path)));
-                            } else {
-                                d.SetData(MpPortableDataFormats.Csv, CopyItemData.ToCsv());
-                            }
-                            break;
-                        default:
-                            continue;
-                    }
+                                break;
+                        }
+                        break;
+                    default:
+                        continue;
                 }
-
-            } else {
-                // TODO set internal data stuff here
             }
-
-            //d.SetData(MpPortableDataFormats.InternalContent, this);
             return d;
         }
         
@@ -1706,20 +1717,16 @@ using MpProcessHelper;
         public IEnumerable<MpTextTemplateViewModelBase> GetSelectedTextTemplateViewModels() {
             var tvml = new List<MpTextTemplateViewModelBase>();
             string spt = SelectedPlainText;
-            if(spt.Contains(MpTextTemplate.TextTemplateOpenToken) && spt.Contains(MpTextTemplate.TextTemplateCloseToken)) {
-                var openIdxList = spt.IndexListOfAll(MpTextTemplate.TextTemplateOpenToken);
 
-                for (int i = 0; i < openIdxList.Count; i++) {
-                    string sub_spt = spt.Substring(openIdxList[i]);
-                    int closeIdx = sub_spt.IndexOf(MpTextTemplate.TextTemplateCloseToken);
-                    string guid = sub_spt.Substring(MpTextTemplate.TextTemplateOpenToken.Length, closeIdx);
-                    var tvm = TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateGuid == guid);
-                    if(tvm != null)
+            var mc = MpRegEx.RegExLookup[MpRegExType.Guid].Matches(SelectedPlainText);
+
+            foreach(Match m in mc) {
+                var tvm = TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateGuid == m.Value);
+                if (tvm != null) {
                     tvml.Add(tvm);
                 }
-                return tvml.Distinct();
             }
-            return tvml;
+            return tvml.Distinct();
         }
         #endregion
 
@@ -1788,34 +1795,6 @@ using MpProcessHelper;
             }
         }
 
-
-        private async Task FillTemplates(IEnumerable<MpTextTemplateViewModelBase> templatesToFill) {
-            if (HasTemplates) {
-                IsSelected = true;
-                
-                IsContentReadOnly = false;
-                //rtbvm.OnPropertyChanged(nameof(rtbvm.IsEditingContent));
-                //TemplateCollection.PastableItems = new ObservableCollection<MpTextTemplateViewModelBase>(templatesToFill);
-
-                IsPasting = true;
-                //TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.Items));
-                //TemplateCollection.OnPropertyChanged(nameof(TemplateCollection.HasMultipleTemplates));
-
-                //TemplateCollection.SelectedItem = TemplateCollection.PastableItems[0];
-
-                TemplateCollection.BeginPasteTemplateCommand.Execute(templatesToFill);
-                
-                await Task.Delay(300);
-                //TemplateCollection.SelectedItem.IsPasteTextBoxFocused = true;
-                TemplateRichText = null;
-                await Task.Run(async () => {
-                    while (string.IsNullOrEmpty(TemplateRichText)) {
-                        await Task.Delay(100);
-                    }
-                });
-
-            }
-        }
 
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
@@ -1961,7 +1940,7 @@ using MpProcessHelper;
                             // none is actually selected. So force it to select all and 
                             // make sure selection extension updates ui of selection
                             IsContentFocused = true;
-                            MpTextSelectionRangeExtension.SelectAll(this);
+                            MpContentDocumentRtfExtension.SelectAll(this);
                         }
 
                         if(GetSelectedTextTemplateViewModels() != null) {

@@ -191,14 +191,70 @@ namespace MonkeyPaste.Common.Wpf {
                 double dpiY = MpScreenInformation.DpiY;
                 bmp.SetResolution((float)dpiX, (float)dpiY);
 
-                return bmp;
-                
+                return bmp;                
             }
         }
         
-        public static string ToAsciiImage(this BitmapSource bmpSrc) {
-            string ascii = MpWpfImagingHelper.ConvertBitmapSourceToPlainTextAsciiArt(bmpSrc);
-            return ascii;
+        public static string ToAsciiImage(this BitmapSource bmpSrc, Size? docSize = null) {
+            //Size size = docSize.HasValue ? docSize.Value : new Size(50, 50);
+            Size size = new Size(100,100);
+            if(docSize.HasValue) {
+                size = docSize.Value;
+            } else {
+                Size pixelSize = bmpSrc.PixelSize();
+                if(pixelSize.Width >= pixelSize.Height) {
+                    double ar = pixelSize.Height / pixelSize.Width;
+                    size.Height *= ar;
+                } else {
+                    double ar = pixelSize.Width / pixelSize.Height;
+                    size.Width *= ar;
+                }
+            }
+            string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
+            bmpSrc = bmpSrc.Resize(size);
+            using (System.Drawing.Bitmap image = bmpSrc.ToBitmap()) {
+                string outStr = string.Empty;
+                for (int h = 0; h < image.Height; h++) {
+                    for (int w = 0; w < image.Width; w++) {
+                        System.Drawing.Color pixelColor = image.GetPixel(w, h);
+                        //Average out the RGB components to find the Gray Color
+                        int avg = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        //int red = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        //int green = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        //int blue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        System.Drawing.Color grayColor = System.Drawing.Color.FromArgb(avg, avg, avg);
+                        int index = (grayColor.R * 10) / 255;
+                        outStr += asciiChars[index];
+                    }
+                    outStr += Environment.NewLine;
+                }
+                return outStr;
+            }
+        }
+
+        public static string ToRtfImage(this BitmapSource bmpSrc, Size? docSize = null) {
+            Size size = docSize.HasValue ? docSize.Value : new Size(50, 50);
+            string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
+            bmpSrc = bmpSrc.Resize(size);
+            var fd = new FlowDocument();
+            fd.Blocks.Clear();
+            var p = new Paragraph();
+            fd.Blocks.Add(p);
+            var ctp = fd.ContentStart;
+            using (System.Drawing.Bitmap image = bmpSrc.ToBitmap()) {
+                string outStr = string.Empty;
+                for (int h = 0; h < image.Height; h++) {
+                    for (int w = 0; w < image.Width; w++) {
+                        System.Drawing.Color pixelColor = image.GetPixel(w, h);
+                        var r = new Run("0", ctp) {
+                            Foreground = pixelColor.ToSolidColorBrush()
+                        };
+                        ctp = r.ContentEnd.GetInsertionPosition(LogicalDirection.Forward);
+                    }
+                    ctp = ctp.InsertLineBreak();
+                }
+                return fd.ToRichText();
+            }
         }
         public static string ToBase64String(this BitmapSource bmpSrc) {
             return Convert.ToBase64String(bmpSrc.ToByteArray());

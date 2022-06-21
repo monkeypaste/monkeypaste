@@ -33,8 +33,8 @@
                      MinWidth="100"
                      IsInactiveSelectionHighlightEnabled="True"
                      local:MpIsFocusedExtension.IsEnabled="True"
-                     local:MpTextSelectionRangeExtension.IsEnabled="True"
-                     local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
+                     local:MpTextBoxSelectionRangeExtension.IsEnabled="True"
+                     local:MpTextBoxSelectionRangeExtension.TextSelectionRange="{Binding}"
                      Text="{Binding ContentQuery,
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged,

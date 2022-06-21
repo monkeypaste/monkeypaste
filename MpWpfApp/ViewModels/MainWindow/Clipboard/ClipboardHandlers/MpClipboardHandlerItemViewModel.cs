@@ -64,7 +64,10 @@ namespace MpWpfApp {
 
         #region Drag Drop
 
-        public bool IsDraggingToExternal { get; set; }
+        public bool IsDraggingToExternal { 
+            get; 
+            set;         
+        }
         #endregion
 
         #endregion

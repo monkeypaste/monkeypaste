@@ -127,6 +127,8 @@ namespace MpWpfApp {
         public async Task Init() {
             IsBusy = true;
 
+            MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
+
             Items.Clear();
 
             var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent);
@@ -179,6 +181,23 @@ namespace MpWpfApp {
 
             await aivm.InitializeAsync(plugin);
             return aivm;
+        }
+
+        private void ReceivedDragDropManagerMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ExternalDragBegin:
+                    if(SelectedItem == null) {
+                        Debugger.Break();
+                    }
+                    SelectedItem.IsDraggingToExternal = true;
+                    break;
+                case MpMessageType.ExternalDragEnd:
+                    if (SelectedItem == null) {
+                        Debugger.Break();
+                    }
+                    SelectedItem.IsDraggingToExternal = false;
+                    break;
+            }
         }
 
         private void MpClipboardHandlerCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

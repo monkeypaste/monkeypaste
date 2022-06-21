@@ -270,7 +270,7 @@ namespace MpWpfApp {
                     return;
                 }
 
-                MpTextSelectionRangeExtension.SetSelectionText(Parent, "{t{" + templateGuid + "}t}");
+                MpContentDocumentRtfExtension.SetSelectionText(Parent, MpTextTemplate.TextTemplateOpenToken + templateGuid + MpTextTemplate.TextTemplateCloseToken);
 
                 var ctvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>();
                 if(ctvl == null) {
@@ -281,12 +281,7 @@ namespace MpWpfApp {
                     Debugger.Break();
                 }
 
-                MpContentDocumentRtfExtension.LoadTemplates(ctv.Rtb).FireAndForgetSafeAsync(this);
-                await Task.Delay(10);
-
-                while(IsBusy) {
-                    await Task.Delay(100);
-                }
+                await MpContentDocumentRtfExtension.LoadTemplates(ctv.Rtb);
 
                 var ntvm = Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
                 if (ntvm == null) {
@@ -356,12 +351,13 @@ namespace MpWpfApp {
                     }
                     if(templateToSelect != null) {
                         SelectedItem = templateToSelect;
+                        SelectedItem.IsPasteTextBoxFocused = true;
                     }
                 }
                 
             });
 
-        public ICommand PasteTemplateCommand => new RelayCommand(
+        public ICommand FinishPasteTemplateCommand => new RelayCommand(
             () => {
                 var cv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>()
                             .FirstOrDefault(x => x.DataContext == Parent);
@@ -379,12 +375,8 @@ namespace MpWpfApp {
                 MpMainWindowViewModel.Instance.OnMainWindowHidden += hideEvent;
 
                 var rtb = cv.Rtb;
-                bool wasAllSelected = false;
-                if(rtb.Selection.IsEmpty) {
-                    rtb.SelectAll();
-                    wasAllSelected = true;
-                }
-                string rtf = MpContentDocumentRtfExtension.GetEncodedContent(rtb,false);
+
+                string rtf = MpContentDocumentRtfExtension.GetEncodedContent(rtb, rtb.Selection.IsEmpty);
 
                 MpConsole.WriteLine("Unmodified item rtf: ");
                 MpConsole.WriteLine(rtf);
@@ -392,12 +384,11 @@ namespace MpWpfApp {
                 foreach (var thlvm in Items) {
                     rtf = rtf.Replace(thlvm.TextTemplate.EncodedTemplateRtf, thlvm.TemplateText);
                 }
-                if(wasAllSelected) {
-                    rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
-                }
+                //if(wasAllSelected) {
+                //    rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
+                //}
 
                 Parent.TemplateRichText = rtf;
-
                 
                 MpConsole.WriteLine("Pastable rtf: ");
                 MpConsole.WriteLine(rtf);

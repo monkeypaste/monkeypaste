@@ -190,7 +190,6 @@ namespace MonkeyPaste.Common.Wpf {
             }
             return false;
         }
-
         public static FlowDocument Clone(this FlowDocument doc) {
             using (MemoryStream stream = new MemoryStream()) {
                 var clonedDoc = new FlowDocument();
@@ -200,35 +199,72 @@ namespace MonkeyPaste.Common.Wpf {
                 TextRange range2 = new TextRange(clonedDoc.ContentEnd, clonedDoc.ContentEnd);
                 range2.Load(stream, DataFormats.XamlPackage);
 
-                //int docLength = doc.ContentStart.GetOffsetToPosition(doc.ContentEnd);
-                //int cdocLength = docLength;
-                //for (int i = 0, ic = 0; i <= docLength && ic <= cdocLength; i++, ic++) {
-                //    var doc_tp = doc.ContentStart.GetPositionAtOffset(i);
-                //    var clone_tp = clonedDoc.ContentStart.GetPositionAtOffset(ic);
-                //    if(doc_tp.Parent is TextElement doc_tp_te) {
-                //        if(doc_tp.Parent is InlineUIContainer iuic && iuic.Tag is MpTextTemplate cit) {
-                //            int sIdx = doc.ContentStart.GetOffsetToPosition(iuic.ContentStart);
-                //            int eIdx = doc.ContentStart.GetOffsetToPosition(iuic.ContentEnd);
-
-                //            var span = new Span(new Run(cit.EncodedTemplate), clone_tp);
-                //            int csIdx = clonedDoc.ContentStart.GetOffsetToPosition(span.ContentStart);
-                //            int ceIdx = clonedDoc.ContentStart.GetOffsetToPosition(span.ContentEnd);
-
-                //            int iuicLength = eIdx - sIdx;
-                //            int spanLength = ceIdx - csIdx;
-
-                //            ic = clonedDoc.ContentStart.GetOffsetToPosition(span.ContentEnd);
-                //            i = doc.ContentStart.GetOffsetToPosition(iuic.ContentEnd);
-
-                //            cdocLength = clonedDoc.ContentStart.GetOffsetToPosition(clonedDoc.ContentEnd);
-                //        } else if(clone_tp.Parent is TextElement) {
-                //            (clone_tp.Parent as TextElement).Tag = doc_tp_te.Tag;
-                //        }                        
-                //    }
-                //}
-                
                 return clonedDoc;
             }
+        }
+
+        public static FlowDocument Clone(this FlowDocument doc, TextRange rangeToEncode, out TextRange encodedRange) {
+            using (MemoryStream stream = new MemoryStream()) {
+                var clonedDoc = new FlowDocument();
+                TextRange range = new TextRange(doc.ContentStart, doc.ContentEnd);
+                System.Windows.Markup.XamlWriter.Save(range, stream);
+                range.Save(stream, DataFormats.XamlPackage);
+                TextRange range2 = new TextRange(clonedDoc.ContentEnd, clonedDoc.ContentEnd);
+                range2.Load(stream, DataFormats.XamlPackage);
+
+                int docLength = doc.ContentStart.GetOffsetToPosition(doc.ContentEnd);
+                int cdocLength = docLength;
+                
+                int rte_sIdx = doc.ContentStart.GetOffsetToPosition(rangeToEncode.Start);
+                int rte_eIdx = doc.ContentStart.GetOffsetToPosition(rangeToEncode.End);
+                
+                var iuicl = doc.GetAllTextElements().Where(x => x is InlineUIContainer).OrderBy(x => x.ContentStart.GetOffsetToPosition(x.ContentStart));
+
+                int c_offset = 0;
+                foreach (var iuic in iuicl) {
+                    int sIdx = doc.ContentStart.GetOffsetToPosition(iuic.ContentStart);
+
+                    var ctp = clonedDoc.ContentStart.GetPositionAtOffset(sIdx + c_offset);
+                    new TextRange(ctp, ctp).Text = iuic.Tag.ToString();
+
+                    cdocLength = clonedDoc.ContentStart.GetOffsetToPosition(clonedDoc.ContentEnd);
+                    c_offset = cdocLength - docLength;
+
+                    // Returns:
+                    //     –1 if the current System.Windows.Documents.TextPointer precedes position; 0 if
+                    //     the locations are the same; +1 if the current System.Windows.Documents.TextPointer
+                    //     follows position.
+                    //
+                    if (iuic.ContentStart.CompareTo(rangeToEncode.Start) <= 0) {
+                        //when selection start is after this iuic add diff to encoded start
+                        rte_sIdx += c_offset;                     
+                    }
+                    if (iuic.ContentStart.CompareTo(rangeToEncode.End) <= 0) {
+                        //when selection end is after this iuic add diff to encoded end
+                        rte_eIdx += c_offset;
+                    }
+                }
+
+                rte_eIdx = Math.Min(cdocLength, rte_eIdx);
+                encodedRange = new TextRange(
+                    clonedDoc.ContentStart.GetPositionAtOffset(rte_sIdx),
+                    clonedDoc.ContentStart.GetPositionAtOffset(rte_eIdx));
+                return clonedDoc;
+            }
+        }
+
+
+        public static FlowDocument CloneDocument(FlowDocument document) {
+            var copy = new FlowDocument();
+            var sourceRange = new TextRange(document.ContentStart, document.ContentEnd);
+            var targetRange = new TextRange(copy.ContentStart, copy.ContentEnd);
+
+            using (var stream = new MemoryStream()) {
+                sourceRange.Save(stream, DataFormats.XamlPackage);
+                targetRange.Load(stream, DataFormats.XamlPackage);
+            }
+
+            return copy;
         }
 
         public static IEnumerable<TextElement> GetTextElementsOfTypes(this FlowDocument doc, params object[] types) {
@@ -584,18 +620,6 @@ namespace MonkeyPaste.Common.Wpf {
             return bitmap;
         }
 
-        public static FlowDocument CloneDocument(FlowDocument document) {
-            var copy = new FlowDocument();
-            var sourceRange = new TextRange(document.ContentStart, document.ContentEnd);
-            var targetRange = new TextRange(copy.ContentStart, copy.ContentEnd);
-
-            using (var stream = new MemoryStream()) {
-                sourceRange.Save(stream, DataFormats.XamlPackage);
-                targetRange.Load(stream, DataFormats.XamlPackage);
-            }
-
-            return copy;
-        }
 
         public static FlowDocument ToFlowDocument(this string str) {
             using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {

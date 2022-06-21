@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Security;
 
 namespace MpProcessHelper {
     public static class MpProcessAutomation {
@@ -224,7 +225,7 @@ namespace MpProcessHelper {
                 pi.CloseOnComplete = false;
 
                 if (string.IsNullOrEmpty(pi.ProcessPath)) {
-                    if(pi.Handle == null  || pi.Handle == IntPtr.Zero) {
+                    if(pi.Handle == null || pi.Handle == IntPtr.Zero) {
                         return pi;
                     }
                     pi.ProcessPath = GetProcessPath((IntPtr)pi.Handle);
@@ -370,7 +371,13 @@ namespace MpProcessHelper {
         private static void SetPath(string newPath) {
             var name = "PATH";
             var scope = EnvironmentVariableTarget.Machine;
-            Environment.SetEnvironmentVariable(name, newPath, scope);
+            try {
+                Environment.SetEnvironmentVariable(name, newPath, scope);
+            } catch(SecurityException sex) {
+                MpConsole.WriteTraceLine("MpProcessAutomation.SetPath exception (likely this app is not running as admin and therefore cannot set env var): ", sex);
+
+            }
+            
         }
 
         #endregion

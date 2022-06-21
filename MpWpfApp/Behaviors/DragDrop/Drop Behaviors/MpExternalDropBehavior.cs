@@ -31,15 +31,16 @@ namespace MpWpfApp {
 
     public class MpExternalDropBehavior : MpDropBehaviorBase<FrameworkElement> {
         #region Private Variables
-
-        private DragDropEffects _dragDropEffects = DragDropEffects.None;
-
         #endregion
 
         #region Singleton Definition
         private static readonly Lazy<MpExternalDropBehavior> _Lazy = new Lazy<MpExternalDropBehavior>(() => new MpExternalDropBehavior());
         public static MpExternalDropBehavior Instance { get { return _Lazy.Value; } }
         #endregion
+
+        #region Properties
+
+        #region MpIDropBehavior
 
         public override MpDropType DropType => MpDropType.External;
         public override FrameworkElement AdornedElement => AssociatedObject;
@@ -56,6 +57,12 @@ namespace MpWpfApp {
 
         public override MpCursorType MoveCursor => MpCursorType.ContentMove;
         public override MpCursorType CopyCursor => MpCursorType.ContentCopy;
+
+        #endregion
+
+        public bool IsPreExternalTemplateDrop { get; set; }
+
+        #endregion 
 
         protected override void OnLoad() {
             IsDebugEnabled = false;
@@ -116,41 +123,23 @@ namespace MpWpfApp {
         }
 
         public override async Task StartDrop() {
-            if(MpClipboardHandlerCollectionViewModel.Instance.SelectedItem != null) {
-                MpClipboardHandlerCollectionViewModel.Instance.SelectedItem.IsDraggingToExternal = true;
-            } else {
-                Debugger.Break();
-            }
-
             var ctvm = MpDragDropManager.DragData as MpClipTileViewModel;
             if(ctvm == null) {
                 Debugger.Break();
                 return;
             }
 
-            MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(                
-                true, 
-                MpProcessManager.LastHandle,
-                false);
+            MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(false);
             DataObject wpfdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo) as DataObject;
 
             if (ctvm.HasTemplates) {
-                MpDragDropManager.IsPreExternalTemplateDrop = true;
+                IsPreExternalTemplateDrop = true;
                 DragDrop.AddPreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
-                DragDrop.AddPreviewGiveFeedbackHandler(AssociatedObject, OnGiveFeedback);
             }
 
             DragDrop.DoDragDrop(AssociatedObject, wpfdo, DragDropEffects.Copy);
         }
 
-        private void OnGiveFeedback(object sender, GiveFeedbackEventArgs e) {
-            MpConsole.WriteLine("Feedback: " + e.Effects);
-
-            if(!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-                // TODO Handle external drag icon here
-                e.Handled = true;
-            }
-        }
         private void OnQueryContinueDrag(object sender, QueryContinueDragEventArgs e) {
 
             MpConsole.WriteLine("Action: " + e.Action);
@@ -158,12 +147,10 @@ namespace MpWpfApp {
             if (!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
 
                 MpHelpers.RunOnMainThread(async () => {
-                    var dropAppHandle = MpProcessHelper.MpProcessManager.LastHandle;
-
                     e.Handled = true;
                     e.Action = DragAction.Cancel;
 
-                    MpProcessAutomation.ActivateThisApp();
+                    
 
                     var ctvm = MpClipTrayViewModel.Instance.SelectedItem;
                     
@@ -173,13 +160,9 @@ namespace MpWpfApp {
                     }
                     //MpDragDropManager.DragData as MpClipTileViewModel;
 
-                    MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(
-                        isDragDrop: true,
-                        targetHandleObj: dropAppHandle,
-                        ignoreSubSelection: false,
-                        isDropping: true);
+                    MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(true);
 
-                    MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(dropAppHandle);
+                    MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(mpdo);
 
                     while(MpClipTrayViewModel.Instance.SelectedItem.IsPasting) {
                         await Task.Delay(100);
@@ -189,8 +172,17 @@ namespace MpWpfApp {
             }
         }
 
-        public override async Task Drop(bool isCopy, object dragData) {            
-            await Task.Delay(1);
+        public override async Task Drop(bool isCopy, object dragData) {
+            Application.Current.MainWindow.Activate();
+            Application.Current.MainWindow.Focus();
+            Application.Current.MainWindow.Topmost = true;
+            Application.Current.MainWindow.Top = 0;
+
+            while (IsPreExternalTemplateDrop) {
+                await Task.Delay(100);
+            }
+            MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
+
             Reset();
         }
 
@@ -201,16 +193,9 @@ namespace MpWpfApp {
         public override void Reset() {
             base.Reset();
 
-            MpDragDropManager.IsPreExternalTemplateDrop = false;
-
-            if (MpClipboardHandlerCollectionViewModel.Instance.SelectedItem != null) {
-                MpClipboardHandlerCollectionViewModel.Instance.SelectedItem.IsDraggingToExternal = false;
-            } else {
-                Debugger.Break();
-            }
+            IsPreExternalTemplateDrop = false;
 
             DragDrop.RemovePreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
-            DragDrop.RemovePreviewGiveFeedbackHandler(AssociatedObject, OnGiveFeedback);
         }
     }
 

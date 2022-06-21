@@ -107,7 +107,7 @@ namespace MpWpfApp {
         protected void SetClipboardData(bool isCopy) {
             var ctvm = DataContext as MpClipTileViewModel;
             if(Selection.IsEmpty) {
-                MpTextSelectionRangeExtension.SelectAll(ctvm);
+                MpTextBoxSelectionRangeExtension.SelectAll(ctvm);
             }
             string selectedText = MpContentDocumentRtfExtension.GetEncodedContent(this, false, true);
 

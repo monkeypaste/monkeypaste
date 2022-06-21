@@ -26,12 +26,12 @@ namespace MpWpfApp {
 
         #region MpITextSelectionRangeViewModel Implementation 
 
-        public int SelectionStart => MpTextSelectionRangeExtension.GetSelectionStart(this);
-        public int SelectionLength => MpTextSelectionRangeExtension.GetSelectionLength(this);
+        public int SelectionStart => MpTextBoxSelectionRangeExtension.GetSelectionStart(this);
+        public int SelectionLength => MpTextBoxSelectionRangeExtension.GetSelectionLength(this);
 
         public string SelectedPlainText {
-            get => MpTextSelectionRangeExtension.GetSelectedPlainText(this);
-            set => MpTextSelectionRangeExtension.SetSelectionText(this, value);
+            get => MpTextBoxSelectionRangeExtension.GetSelectedPlainText(this);
+            set => MpTextBoxSelectionRangeExtension.SetSelectionText(this, value);
         }
 
 

@@ -43,11 +43,7 @@ namespace MonkeyPaste.Common {
     
 
     public interface MpIPortableContentDataObject {
-        Task<MpPortableDataObject> ConvertToPortableDataObject(
-            bool isDragDrop,
-            object targetHandleOrProcessInfo,
-            bool ignoreSubSelection = false,
-            bool isDropping = false);
+        Task<MpPortableDataObject> ConvertToPortableDataObject(bool fillTemplates);
     }
     public interface MpIExternalPasteHandler {
         Task PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo, bool finishWithEnterKey = false);

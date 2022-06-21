@@ -32,8 +32,7 @@
                              local:MpContentDocumentRtfExtension.IsSelected="{Binding IsSelected,
                                                                                       Mode=TwoWay}"
                              local:MpContentDocumentRtfExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
-                             local:MpTextSelectionRangeExtension.IsEnabled="{Binding IsTextItem}"
-                             local:MpTextSelectionRangeExtension.TextSelectionRange="{Binding}"
+                             local:MpContentDocumentRtfExtension.TextSelectionRange="{Binding}"
                              AutoWordSelection="False"
                              
                              Background="White"

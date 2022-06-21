@@ -52,7 +52,11 @@ namespace MpWpfApp {
         public override void AutoScrollByMouse() {
             var pt_lb = AssociatedObject.PinTrayListBox;
             var sv = pt_lb.GetVisualDescendent<ScrollViewer>();
-
+            if(sv == null) {
+                // BUG this happens intermittently, maybe when dragging during immediately
+                // after startup
+                return;
+            }
             var gmp = MpShortcutCollectionViewModel.Instance.GlobalMouseLocation;            
             var pin_tray_lb_mp = Application.Current.MainWindow.TranslatePoint(gmp, pt_lb);
 
@@ -98,7 +102,7 @@ namespace MpWpfApp {
                 return false;
             }
             if(dragData is MpClipTileViewModel ctvm) {
-                if(ctvm.IsPinned && MpTextSelectionRangeExtension.IsAllSelected(ctvm)) {
+                if(ctvm.IsPinned && MpTextBoxSelectionRangeExtension.IsAllSelected(ctvm)) {
                     return false;
                 }
             }
@@ -162,7 +166,7 @@ namespace MpWpfApp {
                 // either a partial pinned or tray selection or tray item
 
                 drag_ctvm = dragData as MpClipTileViewModel;
-                bool isPartialDrop = !MpTextSelectionRangeExtension.IsAllSelected(drag_ctvm);
+                bool isPartialDrop = !MpTextBoxSelectionRangeExtension.IsAllSelected(drag_ctvm);
                 if(isPartialDrop) {
                     string drop_data = drag_ctvm.SelectedPlainText; //MpContentDocumentRtfExtension.ExchangeDataWithTarget(drag_ctvm, isCopy);
 

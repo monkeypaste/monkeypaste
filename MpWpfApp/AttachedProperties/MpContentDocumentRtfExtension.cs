@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Xml.Linq;
 using System.Runtime.Serialization;
+using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
     public class MpContentDocumentRtfExtension : DependencyObject {
@@ -108,8 +109,7 @@ namespace MpWpfApp {
             var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
             
             if (ctcv != null) {
-                SetReadOnlyWidth(fe,ctcv.ActualWidth);
-                
+                SetReadOnlyWidth(fe,ctcv.ActualWidth);                
 
                 if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
                     ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
@@ -190,49 +190,6 @@ namespace MpWpfApp {
             return null;            
         }
 
-        public static string ExchangeDataWithTarget(MpClipTileViewModel drag_ctvm, bool isCopy) {            
-            string dropData = null;
-            var drag_rtb = FindRtbByViewModel(drag_ctvm);
-
-            switch (drag_ctvm.ItemType) {
-                case MpCopyItemType.Text:
-                    dropData = GetEncodedContent(drag_rtb, false, true);                   
-
-                    if(!isCopy) {
-                        //when drag selection is not copy delete selection from source
-                        drag_rtb.Selection.Text = string.Empty;                        
-                    }
-                    break;
-                case MpCopyItemType.FileList:
-                    if(drag_ctvm.FileItems.All(x=>x.IsSelected == false)) {
-                        drag_ctvm.FileItems.ForEach(x => x.IsSelected = true);
-                    }
-                    dropData = string.Join(Environment.NewLine, drag_ctvm.FileItems.Where(x => x.IsSelected).Select(x => x.Path));
-
-                    if (!isCopy) {
-                        //when drag selection is not copy delete selection from source
-                        var fileItemsToRemove = drag_ctvm.FileItems.Where(x => x.IsSelected).ToList();
-                        for(int i = 0; i < fileItemsToRemove.Count;i++) {
-                            drag_ctvm.FileItems.Remove(fileItemsToRemove[i]);
-
-                            
-                        }
-                        var paragraphsToRemove = drag_rtb.Document.GetAllTextElements()
-                           .Where(x => x is MpFileItemParagraph).Cast<MpFileItemParagraph>()
-                               .Where(x => fileItemsToRemove.Any(y => y == x.DataContext));
-
-                        paragraphsToRemove.ForEach(x => drag_rtb.Document.Blocks.Remove(x));
-                    }
-                    break;
-                case MpCopyItemType.Image:
-                    // shouldn't happen for images
-                    Debugger.Break();
-                    break;
-            }
-
-            return dropData;
-        }
-
         public static async Task FinishContentCut(MpClipTileViewModel drag_ctvm) {
             var rtb = FindRtbByViewModel(drag_ctvm);
             if(rtb == null) {
@@ -273,7 +230,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region HeadContentItemViewModel
+        #region CopyItem
 
         public static object GetCopyItem(DependencyObject obj) {
             return obj.GetValue(CopyItemProperty);
@@ -306,6 +263,152 @@ namespace MpWpfApp {
                 }
             });
 
+        #endregion
+
+        #region TextSelectionRange DependencyProperty
+
+        public static MpIRtfSelectionRange GetTextSelectionRange(DependencyObject obj) {
+            return (MpIRtfSelectionRange)obj.GetValue(TextSelectionRangeProperty);
+        }
+
+        public static void SetTextSelectionRange(DependencyObject obj, MpIRtfSelectionRange value) {
+            obj.SetValue(TextSelectionRangeProperty, value);
+        }
+
+        public static readonly DependencyProperty TextSelectionRangeProperty =
+            DependencyProperty.RegisterAttached(
+                "TextSelectionRange",
+                typeof(MpIRtfSelectionRange),
+                typeof(MpContentDocumentRtfExtension),
+                new FrameworkPropertyMetadata(null));
+
+        public static MpRichTextFormatInfoFormat GetSelectionFormat(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                var rtfFormat = new MpRichTextFormatInfoFormat() {
+                    inlineFormat = GetSelectedInlineFormat(rtb),
+                    blockFormat = GetSelectedBlockFormat(rtb)
+                };
+                return rtfFormat;
+            }
+            return null;
+        }
+
+        public static MpInlineTextFormatInfoFormat GetSelectedInlineFormat(RichTextBox rtb) {
+            if (rtb.Selection.Start.Parent is TextElement te) {
+                if (te is Inline inline) {
+                    var inlineFormat = new MpInlineTextFormatInfoFormat() {
+                        background = inline.Background.ToHex(),
+                        color = inline.Foreground.ToHex(),
+                        bold = inline is Bold ||
+                                rtb.Selection.Start.Parent.FindParentOfType<Bold>() != null,
+                        italic = inline is Italic || inline.FontStyle == FontStyles.Italic ||
+                                rtb.Selection.Start.Parent.FindParentOfType<Italic>() != null,
+                        strike = inline.TextDecorations == TextDecorations.Strikethrough,
+                        underline = inline is Underline ||
+                                    rtb.Selection.Start.Parent.FindParentOfType<Underline>() != null,
+                        font = inline.FontFamily.Source,
+                        size = inline.FontSize,
+                        script = inline.BaselineAlignment.ToString()
+                    };
+                    return inlineFormat;
+                }
+            }
+            return null;
+        }
+
+        public static MpBlockTextFormatInfoFormat GetSelectedBlockFormat(RichTextBox rtb) {
+            return null;
+        }
+
+        public static string GetSelectedPlainText(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                return GetEncodedContent(rtb, false, true);
+            }
+            return null;
+        }
+
+        public static string GetSelectedRichText(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                return GetEncodedContent(rtb, false, false);
+            }
+            return null;
+        }
+
+        public static int GetSelectionStart(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                TextRange start = new TextRange(rtb.Document.ContentStart, rtb.Selection.Start);
+                return start.Text.Length;
+            }
+            return 0;
+        }
+
+        public static int GetSelectionLength(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                return rtb.Selection.Text.Length;
+            }
+            return 0;
+        }
+
+
+        public static void SetTextSelection(MpIRtfSelectionRange tsr, TextRange tr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                if (!rtb.Document.ContentStart.IsInSameDocument(tr.Start) ||
+                !rtb.Document.ContentStart.IsInSameDocument(tr.End)) {
+                    return;
+                }
+                rtb.Selection.Select(tr.Start, tr.End);
+
+                if (tr.Start.Parent is FrameworkContentElement fce) {
+                    fce.BringIntoView();
+                }
+            }
+        }
+
+        public static void SetSelectionText(MpIRtfSelectionRange tsr, string text) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                rtb.Selection.Text = text;
+            }
+        }
+
+        public static void SelectAll(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb == null) {
+                Debugger.Break();
+            }
+            if (!tbb.IsFocused) {
+                tbb.Focus();
+            }
+            if (!tbb.IsFocused) {
+                Debugger.Break();
+            }
+            tbb.SelectAll();
+        }
+
+        public static bool IsAllSelected(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                //return rtb.Document.ContentStart == rtb.Selection.Start &&
+                //       rtb.Document.ContentEnd == rtb.Selection.End;
+                return rtb.Document.ContentRange().Text.Length ==
+                       rtb.Selection.Text.Length;
+            }
+            return false;
+        }
+
+        private static TextBoxBase FindTextBoxBase(MpIRtfSelectionRange tsr) {
+            return FindRtbByViewModel(tsr as MpClipTileViewModel);
+        }
+
+        #endregion
+
+        #region Rtb Event Handlers
 
         private static void Rtb_Loaded(object sender, RoutedEventArgs e) {
             var rtb = sender as RichTextBox;
@@ -326,12 +429,38 @@ namespace MpWpfApp {
                 UnloadContent(rtb);
             }
         }
+        private static void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
+            //return;
+            var rtb = sender as RichTextBox;
 
-        private static void UnloadContent(RichTextBox rtb) {
-            rtb.Loaded -= Rtb_Loaded;
-            rtb.Unloaded -= Rtb_Unloaded;
-            rtb.TextChanged -= Rtb_TextChanged;
+            var rtb_a = rtb.GetVisualAncestor<AdornerLayer>();
+            if (rtb_a != null) {
+                rtb_a.Update();
+            }
+
+            if (MpDragDropManager.IsDragAndDrop) {
+                // NOTE during drop rtb will be reinitialized
+                return;
+            }
+            var ctvm = rtb.DataContext as MpClipTileViewModel;
+            if (ctvm.IsPlaceholder) {
+                // BUG I think this event gets called when a tile is dropped and its turned into placeholder
+                return;
+            }
+            //MpConsole.WriteLines("Tile " + ctvm.HeadItem.CopyItemTitle + " text changed:");
+            //MpConsole.WriteLine(rtb.Document.ToXamlPackage());
+
+            if (ctvm.IsTextItem) {
+
+                rtb.Document.ConfigureLineHeight();
+                ctvm.ResetExpensiveDetails();
+
+            }
         }
+
+        #endregion
+
+        #region Public Methods
 
         public static async Task LoadContent(RichTextBox rtb) {
             if (rtb == null) {
@@ -358,7 +487,7 @@ namespace MpWpfApp {
             MpCopyItem ci = ctvm.CopyItem;
             //new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd)
             //    .LoadItemData(ci.ItemData, ci.ItemType, out Size rawDimensions);
-            rtb.Document = MpRtbContentExtensions.LoadContent(ctvm,ci.ItemData, ci.ItemType, out Size rawDimensions);
+            rtb.Document = MpRtbContentExtensions.LoadContent(ctvm, ci.ItemData, ci.ItemType, out Size rawDimensions);
 
             ctvm.UnformattedContentSize = rawDimensions;
 
@@ -393,8 +522,6 @@ namespace MpWpfApp {
             }
         }
 
-
-
         public static async Task LoadTemplates(RichTextBox rtb) {
             var ctvm = rtb.DataContext as MpClipTileViewModel;
             var tcvm = ctvm.TemplateCollection;
@@ -407,25 +534,25 @@ namespace MpWpfApp {
             // verify template loaded in document exists, if does add to collection if not present on remove from document 
             var loadedTemplateItems = await MpDataModelProvider.GetTextTemplatesByGuids(loadedTemplateGuids.ToList());
             var loadedTemplateGuids_toRemove = loadedTemplateGuids.Where(x => loadedTemplateItems.All(y => y.Guid != x));
-            foreach(var templateGuid_toRemove in loadedTemplateGuids_toRemove) {
+            foreach (var templateGuid_toRemove in loadedTemplateGuids_toRemove) {
                 var templateElements_toRemove = loadedTemplateElements.Where(x => (x.Tag as MpTextTemplate).Guid == templateGuid_toRemove);
-                foreach(var templateElement_toRemove in templateElements_toRemove) {
+                foreach (var templateElement_toRemove in templateElements_toRemove) {
                     var ttr = templateElement_toRemove.ContentRange();
                     ttr.Text = string.Empty;
                 }
 
                 var templateViewModel_toRemove = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid_toRemove);
-                if(templateViewModel_toRemove != null) {
+                if (templateViewModel_toRemove != null) {
                     tcvm.Items.Remove(templateViewModel_toRemove);
                 }
             }
 
             // get ranges of templates encoded from db (will be present on initial load, after saving content or when new template is added/created)
-            var templateEncodedRanges = GetEncodedRanges(rtb.Document, "{t{", "}t}");            
-            
-            var templateEncodedGuids = templateEncodedRanges.Select(x => x.Text.Replace("{t{", string.Empty).Replace("}t}", string.Empty)).ToList();
+            var templateEncodedRanges = GetEncodedRanges(rtb.Document, MpTextTemplate.TextTemplateOpenToken, MpTextTemplate.TextTemplateCloseToken);
+
+            var templateEncodedGuids = templateEncodedRanges.Select(x => x.Text.Replace(MpTextTemplate.TextTemplateOpenToken, string.Empty).Replace(MpTextTemplate.TextTemplateCloseToken, string.Empty)).ToList();
             var templateItems = await MpDataModelProvider.GetTextTemplatesByGuids(templateEncodedGuids);
-            
+
             for (int i = 0; i < templateEncodedGuids.Count; i++) {
                 string templateGuid = templateEncodedGuids[i];
                 MpTextTemplate templateItem = null;
@@ -433,13 +560,13 @@ namespace MpWpfApp {
                     //Debugger.Break();
                     // when template is encoded in document but not referenced in MpTextTemplate
                     var missingItem = await MpDataModelProvider.GetTextTemplateByGuid(templateGuid);
-                    if(missingItem == null) {
-                        ctvm.CopyItemData = ctvm.CopyItemData.Replace(@"\{t\{" + templateGuid + @"\{t\{", string.Empty);
+                    if (missingItem == null) {
+                        ctvm.CopyItemData = ctvm.CopyItemData.Replace(MpTextTemplate.TextTemplateOpenTokenRtf + templateGuid + MpTextTemplate.TextTemplateCloseTokenRtf, string.Empty);
                         templateEncodedRanges[i].Text = string.Empty;
                         MpConsole.WriteLine($"CopyItem {ctvm} item's data had ref to {templateGuid} which is not in the db, is now removed from item data");
 
                         var tvm_ToRemove = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
-                        if(tvm_ToRemove != null) {
+                        if (tvm_ToRemove != null) {
                             tcvm.Items.Remove(tvm_ToRemove);
                             MpConsole.WriteLine($"Template collection also had ref to item {templateGuid}, which is also now removed");
                         }
@@ -449,9 +576,9 @@ namespace MpWpfApp {
                 } else {
                     templateItem = templateItems.FirstOrDefault(x => x.Guid == templateGuid);
                 }
-                
 
-                if(templateItem == null) {
+
+                if (templateItem == null) {
                     Debugger.Break();
                 }
                 MpTextTemplateViewModelBase tvm = tcvm.Items.FirstOrDefault(x => x.TextTemplateGuid == templateGuid);
@@ -460,11 +587,11 @@ namespace MpWpfApp {
                     tvm = await tcvm.CreateTemplateViewModel(templateItem);
                     tcvm.Items.Add(tvm);
                 }
-                var templateRange = templateEncodedRanges.FirstOrDefault(x => x.Text == "{t{"+templateGuid+"}t}");
-                if(templateRange == null) {
+                var templateRange = templateEncodedRanges.FirstOrDefault(x => x.Text == "{t{" + templateGuid + "}t}");
+                if (templateRange == null) {
                     Debugger.Break();
                 }
-                if(templateItem == null) {
+                if (templateItem == null) {
                     Debugger.Break();
                 }
 
@@ -475,6 +602,52 @@ namespace MpWpfApp {
             tcvm.OnPropertyChanged(nameof(tcvm.Items));
             tcvm.IsBusy = false;
         }
+
+        public static List<TextRange> FindContent(MpClipTileViewModel ctvm, string matchText, bool isCaseSensitive = false, bool matchWholeWord = false, bool useRegEx = false) {
+            var rtb = FindRtbByViewModel(ctvm);
+
+            return rtb.Document.FindText(
+                matchText,
+                isCaseSensitive,
+                matchWholeWord,
+                useRegEx);
+        }
+
+        public static RichTextBox FindRtbByViewModel(MpClipTileViewModel ctvm) {
+            var cv = Application.Current.MainWindow
+                                 .GetVisualDescendents<MpRtbContentView>()
+                                 .FirstOrDefault(x => x.DataContext == ctvm);
+            if (cv == null) {
+                Debugger.Break();
+            }
+            if (cv.Rtb == null) {
+                Debugger.Break();
+            }
+            return cv.Rtb;
+        }
+
+        public static Tuple<int, int> GetLineAndCharCount(MpClipTileViewModel ctvm) {
+            var rtb = FindRtbByViewModel(ctvm);
+            if (rtb == null) {
+                return new Tuple<int, int>(0, 0);
+            }
+
+            string pt = rtb.Document.ToPlainText();
+            return new Tuple<int, int>(
+                pt.IndexListOfAll(Environment.NewLine).Count + 1,
+                pt.Length);
+        }
+
+        #endregion
+
+        #region Private Methods
+        private static void UnloadContent(RichTextBox rtb) {
+            rtb.Loaded -= Rtb_Loaded;
+            rtb.Unloaded -= Rtb_Unloaded;
+            rtb.TextChanged -= Rtb_TextChanged;
+        }
+
+        
         private static TextRange[] GetEncodedRanges(FlowDocument fd, string rangeStartText, string rangeEndText) {
             return GetEncodedRanges(new TextRange(fd.ContentStart, fd.ContentEnd), rangeStartText, rangeEndText);
         }
@@ -499,62 +672,7 @@ namespace MpWpfApp {
 
             return encodedRange.ToArray();
         }
-
-        private static void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
-            //return;
-            var rtb = sender as RichTextBox;
-
-            var rtb_a = rtb.GetVisualAncestor<AdornerLayer>();
-            if(rtb_a != null) {
-                rtb_a.Update();
-            }
-
-            if (MpDragDropManager.IsDragAndDrop) {
-                // NOTE during drop rtb will be reinitialized
-                return;
-            }
-            var ctvm = rtb.DataContext as MpClipTileViewModel;
-            if(ctvm.IsPlaceholder) {
-                // BUG I think this event gets called when a tile is dropped and its turned into placeholder
-                return;
-            }
-            //MpConsole.WriteLines("Tile " + ctvm.HeadItem.CopyItemTitle + " text changed:");
-            //MpConsole.WriteLine(rtb.Document.ToXamlPackage());
-
-            if (ctvm.IsTextItem) {
-                
-                rtb.Document.ConfigureLineHeight();
-                ctvm.ResetExpensiveDetails();
-                
-            }
-        }
-
-
-        public static List<TextRange> FindContent(MpClipTileViewModel ctvm, string matchText, bool isCaseSensitive = false, bool matchWholeWord = false, bool useRegEx = false) {
-            var rtb = FindRtbByViewModel(ctvm);
-
-            return rtb.Document.FindText(
-                matchText,
-                isCaseSensitive,
-                matchWholeWord,
-                useRegEx);
-        }
-
-        public static RichTextBox FindRtbByViewModel(MpClipTileViewModel ctvm) {
-            var cvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>();
-            if (cvl == null) {
-                Debugger.Break();
-            }
-            var cv = cvl.FirstOrDefault(x => x.DataContext == ctvm);
-            if (cv == null) {
-                Debugger.Break();
-            }
-            if(cv.Rtb == null) {
-                Debugger.Break();
-            }
-            return cv.Rtb;
-        }
-
+        
         private static void LoadHyperlinks(RichTextBox rtb) {
             var ctvm = rtb.DataContext as MpClipTileViewModel;
 
@@ -582,17 +700,6 @@ namespace MpWpfApp {
             }
         }
 
-        public static Tuple<int, int> GetLineAndCharCount(MpClipTileViewModel ctvm) {
-            var rtb = FindRtbByViewModel(ctvm);
-            if(rtb == null) {
-                return new Tuple<int, int>(0, 0);
-            }
-        
-            string pt = rtb.Document.ToPlainText();
-            return new Tuple<int, int>(
-                pt.IndexListOfAll(Environment.NewLine).Count + 1,
-                pt.Length);
-        }
 
         #endregion
     }

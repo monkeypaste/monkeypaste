@@ -26,6 +26,8 @@ namespace MonkeyPaste {
         ItemInitialized,
         ItemDragBegin,
         ItemDragEnd,
+        ExternalDragBegin,
+        ExternalDragEnd,
         TrayScrollChanged,
         TraySelectionChanged,
         ContentListScrollChanged, //has context (tile)

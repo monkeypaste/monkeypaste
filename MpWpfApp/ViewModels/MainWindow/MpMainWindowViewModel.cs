@@ -136,7 +136,6 @@ namespace MpWpfApp {
 
         public double MainWindowHeight { get; set; } = MpMeasurements.Instance.MainWindowDefaultHeight;
 
-
         public double MainWindowTop { get; set; } = MpMeasurements.Instance.WorkAreaBottom;
 
         #endregion
@@ -320,8 +319,6 @@ namespace MpWpfApp {
                 //Ss = MpHelpers.CopyScreen();
                 //MpHelpers.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
 
-
-
                 MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowOpening);
 
                 var mw = (MpMainWindow)Application.Current.MainWindow;
@@ -336,8 +333,7 @@ namespace MpWpfApp {
                     mw.Topmost = true;
                 } else {
                     mw.Topmost = false;
-                }
-                
+                }                
 
                 if (IsMainWindowInitiallyOpening) {
                     //await MpMainWindowResizeBehavior.Instance.ResizeForInitialLoad();
@@ -420,6 +416,7 @@ namespace MpWpfApp {
                       Application.Current.MainWindow.Visibility == Visibility.Visible &&
                       !IsAnyDropDownOpen &&
                       !IsShowingDialog &&
+                      !MpDragDropManager.IsDragAndDrop &&
                       !MpContextMenuView.Instance.IsOpen &&
                       !IsResizing &&
                       !IsMainWindowClosing &&

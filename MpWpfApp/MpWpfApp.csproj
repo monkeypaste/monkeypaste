@@ -133,7 +133,7 @@
     <Compile Include="AttachedProperties\MpDocumentHtmlExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
     <Compile Include="AttachedProperties\MpRichTextFormatExtension.cs" />
-    <Compile Include="AttachedProperties\MpTextSelectionRangeExtension.cs" />
+    <Compile Include="AttachedProperties\MpTextBoxSelectionRangeExtension.cs" />
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpIsFocusedExtension.cs" />
     <Compile Include="AttachedProperties\MpHoverableExtension.cs" />

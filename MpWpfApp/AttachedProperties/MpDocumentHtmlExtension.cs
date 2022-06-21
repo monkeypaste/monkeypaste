@@ -34,8 +34,8 @@ namespace MpWpfApp {
         #region Private Variables
 
         #endregion
-        public const string ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
-        public const string ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
+        public const string ENCODED_TEMPLATE_OPEN_TOKEN = MpTextTemplate.TextTemplateOpenToken;
+        public const string ENCODED_TEMPLATE_CLOSE_TOKEN = MpTextTemplate.TextTemplateCloseToken;
 
         public static string ENCODED_TEMPLATE_REGEXP_STR = string.Format(
             @"{0}{1}{2}",

@@ -938,10 +938,6 @@ namespace MpWpfApp {
             if(MpMainWindowViewModel.Instance.IsMainWindowLoading || IsAppPaused) {
                 return;
             }
-            if(MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent) {
-                MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = false;
-                return;
-            }
             MpHelpers.RunOnMainThread(async () => {
                 await AddItemFromClipboard(mpdo);
             });
@@ -2238,7 +2234,7 @@ namespace MpWpfApp {
 
         public ICommand CopySelectedClipsCommand => new RelayCommand(
             async () => { 
-                var mpdo = await SelectedItem.ConvertToPortableDataObject(false, null, false, false);
+                var mpdo = await SelectedItem.ConvertToPortableDataObject(false);
                 MpPlatformWrapper.Services.DataObjectHelper.SetPlatformClipboard(mpdo, true);
             }, SelectedItem != null);
 
@@ -2280,7 +2276,7 @@ namespace MpWpfApp {
 
                 if(mpdo == null) {
                     //is non-null for external template drop
-                    mpdo = await SelectedItem.ConvertToPortableDataObject(false, pi.Handle);
+                    mpdo = await SelectedItem.ConvertToPortableDataObject(true);
                 }
 
                 await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
@@ -2349,7 +2345,7 @@ namespace MpWpfApp {
                     if(ctvm == null) {
                         Debugger.Break();
                     }
-                    var mpdo = await ctvm.ConvertToPortableDataObject(false, pi, true);
+                    var mpdo = await ctvm.ConvertToPortableDataObject(true);
                     await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
 
                     CleanupAfterPaste(ctvm);

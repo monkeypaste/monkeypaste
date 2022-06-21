@@ -146,5 +146,12 @@ namespace MpWpfApp {
 
             MpRichTextFormatExtension.SetIsEnabled(TextTemplateTextBlock, true);
         }
+
+        public override string ToString() {
+            if(Tag is MpTextTemplate cit) {
+                return cit.ToString();
+            }
+            return base.ToString();
+        }
     }
 }

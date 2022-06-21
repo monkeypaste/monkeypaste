@@ -240,7 +240,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Top"
-                    Command="{Binding PasteTemplateCommand}"
+                    Command="{Binding FinishPasteTemplateCommand}"
                     Content="{Binding PasteButtonText}"
                     FontSize="12"
                     TabIndex="4"

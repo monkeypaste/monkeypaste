@@ -543,7 +543,7 @@ namespace MpWpfApp {
                 }
             } else if (!MpMainWindowViewModel.Instance.IsMainWindowClosing &&
                       !MpMainWindowViewModel.Instance.IsMainWindowLocked &&
-                      !MpDragDropManager.IsPreExternalTemplateDrop &&
+                      !MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
                       GlobalMouseLocation.Y < MpMainWindowViewModel.Instance.MainWindowTop) {
                 MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             }

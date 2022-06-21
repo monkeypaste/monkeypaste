@@ -272,20 +272,27 @@ namespace MonkeyPaste.Common {
             return str.IsFile() || str.IsDirectory();
         }
 
-        public static List<int> IndexListOfAll(this string text, string matchStr) {
-            var idxList = new List<int>();
-            int curIdx = text.IndexOf(matchStr);
-            int offset = 0;
-            while (curIdx >= 0 && curIdx < text.Length) {
-                idxList.Add(curIdx + offset);
-                if (curIdx + matchStr.Length + 1 >= text.Length) {
-                    break;
-                }
-                text = text.Substring(curIdx + matchStr.Length + 1);
-                offset = curIdx + 1;
-                curIdx = text.IndexOf(matchStr);
+        public static List<int> IndexListOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {
+            //var idxList = new List<int>();
+            //int curIdx = text.IndexOf(matchStr);
+            //int offset = 0;
+            //while (curIdx >= 0 && curIdx < text.Length) {
+            //    idxList.Add(curIdx + offset);
+            //    if (curIdx + matchStr.Length + 1 >= text.Length) {
+            //        break;
+            //    }
+            //    text = text.Substring(curIdx + matchStr.Length + 1);
+            //    offset = curIdx + 1;
+            //    curIdx = text.IndexOf(matchStr);
+            //}
+            //return idxList;
+            List<int> allIndexOf = new List<int>();
+            int index = text.IndexOf(str, comparisonType);
+            while (index != -1) {
+                allIndexOf.Add(index);
+                index = text.IndexOf(str, index + 1, comparisonType);
             }
-            return idxList;
+            return allIndexOf;
         }
 
         public static string ToMultiLineString(this StringCollection sc) {

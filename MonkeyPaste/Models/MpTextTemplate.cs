@@ -194,5 +194,9 @@ namespace MonkeyPaste {
             }
             return ccit;
         }
+
+        public override string ToString() {
+            return EncodedTemplate;
+        }
     }
 }

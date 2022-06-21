@@ -22,29 +22,6 @@ namespace MonkeyPaste.Common.Wpf {
     }
 
     public static class MpWpfImagingHelper {
-        public static string ConvertBitmapSourceToPlainTextAsciiArt(BitmapSource bmpSource, Size? docSize = null) {
-            Size size = docSize.HasValue ? docSize.Value : new Size(250, 250);
-            string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
-            bmpSource = bmpSource.Resize(size);
-            using (System.Drawing.Bitmap image = bmpSource.ToBitmap()) {
-                string outStr = string.Empty;
-                for (int h = 0; h < image.Height; h++) {
-                    for (int w = 0; w < image.Width; w++) {
-                        System.Drawing.Color pixelColor = image.GetPixel(w, h);
-                        //Average out the RGB components to find the Gray Color
-                        int avg = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
-                        //int red = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
-                        //int green = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
-                        //int blue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
-                        System.Drawing.Color grayColor = System.Drawing.Color.FromArgb(avg, avg, avg);
-                        int index = (grayColor.R * 10) / 255;
-                        outStr += asciiChars[index];
-                    }
-                    outStr += Environment.NewLine;
-                }
-                return outStr;
-            }
-        }
         
         public static BitmapSource MergeImages2(IList<BitmapSource> bmpSrcList, bool scaleToSmallestSize = false, bool scaleToLargestDpi = true) {
             // if not scaled to smallest, will be scaled to largest

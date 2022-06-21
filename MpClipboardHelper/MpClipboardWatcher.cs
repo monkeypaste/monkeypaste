@@ -136,7 +136,8 @@ namespace MpClipboardHelper {
             switch (m.Msg) {
                 case WinApi.WM_DRAWCLIPBOARD:
                     if (IgnoreNextClipboardChangeEvent) {
-                        MpConsole.WriteLine("Ignoring clipboard changed event");
+                        MpConsole.WriteLine("Ignoring this clipboard changed event");
+                        IgnoreNextClipboardChangeEvent = false;
 
                         WinApi.SendMessage(_nextClipboardViewer, m.Msg, m.WParam, m.LParam);
                         return;
