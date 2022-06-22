@@ -16,7 +16,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
-    public class MpPreferencesViewModel : MpViewModelBase<MpSettingsWindowViewModel> {
+    public class MpPreferencesMenuViewModel : MpViewModelBase<MpSettingsWindowViewModel> {
         #region Private Variables
 
         #endregion
@@ -209,9 +209,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpPreferencesViewModel() : base(null) { }
+        public MpPreferencesMenuViewModel() : base(null) { }
 
-        public MpPreferencesViewModel(MpSettingsWindowViewModel parent) : base(parent) {
+        public MpPreferencesMenuViewModel(MpSettingsWindowViewModel parent) : base(parent) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(IsLoadOnLoginChecked):

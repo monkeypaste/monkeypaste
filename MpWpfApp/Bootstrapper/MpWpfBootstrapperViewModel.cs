@@ -112,13 +112,13 @@ namespace MpWpfApp {
             //            .Select(x => x.LoadItem()).ToList());
 
             // Async
-            Task.WhenAll(
+            await Task.WhenAll(
                 _items.Select(
-                    x => LoadItem(_items[_items.IndexOf(x)], _items.IndexOf(x)))).FireAndForgetSafeAsync(this);
+                    x => LoadItem(_items[_items.IndexOf(x)], _items.IndexOf(x))));//.FireAndForgetSafeAsync(this);
 
-            while (PercentLoaded < 1.0d) {
-                await Task.Delay(100);
-            }
+            //while (PercentLoaded < 1.0d) {
+            //    await Task.Delay(100);
+            //}
 
             // Sequential (58831 ms 05/30/2022)
             // Sequential (35649 06/12/2022)

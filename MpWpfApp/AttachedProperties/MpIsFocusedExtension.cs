@@ -235,9 +235,7 @@ namespace MpWpfApp {
                     //Keyboard.Focus(tbb);
                     if (tbb is TextBox tb) {
                         tb.CaretIndex = 0;
-                    } else if (tbb is RichTextBox rtb) {
-                        rtb.CaretPosition = rtb.Document.ContentStart;
-                    }
+                    } 
                     if (GetSelectAllOnFocus(dpo)) {                        
                         tbb.SelectAll();
                     }

@@ -48,7 +48,7 @@
         pack://application:,,,/MpWpfApp;component/Resources/Images/MpRichTextBox/listnumbers.png
     </s:String>
     <s:String x:Key="EditSpellCheckIcon">
-        pack://application:,,,/MpWpfApp;component/Resources/Images/MpRichTextBox/listbullets.png
+        pack://application:,,,/MpWpfApp;component/Resources/Images/MpRichTextBox/spellcheck.png
     </s:String>
     <s:String x:Key="EditRefreshIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/MpRichTextBox/arrow_refresh.png

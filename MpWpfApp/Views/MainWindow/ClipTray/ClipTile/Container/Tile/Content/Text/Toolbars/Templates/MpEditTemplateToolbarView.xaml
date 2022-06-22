@@ -19,22 +19,72 @@
             HorizontalAlignment="Stretch"            
             Background="LightBlue"
             BorderThickness="0">
-        <DockPanel LastChildFill="True">
+        <Border.Resources>
+            <Style x:Key="BorderStyle" TargetType="Border">
+                <Setter Property="CornerRadius"
+                        Value="5" />
+                <Setter Property="Margin"
+                        Value="7" />
+                <Setter Property="Padding"
+                        Value="3" />
+                <Setter Property="Background"
+                        Value="White" />
+                <Setter Property="BorderThickness"
+                        Value="2" />
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
+            </Style>
+            <Style x:Key="TextBoxStyle"
+                   TargetType="TextBox">
+                <Setter Property="MinHeight"
+                        Value="20" />
+                <Setter Property="BorderThickness"
+                        Value="0" />
+                <Setter Property="MinWidth"
+                        Value="150" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="TextWrapping"
+                        Value="WrapWithOverflow" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Center" />
+                <Setter Property="FontSize"
+                        Value="14" />
+            </Style>
+            <Style x:Key="ComboBoxStyle"
+                   TargetType="ComboBox">
+                
+            </Style>
+            <Style x:Key="ButtonStyle"
+                   TargetType="Button" BasedOn="{StaticResource SemiTransparentButton}">
+                <Setter Property="BorderThickness"
+                        Value="0" />
+                <Setter Property="Padding"
+                        Value="3" />
+                <Setter Property="Width"
+                        Value="80" />
+                <Setter Property="FontSize"
+                        Value="14" />
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="Foreground"
+                        Value="Black" />
+                <Setter Property="FontWeight"
+                        Value="SemiBold" />
+            </Style>
+        </Border.Resources>
+        <DockPanel LastChildFill="True" VerticalAlignment="Center">
             <DockPanel.Resources>
                 <DataTemplate x:Key="DynamicTemplate" />
                 <DataTemplate x:Key="StaticTemplate"
                               DataType="{x:Type local:MpStaticTextTemplateViewModel}">
-                    <StackPanel x:Name="StaticTemplateStackPanelContainer"
-                                Orientation="Horizontal">
-                        <TextBlock Margin="10,0,10,0"
+                    <StackPanel x:Name="StaticTemplateStackPanelContainer" Orientation="Horizontal">
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
                                    Text="Text"
-                                   VerticalAlignment="Center"
+                                   FontSize="14"
                                    FontWeight="SemiBold" />
-                        <Border Background="White"
-                                Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
-                            <TextBox Width="120"
-                                     BorderThickness="0"
-                                     VerticalContentAlignment="Center"
+                        <Border Style="{StaticResource BorderStyle}" VerticalAlignment="Top">
+                            <TextBox Style="{StaticResource TextBoxStyle}" 
                                      PreviewKeyDown="TemplateNameEditorTextBox_PreviewKeyDown"
                                      Text="{Binding TemplateData,
                                                     Mode=TwoWay,
@@ -87,7 +137,7 @@
                               DataType="{x:Type local:MpDateTimeTextTemplateViewModel}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Format"
-                                   Margin="10"
+                                   Margin="10,0"
                                    VerticalAlignment="Center"
                                    FontWeight="SemiBold" />
                         <Border Style="{StaticResource ActionPropertyComboBoxStyle_Border}">
@@ -147,30 +197,16 @@
                         BorderBrush="Black"
                         BorderThickness="1"
                         Click="TemplateColorButton_Click" />
-                <Border CornerRadius="5"
-                        Margin="10,7,0,7"
-                        Background="White"
-                        BorderThickness="0"
-                        VerticalAlignment="Stretch"
-                        
-                        BorderBrush="{Binding TemplateBorderHexColor,
+                <Border Style="{StaticResource BorderStyle}"
+                        BorderBrush="{Binding TemplateNameTextBoxBorderBrush,
                                               Converter={StaticResource StringHexToBrushConverter}}">
                     <TextBox x:Name="TemplateNameEditorTextBox"
-                             MinHeight="25"
-                             MinWidth="150"
-                             Padding="0,0,0,0"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Stretch" TextWrapping="WrapWithOverflow"
-                             VerticalContentAlignment="Stretch"
+                             Style="{StaticResource TextBoxStyle}"
                              local:MpIsFocusedExtension.IsEnabled="True"
                              local:MpIsFocusedExtension.IsFocused="{Binding IsEditTextBoxFocused,
                                                                             Mode=TwoWay}"
                              BorderBrush="{Binding TemplateNameTextBoxBorderBrush,
                                                    Converter={StaticResource StringHexToBrushConverter}}"
-                             BorderThickness="2"
-                             FontSize="14"
-                             Foreground="Black"
-                             IsReadOnly="False"
                              PreviewKeyDown="TemplateNameEditorTextBox_PreviewKeyDown"
                              Text="{Binding TemplateName,
                                             Mode=TwoWay,
@@ -189,7 +225,7 @@
                                              Converter={StaticResource BoolToVisibilityFlipConverter}}">
                     <DockPanel>
                         <Image Source="/Resources/Images/warning.png"
-                               Stretch="Fill"
+                               Stretch="Fill" Height="15" Width="15"
                                DockPanel.Dock="Left" />
                         <TextBlock x:Name="TemplateNameValidationTextBlock"
                                    DockPanel.Dock="Right"
@@ -208,38 +244,34 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         DockPanel.Dock="Right">
-                <Button x:Name="DeleteAllButton"
-                        Margin="5,7,15,7"
-                        Background="Crimson"
-                        Foreground="Wheat"
-                        Padding="3"
-                        Width="80"
-                        Command="{Binding DeleteAllTemplateInstancesCommand}"
-                        Content="DELETE ALL"
-                        FontSize="14"
-                        IsCancel="True" />
-
-                <Button x:Name="CancelButton"
-                        Margin="5,7"
-                        Padding="3"
-                        Width="80"
-                        Command="{Binding CancelEditTemplateCommand}"
-                        Content="CANCEL"
-                        FontSize="14"
-                        IsCancel="True" />
-                <Button x:Name="OkButton"
-                        Margin="5,7,20,7"
-                        Width="80"
-                        Padding="3"
-                        Command="{Binding FinishEditTemplateCommand}"
-                        Content="DONE"
-                        FontSize="14"
-                        IsDefault="True" />
+                <Border Style="{StaticResource BorderStyle}" Margin="0,7,0,7" BorderBrush="DimGray"
+                        Background="Crimson">
+                    <Button x:Name="DeleteAllButton" 
+                            Background="Crimson"
+                            Foreground="Wheat"
+                            Style="{StaticResource ButtonStyle}"
+                            Command="{Binding DeleteAllTemplateInstancesCommand}"
+                            Content="DELETE ALL"/>
+                </Border>
+                <Border Background="LightGray" BorderBrush="DimGray"
+                        Style="{StaticResource BorderStyle}">
+                    <Button x:Name="CancelButton"
+                            Style="{StaticResource ButtonStyle}"
+                            Command="{Binding CancelEditTemplateCommand}"
+                            Content="CANCEL"
+                            IsCancel="True" />
+                </Border>
+                <Border Style="{StaticResource BorderStyle}" Margin="0,7,15,7"
+                        Background="LightGray"
+                        BorderBrush="DimGray">
+                    <Button x:Name="OkButton"
+                            Style="{StaticResource ButtonStyle}"
+                            Command="{Binding FinishEditTemplateCommand}"
+                            Content="DONE" />
+                </Border>
             </StackPanel>
 
             <ContentControl x:Name="TemplateDetailContentControl"
-                            Margin="0,7,0,0"
-                            VerticalAlignment="Top"
                             Background="Orange"
                             Content="{Binding}"
                             ContentTemplateSelector="{StaticResource EditTemplateDetailViewSelector}" />

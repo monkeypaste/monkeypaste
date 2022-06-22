@@ -212,43 +212,25 @@ namespace MonkeyPaste.Common.Wpf {
                 TextRange range2 = new TextRange(clonedDoc.ContentEnd, clonedDoc.ContentEnd);
                 range2.Load(stream, DataFormats.XamlPackage);
 
-                int docLength = doc.ContentStart.GetOffsetToPosition(doc.ContentEnd);
-                int cdocLength = docLength;
-                
-                int rte_sIdx = doc.ContentStart.GetOffsetToPosition(rangeToEncode.Start);
-                int rte_eIdx = doc.ContentStart.GetOffsetToPosition(rangeToEncode.End);
-                
-                var iuicl = doc.GetAllTextElements().Where(x => x is InlineUIContainer).OrderBy(x => x.ContentStart.GetOffsetToPosition(x.ContentStart));
+                //create clone range using decoded range offsets
+                encodedRange = new TextRange(
+                    clonedDoc.ContentStart.GetPositionAtOffset(rangeToEncode.Start.ToOffset()),
+                    clonedDoc.ContentStart.GetPositionAtOffset(rangeToEncode.End.ToOffset()));
 
-                int c_offset = 0;
-                foreach (var iuic in iuicl) {
-                    int sIdx = doc.ContentStart.GetOffsetToPosition(iuic.ContentStart);
+                //select all iuic's from source doc
+                var iuicl = doc.GetAllTextElements()
+                                .Where(x => x is InlineUIContainer);
 
-                    var ctp = clonedDoc.ContentStart.GetPositionAtOffset(sIdx + c_offset);
-                    new TextRange(ctp, ctp).Text = iuic.Tag.ToString();
-
-                    cdocLength = clonedDoc.ContentStart.GetOffsetToPosition(clonedDoc.ContentEnd);
-                    c_offset = cdocLength - docLength;
-
-                    // Returns:
-                    //     –1 if the current System.Windows.Documents.TextPointer precedes position; 0 if
-                    //     the locations are the same; +1 if the current System.Windows.Documents.TextPointer
-                    //     follows position.
-                    //
-                    if (iuic.ContentStart.CompareTo(rangeToEncode.Start) <= 0) {
-                        //when selection start is after this iuic add diff to encoded start
-                        rte_sIdx += c_offset;                     
-                    }
-                    if (iuic.ContentStart.CompareTo(rangeToEncode.End) <= 0) {
-                        //when selection end is after this iuic add diff to encoded end
-                        rte_eIdx += c_offset;
-                    }
+                Dictionary<TextRange, object> clonedIuic_lookup = new Dictionary<TextRange, object>();
+                foreach(var iuic in iuicl) {
+                    //create range's in cloned doc at each iuic offset paired w/ the iuic tag
+                    var clone_iuic_tp = clonedDoc.ContentStart.GetPositionAtOffset(iuic.ContentStart.ToOffset());
+                    clonedIuic_lookup.Add(new TextRange(clone_iuic_tp, clone_iuic_tp), iuic.Tag);
                 }
 
-                rte_eIdx = Math.Min(cdocLength, rte_eIdx);
-                encodedRange = new TextRange(
-                    clonedDoc.ContentStart.GetPositionAtOffset(rte_sIdx),
-                    clonedDoc.ContentStart.GetPositionAtOffset(rte_eIdx));
+                //encode cloned iuic ranges with paired object ToString (which is encoded template string)
+                clonedIuic_lookup.ForEach(x => x.Key.Text = x.Value.ToString());
+
                 return clonedDoc;
             }
         }

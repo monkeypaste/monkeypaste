@@ -61,11 +61,9 @@ namespace MpWpfApp {
                                 var convertPlainHtmlResponse = await _browser.EvaluateScriptAsync(null, "convertPlainHtml", _plainHtmlToConvert);
                                 if (convertPlainHtmlResponse.Success) {
                                     _plainHtmlToConvert = null;
-                                    _quillHtml = convertPlainHtmlResponse.Result.ToString();
-
+                                    _quillHtml = HttpUtility.HtmlDecode(convertPlainHtmlResponse.Result.ToString());                                    
                                 }
                             }
-
                         }
                     });
                 }

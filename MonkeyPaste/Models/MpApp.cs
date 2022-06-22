@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.IO;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpISourceItem, MpISyncableDbObject {        
@@ -28,11 +29,11 @@ namespace MonkeyPaste {
         [Column("IsAppRejected")]
         public int IsRejectedVal { get; set; } = 0;        
 
-        [ForeignKey(typeof(MpIcon))]
+        //[ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
-        [ForeignKey(typeof(MpUserDevice))]
+        //[ForeignKey(typeof(MpUserDevice))]
         [Column("fk_MpUserDeviceId")]
         public int UserDeviceId { get; set; }
 
@@ -40,8 +41,8 @@ namespace MonkeyPaste {
 
         #region Fk Models
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpUserDevice UserDevice { get; set; }
+        //[ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        //public MpUserDevice UserDevice { get; set; }
 
         #endregion
 
@@ -77,7 +78,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         #region MpICopyItemSource Implementation
 
         [Ignore]
@@ -110,7 +110,7 @@ namespace MonkeyPaste {
         public static async Task<MpApp> Create(
             string appPath = "", 
             string appName = "", 
-            MpIcon icon = null,
+            int iconId = 0,
             string guid = "",
             bool suppressWrite = false) {
             if(appPath != null) {
@@ -135,22 +135,21 @@ namespace MonkeyPaste {
                 await thisDevice.WriteToDatabaseAsync();
             }
 
-            if(icon == null) {
+            if(iconId == 0) {
                 string iconImgBase64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath);
 
-                icon = await MpIcon.Create(
-                    iconImgBase64: iconImgBase64,
-                    createBorder: true,
-                    suppressWrite: suppressWrite);
+                var icon = await MpIcon.Create(
+                        iconImgBase64: iconImgBase64,
+                        createBorder: true,
+                        suppressWrite: suppressWrite);
+                iconId = icon.Id;
             }
             var newApp = new MpApp() {
                 AppGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 AppPath = appPath.ToLower(),
                 AppName = appName,
-                IconId = icon.Id,
-                UserDeviceId = thisDevice.Id,
-                UserDevice = thisDevice,
-                //ProcessName = Path.GetFileName(appPath)
+                IconId = iconId,
+                UserDeviceId = thisDevice.Id
             };
 
             await newApp.WriteToDatabaseAsync();
@@ -175,8 +174,12 @@ namespace MonkeyPaste {
                         appFromLog.AppGuid = System.Guid.Parse(li.AffectedColumnValue);
                         break;
                     case "fk_MpUserDeviceId":
-                        appFromLog.UserDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", li.AffectedColumnValue) as MpUserDevice;
-                        appFromLog.UserDeviceId = appFromLog.UserDevice.Id;
+                        var userDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", li.AffectedColumnValue) as MpUserDevice;
+                        if(userDevice == null) {
+                            Debugger.Break();
+                            return appFromLog;
+                        }
+                        appFromLog.UserDeviceId = userDevice.Id;
                         break;
                     case "fk_MpIconId":
                         var icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", li.AffectedColumnValue) as MpIcon;
@@ -205,10 +208,20 @@ namespace MonkeyPaste {
             var a = new MpApp() {
                 AppGuid = System.Guid.Parse(objParts[0])
             };
-            a.UserDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", objParts[1]) as MpUserDevice;
-            a.UserDeviceId = a.UserDevice.Id;
+            var userDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", objParts[1]) as MpUserDevice;
+            if (userDevice == null) {
+                Debugger.Break();
+            } else {
+                a.UserDeviceId = userDevice.Id;
+            }
+            
             var icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", objParts[2]) as MpIcon;
-            a.IconId = icon.Id;
+            if(icon == null) {
+                Debugger.Break();
+            } else {
+                a.IconId = icon.Id;
+            }
+            
 
             a.AppPath = objParts[3];
             a.AppName = objParts[4];
@@ -223,7 +236,7 @@ namespace MonkeyPaste {
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}",
                 ParseToken,
                 AppGuid.ToString(),
-                UserDevice.UserDeviceGuid.ToString(),
+                MpDb.GetItem<MpUserDevice>(UserDeviceId).Guid,
                 MpDb.GetItem<MpIcon>(IconId).Guid,
                 AppPath,
                 AppName,
@@ -253,7 +266,7 @@ namespace MonkeyPaste {
             diffLookup = CheckValue(UserDeviceId, other.UserDeviceId,
                 "fk_MpUserDeviceId",
                 diffLookup,
-                UserDevice.UserDeviceGuid.ToString());
+                MpDb.GetItem<MpUserDevice>(UserDeviceId).Guid);
             diffLookup = CheckValue(IconId, other.IconId,
                 "fk_MpIconId",
                 diffLookup,

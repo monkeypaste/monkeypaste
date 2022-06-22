@@ -72,7 +72,7 @@ namespace MpWpfApp {
 
         public MpUrlCollectionViewModel UrlCollectionViewModel => MpUrlCollectionViewModel.Instance;
 
-        public MpPreferencesViewModel PreferencesViewModel { get; set; } =  new MpPreferencesViewModel();
+        public MpPreferencesMenuViewModel PreferencesViewModel { get; set; } =  new MpPreferencesMenuViewModel();
         #endregion
 
         #region Panel Visibility
@@ -94,7 +94,7 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpSettingsWindowViewModel() : base(null) {
-            PreferencesViewModel = new MpPreferencesViewModel(this);
+            PreferencesViewModel = new MpPreferencesMenuViewModel(this);
             //SecurityViewModel = new MpSecurityViewModel(this);
         }
 

@@ -32,7 +32,6 @@ namespace MpWpfApp {
 
             int html_start_idx = htmlClipboardData.IndexOf(htmlStartToken) + htmlStartToken.Length;
             if(html_start_idx >= 0) {
-                //hcd.Html = HtmlToXamlDemo.HtmlParser.ExtractHtmlFromClipboardData(htmlClipboardData);
                 int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
                 hcd.Html = htmlClipboardData.Substring(html_start_idx, html_end_idx - html_start_idx);
                 hcd.Rtf = await MpQuillHtmlToRtfConverter.ConvertStandardHtmlToRtf(hcd.Html);

@@ -6,6 +6,7 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      mc:Ignorable="d"
                      xmlns:local="clr-namespace:MpWpfApp"
+                     xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                      x:TypeArguments="local:MpClipTileViewModel"
                      d:DataContext="{d:DesignInstance Type=local:MpClipTileViewModel,
                                                       IsDesignTimeCreatable=False}"
@@ -22,7 +23,6 @@
                              MinWidth="100"
                              Height="Auto"
                              Padding="5,0,5,0"
-                             
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              HorizontalContentAlignment="Stretch"
@@ -34,10 +34,9 @@
                              local:MpContentDocumentRtfExtension.IsContentReadOnly="{Binding IsContentReadOnly}"
                              local:MpContentDocumentRtfExtension.TextSelectionRange="{Binding}"
                              AutoWordSelection="False"
-                             
                              Background="White"
                              Foreground="Black"
-                             BorderThickness="0" 
+                             BorderThickness="0"
                              CaretBrush="{Binding CaretBrushHexColor,
                                                   Converter={StaticResource StringHexToBrushConverter}}"
                              local:MpIsFocusedExtension.IsEnabled="True"
@@ -48,6 +47,7 @@
                                                       Converter={StaticResource StringHexToBrushConverter}}"
                              ScrollViewer.ScrollChanged="Rtb_ScrollChanged"
                              IsDocumentEnabled="True"
+                             FontFamily="Consolas"
                              IsEnabled="True"
                              GotFocus="Rtb_GotFocus"
                              IsReadOnlyCaretVisible="{Binding IsSubSelectionEnabled}"
@@ -58,7 +58,7 @@
                              IsUndoEnabled="True"
                              Loaded="Rtb_Loaded"
                              PreviewKeyDown="Rtb_PreviewKeyDown"
-                             PreviewKeyUp="Rtb_PreviewKeyUp"
+                             PreviewKeyUp="Rtb_PreviewKeyUp"                             
                              ScrollViewer.HorizontalScrollBarVisibility="{Binding IsHorizontalScrollbarVisibile,
                                                                                   Converter={StaticResource BoolToScrollBarVisibilityConverter},
                                                                                   ConverterParameter={StaticResource AutoInsteadOfVisible}}"
@@ -72,7 +72,7 @@
                              AllowDrop="True"
                              SelectionChanged="Rtb_SelectionChanged"
                              TextChanged="Rtb_TextChanged"
-                             PreviewMouseWheel="Rtb_PreviewMouseWheel"
+                             PreviewMouseWheel="Rtb_PreviewMouseWheel"                             
                              PreviewMouseLeftButtonDown="Rtb_PreviewMouseLeftButtonDown"
                              PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
                              MouseLeave="Rtb_MouseLeave">

@@ -13,6 +13,8 @@ using MpProcessHelper;
 using System.Windows.Data;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
+using CefSharp;
+
 namespace MpWpfApp {
     public class MpAppCollectionViewModel : 
         MpSelectorViewModelBase<object,MpAppViewModel>, 
@@ -50,7 +52,12 @@ namespace MpWpfApp {
             var appl = await RegisterWithProcessesManager();
             Items.Clear();
             foreach (var app in appl) {
+                if(Items.Any(x=>x.AppId == app.Id)) {
+                    // unknown apps in register will already be added so no duppys
+                    continue;
+                }
                 var avm = await CreateAppViewModel(app);
+
                 Items.Add(avm);
             }
 
@@ -58,14 +65,13 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
-            await RegisterWithProcessesManager();
-
             OnPropertyChanged(nameof(Items));
 
             if(Items.Count > 0) {
                 Items[0].IsSelected = true;
             }
 
+            MpProcessManager.OnAppActivated += MpProcessManager_OnAppActivated;
 
             IsBusy = false;
         }
@@ -92,7 +98,7 @@ namespace MpWpfApp {
         #region Protected Methods
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if(e is MpApp a) {
+            if(e is MpApp a && Items.All(x=>x.AppId != a.Id)) {
                 Task.Run(async () => {
                     var avm = await CreateAppViewModel(a);
                     Items.Add(avm);
@@ -117,7 +123,7 @@ namespace MpWpfApp {
             }
         }
         private async Task<List<MpApp>> RegisterWithProcessesManager() {
-            MpProcessManager.OnAppActivated += MpProcessManager_OnAppActivated;
+            // This is only called during init to keep app storage in sync so any running apps are added if unknown
 
             var al = await MpDb.GetItemsAsync<MpApp>();
             var unknownApps = MpProcessManager.CurrentProcessWindowHandleStackDictionary.Keys
@@ -129,9 +135,12 @@ namespace MpWpfApp {
 
                 var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(uap);
                 var icon = await MpIcon.Create(iconStr);
-                var app = await MpApp.Create(uap, appName, icon);
+                var app = await MpApp.Create(uap, appName, icon.Id);
                 al.Add(app);
             }
+            
+
+           
             return al;
         }
 
@@ -144,10 +153,8 @@ namespace MpWpfApp {
                 MpHelpers.RunOnMainThread(async () => {
                     var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(e.ProcessPath);
                     var icon = await MpIcon.Create(iconStr);
-                    var app = await MpApp.Create(e.ProcessPath, e.ApplicationName, icon);
-
-                    var avm = await CreateAppViewModel(app);
-                    Items.Add(avm);
+                    var app = await MpApp.Create(e.ProcessPath, e.ApplicationName, icon.Id);
+                    // vm is added in db add handler
                 });
             }
         }
@@ -183,9 +190,12 @@ namespace MpWpfApp {
                     if (avm == null) {
                         var iconBmpSrc = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath).ToBitmapSource();
                         var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                        app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
-                        avm = await CreateAppViewModel(app);
-                        Items.Add(avm);
+                        app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon.Id);
+                        if (Items.All(x => x.AppId != app.Id)) {
+                            avm = await CreateAppViewModel(app);
+                            Items.Add(avm);
+                        }
+                        
                     }
 
                     SelectedItem = avm;

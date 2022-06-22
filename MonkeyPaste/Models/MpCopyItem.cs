@@ -343,9 +343,6 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var citml = await MpDataModelProvider.ParseTextTemplatesByCopyItemId(this);
-            await Task.WhenAll(citml.Select(x => x.DeleteFromDatabaseAsync()));
-
             var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
             await Task.WhenAll(citl.Select(x => x.DeleteFromDatabaseAsync()));
 

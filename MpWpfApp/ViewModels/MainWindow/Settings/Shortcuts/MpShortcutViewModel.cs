@@ -22,8 +22,17 @@ namespace MpWpfApp {
         object CommandParameter { get; }
     }
 
-    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, MpIActionComponent {
+    public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, 
+        MpIActionComponent,
+        MpISelectableViewModel {
         #region Properties        
+
+        #region MpISelectableViewModel Implementation
+        
+        public bool IsSelected { get; set; }
+        public DateTime LastSelectedDateTime { get; set; }
+
+        #endregion
 
         #region View Models
 
@@ -258,14 +267,18 @@ namespace MpWpfApp {
                 return Shortcut.KeyString;
             }
             set {
-                if (Shortcut != null && Shortcut.KeyString != value) {
+                if (Shortcut.KeyString != value) {
                     Shortcut.KeyString = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(KeyString));
+                    OnPropertyChanged(nameof(SendKeyStr));
                     OnPropertyChanged(nameof(KeyList));
                 }
             }
         }
+
+        private string _sendKeyStr;
+        public string SendKeyStr => _sendKeyStr;
 
         public string ShortcutDisplayName {
             get {
@@ -296,6 +309,23 @@ namespace MpWpfApp {
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(RoutingType));
                     OnPropertyChanged(nameof(SelectedRoutingType));
+                }
+            }
+        }
+
+        public int RoutingDelayMs {
+            // NOTE only applies to non-direct routing types
+            get {
+                if (Shortcut == null) {
+                    return 0;
+                }
+                return Shortcut.RoutingDelayMs;
+            }
+            set {
+                if (Shortcut.RoutingDelayMs != value) {
+                    Shortcut.RoutingDelayMs = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(RoutingDelayMs));
                 }
             }
         }
@@ -341,9 +371,11 @@ namespace MpWpfApp {
 
         public async Task InitializeAsync(MpShortcut s, ICommand command, object commandParameter = null) {
             //only register if non-empty keysstring
+            
             Shortcut = s;
             Command = command;
             CommandParameter = commandParameter;
+            _sendKeyStr = MpWpfKeyboardInputHelpers.ConvertKeyStringToSendKeysString(KeyString);
 
             OnPropertyChanged(nameof(KeyItems));
             OnPropertyChanged(nameof(IsEmpty));
@@ -367,25 +399,26 @@ namespace MpWpfApp {
                                                  string.Join("+", x.Select(y =>
                                                     Enum.GetName(typeof(System.Windows.Forms.Keys), y)))));
 
-                    //keyValStr = KeyString;
                     if (IsSequence()) {
                         if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                             //only register sequences at startup
-                            hook.OnSequence(new Dictionary<Sequence, Action> {
-                                {
-                                    Sequence.FromString(keyValStr),
-                                    () => PerformShortcutCommand.Execute(null)
-                                }
-                            });
+
+                            //hook.OnSequence(new Dictionary<Sequence, Action> {
+                            //    {
+                            //        Sequence.FromString(keyValStr),
+                            //        () => PerformShortcutCommand.Execute(null)
+                            //    }
+                            //});
                         }
                     } else {
                         //unregister if already exists
+
                         Unregister();
                         var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(keyValStr) };
                         
-                        KeysObservable = hook.KeyUpObservable().Matching(t).Subscribe(
-                            (trigger) => PerformShortcutCommand.Execute(null)
-                        );
+                        //KeysObservable = hook.KeyUpObservable().Matching(t).Subscribe(
+                        //    (trigger) => PerformShortcutCommand.Execute(null)
+                        //);
                     }
                 }
                 catch (Exception ex) {
@@ -487,6 +520,10 @@ namespace MpWpfApp {
         public object Clone() {
             return new MpShortcutViewModel(Parent);
         }
+
+        public override string ToString() {
+            return $"{ShortcutType} - '{KeyString}'";
+        }
         #endregion
 
         #region Protected Methods
@@ -573,10 +610,13 @@ namespace MpWpfApp {
                 if (RoutingType == MpRoutingType.Internal) {
                     return MpMainWindowViewModel.Instance.IsMainWindowOpen;
                 } else {
-                    return !MpMainWindowViewModel.Instance.IsMainWindowOpen;
+                    //return !MpMainWindowViewModel.Instance.IsMainWindowOpen;
+
+                    //always allow global shortcut when context is ok
+                    return true;
                 }
             });
-        
+
         #endregion
     }
 }

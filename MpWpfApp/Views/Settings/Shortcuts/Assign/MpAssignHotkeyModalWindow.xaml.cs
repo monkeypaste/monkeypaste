@@ -19,18 +19,20 @@ namespace MpWpfApp {
     /// Interaction logic for MpAssignHotkeyModalWindow.xaml
     /// </summary>
     public partial class MpAssignHotkeyModalWindow : Window {
+        public static bool IsOpen { get; private set; } = false;
         public MpAssignHotkeyModalWindow() {
             InitializeComponent();
         }
 
         private void Window_Closed(object sender, EventArgs e) {
+            IsOpen = false;
             KeyGestureBehavior.StopListening();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             var hwnd = new WindowInteropHelper(this).Handle;
             WinApi.SetWindowLong(hwnd, WinApi.GWL_STYLE, WinApi.GetWindowLong(hwnd, WinApi.GWL_STYLE) & ~WinApi.WS_SYSMENU);
-
+            IsOpen = true;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {

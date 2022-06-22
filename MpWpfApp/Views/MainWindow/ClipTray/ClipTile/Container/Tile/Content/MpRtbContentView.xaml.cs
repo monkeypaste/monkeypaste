@@ -441,7 +441,7 @@ namespace MpWpfApp {
                     BindingContext.IsSelected = true;
                 }
                 MpClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand.Execute(null);
-            }
+            } 
         }
 
         private void Rtb_PreviewKeyUp(object sender, KeyEventArgs e) {
@@ -450,7 +450,7 @@ namespace MpWpfApp {
             if (e.Key == Key.Escape) {
                 //BindingContext.Parent.ToggleReadOnlyCommand.Execute(null);
                 BindingContext.ClearEditing();
-            }
+            } 
         }
 
         private void Rtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {

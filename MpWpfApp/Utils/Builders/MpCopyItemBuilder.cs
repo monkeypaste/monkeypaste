@@ -131,7 +131,7 @@ namespace MpWpfApp {
                     } else {
                         icon = await MpDb.GetItemAsync<MpIcon>(icon.Id);
                     }
-                    app = await MpApp.Create(processPath, appName, icon);
+                    app = await MpApp.Create(processPath, appName, icon.Id);
                 } else {
                     app = await MpDb.GetItemAsync<MpApp>(app.Id);
 }

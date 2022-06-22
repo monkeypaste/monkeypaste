@@ -554,7 +554,7 @@ namespace MpWpfApp {
 
         public static FlowDocument LoadContent(object dc, string str, MpCopyItemType strItemDataType, out Size unformattedContentSize) {
             var fd = new FlowDocument() {
-                DataContext = dc
+                DataContext = dc,
             };
             var tr = fd.ContentRange();
 

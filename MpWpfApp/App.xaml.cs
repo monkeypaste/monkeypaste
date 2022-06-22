@@ -101,8 +101,7 @@ namespace MpWpfApp {
                 var notepadApp = await MpApp.Create(
                     guid: "9a0085ac-ea3c-4213-9276-08017d0e4ef2",
                     appPath: @"c:\windows\system32\notepad.exe",
-                    appName: "Notepad",
-                    icon: null);
+                    appName: "Notepad");
 
                 var notepadSetting1 = await MpAppClipboardFormatInfo.Create(
                     appId: notepadApp.Id,
@@ -133,8 +132,7 @@ namespace MpWpfApp {
                 var explorerApp = await MpApp.Create(
                     guid: "81c2f520-0568-4b7f-b704-9ca9f9e22c1a",
                     appPath: @"c:\windows\explorer.exe",
-                    appName: "Explorer",
-                    icon: null);
+                    appName: "Explorer");
 
                 var explorerSetting1 = await MpAppClipboardFormatInfo.Create(
                     appId: explorerApp.Id,
@@ -164,8 +162,7 @@ namespace MpWpfApp {
                 var paintApp = await MpApp.Create(
                     guid: "ad30c88e-372c-44e7-89df-124e8b874624",
                     appPath: @"c:\windows\system32\mspaint.exe",
-                    appName: "Paint",
-                    icon: null);
+                    appName: "Paint");
 
                 var paintSetting1 = await MpAppClipboardFormatInfo.Create(
                     appId: paintApp.Id,

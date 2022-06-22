@@ -124,6 +124,11 @@ namespace MonkeyPaste {
             };
 
             await source.WriteToDatabaseAsync();
+
+            if(source.UrlId == 0 && source.AppId == 0) {
+                // where is this happening?
+                Debugger.Break();
+            }
             return source;
         }
 

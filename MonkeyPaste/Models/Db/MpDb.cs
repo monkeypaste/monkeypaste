@@ -1032,7 +1032,7 @@ namespace MonkeyPaste {
             var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
             string thisAppName = MpPreferences.ApplicationName;
-            var thisApp = await MpApp.Create(thisAppPath, thisAppName, sourceIcon);
+            var thisApp = await MpApp.Create(thisAppPath, thisAppName, sourceIcon.Id);
             var thisAppSource = await MpSource.Create(thisApp, null);
             MpPreferences.ThisAppSourceId = thisAppSource.Id;
 

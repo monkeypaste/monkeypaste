@@ -167,6 +167,7 @@
     <Compile Include="Behaviors\Highlighting\Interfaces\MpIHighlightRegion.cs" />
     <Compile Include="Behaviors\Highlighting\MpRtbHighlightBehavior.cs" />
     <Compile Include="Behaviors\Input\MpKeyGestureBehavior.cs" />
+    <Compile Include="Behaviors\Input\MpKeyGestureHelper.cs" />
     <Compile Include="Behaviors\MpGlassBehavior.cs" />
     <Compile Include="Behaviors\Highlighting\Base\MpHighlightBehaviorBase.cs" />
     <Compile Include="Behaviors\MpImageObjectRecognitionBehavior.cs" />
@@ -585,7 +586,7 @@
     <Compile Include="ViewModels\MainWindow\Settings\Sound\MpSoundPlayerGroupCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Sound\MpSoundPlayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Preferences\MpPreferencesViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Preferences\MpPreferencesMenuViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpAssignShortcutModalWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutKeyViewModel.cs" />
@@ -1491,7 +1492,7 @@
       <Version>5.1.1</Version>
     </PackageReference>
     <PackageReference Include="CefSharp.Wpf">
-      <Version>102.0.90</Version>
+      <Version>102.0.100</Version>
     </PackageReference>
     <PackageReference Include="CsvHelper">
       <Version>27.2.1</Version>
@@ -1608,6 +1609,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\yinyang.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\MpRichTextBox\spellcheck.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />

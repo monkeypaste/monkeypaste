@@ -13,15 +13,27 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common; 
 using MonkeyPaste.Common.Wpf;
 using System.Windows;
+using System.Threading;
 
 namespace MpWpfApp {
     public class MpShortcutCollectionViewModel : 
-        MpViewModelBase, 
+        //MpSelectorViewModelBase<object,MpShortcutViewModel>, 
+        MpViewModelBase,
         MpIAsyncSingletonViewModel<MpShortcutCollectionViewModel>{
         #region Private Variables
+
+        private string _sendKeysToThisApp = string.Empty;
+
+        private MpKeyGestureHelper _keyboardGestureHelper;
+
+        private DateTime? _waitToExecuteShortcutStartDateTime;
+
+        private const int _MAX_WAIT_TO_EXECUTE_SHORTCUT_MS = 500;
+
         #endregion
 
         #region Properties
+
 
         #region View Models
         public ObservableCollection<MpShortcutViewModel> Shortcuts { get; set; } = new ObservableCollection<MpShortcutViewModel>();
@@ -71,6 +83,7 @@ namespace MpWpfApp {
         public async Task Init() {
             var sw = new Stopwatch();
             sw.Start();
+            InitGestureListener();
             await InitHotkeysAndMouseEvents();
             await InitShortcuts();
             sw.Stop();
@@ -201,6 +214,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        private void InitGestureListener() {
+            _keyboardGestureHelper = new MpKeyGestureHelper();
+
+        }
 
         private async Task InitHotkeysAndMouseEvents() {
             await MpHelpers.RunOnMainThreadAsync(() => {
@@ -244,10 +261,9 @@ namespace MpWpfApp {
                     GlobalHook.MouseUp += GlobalHook_MouseUp;
                     GlobalHook.MouseWheel += GlobalHook_MouseWheel;
 
-                    GlobalHook.KeyPress += GlobalHook_KeyPress;
                     GlobalHook.KeyDown += GlobalHook_KeyDown;
                     GlobalHook.KeyUp += GlobalHook_KeyUp;
-
+                    
                     #endregion
 
                     #region Application
@@ -548,31 +564,17 @@ namespace MpWpfApp {
                 MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
             }
         }
-        
-        #endregion
 
         #endregion
 
-        #region Application Handlers
-
-        private void GlobalHook_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
-            if (e.KeyCode == System.Windows.Forms.Keys.Alt || 
-                !e.Alt ||
-               e.KeyCode == System.Windows.Forms.Keys.LMenu ||
-               e.KeyCode == System.Windows.Forms.Keys.RMenu) {
-                GlobalIsAltDown = false;
-            }
-            if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {
-                GlobalIsShiftDown = false;
-            }
-            if (e.KeyCode == System.Windows.Forms.Keys.LControlKey || e.KeyCode == System.Windows.Forms.Keys.RControlKey) {
-                GlobalIsCtrlDown = false;
-            }
-        }
+        #region Global Key Handlers
 
         private void GlobalHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-            if(e.KeyCode == System.Windows.Forms.Keys.Alt || 
-                e.Alt || 
+            if(MpAssignHotkeyModalWindow.IsOpen) {
+                return;
+            }
+
+            if (e.KeyCode == System.Windows.Forms.Keys.Alt || e.Alt ||
                e.KeyCode == System.Windows.Forms.Keys.LMenu ||
                e.KeyCode == System.Windows.Forms.Keys.RMenu) {
                 GlobalIsAltDown = true;
@@ -583,16 +585,195 @@ namespace MpWpfApp {
             if (e.KeyCode == System.Windows.Forms.Keys.LControlKey || e.KeyCode == System.Windows.Forms.Keys.RControlKey) {
                 GlobalIsCtrlDown = true;
             }
+
+            HandleGestureRouting_Down(ref e);            
         }
+
+        private void GlobalHook_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
+            if (e.KeyCode == System.Windows.Forms.Keys.Alt || !e.Alt ||
+               e.KeyCode == System.Windows.Forms.Keys.LMenu ||
+               e.KeyCode == System.Windows.Forms.Keys.RMenu) {
+                GlobalIsAltDown = false;
+            }
+            if (e.KeyCode == System.Windows.Forms.Keys.LShiftKey || e.KeyCode == System.Windows.Forms.Keys.RShiftKey) {
+                GlobalIsShiftDown = false;
+            }
+            if (e.KeyCode == System.Windows.Forms.Keys.LControlKey || e.KeyCode == System.Windows.Forms.Keys.RControlKey) {
+                GlobalIsCtrlDown = false;
+            }
+
+            HandleGestureRouting_Up(e);
+        }
+
 
         private void GlobalHook_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {
             //AutoSearchOnKeyPress(e.KeyChar);
-            if(e.KeyChar == (char)27) {
-                GlobalEscKeyPressed?.Invoke(this, null);
-            }
+            
         }
 
         #endregion
+
+        #endregion
+
+        #region Application Handlers
+
+        #endregion
+
+        private void HandleGestureRouting_Down(ref System.Windows.Forms.KeyEventArgs e) {
+            if (e.KeyCode == System.Windows.Forms.Keys.Escape) {
+                if (MpDragDropManager.IsDragAndDrop) {
+                    _keyboardGestureHelper.Reset();
+                    e.SuppressKeyPress = true;
+                    GlobalEscKeyPressed?.Invoke(this, null);
+                    return;
+                }
+            }
+
+            var wpfKey = MpWpfKeyboardInputHelpers.WinformsToWPFKey(e.KeyCode);
+            _keyboardGestureHelper.AddKeyDown(wpfKey);
+
+            if (!string.IsNullOrEmpty(_sendKeysToThisApp) && _sendKeysToThisApp.StartsWith(_keyboardGestureHelper.CurrentGesture)) {
+                if (_sendKeysToThisApp.Length > _keyboardGestureHelper.CurrentGesture.Length) {
+                    _sendKeysToThisApp = _sendKeysToThisApp.Substring(_keyboardGestureHelper.CurrentGesture.Length);
+                } else {
+                    _sendKeysToThisApp = String.Empty;
+                }
+                if (Keyboard.PrimaryDevice != null) {
+                    if (Keyboard.PrimaryDevice.ActiveSource != null) {
+                        var ie = new KeyEventArgs(
+                            Keyboard.PrimaryDevice,
+                            Keyboard.PrimaryDevice.ActiveSource, 0, wpfKey) {
+                            RoutedEvent = Keyboard.KeyDownEvent
+                        };
+                        InputManager.Current.ProcessInput(ie);
+                        // Note: Based on your requirements you may also need to fire events for:
+                        // RoutedEvent = Keyboard.PreviewKeyDownEvent
+                        // RoutedEvent = Keyboard.KeyUpEvent
+                        // RoutedEvent = Keyboard.PreviewKeyUpEvent
+                    }
+                }
+
+                _keyboardGestureHelper.Reset();
+                e.Handled = false;
+                e.SuppressKeyPress = false;
+                return;
+            }
+
+            _waitToExecuteShortcutStartDateTime = null;
+
+            var possibleMatches = Shortcuts.Where(x => x.SendKeyStr.StartsWith(_keyboardGestureHelper.CurrentGesture));
+            if (possibleMatches.Count() == 0) {
+                _keyboardGestureHelper.Reset();
+                return;
+            }
+
+            e.SuppressKeyPress = true;
+
+            possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match DOWN: " + x));
+        }
+
+        private async void HandleGestureRouting_Up(System.Windows.Forms.KeyEventArgs e) {
+            string curGestureStr = _keyboardGestureHelper.CurrentGesture;
+
+            if (string.IsNullOrEmpty(curGestureStr)) {
+                // no possible or exact shorcuts were suppressed so ignore
+                return;
+            }
+
+            var wpfKey = MpWpfKeyboardInputHelpers.WinformsToWPFKey(e.KeyCode);
+            _keyboardGestureHelper.AddKeyUp(wpfKey);
+
+
+            var exactMatches = Shortcuts.Where(x => x.SendKeyStr == curGestureStr);
+            var possibleMatches = Shortcuts.Where(x => exactMatches.All(y => y != x) && x.SendKeyStr.StartsWith(curGestureStr));
+
+            possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match UP: " + x));
+            exactMatches.ForEach(x => MpConsole.WriteLine("Exact match UP: " + x));
+
+            bool passInput = false;
+
+            if (exactMatches.Count() > 0) {
+                if (exactMatches.Count() > 1) {
+                    // should only be 1
+                    Debugger.Break();
+                }
+                // when current gesture is exact match check if it maybe part of a longer sequence
+                var matchedShortcut = exactMatches.ElementAt(0);
+
+                if (possibleMatches.Count() == 0) {
+                    // this means user issued the exact match so no need to dump suppressed input                   
+
+                    passInput = !PerformMatchedShortcut(matchedShortcut);
+                } else {
+                    // when current gesture is a match but a longer is possible set wait delay
+                    _waitToExecuteShortcutStartDateTime = DateTime.Now;
+
+                    while (true) {
+                        if (!_waitToExecuteShortcutStartDateTime.HasValue) {
+                            // a new key down was issued so the exact is not the final gesture
+                            break;
+                        }
+                        if (DateTime.Now - _waitToExecuteShortcutStartDateTime.Value >
+                            TimeSpan.FromMilliseconds(_MAX_WAIT_TO_EXECUTE_SHORTCUT_MS)) {
+                            // since no new key down was issued in given delay execute shortcut and clear buffer
+                            passInput = !PerformMatchedShortcut(matchedShortcut);
+                            break;
+                        }
+                        await Task.Delay(10);
+                    }
+                }
+            } else if (possibleMatches.Count() == 0) {
+                passInput = true;
+            }
+            if (passInput && !string.IsNullOrEmpty(curGestureStr)) {
+                // (i don't think this can happen) when both exact and possible have no matches pass current buffer
+                System.Windows.Forms.SendKeys.SendWait(curGestureStr);
+
+                MpConsole.WriteLine("Emptied gesture buffer with sendkey string: " + curGestureStr);
+                _keyboardGestureHelper.Reset();
+            }
+        }
+
+        private bool PerformMatchedShortcut(MpShortcutViewModel matchedShortcut) {
+            string sendKeyStr = _keyboardGestureHelper.CurrentGesture;
+            if (!matchedShortcut.PerformShortcutCommand.CanExecute(null)) {
+                //when shortcut can't execute pass gesture and clear buffer
+                if(matchedShortcut.RoutingType == MpRoutingType.Internal) {
+                    _sendKeysToThisApp = sendKeyStr;
+                }
+                return false;
+            } else {
+                MpHelpers.RunOnMainThread(async () => {
+                    switch (matchedShortcut.RoutingType) {
+                        case MpRoutingType.Internal:
+                        case MpRoutingType.Direct:
+                            // direct or internal means no further action, gesture is suppressed
+                            matchedShortcut.PerformShortcutCommand.Execute(null);
+                            break;
+                        case MpRoutingType.Bubble:
+                            // pass gesture before invoking command
+
+                            System.Windows.Forms.SendKeys.SendWait(sendKeyStr);
+
+                            await Task.Delay(matchedShortcut.RoutingDelayMs);
+
+                            matchedShortcut.PerformShortcutCommand.Execute(null);
+                            break;
+                        case MpRoutingType.Tunnel:
+                            // pass gesture after invoking command                                
+
+                            matchedShortcut.PerformShortcutCommand.Execute(null);
+
+                            await Task.Delay(matchedShortcut.RoutingDelayMs);
+                            System.Windows.Forms.SendKeys.SendWait(sendKeyStr);
+                            break;
+                    }
+                });
+            }
+            _keyboardGestureHelper.Reset();
+            _waitToExecuteShortcutStartDateTime = null;
+            return true;
+        }
 
         #endregion
 
@@ -641,7 +822,7 @@ namespace MpWpfApp {
                 scvm.KeyString = scvm.Shortcut.DefaultKeyString;
                 await scvm.InitializeAsync(scvm.Shortcut,scvm.Command);
                 await scvm.Shortcut.WriteToDatabaseAsync();
-            });
+            });      
 
         #endregion
     }

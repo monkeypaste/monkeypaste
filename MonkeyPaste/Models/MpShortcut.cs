@@ -891,6 +891,8 @@ namespace MonkeyPaste {
         [Column("e_ShortcutTypeId")]
         public int ShortcutTypeId { get; set; } = 0;
 
+        public int RoutingDelayMs { get; set; } = 100;
+
         #endregion
 
         #region Fk Models

@@ -100,6 +100,7 @@ namespace MpWpfApp {
                 }
 
                 Rtb.SelectionChanged += CurrentRtb_SelectionChanged;
+                CurrentRtb_SelectionChanged(Rtb, null);
 
                 if(BindingContext != null && !BindingContext.IsPasting && !BindingContext.Parent.IsPasting) {
                     BindingContext.IsContentFocused = true;

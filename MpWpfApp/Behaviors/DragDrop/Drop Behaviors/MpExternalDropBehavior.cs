@@ -31,6 +31,9 @@ namespace MpWpfApp {
 
     public class MpExternalDropBehavior : MpDropBehaviorBase<FrameworkElement> {
         #region Private Variables
+        
+        private bool _wasReset = false;
+
         #endregion
 
         #region Singleton Definition
@@ -135,22 +138,29 @@ namespace MpWpfApp {
             if (ctvm.HasTemplates) {
                 IsPreExternalTemplateDrop = true;
                 DragDrop.AddPreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
-            }
+            } else {
 
+                DragDrop.AddQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
+            }
             DragDrop.DoDragDrop(AssociatedObject, wpfdo, DragDropEffects.Copy);
         }
 
         private void OnQueryContinueDrag(object sender, QueryContinueDragEventArgs e) {
-
-            MpConsole.WriteLine("Action: " + e.Action);
-
-            if (!MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
-
+            //MpConsole.WriteLine("Action: " + e.Action);
+            //e.Handled = true;
+            if (_wasReset) {
+                _wasReset = false;
+                DragDrop.RemovePreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
+                e.Handled = true;
+                e.Action = DragAction.Cancel;
+                return;
+            }  else if(MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                e.Action = DragAction.Continue; 
+            } else {
                 MpHelpers.RunOnMainThread(async () => {
                     e.Handled = true;
                     e.Action = DragAction.Cancel;
-
-                    
+                    DragDrop.RemovePreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
 
                     var ctvm = MpClipTrayViewModel.Instance.SelectedItem;
                     
@@ -194,8 +204,9 @@ namespace MpWpfApp {
             base.Reset();
 
             IsPreExternalTemplateDrop = false;
+            _wasReset = true;
 
-            DragDrop.RemovePreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
+            
         }
     }
 

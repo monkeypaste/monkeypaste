@@ -372,7 +372,7 @@ namespace MpWpfApp {
                 var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath);
                 if(avm == null) {
                     var icon = await MpIcon.Create(MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath));
-                    var app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon);
+                    var app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon.Id);
                     await Task.Delay(300);
                     avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath);
                     if(avm == null) {
