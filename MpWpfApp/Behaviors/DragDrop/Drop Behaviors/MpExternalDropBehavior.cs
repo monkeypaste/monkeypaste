@@ -132,6 +132,8 @@ namespace MpWpfApp {
                 return;
             }
 
+            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.ExternalDragBegin);
+
             MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(false);
             DataObject wpfdo = MpPlatformWrapper.Services.DataObjectHelper.ConvertToPlatformClipboardDataObject(mpdo) as DataObject;
 
@@ -193,7 +195,14 @@ namespace MpWpfApp {
             }
             MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
 
+            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.ExternalDragEnd);
+
             Reset();
+        }
+
+        public override void CancelDrop() {
+            base.CancelDrop();
+            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.ExternalDragEnd);
         }
 
         public override void AutoScrollByMouse() {

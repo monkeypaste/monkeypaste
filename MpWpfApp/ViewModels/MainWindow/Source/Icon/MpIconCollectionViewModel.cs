@@ -42,6 +42,12 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region State
+
+        public bool IsAnyBusy => IsBusy || IconViewModels.Any(x => x.IsBusy);
+
+        #endregion
+
         #endregion
 
         #region Constructors
@@ -65,6 +71,10 @@ namespace MpWpfApp {
             foreach(var i in il) {
                 var ivm = await CreateIconViewModel(i);
                 IconViewModels.Add(ivm);
+            }
+
+            while(IconViewModels.Any(x=>x.IsBusy)) {
+                await Task.Delay(100);
             }
             OnPropertyChanged(nameof(IconViewModels));
 
@@ -95,7 +105,13 @@ namespace MpWpfApp {
         protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpIcon i) {
                 var ivm = IconViewModels.FirstOrDefault(x => x.IconId == i.Id);
-                await ivm.InitializeAsync(i);
+                if(ivm == null) {
+                    ivm = await CreateIconViewModel(i);
+                    IconViewModels.Add(ivm);
+                } else {
+                    await ivm.InitializeAsync(i);
+                }
+                
             }
         }
 
@@ -141,7 +157,9 @@ namespace MpWpfApp {
                 uivm.IconId = icon.Id;
             } else {
                 icon = await MpDb.GetItemAsync<MpIcon>(uivm.IconId);
-                icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
+                var img = await MpDb.GetItemAsync<MpDbImage>(icon.IconImageId);
+                img.ImageBase64 = bmpSrc.ToBase64String();
+                await img.WriteToDatabaseAsync();
                 await icon.CreateOrUpdateBorder(forceHexColor: hexColor);
             }
             uivm.OnPropertyChanged(nameof(uivm.IconId));
@@ -178,7 +196,10 @@ namespace MpWpfApp {
                             createBorder: false);
                         uivm.IconId = icon.Id;
                     } else {
-                        icon.IconImage.ImageBase64 = bmpSrc.ToBase64String();
+                        var img = await MpDb.GetItemAsync<MpDbImage>(icon.IconImageId);
+                        img.ImageBase64 = bmpSrc.ToBase64String();
+                        await img.WriteToDatabaseAsync();
+
                         await icon.CreateOrUpdateBorder();
                     }
                     uivm.OnPropertyChanged(nameof(uivm.IconId));

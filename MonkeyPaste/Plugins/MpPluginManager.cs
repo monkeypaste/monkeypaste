@@ -17,6 +17,7 @@ namespace MonkeyPaste {
 
         public static Dictionary<string, MpPluginFormat> Plugins { get; set; } = new Dictionary<string, MpPluginFormat>();
 
+        public static string PluginRootFolderPath => Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
         #endregion
 
         #region Public Methods
@@ -24,14 +25,13 @@ namespace MonkeyPaste {
         public static async Task Init() {
             Plugins.Clear();
             //find plugin folder in main app folder
-            string pluginRootFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
 
-            if (!Directory.Exists(pluginRootFolderPath)) {
+            if (!Directory.Exists(PluginRootFolderPath)) {
                 //if plugin folder doesn't exist then no plugins so nothing to do
                 return;
             }
 
-            var manifestPaths = FindManifestPaths(pluginRootFolderPath);
+            var manifestPaths = FindManifestPaths(PluginRootFolderPath);
 
             foreach (var manifestPath in manifestPaths) {
                 var plugin = await LoadPlugin(manifestPath);
@@ -41,31 +41,6 @@ namespace MonkeyPaste {
                 Plugins.Add(manifestPath, plugin);
                 MpConsole.WriteLine($"Successfully loaded plugin: {plugin.title}");
             }
-        }
-
-        public static async Task<MpPluginFormat> ReloadPlugin(MpPluginFormat plugin) {
-            if (plugin == null || string.IsNullOrEmpty(plugin.guid)) {
-                var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
-                    dialogType: MpNotificationDialogType.InvalidPlugin,
-                    exceptionType: MpNotificationExceptionSeverityType.Error,
-                    msg: "Error reloading plugin or guid null: " + plugin.title);
-                return plugin;
-            }
-            var pkvp = Plugins.FirstOrDefault(x => x.Value.guid == plugin.guid);
-            if (string.IsNullOrEmpty(pkvp.Key)) {
-                var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
-                    dialogType: MpNotificationDialogType.InvalidPlugin,
-                    exceptionType: MpNotificationExceptionSeverityType.Error,
-                    msg: $"Error reloading plugin '{plugin.title}' with guid '{plugin.guid}', manifest.json found.");
-
-                if (userAction == MpDialogResultType.Retry) {
-                    await Init();
-                    return await ReloadPlugin(plugin);
-                }
-                return plugin;
-            }
-            plugin = await LoadPlugin(pkvp.Key);
-            return plugin;
         }
 
         #endregion
@@ -88,14 +63,15 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(manifestStr)) {
                 var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
                     dialogType: MpNotificationDialogType.InvalidPlugin,
-                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                    msg: $"Plugin manifest not found in '{manifestPath}'");
+                    msg: $"Plugin manifest not found in '{manifestPath}'", 
+                    retryAction: async (args) => { await LoadPlugin(manifestPath); },
+                    fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
 
-                if (userAction == MpDialogResultType.Retry) {
-                    var retryPlugin = await LoadPlugin(manifestPath);
-                    return retryPlugin;
-                }
+                //if (userAction == MpDialogResultType.Retry) {
+                //    var retryPlugin = await LoadPlugin(manifestPath);
+                //    return retryPlugin;
+                //}
                 return null;
             }
             MpPluginFormat plugin;
@@ -105,13 +81,14 @@ namespace MonkeyPaste {
             catch (Exception ex) {
                 var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
                         dialogType: MpNotificationDialogType.InvalidPlugin,
-                        exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                        msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}");
+                        msg: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
+                        retryAction: async (args) => { await LoadPlugin(manifestPath); },
+                        fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
-                if (userAction == MpDialogResultType.Retry) {
-                    var retryPlugin = await LoadPlugin(manifestPath);
-                    return retryPlugin;
-                }
+                //if (userAction == MpDialogResultType.Retry) {
+                //    var retryPlugin = await LoadPlugin(manifestPath);
+                //    return retryPlugin;
+                //}
                 return null;
             }
             if (plugin != null) {
@@ -122,13 +99,15 @@ namespace MonkeyPaste {
                 catch (Exception ex) {
                     var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
                             dialogType: MpNotificationDialogType.InvalidPlugin,
-                            exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                            msg: ex.Message);
+                            msg: ex.Message,
+                            retryAction: async (args) => { await LoadPlugin(manifestPath); },
+                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(manifestPath))));
 
-                    if (userAction == MpDialogResultType.Retry) {
-                        var retryPlugin = await LoadPlugin(manifestPath);
-                        return retryPlugin;
-                    }
+
+                    //if (userAction == MpDialogResultType.Retry) {
+                    //    var retryPlugin = await LoadPlugin(manifestPath);
+                    //    return retryPlugin;
+                    //}
                     return null;
                 }
 

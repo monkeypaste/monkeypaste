@@ -67,7 +67,7 @@ namespace MpWpfApp {
         }
 
         private void ApplicationHook_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-            var tbr = new Rect(0, 0, SearchTextBoxBorder.Width, SearchTextBoxBorder.Height);
+            var tbr = new Rect(0, 0, SearchTextBoxBorder.ActualWidth, SearchTextBoxBorder.ActualHeight);
             var tb_mp = Application.Current.MainWindow.TranslatePoint(new Point(e.Location.X, e.Location.Y), SearchTextBoxBorder);
             if (!tbr.Contains(tb_mp)) {
                 BindingContext.IsTextBoxFocused = false;

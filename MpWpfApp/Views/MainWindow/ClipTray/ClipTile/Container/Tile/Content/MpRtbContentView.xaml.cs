@@ -180,8 +180,9 @@ namespace MpWpfApp {
                     if (BindingContext.IsPlaceholder) {
                         return;
                     }
+                    ReattachAllBehaviors();
                 } else {
-                    AttachAllBehaviors();
+                    ReattachAllBehaviors();
                 }
 
                 ScrollToHome();

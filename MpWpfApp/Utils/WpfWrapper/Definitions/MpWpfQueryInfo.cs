@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
+using MonkeyPaste.Common;
+using Newtonsoft.Json;
 
 namespace MpWpfApp {
     public class MpWpfQueryInfo : MpIQueryInfo {
@@ -23,6 +25,9 @@ namespace MpWpfApp {
 
         public int SortOrderIdx { get; set; } = 0;
 
+        public string Serialize() {
+            return MpJsonObject.SerializeObject(this);
+        }
         
         public void NotifyQueryChanged(bool isFilterSortOrSearch = true) {
             IsDescending = MpClipTileSortViewModel.Instance.IsSortDescending;
@@ -30,6 +35,11 @@ namespace MpWpfApp {
             TagId = MpTagTrayViewModel.Instance.SelectedTagTile.TagId;
             SearchText = MpSearchBoxViewModel.Instance.SearchText;
             TotalItemsInQuery = MpDataModelProvider.TotalTilesInQuery;
+
+            // NOTE not sure why this isn't set so maybe bad
+            FilterFlags = MpSearchBoxViewModel.Instance.FilterType;
+
+            MpPreferences.LastQueryInfoJson = Serialize();
 
             var qi = MpDataModelProvider.QueryInfo;
             MpDataModelProvider.QueryInfos.Clear();

@@ -15,7 +15,7 @@ namespace MpWpfApp {
         MpViewModelBase<MpAppCollectionViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
-        MpISourceItem {
+        MpISourceItemViewModel {
         #region Properties
 
         #region View Models
@@ -169,6 +169,7 @@ namespace MpWpfApp {
 
         public async Task InitializeAsync(MpApp app) {
             IsBusy = true;
+            
 
             App = app;
             
@@ -182,8 +183,6 @@ namespace MpWpfApp {
                 PasteShortcutViewModel = new MpPasteShortcutViewModel(this);
                 await PasteShortcutViewModel.InitializeAsync(aps);
             }
-
-            
 
             while (ClipboardFormatInfos.IsAnyBusy || (PasteShortcutViewModel != null && PasteShortcutViewModel.IsBusy)) {
                 await Task.Delay(100);

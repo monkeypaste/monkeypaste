@@ -431,12 +431,13 @@ namespace MpWpfApp {
             bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
             bool needsReset = isNew || isManifestModified;
             if (needsReset) {
-                MpNotificationCollectionViewModel.Instance.ShowNotification(
-                    MpNotificationDialogType.AnalyzerUpdated,
-                    MpNotificationExceptionSeverityType.Warning,
-                    $"Analyzer '{Title}' Updated",
-                    "Reseting presets to default...",
-                    3000).FireAndForgetSafeAsync(this);
+                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
+                MpNotificationCollectionViewModel.Instance.ShowMessage(
+                    msgType: MpNotificationDialogType.AnalyzerUpdated,
+                    title: $"Analyzer '{Title}' Updated",
+                    iconBase64Str: ivm == null ? null : ivm.IconBase64,
+                    msg: "Reseting presets to default...")
+                    .FireAndForgetSafeAsync(this);
 
                 presets = await ResetPresets(presets);
                 isNew = true;

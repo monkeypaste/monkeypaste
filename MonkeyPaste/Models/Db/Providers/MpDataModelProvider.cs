@@ -45,7 +45,9 @@ namespace MonkeyPaste {
 
 
         public static void Init(MpIQueryInfo queryInfo) {
+            QueryInfos.Clear();
             QueryInfos.Add(queryInfo);
+            ResetQuery();
         }
 
 
@@ -535,9 +537,9 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<MpSource> GetSourceByMembers(int appId, int urlId) {
-            string query = $"select * from MpSource where fk_MpAppId=? and fk_MpUrlId=?";
-            var result = await MpDb.QueryAsync<MpSource>(query, appId, urlId);
+        public static async Task<MpSource> GetSourceByMembers(int appId, int urlId, int copyItemTransactionId = 0) {
+            string query = $"select * from MpSource where fk_MpAppId=? and fk_MpUrlId=? and fk_MpCopyItemTransactionId=?";
+            var result = await MpDb.QueryAsync<MpSource>(query, appId, urlId,copyItemTransactionId);
             if (result == null || result.Count == 0) {
                 return null;
             }

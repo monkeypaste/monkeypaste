@@ -1,17 +1,12 @@
-﻿using Microsoft.Xaml.Behaviors;
-using MonkeyPaste;
+﻿using MonkeyPaste;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Media;
-using System.Linq;
-using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public enum MpHighlightType {
@@ -21,12 +16,12 @@ namespace MpWpfApp {
         Content
     }
 
-    public abstract class MpHighlightBehaviorBase<T> : 
-        MpBehavior<T>, 
+    public abstract class MpHighlightBehaviorBase<T> :
+        MpBehavior<T>,
         IComparable<MpHighlightBehaviorBase<T>>, MpIHighlightRegion where T : MpUserControl {
         #region Private Variables
 
-        protected List<KeyValuePair<TextRange, Brush>> _uniqueContentBackgroundBrushLookup = new List<KeyValuePair<TextRange, Brush>>();
+        //protected List<KeyValuePair<TextRange, Brush>> _uniqueContentBackgroundBrushLookup = new List<KeyValuePair<TextRange, Brush>>();
 
         protected List<TextRange> _matches = new List<TextRange>();
 
@@ -48,11 +43,11 @@ namespace MpWpfApp {
 
         public int ContentItemIdx {
             get {
-                if(AssociatedObject == null) {
+                if (AssociatedObject == null) {
                     return int.MaxValue;
                 }
-                if(AssociatedObject.DataContext is MpClipTileViewModel civm) {
-                    if(HighlightType == MpHighlightType.Content) {
+                if (AssociatedObject.DataContext is MpClipTileViewModel civm) {
+                    if (HighlightType == MpHighlightType.Content) {
                         return -1;
                     }
                     return -Priority - 1;
@@ -60,6 +55,8 @@ namespace MpWpfApp {
                 return int.MaxValue;
             }
         }
+        //public Brush InactiveOverlayBrush => MpWpfColorHelpers.ChangeBrushAlpha((SolidColorBrush)InactiveHighlightBrush, 128);
+        //public Brush ActiveOverlayBrush => MpWpfColorHelpers.ChangeBrushAlpha((SolidColorBrush)ActiveHighlightBrush, 128);
 
         #region InactiveHighlightBrush Dependency Property
 
@@ -70,10 +67,10 @@ namespace MpWpfApp {
 
         public static readonly DependencyProperty InactiveHighlightBrushProperty =
             DependencyProperty.Register(
-                nameof(InactiveHighlightBrush), 
-                typeof(Brush), 
-                typeof(MpHighlightBehaviorBase<T>), 
-                new PropertyMetadata(Brushes.Yellow));
+                nameof(InactiveHighlightBrush),
+                typeof(Brush),
+                typeof(MpHighlightBehaviorBase<T>),
+                new PropertyMetadata(Brushes.Pink));
 
         #endregion
 
@@ -89,7 +86,7 @@ namespace MpWpfApp {
                 nameof(ActiveHighlightBrush),
                 typeof(Brush),
                 typeof(MpHighlightBehaviorBase<T>),
-                new PropertyMetadata(Brushes.Pink));
+                new PropertyMetadata(Brushes.Crimson));
 
         #endregion
 
@@ -107,10 +104,10 @@ namespace MpWpfApp {
                 //if(!MpSearchBoxViewModel.Instance.HasText) {
                 //    return;
                 //}
-                if(_wasUnloaded) {
+                if (_wasUnloaded) {
                     Reset();
                 }
-                UpdateUniqueBackgrounds();
+                //UpdateUniqueBackgrounds();
             });
         }
 
@@ -125,12 +122,12 @@ namespace MpWpfApp {
 
         public virtual void Reset() {
             ClearHighlighting();
-            ReplaceDocumentsBgColors();
+            //ReplaceDocumentsBgColors();
         }
 
         public virtual async Task FindHighlighting() {
             await Task.Delay(5);
-            if(AssociatedObject == null || ContentRange == null) {
+            if (AssociatedObject == null || ContentRange == null) {
                 // NOTE currently occurs during active search and tag changes
                 return;
             }
@@ -144,17 +141,17 @@ namespace MpWpfApp {
             }
         }
 
-        public void ClearHighlighting() {
+        public virtual void ClearHighlighting() {
             _matches.ForEach(x => x.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent));
         }
 
-        public void HideHighlighting() {
+        public virtual void HideHighlighting() {
             ClearHighlighting();
-            ReplaceDocumentsBgColors();
+            //ReplaceDocumentsBgColors();
         }
 
         public virtual void ApplyHighlighting() {
-            if(_matches.Count == 0) {
+            if (_matches.Count == 0) {
                 return;
             }
             for (int i = 0; i < _matches.Count; i++) {
@@ -166,20 +163,20 @@ namespace MpWpfApp {
             ScrollToSelectedItem();
         }
 
-        public void UpdateUniqueBackgrounds() {
-            //called from RtbEditToolbar...
-            _uniqueContentBackgroundBrushLookup = FindNonTransparentRangeList();
-            ApplyHighlighting();
-        }
+        //public void UpdateUniqueBackgrounds() {
+        //    //called from RtbEditToolbar...
+        //    _uniqueContentBackgroundBrushLookup = FindNonTransparentRangeList();
+        //    ApplyHighlighting();
+        //}
         #endregion
 
         #region Private Methods
 
-        private void ReplaceDocumentsBgColors() {
-            foreach (var kvp in _uniqueContentBackgroundBrushLookup) {
-                kvp.Key.ApplyPropertyValue(TextElement.BackgroundProperty, kvp.Value);
-            }
-        }
+        //private void ReplaceDocumentsBgColors() {
+        //    foreach (var kvp in _uniqueContentBackgroundBrushLookup) {
+        //        kvp.Key.ApplyPropertyValue(TextElement.BackgroundProperty, kvp.Value);
+        //    }
+        //}
 
         private List<KeyValuePair<TextRange, Brush>> FindNonTransparentRangeList() {
             var matchRangeList = new List<KeyValuePair<TextRange, Brush>>();
@@ -233,7 +230,7 @@ namespace MpWpfApp {
             if (ohltrvm == null) {
                 return -1;
             }
-            if(!ContentRange.Start.IsInSameDocument(ohltrvm.ContentRange.Start)) {
+            if (!ContentRange.Start.IsInSameDocument(ohltrvm.ContentRange.Start)) {
                 return ContentItemIdx.CompareTo(ohltrvm.ContentItemIdx);
             }
 

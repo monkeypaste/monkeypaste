@@ -18,11 +18,11 @@ namespace MpWpfApp {
                     bmpSrc = null;
                 } else if (parameter is string paramStr) {
                     if (paramStr.ToLower() == "border") {
-                        bmpSrc = (BitmapSource)new MpBase64StringToBitmapSourceConverter().Convert(ivm.Icon.IconBorderImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
+                        bmpSrc = (BitmapSource)new MpBase64StringToBitmapSourceConverter().Convert(ivm.IconBorderImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
                     } 
                 }
                 if(ivm != null) {
-                    bmpSrc = (BitmapSource)new MpBase64StringToBitmapSourceConverter().Convert(ivm.Icon.IconImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
+                    bmpSrc = (BitmapSource)new MpBase64StringToBitmapSourceConverter().Convert(ivm.IconImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
                 }
                 
             }

@@ -42,12 +42,15 @@ namespace MpWpfApp {
 
         public string IconBase64 {
             get {
-                if(Icon == null || Icon.IconImage == null) {
+                if(Icon == null || IconImage == null) {
                     return string.Empty;
                 }
-                return Icon.IconImage.ImageBase64;
+                return IconImage.ImageBase64;
             }
         }
+
+        public MpDbImage IconImage { get; private set; }
+        public MpDbImage IconBorderImage { get; private set; }
 
         public MpIcon Icon { get; set; }
 
@@ -67,6 +70,14 @@ namespace MpWpfApp {
             IsBusy = true;
 
             Icon = i;
+            if(Icon != null && Icon.IconImageId > 0) {
+                IconImage = await MpDb.GetItemAsync<MpDbImage>(Icon.IconImageId);
+                OnPropertyChanged(nameof(IconBase64));
+            }
+            if (Icon != null && Icon.IconBorderImageId > 0) {
+                IconBorderImage = await MpDb.GetItemAsync<MpDbImage>(Icon.IconBorderImageId);
+                
+            }
 
             await Task.Delay(1);
 

@@ -112,9 +112,9 @@ namespace MonkeyPaste.Common.Wpf {
 
         public static SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {
             var c = solidColorBrush.Color;
-            c.A = alpha;
-            solidColorBrush.Color = c;
-            return solidColorBrush;
+            return new SolidColorBrush(c) {
+                Opacity = (double)(alpha / (byte)255)
+            };
         }
 
         public static SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, double correctionFactor) {

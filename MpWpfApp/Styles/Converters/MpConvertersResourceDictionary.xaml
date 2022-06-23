@@ -40,8 +40,6 @@
     <local:MpEnumStringToKeyLiteralStringConverter x:Key="EnumStringToKeyLiteralStringConverter" />
     <local:MpBase64StringToBitmapSourceConverter x:Key="Base64ToImageBrushConverter" />
     <local:MpStringToDateTimeConverter x:Key="StringToDateTimeConverter" />
-    <local:MpSourceIdToImageSourceConverter x:Key="SourceIdToImageSourceConverter" />
-    <local:MpSourceIdToImageSourceBorderConverter x:Key="SourceIdToImageSourceBorderConverter" />
     <local:MpIconIdToImageSourceConverter x:Key="IconIdToImageSourceConverter" />
     <local:MpStringToThemeBrushConverter x:Key="StringToThemeBrushConverter" />
     <local:MpIconIdToIconConverter x:Key="IconIdToIconConverter" />
@@ -90,5 +88,6 @@
     <local:MpShortcutCommandViewModelToImageSourceConverter x:Key="ShortcutCommandViewModelToImageSourceConverter" />
     <local:MpShortcutTypeToStringConverter x:Key="ShortcutTypeToStringConverter" />
     <local:MpDateTimeFormatToStringConverter x:Key="DateTimeFormatToStringConverter" />
+    <local:MpEnumToImageSourceConverter x:Key="EnumToImageSourceConverter" />
     <!--  Converter Declarations End  -->
 </ResourceDictionary>

@@ -16,43 +16,17 @@ namespace MpWpfApp {
 
         public MpUrlViewModel UrlViewModel => MpUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == UrlId);
 
-        //public MpIconViewModel PrimarySourceIconViewModel {
-        //    get {
-        //        if(Source == null) {
-        //            return null;
-        //        }
-        //        if(Source.IsUrlPrimarySource) {
-        //            if(UrlViewModel == null) {
-        //                return null;
-        //            }
-        //            return UrlViewModel.IconViewModel;
-        //        } else {
-        //            if (AppViewModel == null) {
-        //                return null;
-        //            }
-        //            return AppViewModel.IconViewModel;
-        //        }
-        //    }
-        //}
-
-        //public MpIconViewModel SecondarySourceIconViewModel {
-        //    get {
-        //        if (Source == null) {
-        //            return null;
-        //        }
-        //        if (!Source.IsUrlPrimarySource) {
-        //            if (UrlViewModel == null) {
-        //                return null;
-        //            }
-        //            return UrlViewModel.IconViewModel;
-        //        } else {
-        //            if (AppViewModel == null) {
-        //                return null;
-        //            }
-        //            return AppViewModel.IconViewModel;
-        //        }
-        //    }
-        //}
+        public MpISourceItemViewModel PrimarySourceViewModel {
+            get {
+                if(Source == null) {
+                    return null;
+                }
+                if(Source.IsUrlPrimarySource) {
+                    return UrlViewModel;
+                }
+                return AppViewModel;
+            }
+        }
 
         #endregion
 
@@ -67,6 +41,7 @@ namespace MpWpfApp {
 
         #region Model
 
+        
         public int UrlId {
             get {
                 if(Source == null) {
@@ -95,28 +70,28 @@ namespace MpWpfApp {
                 return Source.Id;
             }
         }
-        public MpISourceItem PrimarySource {
-            get {
-                if(Source == null) {
-                    return null;
-                }
-                if(Source.PrimarySource == null) {
-                    // BUG I think there's issues w/ SQLite extensions and foreign properties aren't being created. But 
-                    // primary source isn't being set for CopyItemTransactions
-                    return MpPreferences.ThisAppSource.PrimarySource;
-                }
-                return Source.PrimarySource;
-            }
-        }
+        //public MpISourceItem PrimarySource {
+        //    get {
+        //        if(Source == null) {
+        //            return null;
+        //        }
+        //        if(Source.PrimarySource == null) {
+        //            // BUG I think there's issues w/ SQLite extensions and foreign properties aren't being created. But 
+        //            // primary source isn't being set for CopyItemTransactions
+        //            return MpPreferences.ThisAppSource.PrimarySource;
+        //        }
+        //        return Source.PrimarySource;
+        //    }
+        //}
 
-        public MpISourceItem SecondarySource {
-            get {
-                if (Source == null) {
-                    return null;
-                }
-                return Source.SecondarySource;
-            }
-        }
+        //public MpISourceItem SecondarySource {
+        //    get {
+        //        if (Source == null) {
+        //            return null;
+        //        }
+        //        return Source.SecondarySource;
+        //    }
+        //}
 
         public MpSource Source { get; set; }
 
@@ -132,6 +107,7 @@ namespace MpWpfApp {
             IsBusy = true;
 
             Source = s;
+
 
             await Task.Delay(1);
 

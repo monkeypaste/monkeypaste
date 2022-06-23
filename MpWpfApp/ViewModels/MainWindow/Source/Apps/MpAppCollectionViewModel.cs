@@ -31,6 +31,12 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region State
+
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
+
+        #endregion
+
         #endregion
 
         #region Constructors
@@ -48,6 +54,11 @@ namespace MpWpfApp {
         #region Public Methods
         public async Task Init() {
             IsBusy = true;
+
+            while (MpIconCollectionViewModel.Instance.IsAnyBusy) {
+                // wait for icons to load since app vm depends on icon vm
+                await Task.Delay(100);
+            }
 
             var appl = await RegisterWithProcessesManager();
             Items.Clear();

@@ -14,6 +14,19 @@ using System.Diagnostics;
 
 namespace MonkeyPaste {
     public static class MpFileIo {
+        public static void OpenFileBrowser(string path, string browserFileName = "explorer.exe") {
+            if(!path.IsFileOrDirectory()) {
+                MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox($"Error", $"{path} not found");
+                path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            }
+            ProcessStartInfo startInfo = new ProcessStartInfo {
+                Arguments = path,
+                FileName = browserFileName
+            };
+
+            Process.Start(startInfo);
+        }
+
         public static double FileListSize(string[] paths) {
             long total = 0;
             foreach (string path in paths) {

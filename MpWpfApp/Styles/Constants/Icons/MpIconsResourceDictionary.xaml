@@ -1,9 +1,10 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:MpWpfApp"
-                    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                    xmlns:s="clr-namespace:System;assembly=mscorlib"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:MpWpfApp"
+    xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <!--  Icon/Image Source Paths  -->
     <s:String x:Key="AppIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/monkey(2).png
@@ -301,6 +302,9 @@
     </s:String>
     <s:String x:Key="ContactIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/contact.png
+    </s:String>
+    <s:String x:Key="FindReplaceIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/replace.png
     </s:String>
     <!--  Icon/Image Source Paths End  -->
 </ResourceDictionary>

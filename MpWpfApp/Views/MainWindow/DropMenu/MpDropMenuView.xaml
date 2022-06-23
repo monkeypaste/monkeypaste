@@ -77,14 +77,14 @@
                                        Height="30"
                                        Margin="5"
                                        Stretch="Fill"
-                                       Source="{Binding HandledFormatIconResourceKey,
-                                                        Converter={StaticResource StringResourceToImageSourceConverter}}" />
+                                       Source="{Binding IconId,
+                                                        Converter={StaticResource IconIdToImageSourceConverter}}" />
                                 <TextBlock Grid.Row="1"
                                            Background="Transparent"
                                            Foreground="{Binding ItemTitleForegroundBrush}"
                                            HorizontalAlignment="Center"
                                            FontSize="12"
-                                           Text="{Binding HandledFormat}" />
+                                           Text="{Binding Title}" />
                             </Grid>
 
                         </DataTemplate>

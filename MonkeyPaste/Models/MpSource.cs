@@ -18,6 +18,39 @@ namespace MonkeyPaste {
         [Column("MpSourceGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
+
+        //[ForeignKey(typeof(MpCopyItemTransaction))]
+        [Column("fk_MpCopyItemTransactionId")]
+        public int CopyItemTransactionId { get; set; }
+
+        //[ForeignKey(typeof(MpUrl))]
+        [Column("fk_MpUrlId")]
+        public int UrlId { get; set; }
+
+
+        //[ForeignKey(typeof(MpApp))]
+        [Column("fk_MpAppId")]
+        public int AppId { get; set; }
+
+        #endregion
+
+        #region Fk Objects
+
+        //[ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        //public MpApp App { get; set; }
+
+
+        //[ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        //public MpUrl Url { get; set; }
+
+
+        //[OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
+        //public MpCopyItemTransaction CopyItemTransaction { get; set; }
+
+        #endregion
+
+        #region Properties
+
         [Ignore]
         public Guid SourceGuid {
             get {
@@ -31,72 +64,44 @@ namespace MonkeyPaste {
             }
         }
 
-        [ForeignKey(typeof(MpCopyItemTransaction))]
-        [Column("fk_MpCopyItemTransactionId")]
-        public int CopyItemTransactionId { get; set; }
-
-        [ForeignKey(typeof(MpUrl))]
-        [Column("fk_MpUrlId")]
-        public int UrlId { get; set; }
-
-
-        [ForeignKey(typeof(MpApp))]
-        [Column("fk_MpAppId")]
-        public int AppId { get; set; }
-
-        #endregion
-
-        #region Fk Objects
-
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpApp App { get; set; }
-
-
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpUrl Url { get; set; }
-
-
-        [OneToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public MpCopyItemTransaction CopyItemTransaction { get; set; }
-
-        #endregion
-
-        #region Properties
+        [Ignore]
+        public bool IsUrlPrimarySource => UrlId > 0;
+        
 
         [Ignore]
-        public bool IsUrlPrimarySource => PrimarySource.IsUrl;
+        public int PrimarySourceId => IsUrlPrimarySource ? UrlId : AppId;
 
-        [Ignore]
-        public MpISourceItem PrimarySource {
-            get {
-                if (CopyItemTransaction != null) {
-                    if (CopyItemTransaction.HttpTransaction != null) {
-                        return CopyItemTransaction.HttpTransaction;
-                    }
-                    if (CopyItemTransaction.CliTransaction != null) {
-                        return CopyItemTransaction.CliTransaction;
-                    }
-                    if (CopyItemTransaction.DllTransaction != null) {
-                        return CopyItemTransaction.DllTransaction;
-                    }
-                }
-                if(Url != null) {
-                    return Url;
-                }
-                return App;;
-            }
-        }
+        //[Ignore]
+        //public MpISourceItem PrimarySource {
+        //    get {
+        //        if (CopyItemTransaction != null) {
+        //            if (CopyItemTransaction.HttpTransaction != null) {
+        //                return CopyItemTransaction.HttpTransaction;
+        //            }
+        //            if (CopyItemTransaction.CliTransaction != null) {
+        //                return CopyItemTransaction.CliTransaction;
+        //            }
+        //            if (CopyItemTransaction.DllTransaction != null) {
+        //                return CopyItemTransaction.DllTransaction;
+        //            }
+        //        }
+        //        if(Url != null) {
+        //            return Url;
+        //        }
+        //        return App;;
+        //    }
+        //}
 
-        [Ignore]
-        public MpISourceItem SecondarySource {
-            get {
-                var ps = PrimarySource;
-                if(ps != null) {
-                    return ps is MpApp ? Url : App;
-                }
-                return null;
-            }
-        }
+        //[Ignore]
+        //public MpISourceItem SecondarySource {
+        //    get {
+        //        var ps = PrimarySource;
+        //        if(ps != null) {
+        //            return ps is MpApp ? Url : App;
+        //        }
+        //        return null;
+        //    }
+        //}
 
         #endregion
 
@@ -105,25 +110,32 @@ namespace MonkeyPaste {
         [Ignore]
         public static int ThisAppSourceId { get; set; }
 
-        public static async Task<MpSource> Create(MpApp app, MpUrl url) {
-            if(app == null) {
-                throw new Exception("Source must have an app associated");
+        public static async Task<MpSource> Create(
+            int appId = 0,
+            int urlId = 0,
+            int copyItemTransactionId = 0,
+            bool suppressWrite = false) {
+
+            // NOTE this create is for item's from external sources but added copyItemTransactionId for more flexibility
+
+            if(appId == 0 && copyItemTransactionId == 0) {
+                throw new Exception("Source must have an app or item associated");
             }
-            int urlId = url == null ? 0 : url.Id;
-            MpSource dupCheck = await MpDataModelProvider.GetSourceByMembers(app.Id, urlId);
+            MpSource dupCheck = await MpDataModelProvider.GetSourceByMembers(appId, urlId, copyItemTransactionId);
             if(dupCheck != null) {
-                dupCheck = await MpDb.GetItemAsync<MpSource>(dupCheck.Id);
                 return dupCheck;
             }
             var source = new MpSource() {
                 SourceGuid = System.Guid.NewGuid(),
-                App = app,
-                AppId = app.Id,
-                Url = url,
-                UrlId = urlId
+                AppId = appId,
+                UrlId = urlId,
+                CopyItemTransactionId = copyItemTransactionId
             };
 
-            await source.WriteToDatabaseAsync();
+            if(!suppressWrite) {
+                await source.WriteToDatabaseAsync();
+            }
+            
 
             if(source.UrlId == 0 && source.AppId == 0) {
                 // where is this happening?
@@ -132,24 +144,24 @@ namespace MonkeyPaste {
             return source;
         }
 
-        public static async Task<MpSource> Create(
-            int copyItemTransactionId = 0, 
-            bool suppressWrite = false) {
-            if (copyItemTransactionId <= 0 && !suppressWrite) {
-                throw new Exception("Source transaction must be populated");
-            }
+        //public static async Task<MpSource> Create(
+        //    int copyItemTransactionId = 0, 
+        //    bool suppressWrite = false) {
+        //    if (copyItemTransactionId <= 0 && !suppressWrite) {
+        //        throw new Exception("Source transaction must be populated");
+        //    }
 
-            var source = new MpSource() {
-                SourceGuid = System.Guid.NewGuid(),
-                AppId = MpPreferences.ThisAppSource.AppId,
-                CopyItemTransactionId = copyItemTransactionId
-            };
+        //    var source = new MpSource() {
+        //        SourceGuid = System.Guid.NewGuid(),
+        //        AppId = MpPreferences.ThisAppSource.AppId,
+        //        CopyItemTransactionId = copyItemTransactionId
+        //    };
 
-            if(!suppressWrite) {
-                await source.WriteToDatabaseAsync();
-            }
-            return source;
-        }
+        //    if(!suppressWrite) {
+        //        await source.WriteToDatabaseAsync();
+        //    }
+        //    return source;
+        //}
         #endregion
 
         public MpSource() { }

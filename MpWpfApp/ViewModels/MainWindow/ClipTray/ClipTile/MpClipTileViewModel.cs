@@ -221,6 +221,7 @@ using stdole;
         public bool HasFindText => !string.IsNullOrEmpty(FindText) && FindText != FindPlaceholderText;
         public bool HasReplaceText => !string.IsNullOrEmpty(ReplaceText) && ReplaceText != ReplacePlaceholderText;
 
+        public bool IsFindMode { get; set; }
         public bool IsReplaceMode { get; set; }
         public bool IsFindValid => string.IsNullOrEmpty(_findText) || (!string.IsNullOrEmpty(_findText) && HasMatch);
         public bool IsReplaceValid => !IsReplaceMode || (IsReplaceMode && _replaceText != null);
@@ -253,9 +254,15 @@ using stdole;
                             MpContentDocumentRtfExtension.FindRtbByViewModel(this))
                         .FireAndForgetSafeAsync(this);
                     }
-                    _rtbHighligher.Reset();
+                    if(!string.IsNullOrEmpty(MpDataModelProvider.QueryInfo.SearchText)) {
+                        _rtbHighligher.Reset();
+                    }
+                    IsFindMode = false;
+                    IsReplaceMode = false;
                 }
+
             },IsTextItem);
+
         public void UpdateFindAndReplaceMatches() {
             _currentMatchIdx = -1;
             if(_findText == null) {
@@ -868,7 +875,7 @@ using stdole;
                 if (IsBusy) {
                     return true;
                 }
-                if (TitleSwirlViewModel != null && TitleSwirlViewModel.IsAnyBusy) {
+                if (TitleSwirlViewModel != null && TitleSwirlViewModel.IsBusy) {
                     return true;
                 }
                 if (DetectedImageObjectCollectionViewModel != null && DetectedImageObjectCollectionViewModel.IsAnyBusy) {
@@ -1218,9 +1225,10 @@ using stdole;
                 if (SourceViewModel == null) {
                     // BUG currently when plugin creates new content it is not setting source info
                     // so return app icon
-                    return MpPreferences.ThisAppSource.PrimarySource.IconId;
+                    
+                    return MpPreferences.ThisAppIcon.Id;
                 }
-                return SourceViewModel.PrimarySource.IconId;
+                return SourceViewModel.PrimarySourceViewModel.IconId;
             }
             set {
                 if (IconId != value) {
@@ -1922,6 +1930,11 @@ using stdole;
 
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
+
+                    if(!IsContentReadOnly) {
+                        IsFindMode = false;
+                        IsReplaceMode = false;
+                    }
                     break;
                 case nameof(IsContextMenuOpen):
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -2005,6 +2018,39 @@ using stdole;
                 //    //}
                 //    OnPropertyChanged(nameof(TrayX));
                 //    break;
+                case nameof(IsFindMode):
+                    if(IsFindMode) {
+                        if(IsReplaceMode) {
+                            IsReplaceMode = false;
+                        } else {
+                            ToggleFindAndReplaceVisibleCommand.Execute(null);
+                        }                        
+                    } else if(!IsReplaceMode) {
+                        //ToggleFindAndReplaceVisibleCommand.Execute(null);
+                        if(!IsContentReadOnly) {
+                            IsFindAndReplaceVisible = false;
+                        }
+                    }
+                    break;
+                case nameof(IsReplaceMode):
+                    if (IsReplaceMode) {
+                        if(IsFindMode) {
+                            IsFindMode = false;
+                        } else {
+                            ToggleFindAndReplaceVisibleCommand.Execute(null);
+                        }
+                    } else if (!IsFindMode) {
+                        //ToggleFindAndReplaceVisibleCommand.Execute(null);
+                        if (!IsContentReadOnly) {
+                            IsFindAndReplaceVisible = false;
+                        }
+                    }
+                    break;
+                case nameof(IsFindAndReplaceVisible):
+                    if(!IsFindAndReplaceVisible && !IsContentReadOnly) {
+                        IsFindMode = IsReplaceMode = false;
+                    }
+                    break;
                 case nameof(FindText):
                 case nameof(ReplaceText):
                 case nameof(MatchCase):

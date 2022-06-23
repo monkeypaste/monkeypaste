@@ -17,10 +17,10 @@ namespace MpWpfApp {
                 }
                 if (parameter is string paramStr) {
                     if (paramStr.ToLower() == "border") {
-                        return new MpBase64StringToBitmapSourceConverter().Convert(ivm.Icon.IconBorderImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
+                        return new MpBase64StringToBitmapSourceConverter().Convert(ivm.IconBorderImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
                     }
                 }
-                return new MpBase64StringToBitmapSourceConverter().Convert(ivm.Icon.IconImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
+                return new MpBase64StringToBitmapSourceConverter().Convert(ivm.IconImage.ImageBase64, null, null, CultureInfo.CurrentCulture);
             }
             return null;
         }

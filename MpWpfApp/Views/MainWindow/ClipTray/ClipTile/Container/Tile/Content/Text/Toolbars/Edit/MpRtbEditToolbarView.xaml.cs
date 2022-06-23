@@ -294,7 +294,7 @@ namespace MpWpfApp {
                 colorMenuItem,
                 (s1, e1) => {
                     Rtb.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)((Border)s1).Tag);
-                    Rtb.GetVisualAncestor<MpRtbHighlightBehavior>()?.UpdateUniqueBackgrounds();
+                    //Rtb.GetVisualAncestor<MpRtbHighlightBehavior>()?.UpdateUniqueBackgrounds();
                 }
             );
 

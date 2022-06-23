@@ -21,6 +21,13 @@ namespace MpWpfApp {
         #region View Models
 
         #endregion
+
+        #region State
+
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
+
+        #endregion
+
         #endregion
 
         #region Constructors
@@ -34,12 +41,20 @@ namespace MpWpfApp {
 
         public async Task Init() {
             IsBusy = true;
+            while (MpIconCollectionViewModel.Instance.IsAnyBusy) {
+                // wait for icons to load since url vm depends on icon vm
+                await Task.Delay(100);
+            }
 
             var urll = await MpDb.GetItemsAsync<MpUrl>();
             Items.Clear();
             foreach (var url in urll) {
                 var uvm = await CreateUrlViewModel(url);
                 Items.Add(uvm);
+            }
+
+            while(Items.Any(x=>x.IsBusy)) {
+                await Task.Delay(100);
             }
             //await Task.WhenAll(Items.Select(x => UpdateRejection(x)));
             OnPropertyChanged(nameof(Items));

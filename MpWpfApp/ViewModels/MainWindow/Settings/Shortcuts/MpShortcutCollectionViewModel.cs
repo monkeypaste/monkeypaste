@@ -61,6 +61,8 @@ namespace MpWpfApp {
         public Point GlobalMouseLocation { get; private set; }
         public bool GlobalIsMouseLeftButtonDown { get; private set; } = false;
 
+        public bool IsCustomRoutingEnabled { get; set; } = false;
+
         #endregion
 
         #endregion
@@ -296,6 +298,9 @@ namespace MpWpfApp {
             await MpHelpers.RunOnMainThreadAsync(async () => {
                 //using mainwindow, map all saved shortcuts to their commands
                 var scl = await MpDb.GetItemsAsync<MpShortcut>();
+
+                IsCustomRoutingEnabled = scl.All(x => x.RoutingType == MpRoutingType.Internal || x.RoutingType == MpRoutingType.Direct);
+
                 foreach (var sc in scl) {
                     ICommand shortcutCommand = null;
                     switch (sc.ShortcutType) {
@@ -570,7 +575,7 @@ namespace MpWpfApp {
         #region Global Key Handlers
 
         private void GlobalHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-            if(MpAssignHotkeyModalWindow.IsOpen) {
+            if (MpAssignHotkeyModalWindow.IsOpen && IsCustomRoutingEnabled) {
                 return;
             }
 
@@ -586,7 +591,9 @@ namespace MpWpfApp {
                 GlobalIsCtrlDown = true;
             }
 
-            HandleGestureRouting_Down(ref e);            
+            if (IsCustomRoutingEnabled) {
+                HandleGestureRouting_Down(ref e);
+            }            
         }
 
         private void GlobalHook_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
@@ -602,7 +609,9 @@ namespace MpWpfApp {
                 GlobalIsCtrlDown = false;
             }
 
-            HandleGestureRouting_Up(e);
+            if(IsCustomRoutingEnabled) {
+                HandleGestureRouting_Up(e);
+            }            
         }
 
 

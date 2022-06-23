@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using Xamarin.Essentials;
 using MonkeyPaste.Common;
+using System.Reflection;
 
 namespace MonkeyPaste {
     public static class MpPreferences {
@@ -52,6 +53,9 @@ namespace MonkeyPaste {
 
         #region Application Properties
 
+        public static string ThisAppName => "Monkey Paste";
+
+        public static string ThisAppPath => Assembly.GetExecutingAssembly().Location;
         #region Encyption
         public static string SslAlgorithm { get; set; } = "SHA256WITHRSA";
         public static string SslCASubject { get; set; } = "CN{ get; set; } =MPCA";
@@ -1144,8 +1148,16 @@ namespace MonkeyPaste {
             }
         }
 
-        #endregion
+        public static string LastQueryInfoJson {
+            get {
+                return Default.Get(nameof(LastQueryInfoJson), string.Empty);
+            }
+            set {
+                Default.Set(nameof(LastQueryInfoJson), value);
+            }
+        }
 
+        #endregion
 
         #endregion
 

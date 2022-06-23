@@ -223,6 +223,7 @@
     <Compile Include="Converters\MpDoubleToThicknessIndentLevelConverter.cs" />
     <Compile Include="Converters\MpDoubleWithDeltaConverter.cs" />
     <Compile Include="Converters\MpDoubleWithDeltaMultiConverter.cs" />
+    <Compile Include="Converters\MpEnumToImageSourceConverter.cs" />
     <Compile Include="Converters\MpEnumToIntConverter.cs" />
     <Compile Include="Converters\MpBoolFlipConverter.cs" />
     <Compile Include="Converters\MpBoolToBrushConverter.cs" />
@@ -270,8 +271,6 @@
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpBase64StringToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpFilePathStringToImageSourceConverter.cs" />
-    <Compile Include="Converters\MpSourceIdToImageSourceBorderConverter.cs" />
-    <Compile Include="Converters\MpSourceIdToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringHexToImageSourceConverter.cs" />
     <Compile Include="Converters\MpStringHexToWinMediaColorConverter.cs" />
     <Compile Include="Converters\MpStringPathToFileOrFolderNameConverter.cs" />
@@ -387,7 +386,6 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\MpDynamicTextTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\MpStaticTextTemplateViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpClipTileTitleSwirlViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\Base\MpActionViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\CriteriaItem\MpSearchCriteriaOptionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\Filter\MpSearchFilterViewModel.cs" />
@@ -1612,6 +1610,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\MpRichTextBox\spellcheck.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\replace.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />

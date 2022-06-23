@@ -43,6 +43,29 @@ namespace MonkeyPaste {
         ErrorAndShutdown //confirm
     }
     public abstract class MpNotificationViewModelBase : MpViewModelBase<MpNotificationCollectionViewModel> {
+        #region Statics
+
+        public static MpNotificationExceptionSeverityType GetExceptionFromNotificationType(MpNotificationDialogType ndt) {
+            switch(ndt) {
+                case MpNotificationDialogType.InvalidPlugin:
+                case MpNotificationDialogType.InvalidAction:
+                    return MpNotificationExceptionSeverityType.WarningWithOption;
+                case MpNotificationDialogType.AnalyzerTimeout:
+                case MpNotificationDialogType.InvalidRequest:
+                case MpNotificationDialogType.InvalidResponse:
+                case MpNotificationDialogType.TrialExpired:
+                    return MpNotificationExceptionSeverityType.Warning;
+                case MpNotificationDialogType.BadHttpRequest:
+                case MpNotificationDialogType.DbError:
+                    return MpNotificationExceptionSeverityType.Error;
+                default:
+                    return MpNotificationExceptionSeverityType.None;
+            }
+        }
+
+
+        #endregion
+
         #region Properties
 
         #region Appearance
@@ -134,7 +157,7 @@ namespace MonkeyPaste {
 
         public virtual MpNotificationDialogType DialogType { get; set; }
 
-        public MpNotificationExceptionSeverityType ExceptionType { get; set; }
+        public MpNotificationExceptionSeverityType ExceptionType => GetExceptionFromNotificationType(DialogType);
 
         public int NotificationId => (int)DialogType;
 
@@ -164,6 +187,9 @@ namespace MonkeyPaste {
                     if(DoNotShowAgain) {
                         Parent.DoNotShowAgainCommand.Execute((int)DialogType);
                     }
+                    break;
+                case nameof(DialogType):
+                    OnPropertyChanged(nameof(ExceptionType));
                     break;
             }
         }

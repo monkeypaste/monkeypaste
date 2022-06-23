@@ -71,6 +71,10 @@ namespace MonkeyPaste {
                     return;
                 }
 
+                
+
+                await item.LoadItem();
+
                 //PercentLoaded = (double)(index + 1) / (double)_items.Count;
 
                 LoadedCount++;
@@ -85,8 +89,6 @@ namespace MonkeyPaste {
                 for (int i = 0; i < dotCount; i++) {
                     Title += ".";
                 }
-
-                await item.LoadItem();
             });
         }
 

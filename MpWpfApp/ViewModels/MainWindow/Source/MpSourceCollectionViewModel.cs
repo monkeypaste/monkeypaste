@@ -16,7 +16,13 @@ namespace MpWpfApp {
 
         #region View Models
 
-        
+
+        #endregion
+
+        #region State
+
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
+
         #endregion
 
         #endregion
@@ -31,6 +37,10 @@ namespace MpWpfApp {
 
         public async Task Init() {
             IsBusy = true;
+            while (MpAppCollectionViewModel.Instance.IsAnyBusy ||
+                  MpUrlCollectionViewModel.Instance.IsAnyBusy) {
+                await Task.Delay(100);
+            }
 
             var sl = await MpDb.GetItemsAsync<MpSource>();
             foreach(var s in sl) {
@@ -38,6 +48,9 @@ namespace MpWpfApp {
                 Items.Add(svm);
             }
 
+            while(Items.Any(x=>x.IsBusy)) {
+                await Task.Delay(100);
+            }
 
             IsBusy = false;
         }

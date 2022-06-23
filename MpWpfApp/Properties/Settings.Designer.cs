@@ -12,7 +12,7 @@ namespace MpWpfApp.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.2.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -133,48 +133,6 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>paint</string>\r\n  <string>photoshop</string>\r\n</ArrayOfString>")]
-        public string[] PasteAsImageDefaultProcessNameCollection {
-            get {
-                return ((string[])(this["PasteAsImageDefaultProcessNameCollection"]));
-            }
-            set {
-                this["PasteAsImageDefaultProcessNameCollection"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>explorer</string>\r\n</ArrayOfString>")]
-        public string[] PasteAsFileDropDefaultProcessNameCollection {
-            get {
-                return ((string[])(this["PasteAsFileDropDefaultProcessNameCollection"]));
-            }
-            set {
-                this["PasteAsFileDropDefaultProcessNameCollection"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>explorer</string>\r\n  <string>notepad</string>\r\n</ArrayOfString>")]
-        public string[] DragDropAsFileDropDefaultAppTitleCollection {
-            get {
-                return ((string[])(this["DragDropAsFileDropDefaultAppTitleCollection"]));
-            }
-            set {
-                this["DragDropAsFileDropDefaultAppTitleCollection"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string UserCustomColorIdxArray {
             get {
@@ -182,34 +140,6 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["UserCustomColorIdxArray"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>excel</string>\r\n</ArrayOfString>")]
-        public string[] PasteAsCsvDefaultProcessNameCollection {
-            get {
-                return ((string[])(this["PasteAsCsvDefaultProcessNameCollection"]));
-            }
-            set {
-                this["PasteAsCsvDefaultProcessNameCollection"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>notepad</string>\r\n</ArrayOfString>")]
-        public string[] PasteAsTextFileDefaultProcessNameCollection {
-            get {
-                return ((string[])(this["PasteAsTextFileDefaultProcessNameCollection"]));
-            }
-            set {
-                this["PasteAsTextFileDefaultProcessNameCollection"] = value;
             }
         }
         
@@ -1634,6 +1564,88 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["MaxRecentTextsCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>paint</string>\r\n  <string>photoshop</string>\r\n</ArrayOfString>")]
+        public string[] PasteAsImageDefaultProcessNameCollection {
+            get {
+                return ((string[])(this["PasteAsImageDefaultProcessNameCollection"]));
+            }
+            set {
+                this["PasteAsImageDefaultProcessNameCollection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>explorer</string>\r\n</ArrayOfString>")]
+        public string[] PasteAsFileDropDefaultProcessNameCollection {
+            get {
+                return ((string[])(this["PasteAsFileDropDefaultProcessNameCollection"]));
+            }
+            set {
+                this["PasteAsFileDropDefaultProcessNameCollection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>explorer</string>\r\n  <string>notepad</string>\r\n</ArrayOfString>")]
+        public string[] DragDropAsFileDropDefaultAppTitleCollection {
+            get {
+                return ((string[])(this["DragDropAsFileDropDefaultAppTitleCollection"]));
+            }
+            set {
+                this["DragDropAsFileDropDefaultAppTitleCollection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>excel</string>\r\n</ArrayOfString>")]
+        public string[] PasteAsCsvDefaultProcessNameCollection {
+            get {
+                return ((string[])(this["PasteAsCsvDefaultProcessNameCollection"]));
+            }
+            set {
+                this["PasteAsCsvDefaultProcessNameCollection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
+            "tring>notepad</string>\r\n</ArrayOfString>")]
+        public string[] PasteAsTextFileDefaultProcessNameCollection {
+            get {
+                return ((string[])(this["PasteAsTextFileDefaultProcessNameCollection"]));
+            }
+            set {
+                this["PasteAsTextFileDefaultProcessNameCollection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastQueryInfoJson {
+            get {
+                return ((string)(this["LastQueryInfoJson"]));
+            }
+            set {
+                this["LastQueryInfoJson"] = value;
             }
         }
     }

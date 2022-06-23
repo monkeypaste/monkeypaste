@@ -97,7 +97,6 @@ namespace MonkeyPaste {
 
             var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
                 dialogType: MpNotificationDialogType.InvalidRequest,
-                exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                 msg: ex.Message,
                 maxShowTimeMs: 5000);
             if (userAction == MpDialogResultType.Retry) {

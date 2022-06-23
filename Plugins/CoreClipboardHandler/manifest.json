@@ -1,6 +1,6 @@
 {
   "title": "Core Clipboard Handler",
-  "description": "Handles default clipboard formats",
+  "description": "Handles default clipboard formats (cause ur the boss :p) ",
   "version": "1.0",
   "credits": "Somebody",
   "guid": "a7df5078-8c85-4819-9518-dbf389612298",
@@ -13,7 +13,7 @@
     "handledFormats": [
       {
         "handlerGuid": "676278d9-6c9b-4efd-b5e9-9c5840222c14",
-        "displayName": "Plain Text",
+        "displayName": "Text",
         "clipboardName": "Text",
         "parameters": [
           {
@@ -49,7 +49,7 @@
       },
       {
         "handlerGuid": "58558048-a275-4377-9108-8fb1bed3cd5e",
-        "displayName": "Rich Text",
+        "displayName": "Rtf",
         "clipboardName": "Rich Text Format",
         "parameters": [
           {

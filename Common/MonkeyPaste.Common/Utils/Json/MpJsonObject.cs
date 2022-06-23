@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
-    public abstract class MpJsonObject {
+    public abstract class MpJsonObject : MpIJsonObject {
         public static T DeserializeObject<T>(object obj) where T: class{
             if(obj is string objStr) {
                 return JsonConvert.DeserializeObject<T>(objStr);

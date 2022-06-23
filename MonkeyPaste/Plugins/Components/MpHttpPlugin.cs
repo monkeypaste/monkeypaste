@@ -528,15 +528,17 @@ namespace MonkeyPaste {
                         var response = await client.SendAsync(request);
                         
                         if (!response.IsSuccessStatusCode) {
+                            // NOTE fix command should probably open manfiest folder but only http plugin info is provided so just opening plugin folder
                             var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
                                                     dialogType: MpNotificationDialogType.BadHttpRequest,
-                                                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
-                                                    msg: $"{response.ReasonPhrase}");
-                            if(userAction == MpDialogResultType.Retry) {
-                                return new MpPluginResponseFormat() {
-                                    message = MpPluginResponseFormat.RETRY_MESSAGE
-                                };
-                            }
+                                                    msg: $"{response.ReasonPhrase}",
+                                                    fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(MpPluginManager.PluginRootFolderPath))));
+
+                            //if(userAction == MpDialogResultType.Retry) {
+                            //    return new MpPluginResponseFormat() {
+                            //        message = MpPluginResponseFormat.RETRY_MESSAGE
+                            //    };
+                            //}
                         }
 
                         string responseStr = await response.Content.ReadAsStringAsync();

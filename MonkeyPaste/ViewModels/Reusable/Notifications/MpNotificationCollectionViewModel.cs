@@ -91,7 +91,6 @@ namespace MonkeyPaste {
         }
         public async Task<MpDialogResultType> ShowNotification(
             MpNotificationDialogType dialogType = MpNotificationDialogType.None,
-            MpNotificationExceptionSeverityType exceptionType = MpNotificationExceptionSeverityType.None,
             string title = "",
             string msg = "",
             double maxShowTimeMs = -1,
@@ -101,7 +100,8 @@ namespace MonkeyPaste {
             string iconBase64Str = null,
             ICommand fixCommand = null,
             object fixCommandArgs = null) {
-                        
+
+            var exceptionType = MpNotificationViewModelBase.GetExceptionFromNotificationType(dialogType);
 
             if (DoNotShowNotificationIds.Contains((int)dialogType)) {
                 MpConsole.WriteTraceLine($"Notification: {dialogType.ToString()} marked as hidden");
@@ -109,22 +109,21 @@ namespace MonkeyPaste {
             }
 
             if (string.IsNullOrEmpty(title)) {
-                if (exceptionType == MpNotificationExceptionSeverityType.Warning ||
-                    exceptionType == MpNotificationExceptionSeverityType.WarningWithOption) {
-                    title = "Warning: ";
-                } else {
-                    title = "Error: ";
-                }
+                //if (exceptionType == MpNotificationExceptionSeverityType.Warning ||
+                //    exceptionType == MpNotificationExceptionSeverityType.WarningWithOption) {
+                //    title = "Warning: ";
+                //} else {
+                //    title = "Error: ";
+                //}
 
-                title += dialogType.EnumToLabel();
+                title = dialogType.EnumToLabel();
             }
 
             MpNotificationViewModelBase nvm;
-            switch(dialogType) {
-                case MpNotificationDialogType.Message:
+            switch(exceptionType) {
+                case MpNotificationExceptionSeverityType.None:
                     nvm = new MpMessageNotificationViewModel(this) {
                         DialogType = dialogType,
-                        ExceptionType = exceptionType,
                         Title = title,
                         Body = msg,
                         IconImageBase64 = iconBase64Str,
@@ -134,7 +133,6 @@ namespace MonkeyPaste {
                 default:
                     nvm = new MpUserActionNotificationViewModel(this) {
                         DialogType = dialogType,
-                        ExceptionType = exceptionType,
                         Title = title,
                         Body = msg,
                         FixCommand = fixCommand,

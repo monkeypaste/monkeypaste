@@ -168,6 +168,8 @@ namespace MpWpfApp {
             sw.Stop();
             MpConsole.WriteLine($"Bootstrapper loaded in {sw.ElapsedMilliseconds} ms");
 
+            MpClipTrayViewModel.Instance.OnPostMainWindowLoaded();
+
             //var contacts = await MpMasterTemplateModelCollectionViewModel.Instance.GetContacts();
 
             //var contacts = new List<MpIContact>();

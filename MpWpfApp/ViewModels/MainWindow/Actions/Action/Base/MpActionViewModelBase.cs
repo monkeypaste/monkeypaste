@@ -819,7 +819,6 @@ namespace MpWpfApp {
             MpHelpers.RunOnMainThread(() => {
                 MpNotificationCollectionViewModel.Instance.ShowNotification(
                     dialogType: MpNotificationDialogType.InvalidAction,
-                    exceptionType: MpNotificationExceptionSeverityType.WarningWithOption,
                     msg: ValidationText,
                     retryAction: async (args) => { await Validate(); },
                     fixCommand: Parent.SelectActionCommand,

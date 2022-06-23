@@ -15,7 +15,7 @@ namespace MpWpfApp {
         MpViewModelBase<MpUrlCollectionViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpISourceItem {
+        MpISourceItemViewModel {
         #region Properties
 
         #region View Models

@@ -13,6 +13,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common; 
 using MonkeyPaste.Common.Wpf;
 using Microsoft.Office.Interop.Outlook;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public class MpContentAdorner : Adorner {
@@ -22,7 +23,11 @@ namespace MpWpfApp {
         private Color _debugColor;
 
         private MpIContentDropTarget _dropBehavior;
-        
+        private MpRtbHighlightBehavior _highlightBehavior;
+
+        #endregion
+
+        #region Statics
         #endregion
 
         #region Properties
@@ -42,6 +47,8 @@ namespace MpWpfApp {
             }
         }
         public bool IsShowingDropShape => DropIdx >= 0;
+
+        public bool IsShowingHighlightShapes => _highlightBehavior != null && _highlightBehavior.GetHighlightShapes().Count > 0;
 
         public bool IsShowingCaret {
             get {
@@ -83,8 +90,10 @@ namespace MpWpfApp {
         }
 
         public bool IsShowing => //MpMainWindowViewModel.Instance.IsMainWindowOpen &&
-                                _dropBehavior.GetType() != typeof(MpPinTrayDropBehavior) &&
+                                (_dropBehavior.GetType() != typeof(MpPinTrayDropBehavior) ||
+                                 IsShowingHighlightShapes) &&
                                  (IsShowingDropShape || 
+                                  IsShowingHighlightShapes ||
                                  IsShowingCaret || 
                                  IsDebugMode || 
                                  IsShowingContentLines);
@@ -116,11 +125,20 @@ namespace MpWpfApp {
             }
         }
 
+        
+
+
         #endregion
 
         #region Public Methods
         public MpContentAdorner(UIElement uie, MpIContentDropTarget dropBehavior) : base(uie) {
             _dropBehavior = dropBehavior;
+
+            var rtbcv = uie.GetVisualAncestor<MpRtbContentView>();
+            if(rtbcv != null) {                
+                _highlightBehavior = rtbcv.RtbHighlightBehavior;
+            }
+            
             
             _isDash = _dropBehavior.GetType() != typeof(MpActionDesignerItemDropBehavior);
 
@@ -144,6 +162,10 @@ namespace MpWpfApp {
                         dc,
                         new Pen(DropShapeBrush, 1.5) { DashStyle = _isDash ? DashStyles.Dash : DashStyles.Solid });
                 }
+
+                if (IsShowingHighlightShapes) {
+                    DrawHighlightShapes(dc);
+                }
                 if (IsShowingCaret) {
                     DrawCaret(dc, new Pen(Brushes.Red, 1));
                 }
@@ -160,14 +182,17 @@ namespace MpWpfApp {
                 
             } else {
                 Visibility = Visibility.Hidden;
+                Opacity = 1;
             }
         }
 
-        private void DrawShape(DrawingContext dc, MpShape dropShape, Pen pen) {
+        private void DrawShape(DrawingContext dc, MpShape dropShape, Pen pen, Brush brush = null) {
             var fe = AdornedElement as FrameworkElement;
             if (fe == null) {
                 return;
             }
+            brush = brush == null ? Brushes.Transparent : brush;
+
             var rtb_rect = fe.Bounds();
             if (dropShape is MpLine dl) {
                 if (!rtb_rect.Contains(dl.P1.ToWpfPoint()) || !rtb_rect.Contains(dl.P2.ToWpfPoint())) {
@@ -180,16 +205,40 @@ namespace MpWpfApp {
                     dl.P2.ToWpfPoint());
             } else if (dropShape is MpEllipse de) {
                 dc.DrawEllipse(
-                    Brushes.Transparent,
+                    brush,
                     pen,
                     de.Center.ToWpfPoint(),
                     de.Size.Width / 2,
                     de.Size.Height / 2);
             } else if (dropShape is MpRect dr) {
                 dc.DrawRectangle(
-                    Brushes.Transparent,
+                    brush,
                     pen,
                     dr.ToWpfRect());
+            }
+        }
+
+        private void DrawHighlightShapes(DrawingContext dc) {
+            var rtb = AdornedElement as RichTextBox;
+            if (rtb == null) {
+                return;
+            }
+            this.Opacity = 0.5;
+            var sv = rtb.GetVisualDescendent<ScrollViewer>();
+
+            var dropShapes = _highlightBehavior.GetHighlightShapes();
+
+            foreach(var kvp in dropShapes) {
+                foreach(MpRect rect in kvp.Value) {
+                    //rect.Location = rtb.TranslatePoint(rect.Location.ToWpfPoint(), sv).ToMpPoint();
+                    DrawShape(
+                        dc,
+                        rect,
+                        new Pen(),
+                        kvp.Key == _highlightBehavior.SelectedIdx ? //Brushes.Crimson : Brushes.Pink);
+                            _highlightBehavior.ActiveHighlightBrush :
+                            _highlightBehavior.InactiveHighlightBrush);
+                }
             }
         }
 

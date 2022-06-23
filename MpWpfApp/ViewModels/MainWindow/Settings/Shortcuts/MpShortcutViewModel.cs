@@ -398,28 +398,34 @@ namespace MpWpfApp {
                     string keyValStr = string.Join(",", wfcl.Select(x =>
                                                  string.Join("+", x.Select(y =>
                                                     Enum.GetName(typeof(System.Windows.Forms.Keys), y)))));
-
-                    if (IsSequence()) {
-                        if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                            //only register sequences at startup
-
-                            //hook.OnSequence(new Dictionary<Sequence, Action> {
-                            //    {
-                            //        Sequence.FromString(keyValStr),
-                            //        () => PerformShortcutCommand.Execute(null)
-                            //    }
-                            //});
-                        }
+                    if (Parent.IsCustomRoutingEnabled) {
+                        //only register/unregister shortcuts when NOT using custom routing
+                        // at this point if a shortcut changes its routing type, restart
+                        // will be required to change...
                     } else {
-                        //unregister if already exists
+                        if (IsSequence()) {
+                            if (MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+                                //only register sequences at startup
 
-                        Unregister();
-                        var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(keyValStr) };
-                        
-                        //KeysObservable = hook.KeyUpObservable().Matching(t).Subscribe(
-                        //    (trigger) => PerformShortcutCommand.Execute(null)
-                        //);
+                                hook.OnSequence(new Dictionary<Sequence, Action> {
+                                    {
+                                        Sequence.FromString(keyValStr),
+                                        () => PerformShortcutCommand.Execute(null)
+                                    }
+                                });
+                            }
+                        } else {
+                            //unregister if already exists
+
+                            Unregister();
+                            var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(keyValStr) };
+
+                            KeysObservable = hook.KeyUpObservable().Matching(t).Subscribe(
+                                (trigger) => PerformShortcutCommand.Execute(null)
+                            );
+                        }
                     }
+                    
                 }
                 catch (Exception ex) {
                     MpConsole.WriteLine("Error creating shortcut: " + ex.ToString());

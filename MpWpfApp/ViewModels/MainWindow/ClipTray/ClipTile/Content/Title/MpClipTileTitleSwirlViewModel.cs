@@ -20,67 +20,9 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public ObservableCollection<MpSwirlLayerViewModel> Swirls { get; set; } = new ObservableCollection<MpSwirlLayerViewModel>();
+        public ObservableCollection<string> HexColors { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<double> Opacities { get; set; } = new ObservableCollection<double>();
 
-        public MpSwirlLayerViewModel SwirlLayer0 {
-            get {
-                if(Swirls.Count <= 0) {
-                    return null;
-                }
-                return Swirls[0];
-            }
-            set {
-                if(Swirls.Count > 0 && Swirls[0] != value) {
-                    Swirls[0] = value;
-                    OnPropertyChanged(nameof(SwirlLayer0));
-                }
-            }
-        }
-
-        public MpSwirlLayerViewModel SwirlLayer1 {
-            get {
-                if (Swirls.Count <= 1) {
-                    return null;
-                }
-                return Swirls[1];
-            }
-            set {
-                if (Swirls.Count > 1 && Swirls[1] != value) {
-                    Swirls[1] = value;
-                    OnPropertyChanged(nameof(SwirlLayer1));
-                }
-            }
-        }
-
-        public MpSwirlLayerViewModel SwirlLayer2 {
-            get {
-                if (Swirls.Count <= 2) {
-                    return null;
-                }
-                return Swirls[2];
-            }
-            set {
-                if (Swirls.Count > 2 && Swirls[2] != value) {
-                    Swirls[2] = value;
-                    OnPropertyChanged(nameof(SwirlLayer2));
-                }
-            }
-        }
-
-        public MpSwirlLayerViewModel SwirlLayer3 {
-            get {
-                if (Swirls.Count <= 3) {
-                    return null;
-                }
-                return Swirls[3];
-            }
-            set {
-                if (Swirls.Count > 3 && Swirls[3] != value) {
-                    Swirls[3] = value;
-                    OnPropertyChanged(nameof(SwirlLayer3));
-                }
-            }
-        }
         #endregion
 
         #region Brushes
@@ -89,7 +31,6 @@ namespace MpWpfApp {
 
         #region State
 
-        public bool IsAnyBusy => IsBusy || Swirls.Any(x => x.IsBusy);
         public bool HasUserDefinedColor {
             get {
                 if(Parent == null || Parent.CopyItem == null || string.IsNullOrEmpty(Parent.CopyItem.ItemColor)) {
@@ -114,62 +55,34 @@ namespace MpWpfApp {
         }
 
         public async Task InitializeAsync() {
-            if(Parent.IsPlaceholder || IsBusy) {
-                return;
-            }
+            //if(Parent.IsPlaceholder || IsBusy) {
+            //    return;
+            //}
             IsBusy = true;
 
-            var icon = MpDb.GetItem<MpIcon>(Parent.IconId);
-
-            var pallete = new List<string>{
-                    icon.HexColor1,
-                    icon.HexColor3,
-                    icon.HexColor3,
-                    icon.HexColor4,
-                    icon.HexColor5
-                };
-
-            if (HasUserDefinedColor) {
-                pallete = Enumerable.Repeat(Parent.CopyItemHexColor, 5).ToList();
+            if(Parent.IconId > 0 && !HasUserDefinedColor) {                
+                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == Parent.IconId);
+                if(ivm == null) {
+                    var icon = await MpDb.GetItemAsync<MpIcon>(Parent.IconId);
+                    HexColors = new ObservableCollection<string>(icon.HexColors);
+                } else {
+                    HexColors = ivm.PrimaryIconColorList;
+                }                
+            } else if (HasUserDefinedColor) {
+                HexColors = new ObservableCollection<string>(Enumerable.Repeat(Parent.CopyItemHexColor, 5));
             } else {
                 var tagColors = await MpDataModelProvider.GetTagColorsForCopyItem(Parent.CopyItemId);
-                pallete.InsertRange(0, tagColors);
-            }
-            pallete = pallete.Take(5).ToList();
-
-            Swirls.Clear();
-
-            for (int i = 0; i < pallete.ToList().Count; i++) {
-                var scb = new SolidColorBrush(pallete[i].ToWinMediaColor());
-                MpSwirlLayerViewModel slvm = CreateSwirlLayerViewModel(i, scb);
-
-                Swirls.Add(slvm);
+                tagColors.ForEach(x => HexColors.Insert(0, x));
             }
 
-            OnPropertyChanged(nameof(SwirlLayer0));
-            OnPropertyChanged(nameof(SwirlLayer1));
-            OnPropertyChanged(nameof(SwirlLayer2));
-            OnPropertyChanged(nameof(SwirlLayer3));
+            if(HexColors.Count == 0) {
+                HexColors = new ObservableCollection<string>(Enumerable.Repeat(MpColorHelpers.GetRandomHexColor(), 5));
+            }
+            HexColors = new ObservableCollection<string>(HexColors.Take(5));
+            Opacities = new ObservableCollection<double>(Enumerable.Repeat((double)MpRandom.Rand.Next(40, 120) / 255, 5));
 
             IsBusy = false;
         }
-
-        private MpSwirlLayerViewModel CreateSwirlLayerViewModel(int layerId,SolidColorBrush b) {
-            var slvm = new MpSwirlLayerViewModel(
-                            this,
-                            layerId,
-                            b,
-                            (double)MpHelpers.Rand.Next(40, 120) / 255);
-            return slvm;
-
-        }
-
-        public override void Dispose() {
-            base.Dispose();
-        }
-        #endregion
-
-        #region Private Methods
 
         #endregion
     }

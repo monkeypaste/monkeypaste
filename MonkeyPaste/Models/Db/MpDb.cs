@@ -393,7 +393,8 @@ namespace MonkeyPaste {
 
             MpPreferences.ThisAppSourceId = 5;
             MpPreferences.ThisAppSource = await GetItemAsync<MpSource>(MpPreferences.ThisAppSourceId);
-            MpPreferences.ThisAppIcon = await GetItemAsync<MpIcon>(MpPreferences.ThisAppSource.App.IconId);
+            var thisAppApp = await MpDb.GetItemAsync<MpApp>(MpPreferences.ThisAppSource.AppId);
+            MpPreferences.ThisAppIcon = await GetItemAsync<MpIcon>(thisAppApp.IconId);
 
 
             MpPreferences.ThisOsFileManagerSource = await GetItemAsync<MpSource>(MpPreferences.ThisOsFileManagerSourceId);
@@ -606,7 +607,6 @@ namespace MonkeyPaste {
             await AddItemAsync<MpTag>(helpTag, "", true, true);
 
             #endregion
-
             
             #region Shortcuts
 
@@ -1033,11 +1033,11 @@ namespace MonkeyPaste {
             string thisAppPath = process.MainModule.FileName;
             string thisAppName = MpPreferences.ApplicationName;
             var thisApp = await MpApp.Create(thisAppPath, thisAppName, sourceIcon.Id);
-            var thisAppSource = await MpSource.Create(thisApp, null);
+            var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
             MpPreferences.ThisAppSourceId = thisAppSource.Id;
 
             var osApp = await MpApp.Create(MpPlatformWrapper.Services.OsInfo.OsFileManagerPath, MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
-            var osAppSource = await MpSource.Create(osApp, null);
+            var osAppSource = await MpSource.Create(osApp.Id, 0);
             MpPreferences.ThisOsFileManagerSourceId = osAppSource.Id;
 
             #endregion

@@ -20,6 +20,7 @@ using static OpenTK.Graphics.OpenGL.GL;
 using System.Windows.Documents;
 using System.Web.UI.WebControls;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel :
@@ -670,34 +671,38 @@ namespace MpWpfApp {
         public MpClipTrayViewModel() : base(null) { }
 
         public async Task Init() {
-            await MpHelpers.RunOnMainThreadAsync(() => {
-                IsBusy = true;
+            IsBusy = true;
 
-                PropertyChanged += MpClipTrayViewModel_PropertyChanged;
-                Items.CollectionChanged += Items_CollectionChanged;
+            while(MpSourceCollectionViewModel.Instance.IsAnyBusy) {
+                await Task.Delay(100);
+            }
 
-                MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
+            PropertyChanged += MpClipTrayViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
 
-                MpDb.SyncAdd += MpDbObject_SyncAdd;
-                MpDb.SyncUpdate += MpDbObject_SyncUpdate;
-                MpDb.SyncDelete += MpDbObject_SyncDelete;
+            MpDataModelProvider.AllFetchedAndSortedCopyItemIds.CollectionChanged += AllFetchedAndSortedCopyItemIds_CollectionChanged;
 
-                _pageSize = 1;
-                RemainingItemsCountThreshold = 1;
-                _oldMainWindowHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
-                //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
+            MpDb.SyncAdd += MpDbObject_SyncAdd;
+            MpDb.SyncUpdate += MpDbObject_SyncUpdate;
+            MpDb.SyncDelete += MpDbObject_SyncDelete;
 
-                MpMessenger.Register<MpMessageType>(
-                    MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
+            _pageSize = 1;
+            RemainingItemsCountThreshold = 1;
+            _oldMainWindowHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
+            //DefaultLoadCount = MpMeasurements.Instance.DefaultTotalVisibleClipTiles * 1 + 2;
 
-                MpMessenger.Register<MpMessageType>(
-                    nameof(MpDragDropManager), ReceivedDragDropManagerMessage);
+            MpMessenger.Register<MpMessageType>(
+                MpDataModelProvider.QueryInfo, ReceivedQueryInfoMessage);
 
-                MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
-                MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
+            MpMessenger.Register<MpMessageType>(
+                nameof(MpDragDropManager), ReceivedDragDropManagerMessage);
+                                   
 
-                IsBusy = false;
-            });
+            IsBusy = false;
+
+            
+
+
         }
 
         private void AllFetchedAndSortedCopyItemIds_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
@@ -772,7 +777,6 @@ namespace MpWpfApp {
             OnUiRefreshRequest?.Invoke(this, null);
         }
         #endregion      
-
         public async Task UpdateSortOrder(bool fromModel = false) {
             if (fromModel) {
                 //ClipTileViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
@@ -1380,27 +1384,45 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task OnPostMainWindowLoaded() {
-            while (IsBusy || MpTagTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
+        public async void OnPostMainWindowLoaded() {
+            //while (IsBusy || MpTagTrayViewModel.Instance.IsBusy) { await Task.Delay(100); }
 
 
-            if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
-                // this ensures this only gets called once
-                return;
-            }
-
-            int totalItems =  MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
-
-            //MpNotificationCollectionView.Instance.BindingContext.PostLoadedMessage =
-            //    $"Successfully loaded w/ {totalItems} items";
-
-            //while(MpSoundPlayerCollectionViewModel.Instance.IsVisible) {
-            //    await Task.Delay(100);
+            //if (!MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+            //    // this ensures this only gets called once
+            //    return;
             //}
+
+            //int totalItems =  MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
+
+            //MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
+            //MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
+
+            //await Task.Delay(3000);
+
+
+            int totalItems = MpTagTrayViewModel.Instance.AllTagViewModel.TagClipCount;
+
             MpSystemTrayViewModel.Instance.TotalItemCountLabel = string.Format(@"{0} total entries", totalItems);
             MpMainWindowViewModel.Instance.IsMainWindowLoading = false;
 
-            await Task.Delay(3000);
+
+            MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
+            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
+            //await Task.Delay(3000);
+
+            if (!string.IsNullOrEmpty(MpPreferences.LastQueryInfoJson)) {
+                var qi = JsonConvert.DeserializeObject<MpWpfQueryInfo>(MpPreferences.LastQueryInfoJson);
+                if (qi != null) {
+                    MpDataModelProvider.Init(qi);
+                }
+            }
+
+            while(IsAnyBusy) {
+                await Task.Delay(100);
+            }
+
+            QueryCommand.Execute(null);
 
             //MpNotificationCollectionView.Instance.CloseBalloon();
         }
@@ -1416,10 +1438,10 @@ namespace MpWpfApp {
                     break;
             }
 
-            if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+            //if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
                 
-                MpHelpers.RunOnMainThreadAsync(OnPostMainWindowLoaded);
-            }
+            //    MpHelpers.RunOnMainThreadAsync(OnPostMainWindowLoaded);
+            //}
         }
 
         private void ReceivedDragDropManagerMessage(MpMessageType msg) {
@@ -1986,9 +2008,8 @@ namespace MpWpfApp {
                 IsBusy = IsRequery = false;
                 sw.Stop();
                 MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
-            }, (offsetIdx_Or_ScrollOffset_Arg) => !IsAnyBusy && !IsRequery) {
-
-        };
+            }, 
+            (offsetIdx_Or_ScrollOffset_Arg) => !IsAnyBusy && !IsRequery);
 
         public ICommand FlipTileCommand => new RelayCommand<object>(
             async (tileToFlip) => {

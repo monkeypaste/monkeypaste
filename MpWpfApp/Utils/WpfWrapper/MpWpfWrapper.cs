@@ -39,7 +39,7 @@ namespace MpWpfApp {
 
             Cursor = new MpWpfCursor();
             DbInfo = new MpWpfDbInfo();
-            PreferenceIO = new MpWpfPreferences();
+            PreferenceIO = new MpWpfPreferences();            
             QueryInfo = new MpWpfQueryInfo();
             IconBuilder = new MpWpfIconBuilder();
             CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();

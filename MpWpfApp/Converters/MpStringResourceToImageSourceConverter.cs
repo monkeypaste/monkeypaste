@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Windows.Foundation.Collections;
-using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {

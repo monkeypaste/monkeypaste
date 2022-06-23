@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,7 +60,7 @@ namespace MonkeyPaste {
         RegEx
     }
 
-    public interface MpIQueryInfo {
+    public interface MpIQueryInfo : MpIJsonObject {
         public int TotalItemsInQuery { get; set; }
 
         public bool IsDescending { get;  set; }

@@ -114,8 +114,8 @@ namespace MpWpfApp {
                 if (processHandle == IntPtr.Zero) {
                     // since source is unknown set to this app
 
-                    processPath = MpPreferences.ThisAppSource.App.AppPath;
-                    appName = MpPreferences.ThisAppSource.App.AppName;
+                    processPath = Assembly.GetExecutingAssembly().Location;
+                    appName = MpPreferences.ThisAppName;
                     processIconImg64 = MpBase64Images.AppIcon;
                 } else {
                     processPath = MpProcessManager.GetProcessPath(processHandle);
@@ -157,7 +157,7 @@ namespace MpWpfApp {
                 if(url != null) {
                     await MpDb.AddOrUpdateAsync<MpUrl>(url);
                 }
-                var source = await MpSource.Create(app, url);
+                var source = await MpSource.Create(app.Id, url == null ? 0:url.Id);
                 var ci = await MpCopyItem.Create(
                     sourceId: source.Id,
                     //preferredFormatName: htmlClipboardData == null ? null : MpPortableDataFormats.Html,
