@@ -25,6 +25,10 @@ namespace MonkeyPaste.Common.Wpf {
             return new Rect(rect.Location.ToWpfPoint(), rect.Size.ToWpfSize());
         }
 
+        public static MpRect ToPortableRect(this Rect rect) {
+            return new MpRect(rect.Location.ToPortablePoint(), rect.Size.ToPortableSize());
+        }
+
         public static MpSize ToPortableSize(this Size size) {
             return new MpSize(size.Width, size.Height);
         }
@@ -55,7 +59,7 @@ namespace MonkeyPaste.Common.Wpf {
         //          pixels.GetLength(0) * pixels.GetLength(1) * sizeof(PixelColor),
         //          stride);
         //}
-        public static MpPoint ToMpPoint(this Point p) {
+        public static MpPoint ToPortablePoint(this Point p) {
             return new MpPoint(p.X, p.Y);
         }
         public static Point ToPoint(this MpPoint p) {

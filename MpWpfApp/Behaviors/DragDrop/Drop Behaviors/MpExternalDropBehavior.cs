@@ -151,36 +151,49 @@ namespace MpWpfApp {
             //MpConsole.WriteLine("Action: " + e.Action);
             //e.Handled = true;
             if (_wasReset) {
+                MpConsole.WriteLine("External drop reset");
                 _wasReset = false;
                 DragDrop.RemovePreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
                 e.Handled = true;
                 e.Action = DragAction.Cancel;
                 return;
             }  else if(MpShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                MpConsole.WriteLine("External drop L mouse button is down");
                 e.Action = DragAction.Continue; 
             } else {
-                MpHelpers.RunOnMainThread(async () => {
-                    e.Handled = true;
-                    e.Action = DragAction.Cancel;
-                    DragDrop.RemovePreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
+                MpConsole.WriteLine("External drop L mouse button is up");
+                if (IsPreExternalTemplateDrop) {
+                    MpHelpers.RunOnMainThread(async () => {
+                        e.Handled = true;
+                        e.Action = DragAction.Cancel;
+                        DragDrop.RemovePreviewQueryContinueDragHandler(AssociatedObject, OnQueryContinueDrag);
 
-                    var ctvm = MpClipTrayViewModel.Instance.SelectedItem;
-                    
-                    if(ctvm == null) {
-                        var dd = MpDragDropManager.DragData;
-                        Debugger.Break();
-                    }
-                    //MpDragDropManager.DragData as MpClipTileViewModel;
+                        var ctvm = MpClipTrayViewModel.Instance.SelectedItem;
 
-                    MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(true);
+                        if (ctvm == null) {
+                            var dd = MpDragDropManager.DragData;
+                            Debugger.Break();
+                        }
+                        //MpDragDropManager.DragData as MpClipTileViewModel;
 
-                    MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(mpdo);
+                        MpPortableDataObject mpdo = await ctvm.ConvertToPortableDataObject(true);
 
-                    while(MpClipTrayViewModel.Instance.SelectedItem.IsPasting) {
-                        await Task.Delay(100);
-                    }
-                    Reset();
-                });
+                        if(mpdo == null) {
+                            // template paste was canceled
+                            Reset();
+                            return;
+                        }
+
+                        MpClipTrayViewModel.Instance.PasteSelectedClipsCommand.Execute(mpdo);
+
+                        while (MpClipTrayViewModel.Instance.SelectedItem.IsPasting) {
+                            await Task.Delay(100);
+                        }
+                        Reset();
+                    });
+                } else {
+                    e.Action = DragAction.Drop;
+                }                
             }
         }
 

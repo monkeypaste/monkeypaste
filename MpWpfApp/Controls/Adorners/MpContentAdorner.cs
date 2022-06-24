@@ -150,7 +150,7 @@ namespace MpWpfApp {
 
         #region Overrides
         protected override void OnRender(DrawingContext dc) {
-            if (IsShowing) {
+            if (IsShowing) { 
                 Visibility = Visibility.Visible;
 
                 if (IsDebugMode) {
@@ -193,12 +193,7 @@ namespace MpWpfApp {
             }
             brush = brush == null ? Brushes.Transparent : brush;
 
-            var rtb_rect = fe.Bounds();
             if (dropShape is MpLine dl) {
-                if (!rtb_rect.Contains(dl.P1.ToWpfPoint()) || !rtb_rect.Contains(dl.P2.ToWpfPoint())) {
-                    return;
-                }
-
                 dc.DrawLine(
                     pen,
                     dl.P1.ToWpfPoint(),
@@ -219,6 +214,7 @@ namespace MpWpfApp {
         }
 
         private void DrawHighlightShapes(DrawingContext dc) {
+
             var rtb = AdornedElement as RichTextBox;
             if (rtb == null) {
                 return;
@@ -230,6 +226,10 @@ namespace MpWpfApp {
 
             foreach(var kvp in dropShapes) {
                 foreach(MpRect rect in kvp.Value) {
+                    if(rect.Points.Any(x=>!x.X.IsNumber() || !x.Y.IsNumber())) {
+                        // this seems to occur when flow doc has templates
+                        continue;
+                    }
                     //rect.Location = rtb.TranslatePoint(rect.Location.ToWpfPoint(), sv).ToMpPoint();
                     DrawShape(
                         dc,
@@ -262,7 +262,7 @@ namespace MpWpfApp {
                 // this ensures the line doesn't jump when run is wrapped
                 p2.Y = p1.Y;
                 lineStartPointer = lineEndPointer.GetLineStartPosition(1);
-                DrawShape(dc, new MpLine(p1.ToMpPoint(), p2.ToMpPoint()), pen);
+                DrawShape(dc, new MpLine(p1.ToPortablePoint(), p2.ToPortablePoint()), pen);
             }
         }
 

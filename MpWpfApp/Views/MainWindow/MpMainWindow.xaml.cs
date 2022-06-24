@@ -17,6 +17,7 @@ namespace MpWpfApp {
         public MpMainWindow() {
             sw = new Stopwatch();
             sw.Start();
+            WindowStyle = WindowStyle.None;
             InitializeComponent();
         }
 
@@ -99,7 +100,8 @@ namespace MpWpfApp {
         }
 
         private void MainWindow_Deactivated(object sender, EventArgs e) {
-          if(!MpProcessManager.IsHandleChildOfMainWindow(MpProcessManager.LastHandle)) {
+            MpMainWindowViewModel.Instance.IsMainWindowActive = false;
+            if (!MpProcessManager.IsHandleChildOfMainWindow(MpProcessManager.LastHandle)) {
                 MpMainWindowViewModel.Instance.HideWindowCommand.Execute(null);
           }            
         }
@@ -126,6 +128,13 @@ namespace MpWpfApp {
             e.Handled = true;
             var bb = sender as ButtonBase;
             bb.Command.Execute(bb.CommandParameter);
+        }
+
+        private void MainWindow_Activated(object sender, EventArgs e) {
+            //if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
+            //    return;
+            //}
+            MpMainWindowViewModel.Instance.IsMainWindowActive = true;
         }
     }
 }

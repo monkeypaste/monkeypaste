@@ -115,6 +115,15 @@ namespace MpWpfApp {
         #region Toolbar Events
 
         public void CurrentRtb_SelectionChanged(object sender, RoutedEventArgs e) {
+            if(Rtb.Selection.GetAllTextElements().Any(x => x is MpTextTemplateInlineUIContainer)) {
+                // BUG FIX
+                // For some reason when extending selection with fixed end (so towards doc head) and selection hits line 
+                // with text template the selection end will jump to current start to right before a template so ignore for now
+
+                // TODO When selection is entirely 1 template need to populate toolbar w/ template formating info and allow changing
+                return;
+            }
+
             var fontFamily = Rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
             FontFamilyCombo.SelectedItem = fontFamily;
 
@@ -174,7 +183,7 @@ namespace MpWpfApp {
             CenterButton.IsChecked = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
             RightButton.IsChecked = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
 
-            AddTemplateButton.IsEnabled = CanAddTemplate(Rtb.Selection);
+            //AddTemplateButton.IsEnabled = CanAddTemplate(Rtb.Selection);
 
             object bgBrushObj = Rtb.Selection.GetPropertyValue(TextElement.BackgroundProperty);
             if (bgBrushObj is Brush bgBrush) {
@@ -191,38 +200,6 @@ namespace MpWpfApp {
             }
 
             Rtb.FitDocToRtb();
-        }
-
-        private bool CanAddTemplate(TextSelection ts) {
-            if (Rtb == null) {
-                return false;
-            }
-            //disable add template button if:
-            //-current selection intersects with a template
-            //-contains a space
-            //-contains more than 10 characters
-            bool canAddTemplate = true;
-
-            if (Rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
-               Rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-                MpTextTemplateViewModelBase thlvm = null;
-                if (((TextElement)Rtb.Selection.Start.Parent).DataContext != null && ((TextElement)Rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModelBase)) {
-                    thlvm = (MpTextTemplateViewModelBase)((TextElement)Rtb.Selection.Start.Parent).DataContext;
-                } else if (((TextElement)Rtb.Selection.End.Parent).DataContext != null && ((TextElement)Rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTextTemplateViewModelBase)) {
-                    thlvm = (MpTextTemplateViewModelBase)((TextElement)Rtb.Selection.End.Parent).DataContext;
-                }
-                canAddTemplate = thlvm == null;
-            }
-
-            //if(canAddTemplate) {
-            //    canAddTemplate = !ts.Text.Contains(" ");
-            //}
-
-            //if(canAddTemplate) {
-            //    canAddTemplate = ts.Text.Length <= MonkeyPaste.MpPreferences.MaxTemplateTextLength;
-            //}
-
-            return canAddTemplate;
         }
 
         private void FontFamilyCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {

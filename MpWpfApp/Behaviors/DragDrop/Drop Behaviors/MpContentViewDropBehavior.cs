@@ -492,9 +492,12 @@ namespace MpWpfApp {
             if (!MpDragDropManager.IsDragAndDrop || 
                !(AssociatedObject.DataContext as MpClipTileViewModel).IsItemDragging) {
                 // these checks make sure selection isn't cleared during self drop
-                //rtb.FitDocToRtb();
+                
                 var rtb = AssociatedObject.Rtb;
-                rtb.ScrollToHome();
+                if(rtb.IsReadOnly) {
+                    rtb.ScrollToHome();
+                }
+                
                 if(rtb.Document == null) {
                     return;
                 }

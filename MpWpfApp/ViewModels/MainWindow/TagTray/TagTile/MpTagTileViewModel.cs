@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Collections.ObjectModel;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : 
@@ -717,6 +718,12 @@ namespace MpWpfApp {
             return false;
         }
 
+        public void NotifyAllTagItemLinked(MpCopyItem ci) { 
+            if(!IsAllTag) {
+                Debugger.Break();
+            }
+            OnCopyItemLinked?.Invoke(this, ci);
+        }
 
         public override void Dispose() {
             base.Dispose();

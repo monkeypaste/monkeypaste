@@ -181,6 +181,7 @@ namespace MpWpfApp {
                     return string.Empty;
                 }
                 if(Parent.Parent.IsPastingTemplate &&
+                    IsEnabled &&
                     HasText) {
                     return TemplateText;
                 }

@@ -1047,6 +1047,15 @@ namespace MonkeyPaste {
             }
         }
 
+        public static bool SearchByWholeWord {
+            get {
+                return Default.Get(nameof(SearchByWholeWord), false);
+            }
+            set {
+                Default.Set(nameof(SearchByWholeWord), value);
+            }
+        }
+
         public static bool SearchByContent {
             get {
                 return Default.Get(nameof(SearchByContent), false);

@@ -122,6 +122,7 @@ namespace MpWpfApp {
 
         public virtual void Reset() {
             ClearHighlighting();
+            _matches.Clear();
             //ReplaceDocumentsBgColors();
         }
 
@@ -133,7 +134,14 @@ namespace MpWpfApp {
             }
             string st = MpDataModelProvider.QueryInfo.SearchText;
 
-            _matches = ContentRange.Start.FindAllText(ContentRange.End, st, MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)).ToList();
+            var fd = ContentRange.Start.Parent.FindParentOfType<FlowDocument>();
+
+            //_matches = ContentRange.Start.FindAllText(ContentRange.End, st, MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)).ToList();
+            bool isCaseSensitive = MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive);
+            bool isWholeWord = MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.WholeWord);
+            bool isRegEx = MpDataModelProvider.QueryInfo.FilterFlags.HasFlag(MpContentFilterType.Regex);
+            _matches = fd.FindText(st,isCaseSensitive,isWholeWord,isRegEx).ToList();
+
             SelectedIdx = -1;
 
             if (_matches.Count > 1) {

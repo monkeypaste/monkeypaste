@@ -131,6 +131,32 @@ using stdole;
             get => MpContentDocumentRtfExtension.GetSelectionFormat(this);
         }
 
+        public IEnumerable<MpTextTemplateViewModelBase> SelectedTextTemplateViewModels {
+            get {
+                if(!IsPastingTemplate) {
+                    return new List<MpTextTemplateViewModelBase>();
+                }
+
+                if(string.IsNullOrEmpty(SelectedPlainText)) {
+                    // when selection is empty give em all
+                    return TemplateCollection.Items;
+                }
+
+                var tvml = new List<MpTextTemplateViewModelBase>();
+                string spt = SelectedPlainText;
+
+                var mc = MpRegEx.RegExLookup[MpRegExType.Guid].Matches(SelectedPlainText);
+
+                foreach (Match m in mc) {
+                    var tvm = TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateGuid == m.Value);
+                    if (tvm != null) {
+                        tvml.Add(tvm);
+                    }
+                }
+                return tvml.Distinct();
+            }
+        }
+
         #endregion
 
         #region MpIUserColorViewModel Implementation
@@ -272,7 +298,7 @@ using stdole;
             }
             _rtbHighligher.Reset();
             if (HasMatch) {
-                _rtbHighligher.InitHighlighting(_matches);
+                _rtbHighligher.InitLocalHighlighting(_matches);
                 FindNextCommand.Execute(null);
             }
             OnPropertyChanged(nameof(IsFindValid));
@@ -977,6 +1003,7 @@ using stdole;
 
         public bool IsPastingTemplate => IsPasting && HasTemplates;
 
+        public bool IsPastingUserInputTemplate => IsPastingTemplate && SelectedTextTemplateViewModels.Any(x => x.IsInputRequiredForPaste);
 
         public bool HasTemplates {
             get {
@@ -1487,9 +1514,6 @@ using stdole;
         public void RequestMerge() {
             OnMergeRequest?.Invoke(this, null);
         }
-        public void RequestUiReset() {
-            OnUiResetRequest?.Invoke(this, IsSelected);
-        }
 
         public void RequestClearHyperlinks() {
             OnClearTemplatesRequest?.Invoke(this, null);
@@ -1531,17 +1555,13 @@ using stdole;
             string pt = string.Empty;
             string bmpBase64 = string.Empty;
             var sctfl = new List<string>();
-            IEnumerable<MpTextTemplateViewModelBase> templatesToFill = null;
-
+            
             bool isSelectionEmpty = string.IsNullOrEmpty(SelectedPlainText);
             bool needsTemplateData = fillTempalates && HasTemplates;
+
             if(needsTemplateData) {
-                if (isSelectionEmpty) {
-                    templatesToFill = TemplateCollection.Items;
-                } else {
-                    templatesToFill = GetSelectedTextTemplateViewModels();
-                }
-                needsTemplateData = templatesToFill != null && templatesToFill.Count() > 0;
+                IsPasting = true;
+                needsTemplateData = SelectedTextTemplateViewModels.Count() > 0;
             }
             if (needsTemplateData) {
                 IsSelected = true;
@@ -1559,18 +1579,27 @@ using stdole;
                     Application.Current.MainWindow.Top = 0;
                 }
                 IsSelected = true;
+                
+                await Task.Delay(MpClipTrayViewModel.DISABLE_READ_ONLY_DELAY_MS);
                 IsContentReadOnly = false;
-                IsPasting = true;
 
                 TemplateRichText = null;
-                
-                            
-                TemplateCollection.BeginPasteTemplateCommand.Execute(templatesToFill);
+                                            
+                TemplateCollection.BeginPasteTemplateCommand.Execute(null);
+                bool wasCanceled = false;
                 await Task.Run(async () => {
                     while (string.IsNullOrEmpty(TemplateRichText)) {
+                        if(IsContentReadOnly) {
+                            wasCanceled = true;
+                            break;
+                        }
                         await Task.Delay(100);
                     }
                 });
+                if(wasCanceled) {
+                    Parent.CleanupAfterPaste(this);
+                    return null;
+                }
 
                 rtf = TemplateRichText;
                 
@@ -1722,20 +1751,7 @@ using stdole;
         #endregion
 
         
-        public IEnumerable<MpTextTemplateViewModelBase> GetSelectedTextTemplateViewModels() {
-            var tvml = new List<MpTextTemplateViewModelBase>();
-            string spt = SelectedPlainText;
-
-            var mc = MpRegEx.RegExLookup[MpRegExType.Guid].Matches(SelectedPlainText);
-
-            foreach(Match m in mc) {
-                var tvm = TemplateCollection.Items.FirstOrDefault(x => x.TextTemplateGuid == m.Value);
-                if (tvm != null) {
-                    tvml.Add(tvm);
-                }
-            }
-            return tvml.Distinct();
-        }
+        
         #endregion
 
         #region Protected Methods
@@ -1956,9 +1972,7 @@ using stdole;
                             MpContentDocumentRtfExtension.SelectAll(this);
                         }
 
-                        if(GetSelectedTextTemplateViewModels() != null) {
-                            TemplateCollection.ClearAllEditing();
-                        }
+                        TemplateCollection.ClearAllEditing();
                     } else {
                         StopAnimation();
                     }

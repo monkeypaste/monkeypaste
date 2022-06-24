@@ -1071,7 +1071,7 @@ namespace MpWpfApp {
                                          label: GetUniqueActionName(at.ToString()),
                                          parentId: ActionId,
                                          sortOrderIdx: Items.Count,
-                                         location: Parent.FindOpenDesignerLocation(Location).ToMpPoint());
+                                         location: Parent.FindOpenDesignerLocation(Location).ToPortablePoint());
 
                  var navm = await CreateActionViewModel(na);
 

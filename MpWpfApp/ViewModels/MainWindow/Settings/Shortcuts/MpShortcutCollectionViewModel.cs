@@ -61,7 +61,23 @@ namespace MpWpfApp {
         public Point GlobalMouseLocation { get; private set; }
         public bool GlobalIsMouseLeftButtonDown { get; private set; } = false;
 
-        public bool IsCustomRoutingEnabled { get; set; } = false;
+        public bool ForceDisableCustomRouting { get; set; } = true;
+
+        private bool _isCustomRoutingEnabled;
+        public bool IsCustomRoutingEnabled {
+            get {
+                if(ForceDisableCustomRouting) {
+                    return false;
+                }
+                return _isCustomRoutingEnabled;
+            }
+            set {
+                if(_isCustomRoutingEnabled != value) {
+                    _isCustomRoutingEnabled = value;
+                    OnPropertyChanged(nameof(IsCustomRoutingEnabled));
+                }
+            }
+        }
 
         #endregion
 
@@ -575,7 +591,7 @@ namespace MpWpfApp {
         #region Global Key Handlers
 
         private void GlobalHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-            if (MpAssignHotkeyModalWindow.IsOpen && IsCustomRoutingEnabled) {
+             if (MpAssignHotkeyModalWindow.IsOpen && IsCustomRoutingEnabled) {
                 return;
             }
 
@@ -591,8 +607,17 @@ namespace MpWpfApp {
                 GlobalIsCtrlDown = true;
             }
 
+            if (e.KeyCode == System.Windows.Forms.Keys.Escape) {
+                if (MpDragDropManager.IsDragAndDrop) {
+                    _keyboardGestureHelper.Reset();
+                    //e.SuppressKeyPress = true;
+                    GlobalEscKeyPressed?.Invoke(this, null);
+                    return;
+                }
+            }
+
             if (IsCustomRoutingEnabled) {
-                HandleGestureRouting_Down(ref e);
+                 HandleGestureRouting_Down(ref e);
             }            
         }
 
@@ -629,15 +654,6 @@ namespace MpWpfApp {
         #endregion
 
         private void HandleGestureRouting_Down(ref System.Windows.Forms.KeyEventArgs e) {
-            if (e.KeyCode == System.Windows.Forms.Keys.Escape) {
-                if (MpDragDropManager.IsDragAndDrop) {
-                    _keyboardGestureHelper.Reset();
-                    e.SuppressKeyPress = true;
-                    GlobalEscKeyPressed?.Invoke(this, null);
-                    return;
-                }
-            }
-
             var wpfKey = MpWpfKeyboardInputHelpers.WinformsToWPFKey(e.KeyCode);
             _keyboardGestureHelper.AddKeyDown(wpfKey);
 

@@ -489,7 +489,7 @@ namespace MpWpfApp {
                          actionType: MpActionType.Trigger,
                          actionObjId: (int)tt,
                          sortOrderIdx: Items.Count,
-                         location: DefaultTriggerLocation.ToMpPoint());
+                         location: DefaultTriggerLocation.ToPortablePoint());
 
                  var navm = await CreateTriggerViewModel(na);
 

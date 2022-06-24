@@ -77,9 +77,16 @@ namespace MpWpfApp {
             var idsSeen = new List<int>();
             foreach (int ciid in _copyItemIdsNeedingView.ToList()) {
                 var civm = MpClipTrayViewModel.Instance.GetClipTileViewModelById(ciid);
-                if (civm != null && civm.IsVisible && AssociatedObject.BindingContext.IsSelected) {
-                    idsSeen.Add(ciid);
+                if(civm != null) {
+                    if (civm.IsPinned) {
+                        // only mark item as seen if viewed in its query tray
+                        continue;
+                    }
+                    if (civm.IsVisible && AssociatedObject.BindingContext.IsSelected) {
+                        idsSeen.Add(ciid);
+                    }
                 }
+                
             }
             int idsToRemoveCount = idsSeen.Count;
             while (idsToRemoveCount > 0) {

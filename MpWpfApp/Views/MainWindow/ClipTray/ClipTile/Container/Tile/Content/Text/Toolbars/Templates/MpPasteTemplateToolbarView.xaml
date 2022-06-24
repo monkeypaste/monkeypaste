@@ -145,6 +145,8 @@
                                 Grid.Column="0"
                                 Margin="0,3,0,3"
                                 HorizontalAlignment="Center"
+                                Visibility="{Binding HasInputTemplates,
+                                                     Converter={StaticResource BoolToVisibilityConverter}}"
                                 Background="{Binding SelectedItem.TemplateHexColor,
                                                      Converter={StaticResource StringHexToBrushConverter}}"
                                 CornerRadius="5">
@@ -152,7 +154,7 @@
                           MinWidth="100"
                           HorizontalContentAlignment="Left"
                           VerticalContentAlignment="Center"
-                          Background="Transparent"
+                          Background="Transparent"                          
                           FontSize="14"
                           IsDropDownOpen="{Binding IsAnyDropDownOpen,
                                                    Source={x:Static local:MpMainWindowViewModel.Instance},

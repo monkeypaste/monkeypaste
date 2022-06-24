@@ -98,6 +98,11 @@ namespace MpWpfApp {
                             MpContentFilterType.CaseSensitive),
                         new MpSearchFilterViewModel(
                             this,
+                            "Whole Word",
+                            nameof(MpPreferences.SearchByWholeWord),
+                            MpContentFilterType.WholeWord),
+                        new MpSearchFilterViewModel(
+                            this,
                             "Regular Expression",
                             nameof(MpPreferences.SearchByRegex),
                             MpContentFilterType.Regex)

@@ -135,7 +135,6 @@ namespace MpWpfApp {
                     if(BindingContext == null) {
                         return;
                     }
-                    Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
                     BindingContext.IsItemDragging = false;
                     break;
             }
@@ -226,6 +225,17 @@ namespace MpWpfApp {
                 BindingContext.OnPropertyChanged(nameof(BindingContext.SelectedTextHexColor));
             }
 
+            if (BindingContext.IsPasting && Mouse.LeftButton == MouseButtonState.Released && Mouse.RightButton == MouseButtonState.Released) {
+                 // only trigger this for keyboard selection change
+
+                // this signals the template collection of pastable templates and is expensive if trigger while drag selecting
+                // so only signal when mouse up (or if by keyboard which shouldn't be as expensive?)
+                MpMessenger.Send<MpMessageType>(MpMessageType.ContentSelectionChangeEnd, BindingContext);
+            }
+            
+            
+            
+
             //MpConsole.WriteLine(BindingContext.ToString() + " Selection Changed");
             //MpConsole.WriteLine($"Selection Start: {BindingContext.SelectionStart} Length: {BindingContext.SelectionLength}");
             //MpConsole.WriteLine($"Selected Plain Text: '{BindingContext.SelectedPlainText}'");
@@ -307,29 +317,6 @@ namespace MpWpfApp {
         }
 
         private void Rtb_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            //if (e.OldValue != null && e.OldValue is MpContentItemViewModel ocivm) {
-            //    ocivm.OnUiResetRequest -= Rtbivm_OnRtbResetRequest;
-            //    ocivm.OnScrollWheelRequest -= Rtbivm_OnScrollWheelRequest;
-            //    ocivm.OnUiUpdateRequest -= Rtbivm_OnUiUpdateRequest;
-            //    ocivm.OnSyncModels -= Rtbivm_OnSyncModels;
-            //    ocivm.OnFitContentRequest -= Ncivm_OnFitContentRequest;
-            //    ocivm.OnMergeRequest -= Ncivm_OnMergeRequest;
-            //}
-            //if (e.NewValue != null && e.NewValue is MpContentItemViewModel ncivm) {
-            //    if (!ncivm.IsPlaceholder) {
-            //        ncivm.OnMergeRequest += Ncivm_OnMergeRequest;
-            //        ncivm.OnUiResetRequest += Rtbivm_OnRtbResetRequest;
-            //        ncivm.OnScrollWheelRequest += Rtbivm_OnScrollWheelRequest;
-            //        ncivm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
-            //        ncivm.OnSyncModels += Rtbivm_OnSyncModels;
-            //        ncivm.OnFitContentRequest += Ncivm_OnFitContentRequest;
-            //        if(e.OldValue != null) {
-            //            MpHelpers.RunOnMainThread(async () => {
-            //                await CreateHyperlinksAsync(CTS.Token);
-            //            });
-            //        }
-            //    }
-            //}
             if (e.NewValue is MpClipTileViewModel ctvm) {
                 ctvm.OnUiUpdateRequest += Rtbivm_OnUiUpdateRequest;
             }
@@ -927,5 +914,13 @@ namespace MpWpfApp {
 
         #endregion
 
+        private void Rtb_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            e.Handled = false;
+            if (BindingContext.IsPasting) {
+                // this signals the template collection of pastable templates and is expensive if trigger while drag selecting
+                // so only signal when mouse up (or if by keyboard which shouldn't be as expensive?)
+                MpMessenger.Send<MpMessageType>(MpMessageType.ContentSelectionChangeEnd, BindingContext);
+            }
+        }
     }
 }

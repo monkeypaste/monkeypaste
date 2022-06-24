@@ -32,7 +32,8 @@ namespace MonkeyPaste {
         Regex = 1024,
         Content = 2048,
         UrlTitle = 4096,
-        Time = 8192
+        Time = 8192,
+        WholeWord = 16384
     }
 
     [Flags]

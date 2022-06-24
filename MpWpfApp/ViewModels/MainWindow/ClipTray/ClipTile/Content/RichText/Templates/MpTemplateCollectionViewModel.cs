@@ -58,15 +58,22 @@ namespace MpWpfApp {
         //    }
         //}
 
-
-
-        public ObservableCollection<MpTextTemplateViewModelBase> PastableItems { get; set; } = new ObservableCollection<MpTextTemplateViewModelBase>();
+        public IEnumerable<MpTextTemplateViewModelBase> PastableItems {
+            get {
+                if(Parent == null) {
+                    return new ObservableCollection<MpTextTemplateViewModelBase>();
+                }
+                return Parent.SelectedTextTemplateViewModels;
+            }
+        }
 
         public IEnumerable<MpTextTemplateViewModelBase> PastableItemsNeedingInput => PastableItems.Where(x => x.IsInputRequiredForPaste);
         #endregion
 
         #region Business Logic Properties
         public bool HasMultipleTemplates => Items.Where(x=>x.IsEnabled).Count() > 1;
+
+        public bool HasInputTemplates => PastableItemsNeedingInput.Count() > 0;
 
         public string PasteButtonText => IsAllTemplatesFilled ? "PASTE" : "CONTINUE";
 
@@ -88,7 +95,8 @@ namespace MpWpfApp {
         #region Constructors
         public MpTemplateCollectionViewModel() : base(null) { }
 
-        public MpTemplateCollectionViewModel(MpClipTileViewModel ctvm) : base(ctvm) { }
+        public MpTemplateCollectionViewModel(MpClipTileViewModel ctvm) : base(ctvm) {
+        }
 
         #endregion
 
@@ -128,7 +136,7 @@ namespace MpWpfApp {
         }
 
         public void Reset() {
-            PastableItems.Clear();
+            //PastableItems.Clear();
             foreach (var thlvm in Items) {
                 thlvm.Reset();
             }
@@ -218,6 +226,17 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        private void ReceivedRtbContentViewMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.ContentSelectionChangeEnd:
+                    if(Parent.IsPasting) {
+                        Parent.OnPropertyChanged(nameof(Parent.IsPastingUserInputTemplate));
+                        BeginPasteTemplateCommand.Execute("Selection Changed");
+                    }
+                    break;
+            }
+        }
+
         public string GetTemplateTypeIconResourceStr(MpTextTemplateType templateType) {
             switch (templateType) {
                 case MpTextTemplateType.Contact:
@@ -332,14 +351,29 @@ namespace MpWpfApp {
 
         public ICommand BeginPasteTemplateCommand => new RelayCommand<object>(
             (args) => {
-                if(args is IEnumerable<MpTextTemplateViewModelBase> pastableItems) {
-                    PastableItems = new ObservableCollection<MpTextTemplateViewModelBase>(pastableItems);
-                    OnPropertyChanged(nameof(PastableItemsNeedingInput));
-                    OnPropertyChanged(nameof(Items));
-                    OnPropertyChanged(nameof(HasMultipleTemplates));
+                bool isFromSelectionChanged = args != null;
+                if(!isFromSelectionChanged) {
+                    // only happens on initial template paste
 
-                    MpTextTemplateViewModelBase templateToSelect = null;
-                    foreach(var tvm in PastableItems) {
+                    var rtbcv = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>().FirstOrDefault(x => x.DataContext == Parent);
+                    if (rtbcv == null) {
+                        Debugger.Break();
+                    }
+                    MpMessenger.Register<MpMessageType>(rtbcv, ReceivedRtbContentViewMessage, Parent);
+                }
+
+                //PastableItems = new ObservableCollection<MpTextTemplateViewModelBase>(pastableItems);
+                OnPropertyChanged(nameof(PastableItems));
+                OnPropertyChanged(nameof(PastableItemsNeedingInput));
+                OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(HasMultipleTemplates));
+                OnPropertyChanged(nameof(HasInputTemplates));
+                Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsEnabled)));
+
+                MpTextTemplateViewModelBase templateToSelect = null;
+                foreach (var tvm in Items) {
+                    if(PastableItems.Contains(tvm)) {
+                        // find selection and/or populate auto-fill templates
                         if (tvm.IsInputRequiredForPaste) {
                             if (templateToSelect == null) {
                                 templateToSelect = tvm;
@@ -347,14 +381,23 @@ namespace MpWpfApp {
                             continue;
                         }
                         tvm.FillAutoTemplate();
-
-                    }
-                    if(templateToSelect != null) {
-                        SelectedItem = templateToSelect;
-                        SelectedItem.IsPasteTextBoxFocused = true;
-                    }
+                    } else {
+                        // toggle display value so its somewhat clear unselected isn't being filled
+                        tvm.OnPropertyChanged(nameof(tvm.TemplateDisplayValue));
+                    }                    
                 }
-                
+                if(templateToSelect == null) {
+                    //all templates are automatic 
+                    if(!isFromSelectionChanged) {
+                        // only trigger paste if all automatic and from initial call
+                        FinishPasteTemplateCommand.Execute(null);
+                    }
+                } else {
+                    SelectedItem = templateToSelect;
+                    if(!isFromSelectionChanged) {
+                        SelectedItem.IsPasteTextBoxFocused = true;
+                    }                    
+                }
             });
 
         public ICommand FinishPasteTemplateCommand => new RelayCommand(
@@ -364,6 +407,7 @@ namespace MpWpfApp {
                 if(cv == null) {
                     Debugger.Break();
                 }
+                MpMessenger.Unregister<MpMessageType>(cv, ReceivedRtbContentViewMessage);
 
                 Parent.IsBusy = true;
                 EventHandler hideEvent = null;

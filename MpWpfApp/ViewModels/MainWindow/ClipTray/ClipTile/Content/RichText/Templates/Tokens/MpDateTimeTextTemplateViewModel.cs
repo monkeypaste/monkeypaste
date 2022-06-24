@@ -91,6 +91,7 @@ namespace MpWpfApp {
 
         public override void FillAutoTemplate() {
             TemplateText = DateTime.Now.ToString(TemplateData);
+            OnPropertyChanged(nameof(TemplateDisplayValue));
         }
 
         #endregion

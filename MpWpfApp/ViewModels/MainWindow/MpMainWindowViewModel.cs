@@ -109,6 +109,8 @@ namespace MpWpfApp {
 
         public bool IsShowingDialog { get; set; } = false;
 
+        public bool IsMainWindowActive { get; set; }
+
         #endregion
 
         #region Layout
@@ -137,6 +139,19 @@ namespace MpWpfApp {
         public double MainWindowHeight { get; set; } = MpMeasurements.Instance.MainWindowDefaultHeight;
 
         public double MainWindowTop { get; set; } = MpMeasurements.Instance.WorkAreaBottom;
+
+        #endregion
+
+        #region Appearance
+
+        public string TitleBarBackgroundHexColor {
+            get {
+                if(IsMainWindowActive) {
+                    return MpSystemColors.goldenrod.AdjustAlpha(0.7);
+                }
+                return MpSystemColors.gainsboro.AdjustAlpha(0.7);
+            }
+        }
 
         #endregion
 
@@ -314,13 +329,21 @@ namespace MpWpfApp {
 
         public ICommand ShowWindowCommand => new RelayCommand(
             async () => {
+                if (Application.Current.MainWindow is MpMainWindow) {
+                    // thats good do nothing
+                } else {
+                    return;
+                }
+
                 IsMainWindowOpening = true;
 
                 //Ss = MpHelpers.CopyScreen();
                 //MpHelpers.WriteBitmapSourceToFile(@"C:\Users\tkefauver\Desktop\ss.png", Ss);
+                
 
                 MpMessenger.SendGlobal<MpMessageType>(MpMessageType.MainWindowOpening);
 
+                
                 var mw = (MpMainWindow)Application.Current.MainWindow;
                 while(mw == null) {
                     await Task.Delay(100);

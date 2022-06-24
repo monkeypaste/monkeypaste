@@ -26,7 +26,7 @@ namespace HexColorFormatter {
             var trl = new List<TextRange>();
 
             foreach (Match m in mc) {
-                var tr = tp.FindText(fd.ContentEnd, m.Value, MpWpfRichDocumentExtensions.FindFlags.None);
+                var tr = tp.FindText(fd.ContentEnd, m.Value);
                 if(tr == null) {
                     break;
                 }

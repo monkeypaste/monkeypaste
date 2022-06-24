@@ -47,7 +47,14 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Constants
+
+        public const int DISABLE_READ_ONLY_DELAY_MS = 500;
+
+        #endregion
+
         #region Properties
+
 
         #region View Models
 
@@ -1119,6 +1126,23 @@ namespace MpWpfApp {
             _scrollOffset = LastScrollOffset = newOffset;
             OnPropertyChanged(nameof(ScrollOffset));
         }
+
+
+        public void CleanupAfterPaste(MpClipTileViewModel sctvm) {
+            IsPasting = false;
+            //clean up pasted items state after paste
+
+            sctvm.IsPasting = false;
+            if (sctvm.HasTemplates) {
+                sctvm.ClearEditing();
+                sctvm.TemplateCollection.Reset();
+                sctvm.TemplateRichText = string.Empty;
+                //sctvm.RequestUiUpdate();
+                //sctvm.RequestScrollToHome();
+            }
+
+        }
+
         #endregion
 
         #region Db Events
@@ -1289,21 +1313,6 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private void CleanupAfterPaste(MpClipTileViewModel sctvm) {
-            IsPasting = false;
-            //clean up pasted items state after paste
-
-            sctvm.IsPasting = false;
-            if (sctvm.HasTemplates) {                
-                sctvm.ClearEditing();
-                sctvm.TemplateCollection.Reset();
-                sctvm.TemplateRichText = string.Empty;
-                sctvm.RequestUiReset();
-                sctvm.RequestUiUpdate();
-                sctvm.RequestScrollToHome();
-            }
-
-        }
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(IsTrayEmpty));
@@ -1617,6 +1626,9 @@ namespace MpWpfApp {
             IsAddingClipboardItem = false;
 
             OnCopyItemAdd?.Invoke(this, newCopyItem);
+
+            MpTagTrayViewModel.Instance.AllTagViewModel.NotifyAllTagItemLinked(newCopyItem);
+
             totalAddSw.Stop();
             MpConsole.WriteLine("Time to create new copyitem: " + totalAddSw.ElapsedMilliseconds + " ms");
 
@@ -2298,6 +2310,10 @@ namespace MpWpfApp {
                 if(mpdo == null) {
                     //is non-null for external template drop
                     mpdo = await SelectedItem.ConvertToPortableDataObject(true);
+                    if(mpdo == null) {
+                        // paste was canceled
+                        return;
+                    }
                 }
 
                 await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(
@@ -2367,6 +2383,10 @@ namespace MpWpfApp {
                         Debugger.Break();
                     }
                     var mpdo = await ctvm.ConvertToPortableDataObject(true);
+                    if(mpdo == null) {
+                        // paste was canceled
+                        return;
+                    }
                     await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
 
                     CleanupAfterPaste(ctvm);
@@ -2454,8 +2474,13 @@ namespace MpWpfApp {
             });
 
         public ICommand EditSelectedContentCommand => new RelayCommand(
-            () => {
+            async() => {
                 ClearAllEditing();
+                if(SelectedItem.IsSubSelectionEnabled) {
+                    // BUG FIX when spacebar is shortcut to edit and sub-selection is enabled
+                    // the space is passed to the editor so pausing toggling for space to get out ur system
+                    await Task.Delay(DISABLE_READ_ONLY_DELAY_MS);
+                }
                 SelectedItem.ToggleEditContentCommand.Execute(null);
             },
             () => SelectedItem != null && SelectedItem.IsContentReadOnly);

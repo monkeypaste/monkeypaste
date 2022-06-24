@@ -101,6 +101,9 @@ namespace MpWpfApp {
             await SaveTextContent(fe as RichTextBox);
             var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
             if (ctcv != null) {
+                if(GetReadOnlyWidth(fe) < MpClipTileViewModel.DefaultBorderWidth) {
+                    SetReadOnlyWidth(fe, MpClipTileViewModel.DefaultBorderWidth);
+                }
                 ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(fe));
             }
         }
@@ -136,6 +139,9 @@ namespace MpWpfApp {
             var rtb = FindRtbByViewModel(ctvm);
             var ctcv = rtb.GetVisualAncestor<MpClipTileContainerView>();
             if (ctcv != null) {
+                if (GetReadOnlyWidth(rtb) < MpClipTileViewModel.DefaultBorderWidth) {
+                    SetReadOnlyWidth(rtb, MpClipTileViewModel.DefaultBorderWidth);
+                }
                 ctcv.TileResizeBehavior.ResizeWidth(GetReadOnlyWidth(rtb));
             }
         }

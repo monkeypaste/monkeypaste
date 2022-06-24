@@ -1648,5 +1648,17 @@ namespace MpWpfApp.Properties {
                 this["LastQueryInfoJson"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SearchByWholeWord {
+            get {
+                return ((bool)(this["SearchByWholeWord"]));
+            }
+            set {
+                this["SearchByWholeWord"] = value;
+            }
+        }
     }
 }

@@ -21,6 +21,7 @@
                                                     IsDesignTimeCreatable=False}">
     <Border x:Name="TextTemplateBorder"
             Loaded="Border_Loaded"
+            MinWidth="10"
             CornerRadius="5"
             BorderThickness="1"
             Background="{Binding TemplateBackgroundHexColor,

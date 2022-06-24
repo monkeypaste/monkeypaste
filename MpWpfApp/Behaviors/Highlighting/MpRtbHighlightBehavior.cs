@@ -30,12 +30,17 @@ namespace MpWpfApp {
         public override MpHighlightType HighlightType => MpHighlightType.Content;
 
         public Dictionary<int, List<MpShape>> GetHighlightShapes() {
+            FindHighlightShapes();
             return _highlightShapes;
         }
 
         public override async Task FindHighlighting() {
             await base.FindHighlighting();
-                        
+
+            FindHighlightShapes();
+        }
+
+        public void FindHighlightShapes() {
             _highlightShapes.Clear();
 
             for (int i = 0; i < _matches.Count; i++) {
@@ -47,13 +52,13 @@ namespace MpWpfApp {
                 if (startRect.Location.Y == endRect.Location.Y) {
                     //when range is not wrapped make 1 box
                     startRect.Union(endRect);
-                    rectShape = new MpRect(startRect.Location.ToMpPoint(), startRect.Size.ToPortableSize());
+                    rectShape = new MpRect(startRect.Location.ToPortablePoint(), startRect.Size.ToPortableSize());
                     rects.Add(rectShape);
                 } else {
                     var eol_tp = match.Start.GetLineEndPosition(0);
                     var eolRect = eol_tp.GetCharacterRect(LogicalDirection.Backward);
                     startRect.Union(eolRect);
-                    rectShape = new MpRect(startRect.Location.ToMpPoint(), startRect.Size.ToPortableSize());
+                    rectShape = new MpRect(startRect.Location.ToPortablePoint(), startRect.Size.ToPortableSize());
                     rects.Add(rectShape);
 
                     var ctp = eol_tp.GetLineStartPosition(1);
@@ -67,12 +72,12 @@ namespace MpWpfApp {
                         if (sol_rect.Location.Y == endRect.Location.Y) {
                             //this line is end of rects
                             sol_rect.Union(endRect);
-                            rects.Add(new MpRect(sol_rect.Location.ToMpPoint(), sol_rect.Size.ToPortableSize()));
+                            rects.Add(new MpRect(sol_rect.Location.ToPortablePoint(), sol_rect.Size.ToPortableSize()));
                             break;
                         }
                         eolRect = ctp.GetLineEndPosition(0).GetCharacterRect(LogicalDirection.Backward);
                         sol_rect.Union(eolRect);
-                        rects.Add(new MpRect(sol_rect.Location.ToMpPoint(), sol_rect.Size.ToPortableSize()));
+                        rects.Add(new MpRect(sol_rect.Location.ToPortablePoint(), sol_rect.Size.ToPortableSize()));
 
                         ctp = ctp.GetLineStartPosition(1);
                     }
@@ -87,10 +92,7 @@ namespace MpWpfApp {
             }
             ScrollToSelectedItem();
 
-
-
             AssociatedObject.UpdateAdorners();
-
             AssociatedObject.UpdateLayout();
         }
         public override void ClearHighlighting() {
@@ -126,7 +128,7 @@ namespace MpWpfApp {
             sv.ScrollToVerticalOffset(offset);
         }
 
-        public void InitHighlighting(List<TextRange> matches) {
+        public void InitLocalHighlighting(List<TextRange> matches) {
             _matches = matches;
             SelectedIdx = -1;
         }

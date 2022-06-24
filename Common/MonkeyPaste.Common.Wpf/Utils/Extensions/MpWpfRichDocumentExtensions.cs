@@ -224,8 +224,10 @@ namespace MonkeyPaste.Common.Wpf {
                 Dictionary<TextRange, object> clonedIuic_lookup = new Dictionary<TextRange, object>();
                 foreach(var iuic in iuicl) {
                     //create range's in cloned doc at each iuic offset paired w/ the iuic tag
-                    var clone_iuic_tp = clonedDoc.ContentStart.GetPositionAtOffset(iuic.ContentStart.ToOffset());
-                    clonedIuic_lookup.Add(new TextRange(clone_iuic_tp, clone_iuic_tp), iuic.Tag);
+                    var clone_iuic_start_tp = clonedDoc.ContentStart.GetPositionAtOffset(iuic.ContentStart.ToOffset());
+                    var clone_iuic_end_tp = clonedDoc.ContentStart.GetPositionAtOffset(iuic.ContentEnd.ToOffset());
+                    
+                    clonedIuic_lookup.Add(new TextRange(clone_iuic_start_tp, clone_iuic_end_tp), iuic.Tag);
                 }
 
                 //encode cloned iuic ranges with paired object ToString (which is encoded template string)
@@ -380,27 +382,69 @@ namespace MonkeyPaste.Common.Wpf {
             None = 0
         }
 
-        public static IEnumerable<TextRange> FindAllText(
+        public static TextRange FindText(
             this TextPointer start,
             TextPointer end,
             string input,
-            bool isCaseSensitive = true) {
+            bool isCaseSensitive = false,
+            bool matchWholeWord = false,
+            bool useRegEx = false,
+            CultureInfo cultureInfo = null) {
+            if (string.IsNullOrEmpty(input) || start == null || end == null) {
+                return null;
+            }
+            cultureInfo = cultureInfo == null ? CultureInfo.CurrentCulture : cultureInfo;
+
+            if (findMethod == null) {
+                findMethod = typeof(FrameworkElement).Assembly
+                                .GetType("System.Windows.Documents.TextFindEngine")
+                                .GetMethod("Find", BindingFlags.Static | BindingFlags.Public);
+            }
+            FindFlags ff = FindFlags.None;
+            ff |= isCaseSensitive ? FindFlags.MatchCase : ff;
+            ff |= matchWholeWord ? FindFlags.FindWholeWordsOnly : ff;
+                       
+
+            TextRange textRange = null;
+            if (start.CompareTo(end) < 0) {
+                try {
+                    
+                    object result = findMethod.Invoke(null, new object[] {
+                        start,
+                        end,
+                        input, ff, cultureInfo });
+                    textRange = result as TextRange;
+                }
+                catch (ApplicationException) {
+                    textRange = null;
+                }
+            }
+
+            return textRange;
+        }
+
+        private static IEnumerable<TextRange> FindAllText(
+            this TextPointer start,
+            TextPointer end,
+            string input,
+            bool isCaseSensitive = false,
+            bool matchWholeWord = false,
+            bool useRegEx = false) {
             if (start == null) {
                 yield return null;
             }
-
-            //var matchRangeList = new List<TextRange>();
             while (start != null && start != end) {
-                var matchRange = start.FindText(end, input, isCaseSensitive ? FindFlags.MatchCase : FindFlags.None);
+                if (!start.IsInSameDocument(end)) {
+                    break;
+                }
+
+                var matchRange = start.FindText(end, input, isCaseSensitive, matchWholeWord,useRegEx);
                 if (matchRange == null) {
                     break;
                 }
-                //matchRangeList.Add(matchRange);
                 start = matchRange.End.GetNextInsertionPosition(LogicalDirection.Forward);
                 yield return matchRange;
             }
-
-            //return matchRangeList;
         }
         public static List<TextRange> FindText(
             this FlowDocument fd,
@@ -441,37 +485,24 @@ namespace MonkeyPaste.Common.Wpf {
             return fd.ContentStart.FindAllText(fd.ContentEnd, input, isCaseSensitive).ToList();
         }        
 
-        public static TextRange FindText(
-            this TextPointer start, 
-            TextPointer end, 
-            string input, 
-            FindFlags flags = FindFlags.MatchCase, 
-            CultureInfo cultureInfo = null) {
-            if(string.IsNullOrEmpty(input) || start == null || end == null) {
-                return null;
-            }
-            cultureInfo = cultureInfo == null ? CultureInfo.CurrentCulture : cultureInfo;
-
-            TextRange textRange = null;
-            if (start.CompareTo(end) < 0) {
-                try {
-                    if (findMethod == null) {
-                        findMethod = typeof(FrameworkElement).Assembly
-                                        .GetType("System.Windows.Documents.TextFindEngine")
-                                        .GetMethod("Find", BindingFlags.Static | BindingFlags.Public);
-                    }
-                    object result = findMethod.Invoke(null, new object[] { 
-                        start,
-                        end,
-                        input, flags, cultureInfo });
-                    textRange = result as TextRange;
+        public static IEnumerable<TextRange> GetRootRanges(TextPointer start, TextPointer end) {
+            if(start.IsInSameDocument(end)) {
+                yield return new TextRange(start, end);
+            } else {
+                var start_iuic = start.Parent.FindParentOfType<InlineUIContainer>();
+                var end_iuic = end.Parent.FindParentOfType<InlineUIContainer>();
+                
+                if(start_iuic == null && end_iuic == null) {
+                    Debugger.Break();
                 }
-                catch (ApplicationException) {
-                    textRange = null;
+
+                var ranges = new List<TextRange>();
+
+                if(end_iuic == null) {
+                    //end is in root document
+                    ranges.Add(start_iuic.ContentRange());
                 }
             }
-
-            return textRange;
         }
 
         public static Size GetDocumentSize(this FlowDocument doc, double padToAdd = 0) {

@@ -413,14 +413,12 @@ namespace MpWpfApp {
                         break;
                 } 
             } else if (compareObj is FlowDocument fd) {
-                MpWpfRichDocumentExtensions.FindFlags flags = IsCaseSensitive ? MpWpfRichDocumentExtensions.FindFlags.MatchCase : MpWpfRichDocumentExtensions.FindFlags.None;
-
                 var tp = fd.ContentStart.GetPositionAtOffset(idx);
                 if(tp == null) {
                     return null;
                 }
 
-                var tr = tp.FindText(fd.ContentEnd, compareData, flags);
+                var tr = tp.FindText(fd.ContentEnd, compareData, IsCaseSensitive);
 
                 if(tr != null) {
                     int offset = fd.ContentStart.GetOffsetToPosition(tr.Start);

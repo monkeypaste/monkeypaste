@@ -11,6 +11,7 @@
 
         public override void FillAutoTemplate() {
             TemplateText = TemplateData;
+            OnPropertyChanged(nameof(TemplateDisplayValue));
         }
 
         #endregion

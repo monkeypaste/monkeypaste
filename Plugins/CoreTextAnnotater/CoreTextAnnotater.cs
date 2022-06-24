@@ -50,7 +50,8 @@ namespace CoreTextAnnotater {
                     foreach (Match m in mc) {
                         foreach (Group mg in m.Groups) {
                             foreach (Capture c in mg.Captures) {
-                                var trl = fd.FindText(c.Value, isCaseSensitive, false);
+                                //var trl = fd.ContentStart.FindAllText(fd.ContentEnd,c.Value, isCaseSensitive);
+                                var trl = fd.FindText(c.Value, isCaseSensitive);
 
                                 foreach(var tr in trl) {
                                     int offset = fd.ContentStart.GetOffsetToPosition(tr.Start);
