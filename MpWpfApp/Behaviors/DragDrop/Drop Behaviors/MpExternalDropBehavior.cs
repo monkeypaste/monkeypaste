@@ -14,19 +14,6 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Threading;
 
-namespace MonkeyPaste {
-
-    public enum MpExternalDropFileType {
-        None = 0,
-        Txt,
-        Csv,
-        Rtf,
-        Bmp,
-        Png,
-        File
-    }
-}
-
 namespace MpWpfApp {
 
     public class MpExternalDropBehavior : MpDropBehaviorBase<FrameworkElement> {

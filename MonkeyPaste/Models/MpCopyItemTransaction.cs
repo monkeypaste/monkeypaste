@@ -29,7 +29,6 @@ namespace MonkeyPaste {
         [Column("fk_CopyItemTransactionObjectId")]
         public int CopyItemTransactionObjId { get; set; }
 
-        [ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
         public int CopyItemId { get; set; }
 
@@ -61,17 +60,17 @@ namespace MonkeyPaste {
             set => CopyItemTransactionTypeId = (int)value;
         }
 
-        [Ignore]
-        public MpHttpTransaction HttpTransaction { get; set; }
+        //[Ignore]
+        //public MpHttpTransaction HttpTransaction { get; set; }
 
-        [Ignore]
-        public MpCliTransaction CliTransaction { get; set; }
+        //[Ignore]
+        //public MpCliTransaction CliTransaction { get; set; }
 
-        [Ignore]
-        public MpDllTransaction DllTransaction { get; set; }
+        //[Ignore]
+        //public MpDllTransaction DllTransaction { get; set; }
 
-        [Ignore]
-        public MpUserTransaction UserTransaction { get; set; }
+        //[Ignore]
+        //public MpUserTransaction UserTransaction { get; set; }
         #endregion
 
 

@@ -111,6 +111,8 @@ namespace MpWpfApp {
 
         public bool IsMainWindowActive { get; set; }
 
+        public bool IsFilterMenuVisible { get; set; } = true;
+
         #endregion
 
         #region Layout
@@ -140,6 +142,29 @@ namespace MpWpfApp {
 
         public double MainWindowTop { get; set; } = MpMeasurements.Instance.WorkAreaBottom;
 
+        public double MainWindowTopOpened {
+            get {
+                switch (MpScreenInformation.TaskbarLocation) {
+                    case MpTaskbarLocation.Bottom:
+                    default:
+                        return SystemParameters.WorkArea.Bottom - MainWindowHeight;
+                }
+            }
+        }
+
+        public double MainWindowTopClosed {
+            get {
+                switch (MpScreenInformation.TaskbarLocation) {
+                    case MpTaskbarLocation.Bottom:
+                    default:
+                        return SystemParameters.WorkArea.Bottom;
+                }
+            }
+        }
+
+        public double FilterMenuHeight => IsFilterMenuVisible ?
+                                            MpMeasurements.Instance.FilterMenuDefaultHeight :
+                                            0;
         #endregion
 
         #region Appearance
@@ -177,8 +202,8 @@ namespace MpWpfApp {
             MpConsole.WriteLine("MainWindow Init");
             PropertyChanged += MpMainWindowViewModel_PropertyChanged;
 
-            SetupMainWindowRect();
-            //Application.Current.Resources["MainWindowViewModel"] = this;
+            //SetupMainWindowRect();
+            MainWindowTop = MainWindowTopClosed;
 
             MpMessenger.Register<MpMessageType>(
                 MpSearchBoxViewModel.Instance,
@@ -216,29 +241,23 @@ namespace MpWpfApp {
 
         private void MpMainWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(IsMainWindowLocked):
+                case nameof(IsFilterMenuVisible):
+                    var rb = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior;
 
-                    //if (IsMainWindowLocked) {
-                    //    MainWindowTop = 0;
-                    //} else {
-                    //    MainWindowTop = MpMeasurements.Instance.WorkAreaBottom - MainWindowHeight;
-                    //}
-
-                    //Application.Current.MainWindow.Height = MainWindowContainerHeight;
-                    //Application.Current.MainWindow.Top = MainWindowContainerTop;
-
+                    double deltaY = MpMeasurements.Instance.FilterMenuDefaultHeight;
+                    if (IsFilterMenuVisible) {
+                        MainWindowTop -= deltaY;
+                        //MainWindowHeight += deltaY;
+                        rb.ResizeHeight(MainWindowHeight + deltaY);
+                    } else {
+                        MainWindowTop += deltaY;
+                        //MainWindowHeight -= deltaY;
+                        rb.ResizeHeight(MainWindowHeight - deltaY);
+                    }
                     break;
                 case nameof(MainWindowHeight):
                     MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
-
-                    //if (IsMainWindowLocked) {
-                    //    MainWindowTop = 0;
-                    //} else {
-                    //    MainWindowTop = MpMeasurements.Instance.WorkAreaBottom - MainWindowHeight;
-                    //}
-
-                    //Application.Current.MainWindow.Height = MainWindowContainerHeight;
-                    //Application.Current.MainWindow.Top = MainWindowContainerTop;
+                    //MpMessenger.SendGlobal(MpMessageType.ResizingContent);
                     break;
                 case nameof(IsResizing):
                     if(!IsResizing) {
@@ -253,7 +272,8 @@ namespace MpWpfApp {
                     double yDiff = MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight - _lastSearchCriteriaHeight;
 
                     MainWindowHeight += yDiff;
-                    SetupMainWindowRect(false);
+                    //SetupMainWindowRect(false);
+                    MainWindowTop = MainWindowTopOpened;
 
                     _lastSearchCriteriaHeight = MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight;
                     //MpClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpClipTrayViewModel.Instance.ClipTrayHeight));
@@ -363,20 +383,24 @@ namespace MpWpfApp {
                     IsMainWindowInitiallyOpening = false;
                 }
 
-                SetupMainWindowRect();
+                //SetupMainWindowRect();
+                MainWindowTop = MainWindowTopClosed;
 
                 double tt = MpPreferences.ShowMainWindowAnimationMilliseconds;
                 double fps = 30;
-                double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
+                //double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
+                double dt = (MainWindowTopOpened - MainWindowTopClosed) / tt / (fps / 1000);
 
                 var timer = new DispatcherTimer(DispatcherPriority.Normal);
                 timer.Interval = TimeSpan.FromMilliseconds(fps);
 
                 timer.Tick += (s, e32) => {
-                    if (MainWindowTop > _endMainWindowTop) {
+                    //if (MainWindowTop > _endMainWindowTop) {
+                    if (MainWindowTop > MainWindowTopOpened) {
                         MainWindowTop += dt;
                     } else {
-                        MainWindowTop = _endMainWindowTop;
+                        //MainWindowTop = _endMainWindowTop;
+                        MainWindowTop = MainWindowTopOpened;
                         timer.Stop();
                         IsMainWindowLoading = false;
                         IsMainWindowOpening = false;
@@ -402,8 +426,6 @@ namespace MpWpfApp {
                 if (IsMainWindowLocked || IsResizing || IsMainWindowClosing || IsShowingDialog) {
                     return;
                 }
-
-
                 var mw = (MpMainWindow)Application.Current.MainWindow;
 
                 if (IsMainWindowOpen) {
@@ -411,16 +433,19 @@ namespace MpWpfApp {
 
                     double tt = MpPreferences.HideMainWindowAnimationMilliseconds;
                     double fps = 30;
-                    double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
+                    //double dt = (_endMainWindowTop - _startMainWindowTop) / tt / (fps / 1000);
+                    double dt = (MainWindowTopOpened - MainWindowTopClosed) / tt / (fps / 1000);
 
                     var timer = new DispatcherTimer(DispatcherPriority.Render);
                     timer.Interval = TimeSpan.FromMilliseconds(fps);
 
                     timer.Tick += (s, e32) => {
-                        if (MainWindowTop < _startMainWindowTop) {
+                        //if (MainWindowTop < _startMainWindowTop) {
+                        if (MainWindowTop < MainWindowTopClosed) {
                             MainWindowTop -= dt;
                         } else {
-                            MainWindowTop = _startMainWindowTop;
+                            //MainWindowTop = _startMainWindowTop;
+                            MainWindowTop = MainWindowTopClosed;
                             timer.Stop();
                             mw.Visibility = Visibility.Collapsed;
 
@@ -446,23 +471,16 @@ namespace MpWpfApp {
                       IsMainWindowOpen &&
                       !IsMainWindowOpening;
             });
-
-        private RelayCommand<object> _toggleMainWindowLockCommand;
-        public ICommand ToggleMainWindowLockCommand {
-            get {
-                if(_toggleMainWindowLockCommand == null) {
-                    _toggleMainWindowLockCommand = new RelayCommand<object>(ToggleMainWindowLock);
-                }
-                return _toggleMainWindowLockCommand;
-            }
-        }
-        private void ToggleMainWindowLock(object args) {
-            if(args == null) {
-                //only occurs if called outside of ui so toggle value
+        
+        public ICommand ToggleMainWindowLockCommand => new RelayCommand(
+            () => {
                 IsMainWindowLocked = !IsMainWindowLocked;
-            }
-            //Do nothing because two-may binding toggles IsMainWindowLocked
-        }        
+            });
+
+        public ICommand ToggleFilterMenuVisibleCommand => new RelayCommand(
+            () => {
+                IsFilterMenuVisible = !IsFilterMenuVisible;
+            });
         #endregion
     }
 }

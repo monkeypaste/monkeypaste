@@ -401,8 +401,16 @@ namespace MpWpfApp {
             }
         }
 
+        private bool isPaddingList = false;
+
         private void Rtb_TextChanged(object sender, TextChangedEventArgs e) {
             UpdateAdorners();
+            if(!isPaddingList) {
+                var ll = Rtb.Document.GetAllTextElements().Where(x => x is List).Distinct();
+                if(ll.Count() > 0) {
+
+                }
+            }    
         }
 
         private void Rtb_GotFocus(object sender, RoutedEventArgs e) {

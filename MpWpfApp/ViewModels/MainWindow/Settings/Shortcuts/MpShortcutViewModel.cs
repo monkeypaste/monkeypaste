@@ -24,11 +24,24 @@ namespace MpWpfApp {
 
     public class MpShortcutViewModel : MpViewModelBase<MpShortcutCollectionViewModel>, 
         MpIActionComponent,
+        MpIShortcutCommand,
         MpISelectableViewModel {
         #region Properties        
 
+        #region MpIShortcutCommand Implementation
+
+        public ICommand AssignCommand => new RelayCommand(() => {
+            Parent.SelectedItem = this;
+            Parent.ReassignSelectedShortcutCommand.Execute(null);
+        });
+
+        public MpShortcutViewModel ShortcutViewModel => this;
+        public string ShortcutKeyString => KeyString;
+
+        #endregion
+
         #region MpISelectableViewModel Implementation
-        
+
         public bool IsSelected { get; set; }
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -65,33 +78,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Visibility 
-
-        public Visibility GlobalRoutingTypeComboItemVisibility {
-            get {
-                return IsRoutable ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        public Visibility InternalRoutingTypeComboItemVisibility {
-            get {
-                return IsRoutable ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
-        public Visibility DeleteButtonVisibility {
-            get {
-                return IsCustom() ? Visibility.Visible:Visibility.Collapsed;
-            }
-        }
-
-        public Visibility ResetButtonVisibility {
-            get {
-                return IsCustom() ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-        #endregion
-
         #region State
 
         public ICommand Command { get; set; }
@@ -105,6 +91,8 @@ namespace MpWpfApp {
                 return RoutingType != MpRoutingType.None && RoutingType != MpRoutingType.Internal;
             }
         }
+
+        public bool CanDelete => IsCustom();
 
         public bool IsNew {
             get {
@@ -143,22 +131,17 @@ namespace MpWpfApp {
             }
         }
 
-        public string SelectedRoutingType {
+        public int SelectedRoutingTypeIdx {
             get {
                 if (Shortcut == null) {
-                    return "None";
+                    return 0;
                 }
-                return Enum.GetName(typeof(MpRoutingType), Shortcut.RoutingType);
+                return (int)RoutingType;
             }
             set {
-                if (Shortcut != null && Enum.GetName(typeof(MpRoutingType), Shortcut.RoutingType) != value) {
-                    for (int i = 0; i < Enum.GetNames(typeof(MpRoutingType)).Length; i++) {
-                        var rt = Enum.GetNames(typeof(MpRoutingType))[i];
-                        if (rt == value) {
-                            RoutingType = (MpRoutingType)i;
-                        }
-                    }
-                    OnPropertyChanged(nameof(SelectedRoutingType));
+                if (SelectedRoutingTypeIdx != value) {
+                    RoutingType = (MpRoutingType)value;
+                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));                    
                 }
             }
         }
@@ -308,7 +291,7 @@ namespace MpWpfApp {
                     Shortcut.RoutingType = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(RoutingType));
-                    OnPropertyChanged(nameof(SelectedRoutingType));
+                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
                 }
             }
         }
@@ -347,9 +330,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(CommandId));
                     OnPropertyChanged(nameof(ShortcutType));
                     OnPropertyChanged(nameof(DefaultKeyString));
-                    OnPropertyChanged(nameof(ResetButtonVisibility));
-                    OnPropertyChanged(nameof(DeleteButtonVisibility));
-                    OnPropertyChanged(nameof(SelectedRoutingType));
+                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
                 }
             }
         }
@@ -622,6 +603,7 @@ namespace MpWpfApp {
                     return true;
                 }
             });
+
 
         #endregion
     }

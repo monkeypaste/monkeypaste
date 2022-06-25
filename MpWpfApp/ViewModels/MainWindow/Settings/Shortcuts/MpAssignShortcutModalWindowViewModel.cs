@@ -255,7 +255,7 @@ namespace MpWpfApp {
             DuplicatedShortcutViewModel = null;
             _isReplacingShortcut = false;
             //iterate over ALL shortcuts
-            foreach (var scvm in MpShortcutCollectionViewModel.Instance.Shortcuts) {                
+            foreach (var scvm in MpShortcutCollectionViewModel.Instance.Items) {                
                 if (scvm.Command == _assigningCommand ||
                     scvm.KeyList.Count != KeyList.Count || 
                     scvm.KeyList.Count == 0) {

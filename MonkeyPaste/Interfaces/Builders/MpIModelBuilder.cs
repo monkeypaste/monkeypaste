@@ -5,19 +5,13 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
-    public interface MpIModelBuilder {
-        Task<object> Build(object[] args);
-    }
-    public interface MpIModelBuilder<T> : MpIModelBuilder where T:MpDbModelBase {
-        Task<T> Build(object args);
-    }
 
     public interface MpICopyItemBuilder {
         Task<MpCopyItem> Create(MpPortableDataObject pdo, bool suppressWrite = false);
     }
 
     public interface MpIUrlBuilder {
-        Task<MpUrl> Create(string url);
+        Task<MpUrl> Create(string url, string title = "");
     }
 
 
@@ -27,9 +21,15 @@ namespace MonkeyPaste {
         string GetBase64BitmapFromFilePath(string filepath);
     }
 
-    public interface MpIAppBuilder : MpIModelBuilder<MpApp> {
-        string GetProcessApplicationName(object handleInfo);
-        Task<MpApp> Build(object handleInfo, MpIProcessIconBuilder pib);
-        
+    public interface MpIAppBuilder {
+        Task<MpApp> Create(object handleOrAppPath, string appName = "");
+    }
+
+    public interface MpIIconBuilder {
+        Task<MpIcon> Create(string iconBase64, bool createBorder = true);
+
+        string CreateBorder(string iconBase64, double scale, string hexColor);
+        List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5);
+        string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32);
     }
 }

@@ -20,7 +20,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Converters/MpConvertersResourceDictionary.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/ListBoxes/MpActionPropertiesListBoxItemResourceDictionary.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Fonts/MpFontsResourceDictionary.xaml" />
-                <!--<ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Tooltips/MpTooltipResourceDictionary.xaml" />-->
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Tooltips/MpTooltipResourceDictionary.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Menus/MpContextMenuItemResourceDictionary.xaml" />-->
                 <!--<ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Menus/MpSelectorItemResourceDictionary.xaml" />-->
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Designer/MpDesignerResourceDictionary.xaml" />

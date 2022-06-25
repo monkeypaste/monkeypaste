@@ -230,7 +230,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="30" />
-                        <TranslateTransform X="3.7499999999999996" Y="1.00480947161671" />
+                        <TranslateTransform X="3.7499999999999996"
+                                            Y="1.00480947161671" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -251,7 +252,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="60" />
-                        <TranslateTransform X="6.49519052838329" Y="3.7500000271702154" />
+                        <TranslateTransform X="6.49519052838329"
+                                            Y="3.7500000271702154" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -272,7 +274,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="90" />
-                        <TranslateTransform X="7.5000000920390741" Y="7.5" />
+                        <TranslateTransform X="7.5000000920390741"
+                                            Y="7.5" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -293,7 +296,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="120" />
-                        <TranslateTransform X="6.49519052838329" Y="11.25" />
+                        <TranslateTransform X="6.49519052838329"
+                                            Y="11.25" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -314,7 +318,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="150" />
-                        <TranslateTransform X="3.7500000920390728" Y="13.995190528383292" />
+                        <TranslateTransform X="3.7500000920390728"
+                                            Y="13.995190528383292" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -342,7 +347,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="30" />
-                        <TranslateTransform X="-3.7499999999999996" Y="-1.00480947161671" />
+                        <TranslateTransform X="-3.7499999999999996"
+                                            Y="-1.00480947161671" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -363,7 +369,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="60" />
-                        <TranslateTransform X="-6.49519052838329" Y="-3.7500000271702154" />
+                        <TranslateTransform X="-6.49519052838329"
+                                            Y="-3.7500000271702154" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -384,7 +391,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="90" />
-                        <TranslateTransform X="-7.5000000920390741" Y="-7.5" />
+                        <TranslateTransform X="-7.5000000920390741"
+                                            Y="-7.5" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -405,7 +413,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="120" />
-                        <TranslateTransform X="-6.49519052838329" Y="-11.25" />
+                        <TranslateTransform X="-6.49519052838329"
+                                            Y="-11.25" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
@@ -426,7 +435,8 @@
                         <ScaleTransform />
                         <SkewTransform />
                         <RotateTransform Angle="150" />
-                        <TranslateTransform X="-3.7500000920390728" Y="-13.995190528383292" />
+                        <TranslateTransform X="-3.7500000920390728"
+                                            Y="-13.995190528383292" />
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>

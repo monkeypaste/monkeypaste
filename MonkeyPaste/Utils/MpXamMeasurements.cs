@@ -102,7 +102,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public double FilterMenuHeight {
+        public double FilterMenuDefaultHeight {
             get {
                 return MainWindowMinHeight / 8;
             }
@@ -121,7 +121,7 @@ namespace MonkeyPaste {
         }
         public double ClipTrayMinHeight {
             get {
-                return MainWindowRect.Height - TitleMenuHeight - FilterMenuHeight;
+                return MainWindowRect.Height - TitleMenuHeight - FilterMenuDefaultHeight;
             }
         }
 

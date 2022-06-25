@@ -3,12 +3,18 @@
                     xmlns:local="clr-namespace:MpWpfApp"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
 
-    <LinearGradientBrush x:Key="ActiveButtonBrush" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="ActiveButtonBrush"
+                         StartPoint="0,0"
+                         EndPoint="0,1">
         <LinearGradientBrush.GradientStops>
-            <GradientStop Color="#EAF6FD" Offset="0.15" />
-            <GradientStop Color="#D9F0FC" Offset=".5" />
-            <GradientStop Color="#BEE6FD" Offset=".5" />
-            <GradientStop Color="#A7D9F5" Offset="1" />
+            <GradientStop Color="#EAF6FD"
+                          Offset="0.15" />
+            <GradientStop Color="#D9F0FC"
+                          Offset=".5" />
+            <GradientStop Color="#BEE6FD"
+                          Offset=".5" />
+            <GradientStop Color="#A7D9F5"
+                          Offset="1" />
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
 
@@ -55,12 +61,17 @@
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{x:Static SystemColors.HighlightBrush}" />
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="{x:Static SystemColors.HighlightBrush}" />
                         </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{x:Static SystemColors.HighlightBrush}" />
-                            <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
+                        <Trigger Property="IsSelected"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{x:Static SystemColors.HighlightBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{x:Static SystemColors.HighlightTextBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -85,11 +96,16 @@
 
     <Style x:Key="CreateNewItemButtonStyle"
            TargetType="Button">
-        <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="TextBlock.FontSize" Value="10" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.WindowTextBrush}" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <Setter Property="FocusVisualStyle"
+                Value="{StaticResource FocusVisualStyle}" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="TextBlock.FontSize"
+                Value="10" />
+        <Setter Property="BorderBrush"
+                Value="{x:Static SystemColors.WindowTextBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -104,13 +120,19 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource ActiveButtonBrush}" />
-                <Setter Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="{StaticResource ActiveButtonBrush}" />
+                <Setter Property="BorderBrush"
+                        Value="{StaticResource ActiveBorderBrush}" />
             </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{StaticResource ActiveButtonBrush}" />
-                <Setter Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="{StaticResource ActiveButtonBrush}" />
+                <Setter Property="BorderBrush"
+                        Value="{StaticResource ActiveBorderBrush}" />
             </Trigger>
         </Style.Triggers>
 
@@ -144,13 +166,23 @@
         </Border>
         <ControlTemplate.Triggers>
 
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="arrowBorder" Property="Background" Value="{StaticResource ActiveButtonBrush}" />
-                <Setter TargetName="arrowBorder" Property="BorderThickness" Value="1,0,0,0" />
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter TargetName="arrowBorder"
+                        Property="Background"
+                        Value="{StaticResource ActiveButtonBrush}" />
+                <Setter TargetName="arrowBorder"
+                        Property="BorderThickness"
+                        Value="1,0,0,0" />
             </Trigger>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter TargetName="arrowBorder" Property="Background" Value="{StaticResource ActiveButtonBrush}" />
-                <Setter TargetName="arrowBorder" Property="BorderThickness" Value="1,0,0,0" />
+            <Trigger Property="IsChecked"
+                     Value="True">
+                <Setter TargetName="arrowBorder"
+                        Property="Background"
+                        Value="{StaticResource ActiveButtonBrush}" />
+                <Setter TargetName="arrowBorder"
+                        Property="BorderThickness"
+                        Value="1,0,0,0" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -232,19 +264,33 @@
         </Grid>
 
         <ControlTemplate.Triggers>
-            <Trigger SourceName="PART_popup" Property="HasDropShadow" Value="true">
-                <Setter TargetName="Shadow" Property="Margin" Value="0,0,5,5" />
-                <Setter TargetName="Shadow" Property="Color" Value="#71000000" />
+            <Trigger SourceName="PART_popup"
+                     Property="HasDropShadow"
+                     Value="true">
+                <Setter TargetName="Shadow"
+                        Property="Margin"
+                        Value="0,0,5,5" />
+                <Setter TargetName="Shadow"
+                        Property="Color"
+                        Value="#71000000" />
             </Trigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="BorderBrush"
+                        Value="{StaticResource ActiveBorderBrush}" />
             </Trigger>
-            <Trigger SourceName="toggleButton" Property="IsChecked" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource ActiveBorderBrush}" />
+            <Trigger SourceName="toggleButton"
+                     Property="IsChecked"
+                     Value="True">
+                <Setter Property="BorderBrush"
+                        Value="{StaticResource ActiveBorderBrush}" />
             </Trigger>
 
-            <Trigger Property="IsCreateNewEnabled" Value="True">
-                <Setter TargetName="EditBoxGrid" Property="Visibility" Value="Visible" />
+            <Trigger Property="IsCreateNewEnabled"
+                     Value="True">
+                <Setter TargetName="EditBoxGrid"
+                        Property="Visibility"
+                        Value="Visible" />
             </Trigger>
 
             <EventTrigger SourceName="ShowEditBoxButton"
@@ -296,22 +342,37 @@
 
     <!--  Style which defines the MultiComboBox  -->
     <Style TargetType="{x:Type local:MpMultiComboBox}">
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
-        <Setter Property="MinWidth" Value="120" />
-        <Setter Property="MinHeight" Value="20" />
-        <Setter Property="Foreground" Value="{x:Static SystemColors.WindowTextBrush}" />
-        <Setter Property="BorderBrush" Value="{x:Static SystemColors.WindowTextBrush}" />
-        <Setter Property="Background" Value="{x:Static SystemColors.WindowBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="IsTabStop" Value="True" />
-        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}" />
-        <Setter Property="Template" Value="{StaticResource MultiSelectComboBoxReadOnlyTemplate}" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource NormalItemStyleKey}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll"
+                Value="true" />
+        <Setter Property="MinWidth"
+                Value="120" />
+        <Setter Property="MinHeight"
+                Value="20" />
+        <Setter Property="Foreground"
+                Value="{x:Static SystemColors.WindowTextBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{x:Static SystemColors.WindowTextBrush}" />
+        <Setter Property="Background"
+                Value="{x:Static SystemColors.WindowBrush}" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="IsTabStop"
+                Value="True" />
+        <Setter Property="FocusVisualStyle"
+                Value="{StaticResource FocusVisualStyle}" />
+        <Setter Property="Template"
+                Value="{StaticResource MultiSelectComboBoxReadOnlyTemplate}" />
+        <Setter Property="ItemContainerStyle"
+                Value="{StaticResource NormalItemStyleKey}" />
         <Style.Triggers>
-            <Trigger Property="SelectionMode" Value="Single">
-                <Setter Property="ItemContainerStyle" Value="{StaticResource NormalItemStyleKey}" />
+            <Trigger Property="SelectionMode"
+                     Value="Single">
+                <Setter Property="ItemContainerStyle"
+                        Value="{StaticResource NormalItemStyleKey}" />
             </Trigger>
         </Style.Triggers>
     </Style>

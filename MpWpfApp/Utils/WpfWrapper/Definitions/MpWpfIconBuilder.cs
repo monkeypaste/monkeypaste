@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -9,6 +10,13 @@ using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     public class MpWpfIconBuilder : MpIIconBuilder {
+        public async Task<MpIcon> Create(string iconBase64, bool createBorder = true) {
+            var icon = await MpIcon.Create(
+                iconImgBase64: iconBase64,
+                createBorder: createBorder);
+
+            return icon;
+        }
 
         public BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
             var borderBmpSrc = img.Tint(bgColor, true);

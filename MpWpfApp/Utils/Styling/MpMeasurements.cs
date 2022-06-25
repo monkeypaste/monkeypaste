@@ -106,7 +106,7 @@ namespace MpWpfApp {
         }
 
 
-        public double FilterMenuHeight {
+        public double FilterMenuDefaultHeight {
             get {
                 return MainWindowDefaultHeight / 8;
             }
@@ -126,7 +126,7 @@ namespace MpWpfApp {
 
         public double ClipTrayMinHeight {
             get {
-                return MainWindowDefaultHeight - TitleMenuHeight - FilterMenuHeight;
+                return MainWindowDefaultHeight - TitleMenuHeight - FilterMenuDefaultHeight;
             }
         }
 

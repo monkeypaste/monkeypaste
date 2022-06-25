@@ -52,6 +52,7 @@
     <Compile Include="Utils\Extensions\MpCsvToRtfTableConverter.cs" />
     <Compile Include="Utils\Extensions\MpWpfColorExtensions.cs" />
     <Compile Include="Utils\Extensions\MpWpfExtensions.cs" />
+    <Compile Include="Utils\Extensions\MpWpfFlowDocumentSearchExtensions.cs" />
     <Compile Include="Utils\Extensions\MpWpfImageExtensions.cs" />
     <Compile Include="Utils\Extensions\MpWpfKeyboardInputHelpers.cs" />
     <Compile Include="Utils\Extensions\MpWpfRichDocumentExtensions.cs" />

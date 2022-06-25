@@ -37,6 +37,7 @@
                                      AllowDrop="True"
                                      ClipToBounds="True"
                                      SnapsToDevicePixels="True"
+                                     Height="{Binding ClipTrayHeight}"
                                      Width="{Binding ClipTrayTotalWidth}"
                                      SelectionChanged="ClipTray_SelectionChanged"
                                      Visibility="{Binding IsTrayEmpty,

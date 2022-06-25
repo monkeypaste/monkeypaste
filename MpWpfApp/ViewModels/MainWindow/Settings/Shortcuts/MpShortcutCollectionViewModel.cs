@@ -17,8 +17,7 @@ using System.Threading;
 
 namespace MpWpfApp {
     public class MpShortcutCollectionViewModel : 
-        //MpSelectorViewModelBase<object,MpShortcutViewModel>, 
-        MpViewModelBase,
+        MpSelectorViewModelBase<object,MpShortcutViewModel>, 
         MpIAsyncSingletonViewModel<MpShortcutCollectionViewModel>{
         #region Private Variables
 
@@ -36,7 +35,6 @@ namespace MpWpfApp {
 
 
         #region View Models
-        public ObservableCollection<MpShortcutViewModel> Shortcuts { get; set; } = new ObservableCollection<MpShortcutViewModel>();
         #endregion
 
         #region Input Hooks
@@ -120,9 +118,9 @@ namespace MpWpfApp {
             MpShortcutViewModel scvm = null;
             if(commandId == 0) {
                 // for non-custom shortcuts check shortcut type
-                scvm = Shortcuts.FirstOrDefault(x => x.ShortcutType == shortcutType);
+                scvm = Items.FirstOrDefault(x => x.ShortcutType == shortcutType);
             } else {
-                scvm = Shortcuts.FirstOrDefault(x => x.CommandId == (int)commandId && x.ShortcutType == shortcutType);
+                scvm = Items.FirstOrDefault(x => x.CommandId == (int)commandId && x.ShortcutType == shortcutType);
             }
             //if ((int)shortcutType < (int)MpShortcutType.CustomMinimum) {
             //    scvm = Shortcuts.FirstOrDefault(x => x.Command == command && (int)x.CommandId == commandId);
@@ -143,7 +141,7 @@ namespace MpWpfApp {
                     scvm.Unregister();
 
                     if (scvm.IsCustom())  {
-                        Shortcuts.Remove(scvm);
+                        Items.Remove(scvm);
                     }
                 } else {
                     //nothing to do since no shortcut created
@@ -154,7 +152,7 @@ namespace MpWpfApp {
                 //copyitem direct, tag internal, analyzer internal
                 var sc = await MpShortcut.Create(title, shortcutKeyString, shortcutKeyString, routingType, shortcutType, commandId);
                 scvm = await CreateShortcutViewModel(sc, command);
-                Shortcuts.Add(scvm);
+                Items.Add(scvm);
             } else {
                 //if shorcut updated
                 scvm.KeyString = shortcutKeyString;
@@ -177,7 +175,7 @@ namespace MpWpfApp {
                             (smi as MpMenuItemViewModel).InputGestureText = MpTagTrayViewModel.Instance.Items.Where(x => x.TagName == header).FirstOrDefault().ShortcutKeyString;
                         }
                     } else {
-                        var scvm = Shortcuts.Where(x => x.ShortcutId == tagNum).FirstOrDefault();
+                        var scvm = Items.Where(x => x.ShortcutId == tagNum).FirstOrDefault();
                         if (scvm != null) {
                             mi.InputGestureText = scvm.KeyString;
                         }
@@ -190,7 +188,7 @@ namespace MpWpfApp {
         }
 
         public string GetShortcutKeyStringByCommand(ICommand command, int commandId = 0) {
-            var scvm = Shortcuts.FirstOrDefault(x => x.Command == command && x.CommandId == commandId);
+            var scvm = Items.FirstOrDefault(x => x.Command == command && x.CommandId == commandId);
             if(scvm == null) {
                 return string.Empty;
             }
@@ -198,7 +196,7 @@ namespace MpWpfApp {
         }
 
         public MpShortcutViewModel GetShortcutViewModelById(int shortcutId) {
-            var scvml = Shortcuts.Where(x => x.ShortcutId == shortcutId).ToList();
+            var scvml = Items.Where(x => x.ShortcutId == shortcutId).ToList();
             if (scvml.Count > 0) {
                 return scvml[0];
             }
@@ -215,11 +213,11 @@ namespace MpWpfApp {
             await Task.Run(async () => {
                 MpShortcutViewModel scvmToRemove = null;
                 if (e is MpCopyItem ci) {
-                    scvmToRemove = Shortcuts.FirstOrDefault(x => x.CommandId == ci.Id && x.ShortcutType == MpShortcutType.PasteCopyItem);
+                    scvmToRemove = Items.FirstOrDefault(x => x.CommandId == ci.Id && x.ShortcutType == MpShortcutType.PasteCopyItem);
                 } else if (e is MpTag t) {
-                    scvmToRemove = Shortcuts.FirstOrDefault(x => x.CommandId == t.Id && x.ShortcutType == MpShortcutType.SelectTag);
+                    scvmToRemove = Items.FirstOrDefault(x => x.CommandId == t.Id && x.ShortcutType == MpShortcutType.SelectTag);
                 } else if (e is MpAnalyticItemPreset aip) {
-                    scvmToRemove = Shortcuts.FirstOrDefault(x => x.CommandId == aip.Id && x.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset);
+                    scvmToRemove = Items.FirstOrDefault(x => x.CommandId == aip.Id && x.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset);
                 }
                 if(scvmToRemove != null) {
                     await RemoveAsync(scvmToRemove);
@@ -426,6 +424,12 @@ namespace MpWpfApp {
                         case MpShortcutType.FindAndReplaceSelectedItem:
                             shortcutCommand = MpClipTrayViewModel.Instance.FindAndReplaceSelectedItem;
                             break;
+                        case MpShortcutType.ToggleMainWindowLocked:
+                            shortcutCommand = MpMainWindowViewModel.Instance.ToggleMainWindowLockCommand;
+                            break;
+                        case MpShortcutType.ToggleFilterMenuVisible:
+                            shortcutCommand = MpMainWindowViewModel.Instance.ToggleFilterMenuVisibleCommand;
+                            break;
                         default:
                             if (sc.ShortcutType == MpShortcutType.PasteCopyItem) {
                                 shortcutCommand = MpClipTrayViewModel.Instance.PasteCopyItemByIdCommand;
@@ -437,7 +441,7 @@ namespace MpWpfApp {
                             break;
                     }
                     var scvm = await CreateShortcutViewModel(sc,shortcutCommand);
-                    Shortcuts.Add(scvm);
+                    Items.Add(scvm);
                 }
             });
         }
@@ -461,7 +465,7 @@ namespace MpWpfApp {
                 return;
             }
             if (!char.IsControl(keyChar)) {
-                foreach (var scvm in Shortcuts) {
+                foreach (var scvm in Items) {
                 }
                 if (!sbvm.IsTextBoxFocused) {
                     if (sbvm.HasText) {
@@ -481,7 +485,7 @@ namespace MpWpfApp {
         }
 
         private async Task RemoveAsync(MpShortcutViewModel scvm) {
-            Shortcuts.Remove(scvm);
+            Items.Remove(scvm);
             scvm.Unregister();
             if (scvm.IsCustom()) {
                 await scvm.Shortcut.DeleteFromDatabaseAsync();
@@ -686,7 +690,7 @@ namespace MpWpfApp {
 
             _waitToExecuteShortcutStartDateTime = null;
 
-            var possibleMatches = Shortcuts.Where(x => x.SendKeyStr.StartsWith(_keyboardGestureHelper.CurrentGesture));
+            var possibleMatches = Items.Where(x => x.SendKeyStr.StartsWith(_keyboardGestureHelper.CurrentGesture));
             if (possibleMatches.Count() == 0) {
                 _keyboardGestureHelper.Reset();
                 return;
@@ -709,8 +713,8 @@ namespace MpWpfApp {
             _keyboardGestureHelper.AddKeyUp(wpfKey);
 
 
-            var exactMatches = Shortcuts.Where(x => x.SendKeyStr == curGestureStr);
-            var possibleMatches = Shortcuts.Where(x => exactMatches.All(y => y != x) && x.SendKeyStr.StartsWith(curGestureStr));
+            var exactMatches = Items.Where(x => x.SendKeyStr == curGestureStr);
+            var possibleMatches = Items.Where(x => exactMatches.All(y => y != x) && x.SendKeyStr.StartsWith(curGestureStr));
 
             possibleMatches.ForEach(x => MpConsole.WriteLine("Possible match UP: " + x));
             exactMatches.ForEach(x => MpConsole.WriteLine("Exact match UP: " + x));
@@ -806,7 +810,7 @@ namespace MpWpfApp {
 
         public ICommand ReassignSelectedShortcutCommand => new RelayCommand(
             async () => {
-                var scvm = Shortcuts[SelectedShortcutIndex];
+                var scvm = Items[SelectedShortcutIndex];
                 await RegisterViewModelShortcutAsync(
                     scvm.ShortcutDisplayName,
                     scvm.Command,
@@ -832,22 +836,24 @@ namespace MpWpfApp {
                 }
             });
 
-        public ICommand DeleteShortcutCommand => new RelayCommand(
-            async () => {
+        public ICommand DeleteShortcutCommand => new MpCommand<object>(
+            async (args) => {
                 MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
-                var scvm = Shortcuts[SelectedShortcutIndex];
+                var scvm = Items[SelectedShortcutIndex];
                 //await RemoveAsync(scvm);
                 await scvm.Shortcut.DeleteFromDatabaseAsync();
-            });
+            },(args)=> args is MpShortcutViewModel svm && svm.CanDelete);
 
-        public ICommand ResetShortcutCommand => new RelayCommand(
-            async () => {
+
+        public ICommand ResetShortcutCommand => new MpCommand<object>(
+            async (args) => {
                 MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
-                var scvm = Shortcuts[SelectedShortcutIndex];
+
+                var scvm = Items[SelectedShortcutIndex];
                 scvm.KeyString = scvm.Shortcut.DefaultKeyString;
                 await scvm.InitializeAsync(scvm.Shortcut,scvm.Command);
                 await scvm.Shortcut.WriteToDatabaseAsync();
-            });      
+            },(args) => args is MpShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));      
 
         #endregion
     }

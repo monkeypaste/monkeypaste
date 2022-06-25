@@ -38,7 +38,7 @@
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <local:MpListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <wpftk:VirtualizingWrapPanel IsItemsHost="True" />
+                        <WrapPanel IsItemsHost="True" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     </ItemsPanelTemplate>
                 </local:MpListBox.ItemsPanel>
                 <local:MpListBox.ItemContainerStyle>

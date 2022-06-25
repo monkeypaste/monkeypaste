@@ -254,6 +254,7 @@
     <Compile Include="Converters\MpObjectToTooltipConverter.cs" />
     <Compile Include="Converters\MpParameterFormatToItemsSourceConverter.cs" />
     <Compile Include="Converters\MpShorcutIdToKeyStringConverter.cs" />
+    <Compile Include="Converters\MpShortcutTypeToStringConverter.cs" />
     <Compile Include="Converters\MpSliderValueWidthConverter.cs" />
     <Compile Include="Converters\MpStringHexColorToIsBrightBrushConverter.cs" />
     <Compile Include="Converters\MpStringHexToIconConverter.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="Utils\MpJsComAdapter.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\System\VirtualFileDataObject.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfAppBuilder.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfMessageBox.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfIconBuilder.cs" />
@@ -310,7 +312,6 @@
     <Compile Include="Utils\Documents\MpHyperlinkHelper.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCustomColorChooserMenu.cs" />
     <Compile Include="Utils\MpContentColors.cs" />
-    <Compile Include="Utils\Builders\MpUrlBuilder.cs" />
     <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCursor.cs" />
@@ -690,6 +691,9 @@
     <Compile Include="Views\Reusable\Notifications\ContentReport\Selector\MpTooltipContentViewTemplateSelector.cs" />
     <Compile Include="Views\Reusable\Notifications\Tooltip\MpTooltipInfoView.xaml.cs">
       <DependentUpon>MpTooltipInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Reusable\Notifications\Tooltip\MpToolTipView.xaml.cs">
+      <DependentUpon>MpToolTipView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reusable\OAuth\MpGoogleSignInWindow.xaml.cs">
       <DependentUpon>MpGoogleSignInWindow.xaml</DependentUpon>
@@ -1138,6 +1142,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Reusable\Notifications\Tooltip\MpToolTipView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Reusable\OAuth\MpGoogleSignInWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1483,6 +1491,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.1.46">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM">
       <Version>6.0.4</Version>
     </PackageReference>

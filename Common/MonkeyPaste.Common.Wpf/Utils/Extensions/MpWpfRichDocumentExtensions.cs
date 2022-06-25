@@ -395,6 +395,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
             cultureInfo = cultureInfo == null ? CultureInfo.CurrentCulture : cultureInfo;
 
+            //var textRange = MpWpfFlowDocumentSearchExtensions.FindStringRangeFromPosition(start, input, isCaseSensitive);
             if (findMethod == null) {
                 findMethod = typeof(FrameworkElement).Assembly
                                 .GetType("System.Windows.Documents.TextFindEngine")
@@ -403,12 +404,12 @@ namespace MonkeyPaste.Common.Wpf {
             FindFlags ff = FindFlags.None;
             ff |= isCaseSensitive ? FindFlags.MatchCase : ff;
             ff |= matchWholeWord ? FindFlags.FindWholeWordsOnly : ff;
-                       
+
 
             TextRange textRange = null;
             if (start.CompareTo(end) < 0) {
                 try {
-                    
+
                     object result = findMethod.Invoke(null, new object[] {
                         start,
                         end,
@@ -424,12 +425,12 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static IEnumerable<TextRange> FindAllText(
-            this TextPointer start,
-            TextPointer end,
-            string input,
-            bool isCaseSensitive = false,
-            bool matchWholeWord = false,
-            bool useRegEx = false) {
+             this TextPointer start,
+             TextPointer end,
+             string input,
+             bool isCaseSensitive = false,
+             bool matchWholeWord = false,
+             bool useRegEx = false) {
             if (start == null) {
                 yield return null;
             }
@@ -438,7 +439,7 @@ namespace MonkeyPaste.Common.Wpf {
                     break;
                 }
 
-                var matchRange = start.FindText(end, input, isCaseSensitive, matchWholeWord,useRegEx);
+                var matchRange = start.FindText(end, input, isCaseSensitive, matchWholeWord, useRegEx);
                 if (matchRange == null) {
                     break;
                 }
@@ -446,6 +447,7 @@ namespace MonkeyPaste.Common.Wpf {
                 yield return matchRange;
             }
         }
+
         public static List<TextRange> FindText(
             this FlowDocument fd,
             string input,
@@ -456,13 +458,8 @@ namespace MonkeyPaste.Common.Wpf {
             input = input.Replace(Environment.NewLine, string.Empty);
 
 
-            if(matchWholeWord || useRegEx) {
-                string pattern;
-                if(useRegEx) {
-                    pattern = input;
-                } else {
-                    pattern = $"\b{input}\b";
-                }
+            if(useRegEx) {
+                string pattern = input;
                 string pt = fd.ToPlainText();
                 var mc = Regex.Matches(pt, pattern, isCaseSensitive ? RegexOptions.None:RegexOptions.IgnoreCase);
 
@@ -482,28 +479,8 @@ namespace MonkeyPaste.Common.Wpf {
                 return trl;
             }
 
-            return fd.ContentStart.FindAllText(fd.ContentEnd, input, isCaseSensitive).ToList();
+            return fd.ContentStart.FindAllText(fd.ContentEnd, input, isCaseSensitive,matchWholeWord).ToList();
         }        
-
-        public static IEnumerable<TextRange> GetRootRanges(TextPointer start, TextPointer end) {
-            if(start.IsInSameDocument(end)) {
-                yield return new TextRange(start, end);
-            } else {
-                var start_iuic = start.Parent.FindParentOfType<InlineUIContainer>();
-                var end_iuic = end.Parent.FindParentOfType<InlineUIContainer>();
-                
-                if(start_iuic == null && end_iuic == null) {
-                    Debugger.Break();
-                }
-
-                var ranges = new List<TextRange>();
-
-                if(end_iuic == null) {
-                    //end is in root document
-                    ranges.Add(start_iuic.ContentRange());
-                }
-            }
-        }
 
         public static Size GetDocumentSize(this FlowDocument doc, double padToAdd = 0) {
             //Table docTable = doc.GetVisualDescendent<Table>();

@@ -214,7 +214,6 @@ namespace MpWpfApp {
         }
 
         private void DrawHighlightShapes(DrawingContext dc) {
-
             var rtb = AdornedElement as RichTextBox;
             if (rtb == null) {
                 return;

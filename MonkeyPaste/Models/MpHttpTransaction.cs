@@ -31,8 +31,11 @@ namespace MonkeyPaste {
         [Column("fk_MpUserDeviceId")]
         public int DeviceId { get; set; }
 
-        public string DestinationUrl { get; set; }
-        public string DestinationName { get; set; }
+        //public string DestinationUrl { get; set; }
+        [Column("fk_MpUrlId")]
+        public int UrlId { get; set; }
+
+        //public string DestinationName { get; set; }
 
         public string SourceIp { get; set; }
 
@@ -71,8 +74,9 @@ namespace MonkeyPaste {
         public static async Task<MpHttpTransaction> Create(
             int presetId = 0,
             int deviceId = 0,
-            string url = "",
-            string urlName = "",
+            //string url = "",
+            int urlId = 0,
+            //string urlName = "",
             string ip = "",
             DateTime? timeSent = null,
             DateTime? timeReceived = null,
@@ -80,8 +84,9 @@ namespace MonkeyPaste {
             int bytesReceived = 0, 
             string errorMsg = null,
             bool suppressWrite = false) {
-            if(string.IsNullOrEmpty(url)) {
-                MpConsole.WriteTraceLine("Http transaction must have destination url");
+            if(urlId == 0) {
+                //MpConsole.WriteTraceLine("Http transaction must have destination url");
+                throw new Exception("Needs url id");
             }
             if (string.IsNullOrEmpty(ip)) {
                 MpConsole.WriteTraceLine("Http transaction must have source ip");
@@ -96,8 +101,9 @@ namespace MonkeyPaste {
                 PresetId = presetId,
                 DeviceId = deviceId,
                 SourceIp = ip,
-                DestinationUrl = url,
-                DestinationName = string.IsNullOrWhiteSpace(urlName) ? MpUrlHelpers.GetUrlDomain(url) : urlName,
+                //DestinationUrl = url,
+                UrlId = urlId,
+                //DestinationName = string.IsNullOrWhiteSpace(urlName) ? MpUrlHelpers.GetUrlDomain(url) : urlName,
                 DateTimeSent = timeSent.HasValue ? timeSent.Value : DateTime.Now,
                 DateTimeReceived = timeReceived.HasValue ? timeReceived.Value : null,
                 BytesSent = bytesSent,
@@ -119,28 +125,28 @@ namespace MonkeyPaste {
 
         public MpHttpTransaction() { }
 
-        #region MpISourceItem Implementation
-        [Ignore]
-        public int IconId => iconId;
-        [Ignore]
-        public string SourcePath => DestinationUrl;
-        [Ignore]
-        public string SourceName => DestinationName;
-        [Ignore]
-        public int RootId => Id;
-        [Ignore]
-        public bool IsUrl => true;
-        [Ignore]
-        public bool IsUser => false;
-        [Ignore]
-        public bool IsDll => false;
-        [Ignore]
-        public bool IsExe => false;
-        [Ignore]
-        public bool IsRejected => false;
-        [Ignore]
-        public bool IsSubRejected => false;
+        //#region MpISourceItem Implementation
+        //[Ignore]
+        //public int IconId => iconId;
+        //[Ignore]
+        //public string SourcePath => DestinationUrl;
+        //[Ignore]
+        //public string SourceName => DestinationName;
+        //[Ignore]
+        //public int RootId => Id;
+        //[Ignore]
+        //public bool IsUrl => true;
+        //[Ignore]
+        //public bool IsUser => false;
+        //[Ignore]
+        //public bool IsDll => false;
+        //[Ignore]
+        //public bool IsExe => false;
+        //[Ignore]
+        //public bool IsRejected => false;
+        //[Ignore]
+        //public bool IsSubRejected => false;
 
-        #endregion
+        //#endregion
     }
 }

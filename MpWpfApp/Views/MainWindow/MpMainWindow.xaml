@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:MpWpfApp"
+        xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         x:Name="MainWindow"
         Title="MpMainWindow"
@@ -62,8 +63,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="{Binding TitleMenuHeight,
                                                 Source={x:Static local:MpMeasurements.Instance}}" />
-                <RowDefinition Height="{Binding FilterMenuHeight,
-                                                Source={x:Static local:MpMeasurements.Instance}}" />
+                <RowDefinition Height="{Binding FilterMenuHeight}" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -75,8 +75,8 @@
                   Grid.Row="0"
                   Background="{Binding TitleBarBackgroundHexColor,
                                        Converter={StaticResource StringHexToBrushConverter}}">
-
                 <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources />
                     <Button Margin="5,0,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
@@ -96,15 +96,12 @@
                                                 Source={StaticResource CogIcon},
                                                 Converter={StaticResource StringResourceToImageSourceConverter}}"
                                Stretch="Fill">
-                            <Image.Effect>
+                            <!--<Image.Effect>
                                 <local:MpInvertEffect />
-                            </Image.Effect>
+                            </Image.Effect>-->
                         </Image>
                     </Button>
-                    <ToggleButton Margin="0,0,5,0"
-                                  VerticalAlignment="Center"
-                                  Command="{Binding ToggleMainWindowLockCommand}"
-                                  CommandParameter="{StaticResource True}"
+                    <ToggleButton VerticalAlignment="Center"
                                   IsChecked="{Binding IsMainWindowLocked,
                                                       Mode=TwoWay,
                                                       UpdateSourceTrigger=PropertyChanged,
@@ -120,14 +117,51 @@
                                Source="{Binding Source={StaticResource LockIcon},
                                                 Converter={StaticResource StringResourceToImageSourceConverter}}"
                                Stretch="Fill">
-                            <Image.Effect>
+                            <!--<Image.Effect>
                                 <local:MpInvertEffect />
-                            </Image.Effect>
+                            </Image.Effect>-->
                         </Image>
+                    </ToggleButton>
+                    <ToggleButton VerticalAlignment="Center"
+                                  local:MpHoverableExtension.IsEnabled="True"
+                                  local:MpHoverableExtension.HoverCursor="Hand"
+                                  Background="Pink"
+                                  IsChecked="{Binding IsFilterMenuVisible,
+                                                      Mode=TwoWay,
+                                                      UpdateSourceTrigger=PropertyChanged,
+                                                      NotifyOnSourceUpdated=True,
+                                                      NotifyOnTargetUpdated=True,
+                                                      Converter={StaticResource BoolFlipConverter}}"
+                                  Template="{StaticResource LockToggleButtonControlTemplate}"
+                                  ToolTipService.InitialShowDelay="0">
+                        <ToggleButton.ToolTip>
+                            <local:MpToolTipView ToolTipText="{Binding .,
+                                                                       Converter={StaticResource ShortcutTypeToStringConverter},
+                                                                       ConverterParameter={x:Static pcl:MpShortcutType.ToggleFilterMenuVisible}}" />
+                        </ToggleButton.ToolTip>
+                        <Grid>
+                            <Polygon Points="6,0 12,12 0,12"
+                                     StrokeThickness="1"
+                                     Visibility="{Binding IsFilterMenuVisible,
+                                                          Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                     Stroke="Black"
+                                     Fill="Transparent" />
+                            <Polygon Points="5,0 10,10 0,10"
+                                     StrokeThickness="1"
+                                     Visibility="{Binding IsFilterMenuVisible,
+                                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                                     Stroke="Black"
+                                     Fill="Transparent">
+                                <Polygon.LayoutTransform>
+                                    <RotateTransform Angle="180" />
+                                </Polygon.LayoutTransform>
+                            </Polygon>
+                        </Grid>
                     </ToggleButton>
                 </StackPanel>
 
-                <Border Width="100"
+                <Border x:Name="MainWindowResizeBorder"
+                        Width="100"
                         VerticalAlignment="Stretch"
                         local:MpHoverableExtension.DefaultBrush="White"
                         local:MpHoverableExtension.HoverBrush="Yellow"
@@ -165,6 +199,7 @@
                                                                     UpdateSourceTrigger=PropertyChanged,
                                                                     NotifyOnSourceUpdated=True,
                                                                     NotifyOnTargetUpdated=True}"
+                                                DefaultWidth="{Binding MainWindowWidth}"
                                                 DefaultHeight="{Binding MainWindowDefaultHeight,
                                                                         Source={x:Static local:MpMeasurements.Instance}}"
                                                 IsEnabled="True"
@@ -173,7 +208,8 @@
                                                                      UpdateSourceTrigger=PropertyChanged,
                                                                      NotifyOnSourceUpdated=True,
                                                                      NotifyOnTargetUpdated=True}"
-                                                ResizableEdge1="Top" />
+                                                ResizableEdge1="Top"
+                                                DoubleClickFrameworkElement="{Binding ElementName=MainWindowResizeBorder}" />
 
                     </i:Interaction.Behaviors>
                 </Border>
@@ -181,6 +217,8 @@
 
             <!--  FilterMenu  -->
             <Grid Grid.Row="1"
+                  Visibility="{Binding IsFilterMenuVisible,
+                                       Converter={StaticResource BoolToVisibilityConverter}}"
                   Background="{Binding .,
                                        Converter={StaticResource StringToThemeBrushConverter},
                                        ConverterParameter=Filter_Menu_Background_Color}">

@@ -37,6 +37,11 @@ namespace MonkeyPaste.Common {
         public static T[] ToArray<T>(this object obj) where T:class {
             return new T[] { obj as T };
         }
+        public static IEnumerable<Match> ToCollection(this MatchCollection obj) {
+            foreach(Match m in obj) {
+                yield return m;
+            }
+        }
 
         public static List<T> ToList<T>(this object obj) where T:class {
             return new List<T> { obj as T };

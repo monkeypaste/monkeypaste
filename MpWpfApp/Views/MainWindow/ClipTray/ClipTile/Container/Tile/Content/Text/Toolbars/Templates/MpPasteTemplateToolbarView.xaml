@@ -154,7 +154,7 @@
                           MinWidth="100"
                           HorizontalContentAlignment="Left"
                           VerticalContentAlignment="Center"
-                          Background="Transparent"                          
+                          Background="Transparent"
                           FontSize="14"
                           IsDropDownOpen="{Binding IsAnyDropDownOpen,
                                                    Source={x:Static local:MpMainWindowViewModel.Instance},

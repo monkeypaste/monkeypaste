@@ -287,7 +287,7 @@ namespace MpWpfApp {
                 if(Parent == null || Preset == null) {
                     return null;
                 }
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CommandId == Preset.Id && x.ShortcutType == ShortcutType);
+                var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandId == Preset.Id && x.ShortcutType == ShortcutType);
 
                 if(scvm == null) {
                     scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);

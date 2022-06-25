@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Common;
+using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,8 @@ namespace MonkeyPaste {
         PreviousPage,
         NextPage,
         FindAndReplaceSelectedItem,
+        ToggleMainWindowLocked,
+        ToggleFilterMenuVisible,
         //remaining are data (not context) driven using commandId
         PasteCopyItem = 101,
         SelectTag = 102,
@@ -956,6 +959,10 @@ namespace MonkeyPaste {
             MpRoutingType routeType,
             MpShortcutType shortcutType,
             int commandId) {
+            if(shortcutType == MpShortcutType.None) {
+                throw new Exception("Needs type");
+            }
+
             var dupShortcut = await MpDataModelProvider.GetShortcutAsync(shortcutType,commandId);
             if (dupShortcut != null) {
                 dupShortcut = await MpDb.GetItemAsync<MpShortcut>(dupShortcut.Id);
@@ -963,7 +970,7 @@ namespace MonkeyPaste {
             }
             var newShortcut = new MpShortcut() {
                 ShortcutGuid = System.Guid.NewGuid(),
-                ShortcutName = name,
+                ShortcutName = String.IsNullOrEmpty(name) ? shortcutType.EnumToLabel() : name,
                 KeyString = keyString,
                 DefaultKeyString = defKeyString,
                 RoutingType = routeType,

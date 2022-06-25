@@ -384,7 +384,7 @@ namespace MonkeyPaste {
             
             if (isNewDb) {
                 await CreateViews();
-                await InitDefaultPortableData();
+                await InitDefaultData();
 
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
@@ -567,7 +567,7 @@ namespace MonkeyPaste {
             //                                        LEFT JOIN MpUrl ON MpUrl.pk_MpUrlId = MpSource.fk_MpUrlId");
         }
         
-        private static async Task InitDefaultPortableData() {
+        private static async Task InitDefaultData() {
             // NOTE! MpTag.AllTagId needs to be changed to 1 not 2 since recent was removed
 
             #region User Device
@@ -954,6 +954,26 @@ namespace MonkeyPaste {
                 ShortcutGuid = Guid.Parse("a39ac0cb-41e4-47b5-b963-70e388dc156a"),
                 ShortcutName = "Find and Replace",
                 ShortcutType = MpShortcutType.FindAndReplaceSelectedItem,
+                RouteType = 1,
+                KeyString = "Control+H",
+                DefaultKeyString = "Control+H"
+            };
+            await AddItemAsync<MpShortcut>(sh35);
+
+            var sh36 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("99dd81d9-02df-4d81-b2fc-1457aef5a29b"),
+                ShortcutName = "Toggle Main Window Locked",
+                ShortcutType = MpShortcutType.ToggleMainWindowLocked,
+                RouteType = 1,
+                KeyString = "Control+L",
+                DefaultKeyString = "Control+L"
+            };
+            await AddItemAsync<MpShortcut>(sh35);
+
+            var sh37 = new MpShortcut() {
+                ShortcutGuid = Guid.Parse("244ed124-ea02-497d-ac10-6cf0796d9fc5"),
+                ShortcutName = "Toggle Filter Menu Visible",
+                ShortcutType = MpShortcutType.ToggleFilterMenuVisible,
                 RouteType = 1,
                 KeyString = "Control+H",
                 DefaultKeyString = "Control+H"

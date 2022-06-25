@@ -55,7 +55,6 @@ namespace MpWpfApp {
 
         #region Properties
 
-
         #region View Models
 
         public ObservableCollection<MpClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpClipTileViewModel>();
@@ -332,7 +331,12 @@ namespace MpWpfApp {
 
         #region Layout
 
-        public double ClipTrayHeight => MpMainWindowViewModel.Instance.MainWindowHeight - MpMeasurements.Instance.TitleMenuHeight - MpMeasurements.Instance.FilterMenuHeight - MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight;
+        public double ClipTileCurrentDefaultHeight => MpMeasurements.Instance.ClipTileMinSize + (MpMeasurements.Instance.ClipTileMargin * 2) + (MpMeasurements.Instance.ClipTileBorderThickness * 2);
+
+        public double ClipTrayHeight => MpMainWindowViewModel.Instance.MainWindowHeight - 
+                                        MpMeasurements.Instance.TitleMenuHeight - 
+                                        MpMainWindowViewModel.Instance.FilterMenuHeight - 
+                                        MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight;
 
         public double PinTrayScreenWidth { get; set; }
 
@@ -1334,9 +1338,12 @@ namespace MpWpfApp {
                     if (MpMainWindowViewModel.Instance.IsResizing) {
                         //main window resize
 
+                        //double lastHeight = (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior.LastHeight;
 
                         double deltaHeight = MpMainWindowViewModel.Instance.MainWindowHeight - _oldMainWindowHeight;
                         _oldMainWindowHeight = MpMainWindowViewModel.Instance.MainWindowHeight;
+                        //double deltaHeight = ClipTrayHeight - (MpMeasurements.Instance.ClipTileMinSize + (MpMeasurements.Instance.ClipTileMargin * 2) + (MpMeasurements.Instance.ClipTileBorderThickness * 2));
+                        
 
                         MpMeasurements.Instance.ClipTileMinSize += deltaHeight;
                         MpMeasurements.Instance.OnPropertyChanged(nameof(MpMeasurements.Instance.ClipTileTitleHeight));

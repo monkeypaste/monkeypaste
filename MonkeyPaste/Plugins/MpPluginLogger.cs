@@ -35,10 +35,14 @@ namespace MonkeyPaste {
             if (trans.Response == null) {
                 trans.Response = new MpPluginResponseFormat();
             }
+            int transAppId = MpPreferences.ThisAppSource.AppId;
+            int transUrlId = MpPreferences.ThisAppSource.UrlId;
 
             if (trans.Response is MpPluginResponseFormat prf) {                
                 MpCopyItemTransactionType transType = MpCopyItemTransactionType.None;
-                MpISourceTransaction transModel = null;
+                //MpISourceTransaction transModel = null;
+                int transId = 0;
+
                 if (pluginFormat.analyzer.http != null) {
                     string urlPath;
                     if (string.IsNullOrEmpty(trans.Request.ToString())) {
@@ -48,12 +52,14 @@ namespace MonkeyPaste {
                     } else {
                         throw new MpUserNotifiedException("Http Plugin Component does not exist");
                     }
-                    transType = MpCopyItemTransactionType.Http;
 
-                    transModel = await MpHttpTransaction.Create(
+                    var url = MpPlatformWrapper.Services.UrlBuilder.Create(urlPath, preset.Label);                    
+
+                    var httpTrans = await MpHttpTransaction.Create(
                         presetId: preset.Id,
-                        url: urlPath,
+                        //url: urlPath,
                         //urlName: SelectedItem.FullName,
+                        urlId: url.Id,
                         ip: MpNetworkHelpers.GetExternalIp4Address(),
                         timeSent: trans.RequestTime,
                         timeReceived: trans.ResponseTime,
@@ -62,6 +68,9 @@ namespace MonkeyPaste {
                         errorMsg: trans.TransactionErrorMessage,
                         suppressWrite: suppressWrite);
 
+                    transId = httpTrans.Id;
+                    transType = MpCopyItemTransactionType.Http;
+                    transUrlId = url.Id;
                 } else {
                     var pf = MpPluginManager.Plugins.FirstOrDefault(x => x.Value.guid == pluginFormat.guid);
                     if (!string.IsNullOrWhiteSpace(pf.Key)) {
@@ -69,24 +78,28 @@ namespace MonkeyPaste {
                         string pluginDir = Path.GetDirectoryName(manifestPath);
                         string pluginName = Path.GetFileName(pluginDir);
                         string processPath = Path.Combine(pluginDir, pluginName + ".exe");
-
+                        
                         if (pluginFormat.ioType.isCli) {
-                            transType = MpCopyItemTransactionType.Cli;
+                            var app = await MpPlatformWrapper.Services.AppBuilder.Create(processPath, preset.Label);
 
-                            transModel = await MpCliTransaction.Create(
+                            var cliTrans = await MpCliTransaction.Create(
                                 presetId: preset.Id,
-                                cliPath: pf.Value.ComponentPath,
+                                //cliPath: pf.Value.ComponentPath,
+                                appId: app.Id,
                                 //cliName: SelectedItem.FullName,
                                 workingDirectory: pluginDir,
                                 args: trans.Request.ToString(),
                                 transDateTime: trans.RequestTime,
                                 errorMsg: trans.TransactionErrorMessage,
                                 suppressWrite: suppressWrite);
-                        } else if (pluginFormat.ioType.isDll) {
-                            transType = MpCopyItemTransactionType.Dll;
+
+                            transType = MpCopyItemTransactionType.Cli;
+                            transId = cliTrans.Id;
+                            transAppId = app.Id;
+                        } else if (pluginFormat.ioType.isDll) {                            
                             processPath = processPath.Replace(".exe", ".dll");
 
-                            transModel = await MpDllTransaction.Create(
+                            var dllTrans = await MpDllTransaction.Create(
                                 presetId: preset.Id,
                                 dllPath: processPath,
                                 //dllName: SelectedItem.FullName,
@@ -94,26 +107,31 @@ namespace MonkeyPaste {
                                 transDateTime: trans.RequestTime,
                                 errorMsg: trans.TransactionErrorMessage,
                                 suppressWrite: suppressWrite);
+
+                            transType = MpCopyItemTransactionType.Dll;
+                            transId = dllTrans.Id;
                         } else {
                             throw new MpUserNotifiedException($"Uknown ioType for plugin defined in '{manifestPath}'");
                         }
                     }
                 }
 
-                if (transModel == null) {
+                if (transId <= 0) {
                     throw new Exception("Unknown error processing analyzer transaction");
                 }
 
                 if (string.IsNullOrEmpty(trans.TransactionErrorMessage)) {
                     var cit = await MpCopyItemTransaction.Create(
                     transType: transType,
-                    transObjId: transModel.RootId,
+                    transObjId: transId,
                     copyItemId: sourceContent.Id,
                     responseJson: JsonConvert.SerializeObject(trans.Response),
                     suppressWrite: suppressWrite);
 
                     var source = await MpSource.Create(
                         copyItemTransactionId: cit.Id,
+                        appId: transAppId,
+                        urlId: transUrlId,
                         suppressWrite: suppressWrite);
                     return source.Id;
                 }

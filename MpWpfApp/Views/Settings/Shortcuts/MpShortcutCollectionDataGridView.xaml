@@ -12,7 +12,7 @@
                                                       IsDesignTimeCreatable=False}">
 
     <DataGrid x:Name="ShortcutDatagrid"
-              ItemsSource="{Binding Shortcuts}"
+              ItemsSource="{Binding Items}"
               HorizontalAlignment="Center"
               SelectedIndex="{Binding SelectedShortcutIndex,
                                       Mode=TwoWay}"
@@ -31,57 +31,102 @@
             <DataGridTextColumn Header="Action"
                                 Width="200"
                                 Binding="{Binding ShortcutDisplayName}" />
-            <DataGridTextColumn Header="Shortcut"
+            <!--<DataGridTextColumn Header="Shortcut"
                                 Width="150"
                                 Binding="{Binding KeyString,
                                                   Mode=TwoWay,
                                                   UpdateSourceTrigger=PropertyChanged,
                                                   NotifyOnTargetUpdated=True,
-                                                  NotifyOnSourceUpdated=True}" />
-            <DataGridTemplateColumn Width="50">
+                                                  NotifyOnSourceUpdated=True}" />-->
+
+            <DataGridTemplateColumn Width="Auto"
+                                    Header="Shortcut"
+                                    SortMemberPath="KeyString">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <Button Background="Transparent"
-                                BorderBrush="Black"
-                                BorderThickness="1"
-                                ToolTip="Reassign"
-                                Command="{Binding Parent.ReassignSelectedShortcutCommand}">
-                            <Image Width="15"
-                                   Height="15"
-                                   Source="{Binding .,
-                                                    Source={StaticResource HotkeyActiveIcon},
-                                                    Converter={StaticResource StringResourceToImageSourceConverter}}" />
-                        </Button>
+                        <local:MpShortcutGestureView Background="Transparent"
+                                                     HorizontalAlignment="Left"
+                                                     DataContext="{Binding}" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="50">
+            <DataGridTemplateColumn Width="100"
+                                    Header="Routing"
+                                    SortMemberPath="RoutingType">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <Button Background="White"
+                            <ComboBox Visibility="{Binding IsRoutable,
+                                                           Converter={StaticResource BoolToVisibilityConverter}}"
+                                      IsSynchronizedWithCurrentItem="False"
+                                      SelectedIndex="{Binding SelectedRoutingTypeIdx}"
+                                      ItemsSource="{Binding .,
+                                                            Converter={StaticResource EnumToItemSourceLabelsConverter},
+                                                            ConverterParameter=MonkeyPaste.MpRoutingType}">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style TargetType="ComboBoxItem">
+                                        <Setter Property="HorizontalAlignment"
+                                                Value="Stretch" />
+                                        <Setter Property="HorizontalContentAlignment"
+                                                Value="Stretch" />
+                                        <Setter Property="VerticalAlignment"
+                                                Value="Stretch" />
+                                        <Setter Property="VerticalContentAlignment"
+                                                Value="Stretch" />
+                                        <!--<Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ComboBoxItem">
+                                                    <ContentPresenter />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>-->
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                            </ComboBox>
+                            <TextBlock Background="Transparent"
+                                       Foreground="Gray"
+                                       FontStyle="Italic"
+                                       Text="Internal"
+                                       Visibility="{Binding IsRoutable,
+                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}" />
+                        </StackPanel>
+
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Width="Auto">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Button Background="Transparent"
                                     BorderThickness="0"
                                     ToolTip="Delete"
-                                    Template="{StaticResource SearchButtonControlTemplate}"
-                                    Visibility="{Binding DeleteButtonVisibility}"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},
-                                                      Path=DataContext.DeleteShortcutCommand}">
+                                    Visibility="{Binding CanDelete,
+                                                         Converter={StaticResource BoolToVisibilityConverter}}"
+                                    Command="{Binding Parent.DeleteShortcutCommand}"
+                                    CommandParameter="{Binding}">
                                 <Image Width="20"
                                        Height="20"
-                                       Source="/MpWpfApp;component/Resources/Images/delete.png" />
+                                       Stretch="Fill"
+                                       Source="{Binding .,
+                                                        Converter={StaticResource StringResourceToImageSourceConverter},
+                                                        ConverterParameter={StaticResource HelpIcon}}" />
                             </Button>
-                            <Button Background="White"
+                            <Button Background="Transparent"
                                     BorderThickness="0"
                                     ToolTip="Reset"
-                                    Template="{StaticResource SearchButtonControlTemplate}"
-                                    Visibility="{Binding ResetButtonVisibility}"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},
-                                                      Path=DataContext.ResetShortcutCommand}">
+                                    Visibility="{Binding CanDelete,
+                                                         Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                    Command="{Binding Parent.ResetShortcutCommand}"
+                                    CommandParameter="{Binding}">
                                 <Image Width="20"
                                        Height="20"
-                                       Source="/MpWpfApp;component/Resources/Icons/Silk/icons/arrow_refresh.png" />
+                                       Stretch="Uniform"
+                                       Source="{Binding .,
+                                                        Converter={StaticResource StringResourceToImageSourceConverter},
+                                                        ConverterParameter={StaticResource ResetIcon}}" />
                             </Button>
-                        </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>

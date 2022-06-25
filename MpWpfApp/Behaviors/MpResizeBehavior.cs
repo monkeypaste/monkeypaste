@@ -234,6 +234,7 @@ namespace MpWpfApp {
 
         #endregion
 
+
         public bool AffectsContent { get; set; } = false;
 
         public virtual MpRectEdgeFlags ResizableEdge1 { get; set; }
@@ -295,36 +296,40 @@ namespace MpWpfApp {
 
         public void ResetToDefault() {
             Point curSize = new Point(BoundWidth, BoundHeight);
-            //Point defaultSize = new Point(
-            //    DefaultWidth == default ? curSize.X : DefaultWidth, 
-            //    DefaultHeight == default ? curSize.Y : DefaultHeight);
             Point defaultSize = new Point(DefaultWidth, DefaultHeight);
-            if (AssociatedObject.DataContext is MpClipTileViewModel) {
+            if (AssociatedObject.DataContext is MpClipTileViewModel ctvm) {
                 if (defaultSize.X != MpClipTileViewModel.DefaultBorderWidth ||
                    defaultSize.Y != MpClipTileViewModel.DefaultBorderHeight) {
                     //Debugger.Break();
 
                     defaultSize = new Point(MpClipTileViewModel.DefaultBorderWidth, MpClipTileViewModel.DefaultBorderHeight);
                 }
-            } else if (AssociatedObject.DataContext is MpMainWindowViewModel mwvm) { 
-                
+                bool resetToContentSize = false;
+                if (curSize.X == defaultSize.X) {
+                    resetToContentSize = true;
+                    if (AssociatedObject.DataContext is MpClipTileViewModel ctvm1) {
+                        var ds = ctvm1.UnformattedContentSize;
+                        defaultSize = new Point(ds.Width, ds.Height);
+                    }
+
+                }
+
+                Vector delta = curSize - defaultSize;
+                Resize(-delta.X, -delta.Y);
+                Reset();
+
+                if (!resetToContentSize && !ctvm.IsPlaceholder) {
+                    //MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup.Remove(ctvm.CopyItemId);
+                    MpClipTrayViewModel.Instance.RemovePersistentWidthById(ctvm.CopyItemId);
+                }
+
+            } else if (AssociatedObject.DataContext is MpMainWindowViewModel mwvm) {
+                Vector delta = curSize - defaultSize;
+                Resize(-delta.X, -delta.Y);
+                Reset();
             }
 
-            bool resetToContentSize = false;
-            if(curSize.X == defaultSize.X) {
-                resetToContentSize = true;
-                var ds = (AssociatedObject.DataContext as MpClipTileViewModel).UnformattedContentSize;
-                defaultSize = new Point(ds.Width, ds.Height);
-            }
-            Vector delta = curSize - defaultSize;
-            Resize(-delta.X, -delta.Y);
-            Reset();
-
-            if(!resetToContentSize && 
-               AssociatedObject.DataContext is MpClipTileViewModel ctvm && !ctvm.IsPlaceholder) {
-                //MpClipTrayViewModel.Instance.PersistentUniqueWidthTileLookup.Remove(ctvm.CopyItemId);
-                MpClipTrayViewModel.Instance.RemovePersistentWidthById(ctvm.CopyItemId);
-            }
+            
         }
 
         public void Resize(double dx, double dy) {
@@ -337,7 +342,8 @@ namespace MpWpfApp {
             if (Math.Abs(dx + dy) < 0.1) {
                 return;
             }
-            if(BoundWidth + dx < 0) {
+
+            if (BoundWidth + dx < 0) {
                 ResetToDefault();
                 return;
             }
@@ -346,6 +352,8 @@ namespace MpWpfApp {
 
             double nh = BoundHeight + dy;
             BoundHeight = Math.Min(Math.Max(nh, MinHeight), MaxHeight);
+
+            
 
 
             if(AffectsContent) {
@@ -368,6 +376,27 @@ namespace MpWpfApp {
                 return;
             }
             BoundWidth = newWidth;
+
+            if (AffectsContent) {
+                MpMessenger.SendGlobal(MpMessageType.ResizingContent);
+                if (!IsResizing) {
+                    MpMessenger.SendGlobal(MpMessageType.ResizeContentCompleted);
+                }
+            }
+        }
+
+        public void ResizeHeight(double newHeight) {
+            if (newHeight < 0) {
+                Debugger.Break();
+                return;
+            }
+            if (newHeight > MaxHeight || newHeight < MinHeight) {
+                MpConsole.WriteLine(@"Cannot resize width to " + newHeight + " its outside bounds of min: " + MinWidth + " max: " + MaxWidth);
+                MpConsole.WriteLine("Restoring to default: " + DefaultHeight);
+                ResetToDefault();
+                return;
+            }
+            BoundHeight = newHeight;
 
             if (AffectsContent) {
                 MpMessenger.SendGlobal(MpMessageType.ResizingContent);
@@ -435,35 +464,11 @@ namespace MpWpfApp {
                 return;
             }
             var mwmp = e.GetPosition(Application.Current.MainWindow);
-
-            //_lastMousePosition = _lastMousePosition.HasValue ? _lastMousePosition : mwmp;
             Vector delta =  mwmp - _lastMousePosition.Value;
 
             if (IsResizing) {
                 Resize(delta.X, -delta.Y);
-            } //else if(!IsAnyResizing) {
-            //    var rect = new Rect(0, 0, AssociatedObject.RenderSize.Width, AssociatedObject.RenderSize.Height);
-            //    MpRectEdgeFlags edgeFlags = GetClosestEdgeOrCorner(rect, e.GetPosition(AssociatedObject));
-            //    _curCursor = GetCursorByRectFlags(edgeFlags);
-            //    if (_curCursor != MpCursorType.Default) {
-            //        CanResize = true;
-            //        MpCursor.SetCursor(this, _curCursor);
-            //        if(Mouse.LeftButton == MouseButtonState.Pressed) {
-            //            double totalDist = mwmp.Distance(_mouseDownPosition.Value);
-
-            //            if (totalDist >= 1) {
-            //                IsResizing = AssociatedObject.IsMouseCaptured;
-
-            //                if (IsResizing) {
-            //                    Resize(delta.X, delta.Y);
-            //                }
-            //            }
-            //        }                    
-            //    } else {
-            //        MpCursor.UnsetCursor(this);
-            //        CanResize = false;
-            //    }
-            //}
+            } 
             _lastMousePosition = mwmp;
         }
 

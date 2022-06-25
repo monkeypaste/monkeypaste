@@ -119,7 +119,13 @@ namespace MonkeyPaste {
 
             var dupApp = await MpDataModelProvider.GetAppByPath(appPath);
             if (dupApp != null) {
-                dupApp = await MpDb.GetItemAsync<MpApp>(dupApp.Id);
+                //dupApp = await MpDb.GetItemAsync<MpApp>(dupApp.Id);
+                if(dupApp.IconId != iconId && iconId > 0) {
+                    // this means app icon has changed or different device or something but update icon here
+                    Debugger.Break();
+                    dupApp.IconId = iconId;
+                    await dupApp.WriteToDatabaseAsync();                    
+                }
                 return dupApp;
             }
             //if app doesn't exist create image,icon,app and source

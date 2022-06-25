@@ -710,6 +710,7 @@ using stdole;
         public bool IsHorizontalScrollbarVisibile {
             get {
                 if(!IsContentReadOnly) {
+                    // NOTE from margin padding auto false positives for horizontal and has been working
                     return EditableContentSize.Width > ContentWidth;
                 }
                 return false;
@@ -721,8 +722,9 @@ using stdole;
                 if (IsContentReadOnly && !IsSubSelectionEnabled) {
                     return false;
                 }
-
-                return EditableContentSize.Height > ContentHeight;
+                // true makes auto
+                return true;
+                //return EditableContentSize.Height > ContentHeight;
             }
         }
 
@@ -1750,8 +1752,10 @@ using stdole;
 
         #endregion
 
-        
-        
+        public override string ToString() {
+            return CopyItemTitle;
+        }
+
         #endregion
 
         #region Protected Methods

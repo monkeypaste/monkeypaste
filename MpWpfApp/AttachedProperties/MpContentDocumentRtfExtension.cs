@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Xml.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Controls.Primitives;
+using System.Text.RegularExpressions;
 
 namespace MpWpfApp {
     public class MpContentDocumentRtfExtension : DependencyObject {
@@ -383,6 +384,22 @@ namespace MpWpfApp {
             }
         }
 
+        public static void InsertEncodedTemplateInSelection(MpIRtfSelectionRange tsr, string guid) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                string encodedTemplateStr = MpTextTemplate.TextTemplateOpenToken + guid + MpTextTemplate.TextTemplateCloseToken;
+                //var lbi = rtb.Selection.GetAllTextElements().FirstOrDefault(x => x is ListItem) as ListItem;
+                //if (lbi != null) {
+                //    // BUG when adding template to first position of lbi the matcher returns the leading \t
+                //    // so prepending a space
+                //    string lbiText = lbi.ContentRange().Text;
+                //    encodedTemplateStr = " " + encodedTemplateStr;
+                //}
+                rtb.Selection.Text = encodedTemplateStr;
+            }
+        }
+
+
         public static void SelectAll(MpIRtfSelectionRange tsr) {
             var tbb = FindTextBoxBase(tsr);
             if (tbb == null) {
@@ -555,6 +572,7 @@ namespace MpWpfApp {
 
             // get ranges of templates encoded from db (will be present on initial load, after saving content or when new template is added/created)
             var templateEncodedRanges = GetEncodedRanges(rtb.Document, MpTextTemplate.TextTemplateOpenToken, MpTextTemplate.TextTemplateCloseToken);
+            //var templateEncodedRanges = GetEncodedTemplates(rtb.Document).ToArray();
 
             var templateEncodedGuids = templateEncodedRanges.Select(x => x.Text.Replace(MpTextTemplate.TextTemplateOpenToken, string.Empty).Replace(MpTextTemplate.TextTemplateCloseToken, string.Empty)).ToList();
             var templateItems = await MpDataModelProvider.GetTextTemplatesByGuids(templateEncodedGuids);
@@ -593,7 +611,7 @@ namespace MpWpfApp {
                     tvm = await tcvm.CreateTemplateViewModel(templateItem);
                     tcvm.Items.Add(tvm);
                 }
-                var templateRange = templateEncodedRanges.FirstOrDefault(x => x.Text == "{t{" + templateGuid + "}t}");
+                var templateRange = templateEncodedRanges.FirstOrDefault(x => x.Text == MpTextTemplate.TextTemplateOpenToken + templateGuid + MpTextTemplate.TextTemplateCloseToken);
                 if (templateRange == null) {
                     Debugger.Break();
                 }
@@ -653,7 +671,15 @@ namespace MpWpfApp {
             rtb.TextChanged -= Rtb_TextChanged;
         }
 
-        
+        private static IEnumerable<TextRange> GetEncodedTemplates(FlowDocument fd) {
+            var mc = MpRegEx.RegExLookup[MpRegExType.Guid]
+                        .Matches(fd.ContentRange().Text)
+                        .ToCollection().Distinct();
+
+            return mc.SelectMany(x => 
+                        fd.FindText(MpTextTemplate.TextTemplateOpenToken + x.Value + MpTextTemplate.TextTemplateCloseToken,true,true));
+        }
+
         private static TextRange[] GetEncodedRanges(FlowDocument fd, string rangeStartText, string rangeEndText) {
             return GetEncodedRanges(new TextRange(fd.ContentStart, fd.ContentEnd), rangeStartText, rangeEndText);
         }

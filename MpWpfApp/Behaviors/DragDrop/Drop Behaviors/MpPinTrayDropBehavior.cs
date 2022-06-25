@@ -168,7 +168,7 @@ namespace MpWpfApp {
                 drag_ctvm = dragData as MpClipTileViewModel;
                 bool isPartialDrop = !MpTextBoxSelectionRangeExtension.IsAllSelected(drag_ctvm);
                 if(isPartialDrop) {
-                    string drop_data = drag_ctvm.SelectedPlainText; //MpContentDocumentRtfExtension.ExchangeDataWithTarget(drag_ctvm, isCopy);
+                    string drop_data = drag_ctvm.SelectedRichText; 
 
                     var dragModel = await drag_ctvm.CopyItem.Clone(false) as MpCopyItem;
                     dragModel.ItemData = drop_data;
@@ -189,17 +189,6 @@ namespace MpWpfApp {
 
             if(drag_ctvm != null && !isCopy) {
                 await MpContentDocumentRtfExtension.FinishContentCut(drag_ctvm);
-
-                //// only need to update drag source if not from external
-                //if (delete_drag_item) {
-                //    // NOTE this can only be true for partial drop
-                //    drag_ctvm.CopyItem.DeleteFromDatabaseAsync()
-                //        .FireAndForgetSafeAsync(ctrvm);
-                //} else {
-                //    MpContentDocumentRtfExtension.SaveTextContent(
-                //        MpContentDocumentRtfExtension.FindRtbByViewModel(drag_ctvm))
-                //        .FireAndForgetSafeAsync(ctrvm);
-                //}
             }
             
                         
@@ -210,15 +199,6 @@ namespace MpWpfApp {
                 //Debugger.Break();
                 return;
             }
-            ////int curIdx = ctrvm.PinnedItems.IndexOf(drop_ctvm);
-            ////if(curIdx >= 0 && curIdx < ctrvm.PinnedItems.Count &&
-            ////   dropIdx >= 0 && dropIdx < ctrvm.PinnedItems.Count) {
-            ////    ctrvm.PinnedItems.Move(curIdx, dropIdx);
-            ////}
-
-            ////while (ctrvm.IsAnyBusy) {
-            ////    await Task.Delay(100);
-            ////}
 
             drop_ctvm.IsSelected = true;
         }

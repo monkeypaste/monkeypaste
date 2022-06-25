@@ -103,30 +103,30 @@ namespace MonkeyPaste {
 
         public MpDllTransaction() { }
 
-        #region MpISourceItem Implementation
+        //#region MpISourceItem Implementation
 
-        [Ignore]
-        public int IconId => 0;
-        [Ignore]
-        public string SourcePath => DllPath;
-        [Ignore]
-        public string SourceName => DllName;
-        [Ignore]
-        public int RootId => Id;
-        [Ignore]
-        public bool IsUser => false;
-        [Ignore]
-        public bool IsUrl => false;
-        [Ignore]
-        public bool IsDll => true;
-        [Ignore]
-        public bool IsExe => false;
-        [Ignore]
-        public bool IsRejected => false;
-        [Ignore]
-        public bool IsSubRejected => false;
+        //[Ignore]
+        //public int IconId => 0;
+        //[Ignore]
+        //public string SourcePath => DllPath;
+        //[Ignore]
+        //public string SourceName => DllName;
+        //[Ignore]
+        //public int RootId => Id;
+        //[Ignore]
+        //public bool IsUser => false;
+        //[Ignore]
+        //public bool IsUrl => false;
+        //[Ignore]
+        //public bool IsDll => true;
+        //[Ignore]
+        //public bool IsExe => false;
+        //[Ignore]
+        //public bool IsRejected => false;
+        //[Ignore]
+        //public bool IsSubRejected => false;
 
 
-        #endregion
+        //#endregion
     }
 }

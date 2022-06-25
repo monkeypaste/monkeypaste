@@ -38,7 +38,8 @@
                     DataContext="{Binding TitleSwirlViewModel}">
                 <Path x:Name="Layer0"
                       StrokeThickness="0"
-                      Fill="{Binding HexColors[0], Converter={StaticResource StringHexToBrushConverter}}"
+                      Fill="{Binding HexColors[0],
+                                     Converter={StaticResource StringHexToBrushConverter}}"
                       Opacity="{Binding Opacities[0]}">
                     <Path.Data>
                         <PathGeometry PresentationOptions:Freeze="True">
@@ -57,7 +58,8 @@
                 </Path>
                 <Path x:Name="Layer1"
                       StrokeThickness="0"
-                      Fill="{Binding HexColors[1], Converter={StaticResource StringHexToBrushConverter}}"
+                      Fill="{Binding HexColors[1],
+                                     Converter={StaticResource StringHexToBrushConverter}}"
                       Opacity="{Binding Opacities[1]}">
                     <Path.Data>
                         <PathGeometry PresentationOptions:Freeze="True">
@@ -77,10 +79,11 @@
                         </PathGeometry>
                     </Path.Data>
                 </Path>
-                <!-- Opacity="0.2"-->
+                <!--  Opacity="0.2"  -->
                 <Ellipse x:Name="Layer2"
                          StrokeThickness="0"
-                         Fill="{Binding HexColors[2], Converter={StaticResource StringHexToBrushConverter}}"
+                         Fill="{Binding HexColors[2],
+                                        Converter={StaticResource StringHexToBrushConverter}}"
                          Opacity="0.2"
                          Width="87"
                          Height="28"
@@ -88,7 +91,8 @@
                          Canvas.Top="24" />
                 <Path x:Name="Layer3"
                       StrokeThickness="0"
-                      Fill="{Binding HexColors[3], Converter={StaticResource StringHexToBrushConverter}}"
+                      Fill="{Binding HexColors[3],
+                                     Converter={StaticResource StringHexToBrushConverter}}"
                       Opacity="{Binding Opacities[3]}">
                     <Path.Data>
                         <PathGeometry PresentationOptions:Freeze="True">

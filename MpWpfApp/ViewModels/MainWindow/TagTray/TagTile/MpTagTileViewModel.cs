@@ -203,7 +203,7 @@ namespace MpWpfApp {
                 if (Parent == null || Tag == null) {
                     return null;
                 }
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.CommandId == TagId && x.ShortcutType == ShortcutType);
+                var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandId == TagId && x.ShortcutType == ShortcutType);
 
                 if (scvm == null) {
                     scvm = new MpShortcutViewModel(MpShortcutCollectionViewModel.Instance);
@@ -392,7 +392,7 @@ namespace MpWpfApp {
         public double TagHeight {
             get {
                 //assumes Tag Margin is 5
-                return MpMeasurements.Instance.FilterMenuHeight - (5 * 2);
+                return MpMeasurements.Instance.FilterMenuDefaultHeight - (5 * 2);
             }
         }
 

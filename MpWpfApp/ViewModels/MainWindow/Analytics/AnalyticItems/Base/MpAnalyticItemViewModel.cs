@@ -409,7 +409,6 @@ namespace MpWpfApp {
             if (AnalyzerPluginComponent == null) {
                 throw new Exception("Cannot find component");
             }
-
             
             var presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
 
@@ -419,8 +418,10 @@ namespace MpWpfApp {
                 presets.FirstOrDefault(x => x.IsDefault) != default &&
                       presets.FirstOrDefault(x => x.IsDefault).IconId > 0) {
                 IconId = presets.FirstOrDefault(x => x.IsDefault).IconId;
-            } else { 
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl,PluginFormat.RootDirectory);
+            } else if (presets.Any(x => x.IconId > 0)) {
+                IconId = presets.FirstOrDefault(x => x.IconId > 0).IconId;
+            } else {
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl, PluginFormat.RootDirectory);
                 var icon = await MpIcon.Create(
                     iconImgBase64: bytes.ToBase64String(),
                     createBorder: false);

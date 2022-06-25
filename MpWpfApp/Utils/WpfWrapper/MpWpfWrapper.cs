@@ -14,6 +14,8 @@ namespace MpWpfApp {
         public MpIPreferenceIO PreferenceIO { get; }
         public MpIQueryInfo QueryInfo { get; }
         public MpIIconBuilder IconBuilder { get; }
+        public MpIUrlBuilder UrlBuilder { get; }
+        public MpIAppBuilder AppBuilder { get; }
         public MpICustomColorChooserMenu CustomColorChooserMenu { get; }
         public MpIKeyboardInteractionService KeyboardInteractionService { get; }
         public MpIGlobalTouch GlobalTouch { get; }
@@ -42,6 +44,8 @@ namespace MpWpfApp {
             PreferenceIO = new MpWpfPreferences();            
             QueryInfo = new MpWpfQueryInfo();
             IconBuilder = new MpWpfIconBuilder();
+            UrlBuilder = new MpUrlBuilder();
+            AppBuilder = new MpWpfAppBuilder();
             CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
             NativeResource = new MpWpfResourceFetcher();
             ContextMenuCloser = new MpWpfContextMenuCloser();

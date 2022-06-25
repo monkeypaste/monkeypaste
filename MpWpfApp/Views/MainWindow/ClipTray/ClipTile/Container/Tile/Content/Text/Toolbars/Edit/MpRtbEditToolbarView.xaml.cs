@@ -308,7 +308,7 @@ namespace MpWpfApp {
             var clickedButton = (ToggleButton)sender;
             var buttonGroup = new[] { BulletsButton, NumberingButton };
             SetButtonGroupSelection(clickedButton, selectedListButton, buttonGroup, false);
-            selectedListButton = clickedButton;
+            selectedListButton = clickedButton; 
         }
 
         private void SetButtonGroupSelection(ToggleButton clickedButton, ToggleButton currentSelectedButton, IEnumerable<ToggleButton> buttonGroup, bool ignoreClickWhenSelected) {

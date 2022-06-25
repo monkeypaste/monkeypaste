@@ -16,11 +16,12 @@
             IsVisibleChanged="ClipTileEditTemplateToolbar_IsVisibleChanged"
             MinHeight="40"
             VerticalAlignment="Stretch"
-            HorizontalAlignment="Stretch"            
+            HorizontalAlignment="Stretch"
             Background="LightBlue"
             BorderThickness="0">
         <Border.Resources>
-            <Style x:Key="BorderStyle" TargetType="Border">
+            <Style x:Key="BorderStyle"
+                   TargetType="Border">
                 <Setter Property="CornerRadius"
                         Value="5" />
                 <Setter Property="Margin"
@@ -52,11 +53,10 @@
                         Value="14" />
             </Style>
             <Style x:Key="ComboBoxStyle"
-                   TargetType="ComboBox">
-                
-            </Style>
+                   TargetType="ComboBox" />
             <Style x:Key="ButtonStyle"
-                   TargetType="Button" BasedOn="{StaticResource SemiTransparentButton}">
+                   TargetType="Button"
+                   BasedOn="{StaticResource SemiTransparentButton}">
                 <Setter Property="BorderThickness"
                         Value="0" />
                 <Setter Property="Padding"
@@ -73,18 +73,22 @@
                         Value="SemiBold" />
             </Style>
         </Border.Resources>
-        <DockPanel LastChildFill="True" VerticalAlignment="Center">
+        <DockPanel LastChildFill="True"
+                   VerticalAlignment="Center">
             <DockPanel.Resources>
                 <DataTemplate x:Key="DynamicTemplate" />
                 <DataTemplate x:Key="StaticTemplate"
                               DataType="{x:Type local:MpStaticTextTemplateViewModel}">
-                    <StackPanel x:Name="StaticTemplateStackPanelContainer" Orientation="Horizontal">
-                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
+                    <StackPanel x:Name="StaticTemplateStackPanelContainer"
+                                Orientation="Horizontal">
+                        <TextBlock Margin="10,0,0,0"
+                                   VerticalAlignment="Center"
                                    Text="Text"
                                    FontSize="14"
                                    FontWeight="SemiBold" />
-                        <Border Style="{StaticResource BorderStyle}" VerticalAlignment="Top">
-                            <TextBox Style="{StaticResource TextBoxStyle}" 
+                        <Border Style="{StaticResource BorderStyle}"
+                                VerticalAlignment="Top">
+                            <TextBox Style="{StaticResource TextBoxStyle}"
                                      PreviewKeyDown="TemplateNameEditorTextBox_PreviewKeyDown"
                                      Text="{Binding TemplateData,
                                                     Mode=TwoWay,
@@ -225,7 +229,9 @@
                                              Converter={StaticResource BoolToVisibilityFlipConverter}}">
                     <DockPanel>
                         <Image Source="/Resources/Images/warning.png"
-                               Stretch="Fill" Height="15" Width="15"
+                               Stretch="Fill"
+                               Height="15"
+                               Width="15"
                                DockPanel.Dock="Left" />
                         <TextBlock x:Name="TemplateNameValidationTextBlock"
                                    DockPanel.Dock="Right"
@@ -244,16 +250,19 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         DockPanel.Dock="Right">
-                <Border Style="{StaticResource BorderStyle}" Margin="0,7,0,7" BorderBrush="DimGray"
+                <Border Style="{StaticResource BorderStyle}"
+                        Margin="0,7,0,7"
+                        BorderBrush="DimGray"
                         Background="Crimson">
-                    <Button x:Name="DeleteAllButton" 
+                    <Button x:Name="DeleteAllButton"
                             Background="Crimson"
                             Foreground="Wheat"
                             Style="{StaticResource ButtonStyle}"
                             Command="{Binding DeleteAllTemplateInstancesCommand}"
-                            Content="DELETE ALL"/>
+                            Content="DELETE ALL" />
                 </Border>
-                <Border Background="LightGray" BorderBrush="DimGray"
+                <Border Background="LightGray"
+                        BorderBrush="DimGray"
                         Style="{StaticResource BorderStyle}">
                     <Button x:Name="CancelButton"
                             Style="{StaticResource ButtonStyle}"
@@ -261,7 +270,8 @@
                             Content="CANCEL"
                             IsCancel="True" />
                 </Border>
-                <Border Style="{StaticResource BorderStyle}" Margin="0,7,15,7"
+                <Border Style="{StaticResource BorderStyle}"
+                        Margin="0,7,15,7"
                         Background="LightGray"
                         BorderBrush="DimGray">
                     <Button x:Name="OkButton"

@@ -165,15 +165,10 @@
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
-                                                  Padding="10">
-                                        <ToggleButton.ToolTip>
-                                            <TextBlock>
-                                                <Run Text="Append Cut/Copy " />
-                                                <Run Text="{Binding .,
+                                                  ToolTip="{Binding .,
                                                                     Converter={StaticResource ShortcutTypeToStringConverter},
-                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleAppendMode}}" />
-                                            </TextBlock>
-                                        </ToggleButton.ToolTip>
+                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleAppendMode}}"
+                                                  Padding="10">
                                         <Image Source="{Binding Source={StaticResource AppendRunIcon},
                                                                 Converter={StaticResource StringResourceToImageSourceConverter}}"
                                                HorizontalAlignment="Center"
@@ -192,14 +187,14 @@
                                                   HorizontalAlignment="Center"
                                                   Template="{StaticResource AppModeToggleButtonControlTemplate}"
                                                   Padding="10">
-                                        <ToggleButton.ToolTip>
+                                        <!--<ToggleButton.ToolTip>
                                             <TextBlock>
                                                 <Run Text="Append Line Cut/Copy " />
                                                 <Run Text="{Binding .,
                                                                     Converter={StaticResource ShortcutTypeToStringConverter},
                                                                     ConverterParameter={x:Static pcl:MpShortcutType.ToggleAppendLineMode}}" />
                                             </TextBlock>
-                                        </ToggleButton.ToolTip>
+                                        </ToggleButton.ToolTip>-->
                                         <Image Source="{Binding Source={StaticResource AppendLineIcon},
                                                                 Converter={StaticResource StringResourceToImageSourceConverter}}"
                                                HorizontalAlignment="Center"

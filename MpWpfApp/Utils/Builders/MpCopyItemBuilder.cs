@@ -23,18 +23,18 @@ namespace MpWpfApp {
         #region Public Methods
         
         public static async Task<MpCopyItem> CreateFromDataObject(MpPortableDataObject mpdo, bool suppressWrite = false) {
-            try {                
+            try {
                 if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                     return null;
                 }
-                var iData = mpdo.DataFormatLookup as Dictionary<MpPortableDataFormat,object>;
-                                
-                
+                var iData = mpdo.DataFormatLookup as Dictionary<MpPortableDataFormat, object>;
+
+
                 string itemData = null;
                 //string htmlData = string.Empty;
                 MpHtmlClipboardDataConverter htmlClipboardData = new MpHtmlClipboardDataConverter();
                 MpCopyItemType itemType = MpCopyItemType.None;
-                
+
                 if (mpdo.ContainsData(MpPortableDataFormats.FileDrop)) {
                     itemType = MpCopyItemType.FileList;
                     itemData = mpdo.GetData(MpPortableDataFormats.FileDrop).ToString();
@@ -56,7 +56,7 @@ namespace MpWpfApp {
                     htmlClipboardData = await MpHtmlClipboardDataConverter.Parse(rawHtmlData);
                     itemData = htmlClipboardData.Rtf;
                     //itemData = itemData.ToQuillText();
-                } else if(mpdo.ContainsData(MpPortableDataFormats.Text)) {                    
+                } else if (mpdo.ContainsData(MpPortableDataFormats.Text)) {
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Text).ToString().ToRichText();
                     //itemData = itemData.ToQuillText();
@@ -101,43 +101,45 @@ namespace MpWpfApp {
                 }
 
                 var dupCheck = await MpDataModelProvider.GetCopyItemByData(itemData);
-                if(dupCheck != null) {
+                if (dupCheck != null) {
                     MpConsole.WriteLine("Duplicate item detected, flipping id and returning");
                     dupCheck = await MpDb.GetItemAsync<MpCopyItem>(dupCheck.Id);
                     dupCheck.Id *= -1;
                     return dupCheck;
                 }
 
-                string processPath, appName, processIconImg64;
+                var app = await MpPlatformWrapper.Services.AppBuilder.Create(MpProcessManager.LastHandle);
 
-                var processHandle = MpProcessManager.LastHandle;
-                if (processHandle == IntPtr.Zero) {
-                    // since source is unknown set to this app
+                //string processPath, appName, processIconImg64;
 
-                    processPath = Assembly.GetExecutingAssembly().Location;
-                    appName = MpPreferences.ThisAppName;
-                    processIconImg64 = MpBase64Images.AppIcon;
-                } else {
-                    processPath = MpProcessManager.GetProcessPath(processHandle);
-                    appName = MpProcessManager.GetProcessApplicationName(processHandle);
-                    processIconImg64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(processPath);
-                }
+                //var processHandle = MpProcessManager.LastHandle;
+                //if (processHandle == IntPtr.Zero) {
+                //    // since source is unknown set to this app
 
-                MpApp app = await MpDataModelProvider.GetAppByPath(processPath);
-                if (app == null) {
-                    var icon = await MpDataModelProvider.GetIconByImageStr(processIconImg64);
-                    if (icon == null) {
-                        icon = await MpIcon.Create(processIconImg64);
-                    } else {
-                        icon = await MpDb.GetItemAsync<MpIcon>(icon.Id);
-                    }
-                    app = await MpApp.Create(processPath, appName, icon.Id);
-                } else {
-                    app = await MpDb.GetItemAsync<MpApp>(app.Id);
-}
+                //    processPath = Assembly.GetExecutingAssembly().Location;
+                //    appName = MpPreferences.ThisAppName;
+                //    processIconImg64 = MpBase64Images.AppIcon;
+                //} else {
+                //    processPath = MpProcessManager.GetProcessPath(processHandle);
+                //    appName = MpProcessManager.GetProcessApplicationName(processHandle);
+                //    processIconImg64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(processPath);
+                //}
+
+                //MpApp app = await MpDataModelProvider.GetAppByPath(processPath);
+                //if (app == null) {
+                //    var icon = await MpDataModelProvider.GetIconByImageStr(processIconImg64);
+                //    if (icon == null) {
+                //        icon = await MpIcon.Create(processIconImg64);
+                //    } else {
+                //        icon = await MpDb.GetItemAsync<MpIcon>(icon.Id);
+                //    }
+                //    app = await MpApp.Create(processPath, appName, icon.Id);
+                //} else {
+                //    app = await MpDb.GetItemAsync<MpApp>(app.Id);
+                //}
 
                 MpUrl url = htmlClipboardData == null ?
-                    null : await MpUrlBuilder.CreateFromSourceUrl(htmlClipboardData.SourceUrl);
+                    null : await MpUrlBuilder.CreateUrl(htmlClipboardData.SourceUrl);
 
                 if (url != null) {
                     if (MpUrlCollectionViewModel.Instance.IsRejected(url.UrlDomainPath)) {

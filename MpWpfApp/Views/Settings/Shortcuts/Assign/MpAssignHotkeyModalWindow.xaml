@@ -14,7 +14,7 @@
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
-        Loaded="Window_Loaded"        
+        Loaded="Window_Loaded"
         Closed="Window_Closed"
         d:DataContext="{d:DesignInstance Type=local:MpAssignShortcutModalWindowViewModel,
                                          IsDesignTimeCreatable=False}">

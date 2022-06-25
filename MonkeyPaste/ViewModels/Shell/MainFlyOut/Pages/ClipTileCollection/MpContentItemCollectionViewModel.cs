@@ -279,7 +279,7 @@ namespace MonkeyPaste {
 
         #region Layout
 
-        public double ClipTrayHeight => MpMainWindowViewModel.Instance.MainWindowHeight - MpMeasurements.Instance.TitleMenuHeight - MpMeasurements.Instance.FilterMenuHeight - MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight;
+        public double ClipTrayHeight => MpMainWindowViewModel.Instance.MainWindowHeight - MpMeasurements.Instance.TitleMenuHeight - MpMeasurements.Instance.FilterMenuDefaultHeight - MpSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight;
 
         public double PinTrayScreenWidth { get; set; }
 

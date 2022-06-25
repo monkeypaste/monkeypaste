@@ -18,7 +18,7 @@ namespace MpWpfApp {
                 if (Action == null) {
                     return null;
                 }
-                var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(
+                var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(
                     x => x.CommandId == ActionId && x.ShortcutType == ShortcutType);
 
                 if (scvm == null) {
@@ -71,7 +71,7 @@ namespace MpWpfApp {
                 return IsValid;
             }
 
-            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+            var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm == null) {
                 ValidationText = $"Shortcut for Trigger Action '{FullName}' not found";
                 await ShowValidationNotification();
@@ -89,7 +89,7 @@ namespace MpWpfApp {
 
         protected override async Task Enable() {
             await base.Enable();
-            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+            var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.RegisterActionComponent(this);
             }
@@ -97,7 +97,7 @@ namespace MpWpfApp {
 
         protected override async Task Disable() {
             await base.Disable();
-            var scvm = MpShortcutCollectionViewModel.Instance.Shortcuts.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+            var scvm = MpShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
             if (scvm != null) {
                 scvm.UnregisterActionComponent(this);
             }

@@ -28,13 +28,14 @@ namespace MonkeyPaste {
         [Column("fk_MpAnalyticItemPresetId")]
         public int PresetId { get; set; }
 
-        [ForeignKey(typeof(MpUserDevice))]
-        [Column("fk_MpUserDeviceId")]
-        public int DeviceId { get; set; }
+        //[ForeignKey(typeof(MpUserDevice))]
+        //[Column("fk_MpUserDeviceId")]
+        //public int DeviceId { get; set; }
 
-        public string CliPath { get; set; }
-        public string CliName { get; set; }
+        //public string CliPath { get; set; }
+        //public string CliName { get; set; }
 
+        public int AppId { get; set; }
         public string WorkingDirectory { get; set; }
         public string Args { get; set; }
 
@@ -94,9 +95,10 @@ namespace MonkeyPaste {
 
         public static async Task<MpCliTransaction> Create(
             int presetId = 0,
-            int deviceId = 0,
-            string cliPath = "",
-            string cliName = "",
+            //int deviceId = 0,
+            //string cliPath = "",
+            //string cliName = "",
+            int appId = 0,
             string workingDirectory = "",
             string args = "",
             bool isAdmin = false,
@@ -104,19 +106,20 @@ namespace MonkeyPaste {
             DateTime? transDateTime = null,
             string errorMsg = null,
             bool suppressWrite = false) {
-            if (string.IsNullOrWhiteSpace(cliPath)) {
-                throw new Exception("Must specifiy path");
+            if (appId <= 0) {
+                throw new Exception("Must  have app id");
             }
-            if (deviceId <= 0) {
-                deviceId = MpPreferences.ThisUserDevice.Id;
-            }
+            //if (deviceId <= 0) {
+            //    deviceId = MpPreferences.ThisUserDevice.Id;
+            //}
 
             var mr = new MpCliTransaction() {
                 CliTransactionGuid = System.Guid.NewGuid(),
                 PresetId = presetId,
-                DeviceId = deviceId,
-                CliPath = cliPath,
-                CliName = string.IsNullOrWhiteSpace(cliName) ? Path.GetFileNameWithoutExtension(cliPath) : cliName,
+                AppId = appId,
+                //DeviceId = deviceId,
+                //CliPath = cliPath,
+                //CliName = string.IsNullOrWhiteSpace(cliName) ? Path.GetFileNameWithoutExtension(cliPath) : cliName,
                 WorkingDirectory = string.IsNullOrEmpty(workingDirectory) ? Directory.GetCurrentDirectory():workingDirectory,
                 Args = args,
                 IsAdmin = isAdmin,
@@ -140,33 +143,33 @@ namespace MonkeyPaste {
         public MpCliTransaction() { }
 
 
-        #region MpISourceItem Implementation
-        [Ignore]
-        public int IconId => iconId;
-        [Ignore]
-        public string SourcePath => CliPath;
-        [Ignore]
-        public string SourceName => CliName;
-        [Ignore]
-        public int RootId => Id;
+        //#region MpISourceItem Implementation
+        //[Ignore]
+        //public int IconId => iconId;
+        //[Ignore]
+        //public string SourcePath => CliPath;
+        //[Ignore]
+        //public string SourceName => CliName;
+        //[Ignore]
+        //public int RootId => Id;
 
-        [Ignore]
-        public bool IsUser => false;
-        [Ignore]
-        public bool IsUrl => false;
-        [Ignore]
-        public bool IsContent => false;
-        [Ignore]
-        public bool IsDll => false;
-        [Ignore]
-        public bool IsExe => true;
-        [Ignore]
-        public bool IsRejected => false;
-        [Ignore]
-        public bool IsSubRejected => false;
+        //[Ignore]
+        //public bool IsUser => false;
+        //[Ignore]
+        //public bool IsUrl => false;
+        //[Ignore]
+        //public bool IsContent => false;
+        //[Ignore]
+        //public bool IsDll => false;
+        //[Ignore]
+        //public bool IsExe => true;
+        //[Ignore]
+        //public bool IsRejected => false;
+        //[Ignore]
+        //public bool IsSubRejected => false;
 
         
 
-        #endregion
+        //#endregion
     }
 }

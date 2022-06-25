@@ -293,7 +293,8 @@ namespace MpProcessHelper {
         }
 
         public static string GetProcessApplicationName(IntPtr hWnd) {
-            string appName = GetProcessApplicationName(GetProcessMainWindowTitle(hWnd));
+            string mwTitle = GetProcessMainWindowTitle(hWnd);
+            string appName = GetProcessApplicationName(mwTitle);
             
             if(string.IsNullOrWhiteSpace(appName) || appName.HasSpecialCharacters()) {
                 // NOTE trying to enforce app name to not be empty or end up
@@ -354,7 +355,7 @@ namespace MpProcessHelper {
         #region Private Methods
 
         public static bool HasSpecialCharacters(this string str) {
-            return Regex.IsMatch(str, "[^a-zA-Z0-9_.]+", RegexOptions.Compiled);
+            return !Regex.IsMatch(str, "[^a-zA-Z0-9_.]+", RegexOptions.Compiled);
         }
         private static string GetExecutablePathAboveVista(IntPtr dwProcessId) {
             StringBuilder buffer = new StringBuilder(1024);

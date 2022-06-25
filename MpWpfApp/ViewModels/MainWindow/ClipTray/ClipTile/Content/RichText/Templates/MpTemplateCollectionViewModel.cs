@@ -289,7 +289,7 @@ namespace MpWpfApp {
                     return;
                 }
 
-                MpContentDocumentRtfExtension.SetSelectionText(Parent, MpTextTemplate.TextTemplateOpenToken + templateGuid + MpTextTemplate.TextTemplateCloseToken);
+                MpContentDocumentRtfExtension.InsertEncodedTemplateInSelection(Parent, templateGuid);
 
                 var ctvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>();
                 if(ctvl == null) {
@@ -362,7 +362,6 @@ namespace MpWpfApp {
                     MpMessenger.Register<MpMessageType>(rtbcv, ReceivedRtbContentViewMessage, Parent);
                 }
 
-                //PastableItems = new ObservableCollection<MpTextTemplateViewModelBase>(pastableItems);
                 OnPropertyChanged(nameof(PastableItems));
                 OnPropertyChanged(nameof(PastableItemsNeedingInput));
                 OnPropertyChanged(nameof(Items));
