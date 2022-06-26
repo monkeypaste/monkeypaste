@@ -96,7 +96,7 @@ namespace MpWpfApp {
 
         public MpShortcutCollectionViewModel() : base(null) { }
 
-        public async Task Init() {
+        public async Task InitAsync() {
             var sw = new Stopwatch();
             sw.Start();
             InitGestureListener();

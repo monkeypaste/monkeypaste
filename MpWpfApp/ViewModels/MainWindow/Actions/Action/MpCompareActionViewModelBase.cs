@@ -11,11 +11,13 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Windows.Documents;
 using Xamarin.Essentials;
+using MonkeyPaste.Common.Plugin;
 
 namespace MpWpfApp {
     public class MpComparisionMatch {
@@ -300,7 +302,7 @@ namespace MpWpfApp {
             }
             if (ComparePropertyPathType == MpCopyItemPropertyPathType.LastOutput) {
                 if (ao != null) {
-                    if (ao.OutputData is MpPluginResponseFormat prf && IsJsonQuery) {
+                    if (ao.OutputData is MpPluginResponseFormatBase prf && IsJsonQuery) {
                         try {
                             return MpJsonPathProperty.Query(prf, CompareDataJsonPath);
                         }

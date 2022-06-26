@@ -6,15 +6,16 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CodeClassifier.StringTokenizer;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using Newtonsoft.Json;
 
 namespace CodeClassifier {
-    public class ClassifyPlugin : MpIAnalyzeComponent {
-        public object Analyze(object args) {
-            MpPluginResponseFormat response = null;
+    public class ClassifyPlugin : MpIAnalyzerComponent {
+        public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat request) {
+            MpAnalyzerPluginResponseFormat response = null;
 
-            var reqParts = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString()).items;
+            var reqParts = request.items;
             //languages (SHOULD) always part of request
             if (reqParts.Any(x => x.paramId == 1) &&
                reqParts.Any(x => x.paramId == 3) &&
@@ -26,8 +27,8 @@ namespace CodeClassifier {
 
                 if (isTraining) {
                     bool isSuccess = Train(code, languages.ToList());
-                    response = new MpPluginResponseFormat() {
-                        message = isSuccess ? "Success" : "Training Failed"
+                    response = new MpAnalyzerPluginResponseFormat() {
+                        otherMessage = isSuccess ? "Success" : "Training Failed"
                     };
 
                 } else if (reqParts.Any(x => x.paramId == 2)) {
@@ -37,7 +38,7 @@ namespace CodeClassifier {
                     var result = Classify(code, languages.ToList(),minScore);
 
                     if (result.Value >= minScore) {
-                        response = new MpPluginResponseFormat() {
+                        response = new MpAnalyzerPluginResponseFormat() {
                             annotations = new List<MpPluginResponseAnnotationFormat>() {
                                 new MpPluginResponseAnnotationFormat() {
                                     label = new MpJsonPathProperty(result.Key),
@@ -49,14 +50,14 @@ namespace CodeClassifier {
                                 }
                             }};
                     } else {
-                        MpConsole.WriteLine($"Detected language: {result.Key} did not meet minimum confidence: {minScore}, had score: {result.Value}");
-                        //response = new MpPluginResponseFormat() {
-                        //    message = $"Detected language: {result.Key} did not meet minimum confidence: {minScore}, had score: {result.Value}"
-                        //};
-                        return null;
+                        return new MpAnalyzerPluginResponseFormat() {
+                            errorMessage = $"Detected language: {result.Key} did not meet minimum confidence: {minScore}, had score: {result.Value}"
+                        };
                     }
                 } else {
-                    Console.WriteLine("Unsupported request: " + args.ToString());
+                    return new MpAnalyzerPluginResponseFormat() {
+                        errorMessage = $"Can't handle request"
+                    }; 
                 }
             }
 

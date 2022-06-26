@@ -9,7 +9,7 @@ namespace MonkeyPaste.Common.Plugin {
 
         public MpHttpRequestFormat request { get; set; }
 
-        public MpPluginResponseFormat response { get; set; }
+        public MpPluginResponseFormatBase response { get; set; }
     }
 
     #region Request

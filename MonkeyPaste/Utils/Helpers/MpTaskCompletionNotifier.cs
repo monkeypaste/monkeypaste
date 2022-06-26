@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MpWpfApp {
+namespace MonkeyPaste {
     /// <summary>
     /// Watches a task and raises property-changed notifications when the task completes.
     /// </summary>

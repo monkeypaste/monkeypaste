@@ -70,7 +70,7 @@ namespace MpWpfApp {
         private static MpSoundPlayerGroupCollectionViewModel _instance;
         public static MpSoundPlayerGroupCollectionViewModel Instance => _instance ?? (_instance = new MpSoundPlayerGroupCollectionViewModel());
 
-        public async Task Init() {
+        public async Task InitAsync() {
 
             await SetSoundGroupIdx(MpPreferences.NotificationSoundGroupIdx);
         }

@@ -1,14 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Text;
-using MonkeyPaste.Common;
 
-namespace MonkeyPaste.Common.Plugin {    
-    public class MpPluginResponseFormat : MpJsonObject {
-        public const string RETRY_MESSAGE = @"RETRY";
-        public const string ERROR_MESSAGE = @"ERROR";
+namespace MonkeyPaste.Common.Plugin {
+    public class MpPluginResponseFormatBase : MpJsonObject {
+        public string errorMessage { get; set; }
+        public string retryMessage { get; set; }
 
-        public string message { get; set; } = string.Empty;
+        public string otherMessage { get; set; }
 
         public MpPluginResponseNewContentFormat newContentItem { get; set; }
         public List<MpPluginResponseAnnotationFormat> annotations { get; set; } = new List<MpPluginResponseAnnotationFormat>();
@@ -68,12 +67,12 @@ namespace MonkeyPaste.Common.Plugin {
         public MpAnalyzerPluginImageTokenResponseValueFormat(double x, double y, double w, double h) {
             this.x = new MpJsonPathProperty<double>(x);
             this.y = new MpJsonPathProperty<double>(y);
-            this.width = new MpJsonPathProperty<double>(w);
-            this.height = new MpJsonPathProperty<double>(h);
+            width = new MpJsonPathProperty<double>(w);
+            height = new MpJsonPathProperty<double>(h);
         }
 
         public override string ToString() {
-            if(x == null || y == null || width == null || height == null) {
+            if (x == null || y == null || width == null || height == null) {
                 return base.ToString();
             }
             return string.Format(@"x:{0} y:{1} w:{2} h:{4}", x, y, width, height);
@@ -85,7 +84,7 @@ namespace MonkeyPaste.Common.Plugin {
         public MpJsonPathProperty<int> rangeLength { get; set; }
 
         public MpAnalyzerPluginTextTokenResponseValueFormat() { }
-        public MpAnalyzerPluginTextTokenResponseValueFormat(int start,int end) {
+        public MpAnalyzerPluginTextTokenResponseValueFormat(int start, int end) {
             rangeStart = new MpJsonPathProperty<int>(start);
             rangeLength = new MpJsonPathProperty<int>(end);
         }
@@ -115,12 +114,12 @@ namespace MonkeyPaste.Common.Plugin {
     public class MpPluginResponseFontAppearanceFormat : MpJsonObject {
         public string fontFamily { get; set; } = "Consolas";
         public string fontSize { get; set; } = "medium"; //xx-small,x-small,small,medium,large,x-large,xx-large,xxx-large
-        
+
 
         public bool isBold { get; set; }
         public bool isItalic { get; set; }
         public bool isUnderlined { get; set; }
-        public bool isStrikethough { get; set; }        
+        public bool isStrikethough { get; set; }
     }
 
 }

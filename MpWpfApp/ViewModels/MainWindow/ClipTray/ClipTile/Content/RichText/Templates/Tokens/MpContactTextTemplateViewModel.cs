@@ -94,7 +94,7 @@ namespace MpWpfApp {
                     if(HostClipTileViewModel.IsPastingTemplate) {
                         if(!MpContactCollectionViewModel.Instance.IsLoaded) {
                             MpHelpers.RunOnMainThread(async () => {
-                                await MpContactCollectionViewModel.Instance.Init();
+                                await MpContactCollectionViewModel.Instance.InitAsync();
                             });
                         }
                     }

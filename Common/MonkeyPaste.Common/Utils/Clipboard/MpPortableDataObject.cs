@@ -38,9 +38,7 @@ namespace MonkeyPaste.Common {
         object ConvertToPlatformClipboardDataObject(MpPortableDataObject portableObj);
         void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange);
         MpPortableDataObject GetPlatformClipboardDataObject();
-    }
-
-    
+    }    
 
     public interface MpIPortableContentDataObject {
         Task<MpPortableDataObject> ConvertToPortableDataObject(bool fillTemplates);
@@ -49,80 +47,21 @@ namespace MonkeyPaste.Common {
         Task PasteDataObject(MpPortableDataObject mpdo, object handleOrProcessInfo, bool finishWithEnterKey = false);
     }
 
+    public interface MpIPortableDataObject {
+        Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; }
 
-    public class MpPortableDataObject {
+        bool ContainsData(string format);
+        object GetData(string format);
+        void SetData(string format, object data);
+    }
+
+    public class MpPortableDataObject : MpIPortableDataObject {
         #region Properties
 
-        //private static ObservableCollection<MpClipboardFormatType> _supportedFormats;
-        //public static ObservableCollection<MpClipboardFormatType> SupportedFormats {
-        //    get {
-        //        if(_supportedFormats == null) {
-        //            _supportedFormats = new ObservableCollection<MpClipboardFormatType>() {
-        //                MpClipboardFormatType.Text,
-        //                MpClipboardFormatType.Html,
-        //                MpClipboardFormatType.Rtf,
-        //                MpClipboardFormatType.Bitmap,
-        //                MpClipboardFormatType.FileDrop,
-        //                MpClipboardFormatType.Csv,
-        //                MpClipboardFormatType.InternalContent,
-        //                MpClipboardFormatType.UnicodeText,
-        //                MpClipboardFormatType.OemText,
-        //                MpClipboardFormatType.Custom
-        //            };
-        //        }
-        //        return _supportedFormats;
-        //    }
-        //    set {
-        //        _supportedFormats = value;
-        //    }
-        //}
-
-        //private static List<object> _customDataLookup;
-        //public static List<object> CustomDataLookup {
-        //    get {
-        //        if (_customDataLookup == null) {
-        //            _customDataLookup = new List<object>();
-        //        }
-        //        return _customDataLookup;
-        //    }
-        //}        
-
-        //public Dictionary<MpClipboardFormatType,string> DataFormatLookup { get; set; } = new Dictionary<MpClipboardFormatType, string>();
-
-        //public object GetCustomData(string customDataFormatName) {
-        //    int cdfIdx = GetCustomDataFormatId(customDataFormatName);
-        //    if(cdfIdx < 0) {
-        //        return null;
-        //    }
-        //    return CustomDataLookup[cdfIdx];
-        //}
-
-        //public void SetCustomData(string customDataFormatName, object customData) {
-        //    if (!DataFormatLookup.ContainsKey(MpClipboardFormatType.Custom)) {
-        //        DataFormatLookup.Add(MpClipboardFormatType.Custom, customDataFormatName);
-        //        CustomDataLookup.Add(customData);
-        //        return;
-
-        //    }
-        //    int cdfIdx = GetCustomDataFormatId(customDataFormatName);
-        //    if (cdfIdx < 0) {
-        //        DataFormatLookup[MpClipboardFormatType.Custom] += "," + customDataFormatName;
-        //        CustomDataLookup.Add(customData);
-        //        return;
-        //    }
-        //    CustomDataLookup[cdfIdx] = customData;
-        //}
-
-        //private int GetCustomDataFormatId(string customDataFormatName) {
-        //    if (!DataFormatLookup.ContainsKey(MpClipboardFormatType.Custom)) {
-        //        return -1;
-        //    }
-        //    var availableCustomFormats = DataFormatLookup[MpClipboardFormatType.Custom].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        //    return availableCustomFormats.IndexOf(customDataFormatName);
-        //}
+        public Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; private set; } = new Dictionary<MpPortableDataFormat, object>();
+        
         #endregion
 
-        public Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; private set; } = new Dictionary<MpPortableDataFormat, object>();
 
         public bool ContainsData(string format) {
             return GetData(format) != null;
@@ -130,7 +69,7 @@ namespace MonkeyPaste.Common {
 
         public object GetData(string format) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
-            if(pdf == null) {
+            if (pdf == null) {
                 return null;
             }
             DataFormatLookup.TryGetValue(pdf, out object data);
@@ -139,7 +78,7 @@ namespace MonkeyPaste.Common {
 
         public void SetData(string format, object data) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
-            if(pdf == null) {
+            if (pdf == null) {
                 throw new Exception($"Format {format} is not registered");
             }
             DataFormatLookup.AddOrReplace(pdf, data);

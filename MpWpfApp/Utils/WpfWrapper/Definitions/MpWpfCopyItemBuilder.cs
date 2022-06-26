@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Web.UI.HtmlControls;
 
 namespace MpWpfApp {
-    public class MpCopyItemBuilder : MpICopyItemBuilder {
+    public class MpWpfCopyItemBuilder : MpICopyItemBuilder {
         #region Private Variables
         #endregion
 
@@ -160,12 +160,19 @@ namespace MpWpfApp {
                     await MpDb.AddOrUpdateAsync<MpUrl>(url);
                 }
                 var source = await MpSource.Create(app.Id, url == null ? 0:url.Id);
+
+                var dobj = await MpDataObject.CreateAsync(
+                    pdo: mpdo);
+
                 var ci = await MpCopyItem.Create(
                     sourceId: source.Id,
+                    dataObjectId: dobj.Id,
                     //preferredFormatName: htmlClipboardData == null ? null : MpPortableDataFormats.Html,
                     data: itemData,
                     itemType: itemType,
                     suppressWrite: suppressWrite);
+
+
 
                 return ci;
             } catch(Exception ex) {

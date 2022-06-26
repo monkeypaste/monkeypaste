@@ -137,7 +137,7 @@ namespace MpWpfApp {
         public static MpPasteToAppPathViewModelCollection Instance => _instance ?? (_instance = new MpPasteToAppPathViewModelCollection());
 
 
-        public async Task Init() {
+        public async Task InitAsync() {
             //MpProcessManager.CurrentProcessWindowHandleStackDictionary += (s, e) => {
             //    switch (e.PropertyName) {
             //        case nameof(MpRunningApplicationManager.Instance.CurrentProcessWindowHandleStackDictionary):

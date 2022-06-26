@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public static class MpPluginLogger {
-        public static async Task<int> LogTransaction(
+        public static async Task<int> LogTransactionAsync(
             MpPluginFormat pluginFormat,
-            MpPluginTransaction trans, 
+            MpPluginTransactionBase trans, 
             MpCopyItem sourceContent, 
             object sourceHandler,
             bool suppressWrite = false) {
             if(trans is MpAnalyzerTransaction at) {
-                int sourceId = await LogAnalyzerTransaction(
+                int sourceId = await LogAnalyzerTransactionAsync(
                     pluginFormat, at, 
                     sourceContent, 
                     sourceHandler as MpAnalyticItemPreset, 
@@ -26,19 +27,19 @@ namespace MonkeyPaste {
             return 0;
         }
 
-        private static async Task<int> LogAnalyzerTransaction(
+        private static async Task<int> LogAnalyzerTransactionAsync(
             MpPluginFormat pluginFormat,
             MpAnalyzerTransaction trans,
             MpCopyItem sourceContent,
             MpAnalyticItemPreset preset,
             bool suppressWrite = false) {
             if (trans.Response == null) {
-                trans.Response = new MpPluginResponseFormat();
+                trans.Response = new MpPluginResponseFormatBase();
             }
             int transAppId = MpPreferences.ThisAppSource.AppId;
             int transUrlId = MpPreferences.ThisAppSource.UrlId;
 
-            if (trans.Response is MpPluginResponseFormat prf) {                
+            if (trans.Response is MpPluginResponseFormatBase prf) {                
                 MpCopyItemTransactionType transType = MpCopyItemTransactionType.None;
                 //MpISourceTransaction transModel = null;
                 int transId = 0;
@@ -48,7 +49,7 @@ namespace MonkeyPaste {
                     if (string.IsNullOrEmpty(trans.Request.ToString())) {
                         urlPath = pluginFormat.analyzer.http.request.url.raw;
                     } else if (pluginFormat.Component is MpHttpPlugin httpPlugin) {
-                        urlPath = httpPlugin.GetRequestUri(trans.Request.ToString());
+                        urlPath = httpPlugin.GetRequestUri(trans.Request.items);
                     } else {
                         throw new MpUserNotifiedException("Http Plugin Component does not exist");
                     }

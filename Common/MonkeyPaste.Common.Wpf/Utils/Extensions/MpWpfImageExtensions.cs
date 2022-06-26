@@ -25,6 +25,10 @@ namespace MonkeyPaste.Common.Wpf {
             return new Rect(rect.Location.ToWpfPoint(), rect.Size.ToWpfSize());
         }
 
+        public static MpRect ToPortableRect(this System.Drawing.Rectangle rect) {
+            return new MpRect(new MpPoint(rect.X, rect.Y), new MpSize(rect.Width, rect.Height));
+        }
+
         public static MpRect ToPortableRect(this Rect rect) {
             return new MpRect(rect.Location.ToPortablePoint(), rect.Size.ToPortableSize());
         }

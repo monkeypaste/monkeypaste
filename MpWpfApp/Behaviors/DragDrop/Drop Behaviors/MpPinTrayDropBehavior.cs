@@ -159,7 +159,7 @@ namespace MpWpfApp {
 
             if(dragData is MpPortableDataObject mpdo) {
                 // from external source
-                var dragModel = await MpCopyItemBuilder.CreateFromDataObject(mpdo);
+                var dragModel = await MpWpfCopyItemBuilder.CreateFromDataObject(mpdo);
 
                 drop_ctvm = await ctrvm.CreateClipTileViewModel(dragModel);                
             } else if(dragData is MpClipTileViewModel) {

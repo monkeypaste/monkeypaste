@@ -73,7 +73,7 @@ namespace MonkeyPaste {
 
                 
 
-                await item.LoadItem();
+                await item.LoadItemAsync();
 
                 //PercentLoaded = (double)(index + 1) / (double)_items.Count;
 

@@ -27,7 +27,7 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public async Task Init() {
+        public async Task InitAsync() {
             IsBusy = true;
             //var cl = await GetContacts();
             await Task.Delay(3000);

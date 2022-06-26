@@ -9,7 +9,7 @@
   "ioType": {
     "isDll": true
   },
-  "annotater": {
+  "annotator": {
     "parameters": [
       {
         "label": "Case Sensitive",

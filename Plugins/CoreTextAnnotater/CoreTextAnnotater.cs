@@ -14,9 +14,8 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 
 namespace CoreTextAnnotater {
-    public class CoreTextAnnotater : MpIAnnotationComponent {
-        public object Annotate(object args) {
-            var request = MpJsonObject.DeserializeObject<MpAnalyzerPluginRequestFormat>(args);
+    public class CoreTextAnnotater : MpIAnnotatorComponent {
+        public MpAnnotatorResponseFormat Annotate(MpAnnotatorRequestFormat request) {
             if (request == null) {
                 return null;
             }
@@ -69,10 +68,12 @@ namespace CoreTextAnnotater {
 
                 mpdo.SetData("RtfTextRangeCollection", MpJsonObject.SerializeObject(ranges));
 
-                return mpdo;
+                
             }
 
-            return mpdo;
+            return new MpAnnotatorResponseFormat() {
+                dataObject = mpdo
+            };
         }
     }
 

@@ -31,7 +31,7 @@ namespace MonkeyPaste.Common.Plugin {
 
         public MpClipboardHandlerFormats clipboardHandler { get; set; }
 
-        public MpAnnotaterPluginFormat annotater { get; set; }
+        public MpAnnotatorPluginFormat annotator { get; set; }
 
         public MpContactFetcherFormat contactFetcher { get; set; }
 

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using Newtonsoft.Json;
 
 namespace MonkeyPaste {
@@ -12,10 +13,10 @@ namespace MonkeyPaste {
             Dictionary<int,string> paramValues,
             MpCopyItem sourceContent) {
             
-            List<MpAnalyzerPluginRequestItemFormat> requestItems = new List<MpAnalyzerPluginRequestItemFormat>();
+            List<MpPluginRequestItemFormat> requestItems = new List<MpPluginRequestItemFormat>();
 
             foreach(var paramFormat in paramFormats) {
-                MpAnalyzerPluginRequestItemFormat requestItem = await BuildRequestItem(
+                MpPluginRequestItemFormat requestItem = await BuildRequestItem(
                     paramFormat,
                     paramValues[paramFormat.paramId],
                     sourceContent);
@@ -27,11 +28,11 @@ namespace MonkeyPaste {
             };
         }
 
-        private static async Task<MpAnalyzerPluginRequestItemFormat> BuildRequestItem(
+        private static async Task<MpPluginRequestItemFormat> BuildRequestItem(
             MpPluginParameterFormat paramFormat, 
             string paramValue,
             MpCopyItem sourceContent) {
-            return new MpAnalyzerPluginRequestItemFormat() { 
+            return new MpPluginRequestItemFormat() { 
                 paramId = paramFormat.paramId, 
                 value = await GetParameterRequestValue(paramFormat.unitType,paramValue, sourceContent)
             };

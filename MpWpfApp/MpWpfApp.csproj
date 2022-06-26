@@ -304,15 +304,18 @@
     <Compile Include="Utils\MpJsComAdapter.cs" />
     <Compile Include="Utils\System\MpFolderPicker.cs" />
     <Compile Include="Utils\System\VirtualFileDataObject.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfClipboardWatcher.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfAppBuilder.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfContextMenuCloser.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCopyItemBuilder.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfMessageBox.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfIconBuilder.cs" />
     <Compile Include="Utils\Documents\MpHighlightHelper.cs" />
     <Compile Include="Utils\Documents\MpHyperlinkHelper.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCustomColorChooserMenu.cs" />
     <Compile Include="Utils\MpContentColors.cs" />
-    <Compile Include="Utils\Builders\MpCopyItemBuilder.cs" />
     <Compile Include="Utils\MpCopyItemMerger.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfCursor.cs" />
     <Compile Include="Utils\System\MpExtraLargeIconLoader.cs" />
@@ -322,6 +325,8 @@
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfResourceFetcher.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfShortcutManager.cs" />
     <Compile Include="Utils\WpfWrapper\Definitions\MpWpfStringTools.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfScreenInfo.cs" />
+    <Compile Include="Utils\WpfWrapper\Definitions\MpWpfScreenInfoCollection.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpFileWriterActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpAnnotateActionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Actions\Action\MpTimerActionViewModel.cs" />
@@ -2998,10 +3003,6 @@
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
       <Project>{effa9e68-c567-4f5a-ae60-0ba2937cf5fa}</Project>
       <Name>MonkeyPaste</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MpClipboardHelper\MpClipboardHelper.csproj">
-      <Project>{e3c8e3f7-3a44-4678-a742-5a6dd971a38c}</Project>
-      <Name>MpClipboardHelper</Name>
     </ProjectReference>
     <ProjectReference Include="..\MpProcessHelper\MpProcessHelper.csproj">
       <Project>{56e5faad-0c31-400f-b95f-d83517c07ed3}</Project>

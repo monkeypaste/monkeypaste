@@ -70,6 +70,12 @@ namespace MpWpfApp {
                 }
                 return Preset.IsDefault;
             }
+            set { 
+                if(IsDefault != value) {
+                    Preset.IsDefault = value;
+                    OnPropertyChanged(nameof(IsDefault));
+                }
+            }
         }
 
         public string Label {
@@ -167,7 +173,7 @@ namespace MpWpfApp {
             }
         }
 
-        public int AnalyticItemPresetId {
+        public int PresetId {
             get {
                 if (Preset == null) {
                     return 0;
@@ -215,7 +221,7 @@ namespace MpWpfApp {
 
             Preset = aip;//await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
-            var presetValues = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(AnalyticItemPresetId);
+            var presetValues = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(PresetId);
             foreach (var paramFormat in Preset.ClipboardFormat.parameters) {
                 if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
                     string paramVal = string.Empty;
@@ -308,8 +314,8 @@ namespace MpWpfApp {
 
         private void MpClipboardFormatPresetViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(IsQuickAction):
-
+                case nameof(IsDefault):
+                    Parent.Parent.Parent.ToggleFormatPresetIsDefaultCommand.Execute(this);
                     break;
             }
         }

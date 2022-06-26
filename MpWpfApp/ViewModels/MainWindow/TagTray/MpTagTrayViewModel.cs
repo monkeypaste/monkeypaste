@@ -128,7 +128,7 @@ namespace MpWpfApp {
         }
 
 
-        public async Task Init() {
+        public async Task InitAsync() {
             await MpHelpers.RunOnMainThreadAsync(async () => {
                 IsBusy = true;
 

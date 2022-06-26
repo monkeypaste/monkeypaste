@@ -380,7 +380,7 @@ namespace MonkeyPaste {
                 }
             }
 
-            await InitTables();
+            await InitTablesAsync();
             
             if (isNewDb) {
                 await CreateViews();
@@ -452,7 +452,7 @@ namespace MonkeyPaste {
                 SQLitePCL.raw.sqlite3_result_int(ctx, 0);
         }
 
-        private static async Task InitTables() {
+        private static async Task InitTablesAsync() {
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPreset>();
             await _connectionAsync.CreateTableAsync<MpAnalyticItemPresetParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
@@ -463,6 +463,8 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTransaction>();
+            await _connectionAsync.CreateTableAsync<MpDataObject>();
+            await _connectionAsync.CreateTableAsync<MpDataObjectItem>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
             await _connectionAsync.CreateTableAsync<MpImageAnnotation>();

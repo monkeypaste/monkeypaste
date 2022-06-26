@@ -197,7 +197,7 @@ namespace MpWpfApp {
             //MpHelpers.RunOnMainThreadAsync(Init);
         }
 
-        public async Task Init() {
+        public async Task InitAsync() {
             await Task.Delay(1);
             MpConsole.WriteLine("MainWindow Init");
             PropertyChanged += MpMainWindowViewModel_PropertyChanged;

@@ -74,11 +74,11 @@ namespace MonkeyPaste.Common {
         public virtual void SetValue(string text) {
             value = text;
         }
-        public virtual void SetValue(JToken curToken, List<MpIParameterKeyValuePair> reqParams, int idx = 0) {
+        public virtual void SetValue(JToken curToken, IEnumerable<MpIParameterKeyValuePair> reqParams, int idx = 0) {
             value = FindValuePathResult(curToken, reqParams, idx);
         }
 
-        protected string FindValuePathResult(JToken curToken, List<MpIParameterKeyValuePair> reqParams, int idx = 0) {
+        protected string FindValuePathResult(JToken curToken, IEnumerable<MpIParameterKeyValuePair> reqParams, int idx = 0) {
             string result = string.Empty;
             if (pathExpression.StartsWith("@")) {
                 result = GetParamValue(pathExpression, reqParams);
@@ -134,7 +134,7 @@ namespace MonkeyPaste.Common {
             return outputValue;
         }
 
-        private string GetParamValue(string queryParamValueStr, List<MpIParameterKeyValuePair> reqParams) {
+        private string GetParamValue(string queryParamValueStr, IEnumerable<MpIParameterKeyValuePair> reqParams) {
             int enumId = GetParamId(queryParamValueStr);
             var enumParam = reqParams.FirstOrDefault(x => x.paramId == enumId);
             if (enumParam == null) {
@@ -180,7 +180,7 @@ namespace MonkeyPaste.Common {
             value = val;
         }
 
-        public override void SetValue(JToken curToken, List<MpIParameterKeyValuePair> reqParams, int idx = 0) {
+        public override void SetValue(JToken curToken, IEnumerable<MpIParameterKeyValuePair> reqParams, int idx = 0) {
             string result = base.FindValuePathResult(curToken, reqParams, idx);
             if (string.IsNullOrEmpty(result)) {
                 value = default;

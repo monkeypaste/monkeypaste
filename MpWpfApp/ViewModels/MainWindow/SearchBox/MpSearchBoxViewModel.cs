@@ -338,7 +338,7 @@ namespace MpWpfApp {
             PropertyChanged += MpSearchBoxViewModel_PropertyChanged;
         }
 
-        public async Task Init() {
+        public async Task InitAsync() {
             await MpHelpers.RunOnMainThreadAsync(() => {
                 CriteriaItems.CollectionChanged += CriteriaItems_CollectionChanged;
 

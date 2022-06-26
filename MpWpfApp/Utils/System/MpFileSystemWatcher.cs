@@ -58,7 +58,7 @@ namespace MpWpfApp {
             
         }
 
-        public async Task Init() {
+        public async Task InitAsync() {
             await Task.Delay(1);
             _watchers.Clear();
             _handlerLookup.Clear();

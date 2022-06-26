@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Wpf;
 using MonkeyPaste;
 using System.Windows;
 using MpProcessHelper;
 using System.Windows.Input;
 using System.IO;
 using System.Threading;
-using MpClipboardHelper;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows.Controls;
@@ -90,6 +91,8 @@ namespace MpWpfApp {
         }
 
         public object ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
+            var writerLookup = MpClipboardHandlerCollectionViewModel.Instance.DefaultWriters;
+
             DataObject dobj = new DataObject();
             //var handlers = MpClipboardHandlerCollectionViewModel.Instance.Items.SelectMany(x => x.Items.Select(y => y.ClipboardPluginComponent)).Distinct().ToList();
             //foreach (var handler in handlers) {
@@ -244,7 +247,7 @@ namespace MpWpfApp {
                 case MpPortableDataFormats.Bitmap:
                     var bmpSrc = data.ToString().ToBitmapSource(false);
 
-                    var winforms_dataobject = MpClipboardHelper.MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
+                    var winforms_dataobject = new DataObject();// MpClipboardHelper.MpClipoardImageHelpers.GetClipboardImage_WinForms(bmpSrc.ToBitmap(), null, null);
 
                     //Clipboard.SetData(DataFormats.Bitmap, bmpSrc);
                     //Clipboard.SetData("PNG", winforms_dataobject.GetData("PNG"));

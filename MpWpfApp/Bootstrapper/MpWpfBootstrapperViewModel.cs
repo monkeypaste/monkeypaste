@@ -7,10 +7,11 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MpProcessHelper;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common; 
+using MonkeyPaste.Common.Wpf;
 using System.IO;
 using System.Windows.Media;
-using MpClipboardHelper;
 using System.Collections;
 
 namespace MpWpfApp {

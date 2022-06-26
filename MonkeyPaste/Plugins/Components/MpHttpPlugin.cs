@@ -478,7 +478,7 @@ namespace MonkeyPaste {
 		""format"": ""Bmp""
 	}
 }";
-        private List<MpIParameterKeyValuePair> _reqParams;
+        private IEnumerable<MpIParameterKeyValuePair> _reqParams;
         private MpHttpTransactionFormat _httpTransactionFormat;
         private JToken _rootResponseToken;
 
@@ -512,20 +512,20 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public async Task<object> AnalyzeAsync(object args) {
+        public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat request) {
             string unalteredHttpFormat = JsonConvert.SerializeObject(_httpTransactionFormat);
 
-            _reqParams = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString()).items.Cast<MpIParameterKeyValuePair>().ToList();
+            _reqParams = request.items.Cast<MpIParameterKeyValuePair>().ToList();
             if(_reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
-                Console.WriteLine($"With args: {args}");
+                Console.WriteLine($"With args: {request.Serialize()}");
                 _reqParams = new List<MpIParameterKeyValuePair>();
             }
 
             using(var client = new HttpClient()) {
-                using (var request = CreateRequestMessage(args)) {
+                using (var httpRequest = CreateRequestMessage(_reqParams)) {
                     try {
-                        var response = await client.SendAsync(request);
+                        var response = await client.SendAsync(httpRequest);
                         
                         if (!response.IsSuccessStatusCode) {
                             // NOTE fix command should probably open manfiest folder but only http plugin info is provided so just opening plugin folder
@@ -535,8 +535,8 @@ namespace MonkeyPaste {
                                                     fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(MpPluginManager.PluginRootFolderPath))));
 
                             //if(userAction == MpDialogResultType.Retry) {
-                            //    return new MpPluginResponseFormat() {
-                            //        message = MpPluginResponseFormat.RETRY_MESSAGE
+                            //    return new MpPluginResponseFormatBase() {
+                            //        message = MpPluginResponseFormatBase.RETRY_MESSAGE
                             //    };
                             //}
                         }
@@ -545,10 +545,10 @@ namespace MonkeyPaste {
 
                         // string responseStr = _testResponse2;
 
-                        Console.WriteLine($"Response from '{request.RequestUri.AbsoluteUri}':");
+                        Console.WriteLine($"Response from '{httpRequest.RequestUri.AbsoluteUri}':");
                         Console.WriteLine(responseStr.ToPrettyPrintJson());
 
-                        request.Content.Dispose();
+                        httpRequest.Content.Dispose();
                         var responseObj = CreateResponse(responseStr);
 
                         //reset format or subsequent requests compound data 
@@ -564,8 +564,8 @@ namespace MonkeyPaste {
             }
         }
 
-        public string GetRequestUri(object args) {
-            var reqMsg = CreateRequestMessage(args);
+        public string GetRequestUri(IEnumerable<MpIParameterKeyValuePair> reqParams) {
+            var reqMsg = CreateRequestMessage(reqParams);
             if(reqMsg == null) {
                 return null;
             }
@@ -576,11 +576,11 @@ namespace MonkeyPaste {
 
         #region Private Methods
 
-        private HttpRequestMessage CreateRequestMessage(object args) {
-            _reqParams = JsonConvert.DeserializeObject<List<MpIParameterKeyValuePair>>(args.ToString());
+        private HttpRequestMessage CreateRequestMessage(IEnumerable<MpIParameterKeyValuePair> requestParams) {
+            _reqParams = requestParams;//JsonConvert.DeserializeObject<List<MpIParameterKeyValuePair>>(args.ToString());
             if (_reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
-                Console.WriteLine($"With args: {args}");
+                Console.WriteLine($"With args: {requestParams.ToString()}");
                 _reqParams = new List<MpIParameterKeyValuePair>();
             }
             var request = new HttpRequestMessage();
@@ -733,8 +733,8 @@ namespace MonkeyPaste {
             }
         }
 
-        private object CreateResponse(string responseStr) {
-            var response = _httpTransactionFormat.response;
+        private MpAnalyzerPluginResponseFormat CreateResponse(string responseStr) {
+            var response = _httpTransactionFormat.response as MpAnalyzerPluginResponseFormat;
 
             if (responseStr.StartsWith("[")) {
                 JArray a = JArray.Parse(responseStr);

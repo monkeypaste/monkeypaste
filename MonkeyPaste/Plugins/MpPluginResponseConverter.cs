@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace MonkeyPaste {
             bool suppressWrite) {
             MpCopyItem targetCopyItem;
 
-            if (trans.Response is MpPluginResponseFormat prf) {
+            if (trans.Response is MpPluginResponseFormatBase prf) {
                 targetCopyItem = await ProcessNewContentItem(prf, sourceCopyItem, transSourceId, suppressWrite);
             } else {
                 targetCopyItem = sourceCopyItem;
@@ -41,7 +42,7 @@ namespace MonkeyPaste {
 
 
         private static async Task<MpCopyItem> ProcessNewContentItem(
-            MpPluginResponseFormat prf,
+            MpPluginResponseFormatBase prf,
             MpCopyItem sourceCopyItem,
             int transSourceId,
             bool suppressWrite = false) {
@@ -70,7 +71,7 @@ namespace MonkeyPaste {
             if (trans == null || trans.Response == null) {
                 return;
             }
-            if (trans.Response is MpPluginResponseFormat prf && prf.annotations != null) {
+            if (trans.Response is MpPluginResponseFormatBase prf && prf.annotations != null) {
 
                 await Task.WhenAll(prf.annotations.Select(x => ProcesseAnnotation(x, sourceCopyItem.Id, sourceCopyItem.ItemType, trans.RequestContent, transSourceId, suppressWrite)));
             }
@@ -153,7 +154,7 @@ namespace MonkeyPaste {
             }
             await Task.Delay(1);
 
-            if (trans.Response is MpPluginResponseFormat prf && prf.dataObject != null) {
+            if (trans.Response is MpPluginResponseFormatBase prf && prf.dataObject != null) {
                 //var pdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.Create(prf.dataObject,suppressWrite);
                 //sourceCopyItem.ItemData = pdo_ci.ItemData;
 

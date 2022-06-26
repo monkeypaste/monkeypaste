@@ -7,7 +7,7 @@ using System.Windows;
 using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpWpfResourceFetcher : MpINativeResource {
+    public class MpWpfResourceFetcher : MpIPlatformResource {
         public object GetResource(string resourceKey) {
             return Application.Current.Resources[resourceKey];
         }

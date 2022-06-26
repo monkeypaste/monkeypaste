@@ -1022,6 +1022,8 @@ using stdole;
             }
         }
 
+        
+
         public bool IsPlaceholder => CopyItem == null || IsPinned;
 
         #region Drag & Drop
@@ -1040,6 +1042,7 @@ using stdole;
 
         public bool IsPinned => Parent != null && 
                                 Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
+                                    
 
         public bool CanVerticallyScroll => !IsContentReadOnly ?
                                                 EditableContentSize.Height > TileContentHeight :
@@ -1557,8 +1560,9 @@ using stdole;
             string pt = string.Empty;
             string bmpBase64 = string.Empty;
             var sctfl = new List<string>();
-            
-            bool isSelectionEmpty = string.IsNullOrEmpty(SelectedPlainText);
+
+            bool isInUi = Parent.GetClipTileViewModelById(CopyItemId) != null;
+            bool isSelectionEmpty = string.IsNullOrEmpty(SelectedPlainText) || !isInUi;
             bool needsTemplateData = fillTempalates && HasTemplates;
 
             if(needsTemplateData) {
@@ -1610,7 +1614,6 @@ using stdole;
                 }
 
             } else if(ItemType == MpCopyItemType.Text) {
-                bool isInUi = Parent.GetClipTileViewModelById(CopyItemId) != null;
                 if(isInUi) {
                     if (isSelectionEmpty) {
                         rtf = MpContentDocumentRtfExtension.GetEncodedContent(

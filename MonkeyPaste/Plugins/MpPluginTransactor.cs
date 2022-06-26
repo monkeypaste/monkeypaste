@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace MonkeyPaste {
         private const int _ANALYZE_TIMEOUT_MS = 1000000;
         private const int _PROCESS_TIMEOUT_MS = 500000;
 
-        public static async Task<object> PerformTransaction(
+        public static async Task<MpPluginTransactionBase> PerformTransaction(
             MpPluginFormat pluginFormat, 
             MpIPluginComponentBase pluginComponent,
             Dictionary<int,string> paramValues,
@@ -29,7 +30,7 @@ namespace MonkeyPaste {
             // 5. Converts the response to new content and/or updates source content (since from another, potentially 3rd party module)
             // 6. Returns new or updated content
 
-            if(pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzeComponent) {
+            if(pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzerComponent) {
                 MpAnalyzerTransaction at = new MpAnalyzerTransaction() {
                     RequestTime = DateTime.Now,
                 };
@@ -41,8 +42,7 @@ namespace MonkeyPaste {
                                         paramValues,
                                         sourceCopyItem);
                 } catch(Exception ex) {
-                    var errorOrRetryActionResult = await HandleError(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
-                    return errorOrRetryActionResult;
+                    return await HandleErrorAsync(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
                 }
 
                 // FIND CONTENT
@@ -57,20 +57,19 @@ namespace MonkeyPaste {
                 // GET RESPONSE
                 try {
                     if(pluginComponent is MpIAnalyzeAsyncComponent analyzeAsyncComponent) {
-                        at.Response = await analyzeAsyncComponent.AnalyzeAsync(JsonConvert.SerializeObject(at.Request));
-                    } else if(pluginComponent is MpIAnalyzeComponent analyzeComponent) {
-                        at.Response = analyzeComponent.Analyze(JsonConvert.SerializeObject(at.Request));
+                        at.Response = await analyzeAsyncComponent.AnalyzeAsync(at.Request as MpAnalyzerPluginRequestFormat);
+                    } else if(pluginComponent is MpIAnalyzerComponent analyzeComponent) {
+                        at.Response = analyzeComponent.Analyze(at.Request as MpAnalyzerPluginRequestFormat);
                     }
                     at.ResponseTime = DateTime.Now;
                 }
                 catch (Exception ex) {
-                    var errorOrRetryActionResult = await HandleError(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
-                    return errorOrRetryActionResult;
+                    return await HandleErrorAsync(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
                 }
 
                 // LOG TRANSACTION
 
-                int sourceId = await MpPluginLogger.LogTransaction(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+                int sourceId = await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
 
                 // PROCESS RESPONSE
                 try {
@@ -78,32 +77,38 @@ namespace MonkeyPaste {
                     return at;
                 }
                 catch (Exception ex) {
-                    var errorOrRetryActionResult = await HandleError(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
-                    return errorOrRetryActionResult;
+                    return await HandleErrorAsync(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
                 }
             }
 
             return null;
         }
 
-        private static async Task<string> HandleError(
+        private static async Task<MpPluginTransactionBase> HandleErrorAsync(
             Exception ex, 
             MpPluginFormat pluginFormat, 
-            MpPluginTransaction at, MpCopyItem sourceCopyItem, object sourceHandler, bool suppressWrite = false) {
+            MpPluginTransactionBase at, MpCopyItem sourceCopyItem, object sourceHandler, bool suppressWrite = false) {
             MpConsole.WriteTraceLine(ex);
             at.TransactionErrorMessage = ex.ToString();
-            await MpPluginLogger.LogTransaction(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite)
+            await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite)
                                     .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
 
             var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
                 dialogType: MpNotificationDialogType.InvalidRequest,
                 msg: ex.Message,
                 maxShowTimeMs: 5000);
+            
+            if (at.Response == null) {
+                at.Response = new MpPluginResponseFormatBase();
+            }
             if (userAction == MpDialogResultType.Retry) {
-                return MpPluginResponseFormat.RETRY_MESSAGE;
+                
+                at.Response.retryMessage = "Retry";
+            } else {
+                at.Response.errorMessage = "Transaction Error";
             }
 
-            return MpPluginResponseFormat.ERROR_MESSAGE;
+            return at;
         }
     }
 }

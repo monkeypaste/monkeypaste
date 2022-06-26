@@ -113,11 +113,25 @@ namespace MpWpfApp {
             var ctcv = fe.GetVisualAncestor<MpClipTileContainerView>();
             
             if (ctcv != null) {
-                SetReadOnlyWidth(fe,ctcv.ActualWidth);                
+                SetReadOnlyWidth(fe,ctcv.ActualWidth);
 
-                if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
-                    ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
+                if(fe is RichTextBox rtb && rtb.DataContext is MpClipTileViewModel ctvm) {
+                    double deltaWidth = Math.Max(0, ctvm.UnformattedContentSize.Width - rtb.Document.PageWidth);
+                    double deltaHeight = Math.Max(0, ctvm.UnformattedContentSize.Height - rtb.Document.PageHeight);
+
+                    rtb.Document.PageWidth = ctvm.UnformattedContentSize.Width;
+                    rtb.Document.PageHeight = ctvm.UnformattedContentSize.Height;
+
+                    ctcv.TileResizeBehavior.Resize(deltaWidth, 0);
+
+                    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior.Resize(0, deltaHeight);
+                    //rtb.Document.PageWidth = Math.Max(0, w - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
+                    //rtb.Document.PageHeight = Math.Max(0, h - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
                 }
+                //if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
+                    
+                //    ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
+                //}
                 //(fe as RichTextBox).FitDocToRtb();
             }
         }

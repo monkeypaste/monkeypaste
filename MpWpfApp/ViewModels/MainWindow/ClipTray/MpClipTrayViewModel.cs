@@ -681,7 +681,7 @@ namespace MpWpfApp {
 
         public MpClipTrayViewModel() : base(null) { }
 
-        public async Task Init() {
+        public async Task InitAsync() {
             IsBusy = true;
 
             while(MpSourceCollectionViewModel.Instance.IsAnyBusy) {
@@ -1505,7 +1505,7 @@ namespace MpWpfApp {
             createItemSw.Start();
 
 
-            var newCopyItem = await MpCopyItemBuilder.CreateFromDataObject(cd, IsAnyAppendMode && _appendModeCopyItem != null);
+            var newCopyItem = await MpWpfCopyItemBuilder.CreateFromDataObject(cd, IsAnyAppendMode && _appendModeCopyItem != null);
 
             MpConsole.WriteLine("CreateFromClipboardAsync: " + createItemSw.ElapsedMilliseconds + "ms");
 

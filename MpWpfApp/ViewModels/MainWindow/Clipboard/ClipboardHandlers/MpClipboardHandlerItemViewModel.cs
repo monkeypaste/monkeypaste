@@ -70,14 +70,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
-        public int IconId {
-            get {
-                if(Items == null || Items.Count == 0) {
-                    return 0;
-                }
-                return Items[0].IconId;
-            }
-        }
+        public int IconId { get; set; }
         public string HandlerName {
             get {
                 if(PluginFormat == null) {
@@ -112,13 +105,24 @@ namespace MpWpfApp {
             PluginFormat = pf;
 
 
-
-            foreach(var hcf in ClipboardPluginFormat.handledFormats) {
-                var hcfvm = await CreateHandledClipboardFormatViewModel(PluginFormat, ClipboardPluginFormat.handledFormats.IndexOf(hcf));
+            for (int i = 0;i < ClipboardPluginFormat.handledFormats.Count();i++) {
+                var hcfvm = await CreateHandledClipboardFormatViewModel(PluginFormat, i);
                 Items.Add(hcfvm);
             }
             while(Items.Any(x=>x.IsBusy)) {
                 await Task.Delay(100);
+            }
+
+
+            if (string.IsNullOrEmpty(PluginFormat.iconUrl)) {
+                IconId = MpPreferences.ThisAppIcon.Id;
+
+            } else {
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl, PluginFormat.RootDirectory);
+                var icon = await MpIcon.Create(
+                    iconImgBase64: bytes.ToBase64String(),
+                    createBorder: false);
+                IconId = icon.Id;
             }
 
             OnPropertyChanged(nameof(Items));

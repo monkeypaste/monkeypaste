@@ -17,6 +17,7 @@ namespace MonkeyPaste {
         StartupLoader,
         Loader,
         InvalidPlugin,
+        InvalidClipboardFormatHandler,
         InvalidAction,
         BadHttpRequest,
         AnalyzerTimeout,
@@ -49,6 +50,7 @@ namespace MonkeyPaste {
             switch(ndt) {
                 case MpNotificationDialogType.InvalidPlugin:
                 case MpNotificationDialogType.InvalidAction:
+                case MpNotificationDialogType.InvalidClipboardFormatHandler:
                     return MpNotificationExceptionSeverityType.WarningWithOption;
                 case MpNotificationDialogType.AnalyzerTimeout:
                 case MpNotificationDialogType.InvalidRequest:

@@ -124,8 +124,21 @@ namespace MonkeyPaste {
                 if (!File.Exists(dllPath)) {
                     throw new MpUserNotifiedException($"Error, Plugin '{pluginName}' is flagged as dll type in '{manifestPath}' but does not have a matching '{pluginName}.dll' in its folder.");
                 }
-                Assembly pluginAssembly = Assembly.LoadFrom(dllPath);
-                for (int i = 0; i < pluginAssembly.GetTypes().Length; i++) {
+                Assembly pluginAssembly = null;
+                try {
+                    pluginAssembly = Assembly.LoadFrom(dllPath);
+                } catch(Exception rtle) {
+                    throw new MpUserNotifiedException($"Plugin Compilation error '{pluginName}':" + Environment.NewLine + rtle);
+                }
+                int typeCount = 0;
+                try {
+                    typeCount = pluginAssembly.GetTypes().Length;
+                }catch(ReflectionTypeLoadException rtle) {
+                    throw new MpUserNotifiedException("Error loading "+pluginName+" ",rtle);
+                }                
+
+
+                for (int i = 0; i < typeCount; i++) {
                     var curType = pluginAssembly.GetTypes()[i];
                     if (curType.GetInterface("MonkeyPaste.Common.Plugin."+nameof(MpIPluginComponentBase)) != null) {
                         var pluginObj = Activator.CreateInstance(curType);

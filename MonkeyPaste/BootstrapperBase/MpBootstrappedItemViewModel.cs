@@ -42,7 +42,7 @@ namespace MonkeyPaste {
             ItemArg = arg;
         }
 
-        public async Task LoadItem() {
+        public async Task LoadItemAsync() {
            // await Device.InvokeOnMainThreadAsync(async () => {
                 
             var sw = Stopwatch.StartNew();
@@ -54,14 +54,20 @@ namespace MonkeyPaste {
             if (instancePropertyInfo == null) {
                 initMethodInfo = ItemType.GetMethod("Init", BindingFlags.Static | BindingFlags.Public);
                 if (initMethodInfo == null) {
-                    return;
+                    initMethodInfo = ItemType.GetMethod("InitAsync", BindingFlags.Static | BindingFlags.Public);
+                    if(initMethodInfo == null) {
+                        return;
+                    }
                 }
             } else {
                 itemObj = instancePropertyInfo.GetValue(null, null);
 
                 initMethodInfo = ItemType.GetMethod("Init");
                 if (itemObj == null || initMethodInfo == null) {
-                    return;
+                    initMethodInfo = ItemType.GetMethod("InitAsync");
+                    if(initMethodInfo == null) {
+                        return;
+                    }                    
                 }
             }
 
@@ -77,6 +83,7 @@ namespace MonkeyPaste {
                 }
                     
             } else {
+
                 initMethodInfo.Invoke(itemObj, args);
             }
 

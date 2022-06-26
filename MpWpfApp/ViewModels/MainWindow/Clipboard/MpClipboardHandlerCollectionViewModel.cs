@@ -23,7 +23,8 @@ namespace MpWpfApp {
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpClipboardHandlerCollectionViewModel>, 
         MpITreeItemViewModel,
-        MpISidebarItemViewModel { //
+        MpISidebarItemViewModel,
+        MpIClipboardFormatDataHandlers { //
         #region Properties
 
         #region View Models
@@ -64,7 +65,26 @@ namespace MpWpfApp {
             }
         }
 
-        public ObservableCollection<MpClipboardFormatPresetViewModel> DefaultFormatPresetViewModels { get; set; } = new ObservableCollection<MpClipboardFormatPresetViewModel>();
+
+        public Dictionary<string, MpClipboardFormatPresetViewModel> DefaultFormatHandlerLookup { get; private set; } = new Dictionary<string, MpClipboardFormatPresetViewModel>();
+
+        public Dictionary<string, MpClipboardFormatPresetViewModel> DefaultReaders =>
+            DefaultFormatHandlerLookup
+            .Where(x => x.Value.Parent.ClipboardPluginComponent is MpIClipboardReaderComponent)
+            .ToDictionary(
+                x => x.Key,
+                x => x.Value);
+
+        public Dictionary<string, MpClipboardFormatPresetViewModel> DefaultWriters =>
+            DefaultFormatHandlerLookup
+            .Where(x => x.Value.Parent.ClipboardPluginComponent is MpIClipboardWriterComponent)
+            .ToDictionary(
+                x => x.Key,
+                x => x.Value);
+        #endregion
+
+        #region MpIClipboardFormatHandlers Implementation
+        public IEnumerable<MpIClipboardPluginComponent> Handlers => DefaultFormatHandlerLookup.Select(x => x.Value.Parent.ClipboardPluginComponent);
 
         #endregion
 
@@ -124,7 +144,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task Init() {
+        public async Task InitAsync() {
             IsBusy = true;
 
             MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
@@ -144,16 +164,39 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(Items));
             
             if (Items.Count > 0) {
-                // select most recent preset
-                
+                // select most recent preset and init default handlers
+
+                DefaultFormatHandlerLookup.Clear();
                 MpClipboardFormatPresetViewModel presetToSelect = null;
                 foreach(var chivm in Items) {
-                    foreach(var hivm in chivm.Items) {
+                    foreach(var hivm in chivm.Items) {                        
                         foreach(var hipvm in hivm.Items) {
                             if(presetToSelect == null) {
                                 presetToSelect = hipvm;
                             } else if(hipvm.LastSelectedDateTime > presetToSelect.LastSelectedDateTime) {
                                 presetToSelect = hipvm;
+                            }
+
+                            if(hipvm.IsDefault) {
+                                bool replace = true;
+                                if (DefaultFormatHandlerLookup.TryGetValue(hipvm.Parent.HandledFormat, out var curPreset)) {
+                                    
+                                    string errorMsg = $"Warning clipboard format handler conflict for {curPreset.FullName} and {hipvm.FullName}";
+                                    // two handled formats are marked as default so check which was last selected and use that one if none override previous
+                                    if(curPreset.LastSelectedDateTime > hipvm.LastSelectedDateTime) {
+                                        replace = false;
+                                        errorMsg += $" {curPreset} is more recent so ignoring {hipvm}";
+                                    } else if(curPreset.LastSelectedDateTime == hipvm.LastSelectedDateTime) {
+                                        errorMsg += $" have same date time {hipvm.LastSelectedDateTime} so using {hipvm}";
+                                    } else {
+                                        errorMsg += $" {hipvm} is more recent so ignoring {curPreset}";
+                                    }
+                                    MpConsole.WriteTraceLine(errorMsg);
+                                    if(!replace) {
+                                        continue;
+                                    }
+                                }
+                                DefaultFormatHandlerLookup.AddOrReplace(hipvm.Parent.HandledFormat, hipvm);
                             }
                         }
                     }
@@ -163,7 +206,11 @@ namespace MpWpfApp {
                     presetToSelect.Parent.SelectedItem = presetToSelect;
                     presetToSelect.Parent.Parent.SelectedItem = presetToSelect.Parent;
                     SelectedItem = presetToSelect.Parent.Parent;
-                }                
+                }
+
+
+
+
             }
 
             OnPropertyChanged(nameof(SelectedItem));
@@ -232,21 +279,43 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand UpdateDefaultFormatPresetCommand => new RelayCommand<object>(
+        public ICommand ToggleFormatPresetIsDefaultCommand => new RelayCommand<object>(
             (presetVmArg) => {
-                // TODO need a central view of current handled formats
-                // its too confusing having 'Ignore' parameter and 'IsDefault' when multiple handlers are present
+                
                 var presetVm = presetVmArg as MpClipboardFormatPresetViewModel;
                 if (presetVm == null) {
                     return;
                 }
-                foreach(var cihvm in Items) {
-                    var hfvm = cihvm.Items.FirstOrDefault(x => x.HandledFormat == presetVm.Parent.HandledFormat);
-                    if(hfvm == null || hfvm == presetVm.Parent) {
-                        continue;
+                var handlerVm = presetVm.Parent;
+
+                if(presetVm.IsDefault) {
+                    //when toggled  untoggle any other preset handling same format
+                    if(DefaultFormatHandlerLookup.ContainsKey(handlerVm.HandledFormat)) {
+                        var untoggled_preset = DefaultFormatHandlerLookup[handlerVm.HandledFormat];
+                        // setting IsDefault triggers this command and removes the old handler
+                        untoggled_preset.IsDefault = false;
                     }
+
+                    DefaultFormatHandlerLookup.AddOrReplace(handlerVm.HandledFormat, presetVm);
+
+                } else {
+                    // when preset isDefault = false
+                    if(DefaultFormatHandlerLookup.TryGetValue(handlerVm.HandledFormat, out var curHandlerPreset)) {
+                        // when format has a handler
+                        if(curHandlerPreset.PresetId == presetVm.PresetId) {
+                            // when preset WAS the default handler remove it
+                            DefaultFormatHandlerLookup.Remove(handlerVm.HandledFormat);
+                        }
+                    }
+                    //otherwise ignore
                 }
+
+                OnPropertyChanged(nameof(DefaultFormatHandlerLookup));
             });
         #endregion
+    }
+
+    public interface MpIIsCheckable {
+        bool? IsChecked { get; set; }
     }
 }

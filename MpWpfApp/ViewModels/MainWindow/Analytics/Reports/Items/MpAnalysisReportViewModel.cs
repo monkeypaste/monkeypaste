@@ -7,11 +7,13 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows;
 using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using Newtonsoft.Json;
 using System.Windows.Controls;
 using System.IO;
 using System.Diagnostics;
+using MonkeyPaste.Common.Plugin;
 
 namespace MpWpfApp {
     public class MpAnalysisReportViewModel : 
@@ -49,7 +51,7 @@ namespace MpWpfApp {
         #region Model
         public string ReportRtf { get; set; }
 
-        public MpPluginResponseFormat ResponseFormat { get; set; }
+        public MpPluginResponseFormatBase ResponseFormat { get; set; }
 
         #endregion
 
@@ -71,7 +73,7 @@ namespace MpWpfApp {
             IsBusy = true;
             await Task.Delay(1);
 
-            ResponseFormat = JsonConvert.DeserializeObject<MpPluginResponseFormat>(responseJsonStr);
+            ResponseFormat = JsonConvert.DeserializeObject<MpPluginResponseFormatBase>(responseJsonStr);
 
             ReportRtf = CreateReport().ToRichText();
 

@@ -2,9 +2,9 @@
 
 namespace MonkeyPaste.Common.Plugin {
     public interface MpIAnalyzeAsyncComponent : MpIPluginComponentBase {
-        Task<object> AnalyzeAsync(object args);
+        Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat request);
     }
-    public interface MpIAnalyzeComponent : MpIPluginComponentBase {
-        object Analyze(object args);
+    public interface MpIAnalyzerComponent : MpIPluginComponentBase {
+        MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat args);
     }
 }

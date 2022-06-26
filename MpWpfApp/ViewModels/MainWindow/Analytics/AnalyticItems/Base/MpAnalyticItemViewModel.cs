@@ -12,7 +12,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Newtonsoft.Json;
 using System.Web;
 using System.Windows;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -742,7 +744,7 @@ namespace MpWpfApp {
                 Items.ForEach(x => x.IsSelected = x == targetAnalyzer);
                 OnPropertyChanged(nameof(SelectedItem));
 
-                object result = await MpPluginTransactor.PerformTransaction(
+                MpPluginTransactionBase result = await MpPluginTransactor.PerformTransaction(
                                            PluginFormat,
                                            AnalyzerPluginComponent,
                                            SelectedItem.ParamLookup
@@ -754,16 +756,17 @@ namespace MpWpfApp {
                     IsBusy = false;
                     return;
                 }
-                if (result is string errorOrRetryStr) {
-                    if (errorOrRetryStr == MpPluginResponseFormat.RETRY_MESSAGE) {
+                if (!string.IsNullOrEmpty(result.TransactionErrorMessage)) {
+                    if (!string.IsNullOrEmpty(result.Response.retryMessage)) {
+                        MpConsole.WriteTraceLine("Retrying " + result.Response.retryMessage);
                         ExecuteAnalysisCommand.Execute(args);
                         return;
-                    } else if (errorOrRetryStr == MpPluginResponseFormat.ERROR_MESSAGE) {
+                    } else if (!string.IsNullOrEmpty(result.Response.errorMessage)) {
                         OnAnalysisCompleted?.Invoke(SelectedItem, null);
                         IsBusy = false;
                         return;
                     } else {
-                        throw new Exception("Unhandled transaction response: " + errorOrRetryStr);
+                        throw new Exception("Unhandled transaction response: " + result.TransactionErrorMessage);
                     }
                 }
 

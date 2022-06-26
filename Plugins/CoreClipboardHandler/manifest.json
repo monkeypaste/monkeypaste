@@ -10,9 +10,10 @@
     "isDll": true
   },
   "clipboardHandler": {
-    "handledFormats": [
+    "readers": [
       {
         "handlerGuid": "676278d9-6c9b-4efd-b5e9-9c5840222c14",
+        "iconUrl": "text.png",
         "displayName": "Text",
         "clipboardName": "Text",
         "parameters": [
@@ -21,7 +22,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "PlainTextMaxCharacterCount",
+            "paramId": 1,
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -37,7 +38,7 @@
             "description": "When checked Plain Text format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "IgnorePlainText",
+            "paramId": 2,
             "values": [
               {
                 "value": "false",
@@ -50,6 +51,7 @@
       {
         "handlerGuid": "58558048-a275-4377-9108-8fb1bed3cd5e",
         "displayName": "Rtf",
+        "iconUrl": "rtf.png",
         "clipboardName": "Rich Text Format",
         "parameters": [
           {
@@ -57,7 +59,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "RtfMaxCharacterCount",
+            "paramId": 3,
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -73,7 +75,7 @@
             "description": "When checked Rich Text format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "IgnoreRichText",
+            "paramId": 4,
             "values": [
               {
                 "value": "false",
@@ -86,6 +88,7 @@
       {
         "handlerGuid": "936e7b68-72c9-4a8a-ada1-a60f21c93b10",
         "displayName": "Html",
+        "iconUrl": "html.png",
         "clipboardName": "HTML Format",
         "parameters": [
           {
@@ -93,7 +96,7 @@
             "description": "For performance concerns, a maximum amount characters is needed :(",
             "controlType": "Slider",
             "unitType": "Integer",
-            "paramName": "HtmlMaxCharacterCount",
+            "paramId": 5,
             "isRequired": true,
             "minimum": 1,
             "maximum": 10000000,
@@ -109,7 +112,7 @@
             "description": "When checked Html format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "IgnoreHtml",
+            "paramId": 6,
             "values": [
               {
                 "value": "false",
@@ -122,6 +125,7 @@
       {
         "handlerGuid": "8af77575-fd03-4c39-87c5-688eda230f06",
         "displayName": "Bitmap",
+        "iconUrl": "bitmap.png",
         "clipboardName": "Bitmap",
         "parameters": [
           {
@@ -129,7 +133,7 @@
             "description": "When pasting or dropping a bitmap this will be the default file type",
             "controlType": "ComboBox",
             "unitType": "PlainText",
-            "paramName": "DefaultBitmapExportType",
+            "paramId": 7,
             "isRequired": true,
             "values": [
               {
@@ -154,7 +158,7 @@
             "description": "When checked Image format will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "IgnoreBitmap",
+            "paramId": 8,
             "values": [
               {
                 "value": "false",
@@ -167,6 +171,7 @@
       {
         "handlerGuid": "bb997630-985a-420e-808f-60e31625c06f",
         "displayName": "File",
+        "iconUrl": "folder.png",
         "clipboardName": "FileDrop",
         "parameters": [
           {
@@ -174,7 +179,7 @@
             "description": "When checked Files will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "IgnoreAllFiles",
+            "paramId": 9,
             "values": [
               {
                 "value": "false",
@@ -187,13 +192,14 @@
             "description": "These file types will be ignored",
             "controlType": "EditableList",
             "unitType": "PlainText",
-            "paramName": "IgnoredFileExtensions"
+            "paramId": 10
           }
         ]
       },
       {
         "handlerGuid": "34b250a9-c7d4-4290-a15f-bb229867b76b",
         "displayName": "Csv",
+        "iconUrl": "csv.png",
         "clipboardName": "CSV",
         "parameters": [
           {
@@ -201,7 +207,215 @@
             "description": "When checked Csv will be ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
-            "paramName": "IgnoreCsv",
+            "paramId": 11,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "writers": [
+      {
+        "handlerGuid": "fc932676-f688-4f0c-a558-9918241397db",
+        "iconUrl": "text.png",
+        "displayName": "Text",
+        "clipboardName": "Text",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramId": 12,
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Plain Text format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 13,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "handlerGuid": "ac15a058-dae6-4a66-9700-c415fd5b89f9",
+        "displayName": "Rtf",
+        "iconUrl": "rtf.png",
+        "clipboardName": "Rich Text Format",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramId": 14,
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Rich Text format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 15,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "handlerGuid": "825e4325-908f-48c5-94a1-53eb9af4c470",
+        "displayName": "Html",
+        "iconUrl": "html.png",
+        "clipboardName": "HTML Format",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramId": 16,
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Html format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 17,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "handlerGuid": "57f363e9-b478-46e7-a39b-4b143c3d3e7d",
+        "displayName": "Bitmap",
+        "iconUrl": "bitmap.png",
+        "clipboardName": "Bitmap",
+        "parameters": [
+          {
+            "label": "Default Export Type",
+            "description": "When pasting or dropping a bitmap this will be the default file type",
+            "controlType": "ComboBox",
+            "unitType": "PlainText",
+            "paramId": 18,
+            "isRequired": true,
+            "values": [
+              {
+                "label": "bmp",
+                "value": "bmp",
+                "isDefault": false
+              },
+              {
+                "label": "png",
+                "value": "png",
+                "isDefault": true
+              },
+              {
+                "label": "jpg",
+                "value": "jpg",
+                "isDefault": false
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Image format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 19,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "handlerGuid": "e05ed3da-3b2a-4339-8524-2ea339c0856b",
+        "displayName": "File",
+        "iconUrl": "folder.png",
+        "clipboardName": "FileDrop",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Files will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 20,
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignored File Extensions",
+            "description": "These file types will be ignored",
+            "controlType": "EditableList",
+            "unitType": "PlainText",
+            "paramId": 21
+          }
+        ]
+      },
+      {
+        "handlerGuid": "10ab62ae-89fa-4445-895d-b4e5463e6df0",
+        "displayName": "Csv",
+        "iconUrl": "csv.png",
+        "clipboardName": "CSV",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Csv will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": 22,
             "values": [
               {
                 "value": "false",

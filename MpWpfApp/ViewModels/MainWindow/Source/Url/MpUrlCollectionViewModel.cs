@@ -39,7 +39,7 @@ namespace MpWpfApp {
         public MpUrlCollectionViewModel() : base(null) {
         }
 
-        public async Task Init() {
+        public async Task InitAsync() {
             IsBusy = true;
             while (MpIconCollectionViewModel.Instance.IsAnyBusy) {
                 // wait for icons to load since url vm depends on icon vm

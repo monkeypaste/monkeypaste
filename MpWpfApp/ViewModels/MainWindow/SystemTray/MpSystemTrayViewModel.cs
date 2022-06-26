@@ -97,7 +97,7 @@ namespace MpWpfApp {
         private static MpSystemTrayViewModel _instance;
         public static MpSystemTrayViewModel Instance => _instance ?? (_instance = new MpSystemTrayViewModel());
 
-        public async Task Init() {
+        public async Task InitAsync() {
             await Task.Delay(1);
         }
 

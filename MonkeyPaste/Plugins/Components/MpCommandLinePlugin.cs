@@ -10,13 +10,13 @@ namespace MonkeyPaste {
     public interface MpICommandLine {
 
     }
-    public class MpCommandLinePlugin : MpIAnalyzeComponent {
+    public class MpCommandLinePlugin : MpIAnalyzerComponent {
         public string Endpoint { get; set; }
 
-        public object Analyze(object args) {
+        public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat request) {
             Process process = new Process();
             process.StartInfo.FileName = Endpoint;
-            process.StartInfo.Arguments = Base64EncodeArgs(args.ToString());
+            process.StartInfo.Arguments = request.SerializeToByteString();//Base64EncodeArgs(args.ToString());
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
@@ -31,7 +31,9 @@ namespace MonkeyPaste {
             Console.WriteLine(output);
             process.WaitForExit();
 
-            return output;
+            return new MpAnalyzerPluginResponseFormat() {
+                dataObject = new MpPortableDataObject(MpPortableDataFormats.Text,output)
+            };
         }
 
         static void ErrorOutputHandler(object sendingProcess, DataReceivedEventArgs outLine) {

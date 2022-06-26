@@ -58,12 +58,12 @@ namespace MpWpfApp {
 
         public MpIconCollectionViewModel() : base(null) {
             PropertyChanged += MpIconCollectionViewModel_PropertyChanged;
-            MpHelpers.RunOnMainThreadAsync(Init);
+            MpHelpers.RunOnMainThreadAsync(InitAsync);
         }
 
         
 
-        public async Task Init() {
+        public async Task InitAsync() {
             IsBusy = true;
 
             IconViewModels.Clear();

@@ -16,13 +16,13 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {    
-    public partial class MpContextMenuView : ContextMenu, MpISingleton<MpContextMenuView> {
+    public partial class MpContextMenuView : ContextMenu, MpIAsyncSingleton<MpContextMenuView> {
         private static MpContextMenuView _instance;
         public static MpContextMenuView Instance => _instance ?? (_instance = new MpContextMenuView());
 
         public bool IsShowingChildDialog { get; set; } = false;
 
-        public async Task Init() {
+        public async Task InitAsync() {
             await Task.Delay(1);
         }
 

@@ -1,5 +1,6 @@
 ﻿namespace MonkeyPaste {
-    public interface MpINativeResource {
+
+    public interface MpIPlatformResource {
         object GetResource(string resourceKey);
     }
 }

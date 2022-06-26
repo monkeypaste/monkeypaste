@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Common;
+using SQLite;
 using SQLiteNetExtensions;
 using SQLiteNetExtensions.Attributes;
 using System;
@@ -36,14 +37,12 @@ namespace MonkeyPaste {
 
         #endregion
 
-
-        public static async Task<MpDataObject> Create(
+        public static async Task<MpDataObject> CreateAsync(
             string guid = "",
             int dataObjectId = 0,
+            MpPortableDataObject pdo = null,
             bool suppressWrite = false) {
-
-            // TODO dup check here?
-
+                        
             var ndio = new MpDataObject() {
                 DataObjectGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid(): System.Guid.Parse(guid),
                 Id = dataObjectId
@@ -51,6 +50,15 @@ namespace MonkeyPaste {
 
             if(!suppressWrite) {
                 await ndio.WriteToDatabaseAsync();
+            }
+
+            if(pdo != null) {
+                foreach(var kvp in pdo.DataFormatLookup) {
+                    var pdoi = await MpDataObjectItem.Create(
+                        dataObjectId: ndio.Id,
+                        itemFormat: kvp.Key.Name,
+                        itemData64: kvp.Value.ToString());
+                }
             }
             return ndio;
         }

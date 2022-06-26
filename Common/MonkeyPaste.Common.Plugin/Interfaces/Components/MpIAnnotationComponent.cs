@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Plugin {
-    public interface MpIAnnotationComponent : MpIPluginComponentBase {
-        object Annotate(object args);
+    public interface MpIAnnotatorComponent : MpIPluginComponentBase {
+        MpAnnotatorResponseFormat Annotate(MpAnnotatorRequestFormat request);
     }
 }

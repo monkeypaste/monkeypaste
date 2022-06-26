@@ -38,6 +38,7 @@
     <Compile Remove="Resources\Html\temp\**" />
     <Compile Remove="Services\**" />
     <Compile Remove="Utils\NetworkIO\Json\**" />
+    <Compile Remove="ViewModels\Reusable\Clipboard\**" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
     <Compile Remove="Views\MainWindow\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
@@ -65,6 +66,7 @@
     <EmbeddedResource Remove="Resources\Html\temp\**" />
     <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="Utils\NetworkIO\Json\**" />
+    <EmbeddedResource Remove="ViewModels\Reusable\Clipboard\**" />
     <EmbeddedResource Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
     <EmbeddedResource Remove="Views\MainWindow\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
@@ -92,6 +94,7 @@
     <None Remove="Resources\Html\temp\**" />
     <None Remove="Services\**" />
     <None Remove="Utils\NetworkIO\Json\**" />
+    <None Remove="ViewModels\Reusable\Clipboard\**" />
     <None Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModelCopyItem\CopyItemViewModelCopyItem\Title\**" />
     <None Remove="Views\MainWindow\**" />
     <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionViewCopyItem\CopyItemViewCopyItem\Content\**" />
@@ -494,6 +497,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ViewModels\Reusable\NewFolder\" />
     <Folder Include="ViewModels\Reusable\Theme\" />
   </ItemGroup>
 

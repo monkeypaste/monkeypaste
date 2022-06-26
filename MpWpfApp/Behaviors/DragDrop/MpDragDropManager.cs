@@ -27,22 +27,31 @@ namespace MpWpfApp {
             get {
                 List<MpIContentDropTarget> dtl = new List<MpIContentDropTarget>();
 
-                //var clvl = Application.Current.MainWindow.GetVisualDescendents<MpContentListView>();
-                //dtl.AddRange(clvl.Select(x => x.ContentListDropBehavior).Where(x => x.IsDropEnabled).ToList());
-
                 var rtbvl = Application.Current.MainWindow.GetVisualDescendents<MpRtbContentView>();
                 dtl.AddRange(rtbvl.Select(x => x.ContentViewDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
-                dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>().ClipTrayDropBehavior);
+                var ctrv = Application.Current.MainWindow.GetVisualDescendent<MpClipTrayView>();
+                if (ctrv != null) {
+                    dtl.Add(ctrv.ClipTrayDropBehavior);
+                }
 
-                dtl.Add(Application.Current.MainWindow.GetVisualDescendent<MpPinTrayView>().PinTrayDropBehavior);
+                var ptrv = Application.Current.MainWindow.GetVisualDescendent<MpPinTrayView>();
+                if (ptrv != null) {
+                    dtl.Add(ptrv.PinTrayDropBehavior);
+                }
+
 
                 var adivl = Application.Current.MainWindow.GetVisualDescendents<MpActionDesignerItemView>();
                 dtl.AddRange(adivl.Select(x => x.ActionDesignerItemDropBehavior).Where(x => x.IsDropEnabled).ToList());
 
-                dtl.Add((Application.Current.MainWindow as MpMainWindow).ExternalDropBehavior);
+                var mwv = Application.Current.MainWindow as MpMainWindow;
+                if (mwv != null) {
+                    dtl.Add(mwv.ExternalDropBehavior);
+                }
+
 
                 return dtl;
+
             }
         }
 

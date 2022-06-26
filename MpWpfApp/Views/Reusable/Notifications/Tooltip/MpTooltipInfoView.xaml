@@ -47,7 +47,7 @@
                 </Style>
             </Border.Style>
             <Border.ToolTip>
-                <local:MpToolTipView DataContext="{Binding Tooltip}" />
+                <local:MpToolTipView ToolTipText="{Binding Tooltip}" />
             </Border.ToolTip>
             <TextBlock FontSize="10"
                        FontWeight="Bold"

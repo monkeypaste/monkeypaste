@@ -110,7 +110,7 @@ namespace MpWpfApp {
                     return;
                 }
                 // from external source
-                var tempCopyItem = await MpCopyItemBuilder.CreateFromDataObject(mpdo, true);
+                var tempCopyItem = await MpWpfCopyItemBuilder.CreateFromDataObject(mpdo, true);
                 if (tempCopyItem == null) {
                     return;
                 }

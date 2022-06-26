@@ -3,38 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 using Newtonsoft.Json;
 using MpProcessHelper;
-using MpClipboardHelper;
 using System.Diagnostics;
 
 namespace ProcessAutomation {
-    public class ProcessPlugin : MpIAnalyzeComponent {
+    public class ProcessPlugin : MpIAnalyzerComponent {
         private const int _WAIT_FOR_INPUT_IDLE_MS = 30000;
 
         private static Dictionary<string, IntPtr> _lastRanNonExeProcessLookup = new Dictionary<string, IntPtr>();
 
-        public object Analyze(object args) {
+        public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat request) {
 
-            var reqParts = JsonConvert.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString());
 
-            string processPath = reqParts.items.FirstOrDefault(x => x.paramId == 1).value.ToLower();
-            var processArgs = reqParts.items.FirstOrDefault(x => x.paramId == 2).value.ToListFromCsv();
-            bool asAdmin = reqParts.items.FirstOrDefault(x => x.paramId == 3).value.ToLower() == "true";
-            bool isSilent = reqParts.items.FirstOrDefault(x => x.paramId == 4).value.ToLower() == "true";
-            bool useShellExecute = reqParts.items.FirstOrDefault(x => x.paramId == 5).value.ToLower() == "true";
-            string workingDir = reqParts.items.FirstOrDefault(x => x.paramId == 6).value.ToLower();
-            WinApi.ShowWindowCommands windowState = (WinApi.ShowWindowCommands)Enum.Parse(typeof(WinApi.ShowWindowCommands), reqParts.items.FirstOrDefault(x => x.paramId == 7).value);
-            bool suppressErrors = reqParts.items.FirstOrDefault(x => x.paramId == 8).value.ToLower() == "true";
-            bool preferRunningApp = reqParts.items.FirstOrDefault(x => x.paramId == 9).value.ToLower() == "true";
-            bool closeOnComplete = reqParts.items.FirstOrDefault(x => x.paramId == 10).value.ToLower() == "true";
-            string username = reqParts.items.FirstOrDefault(x => x.paramId == 11).value;
-            string password = reqParts.items.FirstOrDefault(x => x.paramId == 12).value;
-            bool createNoWindow = reqParts.items.FirstOrDefault(x => x.paramId == 13).value.ToLower() == "true";
-            string domain = reqParts.items.FirstOrDefault(x => x.paramId == 14).value;
+            string processPath = request.items.FirstOrDefault(x => x.paramId == 1).value.ToLower();
+            var processArgs = request.items.FirstOrDefault(x => x.paramId == 2).value.ToListFromCsv();
+            bool asAdmin = request.items.FirstOrDefault(x => x.paramId == 3).value.ToLower() == "true";
+            bool isSilent = request.items.FirstOrDefault(x => x.paramId == 4).value.ToLower() == "true";
+            bool useShellExecute = request.items.FirstOrDefault(x => x.paramId == 5).value.ToLower() == "true";
+            string workingDir = request.items.FirstOrDefault(x => x.paramId == 6).value.ToLower();
+            WinApi.ShowWindowCommands windowState = (WinApi.ShowWindowCommands)Enum.Parse(typeof(WinApi.ShowWindowCommands), request.items.FirstOrDefault(x => x.paramId == 7).value);
+            bool suppressErrors = request.items.FirstOrDefault(x => x.paramId == 8).value.ToLower() == "true";
+            bool preferRunningApp = request.items.FirstOrDefault(x => x.paramId == 9).value.ToLower() == "true";
+            bool closeOnComplete = request.items.FirstOrDefault(x => x.paramId == 10).value.ToLower() == "true";
+            string username = request.items.FirstOrDefault(x => x.paramId == 11).value;
+            string password = request.items.FirstOrDefault(x => x.paramId == 12).value;
+            bool createNoWindow = request.items.FirstOrDefault(x => x.paramId == 13).value.ToLower() == "true";
+            string domain = request.items.FirstOrDefault(x => x.paramId == 14).value;
 
             IntPtr lastActiveInstanceHandle = IntPtr.Zero;
             if (preferRunningApp) {
@@ -152,7 +150,7 @@ namespace ProcessAutomation {
                 //    }
                 //});
             }
-            MpPluginResponseFormat response = new MpPluginResponseFormat() {
+            MpAnalyzerPluginResponseFormat response = new MpAnalyzerPluginResponseFormat() {
                 annotations = new List<MpPluginResponseAnnotationFormat>() {
                                 new MpPluginResponseAnnotationFormat() {
                                     name = "Output",

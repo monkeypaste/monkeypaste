@@ -1,19 +1,35 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
 
-    public class MpMeasurements : MpViewModelBase, MpIAsyncSingletonViewModel<MpMeasurements> {    
+    public class MpMeasurements : MpViewModelBase, MpISingletonViewModel<MpMeasurements> {
         private static MpMeasurements _instance;
         public static MpMeasurements Instance => _instance ?? (_instance = new MpMeasurements());
 
         public MpMeasurements() : base(null) {
 
         }
-        public async Task Init() {
-            await Task.Delay(1);
+
+        public void Init() {
+            var sic = MpPlatformWrapper.Services.ScreenInfoCollection;
+
+            MpConsole.WriteLine($"WPF");
+            MpConsole.WriteLine($"Screen Width: "+SystemParameters.PrimaryScreenWidth);
+            MpConsole.WriteLine($"Screen Height: " + SystemParameters.PrimaryScreenHeight);
+            MpConsole.WriteLine($"WorkArea Height: " + SystemParameters.WorkArea.Height);
+            MpConsole.WriteLine($"WorkArea Bottom: " + SystemParameters.WorkArea.Bottom);
+
+            var psi = sic.Screens.FirstOrDefault(x => x.IsPrimary);
+            MpConsole.WriteLine($"Forms");
+            MpConsole.WriteLine($"Screen Width: " + psi.Bounds.Size.Width);
+            MpConsole.WriteLine($"Screen Height: " + psi.Bounds.Size.Height);
+            MpConsole.WriteLine($"WorkArea Height: " + psi.WorkArea.Size.Height);
+            MpConsole.WriteLine($"WorkArea Bottom: " + psi.WorkArea.Bottom);
         }
 
 

@@ -36,7 +36,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task Init() {
+        public async Task InitAsync() {
             IsBusy = true;
 
             await Task.Delay(1);

@@ -155,14 +155,18 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              ToolTip="Quick Action?"
+                                              VerticalAlignment="Center" 
+                                              Command=""
                                               ToolTipService.InitialShowDelay="0"
-                                              IsChecked="{Binding IsQuickAction,
+                                              IsChecked="{Binding IsDefault,
                                                                   Mode=TwoWay,
                                                                   UpdateSourceTrigger=PropertyChanged,
                                                                   NotifyOnTargetUpdated=True,
-                                                                  NotifyOnSourceUpdated=True}" />
+                                                                  NotifyOnSourceUpdated=True}">
+                                        <CheckBox.ToolTip>
+                                            <local:MpToolTipView ToolTipText="Default?" />
+                                        </CheckBox.ToolTip>
+                                    </CheckBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

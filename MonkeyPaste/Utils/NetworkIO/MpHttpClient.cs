@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         private static MpHttpClient _instance;
         public static MpHttpClient Instance => _instance ?? (_instance = new MpHttpClient());
 
-        public async Task Init() {
+        public async Task InitAsync() {
             await Task.Delay(1);
         }
 

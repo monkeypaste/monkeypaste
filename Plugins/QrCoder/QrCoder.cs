@@ -8,11 +8,11 @@ using SkiaSharp.QrCode.Image;
 using SkiaSharp;
 
 namespace QrCoder {
-    public class QrCoder : MpIAnalyzeComponent {
-        public object Analyze(object args) {
+    public class QrCoder : MpIAnalyzerComponent {
+        public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat request) {
             //await Task.Delay(1);
 
-            var reqParts = MpJsonObject.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString()).items;
+            var reqParts = request.items;
             string textToConvert = reqParts.FirstOrDefault(x => x.paramId == 1).value;
 
             var qrCode = new QrCode(textToConvert, new Vector2Slim(256, 256), SKEncodedImageFormat.Png);
@@ -22,7 +22,7 @@ namespace QrCoder {
                 byte[] imageBytes = memoryStream.ToArray();
                 string outputQrCodeBase64 = Convert.ToBase64String(imageBytes);
 
-                return new MpPluginResponseFormat() {
+                return new MpAnalyzerPluginResponseFormat() {
                     //newContentItem = new MpPluginResponseNewContentFormat() {
                     //    content = new MpJsonPathProperty(outputQrCodeBase64),
                     //    label = new MpJsonPathProperty("QR Code")

@@ -139,12 +139,12 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task Init() {
+        public async Task InitAsync() {
             IsBusy = true;
 
             Items.Clear();
 
-            var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIAnalyzeAsyncComponent || x.Value.Component is MpIAnalyzeComponent);
+            var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIAnalyzeAsyncComponent || x.Value.Component is MpIAnalyzerComponent);
             foreach(var pai in pail) {
                 var paivm = await CreateAnalyticItemViewModel(pai.Value);
                 Items.Add(paivm);

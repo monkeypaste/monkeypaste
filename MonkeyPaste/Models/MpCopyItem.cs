@@ -143,6 +143,9 @@ namespace MonkeyPaste {
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
+        [Column("fk_MpDataObjectId")]
+        public int DataObjectId { get; set; }
+
         //[ForeignKey(typeof(MpDbImage))]
         //[Column("fk_SsMpDbImageId")]
         //public int SsDbImageId { get; set; }
@@ -266,6 +269,7 @@ namespace MonkeyPaste {
             string description = "",
             double w = 0,
             double h = 0,
+            int dataObjectId = 0,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetCopyItemByData(data);
             if (MpPreferences.IgnoreNewDuplicates && dupCheck != null && !suppressWrite) {
@@ -306,6 +310,7 @@ namespace MonkeyPaste {
                 CopyCount = 1,
                 ItemSize = new MpSize(w,h),
                 CopyItemSourceGuid = copyItemSourceGuid,
+                DataObjectId = dataObjectId
             };
             if (!suppressWrite) {
                 await newCopyItem.WriteToDatabaseAsync();

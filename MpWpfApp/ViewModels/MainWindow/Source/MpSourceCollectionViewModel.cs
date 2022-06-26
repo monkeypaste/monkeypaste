@@ -35,7 +35,7 @@ namespace MpWpfApp {
 
         public MpSourceCollectionViewModel() : base(null) { }
 
-        public async Task Init() {
+        public async Task InitAsync() {
             IsBusy = true;
             while (MpAppCollectionViewModel.Instance.IsAnyBusy ||
                   MpUrlCollectionViewModel.Instance.IsAnyBusy) {

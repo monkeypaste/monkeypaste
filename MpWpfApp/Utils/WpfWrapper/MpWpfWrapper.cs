@@ -1,11 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using MonkeyPaste;
-using Xamarin.Forms.PlatformConfiguration;
-using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
-using MpClipboardHelper;
+using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpWpfWrapper : MpIPlatformWrapper {
@@ -20,7 +16,8 @@ namespace MpWpfApp {
         public MpIKeyboardInteractionService KeyboardInteractionService { get; }
         public MpIGlobalTouch GlobalTouch { get; }
         public MpIUiLocationFetcher LocationFetcher { get; }
-        public MpINativeResource NativeResource { get; }
+        public MpIPlatformResource PlatformResource { get; }
+        public MpIPlatformScreenInfoCollection ScreenInfoCollection { get; }
         public MpIContextMenuCloser ContextMenuCloser { get; }
         public MpIMainThreadMarshal MainThreadMarshal { get; }
         public MpIStringTools StringTools { get; }
@@ -28,7 +25,9 @@ namespace MpWpfApp {
         public MpIPlatformDataObjectHelper DataObjectHelper { get; }
         public MpINativeMessageBox NativeMessageBox { get; }
         
-        public MpIClipboardMonitor ClipboardMonitor { get; set; }
+        public MpIClipboardMonitor ClipboardMonitor { get; }
+
+        public MpIClipboardFormatDataHandlers ClipboardData { get;  }
 
         public MpIExternalPasteHandler ExternalPasteHandler { get; }
 
@@ -47,7 +46,7 @@ namespace MpWpfApp {
             UrlBuilder = new MpUrlBuilder();
             AppBuilder = new MpWpfAppBuilder();
             CustomColorChooserMenu = new MpWpfCustomColorChooserMenu();
-            NativeResource = new MpWpfResourceFetcher();
+            PlatformResource = new MpWpfResourceFetcher();
             ContextMenuCloser = new MpWpfContextMenuCloser();
             MainThreadMarshal = new MpWpfMainThreadMarshal();
             StringTools = new MpWpfStringTools();
@@ -55,9 +54,11 @@ namespace MpWpfApp {
             NativeMessageBox = new MpWpfMessageBox();
             DataObjectHelper = MpWpfDataObjectHelper.Instance;
             ExternalPasteHandler = MpWpfDataObjectHelper.Instance;
-            CopyItemBuilder = new MpCopyItemBuilder();
-            ClipboardMonitor = new MpClipboardWatcher();
+            CopyItemBuilder = new MpWpfCopyItemBuilder();
+            ClipboardMonitor = new MpWpfClipboardWatcher();
+            ClipboardData = MpClipboardHandlerCollectionViewModel.Instance;
             DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
+            ScreenInfoCollection = new MpWpfScreenInfoCollection();            
         }
 
     }

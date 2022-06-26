@@ -176,7 +176,7 @@ namespace MpWpfApp {
         private static MpThemeColors _instance;
         public static MpThemeColors Instance => _instance ?? (_instance = new MpThemeColors());
 
-        public async Task Init() {
+        public async Task InitAsync() {
             await Task.Delay(1);
             InitDefaultThemes();
             LoadTheme(MpThemeType.Light);

@@ -12,12 +12,11 @@ using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace HexColorFormatter {
-    public class HexColorFormatter : MpIAnalyzeComponent {
-        public object Analyze(object args) {
-            var reqParts = MpJsonObject.DeserializeObject<MpAnalyzerPluginRequestFormat>(args.ToString());
+    public class HexColorFormatter : MpIAnnotatorComponent {
+        public MpAnnotatorResponseFormat Annotate(MpAnnotatorRequestFormat request) {
 
-            bool doHighlighting = reqParts.items.FirstOrDefault(x => x.paramId == 1).value.ToLower() == "true";
-            string rtf = reqParts.items.FirstOrDefault(x => x.paramId == 2).value;
+            bool doHighlighting = request.items.FirstOrDefault(x => x.paramId == 1).value.ToLower() == "true";
+            string rtf = request.items.FirstOrDefault(x => x.paramId == 2).value;
             var fd = rtf.ToFlowDocument();
             string pt = fd.ToPlainText();
 
@@ -53,8 +52,7 @@ namespace HexColorFormatter {
                 tp = tr.End.GetInsertionPosition(LogicalDirection.Forward);
             }
 
-            return new MpPluginResponseFormat() {
-                message = "SUCCESS",
+            return new MpAnnotatorResponseFormat() {
                 dataObject = new MpPortableDataObject(MpPortableDataFormats.Rtf,fd.ToRichText())
             };
         }

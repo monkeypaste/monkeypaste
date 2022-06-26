@@ -11,6 +11,7 @@ using System.Windows.Media;
 using GalaSoft.MvvmLight.CommandWpf;
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public class MpHandledClipboardFormatViewModel :
@@ -26,9 +27,6 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-
-        public MpClipboardFormatPresetViewModel DefaultPresetViewModel => Items.FirstOrDefault(x => x.IsDefault);
-
 
         public MpITreeItemViewModel ParentTreeItem => Parent;
 
@@ -184,22 +182,23 @@ namespace MpWpfApp {
 
             PluginFormat = analyzerPlugin;
 
-            ClipboardPluginFormat = PluginFormat.clipboardHandler.handledFormats[handlerIdx];
+            ClipboardPluginFormat = PluginFormat.clipboardHandler.handledFormats.ElementAt(handlerIdx);
             if (ClipboardPluginComponent == null) {
                 throw new Exception("Cannot find component");
             }
 
 
             var presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(ClipboardHandlerGuid);
+                        
 
-            if (string.IsNullOrEmpty(PluginFormat.iconUrl)) {
+            if (string.IsNullOrEmpty(ClipboardPluginFormat.iconUrl)) {
                 IconId = MpPreferences.ThisAppIcon.Id;
             } else if (presets.Count > 0 &&
                 presets.FirstOrDefault(x => x.IsDefault) != default &&
                       presets.FirstOrDefault(x => x.IsDefault).IconId > 0) {
                 IconId = presets.FirstOrDefault(x => x.IsDefault).IconId;
             } else {
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl);
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(ClipboardPluginFormat.iconUrl);
                 var icon = await MpIcon.Create(
                     iconImgBase64: bytes.ToBase64String(),
                     createBorder: false);
@@ -526,11 +525,11 @@ namespace MpWpfApp {
                     throw new Exception("Analyzer is supposed to have a default preset");
                 }
 
-                var defaultPresetModel = await CreateDefaultPresetModel(defvm.AnalyticItemPresetId);
+                var defaultPresetModel = await CreateDefaultPresetModel(defvm.PresetId);
 
                 await defvm.InitializeAsync(defaultPresetModel);
 
-                Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == defvm.AnalyticItemPresetId);
+                Items.ForEach(x => x.IsSelected = x.PresetId == defvm.PresetId);
                 OnPropertyChanged(nameof(SelectedItem));
 
                 IsBusy = false;

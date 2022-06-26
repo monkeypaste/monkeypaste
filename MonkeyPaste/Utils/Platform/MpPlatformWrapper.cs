@@ -17,7 +17,9 @@ namespace MonkeyPaste {
         MpIKeyboardInteractionService KeyboardInteractionService { get; }
         MpIGlobalTouch GlobalTouch { get; }
         MpIUiLocationFetcher LocationFetcher { get; }
-        MpINativeResource NativeResource { get; }
+        MpIPlatformResource PlatformResource { get; }
+        MpIPlatformScreenInfoCollection ScreenInfoCollection { get; }
+
         MpIContextMenuCloser ContextMenuCloser { get; }
         MpIMainThreadMarshal MainThreadMarshal { get; }
         MpIStringTools StringTools { get; }
@@ -25,7 +27,9 @@ namespace MonkeyPaste {
         MpIPlatformDataObjectHelper DataObjectHelper { get; }
         MpINativeMessageBox NativeMessageBox { get; }
 
-        MpIClipboardMonitor ClipboardMonitor { get; set; }
+        MpIClipboardMonitor ClipboardMonitor { get; }
+
+        MpIClipboardFormatDataHandlers ClipboardData { get; }
 
         MpIExternalPasteHandler ExternalPasteHandler { get; }
 
