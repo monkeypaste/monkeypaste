@@ -10,6 +10,10 @@ namespace MonkeyPaste {
         MpMenuItemViewModel MenuItemViewModel { get; }
     }
 
+    public interface MpIContextMenuItemViewModel : MpIMenuItemViewModel { }
+
+    public interface MpIPopupMenuItemViewModel : MpIMenuItemViewModel { }
+
     public class MpMenuItemViewModel : MpViewModelBase {
         #region Properties
 

@@ -36,7 +36,6 @@ namespace MonkeyPaste.Common.Plugin {
         public MpContactFetcherFormat contactFetcher { get; set; }
 
         public string RootDirectory { get; set; }
-        public string ComponentPath { get; set; }
         
         public object Component { get; set; } = null;
         

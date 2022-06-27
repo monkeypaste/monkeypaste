@@ -5,13 +5,14 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpBindableToolbarItem : ToolbarItem {
-        public static readonly BindableProperty IsVisibleProperty = BindableProperty.Create(
-            nameof(IsVisible), 
-            typeof(bool), 
-            typeof(MpBindableToolbarItem), 
-            true, 
-            BindingMode.TwoWay, 
-            propertyChanged: OnIsVisibleChanged);
+        public static readonly BindableProperty IsVisibleProperty = 
+            BindableProperty.Create(
+                nameof(IsVisible), 
+                typeof(bool), 
+                typeof(MpBindableToolbarItem), 
+                true, 
+                BindingMode.TwoWay, 
+                propertyChanged: OnIsVisibleChanged);
 
         public bool IsVisible {
             get => (bool)GetValue(IsVisibleProperty);

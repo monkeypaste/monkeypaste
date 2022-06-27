@@ -10,7 +10,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
-    public class MpEnumerableParameterViewModel : MpAnalyticItemParameterViewModelBase {
+    public class MpEnumerableParameterViewModel : MpPluginParameterViewModelBase {
         #region Private Variables
 
         #endregion
@@ -84,7 +84,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) { 
+        public override async Task InitializeAsync(MpPluginPresetParameterValue aipv) { 
             IsBusy = true;
 
             await base.InitializeAsync(aipv);

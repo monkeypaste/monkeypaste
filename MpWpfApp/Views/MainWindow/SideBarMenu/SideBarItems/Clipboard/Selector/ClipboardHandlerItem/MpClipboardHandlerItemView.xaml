@@ -12,6 +12,7 @@
                                                       IsDesignTimeCreatable=False}">
     <Border Margin="5"
             Padding="5"
+            MinHeight="30"
             HorizontalAlignment="Stretch"
             BorderThickness="0"
             BorderBrush="Black"

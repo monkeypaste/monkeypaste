@@ -2491,7 +2491,7 @@ namespace MonkeyPaste {
         public ICommand AnalyzeSelectedItemCommand => new RelayCommand<int>(
             async (presetId) => {
                 var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>((int)presetId);
-                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyzerPluginGuid == preset.AnalyzerPluginGuid);
+                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
                 var presetVm = analyticItemVm.Items.FirstOrDefault(x => x.Preset.Id == preset.Id);
 
                 var prevSelectedPresetVm = analyticItemVm.SelectedItem;

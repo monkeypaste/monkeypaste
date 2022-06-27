@@ -7,6 +7,6 @@ namespace MonkeyPaste.Common.Plugin {
     }
 
     public class MpPluginRequestFormatBase : MpJsonObject {
-        public List<MpPluginRequestItemFormat> items { get; set; }
+        public List<MpIParameterKeyValuePair> items { get; set; }
     }
 }

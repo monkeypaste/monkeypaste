@@ -21,7 +21,7 @@ namespace MonkeyPaste {
         public int DataObjectId { get; set; }
         public string ItemFormat { get; set; }
 
-        public object ItemDataBase64 { get; set; }
+        public string ItemDataBase64 { get; set; }
 
         #endregion
 
@@ -43,7 +43,7 @@ namespace MonkeyPaste {
         #endregion
 
 
-        public static async Task<MpDataObjectItem> Create(
+        public static async Task<MpDataObjectItem> CreateAsync(
             int dataObjectId = 0,
             string itemFormat = "",
             string itemData64 = null,

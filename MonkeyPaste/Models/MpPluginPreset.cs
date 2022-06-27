@@ -10,16 +10,16 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpAnalyticItemPreset : MpDbModelBase, MpIClonableDbModel<MpAnalyticItemPreset> {
+    public class MpPluginPreset : MpDbModelBase, MpIClonableDbModel<MpPluginPreset> {
         #region Columns
-        [Column("pk_MpAnalyticItemPresetId")]
+        [Column("pk_MpPluginPresetId")]
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
-        [Column("MpAnalyticItemPresetGuid")]
+        [Column("MpPluginPresetGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        public string AnalyzerPluginGuid { get; set; }
+        public string PluginGuid { get; set; }
 
         [ForeignKey(typeof(MpIcon))]
         [Column("fk_MpIconId")]
@@ -31,6 +31,9 @@ namespace MonkeyPaste {
 
         [Column("b_IsDefault")]
         public int Default { get; set; } = 0;
+
+        [Column("b_IsEnabled")]
+        public int Enabled { get; set; } = 0;
 
         [Column("Label")]
         public string Label { get; set; } = string.Empty;
@@ -58,7 +61,7 @@ namespace MonkeyPaste {
 
         //[OneToMany(CascadeOperations = CascadeOperation.All)]
         //[Ignore]
-        //public List<MpAnalyticItemPresetParameterValue> PresetParameterValues { get; set; } = new List<MpAnalyticItemPresetParameterValue>();
+        //public List<MpPluginPresetParameterValue> PresetParameterValues { get; set; } = new List<MpPluginPresetParameterValue>();
 
         #endregion
 
@@ -88,6 +91,12 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
+        public bool IsEnabled {
+            get => Enabled == 1;
+            set => Enabled = value ? 1 : 0;
+        }
+
+        [Ignore]
         public bool IsQuickAction {
             get {
                 return QuickAction == 1;
@@ -112,15 +121,18 @@ namespace MonkeyPaste {
             }
         }
 
-        [Ignore]
-        public MpAnalyzerPluginFormat AnalyzerFormat { get; set; }
+        //[Ignore]
+        //public MpAnalyzerPluginFormat AnalyzerFormat { get; set; }
+
+        //[Ignore]
+        //public MpClipboardHandlerFormat ClipboardFormat { get; set; }
 
         [Ignore]
-        public MpClipboardHandlerFormat ClipboardFormat { get; set; }
+        public MpPluginComponentBaseFormat ComponentFormat { get; set; }
 
         #endregion
 
-        public static async Task<MpAnalyticItemPreset> Create(
+        public static async Task<MpPluginPreset> Create(
             string analyzerPluginGuid = "", 
             string label = "",
             string description = "",
@@ -130,7 +142,7 @@ namespace MonkeyPaste {
             bool isActionPreset = false,
             int sortOrderIdx = -1, 
             DateTime? manifestLastModifiedDateTime = null,
-            object format = null,
+            MpPluginComponentBaseFormat format = null,
             int existingDefaultPresetId = 0) {
             if(format == null) {
                 throw new Exception("must have format");
@@ -142,10 +154,10 @@ namespace MonkeyPaste {
                 throw new Exception("needs analyzer id");
             }
 
-            var newAnalyticItemPreset = new MpAnalyticItemPreset() {
+            var newPluginPreset = new MpPluginPreset() {
                 Id = existingDefaultPresetId,   // only not 0 when reseting default preset
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
-                AnalyzerPluginGuid = analyzerPluginGuid,
+                PluginGuid = analyzerPluginGuid,
                 Label = label,
                 Description = description,
                 IconId = iconId,
@@ -155,34 +167,26 @@ namespace MonkeyPaste {
                 SortOrderIdx = sortOrderIdx,
                 ShortcutId = 0,
                 ManifestLastModifiedDateTime = manifestLastModifiedDateTime.HasValue ? manifestLastModifiedDateTime.Value : DateTime.Now};
-            
-            if(format != null) {
-                if(format is MpAnalyzerPluginFormat) {
-                    newAnalyticItemPreset.AnalyzerFormat = format as MpAnalyzerPluginFormat;
-                } else if(format is MpClipboardHandlerFormat) {
-                    newAnalyticItemPreset.ClipboardFormat = format as MpClipboardHandlerFormat;
-                }
-            }
-            
 
-            await newAnalyticItemPreset.WriteToDatabaseAsync();
+            newPluginPreset.ComponentFormat = format;
 
-            return newAnalyticItemPreset;
+            await newPluginPreset.WriteToDatabaseAsync();
+
+            return newPluginPreset;
         }
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpAnalyticItemPreset> CloneDbModel(bool suppressWrite = false) {
+        public async Task<MpPluginPreset> CloneDbModel(bool suppressWrite = false) {
             // NOTE does not clone ShortcutId,IsDefault or IsQuickAction
 
-            var caip = new MpAnalyticItemPreset() {
+            var caip = new MpPluginPreset() {
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
-                AnalyzerPluginGuid = this.AnalyzerPluginGuid,
+                PluginGuid = this.PluginGuid,
                 Label = this.Label + " - Copy",
                 Description = this.Description,
                 ManifestLastModifiedDateTime = this.ManifestLastModifiedDateTime,
-                AnalyzerFormat = this.AnalyzerFormat,
-                ClipboardFormat = this.ClipboardFormat                
+                ComponentFormat = this.ComponentFormat                
             };
 
             if(IconId > 0) {
@@ -194,10 +198,10 @@ namespace MonkeyPaste {
             // NOTE writing to db before creating preset values because they rely on cloned preset pk
             await caip.WriteToDatabaseAsync();
 
-            var presetValues = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(Id);
+            var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(Id);
             foreach(var ppv in presetValues) {
                 var cppv = await ppv.CloneDbModel();
-                cppv.AnalyticItemPresetId = caip.Id;
+                cppv.PluginPresetId = caip.Id;
                 await cppv.WriteToDatabaseAsync();
             }
 
@@ -206,7 +210,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpAnalyticItemPreset() : base() { }
+        public MpPluginPreset() : base() { }
 
 
 

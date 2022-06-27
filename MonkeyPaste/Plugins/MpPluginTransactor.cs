@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace MonkeyPaste {
     public static class MpPluginTransactor {
@@ -82,6 +83,23 @@ namespace MonkeyPaste {
             }
 
             return null;
+        }
+
+        public static bool ValidatePluginResponse(MpPluginResponseFormatBase response) {
+            if (response == null) {
+                //MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, no response from {handler.ToString()}, (ignoring its assigned formats) ");
+                MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, empty response ");
+                return false;
+            }
+            if (response.errorMessage != null) {
+                MpConsole.WriteTraceLine($"Plugin error (ignoring new clipboard data): " + response.errorMessage);
+                return false;
+            }
+            if (response.otherMessage != null) {
+                MpConsole.WriteLine(response.otherMessage);
+            }
+
+            return true;
         }
 
         private static async Task<MpPluginTransactionBase> HandleErrorAsync(

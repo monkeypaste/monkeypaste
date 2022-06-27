@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSliderParameterViewModel : MpAnalyticItemParameterViewModelBase, MpISliderViewModel {
+    public class MpSliderParameterViewModel : MpPluginParameterViewModelBase, MpISliderViewModel {
         #region Private Variables
         private string _defaultValue;
         #endregion
@@ -66,7 +66,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpPluginPresetParameterValue aipv) {
             IsBusy = true;
 
             await base.InitializeAsync(aipv);

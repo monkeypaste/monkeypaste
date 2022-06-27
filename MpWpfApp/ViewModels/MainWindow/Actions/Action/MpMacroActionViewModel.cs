@@ -159,7 +159,7 @@ namespace MpWpfApp {
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpAnalyticItemPreset aip && aip.Id == AnalyticItemPresetId) {
+            if (e is MpPluginPreset aip && aip.Id == AnalyticItemPresetId) {
                 Task.Run(Validate);
             }
         }

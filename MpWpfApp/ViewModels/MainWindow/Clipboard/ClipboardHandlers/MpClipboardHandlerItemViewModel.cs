@@ -100,15 +100,23 @@ namespace MpWpfApp {
         #region Public Methods
 
         public async Task InitializeAsync(MpPluginFormat pf) {
-            IsBusy = true;
+            if (!ValidatePlugin(pf)) {
+                return;
+            }
+            IsBusy = true;            
 
             PluginFormat = pf;
 
-
-            for (int i = 0;i < ClipboardPluginFormat.handledFormats.Count();i++) {
-                var hcfvm = await CreateHandledClipboardFormatViewModel(PluginFormat, i);
+            foreach(var reader in ClipboardPluginFormat.readers) {
+                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(PluginFormat, ClipboardPluginFormat.readers.IndexOf(reader),true);
                 Items.Add(hcfvm);
             }
+
+            foreach (var writer in ClipboardPluginFormat.writers) {
+                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(PluginFormat, ClipboardPluginFormat.writers.IndexOf(writer), false);
+                Items.Add(hcfvm);
+            }
+
             while(Items.Any(x=>x.IsBusy)) {
                 await Task.Delay(100);
             }
@@ -130,9 +138,9 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpHandledClipboardFormatViewModel> CreateHandledClipboardFormatViewModel(MpPluginFormat pf, int handlerIdx) {
+        public async Task<MpHandledClipboardFormatViewModel> CreateHandledClipboardFormatViewModelAsync(MpPluginFormat pf, int handlerIdx, bool isReader) {
             var hcfvm = new MpHandledClipboardFormatViewModel(this);
-            await hcfvm.InitializeAsync(pf,handlerIdx);
+            await hcfvm.InitializeAsync(pf,handlerIdx, isReader);
             return hcfvm;
         }
 
@@ -156,7 +164,42 @@ namespace MpWpfApp {
             }
         }
 
+        private bool ValidatePlugin(MpPluginFormat pf) {
+            bool isValid = true;
+            var sb = new StringBuilder();
+            var dupNames = pf.clipboardHandler.readers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
+            if (dupNames.Count() > 0) {
+                sb.AppendLine("clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in readers");
+                isValid = false;
+            }
 
+            dupNames = pf.clipboardHandler.writers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
+            if (dupNames.Count() > 0) {
+                sb.AppendLine("clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in writers");
+                isValid = false;
+            }
+            var dupGuids = pf.clipboardHandler.readers.GroupBy(x => x.handlerGuid).Where(x => x.Count() > 1);
+            if (dupGuids.Count() > 0) {
+                sb.AppendLine("clipboard guids must be unique, " + 
+                    String.Join(",", pf.clipboardHandler.readers.Where(x => 
+                    dupGuids.Any(y => y.Key == x.handlerGuid)).Select(x => x.handlerGuid))+" are duplicated reader guids");
+                isValid = false;
+            }
+
+            dupGuids = pf.clipboardHandler.writers.GroupBy(x => x.handlerGuid).Where(x => x.Count() > 1);
+            if (dupGuids.Count() > 0) {
+                sb.AppendLine("clipboard guids must be unique, " +
+                    String.Join(",", pf.clipboardHandler.writers.Where(x =>
+                    dupGuids.Any(y => y.Key == x.handlerGuid)).Select(x => x.handlerGuid)) + " are duplicated writer guids");
+                isValid = false;
+            }
+
+            if(isValid) {
+                return true;
+            }
+            MpConsole.WriteLine(sb.ToString());
+            return false;
+        }
         #endregion
     }
 }

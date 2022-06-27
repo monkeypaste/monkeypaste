@@ -305,5 +305,23 @@
     <s:String x:Key="FindReplaceIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/replace.png
     </s:String>
+    <s:String x:Key="TextFormatIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/text.png
+    </s:String>
+    <s:String x:Key="HtmlFormatIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/html.png
+    </s:String>
+    <s:String x:Key="RtfFormatIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/rtf.png
+    </s:String>
+    <s:String x:Key="CsvFormatIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/csv.png
+    </s:String>
+    <s:String x:Key="BitmapFormatIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/bitmap.png
+    </s:String>
+    <s:String x:Key="FileDropFormatIcon">
+        pack://application:,,,/MpWpfApp;component/Resources/Images/folder.png
+    </s:String>
     <!--  Icon/Image Source Paths End  -->
 </ResourceDictionary>

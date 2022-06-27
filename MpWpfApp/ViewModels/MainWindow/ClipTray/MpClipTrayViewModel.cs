@@ -1650,7 +1650,7 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand PinTileCommand => new RelayCommand<object>(
+        public ICommand PinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
                  var pctvm = args as MpClipTileViewModel;
 
@@ -1691,7 +1691,7 @@ namespace MpWpfApp {
             !ctvm.IsPinned && 
             !ctvm.IsPlaceholder);
 
-        public ICommand UnpinTileCommand => new RelayCommand<object>(
+        public ICommand UnpinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
                  var upctvm = args as MpClipTileViewModel;
                  int unpinnedId = upctvm.CopyItemId;
@@ -2575,8 +2575,8 @@ namespace MpWpfApp {
 
         public ICommand AnalyzeSelectedItemCommand => new RelayCommand<int>(
             async (presetId) => {
-                var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>((int)presetId);
-                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AnalyzerPluginGuid == preset.AnalyzerPluginGuid);
+                var preset = await MpDb.GetItemAsync<MpPluginPreset>((int)presetId);
+                var analyticItemVm = MpAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
                 var presetVm = analyticItemVm.Items.FirstOrDefault(x => x.Preset.Id == preset.Id);                
 
                 analyticItemVm.SelectPresetCommand.Execute(presetVm);

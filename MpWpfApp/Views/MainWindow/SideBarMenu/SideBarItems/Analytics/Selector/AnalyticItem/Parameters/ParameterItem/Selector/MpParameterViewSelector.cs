@@ -19,7 +19,7 @@ namespace MpWpfApp {
                 return null;
             }
 
-            var aipvm = item as MpAnalyticItemParameterViewModelBase;
+            var aipvm = item as MpPluginParameterViewModelBase;
             if(aipvm == null) {
                 return null;
             }

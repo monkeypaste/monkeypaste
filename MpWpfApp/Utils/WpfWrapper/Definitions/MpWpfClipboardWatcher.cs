@@ -27,7 +27,9 @@ namespace MpWpfApp {
         #region MpIPlatfromatDataObjectRegistrar Implmentation
 
         public int RegisterFormat(string format) {
-            return (int)WinApi.RegisterClipboardFormatA(format);
+            uint result = WinApi.RegisterClipboardFormatA(format);
+            int id = Convert.ToInt32(result);
+            return id;
 
         }
 
@@ -107,44 +109,12 @@ namespace MpWpfApp {
                 IgnoreNextClipboardChangeEvent = false;             
                 return;
             }
-            var ndo = new MpPortableDataObject();
 
-            var readerLookup = MpClipboardHandlerCollectionViewModel.Instance.DefaultReaders;
-            //only iterate through actual handlers 
-            var handlers = readerLookup.Select(x=>x.Value.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponent>();
-            foreach (var handler in handlers) {
-                var req = new MpClipboardReaderRequest() {
-                    readFormats = readerLookup
-                                    .Where(x => x.Value.Parent.ClipboardPluginComponent == handler)
-                                    .Select(x => x.Key).Distinct().ToList(),
-                    items = readerLookup
-                                .Where(x => x.Value.Parent.ClipboardPluginComponent == handler)
-                                .SelectMany(x => x.Value.Items
-                                    .Select(y =>
-                                        new MpPluginRequestItemFormat() {
-                                            paramId = y.ParamEnumId,
-                                            value = y.CurrentValue
-                                        })).ToList()
-                };
+            MpPortableDataObject clipboardData = MpClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObject();
 
-                var response = handler.ReadClipboardData(req);
-                if(response == null) {
-                    MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, no response from {handler.ToString()}, (ignoring its assigned formats) ");
-                    continue;
-                }
-                if(response.errorMessage != null) {
-                    MpConsole.WriteTraceLine($"Clipboard Reader Plugin error (ignoring new clipboard data): " + response.errorMessage);
-                    continue;
-                }
-                if(response.otherMessage != null) {
-                    MpConsole.WriteLine(response.otherMessage);
-                }
-
-                response.dataObject.DataFormatLookup.ForEach(x => ndo.DataFormatLookup.AddOrReplace(x.Key, x.Value));                
-            }
-            if(ndo.DataFormatLookup.Where(x=>x.Value != null).Count() > 0) {
+            if(clipboardData.DataFormatLookup.Where(x=>x.Value != null).Count() > 0) {
                 MpConsole.WriteLine("CB Changed: " + DateTime.Now);                
-                OnClipboardChanged?.Invoke(typeof(MpWpfClipboardWatcher).ToString(), ndo);
+                OnClipboardChanged?.Invoke(typeof(MpWpfClipboardWatcher).ToString(), clipboardData);
             }
         }
 

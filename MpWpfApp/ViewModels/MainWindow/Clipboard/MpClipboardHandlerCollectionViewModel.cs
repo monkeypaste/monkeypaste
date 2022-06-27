@@ -65,26 +65,66 @@ namespace MpWpfApp {
             }
         }
 
+        //private ObservableCollection<MpClipboardFormatViewModel> _formatViewModels;
+        //public ObservableCollection<MpClipboardFormatViewModel> FormatViewModels {
+        //    get {
+        //        if(_formatViewModels == null) {
+        //            _formatViewModels = new ObservableCollection<MpClipboardFormatViewModel>();
+        //        }
+        //        return _formatViewModels;
+        //    }
+        //}
+        public IEnumerable<MpClipboardFormatViewModel> FormatViewModels =>
+            MpPortableDataFormats.RegisteredFormats.Select(x => new MpClipboardFormatViewModel(this, x));
 
-        public Dictionary<string, MpClipboardFormatPresetViewModel> DefaultFormatHandlerLookup { get; private set; } = new Dictionary<string, MpClipboardFormatPresetViewModel>();
+        //public Dictionary<string, MpClipboardFormatPresetViewModel> EnabledFormatHandlerLookup {
+        //    get {
+        //        var efl = new Dictionary<string, MpClipboardFormatPresetViewModel>();
+        //        foreach(var chivm in Items) {
+        //            foreach(var hcfvm in chivm.Items) {
+        //                foreach(var cpvm in hcfvm.Items) {
+        //                    if(cpvm.IsDefault) {
+        //                        efl.Add(cpvm.Parent.HandledFormat, cpvm);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        return efl;
+        //    }
+        //}
 
-        public Dictionary<string, MpClipboardFormatPresetViewModel> DefaultReaders =>
-            DefaultFormatHandlerLookup
-            .Where(x => x.Value.Parent.ClipboardPluginComponent is MpIClipboardReaderComponent)
-            .ToDictionary(
-                x => x.Key,
-                x => x.Value);
+        public IEnumerable<MpClipboardFormatPresetViewModel> EnabledFormats {
+            get {
+                foreach(var i in Items) {
+                    foreach(var j in i.Items) {
+                        foreach(var k in j.Items) {
+                            if(k.IsEnabled) {
+                                yield return k;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+            
 
-        public Dictionary<string, MpClipboardFormatPresetViewModel> DefaultWriters =>
-            DefaultFormatHandlerLookup
-            .Where(x => x.Value.Parent.ClipboardPluginComponent is MpIClipboardWriterComponent)
-            .ToDictionary(
-                x => x.Key,
-                x => x.Value);
+        //public Dictionary<string, MpClipboardFormatPresetViewModel> EnabledReaderLookup =>
+        //    Enab
+        //    .Where(x => x.Value.Parent.IsReader)
+        //    .ToDictionary(
+        //        x => x.Key,
+        //        x => x.Value);
+
+        //public Dictionary<string, MpClipboardFormatPresetViewModel> EnabledWriterLookup =>
+        //    EnabledFormatHandlerLookup
+        //    .Where(x => x.Value.Parent.IsWriter)
+        //    .ToDictionary(
+        //        x => x.Key,
+        //        x => x.Value);
         #endregion
 
         #region MpIClipboardFormatHandlers Implementation
-        public IEnumerable<MpIClipboardPluginComponent> Handlers => DefaultFormatHandlerLookup.Select(x => x.Value.Parent.ClipboardPluginComponent);
+        public IEnumerable<MpIClipboardPluginComponent> Handlers => EnabledFormats.Select(x => x.Parent.ClipboardPluginComponent).Distinct();
 
         #endregion
 
@@ -113,8 +153,6 @@ namespace MpWpfApp {
         public bool IsSelected { get; set; }
 
         public bool IsHovering { get; set; }
-
-        public bool IsLoaded => Items.Count > 0;
 
         public bool IsExpanded { get; set; }
 
@@ -153,7 +191,7 @@ namespace MpWpfApp {
 
             var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent);
             foreach(var pai in pail) {
-                var paivm = await CreateClipboardHandlerItemViewModel(pai.Value);
+                var paivm = await CreateClipboardHandlerItemViewModelAsync(pai.Value);
                 Items.Add(paivm);
             }
 
@@ -165,8 +203,6 @@ namespace MpWpfApp {
             
             if (Items.Count > 0) {
                 // select most recent preset and init default handlers
-
-                DefaultFormatHandlerLookup.Clear();
                 MpClipboardFormatPresetViewModel presetToSelect = null;
                 foreach(var chivm in Items) {
                     foreach(var hivm in chivm.Items) {                        
@@ -177,27 +213,36 @@ namespace MpWpfApp {
                                 presetToSelect = hipvm;
                             }
 
-                            if(hipvm.IsDefault) {
-                                bool replace = true;
-                                if (DefaultFormatHandlerLookup.TryGetValue(hipvm.Parent.HandledFormat, out var curPreset)) {
+                            //if(hipvm.IsEnabled) {
+                            //    if(hipvm.CanWrite && hipvm.CanRead) {
+                            //        Debugger.Break();
+                            //    }
+                            //    if(hipvm.CanRead) {
+                            //        ToggleFormatPresetIsReadEnabledCommand.Execute(hipvm);
+                            //    }
+                            //    if(hipvm.CanWrite) {
+                            //        ToggleFormatPresetIsWriteEnabledCommand.Execute(hipvm);
+                            //    }
+                                //bool replace = true;
+                                //if (EnabledFormatHandlerLookup.TryGetValue(hipvm.Parent.HandledFormat, out var curPreset)) {
                                     
-                                    string errorMsg = $"Warning clipboard format handler conflict for {curPreset.FullName} and {hipvm.FullName}";
-                                    // two handled formats are marked as default so check which was last selected and use that one if none override previous
-                                    if(curPreset.LastSelectedDateTime > hipvm.LastSelectedDateTime) {
-                                        replace = false;
-                                        errorMsg += $" {curPreset} is more recent so ignoring {hipvm}";
-                                    } else if(curPreset.LastSelectedDateTime == hipvm.LastSelectedDateTime) {
-                                        errorMsg += $" have same date time {hipvm.LastSelectedDateTime} so using {hipvm}";
-                                    } else {
-                                        errorMsg += $" {hipvm} is more recent so ignoring {curPreset}";
-                                    }
-                                    MpConsole.WriteTraceLine(errorMsg);
-                                    if(!replace) {
-                                        continue;
-                                    }
-                                }
-                                DefaultFormatHandlerLookup.AddOrReplace(hipvm.Parent.HandledFormat, hipvm);
-                            }
+                                //    string errorMsg = $"Warning clipboard format handler conflict for {curPreset.FullName} and {hipvm.FullName}";
+                                //    // two handled formats are marked as default so check which was last selected and use that one if none override previous
+                                //    if(curPreset.LastSelectedDateTime > hipvm.LastSelectedDateTime) {
+                                //        replace = false;
+                                //        errorMsg += $" {curPreset} is more recent so ignoring {hipvm}";
+                                //    } else if(curPreset.LastSelectedDateTime == hipvm.LastSelectedDateTime) {
+                                //        errorMsg += $" have same date time {hipvm.LastSelectedDateTime} so using {hipvm}";
+                                //    } else {
+                                //        errorMsg += $" {hipvm} is more recent so ignoring {curPreset}";
+                                //    }
+                                //    MpConsole.WriteTraceLine(errorMsg);
+                                //    if(!replace) {
+                                //        continue;
+                                //    }
+                                //}
+                                //EnabledFormatHandlerLookup.AddOrReplace(hipvm.Parent.HandledFormat, hipvm);
+                           //
                         }
                     }
                 }                
@@ -214,18 +259,84 @@ namespace MpWpfApp {
             }
 
             OnPropertyChanged(nameof(SelectedItem));
-
+            OnPropertyChanged(nameof(FormatViewModels));
+            OnPropertyChanged(nameof(EnabledFormats));
             IsBusy = false;
         }
 
+        public MpPortableDataObject ReadClipboardOrDropObject(object forcedDataObject = null) {
+            // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
+
+            var ndo = new MpPortableDataObject();
+
+            //only iterate through actual handlers 
+            var handlers = EnabledFormats.Where(x=>x.CanRead).Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponent>();
+            
+            foreach (var handler in handlers) {
+
+                var req = new MpClipboardReaderRequest() {
+                    readFormats = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
+                    items = EnabledFormats.Where(x => x.Parent.ClipboardPluginComponent == handler).SelectMany(x=>x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
+                    //readFormats = EnabledReaderLookup
+                    //                .Where(x => x.Value.Parent.ClipboardPluginComponent == handler)
+                    //                .Select(x => x.Key).Distinct().ToList(),
+                    //items = EnabledReaderLookup
+                    //            .Where(x => x.Value.Parent.ClipboardPluginComponent == handler)
+                    //            .SelectMany(x => x.Value.Items
+                    //                .Select(y =>
+                    //                    new MpPluginRequestItemFormat() {
+                    //                        paramId = y.ParamEnumId,
+                    //                        value = y.CurrentValue
+                    //                    })).Cast<MpIParameterKeyValuePair>().ToList(),
+                    forcedClipboardDataObject = forcedDataObject
+                };
+
+                var response = handler.ReadClipboardData(req);
+
+                bool isValid = MpPluginTransactor.ValidatePluginResponse(response);
+                if (isValid) {
+                    response.dataObject.DataFormatLookup.ForEach(x => ndo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
+                }
+            }
+            return ndo;
+        }
+
+        public object WriteClipboardOrDropObject(MpPortableDataObject mpdo, bool writeToClipboard) {
+            var dobj = new DataObject();
+            var handlers = EnabledFormats.Where(x => x.CanWrite && MpPortableDataFormats.RegisteredFormats.Contains(x.Parent.HandledFormat))
+                                         .Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponent>();
+            foreach (var format in MpPortableDataFormats.RegisteredFormats) {
+                var handler = EnabledFormats.FirstOrDefault(x => x.CanWrite && x.Parent.HandledFormat == format);
+                if(handler == null) {
+                    continue;
+                }
+                var writeRequest = new MpClipboardWriterRequest() {
+                    data = mpdo,
+                    writeToClipboard = writeToClipboard,
+                    items = handler.Items.Cast<MpIParameterKeyValuePair>().ToList()
+                };
+                var writer_component = handler.Parent.ClipboardPluginComponent as MpIClipboardWriterComponent;
+                if (writer_component == null) {
+                    Debugger.Break();
+                }
+                MpClipboardWriterResponse writerResponse = writer_component.WriteClipboardData(writeRequest);
+                bool isValid = MpPluginTransactor.ValidatePluginResponse(writerResponse);
+                if (isValid && writerResponse.platformDataObject is IDataObject ido) {
+                    if (ido.GetDataPresent(format)) {
+                        dobj.SetData(format, ido.GetData(format));
+                    }
+                }
+            }
+
+            return dobj;
+        }
 
         #endregion
 
         #region Private Methods
         
-        private async Task<MpClipboardHandlerItemViewModel> CreateClipboardHandlerItemViewModel(MpPluginFormat plugin) {
+        private async Task<MpClipboardHandlerItemViewModel> CreateClipboardHandlerItemViewModelAsync(MpPluginFormat plugin) {
             MpClipboardHandlerItemViewModel aivm = new MpClipboardHandlerItemViewModel(this);
-
             await aivm.InitializeAsync(plugin);
             return aivm;
         }
@@ -279,43 +390,97 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand ToggleFormatPresetIsDefaultCommand => new RelayCommand<object>(
+        public ICommand ToggleFormatPresetIsReadEnabledCommand => new RelayCommand<object>(
             (presetVmArg) => {
-                
                 var presetVm = presetVmArg as MpClipboardFormatPresetViewModel;
                 if (presetVm == null) {
                     return;
                 }
                 var handlerVm = presetVm.Parent;
 
-                if(presetVm.IsDefault) {
-                    //when toggled  untoggle any other preset handling same format
-                    if(DefaultFormatHandlerLookup.ContainsKey(handlerVm.HandledFormat)) {
-                        var untoggled_preset = DefaultFormatHandlerLookup[handlerVm.HandledFormat];
-                        // setting IsDefault triggers this command and removes the old handler
-                        untoggled_preset.IsDefault = false;
+                if(presetVm.IsEnabled) {
+                    //when toggled on, untoggle any other preset handling same format
+                    var otherEnabled = EnabledFormats.Where(x=>x.CanRead).FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
+                    if(otherEnabled == null) {
+                        //no other preset was enabled so nothing to replace
+                        return;
                     }
+                    otherEnabled.IsEnabled = false;
 
-                    DefaultFormatHandlerLookup.AddOrReplace(handlerVm.HandledFormat, presetVm);
-
+                    MpPortableDataFormats.RegisterDataFormat(handlerVm.HandledFormat);
                 } else {
-                    // when preset isDefault = false
-                    if(DefaultFormatHandlerLookup.TryGetValue(handlerVm.HandledFormat, out var curHandlerPreset)) {
-                        // when format has a handler
-                        if(curHandlerPreset.PresetId == presetVm.PresetId) {
-                            // when preset WAS the default handler remove it
-                            DefaultFormatHandlerLookup.Remove(handlerVm.HandledFormat);
-                        }
-                    }
-                    //otherwise ignore
+                    // when preset isDisabled unregister format 
+                    UnregisterClipboardFormatCommand.Execute(new object[] {
+                                handlerVm.HandledFormat,
+                                true,
+                                false
+                            });
                 }
 
-                OnPropertyChanged(nameof(DefaultFormatHandlerLookup));
+                OnPropertyChanged(nameof(EnabledFormats));
+                OnPropertyChanged(nameof(FormatViewModels));
+            }, (presetVmArg) => presetVmArg is MpClipboardFormatPresetViewModel cfpvm && cfpvm.CanRead);
+
+
+        public ICommand ToggleFormatPresetIsWriteEnabledCommand => new RelayCommand<object>(
+            (presetVmArg) => {
+                var presetVm = presetVmArg as MpClipboardFormatPresetViewModel;
+                if (presetVm == null) {
+                    return;
+                }
+                var handlerVm = presetVm.Parent;
+
+                if (presetVm.IsEnabled) {
+                    //when toggled on, untoggle any other preset handling same format
+                    var otherEnabled = EnabledFormats.Where(x => x.CanWrite).FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
+                    if (otherEnabled == null) {
+                        //no other preset was enabled so nothing to replace
+                        return;
+                    }
+                    otherEnabled.IsEnabled = false;
+
+                    MpPortableDataFormats.RegisterDataFormat(handlerVm.HandledFormat);
+                } else {
+                    // when preset isDisabled unregister format 
+                    UnregisterClipboardFormatCommand.Execute(new object[] {
+                                handlerVm.HandledFormat,
+                                true,
+                                false
+                            });
+                }
+
+                OnPropertyChanged(nameof(EnabledFormats));
+                OnPropertyChanged(nameof(FormatViewModels));
+                OnPropertyChanged(nameof(FormatViewModels));
+            }, (presetVmArg) => presetVmArg is MpClipboardFormatPresetViewModel cfpvm && cfpvm.CanRead);
+
+        public ICommand UnregisterClipboardFormatCommand => new RelayCommand<object>(
+            (args) => {
+                if (args is Object[] argParts &&
+                   argParts.Length == 3 &&
+                   argParts[0] is string format &&
+                   argParts[2] is bool isReadUnregister &&
+                   argParts[1] is bool isWriteUnregister) {
+
+                    bool canUnregister = false;
+                    if(isReadUnregister && isWriteUnregister) {
+                        // when both read and write are unregistered (i don't know when this would happen)
+                        // it doesn't matter if format is known anymore so just unregister
+                        canUnregister = true;
+                    } else if(isReadUnregister && EnabledFormats.Any(x=>x.CanWrite && x.Parent.HandledFormat == format)) {
+                        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because read unregistered but a writer uses it so ignoring");
+                    } else if (isWriteUnregister && EnabledFormats.Any(x => x.CanRead && x.Parent.HandledFormat == format)) {
+                        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because writer unregistered but a reader uses it so ignoring");
+                    } else {
+                        canUnregister = true;
+                    }
+
+                    if (canUnregister) {
+                        MpPortableDataFormats.UnregisterDataFormat(format);
+                    }
+                    OnPropertyChanged(nameof(FormatViewModels));
+                }
             });
         #endregion
-    }
-
-    public interface MpIIsCheckable {
-        bool? IsChecked { get; set; }
     }
 }

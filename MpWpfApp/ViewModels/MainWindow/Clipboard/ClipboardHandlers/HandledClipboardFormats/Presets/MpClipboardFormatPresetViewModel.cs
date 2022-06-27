@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using System.Diagnostics;
 
 namespace MpWpfApp {
     public class MpClipboardFormatPresetViewModel : 
-        MpSelectorViewModelBase<MpHandledClipboardFormatViewModel,MpAnalyticItemParameterViewModelBase>,
+        MpSelectorViewModelBase<MpHandledClipboardFormatViewModel,MpPluginParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpISidebarItemViewModel,
@@ -17,6 +18,11 @@ namespace MpWpfApp {
         MpITreeItemViewModel {
 
         #region Properties
+
+        #region View Models
+                
+
+        #endregion
 
         #region MpISelectableViewModel Implementation
         public bool IsSelected { get; set; }
@@ -50,7 +56,10 @@ namespace MpWpfApp {
         #region State
 
         public bool IsAllValid => Items.All(x => x.IsValid);
-        
+
+        public bool CanRead => Parent == null ? false : Parent.IsReader;
+        public bool CanWrite => Parent == null ? false : Parent.IsWriter;
+
         #endregion
 
         #region Model
@@ -74,6 +83,21 @@ namespace MpWpfApp {
                 if(IsDefault != value) {
                     Preset.IsDefault = value;
                     OnPropertyChanged(nameof(IsDefault));
+                }
+            }
+        }
+
+        public bool IsEnabled {
+            get {
+                if (Preset == null) {
+                    return false;
+                }
+                return Preset.IsEnabled;
+            }
+            set {
+                if (IsEnabled != value) {
+                    Preset.IsEnabled = value;
+                    OnPropertyChanged(nameof(IsEnabled));
                 }
             }
         }
@@ -164,12 +188,12 @@ namespace MpWpfApp {
             }
         }
 
-        public string AnalyzerPluginGuid {
+        public string PluginGuid {
             get {
                 if (Preset == null) {
                     return string.Empty;
                 }
-                return Preset.AnalyzerPluginGuid;
+                return Preset.PluginGuid;
             }
         }
 
@@ -198,7 +222,9 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyticItemPreset Preset { get; set; }
+        public MpClipboardHandlerFormat ClipboardFormat => Preset == null ? null : Preset.ComponentFormat as MpClipboardHandlerFormat;
+
+        public MpPluginPreset Preset { get; set; }
         #endregion
 
         #endregion
@@ -214,15 +240,15 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpAnalyticItemPreset aip) {
-            IsBusy = true;
+        public async Task InitializeAsync(MpPluginPreset aip) {
+            IsBusy = true; 
 
             Items.Clear();
 
             Preset = aip;//await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
-            var presetValues = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(PresetId);
-            foreach (var paramFormat in Preset.ClipboardFormat.parameters) {
+            var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(PresetId);
+            foreach (var paramFormat in ClipboardFormat.parameters) {
                 if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
                     string paramVal = string.Empty;
                     if (paramFormat.values != null && paramFormat.values.Count > 0) {
@@ -232,7 +258,7 @@ namespace MpWpfApp {
                             paramVal = paramFormat.values[0].value;
                         }
                     }
-                    var newPresetVal = await MpAnalyticItemPresetParameterValue.Create(
+                    var newPresetVal = await MpPluginPresetParameterValue.Create(
                         presetId: Preset.Id,
                         paramEnumId: paramFormat.paramId,
                         value: paramVal,
@@ -241,10 +267,10 @@ namespace MpWpfApp {
                     presetValues.Add(newPresetVal);
                 }
             }
-            presetValues.ForEach(x => x.ParameterFormat = Preset.ClipboardFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+            presetValues.ForEach(x => x.ParameterFormat = ClipboardFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
 
             foreach (var paramVal in presetValues) {
-                var naipvm = await CreateParameterViewModel(paramVal);
+                var naipvm = await CreateParameterViewModelAsync(paramVal);
                 Items.Add(naipvm);
             }
 
@@ -259,8 +285,8 @@ namespace MpWpfApp {
 
             IsBusy = false;
         }
-        public async Task<MpAnalyticItemParameterViewModelBase> CreateParameterViewModel(MpAnalyticItemPresetParameterValue aipv) {
-            MpAnalyticItemParameterViewModelBase naipvm = null;
+        public async Task<MpPluginParameterViewModelBase> CreateParameterViewModelAsync(MpPluginPresetParameterValue aipv) {
+            MpPluginParameterViewModelBase naipvm = null;
 
             switch (aipv.ParameterFormat.controlType) {
                 case MpPluginParameterControlType.List:
@@ -299,7 +325,7 @@ namespace MpWpfApp {
         #region Protected Methods
 
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
-            var aipvm = sender as MpAnalyticItemParameterViewModelBase;
+            var aipvm = sender as MpPluginParameterViewModelBase;
             if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
                 aipvm.ValidationMessage = $"{aipvm.Label} is required";
             } else {
@@ -314,8 +340,17 @@ namespace MpWpfApp {
 
         private void MpClipboardFormatPresetViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(IsDefault):
-                    Parent.Parent.Parent.ToggleFormatPresetIsDefaultCommand.Execute(this);
+                case nameof(IsEnabled):
+                    // NOTE Preset should only be able to Read or Write NOT both
+                    if(CanRead && CanWrite) {
+                        Debugger.Break();
+                    }
+                    if(CanRead) {
+                        Parent.Parent.Parent.ToggleFormatPresetIsReadEnabledCommand.Execute(this);
+                    }
+                    if (CanWrite) {
+                        Parent.Parent.Parent.ToggleFormatPresetIsWriteEnabledCommand.Execute(this);
+                    }
                     break;
             }
         }

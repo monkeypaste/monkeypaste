@@ -12,7 +12,7 @@ using Windows.Foundation.Collections;
 
 namespace MpWpfApp {
     public class MpTextBoxParameterViewModel : 
-        MpAnalyticItemParameterViewModelBase,
+        MpPluginParameterViewModelBase,
         MpIMenuItemViewModel,
         MpITextSelectionRange,
         MpIContentQueryTextBoxViewModel {
@@ -107,7 +107,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpPluginPresetParameterValue aipv) {
             IsBusy = true;
 
             await base.InitializeAsync(aipv);

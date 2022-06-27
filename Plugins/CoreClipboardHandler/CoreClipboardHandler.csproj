@@ -91,7 +91,7 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)" md "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)"
 xcopy /s /D /Y "$(TargetDir)\*" "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)"
-copy "$(ProjectDir)manifest.json" "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)"
+copy "$(ProjectDir)*" "$(SolutionDir)MpWpfApp\bin\Debug\Plugins\$(ProjectName)"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

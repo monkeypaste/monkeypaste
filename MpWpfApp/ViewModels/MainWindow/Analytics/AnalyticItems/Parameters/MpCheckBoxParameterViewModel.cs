@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpCheckBoxParameterViewModel : MpAnalyticItemParameterViewModelBase {
+    public class MpCheckBoxParameterViewModel : MpPluginParameterViewModelBase {
         #region Private Variables
 
         #endregion
@@ -24,7 +24,7 @@ namespace MpWpfApp {
 
         public MpCheckBoxParameterViewModel(MpViewModelBase parent) : base(parent) { }
 
-        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpPluginPresetParameterValue aipv) {
             IsBusy = true;
 
             await base.InitializeAsync(aipv);

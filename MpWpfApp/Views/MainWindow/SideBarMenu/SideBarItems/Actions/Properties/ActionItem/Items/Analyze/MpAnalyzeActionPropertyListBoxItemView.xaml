@@ -41,7 +41,7 @@
                   ItemsSource="{Binding AllPresets,
                                         Source={x:Static local:MpAnalyticItemCollectionViewModel.Instance},
                                         Converter={StaticResource CollectionToGroupedCollectionConverter},
-                                        ConverterParameter=AnalyzerPluginGuid}">
+                                        ConverterParameter=PluginGuid}">
             <ComboBox.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>

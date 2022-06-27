@@ -885,40 +885,22 @@ namespace MonkeyPaste {
 
         #region MpAnalytic Item
 
-        public static async Task<int> GetAnalyticItemCount() {
-            string query = $"select DISTINCT count(AnalyzerPluginGuid) from MpAnalyticItemPreset";
-            var result = await MpDb.QueryScalarAsync<int>(query);
+        public static async Task<List<MpPluginPreset>> GetPluginPresetsByPluginGuidAsync(string aguid) {
+            string query = $"select * from MpPluginPreset where PluginGuid=?";
+            var result = await MpDb.QueryAsync<MpPluginPreset>(query, aguid);
             return result;
         }
 
-        public static async Task<List<MpAnalyticItemPreset>> GetAllQuickActionAnalyzers() {
-            string query = $"select * from MpAnalyticItemPreset where IsQuickAction=1";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query);
-            return result;
-        }
-
-        public static async Task<List<MpAnalyticItemPreset>> GetAllShortcutAnalyzers() {
-            string query = $"select * from MpAnalyticItemPreset where pk_MpAnalyticItemPresetId in (select fk_MpAnalyticItemPresetId from MpShortcut where fk_MpAnalyticItemPresetId > 0)";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query);
-            return result;
-        }
-
-        public static async Task<List<MpAnalyticItemPreset>> GetAnalyticItemPresetsByAnalyzerGuid(string aguid) {
-            string query = $"select * from MpAnalyticItemPreset where AnalyzerPluginGuid=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPreset>(query, aguid);
-            return result;
-        }
-
-        public static async Task<List<MpAnalyticItemPresetParameterValue>> GetAnalyticItemPresetValuesByPresetId(int presetId) {
-            string query = $"select * from MpAnalyticItemPresetParameterValue where fk_MpAnalyticItemPresetId=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPresetParameterValue>(query, presetId);
+        public static async Task<List<MpPluginPresetParameterValue>> GetPluginPresetValuesByPresetIdAsync(int presetId) {
+            string query = $"select * from MpPluginPresetParameterValue where fk_MpPluginPresetId=?";
+            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query, presetId);
             return result;
         }
 
 
-        public static async Task<MpAnalyticItemPresetParameterValue> GetAnalyticItemPresetValue(int presetid, int paramEnumId) {
-            string query = $"select * from MpAnalyticItemPresetParameterValue where fk_MpAnalyticItemPresetId=? and ParamId=?";
-            var result = await MpDb.QueryAsync<MpAnalyticItemPresetParameterValue>(query, presetid, paramEnumId);
+        public static async Task<MpPluginPresetParameterValue> GetPluginPresetValueAsync(int presetid, int paramEnumId) {
+            string query = $"select * from MpPluginPresetParameterValue where fk_MpPluginPresetId=? and ParamId=?";
+            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query, presetid, paramEnumId);
             if (result == null || result.Count == 0) {
                 return null;
             }

@@ -101,7 +101,7 @@ namespace MonkeyPaste {
                 TransactionErrorMessage = errorMsg
             };
             if (copyItemId > 0) {
-                var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(copyItemId);
+                var preset = await MpDb.GetItemAsync<MpPluginPreset>(copyItemId);
                 if (preset != null) {
                     mr.iconId = preset.IconId;
                 }

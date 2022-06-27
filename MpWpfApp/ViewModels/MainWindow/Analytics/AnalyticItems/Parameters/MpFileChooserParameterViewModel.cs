@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpFileChooserParameterViewModel : MpAnalyticItemParameterViewModelBase {
+    public class MpFileChooserParameterViewModel : MpPluginParameterViewModelBase {
         #region Private Variables
 
         private string _defaultValue;
@@ -36,7 +36,7 @@ namespace MpWpfApp {
 
         public MpFileChooserParameterViewModel(MpViewModelBase parent) : base(parent) { }
 
-        public override async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpPluginPresetParameterValue aipv) {
             IsBusy = true;
 
             await base.InitializeAsync(aipv);

@@ -19,7 +19,7 @@
             Background="Transparent">
         <StackPanel Orientation="Vertical"
                     Margin="5">
-            <TextBlock Text="Formats"
+            <!--<TextBlock Text="Formats"
                        FontSize="20"
                        Margin="5,0"
                        Foreground="White"
@@ -39,13 +39,15 @@
                     <Style TargetType="{x:Type ComboBoxItem}">
                         <Setter Property="IsSelected"
                                 Value="{Binding IsSelected}" />
-                        <!--<Setter Property="Template">
+            -->
+            <!--<Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
                                     <ContentPresenter />
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>-->
+            <!--
                     </Style>
                 </ComboBox.ItemContainerStyle>
                 <ComboBox.ItemTemplate>
@@ -67,7 +69,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
-            </ComboBox>
+            </ComboBox>-->
             <StackPanel x:Name="ClipboardFormatPresetDatagridContainer"
                         Orientation="Vertical"
                         DataContext="{Binding SelectedItem}">
@@ -103,6 +105,9 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
+
+                        <!--  ICON BUTTON  -->
+
                         <DataGridTemplateColumn Width="50"
                                                 Header="Icon">
                             <DataGridTemplateColumn.CellTemplate>
@@ -131,6 +136,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
+                        <!--  LABEL TEXTBOX  -->
+
                         <DataGridTemplateColumn Header="Label"
                                                 Width="120">
                             <DataGridTemplateColumn.CellTemplate>
@@ -150,73 +158,54 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Quick Action?"
+
+                        <!--  IS READER CHECKBOX  -->
+
+                        <DataGridTemplateColumn Header="Default Reader"
                                                 Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox HorizontalAlignment="Center"
-                                              VerticalAlignment="Center" 
-                                              Command=""
+                                              VerticalAlignment="Center"
                                               ToolTipService.InitialShowDelay="0"
-                                              IsChecked="{Binding IsDefault,
+                                              IsEnabled="{Binding CanRead}"
+                                              IsChecked="{Binding IsEnabled,
                                                                   Mode=TwoWay,
                                                                   UpdateSourceTrigger=PropertyChanged,
                                                                   NotifyOnTargetUpdated=True,
                                                                   NotifyOnSourceUpdated=True}">
                                         <CheckBox.ToolTip>
-                                            <local:MpToolTipView ToolTipText="Default?" />
+                                            <local:MpToolTipView ToolTipText="Default Reader?" />
                                         </CheckBox.ToolTip>
                                     </CheckBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <!--<DataGridTemplateColumn Width="Auto"
-                                                            Header="Hot Key">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <local:MpShortcutGestureView Background="Transparent"
-                                                                             DataContext="{Binding}" />
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>-->
-                        <!--<DataGridTemplateColumn MinWidth="40">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid Visibility="{Binding Parent.IsBusy,
-                                                               Converter={StaticResource BoolToVisibilityFlipConverter}}">
-                                        <Button Background="Transparent"
-                                                BorderThickness="0"
-                                                ToolTip="Analyze"
-                                                Visibility="{Binding Parent.CanAnalyzerExecute,
-                                                                     Converter={StaticResource BoolToVisibilityConverter}}"
-                                                Command="{Binding Parent.ExecuteAnalysisCommand}"
-                                                CommandParameter="{Binding}">
-                                            <Image Width="20"
-                                                   Height="20"
-                                                   Source="{Binding .,
-                                                                    Converter={StaticResource StringResourceToImageSourceConverter},
-                                                                    Source={StaticResource ExecuteIcon}}" />
-                                        </Button>
-                                        <Image Width="20"
-                                               Height="20"
-                                               ToolTip="{Binding Parent.CannotExecuteTooltip}"
-                                               ToolTipService.InitialShowDelay="0"
-                                               Visibility="{Binding Parent.CanAnalyzerExecute,
-                                                                    Converter={StaticResource BoolToVisibilityFlipConverter}}"
-                                               Source="{Binding .,
-                                                                Converter={StaticResource StringResourceToImageSourceConverter},
-                                                                Source={StaticResource QuestionMarkIcon}}" />
-                                    </Grid>
-                                    <local:MpSpinnerSwirl Width="20"
-                                                          Height="20"
-                                                          Visibility="{Binding Parent.IsBusy,
-                                                                               Converter={StaticResource BoolToVisibilityConverter}}" />
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
 
+                        <!--  IS WRITER CHECKBOX  -->
+
+                        <DataGridTemplateColumn Header="Default Writer"
+                                                Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              ToolTipService.InitialShowDelay="0"
+                                              IsEnabled="{Binding CanWrite}"
+                                              IsChecked="{Binding IsEnabled,
+                                                                  Mode=TwoWay,
+                                                                  UpdateSourceTrigger=PropertyChanged,
+                                                                  NotifyOnTargetUpdated=True,
+                                                                  NotifyOnSourceUpdated=True}">
+                                        <CheckBox.ToolTip>
+                                            <local:MpToolTipView ToolTipText="Default Writer?" />
+                                        </CheckBox.ToolTip>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--  DUPLICATE BUTTON  -->
                         <DataGridTemplateColumn MinWidth="40">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -242,6 +231,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
+                        <!--  DELETE/RESET BUTTON  -->
                         <DataGridTemplateColumn MinWidth="40">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

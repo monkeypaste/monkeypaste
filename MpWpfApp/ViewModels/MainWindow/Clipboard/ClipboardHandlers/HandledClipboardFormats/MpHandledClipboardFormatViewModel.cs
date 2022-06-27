@@ -105,11 +105,6 @@ namespace MpWpfApp {
                 if(ClipboardPluginFormat == null) {
                     return null;
                 }
-                //MpClipboardFormatType cft = ClipboardPluginFormat.clipboardName.ToEnum<MpClipboardFormatType>();
-                //if(cft == default) {
-                //    return MpClipboardFormatType.Custom;
-                //}
-                //return cft;
                 return ClipboardPluginFormat.clipboardName;
             }
         }
@@ -117,7 +112,7 @@ namespace MpWpfApp {
 
         #region Models
 
-        #region MpAnalyticItem
+        #region MpClipboardHandlerItem
 
         public int IconId { get; private set; }
 
@@ -150,6 +145,13 @@ namespace MpWpfApp {
 
         public MpIClipboardPluginComponent ClipboardPluginComponent => PluginFormat == null ? null : PluginFormat.Component as MpIClipboardPluginComponent;
 
+        public bool IsReader => PluginFormat == null ? 
+                                    false :
+                                    PluginFormat.clipboardHandler.readers.Any(x=>x.handlerGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
+
+        public bool IsWriter => PluginFormat == null ?
+                                    false :
+                                    PluginFormat.clipboardHandler.writers.Any(x => x.handlerGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
         #endregion
 
         #endregion
@@ -174,7 +176,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpPluginFormat analyzerPlugin, int handlerIdx) {
+        public async Task InitializeAsync(MpPluginFormat analyzerPlugin, int handlerIdx, bool isReader) {
             if (IsLoaded) {
                 return;
             }
@@ -182,13 +184,22 @@ namespace MpWpfApp {
 
             PluginFormat = analyzerPlugin;
 
-            ClipboardPluginFormat = PluginFormat.clipboardHandler.handledFormats.ElementAt(handlerIdx);
+            if(isReader) {
+                ClipboardPluginFormat = PluginFormat.clipboardHandler.readers[handlerIdx];
+            } else {
+                ClipboardPluginFormat = PluginFormat.clipboardHandler.writers[handlerIdx];
+            }
+
+            if (IsReader && IsWriter) {
+                Debugger.Break();
+            }
+
             if (ClipboardPluginComponent == null) {
                 throw new Exception("Cannot find component");
             }
 
 
-            var presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(ClipboardHandlerGuid);
+            var presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(ClipboardHandlerGuid);
                         
 
             if (string.IsNullOrEmpty(ClipboardPluginFormat.iconUrl)) {
@@ -198,7 +209,7 @@ namespace MpWpfApp {
                       presets.FirstOrDefault(x => x.IsDefault).IconId > 0) {
                 IconId = presets.FirstOrDefault(x => x.IsDefault).IconId;
             } else {
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(ClipboardPluginFormat.iconUrl);
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(ClipboardPluginFormat.iconUrl,PluginFormat.RootDirectory);
                 var icon = await MpIcon.Create(
                     iconImgBase64: bytes.ToBase64String(),
                     createBorder: false);
@@ -221,7 +232,7 @@ namespace MpWpfApp {
                 isNew = true;
             }
 
-            presets.ForEach(x => x.ClipboardFormat = ClipboardPluginFormat);
+            presets.ForEach(x => x.ComponentFormat = ClipboardPluginFormat);
 
             Items.Clear();
 
@@ -240,7 +251,7 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpClipboardFormatPresetViewModel> CreatePresetViewModel(MpAnalyticItemPreset aip) {
+        public async Task<MpClipboardFormatPresetViewModel> CreatePresetViewModel(MpPluginPreset aip) {
             MpClipboardFormatPresetViewModel naipvm = new MpClipboardFormatPresetViewModel(this);
             await naipvm.InitializeAsync(aip);
             return naipvm;
@@ -297,14 +308,14 @@ namespace MpWpfApp {
         #region Db Event Handlers
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpAnalyticItemPreset aip) {
+            if (e is MpPluginPreset aip) {
 
             }
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpAnalyticItemPreset aip) {
-                if (aip.AnalyzerPluginGuid == ClipboardHandlerGuid) {
+            if (e is MpPluginPreset aip) {
+                if (aip.PluginGuid == ClipboardHandlerGuid) {
                     var presetVm = Items.FirstOrDefault(x => x.Preset.Id == aip.Id);
                     if (presetVm != null) {
                         int presetIdx = Items.IndexOf(presetVm);
@@ -332,12 +343,12 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private async Task<MpAnalyticItemPreset> CreateDefaultPresetModel(int existingDefaultPresetId = 0) {
+        private async Task<MpPluginPreset> CreateDefaultPresetModel(int existingDefaultPresetId = 0) {
             if (ClipboardPluginFormat.parameters == null) {
                 throw new Exception($"Parameters for '{Title}' not found");
             }
 
-            var aip = await MpAnalyticItemPreset.Create(
+            var aip = await MpPluginPreset.Create(
                                 analyzerPluginGuid: ClipboardHandlerGuid,
                                 isDefault: true,
                                 label: $"{Title} - Default",
@@ -353,7 +364,7 @@ namespace MpWpfApp {
             //if (AnalyzerPluginFormat.parameters != null) {
             //    foreach (var param in AnalyzerPluginFormat.parameters) {
             //        string defVal = string.Join(",", param.values.Where(x=>x.isDefault).Select(x=>x.value));
-            //        var presetVal = await MpAnalyticItemPresetParameterValue.Create(presetId: aip.Id, paramEnumId: param.paramId, value: defVal);
+            //        var presetVal = await MpPluginPresetParameterValue.Create(presetId: aip.Id, paramEnumId: param.paramId, value: defVal);
 
             //        paramPresetValues.Add(presetVal);
             //    }
@@ -415,14 +426,14 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task<List<MpAnalyticItemPreset>> ResetPresets(List<MpAnalyticItemPreset> presets = null) {
+        private async Task<List<MpPluginPreset>> ResetPresets(List<MpPluginPreset> presets = null) {
             //if manifest has been modified
             //(for now clear all presets and either load predefined presets or create from parameter default values)
 
             // TODO maybe less forceably handle add/remove/update of presets when manifest changes
-            presets = presets == null ? await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(ClipboardHandlerGuid) : presets;
+            presets = presets == null ? await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(ClipboardHandlerGuid) : presets;
             foreach (var preset in presets) {
-                var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
+                var vals = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(preset.Id);
                 await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
             }
             await Task.WhenAll(presets.Select(x => x.DeleteFromDatabaseAsync()));
@@ -434,7 +445,7 @@ namespace MpWpfApp {
                 presets.Add(defualtPreset);
             } else {
                 foreach (var preset in ClipboardPluginFormat.presets) {
-                    var aip = await MpAnalyticItemPreset.Create(
+                    var aip = await MpPluginPreset.Create(
                         analyzerPluginGuid: ClipboardHandlerGuid,
                         isDefault: preset.isDefault,
                         label: preset.label,
@@ -460,7 +471,7 @@ namespace MpWpfApp {
             async () => {
                 IsBusy = true;
 
-                MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
+                MpPluginPreset newPreset = await MpPluginPreset.Create(
                         analyzerPluginGuid: ClipboardHandlerGuid,
                         format: ClipboardPluginFormat,
                         iconId: IconId,

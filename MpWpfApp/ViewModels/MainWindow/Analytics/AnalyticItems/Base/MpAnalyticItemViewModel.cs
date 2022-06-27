@@ -70,7 +70,7 @@ namespace MpWpfApp {
                         IconResourceKey = Application.Current.Resources["CogIcon"] as string,
                         Header = $"Manage '{Title}'",
                         Command = ManageAnalyticItemCommand,
-                        CommandParameter = AnalyzerPluginGuid
+                        CommandParameter = PluginGuid
                     });
                 return new MpMenuItemViewModel() {
                     Header = Title, 
@@ -362,7 +362,7 @@ namespace MpWpfApp {
             }
         }
 
-        public string AnalyzerPluginGuid => PluginFormat == null ? string.Empty : PluginFormat.guid;
+        public string PluginGuid => PluginFormat == null ? string.Empty : PluginFormat.guid;
 
         public MpBillableItem BillableItem { get; set; }
 
@@ -412,7 +412,7 @@ namespace MpWpfApp {
                 throw new Exception("Cannot find component");
             }
             
-            var presets = await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid);
+            var presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(PluginFormat.guid);
 
             if (string.IsNullOrEmpty(PluginFormat.iconUrl)) {
                 IconId = MpPreferences.ThisAppIcon.Id;
@@ -446,7 +446,7 @@ namespace MpWpfApp {
                 isNew = true;
             }
 
-            presets.ForEach(x => x.AnalyzerFormat = AnalyzerPluginFormat);
+            presets.ForEach(x => x.ComponentFormat = AnalyzerPluginFormat);
 
             Items.Clear();
 
@@ -467,7 +467,7 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpAnalyticItemPresetViewModel> CreatePresetViewModel(MpAnalyticItemPreset aip) {
+        public async Task<MpAnalyticItemPresetViewModel> CreatePresetViewModel(MpPluginPreset aip) {
             MpAnalyticItemPresetViewModel naipvm = new MpAnalyticItemPresetViewModel(this);
             await naipvm.InitializeAsync(aip);
             return naipvm;
@@ -529,14 +529,14 @@ namespace MpWpfApp {
         #region Db Event Handlers
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpAnalyticItemPreset aip) {
+            if (e is MpPluginPreset aip) {
                 
             }
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpAnalyticItemPreset aip) {
-                if(aip.AnalyzerPluginGuid == AnalyzerPluginGuid) {
+            if(e is MpPluginPreset aip) {
+                if(aip.PluginGuid == PluginGuid) {
                     var presetVm = Items.FirstOrDefault(x => x.Preset.Id == aip.Id);
                     if(presetVm != null) {
                         int presetIdx = Items.IndexOf(presetVm);
@@ -567,12 +567,12 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private async Task<MpAnalyticItemPreset> CreateDefaultPresetModel(int existingDefaultPresetId = 0) {
+        private async Task<MpPluginPreset> CreateDefaultPresetModel(int existingDefaultPresetId = 0) {
             if(AnalyzerPluginFormat.parameters == null) {
                 throw new Exception($"Parameters for '{Title}' not found");
             }
 
-            var aip = await MpAnalyticItemPreset.Create(
+            var aip = await MpPluginPreset.Create(
                                 analyzerPluginGuid: PluginFormat.guid,
                                 isDefault: true,
                                 label: $"{Title} - Default",
@@ -588,7 +588,7 @@ namespace MpWpfApp {
             //if (AnalyzerPluginFormat.parameters != null) {
             //    foreach (var param in AnalyzerPluginFormat.parameters) {
             //        string defVal = string.Join(",", param.values.Where(x=>x.isDefault).Select(x=>x.value));
-            //        var presetVal = await MpAnalyticItemPresetParameterValue.Create(presetId: aip.Id, paramEnumId: param.paramId, value: defVal);
+            //        var presetVal = await MpPluginPresetParameterValue.Create(presetId: aip.Id, paramEnumId: param.paramId, value: defVal);
 
             //        paramPresetValues.Add(presetVal);
             //    }
@@ -656,14 +656,14 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task<List<MpAnalyticItemPreset>> ResetPresets(List<MpAnalyticItemPreset> presets = null) {
+        private async Task<List<MpPluginPreset>> ResetPresets(List<MpPluginPreset> presets = null) {
             //if manifest has been modified
             //(for now clear all presets and either load predefined presets or create from parameter default values)
 
             // TODO maybe less forceably handle add/remove/update of presets when manifest changes
-            presets = presets == null ? await MpDataModelProvider.GetAnalyticItemPresetsByAnalyzerGuid(PluginFormat.guid) : presets;
+            presets = presets == null ? await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(PluginFormat.guid) : presets;
             foreach (var preset in presets) {
-                var vals = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(preset.Id);
+                var vals = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(preset.Id);
                 await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
             }
             await Task.WhenAll(presets.Select(x => x.DeleteFromDatabaseAsync()));
@@ -676,7 +676,7 @@ namespace MpWpfApp {
             } else {
                 //when presets are defined in manifest create the preset and its values in the db
                 foreach (var preset in AnalyzerPluginFormat.presets) {
-                    var aip = await MpAnalyticItemPreset.Create(
+                    var aip = await MpPluginPreset.Create(
                         analyzerPluginGuid: PluginFormat.guid,
                         isDefault: preset.isDefault,
                         label: preset.label,
@@ -688,7 +688,7 @@ namespace MpWpfApp {
 
                     foreach(var presetValue in preset.values) {
                         // only creat preset values in db, they will then be picked up when the preset vm is initialized
-                        var aipv = await MpAnalyticItemPresetParameterValue.Create(
+                        var aipv = await MpPluginPresetParameterValue.Create(
                             presetId: aip.Id, 
                             paramEnumId: presetValue.paramId,
                             value: presetValue.value,
@@ -838,8 +838,8 @@ namespace MpWpfApp {
                 if(args != null) {
                     isActionPreset = (bool)args;
                 }
-                MpAnalyticItemPreset newPreset = await MpAnalyticItemPreset.Create(
-                        analyzerPluginGuid: AnalyzerPluginGuid,
+                MpPluginPreset newPreset = await MpPluginPreset.Create(
+                        analyzerPluginGuid: PluginGuid,
                         format:AnalyzerPluginFormat,
                         isActionPreset: isActionPreset,
                         iconId: IconId,

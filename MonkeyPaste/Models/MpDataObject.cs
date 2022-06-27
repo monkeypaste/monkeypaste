@@ -54,7 +54,7 @@ namespace MonkeyPaste {
 
             if(pdo != null) {
                 foreach(var kvp in pdo.DataFormatLookup) {
-                    var pdoi = await MpDataObjectItem.Create(
+                    var pdoi = await MpDataObjectItem.CreateAsync(
                         dataObjectId: ndio.Id,
                         itemFormat: kvp.Key.Name,
                         itemData64: kvp.Value.ToString());

@@ -6,9 +6,11 @@ using System.Text;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
+
     public abstract class MpSelectorViewModelBase<P,C> : 
         MpViewModelBase<P>, 
-        MpISelectorViewModel<C> where P:class 
+        MpISelectorViewModel<C> 
+        where P:class 
         where C: MpViewModelBase,MpISelectableViewModel {
 
         public MpSelectorViewModelBase() : base(null) { }

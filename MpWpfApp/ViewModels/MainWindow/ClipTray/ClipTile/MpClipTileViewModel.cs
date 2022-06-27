@@ -1654,7 +1654,7 @@ using stdole;
                     break;
             }
 
-            foreach (string format in MpPortableDataFormats.Formats) {
+            foreach (string format in MpPortableDataFormats.RegisteredFormats) {
                 switch (format) {
                     case MpPortableDataFormats.FileDrop:
                         switch(ItemType) {

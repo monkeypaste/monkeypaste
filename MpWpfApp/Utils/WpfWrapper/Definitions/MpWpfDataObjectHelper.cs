@@ -78,7 +78,7 @@ namespace MpWpfApp {
                 Debugger.Break();
             }
 
-            await PasteDataObject(mpdo, pi, finishWithEnterKey);
+            await PasteDataObjectAsync(mpdo, pi, finishWithEnterKey);
         }
 
         #endregion
@@ -87,45 +87,24 @@ namespace MpWpfApp {
         #region MpIPlatformDataObjectHelper Implementation
 
         public MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
-            return ConvertWpfDataObjectToPortableFormat(nativeDataObj as IDataObject, retryCount);
+            return MpClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObject(nativeDataObj);
         }
 
         public object ConvertToPlatformClipboardDataObject(MpPortableDataObject mpdo) {
-            var writerLookup = MpClipboardHandlerCollectionViewModel.Instance.DefaultWriters;
-
-            DataObject dobj = new DataObject();
-            //var handlers = MpClipboardHandlerCollectionViewModel.Instance.Items.SelectMany(x => x.Items.Select(y => y.ClipboardPluginComponent)).Distinct().ToList();
-            //foreach (var handler in handlers) {
-            //    handler.SetClipboardData(mpdo);
-            //}
-            foreach (var kvp in mpdo.DataFormatLookup) {
-                SetDataWrapper(ref dobj, kvp.Key.Name, kvp.Value);
-            }
-            return dobj;
+            return MpClipboardHandlerCollectionViewModel.Instance.WriteClipboardOrDropObject(mpdo,false);
         }
 
 
         public void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreChange) {
             MpPlatformWrapper.Services.ClipboardMonitor.IgnoreNextClipboardChangeEvent = ignoreChange;
-
-            DataObject wpfDataObject = ConvertToPlatformClipboardDataObject(portableObj) as DataObject;
-
-            MpHelpers.RunOnMainThread(async () => {
-                while(MonkeyPaste.Common.Wpf.WinApi.IsClipboardOpen()) {
-                    await Task.Delay(100);
-                }
-
-                Clipboard.SetDataObject(wpfDataObject);
-            });
+            MpClipboardHandlerCollectionViewModel.Instance.WriteClipboardOrDropObject(portableObj, true);
         }
 
         public MpPortableDataObject GetPlatformClipboardDataObject() {
-            var result = Clipboard.GetDataObject();
-            var mpdo = ConvertToSupportedPortableFormats(result);
-            return mpdo;
+            return MpClipboardHandlerCollectionViewModel.Instance.ReadClipboardOrDropObject(null);
         }
 
-        public async Task PasteDataObject(MpPortableDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
+        public async Task PasteDataObjectAsync(MpPortableDataObject mpdo, MpProcessInfo pi, bool finishWithEnterKey = false) {
             string pasteCmdKeyString = "^v";
             var avm = MpAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == pi.ProcessPath.ToLower());
             if(avm != null && avm.PasteShortcutViewModel != null) {
@@ -153,58 +132,6 @@ namespace MpWpfApp {
         }
 
         #endregion
-
-        private MpPortableDataObject ConvertWpfDataObjectToPortableFormat(IDataObject ido, int retryCount = 5) {            
-            if (retryCount == 0) {
-                MpConsole.WriteLine("Exceeded retry limit accessing clipboard, ignoring");
-                return null;
-            }
-            if(ido == null) {
-                return null;
-            }
-            var ndo = new MpPortableDataObject();
-            try {
-                bool autoConvert = false;
-                foreach (var nativeTypeName in MpPortableDataFormats.Formats) {
-                    if (ido != null) {
-                        if (string.IsNullOrEmpty(nativeTypeName) || 
-                            ido.GetDataPresent(nativeTypeName, autoConvert) == false) {
-                            continue;
-                        }
-                    }
-                    string data = null;
-                    switch (nativeTypeName) {
-                        case MpPortableDataFormats.Bitmap:
-                            var bmpSrc = Clipboard.GetImage();
-                            if (bmpSrc != null) {
-                                data = bmpSrc.ToBase64String();
-                            }
-                            break;
-                        case MpPortableDataFormats.FileDrop:
-                            string[] sa = ido.GetData(DataFormats.FileDrop, autoConvert) as string[];
-                            if (sa != null && sa.Length > 0) {
-                                data = string.Join(Environment.NewLine, sa);
-                            }
-                            break;
-                        default:
-                            data = ido.GetData(nativeTypeName, autoConvert) as string;
-                            break;
-                    }
-                    if (!string.IsNullOrEmpty(data)) {
-                        ndo.SetData(nativeTypeName, data);
-                    }
-                }
-                if(ndo.DataFormatLookup.Count == 0) {
-                    return null;
-                }
-                return ndo;
-            }
-            catch (Exception ex) {
-                MpConsole.WriteLine($"Error accessing clipboard {retryCount} attempts remaining", ex);
-                Thread.Sleep((5 - retryCount) * 100);
-                return ConvertWpfDataObjectToPortableFormat(ido, retryCount--);
-            }
-        }
 
         public void HandleError(Exception ex) {
             MpConsole.WriteTraceLine(ex);

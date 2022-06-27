@@ -41,9 +41,9 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public MpAnalyticItemViewModel ProcessAutomationViewModel => Items.FirstOrDefault(x => x.AnalyzerPluginGuid == _processAutomationGuid);
+        public MpAnalyticItemViewModel ProcessAutomationViewModel => Items.FirstOrDefault(x => x.PluginGuid == _processAutomationGuid);
 
-        public MpAnalyticItemViewModel HttpAutomationViewModel => Items.FirstOrDefault(x => x.AnalyzerPluginGuid == _httpAutomationGuid);
+        public MpAnalyticItemViewModel HttpAutomationViewModel => Items.FirstOrDefault(x => x.PluginGuid == _httpAutomationGuid);
 
         public MpMenuItemViewModel MenuItemViewModel {
             get {
@@ -65,11 +65,7 @@ namespace MpWpfApp {
 
         public MpITreeItemViewModel ParentTreeItem => null;
 
-        public List<MpAnalyticItemPresetViewModel> AllPresets {
-            get {
-                return Items.OrderBy(x => x.Title).SelectMany(x => x.Items).ToList();
-            }
-        }
+        public List<MpAnalyticItemPresetViewModel> AllPresets => Items.OrderBy(x => x.Title).SelectMany(x => x.Items).ToList();
 
         public MpAnalyticItemPresetViewModel SelectedPresetViewModel {
             get {

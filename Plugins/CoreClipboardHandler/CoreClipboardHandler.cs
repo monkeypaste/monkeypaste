@@ -19,16 +19,14 @@ using System.Collections.Specialized;
 namespace CoreClipboardHandler {
     public class CoreClipboardHandler : 
         MpIClipboardReaderComponent,
-        MpIClipboardWriterComponent,
-        MpIPlatformDataObjectHelper {
+        MpIClipboardWriterComponent {
         #region Private Variables
 
         private IntPtr _mainWindowHandle;
 
         private uint CF_HTML, CF_RTF, CF_CSV, CF_TEXT = 1, CF_BITMAP = 2, CF_DIB = 8, CF_HDROP = 15, CF_UNICODE_TEXT, CF_OEM_TEXT;
-        #endregion
 
-        public enum CoreClipboardParamType {
+        private enum CoreClipboardParamType {
             None = 0,
             //readers
             R_MaxCharCount_Text = 1,
@@ -56,25 +54,9 @@ namespace CoreClipboardHandler {
             W_Ignore_Csv //22
         }
 
-        #region MpIPlatformDataObjectHelper
-        
-        public MpPortableDataObject ConvertToSupportedPortableFormats(object nativeDataObj, int retryCount = 5) {
-            throw new NotImplementedException();
-        }
-
-        public object ConvertToPlatformClipboardDataObject(MpPortableDataObject portableObj) {
-            throw new NotImplementedException();
-        }
-
-        public void SetPlatformClipboard(MpPortableDataObject portableObj, bool ignoreClipboardChange) {
-            throw new NotImplementedException();
-        }
-
-        public MpPortableDataObject GetPlatformClipboardDataObject() {
-            throw new NotImplementedException();
-        }
-
         #endregion
+
+
 
         #region MpIClipboardReaderComponent Implementation
 

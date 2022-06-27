@@ -357,6 +357,7 @@
     <Compile Include="ViewModels\MainWindow\Clipboard\ClipboardHandlers\HandledClipboardFormats\MpHandledClipboardFormatViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Clipboard\ClipboardHandlers\HandledClipboardFormats\Presets\MpClipboardFormatPresetViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Clipboard\ClipboardHandlers\MpClipboardHandlerItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Clipboard\Formats\MpClipboardFormatViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Clipboard\MpClipboardHandlerCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileDrop\MpFileItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationCollectionViewModel.cs" />
@@ -513,6 +514,12 @@
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\ClipboardHandlerItem\Presets\MpHandledClipboardFormatsItemPresetDataGridView.xaml.cs">
       <DependentUpon>MpHandledClipboardFormatsItemPresetDataGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\FormatExpander\MpClipboardFormatExpanderView.xaml.cs">
+      <DependentUpon>MpClipboardFormatExpanderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\MpClipboardFormatListBoxView.xaml.cs">
+      <DependentUpon>MpClipboardFormatListBoxView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\MpClipboardHandlerItemSelectorView.xaml.cs">
       <DependentUpon>MpClipboardHandlerItemSelectorView.xaml</DependentUpon>
@@ -1036,6 +1043,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\ClipboardHandlerItem\Presets\MpHandledClipboardFormatsItemPresetDataGridView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\FormatExpander\MpClipboardFormatExpanderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow\SideBarMenu\SideBarItems\Clipboard\Selector\MpClipboardFormatListBoxView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1630,6 +1645,24 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\replace.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\bitmap.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\csv.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\folder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\html.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\rtf.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\text.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />
@@ -2984,6 +3017,8 @@
   <ItemGroup>
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Plugins\Google\PeopleApi\" />
+    <Folder Include="ViewModels\MainWindow\Plugins\" />
+    <Folder Include="ViewModels\Reusable\PluginCollection\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Html\" />
     <Folder Include="Views\Settings\Shortcuts\Gesture\" />
   </ItemGroup>

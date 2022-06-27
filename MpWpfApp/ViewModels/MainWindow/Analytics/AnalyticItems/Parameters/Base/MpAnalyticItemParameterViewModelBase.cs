@@ -11,11 +11,12 @@ using Newtonsoft.Json;
 using SQLite;
 
 namespace MpWpfApp {
-    public class MpAnalyticItemParameterViewModelBase : 
+    public class MpPluginParameterViewModelBase : 
         MpViewModelBase<MpViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
-        MpITooltipInfoViewModel {
+        MpITooltipInfoViewModel,
+        MpIParameterKeyValuePair {
         #region Private Variables
 
         #endregion
@@ -23,6 +24,21 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+
+        #endregion
+
+        #region MpIParameterKeyValuePair Implementation
+
+        #region MpIJsonObject Implementation
+
+        string MpIJsonObject.Serialize() {
+            return MpJsonObject.SerializeObject(this);
+        }
+        #endregion
+
+        int MpIParameterKeyValuePair.paramId => ParamEnumId;
+        string MpIParameterKeyValuePair.value => CurrentValue;
+        
 
         #endregion
 
@@ -353,7 +369,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyticItemPresetParameterValue PresetValue { get; set; }
+        public MpPluginPresetParameterValue PresetValue { get; set; }
 
         #endregion
 
@@ -367,9 +383,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpAnalyticItemParameterViewModelBase() : base(null) { }
+        public MpPluginParameterViewModelBase() : base(null) { }
 
-        public MpAnalyticItemParameterViewModelBase(MpViewModelBase parent) : base(parent) {
+        public MpPluginParameterViewModelBase(MpViewModelBase parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterViewModel_PropertyChanged;
         }
 
@@ -377,7 +393,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public virtual async Task InitializeAsync(MpAnalyticItemPresetParameterValue aipv) {
+        public virtual async Task InitializeAsync(MpPluginPresetParameterValue aipv) {
             bool wasBusy = IsBusy;
             IsBusy = true;
 
@@ -439,6 +455,7 @@ namespace MpWpfApp {
             }
             OnValidate?.Invoke(this, new EventArgs());
         }
+
         #endregion
     }
 }

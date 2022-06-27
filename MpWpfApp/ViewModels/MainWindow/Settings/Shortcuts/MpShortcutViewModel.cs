@@ -529,7 +529,7 @@ namespace MpWpfApp {
                     ShortcutDisplayName = $"Select {t.TagName}";
                     wasChanged = true;
                 }
-            } else if (e is MpAnalyticItemPreset aip) {
+            } else if (e is MpPluginPreset aip) {
                 if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset &&
                     CommandId == aip.Id) {
                     ShortcutDisplayName = $"User {aip.Label} analyzer";

@@ -20,7 +20,7 @@ namespace MonkeyPaste {
                 int sourceId = await LogAnalyzerTransactionAsync(
                     pluginFormat, at, 
                     sourceContent, 
-                    sourceHandler as MpAnalyticItemPreset, 
+                    sourceHandler as MpPluginPreset, 
                     suppressWrite);
                 return sourceId;
             }
@@ -31,7 +31,7 @@ namespace MonkeyPaste {
             MpPluginFormat pluginFormat,
             MpAnalyzerTransaction trans,
             MpCopyItem sourceContent,
-            MpAnalyticItemPreset preset,
+            MpPluginPreset preset,
             bool suppressWrite = false) {
             if (trans.Response == null) {
                 trans.Response = new MpPluginResponseFormatBase();

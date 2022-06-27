@@ -48,4 +48,10 @@ namespace MonkeyPaste.Common {
             return Serialize();
         }
     }
+
+    public abstract class MpJsonObject<T> where T:class {
+        [JsonIgnore]
+        public T Parent { get; set; }
+
+    }
 }

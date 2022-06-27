@@ -5,20 +5,20 @@ using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpAnalyticItemPresetParameterValue : 
+    public class MpPluginPresetParameterValue : 
         MpDbModelBase, 
-        MpIClonableDbModel<MpAnalyticItemPresetParameterValue> {
+        MpIClonableDbModel<MpPluginPresetParameterValue> {
         #region Columns
-        [Column("pk_MpAnalyticItemPresetParameterValueId")]
+        [Column("pk_MpPluginPresetParameterValueId")]
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
-        [Column("MpAnalyticItemPresetParameterValueGuid")]
+        [Column("MpPluginPresetParameterValueGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [ForeignKey(typeof(MpAnalyticItemPreset))]
-        [Column("fk_MpAnalyticItemPresetId")]
-        public int AnalyticItemPresetId { get; set; }
+        [ForeignKey(typeof(MpPluginPreset))]
+        [Column("fk_MpPluginPresetId")]
+        public int PluginPresetId { get; set; }
 
         public int ParamId { get; set; }
 
@@ -33,7 +33,7 @@ namespace MonkeyPaste {
         #region Properties
 
         [Ignore]
-        public Guid AnalyticItemPresetParameterValueGuid {
+        public Guid PluginPresetParameterValueGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
@@ -50,7 +50,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpAnalyticItemPresetParameterValue> Create(
+        public static async Task<MpPluginPresetParameterValue> Create(
             int presetId = 0, 
             int paramEnumId = 0, 
             string value = "",
@@ -62,12 +62,12 @@ namespace MonkeyPaste {
                 throw new Exception("Must have format");
             }
 
-            var dupItem = await MpDataModelProvider.GetAnalyticItemPresetValue(presetId, paramEnumId);
+            var dupItem = await MpDataModelProvider.GetPluginPresetValueAsync(presetId, paramEnumId);
             if (dupItem != null) {
                 MpConsole.WriteLine($"Updating preset Id{presetId} for {paramEnumId}");
 
-                dupItem = await MpDb.GetItemAsync<MpAnalyticItemPresetParameterValue>(dupItem.Id);
-                dupItem.AnalyticItemPresetId = presetId;
+                dupItem = await MpDb.GetItemAsync<MpPluginPresetParameterValue>(dupItem.Id);
+                dupItem.PluginPresetId = presetId;
                 dupItem.ParamId = paramEnumId;
                 dupItem.Value = value;
                 dupItem.ParameterFormat = format;
@@ -75,27 +75,27 @@ namespace MonkeyPaste {
                 return dupItem;
             }
 
-            var newAnalyticItemPresetParameterValue = new MpAnalyticItemPresetParameterValue() {
-                AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
+            var newPluginPresetParameterValue = new MpPluginPresetParameterValue() {
+                PluginPresetParameterValueGuid = System.Guid.NewGuid(),
                 ParameterFormat = format,
-                AnalyticItemPresetId = presetId,
+                PluginPresetId = presetId,
                 ParamId = paramEnumId,
                 Value = value
             };
 
-            await newAnalyticItemPresetParameterValue.WriteToDatabaseAsync();
+            await newPluginPresetParameterValue.WriteToDatabaseAsync();
 
-            return newAnalyticItemPresetParameterValue;
+            return newPluginPresetParameterValue;
         }
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpAnalyticItemPresetParameterValue> CloneDbModel(bool suppressWrite = false) {
+        public async Task<MpPluginPresetParameterValue> CloneDbModel(bool suppressWrite = false) {
             // NOTE if recreating preset must set PresetId after this method
 
-            var cppv = new MpAnalyticItemPresetParameterValue() {
-                AnalyticItemPresetParameterValueGuid = System.Guid.NewGuid(),
-                AnalyticItemPresetId = this.AnalyticItemPresetId,
+            var cppv = new MpPluginPresetParameterValue() {
+                PluginPresetParameterValueGuid = System.Guid.NewGuid(),
+                PluginPresetId = this.PluginPresetId,
                 ParamId = this.ParamId,
                 Value = this.Value,
                 ParameterFormat = this.ParameterFormat
@@ -106,7 +106,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpAnalyticItemPresetParameterValue() : base() { }
+        public MpPluginPresetParameterValue() : base() { }
 
     }
 }

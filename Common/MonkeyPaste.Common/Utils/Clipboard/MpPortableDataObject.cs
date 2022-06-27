@@ -93,6 +93,8 @@ namespace MonkeyPaste.Common {
 
     }
     public static class MpPortableDataFormats {
+        #region Private Variables
+
         private static MpIPlatformDataObjectRegistrar _registrar;
 
         private static string[] _defaultFormatNames = new string[] {
@@ -104,10 +106,13 @@ namespace MonkeyPaste.Common {
             Csv,
             Unicode,
             OemText,
-            //InternalContent
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
+
+        #endregion
+
+        #region Constants
 
         public const string Text = "Text";
         public const string Rtf = "Rich Text Format";
@@ -120,17 +125,25 @@ namespace MonkeyPaste.Common {
 
         public const string InternalContent = "Mp Internal Content";
 
+        #endregion
 
-        public static string[] Formats => _formatLookup.Select(x => x.Value.Name).ToArray();
+        #region Properties
+
+        public static IEnumerable<string> RegisteredFormats => _formatLookup.Select(x => x.Value.Name);
+
+        #endregion
+
+
+        #region Public Methods
 
         public static void Init(MpIPlatformDataObjectRegistrar registrar) {
             _registrar = registrar;
 
             _formatLookup = new Dictionary<int, MpPortableDataFormat>();
 
-            foreach(string formatName in _defaultFormatNames) {
-                RegisterDataFormat(formatName);
-            }
+            //foreach(string formatName in _defaultFormatNames) {
+            //    RegisterDataFormat(formatName);
+            //}
         }
         public static MpPortableDataFormat GetDataFormat(int id) {
             if (id < 0 || id >= _formatLookup.Count) {
@@ -151,12 +164,26 @@ namespace MonkeyPaste.Common {
         public static MpPortableDataFormat RegisterDataFormat(string format) {
             int id = GetDataFormatId(format);
             if (id >= 0) {
+                MpConsole.WriteTraceLine($"Warning attempted to register already registered format name:'{format}' id:{id}");
                 return _formatLookup[id];
             }
-
-            var pdf = new MpPortableDataFormat(format, _registrar.RegisterFormat(format));
+            id = _registrar.RegisterFormat(format);
+            var pdf = new MpPortableDataFormat(format, id);
             _formatLookup.Add(pdf.Id, pdf);
+            MpConsole.WriteTraceLine($"Successfully registered format name:'{format}' id:{id}");
             return pdf;
+        }
+
+        public static void UnregisterDataFormat(string format) {
+            int id = GetDataFormatId(format);
+            if (id == 0) {
+                // format doesn't exist so pretend it was successfull but log 
+                MpConsole.WriteTraceLine($"Warning attempted to unregister a non-registered format named '{format}'");
+                return;
+            }
+            if(_formatLookup.Remove(id)) {
+                MpConsole.WriteTraceLine($"Successfully unregistered format name:'{format}' id:{id}");
+            }
         }
 
         public static int GetDataFormatId(string format) {
@@ -167,6 +194,8 @@ namespace MonkeyPaste.Common {
             }
             return -1;
         }
+
+        #endregion
     }
 
 

@@ -5,7 +5,6 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-                     xmlns:pcl="clr-namespace:MonkeyPaste"
                      xmlns:local="clr-namespace:MpWpfApp"
                      x:TypeArguments="local:MpTagTrayViewModel"
                      mc:Ignorable="d"
@@ -15,7 +14,6 @@
                      d:DesignWidth="800">
     <Grid>
         <TreeView x:Name="TagTray"
-                  Loaded="TagTray_Loaded"
                   Background="Transparent"
                   dd:DragDrop.IsDragSource="True"
                   dd:DragDrop.IsDropTarget="True"
@@ -28,8 +26,8 @@
                 <HierarchicalDataTemplate DataType="{x:Type local:MpTagTileViewModel}"
                                           ItemsSource="{Binding Children}">
                     <local:MpTagTileView IsTagTreeTile="True"
-                                             Background="Transparent"
-                                             DataContext="{Binding}" />
+                                         Background="Transparent"
+                                         DataContext="{Binding}" />
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
             <TreeView.ItemContainerStyle>
@@ -44,9 +42,12 @@
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
                                          Color="Transparent" />
                     </Style.Resources>
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
-                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected}" />
+                    <Setter Property="IsExpanded"
+                            Value="{Binding IsExpanded}" />
+                    <Setter Property="Background"
+                            Value="Transparent" />
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>

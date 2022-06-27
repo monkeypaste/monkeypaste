@@ -23,7 +23,7 @@ namespace MonkeyPaste {
         [Column("MpHttpTransactionGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [ForeignKey(typeof(MpAnalyticItemPreset))]
+        [ForeignKey(typeof(MpPluginPreset))]
         [Column("fk_MpAnalyticItemPresetId")]
         public int PresetId { get; set; }
 
@@ -111,7 +111,7 @@ namespace MonkeyPaste {
                 TransactionErrorMessage = errorMsg
             };
             if (presetId > 0) {
-                var preset = await MpDb.GetItemAsync<MpAnalyticItemPreset>(presetId);
+                var preset = await MpDb.GetItemAsync<MpPluginPreset>(presetId);
                 if (preset != null) {
                     mr.iconId = preset.IconId;
                 }

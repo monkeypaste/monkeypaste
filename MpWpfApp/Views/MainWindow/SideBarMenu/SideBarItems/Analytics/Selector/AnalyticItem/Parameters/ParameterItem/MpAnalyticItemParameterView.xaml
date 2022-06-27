@@ -6,11 +6,11 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:MpWpfApp"
                      xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                     x:TypeArguments="local:MpAnalyticItemParameterViewModelBase"
+                     x:TypeArguments="local:MpPluginParameterViewModelBase"
                      mc:Ignorable="d"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
-                     d:DataContext="{d:DesignInstance Type=local:MpAnalyticItemParameterViewModelBase,
+                     d:DataContext="{d:DesignInstance Type=local:MpPluginParameterViewModelBase,
                                                       IsDesignTimeCreatable=False}">
     <Border Background="Transparent"
             BorderThickness="2">

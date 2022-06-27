@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpAnalyticItemParameterView.xaml
+    /// Interaction logic for MpActionPropertyListBoxView.xaml
     /// </summary>
-    public partial class MpAnalyticItemParameterView : MpUserControl<MpPluginParameterViewModelBase> {
-        public MpAnalyticItemParameterView() {
+    public partial class MpClipboardFormatExpanderView : MpUserControl<MpClipboardFormatViewModel> {
+        public MpClipboardFormatExpanderView() {
             InitializeComponent();
         }
     }

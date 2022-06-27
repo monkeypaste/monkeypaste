@@ -434,7 +434,6 @@ namespace MonkeyPaste {
                 SQLitePCL.raw.sqlite3_create_function(_connection.Handle, "REGEXP", 2, null, MatchRegex);
             }
         }
-
         private static void MatchRegex(sqlite3_context ctx, object user_data, sqlite3_value[] args) {
             string input = SQLitePCL.raw.sqlite3_value_text(args[1]).utf8_to_string();
             input = input == null ? string.Empty : input;
@@ -453,8 +452,8 @@ namespace MonkeyPaste {
         }
 
         private static async Task InitTablesAsync() {
-            await _connectionAsync.CreateTableAsync<MpAnalyticItemPreset>();
-            await _connectionAsync.CreateTableAsync<MpAnalyticItemPresetParameterValue>();
+            await _connectionAsync.CreateTableAsync<MpAction>();
+            await _connectionAsync.CreateTableAsync<MpPluginPresetParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
             await _connectionAsync.CreateTableAsync<MpAppClipboardFormatInfo>();
             await _connectionAsync.CreateTableAsync<MpAppPasteShortcut>();
@@ -471,9 +470,9 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpDllTransaction>();
             await _connectionAsync.CreateTableAsync<MpHttpTransaction>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
-            await _connectionAsync.CreateTableAsync<MpAction>();
             await _connectionAsync.CreateTableAsync<MpPasteHistory>();
             await _connectionAsync.CreateTableAsync<MpPasteToAppPath>();
+            await _connectionAsync.CreateTableAsync<MpPluginPreset>();
             await _connectionAsync.CreateTableAsync<MpSearchCriteriaItem>();
             await _connectionAsync.CreateTableAsync<MpShortcut>();
             await _connectionAsync.CreateTableAsync<MpSource>();

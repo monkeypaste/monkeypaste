@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace MonkeyPaste {
     public static class MpPluginRequestBuilder {
@@ -24,7 +25,7 @@ namespace MonkeyPaste {
             }
 
             return new MpAnalyzerPluginRequestFormat() {
-                items = requestItems
+                items = requestItems.Cast<MpIParameterKeyValuePair>().ToList()
             };
         }
 

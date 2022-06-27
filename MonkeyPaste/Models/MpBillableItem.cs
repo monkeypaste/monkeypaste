@@ -36,7 +36,7 @@ namespace MonkeyPaste {
         [Column("e_MpPeriodicCycleTypeId")]
         public int PeriodicCycleTypeId { get; set; } = 0;
 
-        public string AnalyzerPluginGuid { get; set; } = string.Empty;
+        public string PluginGuid { get; set; } = string.Empty;
 
         public string BillableItemName { get; set; } = string.Empty;
 

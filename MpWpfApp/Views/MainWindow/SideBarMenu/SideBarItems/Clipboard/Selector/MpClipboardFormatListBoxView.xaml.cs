@@ -15,11 +15,12 @@ using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpAnalyticItemParameterView.xaml
+    /// Interaction logic for MpClipboardHandlerItemSelectorView.xaml
     /// </summary>
-    public partial class MpAnalyticItemParameterView : MpUserControl<MpPluginParameterViewModelBase> {
-        public MpAnalyticItemParameterView() {
+    public partial class MpClipboardFormatListBoxView : MpUserControl<MpClipboardHandlerCollectionViewModel> {
+        public MpClipboardFormatListBoxView() {
             InitializeComponent();
         }
+
     }
 }

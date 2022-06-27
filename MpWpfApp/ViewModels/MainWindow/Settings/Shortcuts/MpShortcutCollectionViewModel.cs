@@ -216,7 +216,7 @@ namespace MpWpfApp {
                     scvmToRemove = Items.FirstOrDefault(x => x.CommandId == ci.Id && x.ShortcutType == MpShortcutType.PasteCopyItem);
                 } else if (e is MpTag t) {
                     scvmToRemove = Items.FirstOrDefault(x => x.CommandId == t.Id && x.ShortcutType == MpShortcutType.SelectTag);
-                } else if (e is MpAnalyticItemPreset aip) {
+                } else if (e is MpPluginPreset aip) {
                     scvmToRemove = Items.FirstOrDefault(x => x.CommandId == aip.Id && x.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset);
                 }
                 if(scvmToRemove != null) {

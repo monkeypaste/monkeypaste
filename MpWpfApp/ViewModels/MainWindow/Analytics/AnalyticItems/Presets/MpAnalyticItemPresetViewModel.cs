@@ -20,7 +20,7 @@ using Windows.UI.Xaml.Controls.Maps;
 
 namespace MpWpfApp {
     public class MpAnalyticItemPresetViewModel : 
-        MpSelectorViewModelBase<MpAnalyticItemViewModel, MpAnalyticItemParameterViewModelBase>,
+        MpSelectorViewModelBase<MpAnalyticItemViewModel, MpPluginParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel,
@@ -34,9 +34,9 @@ namespace MpWpfApp {
 
         #region View Models
 
-        public Dictionary<int, MpAnalyticItemParameterViewModelBase> ParamLookup {
+        public Dictionary<int, MpPluginParameterViewModelBase> ParamLookup {
             get {
-                var paraDict = new Dictionary<int, MpAnalyticItemParameterViewModelBase>();
+                var paraDict = new Dictionary<int, MpPluginParameterViewModelBase>();
                 foreach (var pvm in Items) {
                     paraDict.Add(pvm.ParamEnumId, pvm);
                 }
@@ -246,12 +246,12 @@ namespace MpWpfApp {
             }
         }
 
-        public string AnalyzerPluginGuid {
+        public string PluginGuid {
             get {
                 if (Preset == null) {
                     return string.Empty;
                 }
-                return Preset.AnalyzerPluginGuid;
+                return Preset.PluginGuid;
             }
         }
 
@@ -273,8 +273,9 @@ namespace MpWpfApp {
             }
         }
 
+        public MpAnalyzerPluginFormat AnalyzerFormat => Preset == null ? null : Preset.ComponentFormat as MpAnalyzerPluginFormat;
 
-        public MpAnalyticItemPreset Preset { get; protected set; }
+        public MpPluginPreset Preset { get; protected set; }
         
         #endregion
 
@@ -317,15 +318,18 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpAnalyticItemPreset aip) {
+        public async Task InitializeAsync(MpPluginPreset aip) {
             IsBusy = true;
 
             Items.Clear();
 
             Preset = aip;//await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
 
-            var presetValues = await MpDataModelProvider.GetAnalyticItemPresetValuesByPresetId(AnalyticItemPresetId);
-            foreach(var paramFormat in Preset.AnalyzerFormat.parameters) {
+            if(AnalyzerFormat == null) {
+                Debugger.Break();
+            }
+            var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(AnalyticItemPresetId);
+            foreach(var paramFormat in AnalyzerFormat.parameters) {
                 if(!presetValues.Any(x=>x.ParamId == paramFormat.paramId)) {
                     string paramVal = string.Empty;
                     if(paramFormat.values != null && paramFormat.values.Count > 0) {
@@ -335,7 +339,7 @@ namespace MpWpfApp {
                             paramVal = paramFormat.values[0].value;
                         }
                     }
-                    var newPresetVal = await MpAnalyticItemPresetParameterValue.Create(
+                    var newPresetVal = await MpPluginPresetParameterValue.Create(
                         presetId: Preset.Id, 
                         paramEnumId: paramFormat.paramId, 
                         value: paramVal,
@@ -344,7 +348,7 @@ namespace MpWpfApp {
                     presetValues.Add(newPresetVal);
                 }
             }
-            presetValues.ForEach(x => x.ParameterFormat = Preset.AnalyzerFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+            presetValues.ForEach(x => x.ParameterFormat = AnalyzerFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
 
             foreach (var paramVal in presetValues) {                                
                 var naipvm = await CreateParameterViewModel(paramVal);
@@ -364,8 +368,8 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpAnalyticItemParameterViewModelBase> CreateParameterViewModel(MpAnalyticItemPresetParameterValue aipv) {
-            MpAnalyticItemParameterViewModelBase naipvm = null;
+        public async Task<MpPluginParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
+            MpPluginParameterViewModelBase naipvm = null;
 
             switch (aipv.ParameterFormat.controlType) {
                 case MpPluginParameterControlType.List:
@@ -415,7 +419,7 @@ namespace MpWpfApp {
         #region Protected Methods
 
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
-            var aipvm = sender as MpAnalyticItemParameterViewModelBase;
+            var aipvm = sender as MpPluginParameterViewModelBase;
             if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
                 aipvm.ValidationMessage = $"{aipvm.Label} is required";
             } else {
