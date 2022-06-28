@@ -4,7 +4,7 @@
   "version": "1.0",
   "credits": "Somebody",
   "guid": "c80163e4-66b6-4845-ba11-de182b9f8a62",
-  "iconUrl": "https://avatars.githubusercontent.com/u/11097237?s=200&v=4",
+  "iconUri": "https://avatars.githubusercontent.com/u/11097237?s=200&v=4",
   "ioType": {
     "isHttp": true
   },

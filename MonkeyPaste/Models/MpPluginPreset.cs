@@ -133,7 +133,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpPluginPreset> Create(
-            string analyzerPluginGuid = "", 
+            string pluginGuid = "", 
             string label = "",
             string description = "",
             int iconId = 0, 
@@ -150,14 +150,14 @@ namespace MonkeyPaste {
             if(iconId == 0) {
                 throw new Exception("needs icon");
             }
-            if(string.IsNullOrEmpty(analyzerPluginGuid)) {
+            if(string.IsNullOrEmpty(pluginGuid)) {
                 throw new Exception("needs analyzer id");
             }
 
             var newPluginPreset = new MpPluginPreset() {
                 Id = existingDefaultPresetId,   // only not 0 when reseting default preset
                 AnalyticItemPresetGuid = System.Guid.NewGuid(),
-                PluginGuid = analyzerPluginGuid,
+                PluginGuid = pluginGuid,
                 Label = label,
                 Description = description,
                 IconId = iconId,

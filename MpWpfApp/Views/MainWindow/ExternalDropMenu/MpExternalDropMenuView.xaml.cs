@@ -17,8 +17,8 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpDropMenuView.xaml
     /// </summary>
-    public partial class MpDropMenuView : MpUserControl<MpClipboardHandlerItemViewModel> {
-        public MpDropMenuView() {
+    public partial class MpExternalDropMenuView : MpUserControl<MpClipboardHandlerItemViewModel> {
+        public MpExternalDropMenuView() {
             InitializeComponent();
         }
 

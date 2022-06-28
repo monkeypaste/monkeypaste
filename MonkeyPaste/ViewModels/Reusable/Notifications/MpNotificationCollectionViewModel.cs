@@ -78,7 +78,7 @@ namespace MonkeyPaste {
             string title = "", 
             string msg = "", 
             double maxShowTimeMs = 3000,
-            MpNotificationDialogType msgType = MpNotificationDialogType.Message,
+            MpNotificationDialogType msgType = MpNotificationDialogType.Message,            
             string iconResourceKey = null,
             string iconBase64Str = null) {
             await ShowNotification(

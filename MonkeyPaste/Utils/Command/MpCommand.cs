@@ -12,8 +12,8 @@ namespace MonkeyPaste {
         bool CanExecute(object parameter);
         void Execute(object parameter);
     }
-    public class MpCommand<T> : Command where T: new() {
-        public MpCommand(Action<object> execute) : base(execute) { }
+    public class MpCommand<T> : Command where T: class {
+        public MpCommand(Action<T> execute) : base(new Action<object>(o => execute((T)o))) { }
 
         public MpCommand(Action execute) : this(o => execute()) { }
 

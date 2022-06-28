@@ -21,7 +21,7 @@
             MouseLeave="Border_MouseLeave">
         <DockPanel LastChildFill="False">
             <Image DockPanel.Dock="Left"
-                   Source="{Binding IconId,
+                   Source="{Binding PluginIconId,
                                     Converter={StaticResource IconIdToImageSourceConverter}}"
                    Margin="0"
                    Height="15"

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -44,6 +45,21 @@ namespace MpWpfApp {
             }
             cbhisv.ClipboardFormatPresetParameterListBoxView.DataContext = dg.SelectedItem;
             cbhisv.ClipboardFormatPresetParameterListBoxView.ConfigurePresetListBox.Items.Refresh();
+        }
+
+        private void Grid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            if (sender is Panel p) {
+                var tbb = p.GetVisualDescendent<TextBoxBase>();
+                if (tbb.IsVisible) {
+                    return;
+                }
+                e.Handled = true;
+                var cbfpvm = tbb.DataContext as MpClipboardFormatPresetViewModel;
+                if (cbfpvm == null) {
+                    return;
+                }
+                cbfpvm.IsLabelReadOnly = false;
+            }
         }
 
         //private void Button_MouseEnter(object sender, MouseEventArgs e) {

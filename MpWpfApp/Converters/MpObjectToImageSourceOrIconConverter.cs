@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 
@@ -28,6 +29,10 @@ namespace MpWpfApp {
                     }
                     return new MpStringResourceToImageSourceConverter().Convert(value, targetType, parameter, culture);
                 }
+            } else if(value is Uri valueUri) {
+                return new BitmapImage() {
+                    UriSource = valueUri
+                };
             }
             return null;
         }

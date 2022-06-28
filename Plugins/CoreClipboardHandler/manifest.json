@@ -5,7 +5,7 @@
   "credits": "Somebody",
   "guid": "a7df5078-8c85-4819-9518-dbf389612298",
   "url": "https://www.monkeypaste.com",
-  "iconUrl": "https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-clipboard-1024.png",
+  "iconUri": "https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-clipboard-1024.png",
   "ioType": {
     "isDll": true
   },
@@ -13,7 +13,7 @@
     "readers": [
       {
         "handlerGuid": "676278d9-6c9b-4efd-b5e9-9c5840222c14",
-        "iconUrl": "text.png",
+        "iconUri": "text.png",
         "displayName": "Text",
         "clipboardName": "Text",
         "parameters": [
@@ -51,7 +51,7 @@
       {
         "handlerGuid": "58558048-a275-4377-9108-8fb1bed3cd5e",
         "displayName": "Rtf",
-        "iconUrl": "rtf.png",
+        "iconUri": "rtf.png",
         "clipboardName": "Rich Text Format",
         "parameters": [
           {
@@ -88,7 +88,7 @@
       {
         "handlerGuid": "936e7b68-72c9-4a8a-ada1-a60f21c93b10",
         "displayName": "Html",
-        "iconUrl": "html.png",
+        "iconUri": "html.png",
         "clipboardName": "HTML Format",
         "parameters": [
           {
@@ -125,7 +125,7 @@
       {
         "handlerGuid": "8af77575-fd03-4c39-87c5-688eda230f06",
         "displayName": "Bitmap",
-        "iconUrl": "bitmap.png",
+        "iconUri": "bitmap.png",
         "clipboardName": "Bitmap",
         "parameters": [
           {
@@ -171,7 +171,7 @@
       {
         "handlerGuid": "bb997630-985a-420e-808f-60e31625c06f",
         "displayName": "File",
-        "iconUrl": "folder.png",
+        "iconUri": "folder.png",
         "clipboardName": "FileDrop",
         "parameters": [
           {
@@ -199,7 +199,7 @@
       {
         "handlerGuid": "34b250a9-c7d4-4290-a15f-bb229867b76b",
         "displayName": "Csv",
-        "iconUrl": "csv.png",
+        "iconUri": "csv.png",
         "clipboardName": "CSV",
         "parameters": [
           {
@@ -221,7 +221,7 @@
     "writers": [
       {
         "handlerGuid": "fc932676-f688-4f0c-a558-9918241397db",
-        "iconUrl": "text.png",
+        "iconUri": "text.png",
         "displayName": "Text",
         "clipboardName": "Text",
         "parameters": [
@@ -259,7 +259,7 @@
       {
         "handlerGuid": "ac15a058-dae6-4a66-9700-c415fd5b89f9",
         "displayName": "Rtf",
-        "iconUrl": "rtf.png",
+        "iconUri": "rtf.png",
         "clipboardName": "Rich Text Format",
         "parameters": [
           {
@@ -296,7 +296,7 @@
       {
         "handlerGuid": "825e4325-908f-48c5-94a1-53eb9af4c470",
         "displayName": "Html",
-        "iconUrl": "html.png",
+        "iconUri": "html.png",
         "clipboardName": "HTML Format",
         "parameters": [
           {
@@ -333,7 +333,7 @@
       {
         "handlerGuid": "57f363e9-b478-46e7-a39b-4b143c3d3e7d",
         "displayName": "Bitmap",
-        "iconUrl": "bitmap.png",
+        "iconUri": "bitmap.png",
         "clipboardName": "Bitmap",
         "parameters": [
           {
@@ -379,7 +379,7 @@
       {
         "handlerGuid": "e05ed3da-3b2a-4339-8524-2ea339c0856b",
         "displayName": "File",
-        "iconUrl": "folder.png",
+        "iconUri": "folder.png",
         "clipboardName": "FileDrop",
         "parameters": [
           {
@@ -407,7 +407,7 @@
       {
         "handlerGuid": "10ab62ae-89fa-4445-895d-b4e5463e6df0",
         "displayName": "Csv",
-        "iconUrl": "csv.png",
+        "iconUri": "csv.png",
         "clipboardName": "CSV",
         "parameters": [
           {

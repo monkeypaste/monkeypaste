@@ -31,12 +31,13 @@ namespace MonkeyPaste.Common.Plugin {
 
     public class MpClipboardHandlerFormat : MpPluginComponentBaseFormat {
         
-        public string iconUrl { get; set; }
+        public string iconUri { get; set; }
         
         public string handlerGuid { get; set; }
         public string displayName { get; set; }
         public string clipboardName { get; set; }
 
+        public string description { get; set; }
     }
 
     public class MpClipboardReaderRequest : MpPluginRequestFormatBase {

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 
@@ -68,11 +69,32 @@ namespace MpWpfApp {
 
         public string IconResourceKeyStr {
             get {
-                string keyStr = Format + "FormatIcon";
-                if(keyStr.IsStringResourcePath()) {
-                    return keyStr;
+                string keyStr = "FormatIcon";
+                switch(FormatName) {
+                    case MpPortableDataFormats.Rtf:
+                        keyStr = "Rtf" + keyStr;
+                        break;
+                    case MpPortableDataFormats.OemText:
+                    case MpPortableDataFormats.Unicode:
+                    case MpPortableDataFormats.Text:
+                        keyStr = "Text" + keyStr;
+                        break;
+                    case MpPortableDataFormats.Html:
+                        keyStr = "Html" + keyStr;
+                        break;
+                    case MpPortableDataFormats.Csv:
+                        keyStr = "Csv" + keyStr;
+                        break;
+                    case MpPortableDataFormats.Bitmap:
+                        keyStr = "Bitmap" + keyStr;
+                        break;
+                    default:
+                        keyStr = "QuestionMarkIcon";
+                        break;
                 }
-                return "QuestionMarkIcon";
+                
+
+                return MpPlatformWrapper.Services.PlatformResource.GetResource(keyStr) as string;
             }
         }
         #endregion

@@ -24,6 +24,9 @@ using Newtonsoft.Json.Linq;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.Windows.Data;
+using FFImageLoading.Forms.Handlers;
+using System.Windows.Media.Imaging;
+using System.Windows.Controls;
 
 namespace MpWpfApp {
     [Flags]
@@ -74,7 +77,7 @@ namespace MpWpfApp {
                     });
                 return new MpMenuItemViewModel() {
                     Header = Title, 
-                    IconId = IconId,
+                    IconId = PluginIconId,
                     SubItems = subItems
                 };
             }
@@ -297,7 +300,14 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region MpAnalyticItem
+        #region Db
+
+        public int PluginIconId { get; private set; }
+        
+        #endregion
+
+        #region Analyzer Plugin
+
 
         public MpAnalyzerInputFormatFlags InputFormatFlags { 
             get {
@@ -341,8 +351,6 @@ namespace MpWpfApp {
                 return flags;
             }
         }
-
-        public int IconId { get; private set; }
 
         public string Title {
             get {
@@ -408,54 +416,25 @@ namespace MpWpfApp {
             IsBusy = true;
 
             PluginFormat = analyzerPlugin;
+
             if (AnalyzerPluginComponent == null) {
                 throw new Exception("Cannot find component");
             }
-            
-            var presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(PluginFormat.guid);
 
-            if (string.IsNullOrEmpty(PluginFormat.iconUrl)) {
-                IconId = MpPreferences.ThisAppIcon.Id;
-            } else if (presets.Count > 0 &&
-                presets.FirstOrDefault(x => x.IsDefault) != default &&
-                      presets.FirstOrDefault(x => x.IsDefault).IconId > 0) {
-                IconId = presets.FirstOrDefault(x => x.IsDefault).IconId;
-            } else if (presets.Any(x => x.IconId > 0)) {
-                IconId = presets.FirstOrDefault(x => x.IconId > 0).IconId;
-            } else {
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl, PluginFormat.RootDirectory);
-                var icon = await MpIcon.Create(
-                    iconImgBase64: bytes.ToBase64String(),
-                    createBorder: false);
-                IconId = icon.Id;
+            PluginIconId = await GetOrCreateIconIdAsync();
+
+            while(MpIconCollectionViewModel.Instance.IsAnyBusy) {
+                await Task.Delay(100);
             }
-
-            bool isNew = presets.Count == 0;
-            bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
-            bool needsReset = isNew || isManifestModified;
-            if (needsReset) {
-                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
-                MpNotificationCollectionViewModel.Instance.ShowMessage(
-                    msgType: MpNotificationDialogType.AnalyzerUpdated,
-                    title: $"Analyzer '{Title}' Updated",
-                    iconBase64Str: ivm == null ? null : ivm.IconBase64,
-                    msg: "Reseting presets to default...")
-                    .FireAndForgetSafeAsync(this);
-
-                presets = await ResetPresets(presets);
-                isNew = true;
-            }
-
-            presets.ForEach(x => x.ComponentFormat = AnalyzerPluginFormat);
-
+                       
             Items.Clear();
 
-            foreach (var preset in presets.OrderBy(x=>x.SortOrderIdx)) {
-                var naipvm = await CreatePresetViewModel(preset);
+            var presets = await PreparePresetModelsAsync();
+            foreach (var preset in presets) {
+                var naipvm = await CreatePresetViewModelAsync(preset);
                 Items.Add(naipvm);
             }
 
-            OnPropertyChanged(nameof(IconId));
             OnPropertyChanged(nameof(Items));
 
             while (Items.Any(x => x.IsBusy)) {
@@ -467,7 +446,7 @@ namespace MpWpfApp {
             IsBusy = false;
         }
 
-        public async Task<MpAnalyticItemPresetViewModel> CreatePresetViewModel(MpPluginPreset aip) {
+        public async Task<MpAnalyticItemPresetViewModel> CreatePresetViewModelAsync(MpPluginPreset aip) {
             MpAnalyticItemPresetViewModel naipvm = new MpAnalyticItemPresetViewModel(this);
             await naipvm.InitializeAsync(aip);
             return naipvm;
@@ -567,16 +546,16 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private async Task<MpPluginPreset> CreateDefaultPresetModel(int existingDefaultPresetId = 0) {
+        private async Task<MpPluginPreset> CreateDefaultPresetModelAsync(int existingDefaultPresetId = 0) {
             if(AnalyzerPluginFormat.parameters == null) {
                 throw new Exception($"Parameters for '{Title}' not found");
             }
 
             var aip = await MpPluginPreset.Create(
-                                analyzerPluginGuid: PluginFormat.guid,
+                                pluginGuid: PluginFormat.guid,
                                 isDefault: true,
                                 label: $"{Title} - Default",
-                                iconId: IconId,
+                                iconId: PluginIconId,
                                 sortOrderIdx: existingDefaultPresetId == 0 ? 0 : Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
                                 description: $"Auto-generated default preset for '{Title}'",
                                 format: AnalyzerPluginFormat,
@@ -646,6 +625,7 @@ namespace MpWpfApp {
             }
         }
 
+
         private void UpdatePresetSortOrder(bool fromModel = false) {
             if(fromModel) {
                 Items.Sort(x => x.SortOrderIdx);
@@ -656,7 +636,42 @@ namespace MpWpfApp {
             }
         }
 
-        private async Task<List<MpPluginPreset>> ResetPresets(List<MpPluginPreset> presets = null) {
+
+        private async Task<int> GetOrCreateIconIdAsync() {
+            var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUri, PluginFormat.RootDirectory); ;
+            var icon = await MpIcon.Create(
+                iconImgBase64: bytes.ToBase64String(),
+                createBorder: false);
+
+            return icon.Id;
+        }
+
+        private async Task<IEnumerable<MpPluginPreset>> PreparePresetModelsAsync() {
+            var presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(PluginFormat.guid);
+
+            bool isNew = presets.Count == 0;
+            bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
+            bool needsReset = isNew || isManifestModified;
+            if (needsReset) {
+                var ivm = MpIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PluginIconId);
+
+                MpNotificationCollectionViewModel.Instance.ShowMessage(
+                    msgType: MpNotificationDialogType.PluginUpdated,
+                    title: $"Analyzer '{Title}' Updated",
+
+                    iconBase64Str: ivm.IconBase64,
+                    msg: "Reseting presets to default...")
+                    .FireAndForgetSafeAsync(this);
+
+                presets = await ResetPresetsAsync(presets);
+                isNew = true;
+            }
+
+            presets.ForEach(x => x.ComponentFormat = AnalyzerPluginFormat);
+            return presets.OrderBy(x=>x.SortOrderIdx);
+        }
+
+        private async Task<List<MpPluginPreset>> ResetPresetsAsync(List<MpPluginPreset> presets = null) {
             //if manifest has been modified
             //(for now clear all presets and either load predefined presets or create from parameter default values)
 
@@ -671,16 +686,16 @@ namespace MpWpfApp {
             presets.Clear();
             if(AnalyzerPluginFormat.presets.IsNullOrEmpty()) {
                 //only generate default preset if no presets defined in manifest
-                var defualtPreset = await CreateDefaultPresetModel();
+                var defualtPreset = await CreateDefaultPresetModelAsync();
                 presets.Add(defualtPreset);
             } else {
                 //when presets are defined in manifest create the preset and its values in the db
                 foreach (var preset in AnalyzerPluginFormat.presets) {
                     var aip = await MpPluginPreset.Create(
-                        analyzerPluginGuid: PluginFormat.guid,
+                        pluginGuid: PluginFormat.guid,
                         isDefault: preset.isDefault,
                         label: preset.label,
-                        iconId: IconId,
+                        iconId: PluginIconId,
                         sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(preset),
                         description: preset.description,
                         format: AnalyzerPluginFormat,
@@ -831,21 +846,22 @@ namespace MpWpfApp {
                    isOkType;
         }
 
-        public ICommand CreateNewPresetCommand => new RelayCommand<object>(
+        public ICommand CreateNewPresetCommand => new MpAsyncCommand<object>(
             async (args) => {
                 IsBusy = true;
                 bool isActionPreset = false;
                 if(args != null) {
                     isActionPreset = (bool)args;
                 }
+
                 MpPluginPreset newPreset = await MpPluginPreset.Create(
-                        analyzerPluginGuid: PluginGuid,
+                        pluginGuid: PluginGuid,
                         format:AnalyzerPluginFormat,
                         isActionPreset: isActionPreset,
-                        iconId: IconId,
+                        iconId: PluginIconId,
                         label: GetUniquePresetName());
 
-                var npvm = await CreatePresetViewModel(newPreset);
+                var npvm = await CreatePresetViewModelAsync(newPreset);
                 Items.Add(npvm);
                 Items.ForEach(x => x.IsSelected = x == npvm);
 
@@ -854,7 +870,7 @@ namespace MpWpfApp {
                 IsBusy = false;
             });
 
-        public ICommand SelectPresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
+        public ICommand SelectPresetCommand => new MpCommand<MpAnalyticItemPresetViewModel>(
              (selectedPresetVm) => {
                 //if(!IsLoaded) {
                 //    await LoadChildren();
@@ -865,7 +881,7 @@ namespace MpWpfApp {
                  SelectedItem = selectedPresetVm;
             });
 
-        public ICommand ManageAnalyticItemCommand => new RelayCommand(
+        public ICommand ManageAnalyticItemCommand => new MpCommand(
              () => {
                  if (!IsSelected) {
                      Parent.SelectedItem = this;
@@ -880,7 +896,7 @@ namespace MpWpfApp {
 
              });
 
-        public ICommand DeletePresetCommand => new RelayCommand<MpAnalyticItemPresetViewModel>(
+        public ICommand DeletePresetCommand => new MpAsyncCommand<MpAnalyticItemPresetViewModel>(
             async (presetVm) => {
                 if(presetVm.IsDefault) {
                     return;
@@ -904,7 +920,7 @@ namespace MpWpfApp {
                     throw new Exception("Analyzer is supposed to have a default preset");
                 }
 
-                var defaultPresetModel = await CreateDefaultPresetModel(defvm.AnalyticItemPresetId);
+                var defaultPresetModel = await CreateDefaultPresetModelAsync(defvm.AnalyticItemPresetId);
 
                 await defvm.InitializeAsync(defaultPresetModel);
 
@@ -914,7 +930,7 @@ namespace MpWpfApp {
                 IsBusy = false;
             });
 
-        public ICommand ShiftPresetCommand => new RelayCommand<object>(
+        public ICommand ShiftPresetCommand => new MpAsyncCommand<object>(
             // [0] = shift dir [1] = presetvm
             async (args) => {
                 var argParts = args as object[];
@@ -956,7 +972,7 @@ namespace MpWpfApp {
                         throw new Exception("DuplicatedPresetCommand must have preset as argument");
                     }
                     var dp = await aipvm.Preset.CloneDbModel();
-                    var dpvm = await CreatePresetViewModel(dp);
+                    var dpvm = await CreatePresetViewModelAsync(dp);
                     Items.Add(dpvm);
                     Items.ForEach(x => x.IsSelected = x == dpvm);
                     OnPropertyChanged(nameof(Items));

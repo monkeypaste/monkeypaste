@@ -197,6 +197,9 @@ namespace MpWpfApp {
                     if(e.NewValue is bool isEnabled) {
                         if(isEnabled) {
                             if (obj is FrameworkElement fe) {
+                                if(fe.Name == "HandlerFormatStackPanel") {
+                                    Debugger.Break();
+                                }
                                 if (fe.IsLoaded) {
                                     Fe_Loaded(obj, null);
                                 } else {
@@ -220,13 +223,21 @@ namespace MpWpfApp {
             if (sender is FrameworkElement fe) {
                 fe.MouseEnter += Fe_MouseEnter;
                 fe.MouseLeave += Fe_MouseLeave;
-                fe.Unloaded += Fe_Unloaded;
+                fe.Unloaded += Fe_Unloaded; 
+                if(e == null) {
+                    fe.Loaded += Fe_Loaded;
+                }
             } else if (sender is FrameworkContentElement fce) {
                 fce.MouseEnter += Fe_MouseEnter;
                 fce.MouseLeave += Fe_MouseLeave;
                 fce.Unloaded += Fe_Unloaded;
-                return;
-            } 
+                if (e == null) {
+                    fce.Loaded += Fe_Loaded;
+                }
+            }  else if(sender is ListBoxItem cc) {
+                cc.MouseEnter += Fe_MouseEnter;
+                cc.MouseLeave += Fe_MouseLeave;
+            }
         }
         private static void Fe_Unloaded(object sender, RoutedEventArgs e) {
             if (sender is FrameworkElement fe) {
@@ -237,7 +248,6 @@ namespace MpWpfApp {
                 fce.MouseEnter -= Fe_MouseEnter;
                 fce.MouseLeave -= Fe_MouseLeave;
                 fce.Unloaded -= Fe_Unloaded;
-                return;
             }
         }
 

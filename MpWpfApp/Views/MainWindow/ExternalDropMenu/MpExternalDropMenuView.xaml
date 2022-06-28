@@ -1,4 +1,4 @@
-﻿<local:MpUserControl x:Class="MpWpfApp.MpDropMenuView"
+﻿<local:MpUserControl x:Class="MpWpfApp.MpExternalDropMenuView"
                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -81,7 +81,8 @@
                                                         Converter={StaticResource IconIdToImageSourceConverter}}" />
                                 <TextBlock Grid.Row="1"
                                            Background="Transparent"
-                                           Foreground="{Binding ItemTitleForegroundBrush}"
+                                           Foreground="{Binding ItemTitleForegroundHexColor,
+                                                                Converter={StaticResource StringHexToBrushConverter}}"
                                            HorizontalAlignment="Center"
                                            FontSize="12"
                                            Text="{Binding Title}" />

@@ -4,7 +4,7 @@
   "version": "1.0",
   "credits": "Somebody",
   "guid": "f7e66100-ea62-4209-ab58-b2915bcedcad",
-  "iconUrl": "color-palette.png",
+  "iconUri": "color-palette.png",
   "ioType": {
     "isDll": true
   },

@@ -13,7 +13,7 @@
                      d:DataContext="{d:DesignInstance Type=local:MpClipboardFormatViewModel,
                                                       IsDesignTimeCreatable=False}">
     <Expander x:Name="FormatExpander"
-              Padding="5,0"
+              Padding="10"
               IsExpanded="{Binding IsExpanded,
                                    Mode=TwoWay}">
         <Expander.Header>
@@ -25,10 +25,12 @@
                 <Image Grid.Column="0"
                        Width="20"
                        Height="20"
+                       Margin="3,0,0,0"
                        VerticalAlignment="Center"
                        Source="{Binding IconResourceKeyStr,
                                         Converter={StaticResource StringResourceToImageSourceConverter}}" />
                 <TextBlock Grid.Column="1"
+                           Margin="7,0,0,0"
                            FontSize="16"
                            FontWeight="SemiBold"
                            Text="{Binding FormatName}" />

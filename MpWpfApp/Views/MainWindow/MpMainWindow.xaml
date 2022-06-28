@@ -40,11 +40,11 @@
         <i:Interaction.Behaviors>
             <local:MpExternalDropBehavior x:Name="ExternalDropBehavior" />
         </i:Interaction.Behaviors>
-        <local:MpDropMenuView DataContext="{Binding SelectedItem,
-                                                    Source={x:Static local:MpClipboardHandlerCollectionViewModel.Instance}}"
-                              Visibility="{Binding IsDraggingToExternal,
-                                                   Converter={StaticResource BoolToVisibilityConverter},
-                                                   FallbackValue=Collapsed}" />
+        <local:MpExternalDropMenuView DataContext="{Binding SelectedItem,
+                                                            Source={x:Static local:MpClipboardHandlerCollectionViewModel.Instance}}"
+                                      Visibility="{Binding IsDraggingToExternal,
+                                                           Converter={StaticResource BoolToVisibilityConverter},
+                                                           FallbackValue=Collapsed}" />
 
         <!--<local:MpQuillEditorView x:Name="QuillConverterView"
                                  IsConverterInstance="True"
@@ -323,12 +323,6 @@
                                                           DataContext="{x:Static local:MpClipboardHandlerCollectionViewModel.Instance}"
                                                           Visibility="{Binding IsSidebarVisible,
                                                                                Converter={StaticResource BoolToVisibilityConverter}}" />
-                <!--<local:MpClipboardFormatListBoxView x:Name="ManageClipboardHandlerItemsContainerView"
-                                                    Grid.Row="1"
-                                                    Grid.Column="1"
-                                                    DataContext="{x:Static local:MpClipboardHandlerCollectionViewModel.Instance}"
-                                                    Visibility="{Binding IsSidebarVisible,
-                                                                         Converter={StaticResource BoolToVisibilityConverter}}" />-->
                 <local:MpAnalyticItemSelectorView x:Name="ManageAnalyticItemsContainerView"
                                                   Grid.Row="1"
                                                   Grid.Column="1"

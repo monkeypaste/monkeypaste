@@ -4,7 +4,7 @@
   "version": "1.0",
   "credits": "Microsoft",
   "guid": "34cbd44d-dc32-4bf6-a3b6-efc7bafea22c",
-  "iconUrl": "https://docs.microsoft.com/en-us/answers/topics/25438/icon.html?t=282210",
+  "iconUri": "https://docs.microsoft.com/en-us/answers/topics/25438/icon.html?t=282210",
   "ioType": {
     "isHttp": true
   },

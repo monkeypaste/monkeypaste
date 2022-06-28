@@ -5,7 +5,7 @@
   "credits": "Somebody",
   "guid": "c85d4bb0-a294-4574-a040-6b928ac14dfa",
   "url": "https://www.monkeypaste.com",
-  "iconUrl": "https://cdn-icons-png.flaticon.com/512/889/889669.png",
+  "iconUri": "https://cdn-icons-png.flaticon.com/512/889/889669.png",
   "ioType": {
     "isDll": true
   },

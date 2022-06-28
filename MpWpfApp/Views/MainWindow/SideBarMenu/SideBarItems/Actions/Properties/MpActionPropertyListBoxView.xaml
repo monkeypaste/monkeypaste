@@ -29,17 +29,26 @@
                  ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                    <Setter Property="Margin" Value="{Binding ActionId, Converter={StaticResource ActionIdToThicknessConverter}, FallbackValue=0 0 0 0}" />
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected}" />
+                    <Setter Property="FocusVisualStyle"
+                            Value="{x:Null}" />
+                    <Setter Property="Margin"
+                            Value="{Binding ActionId,
+                                            Converter={StaticResource ActionIdToThicknessConverter},
+                                            FallbackValue=0 0 0 0,
+                                            TargetNullValue=0 0 0 0}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                 <ContentPresenter />
                                 <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="Background" Value="Transparent" />
+                                    <Trigger Property="IsSelected"
+                                             Value="True">
+                                        <Setter Property="BorderBrush"
+                                                Value="Transparent" />
+                                        <Setter Property="Background"
+                                                Value="Transparent" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

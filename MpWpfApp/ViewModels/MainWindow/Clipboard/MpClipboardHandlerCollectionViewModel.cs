@@ -252,10 +252,6 @@ namespace MpWpfApp {
                     presetToSelect.Parent.Parent.SelectedItem = presetToSelect.Parent;
                     SelectedItem = presetToSelect.Parent.Parent;
                 }
-
-
-
-
             }
 
             OnPropertyChanged(nameof(SelectedItem));
@@ -386,6 +382,7 @@ namespace MpWpfApp {
                     break;
             }
         }
+
         #endregion
 
         #region Commands
@@ -456,6 +453,7 @@ namespace MpWpfApp {
 
         public ICommand UnregisterClipboardFormatCommand => new RelayCommand<object>(
             (args) => {
+                return;
                 if (args is Object[] argParts &&
                    argParts.Length == 3 &&
                    argParts[0] is string format &&

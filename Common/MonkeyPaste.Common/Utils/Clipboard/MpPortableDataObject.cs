@@ -141,9 +141,9 @@ namespace MonkeyPaste.Common {
 
             _formatLookup = new Dictionary<int, MpPortableDataFormat>();
 
-            //foreach(string formatName in _defaultFormatNames) {
-            //    RegisterDataFormat(formatName);
-            //}
+            foreach (string formatName in _defaultFormatNames) {
+                RegisterDataFormat(formatName);
+            }
         }
         public static MpPortableDataFormat GetDataFormat(int id) {
             if (id < 0 || id >= _formatLookup.Count) {

@@ -26,7 +26,7 @@ namespace MonkeyPaste {
         DbError,
         LoadComplete,
         Help,
-        AnalyzerUpdated,
+        PluginUpdated,
         Message,
         UserTriggerEnabled,
         UserTriggerDisabled,

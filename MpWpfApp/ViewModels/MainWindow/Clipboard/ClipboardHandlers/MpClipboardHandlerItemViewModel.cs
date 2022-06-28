@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using System.IO;
 
 namespace MpWpfApp {
     public class MpClipboardHandlerItemViewModel :
@@ -15,6 +16,11 @@ namespace MpWpfApp {
         MpIMenuItemViewModel, 
         MpITreeItemViewModel,
         MpIBoxViewModel {
+
+        #region Private
+
+       
+        #endregion
 
         #region Properties
 
@@ -70,7 +76,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
-        public int IconId { get; set; }
+
+        public int PluginIconId { get; private set; }
+
+
+        #region Plugin
+
         public string HandlerName {
             get {
                 if(PluginFormat == null) {
@@ -83,6 +94,8 @@ namespace MpWpfApp {
         public MpPluginFormat PluginFormat { get; set; }
 
         public MpClipboardHandlerFormats ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.clipboardHandler;
+
+        #endregion
 
         #endregion
 
@@ -107,13 +120,15 @@ namespace MpWpfApp {
 
             PluginFormat = pf;
 
-            foreach(var reader in ClipboardPluginFormat.readers) {
-                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(PluginFormat, ClipboardPluginFormat.readers.IndexOf(reader),true);
+            PluginIconId = await GetOrCreateIconIdAsync();
+
+            foreach (var reader in ClipboardPluginFormat.readers) {
+                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(PluginFormat, reader);
                 Items.Add(hcfvm);
             }
 
             foreach (var writer in ClipboardPluginFormat.writers) {
-                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(PluginFormat, ClipboardPluginFormat.writers.IndexOf(writer), false);
+                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(PluginFormat, writer);
                 Items.Add(hcfvm);
             }
 
@@ -121,26 +136,13 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
-
-            if (string.IsNullOrEmpty(PluginFormat.iconUrl)) {
-                IconId = MpPreferences.ThisAppIcon.Id;
-
-            } else {
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUrl, PluginFormat.RootDirectory);
-                var icon = await MpIcon.Create(
-                    iconImgBase64: bytes.ToBase64String(),
-                    createBorder: false);
-                IconId = icon.Id;
-            }
-
             OnPropertyChanged(nameof(Items));
-            OnPropertyChanged(nameof(IconId));
             IsBusy = false;
         }
 
-        public async Task<MpHandledClipboardFormatViewModel> CreateHandledClipboardFormatViewModelAsync(MpPluginFormat pf, int handlerIdx, bool isReader) {
+        public async Task<MpHandledClipboardFormatViewModel> CreateHandledClipboardFormatViewModelAsync(MpPluginFormat pf, MpClipboardHandlerFormat format) {
             var hcfvm = new MpHandledClipboardFormatViewModel(this);
-            await hcfvm.InitializeAsync(pf,handlerIdx, isReader);
+            await hcfvm.InitializeAsync(pf, format);
             return hcfvm;
         }
 
@@ -165,8 +167,19 @@ namespace MpWpfApp {
         }
 
         private bool ValidatePlugin(MpPluginFormat pf) {
+            if(pf == null) {
+                MpConsole.WriteTraceLine("plugin error, not registered");
+                return false;
+            }
+
             bool isValid = true;
             var sb = new StringBuilder();
+
+
+            if(string.IsNullOrEmpty(pf.iconUri) || !Uri.IsWellFormedUriString(pf.iconUri,UriKind.RelativeOrAbsolute)) {
+                sb.AppendLine($"Plugin {pf.title} has malformed icon uri '{pf.iconUri}', plugin must have valid icon");
+                isValid = false;
+            }
             var dupNames = pf.clipboardHandler.readers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
             if (dupNames.Count() > 0) {
                 sb.AppendLine("clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in readers");
@@ -199,6 +212,14 @@ namespace MpWpfApp {
             }
             MpConsole.WriteLine(sb.ToString());
             return false;
+        }
+
+        private async Task<int> GetOrCreateIconIdAsync() {
+            var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUri, PluginFormat.RootDirectory);
+            var icon = await MpIcon.Create(
+                iconImgBase64: bytes.ToBase64String(),
+                createBorder: false);
+            return icon.Id;
         }
         #endregion
     }

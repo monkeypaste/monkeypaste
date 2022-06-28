@@ -97,29 +97,43 @@ namespace MpWpfApp {
 
         protected override async void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if(e is MpIcon i) {
+                IsBusy = true;
                 var ivm = await CreateIconViewModel(i);
                 IconViewModels.Add(ivm);
+                while(ivm.IsBusy) {
+                    await Task.Delay(100);
+                }
+                IsBusy = false;
             }
         }
 
         protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpIcon i) {
                 var ivm = IconViewModels.FirstOrDefault(x => x.IconId == i.Id);
+                IsBusy = true;
+
                 if(ivm == null) {
                     ivm = await CreateIconViewModel(i);
                     IconViewModels.Add(ivm);
                 } else {
                     await ivm.InitializeAsync(i);
                 }
-                
+                while (ivm.IsBusy) {
+                    await Task.Delay(100);
+                }
+                IsBusy = false;
             }
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpIcon i) {
+                IsBusy = true;
+
                 var ivm = IconViewModels.FirstOrDefault(x => x.IconId == i.Id);
                 IconViewModels.Remove(ivm);
                 OnPropertyChanged(nameof(IconViewModels));
+
+                IsBusy = false;
             }
         }
 

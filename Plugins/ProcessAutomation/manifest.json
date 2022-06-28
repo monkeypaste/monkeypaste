@@ -4,7 +4,7 @@
   "version": "1.0",
   "credits": "Somebody",
   "guid": "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e",
-  "iconUrl": "https://img.icons8.com/external-flaticons-flat-flat-icons/344/external-command-line-computer-science-flaticons-flat-flat-icons.png",
+  "iconUri": "https://img.icons8.com/external-flaticons-flat-flat-icons/344/external-command-line-computer-science-flaticons-flat-flat-icons.png",
   "ioType": {
     "isDll": true
   },

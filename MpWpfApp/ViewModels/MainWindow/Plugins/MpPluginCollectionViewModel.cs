@@ -5,15 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste;
-using MonkeyPaste.Plugin;
+using MonkeyPaste.Common.Plugin;
 
 namespace MpWpfApp {
-    public class MpPluginCollectionViewModelBase : 
+    public abstract class MpPluginItemViewModelBase : 
         MpViewModelBase,
-        MpISingletonViewModel<MpPluginCollectionViewModelBase>,
-        MpISidebarItemViewModel,
         MpITreeItemViewModel {
 
+        #region Statics
+
+
+        #endregion
         #region Properties
 
         #region View Models
@@ -24,8 +26,8 @@ namespace MpWpfApp {
 
         #region MpISingletonViewModel Implementation
 
-        private static MpPluginCollectionViewModelBase _instance;
-        public static MpPluginCollectionViewModelBase Instance => _instance ?? (_instance = new MpPluginCollectionViewModelBase());
+        private static MpPluginItemViewModelBase _instance;
+        public static MpPluginItemViewModelBase Instance => _instance ?? (_instance = new MpPluginItemViewModelBase());
 
         #endregion
 
@@ -51,18 +53,14 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpPluginCollectionViewModelBase() : base() { }
+        public MpPluginItemViewModelBase() : base() { }
 
         #endregion
 
 
         #region Public Methods
 
-        public async Task Init() {
-            await Task.Delay(1);
-
-        }
-
+        public abstract Task InitAsync();
 
 
         #endregion

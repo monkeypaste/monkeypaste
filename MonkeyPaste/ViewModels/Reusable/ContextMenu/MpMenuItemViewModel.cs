@@ -118,6 +118,8 @@ namespace MonkeyPaste {
 
         public string IconHexStr { get; set; } = string.Empty;
 
+        public Uri IconSourceUri { get; set; }
+
         public object IconSourceObj {
             get {
                 if(IconId > 0) {
@@ -128,6 +130,9 @@ namespace MonkeyPaste {
                 }
                 if(IconResourceKey.IsStringResourcePath()) {
                     return IconResourceKey;
+                }
+                if(IconSourceUri != null) {
+                    return IconSourceUri;
                 }
                 return null;
             }

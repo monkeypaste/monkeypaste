@@ -4,7 +4,7 @@
   "version": "1.0",
   "credits": "Somebody",
   "guid": "084abd2e-801d-4637-9054-b42f1b159c32",
-  "iconUrl": "web.png",
+  "iconUri": "web.png",
   "ioType": {
     "isDll": true
   },

@@ -138,6 +138,9 @@ namespace MpWpfApp {
         public async Task InitAsync() {
             IsBusy = true;
 
+            //while(MpIconCollectionViewModel.Instance.IsAnyBusy) {
+            //    await Task.Delay(100);
+            //}
             Items.Clear();
 
             var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIAnalyzeAsyncComponent || x.Value.Component is MpIAnalyzerComponent);

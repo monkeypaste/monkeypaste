@@ -420,30 +420,16 @@ namespace MonkeyPaste {
                 try {
                     httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
                     byte[] bytes = await httpClient.GetByteArrayAsync(uri).TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
-                    using (var fs = new FileStream("favicon.ico", FileMode.Create)) {                    
-                        fs.Write(bytes, 0, bytes.Length);
-                        return bytes;                    
-                    }
+                    return bytes;
+                    //using (var fs = new FileStream("favicon.ico", FileMode.Create)) {
+                    //    await fs.WriteAsync(bytes, 0, bytes.Length);
+                    //    return bytes;                    
+                    //}
                 } catch (Exception ex) {
                     MpConsole.WriteTraceLine(ex);
                 }
             }
             return null;
-        }
-
-        public static async Task<byte[]> ReadBytesFromUri(string url) {
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
-                MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + url);
-                return null;
-            }
-            using var httpClient = new HttpClient();
-            //RunSync<object>(() => dpv.GetDataAsync(af).AsTask());
-            byte[] bytes = await httpClient.GetByteArrayAsync(url);
-
-            using var fs = new FileStream("favicon.ico", FileMode.Create);
-            fs.Write(bytes, 0, bytes.Length);
-
-            return bytes;
         }
 
         public static byte[] ReadBytesFromFile(string filePath) {

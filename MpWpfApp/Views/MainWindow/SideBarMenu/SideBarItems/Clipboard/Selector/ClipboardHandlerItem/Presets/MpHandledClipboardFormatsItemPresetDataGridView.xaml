@@ -19,7 +19,7 @@
             Background="Transparent">
         <StackPanel Orientation="Vertical"
                     Margin="5">
-            <!--<TextBlock Text="Formats"
+            <TextBlock Text="Formats"
                        FontSize="20"
                        Margin="5,0"
                        Foreground="White"
@@ -34,27 +34,75 @@
                       IsDropDownOpen="{Binding IsAnyDropDownOpen,
                                                Source={x:Static local:MpMainWindowViewModel.Instance},
                                                Mode=OneWayToSource}"
-                      ItemsSource="{Binding Items}">
+                      ItemsSource="{Binding Items,
+                                            Converter={StaticResource CollectionToGroupedCollectionConverter},
+                                            ConverterParameter=IsReader}">
+                <ComboBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <Border Background="LightGray">
+                                    <DockPanel Margin="10,5"
+                                               LastChildFill="True">
+                                        <StackPanel DockPanel.Dock="Left">
+                                            <Image Source="{Binding .,
+                                                                    Converter={StaticResource StringResourceToImageSourceConverter},
+                                                                    ConverterParameter={StaticResource OpenEyeIcon}}"
+                                                   Visibility="{Binding Name,
+                                                                        Converter={StaticResource BoolToVisibilityConverter}}"
+                                                   Width="15"
+                                                   Height="15"
+                                                   Stretch="Fill" />
+                                            <Image Source="{Binding .,
+                                                                    Converter={StaticResource StringResourceToImageSourceConverter},
+                                                                    ConverterParameter={StaticResource EditIcon}}"
+                                                   Visibility="{Binding Name,
+                                                                        Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                   Width="15"
+                                                   Height="15"
+                                                   Stretch="Fill" />
+                                        </StackPanel>
+                                        <Grid>
+                                            <TextBlock Foreground="DimGray"
+                                                       FontStyle="Italic"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="16"
+                                                       Visibility="{Binding Name,
+                                                                            Converter={StaticResource BoolToVisibilityConverter}}"
+                                                       Text="Readers" />
+                                            <TextBlock Foreground="DimGray"
+                                                       FontStyle="Italic"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="16"
+                                                       Visibility="{Binding Name,
+                                                                            Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                                       Text="Writers" />
+                                        </Grid>
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ComboBox.GroupStyle>
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ComboBoxItem}">
                         <Setter Property="IsSelected"
                                 Value="{Binding IsSelected}" />
-            -->
-            <!--<Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                                    <ContentPresenter />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>-->
-            <!--
+                        <Setter Property="HorizontalAlignment"
+                                Value="Stretch" />
+                        <Setter Property="Background"
+                                Value="{Binding ItemBackgroundHexColor,
+                                                Converter={StaticResource StringHexToBrushConverter}}" />
+                        <Setter Property="Foreground"
+                                Value="{Binding ItemTitleForegroundHexColor,
+                                                Converter={StaticResource StringHexToBrushConverter}}" />
                     </Style>
                 </ComboBox.ItemContainerStyle>
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <Image DockPanel.Dock="Left"
-                                   Source="{Binding IconId,
+                                   Source="{Binding HandledFormatIconId,
                                                     Converter={StaticResource IconIdToImageSourceConverter}}"
                                    Margin="5,0,5,0"
                                    Height="15"
@@ -69,7 +117,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
-            </ComboBox>-->
+            </ComboBox>
             <StackPanel x:Name="ClipboardFormatPresetDatagridContainer"
                         Orientation="Vertical"
                         DataContext="{Binding SelectedItem}">
@@ -143,46 +191,34 @@
                                                 Width="120">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Margin="3"
-                                             FontSize="16"
-                                             Padding="5"
-                                             Background="White"
-                                             BorderThickness="0"
-                                             local:MpIsFocusedExtension.IsEnabled="True"
-                                             Text="{Binding Label,
-                                                            Mode=TwoWay,
-                                                            NotifyOnSourceUpdated=True,
-                                                            NotifyOnTargetUpdated=True,
-                                                            UpdateSourceTrigger=PropertyChanged}"
-                                             VerticalAlignment="Center" />
+                                    <Grid ClipToBounds="True"
+                                          Margin="1,0"
+                                          PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown">
+                                        <TextBox FontSize="16"
+                                                 Background="White"
+                                                 BorderThickness="0"
+                                                 local:MpIsFocusedExtension.IsEnabled="True"
+                                                 local:MpIsFocusedExtension.IsFocused="{Binding IsLabelTextBoxFocused,
+                                                                                                Mode=TwoWay}"
+                                                 Foreground="Black"
+                                                 local:MpMarqueeTextBoxExtension.IsEnabled="True"
+                                                 local:MpMarqueeTextBoxExtension.IsReadOnly="{Binding IsLabelReadOnly,
+                                                                                                      Mode=TwoWay}"
+                                                 IsReadOnly="{Binding IsLabelReadOnly,
+                                                                      Mode=OneWay}"
+                                                 MaxWidth="118"
+                                                 Text="{Binding Label,
+                                                                Mode=TwoWay,
+                                                                NotifyOnSourceUpdated=True,
+                                                                NotifyOnTargetUpdated=True,
+                                                                UpdateSourceTrigger=PropertyChanged}"
+                                                 VerticalAlignment="Center" />
+                                    </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!--  IS READER CHECKBOX  -->
-
-                        <DataGridTemplateColumn Header="Default Reader"
-                                                Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              ToolTipService.InitialShowDelay="0"
-                                              IsEnabled="{Binding CanRead}"
-                                              IsChecked="{Binding IsEnabled,
-                                                                  Mode=TwoWay,
-                                                                  UpdateSourceTrigger=PropertyChanged,
-                                                                  NotifyOnTargetUpdated=True,
-                                                                  NotifyOnSourceUpdated=True}">
-                                        <CheckBox.ToolTip>
-                                            <local:MpToolTipView ToolTipText="Default Reader?" />
-                                        </CheckBox.ToolTip>
-                                    </CheckBox>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <!--  IS WRITER CHECKBOX  -->
+                        <!--  IS ENABLED CHECKBOX  -->
 
                         <DataGridTemplateColumn Header="Default Writer"
                                                 Width="Auto">
@@ -191,14 +227,13 @@
                                     <CheckBox HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
                                               ToolTipService.InitialShowDelay="0"
-                                              IsEnabled="{Binding CanWrite}"
                                               IsChecked="{Binding IsEnabled,
                                                                   Mode=TwoWay,
                                                                   UpdateSourceTrigger=PropertyChanged,
                                                                   NotifyOnTargetUpdated=True,
                                                                   NotifyOnSourceUpdated=True}">
                                         <CheckBox.ToolTip>
-                                            <local:MpToolTipView ToolTipText="Default Writer?" />
+                                            <local:MpToolTipView ToolTipText="Default" />
                                         </CheckBox.ToolTip>
                                     </CheckBox>
                                 </DataTemplate>

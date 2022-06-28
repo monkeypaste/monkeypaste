@@ -28,9 +28,7 @@
                 Background="Transparent"
                 VerticalAlignment="Top"
                 Margin="10,0">
-            <local:MpClipboardFormatListBoxView DataContext="{Binding}"
-                                                MinWidth="150" />
-            <!--<ComboBox x:Name="AnalyticItemChooserComboBox"
+            <ComboBox x:Name="ClipboardHandlerChooserComboBox"
                       MinWidth="150"
                       IsSynchronizedWithCurrentItem="True"
                       IsDropDownOpen="{Binding IsAnyDropDownOpen,
@@ -53,7 +51,7 @@
                         <local:MpClipboardHandlerItemView DataContext="{Binding}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
-            </ComboBox>-->
+            </ComboBox>
         </Border>
         <local:MpHandledClipboardFormatsItemPresetDataGridView Grid.Row="1"
                                                                Grid.Column="0"

@@ -446,8 +446,8 @@
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\FindAndReplace\MpFindReplaceToolbarView.xaml.cs">
       <DependentUpon>MpFindReplaceToolbarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow\DropMenu\MpDropMenuView.xaml.cs">
-      <DependentUpon>MpDropMenuView.xaml</DependentUpon>
+    <Compile Include="Views\MainWindow\ExternalDropMenu\MpExternalDropMenuView.xaml.cs">
+      <DependentUpon>MpExternalDropMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\FilterMenu\Search\CriteriaList\CriteriaItem\CriteriaOption\MpSearchCriteriaOptionView.xaml.cs">
       <DependentUpon>MpSearchCriteriaOptionView.xaml</DependentUpon>
@@ -874,7 +874,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow\DropMenu\MpDropMenuView.xaml">
+    <Page Include="Views\MainWindow\ExternalDropMenu\MpExternalDropMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -3075,6 +3075,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /u /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /f /S /I /E "$(ProjectDir)Resources\Plugins" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

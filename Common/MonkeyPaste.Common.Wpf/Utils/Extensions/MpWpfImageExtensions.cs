@@ -137,6 +137,9 @@ namespace MonkeyPaste.Common.Wpf {
             if (bs == null) {
                 return null;
             }
+            if(!bs.IsFrozen && bs.CanFreeze) {
+                bs.Freeze();
+            }
             PngBitmapEncoder encoder = new PngBitmapEncoder();
             using (MemoryStream stream = new MemoryStream()) {
                 try {
@@ -263,6 +266,10 @@ namespace MonkeyPaste.Common.Wpf {
                 }
                 return fd.ToRichText();
             }
+        }
+
+        public static string ToBase64String(this ImageSource imgSrc) {
+            return ((BitmapSource)imgSrc).ToBase64String();
         }
         public static string ToBase64String(this BitmapSource bmpSrc) {
             return Convert.ToBase64String(bmpSrc.ToByteArray());

@@ -54,6 +54,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+        public bool IsLabelTextBoxFocused { get; set; } = false;
+        public bool IsLabelReadOnly { get; set; } = true;
 
         public bool IsAllValid => Items.All(x => x.IsValid);
 
@@ -63,6 +65,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+
+        #region Db
         public string FullName {
             get {
                 if (Preset == null || Parent == null) {
@@ -222,9 +226,23 @@ namespace MpWpfApp {
             }
         }
 
-        public MpClipboardHandlerFormat ClipboardFormat => Preset == null ? null : Preset.ComponentFormat as MpClipboardHandlerFormat;
-
         public MpPluginPreset Preset { get; set; }
+
+        #endregion
+
+        #region Plugin
+
+        public MpClipboardHandlerFormat ClipboardFormat {
+            get {
+                if (Parent == null) {
+                    return null;
+                }
+                return Parent.ClipboardPluginFormat;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #endregion
@@ -245,29 +263,9 @@ namespace MpWpfApp {
 
             Items.Clear();
 
-            Preset = aip;//await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
+            Preset = aip;
 
-            var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(PresetId);
-            foreach (var paramFormat in ClipboardFormat.parameters) {
-                if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
-                    string paramVal = string.Empty;
-                    if (paramFormat.values != null && paramFormat.values.Count > 0) {
-                        if (paramFormat.values.Any(x => x.isDefault)) {
-                            paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
-                        } else {
-                            paramVal = paramFormat.values[0].value;
-                        }
-                    }
-                    var newPresetVal = await MpPluginPresetParameterValue.Create(
-                        presetId: Preset.Id,
-                        paramEnumId: paramFormat.paramId,
-                        value: paramVal,
-                        format: paramFormat);
-
-                    presetValues.Add(newPresetVal);
-                }
-            }
-            presetValues.ForEach(x => x.ParameterFormat = ClipboardFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+            var presetValues = await PrepareParameterValueModelsAsync();
 
             foreach (var paramVal in presetValues) {
                 var naipvm = await CreateParameterViewModelAsync(paramVal);
@@ -353,6 +351,32 @@ namespace MpWpfApp {
                     }
                     break;
             }
+        }
+
+        private async Task<IEnumerable<MpPluginPresetParameterValue>> PrepareParameterValueModelsAsync() {
+            var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(PresetId);
+            foreach (var paramFormat in ClipboardFormat.parameters) {
+                if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
+                    string paramVal = string.Empty;
+                    if (paramFormat.values != null && paramFormat.values.Count > 0) {
+                        if (paramFormat.values.Any(x => x.isDefault)) {
+                            paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
+                        } else {
+                            paramVal = paramFormat.values[0].value;
+                        }
+                    }
+                    var newPresetVal = await MpPluginPresetParameterValue.Create(
+                        presetId: Preset.Id,
+                        paramEnumId: paramFormat.paramId,
+                        value: paramVal,
+                        format: paramFormat);
+
+                    presetValues.Add(newPresetVal);
+                }
+            }
+            presetValues.ForEach(x => x.ParameterFormat = ClipboardFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+
+            return presetValues;
         }
 
         #endregion
