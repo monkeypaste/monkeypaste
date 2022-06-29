@@ -33,7 +33,7 @@ namespace MonkeyPaste.Common.Plugin {
         RawDataContentQuery,
         DelimitedPlainText
     }
-
+    
     public class MpPluginParameterFormat : MpJsonObject {
         public int paramId { get; set; } = 0;
 

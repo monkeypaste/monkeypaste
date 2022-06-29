@@ -447,6 +447,20 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public static async Task<MpIcon> GetIconByImageStr2(string text64) {
+            string query = $"select pk_MpDbImageId from MpDbImage where ImageBase64='{text64}'";
+            int iconImgId = await MpDb.QueryScalarAsync<int>(query, null);
+            if (iconImgId <= 0) {
+                return null;
+            }
+            query = $"select * from MpIcon where fk_IconDbImageId=?";
+            var result = await MpDb.QueryAsync<MpIcon>(query, iconImgId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
         public static async Task<string> GetIconHexColor(int iconId, int hexColorIdx = 0) {
             string hexFieldStr = string.Format(@"HexColor{0}", Math.Min(hexColorIdx + 1, 5));
             string query = $"select {hexFieldStr} from MpIcon where pk_MpIconId=?";

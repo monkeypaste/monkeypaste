@@ -189,7 +189,7 @@ namespace MpWpfApp {
 
             Items.Clear();
 
-            var pail = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent);
+            var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent);
             foreach(var pai in pail) {
                 var paivm = await CreateClipboardHandlerItemViewModelAsync(pai.Value);
                 Items.Add(paivm);
@@ -266,7 +266,9 @@ namespace MpWpfApp {
             var ndo = new MpPortableDataObject();
 
             //only iterate through actual handlers 
-            var handlers = EnabledFormats.Where(x=>x.CanRead).Select(x => x.Parent.ClipboardPluginComponent).Distinct().Cast<MpIClipboardReaderComponent>();
+            var handlers = EnabledFormats.Where(x=>x.CanRead)
+                                         .Select(x => x.Parent.ClipboardPluginComponent)
+                                         .Distinct().Cast<MpIClipboardReaderComponent>();
             
             foreach (var handler in handlers) {
 
@@ -387,6 +389,18 @@ namespace MpWpfApp {
 
         #region Commands
 
+        public ICommand ToggleFormatPresetIsEnabled => new MpCommand<object>(
+            (presetVmArg) => {
+                if(presetVmArg is MpClipboardFormatPresetViewModel cfpvm) {
+                    if(cfpvm.CanRead) {
+                        ToggleFormatPresetIsReadEnabledCommand.Execute(cfpvm);
+                    }else if (cfpvm.CanWrite) {
+                        ToggleFormatPresetIsWriteEnabledCommand.Execute(cfpvm);
+                    } else {
+                        Debugger.Break();
+                    }
+                }
+            });
         public ICommand ToggleFormatPresetIsReadEnabledCommand => new RelayCommand<object>(
             (presetVmArg) => {
                 var presetVm = presetVmArg as MpClipboardFormatPresetViewModel;

@@ -532,7 +532,7 @@ namespace MonkeyPaste {
                             var userAction = await MpNotificationCollectionViewModel.Instance.ShowNotification(
                                                     dialogType: MpNotificationDialogType.BadHttpRequest,
                                                     msg: $"{response.ReasonPhrase}",
-                                                    fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(MpPluginManager.PluginRootFolderPath))));
+                                                    fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(Path.GetDirectoryName(MpPluginLoader.PluginRootFolderPath))));
 
                             //if(userAction == MpDialogResultType.Retry) {
                             //    return new MpPluginResponseFormatBase() {

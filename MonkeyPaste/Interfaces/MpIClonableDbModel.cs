@@ -2,6 +2,6 @@
 
 namespace MonkeyPaste {
     public interface MpIClonableDbModel<T> where T: MpDbModelBase {
-        Task<T> CloneDbModel(bool suppressWrite = false);
+        Task<T> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false);
     }
 }

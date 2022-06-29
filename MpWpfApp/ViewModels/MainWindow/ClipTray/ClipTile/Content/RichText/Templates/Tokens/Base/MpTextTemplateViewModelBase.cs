@@ -449,9 +449,11 @@ namespace MpWpfApp {
 
         #region Commands
 
-        public ICommand EditTemplateCommand => new RelayCommand(
+        public ICommand EditTemplateCommand => new MpAsyncCommand(
             async() => {
-                _originalModel = await TextTemplate.CloneDbModel(true);
+                _originalModel = await TextTemplate.CloneDbModelAsync(
+                    deepClone: true,
+                    suppressWrite: true);
                 //Parent.ClearAllEditing();
                 //Parent.ClearSelection();
 
@@ -469,7 +471,7 @@ namespace MpWpfApp {
                 return !HostClipTileViewModel.IsContentReadOnly;
             });
 
-        public ICommand DeleteAllTemplateInstancesCommand => new RelayCommand(
+        public ICommand DeleteAllTemplateInstancesCommand => new MpAsyncCommand(
             async() => {
                 IsEditingTemplate = false;
                 await TextTemplate.DeleteFromDatabaseAsync();
@@ -487,7 +489,7 @@ namespace MpWpfApp {
             }
         }
 
-        public ICommand CancelEditTemplateCommand => new RelayCommand(
+        public ICommand CancelEditTemplateCommand => new MpAsyncCommand(
             async() => {
                 IsSelected = false;
                 TextTemplate = _originalModel;
@@ -495,13 +497,13 @@ namespace MpWpfApp {
 
             });
 
-        public ICommand FinishEditTemplateCommand => new RelayCommand(
+        public ICommand FinishEditTemplateCommand => new MpAsyncCommand(
             async () => {
                 await TextTemplate.WriteToDatabaseAsync();
                 IsEditingTemplate = false;
                 IsSelected = false;
             },
-            Validate());
+            ()=>Validate());
 
         #endregion
 

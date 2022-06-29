@@ -40,23 +40,23 @@ namespace MonkeyPaste.Common.Wpf {
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern int GetWindowTextLength(int hwnd);
 
-        public static bool IsClipboardOpen(bool showOpenWindowName = false) {
+        public static IntPtr IsClipboardOpen(bool showOpenWindowName = false) {
             var hwnd = WinApi.GetOpenClipboardWindow();
 
             if (hwnd == IntPtr.Zero) {
-                return false;
+                return IntPtr.Zero;
             }
             if(showOpenWindowName) {
-                var int32Handle = hwnd.ToInt32();
-                var len = GetWindowTextLength(int32Handle);
-                var sb = new StringBuilder(len);
-                GetWindowText(int32Handle, sb, len);
+                //var int32Handle = hwnd.ToInt32();
+                //var len = GetWindowTextLength(int32Handle);
+                var sb = new StringBuilder();
+                GetWindowText(hwnd, sb, 100);
                 MpConsole.WriteLine("Clipboard is open by window: " + sb.ToString());
             }
             
             
 
-            return true;
+            return hwnd;
         }
 
 

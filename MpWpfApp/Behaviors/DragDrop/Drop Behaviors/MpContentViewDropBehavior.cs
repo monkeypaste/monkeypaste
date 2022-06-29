@@ -332,7 +332,7 @@ namespace MpWpfApp {
 
             if(dropData.IsStringBase64()) {
                 dropRange.LoadImage(dropData, out Size dummySize);
-            } else if(dropData.IsStringFileOrPathFormat()) {
+            } else if(dropData.IsStringWindowsFileOrPathFormat()) {
                 dropRange = dropRange.End.ToTextRange();
                 dropRange.LoadItemData(dropData, MpCopyItemType.FileList, out Size dummySize);
             } else if (dropData.IsStringRichTextTable()) {

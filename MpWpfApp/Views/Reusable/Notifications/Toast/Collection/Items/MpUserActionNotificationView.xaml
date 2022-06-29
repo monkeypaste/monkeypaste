@@ -13,7 +13,7 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="0.6*" />
         </Grid.RowDefinitions>
@@ -26,7 +26,8 @@
                    Margin="10,0"
                    FontSize="16"
                    Foreground="White"
-                   FontWeight="SemiBold"
+                   FontWeight="SemiBold" 
+                   TextWrapping="WrapWithOverflow"
                    Text="{Binding Title}" />
         <Border Grid.Row="0"
                 Grid.ColumnSpan="2"

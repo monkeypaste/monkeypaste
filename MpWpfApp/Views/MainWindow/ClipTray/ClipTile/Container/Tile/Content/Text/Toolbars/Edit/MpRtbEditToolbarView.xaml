@@ -143,6 +143,13 @@
                                                   DataContext="{Binding TemplateCollection}" />
             </ListBoxItem>
             <ListBoxItem>
+                <Image SnapsToDevicePixels="True"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Stretch="None" />
+            </ListBoxItem>
+            <ListBoxItem>
                 <Button x:Name="UndoButton"
                         Command="ApplicationCommands.Undo"
                         Template="{StaticResource FlatButtonControlTemplate}"
@@ -323,6 +330,17 @@
                                             Converter={StaticResource StringResourceToImageSourceConverter}}"
                            Stretch="None" />
                 </ToggleButton>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Image SnapsToDevicePixels="True"
+                       Source="{Binding .,
+                                        Source={StaticResource EditSeparatorIcon},
+                                        Converter={StaticResource StringResourceToImageSourceConverter}}"
+                       Stretch="None" />
+            </ListBoxItem>
+            <ListBoxItem>
+                <local:MpAddTableToolbarContextMenuView x:Name="AddTableButton" 
+                                                        DataContext="{Binding TableViewModel}" />
             </ListBoxItem>
             <ListBoxItem>
                 <Image SnapsToDevicePixels="True"

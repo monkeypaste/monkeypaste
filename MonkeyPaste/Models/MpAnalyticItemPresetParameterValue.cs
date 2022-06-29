@@ -45,22 +45,23 @@ namespace MonkeyPaste {
             }
         }
 
-        [Ignore]
-        public MpPluginParameterFormat ParameterFormat { get; set; }
+        //[Ignore]
+        //public MpPluginParameterFormat ParameterFormat { get; set; }
 
         #endregion
 
         public static async Task<MpPluginPresetParameterValue> Create(
             int presetId = 0, 
             int paramEnumId = 0, 
-            string value = "",
-            MpPluginParameterFormat format = null) {
+            string value = ""
+            //MpPluginParameterFormat format = null
+            ) {
             if (presetId == 0) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
-            if(format == null) {
-                throw new Exception("Must have format");
-            }
+            //if(format == null) {
+            //    throw new Exception("Must have format");
+            //}
 
             var dupItem = await MpDataModelProvider.GetPluginPresetValueAsync(presetId, paramEnumId);
             if (dupItem != null) {
@@ -70,14 +71,14 @@ namespace MonkeyPaste {
                 dupItem.PluginPresetId = presetId;
                 dupItem.ParamId = paramEnumId;
                 dupItem.Value = value;
-                dupItem.ParameterFormat = format;
+                //dupItem.ParameterFormat = format;
                 await dupItem.WriteToDatabaseAsync();
                 return dupItem;
             }
 
             var newPluginPresetParameterValue = new MpPluginPresetParameterValue() {
                 PluginPresetParameterValueGuid = System.Guid.NewGuid(),
-                ParameterFormat = format,
+                //ParameterFormat = format,
                 PluginPresetId = presetId,
                 ParamId = paramEnumId,
                 Value = value
@@ -90,7 +91,7 @@ namespace MonkeyPaste {
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpPluginPresetParameterValue> CloneDbModel(bool suppressWrite = false) {
+        public async Task<MpPluginPresetParameterValue> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
             // NOTE if recreating preset must set PresetId after this method
 
             var cppv = new MpPluginPresetParameterValue() {
@@ -98,7 +99,7 @@ namespace MonkeyPaste {
                 PluginPresetId = this.PluginPresetId,
                 ParamId = this.ParamId,
                 Value = this.Value,
-                ParameterFormat = this.ParameterFormat
+                //ParameterFormat = this.ParameterFormat
             };
             await cppv.WriteToDatabaseAsync();
             return cppv;

@@ -12,7 +12,7 @@ using SQLite;
 
 namespace MpWpfApp {
     public class MpPluginParameterViewModelBase : 
-        MpViewModelBase<MpViewModelBase>,
+        MpViewModelBase<MpIPluginComponentViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpITooltipInfoViewModel,
@@ -232,17 +232,19 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Db
+
         public virtual string CurrentValue {
             get {
-                if(PresetValue == null) {
+                if(PresetValueModel == null) {
                     return string.Empty;
                 }
 
-                return PresetValue.Value.TrimTrailingLineEndings();
+                return PresetValueModel.Value.TrimTrailingLineEndings();
             }
             set {
                 if(CurrentValue != value) {
-                    PresetValue.Value = value; 
+                    PresetValueModel.Value = value; 
                     HasModelChanged = true;      
                     OnPropertyChanged(nameof(CurrentValue));
                 }
@@ -312,6 +314,22 @@ namespace MpWpfApp {
             }
         }
 
+
+        public int ParameterValueId {
+            get {
+                if (PresetValueModel == null) {
+                    return 0;
+                }
+                return PresetValueModel.Id;
+            }
+        }
+
+        public MpPluginPresetParameterValue PresetValueModel { get; set; }
+
+        #endregion
+
+        #region Plugin (MpPluginParameterFormat)
+
         public int ParamEnumId {
             get {
                 if (ParameterFormat == null) {
@@ -351,25 +369,17 @@ namespace MpWpfApp {
             }
         }
 
-        public int ParameterValueId {
-            get {
-                if(PresetValue == null) {
-                    return 0;
-                }
-                return PresetValue.Id;
-            }
-        }
 
-        public MpPluginParameterFormat ParameterFormat { 
+        public MpPluginParameterFormat ParameterFormat {
             get {
-                if(PresetValue == null) {
+                if (Parent == null || PresetValueModel == null) {
                     return null;
                 }
-                return PresetValue.ParameterFormat;
+                //AnalyzerFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId)
+                return Parent.ComponentFormat.parameters.FirstOrDefault(x=>x.paramId == PresetValueModel.ParamId);
             }
         }
-
-        public MpPluginPresetParameterValue PresetValue { get; set; }
+        #endregion
 
         #endregion
 
@@ -385,7 +395,7 @@ namespace MpWpfApp {
 
         public MpPluginParameterViewModelBase() : base(null) { }
 
-        public MpPluginParameterViewModelBase(MpViewModelBase parent) : base(parent) {
+        public MpPluginParameterViewModelBase(MpIPluginComponentViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterViewModel_PropertyChanged;
         }
 
@@ -397,7 +407,7 @@ namespace MpWpfApp {
             bool wasBusy = IsBusy;
             IsBusy = true;
 
-            PresetValue = aipv;
+            PresetValueModel = aipv;
 
             OnPropertyChanged(nameof(CurrentValue));            
 
@@ -423,7 +433,7 @@ namespace MpWpfApp {
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         Task.Run(async () => {
-                            await PresetValue.WriteToDatabaseAsync();
+                            await PresetValueModel.WriteToDatabaseAsync();
                             HasModelChanged = false;
                             //if(this is MpComboBoxParameterViewModel cbpvm) {
                             //    cbpvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));

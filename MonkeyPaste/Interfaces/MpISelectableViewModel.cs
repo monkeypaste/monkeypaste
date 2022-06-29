@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,5 +15,9 @@ namespace MonkeyPaste {
     public interface MpISelectorViewModel<T> : MpIViewModel where T : MpViewModelBase {
         T SelectedItem { get; set; }
         ObservableCollection<T> Items { get; set; }
+    }
+
+    public interface MpIPluginComponentViewModel : MpIViewModel {
+        public MpPluginComponentBaseFormat ComponentFormat { get; }
     }
 }

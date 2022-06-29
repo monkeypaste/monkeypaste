@@ -73,7 +73,7 @@ namespace MonkeyPaste {
                     transType = MpCopyItemTransactionType.Http;
                     transUrlId = url.Id;
                 } else {
-                    var pf = MpPluginManager.Plugins.FirstOrDefault(x => x.Value.guid == pluginFormat.guid);
+                    var pf = MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == pluginFormat.guid);
                     if (!string.IsNullOrWhiteSpace(pf.Key)) {
                         string manifestPath = pf.Key;
                         string pluginDir = Path.GetDirectoryName(manifestPath);

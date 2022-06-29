@@ -5,6 +5,7 @@ using System.Text;
 using SQLiteNetExtensions.Attributes;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
 
@@ -125,7 +126,6 @@ namespace MonkeyPaste {
             if(!string.IsNullOrEmpty(iconImgBase64)) {
                 var dupCheck = await MpDataModelProvider.GetIconByImageStr(iconImgBase64);
                 if (dupCheck != null) {
-                    dupCheck = await MpDb.GetItemAsync<MpIcon>(dupCheck.Id);
                     return dupCheck;
                 }
             }
@@ -151,19 +151,25 @@ namespace MonkeyPaste {
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpIcon> CloneDbModel(bool suppressWrite = false) {
+        public async Task<MpIcon> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
             int cimgId = 0;
             int cbimgId = 0;
-            if (IconImageId > 0) {
-                var img = await MpDb.GetItemAsync<MpDbImage>(IconImageId);
-                var cimg = await img.CloneDbModel(suppressWrite);
-                cimgId = cimg.Id;                
-            }
+            if(deepClone) {
+                if (IconImageId > 0) {
+                    var img = await MpDb.GetItemAsync<MpDbImage>(IconImageId);
+                    var cimg = await img.CloneDbModelAsync(
+                        deepClone: deepClone, 
+                        suppressWrite: suppressWrite);
+                    cimgId = cimg.Id;
+                }
 
-            if (IconBorderImageId > 0) {
-                var bimg = await MpDb.GetItemAsync<MpDbImage>(IconBorderImageId);
-                var cbimg = await bimg.CloneDbModel(suppressWrite);
-                cbimgId = cbimg.Id;
+                if (IconBorderImageId > 0) {
+                    var bimg = await MpDb.GetItemAsync<MpDbImage>(IconBorderImageId);
+                    var cbimg = await bimg.CloneDbModelAsync(
+                        deepClone: deepClone,
+                        suppressWrite: suppressWrite);
+                    cbimgId = cbimg.Id;
+                }
             }
             var ci = new MpIcon() {
                 IconGuid = System.Guid.NewGuid(),

@@ -19,12 +19,21 @@
             Background="Transparent">
         <StackPanel Orientation="Vertical"
                     Margin="5">
-            <TextBlock Text="Formats"
-                       FontSize="20"
-                       Margin="5,0"
-                       Foreground="White"
-                       Background="Transparent"
-                       FontWeight="SemiBold" />
+            <Grid>
+                <TextBlock Text="Formats"
+                           FontSize="20"
+                           HorizontalAlignment="Left"
+                           Margin="5,0,5,10"
+                           Foreground="White"
+                           Background="Transparent"
+                           FontWeight="SemiBold" />
+
+                <local:MpTooltipInfoView HorizontalAlignment="Right"
+                                         Visibility="{Binding IsBusy,
+                                                          Converter={StaticResource BoolToVisibilityFlipConverter}}"
+                                         DataContext="{Binding ClipboardFormatInfoViewModel,
+                                                           Source={x:Static local:MpTooltipInfoCollectionViewModel.Instance}}" />
+            </Grid>
             <ComboBox Background="Transparent"
                       MaxHeight="170"
                       SelectionChanged="ComboBox_SelectionChanged"

@@ -362,6 +362,8 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileDrop\MpFileItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpImageAnnotationViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Tables\MpContentTableViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Tooltips\MpClipboardFormatInfoViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Tooltips\MpContactFieldInfoViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Tooltips\MpDateTimeFormatInfoViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\Tokens\Base\MpTextTemplateViewModelBase.cs" />
@@ -428,6 +430,9 @@
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Rtf\MpRtbContentContainerView.xaml.cs">
       <DependentUpon>MpRtbContentContainerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\Tables\MpAddTableToolbarContextMenuView.xaml.cs">
+      <DependentUpon>MpAddTableToolbarContextMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\Templates\Selector\MpPasteTemplateDetailViewSelector.cs" />
     <Compile Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\Templates\Selector\MpEditTemplateDetailViewSelector.cs" />
@@ -873,6 +878,10 @@
     <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\FindAndReplace\MpFindReplaceToolbarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Text\Toolbars\Tables\MpAddTableToolbarContextMenuView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow\ExternalDropMenu\MpExternalDropMenuView.xaml">
       <SubType>Designer</SubType>
@@ -1663,6 +1672,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\text.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\spreadsheet.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\spreadsheet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Styles\Shaders\InvertColor\MpInvertColorShader.hlsl" />

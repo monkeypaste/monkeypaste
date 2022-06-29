@@ -115,24 +115,24 @@ namespace MpWpfApp {
             if (ctcv != null) {
                 SetReadOnlyWidth(fe,ctcv.ActualWidth);
 
-                if(fe is RichTextBox rtb && rtb.DataContext is MpClipTileViewModel ctvm) {
-                    double deltaWidth = Math.Max(0, ctvm.UnformattedContentSize.Width - rtb.Document.PageWidth);
-                    double deltaHeight = Math.Max(0, ctvm.UnformattedContentSize.Height - rtb.Document.PageHeight);
+                //if(fe is RichTextBox rtb && rtb.DataContext is MpClipTileViewModel ctvm) {
+                //    double deltaWidth = Math.Max(0, ctvm.UnformattedContentSize.Width - rtb.Document.PageWidth);
+                //    double deltaHeight = Math.Max(0, ctvm.UnformattedContentSize.Height - rtb.Document.PageHeight);
 
-                    rtb.Document.PageWidth = ctvm.UnformattedContentSize.Width;
-                    rtb.Document.PageHeight = ctvm.UnformattedContentSize.Height;
+                //    rtb.Document.PageWidth = ctvm.UnformattedContentSize.Width;
+                //    rtb.Document.PageHeight = ctvm.UnformattedContentSize.Height;
 
-                    ctcv.TileResizeBehavior.Resize(deltaWidth, 0);
+                //    ctcv.TileResizeBehavior.Resize(deltaWidth, 0);
 
-                    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior.Resize(0, deltaHeight);
-                    //rtb.Document.PageWidth = Math.Max(0, w - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
-                    //rtb.Document.PageHeight = Math.Max(0, h - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
-                }
-                //if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
-                    
-                //    ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
+                //    (Application.Current.MainWindow as MpMainWindow).MainWindowResizeBehvior.Resize(0, deltaHeight);
+                //    //rtb.Document.PageWidth = Math.Max(0, w - rtb.Margin.Left - rtb.Margin.Right - rtb.Padding.Left - rtb.Padding.Right);
+                //    //rtb.Document.PageHeight = Math.Max(0, h - rtb.Margin.Top - rtb.Margin.Bottom - rtb.Padding.Top - rtb.Padding.Bottom);
                 //}
-                //(fe as RichTextBox).FitDocToRtb();
+                if (ctcv.ActualWidth < _EDITOR_DEFAULT_WIDTH) {
+
+                    ctcv.TileResizeBehavior.ResizeWidth(_EDITOR_DEFAULT_WIDTH);
+                }
+                (fe as RichTextBox).FitDocToRtb();
             }
         }
 

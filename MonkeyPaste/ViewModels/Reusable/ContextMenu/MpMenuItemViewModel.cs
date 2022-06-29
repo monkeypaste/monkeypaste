@@ -6,13 +6,19 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
 
-    public interface MpIMenuItemViewModel {
+    //public interface MpIMenuItemViewModelBase { }
+
+    public interface MpIMenuItemViewModel { //}: MpIMenuItemViewModelBase {
         MpMenuItemViewModel MenuItemViewModel { get; }
     }
 
-    public interface MpIContextMenuItemViewModel : MpIMenuItemViewModel { }
+    //public interface MpIContextMenuItemViewModel : MpIMenuItemViewModelBase { 
+    //    MpMenuItemViewModel MenuItemViewModel { get; }
+    //}
 
-    public interface MpIPopupMenuItemViewModel : MpIMenuItemViewModel { }
+    //public interface MpIPopupMenuItemViewModel : MpIMenuItemViewModelBase {
+    //    MpMenuItemViewModel MenuItemViewModel { get; }
+    //}
 
     public class MpMenuItemViewModel : MpViewModelBase {
         #region Properties
@@ -33,6 +39,7 @@ namespace MonkeyPaste {
 
         public bool IsColorPallete { get; set; }
 
+        public bool IsNewTableSelector { get; set; }
         #endregion
 
         #region Header
@@ -197,6 +204,8 @@ namespace MonkeyPaste {
                 SubItems = colors
             };
         }
+
+
 
         
                

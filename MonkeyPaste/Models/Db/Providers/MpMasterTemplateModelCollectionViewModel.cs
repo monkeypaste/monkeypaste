@@ -94,7 +94,7 @@ namespace MonkeyPaste {
         public async Task<IEnumerable<MpContact>> GetContacts() {
             var contacts = new List<MpIContact>(); 
 
-            var fetchers = MpPluginManager.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x=>x.Value.Component).Distinct();
+            var fetchers = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x=>x.Value.Component).Distinct();
             foreach(var fetcher in fetchers) {
                 if(fetcher is MpIContactFetcherComponent cfc) {
                     contacts.AddRange(cfc.FetchContacts(null));

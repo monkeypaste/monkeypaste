@@ -390,6 +390,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ViewModels\Reusable\Errors\" />
     <Folder Include="ViewModels\Reusable\NewFolder\" />
     <Folder Include="ViewModels\Reusable\Theme\" />
   </ItemGroup>

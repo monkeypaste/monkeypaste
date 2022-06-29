@@ -1,18 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Windows.Threading;
+using System.Xml;
 using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfFlowDocumentSearchExtensions {
 
+        public static string ToRichText(this TextRange tr) {
+            //if(tr == null) {
+            //    return string.Empty;
+            //}
+            //using (var rangeStream = new MemoryStream()) {
+            //    using(var writerStream = new StreamWriter(rangeStream)) {
+            //        try {
+            //            if (tr.CanLoad(DataFormats.Rtf)) {
+            //                tr.Load(rangeStream, DataFormats.Rtf);
+
+            //                rangeStream.Seek(0, SeekOrigin.Begin);
+            //                using (var rtfStreamReader = new StreamReader(rangeStream)) {
+            //                    return rtfStreamReader.ReadToEnd();
+            //                }
+            //            }
+            //        }
+            //        catch (Exception ex) {
+            //            MpConsole.WriteTraceLine(ex);
+            //            return tr.Text;
+            //        }
+            //    }
+            //}
+            //return tr.Text;
+            using (MemoryStream ms = new MemoryStream()) {
+                tr.Save(ms, DataFormats.Rtf);
+                return Encoding.Default.GetString(ms.ToArray());
+            }
+
+        }
 
         public static List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             if (string.IsNullOrEmpty(matchStr)) {

@@ -24,11 +24,13 @@ namespace MpWpfApp {
                 keyStr = "PasteToPathRuntimeMenuItem";
             } else if (cmivm.IsColorPallete) {
                 keyStr = "ColorPalleteMenuItem";
+            } else if (cmivm.IsNewTableSelector) {
+                keyStr = "NewTableSelectorMenuItem";
             } else if (!string.IsNullOrEmpty(cmivm.IconResourceKey)) {
                 keyStr = "MenuItem";
             } else if (!string.IsNullOrEmpty(cmivm.IconHexStr)) {
                 keyStr = cmivm.IsSelected ? "CheckedTagMenuItem" : "UncheckedTagMenuItem";
-            } else if(cmivm.IconId > 0) {
+            } else if (cmivm.IconId > 0) {
                 keyStr = "UserMenuItem";
             } else {
                 keyStr = "MenuItem";

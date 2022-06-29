@@ -177,7 +177,7 @@ namespace MonkeyPaste {
         public MpTextTemplate() : base() { }
 
 
-        public async Task<MpTextTemplate> CloneDbModel(bool suppressWrite = false) {
+        public async Task<MpTextTemplate> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
             var ccit = new MpTextTemplate() {
                 Id = suppressWrite ? this.Id : 0,
                 //CopyItemId = this.CopyItemId,

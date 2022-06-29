@@ -35,7 +35,7 @@
           },
           {
             "label": "Ignore",
-            "description": "When checked Plain Text format will be ignored",
+            "description": "When checked Plain Text format will be completely ignored",
             "controlType": "CheckBox",
             "unitType": "Bool",
             "paramId": 2,
@@ -129,31 +129,6 @@
         "clipboardName": "Bitmap",
         "parameters": [
           {
-            "label": "Default Export Type",
-            "description": "When pasting or dropping a bitmap this will be the default file type",
-            "controlType": "ComboBox",
-            "unitType": "PlainText",
-            "paramId": 7,
-            "isRequired": true,
-            "values": [
-              {
-                "label": "bmp",
-                "value": "bmp",
-                "isDefault": false
-              },
-              {
-                "label": "png",
-                "value": "png",
-                "isDefault": true
-              },
-              {
-                "label": "jpg",
-                "value": "jpg",
-                "isDefault": false
-              }
-            ]
-          },
-          {
             "label": "Ignore",
             "description": "When checked Image format will be ignored",
             "controlType": "CheckBox",
@@ -189,10 +164,17 @@
           },
           {
             "label": "Ignored File Extensions",
-            "description": "These file types will be ignored",
+            "description": "These file types will be ignored when added to clipboard",
             "controlType": "EditableList",
             "unitType": "PlainText",
             "paramId": 10
+          },
+          {
+            "label": "Ignored Directories",
+            "description": "These directories and all sub-directories will be ignored",
+            "controlType": "EditableList",
+            "unitType": "PlainText",
+            "paramId": 23
           }
         ]
       },
@@ -264,7 +246,7 @@
         "parameters": [
           {
             "label": "Max Characters",
-            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "description": "This is max plain text, formatting length is ignored",
             "controlType": "Slider",
             "unitType": "Integer",
             "paramId": 14,
@@ -341,7 +323,7 @@
             "description": "When pasting or dropping a bitmap this will be the default file type",
             "controlType": "ComboBox",
             "unitType": "PlainText",
-            "paramId": 18,
+            "paramId": 18, 
             "isRequired": true,
             "values": [
               {

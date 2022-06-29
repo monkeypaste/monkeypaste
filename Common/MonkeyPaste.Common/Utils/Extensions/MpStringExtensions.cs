@@ -211,11 +211,15 @@ namespace MonkeyPaste.Common {
         }
 
         public static string RemoveSpecialCharacters(this string str) {
-            return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+            //return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+            return MpRegEx.RegExLookup[MpRegExType.HasSpecialCharacters]
+                          .Replace(str, string.Empty);
         }
 
         public static bool HasSpecialCharacters(this string str) {
-            return Regex.IsMatch(str, "[^a-zA-Z0-9_.]+", RegexOptions.Compiled);
+            //return Regex.IsMatch(str, "[^a-zA-Z0-9_.]+", RegexOptions.Compiled);
+            return MpRegEx.RegExLookup[MpRegExType.HasSpecialCharacters]
+                          .IsMatch(str);
         }
 
         public static string ToPrettyPrintJson(this string jsonStr) {
@@ -272,21 +276,7 @@ namespace MonkeyPaste.Common {
             return str.IsFile() || str.IsDirectory();
         }
 
-        public static List<int> IndexListOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {
-            //var idxList = new List<int>();
-            //int curIdx = text.IndexOf(matchStr);
-            //int offset = 0;
-            //while (curIdx >= 0 && curIdx < text.Length) {
-            //    idxList.Add(curIdx + offset);
-            //    if (curIdx + matchStr.Length + 1 >= text.Length) {
-            //        break;
-            //    }
-            //    text = text.Substring(curIdx + matchStr.Length + 1);
-            //    offset = curIdx + 1;
-            //    curIdx = text.IndexOf(matchStr);
-            //}
-            //return idxList;
-            List<int> allIndexOf = new List<int>();
+        public static List<int> IndexListOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {List<int> allIndexOf = new List<int>();
             int index = text.IndexOf(str, comparisonType);
             while (index != -1) {
                 allIndexOf.Add(index);
@@ -417,18 +407,17 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static bool IsStringFileOrPathFormat(this string path) {
+        public static bool IsStringWindowsFileOrPathFormat(this string path) {
             if(string.IsNullOrWhiteSpace(path) || path.Length < 3) {
                 return false;
             }
-            Regex driveCheck = new Regex(@"^[a-zA-Z]:\\$");
-            if (!driveCheck.IsMatch(path.Substring(0, 3))) 
+            if (!MpRegEx.RegExLookup[MpRegExType.StartsWithWindowsStyleDirectory].IsMatch(path.Substring(0, 3))) {
                 return false;
-            string strTheseAreInvalidFileNameChars = new string(System.IO.Path.GetInvalidPathChars());
-            strTheseAreInvalidFileNameChars += @":/?*" + "\"";
-            Regex containsABadCharacter = new Regex("[" + Regex.Escape(strTheseAreInvalidFileNameChars) + "]");
-            if (containsABadCharacter.IsMatch(path.Substring(3, path.Length - 3)))
+            }
+
+            if (MpRegEx.RegExLookup[MpRegExType.ContainsInvalidFileNameChar].IsMatch(path.Substring(3, path.Length - 3))) {
                 return false;
+            }
             return true;
         }
 

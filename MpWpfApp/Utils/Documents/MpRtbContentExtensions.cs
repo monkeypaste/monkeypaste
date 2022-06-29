@@ -655,7 +655,7 @@ namespace MpWpfApp {
             // NOTE iconId is only used to convert file path's to rtf w/ icon 
 
             if (string.IsNullOrEmpty(str)) {
-                return string.Empty.ToRichText().ToFlowDocument();
+                return string.Empty.ToContentRichText().ToFlowDocument();
             }
             if (str.IsStringRichText()) {
                 using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {
@@ -692,15 +692,47 @@ namespace MpWpfApp {
                 img_fd.PageHeight = imgSize.Height;
                 return img_fd;
             }
-            if (str.IsStringFileOrPathFormat()) {
+            if (str.IsStringWindowsFileOrPathFormat()) {
                 return str.ToFilePathDocument();
             }
-            return str.ToRichText(iconId).ToFlowDocument();
+            return str.ToContentRichText(iconId).ToFlowDocument();
         }
 
-        
 
-        public static string ToRichText(this string str, int iconId = 0) {
+        public static string ToXamlPackage(this string str) {
+            if (string.IsNullOrEmpty(str)) {
+                return string.Empty.ToContentRichText().ToXamlPackage();
+            }
+            if (str.IsStringHtmlText()) {
+                return str.ToContentRichText().ToXamlPackage();
+            }
+            if (str.IsStringPlainText()) {
+                return str.ToContentRichText().ToXamlPackage();
+            }
+            if (str.IsStringRichText()) {
+                var assembly = Assembly.GetAssembly(typeof(System.Windows.FrameworkElement));
+                var xamlRtfConverterType = assembly.GetType("System.Windows.Documents.XamlRtfConverter");
+                var xamlRtfConverter = Activator.CreateInstance(xamlRtfConverterType, true);
+                var convertRtfToXaml = xamlRtfConverterType.GetMethod("ConvertRtfToXaml", BindingFlags.Instance | BindingFlags.NonPublic);
+                var xamlContent = (string)convertRtfToXaml.Invoke(xamlRtfConverter, new object[] { str });
+                return xamlContent;
+            }
+            throw new Exception("ToXaml exception string must be plain or rich text. Its content is: " + str);
+        }
+
+        public static string ToXamlPackage(this FlowDocument fd) {
+
+            return XamlWriter.Save(fd);
+        }
+
+        public static string ToXamlPackage(this TextRange tr) {
+            using (var ms = new MemoryStream()) {
+                tr.Save(ms, DataFormats.XamlPackage);
+                return XamlWriter.Save(ms);
+            }
+        }
+
+        public static string ToContentRichText(this string str, int iconId = 0) {
             // NOTE iconId is only used for converting file path's icons to rtf
             if (str == null) {
                 str = string.Empty;
@@ -711,7 +743,7 @@ namespace MpWpfApp {
             if (str.IsStringHtmlText()) {
                 //return MpQuillHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
                 string xaml = HtmlToXamlDemo.HtmlToXamlConverter.ConvertHtmlToXaml(str, true);
-                return xaml.ToRichText(iconId);                
+                return xaml.ToContentRichText(iconId);                
             }
             if (str.IsStringXaml()) {
                 using (var stringReader = new StringReader(str)) {
@@ -777,7 +809,7 @@ namespace MpWpfApp {
             if (str.IsStringBase64()) {
                 return str.ToImageDocument(out Size imgSize).ToRichText();
             }
-            if (str.IsStringFileOrPathFormat()) {
+            if (str.IsStringWindowsFileOrPathFormat()) {
                 return str.ToFilePathDocument(iconId).ToRichText();
             }
             if (str.IsStringPlainText()) {
@@ -797,7 +829,7 @@ namespace MpWpfApp {
         }
 
         public static FlowDocument Combine(this FlowDocument fd, string text, TextPointer insertPointer = null, bool insertNewline = true) {
-            return CombineFlowDocuments(text.ToRichText().ToFlowDocument(), fd, insertPointer, insertNewline);
+            return CombineFlowDocuments(text.ToContentRichText().ToFlowDocument(), fd, insertPointer, insertNewline);
         }
 
         public static FlowDocument CombineFlowDocuments(
@@ -870,67 +902,7 @@ namespace MpWpfApp {
 
         //}
 
-        public static string ToRichText(this TextRange tr) {
-            //if(tr == null) {
-            //    return string.Empty;
-            //}
-            //using (var rangeStream = new MemoryStream()) {
-            //    using(var writerStream = new StreamWriter(rangeStream)) {
-            //        try {
-            //            if (tr.CanLoad(DataFormats.Rtf)) {
-            //                tr.Load(rangeStream, DataFormats.Rtf);
-
-            //                rangeStream.Seek(0, SeekOrigin.Begin);
-            //                using (var rtfStreamReader = new StreamReader(rangeStream)) {
-            //                    return rtfStreamReader.ReadToEnd();
-            //                }
-            //            }
-            //        }
-            //        catch (Exception ex) {
-            //            MpConsole.WriteTraceLine(ex);
-            //            return tr.Text;
-            //        }
-            //    }
-            //}
-            //return tr.Text;
-            using (MemoryStream ms = new MemoryStream()) {
-                tr.Save(ms, DataFormats.Rtf);
-                return Encoding.Default.GetString(ms.ToArray());
-            }
-
-        }
-        public static string ToXamlPackage(this string str) {
-            if (string.IsNullOrEmpty(str)) {
-                return string.Empty.ToRichText().ToXamlPackage();
-            }
-            if (str.IsStringHtmlText()) {
-                return str.ToRichText().ToXamlPackage();
-            }
-            if (str.IsStringPlainText()) {
-                return str.ToRichText().ToXamlPackage();
-            }
-            if (str.IsStringRichText()) {
-                var assembly = Assembly.GetAssembly(typeof(System.Windows.FrameworkElement));
-                var xamlRtfConverterType = assembly.GetType("System.Windows.Documents.XamlRtfConverter");
-                var xamlRtfConverter = Activator.CreateInstance(xamlRtfConverterType, true);
-                var convertRtfToXaml = xamlRtfConverterType.GetMethod("ConvertRtfToXaml", BindingFlags.Instance | BindingFlags.NonPublic);
-                var xamlContent = (string)convertRtfToXaml.Invoke(xamlRtfConverter, new object[] { str });
-                return xamlContent;
-            }
-            throw new Exception("ToXaml exception string must be plain or rich text. Its content is: " + str);
-        }
-
-        public static string ToXamlPackage(this FlowDocument fd) {
-            
-            return XamlWriter.Save(fd);
-        }
-
-        public static string ToXamlPackage(this TextRange tr) {
-            using(var ms = new MemoryStream()) {
-                tr.Save(ms, DataFormats.XamlPackage);
-                return XamlWriter.Save(ms);
-            }
-        }
+        
 
         public static string ToEncodedPlainText(this TextRange tr) {
             if(tr.IsEmpty) {
@@ -985,7 +957,7 @@ namespace MpWpfApp {
             if (text.IsStringHtmlText()) {
                 return text;
             }
-            return MpRtfToHtmlConverter.ConvertRtfToHtml(text.ToRichText());
+            return MpRtfToHtmlConverter.ConvertRtfToHtml(text.ToContentRichText());
         }
 
         

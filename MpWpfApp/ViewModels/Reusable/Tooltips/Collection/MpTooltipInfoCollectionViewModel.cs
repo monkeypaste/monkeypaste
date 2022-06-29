@@ -18,6 +18,7 @@ namespace MpWpfApp {
 
         public MpContactFieldInfoViewModel ContactFieldInfoViewModel { get; private set; }
 
+        public MpClipboardFormatInfoViewModel ClipboardFormatInfoViewModel { get; private set; }
         #endregion
 
         #endregion
@@ -26,6 +27,7 @@ namespace MpWpfApp {
         public void Init() {
             DateTimeFormatInfoViewModel = new MpDateTimeFormatInfoViewModel();
             ContactFieldInfoViewModel = new MpContactFieldInfoViewModel();
+            ClipboardFormatInfoViewModel = new MpClipboardFormatInfoViewModel();
         }
 
         #endregion

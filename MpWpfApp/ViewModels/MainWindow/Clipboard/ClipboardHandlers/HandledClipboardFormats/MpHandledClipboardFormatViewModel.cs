@@ -97,6 +97,7 @@ namespace MpWpfApp {
 
         public virtual bool IsLoaded => Items.Count > 0 && Items[0].Items.Count > 0;
 
+        public bool IsValid { get; private set; }
         //public bool IsAnyEditingParameters => Items.Any(x => x.IsEditingParameters);
 
         public bool IsHovering { get; set; } = false;
@@ -163,7 +164,8 @@ namespace MpWpfApp {
             }
         }
 
-        public MpIClipboardPluginComponent ClipboardPluginComponent => PluginFormat == null ? null : PluginFormat.Component as MpIClipboardPluginComponent;
+        public MpIClipboardPluginComponent ClipboardPluginComponent => 
+            PluginFormat == null ? null : PluginFormat.Component as MpIClipboardPluginComponent;
 
         public bool IsReader => PluginFormat == null ? 
                                     false :
@@ -205,7 +207,11 @@ namespace MpWpfApp {
         #region Public Methods
 
         //public async Task InitializeAsync(MpPluginFormat plugin, int handlerIdx, bool isReader) {
-        public async Task InitializeAsync(MpPluginFormat plugin, MpClipboardHandlerFormat handlerFormat) {
+        public async Task InitializeAsync(MpClipboardHandlerFormat handlerFormat) {
+            IsValid = ValidateClipboardHandlerFormat(handlerFormat);
+            if(!IsValid) {
+                return;
+            }
             if (IsLoaded) {
                 return;
             }
@@ -272,7 +278,7 @@ namespace MpWpfApp {
             return aip;
         }
 
-        public virtual bool Validate() {
+        public virtual bool ValidateParameters() {
             if (SelectedItem == null) {
                 return true;
             }
@@ -337,14 +343,14 @@ namespace MpWpfApp {
                 throw new Exception($"Parameters for '{Title}' not found");
             }
 
-            var aip = await MpPluginPreset.Create(
+            var aip = await MpPluginPreset.CreateAsync(
                                 pluginGuid: ClipboardHandlerGuid,
                                 isDefault: true,
                                 label: $"{Title} - Default [{(IsReader ? "Reader":"Writer")}]",
                                 iconId: HandledFormatIconId,
                                 sortOrderIdx: existingDefaultPresetId == 0 ? 0 : Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
                                 description: $"Auto-generated default preset for '{Title}'",
-                                format: ClipboardPluginFormat,
+                                //format: ClipboardPluginFormat,
                                 manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime,
                                 existingDefaultPresetId: existingDefaultPresetId);
             return aip;
@@ -433,9 +439,9 @@ namespace MpWpfApp {
                 presets = await ResetPresetsAsync(presets);
             }
 
-            presets.ForEach(x => x.ComponentFormat = ClipboardPluginFormat);
+            //presets.ForEach(x => x.ComponentFormat = ClipboardPluginFormat);
 
-            if(isNew && PluginFormat.guid == _defaultHandlerPluginGuid) {
+            if(needsReset && PluginFormat.guid == _defaultHandlerPluginGuid) {
                 // this is supposed to handle initial startup for CoreClipboard handler when no formats are enabled 
                 // but there's many cases that this may not be initial startup so:
                 // TODO instead of doing should notify clipboard collection that default was reset and only enable formats
@@ -444,13 +450,18 @@ namespace MpWpfApp {
 
                 await Task.WhenAll(presets.Select(x => x.WriteToDatabaseAsync()));
 
-                MessageBox.Show("All CoreClipboard formats have been set to enabled");
+                //MessageBox.Show("All CoreClipboard formats have been set to enabled");
             }
 
             return presets.OrderBy(x=>x.SortOrderIdx);
         }
 
         private async Task<List<MpPluginPreset>> ResetPresetsAsync(List<MpPluginPreset> presets = null) {
+            // NOTE Reseting may not be necessary in release, honestly don't remember why I do in the first place
+            // I think its for debugging parameter lifecycle so keep for now..
+            // avoiding changing paramId to string but I think it may aid plugin scaling and this reseting thing so just
+            // am just trying to make what sense I can of it when re-encounter
+
             //if manifest has been modified
             //(for now clear all presets and either load predefined presets or create from parameter default values)
 
@@ -469,14 +480,14 @@ namespace MpWpfApp {
                 presets.Add(defualtPreset);
             } else {
                 foreach (var preset in ClipboardPluginFormat.presets) {
-                    var aip = await MpPluginPreset.Create(
+                    var aip = await MpPluginPreset.CreateAsync(
                         pluginGuid: ClipboardHandlerGuid,
                         isDefault: preset.isDefault,
                         label: preset.label,
                         iconId: HandledFormatIconId,
                         sortOrderIdx: ClipboardPluginFormat.presets.IndexOf(preset),
                         description: preset.description,
-                        format: ClipboardPluginFormat,
+                        //format: ClipboardPluginFormat,
                         manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
                     presets.Add(aip);
                 }
@@ -487,6 +498,17 @@ namespace MpWpfApp {
             return presets;
         }
 
+        private bool ValidateClipboardHandlerFormat(MpClipboardHandlerFormat chf) {
+            bool isValid = true;
+            var sb = new StringBuilder();
+
+            if (string.IsNullOrEmpty(chf.iconUri) || !Uri.IsWellFormedUriString(chf.iconUri, UriKind.RelativeOrAbsolute)) {
+                sb.AppendLine($"Plugin {PluginFormat.title} has malformed icon uri '{chf.iconUri}', plugin must have valid icon");
+                isValid = false;
+            }
+
+            return isValid;
+        }
         #endregion
 
         #region Commands
@@ -495,9 +517,9 @@ namespace MpWpfApp {
             async () => {
                 IsBusy = true;
 
-                MpPluginPreset newPreset = await MpPluginPreset.Create(
+                MpPluginPreset newPreset = await MpPluginPreset.CreateAsync(
                         pluginGuid: ClipboardHandlerGuid,
-                        format: ClipboardPluginFormat,
+                        //format: ClipboardPluginFormat,
                         iconId: HandledFormatIconId,
                         label: GetUniquePresetName());
 
@@ -544,7 +566,7 @@ namespace MpWpfApp {
                 IsBusy = true;
 
                 foreach (var presetVal in presetVm.Items) {
-                    await presetVal.PresetValue.DeleteFromDatabaseAsync();
+                    await presetVal.PresetValueModel.DeleteFromDatabaseAsync();
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
 
@@ -560,12 +582,23 @@ namespace MpWpfApp {
                     throw new Exception("Analyzer is supposed to have a default preset");
                 }
 
+                // recreate default preset record (name, icon, etc.)
                 var defaultPresetModel = await CreateDefaultPresetModelAsync(defvm.PresetId);
+
+                // store IsEnabled to current state
+                bool wasEnabled = defvm.IsEnabled;
+
+                // before initializing preset remove current values from db or it won't reset values
+                await Task.WhenAll(defvm.Items.Select(x => x.PresetValueModel.DeleteFromDatabaseAsync()));
 
                 await defvm.InitializeAsync(defaultPresetModel);
 
                 Items.ForEach(x => x.IsSelected = x.PresetId == defvm.PresetId);
                 OnPropertyChanged(nameof(SelectedItem));
+
+                if(wasEnabled) {
+                    MpClipboardHandlerCollectionViewModel.Instance.ToggleFormatPresetIsEnabled.Execute(defvm);
+                }
 
                 IsBusy = false;
             });
@@ -611,7 +644,10 @@ namespace MpWpfApp {
                 if (aipvm == null) {
                     throw new Exception("DuplicatedPresetCommand must have preset as argument");
                 }
-                var dp = await aipvm.Preset.CloneDbModel();
+                var dp = await aipvm.Preset.CloneDbModelAsync(
+                    deepClone: true,
+                    suppressWrite: false);
+
                 var dpvm = await CreatePresetViewModelAsync(dp);
                 Items.Add(dpvm);
                 Items.ForEach(x => x.IsSelected = x == dpvm);

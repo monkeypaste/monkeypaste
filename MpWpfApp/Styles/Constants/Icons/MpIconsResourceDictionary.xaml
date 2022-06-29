@@ -323,5 +323,6 @@
     <s:String x:Key="FileDropFormatIcon">
         pack://application:,,,/MpWpfApp;component/Resources/Images/folder.png
     </s:String>
+    
     <!--  Icon/Image Source Paths End  -->
 </ResourceDictionary>

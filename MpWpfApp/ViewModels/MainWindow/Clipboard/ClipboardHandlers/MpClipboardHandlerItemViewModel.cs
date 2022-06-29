@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
 using System.IO;
+using System.ComponentModel;
+using System.Collections;
 
 namespace MpWpfApp {
     public class MpClipboardHandlerItemViewModel :
@@ -15,7 +17,8 @@ namespace MpWpfApp {
         MpIHoverableViewModel,
         MpIMenuItemViewModel, 
         MpITreeItemViewModel,
-        MpIBoxViewModel {
+        MpIBoxViewModel,
+        INotifyDataErrorInfo {
 
         #region Private
 
@@ -62,6 +65,17 @@ namespace MpWpfApp {
         #region MpIMenuItemViewModel Implementation
 
         public MpMenuItemViewModel MenuItemViewModel { get; }
+
+        #endregion
+
+        #region INotifyDataErrorInfo Implementation
+        public IEnumerable GetErrors(string propertyName) {
+            throw new NotImplementedException();
+        }
+
+        public bool HasErrors { get; }
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         #endregion
 
@@ -113,7 +127,7 @@ namespace MpWpfApp {
         #region Public Methods
 
         public async Task InitializeAsync(MpPluginFormat pf) {
-            if (!ValidatePlugin(pf)) {
+            if (!ValidateClipboardHandler(pf)) {
                 return;
             }
             IsBusy = true;            
@@ -123,12 +137,12 @@ namespace MpWpfApp {
             PluginIconId = await GetOrCreateIconIdAsync();
 
             foreach (var reader in ClipboardPluginFormat.readers) {
-                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(PluginFormat, reader);
+                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(reader);
                 Items.Add(hcfvm);
             }
 
             foreach (var writer in ClipboardPluginFormat.writers) {
-                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(PluginFormat, writer);
+                var hcfvm = await CreateHandledClipboardFormatViewModelAsync(writer);
                 Items.Add(hcfvm);
             }
 
@@ -136,13 +150,18 @@ namespace MpWpfApp {
                 await Task.Delay(100);
             }
 
+            var invalidItems = Items.Where(x => !x.IsValid);
+            for (int i = 0; i < invalidItems.Count(); i++) {
+                Items.Remove(Items[i]);
+            }
+
             OnPropertyChanged(nameof(Items));
             IsBusy = false;
         }
 
-        public async Task<MpHandledClipboardFormatViewModel> CreateHandledClipboardFormatViewModelAsync(MpPluginFormat pf, MpClipboardHandlerFormat format) {
+        public async Task<MpHandledClipboardFormatViewModel> CreateHandledClipboardFormatViewModelAsync(MpClipboardHandlerFormat format) {
             var hcfvm = new MpHandledClipboardFormatViewModel(this);
-            await hcfvm.InitializeAsync(pf, format);
+            await hcfvm.InitializeAsync(format);
             return hcfvm;
         }
 
@@ -166,20 +185,24 @@ namespace MpWpfApp {
             }
         }
 
-        private bool ValidatePlugin(MpPluginFormat pf) {
+        private bool ValidateClipboardHandler(MpPluginFormat pf) {
             if(pf == null) {
                 MpConsole.WriteTraceLine("plugin error, not registered");
+                return false;
+            }
+            if(pf.clipboardHandler == null) {
+                MpConsole.WriteTraceLine("clipboard handler empty, ignoring");
+                return false;            
+            }
+            if(pf.clipboardHandler.readers.Count == 0 &&
+               pf.clipboardHandler.writers.Count == 0) {
+                MpConsole.WriteTraceLine($"Plugin '{pf.title}' is identified as a clipboard handler but has no readers or writerss, ignoring");
                 return false;
             }
 
             bool isValid = true;
             var sb = new StringBuilder();
 
-
-            if(string.IsNullOrEmpty(pf.iconUri) || !Uri.IsWellFormedUriString(pf.iconUri,UriKind.RelativeOrAbsolute)) {
-                sb.AppendLine($"Plugin {pf.title} has malformed icon uri '{pf.iconUri}', plugin must have valid icon");
-                isValid = false;
-            }
             var dupNames = pf.clipboardHandler.readers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
             if (dupNames.Count() > 0) {
                 sb.AppendLine("clipboard format names must be unique, " + String.Join(",", dupNames) + " are duplicated in readers");
@@ -221,6 +244,7 @@ namespace MpWpfApp {
                 createBorder: false);
             return icon.Id;
         }
+
         #endregion
     }
 }

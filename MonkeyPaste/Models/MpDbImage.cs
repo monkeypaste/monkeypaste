@@ -56,7 +56,7 @@ namespace MonkeyPaste {
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpDbImage> CloneDbModel(bool suppressWrite = false) {
+        public async Task<MpDbImage> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
             var cdbi = new MpDbImage() {
                 DbImageGuid = System.Guid.NewGuid(),
                 ImageBase64 = this.ImageBase64

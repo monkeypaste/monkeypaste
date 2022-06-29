@@ -15,6 +15,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 using System.Collections.Specialized;
+using System.Windows.Documents;
 
 namespace CoreClipboardHandler {
     public class CoreClipboardHandler : 
@@ -51,15 +52,23 @@ namespace CoreClipboardHandler {
             W_Ignore_Bitmap,
             W_IgnoreAll_FileDrop,
             W_IgnoredExt_FileDrop,
-            W_Ignore_Csv //22
+            W_Ignore_Csv, //22
+
+            //Added
+            R_IgnoredDir_FileDrop
         }
+
+        private const string TEXT_FORMAT = "Text";
+        private const string RTF_FORMAT = "Rich Text Format";
+        private const string HTML_FORMAT = "HTML Format";
+        private const string BMP_FORMAT = "Bitmap";
+        private const string FILE_DROP_FORMAT = "FileDrop";
+        private const string CSV_FORMAT = "CSV";
 
         #endregion
 
-
-
         #region MpIClipboardReaderComponent Implementation
-
+        
         public MpClipboardReaderResponse ReadClipboardData(MpClipboardReaderRequest request) {
             var hasError = CanHandleDataObject();
             if (hasError != null) {
@@ -80,54 +89,54 @@ namespace CoreClipboardHandler {
             };
         }
 
-        private string GetClipboardData(string nativeFormatStr, MpClipboardReaderRequest request) {
-            while (WinApi.IsClipboardOpen(true)) {
+        private string GetClipboardData(string format, MpClipboardReaderRequest request) {
+            IntPtr handle_with_cb = WinApi.IsClipboardOpen(true);
+            bool triedToClose = false;
+            while (handle_with_cb != IntPtr.Zero) {
+                if(triedToClose) {
+                    Debugger.Break();
+                }
+                if(handle_with_cb == _mainWindowHandle) {
+                    bool isClosed = WinApi.CloseClipboard();
+                    MpConsole.WriteTraceLine("Clipboard is hung by this app while trying to read it, invoking close cliboard: " + (isClosed ? "SUCCESS" : "FAIL"));
+                    triedToClose = true;
+                }
                 Thread.Sleep(100);
+                handle_with_cb = WinApi.IsClipboardOpen(true);
             }
-            if (nativeFormatStr == DataFormats.FileDrop &&
-                //WinApi.IsClipboardFormatAvailable(CF_HDROP)
-                Clipboard.ContainsFileDropList()) {
+            string data = null;
+            switch(format) {
+                case FILE_DROP_FORMAT:
+                    if(Clipboard.ContainsFileDropList()) {
+                        string[] sa = Clipboard.GetData(format) as string[];
+                        if (sa != null && sa.Length > 0) {
+                            // NOTE ToLowering paths here ensures all item paths are lower case (which is app-wide convention)
+                            data = string.Join(Environment.NewLine, sa.Select(x=>x.ToLower()));
 
-                //WinApi.OpenClipboard(_mainWindowHandle);
-                string[] sa = Clipboard.GetData(nativeFormatStr) as string[];
-                if (sa != null && sa.Length > 0) {
-                    return string.Join(Environment.NewLine, sa);
-                }
-                //WinApi.CloseClipboard();
-
-            } else if (nativeFormatStr == DataFormats.Bitmap &&
-                      //WinApi.IsClipboardFormatAvailable(CF_BITMAP)
-                      Clipboard.ContainsImage()) {
-                var bmpSrc = Clipboard.GetImage();
-                if (bmpSrc != null) {
-                    byte[] bytes = null;
-                    PngBitmapEncoder encoder = new PngBitmapEncoder();
-                    using (MemoryStream stream = new MemoryStream()) {
-                        try {
-                            var bf = System.Windows.Media.Imaging.BitmapFrame.Create(bmpSrc);
-                            encoder.Frames.Add(bf);
-                            encoder.Save(stream);
-                            bytes = stream.ToArray();
-                            stream.Close();
-                            // WinApi.CloseClipboard();
-                        }
-                        catch (Exception ex) {
-                            MpConsole.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
-                            //WinApi.CloseClipboard();
-                            return null;
                         }
                     }
-                    if (bytes != null) {
-                        return Convert.ToBase64String(bytes);
+                    break;
+                case BMP_FORMAT:
+                    if(Clipboard.ContainsImage()) {
+                        var bmpSrc = Clipboard.GetImage();
+                        if (bmpSrc != null) {
+                            data = bmpSrc.ToBase64String();
+                        }
                     }
-                }
-            } else {
-                uint format = GetWin32FormatId(nativeFormatStr);
-                if (format != 0) {
-                    if (WinApi.IsClipboardFormatAvailable(format)) {
-                        if (WinApi.IsClipboardFormatAvailable(format)) {
+                    break;
+                default:
+                    //if(Clipboard.ContainsData(format)) {
+                    //    object raw_data = Clipboard.GetData(format);
+                    //    data = raw_data.ToString();
+                    //    if(string.IsNullOrEmpty(data)) {
+                    //        Debugger.Break();
+                    //    }
+                    //}
+                    uint formatId = GetWin32FormatId(format);
+                    if (formatId != 0) {
+                        if (WinApi.IsClipboardFormatAvailable(formatId)) {
                             if (WinApi.OpenClipboard(_mainWindowHandle)) {
-                                IntPtr hGMem = WinApi.GetClipboardData(format);
+                                IntPtr hGMem = WinApi.GetClipboardData(formatId);
                                 IntPtr pMFP = WinApi.GlobalLock(hGMem);
                                 uint len = WinApi.GlobalSize(hGMem);
                                 byte[] bytes = new byte[len];
@@ -137,14 +146,134 @@ namespace CoreClipboardHandler {
                                 WinApi.GlobalUnlock(hGMem);
                                 WinApi.CloseClipboard();
 
-                                return strMFP;
+                                data = strMFP;
                             }
                         }
                     }
-                }
+                    break;
             }
-            return null;
+            return ProcessReaderFormatParamsOnData(request, format, data); ;
         }
+
+        private string ProcessReaderFormatParamsOnData(MpClipboardReaderRequest req, string format, string data) {
+            if(string.IsNullOrEmpty(data)) {
+                return null;
+            }
+
+            switch(format) {
+                case TEXT_FORMAT: {
+                        if(req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Text, out string ignoreStr)
+                            && bool.Parse(ignoreStr)) {
+                            return null;
+                        }
+
+                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_MaxCharCount_Text, out string maxCharCountStr)) {
+                            int maxCharCount = int.Parse(maxCharCountStr);
+                            if (data.Length > maxCharCount) {
+                                return data.Substring(0, maxCharCount);
+                            }
+                        }
+                        
+                        return data;
+                    }
+                case RTF_FORMAT: {
+                        if(req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Rtf, out string ignoreStr)
+                            && bool.Parse(ignoreStr)) {
+                            return null;
+                        }
+
+                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_MaxCharCount_Rtf, out string maxCharCountStr)) {
+                            int maxCharCount = int.Parse(maxCharCountStr);
+
+                            string pt = data.ToPlainText();
+                            if (pt.Length > maxCharCount) {
+                                // NOTE for rtf 
+                                var fd = data.ToFlowDocument();
+                                var ctp = fd.ContentEnd;
+                                while(new TextRange(fd.ContentStart,ctp).Text.Length > maxCharCount) {
+                                    ctp = ctp.GetPositionAtOffset(-1);
+                                    if(ctp == fd.ContentStart || ctp == null) {
+                                        ctp = null;
+                                        break;
+                                    }
+                                }
+                                if(ctp != null) {
+                                    return new TextRange(fd.ContentStart, ctp).ToRichText();
+                                }
+                                return data.Substring(0, maxCharCount);
+                            }
+                        }
+
+                        return data;
+                    }
+                case HTML_FORMAT: {
+                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Html, out string ignoreStr)
+                            && bool.Parse(ignoreStr)) {
+                            return null;
+                        }
+
+                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_MaxCharCount_Html, out string maxCharCountStr)) {
+                            int maxCharCount = int.Parse(maxCharCountStr);
+                            if (data.Length > maxCharCount) {
+                                return data.Substring(0, maxCharCount);
+                            }
+                        }
+
+                        return data;
+                    }
+                case BMP_FORMAT: {
+                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Bitmap, out string ignoreStr)
+                            && bool.Parse(ignoreStr)) {
+                            return null;
+                        }
+                        return data;
+                    }
+                case FILE_DROP_FORMAT: {
+                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_IgnoreAll_FileDrop, out string ignoreStr)
+                            && bool.Parse(ignoreStr)) {
+                            return null;
+                        }
+                        // NOTE path's are all lower cased after read from clipboard
+
+                        List<string> fpl = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                        IEnumerable<string> ignoreExt = req.items
+                                                    .FirstOrDefault(x => (CoreClipboardParamType)x.paramId == CoreClipboardParamType.R_IgnoredExt_FileDrop)
+                                                    .value.ToListFromCsv().Select(x=>x.ToLower());
+                        
+                        IEnumerable<string> fpl_filesToRemove = fpl.Where(x => ignoreExt.Any(y => x.EndsWith(y)));
+                        for (int i = 0; i < fpl_filesToRemove.Count(); i++) {
+                            fpl.Remove(fpl_filesToRemove.ElementAt(i));
+                        }
+
+                        IEnumerable<string> ignoreDir = req.items.FirstOrDefault(x => (CoreClipboardParamType)x.paramId == CoreClipboardParamType.R_IgnoredDir_FileDrop)
+                                                    .value.ToListFromCsv().Select(x=>x.ToLower());
+
+                        IEnumerable<string> fpl_dirToRemove = fpl.Where(x => ignoreDir.Any(y => x.StartsWith(y)));
+                        for (int i = 0; i < fpl_dirToRemove.Count(); i++) {
+                            fpl.Remove(fpl_dirToRemove.ElementAt(i));
+                        }
+                        if(fpl.Count == 0) {
+                            return null;
+                        }
+                        return String.Join(Environment.NewLine, fpl);
+                    }
+                case CSV_FORMAT: {
+
+                        if (req.ParamLookup.TryGetValue((int)CoreClipboardParamType.R_Ignore_Csv, out string ignoreStr)
+                            && bool.Parse(ignoreStr)) {
+                            return null;
+                        }
+
+                        return data;
+                    }
+                default:
+                    MpConsole.WriteTraceLine($"Warning, format '{format}' has no clipboard read parameter handler specified, returning raw clipboard data");
+                    return data;
+            }
+        }
+        
+
 
         private uint GetWin32FormatId(string nativeFormatStr) {
             if (nativeFormatStr == DataFormats.Text) {
@@ -238,11 +367,5 @@ namespace CoreClipboardHandler {
         }
 
         #endregion
-
-
-
-
-        
-
     }
 }

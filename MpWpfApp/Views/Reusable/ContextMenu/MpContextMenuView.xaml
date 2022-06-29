@@ -14,11 +14,11 @@
              Closed="ContextMenuView_Closed"
              d:DataContext="{d:DesignInstance Type=pcl:MpMenuItemViewModel,
                                               IsDesignTimeCreatable=False}">
-    
+
     <ContextMenu.Resources>
 
         <!--  CONTEXT MENU  -->
-        
+
         <!--  MenuItem  -->
         <HierarchicalDataTemplate x:Key="MenuItem"
                                   DataType="{x:Type pcl:MpMenuItemViewModel}"
@@ -256,6 +256,73 @@
                                                                     Converter={StaticResource BoolToVisibilityConverter},
                                                                     ConverterParameter={StaticResource Hide}}" />
                                     </Border>
+                                </Button>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </MenuItem.Header>
+            </MenuItem>
+        </DataTemplate>
+
+        <!--  Add Table ListBox Menu Item  -->
+        <DataTemplate x:Key="NewTableSelectorMenuItem"
+                      DataType="{x:Type pcl:MpMenuItemViewModel}">
+            <MenuItem Loaded="MenuItem_Loaded" MaxWidth="220">
+                <MenuItem.Header>
+                    <ListBox HorizontalAlignment="Left"
+                             VerticalAlignment="Stretch"
+                             HorizontalContentAlignment="Left"
+                             VerticalContentAlignment="Top"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ItemsSource="{Binding SubItems}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             SelectionMode="Single">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel MaxWidth="240"
+                                           IsItemsHost="True"
+                                           Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="IsSelected"
+                                        Value="{Binding IsSelected}" />
+                                <Setter Property="FocusVisualStyle"
+                                        Value="{x:Null}" />
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Left" />
+                                <Setter Property="VerticalContentAlignment"
+                                        Value="Top" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <!--  Color Pallete Item  -->
+                            <DataTemplate>
+                                <Button local:MpHoverableExtension.IsEnabled="True"
+                                        local:MpHoverableExtension.IsHovering="{Binding IsHovering,
+                                                                                        Mode=TwoWay}"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Command="{Binding Command}"
+                                        CommandParameter="{Binding CommandParameter}">
+                                    <Border Width="15"
+                                            Height="15"
+                                            Padding="2.5"
+                                            Background="{Binding Header,
+                                                                 Converter={StaticResource StringHexToBrushConverter}}"
+                                            BorderBrush="{Binding BorderHexColor,
+                                                                  Converter={StaticResource StringHexToBrushConverter}}"
+                                            BorderThickness="1"
+                                            CornerRadius="2" />
                                 </Button>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

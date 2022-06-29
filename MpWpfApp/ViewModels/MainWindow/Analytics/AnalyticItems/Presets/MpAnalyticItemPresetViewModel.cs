@@ -29,7 +29,8 @@ namespace MpWpfApp {
         MpIUserIconViewModel,
         //MpIUserColorViewModel,
         MpIShortcutCommand, 
-        MpITreeItemViewModel {
+        MpITreeItemViewModel,
+        MpIPluginComponentViewModel {
         #region Properties
 
         #region View Models
@@ -99,6 +100,13 @@ namespace MpWpfApp {
         public bool IsHovering { get; set; } = false;
 
         #endregion
+
+        #region MpIPluginComponentViewModel Implementation
+        public MpPluginComponentBaseFormat ComponentFormat => AnalyzerFormat;
+
+        #endregion
+
+
 
         #region Appearance
 
@@ -273,7 +281,15 @@ namespace MpWpfApp {
             }
         }
 
-        public MpAnalyzerPluginFormat AnalyzerFormat => Preset == null ? null : Preset.ComponentFormat as MpAnalyzerPluginFormat;
+
+        public MpAnalyzerPluginFormat AnalyzerFormat {
+            get {
+                if (Parent == null) {
+                    return null;
+                }
+                return Parent.AnalyzerPluginFormat;
+            }
+        }
 
         public MpPluginPreset Preset { get; protected set; }
         
@@ -323,32 +339,14 @@ namespace MpWpfApp {
 
             Items.Clear();
 
-            Preset = aip;//await MpDb.GetItemAsync<MpAnalyticItemPreset>(aip.Id);
+            Preset = aip;
 
             if(AnalyzerFormat == null) {
                 Debugger.Break();
             }
-            var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(AnalyticItemPresetId);
-            foreach(var paramFormat in AnalyzerFormat.parameters) {
-                if(!presetValues.Any(x=>x.ParamId == paramFormat.paramId)) {
-                    string paramVal = string.Empty;
-                    if(paramFormat.values != null && paramFormat.values.Count > 0) {
-                        if (paramFormat.values.Any(x => x.isDefault)) {
-                            paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
-                        } else {
-                            paramVal = paramFormat.values[0].value;
-                        }
-                    }
-                    var newPresetVal = await MpPluginPresetParameterValue.Create(
-                        presetId: Preset.Id, 
-                        paramEnumId: paramFormat.paramId, 
-                        value: paramVal,
-                        format: paramFormat);
 
-                    presetValues.Add(newPresetVal);
-                }
-            }
-            presetValues.ForEach(x => x.ParameterFormat = AnalyzerFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+            // get all preset values from db
+            var presetValues = await PrepareParameterValueModelsAsync();
 
             foreach (var paramVal in presetValues) {                                
                 var naipvm = await CreateParameterViewModel(paramVal);
@@ -369,9 +367,11 @@ namespace MpWpfApp {
         }
 
         public async Task<MpPluginParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
+            MpPluginParameterControlType controlType = AnalyzerFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
+
             MpPluginParameterViewModelBase naipvm = null;
 
-            switch (aipv.ParameterFormat.controlType) {
+            switch (controlType) {
                 case MpPluginParameterControlType.List:
                 case MpPluginParameterControlType.MultiSelectList:
                 case MpPluginParameterControlType.EditableList:
@@ -393,7 +393,7 @@ namespace MpWpfApp {
                     naipvm = new MpFileChooserParameterViewModel(this);
                     break;
                 default:
-                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), aipv.ParameterFormat.controlType));
+                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), controlType));
             }
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 
@@ -491,6 +491,40 @@ namespace MpWpfApp {
                     break;
             } 
         }
+
+        private async Task<IEnumerable<MpPluginPresetParameterValue>> PrepareParameterValueModelsAsync() {
+            // get all preset values from db
+            var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(AnalyticItemPresetId);
+
+            // loop through plugin formats parameters and add or replace (if found in db) to the preset values
+            foreach (var paramFormat in AnalyzerFormat.parameters) {
+                if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
+                    // if no value is found in db for a parameter defined in manifest...
+
+                    string paramVal = string.Empty;
+                    if (paramFormat.values != null && paramFormat.values.Count > 0) {
+                        // if parameter has a predefined value (a case when not would be a text box that needs input so its value is empty)
+                        if (paramFormat.values.Any(x => x.isDefault)) {
+                            // when manifest identifies a value as default choose that for value
+                            paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
+                        } else {
+                            // if no default is defined use first available value
+                            paramVal = paramFormat.values[0].value;
+                        }
+                    }
+                    var newPresetVal = await MpPluginPresetParameterValue.Create(
+                        presetId: Preset.Id,
+                        paramEnumId: paramFormat.paramId,
+                        value: paramVal
+                        //format: paramFormat
+                        );
+
+                    presetValues.Add(newPresetVal);
+                }
+            }
+            //presetValues.ForEach(x => x.ParameterFormat = AnalyzerFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+            return presetValues;
+        }
         #endregion
 
         #region Commands
@@ -502,7 +536,7 @@ namespace MpWpfApp {
         //        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
         //    }, !IsEditingParameters && !Parent.IsAnyEditingParameters);
 
-        public ICommand AssignHotkeyCommand => new RelayCommand(
+        public ICommand AssignHotkeyCommand => new MpAsyncCommand(
             async () => {
                 await MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                     $"Use {Label} Analyzer",

@@ -286,7 +286,7 @@ namespace MonkeyPaste {
                 //derive content type from data
                 if(data.IsStringBase64()) {
                     itemType = MpCopyItemType.Image;
-                } else if(data.IsStringFileOrPathFormat()) {
+                } else if(data.IsStringWindowsFileOrPathFormat()) {
                     // TODO this check will not work if data is list of files need to check for EOL char, split and check first item
                     itemType = MpCopyItemType.FileList;
                 } else {

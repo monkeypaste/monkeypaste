@@ -34,7 +34,7 @@ namespace MpWpfApp {
 
         public MpFileChooserParameterViewModel() : base(null) { }
 
-        public MpFileChooserParameterViewModel(MpViewModelBase parent) : base(parent) { }
+        public MpFileChooserParameterViewModel(MpIPluginComponentViewModel parent) : base(parent) { }
 
         public override async Task InitializeAsync(MpPluginPresetParameterValue aipv) {
             IsBusy = true;

@@ -74,9 +74,9 @@ namespace MpWpfApp {
 
         #region Constructors
 
-        public MpEnumerableParameterViewModel() : base () { }
+        public MpEnumerableParameterViewModel() : base() { }
 
-        public MpEnumerableParameterViewModel(MpViewModelBase parent) : base(parent) {
+        public MpEnumerableParameterViewModel(MpIPluginComponentViewModel parent) : base(parent) {
             //PropertyChanged += MpEnumerableParameterViewModel_PropertyChanged;
         }
 
@@ -94,8 +94,8 @@ namespace MpWpfApp {
 
             List<string> selectedValues = new List<string>();
 
-            if(!string.IsNullOrEmpty(PresetValue.Value)) {
-                selectedValues = PresetValue.Value.ToListFromCsv();                
+            if(!string.IsNullOrEmpty(PresetValueModel.Value)) {
+                selectedValues = PresetValueModel.Value.ToListFromCsv();                
             } else {
                 selectedValues = DefaultValues;
             }

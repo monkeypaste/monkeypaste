@@ -6,25 +6,6 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpClipboardHandlerFormats : MpJsonObject {
-        //public IEnumerable<MpClipboardHandlerFormat> handledFormats {
-        //    get {
-        //        if (readers == null && writers == null) {
-        //            yield break;
-        //        }
-        //        if (writers != null) {
-        //            foreach (var writer in writers) {
-        //                yield return writer;
-        //            }
-        //        }
-        //        if (readers == null) {
-        //            foreach (var reader in readers) {
-        //                yield return reader;
-        //            }
-        //        }
-
-        //    }
-        //}
-
         public List<MpClipboardHandlerFormat> readers { get; set; }
         public List<MpClipboardHandlerFormat> writers{ get; set; }
     }

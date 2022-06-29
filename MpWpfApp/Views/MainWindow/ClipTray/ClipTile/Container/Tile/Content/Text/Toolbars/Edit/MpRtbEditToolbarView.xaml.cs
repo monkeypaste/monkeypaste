@@ -185,6 +185,8 @@ namespace MpWpfApp {
 
             //AddTemplateButton.IsEnabled = CanAddTemplate(Rtb.Selection);
 
+            //AddTableButton.IsEnabled = Rtb.Selection.GetAllTextElements().Any(x => x is Table);
+
             object bgBrushObj = Rtb.Selection.GetPropertyValue(TextElement.BackgroundProperty);
             if (bgBrushObj is Brush bgBrush) {
                 BackgroundColorButtonBorder.Background = bgBrush;

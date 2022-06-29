@@ -76,7 +76,7 @@ namespace MpWpfApp {
                 if (forceType == MpCopyItemType.Image) {
                     fileList.Add(MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), CopyItem.ItemData.ToBitmapSource()));
                 } else if (forceType == MpCopyItemType.Text) {
-                    fileList.Add(MpHelpers.WriteTextToFile(Path.GetTempFileName(), CopyItem.ItemData.ToRichText()));
+                    fileList.Add(MpHelpers.WriteTextToFile(Path.GetTempFileName(), CopyItem.ItemData.ToContentRichText()));
                 } else {
                     isTemp = false;
                     var splitArray = CopyItem.ItemData.ToPlainText().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
@@ -98,7 +98,7 @@ namespace MpWpfApp {
                         if (forceType == MpCopyItemType.Image) {
                             fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, CopyItem.ItemData.ToBitmapSource()));
                         } else {
-                            fileList.Add(MpHelpers.WriteTextToFile(op, CopyItem.ItemData.ToRichText()));
+                            fileList.Add(MpHelpers.WriteTextToFile(op, CopyItem.ItemData.ToContentRichText()));
                         }
                         break;
                     case MpCopyItemType.Image:

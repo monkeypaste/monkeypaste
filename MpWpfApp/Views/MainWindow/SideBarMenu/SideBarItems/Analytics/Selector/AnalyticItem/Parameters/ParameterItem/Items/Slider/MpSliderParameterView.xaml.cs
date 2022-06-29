@@ -23,8 +23,7 @@ namespace MpWpfApp {
     public partial class MpSliderParameterView : MpUserControl<MpISliderViewModel> {
         private Point _lastMousePosition;
         private bool _isSliding = false;
-        private static Regex _ValueRegEx;
-
+        
         public MpSliderParameterView() {
             InitializeComponent();
         }
@@ -100,11 +99,8 @@ namespace MpWpfApp {
 
 
         private void SliderValueTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
-            if (_ValueRegEx == null) {
-                _ValueRegEx = new Regex(@"[^0-9.-]", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
-            }
             var keyStr = new KeyConverter().ConvertToString(e.Key);
-            if (_ValueRegEx.IsMatch(keyStr) && e.Key != Key.Delete && e.Key != Key.Back) {
+            if (MpRegEx.RegExLookup[MpRegExType.Is_NOT_Number].IsMatch(keyStr) && e.Key != Key.Delete && e.Key != Key.Back) {
                 e.Handled = true;
             }
         }

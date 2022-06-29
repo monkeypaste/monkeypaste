@@ -15,7 +15,8 @@ namespace MpWpfApp {
         MpIHoverableViewModel,
         MpISidebarItemViewModel,
         MpIUserIconViewModel,
-        MpITreeItemViewModel {
+        MpITreeItemViewModel,
+        MpIPluginComponentViewModel {
 
         #region Properties
 
@@ -50,6 +51,11 @@ namespace MpWpfApp {
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem { get; }
         public ObservableCollection<MpITreeItemViewModel> Children { get; }
+
+        #endregion
+
+        #region MpIPluginComponentViewModel Implementation
+        public MpPluginComponentBaseFormat ComponentFormat => ClipboardFormat;
 
         #endregion
 
@@ -284,9 +290,10 @@ namespace MpWpfApp {
             IsBusy = false;
         }
         public async Task<MpPluginParameterViewModelBase> CreateParameterViewModelAsync(MpPluginPresetParameterValue aipv) {
+            MpPluginParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
             MpPluginParameterViewModelBase naipvm = null;
 
-            switch (aipv.ParameterFormat.controlType) {
+            switch (controlType) {
                 case MpPluginParameterControlType.List:
                 case MpPluginParameterControlType.MultiSelectList:
                 case MpPluginParameterControlType.EditableList:
@@ -308,7 +315,7 @@ namespace MpWpfApp {
                     naipvm = new MpFileChooserParameterViewModel(this);
                     break;
                 default:
-                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), aipv.ParameterFormat.controlType));
+                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), controlType));
             }
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 
@@ -329,7 +336,7 @@ namespace MpWpfApp {
             } else {
                 aipvm.ValidationMessage = string.Empty;
             }
-            Parent.Validate();
+            Parent.ValidateParameters();
         }
 
         #endregion
@@ -350,31 +357,49 @@ namespace MpWpfApp {
                         Parent.Parent.Parent.ToggleFormatPresetIsWriteEnabledCommand.Execute(this);
                     }
                     break;
+                case nameof(HasModelChanged):
+                    if(HasModelChanged && IsAllValid) {
+                        Task.Run(async () => {
+                            await Preset.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                        }).FireAndForgetSafeAsync(this);
+                    }
+                    break;
             }
         }
 
         private async Task<IEnumerable<MpPluginPresetParameterValue>> PrepareParameterValueModelsAsync() {
+            // get all preset values from db
             var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(PresetId);
+            // loop through plugin formats parameters and add or replace (if found in db) to the preset values
             foreach (var paramFormat in ClipboardFormat.parameters) {
                 if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
+                    // if no value is found in db for a parameter defined in manifest...
+
                     string paramVal = string.Empty;
-                    if (paramFormat.values != null && paramFormat.values.Count > 0) {
+                    if (paramFormat.values != null && paramFormat.values.Count > 0) { 
+                        // if parameter has a predefined value (a case when not would be a text box that needs input so its value is empty)
+
                         if (paramFormat.values.Any(x => x.isDefault)) {
+                            // when manifest identifies a value as default choose that for value
+
                             paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
                         } else {
+                            // if no default is defined use first available value
                             paramVal = paramFormat.values[0].value;
                         }
                     }
                     var newPresetVal = await MpPluginPresetParameterValue.Create(
                         presetId: Preset.Id,
                         paramEnumId: paramFormat.paramId,
-                        value: paramVal,
-                        format: paramFormat);
+                        value: paramVal
+                        //format: paramFormat
+                        );
 
                     presetValues.Add(newPresetVal);
                 }
             }
-            presetValues.ForEach(x => x.ParameterFormat = ClipboardFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
+            //presetValues.ForEach(x => x.ParameterFormat = ClipboardFormat.parameters.FirstOrDefault(y => y.paramId == x.ParamId));
 
             return presetValues;
         }

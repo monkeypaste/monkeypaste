@@ -398,6 +398,8 @@ using stdole;
 
         public MpTemplateCollectionViewModel TemplateCollection { get; set; }
 
+        public MpContentTableViewModel TableViewModel { get; set; }
+
         public MpSourceViewModel SourceViewModel {
             get {
                 //if(MpMainWindowViewModel.Instance.IsMainWindowLoading) {
@@ -1384,6 +1386,8 @@ using stdole;
                 DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
                 await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
                 OnPropertyChanged(nameof(HasDetectedObjects));
+            } else if(ItemType == MpCopyItemType.Text) {
+                TableViewModel = new MpContentTableViewModel(this);
             }
 
             //RequestUiUpdate();
@@ -1626,7 +1630,7 @@ using stdole;
                     // handle special case when pasting item by id (like from a hotkey)
                     // and it has no templates (if it did tray would set manual query and show it)
                     // so since its not in ui need to use model data which is ok because it won't have any modifications
-                    rtf = CopyItemData.ToRichText();
+                    rtf = CopyItemData.ToContentRichText();
                 } 
             }
             switch (ItemType) {

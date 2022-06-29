@@ -127,12 +127,12 @@ namespace MonkeyPaste {
         //[Ignore]
         //public MpClipboardHandlerFormat ClipboardFormat { get; set; }
 
-        [Ignore]
-        public MpPluginComponentBaseFormat ComponentFormat { get; set; }
+        //[Ignore]
+        //public MpPluginComponentBaseFormat ComponentFormat { get; set; }
 
         #endregion
 
-        public static async Task<MpPluginPreset> Create(
+        public static async Task<MpPluginPreset> CreateAsync(
             string pluginGuid = "", 
             string label = "",
             string description = "",
@@ -142,11 +142,11 @@ namespace MonkeyPaste {
             bool isActionPreset = false,
             int sortOrderIdx = -1, 
             DateTime? manifestLastModifiedDateTime = null,
-            MpPluginComponentBaseFormat format = null,
+            //MpPluginComponentBaseFormat format = null,
             int existingDefaultPresetId = 0) {
-            if(format == null) {
-                throw new Exception("must have format");
-            }
+            //if(format == null) {
+            //    throw new Exception("must have format");
+            //}
             if(iconId == 0) {
                 throw new Exception("needs icon");
             }
@@ -168,7 +168,7 @@ namespace MonkeyPaste {
                 ShortcutId = 0,
                 ManifestLastModifiedDateTime = manifestLastModifiedDateTime.HasValue ? manifestLastModifiedDateTime.Value : DateTime.Now};
 
-            newPluginPreset.ComponentFormat = format;
+            //newPluginPreset.ComponentFormat = format;
 
             await newPluginPreset.WriteToDatabaseAsync();
 
@@ -177,7 +177,7 @@ namespace MonkeyPaste {
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpPluginPreset> CloneDbModel(bool suppressWrite = false) {
+        public async Task<MpPluginPreset> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
             // NOTE does not clone ShortcutId,IsDefault or IsQuickAction
 
             var caip = new MpPluginPreset() {
@@ -186,23 +186,33 @@ namespace MonkeyPaste {
                 Label = this.Label + " - Copy",
                 Description = this.Description,
                 ManifestLastModifiedDateTime = this.ManifestLastModifiedDateTime,
-                ComponentFormat = this.ComponentFormat                
+                //ComponentFormat = this.ComponentFormat                
             };
 
-            if(IconId > 0) {
-                var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
-                var ci = await icon.CloneDbModel();
-                caip.IconId = ci.Id;
+            if(deepClone) {
+                if (IconId > 0) {
+                    var icon = await MpDb.GetItemAsync<MpIcon>(IconId);
+                    var ci = await icon.CloneDbModelAsync(
+                        deepClone: deepClone,
+                        suppressWrite: suppressWrite);
+                    caip.IconId = ci.Id;
+                }
             }
 
-            // NOTE writing to db before creating preset values because they rely on cloned preset pk
-            await caip.WriteToDatabaseAsync();
+            if(!suppressWrite) {
+                // NOTE writing to db before creating preset values because they rely on cloned preset pk
+                await caip.WriteToDatabaseAsync();
+            }
 
-            var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(Id);
-            foreach(var ppv in presetValues) {
-                var cppv = await ppv.CloneDbModel();
-                cppv.PluginPresetId = caip.Id;
-                await cppv.WriteToDatabaseAsync();
+            if(deepClone) {
+                var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(Id);
+                foreach (var ppv in presetValues) {
+                    var cppv = await ppv.CloneDbModelAsync(
+                            deepClone: deepClone,
+                            suppressWrite: suppressWrite);
+                    cppv.PluginPresetId = caip.Id;
+                    await cppv.WriteToDatabaseAsync();
+                }
             }
 
             return caip;

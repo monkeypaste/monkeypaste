@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,10 @@ namespace MpWpfApp {
             if (mivm.Command != MpPlatformWrapper.Services.CustomColorChooserMenu.SelectCustomColorCommand) {
                 CloseMenu();
             }
+        }
+
+        private void MenuItem_Loaded(object sender, RoutedEventArgs e) {
+            //Debugger.Break();
         }
     }
 }

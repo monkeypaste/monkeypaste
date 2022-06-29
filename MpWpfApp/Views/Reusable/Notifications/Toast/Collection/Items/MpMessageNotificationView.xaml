@@ -13,7 +13,7 @@
                                                       IsDesignTimeCreatable=False}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
@@ -21,6 +21,7 @@
                    FontSize="16"
                    Foreground="White"
                    FontWeight="SemiBold"
+                   TextWrapping="WrapWithOverflow"
                    Text="{Binding Title}" />
         <Border Grid.Row="0"
                 Margin="5,0,5,0"

@@ -98,7 +98,7 @@ namespace MpWpfApp {
 
         public MpTextBoxParameterViewModel() : base(null) { }
 
-        public MpTextBoxParameterViewModel(MpViewModelBase parent) : base(parent) {
+        public MpTextBoxParameterViewModel(MpIPluginComponentViewModel parent) : base(parent) {
             PropertyChanged += MpTextBoxParameterViewModel_PropertyChanged;
         }
 

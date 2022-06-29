@@ -410,6 +410,9 @@ namespace MpWpfApp {
         #region Public Methods
 
         public async Task InitializeAsync(MpPluginFormat analyzerPlugin) {
+            if(!ValidateAnalyzer(analyzerPlugin)) {
+                return;
+            }
             if (IsLoaded) {
                 return;
             }
@@ -551,27 +554,16 @@ namespace MpWpfApp {
                 throw new Exception($"Parameters for '{Title}' not found");
             }
 
-            var aip = await MpPluginPreset.Create(
+            var aip = await MpPluginPreset.CreateAsync(
                                 pluginGuid: PluginFormat.guid,
                                 isDefault: true,
                                 label: $"{Title} - Default",
                                 iconId: PluginIconId,
                                 sortOrderIdx: existingDefaultPresetId == 0 ? 0 : Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
                                 description: $"Auto-generated default preset for '{Title}'",
-                                format: AnalyzerPluginFormat,
+                                //format: AnalyzerPluginFormat,
                                 manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime,
                                 existingDefaultPresetId: existingDefaultPresetId);
-
-            //var paramPresetValues = new List<MpAnalyzerPresetValueFormat>();
-            ////derive default preset & preset values from parameter formats
-            //if (AnalyzerPluginFormat.parameters != null) {
-            //    foreach (var param in AnalyzerPluginFormat.parameters) {
-            //        string defVal = string.Join(",", param.values.Where(x=>x.isDefault).Select(x=>x.value));
-            //        var presetVal = await MpPluginPresetParameterValue.Create(presetId: aip.Id, paramEnumId: param.paramId, value: defVal);
-
-            //        paramPresetValues.Add(presetVal);
-            //    }
-            //}
 
             return aip;
         }
@@ -624,8 +616,6 @@ namespace MpWpfApp {
                     break;
             }
         }
-
-
         private void UpdatePresetSortOrder(bool fromModel = false) {
             if(fromModel) {
                 Items.Sort(x => x.SortOrderIdx);
@@ -635,7 +625,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
 
         private async Task<int> GetOrCreateIconIdAsync() {
             var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUri, PluginFormat.RootDirectory); ;
@@ -667,7 +656,7 @@ namespace MpWpfApp {
                 isNew = true;
             }
 
-            presets.ForEach(x => x.ComponentFormat = AnalyzerPluginFormat);
+            //presets.ForEach(x => x.ComponentFormat = AnalyzerPluginFormat);
             return presets.OrderBy(x=>x.SortOrderIdx);
         }
 
@@ -690,33 +679,50 @@ namespace MpWpfApp {
                 presets.Add(defualtPreset);
             } else {
                 //when presets are defined in manifest create the preset and its values in the db
-                foreach (var preset in AnalyzerPluginFormat.presets) {
-                    var aip = await MpPluginPreset.Create(
+                foreach (var presetFormat in AnalyzerPluginFormat.presets) {
+                    var presetModel = await MpPluginPreset.CreateAsync(
                         pluginGuid: PluginFormat.guid,
-                        isDefault: preset.isDefault,
-                        label: preset.label,
+                        isDefault: presetFormat.isDefault,
+                        label: presetFormat.label,
                         iconId: PluginIconId,
-                        sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(preset),
-                        description: preset.description,
-                        format: AnalyzerPluginFormat,
+                        sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(presetFormat),
+                        description: presetFormat.description,
+                        //format: AnalyzerPluginFormat,
                         manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
 
-                    foreach(var presetValue in preset.values) {
+                    foreach(var presetValueModel in presetFormat.values) {
                         // only creat preset values in db, they will then be picked up when the preset vm is initialized
                         var aipv = await MpPluginPresetParameterValue.Create(
-                            presetId: aip.Id, 
-                            paramEnumId: presetValue.paramId,
-                            value: presetValue.value,
-                            format: AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.paramId == presetValue.paramId));                        
+                            presetId: presetModel.Id, 
+                            paramEnumId: presetValueModel.paramId,
+                            value: presetValueModel.value
+                            //format: AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.paramId == presetValueModel.paramId)
+                            );                        
                     }
 
-                    presets.Add(aip);
+                    presets.Add(presetModel);
                 }
                 if(presets.All(x=>x.IsDefault == false) && presets.Count > 0) {
                     presets[0].IsDefault = true;
                 }
             }
             return presets;
+        }
+
+        private bool ValidateAnalyzer(MpPluginFormat pf) {
+            if (pf == null) {
+                MpConsole.WriteTraceLine("plugin error, not registered");
+                return false;
+            }
+
+            bool isValid = true;
+            var sb = new StringBuilder();
+
+            if (isValid) {
+                return true;
+            }
+            MpConsole.WriteLine(sb.ToString());
+            return false;
         }
 
         #endregion
@@ -854,9 +860,9 @@ namespace MpWpfApp {
                     isActionPreset = (bool)args;
                 }
 
-                MpPluginPreset newPreset = await MpPluginPreset.Create(
+                MpPluginPreset newPreset = await MpPluginPreset.CreateAsync(
                         pluginGuid: PluginGuid,
-                        format:AnalyzerPluginFormat,
+                        //format:AnalyzerPluginFormat,
                         isActionPreset: isActionPreset,
                         iconId: PluginIconId,
                         label: GetUniquePresetName());
@@ -904,7 +910,7 @@ namespace MpWpfApp {
                 IsBusy = true;
 
                 foreach(var presetVal in presetVm.Items) {
-                    await presetVal.PresetValue.DeleteFromDatabaseAsync();
+                    await presetVal.PresetValueModel.DeleteFromDatabaseAsync();
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
 
@@ -919,8 +925,12 @@ namespace MpWpfApp {
                 if(defvm == null) {
                     throw new Exception("Analyzer is supposed to have a default preset");
                 }
-
+                                
+                // recreate default preset record (name, icon, etc.)
                 var defaultPresetModel = await CreateDefaultPresetModelAsync(defvm.AnalyticItemPresetId);
+
+                // before initializing preset remove current values from db or it won't reset values
+                await Task.WhenAll(defvm.Items.Select(x => x.PresetValueModel.DeleteFromDatabaseAsync()));
 
                 await defvm.InitializeAsync(defaultPresetModel);
 
@@ -971,7 +981,10 @@ namespace MpWpfApp {
                     if(aipvm == null) {
                         throw new Exception("DuplicatedPresetCommand must have preset as argument");
                     }
-                    var dp = await aipvm.Preset.CloneDbModel();
+                    var dp = await aipvm.Preset.CloneDbModelAsync(
+                        deepClone: true,
+                        suppressWrite: false);
+
                     var dpvm = await CreatePresetViewModelAsync(dp);
                     Items.Add(dpvm);
                     Items.ForEach(x => x.IsSelected = x == dpvm);

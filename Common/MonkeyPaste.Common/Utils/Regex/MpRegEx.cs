@@ -18,13 +18,24 @@ namespace MonkeyPaste.Common {
         //TemplateSegment,
         Guid,
         EncodedTextTemplate,
-        Is_NOT_Base64Str
+        Is_NOT_Base64Str,
+        HasSpecialCharacters,
+        Is_NOT_Number,
+        StartsWithWindowsStyleDirectory,
+        ContainsInvalidFileNameChar
        // HtmlTag
     }
 
-    public static class MpRegEx {
-        public static string KnownFileExtensions = @"rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx";
+    public static class MpRegEx {        
+        public static string KnownFileExtensions { get; set; } = @"rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx";
 
+        public static string InvalidFileNameChars {
+            get {
+                string strTheseAreInvalidFileNameChars = new string(System.IO.Path.GetInvalidPathChars());
+                strTheseAreInvalidFileNameChars += @":/?*" + "\"";
+                return strTheseAreInvalidFileNameChars;
+            }
+        }
         private static List<string> _regExStrings = new List<string>{
             
             //none
@@ -61,7 +72,19 @@ namespace MonkeyPaste.Common {
             @"\\{t\\{[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}\\}t\\}",
 
             //Is_NOT_Base64Str
-            @"[^a-zA-Z0-9+/=]"
+            @"[^a-zA-Z0-9+/=]",
+
+            //HasSpecialCharacters
+            @"[^a-zA-Z0-9_.]+",
+
+            //Is_NOT_Number
+            @"[^0-9.-]",
+
+            //StartsWithWindowsStyleDirectory
+            @"^[a-zA-Z]:\\$",
+
+            //ContainsInvalidFileNameChar
+            @"["+Regex.Escape(InvalidFileNameChars)+"]"
         };
 
         private static Dictionary<MpRegExType, Regex> _regExLookup;

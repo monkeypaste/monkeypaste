@@ -40,9 +40,17 @@ namespace MpWpfApp {
                     itemData = mpdo.GetData(MpPortableDataFormats.FileDrop).ToString();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Csv)) {
                     itemType = MpCopyItemType.Text;
-                    string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
-                    itemData = csvStr.ToRichTextTable();
-                    //itemData = itemData.ToQuillText();
+
+                    if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
+                        // NOTE this is assuming the content is a rich text table. But it may not be 
+                        // depending on the source so may need to be careful handling these. 
+                        itemType = MpCopyItemType.Text;
+                        itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
+                    } else {
+                        string csvStr = mpdo.GetData(MpPortableDataFormats.Csv).ToString();
+                        itemData = csvStr.ToRichTextTable();
+                        //itemData = itemData.ToQuillText();
+                    }
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Rtf)) {
                     itemType = MpCopyItemType.Text;
                     itemData = mpdo.GetData(MpPortableDataFormats.Rtf).ToString().EscapeExtraOfficeRtfFormatting();
@@ -58,15 +66,15 @@ namespace MpWpfApp {
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Text)) {
                     itemType = MpCopyItemType.Text;
-                    itemData = mpdo.GetData(MpPortableDataFormats.Text).ToString().ToRichText();
+                    itemData = mpdo.GetData(MpPortableDataFormats.Text).ToString().ToContentRichText();
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.Unicode)) {
                     itemType = MpCopyItemType.Text;
-                    itemData = mpdo.GetData(MpPortableDataFormats.Unicode).ToString().ToRichText();
+                    itemData = mpdo.GetData(MpPortableDataFormats.Unicode).ToString().ToContentRichText();
                     //itemData = itemData.ToQuillText();
                 } else if (mpdo.ContainsData(MpPortableDataFormats.OemText)) {
                     itemType = MpCopyItemType.Text;
-                    itemData = mpdo.GetData(MpPortableDataFormats.OemText).ToString().ToRichText();
+                    itemData = mpdo.GetData(MpPortableDataFormats.OemText).ToString().ToContentRichText();
                     //itemData = itemData.ToQuillText();
                 } else {
                     MpConsole.WriteTraceLine("clipboard data is not known format");
