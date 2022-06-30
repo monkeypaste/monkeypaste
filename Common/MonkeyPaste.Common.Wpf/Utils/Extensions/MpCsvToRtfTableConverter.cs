@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -120,11 +121,18 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static Table LoadTable(this TextRange tr, string csv) {
-            tr.Text = string.Empty;
-            var fd = tr.Start.Parent.FindParentOfType<FlowDocument>();
             var table = CreateTable(csv);
+
+            tr.Text = string.Empty;
             
-            fd.Blocks.InsertAfter(tr.Start.Paragraph, table);
+            var par = tr.Start.Paragraph;
+            if(par == null || par.Parent is TextElement te) {
+                Debugger.Break();
+            } else if(par.Parent is FlowDocument fd) {
+                fd.Blocks.InsertAfter(par,table);
+                fd.Blocks.Remove(par);
+            }
+            
             return table;
         }
 
@@ -180,7 +188,7 @@ namespace MonkeyPaste.Common.Wpf {
             AutoResizeColumns(table);
             return table;
         }
-        static void AutoResizeColumns(Table table) {
+        public static void AutoResizeColumns(Table table) {
             TableColumnCollection columns = table.Columns;
             TableRowCollection rows = table.RowGroups[0].Rows;
             TableCellCollection cells;

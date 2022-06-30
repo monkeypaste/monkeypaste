@@ -38,8 +38,8 @@ namespace MonkeyPaste.Common {
         public static string Yellow => "#FFFFFF00"; //yellow
         public static string Red => "#FFFF0000"; //red
 
-        public const string Transparent = "#00FFFFFF"; //transparent
-        public const string Black = "#FF000000";
+        public static string Transparent => "#00FFFFFF"; //transparent
+        public static string Black => "#FF000000";
 
         public static string DefaultControlBackground1 => "#FFF0F0F0";
         public static string DefaultControlBackground2 => "#FFE5E5E5";

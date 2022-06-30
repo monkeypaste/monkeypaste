@@ -175,23 +175,24 @@ namespace MpWpfApp {
             (args) => {
                 if(args is int[] argParts) {
                     // NOTE the +1 is because arg is cells index location not dimension
-                    int rowCount = (int)argParts[0] + 1;
-                    int colCount = (int)argParts[1] + 1;
+                    int rowCount = (int)argParts[0]+1;
+                    int colCount = (int)argParts[1]+1;
 
                     string tableCsv = string.Empty;
-                    for (int r = 0; r <= rowCount; r++) {
-                        for (int c = 0; c <= colCount; c++) {
+                    for (int r = 0; r < rowCount; r++) {
+                        for (int c = 0; c < colCount -1; c++) {
                             tableCsv += ",";
                         }
-                        tableCsv += Environment.NewLine;
+                        if(r < rowCount - 1) {
+                            tableCsv += Environment.NewLine;
+                        }                        
                     }
                     
                     var rtbcv = Application.Current.MainWindow
                                 .GetVisualDescendents<MpRtbContentView>()
                                 .FirstOrDefault(x => x.DataContext == Parent);
 
-                    string tableRtf = tableCsv.ToRichTextTable();
-                    rtbcv.Rtb.Selection.LoadRtf(tableRtf, out Size tableSize);
+                    rtbcv.Rtb.Selection.LoadTable(tableCsv);
 
                     MpContextMenuView.Instance.CloseMenu();
                 }
@@ -207,15 +208,48 @@ namespace MpWpfApp {
                     cells.ForEach(x => MpConsole.WriteLine("Selected cell Row: " + x.Row() + " Col: " + x.Col()));
 
                     switch(tableAction) {
-                        case MpContentTableContextActionType.InsertColumnRight:
+                        case MpContentTableContextActionType.InsertColumnRight: {
+                                if (cells != null && cells.Count() > 0) {
+                                    
+                                    var maxRightColumn = cells.Aggregate((a, b) => a.Col() > b.Col() ? a : b);
+                                    var table = maxRightColumn.Parent.FindParentOfType<Table>();
+                                    var insertedCells = new List<TableCell>();
+                                    foreach(var row in table.RowGroups[0].Rows) {
+                                        var newCell = new TableCell();
+                                        row.Cells.Insert(maxRightColumn.Col(), newCell);
+                                        insertedCells.Add(newCell);
+                                    }
+                                    
 
-                            if(cells != null && cells.Count() > 0) {
+                                    //var newColumn = new TableColumn(); 
+                                    //table.Columns.Insert(maxRightColumn.Col(), newColumn);
 
-                                var maxRightColumn = cells.Aggregate((a, b) => a.Col() > b.Col() ? a : b);
-                                var table = maxRightColumn.Parent.FindParentOfType<Table>();
-                                table.Columns.Insert(maxRightColumn.Col(), new TableColumn());
+                                    MpCsvToRtfTableConverter.AutoResizeColumns(table);
+
+
+                                    var rtbcv = Application.Current.MainWindow
+                                                        .GetVisualDescendents<MpRtbContentView>()
+                                                        .FirstOrDefault(x => x.DataContext == Parent);
+
+                                    rtbcv.Rtb.Selection.Select(
+                                        insertedCells[0].ContentStart, 
+                                        insertedCells[insertedCells.Count - 1].ContentEnd);
+                                }
+                                break;
                             }
-                            break;
+                        case MpContentTableContextActionType.InsertColumnLeft: {
+                                if (cells != null && cells.Count() > 0) {
+
+                                    var minLeftColumn = cells.Aggregate((a, b) => a.Col() < b.Col() ? a : b);
+                                    var table = minLeftColumn.Parent.FindParentOfType<Table>();
+                                    var newColumn = new TableColumn();
+                                    table.Columns.Insert(minLeftColumn.Col(), newColumn);
+
+                                    MpCsvToRtfTableConverter.AutoResizeColumns(table);
+                                }
+                                break;
+                            }
+
                     }
                 }
             });

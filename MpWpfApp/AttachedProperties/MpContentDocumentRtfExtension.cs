@@ -420,16 +420,16 @@ namespace MpWpfApp {
             }
             return MpSystemColors.Transparent;
         }
-        public static void SetSelectionBackgroundColor(MpIRtfSelectionRange tsr, string hexColor, string fallback = MpSystemColors.Transparent) {
-            hexColor = hexColor.IsStringHexColor() ? hexColor : fallback;
+        public static void SetSelectionBackgroundColor(MpIRtfSelectionRange tsr, string hexColor, string fallback = "") {
+            hexColor = hexColor.IsStringHexColor() ? hexColor : fallback == string.Empty ? MpSystemColors.Transparent : fallback;
             var tbb = FindTextBoxBase(tsr);
             if (tbb is RichTextBox rtb) {
                 rtb.Selection.ApplyPropertyValue(FlowDocument.BackgroundProperty, hexColor.ToWpfBrush());
             }
         }
 
-        public static void SetSelectionForegroundColor(MpIRtfSelectionRange tsr, string hexColor, string fallback = MpSystemColors.Black) {
-            hexColor = hexColor.IsStringHexColor() ? hexColor : fallback;
+        public static void SetSelectionForegroundColor(MpIRtfSelectionRange tsr, string hexColor, string fallback = "") {
+            hexColor = hexColor.IsStringHexColor() ? hexColor : fallback == string.Empty ? MpSystemColors.Black : fallback;
             var tbb = FindTextBoxBase(tsr);
             if (tbb is RichTextBox rtb) {
                 rtb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, hexColor.ToWpfBrush());
