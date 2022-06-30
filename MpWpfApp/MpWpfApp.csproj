@@ -132,6 +132,7 @@
     <Compile Include="AttachedProperties\MpContentDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpDocumentHtmlExtension.cs" />
     <Compile Include="AttachedProperties\MpMarqueeExtension.cs" />
+    <Compile Include="AttachedProperties\MpMenuExtension.cs" />
     <Compile Include="AttachedProperties\MpRichTextFormatExtension.cs" />
     <Compile Include="AttachedProperties\MpTextBoxSelectionRangeExtension.cs" />
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
@@ -675,7 +676,6 @@
     <Compile Include="Views\Reusable\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Reusable\ContextMenu\Selector\MpSelectorItemDataTemplateSelector.cs" />
     <Compile Include="Views\Reusable\MpContentQueryTextBoxView.xaml.cs">
       <DependentUpon>MpContentQueryTextBoxView.xaml</DependentUpon>
     </Compile>
@@ -3030,6 +3030,7 @@
   <ItemGroup>
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Plugins\Google\PeopleApi\" />
+    <Folder Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Selection\" />
     <Folder Include="ViewModels\MainWindow\Plugins\" />
     <Folder Include="ViewModels\Reusable\PluginCollection\" />
     <Folder Include="Views\MainWindow\ClipTray\ClipTile\Container\Tile\Content\Html\" />

@@ -127,6 +127,15 @@ using stdole;
 
         public string SelectedRichText => MpContentDocumentRtfExtension.GetSelectedRichText(this);
 
+        public string SelectionBackgroundColor {
+            get => MpContentDocumentRtfExtension.GetSelectionBackgroundColor(this);
+            set => MpContentDocumentRtfExtension.SetSelectionBackgroundColor(this, value);
+        }
+        public string SelectionForegroundColor {
+            get => MpContentDocumentRtfExtension.GetSelectionForegroundColor(this);
+            set => MpContentDocumentRtfExtension.SetSelectionForegroundColor(this, value);
+        }
+
         public MpRichTextFormatInfoFormat SelectedRichTextFormat {
             get => MpContentDocumentRtfExtension.GetSelectionFormat(this);
         }
@@ -154,6 +163,17 @@ using stdole;
                     }
                 }
                 return tvml.Distinct();
+            }
+        }
+
+        public bool IsTableSelected {
+            get {
+                if(TableViewModel != null &&
+                    TableViewModel.SelectedTables != null &&
+                    TableViewModel.SelectedTables.Count() > 0) {
+                    return true; 
+                }
+                return false;
             }
         }
 
@@ -443,6 +463,9 @@ using stdole;
             }
         }
 
+        public MpColorPalletePopupMenuViewModel SelectionFgColorPopupViewModel{ get; private set; } = new MpColorPalletePopupMenuViewModel();
+
+        public MpColorPalletePopupMenuViewModel SelectionBgColorPopupViewModel { get; private set; } = new MpColorPalletePopupMenuViewModel();
         #endregion
 
         //#region MpIShortcutCommand Implementation
@@ -1388,6 +1411,12 @@ using stdole;
                 OnPropertyChanged(nameof(HasDetectedObjects));
             } else if(ItemType == MpCopyItemType.Text) {
                 TableViewModel = new MpContentTableViewModel(this);
+
+                SelectionFgColorPopupViewModel.OnColorChanged -= SelectionFgColorPopupViewModel_OnColorChanged;
+                SelectionFgColorPopupViewModel.OnColorChanged += SelectionFgColorPopupViewModel_OnColorChanged;
+
+                SelectionBgColorPopupViewModel.OnColorChanged -= SelectionBgColorPopupViewModel_OnColorChanged;
+                SelectionBgColorPopupViewModel.OnColorChanged += SelectionBgColorPopupViewModel_OnColorChanged;
             }
 
             //RequestUiUpdate();
@@ -1752,6 +1781,8 @@ using stdole;
         public override void Dispose() {
             base.Dispose();
             PropertyChanged -= MpClipTileViewModel_PropertyChanged;
+            SelectionBgColorPopupViewModel.OnColorChanged -= SelectionBgColorPopupViewModel_OnColorChanged;
+            SelectionFgColorPopupViewModel.OnColorChanged -= SelectionFgColorPopupViewModel_OnColorChanged;
             ClearSelection();
             TemplateCollection.Dispose();
             TitleSwirlViewModel.Dispose();
@@ -2087,6 +2118,13 @@ using stdole;
             }
         }
 
+        private void SelectionBgColorPopupViewModel_OnColorChanged(object sender, string e) {
+            SelectionBackgroundColor = e;
+        }
+
+        private void SelectionFgColorPopupViewModel_OnColorChanged(object sender, string e) {
+            SelectionForegroundColor = e;
+        }
 
         private void ExpandedKeyDown_Handler(object sender, KeyEventArgs e) {
             if(MpDragDropManager.IsDragAndDrop) {

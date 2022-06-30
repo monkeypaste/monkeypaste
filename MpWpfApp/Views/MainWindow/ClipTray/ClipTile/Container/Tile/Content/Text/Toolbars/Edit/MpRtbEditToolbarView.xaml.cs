@@ -1,5 +1,7 @@
 ﻿
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -194,12 +196,16 @@ namespace MpWpfApp {
                 BackgroundColorButtonBorder.Background = Brushes.Transparent;
             }
 
+            BindingContext.SelectionBgColorPopupViewModel.UserHexColor = BackgroundColorButtonBorder.Background.ToHex();
+
             object fgBrushObj = Rtb.Selection.GetPropertyValue(TextElement.ForegroundProperty);
             if (fgBrushObj is Brush fgBrush) {
                 ForegroundColorButtonBorder.Background = fgBrush;
             } else {
                 ForegroundColorButtonBorder.Background = Brushes.Transparent;
             }
+
+            BindingContext.SelectionFgColorPopupViewModel.UserHexColor = ForegroundColorButtonBorder.Background.ToHex();
 
             Rtb.FitDocToRtb();
         }
@@ -258,9 +264,13 @@ namespace MpWpfApp {
                     Rtb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, (Brush)((Border)s1).Tag);
                 }
             );
+
+
             ForegroundColorButton.ContextMenu = colorContextMenu;
             colorContextMenu.PlacementTarget = ForegroundColorButton;
             colorContextMenu.IsOpen = true;
+
+
         }
 
         private void BackgroundColorButton_Click(object sender, RoutedEventArgs e) {

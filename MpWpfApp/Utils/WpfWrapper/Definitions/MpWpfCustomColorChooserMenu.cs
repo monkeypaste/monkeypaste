@@ -11,11 +11,13 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpWpfCustomColorChooserMenu : MpICustomColorChooserMenu {
+
         public ICommand SelectCustomColorCommand => new RelayCommand<object>(
             (args) => {
-                var ucvm = args as MpIUserColorViewModel;
-                string selectedColor = ucvm.UserHexColor;
-                ShowCustomColorMenu(selectedColor, ucvm);
+                if(args is MpIUserColorViewModel ucvm) {
+                    string selectedColor = ucvm.UserHexColor;
+                    ShowCustomColorMenu(selectedColor, ucvm);
+                } 
             });
 
         public string ShowCustomColorMenu(string selectedColorHexStr, MpIUserColorViewModel ucvm = null) {
@@ -36,9 +38,9 @@ namespace MpWpfApp {
             if (result == System.Windows.Forms.DialogResult.OK) {
                 MpPreferences.UserCustomColorIdxArray = string.Join(",", cd.CustomColors);
 
-                if (ucvm != null) {
+                if(ucvm != null) {
                     ucvm.UserHexColor = cd.Color.ToHex();
-                }                
+                }
 
                 selectedCustomColor = cd.Color.ToSolidColorBrush().ToHex();
             }

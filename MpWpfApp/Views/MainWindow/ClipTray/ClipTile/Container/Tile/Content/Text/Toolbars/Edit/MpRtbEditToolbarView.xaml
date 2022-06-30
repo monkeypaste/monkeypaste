@@ -225,7 +225,8 @@
             </ListBoxItem>
             <ListBoxItem>
                 <Button x:Name="ForegroundColorButton"
-                        Click="ForegroundColorButton_Click"
+                        local:MpMenuExtension.PopupMenuViewModel="{Binding SelectionFgColorPopupViewModel}"
+                        local:MpMenuExtension.IsEnabled="True"
                         Template="{StaticResource FlatButtonControlTemplate}">
                     <Border x:Name="ForegroundColorButtonBorder"
                             Padding="2"
@@ -241,7 +242,8 @@
             </ListBoxItem>
             <ListBoxItem>
                 <Button x:Name="BackgroundColorButton"
-                        Click="BackgroundColorButton_Click"
+                        local:MpMenuExtension.PopupMenuViewModel="{Binding SelectionBgColorPopupViewModel}"
+                        local:MpMenuExtension.IsEnabled="True"
                         Template="{StaticResource FlatButtonControlTemplate}">
                     <Border x:Name="BackgroundColorButtonBorder">
                         <Image SnapsToDevicePixels="True"
@@ -339,7 +341,7 @@
                        Stretch="None" />
             </ListBoxItem>
             <ListBoxItem>
-                <local:MpAddTableToolbarContextMenuView x:Name="AddTableButton" 
+                <local:MpAddTableToolbarContextMenuView x:Name="AddTableButton"
                                                         DataContext="{Binding TableViewModel}" />
             </ListBoxItem>
             <ListBoxItem>

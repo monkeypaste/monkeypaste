@@ -6,21 +6,32 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
 
-    //public interface MpIMenuItemViewModelBase { }
+    public interface MpIMenuItemViewModelBase { }
 
-    public interface MpIMenuItemViewModel { //}: MpIMenuItemViewModelBase {
+    public interface MpIMenuItemViewModel : MpIMenuItemViewModelBase {
         MpMenuItemViewModel MenuItemViewModel { get; }
     }
 
-    //public interface MpIContextMenuItemViewModel : MpIMenuItemViewModelBase { 
-    //    MpMenuItemViewModel MenuItemViewModel { get; }
-    //}
+    public interface MpIContextMenuViewModel : MpIMenuItemViewModelBase {
+        MpMenuItemViewModel ContextMenuViewModel { get; }
+    }
 
-    //public interface MpIPopupMenuItemViewModel : MpIMenuItemViewModelBase {
-    //    MpMenuItemViewModel MenuItemViewModel { get; }
-    //}
+    public interface MpIPopupMenuViewModel : MpIMenuItemViewModelBase {
+        MpMenuItemViewModel PopupMenuViewModel { get; }
+    }
+
+
+    public class MpSetColorArguments {
+        public event EventHandler<string> SetColorEventCallback;
+        public string OriginalColor { get; }
+    }
 
     public class MpMenuItemViewModel : MpViewModelBase {
+        #region Statics
+
+
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -205,12 +216,8 @@ namespace MonkeyPaste {
             };
         }
 
-
-
-        
-               
         #endregion
-         
+
         #region Private Methods
 
         private void MpContextMenuItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

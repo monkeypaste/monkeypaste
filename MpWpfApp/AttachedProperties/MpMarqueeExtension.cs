@@ -1,5 +1,4 @@
-﻿using MonkeyPaste;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -13,10 +12,13 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
-namespace MpWpfApp {    
+namespace MpWpfApp {
+
     public class MpMarqueeTextBoxExtension : DependencyObject {
         #region Properties
 

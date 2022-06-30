@@ -5,38 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
-    public enum MpContentTableContextActionType {
-        None = 0,
-        InsertColumnRight,
-        InsertColumnLeft,
-        InsertRowUp,
-        InsertRowDown,
-        MergeSelectedCells,
-        UnmergeCells,
-        //separator
-        DeleteSelectedColumns,
-        DeleteSelectedRows,
-        DeleteTable,
-        //separator
-        ChangeSelectedBackgroundColor
-    }
+    
     public class MpContentTableViewModel : MpViewModelBase<MpClipTileViewModel>,
-        MpIMenuItemViewModel {
+        MpIContextMenuViewModel,
+        MpIPopupMenuViewModel {
         #region Properties
-
-        #region MpIContextMenuItemViewModel Implementation
-
-        public MpMenuItemViewModel MenuItemViewModel => null;
-        #endregion
 
         #region MpIPopupMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel AddTableMenuItemViewModel { 
+        public MpMenuItemViewModel PopupMenuViewModel { 
             get {
                 var root_mivm = new MpMenuItemViewModel() {
                     IsNewTableSelector = true,
@@ -96,13 +79,72 @@ namespace MpWpfApp {
                         root_mivm.SubItems.Add(cell_mivm);
                     }
                 }
+                //return root_mivm;
 
                 return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel> { root_mivm}
+                    SubItems = new List<MpMenuItemViewModel> { root_mivm }
                 };
             }
         }
+
         #endregion
+
+        #region MpIContextMenuViewModel Implementation
+
+        public MpMenuItemViewModel ContextMenuViewModel {
+            get {
+                var cmvm = new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>()
+                };
+
+                for (int i = 0; i < Enum.GetValues(typeof(MpContentTableContextActionType)).Length; i++) {
+                    if (i == 0) {
+                        continue;
+                    }
+                    MpContentTableContextActionType tableAction = (MpContentTableContextActionType)i;
+                    var mivm = new MpMenuItemViewModel() {
+                        IconResourceKey = new MpEnumToImageSourceConverter().Convert(tableAction, null, null, null) as string,
+                        Header = tableAction.EnumToLabel(),
+                        Command = PerformTableActionCommand,
+                        CommandParameter = tableAction
+                    };
+                    cmvm.SubItems.Add(mivm);
+                    if (tableAction == MpContentTableContextActionType.UnmergeCells) {
+                        cmvm.SubItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
+                    } 
+                }
+                return cmvm;
+            }
+        }
+
+        #endregion
+
+        #region MpIRtfSelectionRange (Table) Properties
+
+        public IEnumerable<Table> SelectedTables {
+            get {
+                if(Parent == null) {
+                    return null;
+                }
+                return MpContentDocumentRtfExtension.GetSelectedTables(Parent);
+            }
+        }
+
+        public IEnumerable<TableCell> SelectedTableCells {
+            get {
+                if (Parent == null) {
+                    return null;
+                }
+                return MpContentDocumentRtfExtension.GetSelectedTableCells(Parent);
+            }
+        }
+        #endregion
+
+        #region State
+
+
+        #endregion
+
 
         #endregion
 
@@ -136,10 +178,14 @@ namespace MpWpfApp {
                     int rowCount = (int)argParts[0] + 1;
                     int colCount = (int)argParts[1] + 1;
 
-                    // NOTE adding 1 here because the last col will not be part of the join since its empty string i think
-                    string colStr = string.Join(",", Enumerable.Repeat(string.Empty, colCount + 1));
-                    string tableCsv = string.Join(Environment.NewLine, Enumerable.Repeat(colStr, rowCount));
-
+                    string tableCsv = string.Empty;
+                    for (int r = 0; r <= rowCount; r++) {
+                        for (int c = 0; c <= colCount; c++) {
+                            tableCsv += ",";
+                        }
+                        tableCsv += Environment.NewLine;
+                    }
+                    
                     var rtbcv = Application.Current.MainWindow
                                 .GetVisualDescendents<MpRtbContentView>()
                                 .FirstOrDefault(x => x.DataContext == Parent);
@@ -148,6 +194,29 @@ namespace MpWpfApp {
                     rtbcv.Rtb.Selection.LoadRtf(tableRtf, out Size tableSize);
 
                     MpContextMenuView.Instance.CloseMenu();
+                }
+            });
+
+        public ICommand PerformTableActionCommand => new MpCommand<object>(
+            (args) => {
+                if(args is MpContentTableContextActionType tableAction) {
+
+                    var tables = MpContentDocumentRtfExtension.GetSelectedTables(Parent);
+                    var cells = MpContentDocumentRtfExtension.GetSelectedTableCells(Parent);
+
+                    cells.ForEach(x => MpConsole.WriteLine("Selected cell Row: " + x.Row() + " Col: " + x.Col()));
+
+                    switch(tableAction) {
+                        case MpContentTableContextActionType.InsertColumnRight:
+
+                            if(cells != null && cells.Count() > 0) {
+
+                                var maxRightColumn = cells.Aggregate((a, b) => a.Col() > b.Col() ? a : b);
+                                var table = maxRightColumn.Parent.FindParentOfType<Table>();
+                                table.Columns.Insert(maxRightColumn.Col(), new TableColumn());
+                            }
+                            break;
+                    }
                 }
             });
         #endregion

@@ -1,17 +1,7 @@
 ﻿using MonkeyPaste;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; using MonkeyPaste.Common.Wpf;
+using MonkeyPaste.Common.Wpf;
 
 namespace MpWpfApp {
     /// <summary>
@@ -33,11 +23,11 @@ namespace MpWpfApp {
         }
 
 
-        private void AddButton_Click(object sender, RoutedEventArgs e) {
-            MpContextMenuView.Instance.DataContext = BindingContext.AddTableMenuItemViewModel;
-                MpContextMenuView.Instance.PlacementTarget = this;
-                MpContextMenuView.Instance.IsOpen = true;
-        }
+        //private void AddButton_Click(object sender, RoutedEventArgs e) {
+        //    MpContextMenuView.Instance.DataContext = BindingContext.PopupMenuViewModel;
+        //    MpContextMenuView.Instance.PlacementTarget = this;
+        //    MpContextMenuView.Instance.IsOpen = true;
+        //}
 
         private void AddButton_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e) {
             //if(AddButton.IsEnabled) {

@@ -322,7 +322,7 @@
                                             BorderBrush="{Binding BorderHexColor,
                                                                   Converter={StaticResource StringHexToBrushConverter}}"
                                             BorderThickness="1"
-                                            CornerRadius="2" />
+                                            CornerRadius="0" />
                                 </Button>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

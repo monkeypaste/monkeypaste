@@ -18,8 +18,8 @@
         </ResourceDictionary>
     </local:MpUserControl.Resources>
     <Button x:Name="AddTableButton"
-            Click="AddButton_Click"
-            IsEnabled="True"
+            local:MpMenuExtension.PopupMenuViewModel="{Binding}"
+            local:MpMenuExtension.IsEnabled="True"
             Template="{StaticResource FlatButtonControlTemplate}"
             ToolTip="Add Table">
         <Image Width="16"

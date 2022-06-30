@@ -372,8 +372,6 @@ namespace MonkeyPaste {
 
             CreateConnection();
 
-            //CreateFunctions();
-
             if (UseWAL) {
                 if (_connectionAsync != null) {
                     await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);

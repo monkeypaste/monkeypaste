@@ -35,6 +35,11 @@ namespace MonkeyPaste {
                         case MpActionType.FileWriter:
                             return "WandIcon";                            
                     }
+                } else if (valueEnum is MpContentTableContextActionType ctcat) {
+                    switch (ctcat) {
+                        default:
+                            return "ScalesIcon";
+                    }
                 }
             }
 

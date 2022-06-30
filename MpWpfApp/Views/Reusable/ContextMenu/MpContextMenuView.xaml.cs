@@ -38,6 +38,9 @@ namespace MpWpfApp {
 
         private void ContextMenuView_Opened(object sender, RoutedEventArgs e) {
             MpMainWindowViewModel.Instance.IsShowingDialog = true;
+            //if(DataContext is MpISelectableViewModel svm) {
+            //    svm.IsSelected = true;
+            //}
         }
 
         private void ContextMenuView_Closed(object sender, RoutedEventArgs e) {

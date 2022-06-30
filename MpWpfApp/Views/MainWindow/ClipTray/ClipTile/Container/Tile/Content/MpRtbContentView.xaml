@@ -61,7 +61,10 @@
                              PreviewKeyDown="Rtb_PreviewKeyDown"
                              PreviewKeyUp="Rtb_PreviewKeyUp"
                              PreviewMouseLeftButtonDown="Rtb_PreviewMouseLeftButtonDown"
-                             PreviewMouseRightButtonDown="Rtb_PreviewMouseRightButtonDown"
+                             local:MpMenuExtension.IsEnabled="True"
+                             local:MpMenuExtension.ViewModelToSelect="{Binding}"
+                             local:MpMenuExtension.ContextMenuViewModel="{Binding .,
+                                                                                  Source={x:Static local:MpClipTrayViewModel.Instance}}"
                              PreviewMouseLeftButtonUp="Rtb_PreviewMouseLeftButtonUp"
                              PreviewMouseWheel="Rtb_PreviewMouseWheel"
                              ScrollViewer.HorizontalScrollBarVisibility="{Binding IsHorizontalScrollbarVisibile,

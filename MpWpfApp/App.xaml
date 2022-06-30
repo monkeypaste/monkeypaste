@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Buttons/MpButtonResourceDictionary.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Constants/MpConstantsResourceDictionary.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Constants/Icons/MpIconsResourceDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Constants/Icons/MpRtbToolbarIconsResourceDictionary.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Converters/MpConvertersResourceDictionary.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/ListBoxes/MpActionPropertiesListBoxItemResourceDictionary.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MpWpfApp;component/Styles/Fonts/MpFontsResourceDictionary.xaml" />
@@ -85,97 +86,6 @@
 
             <local:MpContextMenuItemContainerSelector x:Key="MenuItemContainerSelector" />
 
-
-            <!--  SELECTOR MENU  -->
-            <local:MpSelectorItemDataTemplateSelector x:Key="SelectorItemDataTemplateSelector" />
-            <!--  SelectorItem  -->
-            <DataTemplate x:Key="SelectorItem"
-                          DataType="{x:Type pcl:MpMenuItemViewModel}">
-                <Button Background="Transparent"
-                        BorderThickness="0"
-                        Command="{Binding Command}"
-                        CommandParameter="{Binding CommandParameter}"
-                        Visibility="{Binding IsVisible,
-                                             Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Border Margin="0"
-                            HorizontalAlignment="Stretch"
-                            local:MpHoverableExtension.IsEnabled="True"
-                            Background="Transparent"
-                            BorderBrush="Black"
-                            BorderThickness="0"
-                            CornerRadius="3">
-                        <DockPanel LastChildFill="False">
-                            <Image Width="15"
-                                   Height="15"
-                                   Margin="5,0,5,0"
-                                   DockPanel.Dock="Left"
-                                   Source="{Binding IconSourceObj,
-                                                    Converter={StaticResource ObjectToImageSourceOrIconConverter}}"
-                                   Visibility="{Binding IsIconHidden,
-                                                        Converter={StaticResource BoolToVisibilityFlipConverter}}" />
-                            <local:MpSpinnerApple Margin="0,0,5,0"
-                                                  VerticalAlignment="Center"
-                                                  DockPanel.Dock="Right"
-                                                  Visibility="{Binding IsBusy,
-                                                                       Converter={StaticResource BoolToVisibilityConverter}}" />
-                            <TextBlock MinWidth="50"
-                                       MaxWidth="140"
-                                       Margin="2,0,5,0"
-                                       Padding="1"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Background="Transparent"
-                                       FontSize="12"
-                                       Foreground="Black"
-                                       Text="{Binding Header}"
-                                       ToolTip="{Binding Tooltip,
-                                                         Converter={StaticResource ObjectToTooltipConverter}}" />
-                        </DockPanel>
-                    </Border>
-                </Button>
-            </DataTemplate>
-            <!--  Seperator  -->
-            <DataTemplate x:Key="SeperatorSelectorItem"
-                          DataType="{x:Type pcl:MpMenuItemViewModel}">
-                <Separator />
-            </DataTemplate>
-            <!--  Headered Seperator  -->
-            <DataTemplate x:Key="HeaderedSeperatorSelectorItem"
-                          DataType="{x:Type pcl:MpMenuItemViewModel}">
-                <Separator IsHitTestVisible="False">
-                    <Separator.Template>
-                        <ControlTemplate>
-                            <Border Width="1000"
-                                    Background="PaleGoldenrod"
-                                    BorderBrush="Black"
-                                    BorderThickness="1"
-                                    CornerRadius="2">
-                                <Border.Padding>
-                                    <MultiBinding Converter="{StaticResource DoubleToThicknessIndentLevelConverter}">
-                                        <Binding Path="DataContext.HeaderIndentLevel"
-                                                 RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                                 AncestorType=Separator}" />
-                                        <Binding Path="DataContext.HeaderIndentSize"
-                                                 RelativeSource="{RelativeSource Mode=FindAncestor,
-                                                                                 AncestorType=Separator}" />
-                                        <!--<Binding>
-                                    <Binding.Source>
-                                        <sys:String>left</sys:String>
-                                    </Binding.Source>
-                                </Binding>-->
-
-                                    </MultiBinding>
-                                </Border.Padding>
-                                <TextBlock FontWeight="Bold"
-                                           Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                         AncestorType=Separator},
-                                                          Path=DataContext.Header}" />
-                            </Border>
-                        </ControlTemplate>
-                    </Separator.Template>
-                </Separator>
-            </DataTemplate>
-
             <!--  Color Palletes  -->
             <SolidColorBrush x:Key="AppColorDark">
                 DarkViolet
@@ -190,29 +100,7 @@
                              Opacity="0.5"
                              Color="Black" />
             <!--  Color Palletes End  -->
-            <Style x:Key="DefaultItemStyle"
-                   TargetType="{x:Type MenuItem}">
-                <Setter Property="Header"
-                        Value="{Binding Header}" />
-                <Setter Property="Command"
-                        Value="{Binding Command}" />
-                <Setter Property="CommandParameter"
-                        Value="{Binding CommandParameter}" />
-                <Setter Property="Icon"
-                        Value="{Binding Icon}" />
-                <Setter Property="InputGestureText"
-                        Value="{Binding InputGestureText}" />
-                <Setter Property="IsCheckable"
-                        Value="{Binding IsCheckable}" />
-                <Setter Property="IsChecked"
-                        Value="{Binding IsChecked}" />
-                <Setter Property="ItemsSource"
-                        Value="{Binding SubItems}" />
-                <!--<Setter Property="ItemContainerStyle"
-                    Value="{StaticResource DefaultItemStyle}"/>
-            <Setter Property="ItemTemplateSelector"
-                    Value="{StaticResource MenuItemSelector}"/>-->
-            </Style>
+            
 
             <!--  Color Pallete Menu Item  -->
             <Style x:Key="ColorPalleteMenuItemStyle"

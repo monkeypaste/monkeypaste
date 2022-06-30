@@ -20,6 +20,7 @@ using System.Xml.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Controls.Primitives;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpContentDocumentRtfExtension : DependencyObject {
@@ -356,7 +357,7 @@ namespace MpWpfApp {
                 return GetEncodedContent(rtb, false, false);
             }
             return null;
-        }
+        }        
 
         public static int GetSelectionStart(MpIRtfSelectionRange tsr) {
             var tbb = FindTextBoxBase(tsr);
@@ -396,6 +397,60 @@ namespace MpWpfApp {
             if (tbb is RichTextBox rtb) {
                 rtb.Selection.Text = text;
             }
+        }
+
+        public static string GetSelectionBackgroundColor(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                object bgBrushObj = rtb.Selection.GetPropertyValue(TextElement.BackgroundProperty);
+                if (bgBrushObj is Brush bgBrush) {
+                    return bgBrush.ToHex();
+                }
+            }
+            return MpSystemColors.Transparent;
+        }
+
+        public static string GetSelectionForegroundColor(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                object fgBrushObj = rtb.Selection.GetPropertyValue(TextElement.ForegroundProperty);
+                if (fgBrushObj is Brush bgBrush) {
+                    return bgBrush.ToHex();
+                }
+            }
+            return MpSystemColors.Transparent;
+        }
+        public static void SetSelectionBackgroundColor(MpIRtfSelectionRange tsr, string hexColor, string fallback = MpSystemColors.Transparent) {
+            hexColor = hexColor.IsStringHexColor() ? hexColor : fallback;
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                rtb.Selection.ApplyPropertyValue(FlowDocument.BackgroundProperty, hexColor.ToWpfBrush());
+            }
+        }
+
+        public static void SetSelectionForegroundColor(MpIRtfSelectionRange tsr, string hexColor, string fallback = MpSystemColors.Black) {
+            hexColor = hexColor.IsStringHexColor() ? hexColor : fallback;
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                rtb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, hexColor.ToWpfBrush());
+            }
+        }
+
+        public static IEnumerable<Table> GetSelectedTables(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                var cells = GetSelectedTableCells(tsr);
+                return cells.Select(x => x.Parent.FindParentOfType<Table>()).Cast<Table>().Distinct();
+            }
+            return null;
+        }
+
+        public static IEnumerable<TableCell> GetSelectedTableCells(MpIRtfSelectionRange tsr) {
+            var tbb = FindTextBoxBase(tsr);
+            if (tbb is RichTextBox rtb) {
+                return rtb.Selection.GetAllTextElements().Where(x => x.Parent.FindParentOfType<TableCell>() != null).Select(x=>x.Parent.FindParentOfType<TableCell>()).Distinct();
+            }
+            return null;
         }
 
         public static void InsertEncodedTemplateInSelection(MpIRtfSelectionRange tsr, string guid) {

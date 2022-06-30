@@ -27,7 +27,8 @@ namespace MpWpfApp {
         MpSelectorViewModelBase<object, MpClipTileViewModel>,
         MpIAsyncSingletonViewModel<MpClipTrayViewModel>,
         MpIActionComponent,
-        MpIMenuItemViewModel {
+        MpIMenuItemViewModel,
+        MpIContextMenuViewModel {
         #region Private Variables      
 
         //private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -120,11 +121,17 @@ namespace MpWpfApp {
 
         #region MpIContextMenuItemViewModel Implementation
 
+        public MpMenuItemViewModel ContextMenuViewModel => MenuItemViewModel;
+
         public MpMenuItemViewModel MenuItemViewModel {
             get {
                 if (SelectedItem == null) {
                     return new MpMenuItemViewModel();
                 }
+                if(SelectedItem.IsTableSelected) {
+                    return SelectedItem.TableViewModel.ContextMenuViewModel;
+                }
+
                 var tagItems = MpTagTrayViewModel.Instance.AllTagViewModel.ContentMenuItemViewModel.SubItems;
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {

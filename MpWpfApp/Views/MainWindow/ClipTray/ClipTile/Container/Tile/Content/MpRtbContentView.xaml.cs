@@ -368,6 +368,8 @@ namespace MpWpfApp {
             e.Handled = true;
             var fe = sender as FrameworkElement;
 
+            
+
             MpContextMenuView.Instance.DataContext = MpClipTrayViewModel.Instance.MenuItemViewModel;
             MpContextMenuView.Instance.PlacementTarget = this;
             MpContextMenuView.Instance.IsOpen = true;

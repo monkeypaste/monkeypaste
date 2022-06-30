@@ -668,5 +668,47 @@ namespace MonkeyPaste.Common.Wpf {
             //}
             return rtf;
         }
+
+        public static int Row(this TableCell tc) {
+            if(tc == null) {
+                return -1;
+            }
+            var tableRow = tc.Parent.FindParentOfType<TableRow>();
+            if(tableRow == null) {
+                return -1;
+            }
+            var tableRowGroup = tableRow.Parent.FindParentOfType<TableRowGroup>();
+            if(tableRowGroup == null) {
+                return -1;
+            }
+            var table = tableRowGroup.Parent.FindParentOfType<Table>();
+            if(table == null) {
+                return -1;
+            }
+
+
+            int curRowIdx = 0;
+            for (int i = 0; i < table.RowGroups.Count; i++) {
+                int rowIdx = table.RowGroups[i].Rows.IndexOf(tableRow);
+                if(rowIdx < 0) {
+                    curRowIdx += table.RowGroups[i].Rows.Count;
+                } else {
+                    curRowIdx += rowIdx;
+                    return curRowIdx;
+                }
+            }
+            return -1;
+        }
+
+        public static int Col(this TableCell tc) {
+            if (tc == null) {
+                return -1;
+            }
+            var tableRow = tc.Parent.FindParentOfType<TableRow>();
+            if (tableRow == null) {
+                return -1;
+            }
+            return tableRow.Cells.IndexOf(tc);
+        }
     }
 }
