@@ -360,20 +360,6 @@ namespace MpWpfApp {
             }
             
         }
-        private void Rtb_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            if (!BindingContext.IsSelected) {
-                BindingContext.IsSelected = true;
-            }
-
-            e.Handled = true;
-            var fe = sender as FrameworkElement;
-
-            
-
-            MpContextMenuView.Instance.DataContext = MpClipTrayViewModel.Instance.MenuItemViewModel;
-            MpContextMenuView.Instance.PlacementTarget = this;
-            MpContextMenuView.Instance.IsOpen = true;
-        }
 
         private void Rtb_MouseEnter(object sender, MouseEventArgs e) {
             if (!BindingContext.IsContentReadOnly || BindingContext.IsSubSelectionEnabled) {

@@ -100,7 +100,7 @@
                              Opacity="0.5"
                              Color="Black" />
             <!--  Color Palletes End  -->
-            
+
 
             <!--  Color Pallete Menu Item  -->
             <Style x:Key="ColorPalleteMenuItemStyle"

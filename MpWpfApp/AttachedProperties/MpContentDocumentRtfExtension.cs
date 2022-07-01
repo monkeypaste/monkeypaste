@@ -712,9 +712,11 @@ namespace MpWpfApp {
                                  .FirstOrDefault(x => x.DataContext == ctvm);
             if (cv == null) {
                 Debugger.Break();
+                return null;
             }
             if (cv.Rtb == null) {
                 Debugger.Break();
+                return null;
             }
             return cv.Rtb;
         }

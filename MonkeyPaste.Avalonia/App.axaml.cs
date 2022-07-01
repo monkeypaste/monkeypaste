@@ -1,16 +1,17 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using PropertyChanged;
 
-using MonkeyPaste.Avalonia.ViewModels;
-using MonkeyPaste.Avalonia.Views;
-
-namespace MonkeyPaste.Avalonia
-{
+namespace MonkeyPaste.Avalonia {
+    [DoNotNotify]
     public partial class App : Application
     {
-        public override void Initialize()
-        {
+        public override async void Initialize()
+        {            
+            //var bootstrapper = new MpAvBootstrapperViewModel(new MpAvWrapper());
+            //await bootstrapper.Init();
+
             AvaloniaXamlLoader.Load(this);
         }
 
@@ -18,9 +19,9 @@ namespace MonkeyPaste.Avalonia
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
+                desktop.MainWindow = new MpMainWindow
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = new MpMainWindowViewModel(),
                 };
             }
 
