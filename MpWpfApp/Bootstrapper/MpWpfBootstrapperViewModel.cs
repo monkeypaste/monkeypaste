@@ -17,7 +17,7 @@ using System.Collections;
 namespace MpWpfApp {
     public class MpWpfBootstrapperViewModel : MpBootstrapperViewModelBase {
 
-        public MpWpfBootstrapperViewModel(MpIPlatformWrapper niw) : base(niw) {
+        public MpWpfBootstrapperViewModel() : base() {
             if(_items == null) {
                 _items = new List<MpBootstrappedItemViewModel>();
             }
@@ -120,7 +120,7 @@ namespace MpWpfApp {
             // Sequential (58831 ms 05/30/2022)
             // Sequential (35649 06/12/2022)
             for (int i = 0; i < _items.Count; i++) {
-                await LoadItem(_items[i], i);
+                await LoadItemAsync(_items[i], i);
             }
 
             //MpPlatformWrapper.Services.ClipboardMonitor = MpClipboardManager.MonitorService;

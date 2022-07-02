@@ -29,8 +29,8 @@ namespace MonkeyPaste {
 
         #region Constructors
 
-        public static void Init(MpICursor cursor) {
-            _cursor = cursor;
+        public static void Init() {
+            _cursor = MpPlatformWrapper.Services.Cursor;
         }
 
         #endregion

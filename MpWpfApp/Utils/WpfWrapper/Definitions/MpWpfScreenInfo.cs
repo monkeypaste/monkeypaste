@@ -5,10 +5,12 @@ using MonkeyPaste.Common.Wpf;
 namespace MpWpfApp {
     public class MpWpfScreenInfo : MpIPlatformScreenInfo {
         
-        public MpRect Bounds { get; }
-        public MpRect WorkArea { get; }
-        public bool IsPrimary { get; }
-        public string Name { get; }
+        public MpRect Bounds { get; set; }
+        public MpRect WorkArea { get; set; }
+        public bool IsPrimary { get; set; }
+        public string Name { get; set; }
+
+        public double PixelDensity { get; set; }
 
         public MpWpfScreenInfo(System.Windows.Forms.Screen screen) { 
             Bounds = screen.Bounds.ToPortableRect();

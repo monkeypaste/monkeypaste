@@ -16,11 +16,23 @@
         public double Top => Location.Y;
         public double Bottom => Location.Y + Size.Height;
 
+        public double Width {
+            get => Size.Width;
+            set => Size.Width = value;
+        }
 
-        public MpRect() { }
+        public double Height {
+            get => Size.Height;
+            set => Size.Height = value;
+        }
+
+
+        public MpRect() : base() { }
         public MpRect(MpPoint location,MpSize size) {
             Points = new MpPoint[] { location, new MpPoint(size.Width, size.Height) };
         }
+
+        public MpRect(double x, double y, double w, double h) : this(new MpPoint(x,y),new MpSize(w,h)) { }
 
         public bool Contains(MpPoint p) {
             return p.X >= Left && p.X <= Right &&

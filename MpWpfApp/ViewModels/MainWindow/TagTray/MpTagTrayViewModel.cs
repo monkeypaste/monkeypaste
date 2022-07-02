@@ -389,7 +389,7 @@ namespace MpWpfApp {
                 Items.ForEach(x => x.IsSelected = x.TagId == tagId);
 
                 OnPropertyChanged(nameof(SelectedTagTile));
-
+                
                 if(MpDataModelProvider.QueryInfo.SortType == MpContentSortType.Manual) {
                     MpClipTileSortViewModel.Instance.ResetToDefault();
                 } else if (MpDataModelProvider.QueryInfo.TagId != tagId) {

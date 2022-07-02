@@ -14,7 +14,7 @@ using System.Collections;
 namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
 
-        public MpAvBootstrapperViewModel(MpIPlatformWrapper niw) : base(niw) {
+        public MpAvBootstrapperViewModel() : base() {
             if(_items == null) {
                 _items = new List<MpBootstrappedItemViewModel>();
             }
@@ -71,8 +71,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override async Task Init() {
-            
-            
+
+            for (int i = 0; i < _items.Count; i++) {
+                await LoadItemAsync(_items[i], i);
+            }
+            while(_items.Any(x=>x.IsBusy)) {
+                await Task.Delay(100);
+            }
 
             IsLoaded = true;
         }

@@ -32,7 +32,6 @@ namespace MonkeyPaste {
         }
 
         public double PercentLoaded => (double)LoadedCount / (double)_items.Count;
-        //public double PercentLoaded { get; set; }
 
         public MpNotificationDialogType DialogType => MpNotificationDialogType.StartupLoader;
 
@@ -43,76 +42,45 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpBootstrapperViewModelBase(MpIPlatformWrapper niw) {
-            MpPlatformWrapper.Init(niw);
+        public MpBootstrapperViewModelBase() {
             _items.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpCursor),niw.Cursor),
-                    new MpBootstrappedItemViewModel(this,typeof(MpPreferences),niw.PreferenceIO),
-                    new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpDb),niw.DbInfo),
-                    new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider),niw.QueryInfo),
-                    new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),niw.DataObjectRegistrar)
+                    new MpBootstrappedItemViewModel(this,typeof(MpCursor)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpPreferences)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpDb)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar)
                 });
         }
 
         public abstract Task Init();
 
-        protected async Task LoadItem(MpBootstrappedItemViewModel item, int index) {
-            await MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThread(async() => {
-                MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
+        protected async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
+            IsBusy = true;
 
-                var lnvm = MpNotificationCollectionViewModel.Instance.Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
-                if (lnvm == null) {
-                    // NOTE this occurs when warnings exist and loader is finished
-                    return;
-                }
+            MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
 
-                
+            await item.LoadItemAsync();
 
-                await item.LoadItemAsync();
+            LoadedCount++;
+            OnPropertyChanged(nameof(PercentLoaded));
 
-                //PercentLoaded = (double)(index + 1) / (double)_items.Count;
+            OnPropertyChanged(nameof(Detail));
 
-                LoadedCount++;
-                OnPropertyChanged(nameof(PercentLoaded));
+            Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
 
-                OnPropertyChanged(nameof(Detail));
+            int dotCount = index % 4;
+            Title = "LOADING";
+            for (int i = 0; i < dotCount; i++) {
+                Title += ".";
+            }
 
-                Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
-
-                int dotCount = index % 4;
-                Title = "LOADING";
-                for (int i = 0; i < dotCount; i++) {
-                    Title += ".";
-                }
-            });
+            IsBusy = false;
         }
-
-        //protected void ReportItemLoading(MpBootstrappedItemViewModel item, int index) {
-        //    MpConsole.WriteLine("Loading " + item.Label + " at idx: " + index);
-
-        //    var lnvm = MpNotificationCollectionViewModel.Instance.Notifications.FirstOrDefault(x => x is MpLoaderNotificationViewModel);
-        //    if (lnvm == null) {
-        //        // NOTE this occurs when warnings exist and loader is finished
-        //        return;
-        //    }
-
-        //    PercentLoaded = (double)(index + 1) / (double)_items.Count;
-
-        //    OnPropertyChanged(nameof(Detail));
-
-        //    Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
-
-        //    int dotCount = index % 4;
-        //    Title = "LOADING";
-        //    for (int i = 0; i < dotCount; i++) {
-        //        Title += ".";
-        //    }
-        //}
     }
 }
 

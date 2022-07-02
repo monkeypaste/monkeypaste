@@ -1,0 +1,464 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MonkeyPaste.Avalonia" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="LogWindowHeightRatio" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.35</Value>
+    </Setting>
+    <Setting Name="MaxDbPasswordAttempts" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="DbPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DbPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ShowMainWindowAnimationMilliseconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    <Setting Name="ShowMainWindowMouseHitZoneHeight" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="SearchPlaceHolderText" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Search...</Value>
+    </Setting>
+    <Setting Name="ClipTileDragDropFormatName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MpClipDragDropFormat</Value>
+    </Setting>
+    <Setting Name="HistoryTagTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">All</Value>
+    </Setting>
+    <Setting Name="ApplicationName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Monkey Paste</Value>
+    </Setting>
+    <Setting Name="SearchByIsCaseSensitive" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UserCustomColorIdxArray" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ClipTileMoveAnimationDurationMs" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">1000</Value>
+    </Setting>
+    <Setting Name="CmdNameShowWindow" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Show Window</Value>
+    </Setting>
+    <Setting Name="CmdNameHideWindow" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Hide Window</Value>
+    </Setting>
+    <Setting Name="CmdNameAppendMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Append Mode</Value>
+    </Setting>
+    <Setting Name="CmdNameAutoCopyMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Auto-Copy Mode</Value>
+    </Setting>
+    <Setting Name="CmdNameRightClickPasteMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Right-Click Paste Mode</Value>
+    </Setting>
+    <Setting Name="CmdNamePasteSelectedClip" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Paste Selected Clip</Value>
+    </Setting>
+    <Setting Name="CmdNameDeleteSelectedClip" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Delete Selected Clip</Value>
+    </Setting>
+    <Setting Name="CmdNameSearch" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Search</Value>
+    </Setting>
+    <Setting Name="CmdNameSelectNext" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Select Next</Value>
+    </Setting>
+    <Setting Name="CmdNameSelectPrevious" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Select Previous</Value>
+    </Setting>
+    <Setting Name="CmdNameSelectAll" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Select All</Value>
+    </Setting>
+    <Setting Name="CmdNameInvertSelection" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Invert Selection</Value>
+    </Setting>
+    <Setting Name="MaxShortcutTitleLength" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="NotificationDoPasteSound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationDoCopySound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationShowCopyToast" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationShowAppendBufferToast" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="NotificationShowModeChangeToast" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationDoModeChangeSound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationCopySound1Path" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Sounds/Ting.wav</Value>
+    </Setting>
+    <Setting Name="NotificationCopySoundCustomPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="NotificationCopySound2Path" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Sounds/chime.wav</Value>
+    </Setting>
+    <Setting Name="NotificationAppendModeOnSoundPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sounds/blip.wav</Value>
+    </Setting>
+    <Setting Name="NotificationAppendModeOffSoundPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sounds/blip2.wav</Value>
+    </Setting>
+    <Setting Name="LoadOnLogin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationBalloonVisibilityTimeMs" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3000</Value>
+    </Setting>
+    <Setting Name="DbParameterBinary" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">@0</Value>
+    </Setting>
+    <Setting Name="DbParameterString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">@1</Value>
+    </Setting>
+    <Setting Name="DbParameterInt" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">@2</Value>
+    </Setting>
+    <Setting Name="DbParameterDateTime" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">@3</Value>
+    </Setting>
+    <Setting Name="DbName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">mp.db</Value>
+    </Setting>
+    <Setting Name="TemplateTokenMarker" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Љ</Value>
+    </Setting>
+    <Setting Name="TemplateTokenUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://www.template.com</Value>
+    </Setting>
+    <Setting Name="UserEmail" Type="System.String" Scope="User">
+      <Value Profile="(Default)">tkefauver@gmail.com</Value>
+    </Setting>
+    <Setting Name="HighlightColorHexString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#FFFF00</Value>
+    </Setting>
+    <Setting Name="AzureCognitiveServicesKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">b455280a2c66456e926b66a1e6656ce3</Value>
+    </Setting>
+    <Setting Name="CurrencyConverterFreeApiKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">897d0d9538155ebeaff7</Value>
+    </Setting>
+    <Setting Name="MainWindowStartHeight" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
+    <Setting Name="ClipTileBackgroundColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#FFFFFF</Value>
+    </Setting>
+    <Setting Name="IgnoreNewDuplicates" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DefaultFontSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">12</Value>
+    </Setting>
+    <Setting Name="DefaultFontFamily" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Arial</Value>
+    </Setting>
+    <Setting Name="HighlightFocusedHexColorString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#FFC0CB</Value>
+    </Setting>
+    <Setting Name="IsInitialLoad" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="UseSpellCheck" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AzureCognitiveServicesEndpoint" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://mp-azure-cognitive-services-resource-instance.cognitiveservices.azure.com/</Value>
+    </Setting>
+    <Setting Name="UserLanguage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">English</Value>
+    </Setting>
+    <Setting Name="RestfulTranslationCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RestfulCurrencyConversionCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RestfulDictionaryDefinitionCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RestfulLinkMinificationCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RestfulCurrencyConversionMaxCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="RestfulTranslationMaxCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="RestfulDictionaryDefinitionMaxCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="RestfulLinkMinificationMaxCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="RestfulBillingDate" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">02/02/2021 08:22:00</Value>
+    </Setting>
+    <Setting Name="BitlyApiToken" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">f6035b9ed05ac82b42d4853c984e34a4f1ba05d8</Value>
+    </Setting>
+    <Setting Name="MaxRtfCharCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">250000</Value>
+    </Setting>
+    <Setting Name="SearchByTitle" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SearchByTag" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SearchByApplicationName" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SearchByTextType" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SearchByImageType" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SearchByFileType" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="MaxQrCodeCharLength" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">4296</Value>
+    </Setting>
+    <Setting Name="DetectedImageMinConfidence" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.3</Value>
+    </Setting>
+    <Setting Name="AbsoluteResourcesPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">pack://application:,,,/Resources</Value>
+    </Setting>
+    <Setting Name="NotificationSoundGroupIdx" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="IsTrialExpired" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="NotificationLoadedPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sounds/MonkeySound1.wav</Value>
+    </Setting>
+    <Setting Name="NotificationDoLoadedSound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PathToTerminal" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Windows\System32\cmd.exe</Value>
+    </Setting>
+    <Setting Name="IsTerminalAdministrator" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="NotificationShowCopyItemTooLargeToast" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CompositeItemDragDropFormatName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CompositeItemDragDropFormat</Value>
+    </Setting>
+    <Setting Name="ThemeClipTileBackgroundColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#FFFFFF</Value>
+    </Setting>
+    <Setting Name="IgnoreWhiteSpaceCopyItems" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="SearchByProcessName" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="MaxCommandLineArgumentLength" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1024</Value>
+    </Setting>
+    <Setting Name="MaxRecentClipItems" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">25</Value>
+    </Setting>
+    <Setting Name="SearchBoxTypingDelayInMilliseconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    <Setting Name="SpeechSynthVoiceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Zira</Value>
+    </Setting>
+    <Setting Name="KnownFileExtensionsPsv" Type="System.String" Scope="User">
+      <Value Profile="(Default)">rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx</Value>
+    </Setting>
+    <Setting Name="AzureTextAnalyticsEndpoint" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://mp-azure-text-analytics-services-resource-instance.cognitiveservices.azure.com/</Value>
+    </Setting>
+    <Setting Name="AzureTextAnalyticsKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ec769ed641ac48ed86b38363e67e824b</Value>
+    </Setting>
+    <Setting Name="DoShowMainWindowWithMouseEdge" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DoShowMainWindowWithMouseEdgeAndScrollDelta" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DoShowMainWIndowWithMouseEdgeIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="MainWindowMonitorIdx" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="DoFindBrowserUrlForCopy" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="UserDefaultBrowserProcessPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SearchBySourceUrl" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ResetClipboardAfterMonkeyPaste" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ShowItemPreview" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="UserCultureInfoName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DefaultCultureInfoName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">en-US</Value>
+    </Setting>
+    <Setting Name="DomainFavIconEndpoint" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://www.google.com/s2/favicons?https://www.google.com/s2/favicons?sz=64&amp;domain_url=</Value>
+    </Setting>
+    <Setting Name="ThisDeviceGuid" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="WpfNamespaceName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MpWpf</Value>
+    </Setting>
+    <Setting Name="XamNamespace" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MonkeyPaste</Value>
+    </Setting>
+    <Setting Name="ThisAppDip" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="StartupDateTime" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MaxTemplateTextLength" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="HideMainWindowAnimationMilliseconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">250</Value>
+    </Setting>
+    <Setting Name="SearchByDescription" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ThisAppSourceId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RestfulOpenAiMaxCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="RestfulOpenAiCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RestfulOpenAiApiKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">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</Value>
+    </Setting>
+    <Setting Name="AzureBingSearchApiKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">e3d9b46346be488293df636abb7b8f9d</Value>
+    </Setting>
+    <Setting Name="MainWindowInitialHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="SearchByContent" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SearchByUrlTitle" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SearchByRegex" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AppStorageFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FallbackProcessPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\WINDOWS\Explorer.EXE</Value>
+    </Setting>
+    <Setting Name="DoNotShowAgainNotificationIdCsvStr" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ThisOsFileManagerSourceId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="IgnoredProcessNames" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ShowMainWindowOnDragToScreenTop" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="UniqueContentItemIdx" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RecentFindTexts" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="RecentReplaceTexts" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="RecentSearchTexts" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MaxRecentTextsCount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="PasteAsImageDefaultProcessNameCollection" Type="System.String[]" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;string&gt;paint&lt;/string&gt;
+  &lt;string&gt;photoshop&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="PasteAsFileDropDefaultProcessNameCollection" Type="System.String[]" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;string&gt;explorer&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="DragDropAsFileDropDefaultAppTitleCollection" Type="System.String[]" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;string&gt;explorer&lt;/string&gt;
+  &lt;string&gt;notepad&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="PasteAsCsvDefaultProcessNameCollection" Type="System.String[]" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;string&gt;excel&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="PasteAsTextFileDefaultProcessNameCollection" Type="System.String[]" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;string&gt;notepad&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="LastQueryInfoJson" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SearchByWholeWord" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="MainWindowOrientation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Bottom</Value>
+    </Setting>
+    <Setting Name="MainWindowDisplayType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Primary</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

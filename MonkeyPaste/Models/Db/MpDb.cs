@@ -50,8 +50,8 @@ namespace MonkeyPaste {
         #region Constructors
 
 
-        public static async Task Init(MpIDbInfo dbInfo) {
-            _dbInfo = dbInfo;
+        public static async Task Init() {
+            _dbInfo = MpPlatformWrapper.Services.DbInfo;
             var sw = new Stopwatch();
             sw.Start();
             //MpPreferences.StartupDateTime = DateTime.Now;

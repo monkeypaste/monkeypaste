@@ -5,35 +5,35 @@ using MonkeyPaste.Common;
 
 namespace MpWpfApp {
     public class MpWpfWrapper : MpIPlatformWrapper {
-        public MpICursor Cursor { get; }
-        public MpIDbInfo DbInfo { get; }
-        public MpIPreferenceIO PreferenceIO { get; }
-        public MpIQueryInfo QueryInfo { get; }
-        public MpIIconBuilder IconBuilder { get; }
-        public MpIUrlBuilder UrlBuilder { get; }
-        public MpIAppBuilder AppBuilder { get; }
-        public MpICustomColorChooserMenu CustomColorChooserMenu { get; }
-        public MpIKeyboardInteractionService KeyboardInteractionService { get; }
-        public MpIGlobalTouch GlobalTouch { get; }
-        public MpIUiLocationFetcher LocationFetcher { get; }
-        public MpIPlatformResource PlatformResource { get; }
-        public MpIPlatformScreenInfoCollection ScreenInfoCollection { get; }
-        public MpIContextMenuCloser ContextMenuCloser { get; }
-        public MpIMainThreadMarshal MainThreadMarshal { get; }
-        public MpIStringTools StringTools { get; }
-        public MpIOsInfo OsInfo { get; }
-        public MpIPlatformDataObjectHelper DataObjectHelper { get; }
-        public MpINativeMessageBox NativeMessageBox { get; }
+        public MpICursor Cursor { get; set; }
+        public MpIDbInfo DbInfo { get; set; }
+        public MpIPreferenceIO PreferenceIO { get; set; }
+        public MpIQueryInfo QueryInfo { get; set; }
+        public MpIIconBuilder IconBuilder { get; set; }
+        public MpIUrlBuilder UrlBuilder { get; set; }
+        public MpIAppBuilder AppBuilder { get; set; }
+        public MpICustomColorChooserMenu CustomColorChooserMenu { get; set; }
+        public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
+        public MpIGlobalTouch GlobalTouch { get; set; }
+        public MpIUiLocationFetcher LocationFetcher { get; set; }
+        public MpIPlatformResource PlatformResource { get; set; }
+        public MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
+        public MpIContextMenuCloser ContextMenuCloser { get; set; }
+        public MpIMainThreadMarshal MainThreadMarshal { get; set; }
+        public MpIStringTools StringTools { get; set; }
+        public MpIOsInfo OsInfo { get; set; }
+        public MpIPlatformDataObjectHelper DataObjectHelper { get; set; }
+        public MpINativeMessageBox NativeMessageBox { get; set; }
         
-        public MpIClipboardMonitor ClipboardMonitor { get; }
+        public MpIClipboardMonitor ClipboardMonitor { get; set; }
 
-        public MpIClipboardFormatDataHandlers ClipboardData { get;  }
+        public MpIClipboardFormatDataHandlers ClipboardData { get; set; }
 
-        public MpIExternalPasteHandler ExternalPasteHandler { get; }
+        public MpIExternalPasteHandler ExternalPasteHandler { get; set; }
 
         public MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
-        public MpICopyItemBuilder CopyItemBuilder { get; }
+        public MpICopyItemBuilder CopyItemBuilder { get; set; }
         public MpWpfWrapper() {
             // NOTE ClipboardMonitor is set after bootstrapping
             // NOTE DataObjectRegistrar is set after bootstrapping

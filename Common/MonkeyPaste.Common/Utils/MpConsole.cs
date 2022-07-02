@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -36,6 +37,9 @@ namespace MonkeyPaste.Common {
             if (LogToConsole) {
                 if (RuntimeInformation.FrameworkDescription.Contains(".NET Framework")) {
                     Console.WriteLine(str);
+                    return;
+                } else if (RuntimeInformation.FrameworkDescription.Contains(".NET 6")) {
+                    Debug.WriteLine(str);
                     return;
                 }
                 Console.WriteLine("");

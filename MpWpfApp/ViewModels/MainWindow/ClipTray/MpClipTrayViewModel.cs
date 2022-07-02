@@ -1431,12 +1431,12 @@ namespace MpWpfApp {
             MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
             //await Task.Delay(3000);
 
-            if (!string.IsNullOrEmpty(MpPreferences.LastQueryInfoJson)) {
-                var qi = JsonConvert.DeserializeObject<MpWpfQueryInfo>(MpPreferences.LastQueryInfoJson);
-                if (qi != null) {
-                    MpDataModelProvider.Init(qi);
-                }
-            }
+            //if (!string.IsNullOrEmpty(MpPreferences.LastQueryInfoJson)) {
+            //    var qi = JsonConvert.DeserializeObject<MpWpfQueryInfo>(MpPreferences.LastQueryInfoJson);
+            //    if (qi != null) {
+            //        MpDataModelProvider.Init();
+            //    }
+            //}
 
             while(IsAnyBusy) {
                 await Task.Delay(100);

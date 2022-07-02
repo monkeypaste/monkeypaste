@@ -48,9 +48,9 @@ namespace MpWpfApp {
                 //await MpWpfBootstrapperViewModel.Init();
 
                 Xamarin.Forms.Forms.Init();
-                
 
-                var bootstrapper = new MpWpfBootstrapperViewModel(new MpWpfWrapper());
+                MpPlatformWrapper.Init(new MpWpfWrapper());
+                var bootstrapper = new MpWpfBootstrapperViewModel();
                 await bootstrapper.Init();
 
                 MpDb.OnInitDefaultNativeData += MpDb_OnInitDefaultNativeData;

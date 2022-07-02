@@ -5,15 +5,17 @@ using System.Collections.ObjectModel;
 
 namespace MonkeyPaste {
     public interface MpIPlatformScreenInfo {
-        MpRect Bounds { get; }
+        MpRect Bounds { get; set; }
 
-        MpRect WorkArea { get; }
-        bool IsPrimary { get; }
+        MpRect WorkArea { get; set; }
+        bool IsPrimary { get; set; }
 
-        string Name { get; }
+        double PixelDensity { get; set; }
+
+        string Name { get; set; }
     }
 
     public interface MpIPlatformScreenInfoCollection {
-        IEnumerable<MpIPlatformScreenInfo> Screens { get; }
+        IEnumerable<MpIPlatformScreenInfo> Screens { get; set; }
     }
 }

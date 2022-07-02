@@ -6,36 +6,36 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpIPlatformWrapper {
-        MpICursor Cursor { get; }
-        MpIDbInfo DbInfo { get; }
-        MpIPreferenceIO PreferenceIO { get; }
-        MpIQueryInfo QueryInfo { get; }
-        MpIIconBuilder IconBuilder { get; }
-        MpIUrlBuilder UrlBuilder { get; }
-        MpIAppBuilder AppBuilder { get; }
-        MpICustomColorChooserMenu CustomColorChooserMenu { get; }
-        MpIKeyboardInteractionService KeyboardInteractionService { get; }
-        MpIGlobalTouch GlobalTouch { get; }
-        MpIUiLocationFetcher LocationFetcher { get; }
-        MpIPlatformResource PlatformResource { get; }
-        MpIPlatformScreenInfoCollection ScreenInfoCollection { get; }
+        MpICursor Cursor { get; set; }
+        MpIDbInfo DbInfo { get; set; }
+        MpIPreferenceIO PreferenceIO { get; set; }
+        MpIQueryInfo QueryInfo { get; set; }
+        MpIIconBuilder IconBuilder { get; set; }
+        MpIUrlBuilder UrlBuilder { get; set; }
+        MpIAppBuilder AppBuilder { get; set; }
+        MpICustomColorChooserMenu CustomColorChooserMenu { get; set; }
+        MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
+        MpIGlobalTouch GlobalTouch { get; set; }
+        MpIUiLocationFetcher LocationFetcher { get; set; }
+        MpIPlatformResource PlatformResource { get; set; }
+        MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
 
-        MpIContextMenuCloser ContextMenuCloser { get; }
-        MpIMainThreadMarshal MainThreadMarshal { get; }
-        MpIStringTools StringTools { get; }
-        MpIOsInfo OsInfo { get; }
-        MpIPlatformDataObjectHelper DataObjectHelper { get; }
-        MpINativeMessageBox NativeMessageBox { get; }
+        MpIContextMenuCloser ContextMenuCloser { get; set; }
+        MpIMainThreadMarshal MainThreadMarshal { get; set; }
+        MpIStringTools StringTools { get; set; }
+        MpIOsInfo OsInfo { get; set; }
+        MpIPlatformDataObjectHelper DataObjectHelper { get; set; }
+        MpINativeMessageBox NativeMessageBox { get; set; }
 
-        MpIClipboardMonitor ClipboardMonitor { get; }
+        MpIClipboardMonitor ClipboardMonitor { get; set; }
 
-        MpIClipboardFormatDataHandlers ClipboardData { get; }
+        MpIClipboardFormatDataHandlers ClipboardData { get; set; }
 
-        MpIExternalPasteHandler ExternalPasteHandler { get; }
+        MpIExternalPasteHandler ExternalPasteHandler { get; set; }
 
         MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
-        MpICopyItemBuilder CopyItemBuilder { get; }
+        MpICopyItemBuilder CopyItemBuilder { get; set; }
     }
 
 

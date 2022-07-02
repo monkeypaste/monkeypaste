@@ -24,10 +24,11 @@ namespace MonkeyPaste {
 
         public static MpIQueryInfo QueryInfo {
             get {
-                if(QueryInfos.Count > 0) {
-                    return QueryInfos.OrderBy(x => x.SortOrderIdx).ToList()[0];
-                }
-                return null;
+                //if(QueryInfos.Count > 0) {
+                //    return QueryInfos.OrderBy(x => x.SortOrderIdx).ToList()[0];
+                //}
+                //return null;
+                return MpPlatformWrapper.Services.QueryInfo;
             }
         }
 
@@ -44,9 +45,9 @@ namespace MonkeyPaste {
         #region Constructor
 
 
-        public static void Init(MpIQueryInfo queryInfo) {
+        public static void Init() {
             QueryInfos.Clear();
-            QueryInfos.Add(queryInfo);
+            QueryInfos.Add(MpPlatformWrapper.Services.QueryInfo);
             ResetQuery();
         }
 

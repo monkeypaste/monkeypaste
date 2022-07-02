@@ -1,0 +1,40 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MonkeyPaste.Avalonia.MainWindow"
+        x:Name="AvMainWindow" 
+        WindowState="Maximized"
+        SystemDecorations="None"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        TransparencyLevelHint="Transparent"
+        Title="Monkey Paste">
+  <!--<Design.DataContext>
+    <local:MpAvMainWindowViewModel/>
+  </Design.DataContext>-->
+  <Canvas x:Name="MainWindowContainerCanvas"
+        AttachedToVisualTree="MainWindow_AttachedToVisualTree"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top" 
+          Background="Transparent" 
+          Width="{Binding Width, ElementName=AvMainWindow}"
+          Height="{Binding Height, ElementName=AvMainWindow}">
+    <!--Canvas.Right="{Binding MainWindowRight}"
+          Canvas.Bottom="{Binding MainWindowBottom}"-->
+      <Grid x:Name="MainWindowGrid"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Canvas.Left="0"
+            Canvas.Top="{Binding MainWindowTop}"
+            Width="{Binding MainWindowWidth}"
+          Height="{Binding MainWindowHeight}"
+          >
+      <Grid.Background>
+        <SolidColorBrush Color="Pink" />
+      </Grid.Background>
+    </Grid>
+  </Canvas>
+</Window>

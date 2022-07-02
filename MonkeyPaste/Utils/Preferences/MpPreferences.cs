@@ -9,8 +9,8 @@ namespace MonkeyPaste {
     public static class MpPreferences {
         #region Constructors
 
-        public static void Init(MpIPreferenceIO prefIo) {
-            Default = prefIo;
+        public static void Init() {
+            Default = MpPlatformWrapper.Services.PreferenceIO;
             if (string.IsNullOrEmpty(ThisDeviceGuid)) {
                 ThisDeviceGuid = System.Guid.NewGuid().ToString();
             }
@@ -387,6 +387,24 @@ namespace MonkeyPaste {
             }
             set {
                 Default.Set(nameof(AppStorageFilePath), value);
+            }
+        }
+
+        public static string MainWindowOrientation {
+            get {
+                return Default.Get(nameof(MainWindowOrientation), "Bottom");
+            }
+            set {
+                Default.Set(nameof(MainWindowOrientation), value);
+            }
+        }
+
+        public static string MainWindowDisplayType {
+            get {
+                return Default.Get(nameof(MainWindowDisplayType), "Primary");
+            }
+            set {
+                Default.Set(nameof(MainWindowDisplayType), value);
             }
         }
 
